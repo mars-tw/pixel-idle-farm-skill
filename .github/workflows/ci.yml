@@ -38,9 +38,24 @@ jobs:
         run: |
           for f in src/*.js scripts/*.js; do node -c "$f" && echo "✓ $f"; done
 
+  e2e:
+    name: 可走動地圖 E2E（真瀏覽器移動驗證）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: 安裝 playwright + chromium
+        run: |
+          npm ci || npm install
+          npx playwright install --with-deps chromium
+      - name: 跑可走動地圖 E2E（桌面 + 手機視窗）
+        run: node scripts/test-map-movement-e2e.js
+
   deploy:
     name: 部署 GitHub Pages
-    needs: test
+    needs: [test, e2e]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment:

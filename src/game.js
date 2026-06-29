@@ -491,6 +491,84 @@
     return { ok: true, product: def.product, added, lost };
   }
 
+  // ========================================================================
+  // 可走動地圖：尋路 / 動作目標解析
+  // ========================================================================
+  function getTileById(state, id) { return (state.map.tiles || []).find((t) => t.id === id) || null; }
+  function getTileXY(state, x, y) { return (state.map.tiles || []).find((t) => t.x === x && t.y === y) || null; }
+  // 可站立：soil/grass/path 且無障礙、無建築、非水
+  function isWalkable(state, tile) {
+    if (!tile) return false;
+    if (tile.terrain === "water") return false;
+    if (tile.object) return false;
+    if (tile.buildingId) return false;
+    return true;
+  }
+  // BFS 最短路徑（4 向，繞過障礙/水/建築）。回傳 tileId 陣列（不含起點、含終點）；不可達回 null
+  function bfsPath(state, fromId, toId) {
+    const from = getTileById(state, fromId), to = getTileById(state, toId);
+    if (!from || !to || !isWalkable(state, to)) return null;
+    if (fromId === toId) return [];
+    const W = state.map.width, H = state.map.height;
+    const k = (x, y) => x + "," + y;
+    const parent = {}; parent[k(from.x, from.y)] = "__start__";
+    const queue = [from]; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+    let found = false;
+    while (queue.length) {
+      const cur = queue.shift();
+      if (cur.x === to.x && cur.y === to.y) { found = true; break; }
+      for (const [dx, dy] of dirs) {
+        const nx = cur.x + dx, ny = cur.y + dy;
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+        const nt = getTileXY(state, nx, ny);
+        if (!isWalkable(state, nt)) continue;
+        const nk = k(nx, ny);
+        if (nk in parent) continue;
+        parent[nk] = k(cur.x, cur.y);
+        queue.push(nt);
+      }
+    }
+    if (!found) return null;
+    // 回溯
+    const path = []; let ck = k(to.x, to.y);
+    while (ck !== "__start__") {
+      const [cx, cy] = ck.split(",").map(Number);
+      path.push("t" + cx + "_" + cy);
+      ck = parent[ck];
+    }
+    path.reverse(); path.shift(); // 去掉起點
+    return path;
+  }
+  // 對「不可站立的目標」（障礙/建築/水），找最近的可站立相鄰格 + 路徑
+  function pathToAdjacent(state, fromId, targetId) {
+    const target = getTileById(state, targetId);
+    if (!target) return null;
+    const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+    let best = null;
+    for (const [dx, dy] of dirs) {
+      const nt = getTileXY(state, target.x + dx, target.y + dy);
+      if (!nt || !isWalkable(state, nt)) continue;
+      const p = bfsPath(state, fromId, nt.id);
+      if (p && (best === null || p.length < best.path.length)) best = { tileId: nt.id, path: p };
+    }
+    return best;
+  }
+  // 走到目標或其相鄰格（依目標是否可站立），回傳 { path, standId }
+  function planMoveTo(state, targetId) {
+    const target = getTileById(state, targetId);
+    if (!target) return null;
+    if (isWalkable(state, target)) { const p = bfsPath(state, state.player.tileId, targetId); return p ? { path: p, standId: targetId } : null; }
+    const adj = pathToAdjacent(state, state.player.tileId, targetId);
+    return adj ? { path: adj.path, standId: adj.tileId } : null;
+  }
+  // 由站立格指向目標格的朝向（給角色面向）
+  function facingTo(fromTile, toTile) {
+    const dx = toTile.x - fromTile.x, dy = toTile.y - fromTile.y;
+    if (Math.abs(dx) >= Math.abs(dy)) return dx >= 0 ? "right" : "left";
+    return dy >= 0 ? "down" : "up";
+  }
+  function plotOfTile(state, tile) { return tile && tile.plotIndex != null ? tile.plotIndex : null; }
+
   // ---------- 離線進度 ----------
   // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數、動物產品
   function applyOffline(state, now) {
@@ -577,6 +655,8 @@
     buildingUnlocked, buildingCount, canBuildOn, buildBuilding,
     homeBuildingFor, animalCapacity, animalsInHome, isAnimalUnlocked,
     addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, feedAnimal,
+    // 可走動地圖：尋路 / 目標解析
+    getTileById, getTileXY, isWalkable, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

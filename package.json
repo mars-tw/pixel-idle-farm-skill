@@ -8,10 +8,25 @@
     "test:economy": "node scripts/test-economy.js",
     "test:systems": "node scripts/test-systems.js",
     "test:ui": "node scripts/test-ui-smoke.js",
+    "test:e2e": "node scripts/test-map-movement-e2e.js",
     "start": "python -m http.server 8000"
   },
-  "keywords": ["idle-game", "farming-game", "pixel-art", "incremental", "claude-code-skill", "vanilla-js", "zero-dependency"],
+  "keywords": [
+    "idle-game",
+    "farming-game",
+    "pixel-art",
+    "incremental",
+    "claude-code-skill",
+    "vanilla-js",
+    "zero-dependency"
+  ],
   "author": "阿軒 (@mars-tw)",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/mars-tw/pixel-idle-farm-skill" }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mars-tw/pixel-idle-farm-skill"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
 }

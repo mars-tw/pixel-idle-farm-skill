@@ -18,6 +18,8 @@
 
 ## ✨ 功能特色
 
+- **🗺️ 可走動農場地圖**：主畫面是 8×6 像素 tile map，原創角色 Miri Rowan 站在地圖上，點格子會走過去；
+  種植/澆水/收成/清障/建造/收集都透過地圖目標解析（走到目標 → 播動作 → 結算）。支援 WASD/方向鍵
 - **🌱 完整放置循環**：種植 → 等待成長 → 收成 → 賣出/交訂單 → 升級 → 解鎖新作物 → 離開回來拿離線收益
 - **5 種作物**：小麥 🌾 / 胡蘿蔔 🥕 / 番茄 🍅 / 草莓 🍓 / 南瓜 🎃，短作物頻繁回饋、長作物高額離線收益
 - **📜 市集訂單**：3 筆輪替訂單，比直售更划算（1.35×～2.2×），連續完成有連單加成
@@ -67,9 +69,14 @@ python -m http.server 8000
 跑 `npm test` 或：
 
 ```bash
-node scripts/test-economy.js   # 經濟/進度模擬
-node scripts/test-ui-smoke.js  # UI 煙霧測試
+node scripts/test-economy.js          # 經濟/進度模擬
+node scripts/test-systems.js          # 地圖/動物/建築/產品訂單系統
+node scripts/test-ui-smoke.js         # UI 煙霧測試（mock DOM）
+node scripts/test-map-movement-e2e.js # 可走動地圖 E2E（真瀏覽器，需 npx playwright install chromium）
 ```
+
+> E2E 用 Playwright 在真實 chromium 驗證「點格子角色會走過去、動作透過地圖解析」（桌面 + 手機視窗），
+> 非 mock DOM。CI 會自動安裝 chromium 並執行。
 
 - **進度節奏**：首次收成 < 20s、第 2 次升級 < 3min、新作物解鎖 < 8min ✅
 - **離線收益**：無幫手成熟待收、幫手自動收成、自動補種多輪、8h 上限 ✅

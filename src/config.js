@@ -192,12 +192,23 @@ const TOOLS = {
 const TOOL_ORDER = ["hand", "water", "clear", "build", "inspect"];
 const MOISTURE_MUL = 0.75;            // 濕土：當輪成長時間 ×0.75（更快）
 
-// 地圖預設配置（6×4）：草地 + 障礙 + 水域。soil 由上方既有農場負責，本圖為擴張/牧場用地。
-const MAP_DEFAULT = { width: 6, height: 4,
-  // 以 (x,y)->object 標記初始障礙/水；其餘為 grass
-  objects: { "1,0": "stump", "4,0": "rock", "2,1": "bush", "5,1": "rock", "0,3": "stump", "3,3": "bush" },
-  water:   ["5,3", "4,3"],
-};
+// ===== 統一地圖場景（主要遊戲畫面，可走動）=====
+// S=農土(對應作物 plot) g=草地 p=步道 w=水域 R=石 T=樁 b=灌木
+const MAP_LAYOUT = [
+  "SSSSpggR",
+  "SSSSpggg",
+  "SSSSpgTg",
+  "pppppppg",
+  "gRggpggw",
+  "ggbgpggw",
+];
+const TERRAIN_CODE = { S: "soil", g: "grass", p: "path", w: "water" };
+const OBSTACLE_CODE = { R: "rock", T: "stump", b: "bush" };
+const PLAYER_START = { x: 4, y: 3 };  // 步道中央，可達農土與草地
+const MOVE_MS = 200;                  // 每格移動 tween 毫秒
+const MAP_DEFAULT = { width: MAP_LAYOUT[0].length, height: MAP_LAYOUT.length };
+// 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
+const FACING_ROW = { down: 0, left: 1, right: 2, up: 3 };
 
 // ===== 匯出（瀏覽器掛 window、Node 用 module.exports）=====
 const CONFIG = {
@@ -207,6 +218,7 @@ const CONFIG = {
   PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
   BUILDINGS, BUILDING_ORDER, ANIMALS, MAP_DEFAULT,
   TOOLS, TOOL_ORDER, MOISTURE_MUL,
+  MAP_LAYOUT, TERRAIN_CODE, OBSTACLE_CODE, PLAYER_START, MOVE_MS, FACING_ROW,
 };
 if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
 if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;

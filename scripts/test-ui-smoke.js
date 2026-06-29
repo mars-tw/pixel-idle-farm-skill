@@ -23,7 +23,8 @@ function makeEl(tag) {
   const listeners = {};
   const classes = new Set();
   const el = {
-    tagName: tag || "div", children: [], _listeners: listeners,
+    tagName: tag || "div", children: [], _listeners: listeners, dataset: {},
+    offsetWidth: 40, offsetHeight: 40, offsetLeft: 0, offsetTop: 0,
     _html: "", textContent: "", value: "", disabled: false, title: "",
     style: new Proxy({}, { get: (t, k) => (k === "setProperty" ? () => {} : t[k]), set: (t, k, v) => { t[k] = v; return true; } }),
     classList: {
@@ -95,31 +96,28 @@ try {
   failed++;
 }
 
-// 互動模擬（直接觸發已綁定的 click 事件）
+// 互動模擬（新版：地圖場景 + 工具按鈕；移動細節由 jsdom E2E 驗證）
 try {
-  const farm = elById["farm"];
-  assert(farm && farm.children.length > 0, "農場格子已建立（" + (farm ? farm.children.length : 0) + " 格）");
+  const scene = elById["mapScene"];
+  assert(scene && scene.children.length > 0, "地圖場景磚已建立（" + (scene ? scene.children.length : 0) + " 磚）");
 
-  // 種植：點第一格空地（預設小麥）
-  const before = JSON.parse(store["pixel_idle_farm_save_v1"] || "{}");
-  farm.children[0]._fire("click");
-  const afterPlant = JSON.parse(store["pixel_idle_farm_save_v1"] || "{}");
-  assert(afterPlant.plots[0].cropId === "wheat", "點空地種下小麥");
-  assert(afterPlant.coins === before.coins - 1, "種植扣 1 金");
+  // 點一個地圖磚不崩（mock 無真實 offset，僅驗證不拋例外）
+  scene.children[0]._fire("click");
+  assert(true, "點地圖磚無例外");
 
-  // 切換 sprite/emoji
+  // 工具按鈕
+  const toolBar = elById["toolBar"];
+  assert(toolBar && toolBar.children.length === 5, "工具列 5 個工具");
+
+  // 各動作按鈕不崩
   elById["spriteToggle"]._fire("click");
-  assert(true, "切換像素圖/Emoji 無例外");
-
-  // 全部賣出（此時倉庫空，應只 toast 不崩）
   elById["sellAllBtn"]._fire("click");
-  assert(true, "全部賣出按鈕無例外");
-
-  // 全部收成（尚未成熟，應只 toast 不崩）
   elById["harvestAllBtn"]._fire("click");
-  assert(true, "全部收成按鈕無例外");
+  elById["waterAllBtn"]._fire("click");
+  elById["collectAllBtn"]._fire("click");
+  assert(true, "賣出/收成/澆水/收產物按鈕無例外");
 
-  // 玩法 / 離線 modal 按鈕
+  // modal 按鈕
   elById["howToBtn"]._fire("click");
   elById["howToOk"]._fire("click");
   elById["offlineOk"]._fire("click");

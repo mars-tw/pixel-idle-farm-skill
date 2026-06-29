@@ -221,26 +221,44 @@
     background-position: 0% 0%; }
   @media (max-width: 560px) { .farmer { width: 56px; height: 56px; left: 4px; bottom: 4px; } }
 
-  /* ===== 地圖面板 ===== */
-  .map-panel { margin-top: 12px; }
-  .map-wrap { display: grid; grid-template-columns: 1fr; gap: 12px; }
-  @media (min-width: 720px) { .map-wrap { grid-template-columns: 1.3fr 1fr; align-items: start; } }
-  .map-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px;
-    background: #6f9e54; padding: 8px; border-radius: 12px; box-shadow: inset 0 2px 8px rgba(0,0,0,.18); }
-  .tile { position: relative; aspect-ratio: 1/1; border-radius: 7px; cursor: pointer; border: 2px solid rgba(0,0,0,.18);
-    display: flex; align-items: center; justify-content: center; font-size: clamp(16px, 5vw, 26px);
-    transition: transform .08s, box-shadow .12s; overflow: hidden; }
-  .tile:active { transform: scale(.94); }
+  /* ===== 統一地圖場景（主要遊戲畫面，可走動）===== */
+  .map-scene-wrap { position: relative; margin-bottom: 10px; }
+  #mapScene { display: grid; gap: 3px; background: #6f9e54; padding: 7px; border-radius: 12px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.18); }
+  .tile { position: relative; aspect-ratio: 1/1; border-radius: 6px; cursor: pointer; border: 1.5px solid rgba(0,0,0,.16);
+    display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4.2vw, 26px);
+    transition: box-shadow .12s; overflow: hidden; }
   .tile.grass { background: linear-gradient(180deg, #8fc46f, #6fa551); }
+  .tile.path  { background: linear-gradient(180deg, #cdb98a, #b89c6a); }
   .tile.water { background: linear-gradient(180deg, #6fc0e6, var(--water)); cursor: not-allowed; }
+  .tile.soil  { background: repeating-linear-gradient(0deg, var(--soil-row) 0 2px, transparent 2px 9px),
+                linear-gradient(180deg, #9a6740, var(--soil) 60%, var(--soil-d)); }
   .tile.has-object { background: linear-gradient(180deg, #9db98a, #7a9c66); }
   .tile.has-building { background: linear-gradient(180deg, #cdb185, #b3935f); }
-  .tile.sel { box-shadow: 0 0 0 3px #ffe27a, 0 0 10px rgba(255,210,80,.6); }
-  .tile .badge { position: absolute; bottom: 1px; right: 2px; font-size: 9px; background: rgba(0,0,0,.45); color: #fff;
-    border-radius: 5px; padding: 0 3px; font-weight: 800; }
+  .tile.soil.locked { filter: grayscale(.6) brightness(.8); cursor: not-allowed; }
+  .tile.soil.locked::after { content: "🔒"; position: absolute; font-size: 14px; opacity: .7; }
+  .tile.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.55); }
+  .tile.sel { box-shadow: 0 0 0 3px #ffe27a, 0 0 10px rgba(255,210,80,.6); z-index: 2; }
+  .tile.dest { box-shadow: 0 0 0 3px #6ee7ff; }
+  .tile .crop { width: 78%; height: 78%; background-repeat: no-repeat; background-image: var(--crop-sheet);
+    background-size: 500% 600%; image-rendering: pixelated; mix-blend-mode: multiply; filter: saturate(1.1) contrast(1.04); }
+  .tile .cropE { font-size: clamp(13px, 4vw, 24px); filter: drop-shadow(0 1px 1px rgba(0,0,0,.3)); }
+  .tile .grow-bar { position: absolute; left: 6%; right: 6%; bottom: 3px; height: 4px; background: rgba(0,0,0,.35); border-radius: 3px; overflow: hidden; }
+  .tile .grow-bar > i { display: block; height: 100%; background: linear-gradient(90deg, #b6e36a, #6ec04a); }
   .tile .ready-dot { position: absolute; top: 2px; right: 2px; width: 9px; height: 9px; border-radius: 50%;
     background: #ffe27a; box-shadow: 0 0 6px #ffd23c; animation: readyPulse 1s infinite; }
+  .tile .wet-mark { position: absolute; top: 1px; left: 2px; font-size: 10px; }
   @keyframes readyPulse { 0%,100%{ transform: scale(1); opacity: 1;} 50%{ transform: scale(1.3); opacity: .7;} }
+
+  /* Miri 在地圖層上（絕對定位 + 移動 tween）*/
+  .player { position: absolute; pointer-events: none; z-index: 5; transform: translate(-50%, -64%);
+    transition: left var(--move-ms, 200ms) linear, top var(--move-ms, 200ms) linear;
+    filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
+  .player .p-sprite { width: 100%; height: 100%; background-repeat: no-repeat; image-rendering: pixelated;
+    background-image: var(--walk-sheet); background-size: 400% 400%; background-position: 0% 0%; }
+
+  /* 右側資訊/動作面板 */
+  .info-col { display: flex; flex-direction: column; gap: 12px; }
 
   /* 磚資訊/動作面板 */
   .tile-context { background: var(--cream-2); border: 2px solid var(--border); border-radius: 12px; padding: 12px; min-height: 120px; }
@@ -270,23 +288,33 @@
   </header>
 
   <div class="main">
-    <!-- 左：農場 -->
+    <!-- 左：可走動農場地圖（主要遊戲畫面）-->
     <div class="panel farm-panel">
-      <h2>🌾 我的農場 <span class="hint" id="farmHint">選工具 → 點農場/地圖互動</span></h2>
+      <h2>🌾 我的農場 <span class="hint" id="farmHint">選工具 → 點地圖：走過去並動作</span></h2>
       <div class="tool-bar" id="toolBar"></div>
       <div class="seed-row" id="seedRow"></div>
-      <div class="farm" id="farm"></div>
+      <!-- 統一地圖場景：Miri 站在上面，點格走過去 -->
+      <div class="map-scene-wrap">
+        <div id="mapScene"></div>
+        <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
+      </div>
       <div class="btn-row" style="margin-top:10px">
         <button class="btn harvest" id="harvestAllBtn">🧺 全部收成</button>
         <button class="btn sell" id="sellAllBtn">🪙 全部賣出</button>
         <button class="btn water" id="waterAllBtn" title="澆水加速成長">💧 澆水</button>
+        <button class="btn small buy" id="collectAllBtn">🧺 收產物</button>
       </div>
-      <!-- 可動角色 Miri Rowan（待機呼吸 + 動作觸發）-->
-      <div class="farmer" id="farmer" aria-hidden="true"><div class="farmer-sprite" id="farmerSprite"></div></div>
+      <!-- 舊作物格（相容/除錯用，預設隱藏）-->
+      <div class="farm" id="farm" style="display:none"></div>
+      <div class="farmer" id="farmer" style="display:none"><div class="farmer-sprite" id="farmerSprite"></div></div>
     </div>
 
-    <!-- 右：訂單 + 升級 -->
-    <div style="display:flex; flex-direction:column; gap:12px;">
+    <!-- 右：磚資訊 + 訂單 + 升級 -->
+    <div class="info-col">
+      <div class="panel">
+        <h2>🔍 磚資訊 / 動作</h2>
+        <div class="tile-context" id="tileContext"><div class="tc-empty">點地圖磚查看資訊與動作</div></div>
+      </div>
       <div class="panel">
         <h2>📜 市集訂單 <span class="hint" id="streakHint"></span></h2>
         <div class="orders" id="orders"></div>
@@ -295,17 +323,6 @@
         <h2>⬆️ 農場升級</h2>
         <div class="upgrades" id="upgrades"></div>
       </div>
-    </div>
-  </div>
-
-  <!-- 農場擴張地圖（地形/障礙/建築/動物）-->
-  <div class="panel map-panel">
-    <h2>🗺️ 農場擴張地圖 <span class="hint">點地圖磚：清障礙 · 蓋建築 · 養動物</span>
-      <button class="btn small buy" id="collectAllBtn" style="margin-left:auto">🧺 收集全部產物</button>
-    </h2>
-    <div class="map-wrap">
-      <div class="map-grid" id="mapGrid"></div>
-      <div class="tile-context" id="tileContext"><div class="tc-empty">點一個地圖磚查看資訊與動作</div></div>
     </div>
   </div>
 

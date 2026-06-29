@@ -2,6 +2,8 @@
 
 This roadmap turns Sunrise Sprout Farm from a crop timer into a richer interactive farm. Use it after reading `game-design.md` and `asset-gameplay-integration.md`.
 
+For the current implementation audit and the exact walkable-map acceptance gate, read `playable-map-movement-acceptance.md`. As of 2026-06-29 the project has map systems and action animation, but it is not yet a walkable map game because Miri is fixed in the farm panel and no player coordinates are saved.
+
 ## Design Goals
 
 - Every 30-second visit should offer a useful action.
@@ -24,9 +26,9 @@ Required interactions:
 | Tile inspect | tap a tile | show terrain, object, effect, blocked reason | every terrain/object has readable feedback |
 | Clear obstacle | tap rock/stump/bush with clear tool | spends coins or actions, gives stone/wood/compost | tile changes state and material increases |
 | Water soil | tap dry soil with watering can | wet soil grows faster for one cycle | progress timer visibly improves |
-| Path movement | tap destination | Miri walks or snaps with path feedback | character animation appears before/with action |
+| Path movement | tap destination | Miri walks or snaps with path feedback | player coordinate and DOM position both change |
 
-Implementation note: start with simple queued action states before full pathfinding. A short movement tween is enough for MVP2.
+Implementation note: start with simple queued action states before full pathfinding. A short movement tween is enough for MVP2. The player sprite must be rendered inside the map layer, not fixed in a dashboard panel.
 
 ### Milestone B: Animal Products
 
