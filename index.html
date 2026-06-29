@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>晨光萌芽農場 · Sunrise Sprout Farm</title>
+<style>
+  :root {
+    /* 暖色田園調色盤（多色系：土壤/作物/木材/天空水） */
+    --sky-1: #bfe3f5; --sky-2: #d8f0c8;
+    --grass: #7cb342; --grass-d: #5a9e3f;
+    --soil: #8a5a36; --soil-d: #5f3d22; --soil-row: #744a2b;
+    --wood: #a9763f; --wood-d: #7c5530;
+    --cream: #fffdf4; --cream-2: #f4ecd6; --ink: #3a2c1a; --ink-soft: #7a6a52;
+    --coin: #f4b942; --xp: #6ec0e0; --water: #4ba3d3;
+    --good: #5a9e3f; --bad: #d4654a; --premium: #b06ae0;
+    --border: #d8c9a6; --border-d: #c2ad82;
+    --shadow: 0 2px 0 rgba(0,0,0,.08), 0 6px 16px rgba(60,40,10,.14);
+    --r: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+    color: var(--ink); background: linear-gradient(170deg, var(--sky-1), var(--sky-2) 55%, var(--grass) 130%);
+    min-height: 100%; padding: 10px; line-height: 1.4;
+    background-attachment: fixed;
+  }
+  img, .sprite { image-rendering: pixelated; image-rendering: crisp-edges; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* ===== 頂部標題 + 資源列 ===== */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .title { font-size: 20px; font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: .5px; display: flex; align-items: center; gap: 6px; }
+  .title small { font-size: 11px; color: #4d6b3a; font-weight: 600; opacity: .8; }
+  .res-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; }
+  .res {
+    display: flex; align-items: center; gap: 6px; background: var(--cream);
+    border: 1.5px solid var(--border); border-radius: 12px; padding: 6px 11px;
+    box-shadow: var(--shadow); font-weight: 800; font-size: 14px; min-height: 40px;
+  }
+  .res .ic { font-size: 18px; line-height: 1; }
+  .res .sub { font-size: 11px; color: var(--ink-soft); font-weight: 700; }
+  .res.coins { color: #9a6b00; } .res.coins .ic { filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
+  .res.level { color: #2b6f8a; }
+  .xp-track { width: 64px; height: 7px; background: #d7e7ee; border-radius: 5px; overflow: hidden; margin-top: 2px; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, #7fd0ee, #4ba3d3); border-radius: 5px; transition: width .3s; }
+  .res.weather { cursor: default; }
+
+  /* ===== 主版面 ===== */
+  .main { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 860px) { .main { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+
+  .panel {
+    background: var(--cream); border: 2px solid var(--border-d); border-radius: var(--r);
+    box-shadow: var(--shadow); padding: 12px; position: relative;
+  }
+  .panel h2 { font-size: 14px; font-weight: 900; color: #4a3a22; margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
+  .panel h2 .hint { font-size: 11px; color: var(--ink-soft); font-weight: 600; margin-left: auto; }
+
+  /* ===== 農場 grid ===== */
+  .farm-panel { background: linear-gradient(180deg, #cfeecb, #b6dfa6); border-color: #8fc47e; }
+  .farm {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    background: #6f9e54; padding: 10px; border-radius: 12px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.18);
+  }
+  @media (max-width: 480px) { .farm { gap: 6px; padding: 7px; } }
+  .plot {
+    position: relative; aspect-ratio: 1 / 1; border-radius: 9px; cursor: pointer;
+    background:
+      repeating-linear-gradient(0deg, var(--soil-row) 0 3px, transparent 3px 13px),
+      linear-gradient(180deg, #9a6740, var(--soil) 60%, var(--soil-d));
+    border: 2px solid #5f3d22; box-shadow: inset 0 2px 4px rgba(0,0,0,.25);
+    overflow: hidden; transition: transform .08s, box-shadow .12s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .plot:active { transform: scale(.96); }
+  .plot.empty:hover { box-shadow: inset 0 0 0 2px rgba(255,255,255,.35), inset 0 2px 4px rgba(0,0,0,.25); }
+  .plot.locked {
+    background: repeating-linear-gradient(45deg, #5b6b4d 0 8px, #53624 8px 16px), #556149;
+    cursor: not-allowed; opacity: .85;
+  }
+  .plot.locked::after { content: "🔒"; position: absolute; font-size: 20px; opacity: .7; }
+  .plot.ready { animation: readyBob .9s ease-in-out infinite; box-shadow: inset 0 0 0 2px #ffe27a, 0 0 12px rgba(255,210,80,.6); }
+  @keyframes readyBob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-3px);} }
+  .plot .crop-sprite {
+    position: absolute; inset: 6%; background-repeat: no-repeat;
+    background-image: var(--crop-sheet); background-size: 500% 600%;
+    image-rendering: pixelated; pointer-events: none; transition: opacity .2s;
+  }
+  .plot .crop-emoji { font-size: clamp(20px, 7vw, 38px); pointer-events: none; line-height: 1;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); transition: transform .2s; }
+  .plot .grow-bar { position: absolute; left: 5%; right: 5%; bottom: 5px; height: 5px;
+    background: rgba(0,0,0,.35); border-radius: 4px; overflow: hidden; }
+  .plot .grow-fill { height: 100%; background: linear-gradient(90deg, #b6e36a, #6ec04a); transition: width .25s; }
+  .plot .timer { position: absolute; top: 3px; right: 4px; font-size: 10px; font-weight: 800;
+    color: #fff; background: rgba(0,0,0,.4); padding: 1px 4px; border-radius: 6px; }
+  .plot .ready-tag { position: absolute; top: 3px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; font-weight: 900; color: #4a3500; background: #ffe27a; padding: 1px 6px; border-radius: 7px; }
+
+  /* ===== 種子選擇 ===== */
+  .seed-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
+  .seed {
+    display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 60px; min-height: 56px;
+    padding: 6px 8px; border-radius: 11px; cursor: pointer; background: var(--cream-2);
+    border: 2px solid var(--border); font-weight: 800; transition: all .1s; position: relative;
+  }
+  .seed .se { font-size: 22px; line-height: 1; }
+  .seed .sn { font-size: 11px; }
+  .seed .sc { font-size: 10px; color: #9a6b00; font-weight: 800; }
+  .seed.sel { border-color: var(--good); background: #e7f5dd; box-shadow: 0 0 0 2px rgba(90,158,63,.25); transform: translateY(-2px); }
+  .seed.locked { opacity: .45; cursor: not-allowed; filter: grayscale(.6); }
+  .seed.locked .sc { color: var(--ink-soft); }
+
+  /* ===== 按鈕 ===== */
+  .btn {
+    border: none; border-radius: 11px; padding: 10px 14px; font-size: 14px; font-weight: 800;
+    cursor: pointer; min-height: 44px; transition: transform .08s, filter .12s; font-family: inherit;
+    box-shadow: 0 2px 0 rgba(0,0,0,.12);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn.harvest { background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; flex: 1; }
+  .btn.sell { background: linear-gradient(180deg, #ffd270, var(--coin)); color: #5a3d00; flex: 1; }
+  .btn.small { padding: 6px 10px; min-height: 36px; font-size: 12px; }
+  .btn.buy { background: linear-gradient(180deg, #ffd270, var(--coin)); color: #5a3d00; }
+  .btn.ghost { background: var(--cream-2); color: var(--ink); border: 1.5px solid var(--border-d); }
+
+  /* ===== 訂單 ===== */
+  .orders { display: flex; flex-direction: column; gap: 8px; }
+  .order {
+    border: 2px solid var(--border); border-radius: 11px; padding: 9px 10px; background: var(--cream-2);
+    display: flex; align-items: center; gap: 9px;
+  }
+  .order .o-rarity { width: 7px; align-self: stretch; border-radius: 4px; }
+  .order .o-body { flex: 1; min-width: 0; }
+  .order .o-wants { display: flex; gap: 8px; flex-wrap: wrap; font-weight: 800; font-size: 14px; }
+  .order .o-wants .w { display: flex; align-items: center; gap: 2px; }
+  .order .o-wants .w.have { color: var(--good); } .order .o-wants .w.miss { color: var(--bad); }
+  .order .o-reward { font-size: 11px; color: #9a6b00; font-weight: 800; margin-top: 2px; }
+  .order .o-reward .xp { color: #2b6f8a; }
+  .order .o-meta { font-size: 10px; color: var(--ink-soft); margin-top: 1px; }
+  .order .o-actions { display: flex; flex-direction: column; gap: 4px; }
+  .streak-badge { font-size: 11px; font-weight: 800; color: #b5560a; }
+
+  /* ===== 升級 ===== */
+  .upgrades { display: flex; flex-direction: column; gap: 7px; }
+  .up {
+    display: flex; align-items: center; gap: 9px; border: 2px solid var(--border); border-radius: 11px;
+    padding: 8px 9px; background: var(--cream-2);
+  }
+  .up .u-ic { font-size: 22px; } .up .u-body { flex: 1; min-width: 0; }
+  .up .u-name { font-weight: 800; font-size: 13px; }
+  .up .u-name .lv { font-size: 11px; color: var(--ink-soft); font-weight: 700; }
+  .up .u-desc { font-size: 11px; color: var(--ink-soft); }
+  .up .u-maxed { font-size: 12px; font-weight: 800; color: var(--good); }
+
+  /* ===== Toast ===== */
+  #toast-zone { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 200;
+    display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; }
+  .toast { background: rgba(40,30,12,.92); color: #fff; padding: 8px 16px; border-radius: 20px;
+    font-weight: 800; font-size: 13px; box-shadow: 0 4px 14px rgba(0,0,0,.3); animation: toastIn .25s, toastOut .3s 1.7s forwards; }
+  @keyframes toastIn { from{ opacity:0; transform: translateY(12px);} to{opacity:1;} }
+  @keyframes toastOut { to{ opacity:0; transform: translateY(-8px);} }
+
+  /* ===== 浮動文字（收成/金幣回饋） ===== */
+  .float { position: fixed; pointer-events: none; z-index: 190; font-weight: 900; font-size: 15px;
+    text-shadow: 0 2px 3px rgba(0,0,0,.4); animation: floatUp .9s ease-out forwards; }
+  @keyframes floatUp { 0%{ opacity:0; transform: translate(-50%,0) scale(.8);} 20%{opacity:1; transform: translate(-50%,-6px) scale(1.1);} 100%{ opacity:0; transform: translate(-50%,-40px);} }
+
+  /* ===== Modal（離線摘要 / 設定 / 引導） ===== */
+  .modal { position: fixed; inset: 0; background: rgba(20,16,8,.66); display: none; align-items: center;
+    justify-content: center; z-index: 150; padding: 16px; }
+  .modal.show { display: flex; }
+  .modal-card { background: var(--cream); border: 3px solid var(--border-d); border-radius: 18px;
+    padding: 22px; max-width: 420px; width: 100%; box-shadow: 0 16px 50px rgba(0,0,0,.4); max-height: 90vh; overflow-y: auto; }
+  .modal-card h2 { font-size: 21px; font-weight: 900; color: #4a3a22; margin-bottom: 12px; text-align: center; }
+  .modal-card .ml { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
+  .modal-card .ml:last-of-type { border-bottom: none; }
+  .modal-card .ml .v { margin-left: auto; font-weight: 800; }
+  .modal-card .tip { font-size: 12px; color: var(--ink-soft); margin: 10px 0; line-height: 1.6; }
+  .modal-card .btn { width: 100%; margin-top: 8px; background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; }
+  .modal-card ol { margin: 0 0 8px 18px; display: flex; flex-direction: column; gap: 7px; font-size: 14px; }
+  .modal-card ol b { color: #2c6f1e; }
+
+  /* ===== 底部工具列 ===== */
+  .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+  .toolbar .btn { background: var(--cream); border: 1.5px solid var(--border-d); color: var(--ink); }
+  footer { text-align: center; font-size: 11px; color: #4d6b3a; margin: 14px 0 4px; opacity: .8; }
+  footer a { color: #2c6f1e; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">🌅 晨光萌芽農場 <small>Sunrise Sprout Farm</small></div>
+    <div class="res-bar" id="resBar"><!-- 資源列由 JS 渲染 --></div>
+  </header>
+
+  <div class="main">
+    <!-- 左：農場 -->
+    <div class="panel farm-panel">
+      <h2>🌾 我的農場 <span class="hint" id="farmHint">選種子 → 點空地種植 · 點成熟作物收成</span></h2>
+      <div class="seed-row" id="seedRow"></div>
+      <div class="farm" id="farm"></div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn harvest" id="harvestAllBtn">🧺 全部收成</button>
+        <button class="btn sell" id="sellAllBtn">🪙 全部賣出</button>
+      </div>
+    </div>
+
+    <!-- 右：訂單 + 升級 -->
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div class="panel">
+        <h2>📜 市集訂單 <span class="hint" id="streakHint"></span></h2>
+        <div class="orders" id="orders"></div>
+      </div>
+      <div class="panel">
+        <h2>⬆️ 農場升級</h2>
+        <div class="upgrades" id="upgrades"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn small ghost" id="spriteToggle">🎨 像素圖</button>
+    <button class="btn small ghost" id="howToBtn">❓ 玩法</button>
+    <button class="btn small ghost" id="resetBtn">🗑️ 重置存檔</button>
+  </div>
+
+  <footer>純原生 HTML/CSS/JS · localStorage 存檔 · 離線收益最多 8 小時 · MIT</footer>
+</div>
+
+<!-- 離線摘要 modal -->
+<div class="modal" id="offlineModal">
+  <div class="modal-card">
+    <h2>🌙 歡迎回來！</h2>
+    <div id="offlineBody"></div>
+    <button class="btn" id="offlineOk">太好了，繼續種田 ▶</button>
+  </div>
+</div>
+
+<!-- 玩法引導 modal -->
+<div class="modal" id="howToModal">
+  <div class="modal-card">
+    <h2>🌻 怎麼玩</h2>
+    <ol>
+      <li><b>① 選種子</b>：點上方種子（看 🪙 成本）</li>
+      <li><b>② 種植</b>：點農場的空地（土壤格）種下</li>
+      <li><b>③ 等成熟</b>：作物會長大，成熟會發光跳動</li>
+      <li><b>④ 收成 → 賣出</b>：點成熟作物收進倉庫，再「賣出」或交「市集訂單」換更多金幣</li>
+      <li><b>⑤ 升級</b>：買升級開更多地、加速、自動收成（離線也運作）</li>
+    </ol>
+    <p class="tip">💡 訂單比直售更划算（連續完成有加成）。升「幫手機器人」後離開也會自動幫你收成、回來看離線收益！</p>
+    <button class="btn" id="howToOk">開始種田 ▶</button>
+  </div>
+</div>
+
+<div id="toast-zone"></div>
+
+<script src="src/config.js"></script>
+<script src="src/game.js"></script>
+<script src="src/state.js"></script>
+<script src="src/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "pixel-idle-farm",
+  "version": "0.1.0",
+  "description": "純原生網頁像素放置農場遊戲 — Claude Code Skill。零依賴 HTML/CSS/JS，localStorage 存檔，時間差離線收益。",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node scripts/test-economy.js && node scripts/test-ui-smoke.js",
+    "test:economy": "node scripts/test-economy.js",
+    "test:ui": "node scripts/test-ui-smoke.js",
+    "start": "python -m http.server 8000"
+  },
+  "keywords": ["idle-game", "farming-game", "pixel-art", "incremental", "claude-code-skill", "vanilla-js", "zero-dependency"],
+  "author": "阿軒 (@mars-tw)",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/mars-tw/pixel-idle-farm-skill" }
+}

@@ -1,0 +1,37 @@
+{
+  "model": "gpt-image-2",
+  "outputDir": "assets/generated",
+  "size": "1024x1024",
+  "quality": "high",
+  "styleSuffix": "Crisp cozy pixel art for a browser idle farming game, top-down orthographic view, readable 16x16 or 32x32 sprite language, limited but varied color palette, clean separated sprites, no text, no logo, no watermark, no UI mockup frame.",
+  "sheets": [
+    {
+      "id": "terrain-tileset",
+      "file": "terrain-tileset.png",
+      "type": "tileset",
+      "grid": "8x8 conceptual tile grid",
+      "prompt": "Create a square pixel-art terrain tileset for a cozy idle farm game. Include grass, tilled dry soil, wet soil, seeded soil, dirt path, stone path, shallow water, bridge plank, wooden fence horizontal and vertical pieces, tree, stump, rock, flower patch, sign post, well, compost pile, and simple field border tiles. Arrange as a clean evenly spaced spritesheet with visible padding between tiles."
+    },
+    {
+      "id": "crop-growth",
+      "file": "crop-growth.png",
+      "type": "spritesheet",
+      "grid": "6 crops x 5 growth stages conceptual grid",
+      "prompt": "Create a square pixel-art crop growth spritesheet for wheat, carrot, tomato, strawberry, corn, and pumpkin. Show five stages for each crop: seed, sprout, small plant, mature plant, harvest-ready. Arrange in a clean grid with one crop per row and growth progressing left to right. Keep each sprite isolated with even padding."
+    },
+    {
+      "id": "farm-actors-buildings",
+      "file": "farm-actors-buildings.png",
+      "type": "spritesheet",
+      "grid": "mixed sprites with consistent padding",
+      "prompt": "Create a square pixel-art spritesheet for a cozy idle farm. Include a farmer character facing down, up, left, and right; small walk cycle hints; chicken, cow, sheep, bee box, scarecrow, barn, chicken coop, seed shop stall, silo, mailbox, and order board. Keep all sprites separated, readable, and suitable for browser game use."
+    },
+    {
+      "id": "ui-icons",
+      "file": "ui-icons.png",
+      "type": "icon-sheet",
+      "grid": "8x8 conceptual icon grid",
+      "prompt": "Create a square pixel-art UI icon sheet for an idle farming game. Include coin, seed packet, wheat bundle, carrot, tomato, strawberry, corn, pumpkin, watering can, hoe, sickle, basket, clock, upgrade arrow, auto-harvest gear, market order crate, XP star, rain cloud, sun, fertilizer bag, storage chest, and premium-looking but non-monetized gem. Clean isolated icons, no numbers, no letters."
+    }
+  ]
+}

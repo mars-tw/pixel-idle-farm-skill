@@ -1,0 +1,56 @@
+name: CI & Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: 測試（經濟 + UI 煙霧 + JSON）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: 經濟與進度模擬測試
+        run: node scripts/test-economy.js
+      - name: UI 煙霧測試（mock DOM）
+        run: node scripts/test-ui-smoke.js
+      - name: 驗證 JSON 可解析
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('art-config.json','utf8')); console.log('✓ art-config.json')"
+          node -e "JSON.parse(require('fs').readFileSync('assets/manifest.json','utf8')); console.log('✓ assets/manifest.json')"
+      - name: 語法檢查所有 JS
+        run: |
+          for f in src/*.js scripts/*.js; do node -c "$f" && echo "✓ $f"; done
+
+  deploy:
+    name: 部署 GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: 上傳網站（repo 根目錄含 index.html / src / assets）
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+      - name: 部署
+        id: deployment
+        uses: actions/deploy-pages@v4

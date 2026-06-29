@@ -1,0 +1,7 @@
+interface:
+  display_name: "Pixel Idle Farm"
+  short_description: "Design pixel web idle farming games."
+  default_prompt: "Use $pixel-idle-farm to design a browser-based pixel idle farming game with a playable loop and generated asset plan."
+
+policy:
+  allow_implicit_invocation: true

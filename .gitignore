@@ -1,0 +1,20 @@
+# 依賴 / 建置（本專案零依賴，保險起見仍忽略）
+node_modules/
+dist/
+build/
+
+# 環境與金鑰（絕不提交 API key）
+.env
+.env.*
+*.key
+
+# 編輯器 / 系統
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 暫存 / 測試輸出
+*.log
+.playwright-mcp/
+scratchpad/

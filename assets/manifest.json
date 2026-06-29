@@ -1,0 +1,42 @@
+{
+  "version": "0.1.0",
+  "intendedModel": "gpt-image-2",
+  "generatedAt": "2026-06-29",
+  "generationMode": "codex-built-in-preview",
+  "reproducibleCommand": "powershell -ExecutionPolicy Bypass -File scripts/gen-art-openai.ps1",
+  "notes": "Preview files are available in assets/generated. Replace or regenerate them with scripts/gen-art-openai.ps1 when OPENAI_API_KEY is available for direct gpt-image-2 generation.",
+  "assets": [
+    {
+      "id": "terrain-tileset",
+      "file": "assets/generated/terrain-tileset.png",
+      "type": "tileset",
+      "grid": "8x8 conceptual tile grid",
+      "recommendedTileSize": 32,
+      "status": "generated-preview"
+    },
+    {
+      "id": "crop-growth",
+      "file": "assets/generated/crop-growth.png",
+      "type": "spritesheet",
+      "grid": "6 crops x 5 growth stages conceptual grid",
+      "recommendedTileSize": 32,
+      "status": "generated-preview"
+    },
+    {
+      "id": "farm-actors-buildings",
+      "file": "assets/generated/farm-actors-buildings.png",
+      "type": "spritesheet",
+      "grid": "mixed sprites with consistent padding",
+      "recommendedTileSize": 32,
+      "status": "generated-preview"
+    },
+    {
+      "id": "ui-icons",
+      "file": "assets/generated/ui-icons.png",
+      "type": "icon-sheet",
+      "grid": "8x8 conceptual icon grid",
+      "recommendedTileSize": 32,
+      "status": "generated-preview"
+    }
+  ]
+}

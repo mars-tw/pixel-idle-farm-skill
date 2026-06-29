@@ -1,0 +1,128 @@
+/* =========================================================================
+ * config.js — Pixel Idle Farm 資料層（純資料，無副作用）
+ * 所有作物、升級、訂單、遊戲常數都在這裡。改平衡只動這個檔。
+ * 同時被 index.html（瀏覽器）與 scripts/test-economy.js（Node）載入。
+ * ========================================================================= */
+
+// ===== 遊戲常數 =====
+const GAME = {
+  saveKey: "pixel_idle_farm_save_v1",
+  version: 1,
+  startCoins: 16,
+  startPlots: 6,
+  maxPlots: 12,
+  baseStorage: 30,
+  offlineCapMs: 8 * 60 * 60 * 1000, // 離線收益上限 8 小時
+  tickMs: 250,                       // 畫面更新間隔
+  autosaveMs: 5000,                  // 自動存檔間隔
+  orderSlots: 3,                     // 同時掛單數
+  orderTtlMs: 12 * 60 * 1000,        // 訂單存活 12 分鐘
+};
+
+// ===== 作物 =====
+// growMs 成長毫秒、seedCost 種子成本、yield 收成數量、sellValue 單位直售價、
+// xp 每次收成 XP、unlockLevel 解鎖等級、spriteRow crop-growth.png 的列、
+// emoji 後備圖示、color 後備色塊（土壤上作物色）
+const CROPS = {
+  wheat:      { id: "wheat",      name: "小麥",   growMs: 15000,  seedCost: 1,  yield: 2, sellValue: 1,  xp: 1,  unlockLevel: 1, spriteRow: 0, emoji: "🌾", color: "#e3c567" },
+  carrot:     { id: "carrot",     name: "胡蘿蔔", growMs: 45000,  seedCost: 4,  yield: 3, sellValue: 3,  xp: 3,  unlockLevel: 2, spriteRow: 1, emoji: "🥕", color: "#f08a3c" },
+  tomato:     { id: "tomato",     name: "番茄",   growMs: 120000, seedCost: 12, yield: 4, sellValue: 8,  xp: 8,  unlockLevel: 3, spriteRow: 2, emoji: "🍅", color: "#e0473b" },
+  strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57" },
+  pumpkin:    { id: "pumpkin",    name: "南瓜",   growMs: 900000, seedCost: 85, yield: 3, sellValue: 80, xp: 55, unlockLevel: 5, spriteRow: 5, emoji: "🎃", color: "#e8821e" },
+};
+const CROP_SHEET = { cols: 5, rows: 6, stages: 5 }; // crop-growth.png 版面
+
+// ===== 等級曲線（累計 XP 門檻）=====
+// 解鎖節奏對齊 game-design：碼表 lv2 約 20 秒、lv5 約 8 分鐘內可達
+const LEVEL_XP = [0, 8, 30, 90, 220, 480, 900, 1600, 2700, 4300];
+function levelFromXp(xp) {
+  let lv = 1;
+  for (let i = 0; i < LEVEL_XP.length; i++) if (xp >= LEVEL_XP[i]) lv = i + 1;
+  return lv;
+}
+function xpForLevel(level) { return LEVEL_XP[level - 1] != null ? LEVEL_XP[level - 1] : Infinity; }
+
+// ===== 升級（5 種，每種多級，cost 累進）=====
+// effect 由 game.js 解讀：plotCount 加農地、growthSpeed 乘成長時間、
+// sellBonus 加直售/訂單金、storageLevel 加倉容、helperLevel 解鎖自動收成
+const UPGRADES = {
+  plotCount: {
+    name: "開墾農地", icon: "🟫", desc: "增加可種植的農地格數",
+    levels: [
+      { cost: 40,   value: 8 },
+      { cost: 140,  value: 10 },
+      { cost: 420,  value: 12 },
+    ],
+  },
+  growthSpeed: {
+    name: "肥沃土壤", icon: "🌱", desc: "所有作物成長更快",
+    levels: [
+      { cost: 50,   value: 0.9 },   // 成長時間 ×0.9
+      { cost: 220,  value: 0.8 },
+      { cost: 650,  value: 0.7 },
+      { cost: 1800, value: 0.6 },
+    ],
+  },
+  sellBonus: {
+    name: "市集人脈", icon: "🪙", desc: "賣出與訂單收益提升",
+    levels: [
+      { cost: 80,   value: 0.15 },  // +15%
+      { cost: 260,  value: 0.30 },
+      { cost: 720,  value: 0.50 },
+      { cost: 2000, value: 0.80 },
+    ],
+  },
+  storageLevel: {
+    name: "擴建穀倉", icon: "📦", desc: "提高倉庫容量上限",
+    levels: [
+      { cost: 50,   value: 40 },    // 容量 base+40 → 70
+      { cost: 180,  value: 90 },
+      { cost: 520,  value: 160 },
+      { cost: 1400, value: 280 },
+    ],
+  },
+  helperLevel: {
+    name: "幫手機器人", icon: "🤖", desc: "自動收成成熟作物（離線也運作）",
+    levels: [
+      { cost: 300,  value: { autoHarvest: true, autoPlant: false } },
+      { cost: 1200, value: { autoHarvest: true, autoPlant: true } }, // 進階：自動補種
+    ],
+  },
+};
+const UPGRADE_ORDER = ["plotCount", "growthSpeed", "sellBonus", "storageLevel", "helperLevel"];
+
+// ===== 訂單設定 =====
+// 訂單由已解鎖作物組成，獎金 = 作物直售總值 × payMultiplier（依稀有度）
+const ORDER_RARITY = {
+  common:   { label: "一般", payMult: 1.35, xpMult: 1.0, weight: 60, color: "#9aa7b4" },
+  good:     { label: "優質", payMult: 1.7,  xpMult: 1.4, weight: 30, color: "#3b9ae0" },
+  premium:  { label: "高級", payMult: 2.2,  xpMult: 1.9, weight: 10, color: "#b06ae0" },
+};
+const ORDER_STREAK_BONUS = 0.05; // 每連續完成一單，獎金 +5%（上限見 game.js）
+const ORDER_STREAK_CAP = 1.0;    // 連單獎金上限 +100%
+
+// ===== 天氣（tier 5 解鎖，retention）=====
+const WEATHER = {
+  clear: { id: "clear", name: "晴朗", icon: "⛅", growthMul: 1.0,  sellMul: 1.0 },
+  rain:  { id: "rain",  name: "降雨", icon: "🌧️", growthMul: 0.7,  sellMul: 1.0 },  // 成長加速
+  sunny: { id: "sunny", name: "豔陽", icon: "☀️", growthMul: 1.0,  sellMul: 1.25 }, // 售價提升
+};
+const WEATHER_UNLOCK_LEVEL = 5;
+const WEATHER_DURATION_MS = 10 * 60 * 1000; // 每段天氣 10 分鐘
+
+// ===== 成就（永久微加成，非必要）=====
+const ACHIEVEMENTS = {
+  firstHarvest: { name: "第一桶金", desc: "完成第一次收成", icon: "🌱" },
+  order10:      { name: "可靠農戶", desc: "完成 10 筆訂單", icon: "📜" },
+  coins1k:      { name: "小富農",   desc: "累計賺得 1000 金幣", icon: "💰" },
+  allCrops:     { name: "全作物大師", desc: "解鎖全部作物", icon: "🏆" },
+};
+
+// ===== 匯出（瀏覽器掛 window、Node 用 module.exports）=====
+const CONFIG = {
+  GAME, CROPS, CROP_SHEET, LEVEL_XP, levelFromXp, xpForLevel,
+  UPGRADES, UPGRADE_ORDER, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
+  WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
+};
+if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
+if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;
