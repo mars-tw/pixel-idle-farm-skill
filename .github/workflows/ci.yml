@@ -26,6 +26,8 @@ jobs:
           node-version: "20"
       - name: 經濟與進度模擬測試
         run: node scripts/test-economy.js
+      - name: MVP2 系統測試（地圖/動物/建築/產品訂單）
+        run: node scripts/test-systems.js
       - name: UI 煙霧測試（mock DOM）
         run: node scripts/test-ui-smoke.js
       - name: 驗證 JSON 可解析

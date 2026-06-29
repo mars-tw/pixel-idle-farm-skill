@@ -4,8 +4,9 @@
   "description": "純原生網頁像素放置農場遊戲 — Claude Code Skill。零依賴 HTML/CSS/JS，localStorage 存檔，時間差離線收益。",
   "type": "commonjs",
   "scripts": {
-    "test": "node scripts/test-economy.js && node scripts/test-ui-smoke.js",
+    "test": "node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-ui-smoke.js",
     "test:economy": "node scripts/test-economy.js",
+    "test:systems": "node scripts/test-systems.js",
     "test:ui": "node scripts/test-ui-smoke.js",
     "start": "python -m http.server 8000"
   },

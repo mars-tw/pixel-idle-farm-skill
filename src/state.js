@@ -17,6 +17,25 @@
     return plots;
   }
 
+  // 由 MAP_DEFAULT 產生地圖磚陣列（grass / 障礙 / 水域）
+  function makeMap() {
+    const m = C.MAP_DEFAULT;
+    const tiles = [];
+    for (let y = 0; y < m.height; y++) {
+      for (let x = 0; x < m.width; x++) {
+        const key = x + "," + y;
+        const isWater = m.water && m.water.indexOf(key) !== -1;
+        tiles.push({
+          id: "t" + x + "_" + y, x, y,
+          terrain: isWater ? "water" : "grass",
+          object: m.objects && m.objects[key] ? m.objects[key] : null, // rock/stump/bush
+          buildingId: null, // 蓋了建築就指向 state.buildings 的 id
+        });
+      }
+    }
+    return { width: m.width, height: m.height, tiles };
+  }
+
   // 預設新存檔
   function defaultState(now) {
     now = now || Date.now();
@@ -29,7 +48,7 @@
       level: 1,
       selectedSeed: "wheat",
       useSprites: true,
-      storage: { items: {} },                 // { cropId: qty }
+      storage: { items: {} },                 // { cropId/productId: qty }
       plots: makePlots(C.GAME.startPlots),
       upgrades: { plotCount: 0, growthSpeed: 0, sellBonus: 0, storageLevel: 0, helperLevel: 0 },
       orders: [],
@@ -37,7 +56,12 @@
       orderStreak: 0,
       weather: { id: "clear", untilMs: 0 },
       achievements: {},                        // { id: true }
-      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0 },
+      // ===== MVP2 =====
+      materials: { wood: 0, stone: 0, compost: 0 },
+      map: makeMap(),
+      buildings: [],                           // { id, type, tileId, builtAt, level }
+      animals: [],                             // { id, type, homeId, lastProducedAt }
+      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} },
     };
   }
 
@@ -53,8 +77,14 @@
     merged.achievements = Object.assign({}, state.achievements);
     merged.stats = Object.assign({}, def.stats, state.stats);
     merged.stats.harvested = Object.assign({}, state.stats && state.stats.harvested);
+    merged.stats.collected = Object.assign({}, state.stats && state.stats.collected);
     if (!Array.isArray(merged.plots) || merged.plots.length === 0) merged.plots = def.plots;
     if (!Array.isArray(merged.orders)) merged.orders = [];
+    // ===== MVP2 欄位補齊 =====
+    merged.materials = Object.assign({ wood: 0, stone: 0, compost: 0 }, state.materials);
+    merged.map = (state.map && Array.isArray(state.map.tiles) && state.map.tiles.length) ? state.map : def.map;
+    merged.buildings = Array.isArray(state.buildings) ? state.buildings : [];
+    merged.animals = Array.isArray(state.animals) ? state.animals : [];
     merged.version = C.GAME.version;
     return merged;
   }

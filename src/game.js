@@ -13,6 +13,8 @@
     GAME, CROPS, UPGRADES, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
     WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
     levelFromXp,
+    PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
+    BUILDINGS, BUILDING_ORDER, ANIMALS,
   } = C;
 
   // ---------- 工具 ----------
@@ -27,6 +29,15 @@
     const c = CROPS[cropId];
     return !!c && c.unlockLevel <= state.level;
   }
+  // MVP2：玩家擁有的動物可生產的產品（訂單只會要玩家做得出的產品）
+  function unlockedProducts(state) {
+    const set = {};
+    for (const a of state.animals || []) { const def = ANIMALS[a.type]; if (def) set[def.product] = true; }
+    return Object.keys(set);
+  }
+  function availableOrderItems(state) {
+    return unlockedCrops(state).concat(unlockedProducts(state));
+  }
   // 成長時間倍率：肥沃土壤升級 × 天氣（rain 加速）
   function growthMultiplier(state, now) {
     let m = 1;
@@ -34,6 +45,16 @@
     if (lv > 0) m *= UPGRADES.growthSpeed.levels[lv - 1].value;
     const w = currentWeather(state, now);
     m *= WEATHER[w].growthMul;
+    m *= buildingGrowthAura(state); // MVP2：堆肥場/蜂箱等建築的成長加成
+    return m;
+  }
+  // 已蓋建築的成長光環連乘（compostHeap 0.90、beeBox 0.92…）
+  function buildingGrowthAura(state) {
+    let m = 1;
+    for (const b of state.buildings || []) {
+      const def = BUILDINGS[b.type];
+      if (def && def.effect && def.effect.growthAura) m *= def.effect.growthAura;
+    }
     return m;
   }
   function effectiveGrowMs(state, cropId, now) {
@@ -54,7 +75,12 @@
   // ---------- 倉庫 ----------
   function storageCapacity(state) {
     const lv = state.upgrades.storageLevel;
-    return GAME.baseStorage + (lv > 0 ? UPGRADES.storageLevel.levels[lv - 1].value : 0);
+    let cap = GAME.baseStorage + (lv > 0 ? UPGRADES.storageLevel.levels[lv - 1].value : 0);
+    for (const b of state.buildings || []) { // MVP2：筒倉等建築加倉容
+      const def = BUILDINGS[b.type];
+      if (def && def.effect && def.effect.storageBonus) cap += def.effect.storageBonus;
+    }
+    return cap;
   }
   function storageUsed(state) {
     return Object.values(state.storage.items).reduce((s, n) => s + (n || 0), 0);
@@ -95,8 +121,9 @@
     const w = currentWeather(state, now);
     return (1 + bonus + achievementBonus(state)) * WEATHER[w].sellMul;
   }
-  function sellUnitValue(state, cropId, now) {
-    return Math.max(1, Math.round(CROPS[cropId].sellValue * sellMultiplier(state, now)));
+  function sellUnitValue(state, itemId, now) {
+    const def = getItemDef(itemId); // 作物或動物產品
+    return Math.max(1, Math.round((def ? def.sellValue : 0) * sellMultiplier(state, now)));
   }
 
   // ---------- 種植 / 收成 ----------
@@ -164,9 +191,13 @@
 
   // ---------- 訂單 ----------
   // 訂單存活靠 expiresAt；獎金 = 直售總值 × rarity.payMult（解讀時再加 sellBonus/連單）
-  const ORDER_QTY = { wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], strawberry: [2, 4], pumpkin: [1, 3] };
+  // 作物 + 動物產品的訂單需求量範圍
+  const ORDER_QTY = {
+    wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], strawberry: [2, 4], pumpkin: [1, 3],
+    egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5],
+  };
   function makeOrder(state, now, rng, idSeed) {
-    const pool = unlockedCrops(state);
+    const pool = availableOrderItems(state); // 作物 + 已解鎖動物產品
     const rarities = Object.values(ORDER_RARITY);
     const totalW = rarities.reduce((s, r) => s + r.weight, 0);
     let roll = (rng || Math.random)() * totalW, rarity = rarities[0];
@@ -177,14 +208,15 @@
     const wants = {}; let baseValue = 0, baseXp = 0;
     const chosen = [];
     for (let k = 0; k < nKinds; k++) {
-      let cropId; let guard = 0;
-      do { cropId = rngPick(rng, pool); guard++; } while (chosen.includes(cropId) && guard < 10);
-      chosen.push(cropId);
-      const [mn, mx] = ORDER_QTY[cropId] || [2, 5];
+      let itemId; let guard = 0;
+      do { itemId = rngPick(rng, pool); guard++; } while (chosen.includes(itemId) && guard < 10);
+      chosen.push(itemId);
+      const [mn, mx] = ORDER_QTY[itemId] || [2, 5];
       const qty = rngInt(rng, mn, mx);
-      wants[cropId] = (wants[cropId] || 0) + qty;
-      baseValue += CROPS[cropId].sellValue * qty;
-      baseXp += CROPS[cropId].xp * qty;
+      wants[itemId] = (wants[itemId] || 0) + qty;
+      const def = getItemDef(itemId);
+      baseValue += (def ? def.sellValue : 0) * qty;
+      baseXp += (CROPS[itemId] ? CROPS[itemId].xp : Math.round((def ? def.sellValue : 0) * 0.6)) * qty;
     }
     return {
       id: "order_" + idSeed,
@@ -315,8 +347,140 @@
     return { harvested };
   }
 
+  // ========================================================================
+  // MVP2：建材 / 地圖障礙 / 建築 / 動物
+  // ========================================================================
+
+  // ---------- 建材 ----------
+  function canAffordCost(state, cost) {
+    if (!cost) return true;
+    if (cost.coins && state.coins < cost.coins) return false;
+    for (const k of Object.keys(MATERIALS)) if (cost[k] && (state.materials[k] || 0) < cost[k]) return false;
+    return true;
+  }
+  function spendCost(state, cost) {
+    if (!cost) return;
+    if (cost.coins) state.coins -= cost.coins;
+    for (const k of Object.keys(MATERIALS)) if (cost[k]) state.materials[k] -= cost[k];
+  }
+  function grantMaterials(state, grants) {
+    for (const k of Object.keys(grants || {})) state.materials[k] = (state.materials[k] || 0) + grants[k];
+  }
+
+  // ---------- 地圖 / 障礙 ----------
+  function getTile(state, tileId) { return (state.map.tiles || []).find((t) => t.id === tileId) || null; }
+  function clearObstacle(state, tileId) {
+    const tile = getTile(state, tileId);
+    if (!tile || !tile.object) return { ok: false, reason: "no_obstacle" };
+    const ob = OBSTACLES[tile.object];
+    if (!ob) return { ok: false, reason: "unknown" };
+    if (state.coins < ob.clearCost) return { ok: false, reason: "no_coins" };
+    state.coins -= ob.clearCost;
+    grantMaterials(state, ob.grants);
+    const cleared = tile.object;
+    tile.object = null;          // 釋出草地
+    state.stats.cleared = (state.stats.cleared || 0) + 1;
+    return { ok: true, cleared, grants: ob.grants };
+  }
+
+  // ---------- 建築 ----------
+  function buildingUnlocked(state, type) { const d = BUILDINGS[type]; return !!d && state.level >= d.unlockLevel; }
+  function buildingCount(state, type) { return (state.buildings || []).filter((b) => b.type === type).length; }
+  function canBuildOn(state, tile) { return !!tile && tile.terrain === "grass" && !tile.object && !tile.buildingId; }
+  function buildBuilding(state, tileId, type, now) {
+    now = now || Date.now();
+    const def = BUILDINGS[type];
+    if (!def) return { ok: false, reason: "unknown" };
+    if (!buildingUnlocked(state, type)) return { ok: false, reason: "locked" };
+    const tile = getTile(state, tileId);
+    if (!canBuildOn(state, tile)) return { ok: false, reason: "bad_tile" };
+    if (!canAffordCost(state, def.cost)) return { ok: false, reason: "cost" };
+    spendCost(state, def.cost);
+    const b = { id: "b_" + type + "_" + (state.buildings.length + 1), type, tileId, builtAt: now, level: 1 };
+    state.buildings.push(b);
+    tile.buildingId = b.id;
+    // 動物家：自動入住 1 隻（讓收集產品立即可達）
+    if (def.effect && def.effect.unlockAnimal) {
+      addAnimal(state, b.id, def.effect.unlockAnimal[0], now);
+    }
+    return { ok: true, building: b };
+  }
+
+  // ---------- 動物 ----------
+  function homeBuildingFor(state, animalType) {
+    const homeType = ANIMALS[animalType].home;
+    return (state.buildings || []).find((b) => b.type === homeType) || null;
+  }
+  function animalCapacity(state, buildingId) {
+    const b = (state.buildings || []).find((x) => x.id === buildingId);
+    if (!b) return 0;
+    const def = BUILDINGS[b.type];
+    return def && def.effect ? (def.effect.capacity || 0) : 0;
+  }
+  function animalsInHome(state, buildingId) { return (state.animals || []).filter((a) => a.homeId === buildingId); }
+  function isAnimalUnlocked(state, animalType) {
+    const b = homeBuildingFor(state, animalType);
+    if (!b) return false;
+    const def = BUILDINGS[b.type];
+    return !!(def.effect && def.effect.unlockAnimal && def.effect.unlockAnimal.indexOf(animalType) !== -1);
+  }
+  function addAnimal(state, buildingId, animalType, now) {
+    const a = { id: "a_" + animalType + "_" + (state.animals.length + 1), type: animalType, homeId: buildingId, lastProducedAt: now };
+    state.animals.push(a);
+    return a;
+  }
+  function buyAnimal(state, buildingId, animalType, now) {
+    if (!isAnimalUnlocked(state, animalType)) return { ok: false, reason: "locked" };
+    const home = (state.buildings || []).find((b) => b.id === buildingId);
+    if (!home) return { ok: false, reason: "no_home" };
+    if (animalsInHome(state, buildingId).length >= animalCapacity(state, buildingId)) return { ok: false, reason: "full" };
+    const cost = ANIMALS[animalType].cost;
+    if (state.coins < cost) return { ok: false, reason: "no_coins" };
+    state.coins -= cost;
+    return { ok: true, animal: addAnimal(state, buildingId, animalType, now) };
+  }
+  function animalProgress(state, animal, now) {
+    const def = ANIMALS[animal.type];
+    const elapsed = Math.max(0, now - animal.lastProducedAt);
+    return { ready: elapsed >= def.produceMs, ratio: Math.min(1, elapsed / def.produceMs), remainingMs: Math.max(0, def.produceMs - elapsed) };
+  }
+  function collectAnimal(state, animalId, now) {
+    const a = (state.animals || []).find((x) => x.id === animalId);
+    if (!a) return { ok: false, reason: "gone" };
+    const def = ANIMALS[a.type];
+    const cycles = Math.floor((now - a.lastProducedAt) / def.produceMs);
+    if (cycles <= 0) return { ok: false, reason: "not_ready" };
+    const { added, lost } = addToStorage(state, def.product, cycles);
+    a.lastProducedAt += cycles * def.produceMs;
+    state.stats.collected[def.product] = (state.stats.collected[def.product] || 0) + added;
+    return { ok: true, product: def.product, added, lost, cycles };
+  }
+  function collectAllAnimals(state, now) {
+    const perProduct = {}; let total = 0, lost = 0;
+    for (const a of (state.animals || [])) {
+      const r = collectAnimal(state, a.id, now);
+      if (r.ok) { perProduct[r.product] = (perProduct[r.product] || 0) + r.added; total += r.added; lost += r.lost; }
+    }
+    return { perProduct, total, lost };
+  }
+  // 餵食：花作物讓動物立即產出一份（主動玩法獎勵）
+  function feedAnimal(state, animalId, now) {
+    const a = (state.animals || []).find((x) => x.id === animalId);
+    if (!a) return { ok: false, reason: "gone" };
+    const def = ANIMALS[a.type];
+    for (const k of Object.keys(def.feedCost)) if ((state.storage.items[k] || 0) < def.feedCost[k]) return { ok: false, reason: "no_feed" };
+    for (const k of Object.keys(def.feedCost)) {
+      state.storage.items[k] -= def.feedCost[k];
+      if (state.storage.items[k] <= 0) delete state.storage.items[k];
+    }
+    const { added, lost } = addToStorage(state, def.product, 1);
+    state.stats.collected[def.product] = (state.stats.collected[def.product] || 0) + added;
+    a.lastProducedAt = now; // 重置週期
+    return { ok: true, product: def.product, added, lost };
+  }
+
   // ---------- 離線進度 ----------
-  // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數
+  // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數、動物產品
   function applyOffline(state, now) {
     const last = state.lastSeenAt || now;
     const rawMs = Math.max(0, now - last);
@@ -368,19 +532,39 @@
         plot.cropId = null; plot.plantedAt = 0; // 只收一輪，格子清空
       }
     }
+
+    // MVP2：動物離線自動產出（時間戳計算，與作物同上限規則）
+    summary.products = {};
+    for (const a of (state.animals || [])) {
+      const def = ANIMALS[a.type];
+      const cycles = Math.min(500, Math.floor((offlineNow - a.lastProducedAt) / def.produceMs));
+      if (cycles <= 0) continue;
+      const { added, lost } = addToStorage(state, def.product, cycles);
+      summary.products[def.product] = (summary.products[def.product] || 0) + added;
+      summary.lost += lost;
+      state.stats.collected[def.product] = (state.stats.collected[def.product] || 0) + added;
+      a.lastProducedAt += cycles * def.produceMs;
+    }
+
     checkAchievements(state);
     state.lastSeenAt = now;
     return summary;
   }
 
   const GameAPI = {
-    rngInt, rngPick, unlockedCrops, isCropUnlocked, growthMultiplier, effectiveGrowMs,
+    rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, availableOrderItems,
+    growthMultiplier, buildingGrowthAura, effectiveGrowMs,
     getCropProgress, storageCapacity, storageUsed, addToStorage, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
+    // MVP2：建材 / 地圖 / 建築 / 動物
+    canAffordCost, spendCost, grantMaterials, getTile, clearObstacle,
+    buildingUnlocked, buildingCount, canBuildOn, buildBuilding,
+    homeBuildingFor, animalCapacity, animalsInHome, isAnimalUnlocked,
+    addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, feedAnimal,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;
