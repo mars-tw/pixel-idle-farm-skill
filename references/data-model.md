@@ -132,6 +132,64 @@ Suggested JS mapping:
 const ASSETS = {
   crops: "assets/generated/crop-growth.png",
   terrain: "assets/generated/terrain-tileset.png",
-  icons: "assets/generated/ui-icons.png"
+  actorsBuildings: "assets/generated/farm-actors-buildings.png",
+  icons: "assets/generated/ui-icons.png",
+  characterWalk: "assets/generated/characters/miri-rowan-walk-cycle.png",
+  characterActions: "assets/generated/characters/miri-rowan-farm-actions.png"
 };
 ```
+
+## Map, Animals, And Buildings
+
+When using the generated map and animal/building sheets, extend state instead of hard-coding visuals in the DOM. See `references/asset-gameplay-integration.md` for required gameplay behavior.
+
+```js
+state.map = {
+  width: 8,
+  height: 6,
+  tiles: [
+    { id: "t00", x: 0, y: 0, terrain: "grass", object: null, unlocked: true },
+    { id: "t01", x: 1, y: 0, terrain: "soil", moisture: 0, unlocked: true },
+    { id: "t02", x: 2, y: 0, terrain: "grass", object: "rock", unlocked: true }
+  ]
+};
+
+state.materials = { wood: 0, stone: 0, compost: 0 };
+
+state.animals = [
+  { id: "chicken_001", type: "chicken", homeId: "coop_001", fedAt: 0, productReadyAt: 0, happiness: 1 }
+];
+
+state.buildings = [
+  { id: "coop_001", type: "chickenCoop", x: 4, y: 2, builtAt: Date.now(), level: 1 }
+];
+
+state.interaction = {
+  tool: "hand",
+  buildType: null,
+  selectedTileId: null,
+  characterAction: "idle",
+  actionEndsAt: 0
+};
+```
+
+Suggested product ids for storage and orders:
+
+```js
+const PRODUCTS = {
+  egg: { name: "Egg", sellValue: 6, source: "chicken" },
+  milk: { name: "Milk", sellValue: 18, source: "cow" },
+  wool: { name: "Wool", sellValue: 24, source: "sheep" },
+  honey: { name: "Honey", sellValue: 15, source: "beeBox" },
+  wood: { name: "Wood", source: "stump" },
+  stone: { name: "Stone", source: "rock" }
+};
+```
+
+Orders should support crop and product requirements in the same `wants` object:
+
+```js
+{ wants: { wheat: 8, egg: 3 }, rewards: { coins: 70, xp: 14 } }
+```
+
+Use `state.interaction` for tool routing and animation hooks. Do not scatter tool-mode booleans across UI components. The full interaction roadmap is in `references/gameplay-interactions-roadmap.md`.

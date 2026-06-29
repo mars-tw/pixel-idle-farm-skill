@@ -12,6 +12,7 @@
       "type": "tileset",
       "grid": "8x8 conceptual tile grid",
       "recommendedTileSize": 32,
+      "gameplayUse": "Farm map terrain: soil, wet soil, paths, water, fences, clearable obstacles, bridge, well, compost and expansion tiles.",
       "status": "generated-preview"
     },
     {
@@ -28,6 +29,7 @@
       "type": "spritesheet",
       "grid": "mixed sprites with consistent padding",
       "recommendedTileSize": 32,
+      "gameplayUse": "Animal and building systems: chicken, cow, sheep, bee box, barn, coop, seed shop, silo, mailbox, order board, scarecrow.",
       "status": "generated-preview"
     },
     {
@@ -36,6 +38,7 @@
       "type": "icon-sheet",
       "grid": "8x8 conceptual icon grid",
       "recommendedTileSize": 32,
+      "gameplayUse": "HUD and action icons for coins, storage, upgrades, crop products, animal products, orders and settings.",
       "status": "generated-preview"
     },
     {
@@ -54,6 +57,7 @@
       "rows": ["walk-down", "walk-left", "walk-right", "walk-up"],
       "frames": ["idle-step", "left-foot", "idle-step", "right-foot"],
       "recommendedFps": 8,
+      "gameplayUse": "Visible player movement feedback while crossing farm map tiles.",
       "status": "generated-preview"
     },
     {
@@ -64,6 +68,9 @@
       "rows": ["idle-down", "hoe-side", "water-side", "sow-down", "harvest-down", "carry-down"],
       "frames": ["anticipation", "action", "contact-or-peak", "recovery"],
       "recommendedFps": 6,
+      "gameplayUse": "Visible action feedback for hoeing, watering, sowing, harvesting, carrying and animal product collection.",
+      "cutout": "assets/generated/characters/miri-rowan-farm-actions-cutout.png",
+      "cutoutNote": "Background-removed (edge flood-fill) transparent版，遊戲實際渲染用；缺檔時 fallback 原圖。",
       "status": "generated-preview"
     }
   ]

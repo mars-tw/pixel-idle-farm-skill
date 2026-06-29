@@ -20,6 +20,20 @@ Core promise: every return to the farm creates one useful decision: harvest now,
 - Offline progress capped at 8 hours for MVP balance.
 - localStorage save/load with manual reset for testing.
 
+## Asset Gameplay Requirement
+
+The project has generated terrain, animal/building, UI icon, and original character sheets. Production must turn these into gameplay and not leave them as unused files.
+
+Read `references/asset-gameplay-integration.md` before building the next playable version. The minimum next milestone is:
+
+- Terrain tiles affect placement, growth, access, or clearing rewards.
+- Animals produce eggs, milk, wool, or honey through timestamp timers.
+- Buildings unlock animals, storage, orders, or map utility.
+- Miri Rowan's walking and farm-action sheets are tied to visible player actions.
+- Orders consume at least one animal product after animals are unlocked.
+
+For a broader interaction roadmap, read `references/gameplay-interactions-roadmap.md`. It defines tool modes, tile inspection, obstacle clearing, animal product loops, mixed orders, character animation hooks, and the recommended build order.
+
 ## Core Loop
 
 1. Buy or select seed.
@@ -42,6 +56,9 @@ The first session should produce a harvest in under 20 seconds. The second upgra
 | 3 | Tomato, storage upgrade | Force storage planning |
 | 4 | Strawberry, auto-harvest | Convert active play into idle play |
 | 5 | Pumpkin, weather event | Longer offline target |
+| 6 | Chicken coop, eggs | Add animal product orders |
+| 7 | Barn, cow/sheep | Add longer idle product timers |
+| 8 | Bee box, honey aura | Add map adjacency bonuses |
 
 ## Crop Baseline
 
@@ -62,6 +79,9 @@ Direct sell is intentionally weaker than orders. Orders should pay 1.35x to 2.2x
 - Helper bot: auto-harvests but does not auto-plant until upgraded.
 - Order streak: fulfilling orders without trashing increases reward multiplier.
 - Achievements: give permanent small boosts, never mandatory for normal progress.
+- Map expansion: clear rocks/stumps/bushes to gain materials and unlock buildable land.
+- Animal care: build homes, wait/feed, collect products, fulfill mixed crop/product orders.
+- Tool interactions: hand, hoe, water, clear, build, and inspect modes make the same map support multiple decisions.
 
 ## UX Requirements
 
