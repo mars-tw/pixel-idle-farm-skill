@@ -90,7 +90,10 @@
     image-rendering: pixelated; pointer-events: none; transition: opacity .2s;
     mix-blend-mode: multiply; filter: saturate(1.12) contrast(1.04);
   }
-  .plot .crop-emoji { font-size: clamp(20px, 7vw, 38px); pointer-events: none; line-height: 1;
+  /* emoji 與 sprite 一樣脫離文檔流（絕對定位 + flex 置中），
+     避免 in-flow emoji 在字形 metrics 較大的瀏覽器（如 iOS Safari）撐高格子造成跑版 */
+  .plot .crop-emoji { position: absolute; inset: 0; align-items: center; justify-content: center;
+    font-size: clamp(20px, 7vw, 38px); pointer-events: none; line-height: 1; overflow: hidden;
     filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); transition: transform .2s; }
   .plot .grow-bar { position: absolute; left: 5%; right: 5%; bottom: 5px; height: 5px;
     background: rgba(0,0,0,.35); border-radius: 4px; overflow: hidden; }
@@ -189,6 +192,8 @@
   /* ===== 底部工具列 ===== */
   .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
   .toolbar .btn { background: var(--cream); border: 1.5px solid var(--border-d); color: var(--ink); }
+  /* 切換鈕固定寬度：像素圖/Emoji 文字長度不同，避免切換時工具列重新置中位移 */
+  #spriteToggle { min-width: 104px; }
   footer { text-align: center; font-size: 11px; color: #4d6b3a; margin: 14px 0 4px; opacity: .8; }
   footer a { color: #2c6f1e; }
 </style>
