@@ -112,6 +112,15 @@
     });
   }
 
+  // ---------- 側欄分頁 ----------
+  function switchTab(name) {
+    document.querySelectorAll(".side-tab").forEach((b) => b.classList.toggle("sel", b.dataset.tab === name));
+    document.querySelectorAll(".side-pane").forEach((p) => p.classList.toggle("sel", p.dataset.pane === name));
+  }
+  function setupSideTabs() {
+    document.querySelectorAll(".side-tab").forEach((b) => { b.onclick = () => switchTab(b.dataset.tab); });
+  }
+
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
   function setTool(t) { state.interaction.tool = t; renderToolbar(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
@@ -478,6 +487,7 @@
     const tile = G.getTileById(state, tileId);
     const tool = currentTool();
     renderTileContext();
+    switchTab("tile"); // 點磚自動顯示磚資訊分頁
     if (tool === "inspect") { updateMap(now()); inspectTile(tile); return; }
 
     const act = actionTargetFor(tool, tile);
@@ -873,6 +883,7 @@
     window.addEventListener("beforeunload", () => { state.lastSeenAt = now(); window.save(state); });
 
     bindToolbar();
+    setupSideTabs();
 
     // 測試/除錯掛鉤
     window.__farm = {

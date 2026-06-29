@@ -49,7 +49,20 @@
 
   /* ===== 主版面 ===== */
   .main { display: grid; grid-template-columns: 1fr; gap: 12px; }
-  @media (min-width: 860px) { .main { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+  /* 世界優先：桌面場景佔大、側欄精簡分頁 */
+  @media (min-width: 860px) { .main { grid-template-columns: minmax(0, 72%) minmax(0, 28%); align-items: start; } }
+  /* 分頁側欄 */
+  .side-panel { padding: 0; overflow: hidden; }
+  .side-tabs { display: flex; border-bottom: 2px solid var(--border); background: var(--cream-2); }
+  .side-tab { flex: 1; border: none; background: none; padding: 11px 6px; font-size: 13px; font-weight: 800;
+    color: var(--ink-soft); cursor: pointer; font-family: inherit; border-bottom: 3px solid transparent; min-height: 44px; }
+  .side-tab.sel { color: var(--ink); background: var(--cream); border-bottom-color: var(--good); }
+  .tab-badge { display: inline-block; min-width: 16px; padding: 0 4px; border-radius: 9px; background: var(--bad);
+    color: #fff; font-size: 10px; line-height: 16px; vertical-align: middle; }
+  .tab-badge:empty { display: none; }
+  .side-body { padding: 12px; }
+  .side-pane { display: none; } .side-pane.sel { display: block; }
+  .pane-head { font-size: 14px; font-weight: 900; color: #4a3a22; margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
 
   .panel {
     background: var(--cream); border: 2px solid var(--border-d); border-radius: var(--r);
@@ -324,19 +337,25 @@
       <div class="farmer" id="farmer" style="display:none"><div class="farmer-sprite" id="farmerSprite"></div></div>
     </div>
 
-    <!-- 右：磚資訊 + 訂單 + 升級 -->
-    <div class="info-col">
-      <div class="panel">
-        <h2>🔍 磚資訊 / 動作</h2>
-        <div class="tile-context" id="tileContext"><div class="tc-empty">點地圖磚查看資訊與動作</div></div>
+    <!-- 右：分頁側欄（磚資訊 / 訂單 / 升級）-->
+    <div class="panel side-panel">
+      <div class="side-tabs" id="sideTabs">
+        <button class="side-tab sel" data-tab="tile">🔍 磚資訊</button>
+        <button class="side-tab" data-tab="orders">📜 訂單 <span class="tab-badge" id="ordersBadge"></span></button>
+        <button class="side-tab" data-tab="upgrades">⬆️ 升級</button>
       </div>
-      <div class="panel">
-        <h2>📜 市集訂單 <span class="hint" id="streakHint"></span></h2>
-        <div class="orders" id="orders"></div>
-      </div>
-      <div class="panel">
-        <h2>⬆️ 農場升級</h2>
-        <div class="upgrades" id="upgrades"></div>
+      <div class="side-body">
+        <div class="side-pane sel" data-pane="tile">
+          <div class="tile-context" id="tileContext"><div class="tc-empty">點地圖磚查看資訊與動作</div></div>
+        </div>
+        <div class="side-pane" data-pane="orders">
+          <div class="pane-head">市集訂單 <span class="hint" id="streakHint"></span></div>
+          <div class="orders" id="orders"></div>
+        </div>
+        <div class="side-pane" data-pane="upgrades">
+          <div class="pane-head">農場升級</div>
+          <div class="upgrades" id="upgrades"></div>
+        </div>
       </div>
     </div>
   </div>
