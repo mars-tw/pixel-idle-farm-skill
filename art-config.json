@@ -32,6 +32,27 @@
       "type": "icon-sheet",
       "grid": "8x8 conceptual icon grid",
       "prompt": "Create a square pixel-art UI icon sheet for an idle farming game. Include coin, seed packet, wheat bundle, carrot, tomato, strawberry, corn, pumpkin, watering can, hoe, sickle, basket, clock, upgrade arrow, auto-harvest gear, market order crate, XP star, rain cloud, sun, fertilizer bag, storage chest, and premium-looking but non-monetized gem. Clean isolated icons, no numbers, no letters."
+    },
+    {
+      "id": "miri-rowan-turnaround",
+      "file": "characters/miri-rowan-turnaround.png",
+      "type": "character-model-sheet",
+      "grid": "front / side / back turnaround",
+      "prompt": "Create a completely original main farmer character model sheet for production use. The character is Miri Rowan: warm tan skin, short auburn hair, teal kerchief, cream work shirt, moss green overalls with brass buttons, red neck scarf, tan boots, hip seed pouch, tiny leaf-shaped brooch. Show three evenly spaced full-body views: front, side, and back. Neutral standing pose, consistent proportions and outfit details across all views, plain light background, no labels. Do not copy or reference any existing game, anime, manga, or franchise character."
+    },
+    {
+      "id": "miri-rowan-walk-cycle",
+      "file": "characters/miri-rowan-walk-cycle.png",
+      "type": "character-animation-sheet",
+      "grid": "4 rows x 4 columns; down, left, right, up walk cycles",
+      "prompt": "Create a completely original pixel-art walking cycle spritesheet for the same original farmer character Miri Rowan: teal kerchief, short auburn hair, cream work shirt, moss green overalls, red neck scarf, tan boots, hip seed pouch. Arrange as a clean 4 rows x 4 columns grid. Rows: walk down, walk left, walk right, walk up. Columns: idle step, left foot, idle step, right foot. Keep character proportions, outfit, colors, and silhouette consistent in every frame. Plain light background, no labels. Do not copy or reference any existing game, anime, manga, or franchise character."
+    },
+    {
+      "id": "miri-rowan-farm-actions",
+      "file": "characters/miri-rowan-farm-actions.png",
+      "type": "character-animation-sheet",
+      "grid": "6 rows x 4 columns; idle, hoe, water, sow, harvest, carry",
+      "prompt": "Create a completely original pixel-art farming action animation spritesheet for the same original farmer character Miri Rowan: teal kerchief, short auburn hair, cream work shirt, moss green overalls, red neck scarf, tan boots, hip seed pouch. Arrange as a clean 6 rows x 4 columns grid. Rows: idle breathing facing down, hoe soil side-facing, watering can side-facing, sow seeds facing down, harvest pull facing down, carry basket facing down. Columns: anticipation, action, contact or peak, recovery. Keep readable silhouettes, strong tool arcs, and consistent outfit details. Plain light background, no labels. Do not copy or reference any existing game, anime, manga, or franchise character."
     }
   ]
 }

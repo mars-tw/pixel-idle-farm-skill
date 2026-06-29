@@ -43,6 +43,9 @@ Expected files:
 - `assets/generated/crop-growth.png`
 - `assets/generated/farm-actors-buildings.png`
 - `assets/generated/ui-icons.png`
+- `assets/generated/characters/miri-rowan-turnaround.png`
+- `assets/generated/characters/miri-rowan-walk-cycle.png`
+- `assets/generated/characters/miri-rowan-farm-actions.png`
 
 If files are missing, run:
 
@@ -51,6 +54,8 @@ If files are missing, run:
 ```
 
 Then generate with OpenAI after setting `OPENAI_API_KEY`, or use the dry-run prompts in another image tool and save the output to the expected paths.
+
+For character slicing and animation naming, read `references/character-animation.md`.
 
 ## Validation
 

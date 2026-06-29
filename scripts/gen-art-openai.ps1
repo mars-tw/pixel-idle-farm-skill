@@ -48,6 +48,8 @@ foreach ($sheet in $sheets) {
   $prompt = Join-Prompt -Main $sheet.prompt -Suffix $config.styleSuffix
   $fileName = if ($sheet.file) { $sheet.file } else { "$($sheet.id).png" }
   $outFile = Join-Path $outputDir $fileName
+  $outParent = Split-Path -Parent $outFile
+  New-Item -ItemType Directory -Force -Path $outParent | Out-Null
   $size = if ($sheet.size) { $sheet.size } else { $config.size }
   $quality = if ($sheet.quality) { $sheet.quality } else { $config.quality }
 

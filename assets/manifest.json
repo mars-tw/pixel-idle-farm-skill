@@ -37,6 +37,34 @@
       "grid": "8x8 conceptual icon grid",
       "recommendedTileSize": 32,
       "status": "generated-preview"
+    },
+    {
+      "id": "miri-rowan-turnaround",
+      "file": "assets/generated/characters/miri-rowan-turnaround.png",
+      "type": "character-model-sheet",
+      "grid": "front / side / back turnaround",
+      "recommendedSpriteSize": "48x64 source, downscale/crop to 32x48 as needed",
+      "status": "generated-preview"
+    },
+    {
+      "id": "miri-rowan-walk-cycle",
+      "file": "assets/generated/characters/miri-rowan-walk-cycle.png",
+      "type": "character-animation-sheet",
+      "grid": "4 rows x 4 columns",
+      "rows": ["walk-down", "walk-left", "walk-right", "walk-up"],
+      "frames": ["idle-step", "left-foot", "idle-step", "right-foot"],
+      "recommendedFps": 8,
+      "status": "generated-preview"
+    },
+    {
+      "id": "miri-rowan-farm-actions",
+      "file": "assets/generated/characters/miri-rowan-farm-actions.png",
+      "type": "character-animation-sheet",
+      "grid": "6 rows x 4 columns",
+      "rows": ["idle-down", "hoe-side", "water-side", "sow-down", "harvest-down", "carry-down"],
+      "frames": ["anticipation", "action", "contact-or-peak", "recovery"],
+      "recommendedFps": 6,
+      "status": "generated-preview"
     }
   ]
 }

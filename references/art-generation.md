@@ -34,6 +34,9 @@ Requirements for live generation:
 | crop-growth | crop growth stages | plot renderer |
 | farm-actors-buildings | player, animals, buildings | farm scene and unlocks |
 | ui-icons | resource and action icons | HUD, buttons, order board |
+| miri-rowan-turnaround | original player character views | character reference |
+| miri-rowan-walk-cycle | four-direction walking | player movement |
+| miri-rowan-farm-actions | farm tool and harvest actions | player interaction animation |
 
 ## Acceptance Checklist
 
