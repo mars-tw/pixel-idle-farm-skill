@@ -1,0 +1,79 @@
+{
+  "version": "2.0.0",
+  "generatedBy": "gen-v2-atlases.js (placeholder)",
+  "note": "整數 frame placeholder atlas；正式 gpt-image-2 v2 就緒可覆蓋同名 PNG。",
+  "sheets": {
+    "terrain": {
+      "image": "assets/generated/v2/terrain-tiles-32.png",
+      "map": "assets/generated/v2/terrain-tiles-32.json",
+      "meta": {
+        "w": 512,
+        "h": 512,
+        "tile": 32
+      },
+      "frameCount": 32
+    },
+    "crops": {
+      "image": "assets/generated/v2/crops-32.png",
+      "map": "assets/generated/v2/crops-32.json",
+      "meta": {
+        "w": 160,
+        "h": 192,
+        "fw": 32,
+        "fh": 32,
+        "cols": 5,
+        "rows": 6
+      },
+      "frameCount": 30
+    },
+    "walk": {
+      "image": "assets/generated/v2/miri-walk-48x64.png",
+      "map": "assets/generated/v2/miri-walk-48x64.json",
+      "meta": {
+        "w": 192,
+        "h": 256,
+        "fw": 48,
+        "fh": 64,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    },
+    "actions": {
+      "image": "assets/generated/v2/miri-actions-48x64.png",
+      "map": "assets/generated/v2/miri-actions-48x64.json",
+      "meta": {
+        "w": 192,
+        "h": 384,
+        "fw": 48,
+        "fh": 64,
+        "cols": 4,
+        "rows": 6
+      },
+      "frameCount": 24
+    },
+    "buildings": {
+      "image": "assets/generated/v2/buildings-props.png",
+      "map": "assets/generated/v2/buildings-props.json",
+      "meta": {
+        "w": 384,
+        "h": 384,
+        "unit": 64
+      },
+      "frameCount": 16
+    },
+    "animals": {
+      "image": "assets/generated/v2/animals-48.png",
+      "map": "assets/generated/v2/animals-48.json",
+      "meta": {
+        "w": 192,
+        "h": 192,
+        "fw": 48,
+        "fh": 48,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    }
+  }
+}

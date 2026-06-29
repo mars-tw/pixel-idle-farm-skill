@@ -1,0 +1,205 @@
+{
+  "image": "assets/generated/v2/miri-actions-48x64.png",
+  "meta": {
+    "w": 192,
+    "h": 384,
+    "fw": 48,
+    "fh": 64,
+    "cols": 4,
+    "rows": 6
+  },
+  "frames": {
+    "idle_anticipation": {
+      "x": 0,
+      "y": 0,
+      "w": 48,
+      "h": 64,
+      "row": 0,
+      "col": 0
+    },
+    "idle_action": {
+      "x": 48,
+      "y": 0,
+      "w": 48,
+      "h": 64,
+      "row": 0,
+      "col": 1
+    },
+    "idle_contact": {
+      "x": 96,
+      "y": 0,
+      "w": 48,
+      "h": 64,
+      "row": 0,
+      "col": 2
+    },
+    "idle_recovery": {
+      "x": 144,
+      "y": 0,
+      "w": 48,
+      "h": 64,
+      "row": 0,
+      "col": 3
+    },
+    "hoe_anticipation": {
+      "x": 0,
+      "y": 64,
+      "w": 48,
+      "h": 64,
+      "row": 1,
+      "col": 0
+    },
+    "hoe_action": {
+      "x": 48,
+      "y": 64,
+      "w": 48,
+      "h": 64,
+      "row": 1,
+      "col": 1
+    },
+    "hoe_contact": {
+      "x": 96,
+      "y": 64,
+      "w": 48,
+      "h": 64,
+      "row": 1,
+      "col": 2
+    },
+    "hoe_recovery": {
+      "x": 144,
+      "y": 64,
+      "w": 48,
+      "h": 64,
+      "row": 1,
+      "col": 3
+    },
+    "water_anticipation": {
+      "x": 0,
+      "y": 128,
+      "w": 48,
+      "h": 64,
+      "row": 2,
+      "col": 0
+    },
+    "water_action": {
+      "x": 48,
+      "y": 128,
+      "w": 48,
+      "h": 64,
+      "row": 2,
+      "col": 1
+    },
+    "water_contact": {
+      "x": 96,
+      "y": 128,
+      "w": 48,
+      "h": 64,
+      "row": 2,
+      "col": 2
+    },
+    "water_recovery": {
+      "x": 144,
+      "y": 128,
+      "w": 48,
+      "h": 64,
+      "row": 2,
+      "col": 3
+    },
+    "sow_anticipation": {
+      "x": 0,
+      "y": 192,
+      "w": 48,
+      "h": 64,
+      "row": 3,
+      "col": 0
+    },
+    "sow_action": {
+      "x": 48,
+      "y": 192,
+      "w": 48,
+      "h": 64,
+      "row": 3,
+      "col": 1
+    },
+    "sow_contact": {
+      "x": 96,
+      "y": 192,
+      "w": 48,
+      "h": 64,
+      "row": 3,
+      "col": 2
+    },
+    "sow_recovery": {
+      "x": 144,
+      "y": 192,
+      "w": 48,
+      "h": 64,
+      "row": 3,
+      "col": 3
+    },
+    "harvest_anticipation": {
+      "x": 0,
+      "y": 256,
+      "w": 48,
+      "h": 64,
+      "row": 4,
+      "col": 0
+    },
+    "harvest_action": {
+      "x": 48,
+      "y": 256,
+      "w": 48,
+      "h": 64,
+      "row": 4,
+      "col": 1
+    },
+    "harvest_contact": {
+      "x": 96,
+      "y": 256,
+      "w": 48,
+      "h": 64,
+      "row": 4,
+      "col": 2
+    },
+    "harvest_recovery": {
+      "x": 144,
+      "y": 256,
+      "w": 48,
+      "h": 64,
+      "row": 4,
+      "col": 3
+    },
+    "carry_anticipation": {
+      "x": 0,
+      "y": 320,
+      "w": 48,
+      "h": 64,
+      "row": 5,
+      "col": 0
+    },
+    "carry_action": {
+      "x": 48,
+      "y": 320,
+      "w": 48,
+      "h": 64,
+      "row": 5,
+      "col": 1
+    },
+    "carry_contact": {
+      "x": 96,
+      "y": 320,
+      "w": 48,
+      "h": 64,
+      "row": 5,
+      "col": 2
+    },
+    "carry_recovery": {
+      "x": 144,
+      "y": 320,
+      "w": 48,
+      "h": 64,
+      "row": 5,
+      "col": 3
+    }
+  }
+}

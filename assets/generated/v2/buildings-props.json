@@ -1,0 +1,250 @@
+{
+  "image": "assets/generated/v2/buildings-props.png",
+  "meta": {
+    "w": 384,
+    "h": 384,
+    "unit": 64
+  },
+  "frames": {
+    "farmhouse": {
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "footprint": [
+        2,
+        2
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "barn": {
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "footprint": [
+        2,
+        2
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "silo": {
+      "x": 256,
+      "y": 0,
+      "w": 64,
+      "h": 128,
+      "footprint": [
+        1,
+        2
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "chicken_coop": {
+      "x": 320,
+      "y": 0,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "bee_box": {
+      "x": 0,
+      "y": 64,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "well": {
+      "x": 64,
+      "y": 64,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "order_board": {
+      "x": 128,
+      "y": 64,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "mailbox": {
+      "x": 192,
+      "y": 64,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "storage_crate": {
+      "x": 256,
+      "y": 64,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "scarecrow": {
+      "x": 320,
+      "y": 64,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "stump": {
+      "x": 0,
+      "y": 128,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "rock": {
+      "x": 64,
+      "y": 128,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "bush": {
+      "x": 128,
+      "y": 128,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "wood_stack": {
+      "x": 192,
+      "y": 128,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "stone_stack": {
+      "x": 256,
+      "y": 128,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    },
+    "compost_heap": {
+      "x": 320,
+      "y": 128,
+      "w": 64,
+      "h": 64,
+      "footprint": [
+        1,
+        1
+      ],
+      "anchor": [
+        0.5,
+        0.9
+      ],
+      "blocksMovement": true
+    }
+  }
+}

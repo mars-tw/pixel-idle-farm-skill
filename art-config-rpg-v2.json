@@ -1,0 +1,83 @@
+{
+  "model": "gpt-image-2",
+  "outputDir": "assets/generated/v2",
+  "quality": "high",
+  "postprocess": {
+    "background": "flat chroma key or transparent pipeline",
+    "required": [
+      "remove background to alpha",
+      "crop to exact sheet size",
+      "validate integer frame dimensions",
+      "write companion atlas json"
+    ]
+  },
+  "globalStyle": "Original premium cozy pixel art for a browser RPG idle farming game. Top-down 3/4 RPG perspective, crisp pixel edges, readable at 32px and 48px, consistent upper-left lighting, varied natural palette, no text, no logo, no watermark, no copied franchise style.",
+  "visualTargets": [
+    "references/visual-targets/rpg-desktop-scene-target.png",
+    "references/visual-targets/rpg-asset-atlas-direction.png"
+  ],
+  "sheets": [
+    {
+      "id": "terrain-tiles-v2",
+      "file": "terrain-tiles-32.png",
+      "atlas": "terrain-tiles-32.json",
+      "size": "512x512",
+      "frameSize": "32x32",
+      "grid": "16 columns x 16 rows",
+      "prompt": "Create a runtime-safe pixel-art terrain tilesheet for a high-quality cozy RPG farming game. Exact 16 by 16 grid of 32x32 tiles, no padding, transparent or flat removable chroma-key background. Include grass variants, flower grass, tall grass, dry soil, wet soil, seeded soil, dirt path center and edges, water center and edges, bridge horizontal and vertical, fence pieces, selection overlays, and ready glow. Every tile must align perfectly to a 32x32 grid. No labels, no numbers, no text."
+    },
+    {
+      "id": "crops-v2",
+      "file": "crops-32.png",
+      "atlas": "crops-32.json",
+      "size": "160x192",
+      "frameSize": "32x32",
+      "grid": "5 columns x 6 rows",
+      "prompt": "Create a runtime-safe crop growth spritesheet for wheat, carrot, tomato, strawberry, corn, and pumpkin. Exact 5 columns by 6 rows, each frame 32x32. Columns are seed, sprout, young, mature, ready. Rows are one crop each. Transparent or flat removable chroma-key background. Crop bases share a consistent baseline. Do not include soil tile backgrounds inside crop frames. No labels, no text."
+    },
+    {
+      "id": "miri-walk-v2",
+      "file": "miri-walk-48x64.png",
+      "atlas": "miri-walk-48x64.json",
+      "size": "192x256",
+      "frameSize": "48x64",
+      "grid": "4 columns x 4 rows",
+      "prompt": "Create a completely original pixel-art walk-cycle sheet for Miri Rowan, an original farmer: teal kerchief, auburn hair, cream work shirt, moss green overalls, red scarf, tan boots, seed pouch. Exact 4 columns by 4 rows, each frame 48x64. Rows: down, left, right, up. Columns: idle-step, step-a, idle-step, step-b. Feet must stay on one baseline and character proportions must be consistent. Transparent or flat removable chroma-key background. No labels, no text. Do not copy any existing game, anime, manga, or franchise character."
+    },
+    {
+      "id": "miri-actions-v2",
+      "file": "miri-actions-48x64.png",
+      "atlas": "miri-actions-48x64.json",
+      "size": "192x384",
+      "frameSize": "48x64",
+      "grid": "4 columns x 6 rows",
+      "prompt": "Create a completely original pixel-art farming action sheet for Miri Rowan with the same outfit and proportions as the walk cycle. Exact 4 columns by 6 rows, each frame 48x64. Rows: idle_down, hoe_side, water_side, sow_down, harvest_down, carry_down. Columns: anticipation, action, contact, recovery. Keep tool arcs inside bounds, feet on a shared baseline, and silhouettes readable. Transparent or flat removable chroma-key background. No labels, no text. Do not copy existing game characters."
+    },
+    {
+      "id": "buildings-props-v2",
+      "file": "buildings-props.png",
+      "atlas": "buildings-props.json",
+      "size": "1024x1024",
+      "frameMap": "variable frame atlas",
+      "prompt": "Create a clean pixel-art object atlas for a cozy RPG farm. Use separated transparent sprites with generous spacing. Include farmhouse 3x3 footprint, order board, mailbox, well, chicken coop, barn, silo, bee box, scarecrow, stump, rock, bush, wood stack, stone stack, compost heap, bridge pieces, fence gate, and storage crate. Every object must have a clear baseline and implied tile footprint. No labels, no numbers, no text, no watermark."
+    },
+    {
+      "id": "animals-v2",
+      "file": "animals-48.png",
+      "atlas": "animals-48.json",
+      "size": "192x192",
+      "frameSize": "48x48",
+      "grid": "4 columns x 4 rows",
+      "prompt": "Create a runtime-safe pixel-art animal spritesheet. Exact 4 columns by 4 rows, each frame 48x48. Rows: chicken, cow, sheep, bee. Columns: idle_a, idle_b, product_ready, rest. Original cute farm animals, consistent scale, clear baseline, transparent or flat removable chroma-key background. No labels, no text."
+    },
+    {
+      "id": "ui-icons-v2",
+      "file": "ui-icons-32.png",
+      "atlas": "ui-icons-32.json",
+      "size": "512x512",
+      "frameSize": "32x32",
+      "grid": "16 columns x 16 rows",
+      "prompt": "Create a runtime-safe 32x32 pixel-art icon sheet for a cozy RPG idle farm. Transparent or flat removable chroma-key background. Include coin, xp star, storage, order, upgrade, hand, water, clear, build, inspect, six crop icons, egg, milk, wool, honey, wood, stone, compost, sun, rain, helper, settings. Exact grid alignment. No text, no numbers, no labels."
+    }
+  ]
+}

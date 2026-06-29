@@ -2,7 +2,7 @@
 
 This roadmap turns Sunrise Sprout Farm from a crop timer into a richer interactive farm. Use it after reading `game-design.md` and `asset-gameplay-integration.md`.
 
-For the current implementation audit and the exact walkable-map acceptance gate, read `playable-map-movement-acceptance.md`. As of 2026-06-29 the project has map systems and action animation, but it is not yet a walkable map game because Miri is fixed in the farm panel and no player coordinates are saved.
+For the current implementation audit and the exact walkable-map acceptance gate, read `playable-map-movement-acceptance.md`. As of the 2026-06-29 gate recheck, the walkable map milestone has passed: Miri is rendered in the map layer, `state.player` persists coordinates, and browser E2E verifies desktop/mobile movement.
 
 ## Design Goals
 

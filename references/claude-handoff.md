@@ -12,6 +12,7 @@ This folder is intended to be usable by Claude Code or Codex as an open-source g
 6. Read `references/asset-gameplay-integration.md` before adding the next playable milestone; generated map, animal, building, icon, and character assets must become gameplay systems.
 7. Read `references/gameplay-interactions-roadmap.md` before adding new player interactions, tool modes, map actions, animal loops, events, or character animation hooks.
 8. Read `references/playable-map-movement-acceptance.md` before claiming the game has a walkable map or Harvest-Moon-like movement.
+9. Read `references/rpg-quality-rework-brief.md`, `references/asset-production-spec-v2.md`, and `references/production-directive-rpg-rework.md` before improving desktop visual quality or replacing preview assets.
 
 ## Build Target
 
@@ -40,6 +41,7 @@ No build step is required for the default implementation. Use localStorage for s
 8. Map, animal, building, and character assets wired to actual gameplay, not decoration-only rendering.
 9. Tool-mode interactions, tile inspection, and mixed crop/animal/material orders as described in `references/gameplay-interactions-roadmap.md`.
 10. Walkable farm scene acceptance as described in `references/playable-map-movement-acceptance.md`.
+11. RPG-quality desktop/mobile scene rework as described in `references/rpg-quality-rework-brief.md`.
 
 ## Mandatory Asset Gameplay
 
@@ -54,6 +56,7 @@ The next production pass must use generated assets this way:
 Acceptance details are in `references/asset-gameplay-integration.md`.
 Interaction sequencing and test expectations are in `references/gameplay-interactions-roadmap.md`.
 Walkable map and character movement gates are in `references/playable-map-movement-acceptance.md`.
+RPG visual-quality and v2 asset-production requirements are in `references/rpg-quality-rework-brief.md` and `references/asset-production-spec-v2.md`.
 
 ## Asset Files
 

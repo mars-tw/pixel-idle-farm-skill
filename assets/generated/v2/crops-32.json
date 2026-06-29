@@ -1,0 +1,253 @@
+{
+  "image": "assets/generated/v2/crops-32.png",
+  "meta": {
+    "w": 160,
+    "h": 192,
+    "fw": 32,
+    "fh": 32,
+    "cols": 5,
+    "rows": 6
+  },
+  "frames": {
+    "wheat_seed": {
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 32,
+      "row": 0,
+      "col": 0
+    },
+    "wheat_sprout": {
+      "x": 32,
+      "y": 0,
+      "w": 32,
+      "h": 32,
+      "row": 0,
+      "col": 1
+    },
+    "wheat_young": {
+      "x": 64,
+      "y": 0,
+      "w": 32,
+      "h": 32,
+      "row": 0,
+      "col": 2
+    },
+    "wheat_mature": {
+      "x": 96,
+      "y": 0,
+      "w": 32,
+      "h": 32,
+      "row": 0,
+      "col": 3
+    },
+    "wheat_ready": {
+      "x": 128,
+      "y": 0,
+      "w": 32,
+      "h": 32,
+      "row": 0,
+      "col": 4
+    },
+    "carrot_seed": {
+      "x": 0,
+      "y": 32,
+      "w": 32,
+      "h": 32,
+      "row": 1,
+      "col": 0
+    },
+    "carrot_sprout": {
+      "x": 32,
+      "y": 32,
+      "w": 32,
+      "h": 32,
+      "row": 1,
+      "col": 1
+    },
+    "carrot_young": {
+      "x": 64,
+      "y": 32,
+      "w": 32,
+      "h": 32,
+      "row": 1,
+      "col": 2
+    },
+    "carrot_mature": {
+      "x": 96,
+      "y": 32,
+      "w": 32,
+      "h": 32,
+      "row": 1,
+      "col": 3
+    },
+    "carrot_ready": {
+      "x": 128,
+      "y": 32,
+      "w": 32,
+      "h": 32,
+      "row": 1,
+      "col": 4
+    },
+    "tomato_seed": {
+      "x": 0,
+      "y": 64,
+      "w": 32,
+      "h": 32,
+      "row": 2,
+      "col": 0
+    },
+    "tomato_sprout": {
+      "x": 32,
+      "y": 64,
+      "w": 32,
+      "h": 32,
+      "row": 2,
+      "col": 1
+    },
+    "tomato_young": {
+      "x": 64,
+      "y": 64,
+      "w": 32,
+      "h": 32,
+      "row": 2,
+      "col": 2
+    },
+    "tomato_mature": {
+      "x": 96,
+      "y": 64,
+      "w": 32,
+      "h": 32,
+      "row": 2,
+      "col": 3
+    },
+    "tomato_ready": {
+      "x": 128,
+      "y": 64,
+      "w": 32,
+      "h": 32,
+      "row": 2,
+      "col": 4
+    },
+    "strawberry_seed": {
+      "x": 0,
+      "y": 96,
+      "w": 32,
+      "h": 32,
+      "row": 3,
+      "col": 0
+    },
+    "strawberry_sprout": {
+      "x": 32,
+      "y": 96,
+      "w": 32,
+      "h": 32,
+      "row": 3,
+      "col": 1
+    },
+    "strawberry_young": {
+      "x": 64,
+      "y": 96,
+      "w": 32,
+      "h": 32,
+      "row": 3,
+      "col": 2
+    },
+    "strawberry_mature": {
+      "x": 96,
+      "y": 96,
+      "w": 32,
+      "h": 32,
+      "row": 3,
+      "col": 3
+    },
+    "strawberry_ready": {
+      "x": 128,
+      "y": 96,
+      "w": 32,
+      "h": 32,
+      "row": 3,
+      "col": 4
+    },
+    "corn_seed": {
+      "x": 0,
+      "y": 128,
+      "w": 32,
+      "h": 32,
+      "row": 4,
+      "col": 0
+    },
+    "corn_sprout": {
+      "x": 32,
+      "y": 128,
+      "w": 32,
+      "h": 32,
+      "row": 4,
+      "col": 1
+    },
+    "corn_young": {
+      "x": 64,
+      "y": 128,
+      "w": 32,
+      "h": 32,
+      "row": 4,
+      "col": 2
+    },
+    "corn_mature": {
+      "x": 96,
+      "y": 128,
+      "w": 32,
+      "h": 32,
+      "row": 4,
+      "col": 3
+    },
+    "corn_ready": {
+      "x": 128,
+      "y": 128,
+      "w": 32,
+      "h": 32,
+      "row": 4,
+      "col": 4
+    },
+    "pumpkin_seed": {
+      "x": 0,
+      "y": 160,
+      "w": 32,
+      "h": 32,
+      "row": 5,
+      "col": 0
+    },
+    "pumpkin_sprout": {
+      "x": 32,
+      "y": 160,
+      "w": 32,
+      "h": 32,
+      "row": 5,
+      "col": 1
+    },
+    "pumpkin_young": {
+      "x": 64,
+      "y": 160,
+      "w": 32,
+      "h": 32,
+      "row": 5,
+      "col": 2
+    },
+    "pumpkin_mature": {
+      "x": 96,
+      "y": 160,
+      "w": 32,
+      "h": 32,
+      "row": 5,
+      "col": 3
+    },
+    "pumpkin_ready": {
+      "x": 128,
+      "y": 160,
+      "w": 32,
+      "h": 32,
+      "row": 5,
+      "col": 4
+    }
+  }
+}

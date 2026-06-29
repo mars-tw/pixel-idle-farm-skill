@@ -2,30 +2,43 @@
 
 This file is a production gate. Do not treat the game as a Harvest-Moon-like pixel farm until the player can move on the farm map and actions resolve through that map.
 
-## Audit Result: 2026-06-29
+## Audit Result: 2026-06-29 Gate Recheck
 
-Tested both the local page and the deployed GitHub Pages build.
+Status: passed for the walkable farm-map milestone.
 
-What works:
+Verified build:
 
-- The page loads with no browser console errors.
-- The game renders 12 crop plots, 5 tool modes, and a 6x4 expansion map.
-- Map tiles can be inspected, obstacles can be cleared, buildings can be placed, and animal systems exist in logic/tests.
-- Miri Rowan's action sheet is loaded and used for farm action feedback.
+- Local `main` and `origin/main` point to `4227f17 feat(walkable-map): 主畫面改為可走動 tile map，Miri 在地圖上移動`.
+- Latest GitHub Actions `CI & Deploy Pages` run for `4227f17` completed with `success`.
+- Local `npm test` passed.
+- Local `npm run test:e2e` passed in Chromium at `1280x900` and `390x844`.
+- Deployed GitHub Pages was manually verified in Chromium at `1280x900` and `390x844`.
 
-What is not yet done:
+Gate checks passed:
 
-- Miri is rendered inside `.farm-panel`, not inside the map grid.
-- `state` has no player or character coordinate object.
-- `state.interaction` only stores `{ tool, buildType }`; it does not store selected tile, character action, path, facing, or action target.
-- Clicking a map tile changes the selected tile/context panel, but Miri's document position does not change.
-- The map appears as a lower expansion panel, not as the primary playable scene.
+- The first gameplay surface is now an 8x6 tile map scene, not the old crop-dashboard grid.
+- `#player` is a child of `.map-scene-wrap`, so Miri is rendered in the map layer.
+- `state.player` stores tile position, facing, action, target, and action end time.
+- `state.interaction` stores tool, build type, selected tile, pending path, and last invalid reason.
+- Clicking a walkable tile changes both `state.player.tileId` and the `#player` DOM position.
+- Walk movement uses the walk-cycle sheet while moving.
+- Tool actions route through map targets: plant, water, harvest, clear, build, and collect.
+- Clear tool moves Miri first, then clears the obstacle and grants materials.
+- Chicken coop can be built on a map tile and produces an egg.
+- The deployed page loads required JS and image assets with HTTP 200 and no console errors.
+- Mobile viewport has no horizontal overflow and keeps the map visible in the first gameplay viewport.
 
-Conclusion: the current build is an idle farm dashboard with an expansion map. It is not yet a walkable map farming game.
+Remaining non-blocking polish:
 
-## Non-Negotiable Next Milestone
+- Clicking one animal building currently uses `collectAllAnimals`, so it collects all mature animal products instead of only that building's products.
+- The old hidden `.farm` and `.farmer` compatibility/debug DOM can be removed after another stable release.
+- Later milestones should add stronger farm identity: named NPC orders, collection book, decorations, events, and per-building/animal interactions.
 
-The next production pass must deliver a walkable farm scene, not another data-only or panel-only feature.
+Conclusion: the old rejection case is resolved. The project is now a walkable tile-map idle farming game and passes this gate.
+
+## Maintained Gate For Future Changes
+
+Future production passes must preserve the walkable farm scene and must not regress to a data-only or panel-only feature.
 
 Required result:
 
