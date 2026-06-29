@@ -61,6 +61,7 @@
       map: makeMap(),
       buildings: [],                           // { id, type, tileId, builtAt, level }
       animals: [],                             // { id, type, homeId, lastProducedAt }
+      interaction: { tool: "hand", buildType: null }, // 工具模式（roadmap）
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} },
     };
   }
@@ -85,6 +86,7 @@
     merged.map = (state.map && Array.isArray(state.map.tiles) && state.map.tiles.length) ? state.map : def.map;
     merged.buildings = Array.isArray(state.buildings) ? state.buildings : [];
     merged.animals = Array.isArray(state.animals) ? state.animals : [];
+    merged.interaction = Object.assign({ tool: "hand", buildType: null }, state.interaction);
     merged.version = C.GAME.version;
     return merged;
   }

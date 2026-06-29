@@ -181,6 +181,17 @@ const ANIMALS = {
   bee:     { id: "bee",     name: "蜜蜂", emoji: "🐝", product: "honey", produceMs: 15 * 60 * 1000, home: "beeBox",      unlockLevel: 6, cost: 120, feedCost: { wheat: 3 } },
 };
 
+// ===== 互動工具（roadmap：明確工具模式，點擊行為依工具改變）=====
+const TOOLS = {
+  hand:    { id: "hand",    name: "手", icon: "👆", desc: "種植/收成作物、收集產物" },
+  water:   { id: "water",   name: "澆水", icon: "💧", desc: "對已種植的乾土澆水加速一輪" },
+  clear:   { id: "clear",   name: "清除", icon: "⛏️", desc: "清除地圖上的石/樁/灌木取建材" },
+  build:   { id: "build",   name: "建造", icon: "🏗️", desc: "在草地興建建築" },
+  inspect: { id: "inspect", name: "查看", icon: "🔍", desc: "查看磚/作物的資訊與效果" },
+};
+const TOOL_ORDER = ["hand", "water", "clear", "build", "inspect"];
+const MOISTURE_MUL = 0.75;            // 濕土：當輪成長時間 ×0.75（更快）
+
 // 地圖預設配置（6×4）：草地 + 障礙 + 水域。soil 由上方既有農場負責，本圖為擴張/牧場用地。
 const MAP_DEFAULT = { width: 6, height: 4,
   // 以 (x,y)->object 標記初始障礙/水；其餘為 grass
@@ -195,6 +206,7 @@ const CONFIG = {
   WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
   PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
   BUILDINGS, BUILDING_ORDER, ANIMALS, MAP_DEFAULT,
+  TOOLS, TOOL_ORDER, MOISTURE_MUL,
 };
 if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
 if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;

@@ -200,6 +200,17 @@
   /* ===== 澆水鈕 ===== */
   .btn.water { background: linear-gradient(180deg, #7fd0ee, var(--water)); color: #04303f; flex: 0 0 auto; }
 
+  /* ===== 工具列 ===== */
+  .tool-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 9px; }
+  .tool { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 52px; min-height: 48px;
+    padding: 5px 8px; border-radius: 11px; cursor: pointer; background: var(--cream-2); border: 2px solid var(--border);
+    font-weight: 800; transition: all .1s; }
+  .tool .ti { font-size: 19px; line-height: 1; } .tool .tn { font-size: 10px; }
+  .tool.sel { border-color: var(--water); background: #e2f3fb; box-shadow: 0 0 0 2px rgba(75,163,211,.25); transform: translateY(-2px); }
+  /* 濕土視覺 */
+  .plot.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.5), inset 0 2px 4px rgba(0,0,0,.25); }
+  .plot .wet-drop { position: absolute; top: 3px; left: 4px; font-size: 11px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.4)); }
+
   /* ===== 可動角色 Miri Rowan ===== */
   /* farm-actions sheet：6 列(idle/hoe/water/sow/harvest/carry) × 4 欄(幀) */
   .farmer { position: absolute; left: 8px; bottom: 8px; width: 72px; height: 72px; z-index: 6;
@@ -261,7 +272,8 @@
   <div class="main">
     <!-- 左：農場 -->
     <div class="panel farm-panel">
-      <h2>🌾 我的農場 <span class="hint" id="farmHint">選種子 → 點空地種植 · 點成熟作物收成</span></h2>
+      <h2>🌾 我的農場 <span class="hint" id="farmHint">選工具 → 點農場/地圖互動</span></h2>
+      <div class="tool-bar" id="toolBar"></div>
       <div class="seed-row" id="seedRow"></div>
       <div class="farm" id="farm"></div>
       <div class="btn-row" style="margin-top:10px">

@@ -157,11 +157,41 @@ console.log("\n== 10. 賣出動物產品（價格用產品定義）==");
   assert(sell.ok && sell.coins === 3 * C.PRODUCTS.milk.sellValue, `賣 3 牛奶得 ${3 * C.PRODUCTS.milk.sellValue} 金`);
 }
 
-console.log("\n== 11. 存檔遷移補齊 MVP2 欄位 ==");
+console.log("\n== 11. 濕土澆水：比乾土更快成長 ==");
+{
+  const st = S.defaultState(T0);
+  st.level = 2; st.coins = 100; // 解鎖胡蘿蔔 + 種子錢
+  G.plant(st, 0, "carrot", T0); // 乾土
+  G.plant(st, 1, "carrot", T0); // 將澆水
+  const w = G.waterPlot(st, 1, T0);
+  assert(w.ok, "可對種植中的乾土澆水");
+  assert(G.getCropProgress(st, st.plots[1], T0).wet === true, "澆水後變濕土");
+  const dryRemain = G.getCropProgress(st, st.plots[0], T0).remainingMs;
+  const wetRemain = G.getCropProgress(st, st.plots[1], T0).remainingMs;
+  assert(wetRemain < dryRemain, `濕土剩餘時間更短（乾 ${dryRemain} > 濕 ${wetRemain}）`);
+  // 邊界
+  assert(G.waterPlot(st, 1, T0).reason === "already_wet", "同輪不可重複澆水");
+  assert(G.waterPlot(st, 5, T0).reason === "empty", "空地不可澆水");
+  // 收成後重種 → 濕土重置
+  const grow = C.CROPS.carrot.growMs;
+  G.harvest(st, 1, T0 + grow);
+  G.plant(st, 1, "carrot", T0 + grow);
+  assert(G.getCropProgress(st, st.plots[1], T0 + grow).wet === false, "收成重種後恢復乾土");
+}
+
+console.log("\n== 12. 工具模式 state.interaction ==");
+{
+  const st = S.defaultState(T0);
+  assert(st.interaction && st.interaction.tool === "hand", "預設工具為 hand");
+  assert(C.TOOL_ORDER.length === 5 && C.TOOLS.water && C.TOOLS.clear, "工具集含 water/clear 等 5 種");
+}
+
+console.log("\n== 13. 存檔遷移補齊 MVP2 欄位 ==");
 {
   const old = { version: 1, coins: 5, plots: [{ id: "p01", cropId: "wheat", plantedAt: 1 }] };
   const m = S.migrate(old);
   assert(m.materials && m.map && Array.isArray(m.map.tiles) && Array.isArray(m.buildings) && Array.isArray(m.animals), "舊存檔補齊 materials/map/buildings/animals");
+  assert(m.interaction && m.interaction.tool === "hand", "舊存檔補齊 interaction.tool");
   assert(m.map.tiles.length === C.MAP_DEFAULT.width * C.MAP_DEFAULT.height, "地圖磚數正確");
 }
 

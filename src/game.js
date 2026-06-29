@@ -14,7 +14,7 @@
     WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
     levelFromXp,
     PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
-    BUILDINGS, BUILDING_ORDER, ANIMALS,
+    BUILDINGS, BUILDING_ORDER, ANIMALS, MOISTURE_MUL,
   } = C;
 
   // ---------- 工具 ----------
@@ -61,15 +61,27 @@
     const c = CROPS[cropId];
     return Math.max(1000, Math.floor(c.growMs * growthMultiplier(state, now)));
   }
+  // 此格本輪是否為濕土（澆水時間 >= 本輪種植時間）
+  function isWet(plot) { return !!plot.cropId && (plot.wateredAt || 0) >= plot.plantedAt; }
   function getCropProgress(state, plot, now) {
-    if (!plot.cropId) return { ready: false, ratio: 0, remainingMs: 0, stage: 0 };
-    const growMs = effectiveGrowMs(state, plot.cropId, now);
+    if (!plot.cropId) return { ready: false, ratio: 0, remainingMs: 0, stage: 0, wet: false };
+    let growMs = effectiveGrowMs(state, plot.cropId, now);
+    if (isWet(plot)) growMs = Math.max(1000, Math.floor(growMs * MOISTURE_MUL)); // 濕土加速
     const elapsed = Math.max(0, now - plot.plantedAt);
     const ratio = Math.min(1, elapsed / growMs);
     const ready = elapsed >= growMs;
     // 5 階段：seed0 sprout1 small2 mature3 ready4
     const stage = ready ? 4 : Math.min(3, Math.floor(ratio * 4));
-    return { ready, ratio, remainingMs: Math.max(0, growMs - elapsed), stage };
+    return { ready, ratio, remainingMs: Math.max(0, growMs - elapsed), stage, wet: isWet(plot) };
+  }
+  // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
+  function waterPlot(state, plotIndex, now) {
+    const plot = state.plots[plotIndex];
+    if (!plot || !plot.cropId) return { ok: false, reason: "empty" };
+    if (getCropProgress(state, plot, now).ready) return { ok: false, reason: "ready" };
+    if (isWet(plot)) return { ok: false, reason: "already_wet" };
+    plot.wateredAt = now;
+    return { ok: true };
   }
 
   // ---------- 倉庫 ----------
@@ -553,7 +565,7 @@
 
   const GameAPI = {
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, availableOrderItems,
-    growthMultiplier, buildingGrowthAura, effectiveGrowMs,
+    growthMultiplier, buildingGrowthAura, effectiveGrowMs, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,

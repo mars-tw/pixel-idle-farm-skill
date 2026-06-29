@@ -108,6 +108,22 @@
     });
   }
 
+  // ---------- 工具列（roadmap：工具模式）----------
+  function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
+  function setTool(t) { state.interaction.tool = t; renderToolbar(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
+  function renderToolbar() {
+    const bar = $("toolBar"); if (!bar) return; bar.innerHTML = "";
+    window.TOOL_ORDER.forEach((id) => {
+      const t = window.TOOLS[id];
+      const el = document.createElement("div");
+      el.className = "tool" + (currentTool() === id ? " sel" : "");
+      el.title = t.desc;
+      el.innerHTML = `<span class="ti">${t.icon}</span><span class="tn">${t.name}</span>`;
+      el.onclick = () => setTool(id);
+      bar.appendChild(el);
+    });
+  }
+
   // ---------- 農場 ----------
   function buildFarm() {
     const farm = $("farm"); farm.innerHTML = ""; plotEls.length = 0;
@@ -152,7 +168,11 @@
       }
       const crop = window.CROPS[plot.cropId];
       const prog = G.getCropProgress(state, plot, t);
-      el.className = "plot" + (prog.ready ? " ready" : " growing");
+      el.className = "plot" + (prog.ready ? " ready" : " growing") + (prog.wet && !prog.ready ? " wet" : "");
+      // 濕土水滴標記
+      let wd = el.querySelector(".wet-drop");
+      if (prog.wet && !prog.ready) { if (!wd) { wd = document.createElement("div"); wd.className = "wet-drop"; wd.textContent = "💧"; el.appendChild(wd); } wd.style.display = "block"; }
+      else if (wd) wd.style.display = "none";
 
       if (state.useSprites && spritesReady) {
         sprite.style.display = "block"; emoji.style.display = "none";
@@ -179,6 +199,26 @@
     const plot = state.plots[i];
     const rect = plotEls[i].getBoundingClientRect();
     const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    const tool = currentTool();
+
+    // 工具路由：查看 / 澆水 / 清除·建造（農地不適用）
+    if (tool === "inspect") {
+      if (!plot.cropId) { toast("🟫 空農地，選「👆手」種植"); return; }
+      const prog = G.getCropProgress(state, plot, t); const crop = window.CROPS[plot.cropId];
+      toast(`${crop.emoji} ${crop.name}・${prog.ready ? "✅ 可收成" : "⏳ " + fmtTime(prog.remainingMs)}${prog.wet ? "・💧濕土加速中" : ""}`);
+      return;
+    }
+    if (tool === "water") {
+      const r = G.waterPlot(state, i, t);
+      if (r.ok) { playAction("water"); floatText(cx, cy, "💧", "#bfe6f7"); afterChange(false); }
+      else if (r.reason === "empty") toast("💧 只有種了作物的乾土需要澆水");
+      else if (r.reason === "ready") toast("已成熟，不需澆水");
+      else if (r.reason === "already_wet") toast("💧 這格已是濕土");
+      return;
+    }
+    if (tool === "clear" || tool === "build") { toast("這裡是農地，「" + window.TOOLS[tool].name + "」請用在右下方擴張地圖"); return; }
+
+    // hand（預設）：種植 / 收成
     if (!plot.cropId) {
       const r = G.plant(state, i, selectedSeed, t);
       if (!r.ok) {
@@ -186,7 +226,6 @@
         else if (r.reason === "locked_crop") toast("🔒 此作物尚未解鎖");
         return;
       }
-      plot.waterBoosts = 0; // 新一輪可重新澆水
       playAction("sow");
       afterChange(true);
     } else {
@@ -324,6 +363,22 @@
     selectedTileId = tileId;
     updateMap(now());
     renderTileContext();
+    // 工具路由：clear/build 直接嘗試動作並給回饋（inspect/hand 僅顯示資訊面板）
+    const tile = state.map.tiles.find((x) => x.id === tileId);
+    const tool = currentTool();
+    if (tool === "clear") {
+      if (!tile.object) { toast("這裡沒有障礙可清除"); return; }
+      const r = G.clearObstacle(state, tile.id);
+      if (r.ok) { playAction("hoe"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，獲得建材"); afterChange(true); buildMap(); renderTileContext(); }
+      else if (r.reason === "no_coins") toast("🪙 金幣不足");
+    } else if (tool === "water") {
+      toast("💧 水壺請用在農場作物上");
+    } else if (tool === "build") {
+      if (tile.buildingId) toast("這裡已有建築");
+      else if (tile.object) toast("先用「⛏️清除」清掉障礙才能蓋");
+      else if (tile.terrain === "water") toast("🌊 水域不能興建");
+      // grass 空地 → renderTileContext 已顯示建築選單
+    }
   }
   function renderTileContext() {
     const box = $("tileContext"); if (!box) return;
@@ -545,7 +600,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
 
     // sprite 切換鈕初始文字
     $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
@@ -586,19 +641,14 @@
       if (r.coins > 0) { playAction("carry"); toast("🪙 賣出 " + r.qty + " 個，得 " + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的作物");
     };
-    // 澆水：花一點時間給成長中作物加速（綁角色澆水動畫）
+    // 澆水（全部）：對所有可澆的乾土作物澆水變濕土加速（綁角色澆水動畫）
     $("waterAllBtn").onclick = () => {
       const t = now(); let n = 0;
       for (let i = 0; i < G.activePlotCount(state); i++) {
-        const p = state.plots[i]; if (!p || !p.cropId) continue;
-        const prog = G.getCropProgress(state, p, t); if (prog.ready) continue;
-        if ((p.waterBoosts || 0) >= 2) continue;     // 每輪最多澆 2 次
-        const grow = G.effectiveGrowMs(state, p.cropId, t);
-        p.plantedAt = Math.max(p.plantedAt - Math.floor(grow * 0.08), t - grow + 1000);
-        p.waterBoosts = (p.waterBoosts || 0) + 1; n++;
+        if (G.waterPlot(state, i, t).ok) n++;
       }
       playAction("water");
-      toast(n > 0 ? "💧 澆水 " + n + " 格，成長加速" : "沒有需要澆水的作物");
+      toast(n > 0 ? "💧 澆水 " + n + " 格，變濕土加速成長" : "沒有需要澆水的作物");
       if (n > 0) afterChange(false);
     };
     // 收集全部動物產物
@@ -619,7 +669,7 @@
       if (confirm("確定重置存檔？所有進度會消失。")) {
         window.reset(); state = window.defaultState(now());
         selectedSeed = "wheat"; selectedTileId = null; buildFarm(); buildMap();
-        renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
+        renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
         G.refreshOrders(state, now()); renderOrders();
         window.save(state); toast("🗑️ 已重置");
       }
