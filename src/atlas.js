@@ -1,23 +1,25 @@
 /* =========================================================================
- * atlas.js — v2 精確 frame atlas 渲染器（瀏覽器）
- * 讀 assets/generated/v2/manifest.json 與各 sheet 的 JSON frame map，
- * 用「整數像素 frame metadata」把某 frame 縮放貼到任意尺寸的元素，
- * 取代舊的「對 1254 概念圖百分比切片」。image-rendering:pixelated 保持銳利。
+ * atlas.js — v3 精確 frame atlas 渲染器（瀏覽器）
+ * 讀 assets/generated/v3/manifest.json 與各 sheet 的 JSON frame map，
+ * 用「整數像素 frame metadata」把某 frame 縮放貼到任意尺寸的元素。
+ * 源圖由 gpt-image-2 生成、process-v3-atlas.js 精確切割（去背/錨點），
+ * 取代舊的「對概念圖百分比切片 / emoji 色塊」。image-rendering:pixelated 保持銳利。
+ * sheets：terrain（程序化 autotile）/ crops / walk / actions / vfx / props。
  * ========================================================================= */
 (function (root) {
   "use strict";
-  const V2_BASE = "assets/generated/v2/";
+  const BASE = "assets/generated/v3/";
   const state = { ready: false, sheets: {}, maps: {}, error: null };
   let readyResolve; const readyPromise = new Promise((r) => (readyResolve = r));
 
   async function load() {
     try {
-      const manifest = await fetch(V2_BASE + "manifest.json").then((r) => r.json());
+      const manifest = await fetch(BASE + "manifest.json").then((r) => r.json());
       const keys = Object.keys(manifest.sheets);
       await Promise.all(keys.map(async (key) => {
         const s = manifest.sheets[key];
-        const map = await fetch(s.map.replace(/^.*\/v2\//, V2_BASE)).then((r) => r.json());
-        state.maps[key] = map;          // { image, meta, frames:{id:{x,y,w,h,...}} }
+        const map = await fetch(s.map.replace(/^.*\/v3\//, BASE)).then((r) => r.json());
+        state.maps[key] = map;          // { image, meta, frames:{id:{x,y,w,h,anchor}} }
         state.sheets[key] = s.image;    // 圖片路徑
       }));
       state.ready = true;

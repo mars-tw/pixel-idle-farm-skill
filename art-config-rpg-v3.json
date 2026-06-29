@@ -1,0 +1,77 @@
+{
+  "model": "gpt-image-2",
+  "outputDir": "assets/generated/v3",
+  "quality": "high",
+  "note": "Use these prompts to produce source art for the v3 RPG interaction pass. Runtime sheets must be cropped/cleaned to the exact dimensions in references/sprite-cutting-method-v3.md.",
+  "visualTargets": [
+    "references/visual-targets/rpg-organic-interaction-map-target.png",
+    "references/visual-targets/miri-corrected-action-sheet-target.png"
+  ],
+  "globalConstraints": [
+    "original assets only",
+    "no text, letters, numbers, labels, logos, or watermark",
+    "no copied franchise style",
+    "consistent upper-left lighting",
+    "crisp pixel art readable at 32px and 48px",
+    "flat removable chroma-key or transparent postprocess-ready background for sheets"
+  ],
+  "sheets": [
+    {
+      "id": "miri-walk-48x64-v3",
+      "targetFile": "miri-walk-48x64.png",
+      "targetJson": "miri-walk-48x64.json",
+      "targetSheet": "288x256",
+      "cell": "48x64",
+      "grid": "6 columns x 4 rows",
+      "rows": ["walk_down", "walk_left", "walk_right", "walk_up"],
+      "prompt": "Create source art for a runtime-safe pixel RPG walk sheet for Miri Rowan. Original farmer: brown hair tied in a small topknot bun (NO headscarf, NO kerchief), cream long-sleeve shirt, moss green overalls, red neck scarf, tan boots, small seed pouch on belt. Cute but normal RPG proportions, no malformed body, feet on stable baseline, consistent head and body scale across all rows. Four rows in this exact order: walking DOWN (facing viewer), walking LEFT (left profile), walking RIGHT (right profile), walking UP (back to viewer). Six frames per row: idle, step_a, passing_a, idle, step_b, passing_b. Use clean separated frames, evenly spaced grid, transparent background, no labels, no text, no background scenery. Match the exact same character design as the matching action sheet."
+    },
+    {
+      "id": "miri-actions-48x64-v3",
+      "targetFile": "miri-actions-48x64.png",
+      "targetJson": "miri-actions-48x64.json",
+      "targetSheet": "288x768",
+      "cell": "48x64",
+      "grid": "6 columns x 12 rows",
+      "rows": ["idle_down", "idle_left", "idle_right", "idle_up", "hoe_side", "water_side", "sow_down", "harvest_down", "carry_down", "collect_down", "use_station_down", "hurt_or_invalid"],
+      "prompt": "Create source art for a runtime-safe pixel RPG farming action sheet for Miri Rowan, same outfit and proportions as walk sheet. Twelve rows, six frames each: idle down/left/right/up, hoe side, water side with water arc, sow down with seed scatter, harvest down pulling crop, carry basket, collect product, use station, invalid/hurt. Feet stay on baseline, tools and water arc inside frame bounds, readable silhouettes, no labels, no text, no scenery."
+    },
+    {
+      "id": "action-vfx-32-v3",
+      "targetFile": "action-vfx-32.png",
+      "targetJson": "action-vfx-32.json",
+      "targetSheet": "192x256",
+      "cell": "32x32",
+      "grid": "6 columns x 8 rows",
+      "rows": ["water_droplets", "soil_dust", "seed_scatter", "harvest_pop", "material_pop", "product_pop", "valid_target_ring", "invalid_target_ring"],
+      "prompt": "Create source art for a 32x32 pixel RPG action VFX sheet. Six frames per row. Rows: water droplets, soil dust, seed scatter, harvest crop pop, material pop, animal product pop, valid target ring, invalid target ring. Transparent or chroma-key background, crisp readable particles, no text."
+    },
+    {
+      "id": "terrain-organic-32-v3",
+      "targetFile": "terrain-organic-32.png",
+      "targetJson": "terrain-organic-32.json",
+      "targetSheet": "512x512",
+      "cell": "32x32",
+      "grid": "16 columns x 16 rows",
+      "prompt": "Create source art for an organic RPG farm terrain tilesheet. 32x32 tile language. Include grass variants, flower overlays, shadow overlays, curved dirt path center/edges/corners/T/cross, dry soil center/edges/corners, wet soil center/edges/corners, water center variants, water edges/corners, bridge horizontal/vertical, pebbles, flowers, grass clumps. Must support blending so the map does not look like boring square cards. No labels, no text."
+    },
+    {
+      "id": "props-stations-v3",
+      "targetFile": "props-stations.png",
+      "targetJson": "props-stations.json",
+      "targetSheet": "1024x1024",
+      "frameMap": "variable",
+      "prompt": "Create source art for separated pixel RPG farm props and interactive stations. Include order board, storage crate, mailbox, well, bridge horizontal/vertical, farmhouse, chicken coop, barn, pond decoration, stump, rock, bush, wood stack, stone stack, compost heap. Each object has clear baseline, implied tile footprint, soft pixel shadow, and readable interaction purpose. No labels, no text, no merged objects."
+    },
+    {
+      "id": "crops-32-v3",
+      "targetFile": "crops-32.png",
+      "targetJson": "crops-32.json",
+      "targetSheet": "160x192",
+      "cell": "32x32",
+      "grid": "5 columns x 6 rows",
+      "rows": ["wheat", "carrot", "tomato", "strawberry", "corn", "pumpkin"],
+      "prompt": "Create source art for a 32x32 crop growth sheet. Six rows: wheat, carrot, tomato, strawberry, corn, pumpkin. Five columns: seed, sprout, young, mature, ready. Transparent or chroma-key background, no soil background inside crop frame, stable baseline, ready stage clearly readable, no labels or text."
+    }
+  ]
+}

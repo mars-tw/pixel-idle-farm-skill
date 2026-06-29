@@ -206,6 +206,23 @@ const TERRAIN_CODE = { S: "soil", g: "grass", p: "path", w: "water" };
 const OBSTACLE_CODE = { R: "rock", T: "stump", b: "bush" };
 const PLAYER_START = { x: 4, y: 3 };  // 步道中央，可達農土與草地
 const MOVE_MS = 200;                  // 每格移動 tween 毫秒
+
+// ===== 地圖站點（固定設施，需「走過去 + 播動作」才觸發；非裝飾）=====
+// frame 對應 props atlas；action 為角色動作；effect 由 ui.js 解讀。
+const STATIONS = {
+  order_board: { id: "order_board", name: "訂單看板", frame: "order_board",   action: "station", effect: "orders", desc: "走過去查看市集訂單" },
+  storage:     { id: "storage",     name: "倉庫木箱", frame: "storage_crate",  action: "carry",   effect: "sell",   desc: "走過去賣出所有庫存" },
+  mailbox:     { id: "mailbox",     name: "信箱",     frame: "mailbox",        action: "station", effect: "mail",   desc: "走過去看農場概況" },
+  well:        { id: "well",        name: "水井",     frame: "well",           action: "water",   effect: "well",   desc: "走過去汲水替全部乾土澆水" },
+};
+// 放在草地磚上（座標須為 MAP_LAYOUT 的草地，且不可堵死障礙的唯一通道、
+// 不可佔用測試用建地 5,1）：
+const STATION_PLACEMENT = [
+  { type: "order_board", x: 5, y: 0 },
+  { type: "storage",     x: 3, y: 4 },
+  { type: "mailbox",     x: 5, y: 5 },
+  { type: "well",        x: 6, y: 4 },
+];
 const MAP_DEFAULT = { width: MAP_LAYOUT[0].length, height: MAP_LAYOUT.length };
 // 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
 const FACING_ROW = { down: 0, left: 1, right: 2, up: 3 };
@@ -219,6 +236,7 @@ const CONFIG = {
   BUILDINGS, BUILDING_ORDER, ANIMALS, MAP_DEFAULT,
   TOOLS, TOOL_ORDER, MOISTURE_MUL,
   MAP_LAYOUT, TERRAIN_CODE, OBSTACLE_CODE, PLAYER_START, MOVE_MS, FACING_ROW,
+  STATIONS, STATION_PLACEMENT,
 };
 if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
 if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;

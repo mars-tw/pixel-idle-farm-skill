@@ -13,6 +13,7 @@ This folder is intended to be usable by Claude Code or Codex as an open-source g
 7. Read `references/gameplay-interactions-roadmap.md` before adding new player interactions, tool modes, map actions, animal loops, events, or character animation hooks.
 8. Read `references/playable-map-movement-acceptance.md` before claiming the game has a walkable map or Harvest-Moon-like movement.
 9. Read `references/rpg-quality-rework-brief.md`, `references/asset-production-spec-v2.md`, and `references/production-directive-rpg-rework.md` before improving desktop visual quality or replacing preview assets.
+10. Read `references/rpg-action-map-gate.md`, `references/sprite-cutting-method-v3.md`, and `references/production-directive-stage3-rpg-actions.md` before changing character sprites, map terrain, watering/hoeing/harvesting actions, or RPG station interactions.
 
 ## Build Target
 
@@ -42,6 +43,7 @@ No build step is required for the default implementation. Use localStorage for s
 9. Tool-mode interactions, tile inspection, and mixed crop/animal/material orders as described in `references/gameplay-interactions-roadmap.md`.
 10. Walkable farm scene acceptance as described in `references/playable-map-movement-acceptance.md`.
 11. RPG-quality desktop/mobile scene rework as described in `references/rpg-quality-rework-brief.md`.
+12. Stage 3 RPG actions, organic terrain, corrected Miri proportions, and station interactions as described in `references/rpg-action-map-gate.md`.
 
 ## Mandatory Asset Gameplay
 
@@ -57,6 +59,7 @@ Acceptance details are in `references/asset-gameplay-integration.md`.
 Interaction sequencing and test expectations are in `references/gameplay-interactions-roadmap.md`.
 Walkable map and character movement gates are in `references/playable-map-movement-acceptance.md`.
 RPG visual-quality and v2 asset-production requirements are in `references/rpg-quality-rework-brief.md` and `references/asset-production-spec-v2.md`.
+Stage 3 character/action/map-station requirements and exact slicing rules are in `references/rpg-action-map-gate.md` and `references/sprite-cutting-method-v3.md`.
 
 ## Asset Files
 

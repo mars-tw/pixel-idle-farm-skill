@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><title>v3 processor</title></head>
+<body style="background:#222;color:#ddd;font-family:monospace"><p id="status">processing…</p>
+<script>
+/* =========================================================================
+ * gen-v3/processor.html — 把 gpt-image-2 源圖切成精確 v3 frame atlas + JSON。
+ * 重點：源圖是 RGB（無 alpha），背景是 gpt 烤進去的棋盤格 → 需自適應去背。
+ * 每格用 alpha bbox 偵測角色/物件，再多步高品質縮放、依錨點對位。
+ * 地形用程序化 autotile（gpt 地形非規則格，無法可靠切片）。
+ * 由 process-v3-atlas.js（playwright）驅動，結果掛在 window.__v3。
+ * ========================================================================= */
+const SRC = "../../assets/generated/v3/source/";
+function loadImg(src){return new Promise((res)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>res(null);i.src=src;});}
+function cv(w,h){const c=document.createElement("canvas");c.width=w;c.height=h;return c;}
+function rect(x,c,X,Y,W,H){x.fillStyle=c;x.fillRect(X,Y,W,H);}
+function px(x,X,Y,c){x.fillStyle=c;x.fillRect(X,Y,1,1);}
+function rng(s){s>>>=0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+
+/* ---- 自適應去背：移除 gpt 棋盤格 / 純色背景 ----
+ * 背景判定：邊界 flood-fill，像素為「亮度高且近灰（低飽和）」或接近角落取樣色。
+ * 角色內部被深色描邊包住，flood-fill 到不了，奶油襯衫(暖白,飽和較高)得以保留。*/
+function debg(ctx,w,h){
+  const d=ctx.getImageData(0,0,w,h),p=d.data;
+  const seeds=[];
+  for(const [cx,cy] of [[0,0],[w-1,0],[0,h-1],[w-1,h-1],[w>>1,0],[w>>1,h-1]]){
+    const i=(cy*w+cx)*4;seeds.push([p[i],p[i+1],p[i+2]]);
+  }
+  const isBg=(k)=>{
+    const r=p[k],g=p[k+1],b=p[k+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b),sat=mx-mn;
+    if(mx>=180&&sat<=24)return true;                    // 棋盤格兩色 + 接縫灰：亮且近灰
+    if(mx>=92&&mx<=178&&sat<=16)return true;            // 接地陰影：中灰低飽和（與背景相連會被一併吃掉；角色深描邊<92 保留）
+    for(const s of seeds){if(Math.abs(r-s[0])<=18&&Math.abs(g-s[1])<=18&&Math.abs(b-s[2])<=18)return true;}
+    return false;
+  };
+  const vis=new Uint8Array(w*h),st=[];
+  for(let x=0;x<w;x++){st.push(x);st.push((h-1)*w+x);}
+  for(let y=0;y<h;y++){st.push(y*w);st.push(y*w+w-1);}
+  while(st.length){const i=st.pop();if(vis[i])continue;vis[i]=1;
+    if(!isBg(i*4))continue;p[i*4+3]=0;
+    const x=i%w,y=(i/w)|0;
+    if(x>0)st.push(i-1);if(x<w-1)st.push(i+1);if(y>0)st.push(i-w);if(y<h-1)st.push(i+w);}
+  ctx.putImageData(d,0,0);
+}
+
+// 多步高品質縮放（大幅縮小時逐次減半，避免鋸齒/糊化）
+function downscale(srcCanvas,sx,sy,sw,sh,dw,dh){
+  let cur=cv(sw,sh),cx=cur.getContext("2d");
+  cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality="high";
+  cx.drawImage(srcCanvas,sx,sy,sw,sh,0,0,sw,sh);
+  let cw=sw,ch=sh;
+  while(cw>dw*2&&ch>dh*2){
+    const nW=Math.max(dw,cw>>1),nH=Math.max(dh,ch>>1),nx=cv(nW,nH),ncx=nx.getContext("2d");
+    ncx.imageSmoothingEnabled=true;ncx.imageSmoothingQuality="high";
+    ncx.drawImage(cur,0,0,cw,ch,0,0,nW,nH);cur=nx;cw=nW;ch=nH;
+  }
+  const fin=cv(dw,dh),fcx=fin.getContext("2d");
+  fcx.imageSmoothingEnabled=true;fcx.imageSmoothingQuality="high";
+  fcx.drawImage(cur,0,0,cw,ch,0,0,dw,dh);
+  return fin;
+}
+
+/* 引導式最小值切割：已知段數 n + 概略 pitch，在每個名目邊界附近窗口找
+ * 投影 proj 最小（最空）的位置下刀 → 對 gpt 不規則/溢出網格穩健。回傳 n+1 邊界。*/
+function guidedCuts(proj,total,n){
+  const pitch=total/n,cuts=[0],win=Math.round(pitch*0.42);
+  for(let i=1;i<n;i++){
+    const center=Math.round(i*pitch),lo=Math.max(1,center-win),hi=Math.min(total-1,center+win);
+    let best=center,bestv=Infinity;
+    for(let y=lo;y<=hi;y++)if(proj[y]<bestv){bestv=proj[y];best=y;}
+    cuts.push(best);
+  }
+  cuts.push(total);return cuts;
+}
+
+/* 切 gpt 網格源圖 → 精確 frame atlas。
+ * 不等分：先 Y 投影引導切出列帶，再在每帶內 X 投影引導切出欄；每格取緊緻 bbox。
+ * mode "baseline"：bbox 底部對齊 anchorY（角色腳底/物件底/作物底）。
+ * mode "center"：bbox 置中（VFX）。*/
+async function sliceGrid(file,cols,rows,fw,fh,frameIdFn,anchor,mode){
+  const img=await loadImg(SRC+file);
+  if(!img)return null;
+  const sw=img.naturalWidth,sh=img.naturalHeight;
+  const tmp=cv(sw,sh),tx=tmp.getContext("2d");tx.drawImage(img,0,0);
+  debg(tx,sw,sh);
+  (window.__dbg=window.__dbg||{})[file]=tmp.toDataURL("image/png");
+  const data=tx.getImageData(0,0,sw,sh).data;
+  const A=(x,y)=>data[(y*sw+x)*4+3]>24;
+  const rowP=new Array(sh).fill(0);
+  for(let y=0;y<sh;y++){let n=0;for(let x=0;x<sw;x++)if(A(x,y))n++;rowP[y]=n;}
+  const yCuts=guidedCuts(rowP,sh,rows);
+  const out=cv(fw*cols,fh*rows),ox=out.getContext("2d");
+  const frames={};
+  const baseY=Math.round(anchor[1]*fh);
+  const median=(a)=>{if(!a.length)return 1;const s=a.slice().sort((p,q)=>p-q);return s[s.length>>1];};
+  for(let r=0;r<rows;r++){
+    const y0=yCuts[r],y1=yCuts[r+1];
+    const colP=new Array(sw).fill(0);
+    for(let y=y0;y<y1;y++)for(let x=0;x<sw;x++)if(A(x,y))colP[x]++;
+    const xCuts=guidedCuts(colP,sw,cols);
+    // 第一遍：各格緊緻 bbox；取最大連續垂直內容塊（身體），丟棄相鄰格切入的上下碎片
+    const cells=[];const hs=[],ws=[];
+    for(let c=0;c<cols;c++){
+      const x0=xCuts[c],x1=xCuts[c+1];
+      const rc=[];for(let y=y0;y<y1;y++){let n=0;for(let x=x0;x<x1;x++)if(A(x,y))n++;rc.push(n);}
+      // 找列內非空 row 的連續段
+      const runs=[];let s=-1,sum=0;
+      for(let i=0;i<rc.length;i++){
+        if(rc[i]>2){if(s<0){s=i;sum=0;}sum+=rc[i];}
+        else if(s>=0){runs.push({s,e:i-1,sum});s=-1;}
+      }
+      if(s>=0)runs.push({s,e:rc.length-1,sum});
+      if(!runs.length){cells.push(null);continue;}
+      // 以最大段（身體）為核心，合併間距 ≤14px 的鄰近段（保留貼身 VFX），丟棄間距大的鄰列碎片
+      let dom=runs[0];for(const r2 of runs)if(r2.sum>dom.sum)dom=r2;
+      let lo=dom.s,hi=dom.e,changed=true;
+      while(changed){changed=false;for(const r2 of runs){
+        if(r2.e<lo&&lo-r2.e<=14){lo=r2.s;changed=true;}
+        else if(r2.s>hi&&r2.s-hi<=14){hi=r2.e;changed=true;}
+      }}
+      const by0=y0+lo,by1=y0+hi;
+      let minx=x1,miny=by1,maxx=x0-1,maxy=by0,found=false;
+      for(let y=by0;y<=by1;y++)for(let x=x0;x<x1;x++)if(A(x,y)){found=true;if(x<minx)minx=x;if(x>maxx)maxx=x;if(y<miny)miny=y;if(y>maxy)maxy=y;}
+      cells.push(found?{minx,miny,bw:maxx-minx+1,bh:maxy-miny+1}:null);
+      if(found){hs.push(maxy-miny+1);ws.push(maxx-minx+1);}
+    }
+    // 第二遍：用全列中位數高/寬定單一 scale → 同列角色大小一致（工具/水弧外延輕微裁切）
+    const medH=median(hs),medW=median(ws);
+    let rowScale=mode==="center"?Math.min(fw*0.82/medW,fh*0.82/medH):Math.min(fw*0.9/medW,(baseY*0.98)/medH);
+    if(rowScale>1)rowScale=1;
+    for(let c=0;c<cols;c++){
+      const fid=frameIdFn(r,c),cell=cells[c];
+      if(!cell){frames[fid]={x:c*fw,y:r*fh,w:fw,h:fh,anchor,empty:true};continue;}
+      const dw=Math.max(1,Math.round(cell.bw*rowScale)),dh=Math.max(1,Math.round(cell.bh*rowScale));
+      const dx=c*fw+Math.round((fw-dw)/2);
+      const dy=mode==="center"?r*fh+Math.round((fh-dh)/2):r*fh+baseY-dh;
+      ox.drawImage(downscale(tmp,cell.minx,cell.miny,cell.bw,cell.bh,dw,dh),dx,dy);
+      frames[fid]={x:c*fw,y:r*fh,w:fw,h:fh,anchor};
+    }
+  }
+  return {png:out.toDataURL("image/png"),frames,meta:{w:fw*cols,h:fh*rows,frameW:fw,frameH:fh,cols,rows}};
+}
+
+// ---- 程序化 autotile 地形 512×512 / 32px ----
+function genTerrain(){
+  const c=cv(512,512),x=c.getContext("2d");x.imageSmoothingEnabled=false;
+  const frames={};let col=0,row=0;
+  const put=(id,draw,extra)=>{const X=col*32,Y=row*32;draw(X,Y);frames[id]=Object.assign({x:X,y:Y,w:32,h:32,anchor:[0.5,0.5]},extra||{});col++;if(col>=16){col=0;row++;}};
+  const r=rng(7);
+  // 草：多色點繪 + 底部微暗，避免平板
+  const grassBase=(X,Y,seed)=>{const g=rng(seed||1);rect(x,"#79bd46",X,Y,32,32);
+    for(let i=0;i<70;i++){const c=["#6cae3a","#86cb52","#71b23f","#5f9c33"][g()*4|0];px(x,X+(g()*32|0),Y+(g()*32|0),c);}
+    rect(x,"rgba(40,80,30,0.10)",X,Y+27,32,5);};
+  for(let i=1;i<=4;i++)put("grass_center_0"+i,(X,Y)=>grassBase(X,Y,10+i));
+  put("grass_flower_01",(X,Y)=>{grassBase(X,Y,21);for(let k=0;k<5;k++){const fx=X+5+(r()*22|0),fy=Y+5+(r()*20|0),cc=["#ff7aa8","#ffd34d","#b07ae0","#fff"][r()*4|0];px(x,fx,fy,cc);px(x,fx,fy-1,cc);px(x,fx+1,fy,cc);}});
+  put("grass_flower_02",(X,Y)=>{grassBase(X,Y,22);for(let k=0;k<8;k++){const fx=X+4+(r()*24|0),fy=Y+4+(r()*22|0);px(x,fx,fy,"#fff");px(x,fx,fy-1,"#ffe9a8");}});
+  put("grass_clump_01",(X,Y)=>{grassBase(X,Y,23);for(let k=0;k<16;k++){const bx=X+4+(r()*24|0),by=Y+29-(r()*3|0),h=4+(r()*6|0);rect(x,r()<.5?"#4f8a2c":"#86cb52",bx,by-h,1,h);}});
+  // 步道（暖砂）+ 草邊融合
+  const path=(X,Y)=>{rect(x,"#cda86a",X,Y,32,32);for(let i=0;i<26;i++)px(x,X+(r()*32|0),Y+(r()*32|0),["#b8964f","#dcc088","#c09a5a"][r()*3|0]);
+    for(let i=0;i<5;i++)px(x,X+(r()*32|0),Y+(r()*32|0),"#8a6f42");};
+  const ge=(X,Y,s)=>{const e="#69ab39";if(s.includes("n")){rect(x,e,X,Y,32,3);for(let i=0;i<10;i++)px(x,X+(r()*32|0),Y+3,"#79bd46");}
+    if(s.includes("s")){rect(x,e,X,Y+29,32,3);for(let i=0;i<10;i++)px(x,X+(r()*32|0),Y+28,"#79bd46");}
+    if(s.includes("w")){rect(x,e,X,Y,3,32);for(let i=0;i<10;i++)px(x,X+3,Y+(r()*32|0),"#79bd46");}
+    if(s.includes("e")){rect(x,e,X+29,Y,3,32);for(let i=0;i<10;i++)px(x,X+28,Y+(r()*32|0),"#79bd46");}};
+  put("path_c",(X,Y)=>path(X,Y));
+  ["n","s","e","w"].forEach(d=>put("path_"+d,(X,Y)=>{path(X,Y);ge(X,Y,[d]);}));
+  [["ne","n","e"],["nw","n","w"],["se","s","e"],["sw","s","w"]].forEach(([id,a,b])=>put("path_"+id,(X,Y)=>{path(X,Y);ge(X,Y,[a,b]);}));
+  // 乾/濕土 + 邊
+  const soil=(X,Y,base,spk,furrow)=>{rect(x,base,X,Y,32,32);
+    for(let i=0;i<30;i++)px(x,X+(r()*32|0),Y+(r()*32|0),spk[r()*spk.length|0]);
+    if(furrow)for(let fy=Y+5;fy<Y+30;fy+=7)rect(x,"rgba(0,0,0,0.10)",X+2,fy,28,2);};
+  put("soil_dry_c",(X,Y)=>soil(X,Y,"#ad7c4d",["#8c5f37","#c08f5c","#9c6e44"],true));
+  ["n","s","e","w"].forEach(d=>put("soil_dry_"+d,(X,Y)=>{soil(X,Y,"#ad7c4d",["#8c5f37","#9c6e44"],true);ge(X,Y,[d]);}));
+  [["ne","n","e"],["nw","n","w"],["se","s","e"],["sw","s","w"]].forEach(([id,a,b])=>put("soil_dry_"+id,(X,Y)=>{soil(X,Y,"#ad7c4d",["#8c5f37"],true);ge(X,Y,[a,b]);}));
+  put("soil_wet_c",(X,Y)=>soil(X,Y,"#6f4a2b","#553a22 #3f2e1c #5a3d24".split(" "),true));
+  ["n","s","e","w"].forEach(d=>put("soil_wet_"+d,(X,Y)=>{soil(X,Y,"#6f4a2b","#553a22 #3f2e1c".split(" "),true);ge(X,Y,[d]);}));
+  [["ne","n","e"],["nw","n","w"],["se","s","e"],["sw","s","w"]].forEach(([id,a,b])=>put("soil_wet_"+id,(X,Y)=>{soil(X,Y,"#6f4a2b","#553a22".split(" "),true);ge(X,Y,[a,b]);}));
+  // 水 + 石岸
+  const water=(X,Y)=>{rect(x,"#3f8fcf",X,Y,32,32);
+    for(let i=0;i<12;i++)rect(x,"#5fa9e0",X+(r()*24|0),Y+(r()*32|0),4+(r()*4|0),1);
+    for(let i=0;i<6;i++)rect(x,"#2f7ab5",X+(r()*28|0),Y+(r()*32|0),3,1);};
+  const bank=(X,Y,s)=>{const k="#b8b0a2";if(s.includes("n"))rect(x,k,X,Y,32,5);if(s.includes("s"))rect(x,k,X,Y+27,32,5);
+    if(s.includes("w"))rect(x,k,X,Y,5,32);if(s.includes("e"))rect(x,k,X+27,Y,5,32);};
+  put("water_c",(X,Y)=>{water(X,Y);if(r()<.5)rect(x,"#6fc26a",X+12,Y+13,3,2);});
+  ["n","s","e","w"].forEach(d=>put("water_"+d,(X,Y)=>{water(X,Y);bank(X,Y,[d]);}));
+  [["ne","n","e"],["nw","n","w"],["se","s","e"],["sw","s","w"]].forEach(([id,a,b])=>put("water_"+id,(X,Y)=>{water(X,Y);bank(X,Y,[a,b]);}));
+  // 橋
+  put("bridge_h",(X,Y)=>{rect(x,"#9c6b3a",X,Y,32,32);for(let i=0;i<32;i+=5)rect(x,"#7c5530",X,Y+i,32,1);rect(x,"#b98a52",X,Y,32,2);rect(x,"#b98a52",X,Y+30,32,2);});
+  put("bridge_v",(X,Y)=>{rect(x,"#9c6b3a",X,Y,32,32);for(let i=0;i<32;i+=5)rect(x,"#7c5530",X+i,Y,1,32);rect(x,"#b98a52",X,Y,2,32);rect(x,"#b98a52",X+30,Y,2,32);});
+  // overlay（透明底裝飾）
+  const ovl=(id,draw)=>put(id,draw,{overlay:true});
+  ovl("overlay_flowers_01",(X,Y)=>{for(let k=0;k<6;k++){const fx=X+4+(r()*24|0),fy=Y+4+(r()*22|0),cc=["#ff7aa8","#ffd34d","#b07ae0"][r()*3|0];px(x,fx,fy,cc);px(x,fx,fy-1,"#fff");}});
+  ovl("overlay_pebbles_01",(X,Y)=>{for(let k=0;k<5;k++){const fx=X+5+(r()*22|0),fy=Y+5+(r()*22|0);px(x,fx,fy,"#9aa3ab");px(x,fx+1,fy,"#b8c0c6");px(x,fx,fy+1,"#7e858c");}});
+  ovl("overlay_grass_clump_01",(X,Y)=>{for(let k=0;k<10;k++){const bx=X+9+(r()*14|0),by=Y+27,h=4+(r()*5|0);rect(x,"#4f8a2c",bx,by-h,1,h);}});
+  ovl("shadow_soft",(X,Y)=>{const g=x.createRadialGradient(X+16,Y+24,2,X+16,Y+24,14);g.addColorStop(0,"rgba(0,0,0,.30)");g.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=g;x.fillRect(X,Y,32,32);});
+  return {png:c.toDataURL("image/png"),frames,meta:{w:512,h:512,frameW:32,frameH:32,cols:16,rows:16}};
+}
+
+(async function(){
+  const out={},log=[];
+  out.terrain=genTerrain();log.push("terrain("+Object.keys(out.terrain.frames).length+")");
+  const cropRows=["wheat","carrot","tomato","strawberry","corn","pumpkin"],cropCols=["seed","sprout","young","mature","ready"];
+  out.crops=await sliceGrid("crops-32.png",5,6,32,32,(r,c)=>cropRows[r]+"_"+cropCols[c],[0.5,0.92],"baseline");if(out.crops)log.push("crops");
+  out.walk=await sliceGrid("miri-walk-48x64.png",6,4,48,64,(r,c)=>["walk_down","walk_left","walk_right","walk_up"][r]+"_"+String(c).padStart(2,"0"),[0.5,0.86],"baseline");if(out.walk)log.push("walk");
+  const actRows=["idle_down","idle_left","idle_right","idle_up","hoe_side","water_side","sow_down","harvest_down","carry_down","collect_down","use_station_down","hurt"];
+  out.actions=await sliceGrid("miri-actions-48x64.png",6,12,48,64,(r,c)=>actRows[r]+"_"+String(c).padStart(2,"0"),[0.5,0.86],"baseline");if(out.actions)log.push("actions");
+  const vfxRows=["water_droplets","soil_dust","seed_scatter","harvest_pop","material_pop","product_pop","valid_ring","invalid_ring"];
+  out.vfx=await sliceGrid("action-vfx-32.png",6,8,32,32,(r,c)=>vfxRows[r]+"_"+String(c).padStart(2,"0"),[0.5,0.5],"center");if(out.vfx)log.push("vfx");
+  const propNames=["order_board","storage_crate","mailbox","well","fence_gate","bridge_v","farmhouse","chicken_coop","barn","pond_edge","stump","rock","bush","wood_stack","stone_stack","compost_heap"];
+  out.props=await sliceGrid("props-stations.png",4,4,128,128,(r,c)=>propNames[r*4+c]||("p"+(r*4+c)),[0.5,0.94],"baseline");if(out.props)log.push("props");
+  window.__v3=out;
+  document.getElementById("status").textContent="done: "+log.join(", ");
+})();
+</script></body></html>

@@ -17,7 +17,16 @@
     return plots;
   }
 
-  // 由 MAP_LAYOUT 產生統一地圖（soil 對應作物 plot、grass/path/water、障礙）
+  // 在地圖上放置固定站點（grass 磚 + station 標記，阻擋移動需走相鄰格互動）
+  function applyStations(map) {
+    for (const s of (C.STATION_PLACEMENT || [])) {
+      const tile = map.tiles.find((t) => t.x === s.x && t.y === s.y);
+      if (tile && tile.terrain === "grass" && !tile.object && !tile.buildingId) tile.station = s.type;
+    }
+    return map;
+  }
+
+  // 由 MAP_LAYOUT 產生統一地圖（soil 對應作物 plot、grass/path/water、障礙、站點）
   function makeMap() {
     const layout = C.MAP_LAYOUT;
     const tiles = [];
@@ -30,13 +39,15 @@
         const tile = {
           id: "t" + x + "_" + y, x, y, terrain,
           object: obstacle,       // rock/stump/bush（障礙，蓋在草地上）
+          station: null,          // 固定站點（order_board/storage/mailbox/well）
           buildingId: null,       // 蓋了建築就指向 state.buildings 的 id
           plotIndex: terrain === "soil" ? plotIndex++ : null, // 農土對應 state.plots
         };
         tiles.push(tile);
       }
     }
-    return { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex };
+    const map = { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex };
+    return applyStations(map);
   }
 
   // 預設新存檔
@@ -92,6 +103,8 @@
     // 地圖：舊存檔（無 plotIndex 的 6×4 擴張圖）一律以新統一地圖重建（保留建築需重置，屬大改版）
     const hasUnifiedMap = state.map && Array.isArray(state.map.tiles) && state.map.tiles.some((t) => t.plotIndex != null);
     merged.map = hasUnifiedMap ? state.map : def.map;
+    // 舊統一地圖補上站點（向後相容：未放過站點才補）
+    if (hasUnifiedMap && !merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
     merged.buildings = (hasUnifiedMap && Array.isArray(state.buildings)) ? state.buildings : [];
     merged.animals = (hasUnifiedMap && Array.isArray(state.animals)) ? state.animals : [];
     // 確保 plots 數量足夠對應所有 soil 磚

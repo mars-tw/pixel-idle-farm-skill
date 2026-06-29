@@ -249,7 +249,13 @@
   .tile.has-object { background: linear-gradient(180deg, #9db98a, #7a9c66); }
   .tile.has-building { background: linear-gradient(180deg, #cdb185, #b3935f); }
   .tile.soil.locked { filter: grayscale(.6) brightness(.8); cursor: not-allowed; }
-  .tile.soil.locked::after { content: "🔒"; position: absolute; font-size: 14px; opacity: .7; }
+  /* 鎖定農土：CSS 畫掛鎖（鎖身 + 弧形鎖梁），不用 emoji */
+  .tile.soil.locked::after { content: ""; position: absolute; width: 12px; height: 9px; border-radius: 2px;
+    background: rgba(24,18,8,.62); top: 50%; left: 50%; transform: translate(-50%, -20%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); }
+  .tile.soil.locked::before { content: ""; position: absolute; width: 7px; height: 7px;
+    border: 2px solid rgba(24,18,8,.62); border-bottom: none; border-radius: 6px 6px 0 0;
+    top: 50%; left: 50%; transform: translate(-50%, -88%); z-index: 1; }
   .tile.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.55); }
   .tile.sel { box-shadow: 0 0 0 3px #ffe27a, 0 0 10px rgba(255,210,80,.6); z-index: 2; }
   .tile.dest { box-shadow: 0 0 0 3px #6ee7ff; }
@@ -276,13 +282,21 @@
   #animalLayer { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
   .map-animal { position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
     transform: translate(-50%, -50%); filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  /* 動作 VFX 疊層（澆水/塵土/種子/收成/產物環，地圖可見回饋）*/
+  #vfxLayer { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+  .map-vfx { position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
+    transform: translate(-50%, -50%); }
+  .map-prod { position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
+    transform: translate(-50%, -50%); animation: prodBob 1s ease-in-out infinite;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  @keyframes prodBob { 0%,100%{ transform: translate(-50%,-50%);} 50%{ transform: translate(-50%,-62%);} }
 
-  /* Miri 在地圖層上（絕對定位 + 移動 tween）*/
-  .player { position: absolute; pointer-events: none; z-index: 5; transform: translate(-50%, -64%);
+  /* Miri 在地圖層上（絕對定位 + 移動 tween）；frame 比例 3:4，腳底錨點對齊磚 */
+  .player { position: absolute; pointer-events: none; z-index: 5; transform: translate(-50%, -72%);
     transition: left var(--move-ms, 200ms) linear, top var(--move-ms, 200ms) linear;
     filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
   .player .p-sprite { width: 100%; height: 100%; background-repeat: no-repeat; image-rendering: pixelated;
-    background-image: var(--walk-sheet); background-size: 400% 400%; background-position: 0% 0%; }
+    background-position: 0% 0%; transition: transform .05s; }
 
   /* 右側資訊/動作面板 */
   .info-col { display: flex; flex-direction: column; gap: 12px; }
@@ -324,6 +338,7 @@
       <div class="map-scene-wrap">
         <div id="mapScene"></div>
         <div id="animalLayer"></div>
+        <div id="vfxLayer"></div>
         <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
       </div>
       <div class="btn-row" style="margin-top:10px">

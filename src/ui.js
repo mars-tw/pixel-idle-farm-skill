@@ -335,11 +335,13 @@
   // ====================================================================
   // 地圖 / 障礙 / 建築 / 動物 UI
   // ====================================================================
-  // v2 frame 對應
+  // ===== v3 frame 對應 =====
   const STAGE_NAME = ["seed", "sprout", "young", "mature", "ready"];
-  const BUILDING_FRAME = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "bee_box", silo: "silo", compostHeap: "compost_heap",
-    orderBoard: "order_board", mailbox: "mailbox", well: "well", storage: "storage_crate", farmhouse: "farmhouse" };
-  const ANIMAL_FRAME = { chicken: "chicken", cow: "cow", sheep: "sheep", bee: "bee" };
+  // 遊戲建築 type → props atlas frame（v3 無 silo/bee_box 專屬圖，沿用近似物件）
+  const BUILDING_FRAME = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap",
+    silo: "storage_crate", compostHeap: "compost_heap" };
+  // 障礙 → props frame（同名）
+  const OBSTACLE_FRAME = { rock: "rock", stump: "stump", bush: "bush" };
   // 建立統一地圖場景（磚 + 持久子層 + 玩家），磚 DOM 快取於 tileEls
   function buildMap() {
     const grid = $("mapScene"); if (!grid) return;
@@ -360,24 +362,51 @@
     updateMap(now());
     positionPlayer(false);
   }
-  // 地形 → v2 terrain frame
-  function terrainFrame(tile, prog) {
-    if (tile.terrain === "soil") {
-      if (prog && prog.wet && !prog.ready) return "soil_wet";
-      if (prog) return "soil_seeded";
-      return "soil_dry";
+  // ---- 地形 autotile：依鄰格選 center/edge/corner，破除方塊感 ----
+  function terrainKind(tile) {
+    if (!tile) return "grass";
+    if (tile.terrain === "soil") return "soil";
+    if (tile.terrain === "water") return "water";
+    if (tile.terrain === "path") return "path";
+    return "grass"; // grass / 障礙 / 建築 / 站點底層皆視為草
+  }
+  const DIR4 = { n: [0, -1], s: [0, 1], w: [-1, 0], e: [1, 0] };
+  // 此磚四向「鄰格不同類」的邊（n/s/e/w）
+  function edgeSidesFor(tile) {
+    const kind = terrainKind(tile); const sides = [];
+    for (const d of ["n", "s", "e", "w"]) {
+      const nt = G.getTileXY(state, tile.x + DIR4[d][0], tile.y + DIR4[d][1]);
+      if (terrainKind(nt) !== kind) sides.push(d);
     }
-    if (tile.terrain === "water") return "water_center";
-    if (tile.terrain === "path") return "path_center";
-    // grass：依座標小變化
-    const v = (tile.x * 3 + tile.y * 7) % 5;
-    return v === 0 ? "grass_flower_01" : v === 1 ? "grass_02" : v === 4 ? "grass_tall" : "grass_01";
+    return sides;
   }
-  function buildingEmoji(tile) {
-    const b = state.buildings.find((x) => x.id === tile.buildingId); const def = b && window.BUILDINGS[b.type];
-    return def ? def.emoji : "🏠";
+  // 邊集合 → frame 後綴：0→c、1→單邊、2相鄰→角、對邊/3邊→取首單邊近似
+  function autoSuffix(sides) {
+    if (sides.length === 0) return "c";
+    if (sides.length === 1) return sides[0];
+    const has = (a, b) => sides.includes(a) && sides.includes(b);
+    if (has("n", "e")) return "ne"; if (has("n", "w")) return "nw";
+    if (has("s", "e")) return "se"; if (has("s", "w")) return "sw";
+    return sides[0];
   }
-  // 設定物件 sprite 層：優先 v2 atlas frame，未就緒退 emoji
+  function hash2(x, y) { return Math.abs((x * 73856093) ^ (y * 19349663)); }
+  // 地形 → v3 terrain frame（autotile）
+  function terrainFrame(tile, prog) {
+    const kind = terrainKind(tile);
+    if (kind === "grass") {
+      const h = hash2(tile.x, tile.y);
+      if (h % 9 === 0) return "grass_flower_01";
+      if (h % 9 === 1) return "grass_flower_02";
+      if (h % 13 === 0) return "grass_clump_01";
+      return "grass_center_0" + (1 + (h % 4));
+    }
+    const sfx = autoSuffix(edgeSidesFor(tile));
+    if (kind === "soil") return ((prog && prog.wet && !prog.ready) ? "soil_wet_" : "soil_dry_") + sfx;
+    if (kind === "water") return "water_" + sfx;
+    if (kind === "path") return "path_" + sfx;
+    return "grass_center_01";
+  }
+  // 設定物件 sprite 層：優先 v3 atlas frame，未就緒退 emoji
   function setObjSprite(cell, sheet, frameId, emojiFallback) {
     const o = cell.obj;
     if (atlasReady && window.Atlas.applyTo(o, sheet, frameId)) { o.classList.add("spr"); o.textContent = ""; }
@@ -398,6 +427,7 @@
       // 地形背景（atlas，否則 CSS class fallback）
       let cls = "tile " + tile.terrain;
       if (tile.object) cls += " has-object";
+      if (tile.station) cls += " has-station";
       if (tile.buildingId) cls += " has-building";
       if (cell.tileId === selectedTileId) cls += " sel";
       if (locked) cls += " locked";
@@ -408,15 +438,16 @@
       // 物件層 + 狀態
       let ready = false;
       cell.bar.style.display = "none"; cell.dot.style.display = "none"; cell.wet.style.display = "none";
-      if (tile.buildingId) {
+      if (tile.station) {
+        const st = window.STATIONS[tile.station];
+        setObjSprite(cell, "props", st ? st.frame : "order_board", "");
+      } else if (tile.buildingId) {
         const home = state.buildings.find((b) => b.id === tile.buildingId);
         const frame = BUILDING_FRAME[home ? home.type : ""] || "farmhouse";
-        setObjSprite(cell, "buildings", frame, window.BUILDINGS[home && home.type] ? window.BUILDINGS[home.type].emoji : "🏠");
+        setObjSprite(cell, "props", frame, "");
         if (home) ready = G.animalsInHome(state, home.id).some((a) => G.animalProgress(state, a, t).ready);
-        // 動物 sprite（疊在建築上緣，成熟換 product_ready）
-        if (home) { const an = G.animalsInHome(state, home.id)[0]; if (an) { /* 動物層由 updateAnimals 負責 */ } }
       } else if (tile.object) {
-        setObjSprite(cell, "buildings", tile.object, window.OBSTACLES[tile.object].emoji);
+        setObjSprite(cell, "props", OBSTACLE_FRAME[tile.object] || tile.object, "");
       } else if (plot && plot.cropId) {
         const frame = plot.cropId + "_" + STAGE_NAME[prog.stage];
         setObjSprite(cell, "crops", frame, prog.stage <= 1 ? "🌱" : window.CROPS[plot.cropId].emoji);
@@ -430,34 +461,63 @@
     updateAnimals(t);
     positionPlayer(true);
   }
-  // 動物 sprite 疊層（在 home 磚附近顯示一隻，成熟時 product_ready）
+  // 動物由 coop/barn 建築圖呈現；此層只在「有成熟產物」時於建築上方放一個浮動產物提示
+  // （v3 無獨立動物 sheet；用 vfx product_pop 首幀當作可收集標記）
+  const PRODUCT_VFX_COL = { egg: 0, milk: 1, wool: 4, honey: 5 }; // 對應 action-vfx product_pop 列各欄
   function updateAnimals(t) {
     const layer = $("animalLayer"); if (!layer) return;
     layer.innerHTML = "";
     if (!atlasReady) return;
     for (const home of state.buildings) {
       const animals = G.animalsInHome(state, home.id); if (!animals.length) continue;
+      const ready = animals.some((a) => G.animalProgress(state, a, t).ready);
+      if (!ready) continue;
       const cell = tileEls.find((c) => { const tl = state.map.tiles.find((x) => x.id === c.tileId); return tl.buildingId === home.id; });
       if (!cell) continue;
-      const a = animals[0]; const ready = G.animalProgress(state, a, t).ready;
-      const sp = document.createElement("div"); sp.className = "map-animal";
-      const size = cell.el.offsetWidth * 0.7;
-      const st = window.Atlas.frameStyleFor("animals", ANIMAL_FRAME[a.type] + "_" + (ready ? "product_ready" : "idle_a"), size, size);
+      const prod = window.ANIMALS[animals[0].type].product;
+      const col = PRODUCT_VFX_COL[prod] != null ? PRODUCT_VFX_COL[prod] : 0;
+      const size = cell.el.offsetWidth * 0.5;
+      const sp = document.createElement("div"); sp.className = "map-prod";
+      const st = window.Atlas.frameStyleFor("vfx", "product_pop_" + String(col).padStart(2, "0"), size, size);
       if (st) { Object.assign(sp.style, st); sp.style.width = size + "px"; sp.style.height = size + "px";
-        sp.style.left = (cell.el.offsetLeft + cell.el.offsetWidth * 0.55) + "px"; sp.style.top = (cell.el.offsetTop + cell.el.offsetWidth * 0.45) + "px"; layer.appendChild(sp); }
+        sp.style.left = (cell.el.offsetLeft + cell.el.offsetWidth * 0.5) + "px";
+        sp.style.top = (cell.el.offsetTop + cell.el.offsetWidth * 0.18) + "px"; layer.appendChild(sp); }
     }
   }
+  // ---- 動作 VFX 疊層（地圖可見回饋）----
+  const ACTION_VFX = { water: "water_droplets", hoe: "soil_dust", clear: "soil_dust", build: "soil_dust",
+    sow: "seed_scatter", plant: "seed_scatter", harvest: "harvest_pop", collect: "product_pop" };
+  let vfxSpawnCount = 0;
+  function spawnVfx(tileId, vfxRow, opts) {
+    if (!atlasReady || !vfxRow) return;
+    const layer = $("vfxLayer"); const el = tileElOf(tileId); if (!layer || !el) return;
+    vfxSpawnCount++;
+    const size = el.offsetWidth * ((opts && opts.scale) || 0.95);
+    const sp = document.createElement("div"); sp.className = "map-vfx";
+    sp.style.width = size + "px"; sp.style.height = size + "px";
+    sp.style.left = (el.offsetLeft + el.offsetWidth / 2) + "px";
+    sp.style.top = (el.offsetTop + el.offsetHeight * ((opts && opts.yf) || 0.5)) + "px";
+    layer.appendChild(sp);
+    let f = 0;
+    const paint = () => { const stl = window.Atlas.frameStyleFor("vfx", vfxRow + "_" + String(f).padStart(2, "0"), size, size);
+      if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; } };
+    paint();
+    const iv = setInterval(() => { f++; if (f > 5) { clearInterval(iv); sp.remove(); return; } paint(); }, 75);
+  }
+  function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1.05 }); }
+  function stationTileOf(type) { const t = state.map.tiles.find((x) => x.station === type); return t ? t.id : null; }
 
   // ---------- 玩家定位 / 移動 ----------
   function tileElOf(tileId) { const r = tileEls.find((x) => x.tileId === tileId); return r ? r.el : null; }
   function positionPlayer(animate) {
     const pl = $("player"); if (!pl) return;
     const el = tileElOf(state.player.tileId); if (!el) return;
-    const size = el.offsetWidth * 1.45;
-    pl.style.width = size + "px"; pl.style.height = size + "px";
+    const tw = el.offsetWidth;
+    const w = tw * 1.16, h = w * (64 / 48); // v3 frame 比例 3:4
+    pl.style.width = w + "px"; pl.style.height = h + "px";
     if (!animate) pl.style.transition = "none"; else pl.style.transition = "";
-    pl.style.left = (el.offsetLeft + el.offsetWidth / 2) + "px";
-    pl.style.top = (el.offsetTop + el.offsetWidth / 2) + "px";
+    pl.style.left = (el.offsetLeft + tw / 2) + "px";
+    pl.style.top = (el.offsetTop + el.offsetHeight / 2) + "px";
     if (!animate) { void pl.offsetWidth; pl.style.transition = ""; }
   }
   function walkPath(path, onArrive) {
@@ -490,15 +550,58 @@
     switchTab("tile"); // 點磚自動顯示磚資訊分頁
     if (tool === "inspect") { updateMap(now()); inspectTile(tile); return; }
 
+    // 站點：任何工具點站點都走過去 + 播站點動作 + 觸發效果
+    if (tile.station) { useStation(tile); updateMap(now()); return; }
+
     const act = actionTargetFor(tool, tile);
-    if (act.invalid) { toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; updateMap(now()); return; }
-    if (act.action) { moveAndAct(tileId, act.action); updateMap(now()); return; }
+    if (act.invalid) { toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
+    if (act.action) { spawnRing(tileId, true); moveAndAct(tileId, act.action); updateMap(now()); return; }
     // 無動作：若可走就走過去
     if (G.isWalkable(state, tile)) {
       const path = G.bfsPath(state, state.player.tileId, tileId);
-      if (path) walkPath(path); else toast("走不到那裡");
+      if (path) { spawnRing(tileId, true); walkPath(path); } else toast("走不到那裡");
     } else {
-      toast(blockedReason(tile));
+      spawnRing(tileId, false); toast(blockedReason(tile));
+    }
+    updateMap(now());
+  }
+  // 站點：走到相鄰 → 面向站點 → 播動作 → 觸發效果
+  function useStation(tile) {
+    const st = window.STATIONS[tile.station]; if (!st) return;
+    const plan = G.planMoveTo(state, tile.id);
+    if (!plan) { toast("走不到 " + st.name); return; }
+    spawnRing(tile.id, true);
+    walkPath(plan.path, () => {
+      const stand = G.getTileById(state, plan.standId);
+      state.player.facing = G.facingTo(stand, tile);
+      playAction(st.action, state.player.facing);
+      resolveStation(st);
+    });
+  }
+  function resolveStation(st) {
+    const t = now();
+    if (st.effect === "orders") {
+      switchTab("orders"); renderOrders(); toast("📜 " + st.name + "：查看市集訂單");
+    } else if (st.effect === "sell") {
+      const r = G.sellAll(state, t);
+      if (r.coins > 0) { spawnVfx(stationTileOf("storage"), "product_pop"); toast("🪙 賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
+      else toast("倉庫沒有可賣的東西");
+    } else if (st.effect === "mail") {
+      const cap = G.storageCapacity(state), used = G.storageUsed(state);
+      toast("🏠 Lv " + state.level + "・🪙 " + fmtNum(state.coins) + "・📦 " + used + "/" + cap);
+    } else if (st.effect === "well") {
+      let n = 0;
+      for (let i = 0; i < G.activePlotCount(state); i++) if (G.waterPlot(state, i, t).ok) n++;
+      // 對地圖上每個新濕土作物磚噴水滴
+      for (const c of tileEls) {
+        const tl = G.getTileById(state, c.tileId);
+        if (tl.plotIndex != null && tl.plotIndex < G.activePlotCount(state)) {
+          const p = state.plots[tl.plotIndex];
+          if (p && p.cropId && G.isWet(p)) spawnVfx(c.tileId, "water_droplets", { scale: 0.8 });
+        }
+      }
+      toast(n > 0 ? "💧 水井替 " + n + " 格作物澆水" : "目前沒有需要澆水的作物");
+      if (n > 0) afterChange(false);
     }
     updateMap(now());
   }
@@ -516,7 +619,8 @@
       if (!plot.cropId) { toast("🟫 農土・空地，用手種植"); return; }
       const prog = G.getCropProgress(state, plot, now()); const crop = window.CROPS[plot.cropId];
       toast(`${crop.emoji}${crop.name}・${prog.ready ? "✅可收成" : "⏳" + fmtTime(prog.remainingMs)}${prog.wet ? "・💧濕土" : ""}`);
-    } else if (tile.object) { const o = window.OBSTACLES[tile.object]; toast(`${o.emoji}${o.name}・${o.desc}`); }
+    } else if (tile.station) { const s = window.STATIONS[tile.station]; toast("🏷️ " + s.name + "・" + s.desc); }
+    else if (tile.object) { const o = window.OBSTACLES[tile.object]; toast(`${o.emoji}${o.name}・${o.desc}`); }
     else if (tile.buildingId) { const b = state.buildings.find((x) => x.id === tile.buildingId); toast(window.BUILDINGS[b.type].emoji + window.BUILDINGS[b.type].name); }
     else { toast(`${terr.name}・${terr.desc}`); }
   }
@@ -568,29 +672,30 @@
   function resolveAction(action, tileId) {
     const tile = G.getTileById(state, tileId);
     const t = now();
+    const face = state.player.facing;
     if (action === "plant") {
       const r = G.plant(state, tile.plotIndex, selectedSeed, t);
-      if (r.ok) { playAction("sow"); afterChange(true); }
-      else toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植");
+      if (r.ok) { playAction("sow", face); spawnVfx(tileId, "seed_scatter"); afterChange(true); }
+      else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       const r = G.harvest(state, tile.plotIndex, t);
-      if (r.ok) { playAction("harvest"); const crop = window.CROPS[r.cropId];
+      if (r.ok) { playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); const crop = window.CROPS[r.cropId];
         toast("🧺 收成 " + r.added + " " + crop.name); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) toast("🎉 升 Lv " + state.level); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
-      if (r.ok) { playAction("water"); toast("💧 澆水變濕土加速"); afterChange(false); }
+      if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); toast("💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
-      if (r.ok) { playAction("hoe"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildMap(); renderTileContext(); }
-      else if (r.reason === "no_coins") toast("🪙 金幣不足");
+      if (r.ok) { playAction("hoe", face); spawnVfx(tileId, "soil_dust"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildMap(); renderTileContext(); }
+      else if (r.reason === "no_coins") { spawnRing(tileId, false); toast("🪙 金幣不足"); }
     } else if (action === "build") {
-      playAction("hoe"); renderTileContext(); // 顯示建築選單（玩家已走到旁邊）
+      playAction("hoe", face); spawnVfx(tileId, "soil_dust"); renderTileContext(); // 顯示建築選單（玩家已走到旁邊）
       toast("🏗️ 選一個建築蓋在這裡");
     } else if (action === "collect") {
       const b = state.buildings.find((x) => x.id === tile.buildingId);
-      if (b) { const r = G.collectAllAnimals(state, t); // 收這家（簡化：收全部成熟）
-        if (r.total > 0) { playAction("carry"); toast("🧺 收集 " + r.total + " 份產物"); afterChange(true); }
-        else toast("還沒有可收集的產物"); renderTileContext(); }
+      if (b) { const r = G.collectHome(state, b.id, t); // 只收「這一家」（per-building）
+        if (r.total > 0) { playAction("collect", face); spawnVfx(tileId, "product_pop"); toast("🧺 收集 " + r.total + " 份產物"); afterChange(true); }
+        else { spawnRing(tileId, false); toast("這裡還沒有可收集的產物"); } renderTileContext(); }
     }
     updateMap(now());
   }
@@ -600,6 +705,14 @@
     const tile = state.map.tiles.find((x) => x.id === selectedTileId);
     const terr = window.TERRAIN[tile.terrain];
 
+    // 0) 站點 → 走過去使用
+    if (tile.station) {
+      const st = window.STATIONS[tile.station];
+      box.innerHTML = `<div class="tc-title">🏷️ ${st.name}</div><div class="tc-desc">${st.desc}</div>
+        <div class="tc-actions"><button class="btn buy small" id="useStBtn">走過去使用</button></div>`;
+      $("useStBtn").onclick = () => useStation(tile);
+      return;
+    }
     // 1) 有建築 → 建築/動物管理
     if (tile.buildingId) { renderBuildingContext(box, tile); return; }
     // 2) 有障礙 → 清除
@@ -707,31 +820,32 @@
   }
 
   // ====================================================================
-  // 玩家 Miri：走路(walk-cycle 4列×4幀) + 動作(farm-actions 6列×4幀)
+  // 玩家 Miri（v3）：走路 4 列×6 幀 + 動作 12 列×6 幀，腳底錨點 [0.5,0.86]
   // ====================================================================
-  const ACTION_ROW = { idle: 0, hoe: 1, water: 2, sow: 3, harvest: 4, carry: 5 };
-  const WALK_COL = ["idle", "stepa", "idle2", "stepb"], ACT_COL = ["anticipation", "action", "contact", "recovery"];
-  const player = { frame: 0, fps: 6, oneShot: false, actionRow: 0, actionName: "idle", acc: 0, last: 0 };
-  // 畫玩家某 frame：優先 v2 atlas（整數 frame），未就緒退舊 CSS-var 百分比
-  function paintPlayer(which, rowName, rowIdx, frame) {
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const WALK_ROW = { down: "walk_down", left: "walk_left", right: "walk_right", up: "walk_up" };
+  const IDLE_ROW = { down: "idle_down", left: "idle_left", right: "idle_right", up: "idle_up" };
+  // 遊戲動作 → v3 動作列
+  const ACTION_V3 = { hoe: "hoe_side", water: "water_side", sow: "sow_down", harvest: "harvest_down",
+    carry: "carry_down", collect: "collect_down", station: "use_station_down", hurt: "hurt" };
+  const player = { frame: 0, fps: 6, oneShot: false, actionRow: "idle_down", acc: 0, last: 0, flip: false };
+  // 畫玩家某 frame（v3 atlas，6 幀/列；side 動作可水平翻轉）
+  function paintPlayer(sheet, rowName, frame, flip) {
     const sp = $("playerSprite"); if (!sp) return;
-    const size = ($("player").offsetWidth) || 64;
+    const pe = $("player"); const ew = pe.offsetWidth || 48, eh = pe.offsetHeight || 64;
     if (atlasReady) {
-      const sheet = which === "walk" ? "walk" : "actions";
-      const frameId = which === "walk" ? rowName + "_" + WALK_COL[frame] : rowName + "_" + ACT_COL[frame];
-      const stl = window.Atlas.frameStyleFor(sheet, frameId, size, size);
-      if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; return; }
+      const stl = window.Atlas.frameStyleFor(sheet, rowName + "_" + pad2(frame), ew, eh);
+      if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; }
     }
-    // fallback：舊 cutout sheet（百分比）
-    if (which === "walk") { sp.style.backgroundImage = "var(--walk-sheet)"; sp.style.backgroundSize = "400% 400%"; sp.style.backgroundPosition = (frame / 3 * 100) + "% " + (rowIdx / 3 * 100) + "%"; }
-    else { sp.style.backgroundImage = "var(--actions-sheet)"; sp.style.backgroundSize = "400% 600%"; sp.style.backgroundPosition = (frame / 3 * 100) + "% " + (rowIdx / 5 * 100) + "%"; }
+    sp.style.transform = flip ? "scaleX(-1)" : "";
   }
   function setPlayerIdle() { state.player.action = "idle"; }
-  const ACTION_NAME = { hoe: "hoe", water: "water", sow: "sow", harvest: "harvest", carry: "carry" };
-  function playAction(type) {
-    const row = ACTION_ROW[type]; if (row == null) return;
-    state.player.action = type; player.actionRow = row; player.actionName = ACTION_NAME[type] || "idle"; player.frame = 0; player.oneShot = true;
-    player.fps = type === "carry" ? 5 : 6; player.acc = 0;
+  function playAction(type, facing) {
+    const row = ACTION_V3[type]; if (!row) return;
+    state.player.action = type; player.actionRow = row; player.frame = 0; player.oneShot = true;
+    player.fps = type === "carry" ? 6 : 7; player.acc = 0;
+    const f = facing || state.player.facing;
+    player.flip = row.indexOf("_side") >= 0 && f === "left"; // side 源圖朝右，左向翻轉
   }
   function tickPlayer(t) {
     if (!player.last) player.last = t;
@@ -739,20 +853,23 @@
     const action = state.player.action;
     if (action === "walk") {
       player.fps = 8; player.acc += dt; const step = 1 / player.fps;
-      while (player.acc >= step) { player.acc -= step; player.frame = (player.frame + 1) % 4; }
-      paintPlayer("walk", state.player.facing, window.FACING_ROW[state.player.facing] || 0, player.frame);
+      while (player.acc >= step) { player.acc -= step; player.frame = (player.frame + 1) % 6; }
+      paintPlayer("walk", WALK_ROW[state.player.facing] || "walk_down", player.frame, false);
       return;
     }
     if (player.oneShot) {
       player.acc += dt; const step = 1 / player.fps;
       while (player.acc >= step) {
         player.acc -= step; player.frame++;
-        if (player.frame > 3) { player.frame = 0; player.oneShot = false; state.player.action = "idle"; }
+        if (player.frame > 5) { player.frame = 5; player.oneShot = false; state.player.action = "idle"; }
       }
-      paintPlayer("actions", player.oneShot ? player.actionName : "idle", player.oneShot ? player.actionRow : 0, player.frame);
+      paintPlayer("actions", player.actionRow, Math.min(player.frame, 5), player.flip);
       return;
     }
-    paintPlayer("actions", "idle", 0, 0); // 待機
+    // 待機呼吸：idle_<facing> 慢速循環
+    player.fps = 3; player.acc += dt; const step = 1 / player.fps;
+    while (player.acc >= step) { player.acc -= step; player.frame = (player.frame + 1) % 6; }
+    paintPlayer("actions", IDLE_ROW[state.player.facing] || "idle_down", player.frame, false);
   }
   // 鍵盤一次走一格（WASD / 方向鍵）
   function onKeyMove(e) {
@@ -764,7 +881,7 @@
     state.player.facing = dir;
     const nt = G.getTileXY(state, state.player.x + dd[0], state.player.y + dd[1]);
     if (nt && G.isWalkable(state, nt)) walkPath([nt.id]);
-    else { player.frame = 0; paintPlayer("walk", dir, window.FACING_ROW[dir], 0); } // 撞牆只轉向
+    else { player.frame = 0; paintPlayer("walk", WALK_ROW[dir], 0, false); } // 撞牆只轉向
   }
 
   // ---------- 統一刷新 ----------
@@ -825,30 +942,18 @@
     state = window.load() || window.defaultState(now());
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
 
+    // 舊作物 sheet 僅供隱藏相容農場格（主地圖作物改用 v3 atlas）
     document.documentElement.style.setProperty("--crop-sheet", `url(${ASSETS.crops})`);
-    // 預載 crop sheet 判斷可用性（onload 可能同步觸發，故 state 須先就緒）
-    const img = new Image();
-    img.onload = () => { spritesReady = true; if (state) updateFarm(now()); };
-    img.onerror = () => { spritesReady = false; if (state) updateFarm(now()); };
-    img.src = ASSETS.crops;
 
-    // 角色雙 sheet：動作圖 + 走路圖（優先去背 cutout，404 退原圖）
-    const setSheetVar = (varName, cutout, raw) => {
-      document.documentElement.style.setProperty(varName, `url(${cutout})`);
-      const im = new Image();
-      im.onerror = () => document.documentElement.style.setProperty(varName, `url(${raw})`);
-      im.src = cutout;
-    };
-    setSheetVar("--actions-sheet", ASSETS.actions, ASSETS.actionsRaw);
-    setSheetVar("--walk-sheet", ASSETS.walk, ASSETS.walkRaw);
-    paintPlayer("actions", "idle", 0, 0);
-
-    // v2 atlas：載入後改用整數 frame 渲染地圖/角色（主地圖無 emoji）
+    // v3 atlas：載入後用整數 frame 渲染地圖/角色（主地圖無 emoji）
     if (window.Atlas) {
       window.Atlas.load();
       window.Atlas.ready().then((ok) => {
         atlasReady = !!ok;
-        if (atlasReady && state) { buildMap(); updateMap(now()); positionPlayer(false); }
+        if (atlasReady && state) {
+          buildMap(); updateMap(now()); positionPlayer(false);
+          paintPlayer("actions", IDLE_ROW[state.player.facing] || "idle_down", 0, false);
+        }
       });
     }
 
@@ -895,6 +1000,9 @@
       clickTile: (id) => handleMapClick(id),
       setTool: (t) => setTool(t),
       moving: () => !!moveTimer,
+      vfxSpawns: () => vfxSpawnCount,
+      activeTab: () => { const b = document.querySelector(".side-tab.sel"); return b ? b.dataset.tab : null; },
+      stationTile: (type) => stationTileOf(type),
     };
   }
 

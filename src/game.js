@@ -475,6 +475,15 @@
     }
     return { perProduct, total, lost };
   }
+  // 只收「單一建築（home）」內成熟動物的產物（per-building 收集，玩家走到該建築互動）
+  function collectHome(state, homeId, now) {
+    const perProduct = {}; let total = 0, lost = 0;
+    for (const a of animalsInHome(state, homeId)) {
+      const r = collectAnimal(state, a.id, now);
+      if (r.ok) { perProduct[r.product] = (perProduct[r.product] || 0) + r.added; total += r.added; lost += r.lost; }
+    }
+    return { perProduct, total, lost };
+  }
   // 餵食：花作物讓動物立即產出一份（主動玩法獎勵）
   function feedAnimal(state, animalId, now) {
     const a = (state.animals || []).find((x) => x.id === animalId);
@@ -496,11 +505,12 @@
   // ========================================================================
   function getTileById(state, id) { return (state.map.tiles || []).find((t) => t.id === id) || null; }
   function getTileXY(state, x, y) { return (state.map.tiles || []).find((t) => t.x === x && t.y === y) || null; }
-  // 可站立：soil/grass/path 且無障礙、無建築、非水
+  // 可站立：soil/grass/path 且無障礙、無建築、無站點、非水
   function isWalkable(state, tile) {
     if (!tile) return false;
     if (tile.terrain === "water") return false;
     if (tile.object) return false;
+    if (tile.station) return false;
     if (tile.buildingId) return false;
     return true;
   }
@@ -654,7 +664,7 @@
     canAffordCost, spendCost, grantMaterials, getTile, clearObstacle,
     buildingUnlocked, buildingCount, canBuildOn, buildBuilding,
     homeBuildingFor, animalCapacity, animalsInHome, isAnimalUnlocked,
-    addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, feedAnimal,
+    addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, collectHome, feedAnimal,
     // 可走動地圖：尋路 / 目標解析
     getTileById, getTileXY, isWalkable, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
   };
