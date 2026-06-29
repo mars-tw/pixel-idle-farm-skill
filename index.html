@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>晨光萌芽農場 · Sunrise Sprout Farm</title>
 <style>
   :root {
@@ -78,7 +78,7 @@
   .plot:active { transform: scale(.96); }
   .plot.empty:hover { box-shadow: inset 0 0 0 2px rgba(255,255,255,.35), inset 0 2px 4px rgba(0,0,0,.25); }
   .plot.locked {
-    background: repeating-linear-gradient(45deg, #5b6b4d 0 8px, #53624 8px 16px), #556149;
+    background: repeating-linear-gradient(45deg, #5b6b4d 0 8px, #53624a 8px 16px), #556149;
     cursor: not-allowed; opacity: .85;
   }
   .plot.locked::after { content: "🔒"; position: absolute; font-size: 20px; opacity: .7; }
@@ -88,6 +88,7 @@
     position: absolute; inset: 6%; background-repeat: no-repeat;
     background-image: var(--crop-sheet); background-size: 500% 600%;
     image-rendering: pixelated; pointer-events: none; transition: opacity .2s;
+    mix-blend-mode: multiply; filter: saturate(1.12) contrast(1.04);
   }
   .plot .crop-emoji { font-size: clamp(20px, 7vw, 38px); pointer-events: none; line-height: 1;
     filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); transition: transform .2s; }

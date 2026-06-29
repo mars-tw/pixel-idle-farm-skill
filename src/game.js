@@ -279,7 +279,7 @@
   // ---------- 天氣 ----------
   function currentWeather(state, now) {
     if (state.level < WEATHER_UNLOCK_LEVEL) return "clear";
-    if (!state.weather || now >= (state.weather.untilMs || 0)) return state.weather ? state.weather.id : "clear";
+    if (!state.weather || now >= (state.weather.untilMs || 0)) return "clear";
     return state.weather.id;
   }
   function updateWeather(state, now, rng) {
@@ -351,14 +351,19 @@
         summary.xp += crop.xp; addXp(state, crop.xp);
         actualCycles++;
         if (flags.autoPlant && c < cycles - 1) {
-          if (state.coins < crop.seedCost) break;     // 種子錢不夠就停
+          if (state.coins < crop.seedCost) {
+            plot.cropId = null; plot.plantedAt = 0;
+            break;
+          }
           state.coins -= crop.seedCost; summary.replanted++;
         }
       }
       if (flags.autoPlant && actualCycles > 0) {
         // 重設種植時間為最後一輪起點，保留殘餘進度
-        plot.plantedAt = plot.plantedAt + actualCycles * growMs;
-        if (plot.plantedAt > offlineNow) plot.plantedAt = offlineNow;
+        if (plot.cropId) {
+          plot.plantedAt = plot.plantedAt + actualCycles * growMs;
+          if (plot.plantedAt > offlineNow) plot.plantedAt = offlineNow;
+        }
       } else {
         plot.cropId = null; plot.plantedAt = 0; // 只收一輪，格子清空
       }
