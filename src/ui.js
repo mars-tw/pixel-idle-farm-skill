@@ -11,6 +11,9 @@
     crops: "assets/generated/crop-growth.png",
     terrain: "assets/generated/terrain-tileset.png",
     icons: "assets/generated/ui-icons.png",
+    // 角色動作圖：優先用去背版（cutout），失敗退原圖
+    farmerActions: "assets/generated/characters/miri-rowan-farm-actions-cutout.png",
+    farmerActionsRaw: "assets/generated/characters/miri-rowan-farm-actions.png",
   };
 
   let state = null;
@@ -18,10 +21,17 @@
   let spritesReady = false;
   let lastOrderSig = "";
   let saveTimer = null;
+  let selectedTileId = null;
   const plotEls = []; // 農地格 DOM 快取
+  const tileEls = []; // 地圖磚 DOM 快取
 
   const $ = (id) => document.getElementById(id);
   const now = () => Date.now();
+
+  // ---------- 物品/建材顯示 ----------
+  function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
+  function itemEmoji(id) { const d = itemDef(id); if (d) return d.emoji; const m = (window.MATERIALS || {})[id]; return m ? m.emoji : "❔"; }
+  function itemName(id) { const d = itemDef(id); if (d) return d.name; const m = (window.MATERIALS || {})[id]; return m ? m.name : id; }
 
   // ---------- 工具 ----------
   function fmtTime(ms) {
@@ -73,7 +83,14 @@
         <span class="sub">${nextXp != null ? xpInLv + "/" + xpNeed : "MAX"}</span>
       </div>
       <div class="res"><span class="ic">📦</span> ${used}<span class="sub">/${cap}</span></div>
-      ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}`;
+      ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
+      ${matChips()}`;
+  }
+  // 建材顯示（>0 才顯示，省空間）
+  function matChips() {
+    const mats = state.materials || {};
+    return Object.keys(window.MATERIALS).filter((k) => (mats[k] || 0) > 0)
+      .map((k) => `<div class="res mat" title="${window.MATERIALS[k].name}"><span class="ic">${window.MATERIALS[k].emoji}</span> ${mats[k]}</div>`).join("");
   }
 
   // ---------- 種子選擇 ----------
@@ -169,6 +186,8 @@
         else if (r.reason === "locked_crop") toast("🔒 此作物尚未解鎖");
         return;
       }
+      plot.waterBoosts = 0; // 新一輪可重新澆水
+      playAction("sow");
       afterChange(true);
     } else {
       const prog = G.getCropProgress(state, plot, t);
@@ -176,6 +195,7 @@
       const crop = window.CROPS[plot.cropId];
       const r = G.harvest(state, i, t);
       if (r.ok) {
+        playAction("harvest");
         floatText(cx, cy, "+" + r.added + " " + crop.emoji, "#dff5c8");
         if (r.lost > 0) toast("📦 倉庫滿了，損失 " + r.lost + " " + crop.name);
         if (r.leveled > 0) toast("🎉 升到 Lv " + state.level + "！");
@@ -199,7 +219,7 @@
       const wantsHtml = Object.entries(o.wants).map(([cid, q]) => {
         const have = state.storage.items[cid] || 0;
         const ok = have >= q;
-        return `<span class="w ${ok ? "have" : "miss"}">${window.CROPS[cid].emoji}${have}/${q}</span>`;
+        return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)}${have}/${q}</span>`;
       }).join("");
       const el = document.createElement("div");
       el.className = "order";
@@ -260,10 +280,197 @@
     });
   }
 
+  // ====================================================================
+  // 地圖 / 障礙 / 建築 / 動物 UI
+  // ====================================================================
+  function buildMap() {
+    const grid = $("mapGrid"); if (!grid) return;
+    grid.innerHTML = ""; tileEls.length = 0;
+    grid.style.gridTemplateColumns = "repeat(" + state.map.width + ", 1fr)";
+    state.map.tiles.forEach((tile) => {
+      const el = document.createElement("div");
+      el.className = "tile";
+      el.addEventListener("click", () => onTileClick(tile.id));
+      grid.appendChild(el);
+      tileEls.push({ el, tileId: tile.id });
+    });
+    updateMap(now());
+  }
+  function tileGlyph(tile) {
+    if (tile.buildingId) { const b = state.buildings.find((x) => x.id === tile.buildingId); const def = b && window.BUILDINGS[b.type]; return def ? def.emoji : "🏠"; }
+    if (tile.object) return window.OBSTACLES[tile.object].emoji;
+    if (tile.terrain === "water") return "🌊";
+    return "";
+  }
+  function updateMap(t) {
+    if (!state.map || tileEls.length === 0) return;
+    for (const { el, tileId } of tileEls) {
+      const tile = state.map.tiles.find((x) => x.id === tileId);
+      let cls = "tile " + tile.terrain;
+      if (tile.object) cls += " has-object";
+      if (tile.buildingId) cls += " has-building";
+      if (tileId === selectedTileId) cls += " sel";
+      el.className = cls;
+      // 內容：glyph + 動物成熟提示
+      let ready = false;
+      if (tile.buildingId) {
+        const home = state.buildings.find((b) => b.id === tile.buildingId);
+        if (home) ready = G.animalsInHome(state, home.id).some((a) => G.animalProgress(state, a, t).ready);
+      }
+      el.innerHTML = `${tileGlyph(tile)}${ready ? '<span class="ready-dot"></span>' : ""}`;
+    }
+  }
+  function onTileClick(tileId) {
+    selectedTileId = tileId;
+    updateMap(now());
+    renderTileContext();
+  }
+  function renderTileContext() {
+    const box = $("tileContext"); if (!box) return;
+    if (!selectedTileId) { box.innerHTML = `<div class="tc-empty">點一個地圖磚查看資訊與動作</div>`; return; }
+    const tile = state.map.tiles.find((x) => x.id === selectedTileId);
+    const terr = window.TERRAIN[tile.terrain];
+
+    // 1) 有建築 → 建築/動物管理
+    if (tile.buildingId) { renderBuildingContext(box, tile); return; }
+    // 2) 有障礙 → 清除
+    if (tile.object) {
+      const ob = window.OBSTACLES[tile.object];
+      const canClear = state.coins >= ob.clearCost;
+      const grantsTxt = Object.entries(ob.grants).map(([k, v]) => `+${v}${window.MATERIALS[k].emoji}`).join(" ");
+      box.innerHTML = `
+        <div class="tc-title">${ob.emoji} ${ob.name}</div>
+        <div class="tc-desc">${ob.desc}。清除後變草地可興建。</div>
+        <div class="tc-actions">
+          <button class="btn buy small" id="clearBtn" ${canClear ? "" : "disabled"}>清除（🪙${ob.clearCost} → ${grantsTxt}）</button>
+        </div>`;
+      $("clearBtn").onclick = () => {
+        const r = G.clearObstacle(state, tile.id);
+        if (r.ok) { playAction("hoe"); toast("⛏️ 已清除，獲得建材"); afterChange(true); renderTileContext(); }
+        else if (r.reason === "no_coins") toast("🪙 金幣不足");
+      };
+      return;
+    }
+    // 3) 水域 → 說明
+    if (tile.terrain === "water") {
+      box.innerHTML = `<div class="tc-title">🌊 ${terr.name}</div><div class="tc-desc">${terr.desc}（MVP2 暫不可用）。</div>`;
+      return;
+    }
+    // 4) 空草地 → 建築選單
+    renderBuildMenu(box, tile);
+  }
+  function renderBuildMenu(box, tile) {
+    const opts = window.BUILDING_ORDER.map((type) => {
+      const def = window.BUILDINGS[type];
+      const unlocked = G.buildingUnlocked(state, type);
+      const afford = G.canAffordCost(state, def.cost);
+      const costTxt = Object.entries(def.cost).map(([k, v]) => k === "coins" ? `🪙${v}` : `${v}${window.MATERIALS[k].emoji}`).join(" ");
+      return `
+        <div class="build-opt ${unlocked && afford ? "" : "locked"}">
+          <span class="bo-ic">${def.emoji}</span>
+          <span class="bo-body"><span class="bo-name">${def.name}</span><br>
+            <span class="bo-cost">${def.desc} · ${costTxt}${unlocked ? "" : " · 🔒Lv" + def.unlockLevel}</span></span>
+          <button class="btn buy small bbtn" data-type="${type}" ${unlocked && afford ? "" : "disabled"}>蓋</button>
+        </div>`;
+    }).join("");
+    box.innerHTML = `<div class="tc-title">🟩 ${window.TERRAIN.grass.name}</div>
+      <div class="tc-desc">可興建建築（影響成長/倉容/解鎖動物）。</div>
+      <div class="tc-actions">${opts}</div>`;
+    box.querySelectorAll(".bbtn").forEach((b) => {
+      b.onclick = () => {
+        const r = G.buildBuilding(state, tile.id, b.dataset.type, now());
+        if (r.ok) { playAction("hoe"); toast(window.BUILDINGS[b.dataset.type].emoji + " 已興建 " + window.BUILDINGS[b.dataset.type].name); afterChange(true); buildMap(); renderTileContext(); }
+        else if (r.reason === "cost") toast("資源不足");
+        else if (r.reason === "locked") toast("🔒 等級不足");
+      };
+    });
+  }
+  function renderBuildingContext(box, tile) {
+    const b = state.buildings.find((x) => x.id === tile.buildingId);
+    const def = window.BUILDINGS[b.type];
+    const isHome = def.effect && def.effect.unlockAnimal;
+    let html = `<div class="tc-title">${def.emoji} ${def.name}</div><div class="tc-desc">${def.desc}</div>`;
+    if (isHome) {
+      const animals = G.animalsInHome(state, b.id);
+      const cap = G.animalCapacity(state, b.id);
+      html += `<div class="tc-actions">`;
+      animals.forEach((a) => {
+        const adef = window.ANIMALS[a.type];
+        const prog = G.animalProgress(state, a, now());
+        html += `
+          <div class="animal-row">
+            <span class="a-ic">${adef.emoji}</span>
+            <span class="a-body"><b>${adef.name}</b> → ${itemEmoji(adef.product)}${adef.name === "蜜蜂" ? "" : ""}
+              <div class="a-prog"><div class="a-fill" style="width:${(prog.ratio * 100).toFixed(0)}%"></div></div>
+              <span class="bo-cost">${prog.ready ? "✅ 可收集" : "⏳ " + fmtTime(prog.remainingMs)}</span></span>
+            <span style="display:flex;flex-direction:column;gap:4px">
+              <button class="btn buy small acol" data-id="${a.id}" ${prog.ready ? "" : "disabled"}>收集</button>
+              <button class="btn ghost small afeed" data-id="${a.id}">餵食</button>
+            </span>
+          </div>`;
+      });
+      // 買動物
+      const animalType = def.effect.unlockAnimal[0];
+      if (animals.length < cap) {
+        const adef = window.ANIMALS[animalType];
+        html += `<button class="btn buy small abuy" data-bid="${b.id}" data-type="${animalType}">＋ 買一隻${adef.name}（🪙${adef.cost}）</button>`;
+      } else {
+        html += `<div class="bo-cost">已達容量上限 ${cap} 隻</div>`;
+      }
+      html += `</div>`;
+    }
+    box.innerHTML = html;
+    box.querySelectorAll(".acol").forEach((btn) => btn.onclick = () => {
+      const r = G.collectAnimal(state, btn.dataset.id, now());
+      if (r.ok) { playAction("carry"); toast("🧺 收集 " + r.added + " " + itemName(r.product)); afterChange(true); renderTileContext(); updateMap(now()); }
+    });
+    box.querySelectorAll(".afeed").forEach((btn) => btn.onclick = () => {
+      const r = G.feedAnimal(state, btn.dataset.id, now());
+      if (r.ok) { playAction("sow"); toast("🌾 餵食 → +1 " + itemName(r.product)); afterChange(true); renderTileContext(); }
+      else toast("飼料不足（需作物）");
+    });
+    box.querySelectorAll(".abuy").forEach((btn) => btn.onclick = () => {
+      const r = G.buyAnimal(state, btn.dataset.bid, btn.dataset.type, now());
+      if (r.ok) { toast("🐣 新動物入住！"); afterChange(true); renderTileContext(); }
+      else if (r.reason === "no_coins") toast("🪙 金幣不足");
+      else if (r.reason === "full") toast("已達容量上限");
+    });
+  }
+
+  // ====================================================================
+  // 可動角色 Miri Rowan（farm-actions sheet：6 列動作 × 4 幀）
+  // ====================================================================
+  const ACTION_ROW = { idle: 0, hoe: 1, water: 2, sow: 3, harvest: 4, carry: 5 };
+  const farmer = { row: 0, frame: 0, fps: 6, oneShot: false, acc: 0, last: 0 };
+  function setFarmerCell(row, frame) {
+    const sp = $("farmerSprite"); if (!sp) return;
+    // 4 欄 → x = frame/3*100；6 列 → y = row/5*100
+    sp.style.backgroundPosition = (frame / 3 * 100) + "% " + (row / 5 * 100) + "%";
+  }
+  function playAction(type) {
+    const row = ACTION_ROW[type]; if (row == null) return;
+    farmer.row = row; farmer.frame = 0; farmer.oneShot = true; farmer.fps = type === "carry" ? 5 : 6; farmer.acc = 0;
+  }
+  function tickFarmer(t) {
+    if (!farmer.last) farmer.last = t;
+    const dt = (t - farmer.last) / 1000; farmer.last = t;
+    farmer.acc += dt;
+    const step = 1 / farmer.fps;
+    while (farmer.acc >= step) {
+      farmer.acc -= step;
+      farmer.frame++;
+      if (farmer.frame > 3) {
+        farmer.frame = 0;
+        if (farmer.oneShot) { farmer.oneShot = false; farmer.row = ACTION_ROW.idle; farmer.fps = 3; } // 動作播完回待機
+      }
+    }
+    setFarmerCell(farmer.row, farmer.frame);
+  }
+
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
     renderResBar(); renderSeeds(); updateFarm(now());
-    if (rerenderPanels) { renderUpgrades(); }
+    if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
     scheduleSave();
   }
 
@@ -276,10 +483,14 @@
     if (crops.length) {
       crops.forEach(([cid, n]) => lines.push(`<div class="ml">${window.CROPS[cid].emoji} ${window.CROPS[cid].name} 自動收成 <span class="v">+${n}</span></div>`));
     }
+    const products = Object.entries(summary.products || {});
+    if (products.length) {
+      products.forEach(([pid, n]) => lines.push(`<div class="ml">${itemEmoji(pid)} ${itemName(pid)} 動物產出 <span class="v">+${n}</span></div>`));
+    }
     if (summary.replanted > 0) lines.push(`<div class="ml">🤖 幫手補種 <span class="v">${summary.replanted} 次</span></div>`);
     if (summary.readyPlots > 0) lines.push(`<div class="ml">🌾 已成熟待收 <span class="v">${summary.readyPlots} 格</span></div>`);
     if (summary.lost > 0) lines.push(`<div class="ml" style="color:var(--bad)">📦 倉滿損失 <span class="v">${summary.lost}</span></div>`);
-    if (!crops.length && !summary.readyPlots) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
+    if (!crops.length && !products.length && !summary.readyPlots) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
     if (summary.cappedFromMs > 0) lines.push(`<div class="tip">（離線收益上限 8 小時，實際離開 ${fmtTime(summary.cappedFromMs)}）</div>`);
     $("offlineBody").innerHTML = lines.join("");
     $("offlineModal").classList.add("show");
@@ -304,6 +515,8 @@
     }
     if (helped.harvested > 0) { renderResBar(); }
     updateFarm(t);
+    updateMap(t);       // 動物成熟提示
+    tickFarmer(t);      // 角色待機/動作動畫
   }
 
   // ---------- 初始化 ----------
@@ -319,13 +532,20 @@
     img.onerror = () => { spritesReady = false; if (state) updateFarm(now()); };
     img.src = ASSETS.crops;
 
+    // 角色動作圖：優先去背 cutout，404 退原圖
+    document.documentElement.style.setProperty("--farmer-sheet", `url(${ASSETS.farmerActions})`);
+    const fimg = new Image();
+    fimg.onerror = () => document.documentElement.style.setProperty("--farmer-sheet", `url(${ASSETS.farmerActionsRaw})`);
+    fimg.src = ASSETS.farmerActions;
+    setFarmerCell(0, 0);
+
     // 離線結算（在 refreshOrders 前）
     const summary = G.applyOffline(state, now());
     G.refreshOrders(state, now());
     G.updateWeather(state, now());
 
-    buildFarm();
-    renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now());
+    buildFarm(); buildMap();
+    renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
 
     // sprite 切換鈕初始文字
     $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
@@ -345,6 +565,14 @@
     window.addEventListener("beforeunload", () => { state.lastSeenAt = now(); window.save(state); });
 
     bindToolbar();
+
+    // 測試/除錯掛鉤
+    window.__farm = {
+      state: () => state,
+      farmer: () => farmer,
+      refresh: () => { renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); buildMap(); updateFarm(now()); renderTileContext(); },
+      selectTile: (id) => { onTileClick(id); },
+    };
   }
 
   function bindToolbar() {
@@ -355,8 +583,29 @@
     };
     $("sellAllBtn").onclick = () => {
       const r = G.sellAll(state, now());
-      if (r.coins > 0) { toast("🪙 賣出 " + r.qty + " 個，得 " + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
+      if (r.coins > 0) { playAction("carry"); toast("🪙 賣出 " + r.qty + " 個，得 " + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的作物");
+    };
+    // 澆水：花一點時間給成長中作物加速（綁角色澆水動畫）
+    $("waterAllBtn").onclick = () => {
+      const t = now(); let n = 0;
+      for (let i = 0; i < G.activePlotCount(state); i++) {
+        const p = state.plots[i]; if (!p || !p.cropId) continue;
+        const prog = G.getCropProgress(state, p, t); if (prog.ready) continue;
+        if ((p.waterBoosts || 0) >= 2) continue;     // 每輪最多澆 2 次
+        const grow = G.effectiveGrowMs(state, p.cropId, t);
+        p.plantedAt = Math.max(p.plantedAt - Math.floor(grow * 0.08), t - grow + 1000);
+        p.waterBoosts = (p.waterBoosts || 0) + 1; n++;
+      }
+      playAction("water");
+      toast(n > 0 ? "💧 澆水 " + n + " 格，成長加速" : "沒有需要澆水的作物");
+      if (n > 0) afterChange(false);
+    };
+    // 收集全部動物產物
+    $("collectAllBtn").onclick = () => {
+      const r = G.collectAllAnimals(state, now());
+      if (r.total > 0) { playAction("carry"); toast("🧺 收集 " + r.total + " 份產物"); afterChange(true); renderTileContext(); updateMap(now()); }
+      else toast("目前沒有可收集的產物");
     };
     $("spriteToggle").onclick = () => {
       state.useSprites = !state.useSprites;
@@ -369,8 +618,8 @@
     $("resetBtn").onclick = () => {
       if (confirm("確定重置存檔？所有進度會消失。")) {
         window.reset(); state = window.defaultState(now());
-        selectedSeed = "wheat"; buildFarm();
-        renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now());
+        selectedSeed = "wheat"; selectedTileId = null; buildFarm(); buildMap();
+        renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
         G.refreshOrders(state, now()); renderOrders();
         window.save(state); toast("🗑️ 已重置");
       }
