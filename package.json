@@ -4,14 +4,17 @@
   "description": "純原生網頁像素放置農場遊戲 — Claude Code Skill。零依賴 HTML/CSS/JS，localStorage 存檔，時間差離線收益。",
   "type": "commonjs",
   "scripts": {
-    "test": "node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js",
+    "test": "node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js",
     "test:economy": "node scripts/test-economy.js",
     "test:systems": "node scripts/test-systems.js",
     "test:ui": "node scripts/test-ui-smoke.js",
     "test:validate": "node scripts/validate-v3-atlas.js",
-    "test:e2e": "node scripts/test-map-movement-e2e.js && node scripts/test-rpg-v3-e2e.js",
+    "test:validate:v4": "node scripts/validate-v4-atlas.js",
+    "test:e2e": "node scripts/test-rpg-v4-e2e.js",
     "art:v3": "node scripts/gen-art-v3.js",
     "art:v3:process": "node scripts/process-v3-atlas.js",
+    "art:v4": "node scripts/gen-art-v4.js",
+    "art:v4:process": "node scripts/process-v4-atlas.js",
     "start": "python -m http.server 8000"
   },
   "keywords": [

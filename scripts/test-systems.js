@@ -109,6 +109,7 @@ console.log("\n== 7. 動物產品（offline）多輪 + 上限 ==");
 {
   const st = S.defaultState(T0);
   st.level = 3; st.coins = 9999; st.materials.wood = 10;
+  st.animals = []; // 清掉 Stage 4 預置的起始雞，隔離測單一新雞的產出
   const tile = firstBuildable(st);
   const r = G.buildBuilding(st, tile.id, "chickenCoop", T0);
   const produceMs = C.ANIMALS.chicken.produceMs;

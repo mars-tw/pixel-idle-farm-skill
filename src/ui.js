@@ -122,6 +122,13 @@
     document.querySelectorAll(".side-tab").forEach((b) => { b.onclick = () => switchTab(b.dataset.tab); });
   }
 
+  // 幫手自動化捷徑：早期隱藏（初期動作必須走到目標執行）；升「幫手機器人」後才解鎖
+  function syncHud() {
+    const ga = $("globalActions"); if (!ga) return;
+    const unlocked = (state.upgrades && state.upgrades.helperLevel > 0);
+    ga.style.display = unlocked ? "flex" : "none";
+  }
+
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
   function setTool(t) { state.interaction.tool = t; renderToolbar(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
@@ -289,7 +296,7 @@
         </div>`;
       el.querySelector(".ful").onclick = () => {
         const r = G.fulfillOrder(state, o.id, now());
-        if (r.ok) { toast("📜 訂單完成！+" + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
+        if (r.ok) { G.advanceStory(state, "deliver"); toast("📜 訂單完成！+" + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
         else toast("作物不足，無法交付");
       };
       el.querySelector(".trash").onclick = () => {
@@ -333,43 +340,28 @@
     });
   }
 
-  // ---------- 故事 / 任務 ----------
-  function totalHarvested() { return Object.values(state.stats.harvested || {}).reduce((s, n) => s + (n || 0), 0); }
-  function storyStage() {
-    if ((state.stats.cleared || 0) >= 1 || state.buildings.length > 0) return {
-      kicker: "第二章",
-      title: "老農場的邊界醒了",
-      copy: "石頭與樹根後面還埋著舊水渠的痕跡。Miri 要把荒地清開，讓動物棚、倉庫和新的小路接回晨光鎮。"
-    };
-    if (totalHarvested() > 0 || state.stats.fulfilledOrders > 0) return {
-      kicker: "第一章",
-      title: "第一批麥穗送往鎮上",
-      copy: "告示板開始有人留下訂單。每一趟交付都讓這座被遺忘的農場多一點名字，也多一點回來的人。"
-    };
-    return {
-      kicker: "序章",
-      title: "Miri 回到晨光萌芽農場",
-      copy: "祖母留下的田地只剩幾畦泥土、一口老水井和鎮口的告示板。先種下小麥，讓第一盞燈重新亮起。"
-    };
-  }
+  // ---------- 故事 / 任務（地圖驅動：state.story 任務鏈）----------
+  const QUEST_ORDER = ["intro_reopen_farm", "plant_wheat", "first_water", "first_harvest", "first_delivery", "clear_old_path"];
   function renderStory() {
     const box = $("storyPanel"); if (!box) return;
-    const harvested = totalHarvested();
-    const quests = [
-      { done: state.stats.plantCount > 0, text: "種下第一批小麥，確認土地還能發芽。" },
-      { done: harvested > 0, text: "收成第一份作物，帶去告示板回應鎮民。" },
-      { done: state.stats.fulfilledOrders > 0, text: "完成第一張市集訂單，讓晨光鎮記起這座農場。" },
-      { done: (state.stats.cleared || 0) > 0, text: "清掉一個石頭或樹根，找回荒地裡的舊路。" },
-      { done: state.buildings.length > 0, text: "蓋下第一棟農場設施，準備迎接動物入住。" }
-    ];
-    const st = storyStage();
+    const cur = G.currentQuest(state);
+    const completed = (state.story && state.story.completed) || {};
+    const doneCount = QUEST_ORDER.filter((id) => completed[id]).length;
+    const kicker = doneCount === 0 ? "序章" : doneCount >= QUEST_ORDER.length ? "第二章" : "第一章";
+    const title = cur ? cur.title : "晨光鎮的新篇章";
+    const copy = cur ? cur.desc
+      : "祖母的農場重新熱鬧了起來。繼續開墾田地、迎接更多動物與市集訂單，讓晨光萌芽農場成為鎮上的驕傲。";
+    const quests = QUEST_ORDER.map((id) => {
+      const q = window.QUESTS[id]; const done = !!completed[id]; const active = cur && cur.id === id;
+      return `<div class="quest ${done ? "done" : ""} ${active ? "active" : ""}">
+        <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span><span>${q.title}</span></div>`;
+    }).join("");
     box.innerHTML = `<div class="story-card">
-      <div class="story-kicker">${st.kicker}</div>
-      <div class="story-title">${st.title}</div>
-      <div class="story-copy">${st.copy}</div>
-      <div class="quest-list">${quests.map((q) => `<div class="quest ${q.done ? "done" : ""}">
-        <span class="qmark">${q.done ? "✓" : "□"}</span><span>${q.text}</span>
-      </div>`).join("")}</div>
+      <div class="story-kicker">${kicker}</div>
+      <div class="story-title">${title}</div>
+      <div class="story-copy">${copy}</div>
+      <div class="quest-list">${quests}</div>
+      ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。</div>` : ""}
     </div>`;
   }
 
@@ -383,25 +375,95 @@
     silo: "storage_crate", compostHeap: "compost_heap" };
   // 障礙 → props frame（同名）
   const OBSTACLE_FRAME = { rock: "rock", stump: "stump", bush: "bush" };
-  // 建立統一地圖場景（磚 + 持久子層 + 玩家），磚 DOM 快取於 tileEls
-  function buildMap() {
-    const grid = $("mapScene"); if (!grid) return;
-    grid.innerHTML = ""; tileEls.length = 0;
-    grid.style.gridTemplateColumns = "repeat(" + state.map.width + ", 1fr)";
-    state.map.tiles.forEach((tile) => {
+  // ===== Stage 4：像素世界 + camera + 分層 y-sort 渲染器 =====
+  const TILE = window.TILE_PX || 48;
+  let worldEl = null, groundEl = null;
+  const obStatic = [], obDyn = [];   // 物件層 sprite（靜態：建築/障礙/站點；動態：作物/動物/狀態）
+  const pxv = (n) => n + "px";
+
+  function buildMap() { buildScene(); }          // 相容舊呼叫名
+  function buildScene() {
+    const scene = $("mapScene"); if (!scene) return;
+    worldEl = $("mapWorld"); groundEl = $("groundLayer");
+    if (!worldEl || !groundEl) return;
+    const W = state.map.width * TILE, H = state.map.height * TILE;
+    worldEl.style.width = pxv(W); worldEl.style.height = pxv(H);
+    groundEl.style.width = pxv(W); groundEl.style.height = pxv(H);
+    groundEl.innerHTML = ""; tileEls.length = 0;
+    for (const tile of state.map.tiles) {
       const el = document.createElement("div");
-      el.className = "tile " + tile.terrain;
+      el.className = "gtile " + tile.terrain;
       el.dataset.tileId = tile.id;
-      // 持久子層：地形上的物件 sprite + 狀態
-      el.innerHTML = `<div class="t-obj"></div><div class="t-bar"><i></i></div><div class="t-dot"></div><div class="t-wet">💧</div>`;
+      el.style.left = pxv(tile.x * TILE); el.style.top = pxv(tile.y * TILE);
+      el.style.width = pxv(TILE); el.style.height = pxv(TILE);
       el.addEventListener("click", () => handleMapClick(tile.id));
-      grid.appendChild(el);
-      tileEls.push({ el, tileId: tile.id, obj: el.querySelector(".t-obj"), bar: el.querySelector(".t-bar"),
-        barFill: el.querySelector(".t-bar > i"), dot: el.querySelector(".t-dot"), wet: el.querySelector(".t-wet") });
-    });
+      groundEl.appendChild(el);
+      tileEls.push({ el, tileId: tile.id });
+    }
+    paintGround();
+    buildStaticObjects();
     document.documentElement.style.setProperty("--move-ms", window.MOVE_MS + "ms");
     updateMap(now());
     positionPlayer(false);
+  }
+  // 地面 terrain 圖（含 wet/locked/sel class）
+  function paintGround() {
+    if (!atlasReady) return;
+    const active = G.activePlotCount(state);
+    for (const cell of tileEls) {
+      const tile = G.getTileById(state, cell.tileId);
+      const plot = tile.plotIndex != null ? state.plots[tile.plotIndex] : null;
+      const prog = plot && plot.cropId ? G.getCropProgress(state, plot, now()) : null;
+      const locked = tile.plotIndex != null && tile.plotIndex >= active;
+      let cls = "gtile " + tile.terrain;
+      if (locked) cls += " locked";
+      if (prog && prog.wet && !prog.ready) cls += " wet";
+      if (cell.tileId === selectedTileId) cls += " sel";
+      cell.el.className = cls;
+      window.Atlas.applyTo(cell.el, "terrain", terrainFrame(tile, prog));
+    }
+  }
+  // 以「像素中心 + 腳底 baseline」放一個物件 sprite；依 frame 真實長寬比，z=baseline 做遮擋
+  function addObjectPx(arr, sheet, frame, cx, baselineY, wPx, cls, zAdjust) {
+    if (!worldEl) return null;
+    const f = atlasReady ? window.Atlas.getFrame(sheet, frame) : null;
+    const ratio = f ? (f.h / f.w) : 1;
+    const w = wPx, h = wPx * ratio;
+    const el = document.createElement("div");
+    el.className = "ob " + (cls || "");
+    el.style.left = pxv(Math.round(cx - w / 2)); el.style.top = pxv(Math.round(baselineY - h));
+    el.style.width = pxv(w); el.style.height = pxv(h);
+    el.style.zIndex = Math.round(baselineY + (zAdjust || 0));
+    if (f) { const st = window.Atlas.frameStyleFor(sheet, frame, w, h);
+      if (st) { el.style.backgroundImage = st.backgroundImage; el.style.backgroundSize = st.backgroundSize; el.style.backgroundPosition = st.backgroundPosition; } }
+    worldEl.appendChild(el); if (arr) arr.push(el);
+    return el;
+  }
+  // 多格建築：寬=footprint 寬，底=footprint 底，sprite 依 frame 比例自然向上延伸（遮擋）
+  function addStructure(s) {
+    const cx = (s.x + s.w / 2) * TILE;
+    const baselineY = (s.y + s.h) * TILE;
+    addObjectPx(obStatic, s.sheet, s.frame, cx, baselineY, s.w * TILE, "shadowed");
+  }
+  const OBSTACLE_SHEET = { rock: "props", stump: "props", bush: "props", tree: "structures" };
+  const OBSTACLE_FRAME2 = { rock: "rock", stump: "stump", bush: "bush", tree: "oak" };
+  const OBSTACLE_SCALE = { rock: 1.05, stump: 1.0, bush: 1.1, tree: 1.8 };
+  // 靜態物件：多格建築 / 障礙 / 站點（buildScene 與清障時重建）
+  function buildStaticObjects() {
+    for (const e of obStatic) e.remove(); obStatic.length = 0;
+    if (!atlasReady || !worldEl) return;
+    for (const s of (window.STRUCTURES || [])) addStructure(s);
+    for (const tile of state.map.tiles) {
+      if (!tile.object) continue;
+      const sheet = OBSTACLE_SHEET[tile.object] || "props";
+      const frame = OBSTACLE_FRAME2[tile.object] || tile.object;
+      addObjectPx(obStatic, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * (OBSTACLE_SCALE[tile.object] || 1), "shadowed");
+    }
+    for (const tile of state.map.tiles) {
+      if (!tile.station) continue;
+      const stn = window.STATIONS[tile.station];
+      addObjectPx(obStatic, "props", stn ? stn.frame : "order_board", (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 1.1, "shadowed");
+    }
   }
   // ---- 地形 autotile：依鄰格選 center/edge/corner，破除方塊感 ----
   function terrainKind(tile) {
@@ -447,87 +509,66 @@
     if (kind === "path") return "path_" + sfx;
     return "grass_center_01";
   }
-  // 設定物件 sprite 層：優先 v3 atlas frame，未就緒退 emoji
-  function setObjSprite(cell, sheet, frameId, emojiFallback) {
-    const o = cell.obj;
-    o.dataset.sheet = sheet; o.dataset.frame = frameId;
-    if (atlasReady && window.Atlas.applyTo(o, sheet, frameId)) { o.classList.add("spr"); o.textContent = ""; }
-    else { o.classList.remove("spr"); o.style.backgroundImage = "none"; o.textContent = emojiFallback || ""; }
-  }
-  function clearObjSprite(cell) {
-    const o = cell.obj; o.classList.remove("spr"); o.style.backgroundImage = "none"; o.textContent = "";
-    delete o.dataset.sheet; delete o.dataset.frame;
-  }
-  // 渲染所有地圖磚（地形/作物/障礙/建築/動物/狀態，皆 v2 sprite）+ 定位玩家
+  // 動態物件（作物 + 狀態、動物、任務標記）每 tick 重建；地面/靜態物件另管。
   function updateMap(t) {
     if (!state.map || tileEls.length === 0) return;
-    const active = G.activePlotCount(state);
-    for (const cell of tileEls) {
-      const { el } = cell;
-      const tile = state.map.tiles.find((x) => x.id === cell.tileId);
-      const plot = tile.plotIndex != null ? state.plots[tile.plotIndex] : null;
-      const prog = plot && plot.cropId ? G.getCropProgress(state, plot, t) : null;
-      const locked = tile.plotIndex != null && tile.plotIndex >= active;
-
-      // 地形背景（atlas，否則 CSS class fallback）
-      let cls = "tile " + tile.terrain;
-      if (tile.object) cls += " has-object";
-      if (tile.station) cls += " has-station";
-      if (tile.buildingId) cls += " has-building";
-      if (cell.tileId === selectedTileId) cls += " sel";
-      if (locked) cls += " locked";
-      if (prog && prog.wet && !prog.ready) cls += " wet";
-      el.className = cls;
-      if (atlasReady) window.Atlas.applyTo(el, "terrain", terrainFrame(tile, prog));
-
-      // 物件層 + 狀態
-      let ready = false;
-      cell.bar.style.display = "none"; cell.dot.style.display = "none"; cell.wet.style.display = "none";
-      if (tile.station) {
-        const st = window.STATIONS[tile.station];
-        setObjSprite(cell, "props", st ? st.frame : "order_board", "");
-      } else if (tile.buildingId) {
-        const home = state.buildings.find((b) => b.id === tile.buildingId);
-        const frame = BUILDING_FRAME[home ? home.type : ""] || "farmhouse";
-        setObjSprite(cell, "props", frame, "");
-        if (home) ready = G.animalsInHome(state, home.id).some((a) => G.animalProgress(state, a, t).ready);
-      } else if (tile.object) {
-        setObjSprite(cell, "props", OBSTACLE_FRAME[tile.object] || tile.object, "");
-      } else if (plot && plot.cropId) {
+    paintGround();
+    for (const e of obDyn) e.remove(); obDyn.length = 0;
+    if (atlasReady && worldEl) {
+      const active = G.activePlotCount(state);
+      // 作物（在 soil 磚，略低於角色 z）
+      for (const tile of state.map.tiles) {
+        if (tile.plotIndex == null || tile.plotIndex >= active) continue;
+        const plot = state.plots[tile.plotIndex];
+        if (!plot.cropId) continue;
+        const prog = G.getCropProgress(state, plot, t);
         const frame = plot.cropId + "_" + STAGE_NAME[prog.stage];
-        setObjSprite(cell, "crops", frame, prog.stage <= 1 ? "🌱" : window.CROPS[plot.cropId].emoji);
-      } else {
-        clearObjSprite(cell);
+        addObjectPx(obDyn, "crops", frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2);
+        if (prog.ready) addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
+        else addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
       }
-      // 狀態：成熟亮點 / 成長條 / 濕土
-      if (ready || (prog && prog.ready)) { cell.dot.style.display = "block"; }
-      else if (prog) { cell.bar.style.display = "block"; cell.barFill.style.width = (prog.ratio * 100).toFixed(0) + "%"; if (prog.wet) cell.wet.style.display = "block"; }
+      renderAnimals(t);
+      renderMarkers(t);
     }
-    updateAnimals(t);
     positionPlayer(true);
   }
-  // 動物由 coop/barn 建築圖呈現；此層只在「有成熟產物」時於建築上方放一個浮動產物提示
-  // （v3 無獨立動物 sheet；用 vfx product_pop 首幀當作可收集標記）
-  const PRODUCT_VFX_COL = { egg: 0, milk: 1, wool: 4, honey: 5 }; // 對應 action-vfx product_pop 列各欄
-  function updateAnimals(t) {
-    const layer = $("animalLayer"); if (!layer) return;
-    layer.innerHTML = "";
-    if (!atlasReady) return;
+  function addBar(left, top, w, ratio) {
+    const el = document.createElement("div"); el.className = "ob-bar";
+    el.style.left = pxv(left); el.style.top = pxv(top); el.style.width = pxv(w);
+    el.innerHTML = '<i style="width:' + (ratio * 100).toFixed(0) + '%"></i>';
+    worldEl.appendChild(el); obDyn.push(el);
+  }
+  function addDot(cx, top) {
+    const el = document.createElement("div"); el.className = "ob-dot";
+    el.style.left = pxv(Math.round(cx - 5)); el.style.top = pxv(top);
+    worldEl.appendChild(el); obDyn.push(el);
+  }
+  // 動物實體：在 home 結構前方草地擺動 + idle 動畫；成熟時上方放可收集亮點
+  function renderAnimals(t) {
     for (const home of state.buildings) {
       const animals = G.animalsInHome(state, home.id); if (!animals.length) continue;
-      const ready = animals.some((a) => G.animalProgress(state, a, t).ready);
-      if (!ready) continue;
-      const cell = tileEls.find((c) => { const tl = state.map.tiles.find((x) => x.id === c.tileId); return tl.buildingId === home.id; });
-      if (!cell) continue;
-      const prod = window.ANIMALS[animals[0].type].product;
-      const col = PRODUCT_VFX_COL[prod] != null ? PRODUCT_VFX_COL[prod] : 0;
-      const size = cell.el.offsetWidth * 0.5;
-      const sp = document.createElement("div"); sp.className = "map-prod";
-      const st = window.Atlas.frameStyleFor("vfx", "product_pop_" + String(col).padStart(2, "0"), size, size);
-      if (st) { Object.assign(sp.style, st); sp.style.width = size + "px"; sp.style.height = size + "px";
-        sp.style.left = (cell.el.offsetLeft + cell.el.offsetWidth * 0.5) + "px";
-        sp.style.top = (cell.el.offsetTop + cell.el.offsetWidth * 0.18) + "px"; layer.appendChild(sp); }
+      const s = (window.STRUCTURES || []).find((x) => x.id === home.structureId);
+      if (!s) continue;
+      const a = animals[0];
+      const ready = animals.some((an) => G.animalProgress(state, an, t).ready);
+      const frameCol = Math.floor(t / 550) % 2 === 0 ? "a" : "b";
+      const frame = a.type + "_idle_" + frameCol;
+      const wob = Math.sin(t / 800) * 0.18;            // 左右輕擺
+      const cx = (s.x + s.w / 2 + wob) * TILE;
+      const baselineY = (s.y + s.h + 0.85) * TILE;     // 結構正下方草地
+      addObjectPx(obDyn, "animals", frame, cx, baselineY, TILE * 0.82, "shadowed");
+      if (ready) addDot(cx, baselineY - TILE * 1.1);
     }
+  }
+  // 任務標記：目前任務目標磚上方浮動箭頭
+  function renderMarkers(t) {
+    const mEl = $("markerLayer"); if (!mEl) return; mEl.innerHTML = "";
+    const targetId = G.questMarkerTile(state, t); if (!targetId) return;
+    const tile = G.getTileById(state, targetId); if (!tile) return;
+    const m = document.createElement("div"); m.className = "qmarker";
+    m.innerHTML = '<div class="qdot"></div><div class="qpin"></div>';
+    m.style.left = pxv((tile.x + 0.5) * TILE); m.style.top = pxv(tile.y * TILE);
+    mEl.appendChild(m);
   }
   // ---- 動作 VFX 疊層（地圖可見回饋）----
   const ACTION_VFX = { water: "water_droplets", hoe: "soil_dust", clear: "soil_dust", build: "soil_dust",
@@ -552,18 +593,35 @@
   function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1.05 }); }
   function stationTileOf(type) { const t = state.map.tiles.find((x) => x.station === type); return t ? t.id : null; }
 
-  // ---------- 玩家定位 / 移動 ----------
+  // ---------- 玩家定位 / camera / 移動 ----------
   function tileElOf(tileId) { const r = tileEls.find((x) => x.tileId === tileId); return r ? r.el : null; }
   function positionPlayer(animate) {
     const pl = $("player"); if (!pl) return;
-    const el = tileElOf(state.player.tileId); if (!el) return;
-    const tw = el.offsetWidth;
-    const w = tw * 1.16, h = w * (64 / 48); // v3 frame 比例 3:4
-    pl.style.width = w + "px"; pl.style.height = h + "px";
+    const tile = G.getTileById(state, state.player.tileId); if (!tile) return;
+    const w = TILE * 1.18, h = w * (64 / 48);            // v3/v4 frame 比例 3:4
+    pl.style.width = pxv(w); pl.style.height = pxv(h);
     if (!animate) pl.style.transition = "none"; else pl.style.transition = "";
-    pl.style.left = (el.offsetLeft + tw / 2) + "px";
-    pl.style.top = (el.offsetTop + el.offsetHeight / 2) + "px";
+    const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE - TILE * 0.08;
+    pl.style.left = pxv(cx); pl.style.top = pxv(baselineY);
+    pl.style.zIndex = Math.round(baselineY);             // y-sort：與物件/建築互相遮擋
     if (!animate) { void pl.offsetWidth; pl.style.transition = ""; }
+    updateCamera(animate);
+  }
+  // camera：跟隨玩家置中，clamp 到世界邊界（世界比視口大才平移）
+  function updateCamera(animate) {
+    if (!worldEl) return;
+    const scene = $("mapScene"); if (!scene) return;
+    const vw = scene.clientWidth, vh = scene.clientHeight;
+    const worldW = state.map.width * TILE, worldH = state.map.height * TILE;
+    const tile = G.getTileById(state, state.player.tileId); if (!tile) return;
+    const px0 = (tile.x + 0.5) * TILE, py0 = (tile.y + 0.5) * TILE;
+    let camX = vw / 2 - px0, camY = vh / 2 - py0;
+    camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
+    camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
+    state.camera.x = camX; state.camera.y = camY;
+    if (!animate) worldEl.style.transition = "none";
+    worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
+    if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
@@ -597,6 +655,8 @@
 
     // 站點：任何工具點站點都走過去 + 播站點動作 + 觸發效果
     if (tile.station) { useStation(tile); updateMap(now()); return; }
+    // 多格建築/結構：走過去互動（雞舍/畜舍收集、市集賣出、農舍歇息）
+    if (tile.structureId) { useStructure(tile); updateMap(now()); return; }
 
     const act = actionTargetFor(tool, tile);
     if (act.invalid) { toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
@@ -623,6 +683,39 @@
       resolveStation(st);
     });
   }
+  // 多格結構：走到相鄰 → 面向 → 動作 → 效果
+  function useStructure(tile) {
+    const s = G.structureAt(state, tile.id); if (!s) return;
+    const plan = G.planMoveToStructure(state, s.id);
+    if (!plan) { toast("走不到 " + s.name); return; }
+    spawnRing(tile.id, true);
+    walkPath(plan.path, () => {
+      const stand = G.getTileById(state, plan.standId);
+      state.player.facing = G.facingTo(stand, { x: s.x + s.w / 2, y: s.y + s.h / 2 });
+      resolveStructure(s);
+    });
+  }
+  function resolveStructure(s) {
+    const t = now();
+    if (s.interaction === "coop" || s.interaction === "barn") {
+      const b = state.buildings.find((x) => x.structureId === s.id);
+      if (b) {
+        const r = G.collectHome(state, b.id, t);
+        if (r.total > 0) { playAction("collect"); spawnVfx(state.player.tileId, "product_pop"); toast("🧺 收集 " + r.total + " 份產物"); afterChange(true); }
+        else { playAction("use"); toast("還沒有可收集的產物（可在面板買動物/餵食）"); }
+      }
+    } else if (s.interaction === "shop") {
+      playAction("collect");
+      const r = G.sellAll(state, t);
+      if (r.coins > 0) { spawnVfx(state.player.tileId, "product_pop"); toast("🪙 市集賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
+      else toast("倉庫沒有可賣的東西");
+    } else { // home（農舍）
+      playAction("use");
+      const cap = G.storageCapacity(state), used = G.storageUsed(state);
+      toast("🏠 農舍・Lv " + state.level + "・🪙 " + fmtNum(state.coins) + "・📦 " + used + "/" + cap);
+    }
+    updateMap(now());
+  }
   function resolveStation(st) {
     const t = now();
     if (st.effect === "orders") {
@@ -631,9 +724,12 @@
       const r = G.sellAll(state, t);
       if (r.coins > 0) { spawnVfx(stationTileOf("storage"), "product_pop"); toast("🪙 賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的東西");
-    } else if (st.effect === "mail") {
-      const cap = G.storageCapacity(state), used = G.storageUsed(state);
-      toast("🏠 Lv " + state.level + "・🪙 " + fmtNum(state.coins) + "・📦 " + used + "/" + cap);
+    } else if (st.effect === "story" || st.effect === "mail") {
+      // 信箱/告示牌：推進序章任務
+      const adv = G.advanceStory(state, "read_sign");
+      const q = window.QUESTS[adv.completed === "intro_reopen_farm" ? "plant_wheat" : (state.story.questId || "intro_reopen_farm")];
+      toast("📖 " + (st.effect === "mail" ? "信箱" : "告示牌") + "：" + (q ? q.title : "晨光鎮的近況"));
+      renderStory(); updateMap(now());
     } else if (st.effect === "well") {
       let n = 0;
       for (let i = 0; i < G.activePlotCount(state); i++) if (G.waterPlot(state, i, t).ok) n++;
@@ -646,7 +742,7 @@
         }
       }
       toast(n > 0 ? "💧 水井替 " + n + " 格作物澆水" : "目前沒有需要澆水的作物");
-      if (n > 0) afterChange(false);
+      if (n > 0) { G.advanceStory(state, "water"); afterChange(false); }
     }
     updateMap(now());
   }
@@ -665,8 +761,8 @@
       const prog = G.getCropProgress(state, plot, now()); const crop = window.CROPS[plot.cropId];
       toast(`${crop.emoji}${crop.name}・${prog.ready ? "✅可收成" : "⏳" + fmtTime(prog.remainingMs)}${prog.wet ? "・💧濕土" : ""}`);
     } else if (tile.station) { const s = window.STATIONS[tile.station]; toast("🏷️ " + s.name + "・" + s.desc); }
+    else if (tile.structureId) { const s = G.structureAt(state, tile.id); toast("🏠 " + (s ? s.name : "建築") + "・點一下走過去互動"); }
     else if (tile.object) { const o = window.OBSTACLES[tile.object]; toast(`${o.emoji}${o.name}・${o.desc}`); }
-    else if (tile.buildingId) { const b = state.buildings.find((x) => x.id === tile.buildingId); toast(window.BUILDINGS[b.type].emoji + window.BUILDINGS[b.type].name); }
     else { toast(`${terr.name}・${terr.desc}`); }
   }
   // 判斷某工具在某磚的動作 / 無效原因
@@ -720,18 +816,18 @@
     const face = state.player.facing;
     if (action === "plant") {
       const r = G.plant(state, tile.plotIndex, selectedSeed, t);
-      if (r.ok) { playAction("sow", face); spawnVfx(tileId, "seed_scatter"); afterChange(true); }
+      if (r.ok) { playAction("sow", face); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); afterChange(true); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       const r = G.harvest(state, tile.plotIndex, t);
-      if (r.ok) { playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); const crop = window.CROPS[r.cropId];
+      if (r.ok) { playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         toast("🧺 收成 " + r.added + " " + crop.name); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) toast("🎉 升 Lv " + state.level); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
-      if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); toast("💧 澆水變濕土加速"); afterChange(false); }
+      if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
-      if (r.ok) { playAction("hoe", face); spawnVfx(tileId, "soil_dust"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildMap(); renderTileContext(); }
+      if (r.ok) { playAction("hoe", face); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
       else if (r.reason === "no_coins") { spawnRing(tileId, false); toast("🪙 金幣不足"); }
     } else if (action === "build") {
       playAction("hoe", face); spawnVfx(tileId, "soil_dust"); renderTileContext(); // 顯示建築選單（玩家已走到旁邊）
@@ -758,7 +854,16 @@
       $("useStBtn").onclick = () => useStation(tile);
       return;
     }
-    // 1) 有建築 → 建築/動物管理
+    // 0.5) 多格結構（農舍/市集，無動物）→ 走過去互動
+    if (tile.structureId && !tile.buildingId) {
+      const s = G.structureAt(state, tile.id);
+      box.innerHTML = `<div class="tc-title">🏠 ${s ? s.name : "建築"}</div>
+        <div class="tc-desc">${s && s.interaction === "shop" ? "走過去把庫存賣給市集攤。" : "走過去看看農場概況、稍作歇息。"}</div>
+        <div class="tc-actions"><button class="btn buy small" id="useStrBtn">走過去</button></div>`;
+      $("useStrBtn").onclick = () => useStructure(tile);
+      return;
+    }
+    // 1) 有建築（雞舍/畜舍）→ 建築/動物管理
     if (tile.buildingId) { renderBuildingContext(box, tile); return; }
     // 2) 有障礙 → 清除
     if (tile.object) {
@@ -869,10 +974,14 @@
   // ====================================================================
   const pad2 = (n) => String(n).padStart(2, "0");
   const WALK_ROW = { down: "walk_down", left: "walk_left", right: "walk_right", up: "walk_up" };
-  // 遊戲動作 → v3 動作列
-  const ACTION_V3 = { hoe: "hoe_side", water: "water_side", sow: "sow_down", harvest: "harvest_down",
-    carry: "carry_down", collect: "collect_down", station: "use_station_down", hurt: "hurt" };
-  const player = { frame: 0, fps: 6, oneShot: false, actionRow: "idle_down", acc: 0, last: 0, flip: false };
+  // 遊戲動作 → v4 動作基底（四向：down/up/side，左向翻轉 side）
+  const ACTION_BASE = { water: "water", hoe: "hoe", clear: "hoe", sow: "sow", plant: "sow",
+    harvest: "harvest", carry: "collect", collect: "collect", build: "build", station: "use", use_station: "use" };
+  function dirRow(base, facing) {
+    const d = facing === "up" ? "up" : facing === "down" ? "down" : "side";
+    return base + "_" + d;
+  }
+  const player = { frame: 0, fps: 6, oneShot: false, actionRow: "use_down", acc: 0, last: 0, flip: false };
   // 畫玩家某 frame（v3 atlas，6 幀/列；side 動作可水平翻轉）
   function paintPlayer(sheet, rowName, frame, flip) {
     const sp = $("playerSprite"); if (!sp) return;
@@ -888,11 +997,11 @@
     paintPlayer("walk", WALK_ROW[state.player.facing] || "walk_down", 0, false);
   }
   function playAction(type, facing) {
-    const row = ACTION_V3[type]; if (!row) return;
-    state.player.action = type; player.actionRow = row; player.frame = 0; player.oneShot = true;
-    player.fps = type === "carry" ? 6 : 7; player.acc = 0;
+    const base = ACTION_BASE[type]; if (!base) return;
     const f = facing || state.player.facing;
-    player.flip = row.indexOf("_side") >= 0 && f === "left"; // side 源圖朝右，左向翻轉
+    state.player.action = type; player.actionRow = dirRow(base, f); player.frame = 0; player.oneShot = true;
+    player.fps = base === "collect" ? 6 : 7; player.acc = 0;
+    player.flip = (f === "left") && player.actionRow.endsWith("_side"); // side 源圖朝右，左向翻轉
   }
   function tickPlayer(t) {
     if (!player.last) player.last = t;
@@ -932,7 +1041,7 @@
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
     renderResBar(); renderSeeds(); updateFarm(now());
-    renderStory();
+    renderStory(); syncHud();
     if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
     scheduleSave();
   }
@@ -1009,7 +1118,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); syncHud(); updateFarm(now()); renderTileContext();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -1042,7 +1151,7 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
-      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); buildMap(); updateFarm(now()); renderTileContext(); },
+      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
       clickTile: (id) => handleMapClick(id),
       setTool: (t) => setTool(t),
       moving: () => !!moveTimer,

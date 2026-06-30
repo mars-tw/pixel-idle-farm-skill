@@ -184,7 +184,10 @@
   .quest { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #4d402e;
     padding: 8px 9px; background: rgba(255,255,255,.56); border: 1.5px solid rgba(194,173,130,.72); border-radius: 10px; }
   .quest.done { color: #5a7d37; background: rgba(226,244,210,.68); }
+  .quest.active { color: #8a5a14; background: rgba(255,238,196,.85); border-color: #e6b860; font-weight: 800; box-shadow: 0 0 0 2px rgba(230,184,96,.35); }
   .quest .qmark { width: 18px; flex: 0 0 18px; text-align: center; font-weight: 950; }
+  .quest-hint { margin-top: 10px; font-size: 12px; color: #7a5a1c; background: rgba(255,244,214,.7); border: 1.5px dashed #e0c184; border-radius: 9px; padding: 7px 9px; line-height: 1.5; }
+  .auto-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; color: #6c7a32; background: rgba(226,244,210,.7); border: 1.5px solid #aacb86; border-radius: 8px; padding: 3px 8px; }
 
   /* ===== Toast ===== */
   #toast-zone { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 200;
@@ -246,67 +249,51 @@
     background-position: 0% 0%; }
   @media (max-width: 560px) { .farmer { width: 56px; height: 56px; left: 4px; bottom: 4px; } }
 
-  /* ===== 統一地圖場景（主要遊戲畫面，可走動）===== */
-  .map-scene-wrap { position: relative; margin-bottom: 10px; overflow: visible; }
-  #mapScene { display: grid; gap: 0; background: #6f9e54; padding: 7px; border-radius: 13px;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,.18), 0 0 0 7px rgba(70,123,45,.16); overflow: visible; }
-  .tile { position: relative; aspect-ratio: 1/1; border-radius: 0; cursor: pointer; border: 0;
-    display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4.2vw, 26px);
-    transition: box-shadow .12s; overflow: visible; }
-  .tile.grass { background: linear-gradient(180deg, #8fc46f, #6fa551); }
-  .tile.path  { background: linear-gradient(180deg, #cdb98a, #b89c6a); }
-  .tile.water { background: linear-gradient(180deg, #6fc0e6, var(--water)); cursor: not-allowed; }
-  .tile.soil  { background: repeating-linear-gradient(0deg, var(--soil-row) 0 2px, transparent 2px 9px),
-                linear-gradient(180deg, #9a6740, var(--soil) 60%, var(--soil-d)); }
-  .tile.has-object { background: linear-gradient(180deg, #9db98a, #7a9c66); }
-  .tile.has-building { background: linear-gradient(180deg, #cdb185, #b3935f); }
-  .tile.soil.locked { filter: grayscale(.6) brightness(.8); cursor: not-allowed; }
-  /* 鎖定農土：CSS 畫掛鎖（鎖身 + 弧形鎖梁），不用 emoji */
-  .tile.soil.locked::after { content: ""; position: absolute; width: 12px; height: 9px; border-radius: 2px;
-    background: rgba(24,18,8,.62); top: 50%; left: 50%; transform: translate(-50%, -20%);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); }
-  .tile.soil.locked::before { content: ""; position: absolute; width: 7px; height: 7px;
-    border: 2px solid rgba(24,18,8,.62); border-bottom: none; border-radius: 6px 6px 0 0;
-    top: 50%; left: 50%; transform: translate(-50%, -88%); z-index: 1; }
-  .tile.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.38); }
-  .tile.sel { box-shadow: 0 0 0 3px #ffe27a, 0 0 10px rgba(255,210,80,.6); z-index: 2; }
-  .tile.dest { box-shadow: 0 0 0 3px #6ee7ff; }
-  .tile .crop { width: 78%; height: 78%; background-repeat: no-repeat; background-image: var(--crop-sheet);
-    background-size: 500% 600%; image-rendering: pixelated; mix-blend-mode: multiply; filter: saturate(1.1) contrast(1.04); }
-  .tile .cropE { font-size: clamp(13px, 4vw, 24px); filter: drop-shadow(0 1px 1px rgba(0,0,0,.3)); }
-  .tile .grow-bar { position: absolute; left: 6%; right: 6%; bottom: 3px; height: 4px; background: rgba(0,0,0,.35); border-radius: 3px; overflow: hidden; }
-  .tile .grow-bar > i { display: block; height: 100%; background: linear-gradient(90deg, #b6e36a, #6ec04a); }
-  .tile .ready-dot { position: absolute; top: 2px; right: 2px; width: 9px; height: 9px; border-radius: 50%;
-    background: #ffe27a; box-shadow: 0 0 6px #ffd23c; animation: readyPulse 1s infinite; }
-  .tile .wet-mark { position: absolute; top: 1px; left: 2px; font-size: 10px; }
+  /* ===== RPG 場景：固定像素世界 + camera 視口 + 分層 y-sort ===== */
+  .map-scene-wrap { position: relative; margin-bottom: 10px; }
+  /* 視口：地圖為主畫面，桌機佔大、手機保留可玩 */
+  #mapScene { position: relative; width: 100%; height: 60vh; max-height: 660px; min-height: 320px;
+    overflow: hidden; border-radius: 14px; cursor: pointer; touch-action: none;
+    background: linear-gradient(180deg, #8fc46f, #79ad58);
+    box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
+  @media (max-width: 859px) { #mapScene { height: 52vh; min-height: 300px; } }
+  /* 世界：依 camera 平移 */
+  #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0);
+    transition: transform .2s ease-out; will-change: transform; }
+  #groundLayer { position: absolute; left: 0; top: 0; z-index: 0; }
+  /* 地面磚（terrain atlas 背景；可點擊）*/
+  .gtile { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%; }
+  .gtile.water { cursor: not-allowed; }
+  .gtile.sel { box-shadow: inset 0 0 0 3px #ffe27a; }
+  .gtile.dest { box-shadow: inset 0 0 0 3px #6ee7ff; }
+  .gtile.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.5); }
+  .gtile.locked { filter: grayscale(.55) brightness(.78); cursor: not-allowed; }
+  .gtile.locked::after { content: ""; position: absolute; width: 12px; height: 9px; border-radius: 2px;
+    background: rgba(24,18,8,.6); left: 50%; top: 52%; transform: translate(-50%, -20%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); }
+  .gtile.locked::before { content: ""; position: absolute; width: 7px; height: 7px; border: 2px solid rgba(24,18,8,.6);
+    border-bottom: none; border-radius: 6px 6px 0 0; left: 50%; top: 52%; transform: translate(-50%, -92%); }
+  /* y-sort 物件 sprite（建築/障礙/作物/動物/站點），z-index = 腳底 baseline */
+  .ob { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%;
+    pointer-events: none; }
+  .ob.shadowed { filter: drop-shadow(0 2px 2px rgba(0,0,0,.28)); }
+  .ob-bar { position: absolute; height: 4px; background: rgba(0,0,0,.42); border-radius: 3px; overflow: hidden; z-index: 8000; }
+  .ob-bar > i { display: block; height: 100%; background: linear-gradient(90deg, #b6e36a, #6ec04a); }
+  .ob-dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ffe27a;
+    box-shadow: 0 0 8px #ffd23c; animation: readyPulse 1s infinite; z-index: 8000; }
   @keyframes readyPulse { 0%,100%{ transform: scale(1); opacity: 1;} 50%{ transform: scale(1.3); opacity: .7;} }
-  /* v2 atlas 持久子層：物件 sprite + 狀態 */
-  .tile .t-obj { position: absolute; inset: -8%; display: flex; align-items: center; justify-content: center;
-    font-size: clamp(14px, 4.2vw, 24px); pointer-events: none; z-index: 2; }
-  .tile .t-obj.spr { background-repeat: no-repeat; image-rendering: pixelated; }
-  .tile .t-obj[data-sheet="crops"] { inset: 7%; transform: translateY(3%); }
-  .tile .t-obj[data-sheet="props"] { inset: -6%; }
-  .tile .t-bar { position: absolute; left: 8%; right: 8%; bottom: 3px; height: 4px; background: rgba(0,0,0,.4);
-    border-radius: 3px; overflow: hidden; display: none; }
-  .tile .t-bar > i { display: block; height: 100%; background: linear-gradient(90deg,#b6e36a,#6ec04a); }
-  .tile .t-dot { position: absolute; top: 2px; right: 2px; width: 9px; height: 9px; border-radius: 50%;
-    background: #ffe27a; box-shadow: 0 0 6px #ffd23c; display: none; animation: readyPulse 1s infinite; }
-  .tile .t-wet { position: absolute; top: 1px; left: 2px; font-size: 10px; display: none; }
-  /* 動物疊層 */
-  #animalLayer { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
-  .map-animal { position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
-    transform: translate(-50%, -50%); filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
-  /* 動作 VFX 疊層（澆水/塵土/種子/收成/產物環，地圖可見回饋）*/
-  #vfxLayer { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
-  .map-vfx { position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
-    transform: translate(-50%, -50%); }
-  .map-prod { position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
-    transform: translate(-50%, -50%); animation: prodBob 1s ease-in-out infinite;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
-  @keyframes prodBob { 0%,100%{ transform: translate(-50%,-50%);} 50%{ transform: translate(-50%,-62%);} }
-
-  /* Miri 在地圖層上（絕對定位 + 移動 tween）；frame 比例 3:4，腳底錨點對齊磚 */
-  .player { position: absolute; pointer-events: none; z-index: 5; transform: translate(-50%, -72%);
+  /* 任務標記（地圖上目標）*/
+  #markerLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9000; }
+  .qmarker { position: absolute; transform: translate(-50%, -100%); animation: qbob 1s ease-in-out infinite; text-align: center; }
+  .qmarker .qdot { width: 13px; height: 13px; border-radius: 50%; background: #ffcf3a; border: 2px solid #fff8e0;
+    box-shadow: 0 0 10px rgba(255,200,60,.9); margin: 0 auto 1px; }
+  .qmarker .qpin { width: 0; height: 0; margin: 0 auto; border-left: 7px solid transparent; border-right: 7px solid transparent;
+    border-top: 10px solid #ffcf3a; filter: drop-shadow(0 2px 1px rgba(0,0,0,.35)); }
+  @keyframes qbob { 0%,100%{ transform: translate(-50%,-100%);} 50%{ transform: translate(-50%,-118%);} }
+  /* 動作 VFX（世界內，澆水/塵土/種子/收成/產物環）*/
+  #vfxLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9500; }
+  .map-vfx { position: absolute; background-repeat: no-repeat; image-rendering: pixelated; transform: translate(-50%, -50%); }
+  /* 玩家（世界內，絕對定位 + 移動 tween）；腳底錨點對齊磚；z-index 由 baseline 設定做遮擋 */
+  .player { position: absolute; pointer-events: none; transform: translate(-50%, -86%);
     transition: left var(--move-ms, 200ms) linear, top var(--move-ms, 200ms) linear;
     filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
   .player .p-sprite { width: 100%; height: 100%; background-repeat: no-repeat; image-rendering: pixelated;
@@ -348,17 +335,23 @@
       <h2>🌾 我的農場 <span class="hint" id="farmHint">選工具 → 點地圖：走過去並動作</span></h2>
       <div class="tool-bar" id="toolBar"></div>
       <div class="seed-row" id="seedRow"></div>
-      <!-- 統一地圖場景：Miri 站在上面，點格走過去 -->
+      <!-- RPG 場景：16×12 世界 + camera 視口 + 分層（地面/物件 y-sort/標記/VFX/玩家）-->
       <div class="map-scene-wrap">
-        <div id="mapScene"></div>
-        <div id="animalLayer"></div>
-        <div id="vfxLayer"></div>
-        <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
+        <div id="mapScene">
+          <div id="mapWorld">
+            <div id="groundLayer"></div>
+            <div id="markerLayer"></div>
+            <div id="vfxLayer"></div>
+            <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
+          </div>
+        </div>
       </div>
-      <div class="btn-row" style="margin-top:10px">
+      <!-- 幫手自動化：早期隱藏，升「幫手機器人」後解鎖；初期動作都要走到目標執行 -->
+      <div class="btn-row" id="globalActions" style="margin-top:10px; display:none">
+        <span class="auto-tag">🤖 幫手</span>
         <button class="btn harvest" id="harvestAllBtn">🧺 全部收成</button>
         <button class="btn sell" id="sellAllBtn">🪙 全部賣出</button>
-        <button class="btn water" id="waterAllBtn" title="澆水加速成長">💧 澆水</button>
+        <button class="btn water" id="waterAllBtn" title="澆水加速成長">💧 全部澆水</button>
         <button class="btn small buy" id="collectAllBtn">🧺 收產物</button>
       </div>
       <!-- 舊作物格（相容/除錯用，預設隱藏）-->

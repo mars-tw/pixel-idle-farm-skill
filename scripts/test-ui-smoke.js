@@ -98,11 +98,12 @@ try {
 
 // 互動模擬（新版：地圖場景 + 工具按鈕；移動細節由 jsdom E2E 驗證）
 try {
-  const scene = elById["mapScene"];
-  assert(scene && scene.children.length > 0, "地圖場景磚已建立（" + (scene ? scene.children.length : 0) + " 磚）");
+  // Stage 4：地面磚建立在 #groundLayer（mapScene > mapWorld > groundLayer > .gtile）
+  const ground = elById["groundLayer"];
+  assert(ground && ground.children.length > 0, "地圖場景磚已建立（" + (ground ? ground.children.length : 0) + " 磚）");
 
   // 點一個地圖磚不崩（mock 無真實 offset，僅驗證不拋例外）
-  scene.children[0]._fire("click");
+  if (ground.children[0]) ground.children[0]._fire("click");
   assert(true, "點地圖磚無例外");
 
   // 工具按鈕

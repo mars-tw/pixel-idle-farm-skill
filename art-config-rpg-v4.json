@@ -1,0 +1,67 @@
+{
+  "model": "gpt-image-2",
+  "outputDir": "assets/generated/v4",
+  "note": "Stage 4 RPG 場景：四向動作 sheet + 多格建築/樹木結構。角色一致：brown topknot bun, cream shirt, moss-green overalls, red scarf, tan boots, seed pouch。切割後須符合 48x64 / anchor [0.5,0.86]。",
+  "globalConstraints": [
+    "no text, letters, numbers, labels, logos, watermark, mockup border",
+    "consistent upper-left lighting, crisp readable pixel art",
+    "fully transparent background, no checkerboard pattern baked into the image",
+    "clean evenly-spaced grid, clear gaps between items, items never touch the cell edges"
+  ],
+  "sheets": [
+    {
+      "id": "miri-walk-48x64-v4",
+      "targetFile": "miri-walk-48x64.png",
+      "size": "1024x1024",
+      "grid": "6 columns x 4 rows",
+      "rows": ["walk_down", "walk_left", "walk_right", "walk_up"],
+      "prompt": "Pixel RPG walk spritesheet for farmer Miri Rowan. Four rows in order: walking DOWN facing viewer, walking LEFT profile, walking RIGHT profile, walking UP back view. Six frames per row: idle, step_a, passing_a, idle, step_b, passing_b. Clean separated frames, transparent background, no scenery."
+    },
+    {
+      "id": "miri-actions-a-48x64-v4",
+      "targetFile": "miri-actions-a.png",
+      "size": "1024x1536",
+      "grid": "6 columns x 12 rows",
+      "rows": ["water_down","water_up","water_side","hoe_down","hoe_up","hoe_side","sow_down","sow_up","sow_side","harvest_down","harvest_up","harvest_side"],
+      "prompt": "Pixel RPG farming ACTION spritesheet for farmer Miri Rowan, same outfit and proportions as the walk sheet. Twelve rows, six animation frames each. Group 1 WATERING with a watering can and small water arc: facing down, facing up (back), facing side. Group 2 HOEING the soil with a hoe and a small dirt puff: down, up, side. Group 3 SOWING seeds with a scatter of seeds: down, up, side. Group 4 HARVESTING pulling a crop up: down, up, side. Tools and effects stay inside each frame. Feet on baseline, clean separated frames, transparent background, no scenery."
+    },
+    {
+      "id": "miri-actions-b-48x64-v4",
+      "targetFile": "miri-actions-b.png",
+      "size": "1024x1536",
+      "grid": "6 columns x 12 rows",
+      "rows": ["idle_down","idle_up","idle_side","collect_down","collect_up","collect_side","build_down","build_up","build_side","use_down","use_up","use_side"],
+      "prompt": "Pixel RPG ACTION spritesheet for farmer Miri Rowan, same outfit and proportions as the walk sheet. Twelve rows, six frames each. Group 1 IDLE breathing pose: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Feet on baseline, clean separated frames, transparent background, no scenery."
+    },
+    {
+      "id": "structures-nature-v4",
+      "targetFile": "structures-nature.png",
+      "size": "1024x1024",
+      "grid": "loose 4x3 objects",
+      "prompt": "Separated top-down pixel RPG nature and structure props, ONLY the props, absolutely NO person, NO farmer, NO human character anywhere. Each prop is one object with a clear ground baseline and soft pixel shadow, generous spacing between objects. Include: a large round leafy oak tree, a tall pine tree, a small fruit tree, a big flowering bush, a wooden market stall with striped awning, a windmill, a wooden signpost, a hay bale, a flower bed, a lamp post, a water trough, a scarecrow. Objects are taller than one tile so they can occlude a character standing behind them. No text, no labels, transparent background."
+    },
+    {
+      "id": "buildings-v4",
+      "targetFile": "buildings.png",
+      "size": "1024x1024",
+      "grid": "loose 2x2 large buildings",
+      "prompt": "Four separated large top-down pixel RPG farm buildings, ONLY the buildings, absolutely NO person, NO farmer, NO human character anywhere. Each building is big enough to cover a 2x2 or 3x2 tile footprint, one object with a flat ground baseline at its bottom edge and a soft pixel shadow, generous spacing, placed in a clean 2x2 layout. Include: top-left a cozy cottage farmhouse with red roof and chimney, top-right a big red barn with hayloft, bottom-left a wooden chicken coop with a fenced run and a couple of hens, bottom-right a small market shop stall with striped awning and produce crates. Front-facing slightly top-down so the roof and door read clearly. No text, no labels, transparent background, no checkerboard."
+    },
+    {
+      "id": "crops-48-v4",
+      "targetFile": "crops-48x48.png",
+      "size": "1024x1024",
+      "grid": "5 columns x 6 rows",
+      "rows": ["wheat","carrot","tomato","strawberry","corn","pumpkin"],
+      "prompt": "Pixel RPG crop GROWTH spritesheet. ONLY the crop plants, absolutely NO person, NO farmer, NO human character anywhere. Six rows: wheat, carrot, tomato, strawberry, corn, pumpkin. Five columns left to right: seed mound, sprout, young plant, mature plant, ready-to-harvest. Each crop grows from a stable bottom baseline, centered in its cell with clear transparent padding so nothing touches the cell edges, consistent scale within and across rows, ready stage clearly fuller than mature. No soil block behind the crop, transparent background, no text, no checkerboard."
+    },
+    {
+      "id": "animals-32-v4",
+      "targetFile": "animals-32x32.png",
+      "size": "1024x1024",
+      "grid": "4 columns x 4 rows",
+      "rows": ["chicken","cow","sheep","bee"],
+      "prompt": "Pixel RPG farm animal spritesheet, cute side-on. ONLY the animals, absolutely NO person, NO farmer, NO human character in any cell. Four rows: a brown hen chicken, a black-and-white cow, a fluffy white sheep, a plump striped bee. Four columns: idle_a, idle_b (peck/chew), walk_a, walk_b. Each animal alone and centered in its cell with generous transparent padding so it never touches the cell edges, consistent scale per row, soft pixel shadow under the feet. Transparent background, no text, no checkerboard, no extra props."
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "version": "4.0.0",
+  "generatedBy": "process-v4-atlas.js (gpt-image-2 v4 源圖 + 程序化地形)",
+  "sheets": {
+    "terrain": {
+      "image": "assets/generated/v4/terrain-organic-32.png",
+      "map": "assets/generated/v4/terrain-organic-32.json",
+      "meta": {
+        "w": 512,
+        "h": 512,
+        "frameW": 32,
+        "frameH": 32,
+        "cols": 16,
+        "rows": 16
+      },
+      "frameCount": 49
+    },
+    "crops": {
+      "image": "assets/generated/v4/crops-48.png",
+      "map": "assets/generated/v4/crops-48.json",
+      "meta": {
+        "w": 240,
+        "h": 288,
+        "frameW": 48,
+        "frameH": 48,
+        "cols": 5,
+        "rows": 6
+      },
+      "frameCount": 30
+    },
+    "walk": {
+      "image": "assets/generated/v4/miri-walk-48x64.png",
+      "map": "assets/generated/v4/miri-walk-48x64.json",
+      "meta": {
+        "w": 288,
+        "h": 256,
+        "frameW": 48,
+        "frameH": 64,
+        "cols": 6,
+        "rows": 4
+      },
+      "frameCount": 24
+    },
+    "actions": {
+      "image": "assets/generated/v4/miri-actions-48x64.png",
+      "map": "assets/generated/v4/miri-actions-48x64.json",
+      "meta": {
+        "w": 288,
+        "h": 1536,
+        "frameW": 48,
+        "frameH": 64,
+        "cols": 6,
+        "rows": 24
+      },
+      "frameCount": 144
+    },
+    "animals": {
+      "image": "assets/generated/v4/animals-48.png",
+      "map": "assets/generated/v4/animals-48.json",
+      "meta": {
+        "w": 192,
+        "h": 192,
+        "frameW": 48,
+        "frameH": 48,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    },
+    "buildings": {
+      "image": "assets/generated/v4/buildings.png",
+      "map": "assets/generated/v4/buildings.json",
+      "meta": {
+        "w": 512,
+        "h": 512,
+        "frameW": 256,
+        "frameH": 256,
+        "cols": 2,
+        "rows": 2
+      },
+      "frameCount": 4
+    },
+    "structures": {
+      "image": "assets/generated/v4/structures-nature.png",
+      "map": "assets/generated/v4/structures-nature.json",
+      "meta": {
+        "w": 1024,
+        "h": 412,
+        "frameW": 0,
+        "frameH": 0,
+        "cols": 0,
+        "rows": 4
+      },
+      "frameCount": 10
+    },
+    "props": {
+      "image": "assets/generated/v3/props-stations.png",
+      "map": "assets/generated/v3/props-stations.json",
+      "meta": {
+        "w": 512,
+        "h": 512,
+        "frameW": 128,
+        "frameH": 128,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16,
+      "reusedFrom": "v3"
+    },
+    "vfx": {
+      "image": "assets/generated/v3/action-vfx-32.png",
+      "map": "assets/generated/v3/action-vfx-32.json",
+      "meta": {
+        "w": 192,
+        "h": 256,
+        "frameW": 32,
+        "frameH": 32,
+        "cols": 6,
+        "rows": 8
+      },
+      "frameCount": 48,
+      "reusedFrom": "v3"
+    }
+  }
+}

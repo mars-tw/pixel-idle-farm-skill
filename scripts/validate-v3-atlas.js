@@ -101,8 +101,11 @@ function main() {
     const propMap = JSON.parse(fs.readFileSync(path.join(V3, "props-stations.json"), "utf8")).frames;
     const buildingFrame = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap", silo: "storage_crate", compostHeap: "compost_heap" };
     for (const t of Object.keys(buildingFrame)) if (!propMap[buildingFrame[t]]) fail(`renderer: props 缺建築 frame「${buildingFrame[t]}」`);
-    for (const o of Object.keys(C.OBSTACLES)) if (!propMap[o]) fail(`renderer: props 缺障礙 frame「${o}」`);
-    for (const sid of Object.keys(C.STATIONS)) if (!propMap[C.STATIONS[sid].frame]) fail(`renderer: props 缺站點 frame「${C.STATIONS[sid].frame}」`);
+    // tree 為 Stage 4 障礙，改用 v4 structures:oak 呈現（不在 v3 props）；其餘障礙沿用 v3 props
+    for (const o of Object.keys(C.OBSTACLES)) if (o !== "tree" && !propMap[o]) fail(`renderer: props 缺障礙 frame「${o}」`);
+    for (const sid of Object.keys(C.STATIONS)) {
+      const st = C.STATIONS[sid]; if ((st.sheet || "props") === "props" && !propMap[st.frame]) fail(`renderer: props 缺站點 frame「${st.frame}」`);
+    }
   } catch (e) { warn("renderer 解析檢查略過：" + e.message); }
 
   done();

@@ -1,0 +1,53 @@
+{
+  "image": "assets/generated/v4/buildings.png",
+  "meta": {
+    "w": 512,
+    "h": 512,
+    "frameW": 256,
+    "frameH": 256,
+    "cols": 2,
+    "rows": 2
+  },
+  "frames": {
+    "farmhouse": {
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256,
+      "anchor": [
+        0.5,
+        0.96
+      ]
+    },
+    "barn": {
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256,
+      "anchor": [
+        0.5,
+        0.96
+      ]
+    },
+    "chicken_coop": {
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "anchor": [
+        0.5,
+        0.96
+      ]
+    },
+    "shop": {
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "anchor": [
+        0.5,
+        0.96
+      ]
+    }
+  }
+}

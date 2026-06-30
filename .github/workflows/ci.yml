@@ -30,8 +30,10 @@ jobs:
         run: node scripts/test-systems.js
       - name: UI 煙霧測試（mock DOM）
         run: node scripts/test-ui-smoke.js
-      - name: 驗證 v3 atlas（尺寸/必要 frame/錨點/renderer 解析）
+      - name: 驗證 v3 atlas（props/vfx 沿用來源：尺寸/必要 frame/錨點）
         run: node scripts/validate-v3-atlas.js
+      - name: 驗證 v4 atlas 結構（尺寸/必要 frame/錨點/renderer 解析；無瀏覽器時略過像素檢查）
+        run: node scripts/validate-v4-atlas.js
       - name: 驗證 JSON 可解析
         run: |
           node -e "JSON.parse(require('fs').readFileSync('art-config.json','utf8')); console.log('✓ art-config.json')"
@@ -41,7 +43,7 @@ jobs:
           for f in src/*.js scripts/*.js; do node -c "$f" && echo "✓ $f"; done
 
   e2e:
-    name: 可走動地圖 E2E（真瀏覽器移動驗證）
+    name: Stage 4 RPG 場景 E2E（真瀏覽器 + atlas 像素驗證）
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,10 +54,10 @@ jobs:
         run: |
           npm ci || npm install
           npx playwright install --with-deps chromium
-      - name: 跑可走動地圖 E2E（桌面 + 手機視窗）
-        run: node scripts/test-map-movement-e2e.js
-      - name: 跑 Stage 3 RPG v3 E2E（無emoji/v3atlas/VFX/站點/per-building）
-        run: node scripts/test-rpg-v3-e2e.js
+      - name: 驗證 v4 atlas 像素品質（空白幀/作物觸邊，需 chromium）
+        run: node scripts/validate-v4-atlas.js
+      - name: 跑 Stage 4 RPG v4 E2E（大世界/camera/動作路由/故事鏈/視覺/RWD/桌機+手機）
+        run: node scripts/test-rpg-v4-e2e.js
 
   deploy:
     name: 部署 GitHub Pages

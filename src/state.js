@@ -17,16 +17,26 @@
     return plots;
   }
 
-  // 在地圖上放置固定站點（grass 磚 + station 標記，阻擋移動需走相鄰格互動）
+  // 多格建築/結構：footprint 磚標記 structureId + blocked（不可走、需走相鄰互動）
+  function applyStructures(map) {
+    for (const s of (C.STRUCTURES || [])) {
+      for (let dy = 0; dy < s.h; dy++) for (let dx = 0; dx < s.w; dx++) {
+        const tile = map.tiles.find((t) => t.x === s.x + dx && t.y === s.y + dy);
+        if (tile) { tile.structureId = s.id; tile.blocked = true; tile.object = null; tile.station = null; }
+      }
+    }
+    return map;
+  }
+  // 固定站點（grass 磚 + station 標記，阻擋移動需走相鄰格互動）
   function applyStations(map) {
     for (const s of (C.STATION_PLACEMENT || [])) {
       const tile = map.tiles.find((t) => t.x === s.x && t.y === s.y);
-      if (tile && tile.terrain === "grass" && !tile.object && !tile.buildingId) tile.station = s.type;
+      if (tile && tile.terrain === "grass" && !tile.object && !tile.buildingId && !tile.structureId && !tile.blocked) tile.station = s.type;
     }
     return map;
   }
 
-  // 由 MAP_LAYOUT 產生統一地圖（soil 對應作物 plot、grass/path/water、障礙、站點）
+  // 由 MAP_LAYOUT 產生 16×12 世界（soil→plot、grass/path/water、障礙、多格建築、站點）
   function makeMap() {
     const layout = C.MAP_LAYOUT;
     const tiles = [];
@@ -36,23 +46,42 @@
         const ch = layout[y][x];
         const obstacle = C.OBSTACLE_CODE[ch] || null;
         const terrain = obstacle ? "grass" : (C.TERRAIN_CODE[ch] || "grass");
-        const tile = {
+        tiles.push({
           id: "t" + x + "_" + y, x, y, terrain,
-          object: obstacle,       // rock/stump/bush（障礙，蓋在草地上）
-          station: null,          // 固定站點（order_board/storage/mailbox/well）
-          buildingId: null,       // 蓋了建築就指向 state.buildings 的 id
-          plotIndex: terrain === "soil" ? plotIndex++ : null, // 農土對應 state.plots
-        };
-        tiles.push(tile);
+          object: obstacle,       // rock/stump/bush/tree（障礙，蓋在草地上）
+          station: null,          // 固定站點（order_board/storage/mailbox/well/sign）
+          structureId: null,      // 多格建築 footprint
+          blocked: false,         // 不可走（水/障礙/建築 footprint 之外的明確阻擋）
+          buildingId: null,       // 對應 state.buildings（動物家）
+          plotIndex: terrain === "soil" ? plotIndex++ : null,
+        });
       }
     }
     const map = { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex };
-    return applyStations(map);
+    applyStructures(map);
+    applyStations(map);
+    return map;
+  }
+
+  // 由 STRUCTURES 預置動物家（雞舍起始 1 隻雞，動物可見＋可收集）+ 對應 buildingId
+  function seedStructures(map, now) {
+    const buildings = [], animals = [];
+    for (const s of (C.STRUCTURES || [])) {
+      if (!s.building) continue;
+      const b = { id: "b_" + s.id, type: s.building, tileId: "t" + s.x + "_" + s.y, structureId: s.id, builtAt: now, level: 1 };
+      buildings.push(b);
+      // footprint 磚的 buildingId 指向此 building（供收集互動）
+      map.tiles.forEach((t) => { if (t.structureId === s.id) t.buildingId = b.id; });
+      if (s.building === "chickenCoop") animals.push({ id: "a_" + s.id + "_1", type: "chicken", homeId: b.id, lastProducedAt: now });
+    }
+    return { buildings, animals };
   }
 
   // 預設新存檔
   function defaultState(now) {
     now = now || Date.now();
+    const map = makeMap();
+    const seeded = seedStructures(map, now);
     return {
       version: C.GAME.version,
       createdAt: now,
@@ -72,13 +101,16 @@
       achievements: {},                        // { id: true }
       // ===== MVP2 =====
       materials: { wood: 0, stone: 0, compost: 0 },
-      map: makeMap(),
-      buildings: [],                           // { id, type, tileId, builtAt, level }
-      animals: [],                             // { id, type, homeId, lastProducedAt }
-      // ===== 可走動地圖 =====
+      map: map,
+      buildings: seeded.buildings,             // 預置雞舍/畜舍（多格結構）
+      animals: seeded.animals,                 // 預置雞舍 1 隻雞（可見＋可收集）
+      // ===== 可走動世界 + camera =====
+      camera: { x: 0, y: 0, followPlayer: true },
       player: { tileId: "t" + C.PLAYER_START.x + "_" + C.PLAYER_START.y, x: C.PLAYER_START.x, y: C.PLAYER_START.y,
                 facing: "down", action: "idle", actionTargetTileId: null, actionEndsAt: 0 },
       interaction: { tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null },
+      // ===== 故事任務（地圖驅動）=====
+      story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} },
     };
   }
@@ -100,19 +132,25 @@
     if (!Array.isArray(merged.orders)) merged.orders = [];
     // ===== MVP2 欄位補齊 =====
     merged.materials = Object.assign({ wood: 0, stone: 0, compost: 0 }, state.materials);
-    // 地圖：舊存檔（無 plotIndex 的 6×4 擴張圖）一律以新統一地圖重建（保留建築需重置，屬大改版）
-    const hasUnifiedMap = state.map && Array.isArray(state.map.tiles) && state.map.tiles.some((t) => t.plotIndex != null);
-    merged.map = hasUnifiedMap ? state.map : def.map;
-    // 舊統一地圖補上站點（向後相容：未放過站點才補）
-    if (hasUnifiedMap && !merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
-    merged.buildings = (hasUnifiedMap && Array.isArray(state.buildings)) ? state.buildings : [];
-    merged.animals = (hasUnifiedMap && Array.isArray(state.animals)) ? state.animals : [];
+    // 地圖：維度不符（升級到 16×12）一律以新世界重建，並重置 buildings/animals/player（大改版）。
+    const sameDims = state.map && Array.isArray(state.map.tiles) && state.map.width === C.MAP_W && state.map.height === C.MAP_H;
+    if (sameDims) {
+      merged.map = state.map;
+      if (!merged.map.tiles.some((t) => t.structureId)) applyStructures(merged.map);
+      if (!merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
+      merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
+      merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
+      merged.player = Object.assign({}, def.player, state.player);
+    } else {
+      merged.map = def.map; merged.buildings = def.buildings; merged.animals = def.animals;
+      merged.player = def.player;
+    }
     // 確保 plots 數量足夠對應所有 soil 磚
     if (merged.plots.length < C.GAME.maxPlots) {
       while (merged.plots.length < C.GAME.maxPlots) merged.plots.push({ id: "p" + String(merged.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
     }
-    // 可走動地圖欄位
-    merged.player = Object.assign({}, def.player, state.player);
+    merged.camera = Object.assign({ x: 0, y: 0, followPlayer: true }, state.camera);
+    merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
     merged.version = C.GAME.version;
     return merged;

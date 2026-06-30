@@ -505,12 +505,14 @@
   // ========================================================================
   function getTileById(state, id) { return (state.map.tiles || []).find((t) => t.id === id) || null; }
   function getTileXY(state, x, y) { return (state.map.tiles || []).find((t) => t.x === x && t.y === y) || null; }
-  // 可站立：soil/grass/path 且無障礙、無建築、無站點、非水
+  // 可站立：soil/grass/path 且無障礙、無建築/結構、無站點、非水、未明確阻擋
   function isWalkable(state, tile) {
     if (!tile) return false;
     if (tile.terrain === "water") return false;
     if (tile.object) return false;
     if (tile.station) return false;
+    if (tile.blocked) return false;       // 多格建築 footprint
+    if (tile.structureId) return false;
     if (tile.buildingId) return false;
     return true;
   }
@@ -578,6 +580,63 @@
     return dy >= 0 ? "down" : "up";
   }
   function plotOfTile(state, tile) { return tile && tile.plotIndex != null ? tile.plotIndex : null; }
+
+  // ---------- 多格建築/結構 ----------
+  function structureAt(state, tileId) {
+    const tile = getTileById(state, tileId);
+    if (!tile || !tile.structureId) return null;
+    return (C.STRUCTURES || []).find((s) => s.id === tile.structureId) || null;
+  }
+  // 結構互動站立格：footprint 周邊最近可站立格 + 路徑
+  function planMoveToStructure(state, structureId) {
+    const s = (C.STRUCTURES || []).find((x) => x.id === structureId);
+    if (!s) return null;
+    let best = null;
+    for (let dy = -1; dy <= s.h; dy++) for (let dx = -1; dx <= s.w; dx++) {
+      const onEdge = dx === -1 || dx === s.w || dy === -1 || dy === s.h;
+      if (!onEdge) continue;
+      const nt = getTileXY(state, s.x + dx, s.y + dy);
+      if (!nt || !isWalkable(state, nt)) continue;
+      const p = bfsPath(state, state.player.tileId, nt.id);
+      if (p && (best === null || p.length < best.path.length)) best = { path: p, standId: nt.id };
+    }
+    return best;
+  }
+
+  // ---------- 故事任務（地圖驅動）----------
+  function currentQuest(state) {
+    const id = state.story && state.story.questId;
+    return id && C.QUESTS[id] ? C.QUESTS[id] : null;
+  }
+  // 事件推進：read_sign / plant / water / harvest / deliver / clear
+  function advanceStory(state, event) {
+    const q = currentQuest(state);
+    if (!q) return { ok: false };
+    if (q.trigger !== event && q.objective !== event) return { ok: false };
+    state.story.completed[q.id] = true;
+    const prev = q.id;
+    state.story.questId = q.next || null;
+    return { ok: true, completed: prev, next: state.story.questId };
+  }
+  // 目前任務在地圖上的標記目標 tileId（給 marker 渲染）
+  function questMarkerTile(state, now) {
+    const q = currentQuest(state); if (!q || !q.marker) return null;
+    const m = q.marker;
+    if (m.kind === "station") { const t = state.map.tiles.find((tl) => tl.station === m.type); return t ? t.id : null; }
+    if (m.kind === "obstacle") { const t = state.map.tiles.find((tl) => tl.object === m.object); return t ? t.id : null; }
+    if (m.kind === "soil") {
+      const active = activePlotCount(state);
+      for (const t of state.map.tiles) {
+        if (t.plotIndex == null || t.plotIndex >= active) continue;
+        const plot = state.plots[t.plotIndex];
+        if (q.objective === "plant" && !plot.cropId) return t.id;
+        if (q.objective === "harvest" && plot.cropId && getCropProgress(state, plot, now || Date.now()).ready) return t.id;
+      }
+      const f = state.map.tiles.find((t) => t.plotIndex != null && t.plotIndex < active);
+      return f ? f.id : null;
+    }
+    return null;
+  }
 
   // ---------- 離線進度 ----------
   // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數、動物產品
@@ -667,6 +726,8 @@
     addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, collectHome, feedAnimal,
     // 可走動地圖：尋路 / 目標解析
     getTileById, getTileXY, isWalkable, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
+    // Stage 4：多格結構 / 故事任務
+    structureAt, planMoveToStructure, currentQuest, advanceStory, questMarkerTile,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;
