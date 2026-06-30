@@ -337,6 +337,14 @@ function genTerrain(){
   const rowsB=["idle_down","idle_up","idle_side","collect_down","collect_up","collect_side","build_down","build_up","build_side","use_down","use_up","use_side"];
   out.actions=await sliceActions("miri-actions-a.png",rowsA,"miri-actions-b.png",rowsB,48,64,[0.5,0.86]);if(out.actions)log.push("actions("+out.actions.meta.rows+")");
 
+  // Stage 6：男主角 Kai（性別可選；與 Miri 同切法/命名，frame 名相同）
+  out.walk_m=await sliceGrid("max-walk-48x64.png",6,4,48,64,(r,c)=>["walk_down","walk_left","walk_right","walk_up"][r]+"_"+String(c).padStart(2,"0"),[0.5,0.86],"baseline");if(out.walk_m)log.push("walk_m");
+  out.actions_m=await sliceActions("max-actions-a.png",rowsA,"max-actions-b.png",rowsB,48,64,[0.5,0.86]);if(out.actions_m)log.push("actions_m("+(out.actions_m?out.actions_m.meta.rows:0)+")");
+
+  // Stage 6：NPC 鎮民（front-facing：idle_a/idle_b/talk_a/talk_b）
+  const npcRows=["mayor","merchant","elder","child"],npcCols=["idle_a","idle_b","talk_a","talk_b"];
+  out.npcs=await sliceGrid("npcs-48x64.png",4,4,48,64,(r,c)=>npcRows[r]+"_"+npcCols[c],[0.5,0.9],"baseline");if(out.npcs)log.push("npcs");
+
   const animalRows=["chicken","cow","sheep","bee"],animalCols=["idle_a","idle_b","walk_a","walk_b"];
   out.animals=await sliceGrid("animals-32x32.png",4,4,48,48,(r,c)=>animalRows[r]+"_"+animalCols[c],[0.5,0.85],"baseline");if(out.animals)log.push("animals");
 

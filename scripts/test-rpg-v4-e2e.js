@@ -187,6 +187,42 @@ async function run() {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     assert(overflow <= 2, `無水平溢出（scrollWidth - innerWidth = ${overflow}）`);
 
+    // ===== Stage 6：NPC 鎮民 + 走近對話泡泡 + 主角性別切換 =====
+    const npcAudit = await page.evaluate(() => ({
+      npc: document.querySelectorAll('#mapWorld [data-audit="object"][data-kind="npc"]').length,
+      sheet: document.querySelectorAll('#mapWorld [data-sheet="npcs"]').length,
+    }));
+    assert(npcAudit.npc >= 4 && npcAudit.sheet >= 4, `NPC 鎮民可稽核 data-kind=npc / data-sheet=npcs（${npcAudit.npc}）`);
+    const npcMeta = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const child = st.map.tiles.find((t) => t.npc === "child");
+      return { childId: child.id, walkable: window.isWalkable(st, child),
+        reachable: window.Game.planMoveTo(st, child.id) !== null, phase: window.Game.npcPhase(st) };
+    });
+    assert(!npcMeta.walkable && npcMeta.reachable, "NPC 阻擋移動但相鄰可達（走近交談）");
+    assert(npcMeta.phase === "start", `序章階段 NPC 對話 phase=start（${npcMeta.phase}）`);
+    await page.evaluate((id) => window.__farm.clickTile(id), npcMeta.childId);
+    await waitArrive(page, 9000);
+    await sleep(500);
+    const bubble = await page.evaluate(() => {
+      const b = document.querySelector('[data-audit="dialogue-bubble"]');
+      const log = (window.__farm.state().story.dialogueLog || []).length;
+      return { has: !!b, npc: b ? b.dataset.npc : null, text: b ? b.innerText.replace(/\s+/g, " ").trim() : "", log };
+    });
+    assert(bubble.has && bubble.npc === "child" && bubble.text.includes("圖圖"), `走近孩童出現對話泡泡（${bubble.text}）`);
+    assert(bubble.log >= 1, `對話進入側欄記錄（${bubble.log} 則）`);
+
+    const gender = await page.evaluate(() => {
+      const before = window.__farm.state().gender;
+      document.getElementById("genderToggle").click();
+      const after = window.__farm.state().gender;
+      const bg = getComputedStyle(document.getElementById("playerSprite")).backgroundImage;
+      document.getElementById("genderToggle").click(); // 切回女，避免影響後續斷言
+      return { before, after, male: /max-walk|max-actions/.test(bg), back: window.__farm.state().gender };
+    });
+    assert(gender.before === "f" && gender.after === "m" && gender.male, "主角性別可切換為男（sprite 換 max atlas）");
+    assert(gender.back === "f", "性別可切回女");
+
     // 6. 動作走位路由：hand 點空農土 → 走過去 → 種植 + VFX + 故事推進到 first_water
     //    先把故事推進到 plant_wheat（讀告示牌）
     const sign = await page.evaluate(async () => {
@@ -373,6 +409,15 @@ async function run() {
     assert(exploreRes.quest === null && exploreRes.ch2 === "2/2", `探索完成第二章（探索完成度 ${exploreRes.ch2}）`);
     assert(exploreRes.lockedAfter === 0, "修橋後封鎖區解除（locked-area 清零）");
 
+    // 13b. Stage 6：對話依故事進度改變（通關後 → ch2done 階段台詞，與序章不同）
+    const lateTalk = await page.evaluate(() => {
+      const st = window.__farm.state();
+      return { phase: window.Game.npcPhase(st), line: window.Game.npcDialogue(st, "mayor", 0).line,
+        startLine: window.NPCS.mayor.lines.start[0] };
+    });
+    assert(lateTalk.phase === "ch2done", `通關後 NPC 對話 phase=ch2done（${lateTalk.phase}）`);
+    assert(lateTalk.line !== lateTalk.startLine, "鎮長台詞隨故事進度改變（非序章台詞）");
+
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));
 
@@ -382,7 +427,7 @@ async function run() {
   await browser.close();
   server.close();
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
-  console.log("\n✅ Stage 4+5 RPG v4 E2E 全部通過");
+  console.log("\n✅ Stage 4+5+6 RPG v4 E2E 全部通過");
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

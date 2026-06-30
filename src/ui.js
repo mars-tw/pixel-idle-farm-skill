@@ -128,6 +128,11 @@
     const unlocked = (state.upgrades && state.upgrades.helperLevel > 0);
     ga.style.display = unlocked ? "flex" : "none";
   }
+  // Stage 6：主角性別按鈕標籤
+  function syncGenderBtn() {
+    const b = $("genderToggle"); if (!b) return;
+    b.textContent = state.gender === "m" ? "👦 主角" : "👧 主角";
+  }
 
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
@@ -400,7 +405,16 @@
       <div class="quest-list">${quests}</div>
       ${ch2Html}
       ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。</div>` : ""}
+      ${dialogueLogHtml()}
     </div>`;
+  }
+  // Stage 6：側欄對話記錄（走近 NPC 交談後累積）
+  function dialogueLogHtml() {
+    const log = (state.story && state.story.dialogueLog) || [];
+    if (!log.length) return "";
+    const rows = log.slice(-8).reverse().map((e) =>
+      `<div class="dlg-row"><span class="dlg-name">${e.name}</span><span class="dlg-line">${e.line}</span></div>`).join("");
+    return `<div class="dialogue-log"><div class="story-kicker">💬 對話記錄</div>${rows}</div>`;
   }
 
   // ====================================================================
@@ -596,6 +610,7 @@
         else addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
       }
       renderAnimals(t);
+      renderNpcs(t);
       renderMarkers(t);
     }
     positionPlayer(true);
@@ -639,6 +654,22 @@
         }
         if (G.animalProgress(state, a, t).ready) addDot(cx, baselineY - TILE * 1.05);
       });
+    }
+  }
+  // Stage 6：NPC 鎮民 — 固定站位、front-facing 呼吸 idle；交談中切 talk 幀；掛 data-audit=npc
+  let activeTalk = null; // { npcId, until }
+  function renderNpcs(t) {
+    for (const tile of state.map.tiles) {
+      if (!tile.npc) continue;
+      const npc = window.NPCS[tile.npc]; if (!npc) continue;
+      const talking = activeTalk && activeTalk.npcId === tile.npc && t < activeTalk.until;
+      const col = Math.floor(t / 420) % 2 === 0 ? "a" : "b";
+      const frame = tile.npc + (talking ? "_talk_" : "_idle_") + col;
+      const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE;
+      const el = addObjectPx(obDyn, "npcs", frame, cx, baselineY, TILE * 1.0, "shadowed", 0, "npc");
+      if (el) { el.dataset.npc = tile.npc; el.dataset.tileId = tile.id; }
+      // 有新對話可看時，頭上放提示點（首次見面尚未對話過）
+      if (!(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) addDot(cx, baselineY - TILE * 1.15);
     }
   }
   // 任務標記：目前任務目標磚上方浮動箭頭
@@ -746,6 +777,8 @@
     // Stage 5：斷橋（走過去修橋 / 過橋）、事件點（走過去觸發）
     if (tile.bridge) { useBridge(tile); updateMap(now()); return; }
     if (tile.event) { useEvent(tile); updateMap(now()); return; }
+    // Stage 6：NPC（走過去交談）
+    if (tile.npc) { useNpc(tile); updateMap(now()); return; }
 
     const act = actionTargetFor(tool, tile);
     if (act.invalid) { toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
@@ -849,6 +882,46 @@
       afterChange(true); renderTileContext();
     });
   }
+  // Stage 6：NPC 對話 — 走到相鄰 → 面向 → 主角互動動作 + NPC talk 動畫 + 地圖泡泡 + 側欄記錄
+  const npcLineIdx = {};
+  let bubbleTimer = null;
+  function useNpc(tile) {
+    const npc = window.NPCS[tile.npc]; if (!npc) return;
+    const plan = G.planMoveTo(state, tile.id);
+    if (!plan) { toast("走不到 " + npc.name); return; }
+    spawnRing(tile.id, true);
+    walkPath(plan.path, () => {
+      const stand = G.getTileById(state, plan.standId);
+      state.player.facing = G.facingTo(stand, tile);
+      const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
+      npcLineIdx[tile.npc] = (npcLineIdx[tile.npc] || 0) + 1;
+      activeTalk = { npcId: tile.npc, until: now() + 2600 };
+      if (!state.story.dialogueSeen) state.story.dialogueSeen = {};
+      state.story.dialogueSeen[tile.npc] = true;
+      showDialogueBubble(tile, d);
+      pushDialogueLog(d);
+      playAction("use", state.player.facing);
+      renderTileContext(); afterChange(false);
+    });
+  }
+  function showDialogueBubble(tile, d) {
+    if (!worldEl || !d) return;
+    const old = worldEl.querySelector(".npc-bubble"); if (old) old.remove();
+    const b = document.createElement("div");
+    b.className = "npc-bubble"; b.dataset.audit = "dialogue-bubble"; b.dataset.npc = d.id;
+    b.innerHTML = `<div class="nb-name">${d.name}</div><div class="nb-line">${d.line}</div>`;
+    b.style.left = pxv((tile.x + 0.5) * TILE); b.style.top = pxv(tile.y * TILE - 4);
+    worldEl.appendChild(b);
+    if (bubbleTimer) clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => { const e = worldEl && worldEl.querySelector(".npc-bubble"); if (e) e.remove(); }, 2800);
+  }
+  function pushDialogueLog(d) {
+    if (!d) return;
+    if (!state.story.dialogueLog) state.story.dialogueLog = [];
+    state.story.dialogueLog.push({ name: d.name, line: d.line });
+    if (state.story.dialogueLog.length > 12) state.story.dialogueLog.shift();
+    renderStory(); // 側欄故事分頁的對話記錄即時更新
+  }
   function resolveStation(st) {
     const t = now();
     if (st.effect === "orders") {
@@ -895,6 +968,7 @@
       toast(`${crop.emoji}${crop.name}・${prog.ready ? "✅可收成" : "⏳" + fmtTime(prog.remainingMs)}${prog.wet ? "・💧濕土" : ""}`);
     } else if (tile.station) { const s = window.STATIONS[tile.station]; toast("🏷️ " + s.name + "・" + s.desc); }
     else if (tile.structureId) { const s = G.structureAt(state, tile.id); toast("🏠 " + (s ? s.name : "建築") + "・點一下走過去互動"); }
+    else if (tile.npc) { const n = window.NPCS[tile.npc]; toast("🧑 " + n.name + "・" + n.title + "・走過去交談"); }
     else if (tile.bridge) { toast(state.flags.bridgeRepaired ? "🌉 木橋・通往東林空地" : "🌉 斷橋・走過去用木材石頭修復"); }
     else if (tile.event) { const ev = window.EVENTS[tile.event]; toast("🌳 " + ev.name + "・" + ev.desc); }
     else if (tile.region === "east" && !state.flags.bridgeRepaired) { toast("⛓️ 東林封鎖中・先修好斷橋才能進入"); }
@@ -997,6 +1071,17 @@
         <div class="tc-desc">${s && s.interaction === "shop" ? "走過去把庫存賣給市集攤。" : "走過去看看農場概況、稍作歇息。"}</div>
         <div class="tc-actions"><button class="btn buy small" id="useStrBtn">走過去</button></div>`;
       $("useStrBtn").onclick = () => useStructure(tile);
+      return;
+    }
+    // 0.6) Stage 6：NPC 鎮民（走過去交談）
+    if (tile.npc) {
+      const npc = window.NPCS[tile.npc];
+      const d = G.npcDialogue(state, tile.npc, (npcLineIdx[tile.npc] || 1) - 1);
+      const seen = state.story.dialogueSeen && state.story.dialogueSeen[tile.npc];
+      box.innerHTML = `<div class="tc-title">🧑 ${npc.name}</div>
+        <div class="tc-desc">${npc.title}${seen && d ? "：「" + d.line + "」" : "・走過去聽聽他要說什麼"}</div>
+        <div class="tc-actions"><button class="btn buy small" id="talkNpcBtn">${seen ? "再聊一句" : "走過去交談"}</button></div>`;
+      $("talkNpcBtn").onclick = () => useNpc(tile);
       return;
     }
     // 0.7) Stage 5：斷橋（修橋 / 過橋）
@@ -1151,8 +1236,14 @@
   }
   const player = { frame: 0, fps: 6, oneShot: false, actionRow: "use_down", acc: 0, last: 0, flip: false };
   // 畫玩家某 frame（v3 atlas，6 幀/列；side 動作可水平翻轉）
+  // 主角性別：男(m)用 walk_m/actions_m，女(f)用 walk/actions（frame 命名相同）
+  function pSheet(base) {
+    if ((base === "walk" || base === "actions") && state.gender === "m") return base + "_m";
+    return base;
+  }
   function paintPlayer(sheet, rowName, frame, flip) {
     const sp = $("playerSprite"); if (!sp) return;
+    sheet = pSheet(sheet);
     const pe = $("player"); const ew = pe.offsetWidth || 48, eh = pe.offsetHeight || 64;
     if (atlasReady) {
       const stl = window.Atlas.frameStyleFor(sheet, rowName + "_" + pad2(frame), ew, eh);
@@ -1286,7 +1377,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); syncHud(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -1360,6 +1451,13 @@
       state.useSprites = !state.useSprites;
       $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
       updateFarm(now()); scheduleSave();
+    };
+    // Stage 6：主角性別切換（女 Miri ↔ 男 Kai），即時換 sprite
+    $("genderToggle").onclick = () => {
+      state.gender = state.gender === "m" ? "f" : "m";
+      syncGenderBtn();
+      paintIdlePlayer(); positionPlayer(false); toast(state.gender === "m" ? "🧑 主角：Kai（男）" : "👩 主角：Miri（女）");
+      scheduleSave();
     };
     $("howToBtn").onclick = () => $("howToModal").classList.add("show");
     $("howToOk").onclick = () => $("howToModal").classList.remove("show");

@@ -13,7 +13,9 @@ const OUT = path.join(ROOT, "assets", "generated", "v4");
 const MIME = { ".html": "text/html", ".js": "application/javascript", ".json": "application/json", ".png": "image/png" };
 // 由 processor 自行切出的 sheets → 輸出檔名
 const FILES = { terrain: "terrain-organic-32", crops: "crops-48", walk: "miri-walk-48x64",
-  actions: "miri-actions-48x64", animals: "animals-48", buildings: "buildings", structures: "structures-nature" };
+  actions: "miri-actions-48x64", animals: "animals-48", buildings: "buildings", structures: "structures-nature",
+  // Stage 6：男主角（性別可選）+ NPC 鎮民
+  walk_m: "max-walk-48x64", actions_m: "max-actions-48x64", npcs: "npcs-48x64" };
 // 沿用 v3 的 sheets（站點/障礙/特效）
 const V3_REUSE = {
   props: { image: "assets/generated/v3/props-stations.png", map: "assets/generated/v3/props-stations.json" },

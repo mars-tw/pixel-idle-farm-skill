@@ -93,6 +93,45 @@
       },
       "frameCount": 10
     },
+    "walk_m": {
+      "image": "assets/generated/v4/max-walk-48x64.png",
+      "map": "assets/generated/v4/max-walk-48x64.json",
+      "meta": {
+        "w": 288,
+        "h": 256,
+        "frameW": 48,
+        "frameH": 64,
+        "cols": 6,
+        "rows": 4
+      },
+      "frameCount": 24
+    },
+    "actions_m": {
+      "image": "assets/generated/v4/max-actions-48x64.png",
+      "map": "assets/generated/v4/max-actions-48x64.json",
+      "meta": {
+        "w": 288,
+        "h": 1536,
+        "frameW": 48,
+        "frameH": 64,
+        "cols": 6,
+        "rows": 24
+      },
+      "frameCount": 144
+    },
+    "npcs": {
+      "image": "assets/generated/v4/npcs-48x64.png",
+      "map": "assets/generated/v4/npcs-48x64.json",
+      "meta": {
+        "w": 192,
+        "h": 256,
+        "frameW": 48,
+        "frameH": 64,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    },
     "props": {
       "image": "assets/generated/v3/props-stations.png",
       "map": "assets/generated/v3/props-stations.json",

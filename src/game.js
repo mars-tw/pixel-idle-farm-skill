@@ -513,6 +513,7 @@
     if (tile.region === "east" && !repaired) return false;        // 東林封鎖區：修橋前不可進
     if (tile.object) return false;
     if (tile.station) return false;
+    if (tile.npc) return false;           // Stage 6：NPC 站位（走相鄰交談）
     if (tile.blocked) return false;       // 多格建築 footprint
     if (tile.structureId) return false;
     if (tile.buildingId) return false;
@@ -723,6 +724,34 @@
     return { ok: true, reward, already, story };
   }
 
+  // ---------- Stage 6：NPC 對話（依故事進度變台詞）----------
+  function npcAt(state, tileId) {
+    const t = getTileById(state, tileId);
+    return t && t.npc ? (C.NPCS || {})[t.npc] : null;
+  }
+  // 對話階段：start → ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）
+  function npcPhase(state) {
+    const f = state.flags || {};
+    if (f.eventsClaimed && f.eventsClaimed.east_clearing) return "ch2done";
+    if (f.bridgeRepaired) return "bridge";
+    if (chapter1Done(state)) return "ch1done";
+    return "start";
+  }
+  // 回傳此 NPC 在目前階段要說的一段台詞（lineIdx 由 UI 傳入做循環）
+  function npcDialogue(state, npcId, lineIdx) {
+    const npc = (C.NPCS || {})[npcId]; if (!npc) return null;
+    const order = ["ch2done", "bridge", "ch1done", "start"];
+    const phase = npcPhase(state);
+    // 取目前階段的台詞；若該階段未定義，往較早階段回退
+    let lines = null;
+    for (let i = order.indexOf(phase); i < order.length; i++) {
+      if (npc.lines[order[i]]) { lines = npc.lines[order[i]]; break; }
+    }
+    if (!lines || !lines.length) lines = ["……"];
+    const idx = ((lineIdx || 0) % lines.length + lines.length) % lines.length;
+    return { id: npc.id, name: npc.name, title: npc.title, frame: npc.frame, phase, line: lines[idx], lineCount: lines.length };
+  }
+
   // ---------- 離線進度 ----------
   // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數、動物產品
   function applyOffline(state, now) {
@@ -815,6 +844,8 @@
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
     bridgeTile, eventTile, chapter1Done, canRepairBridge, repairBridge, triggerEvent,
+    // Stage 6：NPC 對話
+    npcAt, npcPhase, npcDialogue,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

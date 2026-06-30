@@ -34,6 +34,38 @@
       "prompt": "Pixel RPG ACTION spritesheet for farmer Miri Rowan, same outfit and proportions as the walk sheet. Twelve rows, six frames each. Group 1 IDLE breathing pose: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Feet on baseline, clean separated frames, transparent background, no scenery."
     },
     {
+      "id": "max-walk-48x64-v4",
+      "targetFile": "max-walk-48x64.png",
+      "size": "1024x1024",
+      "grid": "6 columns x 4 rows",
+      "rows": ["walk_down", "walk_left", "walk_right", "walk_up"],
+      "prompt": "Pixel RPG walk spritesheet for a MALE farmer named Kai: short tidy brown hair (no bun), cream shirt, moss-green overalls, red neck scarf, tan boots, small seed pouch — same outfit, exact proportions and scale as the female farmer Miri walk sheet, just a young man. Four rows in order: walking DOWN facing viewer, walking LEFT profile, walking RIGHT profile, walking UP back view. Six frames per row: idle, step_a, passing_a, idle, step_b, passing_b. Clean separated frames, transparent background, no scenery."
+    },
+    {
+      "id": "max-actions-a-48x64-v4",
+      "targetFile": "max-actions-a.png",
+      "size": "1024x1536",
+      "grid": "6 columns x 12 rows",
+      "rows": ["water_down","water_up","water_side","hoe_down","hoe_up","hoe_side","sow_down","sow_up","sow_side","harvest_down","harvest_up","harvest_side"],
+      "prompt": "Pixel RPG farming ACTION spritesheet for the MALE farmer Kai (short brown hair, cream shirt, moss-green overalls, red scarf, tan boots), same outfit and proportions as his walk sheet. Twelve rows, six animation frames each. Group 1 WATERING with a watering can and small water arc: facing down, facing up (back), facing side. Group 2 HOEING the soil with a hoe and a small dirt puff: down, up, side. Group 3 SOWING seeds with a scatter of seeds: down, up, side. Group 4 HARVESTING pulling a crop up: down, up, side. Tools and effects stay inside each frame. Feet on baseline, clean separated frames, transparent background, no scenery."
+    },
+    {
+      "id": "max-actions-b-48x64-v4",
+      "targetFile": "max-actions-b.png",
+      "size": "1024x1536",
+      "grid": "6 columns x 12 rows",
+      "rows": ["idle_down","idle_up","idle_side","collect_down","collect_up","collect_side","build_down","build_up","build_side","use_down","use_up","use_side"],
+      "prompt": "Pixel RPG ACTION spritesheet for the MALE farmer Kai (short brown hair, cream shirt, moss-green overalls, red scarf, tan boots), same outfit and proportions as his walk sheet. Twelve rows, six frames each. Group 1 IDLE breathing pose: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Feet on baseline, clean separated frames, transparent background, no scenery."
+    },
+    {
+      "id": "npcs-48x64-v4",
+      "targetFile": "npcs-48x64.png",
+      "size": "1024x1024",
+      "grid": "4 columns x 4 rows",
+      "rows": ["mayor", "merchant", "elder", "child"],
+      "prompt": "Pixel RPG townsfolk NPC spritesheet, original characters, all FRONT-FACING toward the viewer, same pixel art style, scale and proportions as the farmer character but clearly DIFFERENT distinct people (NOT the cream-shirt green-overalls farmer). Four rows, four columns. Columns left to right: idle_a standing, idle_b subtle breathing, talk_a mouth open with one hand raised gesturing, talk_b talking with the other hand gesturing. Row 1: a plump elderly TOWN MAYOR with a brown flat cap, bushy white mustache, green buttoned vest, tan trousers. Row 2: a friendly female MARKET MERCHANT with a headscarf, work apron, holding a small produce basket. Row 3: a weathered OLD FARMER with a wide straw hat, grey beard, blue denim overalls. Row 4: a small cheerful VILLAGE CHILD with a red cap and suspenders. Each character alone and centered in its cell with clear transparent padding so nothing touches the cell edges, feet on a common baseline, soft pixel shadow under the feet. No text, no labels, transparent background, no checkerboard pattern."
+    },
+    {
       "id": "structures-nature-v4",
       "targetFile": "structures-nature.png",
       "size": "1024x1024",

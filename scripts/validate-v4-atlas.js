@@ -35,6 +35,15 @@ const ACTION_ROWS = ["water", "hoe", "sow", "harvest", "collect", "build", "use"
 const REQUIRED = {
   walk: range(["walk_down", "walk_left", "walk_right", "walk_up"], 6),
   actions: range(ACTION_ROWS, 6),
+  // Stage 6：男主角 Kai（性別可選，frame 命名同 Miri）
+  walk_m: range(["walk_down", "walk_left", "walk_right", "walk_up"], 6),
+  actions_m: range(ACTION_ROWS, 6),
+  // Stage 6：NPC 鎮民（front-facing idle/talk）
+  npcs: (() => {
+    const rows = ["mayor", "merchant", "elder", "child"];
+    const cols = ["idle_a", "idle_b", "talk_a", "talk_b"];
+    const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
+  })(),
   crops: (() => {
     const rows = ["wheat", "carrot", "tomato", "strawberry", "corn", "pumpkin"];
     const cols = ["seed", "sprout", "young", "mature", "ready"];
@@ -56,9 +65,9 @@ const REQUIRED = {
   // water_droplets 在 v3 源圖整列為空（沿用），角色澆水動畫已提供回饋，故不強制要求
   vfx: range(["soil_dust", "seed_scatter", "harvest_pop", "product_pop", "valid_ring", "invalid_ring"], 6),
 };
-const NEED_ANCHOR = new Set(["walk", "actions", "crops", "animals", "buildings", "structures"]);
+const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings", "structures"]);
 // 需做像素「非空白」檢查的 sheet（程序化 terrain / vfx 略過）
-const PIXEL_SHEETS = ["walk", "actions", "crops", "animals", "buildings"];
+const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings"];
 
 function server() {
   return new Promise((res) => {

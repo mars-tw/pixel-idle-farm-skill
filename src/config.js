@@ -268,6 +268,37 @@ const STATION_PLACEMENT = [
   { type: "well",        x: 3,  y: 10 },
 ];
 
+// ===== Stage 6：NPC 鎮民（地圖實體，走近才能交談；台詞依故事進度變化）=====
+// phase：start（序章）→ ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）
+const NPCS = {
+  mayor: { id: "mayor", name: "鎮長 葛瑞", title: "晨光鎮長", frame: "mayor", lines: {
+    start:   ["晨光鎮歡迎你回來，孩子。", "你祖母的田荒了好一陣，先到告示牌接第一張委託吧。"],
+    ch1done: ["麥香又飄回鎮上了，大家都在談論你。", "東邊那座橋年久失修——把它修好，就能踏進東林。"],
+    bridge:  ["橋通了！東林的古樹是晨光鎮的老守護。", "去樹下看看，聽說藏著你祖母留下的舊物。"],
+    ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"] } },
+  merchant: { id: "merchant", name: "商人 蘿拉", title: "市集商人", frame: "merchant", lines: {
+    start:   ["新鮮貨色看一下？等你有了作物，市集隨時收購。"],
+    ch1done: ["你的麥子品質不錯，訂單看板上的客人會喜歡。"],
+    bridge:  ["東林通了？那邊的野花蜜，以後說不定能進貨。"],
+    ch2done: ["生意越來越好，多虧你把路打通了。"] } },
+  elder: { id: "elder", name: "老農 班伯", title: "隔壁老農", frame: "elder", lines: {
+    start:   ["雞舍那隻母雞養得還行，記得常餵牠。"],
+    ch1done: ["想要更多蛋奶？把動物顧好，產量自然上來。"],
+    bridge:  ["東林的草肥，以後放羊吃草最好。"],
+    ch2done: ["下次該認真養群動物了——親密度高，產物品質才好。"] } },
+  child: { id: "child", name: "孩童 圖圖", title: "鎮上孩童", frame: "child", lines: {
+    start:   ["你會種田嗎？教教我嘛！"],
+    ch1done: ["哇，你收成了好多麥子！"],
+    bridge:  ["橋修好了！我可以去河對面玩了嗎？"],
+    ch2done: ["東林的古樹好大喔，你看過了嗎？"] } },
+};
+const NPC_PLACEMENT = [
+  { type: "mayor",    x: 10, y: 4, facing: "down" },
+  { type: "merchant", x: 14, y: 2, facing: "down" },
+  { type: "elder",    x: 5,  y: 8, facing: "down" },
+  { type: "child",    x: 8,  y: 7, facing: "down" },
+];
+
 // ===== 故事任務（地圖驅動：信箱/告示觸發、目標在地圖上有標記）=====
 const QUESTS = {
   intro_reopen_farm: { id: "intro_reopen_farm", title: "回到阿軒割割陽光農場",
@@ -317,6 +348,7 @@ const CONFIG = {
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
   EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS,
+  NPCS, NPC_PLACEMENT,
 };
 if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
 if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;

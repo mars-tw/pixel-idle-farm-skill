@@ -35,6 +35,16 @@
     }
     return map;
   }
+  // Stage 6：NPC 鎮民（grass 磚 + npc 標記；阻擋移動，需走相鄰格交談）
+  function applyNpcs(map) {
+    for (const n of (C.NPC_PLACEMENT || [])) {
+      const tile = map.tiles.find((t) => t.x === n.x && t.y === n.y);
+      if (tile && tile.terrain === "grass" && !tile.object && !tile.buildingId && !tile.structureId && !tile.blocked && !tile.station) {
+        tile.npc = n.type; tile.npcFacing = n.facing || "down";
+      }
+    }
+    return map;
+  }
 
   // 由 MAP_LAYOUT 產生大世界（soil→plot、grass/path/water、障礙、多格建築、站點、橋、事件點）
   function makeMap() {
@@ -60,6 +70,7 @@
           bridge,                 // Stage 5：斷橋磚（修好後可走）
           event,                  // Stage 5：事件點 id（走過去觸發）
           region,                 // Stage 5：east＝東林封鎖區
+          npc: null,              // Stage 6：NPC 鎮民 id（走相鄰交談）
           plotIndex: terrain === "soil" ? plotIndex++ : null,
         });
       }
@@ -67,6 +78,7 @@
     const map = { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex };
     applyStructures(map);
     applyStations(map);
+    applyNpcs(map);
     return map;
   }
 
@@ -97,6 +109,7 @@
       xp: 0,
       level: 1,
       selectedSeed: "wheat",
+      gender: "f",                             // Stage 6：主角性別（f=Miri / m=Kai），可在設定切換
       useSprites: true,
       storage: { items: {} },                 // { cropId/productId: qty }
       plots: makePlots(C.GAME.maxPlots),      // 預建 maxPlots，soil 磚 1:1 對應；activePlotCount 控可用數
@@ -147,6 +160,7 @@
       merged.map = state.map;
       if (!merged.map.tiles.some((t) => t.structureId)) applyStructures(merged.map);
       if (!merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
+      if (!merged.map.tiles.some((t) => t.npc)) applyNpcs(merged.map);
       merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
       merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
       merged.player = Object.assign({}, def.player, state.player);
@@ -162,6 +176,7 @@
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
     merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {} }, state.flags);
     merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
+    merged.gender = state.gender === "m" ? "m" : "f"; // Stage 6：主角性別
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
     merged.version = C.GAME.version;
     return merged;
