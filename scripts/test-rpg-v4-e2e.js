@@ -1,5 +1,5 @@
 /* =========================================================================
- * test-rpg-v4-e2e.js — Stage 4+5 RPG 場景 gate E2E（真瀏覽器）
+ * test-rpg-v4-e2e.js — Stage 4–6 RPG 場景 gate E2E（真瀏覽器）
  *
  * 對應 references/production-directive-stage4-game-audit.md：
  *   1. 大世界：地圖 ≥22×12，世界像素 > 視口（camera 可平移）

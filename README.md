@@ -168,11 +168,11 @@ python -m http.server 8000
 
 ```bash
 npm test            # 經濟模擬 + 系統(地圖/動物/建築/訂單) + UI 煙霧(mock DOM) + v3/v4 atlas 驗證
-npm run test:e2e    # 真瀏覽器 Stage 4+5 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈）
+npm run test:e2e    # 真瀏覽器 Stage 4–6 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈）
 ```
 
 E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥22×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、
-動作走位路由、序章任務 `0/6 → 6/6`、第二章探索 `0/2 → 2/2`、`data-audit` 稽核 hook、無水平溢出、無 console error。
+動作走位路由、序章任務 `0/6 → 6/6`、第二章探索 `0/2 → 2/2`、NPC 走近對話、主角性別切換、`data-audit` 稽核 hook、無水平溢出、無 console error。
 CI（`.github/workflows/ci.yml`）會自動安裝 chromium、跑全部測試並部署 Pages。
 
 ---
