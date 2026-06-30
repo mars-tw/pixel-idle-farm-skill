@@ -4,7 +4,7 @@ Copy this instruction to the production agent.
 
 ## Mission
 
-Rework Sunrise Sprout Farm from a functional walkable-map prototype into a high-quality RPG-style browser farming game.
+Rework 阿軒割割陽光農場開源遊戲世界 from a functional walkable-map prototype into a high-quality RPG-style browser farming game.
 
 The current walkable-map gate passed, but visual quality is not acceptable yet. Do not add more economy features until the scene, assets, and map interaction quality are upgraded.
 

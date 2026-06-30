@@ -238,7 +238,7 @@ const STATIONS = {
   order_board: { id: "order_board", name: "訂單看板", frame: "order_board",  action: "station", effect: "orders", desc: "走過去查看市集訂單" },
   storage:     { id: "storage",     name: "倉庫木箱", frame: "storage_crate", action: "carry",   effect: "sell",   desc: "走過去賣出所有庫存" },
   mailbox:     { id: "mailbox",     name: "信箱",     frame: "mailbox",       action: "station", effect: "mail",   desc: "走過去看信件與任務" },
-  sign:        { id: "sign",        name: "告示牌",   frame: "order_board",   action: "station", effect: "story",  desc: "走過去閱讀晨光鎮告示" },
+  sign:        { id: "sign",        name: "告示牌",   frame: "order_board",   action: "station", effect: "story",  desc: "走過去閱讀陽光農場告示" },
   well:        { id: "well",        name: "水井",     frame: "well",          action: "water",   effect: "well",   desc: "走過去汲水替全部乾土澆水" },
 };
 // 放在草地磚（須為 grass、不堵障礙唯一通道、不與 STRUCTURES footprint 重疊）：
@@ -252,8 +252,8 @@ const STATION_PLACEMENT = [
 
 // ===== 故事任務（地圖驅動：信箱/告示觸發、目標在地圖上有標記）=====
 const QUESTS = {
-  intro_reopen_farm: { id: "intro_reopen_farm", title: "回到晨光萌芽農場",
-    desc: "先走到告示牌或信箱，看看祖母留下的話。", next: "plant_wheat",
+  intro_reopen_farm: { id: "intro_reopen_farm", title: "回到阿軒割割陽光農場",
+    desc: "先走到告示牌或信箱，看看開源農場的第一張任務。", next: "plant_wheat",
     trigger: "read_sign", marker: { kind: "station", type: "sign" } },
   plant_wheat:       { id: "plant_wheat", title: "種下第一批小麥",
     desc: "選小麥種子，走到空農土種下。", next: "first_water",

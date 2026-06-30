@@ -608,15 +608,49 @@
     const id = state.story && state.story.questId;
     return id && C.QUESTS[id] ? C.QUESTS[id] : null;
   }
+  function ensureStoryState(state) {
+    if (!state.story) state.story = { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] };
+    if (!("questId" in state.story)) state.story.questId = C.FIRST_QUEST;
+    if (!state.story.completed) state.story.completed = {};
+    if (!state.stats) state.stats = { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} };
+    if (!state.stats.harvested) state.stats.harvested = {};
+  }
+  function hasCrop(state, cropId) {
+    return (state.plots || []).some((p) => p && p.cropId === cropId);
+  }
+  function hasWetCrop(state, cropId) {
+    return (state.plots || []).some((p) => p && p.cropId === cropId && (p.wateredAt || 0) >= (p.plantedAt || 1));
+  }
+  function questSatisfied(state, q, event) {
+    if (!q) return false;
+    if (q.id === "intro_reopen_farm") return q.trigger === event;
+    if (q.id === "plant_wheat") return hasCrop(state, "wheat");
+    if (q.id === "first_water") return hasWetCrop(state, "wheat");
+    if (q.id === "first_harvest") return ((state.stats.harvested || {}).wheat || 0) > 0;
+    if (q.id === "first_delivery") return (state.stats.fulfilledOrders || 0) > 0 || q.objective === event;
+    if (q.id === "clear_old_path") return (state.stats.cleared || 0) > 0 || q.objective === event;
+    return q.trigger === event || q.objective === event;
+  }
+  function syncStoryProgress(state, event) {
+    ensureStoryState(state);
+    let firstCompleted = null;
+    const completedIds = [];
+    for (let guard = 0; guard < 12; guard++) {
+      const q = currentQuest(state);
+      if (!questSatisfied(state, q, event)) break;
+      state.story.completed[q.id] = true;
+      if (!firstCompleted) firstCompleted = q.id;
+      completedIds.push(q.id);
+      state.story.questId = q.next || null;
+      event = null; // 後續任務只用已存在的遊戲狀態同步，避免同一事件誤跳多關。
+    }
+    return completedIds.length
+      ? { ok: true, completed: firstCompleted, completedIds, next: state.story.questId }
+      : { ok: false };
+  }
   // 事件推進：read_sign / plant / water / harvest / deliver / clear
   function advanceStory(state, event) {
-    const q = currentQuest(state);
-    if (!q) return { ok: false };
-    if (q.trigger !== event && q.objective !== event) return { ok: false };
-    state.story.completed[q.id] = true;
-    const prev = q.id;
-    state.story.questId = q.next || null;
-    return { ok: true, completed: prev, next: state.story.questId };
+    return syncStoryProgress(state, event);
   }
   // 目前任務在地圖上的標記目標 tileId（給 marker 渲染）
   function questMarkerTile(state, now) {
@@ -727,7 +761,7 @@
     // 可走動地圖：尋路 / 目標解析
     getTileById, getTileXY, isWalkable, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
     // Stage 4：多格結構 / 故事任務
-    structureAt, planMoveToStructure, currentQuest, advanceStory, questMarkerTile,
+    structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

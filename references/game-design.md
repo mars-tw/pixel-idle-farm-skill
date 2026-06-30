@@ -2,7 +2,7 @@
 
 ## Product Shape
 
-Working title: Sunrise Sprout Farm.
+Working title: 阿軒割割陽光農場開源遊戲世界.
 
 Audience: players who want a calm browser game that can be checked for 30 seconds, left alone, and revisited later. The game should feel useful immediately without tutorials, but it needs enough optimization depth for repeated sessions.
 

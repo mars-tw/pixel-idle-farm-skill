@@ -1,11 +1,11 @@
-# 🌅 pixel-idle-farm — 像素放置農場的 Claude Code Skill
+# 🌅 阿軒割割陽光農場開源遊戲世界
 
 [![CI & Deploy Pages](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Play Online](https://img.shields.io/badge/🎮_線上試玩-Pages-brightgreen)](https://mars-tw.github.io/pixel-idle-farm-skill/)
 
-一個 [Claude Code](https://claude.com/claude-code) **Skill**，幾分鐘內生出**純原生（零依賴）**的
-網頁像素放置農場遊戲。只用 HTML + CSS + 原生 JavaScript + localStorage——零框架、零 npm、零建置。
+一個 [Claude Code](https://claude.com/claude-code) **Skill**，用純原生技術製作的
+RWD 像素 RPG 放置農場網頁遊戲。只用 HTML + CSS + 原生 JavaScript + localStorage——零框架、零 npm、零建置。
 時間差計算離線收益，回來就有進度。
 
 > 作者：**阿軒** ([@mars-tw](https://github.com/mars-tw)) · 授權：MIT
@@ -18,7 +18,7 @@
 
 ## ✨ 功能特色
 
-- **🗺️ 可走動農場地圖**：主畫面是 8×6 像素 tile map，原創角色 Miri Rowan 站在地圖上，點格子會走過去；
+- **🗺️ 可走動農場地圖**：主畫面是 16×12 大世界像素 tile map，原創角色 Miri Rowan 站在地圖上，點格子會走過去；
   種植/澆水/收成/清障/建造/收集都透過地圖目標解析（走到目標 → 播動作 → 結算）。支援 WASD/方向鍵
 - **🌱 完整放置循環**：種植 → 等待成長 → 收成 → 賣出/交訂單 → 升級 → 解鎖新作物 → 離開回來拿離線收益
 - **5 種作物**：小麥 🌾 / 胡蘿蔔 🥕 / 番茄 🍅 / 草莓 🍓 / 南瓜 🎃，短作物頻繁回饋、長作物高額離線收益

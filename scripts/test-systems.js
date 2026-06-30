@@ -187,7 +187,44 @@ console.log("\n== 12. 工具模式 state.interaction ==");
   assert(C.TOOL_ORDER.length === 5 && C.TOOLS.water && C.TOOLS.clear, "工具集含 water/clear 等 5 種");
 }
 
-console.log("\n== 13. 存檔遷移補齊 MVP2 欄位 ==");
+console.log("\n== 13. 故事任務完成度同步（作物先完成也會補進度）==");
+{
+  const st = S.defaultState(T0);
+  st.coins = 9999;
+
+  G.plant(st, 0, "wheat", T0);
+  assert(G.advanceStory(st, "plant").ok === false, "未讀告示前種植不會跳過序章");
+
+  const intro = G.advanceStory(st, "read_sign");
+  assert(intro.ok && intro.completedIds.includes("intro_reopen_farm") && intro.completedIds.includes("plant_wheat"),
+    "讀告示後補認已種小麥，完成度從序章推到澆水");
+  assert(st.story.questId === "first_water", `下一任務是澆水（${st.story.questId}）`);
+
+  G.waterPlot(st, 0, T0 + 1000);
+  const water = G.syncStoryProgress(st);
+  assert(water.ok && water.completedIds.includes("first_water") && st.story.questId === "first_harvest",
+    "已澆水的小麥會補進 first_water 完成度");
+
+  st.plots[0].plantedAt = T0 - C.CROPS.wheat.growMs - 5000;
+  G.harvest(st, 0, T0 + 2000);
+  const harvest = G.syncStoryProgress(st);
+  assert(harvest.ok && harvest.completedIds.includes("first_harvest") && st.story.questId === "first_delivery",
+    "收成小麥後 first_harvest 完成度增加");
+
+  st.orders = [{ id: "order_story", wants: { wheat: 1 }, rarity: "common", rewardCoins: 20, rewardXp: 4, expiresAt: T0 + 999999 }];
+  G.fulfillOrder(st, "order_story", T0 + 3000);
+  const delivery = G.syncStoryProgress(st);
+  assert(delivery.ok && delivery.completedIds.includes("first_delivery") && st.story.questId === "clear_old_path",
+    "交付訂單後 first_delivery 完成度增加");
+
+  const stump = st.map.tiles.find((t) => t.object === "stump");
+  G.clearObstacle(st, stump.id);
+  const clear = G.syncStoryProgress(st);
+  assert(clear.ok && clear.completedIds.includes("clear_old_path") && st.story.questId === null,
+    "清掉樹樁後序章任務鏈完成");
+}
+
+console.log("\n== 14. 存檔遷移補齊 MVP2 欄位 ==");
 {
   const old = { version: 1, coins: 5, plots: [{ id: "p01", cropId: "wheat", plantedAt: 1 }] };
   const m = S.migrate(old);

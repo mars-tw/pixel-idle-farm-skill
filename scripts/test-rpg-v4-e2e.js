@@ -44,6 +44,19 @@ async function waitArrive(page, max) {
   }
   return false;
 }
+async function storyProgress(page) {
+  return page.evaluate(() => {
+    const panel = document.getElementById("storyPanel");
+    const bar = document.querySelector(".story-progress");
+    const completed = (window.__farm.state().story && window.__farm.state().story.completed) || {};
+    return {
+      quest: window.__farm.state().story.questId,
+      count: Object.keys(completed).length,
+      progress: bar ? bar.dataset.progress : "",
+      text: panel ? panel.innerText : "",
+    };
+  });
+}
 
 async function run() {
   let chromium;
@@ -69,6 +82,15 @@ async function run() {
     await page.waitForFunction(() => window.Atlas && window.Atlas.isReady && window.Atlas.isReady(), { timeout: 20000 });
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
     await sleep(300);
+
+    const chrome = await page.evaluate(() => ({
+      title: document.title,
+      heading: document.querySelector(".title") ? document.querySelector(".title").innerText : "",
+      story: document.getElementById("storyPanel") ? document.getElementById("storyPanel").innerText : "",
+    }));
+    assert(chrome.title === "阿軒割割陽光農場開源遊戲世界", "文件標題已改為新遊戲名");
+    assert(chrome.heading.includes("阿軒割割陽光農場開源遊戲世界"), "頁首顯示新遊戲名");
+    assert(chrome.story.includes("任務完成度") && chrome.story.includes("0/6"), "故事面板初始顯示 0/6 完成度");
 
     // 1. 大世界 ≥16×12 + 世界像素 > 視口
     const world = await page.evaluate(() => {
@@ -130,6 +152,27 @@ async function run() {
     assert(render.pos === "absolute" && render.abut <= 1, `地面磚絕對定位精確貼合無格線（鄰磚間隙 ${render.abut}px）`);
     assert(parseFloat(render.tileBorder) === 0, "地面磚無邊框線");
 
+    // 3b. 穩定稽核 hook（data-audit / data-kind / data-sheet）— 外部稽核不需依賴內部函式
+    const audit = await page.evaluate(() => {
+      const q = (sel) => document.querySelectorAll(sel).length;
+      const player = document.querySelector('[data-audit="player"]');
+      return {
+        ground: q('#groundLayer [data-audit="ground-tile"]'),
+        structure: q('#mapWorld [data-audit="object"][data-kind="structure"]'),
+        station: q('#mapWorld [data-audit="object"][data-kind="station"]'),
+        animal: q('#mapWorld [data-audit="object"][data-kind="animal"]'),
+        animalSheet: q('#mapWorld [data-sheet="animals"]'),
+        playerTile: player ? player.getAttribute("data-tile-id") : null,
+        marker: (() => { const m = document.querySelector('[data-audit="quest-marker"]'); return m ? { tile: m.getAttribute("data-tile-id"), quest: m.getAttribute("data-quest") } : null; })(),
+      };
+    });
+    assert(audit.ground >= 16 * 12 * 0.9, `data-audit=ground-tile 可稽核（${audit.ground}）`);
+    assert(audit.structure >= 4, `data-kind=structure 多格建築可稽核（${audit.structure}）`);
+    assert(audit.station >= 5, `data-kind=station 站點可稽核（${audit.station}）`);
+    assert(audit.animal >= 1 && audit.animalSheet >= 1, `data-kind=animal / data-sheet=animals 動物可稽核（${audit.animal}）`);
+    assert(!!audit.playerTile, `data-audit=player 帶 data-tile-id（${audit.playerTile}）`);
+    assert(audit.marker && audit.marker.quest === "intro_reopen_farm", `data-audit=quest-marker 帶 data-quest（${audit.marker && audit.marker.quest}）`);
+
     // 4. y-sort 遮擋：角色與物件 z-index = 腳底 baseline（整數、隨 y 增）
     const zsort = await page.evaluate(() => {
       const pl = document.getElementById("player");
@@ -160,6 +203,8 @@ async function run() {
     assert(sign.marker === sign.signId, "序章任務標記指向告示牌");
     assert(sign.before === "intro_reopen_farm" && afterSign === "plant_wheat",
       `讀告示牌推進序章（${sign.before}→${afterSign}）`);
+    const signProgress = await storyProgress(page);
+    assert(signProgress.progress === "1/6" && signProgress.text.includes("1/6"), `讀告示後完成度 1/6（${signProgress.progress}）`);
 
     const sow = await page.evaluate(async () => {
       const F = window.__farm; const st = F.state(); st.coins = 999; F.setTool("hand");
@@ -180,6 +225,9 @@ async function run() {
     assert(sowRes.planted, "走到農土播種成功");
     assert(sowRes.vfx > sow.before, `種植時地圖出現 VFX（${sow.before}→${sowRes.vfx}）`);
     assert(sowRes.quest === "first_water", `種麥推進到澆水任務（${sowRes.quest}）`);
+    const sowProgress = await storyProgress(page);
+    assert(sowProgress.progress === "2/6" && sowProgress.text.includes("種下第一批小麥") && sowProgress.text.includes("1/1"),
+      `種麥後完成度 2/6 並顯示作物 1/1（${sowProgress.progress}）`);
 
     // 7. 站點水井：走過去汲水 → 麥田變濕 + 故事推進到 first_harvest
     const well = await page.evaluate(async () => {
@@ -197,6 +245,8 @@ async function run() {
     });
     assert(wellRes.wet, "水井：走過去汲水後麥田變濕");
     assert(wellRes.quest === "first_harvest", `澆水推進到收成任務（${wellRes.quest}）`);
+    const waterProgress = await storyProgress(page);
+    assert(waterProgress.progress === "3/6", `澆水後完成度 3/6（${waterProgress.progress}）`);
 
     // 8. 收成：時間快轉使麥成熟 → 走過去收成 → 故事推進到 first_delivery
     const harvest = await page.evaluate(async () => {
@@ -219,11 +269,28 @@ async function run() {
     assert(harvest.marker === harvest.soilId, "收成任務標記指向成熟麥田");
     assert(harvestRes.harvested > 0 && harvestRes.empty, "走到成熟麥田收成成功");
     assert(harvestRes.quest === "first_delivery", `收成推進到交付任務（${harvestRes.quest}）`);
+    const harvestProgress = await storyProgress(page);
+    assert(harvestProgress.progress === "4/6", `收成後完成度 4/6（${harvestProgress.progress}）`);
 
-    // 9. 清除工具路由（強制進入清路任務）：清掉樹樁 → 變草地 + 故事完成
+    // 9. 交付一張故事訂單 → 完成度 5/6，下一步才是清路
+    const deliveryRes = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      st.storage.items.wheat = Math.max(st.storage.items.wheat || 0, 1);
+      st.orders = [{ id: "story_order", wants: { wheat: 1 }, rarity: "common", rewardCoins: 20, rewardXp: 4, expiresAt: Date.now() + 999999 }];
+      const f = window.Game.fulfillOrder(st, "story_order", Date.now());
+      const adv = window.Game.advanceStory(st, "deliver");
+      F.refresh();
+      return { fulfilled: f.ok, advanced: adv.ok, quest: st.story.questId };
+    });
+    assert(deliveryRes.fulfilled && deliveryRes.advanced && deliveryRes.quest === "clear_old_path",
+      `交付故事訂單後推進到清路任務（${deliveryRes.quest}）`);
+    const deliveryProgress = await storyProgress(page);
+    assert(deliveryProgress.progress === "5/6", `交付訂單後完成度 5/6（${deliveryProgress.progress}）`);
+
+    // 10. 清除工具路由：清掉樹樁 → 變草地 + 故事完成
     const clear = await page.evaluate(async () => {
       const F = window.__farm; const st = F.state();
-      st.story.questId = "clear_old_path"; st.coins = 9999; F.refresh();
+      st.coins = 9999; F.refresh();
       const marker = window.questMarkerTile(st, Date.now());
       const stump = st.map.tiles.find((t) => t.object === "stump");
       F.setTool("clear"); F.clickTile(stump.id);
@@ -238,8 +305,10 @@ async function run() {
     assert(clear.marker === clear.stumpId, "清路任務標記指向樹樁");
     assert(!clearRes.anyStump, "清除工具：走過去清掉樹樁");
     assert(clearRes.quest === null, "清路完成序章任務鏈（questId=null）");
+    const clearProgress = await storyProgress(page);
+    assert(clearProgress.progress === "6/6", `清路後完成度 6/6（${clearProgress.progress}）`);
 
-    // 10. 無 console / pageerror
+    // 11. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));
 
     await page.close();

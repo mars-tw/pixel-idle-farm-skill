@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>晨光萌芽農場 · Sunrise Sprout Farm</title>
+<title>阿軒割割陽光農場開源遊戲世界</title>
 <style>
   :root {
     /* 暖色田園調色盤（多色系：土壤/作物/木材/天空水） */
@@ -31,7 +31,7 @@
 
   /* ===== 頂部標題 + 資源列 ===== */
   header { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .title { font-size: 20px; font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: .5px; display: flex; align-items: center; gap: 6px; }
+  .title { font-size: clamp(16px, 3.8vw, 20px); font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: 0; line-height: 1.2; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; max-width: min(100%, 620px); }
   .title small { font-size: 11px; color: #4d6b3a; font-weight: 600; opacity: .8; }
   .res-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; }
   .res {
@@ -177,15 +177,22 @@
   /* ===== 故事 ===== */
   .story-card { background: linear-gradient(180deg, #fffaf0, #f2e7ca); border: 2px solid var(--border);
     border-radius: 12px; padding: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
-  .story-kicker { font-size: 11px; font-weight: 900; color: #6c7a32; letter-spacing: .04em; margin-bottom: 5px; }
+  .story-kicker { font-size: 11px; font-weight: 900; color: #6c7a32; letter-spacing: 0; margin-bottom: 5px; }
   .story-title { font-size: 15px; font-weight: 950; color: #3d2f1c; margin-bottom: 6px; }
   .story-copy { font-size: 12px; color: #5f503a; line-height: 1.55; }
+  .story-progress { margin-top: 10px; display: grid; gap: 5px; }
+  .story-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: #5c4b2f; font-weight: 850; }
+  .story-progress-head b { color: #3f6f2c; font-size: 13px; }
+  .story-progress-track { position: relative; height: 8px; overflow: hidden; border-radius: 999px; background: rgba(127,99,48,.2); box-shadow: inset 0 1px 1px rgba(78,51,20,.22); }
+  .story-progress-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #6fb54b, #ffd36a); transition: width .22s ease; }
   .quest-list { display: grid; gap: 7px; margin-top: 10px; }
   .quest { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #4d402e;
     padding: 8px 9px; background: rgba(255,255,255,.56); border: 1.5px solid rgba(194,173,130,.72); border-radius: 10px; }
   .quest.done { color: #5a7d37; background: rgba(226,244,210,.68); }
   .quest.active { color: #8a5a14; background: rgba(255,238,196,.85); border-color: #e6b860; font-weight: 800; box-shadow: 0 0 0 2px rgba(230,184,96,.35); }
   .quest .qmark { width: 18px; flex: 0 0 18px; text-align: center; font-weight: 950; }
+  .quest .qtext { min-width: 0; flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .quest .qtext em { flex: 0 0 auto; font-style: normal; font-size: 11px; font-weight: 950; color: #735b27; background: rgba(255,255,255,.58); border: 1px solid rgba(177,143,70,.45); border-radius: 999px; padding: 1px 6px; }
   .quest-hint { margin-top: 10px; font-size: 12px; color: #7a5a1c; background: rgba(255,244,214,.7); border: 1.5px dashed #e0c184; border-radius: 9px; padding: 7px 9px; line-height: 1.5; }
   .auto-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; color: #6c7a32; background: rgba(226,244,210,.7); border: 1.5px solid #aacb86; border-radius: 8px; padding: 3px 8px; }
 
@@ -267,11 +274,13 @@
   .gtile.sel { box-shadow: inset 0 0 0 3px #ffe27a; }
   .gtile.dest { box-shadow: inset 0 0 0 3px #6ee7ff; }
   .gtile.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.5); }
-  .gtile.locked { filter: grayscale(.55) brightness(.78); cursor: not-allowed; }
-  .gtile.locked::after { content: ""; position: absolute; width: 12px; height: 9px; border-radius: 2px;
-    background: rgba(24,18,8,.6); left: 50%; top: 52%; transform: translate(-50%, -20%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); }
-  .gtile.locked::before { content: ""; position: absolute; width: 7px; height: 7px; border: 2px solid rgba(24,18,8,.6);
-    border-bottom: none; border-radius: 6px 6px 0 0; left: 50%; top: 52%; transform: translate(-50%, -92%); }
+  /* 未開墾鎖定農土：顯示荒草（terrainFrame 給 grass_clump），僅在角落放小巧淡鎖提示，
+     不再整塊灰暗 + 大鎖頭。點了會提示升級「開墾農地」。 */
+  .gtile.locked { cursor: not-allowed; box-shadow: inset 0 0 0 1px rgba(90,70,30,.16); }
+  .gtile.locked::after { content: ""; position: absolute; width: 8px; height: 6px; border-radius: 1px;
+    background: rgba(58,44,20,.5); right: 4px; bottom: 4px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.28); }
+  .gtile.locked::before { content: ""; position: absolute; width: 5px; height: 5px; border: 1.5px solid rgba(58,44,20,.5);
+    border-bottom: none; border-radius: 5px 5px 0 0; right: 5.5px; bottom: 9px; }
   /* y-sort 物件 sprite（建築/障礙/作物/動物/站點），z-index = 腳底 baseline */
   .ob { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%;
     pointer-events: none; }
@@ -325,7 +334,7 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="title">🌅 晨光萌芽農場 <small>Sunrise Sprout Farm</small></div>
+    <div class="title">🌅 阿軒割割陽光農場開源遊戲世界 <small>Open Farm World</small></div>
     <div class="res-bar" id="resBar"><!-- 資源列由 JS 渲染 --></div>
   </header>
 
@@ -359,16 +368,16 @@
       <div class="farmer" id="farmer" style="display:none"><div class="farmer-sprite" id="farmerSprite"></div></div>
     </div>
 
-    <!-- 右：分頁側欄（磚資訊 / 訂單 / 升級）-->
+    <!-- 右：分頁側欄（故事 / 磚資訊 / 訂單 / 升級）-->
     <div class="panel side-panel">
       <div class="side-tabs" id="sideTabs">
-        <button class="side-tab sel" data-tab="tile">🔍 磚資訊</button>
+        <button class="side-tab" data-tab="tile">🔍 磚資訊</button>
         <button class="side-tab" data-tab="orders">📜 訂單 <span class="tab-badge" id="ordersBadge"></span></button>
         <button class="side-tab" data-tab="upgrades">⬆️ 升級</button>
-        <button class="side-tab" data-tab="story">📖 故事</button>
+        <button class="side-tab sel" data-tab="story">📖 故事</button>
       </div>
       <div class="side-body">
-        <div class="side-pane sel" data-pane="tile">
+        <div class="side-pane" data-pane="tile">
           <div class="tile-context" id="tileContext"><div class="tc-empty">點地圖磚查看資訊與動作</div></div>
         </div>
         <div class="side-pane" data-pane="orders">
@@ -379,8 +388,8 @@
           <div class="pane-head">農場升級</div>
           <div class="upgrades" id="upgrades"></div>
         </div>
-        <div class="side-pane" data-pane="story">
-          <div class="pane-head">晨光手札</div>
+        <div class="side-pane sel" data-pane="story">
+          <div class="pane-head">陽光農場手札</div>
           <div id="storyPanel"></div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 # Gameplay And Interaction Roadmap
 
-This roadmap turns Sunrise Sprout Farm from a crop timer into a richer interactive farm. Use it after reading `game-design.md` and `asset-gameplay-integration.md`.
+This roadmap turns 阿軒割割陽光農場開源遊戲世界 from a crop timer into a richer interactive farm. Use it after reading `game-design.md` and `asset-gameplay-integration.md`.
 
 For the current implementation audit and the exact walkable-map acceptance gate, read `playable-map-movement-acceptance.md`. As of the 2026-06-29 gate recheck, the walkable map milestone has passed: Miri is rendered in the map layer, `state.player` persists coordinates, and browser E2E verifies desktop/mobile movement.
 

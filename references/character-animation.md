@@ -4,7 +4,7 @@
 
 Name: Miri Rowan
 
-Role: main playable farmer for Sunrise Sprout Farm.
+Role: main playable farmer for 阿軒割割陽光農場開源遊戲世界.
 
 Design lock:
 
