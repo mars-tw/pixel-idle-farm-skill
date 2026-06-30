@@ -116,6 +116,7 @@
   function switchTab(name) {
     document.querySelectorAll(".side-tab").forEach((b) => b.classList.toggle("sel", b.dataset.tab === name));
     document.querySelectorAll(".side-pane").forEach((p) => p.classList.toggle("sel", p.dataset.pane === name));
+    if (name === "story") renderStory();
   }
   function setupSideTabs() {
     document.querySelectorAll(".side-tab").forEach((b) => { b.onclick = () => switchTab(b.dataset.tab); });
@@ -332,6 +333,46 @@
     });
   }
 
+  // ---------- 故事 / 任務 ----------
+  function totalHarvested() { return Object.values(state.stats.harvested || {}).reduce((s, n) => s + (n || 0), 0); }
+  function storyStage() {
+    if ((state.stats.cleared || 0) >= 1 || state.buildings.length > 0) return {
+      kicker: "第二章",
+      title: "老農場的邊界醒了",
+      copy: "石頭與樹根後面還埋著舊水渠的痕跡。Miri 要把荒地清開，讓動物棚、倉庫和新的小路接回晨光鎮。"
+    };
+    if (totalHarvested() > 0 || state.stats.fulfilledOrders > 0) return {
+      kicker: "第一章",
+      title: "第一批麥穗送往鎮上",
+      copy: "告示板開始有人留下訂單。每一趟交付都讓這座被遺忘的農場多一點名字，也多一點回來的人。"
+    };
+    return {
+      kicker: "序章",
+      title: "Miri 回到晨光萌芽農場",
+      copy: "祖母留下的田地只剩幾畦泥土、一口老水井和鎮口的告示板。先種下小麥，讓第一盞燈重新亮起。"
+    };
+  }
+  function renderStory() {
+    const box = $("storyPanel"); if (!box) return;
+    const harvested = totalHarvested();
+    const quests = [
+      { done: state.stats.plantCount > 0, text: "種下第一批小麥，確認土地還能發芽。" },
+      { done: harvested > 0, text: "收成第一份作物，帶去告示板回應鎮民。" },
+      { done: state.stats.fulfilledOrders > 0, text: "完成第一張市集訂單，讓晨光鎮記起這座農場。" },
+      { done: (state.stats.cleared || 0) > 0, text: "清掉一個石頭或樹根，找回荒地裡的舊路。" },
+      { done: state.buildings.length > 0, text: "蓋下第一棟農場設施，準備迎接動物入住。" }
+    ];
+    const st = storyStage();
+    box.innerHTML = `<div class="story-card">
+      <div class="story-kicker">${st.kicker}</div>
+      <div class="story-title">${st.title}</div>
+      <div class="story-copy">${st.copy}</div>
+      <div class="quest-list">${quests.map((q) => `<div class="quest ${q.done ? "done" : ""}">
+        <span class="qmark">${q.done ? "✓" : "□"}</span><span>${q.text}</span>
+      </div>`).join("")}</div>
+    </div>`;
+  }
+
   // ====================================================================
   // 地圖 / 障礙 / 建築 / 動物 UI
   // ====================================================================
@@ -409,10 +450,14 @@
   // 設定物件 sprite 層：優先 v3 atlas frame，未就緒退 emoji
   function setObjSprite(cell, sheet, frameId, emojiFallback) {
     const o = cell.obj;
+    o.dataset.sheet = sheet; o.dataset.frame = frameId;
     if (atlasReady && window.Atlas.applyTo(o, sheet, frameId)) { o.classList.add("spr"); o.textContent = ""; }
     else { o.classList.remove("spr"); o.style.backgroundImage = "none"; o.textContent = emojiFallback || ""; }
   }
-  function clearObjSprite(cell) { const o = cell.obj; o.classList.remove("spr"); o.style.backgroundImage = "none"; o.textContent = ""; }
+  function clearObjSprite(cell) {
+    const o = cell.obj; o.classList.remove("spr"); o.style.backgroundImage = "none"; o.textContent = "";
+    delete o.dataset.sheet; delete o.dataset.frame;
+  }
   // 渲染所有地圖磚（地形/作物/障礙/建築/動物/狀態，皆 v2 sprite）+ 定位玩家
   function updateMap(t) {
     if (!state.map || tileEls.length === 0) return;
@@ -824,7 +869,6 @@
   // ====================================================================
   const pad2 = (n) => String(n).padStart(2, "0");
   const WALK_ROW = { down: "walk_down", left: "walk_left", right: "walk_right", up: "walk_up" };
-  const IDLE_ROW = { down: "idle_down", left: "idle_left", right: "idle_right", up: "idle_up" };
   // 遊戲動作 → v3 動作列
   const ACTION_V3 = { hoe: "hoe_side", water: "water_side", sow: "sow_down", harvest: "harvest_down",
     carry: "carry_down", collect: "collect_down", station: "use_station_down", hurt: "hurt" };
@@ -840,6 +884,9 @@
     sp.style.transform = flip ? "scaleX(-1)" : "";
   }
   function setPlayerIdle() { state.player.action = "idle"; }
+  function paintIdlePlayer() {
+    paintPlayer("walk", WALK_ROW[state.player.facing] || "walk_down", 0, false);
+  }
   function playAction(type, facing) {
     const row = ACTION_V3[type]; if (!row) return;
     state.player.action = type; player.actionRow = row; player.frame = 0; player.oneShot = true;
@@ -866,10 +913,8 @@
       paintPlayer("actions", player.actionRow, Math.min(player.frame, 5), player.flip);
       return;
     }
-    // 待機呼吸：idle_<facing> 慢速循環
-    player.fps = 3; player.acc += dt; const step = 1 / player.fps;
-    while (player.acc >= step) { player.acc -= step; player.frame = (player.frame + 1) % 6; }
-    paintPlayer("actions", IDLE_ROW[state.player.facing] || "idle_down", player.frame, false);
+    // 待機使用 walk sheet 的站立幀，避免 actions sheet 壞列造成面向上時消失與走路色差。
+    paintIdlePlayer();
   }
   // 鍵盤一次走一格（WASD / 方向鍵）
   function onKeyMove(e) {
@@ -887,6 +932,7 @@
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
     renderResBar(); renderSeeds(); updateFarm(now());
+    renderStory();
     if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
     scheduleSave();
   }
@@ -952,7 +998,7 @@
         atlasReady = !!ok;
         if (atlasReady && state) {
           buildMap(); updateMap(now()); positionPlayer(false);
-          paintPlayer("actions", IDLE_ROW[state.player.facing] || "idle_down", 0, false);
+          paintIdlePlayer();
         }
       });
     }
@@ -963,7 +1009,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); updateFarm(now()); renderTileContext();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -996,7 +1042,7 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
-      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); buildMap(); updateFarm(now()); renderTileContext(); },
+      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); buildMap(); updateFarm(now()); renderTileContext(); },
       clickTile: (id) => handleMapClick(id),
       setTool: (t) => setTool(t),
       moving: () => !!moveTimer,

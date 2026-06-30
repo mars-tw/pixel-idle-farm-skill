@@ -72,14 +72,21 @@ async function run() {
           if (getComputedStyle(obj).backgroundImage.includes("url(")) objImg++; }
       }
       const ps = document.getElementById("playerSprite");
+      const mapStyle = getComputedStyle(document.getElementById("mapScene"));
+      const tileStyle = getComputedStyle(tiles[0]);
       return { tiles: tiles.length, imgTiles, emoji, objImg,
-        playerImg: getComputedStyle(ps).backgroundImage.includes("url(") };
+        playerImg: getComputedStyle(ps).backgroundImage.includes("url("),
+        rowGap: mapStyle.rowGap, colGap: mapStyle.columnGap,
+        tileBorder: tileStyle.borderTopWidth, tileOverflow: tileStyle.overflow };
     });
     assert(render.tiles >= 40, "地圖磚渲染（" + render.tiles + "）");
     assert(render.imgTiles === render.tiles, "全部磚使用 v3 terrain atlas 背景（" + render.imgTiles + "/" + render.tiles + "）");
     assert(render.emoji === 0, "主地圖物件 0 emoji（實際 " + render.emoji + "）");
     assert(render.objImg >= 6, "站點/障礙以 props atlas 呈現（" + render.objImg + " 個物件圖）");
     assert(render.playerImg, "角色 Miri 使用 atlas sprite");
+    assert(parseFloat(render.rowGap) === 0 && parseFloat(render.colGap) === 0, "主地圖無 CSS 格線 gap");
+    assert(parseFloat(render.tileBorder) === 0, "主地圖 tile 無邊框線");
+    assert(render.tileOverflow === "visible", "tile 允許作物/物件 sprite 安全外溢");
 
     // 2. 390px 無水平溢出
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -95,6 +102,21 @@ async function run() {
     });
     assert(!!board.id && board.after !== board.start, "點訂單看板：角色走過去（" + board.start + "→" + board.after + "）");
     assert(board.tab === "orders", "抵達後切到訂單分頁（" + board.tab + "）");
+
+    // 3b. 回歸：告示板後面向上待機，再點右上石頭，角色不能切到壞掉的 actions idle_up 空 frame
+    const boardRock = await page.evaluate(async () => {
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const F = window.__farm;
+      F.clickTile("t7_0"); await sleep(800);
+      const p = document.getElementById("player");
+      const s = document.getElementById("playerSprite");
+      const r = p.getBoundingClientRect();
+      const bg = getComputedStyle(s).backgroundImage;
+      return { tile: F.playerTileId(), action: F.playerAction(), tab: F.activeTab(), bg, w: r.width, h: r.height };
+    });
+    assert(boardRock.tile === board.after, "告示板後點右上石頭：角色不被傳送/消失（仍在 " + boardRock.tile + "）");
+    assert(boardRock.w > 20 && boardRock.h > 30, "告示板後點右上石頭：角色元素仍有可見尺寸");
+    assert(boardRock.bg.includes("miri-walk-48x64.png"), "告示板後待機使用 walk sheet，避免壞掉 idle_up frame");
 
     // 4. 站點 well：乾土作物 → 走過去汲水 → 變濕 + VFX
     const well = await page.evaluate(async () => {
