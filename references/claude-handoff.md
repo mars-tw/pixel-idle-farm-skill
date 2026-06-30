@@ -14,6 +14,7 @@ This folder is intended to be usable by Claude Code or Codex as an open-source g
 8. Read `references/playable-map-movement-acceptance.md` before claiming the game has a walkable map or Harvest-Moon-like movement.
 9. Read `references/rpg-quality-rework-brief.md`, `references/asset-production-spec-v2.md`, and `references/production-directive-rpg-rework.md` before improving desktop visual quality or replacing preview assets.
 10. Read `references/rpg-action-map-gate.md`, `references/sprite-cutting-method-v3.md`, and `references/production-directive-stage3-rpg-actions.md` before changing character sprites, map terrain, watering/hoeing/harvesting actions, or RPG station interactions.
+11. Read `references/production-directive-stage4-game-audit.md` before the next production pass; the current blocker is game quality, larger RPG world structure, story-driven map interaction, and validated v4 assets.
 
 ## Build Target
 
@@ -44,6 +45,7 @@ No build step is required for the default implementation. Use localStorage for s
 10. Walkable farm scene acceptance as described in `references/playable-map-movement-acceptance.md`.
 11. RPG-quality desktop/mobile scene rework as described in `references/rpg-quality-rework-brief.md`.
 12. Stage 3 RPG actions, organic terrain, corrected Miri proportions, and station interactions as described in `references/rpg-action-map-gate.md`.
+13. Stage 4 game-quality rework as described in `references/production-directive-stage4-game-audit.md`.
 
 ## Mandatory Asset Gameplay
 
@@ -60,6 +62,7 @@ Interaction sequencing and test expectations are in `references/gameplay-interac
 Walkable map and character movement gates are in `references/playable-map-movement-acceptance.md`.
 RPG visual-quality and v2 asset-production requirements are in `references/rpg-quality-rework-brief.md` and `references/asset-production-spec-v2.md`.
 Stage 3 character/action/map-station requirements and exact slicing rules are in `references/rpg-action-map-gate.md` and `references/sprite-cutting-method-v3.md`.
+Stage 4 game audit, large-world requirements, story gates, and v4 asset rejection conditions are in `references/production-directive-stage4-game-audit.md`.
 
 ## Asset Files
 
