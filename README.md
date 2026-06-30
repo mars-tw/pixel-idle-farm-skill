@@ -6,7 +6,7 @@
 
 一個 [Claude Code](https://claude.com/claude-code) **Skill**，也是一個**已上線、可玩、可測**的純原生網頁
 RPG 像素放置農場。只用 HTML + CSS + 原生 JavaScript + localStorage——零框架、零 npm 依賴、零建置步驟。
-主畫面是 16×12 大世界 tile map、camera 跟隨角色、地圖驅動的故事任務，作物/動物/建築全用 gpt-image-2 生成、
+主畫面是 22×12 大世界 tile map、camera 跟隨角色、地圖驅動的故事任務，作物/動物/建築全用 gpt-image-2 生成、
 精切成 frame atlas 的像素美術。
 
 > 作者：**阿軒** ([@mars-tw](https://github.com/mars-tw)) · 授權：**MIT**（程式碼與素材皆可自由使用/修改）
@@ -44,7 +44,7 @@ RPG 像素放置農場。只用 HTML + CSS + 原生 JavaScript + localStorage—
 | Stage 3 | ✅ | 導入 RPG 美術與動作 | gpt-image-2 素材、atlas、角色動畫、VFX、站點 | 主地圖 0 emoji、角色不消失、無格線 |
 | Stage 4 | ✅ | RPG 大世界與故事任務 | 16×12 世界、camera、任務箭頭、故事鏈 | 桌機/手機 E2E 通過 |
 | Stage 4.5 | ✅ | 修任務完成度、改名、場景打磨 | `syncStoryProgress`、0/6→6/6、荒草鎖定格、`data-audit` hook | 線上 Pages 驗證通過 |
-| Stage 5 | 🔜 | 世界可探索 | 橋、封路、解鎖區、事件點、第二章任務 | 須走到地圖互動才能解鎖新區 |
+| Stage 5 | ✅ | 世界可探索 | 河、斷橋、封鎖東林、修橋解鎖、東林古樹事件、第二章任務 | 須走到地圖互動才能解鎖新區；E2E 驗到 2/2 |
 | Stage 6 | 📋 | NPC 與對話系統 | NPC 實體、對話泡泡、交付反應 | NPC 可見、可走近交談 |
 | Stage 7 | 📋 | 動物深化 | 地圖餵食、親密度、產物品質 | 動物不只是產蛋計時器 |
 | Stage 8 | 📋 | 開源遊戲設計技能化 | SKILL.md、製作端規格、素材產線、測試 gate | 可被其他 repo 重用 |
@@ -76,7 +76,7 @@ src/ui.js         DOM 渲染、分層場景渲染器、camera、互動路由、r
 src/atlas.js      讀 v4 manifest，把整數像素 frame 縮放貼到任意尺寸元素（image-rendering:pixelated）
 ```
 
-**分層場景渲染**：固定像素世界（`16*48 × 12*48`）放在 `#mapScene`（overflow:hidden）內，camera 平移
+**分層場景渲染**：固定像素世界（`22*48 × 12*48`）放在 `#mapScene`（overflow:hidden）內，camera 平移
 `#mapWorld`。圖層：地面層 → y-sort 物件/角色（`z-index = 腳底 baseline` 做前景遮擋）→ 任務標記 → VFX。
 
 **穩定稽核 hook**：地面磚/物件/角色/任務標記都掛 `data-audit` / `data-kind` / `data-sheet` /
@@ -140,7 +140,7 @@ fork 後先勾選你的方向，再動手：
 - [ ] **主題/世界觀**：農場 / 太空殖民 / 地城探險 / 城鎮經營 / 釣魚 / 寵物養成？
 - [ ] **核心循環**：純放置（離線為主）/ 主動操作 / 混合？決定 `Date.now()` 時間差的權重。
 - [ ] **美術風格**：沿用本 repo 像素風 / 重生新風格（改 `art-config-rpg-v4.json` 提示詞）/ 手繪 / 向量？
-- [ ] **世界規模**：單畫面 / 大世界 + camera（本 repo 是 16×12，可調 `MAP_W/MAP_H`）？
+- [ ] **世界規模**：單畫面 / 大世界 + camera（本 repo 是 22×12，可調 `MAP_W/MAP_H`）？
 - [ ] **故事**：無 / 任務鏈（本 repo 的 `QUESTS`）/ NPC 對話 / 分支劇情？
 - [ ] **經濟**：作物+訂單 / 製造鏈 / 多貨幣 / 市場波動？數值都集中在 `src/config.js`。
 - [ ] **互動模型**：點哪走哪 + 工具模式（本 repo）/ 直接點擊 / 拖放？
@@ -168,11 +168,11 @@ python -m http.server 8000
 
 ```bash
 npm test            # 經濟模擬 + 系統(地圖/動物/建築/訂單) + UI 煙霧(mock DOM) + v3/v4 atlas 驗證
-npm run test:e2e    # 真瀏覽器 Stage 4 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈）
+npm run test:e2e    # 真瀏覽器 Stage 4+5 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈）
 ```
 
-E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥16×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、
-動作走位路由、序章任務 `0/6 → 6/6`、`data-audit` 稽核 hook、無水平溢出、無 console error。
+E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥22×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、
+動作走位路由、序章任務 `0/6 → 6/6`、第二章探索 `0/2 → 2/2`、`data-audit` 稽核 hook、無水平溢出、無 console error。
 CI（`.github/workflows/ci.yml`）會自動安裝 chromium、跑全部測試並部署 Pages。
 
 ---

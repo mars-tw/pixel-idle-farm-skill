@@ -36,7 +36,7 @@
     return map;
   }
 
-  // 由 MAP_LAYOUT 產生 16×12 世界（soil→plot、grass/path/water、障礙、多格建築、站點）
+  // 由 MAP_LAYOUT 產生大世界（soil→plot、grass/path/water、障礙、多格建築、站點、橋、事件點）
   function makeMap() {
     const layout = C.MAP_LAYOUT;
     const tiles = [];
@@ -141,7 +141,7 @@
     if (!Array.isArray(merged.orders)) merged.orders = [];
     // ===== MVP2 欄位補齊 =====
     merged.materials = Object.assign({ wood: 0, stone: 0, compost: 0 }, state.materials);
-    // 地圖：維度不符（升級到 16×12）一律以新世界重建，並重置 buildings/animals/player（大改版）。
+    // 地圖：維度不符（升級到新版大世界）一律以新世界重建，並重置 buildings/animals/player（大改版）。
     const sameDims = state.map && Array.isArray(state.map.tiles) && state.map.width === C.MAP_W && state.map.height === C.MAP_H;
     if (sameDims) {
       merged.map = state.map;

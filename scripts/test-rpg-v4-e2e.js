@@ -1,8 +1,8 @@
 /* =========================================================================
- * test-rpg-v4-e2e.js — Stage 4 RPG 場景 gate E2E（真瀏覽器）
+ * test-rpg-v4-e2e.js — Stage 4+5 RPG 場景 gate E2E（真瀏覽器）
  *
  * 對應 references/production-directive-stage4-game-audit.md：
- *   1. 大世界：地圖 ≥16×12，世界像素 > 視口（camera 可平移）
+ *   1. 大世界：地圖 ≥22×12，世界像素 > 視口（camera 可平移）
  *   2. camera follow：角色移動 → 世界平移、角色維持在視口內
  *   3. 視覺：地面磚全用 v4 terrain atlas、物件/角色用 atlas sprite、主地圖 0 emoji、無 CSS 格線
  *   4. 動作走位路由：選工具 → 點地圖 → 角色走過去 → 動作 → 結算（種植/清除）
@@ -92,7 +92,7 @@ async function run() {
     assert(chrome.heading.includes("阿軒割割陽光農場開源遊戲世界"), "頁首顯示新遊戲名");
     assert(chrome.story.includes("任務完成度") && chrome.story.includes("0/6"), "故事面板初始顯示 0/6 完成度");
 
-    // 1. 大世界 ≥16×12 + 世界像素 > 視口
+    // 1. 大世界 ≥22×12 + 世界像素 > 視口
     const world = await page.evaluate(() => {
       const st = window.__farm.state();
       const scene = document.getElementById("mapScene"), wEl = document.getElementById("mapWorld");
@@ -100,7 +100,7 @@ async function run() {
         worldW: wEl.offsetWidth, worldH: wEl.offsetHeight,
         sceneW: scene.clientWidth, sceneH: scene.clientHeight };
     });
-    assert(world.w >= 16 && world.h >= 12, `地圖 ≥16×12（${world.w}×${world.h}）`);
+    assert(world.w >= 22 && world.h >= 12, `地圖 ≥22×12（${world.w}×${world.h}）`);
     assert(world.worldW > world.sceneW || world.worldH > world.sceneH,
       `世界像素大於視口可平移（world ${world.worldW}×${world.worldH} > scene ${world.sceneW}×${world.sceneH}）`);
 
