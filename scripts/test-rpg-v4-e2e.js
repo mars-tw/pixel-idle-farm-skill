@@ -304,11 +304,76 @@ async function run() {
     });
     assert(clear.marker === clear.stumpId, "清路任務標記指向樹樁");
     assert(!clearRes.anyStump, "清除工具：走過去清掉樹樁");
-    assert(clearRes.quest === null, "清路完成序章任務鏈（questId=null）");
+    assert(clearRes.quest === "repair_bridge", `清路後接第二章「修橋」（${clearRes.quest}）`);
     const clearProgress = await storyProgress(page);
-    assert(clearProgress.progress === "6/6", `清路後完成度 6/6（${clearProgress.progress}）`);
+    assert(clearProgress.progress === "6/6", `序章完成度 6/6（${clearProgress.progress}）`);
 
-    // 11. 無 console / pageerror
+    // ===== Stage 5：世界可探索（封鎖東林 → 修橋 → 解鎖 → 事件點）=====
+    // 11. 修橋前：斷橋不可走、東林 BFS 封鎖；data-audit bridge/locked-area/event-point 可稽核
+    const pre = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const bridge = window.Game.bridgeTile(st), event = window.Game.eventTile(st, "east_clearing");
+      return {
+        bridgeId: bridge.id, eventId: event.id,
+        bridgeWalkable: window.isWalkable(st, bridge),
+        eastBfs: window.Game.bfsPath(st, st.player.tileId, event.id),
+        lockedArea: document.querySelectorAll('#groundLayer [data-kind="locked-area"]').length,
+        bridgeOb: document.querySelectorAll('#mapWorld [data-audit="object"][data-kind="bridge"]').length,
+        eventOb: document.querySelectorAll('#mapWorld [data-audit="object"][data-kind="event-point"]').length,
+      };
+    });
+    assert(!pre.bridgeWalkable && pre.eastBfs === null, "修橋前：斷橋不可走、東林封鎖區 BFS 不可達");
+    assert(pre.lockedArea >= 30, `修橋前：東林封鎖區可稽核 data-kind=locked-area（${pre.lockedArea}）`);
+    assert(pre.bridgeOb >= 1 && pre.eventOb >= 1, `斷橋 / 事件點 data-audit 可稽核（bridge=${pre.bridgeOb} event=${pre.eventOb}）`);
+
+    // 12. 走過去修橋（給真資源 木6石4，消耗後解鎖；marker 指向斷橋）
+    const repair = await page.evaluate(async () => {
+      const F = window.__farm; const st = F.state();
+      st.materials.wood = 6; st.materials.stone = 4; F.refresh();
+      const bridge = window.Game.bridgeTile(st);
+      const marker = window.questMarkerTile(st, Date.now());
+      F.setTool("hand"); F.clickTile(bridge.id);
+      return { bridgeId: bridge.id, marker };
+    });
+    await waitArrive(page, 9000);
+    await sleep(400);
+    const repairRes = await page.evaluate(() => {
+      const st = window.__farm.state();
+      return { repaired: !!st.flags.bridgeRepaired, wood: st.materials.wood, stone: st.materials.stone, quest: st.story.questId };
+    });
+    assert(repair.marker === repair.bridgeId, "修橋任務標記指向斷橋");
+    assert(repairRes.repaired, "走到橋邊用建材修好斷橋");
+    assert(repairRes.wood === 0 && repairRes.stone === 0, "修橋消耗木材 6、石頭 4（真資源）");
+    assert(repairRes.quest === "explore_new_area", `修橋推進到「探索新區」（${repairRes.quest}）`);
+
+    // 13. 修橋後：東林解鎖可達、走到事件點觸發獎勵、camera 跟隨進新區、第二章 2/2
+    const explore = await page.evaluate(async () => {
+      const F = window.__farm; const st = F.state();
+      const event = window.Game.eventTile(st, "east_clearing");
+      const marker = window.questMarkerTile(st, Date.now());
+      F.setTool("hand"); F.clickTile(event.id);
+      return { eventId: event.id, marker, coinsBefore: st.coins, eastReachable: window.Game.bfsPath(st, st.player.tileId, event.id) !== null };
+    });
+    await waitArrive(page, 12000);
+    await sleep(400);
+    const exploreRes = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const ch2 = document.querySelector('.chapter2-progress');
+      return {
+        claimed: !!(st.flags.eventsClaimed && st.flags.eventsClaimed.east_clearing),
+        quest: st.story.questId, coins: st.coins, camX: st.camera.x, playerX: st.player.x,
+        ch2: ch2 ? ch2.getAttribute('data-progress2') : null,
+        lockedAfter: document.querySelectorAll('#groundLayer [data-kind="locked-area"]').length,
+      };
+    });
+    assert(explore.eastReachable, "修橋後：東林 BFS 可達");
+    assert(explore.marker === explore.eventId, "探索任務標記指向東林事件點");
+    assert(exploreRes.claimed && exploreRes.coins > explore.coinsBefore, `走到東林古樹觸發一次性獎勵（+${exploreRes.coins - explore.coinsBefore} 金）`);
+    assert(exploreRes.playerX >= 17 && exploreRes.camX < -50, `角色進入東林、camera 跟隨平移（playerX=${exploreRes.playerX} camX=${exploreRes.camX}）`);
+    assert(exploreRes.quest === null && exploreRes.ch2 === "2/2", `探索完成第二章（探索完成度 ${exploreRes.ch2}）`);
+    assert(exploreRes.lockedAfter === 0, "修橋後封鎖區解除（locked-area 清零）");
+
+    // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));
 
     await page.close();
@@ -317,7 +382,7 @@ async function run() {
   await browser.close();
   server.close();
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
-  console.log("\n✅ Stage 4 RPG v4 E2E 全部通過");
+  console.log("\n✅ Stage 4+5 RPG v4 E2E 全部通過");
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

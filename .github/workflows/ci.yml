@@ -20,10 +20,10 @@ jobs:
     name: 測試（經濟 + UI 煙霧 + JSON）
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
       - name: 經濟與進度模擬測試
         run: node scripts/test-economy.js
       - name: MVP2 系統測試（地圖/動物/建築/產品訂單）
@@ -46,10 +46,10 @@ jobs:
     name: Stage 4 RPG 場景 E2E（真瀏覽器 + atlas 像素驗證）
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
       - name: 安裝 playwright + chromium
         run: |
           npm ci || npm install
@@ -68,7 +68,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/configure-pages@v5
       - name: 上傳網站（repo 根目錄含 index.html / src / assets）
         uses: actions/upload-pages-artifact@v3

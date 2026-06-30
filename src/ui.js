@@ -341,16 +341,28 @@
   }
 
   // ---------- 故事 / 任務（地圖驅動：state.story 任務鏈）----------
+  // 第一章＝序章 6 關（主完成度面板 0/6→6/6）；第二章＝Stage 5 探索 2 關，另計。
   const QUEST_ORDER = ["intro_reopen_farm", "plant_wheat", "first_water", "first_harvest", "first_delivery", "clear_old_path"];
+  const CHAPTER2_ORDER = (typeof window !== "undefined" && window.CHAPTER2_QUESTS) || ["repair_bridge", "explore_new_area"];
   function questStepProgress(id, completed) {
     if (completed[id]) return { done: 1, total: 1 };
     const harvested = (state.stats && state.stats.harvested) || {};
+    const flags = state.flags || {};
     if (id === "plant_wheat") return { done: state.plots.some((p) => p && p.cropId === "wheat") ? 1 : 0, total: 1 };
     if (id === "first_water") return { done: state.plots.some((p) => p && p.cropId === "wheat" && (p.wateredAt || 0) >= (p.plantedAt || 1)) ? 1 : 0, total: 1 };
     if (id === "first_harvest") return { done: (harvested.wheat || 0) > 0 ? 1 : 0, total: 1 };
     if (id === "first_delivery") return { done: (state.stats && state.stats.fulfilledOrders || 0) > 0 ? 1 : 0, total: 1 };
     if (id === "clear_old_path") return { done: (state.stats && state.stats.cleared || 0) > 0 ? 1 : 0, total: 1 };
+    if (id === "repair_bridge") return { done: flags.bridgeRepaired ? 1 : 0, total: 1 };
+    if (id === "explore_new_area") return { done: (flags.eventsClaimed && flags.eventsClaimed.east_clearing) ? 1 : 0, total: 1 };
     return { done: 0, total: 1 };
+  }
+  function questRow(id, completed, cur) {
+    const q = window.QUESTS[id]; const done = !!completed[id]; const active = cur && cur.id === id;
+    const step = questStepProgress(id, completed);
+    return `<div class="quest ${done ? "done" : ""} ${active ? "active" : ""}">
+      <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span>
+      <span class="qtext"><span>${q.title}</span><em>${step.done}/${step.total}</em></span></div>`;
   }
   function renderStory() {
     const box = $("storyPanel"); if (!box) return;
@@ -359,17 +371,24 @@
     const completed = (state.story && state.story.completed) || {};
     const doneCount = QUEST_ORDER.filter((id) => completed[id]).length;
     const donePct = Math.round(doneCount / QUEST_ORDER.length * 100);
-    const kicker = doneCount === 0 ? "序章" : doneCount >= QUEST_ORDER.length ? "第二章" : "第一章";
+    const ch1Done = doneCount >= QUEST_ORDER.length;
+    const ch2Done = CHAPTER2_ORDER.filter((id) => completed[id]).length;
+    const ch2Pct = Math.round(ch2Done / CHAPTER2_ORDER.length * 100);
+    const kicker = doneCount === 0 ? "序章" : ch1Done ? "第二章" : "第一章";
     const title = cur ? cur.title : "陽光農場的新篇章";
     const copy = cur ? cur.desc
-      : "阿軒割割陽光農場開源遊戲世界重新熱鬧了起來。繼續開墾田地、迎接更多動物與市集訂單，讓這座農場成為玩家共創的 RPG 世界。";
-    const quests = QUEST_ORDER.map((id) => {
-      const q = window.QUESTS[id]; const done = !!completed[id]; const active = cur && cur.id === id;
-      const step = questStepProgress(id, completed);
-      return `<div class="quest ${done ? "done" : ""} ${active ? "active" : ""}">
-        <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span>
-        <span class="qtext"><span>${q.title}</span><em>${step.done}/${step.total}</em></span></div>`;
-    }).join("");
+      : "阿軒割割陽光農場開源遊戲世界重新熱鬧了起來。東林已通，繼續開墾田地、迎接更多動物與市集訂單，讓這座農場成為玩家共創的 RPG 世界。";
+    const quests = QUEST_ORDER.map((id) => questRow(id, completed, cur)).join("");
+    // 第二章：序章 6/6 後才顯示，獨立完成度（不影響主面板 0/6 讀值）
+    const ch2Html = ch1Done ? `
+      <div class="chapter2">
+        <div class="story-kicker">第二章 · 世界可探索</div>
+        <div class="story-progress chapter2-progress" data-progress2="${ch2Done}/${CHAPTER2_ORDER.length}">
+          <div class="story-progress-head"><span>探索完成度</span><b>${ch2Done}/${CHAPTER2_ORDER.length}</b></div>
+          <div class="story-progress-track"><i style="width:${ch2Pct}%"></i></div>
+        </div>
+        <div class="quest-list">${CHAPTER2_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
+      </div>` : "";
     box.innerHTML = `<div class="story-card">
       <div class="story-kicker">${kicker}</div>
       <div class="story-title">${title}</div>
@@ -379,6 +398,7 @@
         <div class="story-progress-track"><i style="width:${donePct}%"></i></div>
       </div>
       <div class="quest-list">${quests}</div>
+      ${ch2Html}
       ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。</div>` : ""}
     </div>`;
   }
@@ -434,11 +454,14 @@
       const plot = tile.plotIndex != null ? state.plots[tile.plotIndex] : null;
       const prog = plot && plot.cropId ? G.getCropProgress(state, plot, now()) : null;
       const locked = tile.plotIndex != null && tile.plotIndex >= active;
+      const lockedArea = tile.region === "east" && !(state.flags && state.flags.bridgeRepaired); // 東林封鎖區
       let cls = "gtile " + tile.terrain;
       if (locked) cls += " locked";
+      if (lockedArea) cls += " locked-area";
       if (prog && prog.wet && !prog.ready) cls += " wet";
       if (cell.tileId === selectedTileId) cls += " sel";
       cell.el.className = cls;
+      cell.el.dataset.kind = lockedArea ? "locked-area" : "";
       window.Atlas.applyTo(cell.el, "terrain", terrainFrame(tile, prog));
     }
   }
@@ -488,6 +511,19 @@
       const stn = window.STATIONS[tile.station];
       const el = addObjectPx(obStatic, (stn && stn.sheet) || "props", stn ? stn.frame : "order_board", (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 1.1, "shadowed", 0, "station");
       if (el) { el.dataset.station = tile.station; el.dataset.tileId = tile.id; }
+    }
+    // Stage 5：斷橋（橫跨河；未修＝broken 半透明、修好＝完整木橋）
+    const repaired = !!(state.flags && state.flags.bridgeRepaired);
+    for (const tile of state.map.tiles) {
+      if (!tile.bridge) continue;
+      const el = addObjectPx(obStatic, "terrain", "bridge_h", (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE, repaired ? "" : "broken", 0, "bridge");
+      if (el) { el.dataset.tileId = tile.id; el.dataset.repaired = repaired ? "1" : "0"; }
+    }
+    // Stage 5：事件點（東林古樹，地標）
+    for (const tile of state.map.tiles) {
+      if (!tile.event) continue;
+      const el = addObjectPx(obStatic, "structures", "oak", (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 2.0, "shadowed", 0, "event-point");
+      if (el) { el.dataset.event = tile.event; el.dataset.tileId = tile.id; }
     }
   }
   // ---- 地形 autotile：依鄰格選 center/edge/corner，破除方塊感 ----
@@ -707,6 +743,9 @@
     if (tile.station) { useStation(tile); updateMap(now()); return; }
     // 多格建築/結構：走過去互動（雞舍/畜舍收集、市集賣出、農舍歇息）
     if (tile.structureId) { useStructure(tile); updateMap(now()); return; }
+    // Stage 5：斷橋（走過去修橋 / 過橋）、事件點（走過去觸發）
+    if (tile.bridge) { useBridge(tile); updateMap(now()); return; }
+    if (tile.event) { useEvent(tile); updateMap(now()); return; }
 
     const act = actionTargetFor(tool, tile);
     if (act.invalid) { toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
@@ -766,6 +805,50 @@
     }
     updateMap(now());
   }
+  // Stage 5：斷橋 — 已修好則過橋；未修則走到橋邊，條件足夠就修橋（消耗木材/石頭）
+  function useBridge(tile) {
+    if (state.flags.bridgeRepaired) {
+      const path = G.bfsPath(state, state.player.tileId, tile.id);
+      if (path) { spawnRing(tile.id, true); walkPath(path); } else toast("走不到橋上");
+      return;
+    }
+    const plan = G.planMoveTo(state, tile.id); // 橋未修不可走 → 走到西岸相鄰磚
+    if (!plan) { toast("走不到斷橋邊"); return; }
+    spawnRing(tile.id, true);
+    walkPath(plan.path, () => {
+      const stand = G.getTileById(state, plan.standId);
+      state.player.facing = G.facingTo(stand, tile);
+      const chk = G.canRepairBridge(state);
+      if (!chk.ok) {
+        if (chk.reason === "chapter") toast("⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
+        else if (chk.reason === "materials") toast("🪵 修橋需要 木材 " + chk.need.wood + " + 石頭 " + chk.need.stone + "（清樹樁得木材、清石得石頭）");
+        else toast("目前無法修橋");
+        spawnRing(tile.id, false); renderTileContext(); return;
+      }
+      playAction("build", state.player.facing); spawnVfx(state.player.tileId, "soil_dust");
+      const r = G.repairBridge(state, now());
+      if (r.ok) { toast("🌉 斷橋修好了！東林空地解鎖"); buildStaticObjects(); paintGround(); afterChange(true); renderTileContext(); }
+    });
+  }
+  // Stage 5：事件點 — 走過去觸發，首次給一次性獎勵 + 推進故事
+  function useEvent(tile) {
+    const plan = G.planMoveTo(state, tile.id);
+    if (!plan) { toast("先修好斷橋才能過去東林"); spawnRing(tile.id, false); return; }
+    spawnRing(tile.id, true);
+    walkPath(plan.path, () => {
+      const ev = window.EVENTS[tile.event];
+      const r = G.triggerEvent(state, tile.event, now());
+      if (!r.ok) return;
+      if (!r.already && r.reward) {
+        playAction("collect", state.player.facing); spawnVfx(state.player.tileId, "product_pop");
+        let msg = "🌳 " + ev.name + "：";
+        if (r.reward.coins) msg += "+" + fmtNum(r.reward.coins) + " 🪙";
+        if (r.reward.materials) for (const k in r.reward.materials) msg += " +" + r.reward.materials[k] + window.MATERIALS[k].emoji;
+        toast(msg);
+      } else { playAction("use", state.player.facing); toast("🌳 " + ev.name + "：" + ev.desc); }
+      afterChange(true); renderTileContext();
+    });
+  }
   function resolveStation(st) {
     const t = now();
     if (st.effect === "orders") {
@@ -812,6 +895,9 @@
       toast(`${crop.emoji}${crop.name}・${prog.ready ? "✅可收成" : "⏳" + fmtTime(prog.remainingMs)}${prog.wet ? "・💧濕土" : ""}`);
     } else if (tile.station) { const s = window.STATIONS[tile.station]; toast("🏷️ " + s.name + "・" + s.desc); }
     else if (tile.structureId) { const s = G.structureAt(state, tile.id); toast("🏠 " + (s ? s.name : "建築") + "・點一下走過去互動"); }
+    else if (tile.bridge) { toast(state.flags.bridgeRepaired ? "🌉 木橋・通往東林空地" : "🌉 斷橋・走過去用木材石頭修復"); }
+    else if (tile.event) { const ev = window.EVENTS[tile.event]; toast("🌳 " + ev.name + "・" + ev.desc); }
+    else if (tile.region === "east" && !state.flags.bridgeRepaired) { toast("⛓️ 東林封鎖中・先修好斷橋才能進入"); }
     else if (tile.object) { const o = window.OBSTACLES[tile.object]; toast(`${o.emoji}${o.name}・${o.desc}`); }
     else { toast(`${terr.name}・${terr.desc}`); }
   }
@@ -911,6 +997,38 @@
         <div class="tc-desc">${s && s.interaction === "shop" ? "走過去把庫存賣給市集攤。" : "走過去看看農場概況、稍作歇息。"}</div>
         <div class="tc-actions"><button class="btn buy small" id="useStrBtn">走過去</button></div>`;
       $("useStrBtn").onclick = () => useStructure(tile);
+      return;
+    }
+    // 0.7) Stage 5：斷橋（修橋 / 過橋）
+    if (tile.bridge) {
+      if (state.flags.bridgeRepaired) {
+        box.innerHTML = `<div class="tc-title">🌉 木橋</div><div class="tc-desc">已修復，通往東林空地。點一下走過去。</div>
+          <div class="tc-actions"><button class="btn buy small" id="useBridgeBtn">走過去</button></div>`;
+      } else {
+        const chk = G.canRepairBridge(state);
+        const cost = window.BRIDGE_COST;
+        const costTxt = `🪵${cost.wood} 🪨${cost.stone}`;
+        const why = chk.ok ? "" : chk.reason === "chapter" ? "（需先完成序章 6/6）" : chk.reason === "materials" ? "（建材不足）" : "";
+        box.innerHTML = `<div class="tc-title">🌉 斷橋</div>
+          <div class="tc-desc">河上的橋斷了。走過去用建材修復，打通東林封鎖區。需 ${costTxt}${why}</div>
+          <div class="tc-actions"><button class="btn buy small" id="useBridgeBtn" ${chk.ok ? "" : "disabled"}>走過去修橋（${costTxt}）</button></div>`;
+      }
+      $("useBridgeBtn").onclick = () => useBridge(tile);
+      return;
+    }
+    // 0.8) Stage 5：事件點（東林古樹）
+    if (tile.event) {
+      const ev = window.EVENTS[tile.event];
+      const claimed = state.flags.eventsClaimed && state.flags.eventsClaimed[tile.event];
+      box.innerHTML = `<div class="tc-title">🌳 ${ev.name}</div><div class="tc-desc">${ev.desc}${claimed ? "（已探索）" : ""}</div>
+        <div class="tc-actions"><button class="btn buy small" id="useEventBtn">走過去</button></div>`;
+      $("useEventBtn").onclick = () => useEvent(tile);
+      return;
+    }
+    // 0.9) Stage 5：東林封鎖區（未修橋）
+    if (tile.region === "east" && !state.flags.bridgeRepaired) {
+      box.innerHTML = `<div class="tc-title">⛓️ 東林（封鎖中）</div>
+        <div class="tc-desc">這片東邊的林地被河隔開了。先修好斷橋才能進入探索。</div>`;
       return;
     }
     // 1) 有建築（雞舍/畜舍）→ 建築/動物管理

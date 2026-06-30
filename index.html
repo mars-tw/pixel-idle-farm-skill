@@ -185,6 +185,10 @@
   .story-progress-head b { color: #3f6f2c; font-size: 13px; }
   .story-progress-track { position: relative; height: 8px; overflow: hidden; border-radius: 999px; background: rgba(127,99,48,.2); box-shadow: inset 0 1px 1px rgba(78,51,20,.22); }
   .story-progress-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #6fb54b, #ffd36a); transition: width .22s ease; }
+  /* Stage 5：第二章探索區塊 */
+  .chapter2 { margin-top: 12px; padding-top: 11px; border-top: 1.5px dashed var(--border-d); }
+  .chapter2 .story-kicker { color: #2b6f8a; }
+  .chapter2-progress .story-progress-track i { background: linear-gradient(90deg, #6fb1d6, #b7e36a); }
   .quest-list { display: grid; gap: 7px; margin-top: 10px; }
   .quest { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #4d402e;
     padding: 8px 9px; background: rgba(255,255,255,.56); border: 1.5px solid rgba(194,173,130,.72); border-radius: 10px; }
@@ -281,10 +285,15 @@
     background: rgba(58,44,20,.5); right: 4px; bottom: 4px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.28); }
   .gtile.locked::before { content: ""; position: absolute; width: 5px; height: 5px; border: 1.5px solid rgba(58,44,20,.5);
     border-bottom: none; border-radius: 5px 5px 0 0; right: 5.5px; bottom: 9px; }
+  /* Stage 5：東林封鎖區（未修橋）— 整片壓暗 + 斜紋，表示尚未解鎖 */
+  .gtile.locked-area { filter: brightness(.6) saturate(.72); cursor: not-allowed; }
+  .gtile.locked-area::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(45deg, rgba(30,22,8,.16) 0 6px, rgba(30,22,8,0) 6px 12px); }
   /* y-sort 物件 sprite（建築/障礙/作物/動物/站點），z-index = 腳底 baseline */
   .ob { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%;
     pointer-events: none; }
   .ob.shadowed { filter: drop-shadow(0 2px 2px rgba(0,0,0,.28)); }
+  .ob.broken { opacity: .5; filter: grayscale(.45) brightness(.85); }  /* Stage 5：斷橋未修 */
   .ob-bar { position: absolute; height: 4px; background: rgba(0,0,0,.42); border-radius: 3px; overflow: hidden; z-index: 8000; }
   .ob-bar > i { display: block; height: 100%; background: linear-gradient(90deg, #b6e36a, #6ec04a); }
   .ob-dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ffe27a;

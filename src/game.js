@@ -508,7 +508,9 @@
   // 可站立：soil/grass/path 且無障礙、無建築/結構、無站點、非水、未明確阻擋
   function isWalkable(state, tile) {
     if (!tile) return false;
-    if (tile.terrain === "water") return false;
+    const repaired = !!(state.flags && state.flags.bridgeRepaired);
+    if (tile.terrain === "water") return tile.bridge && repaired; // 修好的斷橋可走，其餘水域不可
+    if (tile.region === "east" && !repaired) return false;        // 東林封鎖區：修橋前不可進
     if (tile.object) return false;
     if (tile.station) return false;
     if (tile.blocked) return false;       // 多格建築 footprint
@@ -629,6 +631,9 @@
     if (q.id === "first_harvest") return ((state.stats.harvested || {}).wheat || 0) > 0;
     if (q.id === "first_delivery") return (state.stats.fulfilledOrders || 0) > 0 || q.objective === event;
     if (q.id === "clear_old_path") return (state.stats.cleared || 0) > 0 || q.objective === event;
+    // 第二章（Stage 5）
+    if (q.id === "repair_bridge") return !!(state.flags && state.flags.bridgeRepaired);
+    if (q.id === "explore_new_area") return !!(state.flags && state.flags.eventsClaimed && state.flags.eventsClaimed.east_clearing) || q.objective === event;
     return q.trigger === event || q.objective === event;
   }
   function syncStoryProgress(state, event) {
@@ -658,6 +663,8 @@
     const m = q.marker;
     if (m.kind === "station") { const t = state.map.tiles.find((tl) => tl.station === m.type); return t ? t.id : null; }
     if (m.kind === "obstacle") { const t = state.map.tiles.find((tl) => tl.object === m.object); return t ? t.id : null; }
+    if (m.kind === "bridge") { const t = state.map.tiles.find((tl) => tl.bridge); return t ? t.id : null; }
+    if (m.kind === "event") { const t = state.map.tiles.find((tl) => tl.event === m.event); return t ? t.id : null; }
     if (m.kind === "soil") {
       const active = activePlotCount(state);
       for (const t of state.map.tiles) {
@@ -670,6 +677,50 @@
       return f ? f.id : null;
     }
     return null;
+  }
+
+  // ---------- Stage 5：世界探索（橋 / 封鎖區 / 事件點）----------
+  function bridgeTile(state) { return state.map.tiles.find((t) => t.bridge) || null; }
+  function eventTile(state, eventId) { return state.map.tiles.find((t) => t.event === eventId) || null; }
+  // 序章（第一章）是否全完成（修橋解鎖條件之一）
+  function chapter1Done(state) {
+    const ids = C.PROLOGUE_QUESTS || [];
+    const done = (state.story && state.story.completed) || {};
+    return ids.length > 0 && ids.every((id) => done[id]);
+  }
+  // 修橋條件：序章 6/6 + 木材/石頭足夠（用真資源，非按面板）
+  function canRepairBridge(state) {
+    if (!state.flags) return { ok: false, reason: "flags" };
+    if (state.flags.bridgeRepaired) return { ok: false, reason: "done" };
+    if (!chapter1Done(state)) return { ok: false, reason: "chapter", need: C.BRIDGE_COST };
+    const cost = C.BRIDGE_COST || {};
+    for (const k in cost) if ((state.materials[k] || 0) < cost[k]) return { ok: false, reason: "materials", need: cost };
+    return { ok: true, need: C.BRIDGE_COST };
+  }
+  function repairBridge(state, now) {
+    const chk = canRepairBridge(state); if (!chk.ok) return chk;
+    const cost = C.BRIDGE_COST || {};
+    for (const k in cost) state.materials[k] = (state.materials[k] || 0) - cost[k];
+    state.flags.bridgeRepaired = true;
+    const story = syncStoryProgress(state, "repair_bridge"); // 推進第二章
+    return { ok: true, story, cost };
+  }
+  // 走到事件點：首次給一次性獎勵 + 推進故事
+  function triggerEvent(state, eventId, now) {
+    const ev = (C.EVENTS || {})[eventId]; if (!ev) return { ok: false, reason: "unknown" };
+    if (!state.flags.eventsClaimed) state.flags.eventsClaimed = {};
+    const already = !!state.flags.eventsClaimed[eventId];
+    let reward = null;
+    if (!already) {
+      reward = ev.reward || null;
+      if (reward) {
+        if (reward.coins) { state.coins += reward.coins; state.stats.totalCoinsEarned = (state.stats.totalCoinsEarned || 0) + reward.coins; }
+        if (reward.materials) for (const k in reward.materials) state.materials[k] = (state.materials[k] || 0) + reward.materials[k];
+      }
+      if (ev.once) state.flags.eventsClaimed[eventId] = true;
+    }
+    const story = syncStoryProgress(state, "reach_event");
+    return { ok: true, reward, already, story };
   }
 
   // ---------- 離線進度 ----------
@@ -762,6 +813,8 @@
     getTileById, getTileXY, isWalkable, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
+    // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
+    bridgeTile, eventTile, chapter1Done, canRepairBridge, repairBridge, triggerEvent,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

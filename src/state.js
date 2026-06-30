@@ -44,8 +44,12 @@
     for (let y = 0; y < layout.length; y++) {
       for (let x = 0; x < layout[y].length; x++) {
         const ch = layout[y][x];
-        const obstacle = C.OBSTACLE_CODE[ch] || null;
-        const terrain = obstacle ? "grass" : (C.TERRAIN_CODE[ch] || "grass");
+        // Stage 5：B=斷橋（水上、修好才可走）、E=事件點（草地上）
+        let terrain, obstacle = null, bridge = false, event = null;
+        if (ch === "B") { terrain = "water"; bridge = true; }
+        else if (ch === "E") { terrain = "grass"; event = "east_clearing"; }
+        else { obstacle = C.OBSTACLE_CODE[ch] || null; terrain = obstacle ? "grass" : (C.TERRAIN_CODE[ch] || "grass"); }
+        const region = x >= C.EAST_REGION_MIN_X ? "east" : null; // 東林封鎖區（修橋後解鎖）
         tiles.push({
           id: "t" + x + "_" + y, x, y, terrain,
           object: obstacle,       // rock/stump/bush/tree（障礙，蓋在草地上）
@@ -53,6 +57,9 @@
           structureId: null,      // 多格建築 footprint
           blocked: false,         // 不可走（水/障礙/建築 footprint 之外的明確阻擋）
           buildingId: null,       // 對應 state.buildings（動物家）
+          bridge,                 // Stage 5：斷橋磚（修好後可走）
+          event,                  // Stage 5：事件點 id（走過去觸發）
+          region,                 // Stage 5：east＝東林封鎖區
           plotIndex: terrain === "soil" ? plotIndex++ : null,
         });
       }
@@ -111,6 +118,8 @@
       interaction: { tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null },
       // ===== 故事任務（地圖驅動）=====
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
+      // ===== Stage 5：世界探索旗標（修橋/事件）=====
+      flags: { bridgeRepaired: false, eventsClaimed: {} },
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} },
     };
   }
@@ -151,6 +160,8 @@
     }
     merged.camera = Object.assign({ x: 0, y: 0, followPlayer: true }, state.camera);
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
+    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {} }, state.flags);
+    merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
     merged.version = C.GAME.version;
     return merged;

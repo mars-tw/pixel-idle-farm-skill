@@ -193,10 +193,11 @@ const TOOLS = {
 const TOOL_ORDER = ["hand", "water", "clear", "build", "inspect"];
 const MOISTURE_MUL = 0.75;            // 濕土：當輪成長時間 ×0.75（更快）
 
-// ===== Stage 4 世界（16×12，camera 跟隨，地圖為主畫面）=====
-// 用程序化建構器產生地碼（比手打 16×12 字元可靠）。
-// S=農土 g=草地 p=步道 w=水域 R=石 U=樹樁 b=灌木 T=大樹(遮擋)
-const MAP_W = 16, MAP_H = 12;
+// ===== Stage 4/5 世界（22×12，camera 跟隨，地圖為主畫面）=====
+// 西側 0–15＝主農場；col16＝河（含斷橋）；cols17–21＝東林空地（封鎖區，修橋後解鎖）。
+// S=農土 g=草地 p=步道 w=水域 R=石 U=樹樁 b=灌木 T=大樹(遮擋) B=斷橋 E=事件點
+const MAP_W = 22, MAP_H = 12;
+const EAST_REGION_MIN_X = 17;         // x ≥ 此值＝東林封鎖區（state.flags.bridgeRepaired 後可走）
 const TILE_PX = 48;                   // 邏輯磚像素邊長（場景以像素佈局 + camera）
 function buildV4Layout() {
   const g = Array.from({ length: MAP_H }, () => Array(MAP_W).fill("g"));
@@ -215,6 +216,13 @@ function buildV4Layout() {
   set(3, 6, "R"); set(10, 5, "R");                   // 巨石
   set(6, 10, "b"); set(13, 11, "b");                 // 灌木
   set(8, 8, "U");                                    // 樹樁（擋住通往南區的舊路 → clear_old_path 任務）
+  // ===== Stage 5：河 + 斷橋 + 東林封鎖區 =====
+  for (let y = 0; y <= 11; y++) set(16, y, "w");     // col16 整條河（阻斷東西）
+  hline(4, 14, 15);                                  // 把 col14 主道往東接到河西岸 (15,4)
+  set(16, 4, "B");                                   // 斷橋（修好才可走過河）
+  hline(4, 17, 20);                                  // 東岸登陸 (17,4) → 東林步道
+  set(20, 4, "E");                                   // 事件點：東林古樹
+  set(18, 2, "T"); set(21, 8, "T"); set(19, 9, "b"); // 東林裝飾（樹/灌木）
   return g.map((row) => row.join(""));
 }
 const MAP_LAYOUT = buildV4Layout();
@@ -222,6 +230,16 @@ const TERRAIN_CODE = { S: "soil", g: "grass", p: "path", w: "water" };
 const OBSTACLE_CODE = { R: "rock", U: "stump", b: "bush", T: "tree" };
 const PLAYER_START = { x: 7, y: 5 };  // 主道中央，可達田地/站點/建築
 const MOVE_MS = 200;                  // 每格移動 tween 毫秒
+// ===== Stage 5：修橋成本 + 事件點 =====
+const BRIDGE_COST = { wood: 6, stone: 4 };   // 修橋消耗（清樹樁得木材、清石得石頭）
+const EVENTS = {
+  east_clearing: {
+    id: "east_clearing", name: "東林古樹", tileChar: "E",
+    desc: "穿過修好的斷橋，東林深處有一棵古樹。",
+    reward: { coins: 120, materials: { wood: 3 } },   // 首次抵達一次性獎勵
+    once: true,
+  },
+};
 
 // ===== 多格建築/結構（單一大型 sprite 覆蓋多格 footprint，加遮擋）=====
 // footprint = w×h 磚；anchorTile = 互動站立基準（玩家走到相鄰）；sheet/frame 為素材；
@@ -268,10 +286,20 @@ const QUESTS = {
     desc: "走到訂單看板，交付一張市集訂單。", next: "clear_old_path",
     objective: "deliver", marker: { kind: "station", type: "order_board" } },
   clear_old_path:    { id: "clear_old_path", title: "清開荒地舊路",
-    desc: "用清除工具清掉擋路的樹樁，打通南邊。", next: null,
-    objective: "clear", marker: { kind: "obstacle", object: "stump" } },
+    desc: "用清除工具清掉擋路的樹樁，打通南邊。", next: "repair_bridge",
+    objective: "clear", marker: { kind: "obstacle", object: "stump" }, chapter: 1 },
+  // ===== 第二章：世界可探索（Stage 5）=====
+  repair_bridge:     { id: "repair_bridge", title: "修復東邊斷橋",
+    desc: "走到河上的斷橋，用木材 6、石頭 4 修好它（清樹樁/石頭可得建材）。", next: "explore_new_area",
+    objective: "repair_bridge", marker: { kind: "bridge" }, chapter: 2 },
+  explore_new_area:  { id: "explore_new_area", title: "探索東林空地",
+    desc: "過橋走到東林古樹，看看封鎖已久的東邊有什麼。", next: null,
+    objective: "reach_event", marker: { kind: "event", event: "east_clearing" }, chapter: 2 },
 };
 const FIRST_QUEST = "intro_reopen_farm";
+// 章節任務分組（故事面板：第一章完成度 X/6，第二章 X/2 另計）
+const PROLOGUE_QUESTS = ["intro_reopen_farm", "plant_wheat", "first_water", "first_harvest", "first_delivery", "clear_old_path"];
+const CHAPTER2_QUESTS = ["repair_bridge", "explore_new_area"];
 
 const MAP_DEFAULT = { width: MAP_W, height: MAP_H };
 // 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
@@ -288,6 +316,7 @@ const CONFIG = {
   MAP_LAYOUT, TERRAIN_CODE, OBSTACLE_CODE, PLAYER_START, MOVE_MS, FACING_ROW,
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
+  EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS,
 };
 if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
 if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;
