@@ -852,7 +852,6 @@
   // line 會換成委託台詞，並在回傳值附上 request 唯讀投影供 UI 判斷是否顯示交付按鈕。
   function npcDialogue(state, npcId, lineIdx) {
     const npc = (C.NPCS || {})[npcId]; if (!npc) return null;
-    ensureNpcRequestState(state);
     const order = ["ch3done", "ch2done", "bridge", "ch1done", "start"];
     const phase = npcPhase(state);
     // 取目前階段的台詞；若該階段未定義，往較早階段回退
@@ -865,7 +864,7 @@
     let line = lines[idx];
     let request = null;
     const cfg = (C.NPC_REQUESTS || {})[npcId];
-    const req = state.npcRequests[npcId];
+    const req = (state.npcRequests || {})[npcId]; // 純讀取，委託狀態的初始化交給 generate/fulfill/decline/migrate
     if (req) {
       const itemId = Object.keys(req.wants)[0];
       const itemName = (getItemDef(itemId) || {}).name || itemId;
@@ -900,7 +899,9 @@
     if (npcRequestPool(state, npcId).length === 0) return { ok: false, reason: "no_pool" };
     return { ok: true };
   }
-  // 生成一張新委託（單一品項，數量比市集訂單略少，維持「小委託」份量感）
+  // 生成一張新委託（單一品項，數量比市集訂單略少，維持「小委託」份量感）。
+  // 報酬基準用 sellUnitValue（吃當下 sellBonus/成就/天氣），不是原始 sellValue，
+  // 否則玩家升級市集人脈或遇到豔陽後，直接賣會比交付委託划算，委託就變成虧本互動。
   function generateNpcRequest(state, npcId, now, rng) {
     const chk = canRequestFrom(state, npcId, now); if (!chk.ok) return null;
     const cfg = C.NPC_REQUESTS[npcId];
@@ -908,8 +909,7 @@
     const itemId = rngPick(rng, pool);
     const [mn, mx] = ORDER_QTY[itemId] || [2, 5];
     const qty = Math.max(1, Math.round(rngInt(rng, mn, mx) * 0.6));
-    const def = getItemDef(itemId);
-    const baseValue = (def ? def.sellValue : 0) * qty;
+    const baseValue = sellUnitValue(state, itemId, now) * qty;
     const req = {
       id: "req_" + npcId + "_" + now,
       npcId,
@@ -935,6 +935,7 @@
     for (const [id, qty] of Object.entries(req.wants)) {
       state.storage.items[id] -= qty;
       if (state.storage.items[id] <= 0) delete state.storage.items[id];
+      if (isQualityItem(id)) state.stats.qualitySold = (state.stats.qualitySold || 0) + qty;
     }
     state.coins += req.rewardCoins; state.stats.totalCoinsEarned += req.rewardCoins;
     addXp(state, req.rewardXp);
@@ -945,6 +946,16 @@
     delete state.npcRequests[npcId];
     checkAchievements(state);
     return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId };
+  }
+  // 放棄委託：清掉這張委託並跟交付一樣進冷卻——冷卻要一致，否則玩家能用「棄了重抽」
+  // 無限刷到好賠率的品項，失去節流意義；用來解掉抽到「幾乎摸不到」品項時的卡關委託。
+  function declineNpcRequest(state, npcId, now) {
+    ensureNpcRequestState(state);
+    if (!state.npcRequests[npcId]) return { ok: false, reason: "none" };
+    delete state.npcRequests[npcId];
+    if (!state.npcRequestLog[npcId]) state.npcRequestLog[npcId] = { lastRequestAt: 0, fulfilledCount: 0 };
+    state.npcRequestLog[npcId].lastRequestAt = now;
+    return { ok: true };
   }
 
   // ---------- 離線進度 ----------
@@ -1047,7 +1058,7 @@
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
     // Stage 10：NPC 重複委託
-    ensureNpcRequestState, npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest,
+    ensureNpcRequestState, npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest, declineNpcRequest,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,

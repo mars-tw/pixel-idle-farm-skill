@@ -1142,24 +1142,40 @@
       const d = G.npcDialogue(state, tile.npc, (npcLineIdx[tile.npc] || 1) - 1);
       const seen = state.story.dialogueSeen && state.story.dialogueSeen[tile.npc];
       const req = d && d.request && d.request.wants ? d.request : null; // 只有進行中委託才有 wants
+      const log = (state.npcRequestLog || {})[tile.npc];
+      const doneCount = (log && log.fulfilledCount) || 0;
       const reqHtml = req ? `<div class="npc-request" data-audit="npc-request" data-npc="${tile.npc}">
           <div class="nr-wants">${Object.entries(req.wants).map(([id, q]) => {
             const have = state.storage.items[id] || 0;
             return `<span class="w ${have >= q ? "have" : "miss"}">${itemEmoji(id)} ${have}/${q}</span>`;
           }).join("")}</div>
           <div class="nr-reward">🪙 ${fmtNum(req.rewardCoins)} · ⭐ ${req.rewardXp}</div>
-          <button class="btn buy small" id="fulfillReqBtn" ${req.canDeliver ? "" : "disabled"}>交付委託</button>
+          <div class="nr-actions">
+            <button class="btn buy small" id="fulfillReqBtn" ${req.canDeliver ? "" : "disabled"}>交付委託</button>
+            <button class="btn small ghost" id="declineReqBtn">放棄</button>
+          </div>
         </div>` : "";
       box.innerHTML = `<div class="tc-title">🧑 ${npc.name}</div>
         <div class="tc-desc">${npc.title}${seen && d ? "：「" + d.line + "」" : "・走過去聽聽他要說什麼"}</div>
         ${reqHtml}
+        ${doneCount > 0 ? `<div class="nr-history">已幫忙完成 ${doneCount} 次委託</div>` : ""}
         <div class="tc-actions"><button class="btn buy small" id="talkNpcBtn">${seen ? "再聊一句" : "走過去交談"}</button></div>`;
       $("talkNpcBtn").onclick = () => useNpc(tile);
       if (req) {
         $("fulfillReqBtn").onclick = () => {
           const r = G.fulfillNpcRequest(state, tile.npc, now());
-          if (r.ok) { toast("🎁 " + npc.name + " 的委託完成！+" + fmtNum(r.coins) + " 🪙"); playAction("use", state.player.facing); afterChange(true); renderTileContext(); }
-          else toast("作物/產物不足，無法交付");
+          if (r.ok) {
+            const cfg = (window.NPC_REQUESTS || {})[tile.npc];
+            const doneLine = (cfg && cfg.flavorDone && cfg.flavorDone[0]) || "謝謝你！";
+            toast("🎁 " + npc.name + " 的委託完成！+" + fmtNum(r.coins) + " 🪙");
+            pushDialogueLog({ name: npc.name, line: doneLine });
+            playAction("use", state.player.facing); afterChange(true); renderTileContext();
+          } else toast("作物/產物不足，無法交付");
+        };
+        $("declineReqBtn").onclick = () => {
+          G.declineNpcRequest(state, tile.npc, now());
+          toast("已放棄這張委託");
+          afterChange(true); renderTileContext();
         };
       }
       return;

@@ -500,6 +500,56 @@ console.log("\n== 15b. Stage 10.1：舊存檔補齊 NPC 委託欄位 ==");
   assert(m.stats.npcRequestsCompleted === 0, "舊存檔補齊 stats.npcRequestsCompleted");
 }
 
+console.log("\n== 15c. Stage 10 審核修正：品質委託計數、放棄委託、報酬吃 sellBonus ==");
+{
+  const st = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).forEach((id) => (st.story.completed[id] = true));
+
+  // 品質分級品項交付要計入 qualitySold（原本只有 sellItem/fulfillOrder 有算，NPC 委託漏了）
+  st.stats.collected.egg_good = 1;
+  const req1 = G.generateNpcRequest(st, "elder", T0);
+  assert(!!req1, "elder 委託池含品質分級品項時可正常生成");
+  const itemId1 = Object.keys(req1.wants)[0];
+  st.storage.items[itemId1] = req1.wants[itemId1];
+  const qsBefore = st.stats.qualitySold || 0;
+  const r1 = G.fulfillNpcRequest(st, "elder", T0 + 1);
+  assert(r1.ok === true, "交付含品質品項的委託成功");
+  if (itemId1.endsWith("_good") || itemId1.endsWith("_premium")) {
+    assert((st.stats.qualitySold || 0) > qsBefore, `交付品質分級品項後 qualitySold 增加（實際 ${st.stats.qualitySold}）`);
+  }
+
+  // 放棄委託：清掉進行中委託，並跟交付一樣進冷卻（不能無成本棄了重抽找更好賠率）
+  // 冷卻要等 T0+1（上一張交付時間）過了 NPC_REQUEST_COOLDOWN_MS 才能再生成
+  const T_ready = T0 + 1 + C.NPC_REQUEST_COOLDOWN_MS + 10;
+  const req2 = G.generateNpcRequest(st, "elder", T_ready);
+  assert(!!req2, "冷卻已過後可再生成新委託（放棄測試前置）");
+  const dec = G.declineNpcRequest(st, "elder", T_ready);
+  assert(dec.ok === true, "declineNpcRequest 成功");
+  assert(!st.npcRequests.elder, "放棄後委託從 state.npcRequests 移除");
+  const chkAfterDecline = G.canRequestFrom(st, "elder", T_ready);
+  assert(chkAfterDecline.ok === false && chkAfterDecline.reason === "cooldown", `放棄後立即詢問應在冷卻中（實際 reason=${chkAfterDecline.reason}）`);
+  assert(G.declineNpcRequest(st, "elder", T_ready).ok === false, "沒有進行中委託時 declineNpcRequest 回傳 ok=false");
+
+  // 報酬基準應該吃 sellBonus 升級（不是原始 sellValue），否則升了市集人脈後直接賣反而更划算
+  // 用 egg（起始雞舍已預置雞，unlockedProducts 只會列出玩家「實際擁有的動物」對應的產品，
+  // 沒有牛/羊/蜂就不會列出 milk/wool/honey，即使 stats.collected 裡有記錄也一樣）
+  const stPlain = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).forEach((id) => (stPlain.story.completed[id] = true));
+  stPlain.stats.collected.egg = 1;
+  const stBoosted = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).forEach((id) => (stBoosted.story.completed[id] = true));
+  stBoosted.stats.collected.egg = 1;
+  stBoosted.upgrades.sellBonus = 1; // 市集人脈 Lv1：+15% 售價
+  // 兩邊 elder pool 都只有 egg 一項可選（都只收集過 egg），必然抽到同一品項；
+  // rng 固定回傳 0.5 讓兩邊抽到的數量也一致，才能單獨看出 sellBonus 對報酬的影響
+  const fixedRng = () => 0.5;
+  const reqPlain = G.generateNpcRequest(stPlain, "elder", T0, fixedRng);
+  const reqBoosted = G.generateNpcRequest(stBoosted, "elder", T0, fixedRng);
+  assert(!!reqPlain && !!reqBoosted, "兩邊都能成功生成委託（比較報酬前置）");
+  assert(reqBoosted.rewardCoins > reqPlain.rewardCoins,
+    `sellBonus 升級後委託報酬跟著提升（${reqPlain.rewardCoins} → ${reqBoosted.rewardCoins}），報酬基準吃當下 sellUnitValue`);
+}
+
 console.log("");
 if (failed === 0) { console.log("✅ 全部 MVP2 系統測試通過"); process.exit(0); }
 else { console.error(`❌ ${failed} 項失敗`); process.exit(1); }
