@@ -72,6 +72,7 @@ async function run() {
   const base = "http://127.0.0.1:" + port + "/index.html";
   const browser = await chromium.launch();
 
+  try {
   for (const vp of [{ w: 1280, h: 900, name: "桌面 1280x900" }, { w: 390, h: 844, name: "手機 390x844" }]) {
     console.log("\n== 視窗 " + vp.name + " ==");
     const page = await browser.newPage({ viewport: { width: vp.w, height: vp.h } });
@@ -496,9 +497,10 @@ async function run() {
 
     await page.close();
   }
-
-  await browser.close();
-  server.close();
+  } finally {
+    await browser.close();
+    server.close();
+  }
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
   console.log("\n✅ Stage 4+5+6+7 RPG v4 E2E 全部通過");
 }

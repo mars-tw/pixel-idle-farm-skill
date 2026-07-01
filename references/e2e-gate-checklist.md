@@ -91,10 +91,11 @@ async function run() {
 run().catch((err) => { console.error(err); process.exit(1); }); // 這行不能漏，漏了整支腳本不會真的執行
 ```
 
-**Windows 路徑陷阱**：`ROOT` 一定要用 `path.resolve(__dirname, "..")`，不要自己拼字串。
-`path.join` 在 Windows 回傳反斜線路徑，如果你拿它跟 URL 解碼出來的正斜線路徑做
-`fp.startsWith(ROOT)` 比對，會永遠比對失敗（本機開發時看起來像 404，很難第一時間
-意識到是路徑分隔符號問題）。
+**路徑防護要用 `path.relative` 判斷 containment，不要用字串前綴比對**：`ROOT` 一定要用
+`path.resolve(__dirname, "..")`，不要自己拼字串。判斷「請求的檔案是否還在 ROOT 底下」
+時，也不要用 `fp.startsWith(ROOT)`——這是字串比對，`"C:\repo-evil"` 這種同前綴的鄰居
+目錄會被誤判成在 `"C:\repo"` 底下。改用 `path.relative(ROOT, fp)`，只要結果不是以
+`".."` 開頭、也不是絕對路徑，才代表真的沒逃出 `ROOT`（見上方樣板的 `startServer`）。
 
 ## 怎麼延伸現有 E2E 加新斷言
 
