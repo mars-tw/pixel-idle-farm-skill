@@ -25,9 +25,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function startServer() {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
-      let p = decodeURIComponent(req.url.split("?")[0]); if (p === "/") p = "/index.html";
-      const fp = path.join(ROOT, p);
-      if (!fp.startsWith(ROOT) || !fs.existsSync(fp) || fs.statSync(fp).isDirectory()) { res.writeHead(404); res.end(); return; }
+      const pathname = decodeURIComponent(new URL(req.url, "http://local").pathname);
+      const safePath = pathname === "/" ? "/index.html" : pathname;
+      const fp = path.resolve(ROOT, "." + safePath);
+      const rel = path.relative(ROOT, fp);
+      // path.relative 而非 fp.startsWith(ROOT)：startsWith 對同前綴的鄰居目錄（如 ROOT 是
+      // "C:\repo" 時的 "C:\repo-evil"）會誤判為在 ROOT 底下
+      if (rel.startsWith("..") || path.isAbsolute(rel) || !fs.existsSync(fp) || fs.statSync(fp).isDirectory()) { res.writeHead(404); res.end(); return; }
       res.writeHead(200, { "Content-Type": MIME[path.extname(fp)] || "application/octet-stream" });
       fs.createReadStream(fp).pipe(res);
     });

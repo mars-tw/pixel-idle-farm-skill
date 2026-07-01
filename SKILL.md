@@ -55,31 +55,44 @@ NPC、動物照護、品質經濟都涵蓋在內），不需要先讀 README 的
 
 ## Reference 導覽
 
-**可重用方法文件**（跨專案適用的做法，新專案照著讀就能複製這套流程）：
+**可重用方法文件**（跨專案適用的做法，新專案照著讀就能複製這套流程，內容不綁定
+這個遊戲的具體設定）：
 
 | 文件 | 用途 |
 |---|---|
-| `references/stage-gate-playbook.md` | Stage Gate 節奏、次版本號慣例、多 agent 分工與「先驗證再動手」 |
-| `references/world-interaction-systems.md` | 世界解鎖區、NPC 對話、動物照護、品質經濟——四個系統的通用 recipe |
-| `references/art-pipeline-v4.md` | gpt-image-2 生圖 → 切割 → 驗證的完整產線與常見陷阱 |
-| `references/e2e-gate-checklist.md` | E2E 具體要驗什麼、怎麼延伸現有測試、可複製的樣板程式碼 |
-| `references/implementation-baseline.md` | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |
-| `references/game-design.md` | 核心循環設計細節 |
-| `references/data-model.md` | 資料結構與計算範例 |
-| `references/character-animation.md` | 角色動作切圖規格 |
-| `references/asset-gameplay-integration.md` | 地圖/動物/建築素材如何轉成玩法 |
-| `references/claude-handoff.md` | agent 交接：先讀順序、角色分工、驗收檢查 |
+| [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 節奏、次版本號慣例、多 agent 分工與「先驗證再動手」 |
+| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟——四個系統的通用 recipe |
+| [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 生圖 → 切割 → 驗證的完整產線與常見陷阱 |
+| [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼、怎麼延伸現有測試、可複製的樣板程式碼 |
+| [`references/implementation-baseline.md`](references/implementation-baseline.md) | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |
+| [`references/data-model.md`](references/data-model.md) | 資料結構與計算範例 |
+| [`references/claude-handoff.md`](references/claude-handoff.md) | agent 交接：先讀順序、角色分工、驗收檢查 |
 
 **案例研究／歷史稽核紀錄**（這個專案實際跑過的紀錄，可當範本，但內容是專案特定的
-歷史決策，不是通用方法——新專案不需要讀這些也能規劃 Stage）：
+歷史決策或具體角色/數值設定，不是抽象方法——新專案不需要讀這些也能規劃 Stage；
+讀的時候把裡面的角色名、working title、檔名換成自己專案的東西）：
 
-`production-directive-stage3-rpg-actions.md`、`production-directive-stage4-game-audit.md`、
-`production-directive-rpg-rework.md`、`rpg-action-map-gate.md`、
-`rpg-quality-rework-brief.md`、`playable-map-movement-acceptance.md`、
-`gameplay-interactions-roadmap.md`（Stage 5-7 的舊版路線圖，已被
-`world-interaction-systems.md` 的通用整理取代，留著當歷史對照）、
-`sprite-cutting-method-v3.md`、`art-generation.md`、`asset-production-spec-v2.md`
-（三份都是 v4 產線之前的舊版美術方法，已被 `art-pipeline-v4.md` 取代）。
+- [`references/game-design.md`](references/game-design.md)、
+  [`references/character-animation.md`](references/character-animation.md)、
+  [`references/asset-gameplay-integration.md`](references/asset-gameplay-integration.md)
+  ——本專案實際的遊戲設計/角色美術規格/素材對玩法映射表，方法（核心循環要素、
+  JSON 命名契約、「素材必須接玩法」規則）是通用的，但範例內容（working title、
+  角色 Miri Rowan、`miri-rowan-*.png` 檔名）是這個遊戲的具體決策，抄的時候只抄
+  結構、不要照搬名字。
+- [`references/production-directive-stage3-rpg-actions.md`](references/production-directive-stage3-rpg-actions.md)、
+  [`references/production-directive-stage4-game-audit.md`](references/production-directive-stage4-game-audit.md)、
+  [`references/production-directive-rpg-rework.md`](references/production-directive-rpg-rework.md)、
+  [`references/rpg-action-map-gate.md`](references/rpg-action-map-gate.md)、
+  [`references/rpg-quality-rework-brief.md`](references/rpg-quality-rework-brief.md)、
+  [`references/playable-map-movement-acceptance.md`](references/playable-map-movement-acceptance.md)
+  ——各 Stage 實際的稽核/驗收紀錄。
+- [`references/gameplay-interactions-roadmap.md`](references/gameplay-interactions-roadmap.md)
+  ——Stage 5-7 的舊版路線圖，已被 `world-interaction-systems.md` 的通用整理取代，
+  留著當歷史對照。
+- [`references/sprite-cutting-method-v3.md`](references/sprite-cutting-method-v3.md)、
+  [`references/art-generation.md`](references/art-generation.md)、
+  [`references/asset-production-spec-v2.md`](references/asset-production-spec-v2.md)
+  ——三份都是 v4 產線之前的舊版美術方法，已被 `art-pipeline-v4.md` 取代。
 
 ## 核心不可違反原則
 

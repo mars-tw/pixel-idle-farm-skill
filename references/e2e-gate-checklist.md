@@ -41,10 +41,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function startServer() {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
-      let p = decodeURIComponent(req.url.split("?")[0]); if (p === "/") p = "/index.html";
-      const fp = path.join(ROOT, p);
-      // fp.startsWith(ROOT) 防止 "../" 逃出 repo 根目錄；ROOT 沒用 path.resolve 這裡會永遠比對失敗
-      if (!fp.startsWith(ROOT) || !fs.existsSync(fp) || fs.statSync(fp).isDirectory()) { res.writeHead(404); res.end(); return; }
+      const pathname = decodeURIComponent(new URL(req.url, "http://local").pathname);
+      const safePath = pathname === "/" ? "/index.html" : pathname;
+      const fp = path.resolve(ROOT, "." + safePath);
+      const rel = path.relative(ROOT, fp);
+      // 用 path.relative 判斷而非 fp.startsWith(ROOT)：startsWith 對字串比對，
+      // "C:\repo".startsWith 檢查會誤放行 "C:\repo-evil\..." 這種同前綴的鄰居目錄；
+      // path.relative 算出的相對路徑只要不是以 ".." 開頭，才代表真的沒逃出 ROOT
+      if (rel.startsWith("..") || path.isAbsolute(rel) || !fs.existsSync(fp) || fs.statSync(fp).isDirectory()) {
+        res.writeHead(404); res.end(); return;
+      }
       res.writeHead(200, { "Content-Type": MIME[path.extname(fp)] || "application/octet-stream" });
       fs.createReadStream(fp).pipe(res);
     });
@@ -66,16 +72,23 @@ async function run() {
   const { chromium } = require("playwright");
   const server = await startServer();
   const browser = await chromium.launch();
-  for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {   // 桌機 + 手機都跑同一套斷言
-    const page = await browser.newPage({ viewport: vp });
-    const errors = [];
-    page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
-    page.on("pageerror", (e) => errors.push(e.message));
-    // ...實際斷言...
-    assert(errors.length === 0, "無 console 錯誤 / pageerror");
+  try {
+    for (const vp of [{ w: 1280, h: 900 }, { w: 390, h: 844 }]) {   // 桌機 + 手機都跑同一套斷言
+      const page = await browser.newPage({ viewport: vp });
+      const errors = [];
+      page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+      page.on("pageerror", (e) => errors.push(e.message));
+      // ...實際斷言...
+      assert(errors.length === 0, "無 console 錯誤 / pageerror");
+    }
+  } finally {
+    await browser.close();
+    server.close();
   }
   if (failed > 0) process.exit(1);
 }
+
+run().catch((err) => { console.error(err); process.exit(1); }); // 這行不能漏，漏了整支腳本不會真的執行
 ```
 
 **Windows 路徑陷阱**：`ROOT` 一定要用 `path.resolve(__dirname, "..")`，不要自己拼字串。
