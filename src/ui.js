@@ -610,7 +610,16 @@
     return "grass_center_01";
   }
   // 動態物件（作物 + 狀態、動物、任務標記）每 tick 重建；地面/靜態物件另管。
+  // Stage 9：天氣視覺化——只在天氣真的變了才切 class，避免每個 tick 重啟 CSS 動畫
+  function updateWeatherLayer(t) {
+    const el = $("weatherLayer"); if (!el || !state) return;
+    const wId = G.currentWeather(state, t);
+    if (el.dataset.weather === wId) return;
+    el.dataset.weather = wId;
+    el.className = wId === "clear" ? "" : wId;
+  }
   function updateMap(t) {
+    updateWeatherLayer(t);
     if (!state.map || tileEls.length === 0) return;
     paintGround();
     for (const e of obDyn) e.remove(); obDyn.length = 0;

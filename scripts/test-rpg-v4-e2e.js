@@ -1,5 +1,5 @@
 /* =========================================================================
- * test-rpg-v4-e2e.js — Stage 4–6 RPG 場景 gate E2E（真瀏覽器）
+ * test-rpg-v4-e2e.js — Stage 4–9 RPG 場景 gate E2E（真瀏覽器）
  *
  * 對應 references/production-directive-stage4-game-audit.md：
  *   1. 大世界：地圖 ≥22×12，世界像素 > 視口（camera 可平移）
@@ -9,6 +9,8 @@
  *   5. 故事地圖驅動：序章任務鏈（讀告示→種麥→澆水→收成）逐步推進，地圖任務標記指向目標
  *   6. y-sort 遮擋：角色 z-index = 腳底 baseline，建築/物件依 baseline 分層
  *   7. 390px 無水平溢出、無 console / pageerror
+ *   8. Stage 9：天氣視覺化——rain/sunny 切換時 #weatherLayer 的 class/data-weather 正確跟隨，
+ *      clear 時視覺效果歸零，桌機/手機都不造成水平溢出
  * 執行：node scripts/test-rpg-v4-e2e.js   （需 devDependency: playwright）
  * ========================================================================= */
 const http = require("http");
@@ -492,6 +494,36 @@ async function run() {
     assert(afterSell.qualitySold > 0, `賣出優質品後 qualitySold 增加（${afterSell.qualitySold}）`);
     assert(afterSell.quest === null && afterSell.ch3 === "5/5", `第三章完成（照護完成度 ${afterSell.ch3}）`);
 
+    // 19. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
+    const rainState = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.level = Math.max(st.level, 5); // 天氣 Lv5 解鎖，故事鏈跑到這裡不一定已經到 Lv5
+      st.weather = { id: "rain", untilMs: Date.now() + 999999 };
+      window.__farm.refresh();
+      const el = document.getElementById("weatherLayer");
+      return { cls: el.className, data: el.getAttribute("data-weather"), overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(rainState.cls === "rain" && rainState.data === "rain", `降雨：#weatherLayer 套上 rain（class=${rainState.cls} data-weather=${rainState.data}）`);
+    assert(rainState.overflow <= 2, `降雨疊圖不造成水平溢出（${rainState.overflow}）`);
+
+    const sunnyState = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.weather = { id: "sunny", untilMs: Date.now() + 999999 };
+      window.__farm.refresh();
+      const el = document.getElementById("weatherLayer");
+      return { cls: el.className, data: el.getAttribute("data-weather") };
+    });
+    assert(sunnyState.cls === "sunny" && sunnyState.data === "sunny", `豔陽：#weatherLayer 套上 sunny（class=${sunnyState.cls} data-weather=${sunnyState.data}）`);
+
+    const clearState = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.weather = { id: "clear", untilMs: 0 };
+      window.__farm.refresh();
+      const el = document.getElementById("weatherLayer");
+      return { cls: el.className, data: el.getAttribute("data-weather") };
+    });
+    assert(clearState.cls === "" && clearState.data === "clear", `晴朗：#weatherLayer 清空特效 class（class="${clearState.cls}" data-weather=${clearState.data}）`);
+
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));
 
@@ -502,7 +534,7 @@ async function run() {
     server.close();
   }
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
-  console.log("\n✅ Stage 4+5+6+7 RPG v4 E2E 全部通過");
+  console.log("\n✅ Stage 4-9 RPG v4 E2E 全部通過");
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

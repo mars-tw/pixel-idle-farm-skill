@@ -324,6 +324,26 @@
   .dialogue-log .dlg-row { font-size: 12px; line-height: 1.45; }
   .dialogue-log .dlg-name { font-weight: 850; color: #6c7a32; margin-right: 5px; }
   .dialogue-log .dlg-line { color: #5f503a; }
+  /* Stage 9：天氣視覺化——固定在視口座標的大氣濾鏡層，不隨 camera 平移（是 #mapWorld
+     的手足而非子元素，才不會被世界的 transform 一起搬移）*/
+  #weatherLayer { position: absolute; inset: 0; z-index: 9700; pointer-events: none;
+    opacity: 0; transition: opacity .6s ease; }
+  #weatherLayer.rain, #weatherLayer.sunny { opacity: 1; }
+  #weatherLayer::before, #weatherLayer::after { content: ""; position: absolute; inset: 0; }
+  #weatherLayer.rain::before { background-image: repeating-linear-gradient(115deg,
+      rgba(214,232,255,.55) 0 2px, transparent 2px 34px); opacity: .38; animation: rainFall .5s linear infinite; }
+  #weatherLayer.rain::after { background: linear-gradient(180deg, rgba(40,58,88,.16), rgba(24,36,58,.24));
+    mix-blend-mode: multiply; }
+  @keyframes rainFall { from { background-position: 0 0; } to { background-position: -34px 118px; } }
+  #weatherLayer.sunny::before { background: linear-gradient(160deg, rgba(255,214,140,.22),
+      rgba(255,182,90,.08) 55%, transparent 80%); mix-blend-mode: soft-light; }
+  #weatherLayer.sunny::after { background-image:
+      radial-gradient(60px 60px at 20% 30%, rgba(255,244,200,.35), transparent 70%),
+      radial-gradient(80px 80px at 70% 60%, rgba(255,244,200,.28), transparent 70%),
+      radial-gradient(50px 50px at 45% 80%, rgba(255,244,200,.22), transparent 70%);
+    mix-blend-mode: screen; animation: sunDrift 14s ease-in-out infinite alternate; }
+  @keyframes sunDrift { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 12px -10px, -14px 8px, 8px 10px; } }
+  @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
   /* 動作 VFX（世界內，澆水/塵土/種子/收成/產物環）*/
   #vfxLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9500; }
   .map-vfx { position: absolute; background-repeat: no-repeat; image-rendering: pixelated; transform: translate(-50%, -50%); }
@@ -383,6 +403,7 @@
             <div id="vfxLayer"></div>
             <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
           </div>
+          <div id="weatherLayer" data-audit="weather-layer" data-weather="clear" aria-hidden="true"></div>
         </div>
       </div>
       <!-- 幫手自動化：早期隱藏，升「幫手機器人」後解鎖；初期動作都要走到目標執行 -->

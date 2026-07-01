@@ -50,6 +50,7 @@ RPG 像素放置農場。只用 HTML + CSS + 原生 JavaScript + localStorage—
 | Stage 7 | ✅ | 動物深化 | 走到動物旁餵食/澆水/梳理 → 親密度 → 產物分普通/優質/頂級三級品質、地圖照護狀態圖示 + VFX、老農對話開啟第三章任務鏈 | 動物不只是產蛋計時器；桌機/手機 E2E 通過 |
 | Stage 7.1 | ✅ | 修正 Stage 7 上線後的平衡/邊界問題 | 餵食先自動收已累積產物 + 加冷卻防洗親密度、畜舍可買牛「和」羊、玩家自建動物家在地圖可見、離線動物產出依當下親密度結算品質、品質分級品項訂單數量明確化 | `npm test`/`test:e2e` 全綠、UI 冷卻狀態正確顯示 |
 | Stage 8 | ✅ | 開源遊戲設計技能化 | `SKILL.md` + `references/`（Stage Gate 方法論、世界互動系統 recipe、美術產線、E2E gate、實作基線） | 新專案只讀 `SKILL.md` + reference 導覽即可規劃世界探索/NPC/動物照護/品質經濟的完整 Stage；經 Codex 三輪審核收斂、`npm test`/`test:e2e` 全綠、Pages 已部署 |
+| Stage 9 | ✅ | 天氣視覺化 | 降雨/豔陽的世界層濾鏡（雨絲疊圖+冷色調、暖光+浮光暈，`#weatherLayer` 與 camera 脫鉤）、CSS-only（不需新生圖）| rain/sunny 地圖有明確視覺變化、`clear` 時歸零、原數值效果（成長/售價倍率）不回歸、桌機/手機無水平溢出、E2E 通過 |
 
 **Gate 固定要求**（每階段都要過）：
 
@@ -164,7 +165,7 @@ fork 後先勾選你的方向，再動手：
 |---|---|
 | [`SKILL.md`](SKILL.md) | 觸發時機、適用/不適用場景、完整工作流、reference 導覽表、核心不可違反原則 |
 | [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 方法論本體：什麼算一個 Stage、標準循環、次版本號（X.5/X.1）什麼時候用、多 agent 協作分工與「先驗證再動手」紀律 |
-| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟四個系統的通用 recipe（資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate） |
+| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟、世界狀態視覺化五個系統的通用 recipe（資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate） |
 | [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 → 切割 → 驗證四步產線的技術細節，含常見陷阱表（棋盤格烤進 RGB、空白幀、物件間距太近導致合併） |
 | [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼（世界規模/camera/視覺純度/互動路由/故事/RWD/穩定性）、怎麼延伸現有測試 |
 | [`references/implementation-baseline.md`](references/implementation-baseline.md) | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |
@@ -192,7 +193,7 @@ python -m http.server 8000
 
 ```bash
 npm test            # 經濟模擬 + 系統(地圖/動物/建築/訂單) + UI 煙霧(mock DOM) + v3/v4 atlas 驗證
-npm run test:e2e    # 真瀏覽器 Stage 4–7 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護）
+npm run test:e2e    # 真瀏覽器 Stage 4–9 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護、天氣視覺化）
 ```
 
 E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥22×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、
