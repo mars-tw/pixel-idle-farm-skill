@@ -649,8 +649,8 @@
     el.innerHTML = '<i style="width:' + (ratio * 100).toFixed(0) + '%"></i>';
     worldEl.appendChild(el); obDyn.push(el);
   }
-  function addDot(cx, top) {
-    const el = document.createElement("div"); el.className = "ob-dot";
+  function addDot(cx, top, variant) {
+    const el = document.createElement("div"); el.className = "ob-dot" + (variant ? " ob-dot-" + variant : "");
     el.style.left = pxv(Math.round(cx - 5)); el.style.top = pxv(top);
     worldEl.appendChild(el); obDyn.push(el);
   }
@@ -720,8 +720,10 @@
       const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE;
       const el = addObjectPx(obDyn, "npcs", frame, cx, baselineY, TILE * 1.0, "shadowed", 0, "npc");
       if (el) { el.dataset.npc = tile.npc; el.dataset.tileId = tile.id; }
-      // 有新對話可看時，頭上放提示點（首次見面尚未對話過）
-      if (!(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) addDot(cx, baselineY - TILE * 1.15);
+      // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
+      const req = state.npcRequests && state.npcRequests[tile.npc];
+      if (req && G.canFulfillNpcRequest(state, tile.npc)) addDot(cx, baselineY - TILE * 1.15, "ready");
+      else if (!(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) addDot(cx, baselineY - TILE * 1.15);
     }
   }
   // 任務標記：目前任務目標磚上方浮動箭頭
@@ -946,6 +948,13 @@
     walkPath(plan.path, () => {
       const stand = G.getTileById(state, plan.standId);
       state.player.facing = G.facingTo(stand, tile);
+      // Stage 10：走到 NPC 時，若目前沒有委託且冷卻已過，自動生成一張新委託（走近即觸發，非按鈕）；
+      // 放在 npcDialogue() 之前，這樣這次的台詞就會是新委託的 flavorOffer。
+      G.ensureNpcRequestState(state);
+      if (!state.npcRequests[tile.npc]) {
+        const chk = G.canRequestFrom(state, tile.npc, now());
+        if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
+      }
       const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
       npcLineIdx[tile.npc] = (npcLineIdx[tile.npc] || 0) + 1;
       activeTalk = { npcId: tile.npc, until: now() + 2600 };
@@ -1127,15 +1136,32 @@
       $("useStrBtn").onclick = () => useStructure(tile);
       return;
     }
-    // 0.6) Stage 6：NPC 鎮民（走過去交談）
+    // 0.6) Stage 6：NPC 鎮民（走過去交談）；Stage 10：若有進行中委託，附交付卡
     if (tile.npc) {
       const npc = window.NPCS[tile.npc];
       const d = G.npcDialogue(state, tile.npc, (npcLineIdx[tile.npc] || 1) - 1);
       const seen = state.story.dialogueSeen && state.story.dialogueSeen[tile.npc];
+      const req = d && d.request && d.request.wants ? d.request : null; // 只有進行中委託才有 wants
+      const reqHtml = req ? `<div class="npc-request" data-audit="npc-request" data-npc="${tile.npc}">
+          <div class="nr-wants">${Object.entries(req.wants).map(([id, q]) => {
+            const have = state.storage.items[id] || 0;
+            return `<span class="w ${have >= q ? "have" : "miss"}">${itemEmoji(id)} ${have}/${q}</span>`;
+          }).join("")}</div>
+          <div class="nr-reward">🪙 ${fmtNum(req.rewardCoins)} · ⭐ ${req.rewardXp}</div>
+          <button class="btn buy small" id="fulfillReqBtn" ${req.canDeliver ? "" : "disabled"}>交付委託</button>
+        </div>` : "";
       box.innerHTML = `<div class="tc-title">🧑 ${npc.name}</div>
         <div class="tc-desc">${npc.title}${seen && d ? "：「" + d.line + "」" : "・走過去聽聽他要說什麼"}</div>
+        ${reqHtml}
         <div class="tc-actions"><button class="btn buy small" id="talkNpcBtn">${seen ? "再聊一句" : "走過去交談"}</button></div>`;
       $("talkNpcBtn").onclick = () => useNpc(tile);
+      if (req) {
+        $("fulfillReqBtn").onclick = () => {
+          const r = G.fulfillNpcRequest(state, tile.npc, now());
+          if (r.ok) { toast("🎁 " + npc.name + " 的委託完成！+" + fmtNum(r.coins) + " 🪙"); playAction("use", state.player.facing); afterChange(true); renderTileContext(); }
+          else toast("作物/產物不足，無法交付");
+        };
+      }
       return;
     }
     // 0.7) Stage 5：斷橋（修橋 / 過橋）

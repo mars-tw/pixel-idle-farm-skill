@@ -303,22 +303,26 @@ const NPCS = {
     start:   ["晨光鎮歡迎你回來，孩子。", "你祖母的田荒了好一陣，先到告示牌接第一張委託吧。"],
     ch1done: ["麥香又飄回鎮上了，大家都在談論你。", "東邊那座橋年久失修——把它修好，就能踏進東林。"],
     bridge:  ["橋通了！東林的古樹是晨光鎮的老守護。", "去樹下看看，聽說藏著你祖母留下的舊物。"],
-    ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"] } },
+    ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"],
+    ch3done: ["作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。", "以後我這偶爾會帶點小委託來，別嫌我麻煩啊。"] } },
   merchant: { id: "merchant", name: "商人 蘿拉", title: "市集商人", frame: "merchant", lines: {
     start:   ["新鮮貨色看一下？等你有了作物，市集隨時收購。"],
     ch1done: ["你的麥子品質不錯，訂單看板上的客人會喜歡。"],
     bridge:  ["東林通了？那邊的野花蜜，以後說不定能進貨。"],
-    ch2done: ["生意越來越好，多虧你把路打通了。"] } },
+    ch2done: ["生意越來越好，多虧你把路打通了。"],
+    ch3done: ["聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！", "手頭有好貨的話，記得留一份給我試賣。"] } },
   elder: { id: "elder", name: "老農 班伯", title: "隔壁老農", frame: "elder", lines: {
     start:   ["雞舍那隻母雞養得還行，記得常餵牠。"],
     ch1done: ["想要更多蛋奶？把動物顧好，產量自然上來。"],
     bridge:  ["東林的草肥，以後放羊吃草最好。"],
-    ch2done: ["下次該認真養群動物了——親密度高，產物品質才好。"] } },
+    ch2done: ["下次該認真養群動物了——親密度高，產物品質才好。"],
+    ch3done: ["照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。", "手頭若有多的產物，拿來讓我瞧瞧成果也好。"] } },
   child: { id: "child", name: "孩童 圖圖", title: "鎮上孩童", frame: "child", lines: {
     start:   ["你會種田嗎？教教我嘛！"],
     ch1done: ["哇，你收成了好多麥子！"],
     bridge:  ["橋修好了！我可以去河對面玩了嗎？"],
-    ch2done: ["東林的古樹好大喔，你看過了嗎？"] } },
+    ch2done: ["東林的古樹好大喔，你看過了嗎？"],
+    ch3done: ["我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？"] } },
 };
 const NPC_PLACEMENT = [
   { type: "mayor",    x: 10, y: 4, facing: "down" },
@@ -326,6 +330,25 @@ const NPC_PLACEMENT = [
   { type: "elder",    x: 5,  y: 8, facing: "down" },
   { type: "child",    x: 8,  y: 7, facing: "down" },
 ];
+
+// ===== Stage 10：NPC 重複委託（走近 NPC 觸發，交付後進冷卻，非到期制）=====
+// pool 只是候選白名單，實際生成時會跟 availableOrderItems(state) 取交集，
+// 確保永遠不會要求玩家還沒解鎖/還沒收集過的品項（沿用 D 系統的發現閥門）。
+const NPC_REQUEST_COOLDOWN_MS = 8 * 60 * 1000; // 交付後多久可再接下一張委託
+const NPC_REQUESTS = {
+  mayor:    { pool: ["wheat", "carrot", "tomato"], rewardMul: 1.0,
+    flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？"],
+    flavorDone:  ["有你真好，晨光鎮又熱鬧一場。"] },
+  merchant: { pool: ["strawberry", "pumpkin", "egg_good", "egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
+    flavorOffer: ["市集缺貨，手頭有{item}嗎？"],
+    flavorDone:  ["生意興隆，多虧你這批貨。"] },
+  elder:    { pool: ["egg", "milk", "wool", "honey", "egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
+    flavorOffer: ["幫我張羅點{item}，我拿去燉湯。"],
+    flavorDone:  ["這品質，照顧得很用心啊。"] },
+  child:    { pool: ["wheat", "carrot", "strawberry"], rewardMul: 0.85,
+    flavorOffer: ["可以給我一點{item}嗎？我肚子餓了！"],
+    flavorDone:  ["謝謝你！好好吃！"] },
+};
 
 // ===== 故事任務（地圖驅動：信箱/告示觸發、目標在地圖上有標記）=====
 const QUESTS = {
@@ -393,7 +416,7 @@ const CONFIG = {
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
   EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS,
-  NPCS, NPC_PLACEMENT,
+  NPCS, NPC_PLACEMENT, NPC_REQUESTS, NPC_REQUEST_COOLDOWN_MS,
   QUALITY_TIERS, QUALITY_SELL_MUL, QUALITY_LABEL,
   AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,
   CARE_GAIN, CARE_COOLDOWN_MS, STATUS_STALE_MS,

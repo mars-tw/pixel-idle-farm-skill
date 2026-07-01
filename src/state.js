@@ -87,7 +87,8 @@
   // 實際親密度由 game.js 依經過時間衰減後現算，不在這裡模擬。
   function makeAnimal(id, type, homeId, now) {
     return { id, type, homeId, lastProducedAt: now,
-      affinity: 0, lastCaredAt: now, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0 };
+      affinity: 0, lastCaredAt: now, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0,
+      bestAffinity: 0 }; // Stage 11：歷史最高親密度（affinity 會隨時間衰減，Journal 的「曾經養到開心」里程碑要靠這個高水位，不能讀現值）
   }
   function seedStructures(map, now) {
     const buildings = [], animals = [];
@@ -139,7 +140,10 @@
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
       flags: { bridgeRepaired: false, eventsClaimed: {} },
-      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0 },
+      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0 },
+      // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
+      npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
+      npcRequestLog: {}, // { [npcId]: { lastRequestAt: 0, fulfilledCount: 0 } }
     };
   }
 
@@ -156,6 +160,8 @@
     merged.stats = Object.assign({}, def.stats, state.stats);
     merged.stats.harvested = Object.assign({}, state.stats && state.stats.harvested);
     merged.stats.collected = Object.assign({}, state.stats && state.stats.collected);
+    merged.npcRequests = Object.assign({}, state.npcRequests);
+    merged.npcRequestLog = Object.assign({}, state.npcRequestLog);
     if (!Array.isArray(merged.plots) || merged.plots.length === 0) merged.plots = def.plots;
     if (!Array.isArray(merged.orders)) merged.orders = [];
     // ===== MVP2 欄位補齊 =====
@@ -175,8 +181,9 @@
       merged.player = def.player;
     }
     // Stage 7：舊存檔的動物物件補齊照護欄位（新蓋的已經有，這裡對舊資料是 no-op）
+    // Stage 11：bestAffinity 用舊 affinity 值當合理預設（沒有歷史資料，只能用現值墊底）
     merged.animals = (merged.animals || []).map((a) => Object.assign(
-      { affinity: 0, lastCaredAt: a.lastProducedAt || 0, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0 }, a));
+      { affinity: 0, lastCaredAt: a.lastProducedAt || 0, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0, bestAffinity: a.affinity || 0 }, a));
     // 確保 plots 數量足夠對應所有 soil 磚
     if (merged.plots.length < C.GAME.maxPlots) {
       while (merged.plots.length < C.GAME.maxPlots) merged.plots.push({ id: "p" + String(merged.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });

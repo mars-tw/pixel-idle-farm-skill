@@ -1,5 +1,5 @@
 /* =========================================================================
- * test-rpg-v4-e2e.js — Stage 4–9 RPG 場景 gate E2E（真瀏覽器）
+ * test-rpg-v4-e2e.js — Stage 4–10 RPG 場景 gate E2E（真瀏覽器）
  *
  * 對應 references/production-directive-stage4-game-audit.md：
  *   1. 大世界：地圖 ≥22×12，世界像素 > 視口（camera 可平移）
@@ -11,6 +11,8 @@
  *   7. 390px 無水平溢出、無 console / pageerror
  *   8. Stage 9：天氣視覺化——rain/sunny 切換時 #weatherLayer 的 class/data-weather 正確跟隨，
  *      clear 時視覺效果歸零，桌機/手機都不造成水平溢出
+ *   9. Stage 10：NPC 重複委託——第三章完成後 ch3done 對話階段、走近 NPC 自動生成委託、
+ *      庫存不足時交付按鈕 disabled、交付後扣庫存發獎並進冷卻、冷卻中不重複生成
  * 執行：node scripts/test-rpg-v4-e2e.js   （需 devDependency: playwright）
  * ========================================================================= */
 const http = require("http");
@@ -494,7 +496,77 @@ async function run() {
     assert(afterSell.qualitySold > 0, `賣出優質品後 qualitySold 增加（${afterSell.qualitySold}）`);
     assert(afterSell.quest === null && afterSell.ch3 === "5/5", `第三章完成（照護完成度 ${afterSell.ch3}）`);
 
-    // 19. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
+    // 19. Stage 10.0：第三章動物照護全完成後，NPC 對話進入 ch3done 階段
+    const ch3Phase = await page.evaluate(() => window.Game.npcPhase(window.__farm.state()));
+    assert(ch3Phase === "ch3done", `第三章完成後 NPC 對話階段為 ch3done（實際 ${ch3Phase}）`);
+
+    // 20. Stage 10.1/10.2：走近老農，自動生成一張委託（走近觸發，非按鈕）
+    const elderTile2 = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const t = st.map.tiles.find((x) => x.npc === "elder");
+      F.clickTile(t.id);
+      return t.id;
+    });
+    await waitArrive(page, 9000);
+    await sleep(500);
+    const reqGen = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const req = st.npcRequests.elder;
+      const bubble = document.querySelector('[data-audit="dialogue-bubble"][data-npc="elder"]');
+      return { hasReq: !!req, wants: req ? req.wants : null, bubbleText: bubble ? bubble.querySelector(".nb-line").textContent : null };
+    });
+    assert(reqGen.hasReq === true, "走近老農後自動生成委託（req 存進 state.npcRequests.elder）");
+    assert(!!reqGen.bubbleText && /x\d/.test(reqGen.bubbleText), `對話泡泡顯示委託內容（${reqGen.bubbleText}）`);
+
+    // 21. 開啟磚資訊面板：委託卡顯示、庫存不足時交付按鈕 disabled
+    await page.evaluate((id) => window.__farm.clickTile(id), elderTile2);
+    await sleep(300);
+    const cardBefore = await page.evaluate(() => {
+      const box = document.getElementById("tileContext");
+      const btn = document.getElementById("fulfillReqBtn");
+      return { hasCard: !!(box && box.querySelector(".npc-request")), disabled: btn ? btn.disabled : null };
+    });
+    assert(cardBefore.hasCard === true, "磚資訊側欄出現 NPC 委託卡");
+    assert(cardBefore.disabled === true, "庫存不足時交付按鈕為 disabled");
+
+    // 22. 補足庫存後交付委託：coins 增加、委託消失、npcRequestLog 記錄完成次數
+    const fulfillResult = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const req = st.npcRequests.elder;
+      const itemId = Object.keys(req.wants)[0];
+      st.storage.items[itemId] = req.wants[itemId];
+      window.__farm.refresh();
+      const before = st.coins;
+      document.getElementById("fulfillReqBtn").click();
+      return { before, after: window.__farm.state().coins, gone: !window.__farm.state().npcRequests.elder,
+        fulfilledCount: (window.__farm.state().npcRequestLog.elder || {}).fulfilledCount };
+    });
+    assert(fulfillResult.after > fulfillResult.before, `交付委託後 coins 增加（${fulfillResult.before} → ${fulfillResult.after}）`);
+    assert(fulfillResult.gone === true, "交付後委託從 state.npcRequests 移除");
+    assert(fulfillResult.fulfilledCount === 1, `npcRequestLog 完成次數為 1（實際 ${fulfillResult.fulfilledCount}）`);
+
+    // 23. 交付後立刻再走近老農：仍在冷卻中，不會生成新委託，磚資訊不顯示委託卡
+    const afterCooldownTile = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const t = st.map.tiles.find((x) => x.npc === "elder");
+      F.clickTile(t.id);
+      return t.id;
+    });
+    await waitArrive(page, 9000);
+    await sleep(400);
+    await page.evaluate((id) => window.__farm.clickTile(id), afterCooldownTile);
+    await sleep(300);
+    const cardAfter = await page.evaluate(() => {
+      const box = document.getElementById("tileContext");
+      return !!(box && box.querySelector(".npc-request"));
+    });
+    assert(cardAfter === false, "交付後立刻再訪冷卻中，不顯示委託卡（未生成新委託）");
+
+    // 24. 桌機/手機皆無水平溢出（Stage 10 新增的委託 UI 也要檢查）
+    const overflowAfterRequest = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    assert(overflowAfterRequest <= 2, `NPC 委託 UI 不造成水平溢出（${overflowAfterRequest}）`);
+
+    // 25. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
     const rainState = await page.evaluate(() => {
       const st = window.__farm.state();
       st.level = Math.max(st.level, 5); // 天氣 Lv5 解鎖，故事鏈跑到這裡不一定已經到 Lv5
@@ -536,7 +608,7 @@ async function run() {
     server.close();
   }
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
-  console.log("\n✅ Stage 4-9 RPG v4 E2E 全部通過");
+  console.log("\n✅ Stage 4-10 RPG v4 E2E 全部通過");
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

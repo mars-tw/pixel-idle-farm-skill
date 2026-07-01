@@ -483,6 +483,7 @@
     const cur = animalAffinity(state, a, now);
     a.lastWateredAt = now;
     a.affinity = Math.min(AFFINITY_MAX, cur + CARE_GAIN.water); a.lastCaredAt = now;
+    a.bestAffinity = Math.max(a.bestAffinity || 0, a.affinity); // Stage 11 Journal 依賴此欄位，勿刪
     return { ok: true, affinity: a.affinity, status: animalStatus(state, a, now) };
   }
   // 梳理：免費、有冷卻，純照護動作（不產出）
@@ -493,6 +494,7 @@
     const cur = animalAffinity(state, a, now);
     a.lastGroomedAt = now;
     a.affinity = Math.min(AFFINITY_MAX, cur + CARE_GAIN.groom); a.lastCaredAt = now;
+    a.bestAffinity = Math.max(a.bestAffinity || 0, a.affinity); // Stage 11 Journal 依賴此欄位，勿刪
     return { ok: true, affinity: a.affinity, status: animalStatus(state, a, now) };
   }
   function isAnimalUnlocked(state, animalType) {
@@ -509,7 +511,7 @@
   function addAnimal(state, buildingId, animalType, now) {
     // Stage 7 照護欄位：affinity 是「上次照護當下的已收藏值」，實際親密度依經過時間現算（見 animalAffinity）。
     const a = { id: "a_" + animalType + "_" + (state.animals.length + 1), type: animalType, homeId: buildingId, lastProducedAt: now,
-      affinity: 0, lastCaredAt: now, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0 };
+      affinity: 0, lastCaredAt: now, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0, bestAffinity: 0 };
     state.animals.push(a);
     return a;
   }
@@ -577,6 +579,7 @@
     const curAffinity = animalAffinity(state, a, now);
     a.lastFedAt = now; a.lastCaredAt = now;
     a.affinity = Math.min(AFFINITY_MAX, curAffinity + CARE_GAIN.feed);
+    a.bestAffinity = Math.max(a.bestAffinity || 0, a.affinity); // Stage 11 Journal 依賴此欄位，勿刪
     const tier = qualityTierFor(a.affinity); // 餵食後立即以新親密度結算這份產物的品質
     const productId = qualityProductId(def.product, tier);
     const { added, lost } = addToStorage(state, productId, 1);
@@ -790,6 +793,12 @@
     const done = (state.story && state.story.completed) || {};
     return ids.length > 0 && ids.every((id) => done[id]);
   }
+  // 第三章（動物照護）是否全完成（NPC 對話進 ch3done、開放 Stage 10 委託的前置條件）
+  function chapter3Done(state) {
+    const ids = C.CHAPTER3_QUESTS || [];
+    const done = (state.story && state.story.completed) || {};
+    return ids.length > 0 && ids.every((id) => done[id]);
+  }
   // 修橋條件：序章 6/6 + 木材/石頭足夠（用真資源，非按面板）
   function canRepairBridge(state) {
     if (!state.flags) return { ok: false, reason: "flags" };
@@ -830,18 +839,21 @@
     const t = getTileById(state, tileId);
     return t && t.npc ? (C.NPCS || {})[t.npc] : null;
   }
-  // 對話階段：start → ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）
+  // 對話階段：start → ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）→ ch3done（動物照護學完）
   function npcPhase(state) {
     const f = state.flags || {};
+    if (chapter3Done(state)) return "ch3done";
     if (f.eventsClaimed && f.eventsClaimed.east_clearing) return "ch2done";
     if (f.bridgeRepaired) return "bridge";
     if (chapter1Done(state)) return "ch1done";
     return "start";
   }
-  // 回傳此 NPC 在目前階段要說的一段台詞（lineIdx 由 UI 傳入做循環）
+  // 回傳此 NPC 在目前階段要說的一段台詞（lineIdx 由 UI 傳入做循環）；若有進行中委託，
+  // line 會換成委託台詞，並在回傳值附上 request 唯讀投影供 UI 判斷是否顯示交付按鈕。
   function npcDialogue(state, npcId, lineIdx) {
     const npc = (C.NPCS || {})[npcId]; if (!npc) return null;
-    const order = ["ch2done", "bridge", "ch1done", "start"];
+    ensureNpcRequestState(state);
+    const order = ["ch3done", "ch2done", "bridge", "ch1done", "start"];
     const phase = npcPhase(state);
     // 取目前階段的台詞；若該階段未定義，往較早階段回退
     let lines = null;
@@ -850,7 +862,89 @@
     }
     if (!lines || !lines.length) lines = ["……"];
     const idx = ((lineIdx || 0) % lines.length + lines.length) % lines.length;
-    return { id: npc.id, name: npc.name, title: npc.title, frame: npc.frame, phase, line: lines[idx], lineCount: lines.length };
+    let line = lines[idx];
+    let request = null;
+    const cfg = (C.NPC_REQUESTS || {})[npcId];
+    const req = state.npcRequests[npcId];
+    if (req) {
+      const itemId = Object.keys(req.wants)[0];
+      const itemName = (getItemDef(itemId) || {}).name || itemId;
+      const canDeliver = canFulfillNpcRequest(state, npcId);
+      line = ((cfg && cfg.flavorOffer && cfg.flavorOffer[0]) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
+      request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp, canDeliver };
+    }
+    return { id: npc.id, name: npc.name, title: npc.title, frame: npc.frame, phase, line, lineCount: lines.length, request };
+  }
+
+  // ---------- Stage 10：NPC 重複委託（走近觸發、交付後進冷卻，非到期制）----------
+  function ensureNpcRequestState(state) {
+    if (!state.npcRequests) state.npcRequests = {};
+    if (!state.npcRequestLog) state.npcRequestLog = {};
+  }
+  // 這位 NPC 目前實際能開出的候選品項（設定白名單 ∩ 玩家已解鎖/已發現的品項）
+  function npcRequestPool(state, npcId) {
+    const cfg = (C.NPC_REQUESTS || {})[npcId]; if (!cfg) return [];
+    const avail = availableOrderItems(state);
+    return cfg.pool.filter((id) => avail.indexOf(id) !== -1);
+  }
+  // 這位 NPC 現在能不能生成新委託：要先學完動物照護（ch3done）、身上沒有進行中委託、
+  // 冷卻已過、且至少有一項玩家已發現的候選品項——四個條件缺一都不生成。
+  function canRequestFrom(state, npcId, now) {
+    ensureNpcRequestState(state);
+    if (!(C.NPC_REQUESTS || {})[npcId]) return { ok: false, reason: "no_npc" };
+    if (!chapter3Done(state)) return { ok: false, reason: "story" };
+    if (state.npcRequests[npcId]) return { ok: false, reason: "active" };
+    const log = state.npcRequestLog[npcId];
+    const readyAt = (log && log.lastRequestAt || 0) + (C.NPC_REQUEST_COOLDOWN_MS || 0);
+    if (log && now < readyAt) return { ok: false, reason: "cooldown", readyAt };
+    if (npcRequestPool(state, npcId).length === 0) return { ok: false, reason: "no_pool" };
+    return { ok: true };
+  }
+  // 生成一張新委託（單一品項，數量比市集訂單略少，維持「小委託」份量感）
+  function generateNpcRequest(state, npcId, now, rng) {
+    const chk = canRequestFrom(state, npcId, now); if (!chk.ok) return null;
+    const cfg = C.NPC_REQUESTS[npcId];
+    const pool = npcRequestPool(state, npcId);
+    const itemId = rngPick(rng, pool);
+    const [mn, mx] = ORDER_QTY[itemId] || [2, 5];
+    const qty = Math.max(1, Math.round(rngInt(rng, mn, mx) * 0.6));
+    const def = getItemDef(itemId);
+    const baseValue = (def ? def.sellValue : 0) * qty;
+    const req = {
+      id: "req_" + npcId + "_" + now,
+      npcId,
+      wants: { [itemId]: qty },
+      rewardCoins: Math.round(baseValue * 1.2 * cfg.rewardMul),
+      rewardXp: Math.max(1, Math.round(baseValue * 0.6 * cfg.rewardMul)),
+      createdAt: now,
+    };
+    state.npcRequests[npcId] = req;
+    return req;
+  }
+  function canFulfillNpcRequest(state, npcId) {
+    ensureNpcRequestState(state);
+    const req = state.npcRequests[npcId]; if (!req) return false;
+    return Object.entries(req.wants).every(([id, qty]) => (state.storage.items[id] || 0) >= qty);
+  }
+  // 交付：扣庫存、發獎、記錄冷卻與完成次數，不像市集訂單一樣自動補新單（要等冷卻+再次走近）
+  function fulfillNpcRequest(state, npcId, now) {
+    ensureNpcRequestState(state);
+    const req = state.npcRequests[npcId];
+    if (!req) return { ok: false, reason: "none" };
+    if (!canFulfillNpcRequest(state, npcId)) return { ok: false, reason: "short" };
+    for (const [id, qty] of Object.entries(req.wants)) {
+      state.storage.items[id] -= qty;
+      if (state.storage.items[id] <= 0) delete state.storage.items[id];
+    }
+    state.coins += req.rewardCoins; state.stats.totalCoinsEarned += req.rewardCoins;
+    addXp(state, req.rewardXp);
+    if (!state.npcRequestLog[npcId]) state.npcRequestLog[npcId] = { lastRequestAt: 0, fulfilledCount: 0 };
+    state.npcRequestLog[npcId].lastRequestAt = now;
+    state.npcRequestLog[npcId].fulfilledCount++;
+    state.stats.npcRequestsCompleted = (state.stats.npcRequestsCompleted || 0) + 1;
+    delete state.npcRequests[npcId];
+    checkAchievements(state);
+    return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId };
   }
 
   // ---------- 離線進度 ----------
@@ -949,9 +1043,11 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, canRepairBridge, repairBridge, triggerEvent,
+    bridgeTile, eventTile, chapter1Done, chapter3Done, canRepairBridge, repairBridge, triggerEvent,
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
+    // Stage 10：NPC 重複委託
+    ensureNpcRequestState, npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,
