@@ -90,6 +90,22 @@ console.log("\n== 5. 建築解鎖動物 + 容量限制 ==");
   assert(G.buyAnimal(st, r.building.id, "chicken", T0).reason === "full", "超過容量被擋");
 }
 
+console.log("\n== 5b. Stage 6.5：畜舍地圖常駐不代表動物解鎖，仍需等級（修正 Stage 4 迴歸）==");
+{
+  const st = S.defaultState(T0); // Lv1（預設）；farmhouse/coop/barn/shop 從地圖建立就常駐（Stage 4 設計）
+  st.coins = 9999;
+  const barn = st.buildings.find((b) => b.type === "barn");
+  assert(!!barn, "畜舍從地圖常駐建築就已存在（Stage 4 設計，不需玩家另外建造）");
+  assert(!G.isAnimalUnlocked(st, "cow"), "Lv1 畜舍雖已存在，牛尚未解鎖（ANIMALS.cow.unlockLevel=5）");
+  assert(G.buyAnimal(st, barn.id, "cow", T0).reason === "locked", "Lv1 即使金幣足夠也買不到牛");
+  const seededChicken = st.animals[0];
+  assert(seededChicken && seededChicken.type === "chicken", "起始雞不受此檢查影響（seedStructures 直接塞入，非經 buyAnimal）");
+  assert(G.collectAnimal(st, seededChicken.id, T0 + C.ANIMALS.chicken.produceMs).ok, "Lv1 仍可收集起始雞的蛋");
+  st.level = 5;
+  assert(G.isAnimalUnlocked(st, "cow"), "Lv5 牛解鎖");
+  assert(G.buyAnimal(st, barn.id, "cow", T0).ok, "Lv5 可以買牛");
+}
+
 console.log("\n== 6. 動物產品計時（online）+ 收集 ==");
 {
   const st = S.defaultState(T0);
@@ -133,13 +149,17 @@ console.log("\n== 8. 餵食立即產出（花作物）==");
   assert((st.storage.items.egg || 0) === 1, "餵食得 1 蛋");
 }
 
-console.log("\n== 9. 動物產品可滿足訂單 ==");
+console.log("\n== 9. 動物產品可滿足訂單（Stage 6.5：須先收集過才進訂單池）==");
 {
   const st = S.defaultState(T0);
   st.level = 3; st.coins = 9999; st.materials.wood = 10;
   const tile = firstBuildable(st);
   G.buildBuilding(st, tile.id, "chickenCoop", T0);
-  assert(G.availableOrderItems(st).indexOf("egg") !== -1, "解鎖雞後訂單池含雞蛋");
+  assert(G.availableOrderItems(st).indexOf("egg") === -1, "蓋雞舍但還沒收過蛋，訂單池不含雞蛋（避免 Lv1 隨機訂單一開局就要蛋）");
+  const chicken = G.animalsInHome(st, st.buildings.find((b) => b.type === "chickenCoop").id)[0];
+  const col = G.collectAnimal(st, chicken.id, T0 + C.ANIMALS.chicken.produceMs);
+  assert(col.ok, "收集一次蛋");
+  assert(G.availableOrderItems(st).indexOf("egg") !== -1, "收過蛋後訂單池才含雞蛋");
   // 直接構造一張要蛋的訂單並完成
   st.storage.items.egg = 5;
   st.orders = [{ id: "order_test", wants: { egg: 3 }, rarity: "common", rewardCoins: 30, rewardXp: 6, expiresAt: T0 + 1e9 }];
@@ -178,6 +198,25 @@ console.log("\n== 11. 濕土澆水：比乾土更快成長 ==");
   G.harvest(st, 1, T0 + grow);
   G.plant(st, 1, "carrot", T0 + grow);
   assert(G.getCropProgress(st, st.plots[1], T0 + grow).wet === false, "收成重種後恢復乾土");
+}
+
+console.log("\n== 11b. Stage 6.5：離線收益也要吃到濕土加速（修正 applyOffline 沒套用 MOISTURE_MUL）==");
+{
+  const grow = C.CROPS.carrot.growMs;
+  const wetMs = Math.max(1000, Math.floor(grow * C.MOISTURE_MUL));
+  // 乾土：offline 到「濕土才會熟」的時間點，乾土應該還沒熟
+  const dry = S.defaultState(T0);
+  dry.level = 2; dry.coins = 100;
+  G.plant(dry, 0, "carrot", T0);
+  const dryOff = G.applyOffline(dry, T0 + wetMs + 500);
+  assert((dryOff.perCrop.carrot || 0) === 0 && dryOff.readyPlots === 0, "乾土在濕土成熟時間點離線結束時還沒熟");
+  // 濕土：同樣的離線時長，應該已經自動收成（幫手解鎖時）或至少標記待收
+  const wet = S.defaultState(T0);
+  wet.level = 2; wet.coins = 100; wet.upgrades.helperLevel = 1; // 解鎖離線自動收成
+  G.plant(wet, 0, "carrot", T0);
+  G.waterPlot(wet, 0, T0);
+  const wetOff = G.applyOffline(wet, T0 + wetMs + 500);
+  assert((wetOff.perCrop.carrot || 0) === C.CROPS.carrot.yield, `濕土離線也吃到加速，同時間已自動收成一輪（yield ${C.CROPS.carrot.yield}，實際 ${JSON.stringify(wetOff.perCrop)}）`);
 }
 
 console.log("\n== 12. 工具模式 state.interaction ==");

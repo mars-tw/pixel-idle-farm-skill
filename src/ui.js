@@ -1194,11 +1194,15 @@
             </span>
           </div>`;
       });
-      // 買動物
+      // 買動物：Stage 6.5 起畜舍/雞舍地圖常駐不代表解鎖，仍需等級（ANIMALS[type].unlockLevel）
       const animalType = def.effect.unlockAnimal[0];
+      const adef = window.ANIMALS[animalType];
       if (animals.length < cap) {
-        const adef = window.ANIMALS[animalType];
-        html += `<button class="btn buy small abuy" data-bid="${b.id}" data-type="${animalType}">＋ 買一隻${adef.name}（🪙${adef.cost}）</button>`;
+        if (state.level >= adef.unlockLevel) {
+          html += `<button class="btn buy small abuy" data-bid="${b.id}" data-type="${animalType}">＋ 買一隻${adef.name}（🪙${adef.cost}）</button>`;
+        } else {
+          html += `<div class="bo-cost">🔒 ${adef.emoji} ${adef.name}・Lv${adef.unlockLevel} 解鎖</div>`;
+        }
       } else {
         html += `<div class="bo-cost">已達容量上限 ${cap} 隻</div>`;
       }
@@ -1219,6 +1223,7 @@
       if (r.ok) { toast("🐣 新動物入住！"); afterChange(true); renderTileContext(); }
       else if (r.reason === "no_coins") toast("🪙 金幣不足");
       else if (r.reason === "full") toast("已達容量上限");
+      else if (r.reason === "locked") { toast("🔒 尚未達到解鎖等級"); renderTileContext(); }
     });
   }
 

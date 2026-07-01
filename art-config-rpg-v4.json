@@ -69,8 +69,8 @@
       "id": "structures-nature-v4",
       "targetFile": "structures-nature.png",
       "size": "1024x1024",
-      "grid": "loose 4x3 objects",
-      "prompt": "Separated top-down pixel RPG nature and structure props, ONLY the props, absolutely NO person, NO farmer, NO human character anywhere. Each prop is one object with a clear ground baseline and soft pixel shadow, generous spacing between objects. Include: a large round leafy oak tree, a tall pine tree, a small fruit tree, a big flowering bush, a wooden market stall with striped awning, a windmill, a wooden signpost, a hay bale, a flower bed, a lamp post, a water trough, a scarecrow. Objects are taller than one tile so they can occlude a character standing behind them. No text, no labels, transparent background."
+      "grid": "loose 10 objects",
+      "prompt": "Separated top-down pixel RPG nature and structure props, ONLY the props, absolutely NO person, NO farmer, NO human character anywhere. Each prop is one object with a clear ground baseline and soft pixel shadow, GENEROUS spacing between objects so each one can be cleanly separated (avoid clustering two props close together). Include exactly ten props: a large round leafy oak tree, a tall pine tree, a small fruit tree, a big flowering bush, a wooden market stall with striped awning, a windmill, a wooden signpost, a hay bale, a flower bed, a lamp post. Objects are taller than one tile so they can occlude a character standing behind them. No text, no labels, transparent background."
     },
     {
       "id": "buildings-v4",

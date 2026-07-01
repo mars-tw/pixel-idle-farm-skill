@@ -31,8 +31,13 @@
   }
   // MVP2：玩家擁有的動物可生產的產品（訂單只會要玩家做得出的產品）
   function unlockedProducts(state) {
+    // 動物產品要「玩家至少收集過一次」才進訂單池，避免起始雞讓 Lv1 隨機訂單一開局就要蛋
+    // （玩家還沒被教過怎麼拿蛋）。直售/餵食仍可隨時進行，不受此檢查影響。
     const set = {};
-    for (const a of state.animals || []) { const def = ANIMALS[a.type]; if (def) set[def.product] = true; }
+    for (const a of state.animals || []) {
+      const def = ANIMALS[a.type];
+      if (def && (state.stats.collected[def.product] || 0) > 0) set[def.product] = true;
+    }
     return Object.keys(set);
   }
   function availableOrderItems(state) {
@@ -253,6 +258,8 @@
   function canFulfill(state, order) {
     return Object.entries(order.wants).every(([cropId, qty]) => (state.storage.items[cropId] || 0) >= qty);
   }
+  // 刻意設計：訂單是固定契約價（rewardCoins/rewardXp 在生成當下就定了），不吃天氣 sellMul——
+  // 天氣只影響「直售」（sellMultiplier）。避免訂單獎勵隨天氣忽高忽低，讓訂單成為穩定的收益來源。
   function orderPayout(state, order) {
     const streakMul = 1 + Math.min(ORDER_STREAK_CAP, state.orderStreak * ORDER_STREAK_BONUS);
     const sellLv = state.upgrades.sellBonus;
@@ -431,6 +438,11 @@
   }
   function animalsInHome(state, buildingId) { return (state.animals || []).filter((a) => a.homeId === buildingId); }
   function isAnimalUnlocked(state, animalType) {
+    // Stage 4 把 farmhouse/coop/barn/shop 改成一律預置的地圖常駐結構（RPG 世界感），
+    // 但這代表「家已存在」不能再當解鎖條件 —— 改為直接檢查玩家等級（ANIMALS[type].unlockLevel）。
+    // 起始雞是 seedStructures 直接塞進 state.animals（非經 buyAnimal），不受此檢查影響。
+    const animalDef = ANIMALS[animalType];
+    if (!animalDef || state.level < animalDef.unlockLevel) return false;
     const b = homeBuildingFor(state, animalType);
     if (!b) return false;
     const def = BUILDINGS[b.type];
@@ -770,7 +782,8 @@
       const plot = state.plots[i];
       if (!plot.cropId) continue;
       const crop = CROPS[plot.cropId];
-      const growMs = effectiveGrowMs(state, plot.cropId, offlineNow);
+      let growMs = effectiveGrowMs(state, plot.cropId, offlineNow);
+      if (isWet(plot)) growMs = Math.max(1000, Math.floor(growMs * MOISTURE_MUL)); // 濕土加速：離線也要吃到，與 getCropProgress 一致
       const elapsed = Math.max(0, offlineNow - plot.plantedAt);
       if (elapsed < growMs) continue; // 還沒熟
 

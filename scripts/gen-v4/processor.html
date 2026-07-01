@@ -351,7 +351,10 @@ function genTerrain(){
   const buildingNames=["farmhouse","barn","chicken_coop","shop"]; // 2x2：左上/右上/左下/右下
   out.buildings=await sliceGrid("buildings.png",2,2,256,256,(r,c)=>buildingNames[r*2+c],[0.5,0.96],"baseline");if(out.buildings)log.push("buildings");
 
-  const structNames=["oak","pine","fruit_tree","bush_big","market_stall","windmill","signpost","hay_bale","flower_bed","lamp_post","water_trough","scarecrow"];
+  // Stage 6.5：修正為與 sliceLoose 實際可靠切出的 10 個物件一致（原 12 個含 water_trough/scarecrow
+  // 因物件間距太近被合併吃掉，從未真的產生過 frame）。water_trough 由 Stage 7 專屬的
+  // animal-care-props sheet 提供，不再由這張 loose sheet 負責。
+  const structNames=["oak","pine","fruit_tree","bush_big","market_stall","windmill","signpost","hay_bale","flower_bed","lamp_post"];
   out.structures=await sliceLoose("structures-nature.png",structNames,[0.5,0.97],200);if(out.structures)log.push("structures("+Object.keys(out.structures.frames).length+")");
 
   window.__v4=out;
