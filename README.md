@@ -51,6 +51,7 @@ RPG 像素放置農場。只用 HTML + CSS + 原生 JavaScript + localStorage—
 | Stage 7.1 | ✅ | 修正 Stage 7 上線後的平衡/邊界問題 | 餵食先自動收已累積產物 + 加冷卻防洗親密度、畜舍可買牛「和」羊、玩家自建動物家在地圖可見、離線動物產出依當下親密度結算品質、品質分級品項訂單數量明確化 | `npm test`/`test:e2e` 全綠、UI 冷卻狀態正確顯示 |
 | Stage 8 | ✅ | 開源遊戲設計技能化 | `SKILL.md` + `references/`（Stage Gate 方法論、世界互動系統 recipe、美術產線、E2E gate、實作基線） | 新專案只讀 `SKILL.md` + reference 導覽即可規劃世界探索/NPC/動物照護/品質經濟的完整 Stage；經 Codex 三輪審核收斂、`npm test`/`test:e2e` 全綠、Pages 已部署 |
 | Stage 9 | ✅ | 天氣視覺化 | 降雨/豔陽的世界層濾鏡（雨絲疊圖+冷色調、暖光+浮光暈，`#weatherLayer` 與 camera 脫鉤）、CSS-only（不需新生圖）| rain/sunny 地圖有明確視覺變化、`clear` 時歸零、原數值效果（成長/售價倍率）不回歸、桌機/手機無水平溢出、E2E 通過 |
+| Stage 10 | ✅ | NPC 重複委託 | 延伸 Stage 6 對話系統：第三章動物照護全完成後 NPC 進入 `ch3done`，走近 NPC 自動生成小委託（品項取自玩家已發現清單）、磚資訊面板可交付/放棄、報酬吃當下 sellBonus/成就/天氣、免費放棄跟交付一樣進冷卻 | 委託內容永遠只來自已解鎖/已收集品項、交付/放棄後正確進冷卻、`npm test`/`test:e2e` 全綠、經 Codex 兩輪審核收斂 |
 
 **Gate 固定要求**（每階段都要過）：
 
@@ -193,7 +194,7 @@ python -m http.server 8000
 
 ```bash
 npm test            # 經濟模擬 + 系統(地圖/動物/建築/訂單) + UI 煙霧(mock DOM) + v3/v4 atlas 驗證
-npm run test:e2e    # 真瀏覽器 Stage 4–9 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護、天氣視覺化）
+npm run test:e2e    # 真瀏覽器 Stage 4–10 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護、天氣視覺化、NPC委託）
 ```
 
 E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥22×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、
