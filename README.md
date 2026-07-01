@@ -52,6 +52,7 @@ RPG 像素放置農場。只用 HTML + CSS + 原生 JavaScript + localStorage—
 | Stage 8 | ✅ | 開源遊戲設計技能化 | `SKILL.md` + `references/`（Stage Gate 方法論、世界互動系統 recipe、美術產線、E2E gate、實作基線） | 新專案只讀 `SKILL.md` + reference 導覽即可規劃世界探索/NPC/動物照護/品質經濟的完整 Stage；經 Codex 三輪審核收斂、`npm test`/`test:e2e` 全綠、Pages 已部署 |
 | Stage 9 | ✅ | 天氣視覺化 | 降雨/豔陽的世界層濾鏡（雨絲疊圖+冷色調、暖光+浮光暈，`#weatherLayer` 與 camera 脫鉤）、CSS-only（不需新生圖）| rain/sunny 地圖有明確視覺變化、`clear` 時歸零、原數值效果（成長/售價倍率）不回歸、桌機/手機無水平溢出、E2E 通過 |
 | Stage 10 | ✅ | NPC 重複委託 | 延伸 Stage 6 對話系統：第三章動物照護全完成後 NPC 進入 `ch3done`，走近 NPC 自動生成小委託（品項取自玩家已發現清單）、磚資訊面板可交付/放棄、報酬吃當下 sellBonus/成就/天氣、免費放棄跟交付一樣進冷卻 | 委託內容永遠只來自已解鎖/已收集品項、交付/放棄後正確進冷卻、`npm test`/`test:e2e` 全綠、經 Codex 兩輪審核收斂 |
+| Stage 11 | ✅ | 農場圖鑑 | 側欄新分頁「📔 圖鑑」：唯讀彙總 A-D 系統既有資料（作物/產物品質/鎮民名錄/動物親密度里程碑/世界旗標/章節完成度/成就），`journalSummary()` 不新增追蹤狀態、套用各系統既有發現閥門 | 未發現內容正確隱藏且不連帶洩漏同系列其他項目、`journalSummary()` 不 mutate state、桌機/手機無水平溢出、`npm test`/`test:e2e` 全綠 |
 
 **Gate 固定要求**（每階段都要過）：
 
@@ -166,7 +167,7 @@ fork 後先勾選你的方向，再動手：
 |---|---|
 | [`SKILL.md`](SKILL.md) | 觸發時機、適用/不適用場景、完整工作流、reference 導覽表、核心不可違反原則 |
 | [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 方法論本體：什麼算一個 Stage、標準循環、次版本號（X.5/X.1）什麼時候用、多 agent 協作分工與「先驗證再動手」紀律 |
-| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟、世界狀態視覺化五個系統的通用 recipe（資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate） |
+| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟、世界狀態視覺化、跨系統唯讀彙總層六個系統的通用 recipe（資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate） |
 | [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 → 切割 → 驗證四步產線的技術細節，含常見陷阱表（棋盤格烤進 RGB、空白幀、物件間距太近導致合併） |
 | [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼（世界規模/camera/視覺純度/互動路由/故事/RWD/穩定性）、怎麼延伸現有測試 |
 | [`references/implementation-baseline.md`](references/implementation-baseline.md) | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |
@@ -194,7 +195,7 @@ python -m http.server 8000
 
 ```bash
 npm test            # 經濟模擬 + 系統(地圖/動物/建築/訂單) + UI 煙霧(mock DOM) + v3/v4 atlas 驗證
-npm run test:e2e    # 真瀏覽器 Stage 4–10 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護、天氣視覺化、NPC委託）
+npm run test:e2e    # 真瀏覽器 Stage 4–11 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護、天氣視覺化、NPC委託、農場圖鑑）
 ```
 
 E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥22×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、

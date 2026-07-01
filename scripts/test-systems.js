@@ -550,6 +550,74 @@ console.log("\n== 15c. Stage 10 審核修正：品質委託計數、放棄委託
     `sellBonus 升級後委託報酬跟著提升（${reqPlain.rewardCoins} → ${reqBoosted.rewardCoins}），報酬基準吃當下 sellUnitValue`);
 }
 
+console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層）==");
+{
+  const st = S.defaultState(T0);
+  const j0 = G.journalSummary(st, T0);
+
+  // 作物：unlockLevel > 目前等級 → unlocked=false；解鎖但沒收成過 → discovered=false
+  const wheatEntry = j0.crops.find((c) => c.id === "wheat");
+  const pumpkinEntry = j0.crops.find((c) => c.id === "pumpkin"); // unlockLevel 5，Lv1 不會解鎖
+  assert(wheatEntry.unlocked === true && wheatEntry.discovered === false, "Lv1 小麥已解鎖但尚未發現（沒收成過）");
+  assert(pumpkinEntry.unlocked === false, "Lv1 南瓜（unlockLevel 5）尚未解鎖");
+
+  // 收成小麥後，作物圖鑑該項目變成已發現，其餘不受影響
+  st.stats.harvested.wheat = 1;
+  const j1 = G.journalSummary(st, T0);
+  assert(j1.crops.find((c) => c.id === "wheat").discovered === true, "收成小麥後作物圖鑑該項目變已發現");
+  assert(j1.crops.find((c) => c.id === "carrot").discovered === false, "沒收成過的作物仍是未發現（不會被連帶洩漏）");
+
+  // 收集 egg 後，只有 egg 變已發現，egg_good/egg_premium 仍未發現（不連帶洩漏同 baseProduct 的其他 tier）
+  st.stats.collected.egg = 1;
+  const j2 = G.journalSummary(st, T0);
+  assert(j2.products.find((p) => p.id === "egg").discovered === true, "收集 egg 後產物圖鑑該項目變已發現");
+  assert(j2.products.find((p) => p.id === "egg_good").discovered === false, "egg_good 不因為 egg 已發現而連帶曝光");
+  assert(j2.products.find((p) => p.id === "egg_premium").discovered === false, "egg_premium 不因為 egg 已發現而連帶曝光");
+
+  // NPC 名錄：只有互動過的 NPC met=true，總數對得上 NPCS 設定數量
+  st.story.dialogueSeen = { elder: true };
+  const j3 = G.journalSummary(st, T0);
+  assert(j3.npcs.length === Object.keys(C.NPCS).length, "NPC 名錄總數與 NPCS 設定一致");
+  assert(j3.npcs.find((n) => n.id === "elder").met === true, "已互動過的老農 met=true");
+  assert(j3.npcs.filter((n) => n.met).length === 1, "只有互動過的那位 NPC met=true，其餘仍未遇見");
+
+  // 動物親密度里程碑：bestAffinity 是歷史最高值，不受之後 affinity 衰減影響
+  const chicken = st.animals[0];
+  chicken.bestAffinity = 80; // 高於 AFFINITY_HAPPY_THRESHOLD(70)
+  chicken.affinity = 5; chicken.lastCaredAt = T0; // 模擬現值已經很低
+  const j4 = G.journalSummary(st, T0 + 999999999); // 拉長時間讓現值進一步衰減趨近 0
+  const chickenEntry = j4.animals.find((a) => a.id === chicken.id);
+  assert(chickenEntry.everHappy === true, "bestAffinity 曾達開心門檻，即使現值已衰減仍算數");
+  assert(chickenEntry.bestAffinity === 80, "bestAffinity 不隨時間衰減");
+
+  // 章節完成度：計算方式跟既有 Story 面板一致（done/total）
+  C.PROLOGUE_QUESTS.forEach((id) => (st.story.completed[id] = true));
+  const j5 = G.journalSummary(st, T0);
+  assert(j5.chapters.chapter1.done === C.PROLOGUE_QUESTS.length && j5.chapters.chapter1.total === C.PROLOGUE_QUESTS.length,
+    "第一章完成度算法跟 PROLOGUE_QUESTS 對得上");
+  assert(j5.chapters.chapter2.done === 0, "第二章尚未開始，完成度 0");
+
+  // 世界旗標
+  st.flags.bridgeRepaired = true;
+  const j6 = G.journalSummary(st, T0);
+  assert(j6.world.bridgeRepaired === true, "世界旗標讀取正確");
+
+  // 純讀取：journalSummary 不應該修改 state（唯讀彙總層不該有副作用）
+  const before = JSON.stringify(st);
+  G.journalSummary(st, T0);
+  const after = JSON.stringify(st);
+  assert(before === after, "journalSummary 不會 mutate state（純讀取彙總）");
+}
+
+console.log("\n== 16b. Stage 11.1：舊存檔動物物件補齊 bestAffinity ==");
+{
+  const oldAnimal = { id: "a_coop_1", type: "chicken", homeId: "b_coop", lastProducedAt: 12345, affinity: 42 };
+  const old = { version: 1, coins: 5, animals: [oldAnimal], map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } };
+  const m = S.migrate(old);
+  const a = m.animals.find((x) => x.id === "a_coop_1");
+  assert(a.bestAffinity === 42, "舊動物沒有 bestAffinity 時，用舊 affinity 值當合理預設（實際 " + a.bestAffinity + "）");
+}
+
 console.log("");
 if (failed === 0) { console.log("✅ 全部 MVP2 系統測試通過"); process.exit(0); }
 else { console.error(`❌ ${failed} 項失敗`); process.exit(1); }

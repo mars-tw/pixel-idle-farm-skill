@@ -53,9 +53,11 @@
   @media (min-width: 860px) { .main { grid-template-columns: minmax(0, 72%) minmax(0, 28%); align-items: start; } }
   /* 分頁側欄 */
   .side-panel { padding: 0; overflow: hidden; }
-  .side-tabs { display: flex; border-bottom: 2px solid var(--border); background: var(--cream-2); }
-  .side-tab { flex: 1; border: none; background: none; padding: 11px 5px; font-size: 13px; font-weight: 800;
-    color: var(--ink-soft); cursor: pointer; font-family: inherit; border-bottom: 3px solid transparent; min-height: 44px; }
+  /* Stage 11：多加一個分頁後，窄螢幕改水平捲動而不是把每個分頁擠到看不清楚 */
+  .side-tabs { display: flex; border-bottom: 2px solid var(--border); background: var(--cream-2);
+    overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .side-tab { flex: 1 1 auto; min-width: 62px; border: none; background: none; padding: 11px 5px; font-size: 13px; font-weight: 800;
+    color: var(--ink-soft); cursor: pointer; font-family: inherit; border-bottom: 3px solid transparent; min-height: 44px; white-space: nowrap; }
   .side-tab.sel { color: var(--ink); background: var(--cream); border-bottom-color: var(--good); }
   .tab-badge { display: inline-block; min-width: 16px; padding: 0 4px; border-radius: 9px; background: var(--bad);
     color: #fff; font-size: 10px; line-height: 16px; vertical-align: middle; }
@@ -393,6 +395,13 @@
   .animal-row .a-affinity-fill { height: 100%; background: linear-gradient(90deg, #ff9db0, #ff5f8a); transition: width .25s; }
   .animal-row .a-actions-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; flex: 0 0 auto; }
   .res.mat { color: #6b5638; }
+  /* Stage 11：農場圖鑑（唯讀彙總層），視覺沿用 story-card/story-kicker 的既有語彙 */
+  .journal-card { margin-bottom: 0; }
+  .journal-chapters { display: flex; gap: 10px; font-size: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+  .journal-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+  .journal-item { font-size: 12px; padding: 4px 8px; border-radius: 6px; background: #f4f1e8; border: 1px solid #e3ddc8; }
+  .journal-item.found { background: #eaf7e0; border-color: #bfe6a3; }
+  .journal-item.undiscovered, .journal-item.locked { color: var(--ink-soft); opacity: .7; }
 </style>
 </head>
 <body>
@@ -440,6 +449,7 @@
         <button class="side-tab" data-tab="orders">📜 訂單 <span class="tab-badge" id="ordersBadge"></span></button>
         <button class="side-tab" data-tab="upgrades">⬆️ 升級</button>
         <button class="side-tab sel" data-tab="story">📖 故事</button>
+        <button class="side-tab" data-tab="journal">📔 圖鑑</button>
       </div>
       <div class="side-body">
         <div class="side-pane" data-pane="tile">
@@ -456,6 +466,10 @@
         <div class="side-pane sel" data-pane="story">
           <div class="pane-head">陽光農場手札</div>
           <div id="storyPanel"></div>
+        </div>
+        <div class="side-pane" data-pane="journal">
+          <div class="pane-head">農場圖鑑</div>
+          <div id="journalPanel"></div>
         </div>
       </div>
     </div>

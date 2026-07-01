@@ -43,8 +43,9 @@ NPC、動物照護、品質經濟都涵蓋在內），不需要先讀 README 的
 6. 若要接會動的角色或用 gpt-image-2 生成/切割素材，讀 `references/character-animation.md`
    與 `references/art-pipeline-v4.md`（規格→生圖→切割→驗證四步，含常見陷阱表）。
 7. 若要做可走動大世界（camera、y-sort 遮擋、多格建築）或世界探索/NPC 對話/動物照護/
-   品質經濟/天氣等世界狀態視覺化這類深化系統，讀 `references/world-interaction-systems.md`
-   ——每個系統都拆成資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate 給可套用的做法。
+   品質經濟/天氣等世界狀態視覺化/收藏圖鑑這類跨系統彙總面板，讀
+   `references/world-interaction-systems.md`——每個系統都拆成資料層/state 遷移/核心邏輯/
+   UI/美術/測試/E2E gate 給可套用的做法。
 8. 補測試：核心邏輯用 Node 單元測試，互動與視覺用 Playwright E2E（桌機+手機都要跑）。
    E2E 具體要驗什麼、怎麼延伸現有測試，讀 `references/e2e-gate-checklist.md`。
 9. 交接給其他 agent 或下一輪工作時，讀 `references/claude-handoff.md`。
@@ -61,7 +62,7 @@ NPC、動物照護、品質經濟都涵蓋在內），不需要先讀 README 的
 | 文件 | 用途 |
 |---|---|
 | [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 節奏、次版本號慣例、多 agent 分工與「先驗證再動手」 |
-| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟、世界狀態視覺化——五個系統的通用 recipe |
+| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟、世界狀態視覺化、跨系統唯讀彙總層——六個系統的通用 recipe |
 | [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 生圖 → 切割 → 驗證的完整產線與常見陷阱 |
 | [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼、怎麼延伸現有測試、可複製的樣板程式碼 |
 | [`references/implementation-baseline.md`](references/implementation-baseline.md) | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |

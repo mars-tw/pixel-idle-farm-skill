@@ -958,6 +958,75 @@
     return { ok: true };
   }
 
+  // ---------- Stage 11：Farm Journal（唯讀彙總層，只讀既有 state 欄位，不建立平行狀態）----------
+  // 這一整組函式都不改 state，只是把 A-D 系統各自的資料換個角度彙總呈現；
+  // 「玩家有沒有發現」一律沿用該系統原本的閥門（harvested/collected/dialogueSeen），
+  // 不新發明一套判斷，否則兩邊定義漂移就會出現「Journal 說發現了，實際系統說沒有」的裂縫。
+  function journalCrops(state) {
+    const unlocked = unlockedCrops(state);
+    const harvested = (state.stats && state.stats.harvested) || {};
+    return Object.values(CROPS).map((c) => ({
+      id: c.id, name: c.name, emoji: c.emoji,
+      unlocked: unlocked.indexOf(c.id) !== -1,
+      discovered: (harvested[c.id] || 0) > 0,
+    }));
+  }
+  function journalProducts(state) {
+    const collected = (state.stats && state.stats.collected) || {};
+    return Object.keys(PRODUCTS).map((id) => {
+      const p = PRODUCTS[id];
+      return { id, name: p.name, emoji: p.emoji, quality: p.quality, baseProduct: p.baseProduct,
+        discovered: (collected[id] || 0) > 0 };
+    });
+  }
+  function journalNpcs(state) {
+    const seen = (state.story && state.story.dialogueSeen) || {};
+    const log = state.npcRequestLog || {};
+    return Object.values(C.NPCS || {}).map((n) => ({
+      id: n.id, name: n.name, title: n.title, met: !!seen[n.id],
+      requestsCompleted: (log[n.id] && log[n.id].fulfilledCount) || 0,
+    }));
+  }
+  // 動物親密度里程碑：affinity 現值會隨時間衰減，「曾經養到開心」要靠 bestAffinity 高水位判斷，
+  // 讀現值會讓玩家出門一趟回來發現自己養的動物「從沒開心過」——這不是玩家想看到的東西。
+  function journalAnimals(state, now) {
+    return (state.animals || []).map((a) => {
+      const def = ANIMALS[a.type];
+      return { id: a.id, type: a.type, name: def ? def.name : a.type,
+        currentTier: qualityTierFor(animalAffinity(state, a, now)),
+        bestAffinity: a.bestAffinity || 0,
+        everGood: (a.bestAffinity || 0) >= AFFINITY_GOOD_THRESHOLD,
+        everHappy: (a.bestAffinity || 0) >= AFFINITY_HAPPY_THRESHOLD };
+    });
+  }
+  function journalWorldFlags(state) {
+    const f = state.flags || {};
+    return { bridgeRepaired: !!f.bridgeRepaired, eventsClaimed: Object.keys(f.eventsClaimed || {}) };
+  }
+  function journalChapters(state) {
+    const completed = (state.story && state.story.completed) || {};
+    const pct = (ids) => ({ done: ids.filter((id) => completed[id]).length, total: ids.length });
+    return { chapter1: pct(C.PROLOGUE_QUESTS || []), chapter2: pct(C.CHAPTER2_QUESTS || []), chapter3: pct(C.CHAPTER3_QUESTS || []) };
+  }
+  function journalAchievements(state) {
+    const a = state.achievements || {};
+    return Object.keys(ACHIEVEMENTS).map((id) => ({
+      id, name: ACHIEVEMENTS[id].name, desc: ACHIEVEMENTS[id].desc, icon: ACHIEVEMENTS[id].icon, unlocked: !!a[id] }));
+  }
+  // 彙總入口：一次回傳 Journal 面板要的全部資料，UI 只呼叫這一個函式，不要各自重算發現閥門
+  function journalSummary(state, now) {
+    return {
+      crops: journalCrops(state),
+      products: journalProducts(state),
+      npcs: journalNpcs(state),
+      animals: journalAnimals(state, now),
+      world: journalWorldFlags(state),
+      chapters: journalChapters(state),
+      achievements: journalAchievements(state),
+      npcRequestsCompleted: (state.stats && state.stats.npcRequestsCompleted) || 0,
+    };
+  }
+
   // ---------- 離線進度 ----------
   // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數、動物產品
   function applyOffline(state, now) {
@@ -1059,6 +1128,8 @@
     npcAt, npcPhase, npcDialogue,
     // Stage 10：NPC 重複委託
     ensureNpcRequestState, npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest, declineNpcRequest,
+    // Stage 11：Farm Journal
+    journalCrops, journalProducts, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalSummary,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,

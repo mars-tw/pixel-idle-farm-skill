@@ -117,6 +117,7 @@
     document.querySelectorAll(".side-tab").forEach((b) => b.classList.toggle("sel", b.dataset.tab === name));
     document.querySelectorAll(".side-pane").forEach((p) => p.classList.toggle("sel", p.dataset.pane === name));
     if (name === "story") renderStory();
+    if (name === "journal") renderJournal();
   }
   function setupSideTabs() {
     document.querySelectorAll(".side-tab").forEach((b) => { b.onclick = () => switchTab(b.dataset.tab); });
@@ -434,6 +435,48 @@
     const rows = log.slice(-8).reverse().map((e) =>
       `<div class="dlg-row"><span class="dlg-name">${e.name}</span><span class="dlg-line">${e.line}</span></div>`).join("");
     return `<div class="dialogue-log"><div class="story-kicker">💬 對話記錄</div>${rows}</div>`;
+  }
+
+  // Stage 11：農場圖鑑——唯讀彙總層，畫面只是把 G.journalSummary() 的資料換個角度顯示，
+  // 不在這裡重新判斷任何「有沒有發現」，一律照 journalSummary 給的 discovered/unlocked/met 顯示。
+  function renderJournal() {
+    const box = $("journalPanel"); if (!box) return;
+    const j = G.journalSummary(state, now());
+    const item = (discovered, html, category) =>
+      `<div class="journal-item ${discovered ? "found" : "undiscovered"}" data-audit="journal-item" data-category="${category}" data-discovered="${discovered}">${html}</div>`;
+    const cropRows = j.crops.map((c) => {
+      if (!c.unlocked) return item(false, "🔒 未解鎖", "crop");
+      if (!c.discovered) return item(false, "❔ 尚未發現", "crop");
+      return item(true, `${c.emoji} ${c.name}`, "crop");
+    }).join("");
+    const productRows = j.products.map((p) =>
+      item(p.discovered, p.discovered ? `${p.emoji} ${p.name}` : "❔ 尚未發現", "product")).join("");
+    const npcMetCount = j.npcs.filter((n) => n.met).length;
+    const npcRows = j.npcs.map((n) => item(n.met,
+      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}` : "❔ 尚未遇見", "npc")).join("");
+    const animalRows = j.animals.map((a) => item(a.everHappy,
+      `${a.everHappy ? "💛" : a.everGood ? "🤍" : "⬜"} ${a.name}${a.everHappy ? "・曾達開心" : a.everGood ? "・曾達良好" : "・尚未達標"}`, "animal")).join("");
+    const achRows = j.achievements.map((a) => item(a.unlocked,
+      a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement")).join("");
+    box.innerHTML = `<div class="story-card journal-card">
+      <div class="story-kicker">章節完成度</div>
+      <div class="journal-chapters">
+        <div>第一章 ${j.chapters.chapter1.done}/${j.chapters.chapter1.total}</div>
+        <div>第二章 ${j.chapters.chapter2.done}/${j.chapters.chapter2.total}</div>
+        <div>第三章 ${j.chapters.chapter3.done}/${j.chapters.chapter3.total}</div>
+      </div>
+      <div class="story-kicker">🌾 作物圖鑑</div><div class="journal-grid">${cropRows}</div>
+      <div class="story-kicker">🥚 產物與品質圖鑑</div><div class="journal-grid">${productRows}</div>
+      <div class="story-kicker">🧑 鎮民名錄（${npcMetCount}/${j.npcs.length}）</div><div class="journal-grid">${npcRows}</div>
+      <div class="story-kicker">🐾 動物親密度里程碑</div><div class="journal-grid">${animalRows}</div>
+      <div class="story-kicker">🌉 世界旗標</div>
+      <div class="journal-grid">
+        ${item(j.world.bridgeRepaired, j.world.bridgeRepaired ? "✅ 東橋已修復" : "🔒 東橋未修復", "world")}
+        ${item(j.world.eventsClaimed.length > 0, j.world.eventsClaimed.length > 0 ? "✅ 東林空地已探索" : "🔒 東林空地未探索", "world")}
+      </div>
+      <div class="story-kicker">🏆 成就</div>
+      <div class="journal-grid">${achRows}</div>
+    </div>`;
   }
 
   // ====================================================================
@@ -1443,7 +1486,7 @@
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
     renderResBar(); renderSeeds(); updateFarm(now());
-    renderStory(); syncHud();
+    renderStory(); renderJournal(); syncHud();
     if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
     scheduleSave();
   }
@@ -1521,7 +1564,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -1554,7 +1597,7 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
-      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
+      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
       clickTile: (id) => handleMapClick(id),
       setTool: (t) => setTool(t),
       moving: () => !!moveTimer,

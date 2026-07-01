@@ -1,5 +1,5 @@
 /* =========================================================================
- * test-rpg-v4-e2e.js — Stage 4–10 RPG 場景 gate E2E（真瀏覽器）
+ * test-rpg-v4-e2e.js — Stage 4–11 RPG 場景 gate E2E（真瀏覽器）
  *
  * 對應 references/production-directive-stage4-game-audit.md：
  *   1. 大世界：地圖 ≥22×12，世界像素 > 視口（camera 可平移）
@@ -13,6 +13,8 @@
  *      clear 時視覺效果歸零，桌機/手機都不造成水平溢出
  *   9. Stage 10：NPC 重複委託——第三章完成後 ch3done 對話階段、走近 NPC 自動生成委託、
  *      庫存不足時交付按鈕 disabled、交付後扣庫存發獎並進冷卻、冷卻中不重複生成
+ *  10. Stage 11：農場圖鑑——已發現/未發現內容正確區分（不連帶洩漏同系列其他項目）、
+ *      鎮民名錄反映真實互動過的 NPC、動物親密度里程碑不受衰減影響、無水平溢出
  * 執行：node scripts/test-rpg-v4-e2e.js   （需 devDependency: playwright）
  * ========================================================================= */
 const http = require("http");
@@ -622,6 +624,37 @@ async function run() {
     assert(clearState.cls === "" && clearState.data === "clear", `晴朗：#weatherLayer 清空特效 class（class="${clearState.cls}" data-weather=${clearState.data}）`);
     assert(clearState.overflow <= 2, `晴朗時無水平溢出（${clearState.overflow}）`);
 
+    // 27. Stage 11：農場圖鑑——用故事鏈跑到這裡已經真實累積的發現狀態驗證，不刻意灌資料
+    await page.click('[data-tab="journal"]');
+    await sleep(300);
+    const journalState = await page.evaluate(() => {
+      const items = [...document.querySelectorAll('[data-audit="journal-item"]')];
+      const byCat = (cat) => items.filter((el) => el.dataset.category === cat);
+      const crop = byCat("crop"), product = byCat("product"), npc = byCat("npc");
+      return {
+        totalItems: items.length,
+        cropFoundHasWheat: crop.some((el) => el.dataset.discovered === "true" && el.textContent.includes("小麥")),
+        cropHasUndiscovered: crop.some((el) => el.dataset.discovered === "false"),
+        productFound: product.some((el) => el.dataset.discovered === "true"),
+        npcMetCount: npc.filter((el) => el.dataset.discovered === "true").length,
+        npcUnmetCount: npc.filter((el) => el.dataset.discovered === "false").length,
+        merchantMet: npc.some((el) => el.dataset.discovered === "true" && el.textContent.includes("商人")),
+        chickenHappy: [...document.querySelectorAll('[data-category="animal"]')].some((el) => el.textContent.includes("曾達開心")),
+        bridgeFlag: [...document.querySelectorAll('[data-category="world"]')].some((el) => el.textContent.includes("東橋已修復")),
+        overflow: document.documentElement.scrollWidth - window.innerWidth,
+      };
+    });
+    assert(journalState.totalItems > 0, "圖鑑分頁渲染出內容");
+    assert(journalState.cropFoundHasWheat === true, "作物圖鑑顯示已收成的小麥（真實故事進度累積，非灌資料）");
+    assert(journalState.cropHasUndiscovered === true, "作物圖鑑仍有未發現項目（沒有全部提前曝光）");
+    assert(journalState.productFound === true, "產物圖鑑顯示已收集過的動物產品");
+    assert(journalState.npcMetCount === 3 && journalState.npcUnmetCount === 1,
+      `鎮民名錄：跑完故事鏈只跟 3 位 NPC 互動過，商人從未拜訪（met=${journalState.npcMetCount} unmet=${journalState.npcUnmetCount}）`);
+    assert(journalState.merchantMet === false, "從未拜訪過的商人仍顯示「尚未遇見」，不因其他 NPC 已遇見而連帶曝光");
+    assert(journalState.chickenHappy === true, "動物親密度里程碑：起始雞的 bestAffinity 曾達開心門檻");
+    assert(journalState.bridgeFlag === true, "世界旗標：東橋已修復狀態正確");
+    assert(journalState.overflow <= 2, `圖鑑分頁無水平溢出（${journalState.overflow}）`);
+
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));
 
@@ -632,7 +665,7 @@ async function run() {
     server.close();
   }
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
-  console.log("\n✅ Stage 4-10 RPG v4 E2E 全部通過");
+  console.log("\n✅ Stage 4-11 RPG v4 E2E 全部通過");
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });
