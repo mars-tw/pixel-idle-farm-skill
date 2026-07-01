@@ -1167,7 +1167,7 @@
           if (r.ok) {
             const cfg = (window.NPC_REQUESTS || {})[tile.npc];
             const doneLine = (cfg && cfg.flavorDone && cfg.flavorDone[0]) || "謝謝你！";
-            toast("🎁 " + npc.name + " 的委託完成！+" + fmtNum(r.coins) + " 🪙");
+            toast("🎁 " + npc.name + "：「" + doneLine + "」+" + fmtNum(r.coins) + " 🪙");
             pushDialogueLog({ name: npc.name, line: doneLine });
             playAction("use", state.player.facing); afterChange(true); renderTileContext();
           } else toast("作物/產物不足，無法交付");

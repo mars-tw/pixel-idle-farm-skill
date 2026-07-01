@@ -562,11 +562,35 @@ async function run() {
     });
     assert(cardAfter === false, "交付後立刻再訪冷卻中，不顯示委託卡（未生成新委託）");
 
-    // 24. 桌機/手機皆無水平溢出（Stage 10 新增的委託 UI 也要檢查）
+    // 24. 放棄委託（用 mayor，避免跟 elder 的冷卻時間軸互相干擾）：點放棄後卡片消失、立刻進冷卻
+    const mayorTile = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const t = st.map.tiles.find((x) => x.npc === "mayor");
+      F.clickTile(t.id);
+      return t.id;
+    });
+    await waitArrive(page, 9000);
+    await sleep(500);
+    await page.evaluate((id) => window.__farm.clickTile(id), mayorTile);
+    await sleep(300);
+    const declineResult = await page.evaluate((id) => {
+      const hadCard = !!document.getElementById("tileContext").querySelector(".npc-request");
+      const btn = document.getElementById("declineReqBtn");
+      if (btn) btn.click();
+      const cardGone = !document.getElementById("tileContext").querySelector(".npc-request");
+      const reqGone = !window.__farm.state().npcRequests.mayor;
+      return { hadCard, cardGone, reqGone };
+    }, mayorTile);
+    assert(declineResult.hadCard === true, "鎮長也會自動生成委託（走近觸發，跟 elder 同一套邏輯）");
+    assert(declineResult.cardGone === true && declineResult.reqGone === true, "點「放棄」後委託卡消失、state.npcRequests 清空");
+    const overflowAfterDecline = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    assert(overflowAfterDecline <= 2, `放棄委託後仍無水平溢出（${overflowAfterDecline}）`);
+
+    // 25. 桌機/手機皆無水平溢出（Stage 10 新增的委託 UI 也要檢查）
     const overflowAfterRequest = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     assert(overflowAfterRequest <= 2, `NPC 委託 UI 不造成水平溢出（${overflowAfterRequest}）`);
 
-    // 25. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
+    // 26. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
     const rainState = await page.evaluate(() => {
       const st = window.__farm.state();
       st.level = Math.max(st.level, 5); // 天氣 Lv5 解鎖，故事鏈跑到這裡不一定已經到 Lv5
