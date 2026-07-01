@@ -453,9 +453,18 @@ async function run() {
     await waitArrive(page, 9000);
     await sleep(400);
     assert(coopInfo.marker === coopInfo.coopTileId, "「餵食/澆水/梳理」任務標記指向雞舍（structure marker）");
+    // Stage 7.1：餵食現在有冷卻（CARE_COOLDOWN_MS），E2E 不用真的等 20 秒 —
+    // 每次點擊後把該動物的 lastFedAt 往回撥，模擬冷卻已過，驗證的是「連續餵食後親密度/品質正確累積」
+    // 而非冷卻計時器本身（冷卻邏輯已由 test-systems.js 的 node 單元測試覆蓋）。
     for (let i = 0; i < 4; i++) {
       await page.evaluate(() => { const b = document.querySelector(".afeed"); if (b) b.click(); });
-      await sleep(250);
+      await sleep(200);
+      await page.evaluate(() => {
+        const F = window.__farm; const st = F.state();
+        const coop = st.buildings.find((b) => b.type === "chickenCoop");
+        for (const a of window.Game.animalsInHome(st, coop.id)) a.lastFedAt = 0;
+        F.refresh(); // 按鈕的 disabled 狀態是渲染當下算的，直接改 state 要重繪面板才會反映
+      });
     }
     const afterFeed = await page.evaluate(() => {
       const st = window.__farm.state();

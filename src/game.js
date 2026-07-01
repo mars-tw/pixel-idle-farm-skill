@@ -220,6 +220,12 @@
   const ORDER_QTY = {
     wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], strawberry: [2, 4], pumpkin: [1, 3],
     egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5],
+    // Stage 7.1：品質分級品項明確給數量範圍，隨品質往下收（原本沒列到會 fallback [2,5]，
+    // 對高單價的 premium 品項偏寬鬆）
+    egg_good: [2, 5], egg_premium: [1, 3],
+    milk_good: [1, 3], milk_premium: [1, 2],
+    wool_good: [1, 2], wool_premium: [1, 1],
+    honey_good: [1, 3], honey_premium: [1, 2],
   };
   function makeOrder(state, now, rng, idSeed) {
     const pool = availableOrderItems(state); // 作物 + 已解鎖動物產品
@@ -553,12 +559,17 @@
     }
     return { perProduct, total, lost };
   }
-  // 餵食：花作物讓動物立即產出一份（主動玩法獎勵），同時是一種照護動作（漲親密度）
+  // 餵食：花作物讓動物立即產出一份（主動玩法獎勵），同時是一種照護動作（漲親密度）。
+  // Stage 7.1 修正兩點：(1) 有冷卻，避免無成本地狂點餵食把親密度/品質衝太快；
+  // (2) 若動物已有自然累積的待收產物，餵食前先自動收掉，避免蓋掉 lastProducedAt 白白損失。
   function feedAnimal(state, animalId, now) {
     const a = (state.animals || []).find((x) => x.id === animalId);
     if (!a) return { ok: false, reason: "gone" };
+    if (now - (a.lastFedAt || 0) < CARE_COOLDOWN_MS) return { ok: false, reason: "cooldown" };
     const def = ANIMALS[a.type];
     for (const k of Object.keys(def.feedCost)) if ((state.storage.items[k] || 0) < def.feedCost[k]) return { ok: false, reason: "no_feed" };
+    let collectedFirst = null;
+    if (Math.floor((now - a.lastProducedAt) / def.produceMs) > 0) collectedFirst = collectAnimal(state, animalId, now);
     for (const k of Object.keys(def.feedCost)) {
       state.storage.items[k] -= def.feedCost[k];
       if (state.storage.items[k] <= 0) delete state.storage.items[k];
@@ -571,7 +582,7 @@
     const { added, lost } = addToStorage(state, productId, 1);
     state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
     a.lastProducedAt = now; // 重置週期
-    return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, affinity: a.affinity };
+    return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, affinity: a.affinity, collectedFirst };
   }
 
   // ========================================================================
@@ -897,16 +908,20 @@
       }
     }
 
-    // MVP2：動物離線自動產出（時間戳計算，與作物同上限規則）
+    // MVP2：動物離線自動產出（時間戳計算，與作物同上限規則）。
+    // Stage 7.1 修正：離線收成品質改依「回來當下」的親密度結算（跟上線收集同規則），
+    // 原本固定用 def.product（normal），跟「當下親密度決定品質」的設計語義不一致。
     summary.products = {};
     for (const a of (state.animals || [])) {
       const def = ANIMALS[a.type];
       const cycles = Math.min(500, Math.floor((offlineNow - a.lastProducedAt) / def.produceMs));
       if (cycles <= 0) continue;
-      const { added, lost } = addToStorage(state, def.product, cycles);
-      summary.products[def.product] = (summary.products[def.product] || 0) + added;
+      const tier = qualityTierFor(animalAffinity(state, a, offlineNow));
+      const productId = qualityProductId(def.product, tier);
+      const { added, lost } = addToStorage(state, productId, cycles);
+      summary.products[productId] = (summary.products[productId] || 0) + added;
       summary.lost += lost;
-      state.stats.collected[def.product] = (state.stats.collected[def.product] || 0) + added;
+      state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
       a.lastProducedAt += cycles * def.produceMs;
     }
 

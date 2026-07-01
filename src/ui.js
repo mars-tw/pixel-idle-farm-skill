@@ -666,8 +666,14 @@
     for (const home of state.buildings) {
       const animals = G.animalsInHome(state, home.id); if (!animals.length) continue;
       const s = (window.STRUCTURES || []).find((x) => x.id === home.structureId);
-      if (!s) continue;
-      const baseX = s.x + s.w / 2, baseY = s.y + s.h + 0.9; // 結構正下方草地帶
+      let baseX, baseY;
+      if (s) { baseX = s.x + s.w / 2; baseY = s.y + s.h + 0.9; } // 地圖常駐多格結構：結構正下方草地帶
+      else {
+        // Stage 7.1 修正：玩家自建的建築（buildBuilding，如額外雞舍/畜舍/蜂箱）沒有 structureId，
+        // 原本會被 continue 跳過導致動物在地圖上永遠不可見。改用建築自己所在的單格磚當錨點。
+        const tile = G.getTileById(state, home.tileId); if (!tile) continue;
+        baseX = tile.x + 0.5; baseY = tile.y + 1.15;
+      }
       animals.forEach((a, i) => {
         const seed = (strHash(a.id) % 1000) / 1000;        // 每隻獨立相位/速度
         const ph = seed * Math.PI * 2, sp = 0.00035 + seed * 0.00025;
@@ -1226,6 +1232,7 @@
         const prog = G.animalProgress(state, a, now());
         const affinity = G.animalAffinity(state, a, now());
         const status = G.animalStatus(state, a, now());
+        const canFeed = now() - (a.lastFedAt || 0) >= window.CARE_COOLDOWN_MS;
         const canWater = now() - (a.lastWateredAt || 0) >= window.CARE_COOLDOWN_MS;
         const canGroom = now() - (a.lastGroomedAt || 0) >= window.CARE_COOLDOWN_MS;
         html += `
@@ -1238,21 +1245,22 @@
               <span class="bo-cost">${ANIMAL_STATUS_EMOJI[status]} ${ANIMAL_STATUS_LABEL[status]}・親密度 ${affinity.toFixed(0)}</span></span>
             <span class="a-actions-col">
               <button class="btn buy small acol" data-id="${a.id}" ${prog.ready ? "" : "disabled"}>收集</button>
-              <button class="btn ghost small afeed" data-id="${a.id}">餵食</button>
+              <button class="btn ghost small afeed" data-id="${a.id}" ${canFeed ? "" : "disabled"}>餵食</button>
               <button class="btn ghost small awater" data-id="${a.id}" ${canWater ? "" : "disabled"}>澆水</button>
               <button class="btn ghost small agroom" data-id="${a.id}" ${canGroom ? "" : "disabled"}>梳理</button>
             </span>
           </div>`;
       });
-      // 買動物：Stage 6.5 起畜舍/雞舍地圖常駐不代表解鎖，仍需等級（ANIMALS[type].unlockLevel）
-      const animalType = def.effect.unlockAnimal[0];
-      const adef = window.ANIMALS[animalType];
+      // 買動物：Stage 6.5 起畜舍/雞舍地圖常駐不代表解鎖，仍需等級（ANIMALS[type].unlockLevel）；
+      // Stage 7.1 修正：畜舍可養牛「和」羊，逐一列出 unlockAnimal 全部類型，不只 [0]（原本羊在 UI 上永遠買不到）
       if (animals.length < cap) {
-        if (state.level >= adef.unlockLevel) {
-          html += `<button class="btn buy small abuy" data-bid="${b.id}" data-type="${animalType}">＋ 買一隻${adef.name}（🪙${adef.cost}）</button>`;
-        } else {
-          html += `<div class="bo-cost">🔒 ${adef.emoji} ${adef.name}・Lv${adef.unlockLevel} 解鎖</div>`;
-        }
+        html += (def.effect.unlockAnimal || []).map((animalType) => {
+          const adef = window.ANIMALS[animalType];
+          if (state.level >= adef.unlockLevel) {
+            return `<button class="btn buy small abuy" data-bid="${b.id}" data-type="${animalType}">＋ 買一隻${adef.name}（🪙${adef.cost}）</button>`;
+          }
+          return `<div class="bo-cost">🔒 ${adef.emoji} ${adef.name}・Lv${adef.unlockLevel} 解鎖</div>`;
+        }).join("");
       } else {
         html += `<div class="bo-cost">已達容量上限 ${cap} 隻</div>`;
       }
@@ -1272,10 +1280,12 @@
       const r = G.feedAnimal(state, btn.dataset.id, now());
       if (r.ok) {
         playAction("sow"); spawnVfx(tile.id, "feed_bits", { sheet: "care_vfx" });
-        toast("🌾 餵食 → +1 " + itemName(r.product) + "・親密度 " + r.affinity.toFixed(0));
+        const extra = r.collectedFirst && r.collectedFirst.added ? "（另收 " + r.collectedFirst.added + " 份已成熟的）" : "";
+        toast("🌾 餵食 → +1 " + itemName(r.product) + extra + "・親密度 " + r.affinity.toFixed(0));
         G.advanceStory(state, "care_animal", now());
         afterChange(true); renderTileContext();
-      } else toast("飼料不足（需作物）");
+      } else if (r.reason === "cooldown") toast("剛餵過，牠還吃得很飽（稍後再來）");
+      else toast("飼料不足（需作物）");
     });
     box.querySelectorAll(".awater").forEach((btn) => btn.onclick = () => {
       const r = G.waterAnimal(state, btn.dataset.id, now());
