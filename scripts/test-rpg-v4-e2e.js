@@ -511,18 +511,20 @@ async function run() {
       st.weather = { id: "sunny", untilMs: Date.now() + 999999 };
       window.__farm.refresh();
       const el = document.getElementById("weatherLayer");
-      return { cls: el.className, data: el.getAttribute("data-weather") };
+      return { cls: el.className, data: el.getAttribute("data-weather"), overflow: document.documentElement.scrollWidth - window.innerWidth };
     });
     assert(sunnyState.cls === "sunny" && sunnyState.data === "sunny", `豔陽：#weatherLayer 套上 sunny（class=${sunnyState.cls} data-weather=${sunnyState.data}）`);
+    assert(sunnyState.overflow <= 2, `豔陽疊圖不造成水平溢出（${sunnyState.overflow}）`);
 
     const clearState = await page.evaluate(() => {
       const st = window.__farm.state();
       st.weather = { id: "clear", untilMs: 0 };
       window.__farm.refresh();
       const el = document.getElementById("weatherLayer");
-      return { cls: el.className, data: el.getAttribute("data-weather") };
+      return { cls: el.className, data: el.getAttribute("data-weather"), overflow: document.documentElement.scrollWidth - window.innerWidth };
     });
     assert(clearState.cls === "" && clearState.data === "clear", `晴朗：#weatherLayer 清空特效 class（class="${clearState.cls}" data-weather=${clearState.data}）`);
+    assert(clearState.overflow <= 2, `晴朗時無水平溢出（${clearState.overflow}）`);
 
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));

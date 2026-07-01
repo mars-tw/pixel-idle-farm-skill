@@ -265,8 +265,10 @@
   /* 視口：地圖為主畫面，桌機佔大、手機保留可玩 */
   #mapScene { position: relative; width: 100%; height: 60vh; max-height: 660px; min-height: 320px;
     overflow: hidden; border-radius: 14px; cursor: pointer; touch-action: none;
-    background: linear-gradient(180deg, #8fc46f, #79ad58);
+    background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate;
     box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
+  /* isolation: isolate 讓 #weatherLayer 的 mix-blend-mode 只跟地圖場景內的內容混色，
+     不會跨到場景外的其他 UI（Stage 9）*/
   @media (max-width: 859px) { #mapScene { height: 52vh; min-height: 300px; } }
   /* 世界：依 camera 平移 */
   #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0);

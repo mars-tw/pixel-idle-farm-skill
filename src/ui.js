@@ -1432,7 +1432,7 @@
   // ---------- 主迴圈 ----------
   function loop() {
     const t = now();
-    G.updateWeather(state, t);
+    const weatherChanged = G.updateWeather(state, t);
     const helped = G.runHelperOnline(state, t);
     // 訂單過期補單
     G.refreshOrders(state, t);
@@ -1445,7 +1445,8 @@
         m.innerHTML = `${rarity.label} · ⏳ ${fmtTime(Math.max(0, o.expiresAt - t))}`;
       });
     }
-    if (helped.harvested > 0) { renderResBar(); }
+    // 天氣自然到期改變時，資源列的天氣圖示也要跟著換，不然會跟地圖上的 #weatherLayer 對不上
+    if (helped.harvested > 0 || weatherChanged) { renderResBar(); }
     updateFarm(t);
     updateMap(t);       // 地圖：作物/動物成熟
     tickPlayer(t);      // 玩家走路/動作/待機動畫

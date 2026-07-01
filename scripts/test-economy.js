@@ -237,6 +237,19 @@ console.log("\n== 9. 天氣（lv5 解鎖）==");
   assert(growRain < growClear, "降雨時成長更快");
   st.weather = { id: "rain", untilMs: T0 - 1 };
   assert(G.currentWeather(st, T0) === "clear", "過期天氣不會繼續生效");
+  // sunny 提升售價（用高單價作物，低單價作物的 1.25 倍會被 Math.round 蓋掉看不出差異）
+  st.weather = { id: "sunny", untilMs: T0 + 1e9 };
+  const sellSunny = G.sellUnitValue(st, "pumpkin", T0);
+  st.weather = { id: "clear", untilMs: T0 + 1e9 };
+  const sellClear = G.sellUnitValue(st, "pumpkin", T0);
+  assert(sellSunny > sellClear, "豔陽時售價更高");
+  // 訂單契約價不受天氣影響（Stage 6.5 起的既定設計，不是遺漏）
+  const order = G.makeOrder(st, T0, makeRng(3));
+  st.weather = { id: "sunny", untilMs: T0 + 1e9 };
+  const paySunny = G.orderPayout(st, order).coins;
+  st.weather = { id: "clear", untilMs: T0 + 1e9 };
+  const payClear = G.orderPayout(st, order).coins;
+  assert(paySunny === payClear, "訂單契約價不受天氣影響（既定設計）");
 }
 
 console.log("\n== 10. 存檔遷移（向後相容）==");
