@@ -154,6 +154,26 @@ fork 後先勾選你的方向，再動手：
 
 ---
 
+## 🧩 把這個 repo 當 Skill / 模板使用
+
+這個 repo 本身就是一個 [Claude Code Skill](https://claude.com/claude-code)（`SKILL.md`），
+也是「用 Stage Gate 方法論做遊戲」的完整實戰紀錄。想複製這套**方法**（不只是這個遊戲）
+去做別的專案，讀這幾份文件：
+
+| 文件 | 內容 |
+|---|---|
+| [`SKILL.md`](SKILL.md) | 觸發時機、適用/不適用場景、完整工作流、資源導覽 |
+| [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 方法論本體：什麼算一個 Stage、標準循環、次版本號（X.5/X.1）什麼時候用、多 agent 協作分工與「先驗證再動手」紀律 |
+| [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 → 切割 → 驗證四步產線的技術細節，含常見陷阱表（棋盤格烤進 RGB、空白幀、物件間距太近導致合併） |
+| [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼（世界規模/camera/視覺純度/互動路由/故事/RWD/穩定性）、怎麼延伸現有測試 |
+| [`references/claude-handoff.md`](references/claude-handoff.md) | 交接指南：先讀順序、目前狀態、角色分工、驗收檢查 |
+
+**多 agent 協作模式**（Stage 6.5 起採用）：一個 agent 負責審核/企劃/美術規格（獨立讀
+repo 給意見，不先餵摘要），另一個負責實作（驗證每個具體主張後才動手、寫程式碼、補測試、
+上線）。這個 repo 的 git 歷史就是這套協作實際跑起來的紀錄，可以直接參考 commit 訊息。
+
+---
+
 ## 🚀 本地執行
 
 ```bash
