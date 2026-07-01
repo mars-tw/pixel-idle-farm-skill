@@ -589,18 +589,34 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   const chickenEntry = j4.animals.find((a) => a.id === chicken.id);
   assert(chickenEntry.everHappy === true, "bestAffinity 曾達開心門檻，即使現值已衰減仍算數");
   assert(chickenEntry.bestAffinity === 80, "bestAffinity 不隨時間衰減");
+  assert(chickenEntry.everGood === true, "曾達開心門檻的動物，同時也滿足較低的 everGood 門檻");
 
-  // 章節完成度：計算方式跟既有 Story 面板一致（done/total）
+  // Codex 審核 Stage 11：everGood-only（未達開心但達良好）也要算「已發現」，
+  // 不能只看 everHappy——不然文字顯示「曾達良好」但 data-discovered 卻是 false
+  const onlyGoodAnimal = { id: "test_only_good", type: "chicken", affinity: 0, bestAffinity: 40 }; // 高於 GOOD(35) 低於 HAPPY(70)
+  const goodEntry = G.journalAnimals({ animals: [onlyGoodAnimal] }, T0).find((a) => a.id === "test_only_good");
+  assert(goodEntry.everGood === true && goodEntry.everHappy === false, "bestAffinity 40 只達 good 門檻，未達 happy");
+
+  // 章節完成度：計算方式跟既有 Story 面板一致（done/total），且要有 unlocked 閥門——
+  // Codex 審核 Stage 11 抓到：Journal 原本不管解鎖狀態就把三章進度都顯示出來，
+  // 跟 renderStory() 的既有規則（序章全完成才顯示第二章）不一致
+  assert(j4.chapters.chapter1.unlocked === true, "第一章一開始就看得到");
+  assert(j4.chapters.chapter2.unlocked === false, "序章尚未全部完成前，第二章維持未解鎖");
   C.PROLOGUE_QUESTS.forEach((id) => (st.story.completed[id] = true));
   const j5 = G.journalSummary(st, T0);
   assert(j5.chapters.chapter1.done === C.PROLOGUE_QUESTS.length && j5.chapters.chapter1.total === C.PROLOGUE_QUESTS.length,
     "第一章完成度算法跟 PROLOGUE_QUESTS 對得上");
-  assert(j5.chapters.chapter2.done === 0, "第二章尚未開始，完成度 0");
+  assert(j5.chapters.chapter2.unlocked === true, "序章全部完成後，第二章解鎖");
+  assert(j5.chapters.chapter2.done === 0, "第二章剛解鎖，完成度 0");
+  assert(j5.chapters.chapter3.unlocked === false, "第二章尚未完成前，第三章維持未解鎖");
 
-  // 世界旗標
+  // 世界旗標：明確用 eastClearingClaimed，不要用「任一事件已領取」這種會隨事件數增加而
+  // 誤判的通用邏輯（Codex 審核 Stage 11 指出的潛在坑）
   st.flags.bridgeRepaired = true;
+  st.flags.eventsClaimed.east_clearing = true;
   const j6 = G.journalSummary(st, T0);
-  assert(j6.world.bridgeRepaired === true, "世界旗標讀取正確");
+  assert(j6.world.bridgeRepaired === true, "世界旗標讀取正確（東橋）");
+  assert(j6.world.eastClearingClaimed === true, "世界旗標讀取正確（東林空地，明確欄位而非事件清單長度）");
 
   // 純讀取：journalSummary 不應該修改 state（唯讀彙總層不該有副作用）
   const before = JSON.stringify(st);

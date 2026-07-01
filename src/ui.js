@@ -454,16 +454,19 @@
     const npcMetCount = j.npcs.filter((n) => n.met).length;
     const npcRows = j.npcs.map((n) => item(n.met,
       n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}` : "❔ 尚未遇見", "npc")).join("");
-    const animalRows = j.animals.map((a) => item(a.everHappy,
+    // discovered 要用 everGood||everHappy，不能只看 everHappy——不然「曾達良好」的文字
+    // 顯示了，但 CSS class/data-discovered 卻標成 undiscovered，兩者互相矛盾
+    const animalRows = j.animals.map((a) => item(a.everGood || a.everHappy,
       `${a.everHappy ? "💛" : a.everGood ? "🤍" : "⬜"} ${a.name}${a.everHappy ? "・曾達開心" : a.everGood ? "・曾達良好" : "・尚未達標"}`, "animal")).join("");
     const achRows = j.achievements.map((a) => item(a.unlocked,
       a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement")).join("");
+    const chapterLine = (label, ch) => ch.unlocked ? `<div>${label} ${ch.done}/${ch.total}</div>` : `<div>🔒 ${label}未解鎖</div>`;
     box.innerHTML = `<div class="story-card journal-card">
       <div class="story-kicker">章節完成度</div>
       <div class="journal-chapters">
-        <div>第一章 ${j.chapters.chapter1.done}/${j.chapters.chapter1.total}</div>
-        <div>第二章 ${j.chapters.chapter2.done}/${j.chapters.chapter2.total}</div>
-        <div>第三章 ${j.chapters.chapter3.done}/${j.chapters.chapter3.total}</div>
+        ${chapterLine("第一章", j.chapters.chapter1)}
+        ${chapterLine("第二章", j.chapters.chapter2)}
+        ${chapterLine("第三章", j.chapters.chapter3)}
       </div>
       <div class="story-kicker">🌾 作物圖鑑</div><div class="journal-grid">${cropRows}</div>
       <div class="story-kicker">🥚 產物與品質圖鑑</div><div class="journal-grid">${productRows}</div>
@@ -472,7 +475,7 @@
       <div class="story-kicker">🌉 世界旗標</div>
       <div class="journal-grid">
         ${item(j.world.bridgeRepaired, j.world.bridgeRepaired ? "✅ 東橋已修復" : "🔒 東橋未修復", "world")}
-        ${item(j.world.eventsClaimed.length > 0, j.world.eventsClaimed.length > 0 ? "✅ 東林空地已探索" : "🔒 東林空地未探索", "world")}
+        ${item(j.world.eastClearingClaimed, j.world.eastClearingClaimed ? "✅ 東林空地已探索" : "🔒 東林空地未探索", "world")}
       </div>
       <div class="story-kicker">🏆 成就</div>
       <div class="journal-grid">${achRows}</div>

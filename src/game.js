@@ -1001,12 +1001,24 @@
   }
   function journalWorldFlags(state) {
     const f = state.flags || {};
-    return { bridgeRepaired: !!f.bridgeRepaired, eventsClaimed: Object.keys(f.eventsClaimed || {}) };
+    // 明確回傳具名旗標而非整個 eventsClaimed 清單——未來新增其他事件點時，這裡不會
+    // 因為「任一事件已領取」就誤判成「東林已探索」（Codex 審核 Stage 11 時抓到的坑）
+    return { bridgeRepaired: !!f.bridgeRepaired, eastClearingClaimed: !!(f.eventsClaimed && f.eventsClaimed.east_clearing) };
   }
+  // 章節完成度要跟 renderStory() 用同一套「解鎖」閥門：第二章要序章全完成才顯示，
+  // 第三章要第二章全完成才顯示，不能提前曝光「還沒解鎖的章節有幾個任務」
+  // （Codex 審核 Stage 11 時抓到的坑：Journal 原本不管解鎖狀態就把三章進度都顯示出來）。
   function journalChapters(state) {
     const completed = (state.story && state.story.completed) || {};
     const pct = (ids) => ({ done: ids.filter((id) => completed[id]).length, total: ids.length });
-    return { chapter1: pct(C.PROLOGUE_QUESTS || []), chapter2: pct(C.CHAPTER2_QUESTS || []), chapter3: pct(C.CHAPTER3_QUESTS || []) };
+    const chapter1 = pct(C.PROLOGUE_QUESTS || []);
+    const chapter2 = pct(C.CHAPTER2_QUESTS || []);
+    const chapter3 = pct(C.CHAPTER3_QUESTS || []);
+    return {
+      chapter1: Object.assign({ unlocked: true }, chapter1),
+      chapter2: Object.assign({ unlocked: chapter1.total > 0 && chapter1.done >= chapter1.total }, chapter2),
+      chapter3: Object.assign({ unlocked: chapter2.total > 0 && chapter2.done >= chapter2.total }, chapter3),
+    };
   }
   function journalAchievements(state) {
     const a = state.achievements || {};
