@@ -37,8 +37,30 @@ let failed = 0;
 function assert(cond, msg) { if (cond) console.log("  ✓ " + msg); else { console.error("  ✗ " + msg); failed++; } }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function startServer() { /* 起本地 http server 供 chromium 開 */ }
-async function waitArrive(page, max) { /* 輪詢 window.__farm.moving() 直到 false，取代固定 sleep */ }
+// 起本地 http server 供 chromium 開；防目錄穿越 + Windows 路徑陷阱都在這裡處理好
+function startServer() {
+  return new Promise((resolve) => {
+    const server = http.createServer((req, res) => {
+      let p = decodeURIComponent(req.url.split("?")[0]); if (p === "/") p = "/index.html";
+      const fp = path.join(ROOT, p);
+      // fp.startsWith(ROOT) 防止 "../" 逃出 repo 根目錄；ROOT 沒用 path.resolve 這裡會永遠比對失敗
+      if (!fp.startsWith(ROOT) || !fs.existsSync(fp) || fs.statSync(fp).isDirectory()) { res.writeHead(404); res.end(); return; }
+      res.writeHead(200, { "Content-Type": MIME[path.extname(fp)] || "application/octet-stream" });
+      fs.createReadStream(fp).pipe(res);
+    });
+    server.listen(0, "127.0.0.1", () => resolve(server)); // port 0 = 系統自動選空閒埠，測試互相不衝突
+  });
+}
+
+// 輪詢 window.__farm.moving() 直到 false，取代固定 sleep（角色走路距離不同、耗時不同）
+async function waitArrive(page, max) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < (max || 6000)) {
+    if (!(await page.evaluate(() => window.__farm.moving()))) return true;
+    await sleep(120);
+  }
+  return false;
+}
 
 async function run() {
   const { chromium } = require("playwright");

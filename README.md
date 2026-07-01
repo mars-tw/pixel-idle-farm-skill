@@ -162,10 +162,12 @@ fork 後先勾選你的方向，再動手：
 
 | 文件 | 內容 |
 |---|---|
-| [`SKILL.md`](SKILL.md) | 觸發時機、適用/不適用場景、完整工作流、資源導覽 |
+| [`SKILL.md`](SKILL.md) | 觸發時機、適用/不適用場景、完整工作流、reference 導覽表、核心不可違反原則 |
 | [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 方法論本體：什麼算一個 Stage、標準循環、次版本號（X.5/X.1）什麼時候用、多 agent 協作分工與「先驗證再動手」紀律 |
+| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟四個系統的通用 recipe（資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate） |
 | [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 → 切割 → 驗證四步產線的技術細節，含常見陷阱表（棋盤格烤進 RGB、空白幀、物件間距太近導致合併） |
 | [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼（世界規模/camera/視覺純度/互動路由/故事/RWD/穩定性）、怎麼延伸現有測試 |
+| [`references/implementation-baseline.md`](references/implementation-baseline.md) | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |
 | [`references/claude-handoff.md`](references/claude-handoff.md) | 交接指南：先讀順序、目前狀態、角色分工、驗收檢查 |
 
 **多 agent 協作模式**（Stage 6.5 起採用）：一個 agent 負責審核/企劃/美術規格（獨立讀

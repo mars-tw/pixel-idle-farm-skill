@@ -124,7 +124,8 @@ frame 是空的。內容帶偵測直接找內容，不會切到空白帶。
    `out.xxx = await sliceGrid(...)`（或 `sliceActions`/`sliceLoose`），決定 frame 命名
    規則（跟遊戲程式碼要用到的 id 對齊，通常是 `${row}_${col}` 或明確列出的變體名）。
 4. 在 `scripts/process-v4-atlas.js` 的 `FILES` 物件加一筆 `key: "輸出檔名"` 映射。
-5. `node scripts/process-v4-atlas.js` 實際切割，肉眼看切出來的結果（用 Read 工具開圖）。
+5. `node scripts/process-v4-atlas.js` 實際切割，用圖片檢視器、瀏覽器截圖或任何視覺檢查
+   工具人工確認切出來的結果——不要只看驗證器綠燈，肉眼看一次品質。
 6. 在 `scripts/validate-v4-atlas.js` 的 `REQUIRED` 補上這個 sheet 遊戲會用到的 frame id
    清單，跑 `node scripts/validate-v4-atlas.js` 確認全綠。
 7. 在 `src/config.js`／`src/ui.js` 接上實際的遊戲邏輯與渲染（新素材如果沒有接玩法，

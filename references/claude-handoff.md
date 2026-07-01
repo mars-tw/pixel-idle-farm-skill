@@ -5,12 +5,15 @@
 
 ## 先讀順序
 
-1. `SKILL.md` — 觸發時機、適用場景、工作流程總覽。
+1. `SKILL.md` — 觸發時機、適用場景、工作流程總覽、reference 導覽表。
 2. `references/stage-gate-playbook.md` — Stage Gate 方法論，怎麼跑一輪「規劃→實作→測試→上線」。
-3. `references/game-design.md` + `references/data-model.md` — 改玩法/數值前必讀。
-4. 若涉及美術：`references/art-pipeline-v4.md` — gpt-image-2 → 切割 → 驗證的完整產線。
-5. 若涉及測試：`references/e2e-gate-checklist.md` — E2E 具體要驗什麼、怎麼延伸現有測試。
-6. README 的 Stage Gate 表格 — 目前每個 Stage 實際做了什麼、通過了什麼 gate。
+3. `references/game-design.md` + `references/data-model.md` + `references/implementation-baseline.md`
+   — 改玩法/數值/工程基線前必讀。
+4. 若涉及世界探索/NPC 對話/動物照護/品質經濟：`references/world-interaction-systems.md`
+   — 每個系統的資料層/核心邏輯/UI/測試/E2E gate 通用做法。
+5. 若涉及美術：`references/art-pipeline-v4.md` — gpt-image-2 → 切割 → 驗證的完整產線。
+6. 若涉及測試：`references/e2e-gate-checklist.md` — E2E 具體要驗什麼、怎麼延伸現有測試。
+7. README 的 Stage Gate 表格 — 目前每個 Stage 實際做了什麼、通過了什麼 gate。
 
 ## 目前狀態（Stage 1–7.1 已上線）
 
