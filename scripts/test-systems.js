@@ -449,6 +449,8 @@ console.log("\n== 14b. Stage 7：舊存檔的動物物件補齊照護欄位 ==")
 console.log("\n== 15. Stage 10.1：NPC 重複委託（core logic）==");
 {
   const st = S.defaultState(T0);
+  const chk = G.canRequestFrom(st, "not_a_real_npc", T0);
+  assert(chk.ok === false && chk.reason === "no_npc", `不存在的 NPC id 回傳 reason=no_npc（實際 ${chk.reason}）`);
   assert(G.canRequestFrom(st, "elder", T0).reason === "story", "第三章未完成前，NPC 不會開委託（reason=story）");
 
   C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).forEach((id) => (st.story.completed[id] = true));
@@ -560,6 +562,20 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   const pumpkinEntry = j0.crops.find((c) => c.id === "pumpkin"); // unlockLevel 5，Lv1 不會解鎖
   assert(wheatEntry.unlocked === true && wheatEntry.discovered === false, "Lv1 小麥已解鎖但尚未發現（沒收成過）");
   assert(pumpkinEntry.unlocked === false, "Lv1 南瓜（unlockLevel 5）尚未解鎖");
+  // 邊界值：胡蘿蔔 unlockLevel=2，等級剛好卡在邊界兩側都要驗證（避免 unlockedCrops 的
+  // <= 比較被改成 < 這種 off-by-one 沒被抓到）
+  assert(j0.crops.find((c) => c.id === "carrot").unlocked === false, "Lv1 時胡蘿蔔（unlockLevel 2）尚未解鎖");
+  const stLv2 = S.defaultState(T0); stLv2.level = 2;
+  assert(G.journalSummary(stLv2, T0).crops.find((c) => c.id === "carrot").unlocked === true, "Lv2 時胡蘿蔔剛好解鎖（邊界值）");
+
+  // 成就：未解鎖成就在圖鑑裡要有對應項目（但顯示邏輯是 UI 層的事，這裡只驗證資料本身）
+  assert(j0.achievements.length === Object.keys(C.ACHIEVEMENTS).length, "成就總數與 ACHIEVEMENTS 設定一致");
+  assert(j0.achievements.every((a) => a.unlocked === false), "全新存檔沒有任何成就解鎖");
+  st.achievements.firstHarvest = true;
+  const jAch = G.journalSummary(st, T0);
+  assert(jAch.achievements.find((a) => a.id === "firstHarvest").unlocked === true, "解鎖後的成就 unlocked 正確反映（實際讀 state.achievements）");
+  assert(jAch.achievements.filter((a) => a.unlocked).length === 1, "只有解鎖的那一項是 true，其餘成就仍是 false（不會互相污染）");
+  st.achievements = {}; // 還原，避免影響後續斷言
 
   // 收成小麥後，作物圖鑑該項目變成已發現，其餘不受影響
   st.stats.harvested.wheat = 1;
@@ -580,6 +596,13 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   assert(j3.npcs.length === Object.keys(C.NPCS).length, "NPC 名錄總數與 NPCS 設定一致");
   assert(j3.npcs.find((n) => n.id === "elder").met === true, "已互動過的老農 met=true");
   assert(j3.npcs.filter((n) => n.met).length === 1, "只有互動過的那位 NPC met=true，其餘仍未遇見");
+  assert(j3.npcs.find((n) => n.id === "elder").requestsCompleted === 0, "尚未完成過委託時，NPC 名錄的完成次數為 0");
+  st.npcRequestLog = { elder: { lastRequestAt: T0, fulfilledCount: 3 } };
+  const j3b = G.journalSummary(st, T0);
+  assert(j3b.npcs.find((n) => n.id === "elder").requestsCompleted === 3,
+    "NPC 名錄的完成次數讀 npcRequestLog[npcId].fulfilledCount（不是隨便一個計數器）");
+  assert(j3b.npcs.find((n) => n.id === "mayor").requestsCompleted === 0, "沒交過委託的其他 NPC 完成次數仍是 0（不會互相污染）");
+  st.npcRequestLog = {}; // 還原，避免影響後續斷言
 
   // 動物親密度里程碑：bestAffinity 是歷史最高值，不受之後 affinity 衰減影響
   const chicken = st.animals[0];
@@ -590,6 +613,11 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   assert(chickenEntry.everHappy === true, "bestAffinity 曾達開心門檻，即使現值已衰減仍算數");
   assert(chickenEntry.bestAffinity === 80, "bestAffinity 不隨時間衰減");
   assert(chickenEntry.everGood === true, "曾達開心門檻的動物，同時也滿足較低的 everGood 門檻");
+  assert(chickenEntry.currentTier === "normal", "currentTier 讀現值（已大幅衰減至 0），跟 bestAffinity 的歷史高水位是兩回事");
+  // currentTier 獨立驗證：剛照護完、還沒經過衰減時，應反映當下親密度而非歷史值
+  const freshHappyAnimal = { id: "test_fresh", type: "chicken", affinity: 80, lastCaredAt: T0 };
+  assert(G.journalAnimals({ animals: [freshHappyAnimal] }, T0).find((a) => a.id === "test_fresh").currentTier === "premium",
+    "剛照護完、尚未衰減時，currentTier 反映當下親密度（premium，門檻 70，現值 80）");
 
   // Codex 審核 Stage 11：everGood-only（未達開心但達良好）也要算「已發現」，
   // 不能只看 everHappy——不然文字顯示「曾達良好」但 data-discovered 卻是 false
@@ -609,6 +637,13 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   assert(j5.chapters.chapter2.unlocked === true, "序章全部完成後，第二章解鎖");
   assert(j5.chapters.chapter2.done === 0, "第二章剛解鎖，完成度 0");
   assert(j5.chapters.chapter3.unlocked === false, "第二章尚未完成前，第三章維持未解鎖");
+  // chapter2→chapter3 的解鎖轉換跟 chapter1→chapter2 結構一樣，但沒有對稱測過「解鎖後」
+  // 的正向案例（只測過 false），複製貼上寫錯題庫或比較運算子不會被抓到
+  C.CHAPTER2_QUESTS.forEach((id) => (st.story.completed[id] = true));
+  const j5b = G.journalSummary(st, T0);
+  assert(j5b.chapters.chapter2.done === C.CHAPTER2_QUESTS.length, "第二章全部完成後，完成度對得上 CHAPTER2_QUESTS 長度");
+  assert(j5b.chapters.chapter3.unlocked === true, "第二章全部完成後，第三章解鎖（chapter2→chapter3 的正向轉換，不只測過 false）");
+  assert(j5b.chapters.chapter3.done === 0, "第三章剛解鎖，完成度 0");
 
   // 世界旗標：明確用 eastClearingClaimed，不要用「任一事件已領取」這種會隨事件數增加而
   // 誤判的通用邏輯（Codex 審核 Stage 11 指出的潛在坑）
@@ -617,6 +652,12 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   const j6 = G.journalSummary(st, T0);
   assert(j6.world.bridgeRepaired === true, "世界旗標讀取正確（東橋）");
   assert(j6.world.eastClearingClaimed === true, "世界旗標讀取正確（東林空地，明確欄位而非事件清單長度）");
+
+  // journalSummary 頂層的 npcRequestsCompleted 要跟 stats.npcRequestsCompleted 同步
+  // （這是 Journal 包裝過的複本，不能悄悄接到別的來源或漏接）
+  st.stats.npcRequestsCompleted = 7;
+  const j7 = G.journalSummary(st, T0);
+  assert(j7.npcRequestsCompleted === 7, "journalSummary 頂層 npcRequestsCompleted 讀 stats.npcRequestsCompleted（實際 " + j7.npcRequestsCompleted + "）");
 
   // 純讀取：journalSummary 不應該修改 state（唯讀彙總層不該有副作用）
   const before = JSON.stringify(st);
