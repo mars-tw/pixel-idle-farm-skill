@@ -290,9 +290,82 @@ console.log("\n== 13b. Stage 5：修橋解鎖東林封鎖區 + 事件點獎勵 =
   const ev = G.triggerEvent(st, "east_clearing", T0);
   assert(ev.ok && !ev.already && ev.reward, "首次抵達東林古樹給一次性獎勵");
   assert(st.coins === coinsBefore + 120, "事件獎勵 +120 金");
-  assert(st.story.questId === null, "探索新區完成第二章任務鏈");
+  assert(st.story.questId === "learn_animal_care", "探索新區完成第二章任務鏈，接上第三章「跟老農學動物照護」");
   // 重複觸發不再給獎
   assert(G.triggerEvent(st, "east_clearing", T0).already === true, "事件獎勵僅一次");
+}
+
+console.log("\n== 13c. Stage 7：動物照護（親密度/品質分級/冷卻/衰減）==");
+{
+  const st = S.defaultState(T0);
+  const chicken = st.animals[0];
+  assert(G.animalAffinity(st, chicken, T0) === 0, "初始親密度 0");
+  assert(G.qualityTierFor(0) === "normal", "0 親密度 = normal 品質");
+
+  st.storage.items.wheat = 20;
+  const f1 = G.feedAnimal(st, chicken.id, T0);
+  assert(f1.ok && f1.tier === "normal" && f1.product === "egg", "第 1 次餵食：normal 品質，item id 為 egg");
+  const f2 = G.feedAnimal(st, chicken.id, T0 + 1000);
+  assert(f2.tier === "good" && f2.product === "egg_good", `第 2 次餵食（親密度 ${f2.affinity.toFixed(0)}）：good 品質，item id 為 egg_good`);
+
+  // 免費照護動作有冷卻，付費（餵食）動作不受此冷卻限制
+  const w1 = G.waterAnimal(st, chicken.id, T0 + 2000);
+  assert(w1.ok, "澆水成功");
+  const w2 = G.waterAnimal(st, chicken.id, T0 + 3000);
+  assert(!w2.ok && w2.reason === "cooldown", "冷卻中重複澆水被擋");
+  const w3 = G.waterAnimal(st, chicken.id, T0 + 2000 + C.CARE_COOLDOWN_MS + 1000);
+  assert(w3.ok, "冷卻結束後可再次澆水");
+  const g1 = G.groomAnimal(st, chicken.id, T0 + 5000);
+  assert(g1.ok && g1.affinity >= C.AFFINITY_HAPPY_THRESHOLD, `梳理後達到開心門檻（${g1.affinity.toFixed(0)} >= ${C.AFFINITY_HAPPY_THRESHOLD}）`);
+  assert(G.animalStatus(st, chicken, T0 + 5000) === "happy", "開心門檻以上狀態為 happy");
+
+  // 衰減：離峰很久後親密度應該掉回 0（決定下次收成品質降回 normal）
+  const farFuture = T0 + 5000 + 24 * 3600 * 1000; // 24 小時沒照護
+  assert(G.animalAffinity(st, chicken, farFuture) === 0, "24 小時沒照護，親密度衰減回 0");
+  assert(G.qualityTierFor(G.animalAffinity(st, chicken, farFuture)) === "normal", "衰減後品質回到 normal");
+
+  // 收集：親密度即時決定這次收成品質（不看上次品質）
+  chicken.lastProducedAt = T0; // 重置產出計時器方便測試
+  const highAffinitySt = S.defaultState(T0);
+  const c2 = highAffinitySt.animals[0];
+  c2.affinity = 90; c2.lastCaredAt = T0;
+  const col = G.collectAnimal(highAffinitySt, c2.id, T0 + C.ANIMALS.chicken.produceMs);
+  assert(col.ok && col.tier === "premium" && col.product === "egg_premium", "高親密度時收集得 premium 品質");
+}
+
+console.log("\n== 13d. Stage 7：第三章任務鏈（老農對話 → 照護 → 開心 → 優質品 → 賣出）==");
+{
+  const st = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).forEach((id) => (st.story.completed[id] = true));
+  st.story.questId = "learn_animal_care"; st.flags.bridgeRepaired = true; st.flags.eventsClaimed.east_clearing = true;
+
+  const elderTile = st.map.tiles.find((t) => t.npc === "elder");
+  assert(!!elderTile, "地圖有老農 NPC");
+  assert(G.questMarkerTile(st, T0) === elderTile.id, "任務標記指向老農");
+
+  const adv1 = G.advanceStory(st, "npc_elder", T0);
+  assert(adv1.ok && st.story.questId === "feed_care_animal", "跟老農對話推進到「餵食/澆水/梳理」任務");
+  const coopStructTile = st.map.tiles.find((t) => t.structureId === "coop");
+  assert(G.questMarkerTile(st, T0) === coopStructTile.id, "任務標記指向雞舍（structure marker kind）");
+
+  st.storage.items.wheat = 20;
+  const chicken = st.animals[0];
+  G.feedAnimal(st, chicken.id, T0);
+  const adv2 = G.advanceStory(st, "care_animal", T0);
+  assert(adv2.ok && st.story.questId === "raise_affinity_happy", "照護動物後推進到「養到開心」任務");
+
+  for (let i = 0; i < 3; i++) G.feedAnimal(st, chicken.id, T0 + i * 1000);
+  const adv3 = G.syncStoryProgress(st, null, T0 + 3000);
+  assert(adv3.ok && adv3.completedIds.includes("raise_affinity_happy") && adv3.completedIds.includes("collect_quality_product"),
+    "親密度衝高並已收集優質品後，一次連跳兩關（不需分開觸發）");
+  assert(st.story.questId === "deliver_quality_order", "接下來是「賣出優質品」任務");
+
+  const qualKey = Object.keys(st.storage.items).find((k) => k.endsWith("_good") || k.endsWith("_premium"));
+  assert(!!qualKey, "倉庫已有優質/頂級品項");
+  G.sellItem(st, qualKey, st.storage.items[qualKey], T0 + 3000);
+  assert((st.stats.qualitySold || 0) > 0, "賣出優質品後 qualitySold 計數增加");
+  const adv4 = G.syncStoryProgress(st, null, T0 + 3000);
+  assert(adv4.ok && st.story.questId === null, "賣出優質品後完成第三章任務鏈");
 }
 
 console.log("\n== 14. 存檔遷移補齊 MVP2 欄位 ==");
@@ -302,6 +375,19 @@ console.log("\n== 14. 存檔遷移補齊 MVP2 欄位 ==");
   assert(m.materials && m.map && Array.isArray(m.map.tiles) && Array.isArray(m.buildings) && Array.isArray(m.animals), "舊存檔補齊 materials/map/buildings/animals");
   assert(m.interaction && m.interaction.tool === "hand", "舊存檔補齊 interaction.tool");
   assert(m.map.tiles.length === C.MAP_DEFAULT.width * C.MAP_DEFAULT.height, "地圖磚數正確");
+}
+
+console.log("\n== 14b. Stage 7：舊存檔的動物物件補齊照護欄位 ==");
+{
+  // 模擬 Stage 6.5（尚無照護欄位）存檔的動物形狀
+  const oldAnimal = { id: "a_coop_1", type: "chicken", homeId: "b_coop", lastProducedAt: 12345 };
+  const old = { version: 1, coins: 5, animals: [oldAnimal], map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } };
+  const m = S.migrate(old);
+  const a = m.animals.find((x) => x.id === "a_coop_1");
+  assert(a && typeof a.affinity === "number" && a.affinity === 0, "舊動物補齊 affinity（預設 0）");
+  assert(a && typeof a.lastCaredAt === "number", "舊動物補齊 lastCaredAt");
+  assert(a && a.lastFedAt === 0 && a.lastWateredAt === 0 && a.lastGroomedAt === 0, "舊動物補齊 lastFedAt/lastWateredAt/lastGroomedAt");
+  assert(m.stats.qualitySold === 0, "舊存檔補齊 stats.qualitySold");
 }
 
 console.log("");

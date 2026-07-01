@@ -406,7 +406,8 @@ async function run() {
     assert(explore.marker === explore.eventId, "探索任務標記指向東林事件點");
     assert(exploreRes.claimed && exploreRes.coins > explore.coinsBefore, `走到東林古樹觸發一次性獎勵（+${exploreRes.coins - explore.coinsBefore} 金）`);
     assert(exploreRes.playerX >= 17 && exploreRes.camX < -50, `角色進入東林、camera 跟隨平移（playerX=${exploreRes.playerX} camX=${exploreRes.camX}）`);
-    assert(exploreRes.quest === null && exploreRes.ch2 === "2/2", `探索完成第二章（探索完成度 ${exploreRes.ch2}）`);
+    assert(exploreRes.quest === "learn_animal_care" && exploreRes.ch2 === "2/2",
+      `探索完成第二章，接上第三章「跟老農學動物照護」（探索完成度 ${exploreRes.ch2}，quest=${exploreRes.quest}）`);
     assert(exploreRes.lockedAfter === 0, "修橋後封鎖區解除（locked-area 清零）");
 
     // 13b. Stage 6：對話依故事進度改變（通關後 → ch2done 階段台詞，與序章不同）
@@ -418,6 +419,65 @@ async function run() {
     assert(lateTalk.phase === "ch2done", `通關後 NPC 對話 phase=ch2done（${lateTalk.phase}）`);
     assert(lateTalk.line !== lateTalk.startLine, "鎮長台詞隨故事進度改變（非序章台詞）");
 
+    // ===== Stage 7：動物照護（老農對話 → 走到雞舍餵食 → 親密度 → 品質 → 賣出）=====
+    // 15. 走到老農（elder）→ 觸發 npc_elder → 推進到第三章「餵食/澆水/梳理」
+    const elderInfo = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const elderTile = st.map.tiles.find((t) => t.npc === "elder");
+      const marker = window.questMarkerTile(st, Date.now());
+      F.clickTile(elderTile.id);
+      return { elderId: elderTile.id, marker };
+    });
+    await waitArrive(page, 9000);
+    await sleep(500);
+    const afterElder = await page.evaluate(() => window.__farm.state().story.questId);
+    assert(elderInfo.marker === elderInfo.elderId, "第三章開頭任務標記指向老農");
+    assert(afterElder === "feed_care_animal", `跟老農對話推進到「餵食/澆水/梳理」任務（${afterElder}）`);
+
+    // 16. 雞從未照護過應顯示 hungry 狀態圖示（data-audit 可稽核）
+    const hungryAudit = await page.evaluate(() => {
+      const animalEl = document.querySelector('[data-audit="object"][data-kind="animal"]');
+      return { status: animalEl ? animalEl.dataset.status : null, sheet: animalEl ? animalEl.dataset.sheet : null };
+    });
+    assert(hungryAudit.status === "hungry", `起始雞從未照護過，狀態為 hungry（實際 ${hungryAudit.status}）`);
+
+    // 17. 走到雞舍 → 點餵食 4 次（4×22=88 親密度，跨過開心門檻 70）→ 一次連跳 raise_affinity_happy + collect_quality_product
+    const coopInfo = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      st.storage.items.wheat = 20;
+      const coop = st.buildings.find((b) => b.type === "chickenCoop");
+      const marker = window.questMarkerTile(st, Date.now());
+      F.refresh(); F.clickTile(coop.tileId);
+      return { coopTileId: coop.tileId, marker };
+    });
+    await waitArrive(page, 9000);
+    await sleep(400);
+    assert(coopInfo.marker === coopInfo.coopTileId, "「餵食/澆水/梳理」任務標記指向雞舍（structure marker）");
+    for (let i = 0; i < 4; i++) {
+      await page.evaluate(() => { const b = document.querySelector(".afeed"); if (b) b.click(); });
+      await sleep(250);
+    }
+    const afterFeed = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const ch3 = document.querySelector(".chapter3-progress");
+      return { quest: st.story.questId, ch3: ch3 ? ch3.getAttribute("data-progress3") : null,
+        hasQualityItem: Object.keys(st.storage.items).some((k) => k.endsWith("_good") || k.endsWith("_premium")) };
+    });
+    assert(afterFeed.hasQualityItem, "連續餵食後倉庫出現優質/頂級品項");
+    assert(afterFeed.quest === "deliver_quality_order", `連跳兩關後接上「賣出優質品」任務（${afterFeed.quest}）`);
+    assert(afterFeed.ch3 === "4/5", `第三章完成度 4/5（老農對話+餵食+開心+優質品，實際 ${afterFeed.ch3}）`);
+
+    // 18. 賣出全部庫存（含優質品）→ qualitySold 增加 → 第三章 5/5 完成
+    await page.evaluate(() => { const b = document.getElementById("sellAllBtn"); if (b) b.click(); });
+    await sleep(300);
+    const afterSell = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const ch3 = document.querySelector(".chapter3-progress");
+      return { qualitySold: st.stats.qualitySold, quest: st.story.questId, ch3: ch3 ? ch3.getAttribute("data-progress3") : null };
+    });
+    assert(afterSell.qualitySold > 0, `賣出優質品後 qualitySold 增加（${afterSell.qualitySold}）`);
+    assert(afterSell.quest === null && afterSell.ch3 === "5/5", `第三章完成（照護完成度 ${afterSell.ch3}）`);
+
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));
 
@@ -427,7 +487,7 @@ async function run() {
   await browser.close();
   server.close();
   if (failed > 0) { console.error("\n❌ " + failed + " 項失敗"); process.exit(1); }
-  console.log("\n✅ Stage 4+5+6 RPG v4 E2E 全部通過");
+  console.log("\n✅ Stage 4+5+6+7 RPG v4 E2E 全部通過");
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });

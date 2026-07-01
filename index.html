@@ -299,6 +299,9 @@
   .ob-dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ffe27a;
     box-shadow: 0 0 8px #ffd23c; animation: readyPulse 1s infinite; z-index: 8000; }
   @keyframes readyPulse { 0%,100%{ transform: scale(1); opacity: 1;} 50%{ transform: scale(1.3); opacity: .7;} }
+  /* Stage 7：動物頭上的照護狀態小圖示（hungry/thirsty/needs_groom）*/
+  .ob-status-icon { position: absolute; image-rendering: pixelated; background-repeat: no-repeat;
+    background-size: 100% 100%; z-index: 8000; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
   /* 任務標記（地圖上目標）*/
   #markerLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9000; }
   .qmarker { position: absolute; transform: translate(-50%, -100%); animation: qbob 1s ease-in-out infinite; text-align: center; }
@@ -351,6 +354,10 @@
   .animal-row .a-ic { font-size: 22px; } .animal-row .a-body { flex: 1; min-width: 0; }
   .animal-row .a-prog { height: 5px; background: #d7e7ee; border-radius: 4px; overflow: hidden; margin-top: 3px; }
   .animal-row .a-fill { height: 100%; background: linear-gradient(90deg, #ffd270, var(--coin)); }
+  /* Stage 7：親密度條 + 照護動作 2x2 按鈕 */
+  .animal-row .a-affinity { height: 5px; background: #f3ddd0; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .animal-row .a-affinity-fill { height: 100%; background: linear-gradient(90deg, #ff9db0, #ff5f8a); transition: width .25s; }
+  .animal-row .a-actions-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; flex: 0 0 auto; }
   .res.mat { color: #6b5638; }
 </style>
 </head>

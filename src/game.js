@@ -15,6 +15,8 @@
     levelFromXp,
     PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
     BUILDINGS, BUILDING_ORDER, ANIMALS, MOISTURE_MUL,
+    AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,
+    CARE_GAIN, CARE_COOLDOWN_MS, STATUS_STALE_MS, QUALITY_TIERS,
   } = C;
 
   // ---------- 工具 ----------
@@ -31,12 +33,15 @@
   }
   // MVP2：玩家擁有的動物可生產的產品（訂單只會要玩家做得出的產品）
   function unlockedProducts(state) {
-    // 動物產品要「玩家至少收集過一次」才進訂單池，避免起始雞讓 Lv1 隨機訂單一開局就要蛋
-    // （玩家還沒被教過怎麼拿蛋）。直售/餵食仍可隨時進行，不受此檢查影響。
+    // 動物產品（含 Stage 7 品質分級）要「玩家至少收集過一次」才進訂單池，避免起始雞讓 Lv1
+    // 隨機訂單一開局就要蛋、或還沒摸過品質機制就被要求交優質品。直售/餵食不受此檢查影響。
     const set = {};
     for (const a of state.animals || []) {
-      const def = ANIMALS[a.type];
-      if (def && (state.stats.collected[def.product] || 0) > 0) set[def.product] = true;
+      const def = ANIMALS[a.type]; if (!def) continue;
+      for (const q of QUALITY_TIERS) {
+        const id = q === "normal" ? def.product : def.product + "_" + q;
+        if ((state.stats.collected[id] || 0) > 0) set[id] = true;
+      }
     }
     return Object.keys(set);
   }
@@ -185,6 +190,8 @@
   }
 
   // ---------- 賣出 ----------
+  // Stage 7：品質分級品項 id 以 _good/_premium 結尾（見 config.buildProducts）
+  function isQualityItem(id) { return /_(good|premium)$/.test(id); }
   function sellItem(state, cropId, qty, now) {
     const have = state.storage.items[cropId] || 0;
     const n = Math.min(qty, have);
@@ -194,6 +201,7 @@
     if (state.storage.items[cropId] === 0) delete state.storage.items[cropId];
     state.coins += coins;
     state.stats.totalCoinsEarned += coins;
+    if (isQualityItem(cropId)) state.stats.qualitySold = (state.stats.qualitySold || 0) + n;
     checkAchievements(state);
     return { ok: true, coins, qty: n };
   }
@@ -277,6 +285,7 @@
     for (const [cropId, qty] of Object.entries(order.wants)) {
       state.storage.items[cropId] -= qty;
       if (state.storage.items[cropId] <= 0) delete state.storage.items[cropId];
+      if (isQualityItem(cropId)) state.stats.qualitySold = (state.stats.qualitySold || 0) + qty;
     }
     state.orderStreak++;
     const pay = orderPayout(state, order);
@@ -437,6 +446,49 @@
     return def && def.effect ? (def.effect.capacity || 0) : 0;
   }
   function animalsInHome(state, buildingId) { return (state.animals || []).filter((a) => a.homeId === buildingId); }
+
+  // ---------- Stage 7：動物照護（親密度 → 產物品質）----------
+  // 親密度＝上次照護當下的「已收藏值」，隨經過時間衰減，現算不模擬（同作物成長的哲學）。
+  function animalAffinity(state, animal, now) {
+    const banked = animal.affinity || 0;
+    const elapsedMs = Math.max(0, now - (animal.lastCaredAt || animal.lastProducedAt || 0));
+    const decay = (elapsedMs / (60 * 60 * 1000)) * AFFINITY_DECAY_PER_HOUR;
+    return Math.max(0, Math.min(AFFINITY_MAX, banked - decay));
+  }
+  function qualityTierFor(affinity) {
+    if (affinity >= AFFINITY_HAPPY_THRESHOLD) return "premium";
+    if (affinity >= AFFINITY_GOOD_THRESHOLD) return "good";
+    return "normal";
+  }
+  function qualityProductId(baseProduct, tier) { return tier === "normal" ? baseProduct : baseProduct + "_" + tier; }
+  // 動物地圖狀態（給 UI 顯示提示圖示）：開心優先於各項照護提示
+  function animalStatus(state, animal, now) {
+    if (animalAffinity(state, animal, now) >= AFFINITY_HAPPY_THRESHOLD) return "happy";
+    if (now - (animal.lastFedAt || 0) > STATUS_STALE_MS) return "hungry";
+    if (now - (animal.lastWateredAt || 0) > STATUS_STALE_MS) return "thirsty";
+    if (now - (animal.lastGroomedAt || 0) > STATUS_STALE_MS) return "needs_groom";
+    return "happy";
+  }
+  // 澆水：免費、有冷卻，純照護動作（不產出）
+  function waterAnimal(state, animalId, now) {
+    const a = (state.animals || []).find((x) => x.id === animalId);
+    if (!a) return { ok: false, reason: "gone" };
+    if (now - (a.lastWateredAt || 0) < CARE_COOLDOWN_MS) return { ok: false, reason: "cooldown" };
+    const cur = animalAffinity(state, a, now);
+    a.lastWateredAt = now;
+    a.affinity = Math.min(AFFINITY_MAX, cur + CARE_GAIN.water); a.lastCaredAt = now;
+    return { ok: true, affinity: a.affinity, status: animalStatus(state, a, now) };
+  }
+  // 梳理：免費、有冷卻，純照護動作（不產出）
+  function groomAnimal(state, animalId, now) {
+    const a = (state.animals || []).find((x) => x.id === animalId);
+    if (!a) return { ok: false, reason: "gone" };
+    if (now - (a.lastGroomedAt || 0) < CARE_COOLDOWN_MS) return { ok: false, reason: "cooldown" };
+    const cur = animalAffinity(state, a, now);
+    a.lastGroomedAt = now;
+    a.affinity = Math.min(AFFINITY_MAX, cur + CARE_GAIN.groom); a.lastCaredAt = now;
+    return { ok: true, affinity: a.affinity, status: animalStatus(state, a, now) };
+  }
   function isAnimalUnlocked(state, animalType) {
     // Stage 4 把 farmhouse/coop/barn/shop 改成一律預置的地圖常駐結構（RPG 世界感），
     // 但這代表「家已存在」不能再當解鎖條件 —— 改為直接檢查玩家等級（ANIMALS[type].unlockLevel）。
@@ -449,7 +501,9 @@
     return !!(def.effect && def.effect.unlockAnimal && def.effect.unlockAnimal.indexOf(animalType) !== -1);
   }
   function addAnimal(state, buildingId, animalType, now) {
-    const a = { id: "a_" + animalType + "_" + (state.animals.length + 1), type: animalType, homeId: buildingId, lastProducedAt: now };
+    // Stage 7 照護欄位：affinity 是「上次照護當下的已收藏值」，實際親密度依經過時間現算（見 animalAffinity）。
+    const a = { id: "a_" + animalType + "_" + (state.animals.length + 1), type: animalType, homeId: buildingId, lastProducedAt: now,
+      affinity: 0, lastCaredAt: now, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0 };
     state.animals.push(a);
     return a;
   }
@@ -468,16 +522,19 @@
     const elapsed = Math.max(0, now - animal.lastProducedAt);
     return { ready: elapsed >= def.produceMs, ratio: Math.min(1, elapsed / def.produceMs), remainingMs: Math.max(0, def.produceMs - elapsed) };
   }
+  // 收集當下的親密度決定這次產物品質（tier）；品質品項 id 為 baseProduct 或 baseProduct_good/_premium
   function collectAnimal(state, animalId, now) {
     const a = (state.animals || []).find((x) => x.id === animalId);
     if (!a) return { ok: false, reason: "gone" };
     const def = ANIMALS[a.type];
     const cycles = Math.floor((now - a.lastProducedAt) / def.produceMs);
     if (cycles <= 0) return { ok: false, reason: "not_ready" };
-    const { added, lost } = addToStorage(state, def.product, cycles);
+    const tier = qualityTierFor(animalAffinity(state, a, now));
+    const productId = qualityProductId(def.product, tier);
+    const { added, lost } = addToStorage(state, productId, cycles);
     a.lastProducedAt += cycles * def.produceMs;
-    state.stats.collected[def.product] = (state.stats.collected[def.product] || 0) + added;
-    return { ok: true, product: def.product, added, lost, cycles };
+    state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
+    return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, cycles };
   }
   function collectAllAnimals(state, now) {
     const perProduct = {}; let total = 0, lost = 0;
@@ -496,7 +553,7 @@
     }
     return { perProduct, total, lost };
   }
-  // 餵食：花作物讓動物立即產出一份（主動玩法獎勵）
+  // 餵食：花作物讓動物立即產出一份（主動玩法獎勵），同時是一種照護動作（漲親密度）
   function feedAnimal(state, animalId, now) {
     const a = (state.animals || []).find((x) => x.id === animalId);
     if (!a) return { ok: false, reason: "gone" };
@@ -506,10 +563,15 @@
       state.storage.items[k] -= def.feedCost[k];
       if (state.storage.items[k] <= 0) delete state.storage.items[k];
     }
-    const { added, lost } = addToStorage(state, def.product, 1);
-    state.stats.collected[def.product] = (state.stats.collected[def.product] || 0) + added;
+    const curAffinity = animalAffinity(state, a, now);
+    a.lastFedAt = now; a.lastCaredAt = now;
+    a.affinity = Math.min(AFFINITY_MAX, curAffinity + CARE_GAIN.feed);
+    const tier = qualityTierFor(a.affinity); // 餵食後立即以新親密度結算這份產物的品質
+    const productId = qualityProductId(def.product, tier);
+    const { added, lost } = addToStorage(state, productId, 1);
+    state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
     a.lastProducedAt = now; // 重置週期
-    return { ok: true, product: def.product, added, lost };
+    return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, affinity: a.affinity };
   }
 
   // ========================================================================
@@ -636,8 +698,13 @@
   function hasWetCrop(state, cropId) {
     return (state.plots || []).some((p) => p && p.cropId === cropId && (p.wateredAt || 0) >= (p.plantedAt || 1));
   }
-  function questSatisfied(state, q, event) {
+  function hasCollectedQuality(state) {
+    const c = state.stats.collected || {};
+    return Object.keys(c).some((k) => isQualityItem(k) && c[k] > 0);
+  }
+  function questSatisfied(state, q, event, now) {
     if (!q) return false;
+    now = now || Date.now();
     if (q.id === "intro_reopen_farm") return q.trigger === event;
     if (q.id === "plant_wheat") return hasCrop(state, "wheat");
     if (q.id === "first_water") return hasWetCrop(state, "wheat");
@@ -647,15 +714,21 @@
     // 第二章（Stage 5）
     if (q.id === "repair_bridge") return !!(state.flags && state.flags.bridgeRepaired);
     if (q.id === "explore_new_area") return !!(state.flags && state.flags.eventsClaimed && state.flags.eventsClaimed.east_clearing) || q.objective === event;
+    // 第三章（Stage 7：動物照護）
+    if (q.id === "learn_animal_care") return q.trigger === event;
+    if (q.id === "feed_care_animal") return q.objective === event;
+    if (q.id === "raise_affinity_happy") return (state.animals || []).some((a) => animalAffinity(state, a, now) >= AFFINITY_HAPPY_THRESHOLD);
+    if (q.id === "collect_quality_product") return hasCollectedQuality(state);
+    if (q.id === "deliver_quality_order") return (state.stats.qualitySold || 0) > 0;
     return q.trigger === event || q.objective === event;
   }
-  function syncStoryProgress(state, event) {
+  function syncStoryProgress(state, event, now) {
     ensureStoryState(state);
     let firstCompleted = null;
     const completedIds = [];
     for (let guard = 0; guard < 12; guard++) {
       const q = currentQuest(state);
-      if (!questSatisfied(state, q, event)) break;
+      if (!questSatisfied(state, q, event, now)) break;
       state.story.completed[q.id] = true;
       if (!firstCompleted) firstCompleted = q.id;
       completedIds.push(q.id);
@@ -666,9 +739,9 @@
       ? { ok: true, completed: firstCompleted, completedIds, next: state.story.questId }
       : { ok: false };
   }
-  // 事件推進：read_sign / plant / water / harvest / deliver / clear
-  function advanceStory(state, event) {
-    return syncStoryProgress(state, event);
+  // 事件推進：read_sign / plant / water / harvest / deliver / clear / npc_elder / care_animal ...
+  function advanceStory(state, event, now) {
+    return syncStoryProgress(state, event, now);
   }
   // 目前任務在地圖上的標記目標 tileId（給 marker 渲染）
   function questMarkerTile(state, now) {
@@ -678,6 +751,11 @@
     if (m.kind === "obstacle") { const t = state.map.tiles.find((tl) => tl.object === m.object); return t ? t.id : null; }
     if (m.kind === "bridge") { const t = state.map.tiles.find((tl) => tl.bridge); return t ? t.id : null; }
     if (m.kind === "event") { const t = state.map.tiles.find((tl) => tl.event === m.event); return t ? t.id : null; }
+    if (m.kind === "npc") { const t = state.map.tiles.find((tl) => tl.npc === m.type); return t ? t.id : null; }
+    if (m.kind === "structure") {
+      const s = (C.STRUCTURES || []).find((x) => x.id === m.id); if (!s) return null;
+      const t = state.map.tiles.find((tl) => tl.structureId === s.id); return t ? t.id : null;
+    }
     if (m.kind === "soil") {
       const active = activePlotCount(state);
       for (const t of state.map.tiles) {
@@ -859,6 +937,9 @@
     bridgeTile, eventTile, chapter1Done, canRepairBridge, repairBridge, triggerEvent,
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
+    // Stage 7：動物照護（親密度 / 品質分級）
+    animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
+    isQualityItem, hasCollectedQuality,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

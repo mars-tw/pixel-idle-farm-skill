@@ -119,12 +119,40 @@ const ACHIEVEMENTS = {
 };
 
 // ===== MVP2：動物產品（可賣、可入訂單，與作物同存 storage.items）=====
-const PRODUCTS = {
-  egg:   { id: "egg",   name: "雞蛋", emoji: "🥚", sellValue: 6,  source: "chicken" },
-  milk:  { id: "milk",  name: "牛奶", emoji: "🥛", sellValue: 18, source: "cow" },
-  wool:  { id: "wool",  name: "羊毛", emoji: "🧶", sellValue: 24, source: "sheep" },
-  honey: { id: "honey", name: "蜂蜜", emoji: "🍯", sellValue: 15, source: "bee" },
-};
+// Stage 7：每種產品分 normal/good/premium 三級品質，由收集當下的動物親密度決定。
+// itemId 命名：normal 用原始 id（如 egg），good/premium 加後綴（egg_good/egg_premium）。
+const QUALITY_TIERS = ["normal", "good", "premium"];
+const QUALITY_SELL_MUL = { normal: 1, good: 1.6, premium: 2.6 };
+const QUALITY_LABEL = { normal: "", good: "優質", premium: "頂級" };
+function buildProducts() {
+  const base = {
+    egg:   { name: "雞蛋", emoji: "🥚", sellValue: 6,  source: "chicken" },
+    milk:  { name: "牛奶", emoji: "🥛", sellValue: 18, source: "cow" },
+    wool:  { name: "羊毛", emoji: "🧶", sellValue: 24, source: "sheep" },
+    honey: { name: "蜂蜜", emoji: "🍯", sellValue: 15, source: "bee" },
+  };
+  const out = {};
+  for (const bid of Object.keys(base)) {
+    const b = base[bid];
+    for (const q of QUALITY_TIERS) {
+      const id = q === "normal" ? bid : bid + "_" + q;
+      out[id] = { id, name: QUALITY_LABEL[q] + b.name, emoji: b.emoji, source: b.source,
+        sellValue: Math.round(b.sellValue * QUALITY_SELL_MUL[q]), baseProduct: bid, quality: q };
+    }
+  }
+  return out;
+}
+const PRODUCTS = buildProducts();
+
+// ===== Stage 7：動物照護（餵食/澆水/梳理 → 親密度 → 產物品質）=====
+// 親密度 0-100，「已收藏值 + 距上次照護的時間衰減」推導，不用 tick 模擬（跟作物成長同一套哲學）。
+const AFFINITY_MAX = 100;
+const AFFINITY_DECAY_PER_HOUR = 6;                 // 沒照護時，每小時衰減多少
+const AFFINITY_HAPPY_THRESHOLD = 70;                // 達到「開心」狀態，UI 顯示 happy、掉 premium
+const AFFINITY_GOOD_THRESHOLD = 35;                 // 達到 good 品質門檻
+const CARE_GAIN = { feed: 22, water: 16, groom: 18 }; // 各照護動作的親密度增量
+const CARE_COOLDOWN_MS = 20 * 1000;                 // 澆水/梳理（免費動作）冷卻，避免瘋狂點擊瞬間衝滿
+const STATUS_STALE_MS = 3 * 60 * 1000;              // 超過此時間沒做某動作 → UI 顯示對應提示圖示
 // 統一查作物或產品的賣價/名稱/emoji（訂單與倉庫共用）
 function getItemDef(id) { return CROPS[id] || PRODUCTS[id] || null; }
 function itemSellValue(id) { const d = getItemDef(id); return d ? d.sellValue : 0; }
@@ -324,13 +352,30 @@ const QUESTS = {
     desc: "走到河上的斷橋，用木材 6、石頭 4 修好它（清樹樁/石頭可得建材）。", next: "explore_new_area",
     objective: "repair_bridge", marker: { kind: "bridge" }, chapter: 2 },
   explore_new_area:  { id: "explore_new_area", title: "探索東林空地",
-    desc: "過橋走到東林古樹，看看封鎖已久的東邊有什麼。", next: null,
+    desc: "過橋走到東林古樹，看看封鎖已久的東邊有什麼。", next: "learn_animal_care",
     objective: "reach_event", marker: { kind: "event", event: "east_clearing" }, chapter: 2 },
+  // ===== 第三章：動物照護（Stage 7）=====
+  learn_animal_care: { id: "learn_animal_care", title: "跟老農學動物照護",
+    desc: "找老農班伯聊聊，學習怎麼照顧動物。", next: "feed_care_animal",
+    trigger: "npc_elder", marker: { kind: "npc", type: "elder" }, chapter: 3 },
+  feed_care_animal:  { id: "feed_care_animal", title: "餵食、澆水或梳理一隻動物",
+    desc: "走到雞舍或畜舍，選一隻動物餵食、澆水或梳理。", next: "raise_affinity_happy",
+    objective: "care_animal", marker: { kind: "structure", id: "coop" }, chapter: 3 },
+  raise_affinity_happy: { id: "raise_affinity_happy", title: "讓一隻動物養到開心",
+    desc: "多照顧同一隻動物，親密度達到開心程度。", next: "collect_quality_product",
+    objective: "affinity_happy", marker: { kind: "structure", id: "coop" }, chapter: 3 },
+  collect_quality_product: { id: "collect_quality_product", title: "收集一份優質或頂級產物",
+    desc: "親密度夠高時收集，產物品質會提升。", next: "deliver_quality_order",
+    objective: "collect_quality", marker: { kind: "structure", id: "coop" }, chapter: 3 },
+  deliver_quality_order: { id: "deliver_quality_order", title: "賣出或交付優質產物",
+    desc: "把優質/頂級產物直售或交付訂單，讓晨光鎮嚐嚐用心照顧的成果。", next: null,
+    objective: "deliver_quality", chapter: 3 },
 };
 const FIRST_QUEST = "intro_reopen_farm";
-// 章節任務分組（故事面板：第一章完成度 X/6，第二章 X/2 另計）
+// 章節任務分組（故事面板：第一章完成度 X/6，第二章 X/2、第三章 X/5 另計）
 const PROLOGUE_QUESTS = ["intro_reopen_farm", "plant_wheat", "first_water", "first_harvest", "first_delivery", "clear_old_path"];
 const CHAPTER2_QUESTS = ["repair_bridge", "explore_new_area"];
+const CHAPTER3_QUESTS = ["learn_animal_care", "feed_care_animal", "raise_affinity_happy", "collect_quality_product", "deliver_quality_order"];
 
 const MAP_DEFAULT = { width: MAP_W, height: MAP_H };
 // 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
@@ -347,8 +392,11 @@ const CONFIG = {
   MAP_LAYOUT, TERRAIN_CODE, OBSTACLE_CODE, PLAYER_START, MOVE_MS, FACING_ROW,
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
-  EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS,
+  EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS,
   NPCS, NPC_PLACEMENT,
+  QUALITY_TIERS, QUALITY_SELL_MUL, QUALITY_LABEL,
+  AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,
+  CARE_GAIN, CARE_COOLDOWN_MS, STATUS_STALE_MS,
 };
 if (typeof window !== "undefined") Object.assign(window, CONFIG, { CONFIG });
 if (typeof module !== "undefined" && module.exports) module.exports = CONFIG;

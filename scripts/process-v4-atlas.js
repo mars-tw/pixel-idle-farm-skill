@@ -15,7 +15,10 @@ const MIME = { ".html": "text/html", ".js": "application/javascript", ".json": "
 const FILES = { terrain: "terrain-organic-32", crops: "crops-48", walk: "miri-walk-48x64",
   actions: "miri-actions-48x64", animals: "animals-48", buildings: "buildings", structures: "structures-nature",
   // Stage 6：男主角（性別可選）+ NPC 鎮民
-  walk_m: "max-walk-48x64", actions_m: "max-actions-48x64", npcs: "npcs-48x64" };
+  walk_m: "max-walk-48x64", actions_m: "max-actions-48x64", npcs: "npcs-48x64",
+  // Stage 7：動物照護（互動物件/品質圖示/VFX/狀態圖示/happy+eating 動物）
+  care_props: "animal-care-props-64", product_quality: "animal-products-quality-32",
+  care_vfx: "animal-care-vfx-32", animal_status: "animal-status-icons-32", animals_care: "animals-care-48" };
 // 沿用 v3 的 sheets（站點/障礙/特效）
 const V3_REUSE = {
   props: { image: "assets/generated/v3/props-stations.png", map: "assets/generated/v3/props-stations.json" },

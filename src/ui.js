@@ -346,9 +346,11 @@
   }
 
   // ---------- 故事 / 任務（地圖驅動：state.story 任務鏈）----------
-  // 第一章＝序章 6 關（主完成度面板 0/6→6/6）；第二章＝Stage 5 探索 2 關，另計。
+  // 第一章＝序章 6 關（主完成度面板 0/6→6/6）；第二章＝Stage 5 探索 2 關；第三章＝Stage 7 動物照護 5 關，各自另計。
   const QUEST_ORDER = ["intro_reopen_farm", "plant_wheat", "first_water", "first_harvest", "first_delivery", "clear_old_path"];
   const CHAPTER2_ORDER = (typeof window !== "undefined" && window.CHAPTER2_QUESTS) || ["repair_bridge", "explore_new_area"];
+  const CHAPTER3_ORDER = (typeof window !== "undefined" && window.CHAPTER3_QUESTS) ||
+    ["learn_animal_care", "feed_care_animal", "raise_affinity_happy", "collect_quality_product", "deliver_quality_order"];
   function questStepProgress(id, completed) {
     if (completed[id]) return { done: 1, total: 1 };
     const harvested = (state.stats && state.stats.harvested) || {};
@@ -360,6 +362,9 @@
     if (id === "clear_old_path") return { done: (state.stats && state.stats.cleared || 0) > 0 ? 1 : 0, total: 1 };
     if (id === "repair_bridge") return { done: flags.bridgeRepaired ? 1 : 0, total: 1 };
     if (id === "explore_new_area") return { done: (flags.eventsClaimed && flags.eventsClaimed.east_clearing) ? 1 : 0, total: 1 };
+    if (id === "raise_affinity_happy") return { done: (state.animals || []).some((a) => G.animalAffinity(state, a, now()) >= window.AFFINITY_HAPPY_THRESHOLD) ? 1 : 0, total: 1 };
+    if (id === "collect_quality_product") return { done: G.hasCollectedQuality(state) ? 1 : 0, total: 1 };
+    if (id === "deliver_quality_order") return { done: (state.stats && state.stats.qualitySold || 0) > 0 ? 1 : 0, total: 1 };
     return { done: 0, total: 1 };
   }
   function questRow(id, completed, cur) {
@@ -379,7 +384,10 @@
     const ch1Done = doneCount >= QUEST_ORDER.length;
     const ch2Done = CHAPTER2_ORDER.filter((id) => completed[id]).length;
     const ch2Pct = Math.round(ch2Done / CHAPTER2_ORDER.length * 100);
-    const kicker = doneCount === 0 ? "序章" : ch1Done ? "第二章" : "第一章";
+    const ch2AllDone = ch2Done >= CHAPTER2_ORDER.length;
+    const ch3Done = CHAPTER3_ORDER.filter((id) => completed[id]).length;
+    const ch3Pct = Math.round(ch3Done / CHAPTER3_ORDER.length * 100);
+    const kicker = doneCount === 0 ? "序章" : ch2AllDone ? "第三章" : ch1Done ? "第二章" : "第一章";
     const title = cur ? cur.title : "陽光農場的新篇章";
     const copy = cur ? cur.desc
       : "阿軒割割陽光農場開源遊戲世界重新熱鬧了起來。東林已通，繼續開墾田地、迎接更多動物與市集訂單，讓這座農場成為玩家共創的 RPG 世界。";
@@ -394,6 +402,16 @@
         </div>
         <div class="quest-list">${CHAPTER2_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
       </div>` : "";
+    // 第三章：第二章 2/2 後才顯示，獨立完成度（Stage 7 動物照護）
+    const ch3Html = ch2AllDone ? `
+      <div class="chapter2 chapter3">
+        <div class="story-kicker">第三章 · 動物照護</div>
+        <div class="story-progress chapter3-progress" data-progress3="${ch3Done}/${CHAPTER3_ORDER.length}">
+          <div class="story-progress-head"><span>照護完成度</span><b>${ch3Done}/${CHAPTER3_ORDER.length}</b></div>
+          <div class="story-progress-track"><i style="width:${ch3Pct}%"></i></div>
+        </div>
+        <div class="quest-list">${CHAPTER3_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
+      </div>` : "";
     box.innerHTML = `<div class="story-card">
       <div class="story-kicker">${kicker}</div>
       <div class="story-title">${title}</div>
@@ -404,6 +422,7 @@
       </div>
       <div class="quest-list">${quests}</div>
       ${ch2Html}
+      ${ch3Html}
       ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。</div>` : ""}
       ${dialogueLogHtml()}
     </div>`;
@@ -627,8 +646,22 @@
     worldEl.appendChild(el); obDyn.push(el);
   }
   function strHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+  // Stage 7：地圖上動物頭上的照護狀態小圖示（hungry/thirsty/needs_groom 才顯示，happy 不額外標，
+  // 因為 happy 已經用 animals_care 的開心姿態表現，避免畫面太吵）
+  const STATUS_ICON_ROW = { hungry: "hungry", thirsty: "thirsty", needs_groom: "needs_groom" };
+  function addStatusIcon(cx, top, status) {
+    const row = STATUS_ICON_ROW[status]; if (!row || !atlasReady) return;
+    const size = TILE * 0.34;
+    const el = document.createElement("div"); el.className = "ob-status-icon";
+    el.dataset.audit = "object"; el.dataset.kind = "animal-status"; el.dataset.status = status;
+    el.style.left = pxv(Math.round(cx - size / 2)); el.style.top = pxv(Math.round(top));
+    el.style.width = pxv(size); el.style.height = pxv(size);
+    const stl = window.Atlas.frameStyleFor("animal_status", row + "_00", size, size);
+    if (stl) { el.style.backgroundImage = stl.backgroundImage; el.style.backgroundSize = stl.backgroundSize; el.style.backgroundPosition = stl.backgroundPosition; }
+    worldEl.appendChild(el); obDyn.push(el);
+  }
   // 動物實體：每隻動物在 home 結構前方草地緩慢 roam 漫遊（Lissajous），走動時用 walk 幀並依朝向翻轉，
-  // 靜止時用 idle 幀；可收集時頭上放亮點。每隻掛 data-audit/animal-id 供稽核。
+  // 靜止時依親密度用開心/待機幀；頭上顯示照護提示圖示、可收集時放亮點。每隻掛 data-audit/animal-id 供稽核。
   function renderAnimals(t) {
     for (const home of state.buildings) {
       const animals = G.animalsInHome(state, home.id); if (!animals.length) continue;
@@ -644,14 +677,18 @@
         const cx = (baseX + spread + rx) * TILE, baselineY = (baseY + ry) * TILE;
         const vx = Math.cos(t * sp + ph);                  // x 速度方向
         const moving = Math.abs(vx) > 0.45;
+        const status = G.animalStatus(state, a, t);
         const col = Math.floor(t / 320) % 2 === 0 ? "a" : "b";
-        const frame = a.type + (moving ? "_walk_" : "_idle_") + col;
-        const el = addObjectPx(obDyn, "animals", frame, cx, baselineY, TILE * 0.82, "shadowed", 0, "animal");
+        // 移動中沿用基礎 walk 幀；靜止時開心用 animals_care 開心姿態，其餘用基礎 idle 幀
+        const sheet = (!moving && status === "happy") ? "animals_care" : "animals";
+        const frame = a.type + "_" + (moving ? "walk_" : (status === "happy" ? "happy_" : "idle_")) + col;
+        const el = addObjectPx(obDyn, sheet, frame, cx, baselineY, TILE * 0.82, "shadowed", 0, "animal");
         if (el) {
           el.dataset.animalId = a.id; el.dataset.animalType = a.type;
-          el.dataset.homeId = home.id;
+          el.dataset.homeId = home.id; el.dataset.status = status;
           if (vx < 0) el.style.transform = "scaleX(-1)"; // 朝左翻轉（源圖朝右）
         }
+        addStatusIcon(cx, baselineY - TILE * 1.6, status);
         if (G.animalProgress(state, a, t).ready) addDot(cx, baselineY - TILE * 1.05);
       });
     }
@@ -692,6 +729,7 @@
   function spawnVfx(tileId, vfxRow, opts) {
     if (!atlasReady || !vfxRow) return;
     const layer = $("vfxLayer"); const el = tileElOf(tileId); if (!layer || !el) return;
+    const sheet = (opts && opts.sheet) || "vfx"; // Stage 7：動物照護 VFX 用獨立的 care_vfx sheet
     vfxSpawnCount++;
     const size = el.offsetWidth * ((opts && opts.scale) || 0.95);
     const sp = document.createElement("div"); sp.className = "map-vfx";
@@ -700,7 +738,7 @@
     sp.style.top = (el.offsetTop + el.offsetHeight * ((opts && opts.yf) || 0.5)) + "px";
     layer.appendChild(sp);
     let f = 0;
-    const paint = () => { const stl = window.Atlas.frameStyleFor("vfx", vfxRow + "_" + String(f).padStart(2, "0"), size, size);
+    const paint = () => { const stl = window.Atlas.frameStyleFor(sheet, vfxRow + "_" + String(f).padStart(2, "0"), size, size);
       if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; } };
     paint();
     const iv = setInterval(() => { f++; if (f > 5) { clearInterval(iv); sp.remove(); return; } paint(); }, 75);
@@ -901,7 +939,8 @@
       showDialogueBubble(tile, d);
       pushDialogueLog(d);
       playAction("use", state.player.facing);
-      renderTileContext(); afterChange(false);
+      if (tile.npc === "elder") G.advanceStory(state, "npc_elder", now()); // Stage 7：跟老農對話開啟第三章
+      renderTileContext(); afterChange(true);
     });
   }
   function showDialogueBubble(tile, d) {
@@ -1170,6 +1209,9 @@
       };
     });
   }
+  // Stage 7：動物照護狀態顯示文案
+  const ANIMAL_STATUS_EMOJI = { happy: "😊", hungry: "🍽️", thirsty: "💧", needs_groom: "🧹" };
+  const ANIMAL_STATUS_LABEL = { happy: "開心", hungry: "飢餓", thirsty: "口渴", needs_groom: "待梳理" };
   function renderBuildingContext(box, tile) {
     const b = state.buildings.find((x) => x.id === tile.buildingId);
     const def = window.BUILDINGS[b.type];
@@ -1182,15 +1224,23 @@
       animals.forEach((a) => {
         const adef = window.ANIMALS[a.type];
         const prog = G.animalProgress(state, a, now());
+        const affinity = G.animalAffinity(state, a, now());
+        const status = G.animalStatus(state, a, now());
+        const canWater = now() - (a.lastWateredAt || 0) >= window.CARE_COOLDOWN_MS;
+        const canGroom = now() - (a.lastGroomedAt || 0) >= window.CARE_COOLDOWN_MS;
         html += `
           <div class="animal-row">
             <span class="a-ic">${adef.emoji}</span>
-            <span class="a-body"><b>${adef.name}</b> → ${itemEmoji(adef.product)}${adef.name === "蜜蜂" ? "" : ""}
+            <span class="a-body"><b>${adef.name}</b> → ${itemEmoji(adef.product)}
               <div class="a-prog"><div class="a-fill" style="width:${(prog.ratio * 100).toFixed(0)}%"></div></div>
-              <span class="bo-cost">${prog.ready ? "✅ 可收集" : "⏳ " + fmtTime(prog.remainingMs)}</span></span>
-            <span style="display:flex;flex-direction:column;gap:4px">
+              <span class="bo-cost">${prog.ready ? "✅ 可收集" : "⏳ " + fmtTime(prog.remainingMs)}</span>
+              <div class="a-affinity" title="親密度 ${affinity.toFixed(0)}/100"><div class="a-affinity-fill" style="width:${affinity.toFixed(0)}%"></div></div>
+              <span class="bo-cost">${ANIMAL_STATUS_EMOJI[status]} ${ANIMAL_STATUS_LABEL[status]}・親密度 ${affinity.toFixed(0)}</span></span>
+            <span class="a-actions-col">
               <button class="btn buy small acol" data-id="${a.id}" ${prog.ready ? "" : "disabled"}>收集</button>
               <button class="btn ghost small afeed" data-id="${a.id}">餵食</button>
+              <button class="btn ghost small awater" data-id="${a.id}" ${canWater ? "" : "disabled"}>澆水</button>
+              <button class="btn ghost small agroom" data-id="${a.id}" ${canGroom ? "" : "disabled"}>梳理</button>
             </span>
           </div>`;
       });
@@ -1211,12 +1261,39 @@
     box.innerHTML = html;
     box.querySelectorAll(".acol").forEach((btn) => btn.onclick = () => {
       const r = G.collectAnimal(state, btn.dataset.id, now());
-      if (r.ok) { playAction("carry"); toast("🧺 收集 " + r.added + " " + itemName(r.product)); afterChange(true); renderTileContext(); updateMap(now()); }
+      if (r.ok) {
+        playAction("carry");
+        if (r.tier !== "normal") spawnVfx(tile.id, "quality_sparkle", { scale: 1.1, sheet: "care_vfx" });
+        toast((r.tier === "premium" ? "✨ " : r.tier === "good" ? "🌟 " : "🧺 ") + "收集 " + r.added + " " + itemName(r.product));
+        afterChange(true); renderTileContext(); updateMap(now());
+      }
     });
     box.querySelectorAll(".afeed").forEach((btn) => btn.onclick = () => {
       const r = G.feedAnimal(state, btn.dataset.id, now());
-      if (r.ok) { playAction("sow"); toast("🌾 餵食 → +1 " + itemName(r.product)); afterChange(true); renderTileContext(); }
-      else toast("飼料不足（需作物）");
+      if (r.ok) {
+        playAction("sow"); spawnVfx(tile.id, "feed_bits", { sheet: "care_vfx" });
+        toast("🌾 餵食 → +1 " + itemName(r.product) + "・親密度 " + r.affinity.toFixed(0));
+        G.advanceStory(state, "care_animal", now());
+        afterChange(true); renderTileContext();
+      } else toast("飼料不足（需作物）");
+    });
+    box.querySelectorAll(".awater").forEach((btn) => btn.onclick = () => {
+      const r = G.waterAnimal(state, btn.dataset.id, now());
+      if (r.ok) {
+        playAction("water"); spawnVfx(tile.id, "water_splash", { sheet: "care_vfx" });
+        toast("💧 澆水 → 親密度 " + r.affinity.toFixed(0));
+        G.advanceStory(state, "care_animal", now());
+        afterChange(true); renderTileContext();
+      } else if (r.reason === "cooldown") toast("這隻剛澆過水，等一下再來");
+    });
+    box.querySelectorAll(".agroom").forEach((btn) => btn.onclick = () => {
+      const r = G.groomAnimal(state, btn.dataset.id, now());
+      if (r.ok) {
+        playAction("build"); spawnVfx(tile.id, "groom_sparkle", { sheet: "care_vfx" });
+        toast("🧹 梳理 → 親密度 " + r.affinity.toFixed(0));
+        G.advanceStory(state, "care_animal", now());
+        afterChange(true); renderTileContext();
+      } else if (r.reason === "cooldown") toast("這隻剛梳理過，等一下再來");
     });
     box.querySelectorAll(".abuy").forEach((btn) => btn.onclick = () => {
       const r = G.buyAnimal(state, btn.dataset.bid, btn.dataset.type, now());

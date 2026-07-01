@@ -64,10 +64,28 @@ const REQUIRED = {
   props: ["order_board", "storage_crate", "mailbox", "well", "rock", "stump", "bush"],
   // water_droplets 在 v3 源圖整列為空（沿用），角色澆水動畫已提供回饋，故不強制要求
   vfx: range(["soil_dust", "seed_scatter", "harvest_pop", "product_pop", "valid_ring", "invalid_ring"], 6),
+  // Stage 7：動物照護
+  care_props: (() => {
+    const cols = { feed_trough: ["empty", "grain", "hay", "mixed"], water_trough: ["empty", "half", "full", "fresh"],
+      grooming_brush: ["plain", "wool", "bucket", "kit"], animal_bed: ["plain", "fresh", "cozy", "premium"] };
+    const out = []; for (const r of Object.keys(cols)) for (const c of cols[r]) out.push(r + "_" + c); return out;
+  })(),
+  product_quality: (() => {
+    const rows = ["egg", "milk", "wool", "honey"], cols = ["normal", "good", "premium"];
+    const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
+  })(),
+  care_vfx: range(["feed_bits", "water_splash", "groom_sparkle", "affinity_heart", "quality_sparkle", "care_ready_ring"], 6),
+  animal_status: range(["hungry", "thirsty", "needs_groom", "happy"], 4),
+  animals_care: (() => {
+    const rows = ["chicken", "cow", "sheep", "bee"], cols = ["happy_a", "happy_b", "eating_a", "eating_b"];
+    const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
+  })(),
 };
-const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings", "structures"]);
+const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings", "structures",
+  "care_props", "animals_care"]);
 // 需做像素「非空白」檢查的 sheet（程序化 terrain / vfx 略過）
-const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings"];
+const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings",
+  "care_props", "product_quality", "animals_care"];
 
 function server() {
   return new Promise((res) => {
@@ -179,6 +197,16 @@ async function main() {
       if (o === "tree") { if (!structMap.oak) fail("renderer: structures 缺 tree 用的 frame「oak」"); }
       else if (!propMap[o]) fail(`renderer: props 缺障礙 frame「${o}」`);
     }
+    // Stage 7：品質分級圖示 / 動物 happy+eating 幀，config 實際用到的都要能解析
+    const qualMap = JSON.parse(fs.readFileSync(path.join(V4, "animal-products-quality-32.json"), "utf8")).frames;
+    for (const pid of Object.keys(C.PRODUCTS)) {
+      const p = C.PRODUCTS[pid]; const fid = p.baseProduct + "_" + p.quality;
+      if (!qualMap[fid]) fail(`renderer: product_quality 缺產品 frame「${fid}」（${pid}）`);
+    }
+    const careAnimalMap = JSON.parse(fs.readFileSync(path.join(V4, "animals-care-48.json"), "utf8")).frames;
+    for (const aid of Object.keys(C.ANIMALS))
+      for (const suffix of ["happy_a", "happy_b", "eating_a", "eating_b"])
+        if (!careAnimalMap[aid + "_" + suffix]) fail(`renderer: animals_care 缺動物 frame「${aid}_${suffix}」`);
   } catch (e) { warn("renderer 解析檢查略過：" + e.message); }
 
   await pixelCheck(manifest);

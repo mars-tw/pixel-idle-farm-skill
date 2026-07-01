@@ -132,6 +132,71 @@
       },
       "frameCount": 16
     },
+    "care_props": {
+      "image": "assets/generated/v4/animal-care-props-64.png",
+      "map": "assets/generated/v4/animal-care-props-64.json",
+      "meta": {
+        "w": 256,
+        "h": 256,
+        "frameW": 64,
+        "frameH": 64,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    },
+    "product_quality": {
+      "image": "assets/generated/v4/animal-products-quality-32.png",
+      "map": "assets/generated/v4/animal-products-quality-32.json",
+      "meta": {
+        "w": 96,
+        "h": 128,
+        "frameW": 32,
+        "frameH": 32,
+        "cols": 3,
+        "rows": 4
+      },
+      "frameCount": 12
+    },
+    "care_vfx": {
+      "image": "assets/generated/v4/animal-care-vfx-32.png",
+      "map": "assets/generated/v4/animal-care-vfx-32.json",
+      "meta": {
+        "w": 192,
+        "h": 192,
+        "frameW": 32,
+        "frameH": 32,
+        "cols": 6,
+        "rows": 6
+      },
+      "frameCount": 36
+    },
+    "animal_status": {
+      "image": "assets/generated/v4/animal-status-icons-32.png",
+      "map": "assets/generated/v4/animal-status-icons-32.json",
+      "meta": {
+        "w": 128,
+        "h": 128,
+        "frameW": 32,
+        "frameH": 32,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    },
+    "animals_care": {
+      "image": "assets/generated/v4/animals-care-48.png",
+      "map": "assets/generated/v4/animals-care-48.json",
+      "meta": {
+        "w": 192,
+        "h": 192,
+        "frameW": 48,
+        "frameH": 48,
+        "cols": 4,
+        "rows": 4
+      },
+      "frameCount": 16
+    },
     "props": {
       "image": "assets/generated/v3/props-stations.png",
       "map": "assets/generated/v3/props-stations.json",

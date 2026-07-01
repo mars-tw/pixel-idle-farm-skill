@@ -43,7 +43,7 @@ jobs:
           for f in src/*.js scripts/*.js; do node -c "$f" && echo "✓ $f"; done
 
   e2e:
-    name: Stage 4–6 RPG 場景 E2E（真瀏覽器 + atlas 像素驗證）
+    name: Stage 4–7 RPG 場景 E2E（真瀏覽器 + atlas 像素驗證）
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -56,7 +56,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: 驗證 v4 atlas 像素品質（空白幀/作物觸邊，需 chromium）
         run: node scripts/validate-v4-atlas.js
-      - name: 跑 Stage 4–6 RPG v4 E2E（大世界/camera/動作/故事鏈/探索/NPC對話/性別/視覺/RWD/桌機+手機）
+      - name: 跑 Stage 4–7 RPG v4 E2E（大世界/camera/動作/故事鏈/探索/NPC對話/性別/動物照護/視覺/RWD/桌機+手機）
         run: node scripts/test-rpg-v4-e2e.js
 
   deploy:

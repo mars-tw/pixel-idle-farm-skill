@@ -83,6 +83,12 @@
   }
 
   // 由 STRUCTURES 預置動物家（雞舍起始 1 隻雞，動物可見＋可收集）+ 對應 buildingId
+  // Stage 7：動物物件（含照護欄位）。affinity 為「上次照護當下的已收藏值」，
+  // 實際親密度由 game.js 依經過時間衰減後現算，不在這裡模擬。
+  function makeAnimal(id, type, homeId, now) {
+    return { id, type, homeId, lastProducedAt: now,
+      affinity: 0, lastCaredAt: now, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0 };
+  }
   function seedStructures(map, now) {
     const buildings = [], animals = [];
     for (const s of (C.STRUCTURES || [])) {
@@ -91,7 +97,7 @@
       buildings.push(b);
       // footprint 磚的 buildingId 指向此 building（供收集互動）
       map.tiles.forEach((t) => { if (t.structureId === s.id) t.buildingId = b.id; });
-      if (s.building === "chickenCoop") animals.push({ id: "a_" + s.id + "_1", type: "chicken", homeId: b.id, lastProducedAt: now });
+      if (s.building === "chickenCoop") animals.push(makeAnimal("a_" + s.id + "_1", "chicken", b.id, now));
     }
     return { buildings, animals };
   }
@@ -133,7 +139,7 @@
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
       flags: { bridgeRepaired: false, eventsClaimed: {} },
-      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} },
+      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0 },
     };
   }
 
@@ -168,6 +174,9 @@
       merged.map = def.map; merged.buildings = def.buildings; merged.animals = def.animals;
       merged.player = def.player;
     }
+    // Stage 7：舊存檔的動物物件補齊照護欄位（新蓋的已經有，這裡對舊資料是 no-op）
+    merged.animals = (merged.animals || []).map((a) => Object.assign(
+      { affinity: 0, lastCaredAt: a.lastProducedAt || 0, lastFedAt: 0, lastWateredAt: 0, lastGroomedAt: 0 }, a));
     // 確保 plots 數量足夠對應所有 soil 磚
     if (merged.plots.length < C.GAME.maxPlots) {
       while (merged.plots.length < C.GAME.maxPlots) merged.plots.push({ id: "p" + String(merged.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
