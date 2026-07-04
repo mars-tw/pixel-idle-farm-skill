@@ -137,7 +137,7 @@
 
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
-  function setTool(t) { state.interaction.tool = t; renderToolbar(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
+  function setTool(t) { state.interaction.tool = t; renderToolbar(); renderQuestDock(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
   function renderToolbar() {
     const bar = $("toolBar"); if (!bar) return; bar.innerHTML = "";
     window.TOOL_ORDER.forEach((id) => {
@@ -375,6 +375,57 @@
       <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span>
       <span class="qtext"><span>${q.title}</span><em>${step.done}/${step.total}</em></span></div>`;
   }
+  function bridgeMaterialRowsHtml(compact) {
+    if (!G.bridgeMaterialStatus) return "";
+    const st = G.bridgeMaterialStatus(state);
+    const names = { wood: "木材", stone: "石頭" };
+    const rows = Object.keys(st.cost).map((k) => {
+      const ready = (st.missing[k] || 0) <= 0;
+      const src = (st.sources[k] || []).map((s) => window.OBSTACLES[s.object].name).filter((v, i, arr) => arr.indexOf(v) === i).join("、");
+      return `<div class="bm-row ${ready ? "ready" : "miss"}" data-material="${k}" data-missing="${st.missing[k]}">
+        <span>${window.MATERIALS[k].emoji} ${names[k] || window.MATERIALS[k].name}</span>
+        <b>${st.have[k]}/${st.cost[k]}${ready ? " 完成" : " 缺 " + st.missing[k]}</b>
+        ${compact ? "" : `<span class="bm-src">${ready ? "已備齊" : "來源：" + (src || "已無可清障礙")}</span>`}
+      </div>`;
+    }).join("");
+    return `<div class="bridge-materials" data-audit="bridge-materials" data-ready="${st.ready}">${rows}</div>`;
+  }
+  function questActionText(cur) {
+    if (!cur) return "自由經營：繼續種植、接訂單、照顧動物。";
+    if (cur.id === "intro_reopen_farm") return "主動作：點金色箭頭旁的告示牌，走過去閱讀。";
+    if (cur.id === "plant_wheat") return "主動作：選手工具，點空農土種下小麥。";
+    if (cur.id === "first_water") return "主動作：走到水井，或選澆水工具點麥田。";
+    if (cur.id === "first_harvest") return "主動作：等小麥成熟，點麥田走過去收成。";
+    if (cur.id === "first_delivery") return "主動作：走到訂單看板，交付 2 小麥新手訂單。";
+    if (cur.id === "clear_old_path") return "主動作：選清除工具，點金色箭頭標示的樹樁。";
+    if (cur.id === "repair_bridge") {
+      const st = G.bridgeMaterialStatus ? G.bridgeMaterialStatus(state) : null;
+      return st && st.ready ? "主動作：材料已齊，點斷橋走過去修復。" : "主動作：跟著金色箭頭清障，補齊修橋材料。";
+    }
+    if (cur.id === "explore_new_area") return "主動作：過橋走到東林古樹。";
+    if (cur.id === "learn_animal_care") return "主動作：找老農班伯交談。";
+    if (cur.id === "feed_care_animal") return "主動作：走到雞舍，餵食、澆水或梳理動物。";
+    if (cur.id === "raise_affinity_happy") return "主動作：持續照護同一隻動物到開心。";
+    if (cur.id === "collect_quality_product") return "主動作：親密度高時收集優質或頂級產物。";
+    if (cur.id === "deliver_quality_order") return "主動作：把優質產物賣到市集或交付訂單。";
+    return "主動作：" + cur.desc;
+  }
+  function renderQuestDock() {
+    const box = $("questDock"); if (!box) return;
+    if (G.syncStoryProgress) G.syncStoryProgress(state);
+    const cur = G.currentQuest(state);
+    const targetId = G.questMarkerTile ? G.questMarkerTile(state, now()) : null;
+    const title = cur ? cur.title : "自由經營";
+    const action = questActionText(cur);
+    box.dataset.quest = cur ? cur.id : "free";
+    box.dataset.targetId = targetId || "";
+    box.innerHTML = `<div class="qd-body">
+        <div class="qd-title"><span>📍</span><span>${title}</span></div>
+        <div class="qd-action">${action}</div>
+        ${cur && cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(true) : ""}
+      </div>
+      <div class="qd-meta">${targetId ? "金箭頭" : "探索"}</div>`;
+  }
   function renderStory() {
     const box = $("storyPanel"); if (!box) return;
     if (G.syncStoryProgress) G.syncStoryProgress(state);
@@ -424,7 +475,7 @@
       <div class="quest-list">${quests}</div>
       ${ch2Html}
       ${ch3Html}
-      ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。</div>` : ""}
+      ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。${cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(false) : ""}</div>` : ""}
       ${dialogueLogHtml()}
     </div>`;
   }
@@ -955,13 +1006,13 @@
       const chk = G.canRepairBridge(state);
       if (!chk.ok) {
         if (chk.reason === "chapter") toast("⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
-        else if (chk.reason === "materials") toast("🪵 修橋需要 木材 " + chk.need.wood + " + 石頭 " + chk.need.stone + "（清樹樁得木材、清石得石頭）");
+        else if (chk.reason === "materials") toast("🪵 修橋材料不足，跟著任務 Dock 清大樹與巨石");
         else toast("目前無法修橋");
-        spawnRing(tile.id, false); renderTileContext(); return;
+        spawnRing(tile.id, false); renderTileContext(); renderQuestDock(); return;
       }
       playAction("build", state.player.facing); spawnVfx(state.player.tileId, "soil_dust");
       const r = G.repairBridge(state, now());
-      if (r.ok) { toast("🌉 斷橋修好了！東林空地解鎖"); buildStaticObjects(); paintGround(); afterChange(true); renderTileContext(); }
+      if (r.ok) { toast("🌉 斷橋修好了！東林空地解鎖"); buildStaticObjects(); paintGround(); afterChange(true); renderTileContext(); renderQuestDock(); }
     });
   }
   // Stage 5：事件點 — 走過去觸發，首次給一次性獎勵 + 推進故事
@@ -1044,7 +1095,7 @@
       const adv = G.advanceStory(state, "read_sign");
       const q = window.QUESTS[adv.completed === "intro_reopen_farm" ? "plant_wheat" : (state.story.questId || "intro_reopen_farm")];
       toast("📖 " + (st.effect === "mail" ? "信箱" : "告示牌") + "：" + (q ? q.title : "陽光農場的近況"));
-      renderStory(); updateMap(now());
+      renderStory(); renderQuestDock(); updateMap(now());
     } else if (st.effect === "well") {
       let n = 0;
       for (let i = 0; i < G.activePlotCount(state); i++) if (G.waterPlot(state, i, t).ok) n++;
@@ -1238,6 +1289,7 @@
         const why = chk.ok ? "" : chk.reason === "chapter" ? "（需先完成序章 6/6）" : chk.reason === "materials" ? "（建材不足）" : "";
         box.innerHTML = `<div class="tc-title">🌉 斷橋</div>
           <div class="tc-desc">河上的橋斷了。走過去用建材修復，打通東林封鎖區。需 ${costTxt}${why}</div>
+          ${bridgeMaterialRowsHtml(false)}
           <div class="tc-actions"><button class="btn buy small" id="useBridgeBtn" ${chk.ok ? "" : "disabled"}>走過去修橋（${costTxt}）</button></div>`;
       }
       $("useBridgeBtn").onclick = () => useBridge(tile);
@@ -1265,15 +1317,18 @@
       const ob = window.OBSTACLES[tile.object];
       const canClear = state.coins >= ob.clearCost;
       const grantsTxt = Object.entries(ob.grants).map(([k, v]) => `+${v}${window.MATERIALS[k].emoji}`).join(" ");
+      const bridgeNeed = G.currentQuest(state) && G.currentQuest(state).id === "repair_bridge"
+        && Object.keys(ob.grants || {}).some((k) => ((G.bridgeMaterialStatus(state).missing || {})[k] || 0) > 0);
       box.innerHTML = `
         <div class="tc-title">${ob.emoji} ${ob.name}</div>
-        <div class="tc-desc">${ob.desc}。清除後變草地可興建。</div>
+        <div class="tc-desc">${ob.desc}。清除後變草地可興建。${bridgeNeed ? "這是目前修橋材料來源。" : ""}</div>
+        ${bridgeNeed ? bridgeMaterialRowsHtml(false) : ""}
         <div class="tc-actions">
           <button class="btn buy small" id="clearBtn" ${canClear ? "" : "disabled"}>清除（🪙${ob.clearCost} → ${grantsTxt}）</button>
         </div>`;
       $("clearBtn").onclick = () => {
         const r = G.clearObstacle(state, tile.id);
-        if (r.ok) { playAction("hoe"); toast("⛏️ 已清除，獲得建材"); afterChange(true); renderTileContext(); }
+        if (r.ok) { playAction("hoe"); toast("⛏️ 已清除，獲得建材"); afterChange(true); renderTileContext(); renderQuestDock(); }
         else if (r.reason === "no_coins") toast("🪙 金幣不足");
       };
       return;
@@ -1489,7 +1544,7 @@
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
     renderResBar(); renderSeeds(); updateFarm(now());
-    renderStory(); renderJournal(); syncHud();
+    renderStory(); renderQuestDock(); renderJournal(); syncHud();
     if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
     scheduleSave();
   }
@@ -1567,7 +1622,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -1600,7 +1655,7 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
-      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
+      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
       clickTile: (id) => handleMapClick(id),
       setTool: (t) => setTool(t),
       moving: () => !!moveTimer,
@@ -1656,7 +1711,7 @@
       if (confirm("確定重置存檔？所有進度會消失。")) {
         window.reset(); state = window.defaultState(now());
         selectedSeed = "wheat"; selectedTileId = null; buildFarm(); buildMap();
-        renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); updateFarm(now()); renderTileContext();
+        renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); updateFarm(now()); renderTileContext();
         G.refreshOrders(state, now()); renderOrders();
         window.save(state); toast("🗑️ 已重置");
       }

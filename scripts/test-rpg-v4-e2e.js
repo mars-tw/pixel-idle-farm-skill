@@ -102,6 +102,16 @@ async function run() {
     assert(chrome.title === "阿軒割割陽光農場開源遊戲世界", "文件標題已改為新遊戲名");
     assert(chrome.heading.includes("阿軒割割陽光農場開源遊戲世界"), "頁首顯示新遊戲名");
     assert(chrome.story.includes("任務完成度") && chrome.story.includes("0/6"), "故事面板初始顯示 0/6 完成度");
+    const dockInitial = await page.evaluate(() => {
+      const el = document.getElementById("questDock");
+      const r = el.getBoundingClientRect();
+      return { text: el.innerText, h: r.height, visible: r.width > 0 && r.height > 0,
+        quest: el.dataset.quest, overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(dockInitial.visible && dockInitial.h >= 44, `任務 Dock 常駐且 tap target >=44px（${Math.round(dockInitial.h)}px）`);
+    assert(dockInitial.quest === "intro_reopen_farm" && dockInitial.text.includes("主動作"),
+      `任務 Dock 顯示當前任務與主動作（${dockInitial.quest}）`);
+    assert(dockInitial.overflow <= 2, `任務 Dock 不造成水平溢出（${dockInitial.overflow}）`);
 
     // 1. 大世界 ≥22×12 + 世界像素 > 視口
     const world = await page.evaluate(() => {
@@ -254,7 +264,7 @@ async function run() {
     assert(signProgress.progress === "1/6" && signProgress.text.includes("1/6"), `讀告示後完成度 1/6（${signProgress.progress}）`);
 
     const sow = await page.evaluate(async () => {
-      const F = window.__farm; const st = F.state(); st.coins = 999; F.setTool("hand");
+      const F = window.__farm; const st = F.state(); F.setTool("hand");
       const marker = window.questMarkerTile(st, Date.now());
       const soil = st.map.tiles.find((t) => t.plotIndex === 0);
       const before = F.vfxSpawns();
@@ -272,6 +282,17 @@ async function run() {
     assert(sowRes.planted, "走到農土播種成功");
     assert(sowRes.vfx > sow.before, `種植時地圖出現 VFX（${sow.before}→${sowRes.vfx}）`);
     assert(sowRes.quest === "first_water", `種麥推進到澆水任務（${sowRes.quest}）`);
+    const dockAfterMapClick = await page.evaluate(() => {
+      const el = document.getElementById("questDock");
+      const r = el.getBoundingClientRect();
+      return { text: el.innerText, h: r.height, quest: el.dataset.quest,
+        tileTab: window.__farm.activeTab(), overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(dockAfterMapClick.tileTab === "tile" && dockAfterMapClick.h >= 44,
+      `點地圖切到磚資訊後 Dock 仍可見且 >=44px（tab=${dockAfterMapClick.tileTab}, h=${Math.round(dockAfterMapClick.h)}）`);
+    assert(dockAfterMapClick.quest === "first_water" && dockAfterMapClick.text.includes("主動作"),
+      "點地圖後 Dock 仍顯示當前任務與下一動作");
+    assert(dockAfterMapClick.overflow <= 2, `點地圖後 Dock 無水平溢出（${dockAfterMapClick.overflow}）`);
     const sowProgress = await storyProgress(page);
     assert(sowProgress.progress === "2/6" && sowProgress.text.includes("種下第一批小麥") && sowProgress.text.includes("1/1"),
       `種麥後完成度 2/6 並顯示作物 1/1（${sowProgress.progress}）`);
@@ -319,29 +340,46 @@ async function run() {
     const harvestProgress = await storyProgress(page);
     assert(harvestProgress.progress === "4/6", `收成後完成度 4/6（${harvestProgress.progress}）`);
 
-    // 9. 交付一張故事訂單 → 完成度 5/6，下一步才是清路
-    const deliveryRes = await page.evaluate(() => {
+    // 9. 首收後保底新手訂單可交付 → 走到看板交付 → 完成度 5/6
+    const firstOrderReady = await page.evaluate(() => {
       const F = window.__farm; const st = F.state();
-      st.storage.items.wheat = Math.max(st.storage.items.wheat || 0, 1);
-      st.orders = [{ id: "story_order", wants: { wheat: 1 }, rarity: "common", rewardCoins: 20, rewardXp: 4, expiresAt: Date.now() + 999999 }];
-      const f = window.Game.fulfillOrder(st, "story_order", Date.now());
-      const adv = window.Game.advanceStory(st, "deliver");
+      window.Game.refreshOrders(st, Date.now());
       F.refresh();
-      return { fulfilled: f.ok, advanced: adv.ok, quest: st.story.questId };
+      const tutorial = st.orders.find((o) => o.id === "tutorial_first_delivery");
+      return { hasTutorial: !!tutorial, tutorialWants: tutorial ? tutorial.wants : null,
+        canFulfillCount: st.orders.filter((o) => window.Game.canFulfill(st, o)).length,
+        wheat: st.storage.items.wheat || 0 };
     });
-    assert(deliveryRes.fulfilled && deliveryRes.advanced && deliveryRes.quest === "clear_old_path",
-      `交付故事訂單後推進到清路任務（${deliveryRes.quest}）`);
+    assert(firstOrderReady.hasTutorial && firstOrderReady.tutorialWants.wheat === 2,
+      "首收後生成 2 小麥新手保底訂單");
+    assert(firstOrderReady.canFulfillCount >= 1,
+      `新存檔首輪收成後至少 1 張訂單可交付（可交 ${firstOrderReady.canFulfillCount}，小麥 ${firstOrderReady.wheat}）`);
+    const orderBoard = await page.evaluate(() => {
+      const F = window.__farm; const board = F.state().map.tiles.find((t) => t.station === "order_board");
+      F.clickTile(board.id);
+      return board.id;
+    });
+    await waitArrive(page, 9000);
+    await sleep(300);
+    const deliveryRes = await page.evaluate(() => {
+      const btn = document.querySelector("#orders .ful:not([disabled])");
+      if (btn) btn.click();
+      const st = window.__farm.state();
+      return { clicked: !!btn, quest: st.story.questId, fulfilledOrders: st.stats.fulfilledOrders };
+    });
+    assert(deliveryRes.clicked && deliveryRes.fulfilledOrders >= 1 && deliveryRes.quest === "clear_old_path",
+      `走到訂單看板交付保底訂單後推進到清路任務（${deliveryRes.quest}，board=${orderBoard}）`);
     const deliveryProgress = await storyProgress(page);
     assert(deliveryProgress.progress === "5/6", `交付訂單後完成度 5/6（${deliveryProgress.progress}）`);
 
     // 10. 清除工具路由：清掉樹樁 → 變草地 + 故事完成
     const clear = await page.evaluate(async () => {
       const F = window.__farm; const st = F.state();
-      st.coins = 9999; F.refresh();
+      F.refresh();
       const marker = window.questMarkerTile(st, Date.now());
       const stump = st.map.tiles.find((t) => t.object === "stump");
       F.setTool("clear"); F.clickTile(stump.id);
-      return { marker, stumpId: stump.id };
+      return { marker, stumpId: stump.id, coinsBefore: st.coins };
     });
     await waitArrive(page, 9000);
     await sleep(400);
@@ -350,7 +388,7 @@ async function run() {
       return { quest: st.story.questId, anyStump: st.map.tiles.some((t) => t.object === "stump") };
     });
     assert(clear.marker === clear.stumpId, "清路任務標記指向樹樁");
-    assert(!clearRes.anyStump, "清除工具：走過去清掉樹樁");
+    assert(clear.coinsBefore >= 18 && !clearRes.anyStump, "清除工具：不灌金幣，走過去清掉樹樁");
     assert(clearRes.quest === "repair_bridge", `清路後接第二章「修橋」（${clearRes.quest}）`);
     const clearProgress = await storyProgress(page);
     assert(clearProgress.progress === "6/6", `序章完成度 6/6（${clearProgress.progress}）`);
@@ -373,10 +411,51 @@ async function run() {
     assert(pre.lockedArea >= 30, `修橋前：東林封鎖區可稽核 data-kind=locked-area（${pre.lockedArea}）`);
     assert(pre.bridgeOb >= 1 && pre.eventOb >= 1, `斷橋 / 事件點 data-audit 可稽核（bridge=${pre.bridgeOb} event=${pre.eventOb}）`);
 
-    // 12. 走過去修橋（給真資源 木6石4，消耗後解鎖；marker 指向斷橋）
+    // 12. 修橋材料導引：不灌 state，依 Dock/marker 清大樹與兩顆巨石湊齊木6石4
+    const matStart = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const s = window.Game.bridgeMaterialStatus(st);
+      const dock = document.getElementById("questDock");
+      const target = window.Game.getTile(st, window.questMarkerTile(st, Date.now()));
+      return { status: s, dockText: dock.innerText, dockQuest: dock.dataset.quest,
+        targetObject: target && target.object, targetId: target && target.id,
+        overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(matStart.dockQuest === "repair_bridge" && matStart.dockText.includes("木材") && matStart.dockText.includes("石頭"),
+      "修橋任務 Dock 顯示材料清單");
+    assert(matStart.status.have.wood === 2 && matStart.status.missing.wood === 4 && matStart.status.missing.stone === 4,
+      `清樹樁後材料缺口正確（木 ${matStart.status.have.wood}/6，石缺 ${matStart.status.missing.stone}）`);
+    assert(matStart.targetObject === "tree", `木材不足時 marker 指向大樹（${matStart.targetId}）`);
+    assert(matStart.overflow <= 2, `修橋材料 Dock 無水平溢出（${matStart.overflow}）`);
+
+    for (const expected of ["tree", "rock", "rock"]) {
+      const target = await page.evaluate((want) => {
+        const F = window.__farm; const st = F.state();
+        const tid = window.questMarkerTile(st, Date.now());
+        const tile = window.Game.getTile(st, tid);
+        F.setTool("clear"); F.clickTile(tid);
+        return { id: tid, object: tile && tile.object, want, coins: st.coins };
+      }, expected);
+      assert(target.object === expected, `材料導引 marker 指向 ${expected}（實際 ${target.object}）`);
+      assert(target.coins >= (expected === "tree" ? 40 : 25), `清除 ${expected} 前金幣足夠（${target.coins}）`);
+      await waitArrive(page, 9000);
+      await sleep(350);
+    }
+    const matReady = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const s = window.Game.bridgeMaterialStatus(st);
+      const marker = window.questMarkerTile(st, Date.now());
+      const bridge = window.Game.bridgeTile(st);
+      return { status: s, marker, bridgeId: bridge.id, dockText: document.getElementById("questDock").innerText };
+    });
+    assert(matReady.status.ready && matReady.status.have.wood === 6 && matReady.status.have.stone === 4,
+      "依 UI 材料導引清障後湊齊木6石4");
+    assert(matReady.marker === matReady.bridgeId && matReady.dockText.includes("材料已齊"),
+      "材料齊後 marker 回到斷橋，Dock 提示修復");
+
+    // 12b. 走過去修橋（消耗真資源後解鎖）
     const repair = await page.evaluate(async () => {
       const F = window.__farm; const st = F.state();
-      st.materials.wood = 6; st.materials.stone = 4; F.refresh();
       const bridge = window.Game.bridgeTile(st);
       const marker = window.questMarkerTile(st, Date.now());
       F.setTool("hand"); F.clickTile(bridge.id);

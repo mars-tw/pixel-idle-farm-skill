@@ -227,6 +227,26 @@
     wool_good: [1, 2], wool_premium: [1, 1],
     honey_good: [1, 3], honey_premium: [1, 2],
   };
+  const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
+  function tutorialDeliveryOrderNeeded(state) {
+    const story = state.story || {};
+    const done = story.completed || {};
+    const stats = state.stats || {};
+    return story.questId === "first_delivery" && !done.first_delivery
+      && (stats.fulfilledOrders || 0) === 0
+      && ((stats.harvested || {}).wheat || 0) > 0;
+  }
+  function makeTutorialDeliveryOrder(now) {
+    return {
+      id: TUTORIAL_DELIVERY_ORDER_ID,
+      wants: { wheat: CROPS.wheat.yield },
+      rarity: "common",
+      rewardCoins: 110,
+      rewardXp: 8,
+      expiresAt: now + GAME.orderTtlMs,
+      tutorial: true,
+    };
+  }
   function makeOrder(state, now, rng, idSeed) {
     const pool = availableOrderItems(state); // 作物 + 已解鎖動物產品
     const rarities = Object.values(ORDER_RARITY);
@@ -261,6 +281,11 @@
   function refreshOrders(state, now, rng) {
     // 移除過期訂單，補滿到 orderSlots
     state.orders = state.orders.filter((o) => o.expiresAt > now);
+    if (tutorialDeliveryOrderNeeded(state)) {
+      state.orders = state.orders.filter((o) => o.id !== TUTORIAL_DELIVERY_ORDER_ID);
+      state.orders.unshift(makeTutorialDeliveryOrder(now));
+      if (state.orders.length > GAME.orderSlots) state.orders.length = GAME.orderSlots;
+    }
     let seed = (state.ordersSeededAt || 0);
     while (state.orders.length < GAME.orderSlots) {
       seed++;
@@ -763,7 +788,13 @@
     const m = q.marker;
     if (m.kind === "station") { const t = state.map.tiles.find((tl) => tl.station === m.type); return t ? t.id : null; }
     if (m.kind === "obstacle") { const t = state.map.tiles.find((tl) => tl.object === m.object); return t ? t.id : null; }
-    if (m.kind === "bridge") { const t = state.map.tiles.find((tl) => tl.bridge); return t ? t.id : null; }
+    if (m.kind === "bridge") {
+      if (q.id === "repair_bridge") {
+        const mt = bridgeMaterialTargetTile(state);
+        if (mt) return mt.id;
+      }
+      const t = state.map.tiles.find((tl) => tl.bridge); return t ? t.id : null;
+    }
     if (m.kind === "event") { const t = state.map.tiles.find((tl) => tl.event === m.event); return t ? t.id : null; }
     if (m.kind === "npc") { const t = state.map.tiles.find((tl) => tl.npc === m.type); return t ? t.id : null; }
     if (m.kind === "structure") {
@@ -804,9 +835,35 @@
     if (!state.flags) return { ok: false, reason: "flags" };
     if (state.flags.bridgeRepaired) return { ok: false, reason: "done" };
     if (!chapter1Done(state)) return { ok: false, reason: "chapter", need: C.BRIDGE_COST };
+    const status = bridgeMaterialStatus(state);
+    for (const k in status.missing) if (status.missing[k] > 0) return { ok: false, reason: "materials", need: status.cost, status };
+    return { ok: true, need: C.BRIDGE_COST, status };
+  }
+  function bridgeMaterialStatus(state) {
     const cost = C.BRIDGE_COST || {};
-    for (const k in cost) if ((state.materials[k] || 0) < cost[k]) return { ok: false, reason: "materials", need: cost };
-    return { ok: true, need: C.BRIDGE_COST };
+    const have = {}, missing = {}, sources = {};
+    for (const k in cost) {
+      have[k] = (state.materials && state.materials[k]) || 0;
+      missing[k] = Math.max(0, cost[k] - have[k]);
+      sources[k] = (state.map.tiles || [])
+        .filter((t) => t.object && OBSTACLES[t.object] && (OBSTACLES[t.object].grants || {})[k] > 0)
+        .map((t) => ({ tileId: t.id, object: t.object, grants: OBSTACLES[t.object].grants[k], clearCost: OBSTACLES[t.object].clearCost }));
+    }
+    const ready = Object.keys(cost).every((k) => missing[k] <= 0);
+    return { cost, have, missing, sources, ready };
+  }
+  function bridgeMaterialTargetTile(state) {
+    if (state.flags && state.flags.bridgeRepaired) return null;
+    if (!chapter1Done(state)) return bridgeTile(state);
+    const status = bridgeMaterialStatus(state);
+    for (const k of ["wood", "stone"]) {
+      if ((status.missing[k] || 0) <= 0) continue;
+      for (const src of status.sources[k] || []) {
+        const tile = getTileById(state, src.tileId);
+        if (tile && planMoveTo(state, tile.id)) return tile;
+      }
+    }
+    return bridgeTile(state);
   }
   function repairBridge(state, now) {
     const chk = canRepairBridge(state); if (!chk.ok) return chk;
@@ -1122,6 +1179,7 @@
     getCropProgress, storageCapacity, storageUsed, addToStorage, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
+    tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder,
     makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
@@ -1135,7 +1193,7 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, chapter3Done, canRepairBridge, repairBridge, triggerEvent,
+    bridgeTile, eventTile, chapter1Done, chapter3Done, canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
     // Stage 10：NPC 重複委託

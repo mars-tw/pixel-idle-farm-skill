@@ -200,6 +200,20 @@
   .quest .qtext { min-width: 0; flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .quest .qtext em { flex: 0 0 auto; font-style: normal; font-size: 11px; font-weight: 950; color: #735b27; background: rgba(255,255,255,.58); border: 1px solid rgba(177,143,70,.45); border-radius: 999px; padding: 1px 6px; }
   .quest-hint { margin-top: 10px; font-size: 12px; color: #7a5a1c; background: rgba(255,244,214,.7); border: 1.5px dashed #e0c184; border-radius: 9px; padding: 7px 9px; line-height: 1.5; }
+  .quest-dock { min-height: 48px; margin: 0 0 9px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border: 2px solid #d4b468; border-radius: 12px; padding: 8px 10px; background: linear-gradient(180deg, #fff8df, #f4e5b8);
+    color: #513d17; box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 2px 8px rgba(90,65,20,.12); }
+  .quest-dock .qd-body { min-width: 0; flex: 1; }
+  .quest-dock .qd-title { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .quest-dock .qd-action { margin-top: 2px; font-size: 11px; font-weight: 800; color: #77520d; line-height: 1.35; }
+  .quest-dock .qd-meta { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 32px; padding: 4px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 950; color: #2f6525; background: rgba(226,244,210,.9); border: 1.5px solid #aacb86; }
+  .bridge-materials { margin-top: 8px; display: grid; gap: 5px; font-size: 12px; color: #6a4c16; }
+  .bridge-materials .bm-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px;
+    padding: 4px 7px; border-radius: 8px; background: rgba(255,255,255,.55); border: 1px solid rgba(194,173,130,.55); }
+  .bridge-materials .bm-row.ready { color: #2f6525; background: rgba(226,244,210,.75); border-color: #aacb86; }
+  .bridge-materials .bm-row.miss { color: #8a4c12; background: rgba(255,238,196,.85); border-color: #e6b860; }
+  .bridge-materials .bm-src { color: #6f6248; font-size: 11px; }
   .auto-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; color: #6c7a32; background: rgba(226,244,210,.7); border: 1.5px solid #aacb86; border-radius: 8px; padding: 3px 8px; }
 
   /* ===== Toast ===== */
@@ -272,6 +286,12 @@
   /* isolation: isolate 讓 #weatherLayer 的 mix-blend-mode 只跟地圖場景內的內容混色，
      不會跨到場景外的其他 UI（Stage 9）*/
   @media (max-width: 859px) { #mapScene { height: 52vh; min-height: 300px; } }
+  @media (max-width: 560px) {
+    .quest-dock { min-height: 48px; padding: 7px 9px; }
+    .quest-dock .qd-title { font-size: 11px; }
+    .quest-dock .qd-action { font-size: 10px; }
+    .quest-dock .qd-meta { min-height: 30px; padding-inline: 7px; }
+  }
   /* 世界：依 camera 平移 */
   #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0);
     transition: transform .2s ease-out; will-change: transform; }
@@ -419,6 +439,7 @@
       <div class="seed-row" id="seedRow"></div>
       <!-- RPG 場景：16×12 世界 + camera 視口 + 分層（地面/物件 y-sort/標記/VFX/玩家）-->
       <div class="map-scene-wrap">
+        <div id="questDock" class="quest-dock" data-audit="quest-dock"><!-- 任務 Dock 由 JS 渲染 --></div>
         <div id="mapScene">
           <div id="mapWorld">
             <div id="groundLayer"></div>
