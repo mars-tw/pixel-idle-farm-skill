@@ -254,7 +254,8 @@
   /* 切換鈕固定寬度：像素圖/Emoji 文字長度不同，避免切換時工具列重新置中位移 */
   #spriteToggle { min-width: 104px; }
   footer { text-align: center; font-size: 11px; color: #4d6b3a; margin: 14px 0 4px; opacity: .8; }
-  footer a { color: #2c6f1e; }
+  footer a { color: #2c6f1e; text-decoration: none; font-weight: 800; margin: 0 5px; white-space: nowrap; }
+  footer a:hover { text-decoration: underline; }
 
   /* ===== 澆水鈕 ===== */
   .btn.water { background: linear-gradient(180deg, #7fd0ee, var(--water)); color: #04303f; flex: 0 0 auto; }
@@ -507,7 +508,12 @@
     <button class="btn small ghost" id="resetBtn">🗑️ 重置存檔</button>
   </div>
 
-  <footer>純原生 HTML/CSS/JS · localStorage 存檔 · 離線收益最多 8 小時 · MIT</footer>
+  <footer class="series-footer" aria-label="阿軒的小遊戲系列">
+    🎮 阿軒的小遊戲系列
+    <a href="https://mars-tw.github.io/web-card-game-skill/templates/card-battle/" target="_blank" rel="noopener">卡牌對戰</a>
+    <a href="https://mars-tw.github.io/tower-defense-skill/" target="_blank" rel="noopener">無盡塔防</a>
+    <a href="https://mars-tw.github.io/ashes-convoy/" target="_blank" rel="noopener">灰燼護航</a>
+  </footer>
 </div>
 
 <!-- 離線摘要 modal -->

@@ -1,27 +1,21 @@
-# Data Model
+# 資料模型與數值索引
 
-Keep game state serializable and versioned. The UI should render from state and config; timers should be derived from timestamps.
+本文件對齊目前 `src/config.js`、`src/state.js` 與 `src/game.js`。遊戲狀態必須可序列化、可遷移，UI 只從 state/config 讀取資料。
 
-## Save Shape
+## 存檔
 
 ```js
 const SAVE_KEY = "pixel_idle_farm_save_v1";
 
-const state = {
+state = {
   version: 1,
-  now: 0,
   lastSeenAt: Date.now(),
-  coins: 12,
+  coins: 16,
   xp: 0,
   level: 1,
   selectedSeed: "wheat",
-  storage: {
-    capacity: 30,
-    items: { wheat: 0, carrot: 0, tomato: 0 }
-  },
-  plots: [
-    { id: "p01", cropId: null, plantedAt: 0, wateredAt: 0, autoHarvestedAt: 0 }
-  ],
+  storage: { capacity: 30, items: {} },
+  plots: [{ id: "plot_0", cropId: null, plantedAt: 0, wateredAt: 0 }],
   upgrades: {
     plotCount: 6,
     growthSpeed: 0,
@@ -30,166 +24,139 @@ const state = {
     helperLevel: 0
   },
   orders: [],
+  ordersSeededAt: 0,
+  orderStreak: 0,
+  weather: { current: "clear", startedAt: 0 },
+  map: { width: 22, height: 12, tiles: [] },
+  player: { tileId: "", x: 0, y: 0, facing: "down", moving: false },
+  camera: { x: 0, y: 0, followPlayer: true, focusTileId: null, focusUntil: 0 },
+  story: { questId: "intro_reopen_farm", completed: {}, dialogueSeen: {}, markers: [] },
+  flags: {
+    bridgeRepaired: false,
+    eventsClaimed: {},
+    forageNodes: {},
+    eastForageDiscovered: false,
+    eastForageReported: false
+  },
+  materials: { wood: 0, stone: 0, compost: 0 },
+  animals: [],
+  buildings: [],
+  npcRequests: {},
+  npcRequestLog: {},
   stats: {
     harvested: {},
     fulfilledOrders: 0,
-    totalCoinsEarned: 0
+    totalCoinsEarned: 0,
+    plantCount: 0,
+    cleared: 0,
+    collected: {},
+    qualitySold: 0,
+    npcRequestsCompleted: 0
   }
 };
 ```
 
-## Config Shape
+## 作物與升級
+
+| 作物 | 解鎖 | 成長 | 種子 | 產量 | 直售 | XP |
+|---|---:|---:|---:|---:|---:|---:|
+| wheat | Lv.1 | 15 秒 | 1 | 2 | 1 | 1 |
+| carrot | Lv.2 | 45 秒 | 4 | 3 | 3 | 3 |
+| tomato | Lv.3 | 120 秒 | 12 | 4 | 8 | 8 |
+| strawberry | Lv.4 | 300 秒 | 30 | 5 | 22 | 18 |
+| pumpkin | Lv.5 | 900 秒 | 85 | 3 | 80 | 55 |
+
+| 升級 | 等級數 | 效果 |
+|---|---:|---|
+| `plotCount` | 3 | 田地 8 / 10 / 12 |
+| `growthSpeed` | 4 | 成長倍率 0.9 / 0.8 / 0.7 / 0.6 |
+| `sellBonus` | 4 | 直售與訂單收益 +15% / +30% / +50% / +80% |
+| `storageLevel` | 4 | 倉庫額外 +40 / +90 / +160 / +280 |
+| `helperLevel` | 2 | 自動收成，第二級自動補種 |
+
+## 訂單
 
 ```js
-const CROPS = {
-  wheat: {
-    name: "Wheat",
-    growMs: 15000,
-    seedCost: 1,
-    yield: 2,
-    sellValue: 1,
-    xp: 1,
-    unlockLevel: 1,
-    spriteRow: 0
-  }
-};
-
-const UPGRADES = {
-  growthSpeed: [
-    { level: 1, cost: 30, multiplier: 0.95 },
-    { level: 2, cost: 120, multiplier: 0.9 }
-  ]
+order = {
+  id: "order_...",
+  wants: { wheat: 2 },
+  rewardCoins: 8,
+  rewardXp: 2,
+  expiresAt: now + 12 * 60 * 1000,
+  rarity: "common",
+  npcId: "merchant",
+  flavor: "...",
+  thanks: "..."
 };
 ```
 
-## Growth Calculation
+- 同時 3 張訂單，過期後補單。
+- 稀有度：`common` 1.35 倍、`good` 1.7 倍、`premium` 2.2 倍。
+- `orderStreak` 每完成一張 +1，獎金每層 +5%，最高 +100%；丟棄訂單會歸零。
+- `tutorial_first_delivery` 是新手任務保底訂單，需求固定為 2 小麥。
+- 東林採集品只有在 `flags.eastForageReported` 後才會進入可用訂單/NPC 委託池。
+
+## 地圖、橋與東林
+
+| 常數 | 值 |
+|---|---|
+| `MAP_W` / `MAP_H` | 22 / 12 |
+| `TILE_PX` | 48 |
+| `EAST_REGION_MIN_X` | 17 |
+| `BRIDGE_COST` | `{ wood: 6, stone: 4 }` |
+| `PLAYER_START` | `{ x: 7, y: 5 }` |
+
+`state.map.tiles[]` 重要欄位：
 
 ```js
-function getCropProgress(plot, crop, now, upgrades) {
-  if (!plot.cropId) return { ready: false, ratio: 0, remainingMs: 0 };
-  const speed = getGrowthMultiplier(upgrades);
-  const growMs = Math.max(1000, Math.floor(crop.growMs * speed));
-  const elapsed = Math.max(0, now - plot.plantedAt);
-  return {
-    ready: elapsed >= growMs,
-    ratio: Math.min(1, elapsed / growMs),
-    remainingMs: Math.max(0, growMs - elapsed)
-  };
+{
+  id: "t_16_4",
+  x: 16,
+  y: 4,
+  terrain: "water",
+  obstacle: null,
+  station: null,
+  bridge: true,
+  event: null,
+  forage: null,
+  region: null,
+  unlocked: true
 }
 ```
 
-## Offline Progress
+東林採集：
 
-On load:
+| 節點 | itemId | 位置 | 產量 | 冷卻 |
+|---|---|---:|---:|---:|
+| `east_herb_patch` | `forest_herb` | 18,5 | 1 | 10 分鐘 |
+| `east_mushroom_log` | `glow_mushroom` | 21,4 | 1 | 10 分鐘 |
 
-1. Read save.
-2. Compute `offlineMs = min(Date.now() - state.lastSeenAt, OFFLINE_CAP_MS)`.
-3. Apply growth readiness for each plot.
-4. If helper can auto-harvest, harvest ready crops until storage is full.
-5. Store losses separately for the offline summary.
-6. Set `lastSeenAt = Date.now()` and save.
+回報商人需求 `forest_herb: 1`、`glow_mushroom: 1`，獎勵 18 金幣與 6 XP，並把 `eastForageReported` 設為 true。
 
-Do not simulate every second. For MVP, calculate each plot once based on timestamps. For advanced auto-planting, calculate cycles with integer division:
+## 任務鏈
 
-```js
-const cycles = Math.floor((now - plot.plantedAt) / crop.growMs);
-```
+| 章節 | 任務 |
+|---|---|
+| 序章 `PROLOGUE_QUESTS` | `intro_reopen_farm`、`plant_wheat`、`first_water`、`first_harvest`、`first_delivery`、`clear_old_path` |
+| 東林 `CHAPTER2_QUESTS` | `repair_bridge`、`explore_new_area`、`discover_east_forage`、`collect_east_forage`、`report_east_forage` |
+| 動物 `CHAPTER3_QUESTS` | `learn_animal_care`、`feed_care_animal`、`raise_affinity_happy`、`collect_quality_product`、`deliver_quality_order` |
 
-Cap cycles per plot to prevent runaway saves after long absences.
+任務 UI 依 `questMarkerTile(state, now)` 取得目標 tile。`state.camera.focusTileId` 用於「前往」與鏡頭導引，不應被規則函式直接操作 DOM。
 
-## Orders
+## 動物、品質與委託
 
-Orders should be generated from unlocked crops and available storage.
+- 動物：`chicken`、`cow`、`sheep`、`bee`。
+- 產物：`egg`、`milk`、`wool`、`honey`，品質後綴為 `_good`、`_premium`。
+- 親密度上限 100，每小時衰退 6；35 以上產出優質，70 以上產出頂級。
+- 照護增益：餵食 +22、補水 +16、梳理 +18；照護冷卻 20 秒。
+- NPC 委託保存在 `npcRequests[npcId]`，完成後寫入 `npcRequestLog[npcId].lastRequestAt` 與 `fulfilledCount`，冷卻 8 分鐘。
 
-```js
-const order = {
-  id: "order_001",
-  wants: { wheat: 8, carrot: 3 },
-  rewards: { coins: 42, xp: 12 },
-  expiresAt: Date.now() + 10 * 60 * 1000,
-  rarity: "common"
-};
-```
+## 測試契約
 
-Use direct sell as fallback, but make orders the better strategic outlet.
-
-## Asset Mapping
-
-Use `assets/manifest.json` as the source of available generated sheets.
-
-Suggested CSS:
-
-```css
-.pixel-art {
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-```
-
-Suggested JS mapping:
-
-```js
-const ASSETS = {
-  crops: "assets/generated/crop-growth.png",
-  terrain: "assets/generated/terrain-tileset.png",
-  actorsBuildings: "assets/generated/farm-actors-buildings.png",
-  icons: "assets/generated/ui-icons.png",
-  characterWalk: "assets/generated/characters/miri-rowan-walk-cycle.png",
-  characterActions: "assets/generated/characters/miri-rowan-farm-actions.png"
-};
-```
-
-## Map, Animals, And Buildings
-
-When using the generated map and animal/building sheets, extend state instead of hard-coding visuals in the DOM. See `references/asset-gameplay-integration.md` for required gameplay behavior.
-
-```js
-state.map = {
-  width: 8,
-  height: 6,
-  tiles: [
-    { id: "t00", x: 0, y: 0, terrain: "grass", object: null, unlocked: true },
-    { id: "t01", x: 1, y: 0, terrain: "soil", moisture: 0, unlocked: true },
-    { id: "t02", x: 2, y: 0, terrain: "grass", object: "rock", unlocked: true }
-  ]
-};
-
-state.materials = { wood: 0, stone: 0, compost: 0 };
-
-state.animals = [
-  { id: "chicken_001", type: "chicken", homeId: "coop_001", fedAt: 0, productReadyAt: 0, happiness: 1 }
-];
-
-state.buildings = [
-  { id: "coop_001", type: "chickenCoop", x: 4, y: 2, builtAt: Date.now(), level: 1 }
-];
-
-state.interaction = {
-  tool: "hand",
-  buildType: null,
-  selectedTileId: null,
-  characterAction: "idle",
-  actionEndsAt: 0
-};
-```
-
-Suggested product ids for storage and orders:
-
-```js
-const PRODUCTS = {
-  egg: { name: "Egg", sellValue: 6, source: "chicken" },
-  milk: { name: "Milk", sellValue: 18, source: "cow" },
-  wool: { name: "Wool", sellValue: 24, source: "sheep" },
-  honey: { name: "Honey", sellValue: 15, source: "beeBox" },
-  wood: { name: "Wood", source: "stump" },
-  stone: { name: "Stone", source: "rock" }
-};
-```
-
-Orders should support crop and product requirements in the same `wants` object:
-
-```js
-{ wants: { wheat: 8, egg: 3 }, rewards: { coins: 70, xp: 14 } }
-```
-
-Use `state.interaction` for tool routing and animation hooks. Do not scatter tool-mode booleans across UI components. The full interaction roadmap is in `references/gameplay-interactions-roadmap.md`.
+| 指令 | 覆蓋 |
+|---|---|
+| `node scripts/test-economy.js` | 作物、訂單、離線與經濟公式 |
+| `node scripts/test-systems.js` | 任務、橋、東林、NPC、動物與品質系統 |
+| `node scripts/test-ui-smoke.js` | mock DOM UI smoke |
+| `node scripts/validate-v3-atlas.js` | v3 atlas 驗證 |
+| `node scripts/validate-v4-atlas.js` | v4 atlas 驗證 |

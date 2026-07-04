@@ -1,239 +1,74 @@
-# 🌅 阿軒割割陽光農場開源遊戲世界
+# 阿軒割割陽光農場
 
 [![CI & Deploy Pages](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Play Online](https://img.shields.io/badge/🎮_線上試玩-Pages-brightgreen)](https://mars-tw.github.io/pixel-idle-farm-skill/)
+[![Play Online](https://img.shields.io/badge/Play-Pages-brightgreen)](https://mars-tw.github.io/pixel-idle-farm-skill/)
 
-一個 [Claude Code](https://claude.com/claude-code) **Skill**，也是一個**已上線、可玩、可測**的純原生網頁
-RPG 像素放置農場。只用 HTML + CSS + 原生 JavaScript + localStorage——零框架、零 npm 依賴、零建置步驟。
-主畫面是 22×12 大世界 tile map、camera 跟隨角色、地圖驅動的故事任務，作物/動物/建築全用 gpt-image-2 生成、
-精切成 frame atlas 的像素美術。
+一款純原生 HTML/CSS/JavaScript 製作的像素農場 RPG。玩家在 22 x 12 的可走動地圖上種植、接訂單、照顧動物、修橋進入東林，並透過 localStorage 保存進度與離線收益。
 
-> 作者：**阿軒** ([@mars-tw](https://github.com/mars-tw)) · 授權：**MIT**（程式碼與素材皆可自由使用/修改）
+## 主要內容
 
-### 🎮 線上直接玩（不用安裝）
+- 可走動像素農場：22 x 12 tile map、camera 跟隨、任務目標鏡頭導引、y-sort 分層與 v4 sprite atlas。
+- 種植循環：小麥、胡蘿蔔、番茄、草莓、南瓜；支援澆水、成長加速、離線最多 8 小時。
+- 市集訂單：同時 3 張、12 分鐘期限，訂單獎勵在生成時固定；連單每次 +5%，最高 +100%。
+- 新手保底：第一張交付任務會固定生成 2 小麥新手訂單，避免卡在隨機需求。
+- 任務 Dock：序章 6 步、東林 5 步、動物照護 5 步；地圖金色箭頭與「前往」會指向當前目標。
+- 修橋與東林：完成序章並收集木材 6、石頭 4 後修復東橋，解鎖東林古樹、藥草叢與螢光菇木。
+- 東林內容鏈：辨認採集點、收集東林藥草與螢光菇、回報商人後，採集品會進入 NPC 委託池。
+- NPC 與敘事訂單：村長、商人、老農與孩子會依章節變換台詞；市集訂單顯示委託人與感謝語。
+- 動物與品質：雞、牛、羊、蜜蜂可生產蛋、牛奶、羊毛與蜂蜜；餵食、補水、梳理提升親密度並產出優質/頂級品。
+- 建築與升級：田地上限 12、成長加速、售價加成、倉庫容量、幫手自動收成/補種；另有堆肥場、筒倉、雞舍、畜棚與蜂箱。
 
-**👉 https://mars-tw.github.io/pixel-idle-farm-skill/**
+## 玩法
 
----
+1. 走到告示牌或信箱啟動序章，依任務 Dock 種下小麥、澆水、收成並交付第一張訂單。
+2. 清除舊路與地圖障礙取得木材、石頭，材料足夠後走到斷橋修復。
+3. 過橋探索東林，採集藥草與螢光菇並回報商人。
+4. 解鎖動物照護後，透過餵食、補水、梳理提升親密度，收集高品質產物。
+5. 以市集訂單、NPC 委託與直售累積金幣，再回頭升級田地、倉庫、建築與自動化。
 
-## 📖 這個 repo 是什麼？
+## 關鍵數值
 
-它同時是三樣東西，你可以只取你要的：
-
-1. **一個可玩的開源遊戲** — clone 下來用任意 HTTP server 打開就能玩，存檔在 localStorage、離線也累積進度。
-2. **一份「用 Claude Code + gpt-image-2 做遊戲」的實戰範本** — 從企劃包一路做到上線 RPG，全程用
-   **Stage Gate**（階段門檻）管理，每一階段都「可玩、可測、可上線」，不交概念稿。下面的〈製作流程〉
-   就是這套方法的真實紀錄。
-3. **一個 Claude Code Skill** — `SKILL.md` 描述觸發時機與工作流，`references/` 是各階段的製作端規格與驗收門檻，
-   可被其他 repo 重用來規劃同類遊戲。
-
-> 想做自己的遊戲？跳到〈🎨 用我的素材改造〉與〈🧭 自選設計方向清單〉。
-
----
-
-## 🏗️ 製作流程（Stage Gate 實戰紀錄）
-
-這個遊戲不是一次寫完的，而是**一階段一上線**。每個 Stage 都必須通過 Gate（可玩、`npm test` 全綠、
-真瀏覽器 E2E 通過、線上 Pages 可玩）才進下一階段。這也是建議你 fork 後沿用的節奏。
-
-| 階段 | 狀態 | 目標 | 主要交付 | 通過 Gate |
-|---|---|---|---|---|
-| Stage 1 | ✅ | 從規劃包變成可玩放置農場 | 作物、倉庫、訂單、升級、離線收益 | `npm test` 全綠、線上可玩 |
-| Stage 2 | ✅ | 主畫面從儀表板改為可走地圖 | tile map、角色座標、點地移動、工具互動 | 角色可走、可種/澆/收 |
-| Stage 3 | ✅ | 導入 RPG 美術與動作 | gpt-image-2 素材、atlas、角色動畫、VFX、站點 | 主地圖 0 emoji、角色不消失、無格線 |
-| Stage 4 | ✅ | RPG 大世界與故事任務 | 16×12 世界、camera、任務箭頭、故事鏈 | 桌機/手機 E2E 通過 |
-| Stage 4.5 | ✅ | 修任務完成度、改名、場景打磨 | `syncStoryProgress`、0/6→6/6、荒草鎖定格、`data-audit` hook | 線上 Pages 驗證通過 |
-| Stage 5 | ✅ | 世界可探索 | 河、斷橋、封鎖東林、修橋解鎖、東林古樹事件、第二章任務 | 須走到地圖互動才能解鎖新區；E2E 驗到 2/2 |
-| Stage 6 | ✅ | NPC 與對話系統 + 主角性別 | 4 位原創 NPC、地圖對話泡泡 + 側欄記錄、故事進度驅動台詞、主角男/女可選 | NPC 可見、走近交談；桌機/手機 E2E 通過 |
-| Stage 6.5 | ✅ | 修正 Stage 4-6 疊代留下的動物/訂單經濟迴歸 | 動物解鎖回頭檢查等級（畜舍地圖常駐≠解鎖）、訂單池改「已收集過才進池」、離線收益補上濕土加速、素材期望清單與實際一致化 | `npm test`/`test:e2e` 全綠、UI 鎖定狀態正確顯示 |
-| Stage 7 | ✅ | 動物深化 | 走到動物旁餵食/澆水/梳理 → 親密度 → 產物分普通/優質/頂級三級品質、地圖照護狀態圖示 + VFX、老農對話開啟第三章任務鏈 | 動物不只是產蛋計時器；桌機/手機 E2E 通過 |
-| Stage 7.1 | ✅ | 修正 Stage 7 上線後的平衡/邊界問題 | 餵食先自動收已累積產物 + 加冷卻防洗親密度、畜舍可買牛「和」羊、玩家自建動物家在地圖可見、離線動物產出依當下親密度結算品質、品質分級品項訂單數量明確化 | `npm test`/`test:e2e` 全綠、UI 冷卻狀態正確顯示 |
-| Stage 8 | ✅ | 開源遊戲設計技能化 | `SKILL.md` + `references/`（Stage Gate 方法論、世界互動系統 recipe、美術產線、E2E gate、實作基線） | 新專案只讀 `SKILL.md` + reference 導覽即可規劃世界探索/NPC/動物照護/品質經濟的完整 Stage；經 Codex 三輪審核收斂、`npm test`/`test:e2e` 全綠、Pages 已部署 |
-| Stage 9 | ✅ | 天氣視覺化 | 降雨/豔陽的世界層濾鏡（雨絲疊圖+冷色調、暖光+浮光暈，`#weatherLayer` 與 camera 脫鉤）、CSS-only（不需新生圖）| rain/sunny 地圖有明確視覺變化、`clear` 時歸零、原數值效果（成長/售價倍率）不回歸、桌機/手機無水平溢出、E2E 通過 |
-| Stage 10 | ✅ | NPC 重複委託 | 延伸 Stage 6 對話系統：第三章動物照護全完成後 NPC 進入 `ch3done`，走近 NPC 自動生成小委託（品項取自玩家已發現清單）、磚資訊面板可交付/放棄、報酬吃當下 sellBonus/成就/天氣、免費放棄跟交付一樣進冷卻 | 委託內容永遠只來自已解鎖/已收集品項、交付/放棄後正確進冷卻、`npm test`/`test:e2e` 全綠、經 Codex 兩輪審核收斂 |
-| Stage 11 | ✅ | 農場圖鑑 | 側欄新分頁「📔 圖鑑」：唯讀彙總 A-D 系統既有資料（作物/產物品質/鎮民名錄/動物親密度里程碑/世界旗標/章節完成度/成就），`journalSummary()` 不新增追蹤狀態、套用各系統既有發現閥門 | 未發現內容正確隱藏且不連帶洩漏同系列其他項目、`journalSummary()` 不 mutate state、桌機/手機無水平溢出、`npm test`/`test:e2e` 全綠 |
-
-**Gate 固定要求**（每階段都要過）：
-
-| 類型 | 必跑內容 |
+| 類別 | 現況 |
 |---|---|
-| 單元/系統 | `npm test` |
-| 真瀏覽器 | `npm run test:e2e` |
-| RWD | 桌機 `1280×900`、手機 `390×844` |
-| 視覺 | 主地圖 0 emoji、無格線、無水平溢出 |
-| 互動 | 主要功能必須「走到地圖目標 → 播動作 → 結算」 |
-| 線上 | GitHub Pages 200、JS/素材載入成功、無 console error |
+| 存檔 | `pixel_idle_farm_save_v1`，schema version 1 |
+| 地圖 | 22 x 12，tile 48px，東林從 x >= 17 開始 |
+| 起始 | 16 金幣、6 塊田、倉庫 30 |
+| 作物 | 小麥 15 秒、胡蘿蔔 45 秒、番茄 120 秒、草莓 300 秒、南瓜 900 秒 |
+| 訂單 | 3 欄、12 分鐘、連單 +5% 至 +100% |
+| 修橋 | 木材 6、石頭 4；需序章 6/6 |
+| 東林採集 | 藥草/螢光菇各 10 分鐘冷卻，回報商人後進委託池 |
+| 親密度 | 0-100；35 以上 good，70 以上 premium |
+| 離線 | 最多 8 小時 |
 
-各階段的詳細製作端規格在 [`references/`](references/)（例如 `production-directive-stage4-game-audit.md`、
-`rpg-action-map-gate.md`、`sprite-cutting-method-v3.md`）。
+## 專案結構
 
----
-
-## 🧱 技術架構（零依賴）
-
-```text
-index.html        單頁遊戲 + 全部 CSS（含 RPG 場景 / camera / y-sort 樣式）
-src/config.js     ★ 資料層：作物/升級/訂單/天氣/地圖/建築/動物/站點/故事任務（QUESTS）
-src/state.js      存檔結構、localStorage 讀寫、版本遷移（地圖維度變更會自動重建）
-src/game.js       核心規則：成長/收成/賣出/訂單/升級/離線/移動/故事推進（純邏輯、可 Node 測）
-src/ui.js         DOM 渲染、分層場景渲染器、camera、互動路由、render loop
-src/atlas.js      讀 v4 manifest，把整數像素 frame 縮放貼到任意尺寸元素（image-rendering:pixelated）
-```
-
-**分層場景渲染**：固定像素世界（`22*48 × 12*48`）放在 `#mapScene`（overflow:hidden）內，camera 平移
-`#mapWorld`。圖層：地面層 → y-sort 物件/角色（`z-index = 腳底 baseline` 做前景遮擋）→ 任務標記 → VFX。
-
-**穩定稽核 hook**：地面磚/物件/角色/任務標記都掛 `data-audit` / `data-kind` / `data-sheet` /
-`data-frame` / `data-tile-id`，外部自動稽核地圖、動物、建築、任務不需依賴內部函式。
-
----
-
-## 🎨 像素美術產線（gpt-image-2 → atlas）
-
-素材已切好、附在 `assets/generated/v4/`，**遊戲開箱即用，不需任何 API 金鑰**。要重生或換風格才需要金鑰。
-
-產線四步（v4）：
-
-```bash
-# 1) 生成源圖（呼叫 gpt-image-2；需「你自己的」OpenAI 金鑰，見下方安全說明）
-OPENAI_API_KEY="你的金鑰" node scripts/gen-art-v4.js          # → assets/generated/v4/source/*.png
-
-# 2) 精切成 frame atlas（去背 + 內容帶偵測 + 連通元件 + 多步高品質縮放）
-node scripts/process-v4-atlas.js                              # → v4/*.png + *.json + manifest.json
-
-# 3) 驗證 atlas 品質（尺寸/必要 frame/錨點/空白幀/作物觸邊；需 chromium）
-node scripts/validate-v4-atlas.js
-
-# 4) 程序化地形（草/土/水/步道 autotile）在 process 步驟一併產生
-```
-
-> 切割原理見 [`references/sprite-cutting-method-v3.md`](references/sprite-cutting-method-v3.md)。
-> 源圖規格在 [`art-config-rpg-v4.json`](art-config-rpg-v4.json)。
-
-### 🔒 安全：API 金鑰請用你自己的
-
-- **本 repo 不含、git 歷史也從未含任何 OpenAI 金鑰。** 產線腳本只從環境變數 `OPENAI_API_KEY` 讀取，
-  絕不寫入檔案或 commit。
-- 你要重生素材時，請用**自己的**金鑰，並**只透過環境變數**傳入（例如上面的 `OPENAI_API_KEY=... node ...`），
-  不要貼進任何檔案。
-- `.gitignore` 已忽略 `.env`、`.env.*`、`*.key`，避免不小心提交金鑰。
-- 提交前可自我檢查：`grep -rniE "sk-[a-z0-9-]{20,}" . | grep -v node_modules`（應為空）。
-
----
-
-## 🖼️ 用我的素材改造（MIT，可自由使用/修改）
-
-所有 `assets/generated/` 下的圖（含 v4 角色/作物/動物/建築/結構）與源圖 `assets/generated/v4/source/`
-都是 **MIT 授權**，你可以直接拿去用、改、重切：
-
-- **直接換圖**：替換 `assets/generated/v4/source/*.png`（保持同樣的格數排版），再跑
-  `node scripts/process-v4-atlas.js` 重切，遊戲就吃新圖。
-- **改切割規格**：角色/作物/動物的格數、錨點、命名在 `art-config-rpg-v4.json` 與 `scripts/gen-v4/processor.html`。
-- **只改某張**：`node scripts/gen-art-v4.js miri-walk-48x64-v4`（只重生指定 sheet），再重切。
-- **完全換風格**：改 `art-config-rpg-v4.json` 的提示詞（風格、調色盤、視角），重生整套。
-- **不想用 gpt-image-2**：手繪同規格 spritesheet 丟進 `source/`，照樣可切。
-- 素材缺檔時遊戲會優雅退場（作物退回 Emoji），不會白畫面。
-
----
-
-## 🧭 自選設計方向清單（fork 前先決定）
-
-這份遊戲是「像素放置農場 RPG」，但這套零依賴 + Stage Gate + atlas 產線可以做很多種遊戲。
-fork 後先勾選你的方向，再動手：
-
-- [ ] **主題/世界觀**：農場 / 太空殖民 / 地城探險 / 城鎮經營 / 釣魚 / 寵物養成？
-- [ ] **核心循環**：純放置（離線為主）/ 主動操作 / 混合？決定 `Date.now()` 時間差的權重。
-- [ ] **美術風格**：沿用本 repo 像素風 / 重生新風格（改 `art-config-rpg-v4.json` 提示詞）/ 手繪 / 向量？
-- [ ] **世界規模**：單畫面 / 大世界 + camera（本 repo 是 22×12，可調 `MAP_W/MAP_H`）？
-- [ ] **故事**：無 / 任務鏈（本 repo 的 `QUESTS`）/ NPC 對話 / 分支劇情？
-- [ ] **經濟**：作物+訂單 / 製造鏈 / 多貨幣 / 市場波動？數值都集中在 `src/config.js`。
-- [ ] **互動模型**：點哪走哪 + 工具模式（本 repo）/ 直接點擊 / 拖放？
-- [ ] **進度系統**：升級樹 / 解鎖區域（Stage 5）/ 成就 / 等級天氣？
-- [ ] **平台**：純網頁 / PWA 離線安裝 / 包成手機殼？
-- [ ] **測試嚴格度**：要保留哪些 Gate（單元、E2E、RWD、線上 smoke）？建議至少留 `npm test` + 一條 E2E。
-
-> 決定後，把它寫成一份 `references/your-directive.md`，每個 Stage 對著它驗收——這就是本 repo 的做法。
-
----
-
-## 🧩 把這個 repo 當 Skill / 模板使用
-
-這個 repo 本身就是一個 [Claude Code Skill](https://claude.com/claude-code)（`SKILL.md`），
-也是「用 Stage Gate 方法論做遊戲」的完整實戰紀錄。想複製這套**方法**（不只是這個遊戲）
-去做別的專案，讀這幾份文件：
-
-| 文件 | 內容 |
+| 檔案 | 說明 |
 |---|---|
-| [`SKILL.md`](SKILL.md) | 觸發時機、適用/不適用場景、完整工作流、reference 導覽表、核心不可違反原則 |
-| [`references/stage-gate-playbook.md`](references/stage-gate-playbook.md) | Stage Gate 方法論本體：什麼算一個 Stage、標準循環、次版本號（X.5/X.1）什麼時候用、多 agent 協作分工與「先驗證再動手」紀律 |
-| [`references/world-interaction-systems.md`](references/world-interaction-systems.md) | 世界解鎖區、NPC 對話、動物照護、品質經濟、世界狀態視覺化、跨系統唯讀彙總層六個系統的通用 recipe（資料層/state 遷移/核心邏輯/UI/美術/測試/E2E gate） |
-| [`references/art-pipeline-v4.md`](references/art-pipeline-v4.md) | gpt-image-2 → 切割 → 驗證四步產線的技術細節，含常見陷阱表（棋盤格烤進 RGB、空白幀、物件間距太近導致合併） |
-| [`references/e2e-gate-checklist.md`](references/e2e-gate-checklist.md) | E2E 具體要驗什麼（世界規模/camera/視覺純度/互動路由/故事/RWD/穩定性）、怎麼延伸現有測試 |
-| [`references/implementation-baseline.md`](references/implementation-baseline.md) | 引擎級工程基線：核心循環、存檔遷移、CSS 像素設定、素材生成指令 |
-| [`references/claude-handoff.md`](references/claude-handoff.md) | 交接指南：先讀順序、目前狀態、角色分工、驗收檢查 |
+| `index.html` | 遊戲主頁、CSS、DOM 容器與系列 footer |
+| `src/config.js` | 作物、升級、訂單、地圖、橋、東林、NPC、任務與品質數值 |
+| `src/state.js` | localStorage 存檔、遷移、地圖與旗標初始值 |
+| `src/game.js` | 種植、訂單、修橋、採集、NPC 委託、動物照護與任務推進規則 |
+| `src/ui.js` | UI、任務 Dock、地圖渲染、camera、互動面板 |
+| `src/atlas.js` | v4 atlas 載入與 frame 查詢 |
+| `references/data-model.md` | 存檔 shape、主要常數與測試契約 |
 
-**多 agent 協作模式**（Stage 6.5 起採用）：一個 agent 負責審核/企劃/美術規格（獨立讀
-repo 給意見，不先餵摘要），另一個負責實作（驗證每個具體主張後才動手、寫程式碼、補測試、
-上線）。這個 repo 的 git 歷史就是這套協作實際跑起來的紀錄，可以直接參考 commit 訊息。
-
----
-
-## 🚀 本地執行
+## 測試
 
 ```bash
-# 在 repo 根目錄起 HTTP server（localStorage + 相對載入素材，需 HTTP 而非 file://）
-python -m http.server 8000
-# 開 http://localhost:8000/index.html
+npm test
+npm run test:e2e
 ```
 
-> ⚠️ 一定要用 HTTP server 開（不要 `file://`），且 server 開在 **repo 根目錄**，否則素材圖 404 只剩 Emoji。
+`npm test` 會跑經濟、系統、UI smoke 與 v3/v4 atlas 驗證；E2E 另檢查 RPG 地圖、任務、RWD 與互動流程。
 
----
+## 📋 更新日誌
 
-## ✅ 測試（CI 把關）
+- R5：新增新手訂單保底、任務 Dock、修橋材料導引與斷橋互動。
+- R9：補上東林內容鏈、採集樣品回報、訂單敘事化與任務鏡頭導引。
+- R7 前後：動物親密度、品質產物、照護互動與多章任務串接完成。
+- 早期版本：完成 v4 AI pixel atlas、22 x 12 RPG 地圖、離線收益與原生 localStorage 存檔。
 
-```bash
-npm test            # 經濟模擬 + 系統(地圖/動物/建築/訂單) + UI 煙霧(mock DOM) + v3/v4 atlas 驗證
-npm run test:e2e    # 真瀏覽器 Stage 4–11 場景 E2E（桌機 1280×900 + 手機 390×844 完整任務鏈，含動物照護、天氣視覺化、NPC委託、農場圖鑑）
-```
+## 授權
 
-E2E 用 Playwright 在真實 chromium 驗證：大世界 ≥22×12、camera 跟隨、地面磚全用 atlas、主地圖 0 emoji、
-動作走位路由、序章任務 `0/6 → 6/6`、第二章探索 `0/2 → 2/2`、第三章動物照護 `0/5 → 5/5`（餵食/澆水/梳理 →
-親密度 → 品質分級產物 → 賣出）、NPC 走近對話、主角性別切換、`data-audit` 稽核 hook、無水平溢出、無 console error。
-CI（`.github/workflows/ci.yml`）會自動安裝 chromium、跑全部測試並部署 Pages。
-
----
-
-## 📁 結構
-
-| 路徑 | 說明 |
-|------|------|
-| `SKILL.md` | Claude Code Skill 主檔（觸發時機與工作流） |
-| `index.html` | 單頁遊戲 + 全部 CSS |
-| `src/config.js` | ★ 資料層：作物/升級/訂單/天氣/地圖/建築/動物/站點/`QUESTS` 故事任務 |
-| `src/state.js` | 存檔結構、localStorage、版本遷移 |
-| `src/game.js` | 核心規則（純邏輯，可 Node 測）：成長/訂單/升級/離線/移動/故事 |
-| `src/ui.js` | DOM 渲染、分層場景、camera、互動路由 |
-| `src/atlas.js` | v4 frame atlas 渲染器 |
-| `art-config-rpg-v4.json` | gpt-image-2 v4 源圖規格（角色/動作/作物/動物/建築/結構） |
-| `scripts/gen-art-v4.js` | 呼叫 gpt-image-2 生成 v4 源圖（讀 `OPENAI_API_KEY`） |
-| `scripts/process-v4-atlas.js` | 精切 v4 atlas（去背/切割/縮放/錨點）+ 程序化地形 |
-| `scripts/validate-v4-atlas.js` | v4 atlas 品質驗證（尺寸/必要 frame/空白幀/作物觸邊） |
-| `scripts/test-*.js` | 經濟/系統/UI 煙霧/E2E 測試 |
-| `references/` | 各 Stage 製作端規格、資料模型、美術流程、驗收 gate、Claude handoff |
-
----
-
-## 🛠️ 加作物 / 加升級 / 調平衡
-
-改 `src/config.js` 即可（細節見 [references/data-model.md](references/data-model.md)）。
-**改完數值務必跑 `node scripts/test-economy.js`** 確認進度節奏沒被破壞（CI 已內建把關）。
-
-## 🤝 貢獻
-
-歡迎 issue 與 PR！各階段企劃與製作端規格見 [references/](references/)。請維持「可玩、可測、可上線」的 Stage Gate 節奏。
-
-## 📄 授權
-
-[MIT](LICENSE) © 2026 阿軒 ([@mars-tw](https://github.com/mars-tw))　程式碼與素材皆採 MIT，歡迎自由使用與改造。
+[MIT](LICENSE) © 2026 mars-tw
