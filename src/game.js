@@ -45,8 +45,13 @@
     }
     return Object.keys(set);
   }
+  function unlockedForageItems(state) {
+    if (!(state.flags && state.flags.eastForageReported)) return [];
+    const collected = (state.stats && state.stats.collected) || {};
+    return Object.keys(C.FORAGE_ITEMS || {}).filter((id) => (collected[id] || 0) > 0);
+  }
   function availableOrderItems(state) {
-    return unlockedCrops(state).concat(unlockedProducts(state));
+    return unlockedCrops(state).concat(unlockedProducts(state), unlockedForageItems(state));
   }
   // 成長時間倍率：肥沃土壤升級 × 天氣（rain 加速）
   function growthMultiplier(state, now) {
@@ -226,8 +231,56 @@
     milk_good: [1, 3], milk_premium: [1, 2],
     wool_good: [1, 2], wool_premium: [1, 1],
     honey_good: [1, 3], honey_premium: [1, 2],
+    forest_herb: [2, 4], glow_mushroom: [1, 3],
   };
   const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
+  const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
+  const ORDER_COPY = {
+    mayor: {
+      offer: "鎮公所要補一批 {item}，麻煩你送到看板登記。",
+      thanks: "交付得很準時，鎮上的餐桌會記得這份幫忙。",
+    },
+    merchant: {
+      offer: "市集缺 {item}，我想先試一小批貨。",
+      thanks: "品質不錯，這批我會好好賣。",
+    },
+    elder: {
+      offer: "我想收些 {item} 做家常料理，份量不用多。",
+      thanks: "辛苦了，這正合用。",
+    },
+    child: {
+      offer: "可以幫我準備 {item} 嗎？我想帶去野餐。",
+      thanks: "謝謝你！野餐袋變得好豐盛。",
+    },
+  };
+  function hashString(s) {
+    let h = 0;
+    s = String(s || "");
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return h;
+  }
+  function orderNpcIdFor(orderOrSeed) {
+    const explicit = orderOrSeed && orderOrSeed.npcId;
+    if (explicit && (C.NPCS || {})[explicit]) return explicit;
+    const seed = typeof orderOrSeed === "string" ? orderOrSeed : (orderOrSeed && orderOrSeed.id);
+    return ORDER_NPC_IDS[hashString(seed) % ORDER_NPC_IDS.length];
+  }
+  function orderNarrative(state, order) {
+    const npcId = orderNpcIdFor(order);
+    const npc = (C.NPCS || {})[npcId] || { name: "鎮民", title: "委託人" };
+    const copy = ORDER_COPY[npcId] || ORDER_COPY.mayor;
+    const firstId = Object.keys(order.wants || {})[0];
+    const firstDef = getItemDef(firstId) || { name: firstId || "物資" };
+    const qty = firstId ? order.wants[firstId] : 0;
+    const itemText = firstId ? `${firstDef.name} x${qty}` : "物資";
+    return {
+      npcId,
+      npcName: npc.name,
+      npcTitle: npc.title,
+      offer: order.flavor || copy.offer.replace("{item}", itemText),
+      thanks: order.thanks || copy.thanks,
+    };
+  }
   function tutorialDeliveryOrderNeeded(state) {
     const story = state.story || {};
     const done = story.completed || {};
@@ -245,6 +298,9 @@
       rewardXp: 8,
       expiresAt: now + GAME.orderTtlMs,
       tutorial: true,
+      npcId: "mayor",
+      flavor: "鎮長先替你掛一張首收小麥委託，交付 2 份就能完成。",
+      thanks: "第一批小麥收到了，農場重新開張有個好開始。",
     };
   }
   function makeOrder(state, now, rng, idSeed) {
@@ -269,13 +325,15 @@
       baseValue += (def ? def.sellValue : 0) * qty;
       baseXp += (CROPS[itemId] ? CROPS[itemId].xp : Math.round((def ? def.sellValue : 0) * 0.6)) * qty;
     }
+    const id = "order_" + idSeed;
     return {
-      id: "order_" + idSeed,
+      id,
       wants,
       rarity: rarityId,
       rewardCoins: Math.round(baseValue * rarity.payMult),
       rewardXp: Math.max(1, Math.round(baseXp * 0.5 * rarity.xpMult)),
       expiresAt: now + GAME.orderTtlMs,
+      npcId: orderNpcIdFor(id),
     };
   }
   function refreshOrders(state, now, rng) {
@@ -753,6 +811,9 @@
     // 第二章（Stage 5）
     if (q.id === "repair_bridge") return !!(state.flags && state.flags.bridgeRepaired);
     if (q.id === "explore_new_area") return !!(state.flags && state.flags.eventsClaimed && state.flags.eventsClaimed.east_clearing) || q.objective === event;
+    if (q.id === "discover_east_forage") return !!(state.flags && state.flags.eastForageDiscovered) || q.objective === event;
+    if (q.id === "collect_east_forage") return eastForageStatus(state, now).collectedAll;
+    if (q.id === "report_east_forage") return !!(state.flags && state.flags.eastForageReported) || q.objective === event;
     // 第三章（Stage 7：動物照護）
     if (q.id === "learn_animal_care") return q.trigger === event;
     if (q.id === "feed_care_animal") return q.objective === event;
@@ -796,6 +857,10 @@
       const t = state.map.tiles.find((tl) => tl.bridge); return t ? t.id : null;
     }
     if (m.kind === "event") { const t = state.map.tiles.find((tl) => tl.event === m.event); return t ? t.id : null; }
+    if (m.kind === "forage") {
+      const t = eastForageTargetTile(state, now || Date.now());
+      return t ? t.id : null;
+    }
     if (m.kind === "npc") { const t = state.map.tiles.find((tl) => tl.npc === m.type); return t ? t.id : null; }
     if (m.kind === "structure") {
       const s = (C.STRUCTURES || []).find((x) => x.id === m.id); if (!s) return null;
@@ -821,6 +886,11 @@
   // 序章（第一章）是否全完成（修橋解鎖條件之一）
   function chapter1Done(state) {
     const ids = C.PROLOGUE_QUESTS || [];
+    const done = (state.story && state.story.completed) || {};
+    return ids.length > 0 && ids.every((id) => done[id]);
+  }
+  function chapter2Done(state) {
+    const ids = C.CHAPTER2_QUESTS || [];
     const done = (state.story && state.story.completed) || {};
     return ids.length > 0 && ids.every((id) => done[id]);
   }
@@ -865,6 +935,58 @@
     }
     return bridgeTile(state);
   }
+  function forageNodeDef(nodeId) {
+    return (C.FORAGE_NODES || []).find((n) => n.id === nodeId) || null;
+  }
+  function forageTile(state, nodeId) {
+    return (state.map.tiles || []).find((t) => t.forage === nodeId) || null;
+  }
+  function forageNodeStatus(state, nodeId, now) {
+    const node = forageNodeDef(nodeId);
+    if (!node) return null;
+    now = now || Date.now();
+    const last = ((state.flags && state.flags.forageNodes) || {})[node.id] || 0;
+    const cooldownMs = node.cooldownMs || C.FORAGE_NODE_COOLDOWN_MS || 0;
+    const readyAt = last + cooldownMs;
+    const ready = !last || now >= readyAt;
+    return { node, item: (C.FORAGE_ITEMS || {})[node.itemId], lastCollectedAt: last, readyAt, ready, remainingMs: ready ? 0 : readyAt - now };
+  }
+  function eastForageStatus(state, now) {
+    const wants = (C.EAST_FORAGE_REPORT && C.EAST_FORAGE_REPORT.wants) || {};
+    const collected = (state.stats && state.stats.collected) || {};
+    const storage = (state.storage && state.storage.items) || {};
+    const have = {}, found = {};
+    for (const id of Object.keys(wants)) {
+      have[id] = storage[id] || 0;
+      found[id] = collected[id] || 0;
+    }
+    const readyForReport = Object.keys(wants).every((id) => have[id] >= wants[id]);
+    const collectedAll = Object.keys(wants).every((id) => found[id] >= wants[id]);
+    const nodes = (C.FORAGE_NODES || []).map((n) => Object.assign({ tile: forageTile(state, n.id) }, forageNodeStatus(state, n.id, now)));
+    return {
+      discovered: !!(state.flags && state.flags.eastForageDiscovered),
+      reported: !!(state.flags && state.flags.eastForageReported),
+      wants, have, found, readyForReport, collectedAll, nodes,
+    };
+  }
+  function eastForageTargetTile(state, now) {
+    const q = currentQuest(state);
+    const status = eastForageStatus(state, now);
+    if (q && q.id === "discover_east_forage") {
+      const n = status.nodes.find((x) => x.tile && planMoveTo(state, x.tile.id));
+      return n ? n.tile : null;
+    }
+    if (q && q.id === "collect_east_forage") {
+      for (const itemId of Object.keys(status.wants)) {
+        if ((status.found[itemId] || 0) >= status.wants[itemId]) continue;
+        const n = status.nodes.find((x) => x.node.itemId === itemId && x.ready && x.tile && planMoveTo(state, x.tile.id));
+        if (n) return n.tile;
+      }
+      const anyReady = status.nodes.find((x) => x.ready && x.tile && planMoveTo(state, x.tile.id));
+      if (anyReady) return anyReady.tile;
+    }
+    return null;
+  }
   function repairBridge(state, now) {
     const chk = canRepairBridge(state); if (!chk.ok) return chk;
     const cost = C.BRIDGE_COST || {};
@@ -872,6 +994,48 @@
     state.flags.bridgeRepaired = true;
     const story = syncStoryProgress(state, "repair_bridge"); // 推進第二章
     return { ok: true, story, cost };
+  }
+  function discoverForage(state, nodeId, now) {
+    const node = forageNodeDef(nodeId);
+    if (!node) return { ok: false, reason: "unknown" };
+    if (!state.flags || !state.flags.bridgeRepaired) return { ok: false, reason: "locked" };
+    state.flags.eastForageDiscovered = true;
+    const story = syncStoryProgress(state, "discover_forage", now);
+    return { ok: true, node, story };
+  }
+  function gatherForage(state, nodeId, now) {
+    now = now || Date.now();
+    const st = forageNodeStatus(state, nodeId, now);
+    if (!st) return { ok: false, reason: "unknown" };
+    if (!state.flags || !state.flags.bridgeRepaired) return { ok: false, reason: "locked" };
+    if (!state.flags.eastForageDiscovered) return { ok: false, reason: "undiscovered" };
+    if (!st.ready) return { ok: false, reason: "cooldown", readyAt: st.readyAt };
+    const qty = st.node.yield || 1;
+    const { added, lost } = addToStorage(state, st.node.itemId, qty);
+    if (!state.flags.forageNodes) state.flags.forageNodes = {};
+    state.flags.forageNodes[st.node.id] = now;
+    state.stats.collected[st.node.itemId] = (state.stats.collected[st.node.itemId] || 0) + added;
+    const story = syncStoryProgress(state, "collect_forage", now);
+    return { ok: true, node: st.node, item: st.item, added, lost, story };
+  }
+  function ensureEastForageReportRequest(state, now) {
+    const cfg = C.EAST_FORAGE_REPORT;
+    if (!cfg || !currentQuest(state) || currentQuest(state).id !== "report_east_forage") return null;
+    ensureNpcRequestState(state);
+    if (state.npcRequests[cfg.npcId]) return state.npcRequests[cfg.npcId];
+    const req = {
+      id: "req_east_forage_report",
+      npcId: cfg.npcId,
+      wants: Object.assign({}, cfg.wants),
+      rewardCoins: cfg.rewardCoins,
+      rewardXp: cfg.rewardXp,
+      createdAt: now || Date.now(),
+      storyEvent: "report_forage",
+      flavorOffer: cfg.offer,
+      flavorDone: cfg.done,
+    };
+    state.npcRequests[cfg.npcId] = req;
+    return req;
   }
   // 走到事件點：首次給一次性獎勵 + 推進故事
   function triggerEvent(state, eventId, now) {
@@ -898,10 +1062,9 @@
   }
   // 對話階段：start → ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）→ ch3done（動物照護學完）
   function npcPhase(state) {
-    const f = state.flags || {};
     if (chapter3Done(state)) return "ch3done";
-    if (f.eventsClaimed && f.eventsClaimed.east_clearing) return "ch2done";
-    if (f.bridgeRepaired) return "bridge";
+    if (chapter2Done(state)) return "ch2done";
+    if (state.flags && state.flags.bridgeRepaired) return "bridge";
     if (chapter1Done(state)) return "ch1done";
     return "start";
   }
@@ -926,7 +1089,7 @@
       const itemId = Object.keys(req.wants)[0];
       const itemName = (getItemDef(itemId) || {}).name || itemId;
       const canDeliver = canFulfillNpcRequest(state, npcId);
-      line = ((cfg && cfg.flavorOffer && cfg.flavorOffer[0]) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
+      line = (req.flavorOffer || (cfg && cfg.flavorOffer && cfg.flavorOffer[0]) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
       request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp, canDeliver };
     }
     return { id: npc.id, name: npc.name, title: npc.title, frame: npc.frame, phase, line, lineCount: lines.length, request };
@@ -1001,8 +1164,14 @@
     state.npcRequestLog[npcId].fulfilledCount++;
     state.stats.npcRequestsCompleted = (state.stats.npcRequestsCompleted || 0) + 1;
     delete state.npcRequests[npcId];
+    let story = null;
+    if (req.storyEvent === "report_forage") {
+      if (!state.flags) state.flags = {};
+      state.flags.eastForageReported = true;
+      story = syncStoryProgress(state, "report_forage", now);
+    }
     checkAchievements(state);
-    return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId };
+    return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId, story, doneLine: req.flavorDone || null };
   }
   // 放棄委託：清掉這張委託並跟交付一樣進冷卻——冷卻要一致，否則玩家能用「棄了重抽」
   // 無限刷到好賠率的品項，失去節流意義；用來解掉抽到「幾乎摸不到」品項時的卡關委託。
@@ -1174,12 +1343,12 @@
   }
 
   const GameAPI = {
-    rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, availableOrderItems,
+    rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, effectiveGrowMs, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
-    tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder,
+    tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder, orderNarrative,
     makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
@@ -1193,7 +1362,10 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, chapter3Done, canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
+    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done,
+    canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
+    forageNodeDef, forageTile, forageNodeStatus, eastForageStatus, eastForageTargetTile,
+    discoverForage, gatherForage, ensureEastForageReportRequest,
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
     // Stage 10：NPC 重複委託

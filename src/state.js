@@ -45,6 +45,15 @@
     }
     return map;
   }
+  function applyForage(map) {
+    for (const n of (C.FORAGE_NODES || [])) {
+      const tile = map.tiles.find((t) => t.x === n.x && t.y === n.y);
+      if (tile && !tile.object && !tile.station && !tile.buildingId && !tile.structureId && !tile.npc) {
+        tile.forage = n.id;
+      }
+    }
+    return map;
+  }
 
   // 由 MAP_LAYOUT 產生大世界（soil→plot、grass/path/water、障礙、多格建築、站點、橋、事件點）
   function makeMap() {
@@ -69,6 +78,7 @@
           buildingId: null,       // 對應 state.buildings（動物家）
           bridge,                 // Stage 5：斷橋磚（修好後可走）
           event,                  // Stage 5：事件點 id（走過去觸發）
+          forage: null,           // Stage 12：東林採集點 id
           region,                 // Stage 5：east＝東林封鎖區
           npc: null,              // Stage 6：NPC 鎮民 id（走相鄰交談）
           plotIndex: terrain === "soil" ? plotIndex++ : null,
@@ -79,6 +89,7 @@
     applyStructures(map);
     applyStations(map);
     applyNpcs(map);
+    applyForage(map);
     return map;
   }
 
@@ -132,14 +143,14 @@
       buildings: seeded.buildings,             // 預置雞舍/畜舍（多格結構）
       animals: seeded.animals,                 // 預置雞舍 1 隻雞（可見＋可收集）
       // ===== 可走動世界 + camera =====
-      camera: { x: 0, y: 0, followPlayer: true },
+      camera: { x: 0, y: 0, followPlayer: true, focusTileId: null, focusUntil: 0 },
       player: { tileId: "t" + C.PLAYER_START.x + "_" + C.PLAYER_START.y, x: C.PLAYER_START.x, y: C.PLAYER_START.y,
                 facing: "down", action: "idle", actionTargetTileId: null, actionEndsAt: 0 },
       interaction: { tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null },
       // ===== 故事任務（地圖驅動）=====
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
-      flags: { bridgeRepaired: false, eventsClaimed: {} },
+      flags: { bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false },
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0 },
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
@@ -173,6 +184,7 @@
       if (!merged.map.tiles.some((t) => t.structureId)) applyStructures(merged.map);
       if (!merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
       if (!merged.map.tiles.some((t) => t.npc)) applyNpcs(merged.map);
+      if (!merged.map.tiles.some((t) => t.forage)) applyForage(merged.map);
       merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
       merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
       merged.player = Object.assign({}, def.player, state.player);
@@ -188,10 +200,11 @@
     if (merged.plots.length < C.GAME.maxPlots) {
       while (merged.plots.length < C.GAME.maxPlots) merged.plots.push({ id: "p" + String(merged.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
     }
-    merged.camera = Object.assign({ x: 0, y: 0, followPlayer: true }, state.camera);
+    merged.camera = Object.assign({ x: 0, y: 0, followPlayer: true, focusTileId: null, focusUntil: 0 }, state.camera);
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
-    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {} }, state.flags);
+    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false }, state.flags);
     merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
+    merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     merged.gender = state.gender === "m" ? "m" : "f"; // Stage 6：主角性別
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
     merged.version = C.GAME.version;

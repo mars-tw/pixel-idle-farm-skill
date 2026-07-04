@@ -346,14 +346,20 @@ async function run() {
       window.Game.refreshOrders(st, Date.now());
       F.refresh();
       const tutorial = st.orders.find((o) => o.id === "tutorial_first_delivery");
+      const npc = document.querySelector('#orders [data-audit="order-npc"]');
+      const flavor = document.querySelector("#orders .o-flavor");
       return { hasTutorial: !!tutorial, tutorialWants: tutorial ? tutorial.wants : null,
         canFulfillCount: st.orders.filter((o) => window.Game.canFulfill(st, o)).length,
-        wheat: st.storage.items.wheat || 0 };
+        wheat: st.storage.items.wheat || 0,
+        npcText: npc ? npc.textContent : "",
+        flavorText: flavor ? flavor.textContent : "" };
     });
     assert(firstOrderReady.hasTutorial && firstOrderReady.tutorialWants.wheat === 2,
       "首收後生成 2 小麥新手保底訂單");
     assert(firstOrderReady.canFulfillCount >= 1,
       `新存檔首輪收成後至少 1 張訂單可交付（可交 ${firstOrderReady.canFulfillCount}，小麥 ${firstOrderReady.wheat}）`);
+    assert(firstOrderReady.npcText.includes("鎮長") && firstOrderReady.flavorText.includes("首收小麥"),
+      `訂單顯示 NPC 名字與委託語境（${firstOrderReady.npcText}｜${firstOrderReady.flavorText}）`);
     const orderBoard = await page.evaluate(() => {
       const F = window.__farm; const board = F.state().map.tiles.find((t) => t.station === "order_board");
       F.clickTile(board.id);
@@ -472,7 +478,39 @@ async function run() {
     assert(repairRes.wood === 0 && repairRes.stone === 0, "修橋消耗木材 6、石頭 4（真資源）");
     assert(repairRes.quest === "explore_new_area", `修橋推進到「探索新區」（${repairRes.quest}）`);
 
-    // 13. 修橋後：東林解鎖可達、走到事件點觸發獎勵、camera 跟隨進新區、第二章 2/2
+    // 12c. Dock「前往」：鏡頭聚焦目前任務 marker，手機視口要實際平移
+    const dockGuide = await page.evaluate(async () => {
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const st = window.__farm.state();
+      const target = window.questMarkerTile(st, Date.now());
+      const before = { x: st.camera.x, y: st.camera.y };
+      const btn = document.querySelector('[data-audit="quest-dock-go"]');
+      const rect = btn ? btn.getBoundingClientRect() : null;
+      if (btn) btn.click();
+      await sleep(320);
+      return {
+        target,
+        focus: st.camera.focusTileId,
+        before,
+        after: { x: st.camera.x, y: st.camera.y },
+        quest: document.getElementById("questDock").dataset.quest,
+        btnW: rect ? rect.width : 0,
+        btnH: rect ? rect.height : 0,
+        overflow: document.documentElement.scrollWidth - window.innerWidth,
+      };
+    });
+    assert(dockGuide.quest === "explore_new_area" && dockGuide.focus === dockGuide.target,
+      `Dock 前往把鏡頭 focus 到目前任務 marker（target=${dockGuide.target} focus=${dockGuide.focus}）`);
+    assert(dockGuide.btnW >= 44 && dockGuide.btnH >= 44 && dockGuide.overflow <= 2,
+      `Dock 前往 tap target >=44px 且無水平溢出（${Math.round(dockGuide.btnW)}×${Math.round(dockGuide.btnH)} overflow=${dockGuide.overflow}）`);
+    if (vp.w <= 560) {
+      assert(dockGuide.before.x !== dockGuide.after.x || dockGuide.before.y !== dockGuide.after.y,
+        `手機 Dock 前往觸發 camera 平移（x ${dockGuide.before.x}→${dockGuide.after.x}, y ${dockGuide.before.y}→${dockGuide.after.y}）`);
+    } else {
+      assert(dockGuide.focus === dockGuide.target, "桌機 Dock 前往設定 marker focus（視口較寬時可能已在 clamp 邊界）");
+    }
+
+    // 13. 修橋後：東林解鎖可達、走到事件點觸發獎勵，並接上採集鏈
     const explore = await page.evaluate(async () => {
       const F = window.__farm; const st = F.state();
       const event = window.Game.eventTile(st, "east_clearing");
@@ -496,11 +534,107 @@ async function run() {
     assert(explore.marker === explore.eventId, "探索任務標記指向東林事件點");
     assert(exploreRes.claimed && exploreRes.coins > explore.coinsBefore, `走到東林古樹觸發一次性獎勵（+${exploreRes.coins - explore.coinsBefore} 金）`);
     assert(exploreRes.playerX >= 17 && exploreRes.camX < -50, `角色進入東林、camera 跟隨平移（playerX=${exploreRes.playerX} camX=${exploreRes.camX}）`);
-    assert(exploreRes.quest === "learn_animal_care" && exploreRes.ch2 === "2/2",
-      `探索完成第二章，接上第三章「跟老農學動物照護」（探索完成度 ${exploreRes.ch2}，quest=${exploreRes.quest}）`);
+    assert(exploreRes.quest === "discover_east_forage" && exploreRes.ch2 === "2/5",
+      `探索後接東林採集鏈（第二章 ${exploreRes.ch2}，quest=${exploreRes.quest}）`);
     assert(exploreRes.lockedAfter === 0, "修橋後封鎖區解除（locked-area 清零）");
 
-    // 13b. Stage 6：對話依故事進度改變（通關後 → ch2done 階段台詞，與序章不同）
+    // 13b. 東林採集鏈：辨認 → 採集兩種東林限定材料 → 向商人回報
+    const forageDiscover = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const marker = window.questMarkerTile(st, Date.now());
+      const tile = window.Game.getTile(st, marker);
+      F.setTool("hand"); F.clickTile(marker);
+      return { marker, forage: tile && tile.forage };
+    });
+    await waitArrive(page, 9000);
+    await sleep(400);
+    const forageDiscoverRes = await page.evaluate(() => {
+      const st = window.__farm.state();
+      return { discovered: !!st.flags.eastForageDiscovered, quest: st.story.questId };
+    });
+    assert(!!forageDiscover.forage && forageDiscoverRes.discovered && forageDiscoverRes.quest === "collect_east_forage",
+      `東林採集點可辨認並推進到收集樣品（node=${forageDiscover.forage}, quest=${forageDiscoverRes.quest}）`);
+
+    for (const expected of ["forest_herb", "glow_mushroom"]) {
+      const gatherInfo = await page.evaluate((want) => {
+        const F = window.__farm; const st = F.state();
+        const marker = window.questMarkerTile(st, Date.now());
+        const tile = window.Game.getTile(st, marker);
+        const node = tile && window.FORAGE_NODES.find((n) => n.id === tile.forage);
+        F.setTool("hand"); F.clickTile(marker);
+        return { marker, forage: tile && tile.forage, item: node && node.itemId, want };
+      }, expected);
+      assert(gatherInfo.item === expected, `採集任務 marker 指向 ${expected} 採集點（實際 ${gatherInfo.item}）`);
+      await waitArrive(page, 9000);
+      await sleep(400);
+    }
+    const forageCollectRes = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const status = window.Game.eastForageStatus(st, Date.now());
+      return {
+        quest: st.story.questId,
+        herb: st.storage.items.forest_herb || 0,
+        mushroom: st.storage.items.glow_mushroom || 0,
+        foundHerb: status.found.forest_herb || 0,
+        foundMushroom: status.found.glow_mushroom || 0,
+        ready: status.readyForReport,
+      };
+    });
+    assert(forageCollectRes.quest === "report_east_forage" && forageCollectRes.ready,
+      `採集兩種東林材料後接回報任務（quest=${forageCollectRes.quest}）`);
+    assert(forageCollectRes.herb >= 1 && forageCollectRes.mushroom >= 1 && forageCollectRes.foundHerb >= 1 && forageCollectRes.foundMushroom >= 1,
+      `倉庫與發現紀錄都有東林藥草/螢光菇（herb=${forageCollectRes.herb}, mushroom=${forageCollectRes.mushroom}）`);
+
+    const merchantInfo = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const merchant = st.map.tiles.find((t) => t.npc === "merchant");
+      const marker = window.questMarkerTile(st, Date.now());
+      F.clickTile(merchant.id);
+      return { merchantId: merchant.id, marker, coinsBefore: st.coins };
+    });
+    await waitArrive(page, 9000);
+    await sleep(500);
+    const merchantCard = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const req = st.npcRequests.merchant;
+      const card = document.querySelector('[data-audit="npc-request"][data-npc="merchant"]');
+      const btn = document.getElementById("fulfillReqBtn");
+      return {
+        hasReq: !!req,
+        wants: req ? req.wants : null,
+        hasCard: !!card,
+        disabled: btn ? btn.disabled : null,
+        text: document.getElementById("tileContext").innerText,
+      };
+    });
+    assert(merchantInfo.marker === merchantInfo.merchantId, "回報任務 marker 指向商人");
+    assert(merchantCard.hasReq && merchantCard.hasCard && merchantCard.disabled === false &&
+      merchantCard.wants.forest_herb === 1 && merchantCard.wants.glow_mushroom === 1,
+      `商人回報委託卡顯示東林材料需求（${merchantCard.text.replace(/\s+/g, " ").slice(0, 80)}）`);
+    const reportRes = await page.evaluate(() => {
+      const before = window.__farm.state().coins;
+      document.getElementById("fulfillReqBtn").click();
+      const st = window.__farm.state();
+      const ch2 = document.querySelector(".chapter2-progress");
+      return {
+        before,
+        after: st.coins,
+        quest: st.story.questId,
+        reported: !!st.flags.eastForageReported,
+        ch2: ch2 ? ch2.getAttribute("data-progress2") : null,
+        herb: st.storage.items.forest_herb || 0,
+        mushroom: st.storage.items.glow_mushroom || 0,
+        pool: window.Game.availableOrderItems(st),
+      };
+    });
+    assert(reportRes.reported && reportRes.quest === "learn_animal_care" && reportRes.ch2 === "5/5",
+      `商人回報後完成第二章並接第三章（ch2=${reportRes.ch2}, quest=${reportRes.quest}）`);
+    assert(reportRes.after - reportRes.before === 18 && reportRes.herb === 0 && reportRes.mushroom === 0,
+      `商人回報消耗材料並給 +18 金（${reportRes.before}→${reportRes.after}）`);
+    assert(reportRes.pool.includes("forest_herb") && reportRes.pool.includes("glow_mushroom"),
+      "回報後東林材料進入既有訂單/委託候選池");
+
+    // 13c. Stage 6：對話依故事進度改變（通關後 → ch2done 階段台詞，與序章不同）
     const lateTalk = await page.evaluate(() => {
       const st = window.__farm.state();
       return { phase: window.Game.npcPhase(st), line: window.Game.npcDialogue(st, "mayor", 0).line,
@@ -727,9 +861,9 @@ async function run() {
     assert(journalState.cropFoundHasWheat === true, "作物圖鑑顯示已收成的小麥（真實故事進度累積，非灌資料）");
     assert(journalState.cropHasUndiscovered === true, "作物圖鑑仍有未發現項目（沒有全部提前曝光）");
     assert(journalState.productFound === true, "產物圖鑑顯示已收集過的動物產品");
-    assert(journalState.npcMetCount === 3 && journalState.npcUnmetCount === 1,
-      `鎮民名錄：跑完故事鏈只跟 3 位 NPC 互動過，商人從未拜訪（met=${journalState.npcMetCount} unmet=${journalState.npcUnmetCount}）`);
-    assert(journalState.merchantMet === false, "從未拜訪過的商人仍顯示「尚未遇見」，不因其他 NPC 已遇見而連帶曝光");
+    assert(journalState.npcMetCount === 4 && journalState.npcUnmetCount === 0,
+      `鎮民名錄：跑完故事鏈與回報流程後 4 位鎮民皆為真實互動遇見（met=${journalState.npcMetCount} unmet=${journalState.npcUnmetCount}）`);
+    assert(journalState.merchantMet === true, "商人因東林回報流程列為已遇見");
     assert(journalState.chickenHappy === true, "動物親密度里程碑：起始雞的 bestAffinity 曾達開心門檻");
     assert(journalState.bridgeFlag === true, "世界旗標：東橋已修復狀態正確");
     assert(journalState.overflow <= 2, `圖鑑分頁無水平溢出（${journalState.overflow}）`);

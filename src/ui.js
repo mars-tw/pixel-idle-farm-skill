@@ -282,6 +282,7 @@
       const rarity = window.ORDER_RARITY[o.rarity];
       const pay = G.orderPayout(state, o);
       const can = G.canFulfill(state, o);
+      const narrative = G.orderNarrative ? G.orderNarrative(state, o) : null;
       const wantsHtml = Object.entries(o.wants).map(([cid, q]) => {
         const have = state.storage.items[cid] || 0;
         const ok = have >= q;
@@ -289,9 +290,12 @@
       }).join("");
       const el = document.createElement("div");
       el.className = "order";
+      if (narrative) el.dataset.npc = narrative.npcId;
       el.innerHTML = `
         <div class="o-rarity" style="background:${rarity.color}"></div>
         <div class="o-body">
+          ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
+          <div class="o-flavor">${narrative.offer}</div>` : ""}
           <div class="o-wants">${wantsHtml}</div>
           <div class="o-reward">🪙 ${fmtNum(pay.coins)} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${rarity.label} · ⏳ ${fmtTime(Math.max(0, o.expiresAt - now()))}</div>
@@ -302,7 +306,7 @@
         </div>`;
       el.querySelector(".ful").onclick = () => {
         const r = G.fulfillOrder(state, o.id, now());
-        if (r.ok) { G.advanceStory(state, "deliver"); toast("📜 訂單完成！+" + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
+        if (r.ok) { G.advanceStory(state, "deliver"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
         else toast("作物不足，無法交付");
       };
       el.querySelector(".trash").onclick = () => {
@@ -363,6 +367,13 @@
     if (id === "clear_old_path") return { done: (state.stats && state.stats.cleared || 0) > 0 ? 1 : 0, total: 1 };
     if (id === "repair_bridge") return { done: flags.bridgeRepaired ? 1 : 0, total: 1 };
     if (id === "explore_new_area") return { done: (flags.eventsClaimed && flags.eventsClaimed.east_clearing) ? 1 : 0, total: 1 };
+    if (id === "discover_east_forage") return { done: flags.eastForageDiscovered ? 1 : 0, total: 1 };
+    if (id === "collect_east_forage") {
+      const st = G.eastForageStatus ? G.eastForageStatus(state, now()) : null;
+      const done = st ? Object.keys(st.wants).filter((k) => (st.found[k] || 0) >= st.wants[k]).length : 0;
+      return { done, total: st ? Object.keys(st.wants).length : 2 };
+    }
+    if (id === "report_east_forage") return { done: flags.eastForageReported ? 1 : 0, total: 1 };
     if (id === "raise_affinity_happy") return { done: (state.animals || []).some((a) => G.animalAffinity(state, a, now()) >= window.AFFINITY_HAPPY_THRESHOLD) ? 1 : 0, total: 1 };
     if (id === "collect_quality_product") return { done: G.hasCollectedQuality(state) ? 1 : 0, total: 1 };
     if (id === "deliver_quality_order") return { done: (state.stats && state.stats.qualitySold || 0) > 0 ? 1 : 0, total: 1 };
@@ -390,6 +401,19 @@
     }).join("");
     return `<div class="bridge-materials" data-audit="bridge-materials" data-ready="${st.ready}">${rows}</div>`;
   }
+  function forageRowsHtml(compact) {
+    if (!G.eastForageStatus) return "";
+    const st = G.eastForageStatus(state, now());
+    const rows = Object.keys(st.wants).map((k) => {
+      const def = itemDef(k) || { name: k, emoji: "" };
+      const done = (st.found[k] || 0) >= st.wants[k];
+      return `<div class="bm-row ${done ? "ready" : "miss"}" data-forage-item="${k}">
+        <span>${def.emoji} ${def.name}</span><b>${st.found[k] || 0}/${st.wants[k]}</b>
+        ${compact ? "" : `<span class="bm-src">${done ? "已採樣" : "東林採集點"}</span>`}
+      </div>`;
+    }).join("");
+    return `<div class="bridge-materials forage-status" data-audit="forage-status" data-ready="${st.collectedAll}">${rows}</div>`;
+  }
   function questActionText(cur) {
     if (!cur) return "自由經營：繼續種植、接訂單、照顧動物。";
     if (cur.id === "intro_reopen_farm") return "主動作：點金色箭頭旁的告示牌，走過去閱讀。";
@@ -403,6 +427,9 @@
       return st && st.ready ? "主動作：材料已齊，點斷橋走過去修復。" : "主動作：跟著金色箭頭清障，補齊修橋材料。";
     }
     if (cur.id === "explore_new_area") return "主動作：過橋走到東林古樹。";
+    if (cur.id === "discover_east_forage") return "主動作：前往東林採集點，先辨認可採的藥草或菇木。";
+    if (cur.id === "collect_east_forage") return "主動作：各採一份東林藥草與螢光菇。";
+    if (cur.id === "report_east_forage") return "主動作：回到商人身邊交付東林樣品。";
     if (cur.id === "learn_animal_care") return "主動作：找老農班伯交談。";
     if (cur.id === "feed_care_animal") return "主動作：走到雞舍，餵食、澆水或梳理動物。";
     if (cur.id === "raise_affinity_happy") return "主動作：持續照護同一隻動物到開心。";
@@ -423,8 +450,11 @@
         <div class="qd-title"><span>📍</span><span>${title}</span></div>
         <div class="qd-action">${action}</div>
         ${cur && cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(true) : ""}
+        ${cur && (cur.id === "collect_east_forage") ? forageRowsHtml(true) : ""}
       </div>
-      <div class="qd-meta">${targetId ? "金箭頭" : "探索"}</div>`;
+      <button class="qd-meta qd-go" data-audit="quest-dock-go" ${targetId ? "" : "disabled"}>${targetId ? "前往" : "探索"}</button>`;
+    const go = box.querySelector(".qd-go");
+    if (go && targetId) go.onclick = (ev) => { ev.stopPropagation(); focusCameraOnTile(targetId); };
   }
   function renderStory() {
     const box = $("storyPanel"); if (!box) return;
@@ -475,7 +505,7 @@
       <div class="quest-list">${quests}</div>
       ${ch2Html}
       ${ch3Html}
-      ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。${cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(false) : ""}</div>` : ""}
+      ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。${cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(false) : ""}${cur.id === "collect_east_forage" ? forageRowsHtml(false) : ""}</div>` : ""}
       ${dialogueLogHtml()}
     </div>`;
   }
@@ -654,6 +684,13 @@
       if (!tile.event) continue;
       const el = addObjectPx(obStatic, "structures", "oak", (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 2.0, "shadowed", 0, "event-point");
       if (el) { el.dataset.event = tile.event; el.dataset.tileId = tile.id; }
+    }
+    for (const tile of state.map.tiles) {
+      if (!tile.forage) continue;
+      const node = (window.FORAGE_NODES || []).find((n) => n.id === tile.forage);
+      const frame = node && node.itemId === "glow_mushroom" ? "bush" : "bush";
+      const el = addObjectPx(obStatic, "props", frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.9, "shadowed", 0, "forage");
+      if (el) { el.dataset.forage = tile.forage; el.dataset.item = node ? node.itemId : ""; el.dataset.tileId = tile.id; }
     }
   }
   // ---- 地形 autotile：依鄰格選 center/edge/corner，破除方塊感 ----
@@ -862,6 +899,23 @@
 
   // ---------- 玩家定位 / camera / 移動 ----------
   function tileElOf(tileId) { const r = tileEls.find((x) => x.tileId === tileId); return r ? r.el : null; }
+  function clearCameraFocus() {
+    if (!state.camera) state.camera = {};
+    state.camera.focusTileId = null; state.camera.focusUntil = 0; state.camera.followPlayer = true;
+  }
+  function focusCameraOnTile(tileId) {
+    const tile = G.getTileById(state, tileId);
+    if (!tile) return false;
+    if (!state.camera) state.camera = {};
+    state.camera.focusTileId = tileId;
+    state.camera.focusUntil = now() + 2600;
+    state.camera.followPlayer = false;
+    spawnRing(tileId, true);
+    updateCamera(true);
+    toast("📍 鏡頭移到任務目標");
+    scheduleSave();
+    return true;
+  }
   function positionPlayer(animate) {
     const pl = $("player"); if (!pl) return;
     const tile = G.getTileById(state, state.player.tileId); if (!tile) return;
@@ -882,7 +936,14 @@
     const scene = $("mapScene"); if (!scene) return;
     const vw = scene.clientWidth, vh = scene.clientHeight;
     const worldW = state.map.width * TILE, worldH = state.map.height * TILE;
-    const tile = G.getTileById(state, state.player.tileId); if (!tile) return;
+    let tile = null;
+    if (state.camera && state.camera.focusTileId && now() < (state.camera.focusUntil || 0)) {
+      tile = G.getTileById(state, state.camera.focusTileId);
+    } else if (state.camera && state.camera.focusTileId) {
+      clearCameraFocus();
+    }
+    if (!tile) tile = G.getTileById(state, state.player.tileId);
+    if (!tile) return;
     const px0 = (tile.x + 0.5) * TILE, py0 = (tile.y + 0.5) * TILE;
     let camX = vw / 2 - px0, camY = vh / 2 - py0;
     camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
@@ -894,6 +955,7 @@
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
+    clearCameraFocus();
     if (!path || path.length === 0) { if (onArrive) onArrive(); else setPlayerIdle(); return; }
     state.player.action = "walk";
     let i = 0;
@@ -929,6 +991,7 @@
     // Stage 5：斷橋（走過去修橋 / 過橋）、事件點（走過去觸發）
     if (tile.bridge) { useBridge(tile); updateMap(now()); return; }
     if (tile.event) { useEvent(tile); updateMap(now()); return; }
+    if (tile.forage) { useForage(tile); updateMap(now()); return; }
     // Stage 6：NPC（走過去交談）
     if (tile.npc) { useNpc(tile); updateMap(now()); return; }
 
@@ -1034,6 +1097,38 @@
       afterChange(true); renderTileContext();
     });
   }
+  function useForage(tile) {
+    const node = (window.FORAGE_NODES || []).find((n) => n.id === tile.forage);
+    if (!node) return;
+    const plan = G.planMoveTo(state, tile.id);
+    if (!plan) { toast("要先修好橋才能靠近採集點"); spawnRing(tile.id, false); return; }
+    spawnRing(tile.id, true);
+    walkPath(plan.path, () => {
+      const cur = G.currentQuest(state);
+      if (cur && cur.id === "discover_east_forage" && !state.flags.eastForageDiscovered) {
+        const r = G.discoverForage(state, tile.forage, now());
+        if (r.ok) {
+          playAction("use", state.player.facing);
+          spawnVfx(tile.id, "valid_ring");
+          toast("📍 已記下採集點：" + node.name);
+          afterChange(true); renderTileContext(); return;
+        }
+      }
+      const r = G.gatherForage(state, tile.forage, now());
+      if (r.ok) {
+        playAction("collect", state.player.facing);
+        spawnVfx(tile.id, "product_pop");
+        toast("🌿 採集 +" + r.added + " " + itemName(node.itemId) + (r.lost ? "（倉庫滿，遺失 " + r.lost + "）" : ""));
+        afterChange(true); renderTileContext();
+      } else if (r.reason === "undiscovered") {
+        toast("先辨認這個採集點。");
+      } else if (r.reason === "cooldown") {
+        toast("採集點還在恢復，稍後再來。");
+      } else {
+        toast("現在還不能採集。");
+      }
+    });
+  }
   // Stage 6：NPC 對話 — 走到相鄰 → 面向 → 主角互動動作 + NPC talk 動畫 + 地圖泡泡 + 側欄記錄
   const npcLineIdx = {};
   let bubbleTimer = null;
@@ -1048,6 +1143,7 @@
       // Stage 10：走到 NPC 時，若目前沒有委託且冷卻已過，自動生成一張新委託（走近即觸發，非按鈕）；
       // 放在 npcDialogue() 之前，這樣這次的台詞就會是新委託的 flavorOffer。
       G.ensureNpcRequestState(state);
+      if (G.ensureEastForageReportRequest) G.ensureEastForageReportRequest(state, now());
       if (!state.npcRequests[tile.npc]) {
         const chk = G.canRequestFrom(state, tile.npc, now());
         if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
@@ -1131,6 +1227,10 @@
     else if (tile.npc) { const n = window.NPCS[tile.npc]; toast("🧑 " + n.name + "・" + n.title + "・走過去交談"); }
     else if (tile.bridge) { toast(state.flags.bridgeRepaired ? "🌉 木橋・通往東林空地" : "🌉 斷橋・走過去用木材石頭修復"); }
     else if (tile.event) { const ev = window.EVENTS[tile.event]; toast("🌳 " + ev.name + "・" + ev.desc); }
+    else if (tile.forage) {
+      const node = (window.FORAGE_NODES || []).find((n) => n.id === tile.forage);
+      toast("🌿 " + (node ? node.name : "採集點") + "・走過去採集");
+    }
     else if (tile.region === "east" && !state.flags.bridgeRepaired) { toast("⛓️ 東林封鎖中・先修好斷橋才能進入"); }
     else if (tile.object) { const o = window.OBSTACLES[tile.object]; toast(`${o.emoji}${o.name}・${o.desc}`); }
     else { toast(`${terr.name}・${terr.desc}`); }
@@ -1236,6 +1336,7 @@
     // 0.6) Stage 6：NPC 鎮民（走過去交談）；Stage 10：若有進行中委託，附交付卡
     if (tile.npc) {
       const npc = window.NPCS[tile.npc];
+      if (G.ensureEastForageReportRequest) G.ensureEastForageReportRequest(state, now());
       const d = G.npcDialogue(state, tile.npc, (npcLineIdx[tile.npc] || 1) - 1);
       const seen = state.story.dialogueSeen && state.story.dialogueSeen[tile.npc];
       const req = d && d.request && d.request.wants ? d.request : null; // 只有進行中委託才有 wants
@@ -1263,7 +1364,7 @@
           const r = G.fulfillNpcRequest(state, tile.npc, now());
           if (r.ok) {
             const cfg = (window.NPC_REQUESTS || {})[tile.npc];
-            const doneLine = (cfg && cfg.flavorDone && cfg.flavorDone[0]) || "謝謝你！";
+            const doneLine = r.doneLine || (cfg && cfg.flavorDone && cfg.flavorDone[0]) || "謝謝你！";
             toast("🎁 " + npc.name + "：「" + doneLine + "」+" + fmtNum(r.coins) + " 🪙");
             pushDialogueLog({ name: npc.name, line: doneLine });
             playAction("use", state.player.facing); afterChange(true); renderTileContext();
@@ -1302,6 +1403,23 @@
       box.innerHTML = `<div class="tc-title">🌳 ${ev.name}</div><div class="tc-desc">${ev.desc}${claimed ? "（已探索）" : ""}</div>
         <div class="tc-actions"><button class="btn buy small" id="useEventBtn">走過去</button></div>`;
       $("useEventBtn").onclick = () => useEvent(tile);
+      return;
+    }
+    // 0.85) Stage 12：東林採集點
+    if (tile.forage) {
+      const node = (window.FORAGE_NODES || []).find((n) => n.id === tile.forage);
+      const status = G.forageNodeStatus ? G.forageNodeStatus(state, tile.forage, now()) : null;
+      const def = node ? itemDef(node.itemId) : null;
+      const locked = !(state.flags && state.flags.bridgeRepaired);
+      const undiscovered = !locked && !(state.flags && state.flags.eastForageDiscovered);
+      const desc = locked ? "先修好斷橋才能靠近東林採集點。"
+        : undiscovered ? "先辨認這處採集點，之後就能定期採樣。"
+        : status && !status.ready ? "採集點正在恢復，還要 " + fmtTime(status.remainingMs) + "。"
+        : "可採集 " + (def ? def.name : "東林材料") + "，回報後會進入鎮民委託池。";
+      box.innerHTML = `<div class="tc-title">${def ? def.emoji : "🌿"} ${node ? node.name : "東林採集點"}</div>
+        <div class="tc-desc">${desc}</div>
+        <div class="tc-actions"><button class="btn buy small" id="useForageBtn" ${locked ? "disabled" : ""}>${undiscovered ? "走過去辨認" : "走過去採集"}</button></div>`;
+      $("useForageBtn").onclick = () => useForage(tile);
       return;
     }
     // 0.9) Stage 5：東林封鎖區（未修橋）
@@ -1657,6 +1775,11 @@
       playerAction: () => state.player.action,
       refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
       clickTile: (id) => handleMapClick(id),
+      focusQuestTarget: () => {
+        const targetId = G.questMarkerTile ? G.questMarkerTile(state, now()) : null;
+        if (targetId) focusCameraOnTile(targetId);
+        return targetId;
+      },
       setTool: (t) => setTool(t),
       moving: () => !!moveTimer,
       vfxSpawns: () => vfxSpawnCount,
