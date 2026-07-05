@@ -26,6 +26,7 @@
   let selectedTileId = null;
   let moveTimer = null;
   let atlasReady = false;
+  let journalDetailSelection = null;
   const plotEls = []; // 農地格 DOM 快取
   const tileEls = []; // 地圖磚 DOM 快取
 
@@ -50,6 +51,14 @@
     if (n < 1000) return "" + n;
     if (n < 1e6) return (n / 1000).toFixed(n < 1e4 ? 1 : 0) + "k";
     return (n / 1e6).toFixed(1) + "M";
+  }
+  function fmtDate(ms) {
+    if (!ms) return "尚未發現";
+    try {
+      return new Date(ms).toLocaleString("zh-TW", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+    } catch (e) {
+      return "已記錄";
+    }
   }
   function toast(msg) {
     const t = document.createElement("div");
@@ -414,6 +423,23 @@
     }).join("");
     return `<div class="bridge-materials forage-status" data-audit="forage-status" data-ready="${st.collectedAll}">${rows}</div>`;
   }
+  function eastDeepCostRowsHtml(compact) {
+    if (!G.eastDeepStatus) return "";
+    const st = G.eastDeepStatus(state);
+    const label = { coins: "金幣", wood: "木材", stone: "石頭", compost: "堆肥" };
+    const icon = { coins: "🪙" };
+    const rows = Object.keys(st.cost).map((k) => {
+      const have = st.have[k] || 0;
+      const ready = (st.missing[k] || 0) <= 0;
+      const mat = window.MATERIALS[k];
+      return `<div class="bm-row ${ready ? "ready" : "miss"}" data-deep-cost="${k}" data-missing="${st.missing[k]}">
+        <span>${icon[k] || (mat && mat.emoji) || ""} ${label[k] || (mat && mat.name) || k}</span>
+        <b>${have}/${st.cost[k]}${ready ? " 完成" : " 缺 " + st.missing[k]}</b>
+        ${compact ? "" : `<span class="bm-src">${ready ? "已備齊" : "清障與經營取得"}</span>`}
+      </div>`;
+    }).join("");
+    return `<div class="bridge-materials deep-status" data-audit="east-deep-cost" data-ready="${st.ready}" data-unlocked="${st.unlocked}">${rows}</div>`;
+  }
   function questActionText(cur) {
     if (!cur) return "自由經營：繼續種植、接訂單、照顧動物。";
     if (cur.id === "intro_reopen_farm") return "主動作：點金色箭頭旁的告示牌，走過去閱讀。";
@@ -523,30 +549,63 @@
   function renderJournal() {
     const box = $("journalPanel"); if (!box) return;
     const j = G.journalSummary(state, now());
-    const item = (discovered, html, category) =>
-      `<div class="journal-item ${discovered ? "found" : "undiscovered"}" data-audit="journal-item" data-category="${category}" data-discovered="${discovered}">${html}</div>`;
+    const item = (discovered, html, category, id) =>
+      `<button type="button" class="journal-item ${discovered ? "found" : "undiscovered"}" data-audit="journal-item" data-category="${category}" data-journal-id="${id || ""}" data-discovered="${discovered}">${html}</button>`;
     const head = (label, key) => {
       const c = j.completion && j.completion[key];
       return `<div class="story-kicker">${label}${c ? ` <span class="journal-pct" data-audit="journal-completion" data-category="${key}">${c.done}/${c.total} · ${c.pct}%</span>` : ""}</div>`;
     };
+    const findEntry = (category, id) => {
+      const map = { crop: j.crops, product: j.products, forage: j.forage, collectible: j.collectibles };
+      return ((map[category] || []).find((x) => x.id === id)) || null;
+    };
+    const detailHtml = () => {
+      if (!journalDetailSelection) return `<div class="journal-detail muted" data-audit="journal-detail">點作物或採集物查看來源、季節、用途與首次發現時間。</div>`;
+      const entry = findEntry(journalDetailSelection.category, journalDetailSelection.id);
+      if (!entry) return "";
+      const discovered = entry.discovered !== false && entry.unlocked !== false;
+      if (journalDetailSelection.category === "collectible") {
+        return `<div class="journal-detail" data-audit="journal-detail" data-category="collectible" data-discovered="${entry.unlocked}">
+          <div class="jd-title">${entry.unlocked ? entry.emoji + " " + entry.name : "◼ 未取得收藏品"}</div>
+          <div class="jd-row"><b>來源</b><span>${entry.source}</span></div>
+          <div class="jd-row"><b>用途</b><span>純收藏，不產生收益</span></div>
+          <div class="jd-note">${entry.unlocked ? entry.desc : "先完成對應探索。"} </div>
+        </div>`;
+      }
+      if (!discovered) {
+        return `<div class="journal-detail undiscovered" data-audit="journal-detail" data-category="${journalDetailSelection.category}" data-discovered="false">
+          <div class="jd-title">◼ 尚未發現</div>
+          <div class="jd-row"><b>來源提示</b><span>${entry.sourceHint || "繼續探索農場"}</span></div>
+        </div>`;
+      }
+      return `<div class="journal-detail" data-audit="journal-detail" data-category="${journalDetailSelection.category}" data-discovered="true">
+        <div class="jd-title">${entry.emoji || ""} ${entry.name}</div>
+        <div class="jd-row"><b>來源</b><span>${entry.source || entry.sourceHint || "農場"}</span></div>
+        <div class="jd-row"><b>季節</b><span>${entry.season || "全年"}</span></div>
+        <div class="jd-row"><b>用途</b><span>${(entry.usage || []).join("／") || "收藏"}</span></div>
+        <div class="jd-row"><b>首次發現</b><span data-audit="journal-first-seen">${fmtDate(entry.firstDiscoveredAt)}</span></div>
+      </div>`;
+    };
     const cropRows = j.crops.map((c) => {
-      if (!c.unlocked) return item(false, "🔒 未解鎖", "crop");
-      if (!c.discovered) return item(false, "❔ 尚未發現", "crop");
-      return item(true, `${c.emoji} ${c.name}`, "crop");
+      if (!c.unlocked) return item(false, "🔒 未解鎖", "crop", c.id);
+      if (!c.discovered) return item(false, "❔ 尚未發現", "crop", c.id);
+      return item(true, `${c.emoji} ${c.name}`, "crop", c.id);
     }).join("");
     const productRows = j.products.map((p) =>
-      item(p.discovered, p.discovered ? `${p.emoji} ${p.name}` : "❔ 尚未發現", "product")).join("");
+      item(p.discovered, p.discovered ? `${p.emoji} ${p.name}` : "❔ 尚未發現", "product", p.id)).join("");
     const forageRows = (j.forage || []).map((f) =>
-      item(f.discovered, f.discovered ? `${f.emoji} ${f.name}${f.season ? "・" + f.season : ""}` : "◼ 未採集", "forage")).join("");
+      item(f.discovered, f.discovered ? `${f.emoji} ${f.name}${f.season ? "・" + f.season : ""}` : "◼ 未採集", "forage", f.id)).join("");
     const npcMetCount = j.npcs.filter((n) => n.met).length;
     const npcRows = j.npcs.map((n) => item(n.met,
-      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}${n.sideQuest && n.sideQuest.completed ? "・支線完成" : ""}` : "❔ 尚未遇見", "npc")).join("");
+      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}${n.sideQuest && n.sideQuest.completed ? "・支線完成" : ""}` : "❔ 尚未遇見", "npc", n.id)).join("");
     // discovered 要用 everGood||everHappy，不能只看 everHappy——不然「曾達良好」的文字
     // 顯示了，但 CSS class/data-discovered 卻標成 undiscovered，兩者互相矛盾
     const animalRows = j.animals.map((a) => item(a.everGood || a.everHappy,
-      `${a.everHappy ? "💛" : a.everGood ? "🤍" : "⬜"} ${a.name}${a.everHappy ? "・曾達開心" : a.everGood ? "・曾達良好" : "・尚未達標"}`, "animal")).join("");
+      `${a.everHappy ? "💛" : a.everGood ? "🤍" : "⬜"} ${a.name}${a.everHappy ? "・曾達開心" : a.everGood ? "・曾達良好" : "・尚未達標"}`, "animal", a.id)).join("");
     const achRows = j.achievements.map((a) => item(a.unlocked,
-      a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement")).join("");
+      a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement", a.id)).join("");
+    const collectibleRows = (j.collectibles || []).map((c) => item(c.unlocked,
+      c.unlocked ? `${c.emoji} ${c.name}` : "◼ 未取得收藏品", "collectible", c.id)).join("");
     const chapterLine = (label, ch) => ch.unlocked ? `<div>${label} ${ch.done}/${ch.total}</div>` : `<div>🔒 ${label}未解鎖</div>`;
     box.innerHTML = `<div class="story-card journal-card">
       <div class="story-kicker">章節完成度</div>
@@ -555,23 +614,35 @@
         ${chapterLine("第二章", j.chapters.chapter2)}
         ${chapterLine("第三章", j.chapters.chapter3)}
       </div>
+      ${detailHtml()}
       ${head("🌾 作物圖鑑", "crops")}<div class="journal-grid">${cropRows}</div>
       ${head("🥚 產物與品質圖鑑", "products")}<div class="journal-grid">${productRows}</div>
       ${head("🌲 東林採集", "forage")}<div class="journal-grid" data-audit="journal-forage">${forageRows}</div>
       ${head("🧑 鎮民名錄（" + npcMetCount + "/" + j.npcs.length + "）", "npcs")}<div class="journal-grid">${npcRows}</div>
       ${head("📬 鎮民支線", "npcSideQuests")}<div class="journal-grid">${j.npcs.map((n) => {
         const sq = n.sideQuest;
-        return item(!!(sq && sq.completed), sq ? `${sq.completed ? "✅" : sq.status === "active" ? "📌" : sq.status === "available" ? "📮" : "🔒"} ${n.name}・${sq.title}` : "❔ 尚無支線", "npc-sidequest");
+        const lore = sq && sq.loreUnlocked ? `<span class="sq-lore">・${sq.lore}</span>` : "";
+        return item(!!(sq && sq.completed), sq ? `${sq.completed ? "✅" : sq.status === "active" ? "📌" : sq.status === "available" ? "📮" : "🔒"} ${n.name}・${sq.chainTitle || sq.title} ${sq.completedSteps}/${sq.totalSteps}${lore}` : "❔ 尚無支線", "npc-sidequest", n.id);
       }).join("")}</div>
       ${head("🐾 動物親密度里程碑", "animals")}<div class="journal-grid">${animalRows}</div>
       ${head("🌉 世界旗標", "world")}
       <div class="journal-grid">
-        ${item(j.world.bridgeRepaired, j.world.bridgeRepaired ? "✅ 東橋已修復" : "🔒 東橋未修復", "world")}
-        ${item(j.world.eastClearingClaimed, j.world.eastClearingClaimed ? "✅ 東林空地已探索" : "🔒 東林空地未探索", "world")}
+        ${item(j.world.bridgeRepaired, j.world.bridgeRepaired ? "✅ 東橋已修復" : "🔒 東橋未修復", "world", "bridge")}
+        ${item(j.world.eastClearingClaimed, j.world.eastClearingClaimed ? "✅ 東林空地已探索" : "🔒 東林空地未探索", "world", "east_clearing")}
+        ${item(j.world.eastDeepUnlocked, j.world.eastDeepUnlocked ? "✅ 東林深處已解鎖" : "🔒 東林深處未解鎖", "world", "east_deep")}
       </div>
+      ${head("📜 收藏品", "collectibles")}<div class="journal-grid" data-audit="journal-collectibles">${collectibleRows}</div>
       ${head("🏆 成就", "achievements")}
       <div class="journal-grid">${achRows}</div>
     </div>`;
+    box.querySelectorAll("[data-journal-id]").forEach((el) => {
+      const cat = el.dataset.category;
+      if (!["crop", "product", "forage", "collectible"].includes(cat)) return;
+      el.addEventListener("click", () => {
+        journalDetailSelection = { category: cat, id: el.dataset.journalId };
+        renderJournal();
+      });
+    });
   }
 
   // ====================================================================
@@ -625,7 +696,8 @@
       const plot = tile.plotIndex != null ? state.plots[tile.plotIndex] : null;
       const prog = plot && plot.cropId ? G.getCropProgress(state, plot, now()) : null;
       const locked = tile.plotIndex != null && tile.plotIndex >= active;
-      const lockedArea = tile.region === "east" && !(state.flags && state.flags.bridgeRepaired); // 東林封鎖區
+      const lockedArea = (tile.region === "east" && !(state.flags && state.flags.bridgeRepaired))
+        || (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)); // 東林/深處封鎖區
       let cls = "gtile " + tile.terrain;
       if (locked) cls += " locked";
       if (lockedArea) cls += " locked-area";
@@ -1098,6 +1170,25 @@
     spawnRing(tile.id, true);
     walkPath(plan.path, () => {
       const ev = window.EVENTS[tile.event];
+      if (tile.event === "east_deep_gate") {
+        const st = G.eastDeepStatus ? G.eastDeepStatus(state) : null;
+        if (st && st.unlocked) {
+          playAction("use", state.player.facing);
+          toast("🌲 東林深處小徑已開通");
+          renderTileContext(); updateMap(now()); return;
+        }
+        const r = G.unlockEastDeep ? G.unlockEastDeep(state, now()) : { ok: false, reason: "unknown" };
+        if (r.ok) {
+          playAction("build", state.player.facing);
+          spawnVfx(tile.id, "valid_ring");
+          toast("🌲 東林深處開通，收藏「東林年輪拓印」");
+          buildStaticObjects(); paintGround(); afterChange(true); renderTileContext(); return;
+        }
+        if (r.reason === "story") toast("先完成東林採集回報，再整理深處小徑。");
+        else if (r.reason === "cost") toast("東林深處材料不足，查看缺口清單。");
+        else toast("目前無法整理東林深處。");
+        renderTileContext(); renderQuestDock(); return;
+      }
       const r = G.triggerEvent(state, tile.event, now());
       if (!r.ok) return;
       if (!r.already && r.reward) {
@@ -1137,6 +1228,8 @@
         toast("先辨認這個採集點。");
       } else if (r.reason === "cooldown") {
         toast("採集點還在恢復，稍後再來。");
+      } else if (r.reason === "locked_deep") {
+        toast("先整理東林深處小徑，才能採這裡。");
       } else {
         toast("現在還不能採集。");
       }
@@ -1224,6 +1317,7 @@
   }
   function blockedReason(tile) {
     if (tile.terrain === "water") return "🌊 水域擋路（需架橋）";
+    if (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)) return "🌲 東林深處尚未開通";
     if (tile.object) return window.OBSTACLES[tile.object].emoji + " 障礙擋路（用清除工具）";
     if (tile.buildingId) return "這裡有建築";
     return "無法前往";
@@ -1245,6 +1339,7 @@
       const node = (window.FORAGE_NODES || []).find((n) => n.id === tile.forage);
       toast("🌿 " + (node ? node.name : "採集點") + "・走過去採集");
     }
+    else if (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)) { toast("🌲 東林深處未開通・先整理入口小徑"); }
     else if (tile.region === "east" && !state.flags.bridgeRepaired) { toast("⛓️ 東林封鎖中・先修好斷橋才能進入"); }
     else if (tile.object) { const o = window.OBSTACLES[tile.object]; toast(`${o.emoji}${o.name}・${o.desc}`); }
     else { toast(`${terr.name}・${terr.desc}`); }
@@ -1357,10 +1452,11 @@
       const log = (state.npcRequestLog || {})[tile.npc];
       const doneCount = (log && log.fulfilledCount) || 0;
       const sq = G.npcSideQuestStatus ? G.npcSideQuestStatus(state, tile.npc) : null;
-      const sqText = sq ? (sq.status === "done" ? "支線完成：" + sq.title
-        : sq.status === "active" ? "支線進行中：" + sq.title
-        : sq.status === "available" ? "支線可接：" + sq.title
-        : "支線未解鎖：" + sq.title) : "";
+      const sqProg = sq && sq.totalSteps ? `（${sq.status === "done" ? sq.totalSteps : sq.stepIndex}/${sq.totalSteps}）` : "";
+      const sqText = sq ? (sq.status === "done" ? "支線完成：" + (sq.chainTitle || sq.title) + sqProg
+        : sq.status === "active" ? "支線進行中：" + sq.title + sqProg
+        : sq.status === "available" ? "支線可接：" + sq.title + sqProg
+        : "支線未解鎖：" + sq.title + sqProg) : "";
       const reqHtml = req ? `<div class="npc-request" data-audit="npc-request" data-npc="${tile.npc}">
           <div class="nr-wants">${Object.entries(req.wants).map(([id, q]) => {
             const have = state.storage.items[id] || 0;
@@ -1419,6 +1515,16 @@
     // 0.8) Stage 5：事件點（東林古樹）
     if (tile.event) {
       const ev = window.EVENTS[tile.event];
+      if (tile.event === "east_deep_gate") {
+        const st = G.eastDeepStatus ? G.eastDeepStatus(state) : null;
+        const lockedWhy = st && !st.prerequisites ? "（需先完成東林採集回報）" : "";
+        box.innerHTML = `<div class="tc-title">🌲 ${ev.name}</div>
+          <div class="tc-desc">${ev.desc}${st && st.unlocked ? "（已開通）" : lockedWhy}</div>
+          ${st && !st.unlocked ? eastDeepCostRowsHtml(false) : `<div class="nr-history">稀有採集點已開放，收藏品已登錄。</div>`}
+          <div class="tc-actions"><button class="btn buy small" id="useEventBtn" ${st && (st.ready || st.unlocked) ? "" : "disabled"}>${st && st.unlocked ? "走過去" : "整理小徑"}</button></div>`;
+        $("useEventBtn").onclick = () => useEvent(tile);
+        return;
+      }
       const claimed = state.flags.eventsClaimed && state.flags.eventsClaimed[tile.event];
       box.innerHTML = `<div class="tc-title">🌳 ${ev.name}</div><div class="tc-desc">${ev.desc}${claimed ? "（已探索）" : ""}</div>
         <div class="tc-actions"><button class="btn buy small" id="useEventBtn">走過去</button></div>`;
@@ -1431,18 +1537,26 @@
       const status = G.forageNodeStatus ? G.forageNodeStatus(state, tile.forage, now()) : null;
       const def = node ? itemDef(node.itemId) : null;
       const locked = !(state.flags && state.flags.bridgeRepaired);
+      const deepLocked = status && status.unlocked === false;
       const undiscovered = !locked && !(state.flags && state.flags.eastForageDiscovered);
       const desc = locked ? "先修好斷橋才能靠近東林採集點。"
+        : deepLocked ? "這是東林深處的稀有採集點，先整理深處入口。"
         : undiscovered ? "先辨認這處採集點，之後就能定期採樣。"
         : status && !status.ready ? "採集點正在恢復，還要 " + fmtTime(status.remainingMs) + "。"
         : "可採集 " + (def ? def.name : "東林材料") + "，回報後會進入鎮民委託池。";
       box.innerHTML = `<div class="tc-title">${def ? def.emoji : "🌿"} ${node ? node.name : "東林採集點"}</div>
         <div class="tc-desc">${desc}</div>
-        <div class="tc-actions"><button class="btn buy small" id="useForageBtn" ${locked ? "disabled" : ""}>${undiscovered ? "走過去辨認" : "走過去採集"}</button></div>`;
+        <div class="tc-actions"><button class="btn buy small" id="useForageBtn" ${locked || deepLocked ? "disabled" : ""}>${undiscovered ? "走過去辨認" : "走過去採集"}</button></div>`;
       $("useForageBtn").onclick = () => useForage(tile);
       return;
     }
     // 0.9) Stage 5：東林封鎖區（未修橋）
+    if (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)) {
+      box.innerHTML = `<div class="tc-title">🌲 東林深處（未開通）</div>
+        <div class="tc-desc">枝葉和舊踏板擋住路線，先到深處入口整理小徑。</div>
+        ${eastDeepCostRowsHtml(false)}`;
+      return;
+    }
     if (tile.region === "east" && !state.flags.bridgeRepaired) {
       box.innerHTML = `<div class="tc-title">⛓️ 東林（封鎖中）</div>
         <div class="tc-desc">這片東邊的林地被河隔開了。先修好斷橋才能進入探索。</div>`;

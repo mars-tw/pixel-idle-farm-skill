@@ -536,7 +536,8 @@ async function run() {
     assert(exploreRes.playerX >= 17 && exploreRes.camX < -50, `角色進入東林、camera 跟隨平移（playerX=${exploreRes.playerX} camX=${exploreRes.camX}）`);
     assert(exploreRes.quest === "discover_east_forage" && exploreRes.ch2 === "2/5",
       `探索後接東林採集鏈（第二章 ${exploreRes.ch2}，quest=${exploreRes.quest}）`);
-    assert(exploreRes.lockedAfter === 0, "修橋後封鎖區解除（locked-area 清零）");
+    assert(exploreRes.lockedAfter > 0 && exploreRes.lockedAfter < 30,
+      `修橋後東林主區解除封鎖，只保留東林深處門檻區（locked-area=${exploreRes.lockedAfter}）`);
 
     // 13b. 東林採集鏈：辨認 → 採集兩種東林限定材料 → 向商人回報
     const forageDiscover = await page.evaluate(() => {
@@ -715,7 +716,7 @@ async function run() {
     const ch3Phase = await page.evaluate(() => window.Game.npcPhase(window.__farm.state()));
     assert(ch3Phase === "ch3done", `第三章完成後 NPC 對話階段為 ch3done（實際 ${ch3Phase}）`);
 
-    // 20. Stage 10.1/R15：走近老農，優先生成一次性支線委託（走近觸發，非按鈕）
+    // 20. Stage 10.1/R19：走近老農，優先生成三段連鎖支線委託（走近觸發，非按鈕）
     const elderTile2 = await page.evaluate(() => {
       const F = window.__farm; const st = F.state();
       const t = st.map.tiles.find((x) => x.npc === "elder");
@@ -730,10 +731,11 @@ async function run() {
       const bubble = document.querySelector('[data-audit="dialogue-bubble"][data-npc="elder"]');
       const sq = window.Game.npcSideQuestStatus(st, "elder");
       return { hasReq: !!req, wants: req ? req.wants : null, sideQuestId: req ? req.sideQuestId : null,
-        sideStatus: sq ? sq.status : null, bubbleText: bubble ? bubble.querySelector(".nb-line").textContent : null };
+        sideStatus: sq ? sq.status : null, stepIndex: sq ? sq.stepIndex : null, totalSteps: sq ? sq.totalSteps : null,
+        bubbleText: bubble ? bubble.querySelector(".nb-line").textContent : null };
     });
-    assert(reqGen.hasReq === true && !!reqGen.sideQuestId && reqGen.sideStatus === "active",
-      `走近老農後自動生成 R15 支線委託（sideQuest=${reqGen.sideQuestId} status=${reqGen.sideStatus}）`);
+    assert(reqGen.hasReq === true && !!reqGen.sideQuestId && reqGen.sideStatus === "active" && reqGen.stepIndex === 1 && reqGen.totalSteps === 3,
+      `走近老農後自動生成 R19 支線第 1/3 段（sideQuest=${reqGen.sideQuestId} status=${reqGen.sideStatus}）`);
     assert(!!reqGen.bubbleText && reqGen.bubbleText.includes("雞蛋"), `對話泡泡顯示支線委託內容（${reqGen.bubbleText}）`);
 
     // 21. 開啟磚資訊面板：委託卡顯示、庫存不足時交付按鈕 disabled
@@ -748,25 +750,42 @@ async function run() {
     });
     assert(cardBefore.hasCard === true, "磚資訊側欄出現 NPC 委託卡");
     assert(cardBefore.disabled === true, "庫存不足時交付按鈕為 disabled");
-    assert(cardBefore.sideStatus === "active" && cardBefore.text.includes("雞舍巡查"),
+    assert(cardBefore.sideStatus === "active" && cardBefore.text.includes("雞舍巡查") && cardBefore.text.includes("1/3"),
       `磚資訊側欄顯示支線狀態（${cardBefore.sideStatus}）`);
 
-    // 22. 補足庫存後交付委託：coins 增加、委託消失、npcRequestLog 記錄完成次數
+    // 22. 補足庫存後完成老農三段支線：coins 增加、3/3 完成、背景文本解鎖
     const fulfillResult = await page.evaluate(() => {
       const st = window.__farm.state();
-      const req = st.npcRequests.elder;
-      for (const [itemId, qty] of Object.entries(req.wants)) st.storage.items[itemId] = qty;
-      window.__farm.refresh();
       const before = st.coins;
+      const doneSteps = [];
+      function fill(req) {
+        for (const [itemId, qty] of Object.entries(req.wants)) st.storage.items[itemId] = (st.storage.items[itemId] || 0) + qty;
+      }
+      let req = st.npcRequests.elder;
+      fill(req);
+      window.__farm.refresh();
       document.getElementById("fulfillReqBtn").click();
-      return { before, after: window.__farm.state().coins, gone: !window.__farm.state().npcRequests.elder,
+      doneSteps.push(window.Game.npcSideQuestStatus(st, "elder").completedSteps);
+      for (let i = 0; i < 2; i++) {
+        req = window.Game.ensureNpcSideQuestRequest(st, "elder", Date.now() + i + 1);
+        fill(req);
+        window.Game.fulfillNpcRequest(st, "elder", Date.now() + i + 11);
+        doneSteps.push(window.Game.npcSideQuestStatus(st, "elder").completedSteps);
+      }
+      window.__farm.refresh();
+      const sq = window.Game.npcSideQuestStatus(st, "elder");
+      return { before, after: st.coins, gone: !st.npcRequests.elder,
         fulfilledCount: (window.__farm.state().npcRequestLog.elder || {}).fulfilledCount,
-        sideDone: window.Game.npcSideQuestStatus(window.__farm.state(), "elder").completed };
+        sideDone: sq.completed, completedSteps: sq.completedSteps, totalSteps: sq.totalSteps,
+        loreUnlocked: sq.loreUnlocked, lore: sq.lore, doneSteps };
     });
     assert(fulfillResult.after > fulfillResult.before, `交付委託後 coins 增加（${fulfillResult.before} → ${fulfillResult.after}）`);
     assert(fulfillResult.gone === true, "交付後委託從 state.npcRequests 移除");
-    assert(fulfillResult.fulfilledCount === 1, `npcRequestLog 完成次數為 1（實際 ${fulfillResult.fulfilledCount}）`);
-    assert(fulfillResult.sideDone === true, "老農 R15 支線完成狀態寫入紀錄");
+    assert(fulfillResult.fulfilledCount === 3, `npcRequestLog 完成次數為 3（實際 ${fulfillResult.fulfilledCount}）`);
+    assert(fulfillResult.sideDone === true && fulfillResult.completedSteps === 3 && fulfillResult.totalSteps === 3,
+      `老農 R19 支線 3/3 完成（steps=${fulfillResult.doneSteps.join(">")}）`);
+    assert(fulfillResult.loreUnlocked === true && fulfillResult.lore.includes("照護筆記"),
+      "完成三段後解鎖老農小鎮背景文本");
 
     // 23. 交付後立刻再走近老農：仍在冷卻中，不會生成新委託，磚資訊不顯示委託卡
     const afterCooldownTile = await page.evaluate(() => {
@@ -783,7 +802,7 @@ async function run() {
       const box = document.getElementById("tileContext");
       return !!(box && box.querySelector(".npc-request"));
     });
-    assert(cardAfter === false, "交付後立刻再訪冷卻中，不顯示委託卡（未生成新委託）");
+    assert(cardAfter === false, "三段支線完成後立刻再訪，不顯示新的老農委託卡");
 
     // 24. 放棄委託（用 mayor，避免跟 elder 的冷卻時間軸互相干擾）：點放棄後卡片消失、立刻進冷卻
     const mayorTile = await page.evaluate(() => {
@@ -813,7 +832,50 @@ async function run() {
     const overflowAfterRequest = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     assert(overflowAfterRequest <= 2, `NPC 委託 UI 不造成水平溢出（${overflowAfterRequest}）`);
 
-    // 26. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
+    // 26. R19：東林深處用 UI 入口解鎖，採集 1 個低頻稀有點並取得收藏品
+    const deepGate = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      st.coins = Math.max(st.coins, 90);
+      st.materials.wood = Math.max(st.materials.wood || 0, 4);
+      st.materials.stone = Math.max(st.materials.stone || 0, 2);
+      F.refresh();
+      const t = st.map.tiles.find((x) => x.event === "east_deep_gate");
+      F.clickTile(t.id);
+      return { gateId: t.id, status: window.Game.eastDeepStatus(st) };
+    });
+    await waitArrive(page, 9000);
+    await sleep(500);
+    const deepUnlock = await page.evaluate(() => {
+      const st = window.__farm.state();
+      return { unlocked: !!st.flags.eastDeepUnlocked, collectible: !!(st.collections && st.collections.east_deep_rubbing),
+        gateClaimed: !!(st.flags.eventsClaimed && st.flags.eventsClaimed.east_deep_gate),
+        costPanel: document.querySelector('[data-audit="east-deep-cost"]') ? document.querySelector('[data-audit="east-deep-cost"]').getAttribute("data-unlocked") : "" };
+    });
+    assert(deepUnlock.unlocked && deepUnlock.collectible && deepUnlock.gateClaimed,
+      `東林深處入口可由 UI 解鎖並取得收藏品（gate=${deepGate.gateId}）`);
+
+    const rareClick = await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const t = st.map.tiles.find((x) => x.forage === "deep_mooncap_ring");
+      F.clickTile(t.id);
+      return { tileId: t.id };
+    });
+    await waitArrive(page, 9000);
+    await sleep(500);
+    const rareResult = await page.evaluate(() => {
+      const st = window.__farm.state();
+      const js = window.Game.journalSummary(st, Date.now());
+      return {
+        mooncap: st.storage.items.mooncap_spore || 0,
+        discovered: !!(st.stats.collected.mooncap_spore > 0),
+        firstSeen: js.forage.find((f) => f.id === "mooncap_spore").firstDiscoveredAt,
+        completion: (() => { const c = js.completion.forage; return `${c.done}/${c.total} ${c.pct}%`; })(),
+      };
+    });
+    assert(rareResult.mooncap >= 1 && rareResult.discovered && rareResult.firstSeen > 0,
+      `東林深處稀有採集可完成並寫入首次發現時間（tile=${rareClick.tileId}）`);
+
+    // 27. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
     const rainState = await page.evaluate(() => {
       const st = window.__farm.state();
       st.level = Math.max(st.level, 5); // 天氣 Lv5 解鎖，故事鏈跑到這裡不一定已經到 Lv5
@@ -865,13 +927,13 @@ async function run() {
     assert(clearState.cls === "" && clearState.data === "clear", `晴朗：#weatherLayer 清空特效 class（class="${clearState.cls}" data-weather=${clearState.data}）`);
     assert(clearState.overflow <= 2, `晴朗時無水平溢出（${clearState.overflow}）`);
 
-    // 27. Stage 11：農場圖鑑——用故事鏈跑到這裡已經真實累積的發現狀態驗證，不刻意灌資料
+    // 28. Stage 11/R19：農場圖鑑——用故事鏈跑到這裡已經真實累積的發現狀態驗證
     await page.click('[data-tab="journal"]');
     await sleep(300);
     const journalState = await page.evaluate(() => {
       const items = [...document.querySelectorAll('[data-audit="journal-item"]')];
       const byCat = (cat) => items.filter((el) => el.dataset.category === cat);
-      const crop = byCat("crop"), product = byCat("product"), npc = byCat("npc"), forage = byCat("forage"), side = byCat("npc-sidequest");
+      const crop = byCat("crop"), product = byCat("product"), npc = byCat("npc"), forage = byCat("forage"), side = byCat("npc-sidequest"), collectible = byCat("collectible");
       const completion = (cat) => {
         const el = document.querySelector(`[data-audit="journal-completion"][data-category="${cat}"]`);
         return el ? el.textContent : "";
@@ -886,8 +948,10 @@ async function run() {
         forageHidden: forage.filter((el) => el.dataset.discovered === "false" && el.textContent.includes("未採集")).length,
         forageCompletion: completion("forage"),
         cropCompletion: completion("crops"),
-        sideDone: side.some((el) => el.dataset.discovered === "true" && el.textContent.includes("老農")),
+        sideDone: side.some((el) => el.dataset.discovered === "true" && el.textContent.includes("老農") && el.textContent.includes("3/3")),
         sideCompletion: completion("npcSideQuests"),
+        collectibleDone: collectible.some((el) => el.dataset.discovered === "true" && el.textContent.includes("東林年輪拓印")),
+        collectibleCompletion: completion("collectibles"),
         npcMetCount: npc.filter((el) => el.dataset.discovered === "true").length,
         npcUnmetCount: npc.filter((el) => el.dataset.discovered === "false").length,
         merchantMet: npc.some((el) => el.dataset.discovered === "true" && el.textContent.includes("商人")),
@@ -901,18 +965,41 @@ async function run() {
     assert(journalState.cropHasUndiscovered === true, "作物圖鑑仍有未發現項目（沒有全部提前曝光）");
     assert(journalState.cropCompletion.includes("/6"), `作物圖鑑完成度包含 R15 玉米後的 6 作物總數（${journalState.cropCompletion}）`);
     assert(journalState.productFound === true, "產物圖鑑顯示已收集過的動物產品");
-    assert(journalState.forageCount === 4 && journalState.forageFound === 2 && journalState.forageHidden === 2,
-      `東林採集圖鑑顯示 2/4 已採、2 個未採集剪影（found=${journalState.forageFound} hidden=${journalState.forageHidden}）`);
-    assert(journalState.forageCompletion.includes("2/4") && journalState.forageCompletion.includes("50%"),
-      `東林採集完成度顯示 2/4 · 50%（${journalState.forageCompletion}）`);
+    assert(journalState.forageCount === 6 && journalState.forageFound === 3 && journalState.forageHidden === 3,
+      `東林採集圖鑑顯示 3/6 已採、3 個未採集剪影（found=${journalState.forageFound} hidden=${journalState.forageHidden}）`);
+    assert(journalState.forageCompletion.includes("3/6") && journalState.forageCompletion.includes("50%"),
+      `東林採集完成度顯示 3/6 · 50%（${journalState.forageCompletion}）`);
     assert(journalState.sideDone === true && journalState.sideCompletion.includes("1/4"),
-      `鎮民支線圖鑑記錄老農完成且完成度 1/4（${journalState.sideCompletion}）`);
+      `鎮民支線圖鑑記錄老農 3/3 完成且完成度 1/4（${journalState.sideCompletion}）`);
+    assert(journalState.collectibleDone === true && journalState.collectibleCompletion.includes("1/1"),
+      `收藏品圖鑑記錄東林年輪拓印（${journalState.collectibleCompletion}）`);
     assert(journalState.npcMetCount === 4 && journalState.npcUnmetCount === 0,
       `鎮民名錄：跑完故事鏈與回報流程後 4 位鎮民皆為真實互動遇見（met=${journalState.npcMetCount} unmet=${journalState.npcUnmetCount}）`);
     assert(journalState.merchantMet === true, "商人因東林回報流程列為已遇見");
     assert(journalState.chickenHappy === true, "動物親密度里程碑：起始雞的 bestAffinity 曾達開心門檻");
     assert(journalState.bridgeFlag === true, "世界旗標：東橋已修復狀態正確");
     assert(journalState.overflow <= 2, `圖鑑分頁無水平溢出（${journalState.overflow}）`);
+
+    const journalDetailState = await page.evaluate(() => {
+      const clickAndText = (sel) => {
+        const el = document.querySelector(sel);
+        if (!el) return "";
+        el.click();
+        const detail = document.querySelector('[data-audit="journal-detail"]');
+        return detail ? detail.innerText : "";
+      };
+      const wheat = clickAndText('[data-category="crop"][data-journal-id="wheat"]');
+      const hiddenMint = clickAndText('[data-category="forage"][data-journal-id="river_mint"]');
+      const collectible = clickAndText('[data-category="collectible"][data-journal-id="east_deep_rubbing"]');
+      return { wheat, hiddenMint, collectible, overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(journalDetailState.wheat.includes("來源") && journalDetailState.wheat.includes("首次發現") && journalDetailState.wheat.includes("市集訂單"),
+      "收藏冊詳情頁顯示作物來源/用途/首次發現時間");
+    assert(journalDetailState.hiddenMint.includes("尚未發現") && journalDetailState.hiddenMint.includes("來源提示") && !journalDetailState.hiddenMint.includes("直售"),
+      "未發現採集物詳情只顯示剪影與來源提示");
+    assert(journalDetailState.collectible.includes("純收藏") && journalDetailState.collectible.includes("東林年輪拓印"),
+      "收藏品詳情顯示非通膨用途");
+    assert(journalDetailState.overflow <= 2, `收藏冊詳情頁無水平溢出（${journalDetailState.overflow}）`);
 
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));

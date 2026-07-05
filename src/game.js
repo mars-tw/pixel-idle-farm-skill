@@ -119,6 +119,19 @@
     state.storage.items[cropId] = (state.storage.items[cropId] || 0) + added;
     return { added, lost: qty - added };
   }
+  function ensureDiscoveryState(state) {
+    if (!state.discoveries) state.discoveries = { items: {} };
+    if (!state.discoveries.items) state.discoveries.items = {};
+  }
+  function recordDiscovery(state, itemId, now) {
+    if (!itemId) return 0;
+    ensureDiscoveryState(state);
+    if (!state.discoveries.items[itemId]) state.discoveries.items[itemId] = now || Date.now();
+    return state.discoveries.items[itemId];
+  }
+  function firstDiscoveredAt(state, itemId) {
+    return (state.discoveries && state.discoveries.items && state.discoveries.items[itemId]) || 0;
+  }
 
   // ---------- 等級 / XP / 成就 ----------
   function addXp(state, amount) {
@@ -180,6 +193,7 @@
     const crop = CROPS[plot.cropId];
     const { added, lost } = addToStorage(state, crop.id, crop.yield);
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
+    if (added > 0) recordDiscovery(state, crop.id, now);
     const leveled = addXp(state, crop.xp);
     plot.cropId = null; plot.plantedAt = 0;
     checkAchievements(state);
@@ -232,6 +246,7 @@
     wool_good: [1, 2], wool_premium: [1, 1],
     honey_good: [1, 3], honey_premium: [1, 2],
     forest_herb: [2, 4], glow_mushroom: [1, 3], wild_berry: [1, 3], river_mint: [1, 3],
+    mooncap_spore: [1, 2], amber_resin: [1, 2],
   };
   const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
@@ -625,6 +640,7 @@
     const { added, lost } = addToStorage(state, productId, cycles);
     a.lastProducedAt += cycles * def.produceMs;
     state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
+    if (added > 0) recordDiscovery(state, productId, now);
     return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, cycles };
   }
   function collectAllAnimals(state, now) {
@@ -667,6 +683,7 @@
     const productId = qualityProductId(def.product, tier);
     const { added, lost } = addToStorage(state, productId, 1);
     state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
+    if (added > 0) recordDiscovery(state, productId, now);
     a.lastProducedAt = now; // 重置週期
     return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, affinity: a.affinity, collectedFirst };
   }
@@ -682,6 +699,7 @@
     const repaired = !!(state.flags && state.flags.bridgeRepaired);
     if (tile.terrain === "water") return tile.bridge && repaired; // 修好的斷橋可走，其餘水域不可
     if (tile.region === "east" && !repaired) return false;        // 東林封鎖區：修橋前不可進
+    if (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)) return false;
     if (tile.object) return false;
     if (tile.station) return false;
     if (tile.npc) return false;           // Stage 6：NPC 站位（走相鄰交談）
@@ -948,8 +966,9 @@
     const last = ((state.flags && state.flags.forageNodes) || {})[node.id] || 0;
     const cooldownMs = node.cooldownMs || C.FORAGE_NODE_COOLDOWN_MS || 0;
     const readyAt = last + cooldownMs;
-    const ready = !last || now >= readyAt;
-    return { node, item: (C.FORAGE_ITEMS || {})[node.itemId], lastCollectedAt: last, readyAt, ready, remainingMs: ready ? 0 : readyAt - now };
+    const unlocked = !node.requiresFlag || !!(state.flags && state.flags[node.requiresFlag]);
+    const ready = unlocked && (!last || now >= readyAt);
+    return { node, item: (C.FORAGE_ITEMS || {})[node.itemId], lastCollectedAt: last, readyAt, ready, unlocked, remainingMs: ready ? 0 : Math.max(0, readyAt - now) };
   }
   function eastForageStatus(state, now) {
     const wants = (C.EAST_FORAGE_REPORT && C.EAST_FORAGE_REPORT.wants) || {};
@@ -987,6 +1006,44 @@
     }
     return null;
   }
+  function eastDeepStatus(state) {
+    const cost = C.EAST_DEEP_UNLOCK_COST || {};
+    const have = { coins: state.coins || 0 };
+    const missing = {};
+    for (const k of Object.keys(MATERIALS)) have[k] = (state.materials && state.materials[k]) || 0;
+    for (const k of Object.keys(cost)) missing[k] = Math.max(0, cost[k] - (have[k] || 0));
+    const prerequisites = !!(state.flags && state.flags.bridgeRepaired && state.flags.eastForageReported);
+    const unlocked = !!(state.flags && state.flags.eastDeepUnlocked);
+    return {
+      unlocked,
+      prerequisites,
+      cost,
+      have,
+      missing,
+      ready: !unlocked && prerequisites && Object.values(missing).every((n) => n <= 0),
+      collectibleId: "east_deep_rubbing",
+      rareNodes: (C.FORAGE_NODES || []).filter((n) => n.requiresFlag === "eastDeepUnlocked").map((n) => n.id),
+    };
+  }
+  function canUnlockEastDeep(state) {
+    const st = eastDeepStatus(state);
+    if (st.unlocked) return { ok: false, reason: "done", status: st };
+    if (!st.prerequisites) return { ok: false, reason: "story", status: st };
+    if (!st.ready) return { ok: false, reason: "cost", status: st };
+    return { ok: true, status: st };
+  }
+  function unlockEastDeep(state, now) {
+    const chk = canUnlockEastDeep(state);
+    if (!chk.ok) return chk;
+    if (!state.flags) state.flags = {};
+    spendCost(state, chk.status.cost);
+    state.flags.eastDeepUnlocked = true;
+    if (!state.flags.eventsClaimed) state.flags.eventsClaimed = {};
+    state.flags.eventsClaimed.east_deep_gate = true;
+    if (!state.collections) state.collections = {};
+    state.collections.east_deep_rubbing = true;
+    return { ok: true, cost: chk.status.cost, collectibleId: "east_deep_rubbing", now: now || Date.now() };
+  }
   function repairBridge(state, now) {
     const chk = canRepairBridge(state); if (!chk.ok) return chk;
     const cost = C.BRIDGE_COST || {};
@@ -999,6 +1056,7 @@
     const node = forageNodeDef(nodeId);
     if (!node) return { ok: false, reason: "unknown" };
     if (!state.flags || !state.flags.bridgeRepaired) return { ok: false, reason: "locked" };
+    if (node.requiresFlag && !state.flags[node.requiresFlag]) return { ok: false, reason: "locked_deep" };
     state.flags.eastForageDiscovered = true;
     const story = syncStoryProgress(state, "discover_forage", now);
     return { ok: true, node, story };
@@ -1008,6 +1066,7 @@
     const st = forageNodeStatus(state, nodeId, now);
     if (!st) return { ok: false, reason: "unknown" };
     if (!state.flags || !state.flags.bridgeRepaired) return { ok: false, reason: "locked" };
+    if (!st.unlocked) return { ok: false, reason: "locked_deep" };
     if (!state.flags.eastForageDiscovered) return { ok: false, reason: "undiscovered" };
     if (!st.ready) return { ok: false, reason: "cooldown", readyAt: st.readyAt };
     const qty = st.node.yield || 1;
@@ -1015,6 +1074,7 @@
     if (!state.flags.forageNodes) state.flags.forageNodes = {};
     state.flags.forageNodes[st.node.id] = now;
     state.stats.collected[st.node.itemId] = (state.stats.collected[st.node.itemId] || 0) + added;
+    if (added > 0) recordDiscovery(state, st.node.itemId, now);
     const story = syncStoryProgress(state, "collect_forage", now);
     return { ok: true, node: st.node, item: st.item, added, lost, story };
   }
@@ -1039,6 +1099,7 @@
   }
   // 走到事件點：首次給一次性獎勵 + 推進故事
   function triggerEvent(state, eventId, now) {
+    if (eventId === "east_deep_gate") return unlockEastDeep(state, now);
     const ev = (C.EVENTS || {})[eventId]; if (!ev) return { ok: false, reason: "unknown" };
     if (!state.flags.eventsClaimed) state.flags.eventsClaimed = {};
     const already = !!state.flags.eventsClaimed[eventId];
@@ -1091,7 +1152,7 @@
       const canDeliver = canFulfillNpcRequest(state, npcId);
       line = (req.flavorOffer || (cfg && cfg.flavorOffer && cfg.flavorOffer[0]) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
       request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp,
-        canDeliver, sideQuestId: req.sideQuestId || null };
+        canDeliver, sideQuestId: req.sideQuestId || null, sideQuestStepId: req.sideQuestStepId || null };
     }
     return { id: npc.id, name: npc.name, title: npc.title, frame: npc.frame, phase, line, lineCount: lines.length, request };
   }
@@ -1107,6 +1168,20 @@
   function npcSideQuestDef(npcId) {
     return (C.NPC_SIDE_QUESTS || {})[npcId] || null;
   }
+  function sideQuestSteps(def) {
+    if (!def) return [];
+    if (Array.isArray(def.steps) && def.steps.length) return def.steps;
+    return [{ id: def.id, title: def.title, wants: def.wants, rewardCoins: def.rewardCoins,
+      rewardXp: def.rewardXp, offer: def.offer, done: def.done }];
+  }
+  function sideQuestCompletedSteps(rec, def) {
+    const total = sideQuestSteps(def).length;
+    if (!rec) return 0;
+    if (typeof rec.completedSteps === "number") return Math.max(0, Math.min(total, rec.completedSteps));
+    // R15 舊存檔：status=done 代表第一章已完成；R19 還要能續接第二章。
+    if (rec.status === "done") return Math.min(1, total);
+    return 0;
+  }
   function npcSideQuestUnlocked(state, npcId) {
     return !!npcSideQuestDef(npcId) && chapter3Done(state);
   }
@@ -1114,35 +1189,50 @@
     const def = npcSideQuestDef(npcId); if (!def) return null;
     const rec = ((state && state.npcSideQuests) || {})[npcId] || {};
     const req = state && state.npcRequests && state.npcRequests[npcId];
+    const steps = sideQuestSteps(def);
+    const completedSteps = sideQuestCompletedSteps(rec, def);
+    const currentStep = steps[Math.min(completedSteps, Math.max(0, steps.length - 1))] || def;
     const activeReq = !!(req && req.sideQuestId === def.id);
-    const completed = rec.status === "done";
+    const completed = completedSteps >= steps.length;
     const unlocked = npcSideQuestUnlocked(state, npcId);
     const status = completed ? "done" : (activeReq || rec.status === "active") ? "active" : unlocked ? "available" : "locked";
     return {
-      id: def.id, npcId, title: def.title, wants: Object.assign({}, def.wants),
-      rewardCoins: def.rewardCoins, rewardXp: def.rewardXp,
+      id: def.id, npcId, title: currentStep.title || def.title, chainTitle: def.title,
+      stepId: currentStep.id || def.id, stepIndex: Math.min(completedSteps + 1, steps.length), totalSteps: steps.length,
+      completedSteps, wants: Object.assign({}, currentStep.wants || def.wants),
+      rewardCoins: currentStep.rewardCoins != null ? currentStep.rewardCoins : def.rewardCoins,
+      rewardXp: currentStep.rewardXp != null ? currentStep.rewardXp : def.rewardXp,
       status, unlocked, completed, startedAt: rec.startedAt || 0, completedAt: rec.completedAt || 0,
+      lore: def.lore || "", loreUnlocked: completed,
     };
   }
   function ensureNpcSideQuestRequest(state, npcId, now) {
     const def = npcSideQuestDef(npcId); if (!def || !npcSideQuestUnlocked(state, npcId)) return null;
     ensureNpcRequestState(state); ensureNpcSideQuestState(state);
     const rec = state.npcSideQuests[npcId] || {};
-    if (rec.status === "done") return null;
+    const steps = sideQuestSteps(def);
+    const completedSteps = sideQuestCompletedSteps(rec, def);
+    if (completedSteps >= steps.length) return null;
     const active = state.npcRequests[npcId];
     if (active) return active.sideQuestId === def.id ? active : null;
+    const step = steps[completedSteps] || def;
     const req = {
-      id: "side_" + def.id,
+      id: "side_" + (step.id || def.id),
       npcId,
-      wants: Object.assign({}, def.wants),
-      rewardCoins: def.rewardCoins,
-      rewardXp: def.rewardXp,
+      wants: Object.assign({}, step.wants || def.wants),
+      rewardCoins: step.rewardCoins != null ? step.rewardCoins : def.rewardCoins,
+      rewardXp: step.rewardXp != null ? step.rewardXp : def.rewardXp,
       createdAt: now || Date.now(),
       sideQuestId: def.id,
-      flavorOffer: def.offer,
-      flavorDone: def.done,
+      sideQuestStepId: step.id || def.id,
+      sideQuestStepIndex: completedSteps,
+      flavorOffer: step.offer || def.offer,
+      flavorDone: step.done || def.done,
     };
-    state.npcSideQuests[npcId] = Object.assign({}, rec, { id: def.id, status: "active", startedAt: rec.startedAt || req.createdAt });
+    state.npcSideQuests[npcId] = Object.assign({}, rec, {
+      id: def.id, status: "active", completedSteps,
+      startedAt: rec.startedAt || req.createdAt,
+    });
     state.npcRequests[npcId] = req;
     return req;
   }
@@ -1219,11 +1309,19 @@
     if (req.sideQuestId) {
       ensureNpcSideQuestState(state);
       const prev = state.npcSideQuests[npcId] || {};
+      const def = npcSideQuestDef(npcId);
+      const totalSteps = sideQuestSteps(def).length || 1;
+      const completedSteps = Math.min(totalSteps, Math.max(sideQuestCompletedSteps(prev, def), (req.sideQuestStepIndex || 0)) + 1);
+      const doneAll = completedSteps >= totalSteps;
       state.npcSideQuests[npcId] = Object.assign({}, prev, {
         id: req.sideQuestId,
-        status: "done",
+        status: doneAll ? "done" : "available",
+        completedSteps,
+        lastStepId: req.sideQuestStepId || req.sideQuestId,
+        lastStepCompletedAt: now,
         startedAt: prev.startedAt || req.createdAt || now,
-        completedAt: now,
+        completedAt: doneAll ? now : (prev.completedAt || 0),
+        loreUnlockedAt: doneAll ? now : (prev.loreUnlockedAt || 0),
       });
     }
     checkAchievements(state);
@@ -1240,7 +1338,12 @@
     if (req.sideQuestId) {
       ensureNpcSideQuestState(state);
       const prev = state.npcSideQuests[npcId] || {};
-      state.npcSideQuests[npcId] = Object.assign({}, prev, { id: req.sideQuestId, status: "available" });
+      const def = npcSideQuestDef(npcId);
+      state.npcSideQuests[npcId] = Object.assign({}, prev, {
+        id: req.sideQuestId,
+        completedSteps: sideQuestCompletedSteps(prev, def),
+        status: "available",
+      });
     }
     if (!state.npcRequestLog[npcId]) state.npcRequestLog[npcId] = { lastRequestAt: 0, fulfilledCount: 0 };
     state.npcRequestLog[npcId].lastRequestAt = now;
@@ -1251,6 +1354,38 @@
   // 這一整組函式都不改 state，只是把 A-D 系統各自的資料換個角度彙總呈現；
   // 「玩家有沒有發現」一律沿用該系統原本的閥門（harvested/collected/dialogueSeen），
   // 不新發明一套判斷，否則兩邊定義漂移就會出現「Journal 說發現了，實際系統說沒有」的裂縫。
+  function itemSourceHint(itemId) {
+    if (CROPS[itemId]) {
+      const c = CROPS[itemId];
+      return `Lv${c.unlockLevel} 解鎖，在農土種植並收成`;
+    }
+    if (PRODUCTS[itemId]) {
+      const p = PRODUCTS[itemId];
+      const animal = Object.values(ANIMALS || {}).find((a) => a.product === p.baseProduct || a.product === itemId);
+      return animal ? `${animal.name} 產出` : "動物照護產出";
+    }
+    if ((C.FORAGE_ITEMS || {})[itemId]) {
+      const nodes = (C.FORAGE_NODES || []).filter((n) => n.itemId === itemId);
+      const deep = nodes.some((n) => n.requiresFlag === "eastDeepUnlocked");
+      return `${deep ? "解鎖東林深處後" : "修橋探索東林後"}採集${nodes.length ? "：" + nodes.map((n) => n.name).join("、") : ""}`;
+    }
+    return "尚未發現來源";
+  }
+  function itemUsageSummary(itemId) {
+    const def = getItemDef(itemId);
+    const usage = [];
+    if (def && def.sellValue != null) usage.push(`直售 ${def.sellValue} 金`);
+    if (CROPS[itemId] || (C.FORAGE_ITEMS || {})[itemId] || PRODUCTS[itemId]) usage.push("市集訂單");
+    const npcUsers = Object.entries(C.NPC_REQUESTS || {})
+      .filter(([, cfg]) => (cfg.pool || []).indexOf(itemId) !== -1)
+      .map(([npcId]) => ((C.NPCS || {})[npcId] || {}).name || npcId);
+    if (npcUsers.length) usage.push("鎮民委託：" + npcUsers.join("、"));
+    const sideUsers = Object.entries(C.NPC_SIDE_QUESTS || {}).filter(([, defn]) =>
+      sideQuestSteps(defn).some((step) => Object.prototype.hasOwnProperty.call(step.wants || {}, itemId)))
+      .map(([npcId]) => ((C.NPCS || {})[npcId] || {}).name || npcId);
+    if (sideUsers.length) usage.push("支線：" + sideUsers.join("、"));
+    return usage;
+  }
   function journalCrops(state) {
     const unlocked = unlockedCrops(state);
     const harvested = (state.stats && state.stats.harvested) || {};
@@ -1258,6 +1393,11 @@
       id: c.id, name: c.name, emoji: c.emoji,
       unlocked: unlocked.indexOf(c.id) !== -1,
       discovered: (harvested[c.id] || 0) > 0,
+      sourceHint: itemSourceHint(c.id),
+      season: c.season || "全年",
+      sellValue: c.sellValue,
+      usage: itemUsageSummary(c.id),
+      firstDiscoveredAt: firstDiscoveredAt(state, c.id),
     }));
   }
   function journalProducts(state) {
@@ -1265,15 +1405,23 @@
     return Object.keys(PRODUCTS).map((id) => {
       const p = PRODUCTS[id];
       return { id, name: p.name, emoji: p.emoji, quality: p.quality, baseProduct: p.baseProduct,
-        discovered: (collected[id] || 0) > 0 };
+        discovered: (collected[id] || 0) > 0,
+        sourceHint: itemSourceHint(id), season: "全年", sellValue: p.sellValue,
+        usage: itemUsageSummary(id), firstDiscoveredAt: firstDiscoveredAt(state, id) };
     });
   }
   function journalForage(state) {
     const collected = (state.stats && state.stats.collected) || {};
     return Object.keys(C.FORAGE_ITEMS || {}).map((id) => {
       const f = C.FORAGE_ITEMS[id];
+      const nodes = (C.FORAGE_NODES || []).filter((n) => n.itemId === id);
       return { id, name: f.name, emoji: f.emoji, region: f.region, season: f.season || "",
-        discovered: (collected[id] || 0) > 0 };
+        discovered: (collected[id] || 0) > 0,
+        sourceHint: itemSourceHint(id),
+        source: nodes.map((n) => n.name).join("、") || (f.region === "east_deep" ? "東林深處" : "東林"),
+        sellValue: f.sellValue,
+        usage: itemUsageSummary(id),
+        firstDiscoveredAt: firstDiscoveredAt(state, id) };
     });
   }
   function journalNpcs(state) {
@@ -1301,7 +1449,9 @@
     const f = state.flags || {};
     // 明確回傳具名旗標而非整個 eventsClaimed 清單——未來新增其他事件點時，這裡不會
     // 因為「任一事件已領取」就誤判成「東林已探索」（Codex 審核 Stage 11 時抓到的坑）
-    return { bridgeRepaired: !!f.bridgeRepaired, eastClearingClaimed: !!(f.eventsClaimed && f.eventsClaimed.east_clearing) };
+    return { bridgeRepaired: !!f.bridgeRepaired,
+      eastClearingClaimed: !!(f.eventsClaimed && f.eventsClaimed.east_clearing),
+      eastDeepUnlocked: !!f.eastDeepUnlocked };
   }
   // 章節完成度要跟 renderStory() 用同一套「解鎖」閥門：第二章要序章全完成才顯示，
   // 第三章要第二章全完成才顯示，不能提前曝光「還沒解鎖的章節有幾個任務」
@@ -1323,6 +1473,13 @@
     return Object.keys(ACHIEVEMENTS).map((id) => ({
       id, name: ACHIEVEMENTS[id].name, desc: ACHIEVEMENTS[id].desc, icon: ACHIEVEMENTS[id].icon, unlocked: !!a[id] }));
   }
+  function journalCollectibles(state) {
+    const owned = state.collections || {};
+    return Object.keys(C.COLLECTIBLES || {}).map((id) => {
+      const c = C.COLLECTIBLES[id];
+      return { id, name: c.name, emoji: c.emoji, desc: c.desc, source: c.source, unlocked: !!owned[id] };
+    });
+  }
   function completionOf(items, pred) {
     const total = items.length;
     const done = items.filter(pred).length;
@@ -1337,7 +1494,8 @@
     const animals = journalAnimals(state, now);
     const world = journalWorldFlags(state);
     const achievements = journalAchievements(state);
-    const worldItems = [world.bridgeRepaired, world.eastClearingClaimed];
+    const collectibles = journalCollectibles(state);
+    const worldItems = [world.bridgeRepaired, world.eastClearingClaimed, world.eastDeepUnlocked];
     return {
       crops,
       products,
@@ -1347,6 +1505,7 @@
       world,
       chapters: journalChapters(state),
       achievements,
+      collectibles,
       completion: {
         crops: completionOf(crops, (c) => c.discovered),
         products: completionOf(products, (p) => p.discovered),
@@ -1356,6 +1515,7 @@
         animals: completionOf(animals, (a) => a.everGood || a.everHappy),
         world: completionOf(worldItems, Boolean),
         achievements: completionOf(achievements, (a) => a.unlocked),
+        collectibles: completionOf(collectibles, (c) => c.unlocked),
       },
       npcRequestsCompleted: (state.stats && state.stats.npcRequestsCompleted) || 0,
     };
@@ -1441,7 +1601,7 @@
   const GameAPI = {
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, effectiveGrowMs, isWet, waterPlot,
-    getCropProgress, storageCapacity, storageUsed, addToStorage, addXp,
+    getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder, orderNarrative,
@@ -1461,6 +1621,7 @@
     bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done,
     canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
     forageNodeDef, forageTile, forageNodeStatus, eastForageStatus, eastForageTargetTile,
+    eastDeepStatus, canUnlockEastDeep, unlockEastDeep,
     discoverForage, gatherForage, ensureEastForageReportRequest,
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
@@ -1468,7 +1629,8 @@
     ensureNpcRequestState, ensureNpcSideQuestState, npcSideQuestStatus, ensureNpcSideQuestRequest,
     npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest, declineNpcRequest,
     // Stage 11：Farm Journal
-    journalCrops, journalProducts, journalForage, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalSummary,
+    itemSourceHint, itemUsageSummary,
+    journalCrops, journalProducts, journalForage, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalCollectibles, journalSummary,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,

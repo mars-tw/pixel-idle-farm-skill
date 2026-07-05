@@ -153,8 +153,11 @@ const FORAGE_ITEMS = {
   glow_mushroom: { id: "glow_mushroom", name: "螢光菇",   emoji: "🍄", sellValue: 5, region: "east" },
   wild_berry:    { id: "wild_berry",    name: "東林野莓", emoji: "🫐", sellValue: 6, region: "east", season: "秋" },
   river_mint:    { id: "river_mint",    name: "溪畔薄荷", emoji: "🍃", sellValue: 7, region: "east", season: "春" },
+  mooncap_spore: { id: "mooncap_spore", name: "月帽菇孢", emoji: "🌙", sellValue: 18, region: "east_deep", season: "冬" },
+  amber_resin:   { id: "amber_resin",   name: "古樹琥珀脂", emoji: "🟠", sellValue: 24, region: "east_deep", season: "夏" },
 };
 const FORAGE_NODE_COOLDOWN_MS = 10 * 60 * 1000;
+const EAST_DEEP_FORAGE_COOLDOWN_MS = 30 * 60 * 1000;
 const FORAGE_NODES = [
   { id: "east_herb_patch", itemId: "forest_herb", x: 18, y: 5, yield: 1, name: "東林藥草叢",
     desc: "橋後林地才長得好的清香藥草。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
@@ -164,6 +167,10 @@ const FORAGE_NODES = [
     desc: "秋天最甜的灌木野莓，適合做小點心。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
   { id: "east_mint_spring", itemId: "river_mint", x: 20, y: 6, yield: 1, name: "溪畔薄荷",
     desc: "靠近濕潤溪岸的清涼香草。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
+  { id: "deep_mooncap_ring", itemId: "mooncap_spore", x: 20, y: 9, yield: 1, name: "月帽菇環",
+    desc: "東林深處夜色較重的菇環，恢復很慢。", cooldownMs: EAST_DEEP_FORAGE_COOLDOWN_MS, requiresFlag: "eastDeepUnlocked" },
+  { id: "deep_amber_root", itemId: "amber_resin", x: 21, y: 10, yield: 1, name: "古樹琥珀根",
+    desc: "老樹根部滲出的琥珀色樹脂，少量即可入委託。", cooldownMs: EAST_DEEP_FORAGE_COOLDOWN_MS, requiresFlag: "eastDeepUnlocked" },
 ];
 const EAST_FORAGE_REPORT = {
   npcId: "merchant",
@@ -172,6 +179,16 @@ const EAST_FORAGE_REPORT = {
   rewardXp: 6,
   offer: "東林的新貨源要先登記。藥草和螢光菇各帶一份，我幫你開鎮民委託。",
   done: "這批樣品很穩，之後我會把東林採集品放進委託清單。",
+};
+const EAST_DEEP_UNLOCK_COST = { coins: 90, wood: 4, stone: 2 };
+const COLLECTIBLES = {
+  east_deep_rubbing: {
+    id: "east_deep_rubbing",
+    name: "東林年輪拓印",
+    emoji: "📜",
+    source: "解鎖東林深處",
+    desc: "古樹根旁留下的年輪拓印，只作收藏紀錄，不產生收益。",
+  },
 };
 
 // ===== Stage 7：動物照護（餵食/澆水/梳理 → 親密度 → 產物品質）=====
@@ -280,6 +297,7 @@ function buildV4Layout() {
   set(16, 4, "B");                                   // 斷橋（修好才可走過河）
   hline(4, 17, 20);                                  // 東岸登陸 (17,4) → 東林步道
   set(20, 4, "E");                                   // 事件點：東林古樹
+  set(19, 8, "D");                                   // 東林深處入口（輕門檻解鎖）
   set(18, 2, "T"); set(21, 8, "T"); set(19, 9, "b"); // 東林裝飾（樹/灌木）
   return g.map((row) => row.join(""));
 }
@@ -292,9 +310,14 @@ const MOVE_MS = 200;                  // 每格移動 tween 毫秒
 const BRIDGE_COST = { wood: 6, stone: 4 };   // 修橋消耗（清樹樁得木材、清石得石頭）
 const EVENTS = {
   east_clearing: {
-    id: "east_clearing", name: "東林古樹", tileChar: "E",
+    id: "east_clearing", name: "東林古樹", tileChar: "E", x: 20, y: 4,
     desc: "穿過修好的斷橋，東林深處有一棵古樹。",
     reward: { coins: 120, materials: { wood: 3 } },   // 首次抵達一次性獎勵
+    once: true,
+  },
+  east_deep_gate: {
+    id: "east_deep_gate", name: "東林深處入口", tileChar: "D", x: 19, y: 8,
+    desc: "枝葉擋住的小徑，需要補強踏板後才能進入更深處。",
     once: true,
   },
 };
@@ -369,10 +392,10 @@ const NPC_REQUESTS = {
   mayor:    { pool: ["wheat", "carrot", "tomato", "corn"], rewardMul: 1.0,
     flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？"],
     flavorDone:  ["有你真好，晨光鎮又熱鬧一場。"] },
-  merchant: { pool: ["strawberry", "corn", "pumpkin", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "egg_good", "egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
+  merchant: { pool: ["strawberry", "corn", "pumpkin", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "egg_good", "egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
     flavorOffer: ["市集缺貨，手頭有{item}嗎？"],
     flavorDone:  ["生意興隆，多虧你這批貨。"] },
-  elder:    { pool: ["egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
+  elder:    { pool: ["egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
     flavorOffer: ["幫我張羅點{item}，我拿去燉湯。"],
     flavorDone:  ["這品質，照顧得很用心啊。"] },
   child:    { pool: ["wheat", "carrot", "corn", "strawberry", "wild_berry"], rewardMul: 0.85,
@@ -380,31 +403,91 @@ const NPC_REQUESTS = {
     flavorDone:  ["謝謝你！好好吃！"] },
 };
 
-// ===== R15：鎮民一次性支線（固定小委託；不使用隨機報酬公式）=====
+// ===== R15/R19：鎮民一次性支線（固定小委託；不使用隨機報酬公式）=====
 const NPC_SIDE_QUESTS = {
   mayor: {
     id: "mayor_notice_board", npcId: "mayor", title: "公告欄重新開張",
     wants: { wheat: 4 }, rewardCoins: 16, rewardXp: 3,
     offer: "鎮上的公告欄要重新開張，先送 4 份小麥來當第一批登記樣品吧。",
     done: "公告欄終於像樣了，大家會更常來看你的農場消息。",
+    lore: "鎮公所的公告欄其實是舊農場留下的木板，重新貼滿委託後，鎮民才開始把農場當成生活的一部分。",
+    steps: [
+      { id: "mayor_notice_board_1", title: "公告欄重新開張",
+        wants: { wheat: 4 }, rewardCoins: 16, rewardXp: 3,
+        offer: "鎮上的公告欄要重新開張，先送 4 份小麥來當第一批登記樣品吧。",
+        done: "公告欄終於像樣了，大家會更常來看你的農場消息。" },
+      { id: "mayor_notice_board_2", title: "巡路便當",
+        wants: { carrot: 2 }, rewardCoins: 9, rewardXp: 2,
+        offer: "修好的路要巡一圈，幫我準備 2 份胡蘿蔔當巡路便當。",
+        done: "巡路的人有東西吃，橋邊的回報也會更準時。" },
+      { id: "mayor_notice_board_3", title: "鎮會樣品",
+        wants: { tomato: 1 }, rewardCoins: 10, rewardXp: 3,
+        offer: "鎮會想看農場現在能供應什麼，帶 1 份番茄當樣品就好。",
+        done: "鎮會記下來了，這塊公告欄會繼續替農場接上鎮上的需求。" },
+    ],
   },
   merchant: {
     id: "merchant_forest_bundle", npcId: "merchant", title: "東林試賣組",
     wants: { forest_herb: 1, glow_mushroom: 1 }, rewardCoins: 14, rewardXp: 4,
     offer: "我想把東林貨做成試賣組，藥草和螢光菇各一份就好。",
     done: "包裝起來很有賣相，東林的名字會慢慢傳出去。",
+    lore: "商人把東林採集物列成小鎮的新貨架，外地旅人因此開始問起這座被河隔開很久的森林。",
+    steps: [
+      { id: "merchant_forest_bundle_1", title: "東林試賣組",
+        wants: { forest_herb: 1, glow_mushroom: 1 }, rewardCoins: 14, rewardXp: 4,
+        offer: "我想把東林貨做成試賣組，藥草和螢光菇各一份就好。",
+        done: "包裝起來很有賣相，東林的名字會慢慢傳出去。" },
+      { id: "merchant_forest_bundle_2", title: "森林香包",
+        wants: { wild_berry: 1, river_mint: 1 }, rewardCoins: 14, rewardXp: 4,
+        offer: "下一批要做森林香包，野莓和薄荷各一份，味道會更完整。",
+        done: "香味很清楚，這批可以放到市集攤前面。" },
+      { id: "merchant_forest_bundle_3", title: "旅人樣貨",
+        wants: { corn: 1 }, rewardCoins: 13, rewardXp: 3,
+        offer: "外地旅人想買能久放的農產，帶 1 份玉米讓我配成樣貨。",
+        done: "有農產也有森林貨，旅人會記得這座鎮不只賣一種東西。" },
+    ],
   },
   elder: {
     id: "elder_coop_check", npcId: "elder", title: "雞舍巡查",
     wants: { egg: 2 }, rewardCoins: 12, rewardXp: 4,
     offer: "讓我看看你照顧雞舍的成果，帶 2 顆雞蛋來。",
     done: "蛋殼厚實，雞舍照護算是穩了。",
+    lore: "老農以前也替鎮上看顧過動物棚，現在他把照護筆記留給農場，讓年輕鎮民能接手。",
+    steps: [
+      { id: "elder_coop_check_1", title: "雞舍巡查",
+        wants: { egg: 2 }, rewardCoins: 12, rewardXp: 4,
+        offer: "讓我看看你照顧雞舍的成果，帶 2 顆雞蛋來。",
+        done: "蛋殼厚實，雞舍照護算是穩了。" },
+      { id: "elder_coop_check_2", title: "照護筆記",
+        wants: { egg_good: 1 }, rewardCoins: 10, rewardXp: 3,
+        offer: "若照護得更細，蛋會不一樣。帶 1 顆良好雞蛋讓我記到筆記裡。",
+        done: "這個品質能當教學範例，筆記會更完整。" },
+      { id: "elder_coop_check_3", title: "老農草藥",
+        wants: { forest_herb: 1, glow_mushroom: 1 }, rewardCoins: 11, rewardXp: 3,
+        offer: "動物棚也需要驅潮的草藥，東林藥草和螢光菇各帶一份來。",
+        done: "棚裡會乾爽些。這套照護法，以後可以交給鎮上的孩子。" },
+    ],
   },
   child: {
     id: "child_picnic_pack", npcId: "child", title: "野餐小包",
     wants: { wheat: 2, carrot: 2 }, rewardCoins: 10, rewardXp: 3,
     offer: "我想做一份野餐小包，可以幫我準備小麥和胡蘿蔔嗎？",
     done: "野餐小包完成！我會分一點給大家。",
+    lore: "孩子把第一次野餐畫成地圖，標出橋、菇木和薄荷水邊，成了小鎮新的散步路線。",
+    steps: [
+      { id: "child_picnic_pack_1", title: "野餐小包",
+        wants: { wheat: 2, carrot: 2 }, rewardCoins: 10, rewardXp: 3,
+        offer: "我想做一份野餐小包，可以幫我準備小麥和胡蘿蔔嗎？",
+        done: "野餐小包完成！我會分一點給大家。" },
+      { id: "child_picnic_pack_2", title: "森林點心",
+        wants: { wild_berry: 1 }, rewardCoins: 7, rewardXp: 2,
+        offer: "野餐如果有東林野莓就更像冒險了，可以帶 1 份嗎？",
+        done: "甜甜的！我會在地圖上畫一顆莓果記號。" },
+      { id: "child_picnic_pack_3", title: "路線標記",
+        wants: { wheat: 2, carrot: 1 }, rewardCoins: 7, rewardXp: 2,
+        offer: "最後要做路線標記的小點心，再給我 2 份小麥和 1 份胡蘿蔔。",
+        done: "完成！大家可以照著我的野餐地圖走到東林邊。" },
+    ],
   },
 };
 
@@ -476,7 +559,8 @@ const CONFIG = {
   GAME, CROPS, CROP_SHEET, LEVEL_XP, levelFromXp, xpForLevel,
   UPGRADES, UPGRADE_ORDER, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
   WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
-  PRODUCTS, FORAGE_ITEMS, FORAGE_NODES, FORAGE_NODE_COOLDOWN_MS, EAST_FORAGE_REPORT,
+  PRODUCTS, FORAGE_ITEMS, FORAGE_NODES, FORAGE_NODE_COOLDOWN_MS, EAST_DEEP_FORAGE_COOLDOWN_MS,
+  EAST_FORAGE_REPORT, EAST_DEEP_UNLOCK_COST, COLLECTIBLES,
   getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
   BUILDINGS, BUILDING_ORDER, ANIMALS, MAP_DEFAULT,
   TOOLS, TOOL_ORDER, MOISTURE_MUL,

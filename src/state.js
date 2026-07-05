@@ -45,6 +45,20 @@
     }
     return map;
   }
+  function applyRegions(map) {
+    for (const tile of (map.tiles || [])) {
+      tile.region = (tile.x >= 19 && tile.y >= 8) ? "east_deep" : (tile.x >= C.EAST_REGION_MIN_X ? "east" : null);
+    }
+    return map;
+  }
+  function applyEvents(map) {
+    for (const ev of Object.values(C.EVENTS || {})) {
+      if (typeof ev.x !== "number" || typeof ev.y !== "number") continue;
+      const tile = map.tiles.find((t) => t.x === ev.x && t.y === ev.y);
+      if (tile) tile.event = ev.id;
+    }
+    return map;
+  }
   function applyForage(map) {
     for (const n of (C.FORAGE_NODES || [])) {
       const tile = map.tiles.find((t) => t.x === n.x && t.y === n.y);
@@ -67,8 +81,9 @@
         let terrain, obstacle = null, bridge = false, event = null;
         if (ch === "B") { terrain = "water"; bridge = true; }
         else if (ch === "E") { terrain = "grass"; event = "east_clearing"; }
+        else if (ch === "D") { terrain = "grass"; event = "east_deep_gate"; }
         else { obstacle = C.OBSTACLE_CODE[ch] || null; terrain = obstacle ? "grass" : (C.TERRAIN_CODE[ch] || "grass"); }
-        const region = x >= C.EAST_REGION_MIN_X ? "east" : null; // 東林封鎖區（修橋後解鎖）
+        const region = (x >= 19 && y >= 8) ? "east_deep" : (x >= C.EAST_REGION_MIN_X ? "east" : null); // 東林封鎖區（修橋後解鎖）
         tiles.push({
           id: "t" + x + "_" + y, x, y, terrain,
           object: obstacle,       // rock/stump/bush/tree（障礙，蓋在草地上）
@@ -86,9 +101,11 @@
       }
     }
     const map = { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex };
+    applyRegions(map);
     applyStructures(map);
     applyStations(map);
     applyNpcs(map);
+    applyEvents(map);
     applyForage(map);
     return map;
   }
@@ -150,8 +167,10 @@
       // ===== 故事任務（地圖驅動）=====
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
-      flags: { bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false },
+      flags: { bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false },
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0 },
+      discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
+      collections: {},            // { [collectibleId]: true }
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
       npcRequestLog: {}, // { [npcId]: { lastRequestAt: 0, fulfilledCount: 0 } }
@@ -183,10 +202,12 @@
     const sameDims = state.map && Array.isArray(state.map.tiles) && state.map.width === C.MAP_W && state.map.height === C.MAP_H;
     if (sameDims) {
       merged.map = state.map;
+      applyRegions(merged.map);
       if (!merged.map.tiles.some((t) => t.structureId)) applyStructures(merged.map);
       if (!merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
       if (!merged.map.tiles.some((t) => t.npc)) applyNpcs(merged.map);
-      if (!merged.map.tiles.some((t) => t.forage)) applyForage(merged.map);
+      applyEvents(merged.map);
+      applyForage(merged.map);
       merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
       merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
       merged.player = Object.assign({}, def.player, state.player);
@@ -204,9 +225,19 @@
     }
     merged.camera = Object.assign({ x: 0, y: 0, followPlayer: true, focusTileId: null, focusUntil: 0 }, state.camera);
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
-    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false }, state.flags);
+    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false }, state.flags);
     merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
     merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
+    merged.discoveries = Object.assign({ items: {} }, state.discoveries);
+    merged.discoveries.items = Object.assign({}, state.discoveries && state.discoveries.items);
+    const discoveredAtFallback = state.createdAt || state.lastSeenAt || Date.now();
+    for (const [id, qty] of Object.entries(merged.stats.harvested || {})) {
+      if (qty > 0 && !merged.discoveries.items[id]) merged.discoveries.items[id] = discoveredAtFallback;
+    }
+    for (const [id, qty] of Object.entries(merged.stats.collected || {})) {
+      if (qty > 0 && !merged.discoveries.items[id]) merged.discoveries.items[id] = discoveredAtFallback;
+    }
+    merged.collections = Object.assign({}, state.collections);
     merged.gender = state.gender === "m" ? "m" : "f"; // Stage 6：主角性別
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
     merged.version = C.GAME.version;
