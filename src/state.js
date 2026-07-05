@@ -155,6 +155,7 @@
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
       npcRequestLog: {}, // { [npcId]: { lastRequestAt: 0, fulfilledCount: 0 } }
+      npcSideQuests: {}, // { [npcId]: { id, status, startedAt, completedAt } }
     };
   }
 
@@ -173,6 +174,7 @@
     merged.stats.collected = Object.assign({}, state.stats && state.stats.collected);
     merged.npcRequests = Object.assign({}, state.npcRequests);
     merged.npcRequestLog = Object.assign({}, state.npcRequestLog);
+    merged.npcSideQuests = Object.assign({}, state.npcSideQuests);
     if (!Array.isArray(merged.plots) || merged.plots.length === 0) merged.plots = def.plots;
     if (!Array.isArray(merged.orders)) merged.orders = [];
     // ===== MVP2 欄位補齊 =====

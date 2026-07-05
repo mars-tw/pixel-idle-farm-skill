@@ -216,8 +216,13 @@ console.log("\n== 8. 等級曲線與作物解鎖 ==");
   assert(G.unlockedCrops(st).length === 1, "lv1 只解鎖小麥");
   st.xp = C.LEVEL_XP[1]; st.level = C.levelFromXp(st.xp);
   assert(st.level === 2 && G.unlockedCrops(st).includes("carrot"), "達門檻升 lv2 解鎖胡蘿蔔");
+  st.xp = C.LEVEL_XP[3]; st.level = C.levelFromXp(st.xp);
+  assert(G.unlockedCrops(st).includes("corn"), "lv4 解鎖 R15 新作物玉米");
+  const corn = C.CROPS.corn;
+  const cornNetPerMin = ((corn.yield * corn.sellValue) - corn.seedCost) / (corn.growMs / 60000);
+  assert(cornNetPerMin > 0 && cornNetPerMin < 12, `玉米期望淨利 ${cornNetPerMin.toFixed(1)} 金/分鐘，低於番茄後段爆發線`);
   st.xp = C.LEVEL_XP[4]; st.level = C.levelFromXp(st.xp);
-  assert(G.unlockedCrops(st).length === 5, "lv5 解鎖全部 5 作物");
+  assert(G.unlockedCrops(st).length === Object.keys(C.CROPS).length, `lv5 解鎖全部 ${Object.keys(C.CROPS).length} 作物`);
 }
 
 console.log("\n== 9. 天氣（lv5 解鎖）==");
@@ -228,7 +233,7 @@ console.log("\n== 9. 天氣（lv5 解鎖）==");
   st.level = 5;
   const rng = makeRng(7);
   G.updateWeather(st, T0, rng);
-  assert(["clear", "rain", "sunny"].includes(st.weather.id), "lv5 後天氣會變化");
+  assert(Object.keys(C.WEATHER).includes(st.weather.id), "lv5 後天氣會變化");
   // rain 加速成長
   st.weather = { id: "rain", untilMs: T0 + 1e9 };
   const growRain = G.effectiveGrowMs(st, "wheat", T0);
@@ -243,6 +248,12 @@ console.log("\n== 9. 天氣（lv5 解鎖）==");
   st.weather = { id: "clear", untilMs: T0 + 1e9 };
   const sellClear = G.sellUnitValue(st, "pumpkin", T0);
   assert(sellSunny > sellClear, "豔陽時售價更高");
+  st.weather = { id: "windy", untilMs: T0 + 1e9 };
+  assert(G.effectiveGrowMs(st, "wheat", T0) < growClear && G.sellUnitValue(st, "pumpkin", T0) > sellClear,
+    "微風同時小幅加速成長並提高售價");
+  st.weather = { id: "fog", untilMs: T0 + 1e9 };
+  assert(G.effectiveGrowMs(st, "wheat", T0) > growClear && G.sellUnitValue(st, "pumpkin", T0) > sellClear,
+    "晨霧成長稍慢但售價提高");
   // 訂單契約價不受天氣影響（Stage 6.5 起的既定設計，不是遺漏）
   const order = G.makeOrder(st, T0, makeRng(3));
   st.weather = { id: "sunny", untilMs: T0 + 1e9 };

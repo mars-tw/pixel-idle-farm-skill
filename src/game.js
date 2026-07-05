@@ -223,7 +223,7 @@
   // 訂單存活靠 expiresAt；獎金 = 直售總值 × rarity.payMult（解讀時再加 sellBonus/連單）
   // 作物 + 動物產品的訂單需求量範圍
   const ORDER_QTY = {
-    wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], strawberry: [2, 4], pumpkin: [1, 3],
+    wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], corn: [2, 5], strawberry: [2, 4], pumpkin: [1, 3],
     egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5],
     // Stage 7.1：品質分級品項明確給數量範圍，隨品質往下收（原本沒列到會 fallback [2,5]，
     // 對高單價的 premium 品項偏寬鬆）
@@ -231,7 +231,7 @@
     milk_good: [1, 3], milk_premium: [1, 2],
     wool_good: [1, 2], wool_premium: [1, 1],
     honey_good: [1, 3], honey_premium: [1, 2],
-    forest_herb: [2, 4], glow_mushroom: [1, 3],
+    forest_herb: [2, 4], glow_mushroom: [1, 3], wild_berry: [1, 3], river_mint: [1, 3],
   };
   const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
@@ -435,7 +435,7 @@
     if (state.level < WEATHER_UNLOCK_LEVEL) { state.weather = { id: "clear", untilMs: 0 }; return false; }
     if (now < (state.weather.untilMs || 0)) return false;
     const roll = (rng || Math.random)();
-    const id = roll < 0.5 ? "clear" : roll < 0.75 ? "rain" : "sunny";
+    const id = roll < 0.38 ? "clear" : roll < 0.60 ? "rain" : roll < 0.78 ? "sunny" : roll < 0.90 ? "windy" : "fog";
     state.weather = { id, untilMs: now + WEATHER_DURATION_MS };
     return true;
   }
@@ -1090,7 +1090,8 @@
       const itemName = (getItemDef(itemId) || {}).name || itemId;
       const canDeliver = canFulfillNpcRequest(state, npcId);
       line = (req.flavorOffer || (cfg && cfg.flavorOffer && cfg.flavorOffer[0]) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
-      request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp, canDeliver };
+      request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp,
+        canDeliver, sideQuestId: req.sideQuestId || null };
     }
     return { id: npc.id, name: npc.name, title: npc.title, frame: npc.frame, phase, line, lineCount: lines.length, request };
   }
@@ -1099,6 +1100,51 @@
   function ensureNpcRequestState(state) {
     if (!state.npcRequests) state.npcRequests = {};
     if (!state.npcRequestLog) state.npcRequestLog = {};
+  }
+  function ensureNpcSideQuestState(state) {
+    if (!state.npcSideQuests) state.npcSideQuests = {};
+  }
+  function npcSideQuestDef(npcId) {
+    return (C.NPC_SIDE_QUESTS || {})[npcId] || null;
+  }
+  function npcSideQuestUnlocked(state, npcId) {
+    return !!npcSideQuestDef(npcId) && chapter3Done(state);
+  }
+  function npcSideQuestStatus(state, npcId) {
+    const def = npcSideQuestDef(npcId); if (!def) return null;
+    const rec = ((state && state.npcSideQuests) || {})[npcId] || {};
+    const req = state && state.npcRequests && state.npcRequests[npcId];
+    const activeReq = !!(req && req.sideQuestId === def.id);
+    const completed = rec.status === "done";
+    const unlocked = npcSideQuestUnlocked(state, npcId);
+    const status = completed ? "done" : (activeReq || rec.status === "active") ? "active" : unlocked ? "available" : "locked";
+    return {
+      id: def.id, npcId, title: def.title, wants: Object.assign({}, def.wants),
+      rewardCoins: def.rewardCoins, rewardXp: def.rewardXp,
+      status, unlocked, completed, startedAt: rec.startedAt || 0, completedAt: rec.completedAt || 0,
+    };
+  }
+  function ensureNpcSideQuestRequest(state, npcId, now) {
+    const def = npcSideQuestDef(npcId); if (!def || !npcSideQuestUnlocked(state, npcId)) return null;
+    ensureNpcRequestState(state); ensureNpcSideQuestState(state);
+    const rec = state.npcSideQuests[npcId] || {};
+    if (rec.status === "done") return null;
+    const active = state.npcRequests[npcId];
+    if (active) return active.sideQuestId === def.id ? active : null;
+    const req = {
+      id: "side_" + def.id,
+      npcId,
+      wants: Object.assign({}, def.wants),
+      rewardCoins: def.rewardCoins,
+      rewardXp: def.rewardXp,
+      createdAt: now || Date.now(),
+      sideQuestId: def.id,
+      flavorOffer: def.offer,
+      flavorDone: def.done,
+    };
+    state.npcSideQuests[npcId] = Object.assign({}, rec, { id: def.id, status: "active", startedAt: rec.startedAt || req.createdAt });
+    state.npcRequests[npcId] = req;
+    return req;
   }
   // 這位 NPC 目前實際能開出的候選品項（設定白名單 ∩ 玩家已解鎖/已發現的品項）
   function npcRequestPool(state, npcId) {
@@ -1170,15 +1216,32 @@
       state.flags.eastForageReported = true;
       story = syncStoryProgress(state, "report_forage", now);
     }
+    if (req.sideQuestId) {
+      ensureNpcSideQuestState(state);
+      const prev = state.npcSideQuests[npcId] || {};
+      state.npcSideQuests[npcId] = Object.assign({}, prev, {
+        id: req.sideQuestId,
+        status: "done",
+        startedAt: prev.startedAt || req.createdAt || now,
+        completedAt: now,
+      });
+    }
     checkAchievements(state);
-    return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId, story, doneLine: req.flavorDone || null };
+    return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId, story,
+      sideQuestId: req.sideQuestId || null, doneLine: req.flavorDone || null };
   }
   // 放棄委託：清掉這張委託並跟交付一樣進冷卻——冷卻要一致，否則玩家能用「棄了重抽」
   // 無限刷到好賠率的品項，失去節流意義；用來解掉抽到「幾乎摸不到」品項時的卡關委託。
   function declineNpcRequest(state, npcId, now) {
     ensureNpcRequestState(state);
-    if (!state.npcRequests[npcId]) return { ok: false, reason: "none" };
+    const req = state.npcRequests[npcId];
+    if (!req) return { ok: false, reason: "none" };
     delete state.npcRequests[npcId];
+    if (req.sideQuestId) {
+      ensureNpcSideQuestState(state);
+      const prev = state.npcSideQuests[npcId] || {};
+      state.npcSideQuests[npcId] = Object.assign({}, prev, { id: req.sideQuestId, status: "available" });
+    }
     if (!state.npcRequestLog[npcId]) state.npcRequestLog[npcId] = { lastRequestAt: 0, fulfilledCount: 0 };
     state.npcRequestLog[npcId].lastRequestAt = now;
     return { ok: true };
@@ -1205,12 +1268,21 @@
         discovered: (collected[id] || 0) > 0 };
     });
   }
+  function journalForage(state) {
+    const collected = (state.stats && state.stats.collected) || {};
+    return Object.keys(C.FORAGE_ITEMS || {}).map((id) => {
+      const f = C.FORAGE_ITEMS[id];
+      return { id, name: f.name, emoji: f.emoji, region: f.region, season: f.season || "",
+        discovered: (collected[id] || 0) > 0 };
+    });
+  }
   function journalNpcs(state) {
     const seen = (state.story && state.story.dialogueSeen) || {};
     const log = state.npcRequestLog || {};
     return Object.values(C.NPCS || {}).map((n) => ({
       id: n.id, name: n.name, title: n.title, met: !!seen[n.id],
       requestsCompleted: (log[n.id] && log[n.id].fulfilledCount) || 0,
+      sideQuest: npcSideQuestStatus(state, n.id),
     }));
   }
   // 動物親密度里程碑：affinity 現值會隨時間衰減，「曾經養到開心」要靠 bestAffinity 高水位判斷，
@@ -1251,16 +1323,40 @@
     return Object.keys(ACHIEVEMENTS).map((id) => ({
       id, name: ACHIEVEMENTS[id].name, desc: ACHIEVEMENTS[id].desc, icon: ACHIEVEMENTS[id].icon, unlocked: !!a[id] }));
   }
+  function completionOf(items, pred) {
+    const total = items.length;
+    const done = items.filter(pred).length;
+    return { done, total, pct: total ? Math.round(done / total * 100) : 0 };
+  }
   // 彙總入口：一次回傳 Journal 面板要的全部資料，UI 只呼叫這一個函式，不要各自重算發現閥門
   function journalSummary(state, now) {
+    const crops = journalCrops(state);
+    const products = journalProducts(state);
+    const forage = journalForage(state);
+    const npcs = journalNpcs(state);
+    const animals = journalAnimals(state, now);
+    const world = journalWorldFlags(state);
+    const achievements = journalAchievements(state);
+    const worldItems = [world.bridgeRepaired, world.eastClearingClaimed];
     return {
-      crops: journalCrops(state),
-      products: journalProducts(state),
-      npcs: journalNpcs(state),
-      animals: journalAnimals(state, now),
-      world: journalWorldFlags(state),
+      crops,
+      products,
+      forage,
+      npcs,
+      animals,
+      world,
       chapters: journalChapters(state),
-      achievements: journalAchievements(state),
+      achievements,
+      completion: {
+        crops: completionOf(crops, (c) => c.discovered),
+        products: completionOf(products, (p) => p.discovered),
+        forage: completionOf(forage, (f) => f.discovered),
+        npcs: completionOf(npcs, (n) => n.met),
+        npcSideQuests: completionOf(npcs.filter((n) => n.sideQuest), (n) => n.sideQuest.completed),
+        animals: completionOf(animals, (a) => a.everGood || a.everHappy),
+        world: completionOf(worldItems, Boolean),
+        achievements: completionOf(achievements, (a) => a.unlocked),
+      },
       npcRequestsCompleted: (state.stats && state.stats.npcRequestsCompleted) || 0,
     };
   }
@@ -1369,9 +1465,10 @@
     // Stage 6：NPC 對話
     npcAt, npcPhase, npcDialogue,
     // Stage 10：NPC 重複委託
-    ensureNpcRequestState, npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest, declineNpcRequest,
+    ensureNpcRequestState, ensureNpcSideQuestState, npcSideQuestStatus, ensureNpcSideQuestRequest,
+    npcRequestPool, canRequestFrom, generateNpcRequest, canFulfillNpcRequest, fulfillNpcRequest, declineNpcRequest,
     // Stage 11：Farm Journal
-    journalCrops, journalProducts, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalSummary,
+    journalCrops, journalProducts, journalForage, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalSummary,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,

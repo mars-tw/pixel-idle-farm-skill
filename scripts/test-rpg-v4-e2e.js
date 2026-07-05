@@ -715,7 +715,7 @@ async function run() {
     const ch3Phase = await page.evaluate(() => window.Game.npcPhase(window.__farm.state()));
     assert(ch3Phase === "ch3done", `第三章完成後 NPC 對話階段為 ch3done（實際 ${ch3Phase}）`);
 
-    // 20. Stage 10.1/10.2：走近老農，自動生成一張委託（走近觸發，非按鈕）
+    // 20. Stage 10.1/R15：走近老農，優先生成一次性支線委託（走近觸發，非按鈕）
     const elderTile2 = await page.evaluate(() => {
       const F = window.__farm; const st = F.state();
       const t = st.map.tiles.find((x) => x.npc === "elder");
@@ -728,10 +728,13 @@ async function run() {
       const st = window.__farm.state();
       const req = st.npcRequests.elder;
       const bubble = document.querySelector('[data-audit="dialogue-bubble"][data-npc="elder"]');
-      return { hasReq: !!req, wants: req ? req.wants : null, bubbleText: bubble ? bubble.querySelector(".nb-line").textContent : null };
+      const sq = window.Game.npcSideQuestStatus(st, "elder");
+      return { hasReq: !!req, wants: req ? req.wants : null, sideQuestId: req ? req.sideQuestId : null,
+        sideStatus: sq ? sq.status : null, bubbleText: bubble ? bubble.querySelector(".nb-line").textContent : null };
     });
-    assert(reqGen.hasReq === true, "走近老農後自動生成委託（req 存進 state.npcRequests.elder）");
-    assert(!!reqGen.bubbleText && /x\d/.test(reqGen.bubbleText), `對話泡泡顯示委託內容（${reqGen.bubbleText}）`);
+    assert(reqGen.hasReq === true && !!reqGen.sideQuestId && reqGen.sideStatus === "active",
+      `走近老農後自動生成 R15 支線委託（sideQuest=${reqGen.sideQuestId} status=${reqGen.sideStatus}）`);
+    assert(!!reqGen.bubbleText && reqGen.bubbleText.includes("雞蛋"), `對話泡泡顯示支線委託內容（${reqGen.bubbleText}）`);
 
     // 21. 開啟磚資訊面板：委託卡顯示、庫存不足時交付按鈕 disabled
     await page.evaluate((id) => window.__farm.clickTile(id), elderTile2);
@@ -739,26 +742,31 @@ async function run() {
     const cardBefore = await page.evaluate(() => {
       const box = document.getElementById("tileContext");
       const btn = document.getElementById("fulfillReqBtn");
-      return { hasCard: !!(box && box.querySelector(".npc-request")), disabled: btn ? btn.disabled : null };
+      const side = box ? box.querySelector('[data-audit="npc-sidequest"]') : null;
+      return { hasCard: !!(box && box.querySelector(".npc-request")), disabled: btn ? btn.disabled : null,
+        sideStatus: side ? side.dataset.status : null, text: box ? box.innerText : "" };
     });
     assert(cardBefore.hasCard === true, "磚資訊側欄出現 NPC 委託卡");
     assert(cardBefore.disabled === true, "庫存不足時交付按鈕為 disabled");
+    assert(cardBefore.sideStatus === "active" && cardBefore.text.includes("雞舍巡查"),
+      `磚資訊側欄顯示支線狀態（${cardBefore.sideStatus}）`);
 
     // 22. 補足庫存後交付委託：coins 增加、委託消失、npcRequestLog 記錄完成次數
     const fulfillResult = await page.evaluate(() => {
       const st = window.__farm.state();
       const req = st.npcRequests.elder;
-      const itemId = Object.keys(req.wants)[0];
-      st.storage.items[itemId] = req.wants[itemId];
+      for (const [itemId, qty] of Object.entries(req.wants)) st.storage.items[itemId] = qty;
       window.__farm.refresh();
       const before = st.coins;
       document.getElementById("fulfillReqBtn").click();
       return { before, after: window.__farm.state().coins, gone: !window.__farm.state().npcRequests.elder,
-        fulfilledCount: (window.__farm.state().npcRequestLog.elder || {}).fulfilledCount };
+        fulfilledCount: (window.__farm.state().npcRequestLog.elder || {}).fulfilledCount,
+        sideDone: window.Game.npcSideQuestStatus(window.__farm.state(), "elder").completed };
     });
     assert(fulfillResult.after > fulfillResult.before, `交付委託後 coins 增加（${fulfillResult.before} → ${fulfillResult.after}）`);
     assert(fulfillResult.gone === true, "交付後委託從 state.npcRequests 移除");
     assert(fulfillResult.fulfilledCount === 1, `npcRequestLog 完成次數為 1（實際 ${fulfillResult.fulfilledCount}）`);
+    assert(fulfillResult.sideDone === true, "老農 R15 支線完成狀態寫入紀錄");
 
     // 23. 交付後立刻再走近老農：仍在冷卻中，不會生成新委託，磚資訊不顯示委託卡
     const afterCooldownTile = await page.evaluate(() => {
@@ -827,6 +835,26 @@ async function run() {
     assert(sunnyState.cls === "sunny" && sunnyState.data === "sunny", `豔陽：#weatherLayer 套上 sunny（class=${sunnyState.cls} data-weather=${sunnyState.data}）`);
     assert(sunnyState.overflow <= 2, `豔陽疊圖不造成水平溢出（${sunnyState.overflow}）`);
 
+    const windyState = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.weather = { id: "windy", untilMs: Date.now() + 999999 };
+      window.__farm.refresh();
+      const el = document.getElementById("weatherLayer");
+      return { cls: el.className, data: el.getAttribute("data-weather"), overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(windyState.cls === "windy" && windyState.data === "windy", `微風：#weatherLayer 套上 windy（class=${windyState.cls} data-weather=${windyState.data}）`);
+    assert(windyState.overflow <= 2, `微風疊圖不造成水平溢出（${windyState.overflow}）`);
+
+    const fogState = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.weather = { id: "fog", untilMs: Date.now() + 999999 };
+      window.__farm.refresh();
+      const el = document.getElementById("weatherLayer");
+      return { cls: el.className, data: el.getAttribute("data-weather"), overflow: document.documentElement.scrollWidth - window.innerWidth };
+    });
+    assert(fogState.cls === "fog" && fogState.data === "fog", `晨霧：#weatherLayer 套上 fog（class=${fogState.cls} data-weather=${fogState.data}）`);
+    assert(fogState.overflow <= 2, `晨霧疊圖不造成水平溢出（${fogState.overflow}）`);
+
     const clearState = await page.evaluate(() => {
       const st = window.__farm.state();
       st.weather = { id: "clear", untilMs: 0 };
@@ -843,12 +871,23 @@ async function run() {
     const journalState = await page.evaluate(() => {
       const items = [...document.querySelectorAll('[data-audit="journal-item"]')];
       const byCat = (cat) => items.filter((el) => el.dataset.category === cat);
-      const crop = byCat("crop"), product = byCat("product"), npc = byCat("npc");
+      const crop = byCat("crop"), product = byCat("product"), npc = byCat("npc"), forage = byCat("forage"), side = byCat("npc-sidequest");
+      const completion = (cat) => {
+        const el = document.querySelector(`[data-audit="journal-completion"][data-category="${cat}"]`);
+        return el ? el.textContent : "";
+      };
       return {
         totalItems: items.length,
         cropFoundHasWheat: crop.some((el) => el.dataset.discovered === "true" && el.textContent.includes("小麥")),
         cropHasUndiscovered: crop.some((el) => el.dataset.discovered === "false"),
         productFound: product.some((el) => el.dataset.discovered === "true"),
+        forageCount: forage.length,
+        forageFound: forage.filter((el) => el.dataset.discovered === "true").length,
+        forageHidden: forage.filter((el) => el.dataset.discovered === "false" && el.textContent.includes("未採集")).length,
+        forageCompletion: completion("forage"),
+        cropCompletion: completion("crops"),
+        sideDone: side.some((el) => el.dataset.discovered === "true" && el.textContent.includes("老農")),
+        sideCompletion: completion("npcSideQuests"),
         npcMetCount: npc.filter((el) => el.dataset.discovered === "true").length,
         npcUnmetCount: npc.filter((el) => el.dataset.discovered === "false").length,
         merchantMet: npc.some((el) => el.dataset.discovered === "true" && el.textContent.includes("商人")),
@@ -860,7 +899,14 @@ async function run() {
     assert(journalState.totalItems > 0, "圖鑑分頁渲染出內容");
     assert(journalState.cropFoundHasWheat === true, "作物圖鑑顯示已收成的小麥（真實故事進度累積，非灌資料）");
     assert(journalState.cropHasUndiscovered === true, "作物圖鑑仍有未發現項目（沒有全部提前曝光）");
+    assert(journalState.cropCompletion.includes("/6"), `作物圖鑑完成度包含 R15 玉米後的 6 作物總數（${journalState.cropCompletion}）`);
     assert(journalState.productFound === true, "產物圖鑑顯示已收集過的動物產品");
+    assert(journalState.forageCount === 4 && journalState.forageFound === 2 && journalState.forageHidden === 2,
+      `東林採集圖鑑顯示 2/4 已採、2 個未採集剪影（found=${journalState.forageFound} hidden=${journalState.forageHidden}）`);
+    assert(journalState.forageCompletion.includes("2/4") && journalState.forageCompletion.includes("50%"),
+      `東林採集完成度顯示 2/4 · 50%（${journalState.forageCompletion}）`);
+    assert(journalState.sideDone === true && journalState.sideCompletion.includes("1/4"),
+      `鎮民支線圖鑑記錄老農完成且完成度 1/4（${journalState.sideCompletion}）`);
     assert(journalState.npcMetCount === 4 && journalState.npcUnmetCount === 0,
       `鎮民名錄：跑完故事鏈與回報流程後 4 位鎮民皆為真實互動遇見（met=${journalState.npcMetCount} unmet=${journalState.npcUnmetCount}）`);
     assert(journalState.merchantMet === true, "商人因東林回報流程列為已遇見");

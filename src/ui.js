@@ -525,6 +525,10 @@
     const j = G.journalSummary(state, now());
     const item = (discovered, html, category) =>
       `<div class="journal-item ${discovered ? "found" : "undiscovered"}" data-audit="journal-item" data-category="${category}" data-discovered="${discovered}">${html}</div>`;
+    const head = (label, key) => {
+      const c = j.completion && j.completion[key];
+      return `<div class="story-kicker">${label}${c ? ` <span class="journal-pct" data-audit="journal-completion" data-category="${key}">${c.done}/${c.total} · ${c.pct}%</span>` : ""}</div>`;
+    };
     const cropRows = j.crops.map((c) => {
       if (!c.unlocked) return item(false, "🔒 未解鎖", "crop");
       if (!c.discovered) return item(false, "❔ 尚未發現", "crop");
@@ -532,9 +536,11 @@
     }).join("");
     const productRows = j.products.map((p) =>
       item(p.discovered, p.discovered ? `${p.emoji} ${p.name}` : "❔ 尚未發現", "product")).join("");
+    const forageRows = (j.forage || []).map((f) =>
+      item(f.discovered, f.discovered ? `${f.emoji} ${f.name}${f.season ? "・" + f.season : ""}` : "◼ 未採集", "forage")).join("");
     const npcMetCount = j.npcs.filter((n) => n.met).length;
     const npcRows = j.npcs.map((n) => item(n.met,
-      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}` : "❔ 尚未遇見", "npc")).join("");
+      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}${n.sideQuest && n.sideQuest.completed ? "・支線完成" : ""}` : "❔ 尚未遇見", "npc")).join("");
     // discovered 要用 everGood||everHappy，不能只看 everHappy——不然「曾達良好」的文字
     // 顯示了，但 CSS class/data-discovered 卻標成 undiscovered，兩者互相矛盾
     const animalRows = j.animals.map((a) => item(a.everGood || a.everHappy,
@@ -549,16 +555,21 @@
         ${chapterLine("第二章", j.chapters.chapter2)}
         ${chapterLine("第三章", j.chapters.chapter3)}
       </div>
-      <div class="story-kicker">🌾 作物圖鑑</div><div class="journal-grid">${cropRows}</div>
-      <div class="story-kicker">🥚 產物與品質圖鑑</div><div class="journal-grid">${productRows}</div>
-      <div class="story-kicker">🧑 鎮民名錄（${npcMetCount}/${j.npcs.length}）</div><div class="journal-grid">${npcRows}</div>
-      <div class="story-kicker">🐾 動物親密度里程碑</div><div class="journal-grid">${animalRows}</div>
-      <div class="story-kicker">🌉 世界旗標</div>
+      ${head("🌾 作物圖鑑", "crops")}<div class="journal-grid">${cropRows}</div>
+      ${head("🥚 產物與品質圖鑑", "products")}<div class="journal-grid">${productRows}</div>
+      ${head("🌲 東林採集", "forage")}<div class="journal-grid" data-audit="journal-forage">${forageRows}</div>
+      ${head("🧑 鎮民名錄（" + npcMetCount + "/" + j.npcs.length + "）", "npcs")}<div class="journal-grid">${npcRows}</div>
+      ${head("📬 鎮民支線", "npcSideQuests")}<div class="journal-grid">${j.npcs.map((n) => {
+        const sq = n.sideQuest;
+        return item(!!(sq && sq.completed), sq ? `${sq.completed ? "✅" : sq.status === "active" ? "📌" : sq.status === "available" ? "📮" : "🔒"} ${n.name}・${sq.title}` : "❔ 尚無支線", "npc-sidequest");
+      }).join("")}</div>
+      ${head("🐾 動物親密度里程碑", "animals")}<div class="journal-grid">${animalRows}</div>
+      ${head("🌉 世界旗標", "world")}
       <div class="journal-grid">
         ${item(j.world.bridgeRepaired, j.world.bridgeRepaired ? "✅ 東橋已修復" : "🔒 東橋未修復", "world")}
         ${item(j.world.eastClearingClaimed, j.world.eastClearingClaimed ? "✅ 東林空地已探索" : "🔒 東林空地未探索", "world")}
       </div>
-      <div class="story-kicker">🏆 成就</div>
+      ${head("🏆 成就", "achievements")}
       <div class="journal-grid">${achRows}</div>
     </div>`;
   }
@@ -856,7 +867,9 @@
       if (el) { el.dataset.npc = tile.npc; el.dataset.tileId = tile.id; }
       // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
       const req = state.npcRequests && state.npcRequests[tile.npc];
+      const sq = G.npcSideQuestStatus ? G.npcSideQuestStatus(state, tile.npc) : null;
       if (req && G.canFulfillNpcRequest(state, tile.npc)) addDot(cx, baselineY - TILE * 1.15, "ready");
+      else if (sq && sq.status === "available") addDot(cx, baselineY - TILE * 1.15);
       else if (!(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) addDot(cx, baselineY - TILE * 1.15);
     }
   }
@@ -1144,6 +1157,7 @@
       // 放在 npcDialogue() 之前，這樣這次的台詞就會是新委託的 flavorOffer。
       G.ensureNpcRequestState(state);
       if (G.ensureEastForageReportRequest) G.ensureEastForageReportRequest(state, now());
+      if (!state.npcRequests[tile.npc] && G.ensureNpcSideQuestRequest) G.ensureNpcSideQuestRequest(state, tile.npc, now());
       if (!state.npcRequests[tile.npc]) {
         const chk = G.canRequestFrom(state, tile.npc, now());
         if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
@@ -1342,6 +1356,11 @@
       const req = d && d.request && d.request.wants ? d.request : null; // 只有進行中委託才有 wants
       const log = (state.npcRequestLog || {})[tile.npc];
       const doneCount = (log && log.fulfilledCount) || 0;
+      const sq = G.npcSideQuestStatus ? G.npcSideQuestStatus(state, tile.npc) : null;
+      const sqText = sq ? (sq.status === "done" ? "支線完成：" + sq.title
+        : sq.status === "active" ? "支線進行中：" + sq.title
+        : sq.status === "available" ? "支線可接：" + sq.title
+        : "支線未解鎖：" + sq.title) : "";
       const reqHtml = req ? `<div class="npc-request" data-audit="npc-request" data-npc="${tile.npc}">
           <div class="nr-wants">${Object.entries(req.wants).map(([id, q]) => {
             const have = state.storage.items[id] || 0;
@@ -1355,6 +1374,7 @@
         </div>` : "";
       box.innerHTML = `<div class="tc-title">🧑 ${npc.name}</div>
         <div class="tc-desc">${npc.title}${seen && d ? "：「" + d.line + "」" : "・走過去聽聽他要說什麼"}</div>
+        ${sq ? `<div class="nr-history" data-audit="npc-sidequest" data-status="${sq.status}">${sqText}</div>` : ""}
         ${reqHtml}
         ${doneCount > 0 ? `<div class="nr-history">已幫忙完成 ${doneCount} 次委託</div>` : ""}
         <div class="tc-actions"><button class="btn buy small" id="talkNpcBtn">${seen ? "再聊一句" : "走過去交談"}</button></div>`;

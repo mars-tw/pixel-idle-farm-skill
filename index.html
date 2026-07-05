@@ -359,7 +359,7 @@
      的手足而非子元素，才不會被世界的 transform 一起搬移）*/
   #weatherLayer { position: absolute; inset: 0; z-index: 9700; pointer-events: none;
     opacity: 0; transition: opacity .6s ease; }
-  #weatherLayer.rain, #weatherLayer.sunny { opacity: 1; }
+  #weatherLayer.rain, #weatherLayer.sunny, #weatherLayer.windy, #weatherLayer.fog { opacity: 1; }
   #weatherLayer::before, #weatherLayer::after { content: ""; position: absolute; inset: 0; }
   #weatherLayer.rain::before { background-image: repeating-linear-gradient(115deg,
       rgba(214,232,255,.55) 0 2px, transparent 2px 34px); opacity: .38; animation: rainFall .5s linear infinite; }
@@ -374,6 +374,17 @@
       radial-gradient(50px 50px at 45% 80%, rgba(255,244,200,.22), transparent 70%);
     mix-blend-mode: screen; animation: sunDrift 14s ease-in-out infinite alternate; }
   @keyframes sunDrift { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 12px -10px, -14px 8px, 8px 10px; } }
+  #weatherLayer.windy::before { background-image: repeating-linear-gradient(12deg,
+      transparent 0 28px, rgba(238,255,224,.34) 28px 31px, transparent 31px 74px);
+    animation: windSlide 1.8s linear infinite; }
+  #weatherLayer.windy::after { background: linear-gradient(90deg, rgba(220,255,210,.10), transparent 45%, rgba(255,255,255,.10)); }
+  @keyframes windSlide { from { background-position: -80px 0; } to { background-position: 80px 0; } }
+  #weatherLayer.fog::before { background:
+      linear-gradient(180deg, rgba(238,242,230,.20), rgba(238,242,230,.36)),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0 18px, transparent 18px 58px);
+    animation: fogDrift 8s ease-in-out infinite alternate; }
+  #weatherLayer.fog::after { background: linear-gradient(180deg, rgba(225,230,215,.18), rgba(150,160,145,.12)); }
+  @keyframes fogDrift { from { background-position: 0 0, -30px 0; } to { background-position: 0 0, 30px 0; } }
   @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
   /* 動作 VFX（世界內，澆水/塵土/種子/收成/產物環）*/
   #vfxLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9500; }
@@ -427,6 +438,8 @@
   .journal-item { font-size: 12px; padding: 4px 8px; border-radius: 6px; background: #f4f1e8; border: 1px solid #e3ddc8; }
   .journal-item.found { background: #eaf7e0; border-color: #bfe6a3; }
   .journal-item.undiscovered, .journal-item.locked { color: var(--ink-soft); opacity: .7; }
+  .journal-pct { margin-left: 6px; font-size: 11px; font-weight: 850; color: #5d6f2b; background: rgba(226,244,210,.72);
+    border: 1px solid #bedaa4; border-radius: 999px; padding: 1px 6px; white-space: nowrap; }
 </style>
 </head>
 <body>

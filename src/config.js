@@ -28,6 +28,7 @@ const CROPS = {
   carrot:     { id: "carrot",     name: "胡蘿蔔", growMs: 45000,  seedCost: 4,  yield: 3, sellValue: 3,  xp: 3,  unlockLevel: 2, spriteRow: 1, emoji: "🥕", color: "#f08a3c" },
   tomato:     { id: "tomato",     name: "番茄",   growMs: 120000, seedCost: 12, yield: 4, sellValue: 8,  xp: 8,  unlockLevel: 3, spriteRow: 2, emoji: "🍅", color: "#e0473b" },
   strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57" },
+  corn:       { id: "corn",       name: "玉米",   growMs: 210000, seedCost: 20, yield: 4, sellValue: 12, xp: 12, unlockLevel: 4, spriteRow: 4, emoji: "🌽", color: "#f0c84a", season: "夏" },
   pumpkin:    { id: "pumpkin",    name: "南瓜",   growMs: 900000, seedCost: 85, yield: 3, sellValue: 80, xp: 55, unlockLevel: 5, spriteRow: 5, emoji: "🎃", color: "#e8821e" },
 };
 const CROP_SHEET = { cols: 5, rows: 6, stages: 5 }; // crop-growth.png 版面
@@ -106,6 +107,8 @@ const WEATHER = {
   clear: { id: "clear", name: "晴朗", icon: "⛅", growthMul: 1.0,  sellMul: 1.0 },
   rain:  { id: "rain",  name: "降雨", icon: "🌧️", growthMul: 0.7,  sellMul: 1.0 },  // 成長加速
   sunny: { id: "sunny", name: "豔陽", icon: "☀️", growthMul: 1.0,  sellMul: 1.25 }, // 售價提升
+  windy: { id: "windy", name: "微風", icon: "🍃", growthMul: 0.9,  sellMul: 1.05 }, // 小幅成長與售價加成
+  fog:   { id: "fog",   name: "晨霧", icon: "🌫️", growthMul: 1.15, sellMul: 1.10 }, // 成長稍慢、售價稍高
 };
 const WEATHER_UNLOCK_LEVEL = 5;
 const WEATHER_DURATION_MS = 10 * 60 * 1000; // 每段天氣 10 分鐘
@@ -148,6 +151,8 @@ const PRODUCTS = buildProducts();
 const FORAGE_ITEMS = {
   forest_herb:   { id: "forest_herb",   name: "東林藥草", emoji: "🌿", sellValue: 4, region: "east" },
   glow_mushroom: { id: "glow_mushroom", name: "螢光菇",   emoji: "🍄", sellValue: 5, region: "east" },
+  wild_berry:    { id: "wild_berry",    name: "東林野莓", emoji: "🫐", sellValue: 6, region: "east", season: "秋" },
+  river_mint:    { id: "river_mint",    name: "溪畔薄荷", emoji: "🍃", sellValue: 7, region: "east", season: "春" },
 };
 const FORAGE_NODE_COOLDOWN_MS = 10 * 60 * 1000;
 const FORAGE_NODES = [
@@ -155,6 +160,10 @@ const FORAGE_NODES = [
     desc: "橋後林地才長得好的清香藥草。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
   { id: "east_mushroom_log", itemId: "glow_mushroom", x: 21, y: 4, yield: 1, name: "螢光菇木",
     desc: "靠近古樹根部的微光菇蕈。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
+  { id: "east_berry_thicket", itemId: "wild_berry", x: 18, y: 7, yield: 1, name: "東林野莓叢",
+    desc: "秋天最甜的灌木野莓，適合做小點心。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
+  { id: "east_mint_spring", itemId: "river_mint", x: 20, y: 6, yield: 1, name: "溪畔薄荷",
+    desc: "靠近濕潤溪岸的清涼香草。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
 ];
 const EAST_FORAGE_REPORT = {
   npcId: "merchant",
@@ -357,18 +366,46 @@ const NPC_PLACEMENT = [
 // 確保永遠不會要求玩家還沒解鎖/還沒收集過的品項（沿用 D 系統的發現閥門）。
 const NPC_REQUEST_COOLDOWN_MS = 8 * 60 * 1000; // 交付後多久可再接下一張委託
 const NPC_REQUESTS = {
-  mayor:    { pool: ["wheat", "carrot", "tomato"], rewardMul: 1.0,
+  mayor:    { pool: ["wheat", "carrot", "tomato", "corn"], rewardMul: 1.0,
     flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？"],
     flavorDone:  ["有你真好，晨光鎮又熱鬧一場。"] },
-  merchant: { pool: ["strawberry", "pumpkin", "forest_herb", "glow_mushroom", "egg_good", "egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
+  merchant: { pool: ["strawberry", "corn", "pumpkin", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "egg_good", "egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
     flavorOffer: ["市集缺貨，手頭有{item}嗎？"],
     flavorDone:  ["生意興隆，多虧你這批貨。"] },
-  elder:    { pool: ["egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
+  elder:    { pool: ["egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
     flavorOffer: ["幫我張羅點{item}，我拿去燉湯。"],
     flavorDone:  ["這品質，照顧得很用心啊。"] },
-  child:    { pool: ["wheat", "carrot", "strawberry"], rewardMul: 0.85,
+  child:    { pool: ["wheat", "carrot", "corn", "strawberry", "wild_berry"], rewardMul: 0.85,
     flavorOffer: ["可以給我一點{item}嗎？我肚子餓了！"],
     flavorDone:  ["謝謝你！好好吃！"] },
+};
+
+// ===== R15：鎮民一次性支線（固定小委託；不使用隨機報酬公式）=====
+const NPC_SIDE_QUESTS = {
+  mayor: {
+    id: "mayor_notice_board", npcId: "mayor", title: "公告欄重新開張",
+    wants: { wheat: 4 }, rewardCoins: 16, rewardXp: 3,
+    offer: "鎮上的公告欄要重新開張，先送 4 份小麥來當第一批登記樣品吧。",
+    done: "公告欄終於像樣了，大家會更常來看你的農場消息。",
+  },
+  merchant: {
+    id: "merchant_forest_bundle", npcId: "merchant", title: "東林試賣組",
+    wants: { forest_herb: 1, glow_mushroom: 1 }, rewardCoins: 14, rewardXp: 4,
+    offer: "我想把東林貨做成試賣組，藥草和螢光菇各一份就好。",
+    done: "包裝起來很有賣相，東林的名字會慢慢傳出去。",
+  },
+  elder: {
+    id: "elder_coop_check", npcId: "elder", title: "雞舍巡查",
+    wants: { egg: 2 }, rewardCoins: 12, rewardXp: 4,
+    offer: "讓我看看你照顧雞舍的成果，帶 2 顆雞蛋來。",
+    done: "蛋殼厚實，雞舍照護算是穩了。",
+  },
+  child: {
+    id: "child_picnic_pack", npcId: "child", title: "野餐小包",
+    wants: { wheat: 2, carrot: 2 }, rewardCoins: 10, rewardXp: 3,
+    offer: "我想做一份野餐小包，可以幫我準備小麥和胡蘿蔔嗎？",
+    done: "野餐小包完成！我會分一點給大家。",
+  },
 };
 
 // ===== 故事任務（地圖驅動：信箱/告示觸發、目標在地圖上有標記）=====
@@ -447,7 +484,7 @@ const CONFIG = {
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
   EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS,
-  NPCS, NPC_PLACEMENT, NPC_REQUESTS, NPC_REQUEST_COOLDOWN_MS,
+  NPCS, NPC_PLACEMENT, NPC_REQUESTS, NPC_REQUEST_COOLDOWN_MS, NPC_SIDE_QUESTS,
   QUALITY_TIERS, QUALITY_SELL_MUL, QUALITY_LABEL,
   AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,
   CARE_GAIN, CARE_COOLDOWN_MS, STATUS_STALE_MS,
