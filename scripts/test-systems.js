@@ -862,6 +862,53 @@ console.log("\n== 16b. Stage 11.1：舊存檔動物物件補齊 bestAffinity =="
   assert(a.bestAffinity === 42, "舊動物沒有 bestAffinity 時，用舊 affinity 值當合理預設（實際 " + a.bestAffinity + "）");
 }
 
+console.log("\n== 17. R23：智慧助手 / 離線摘要 / 安全存檔 ==");
+{
+  const st = S.defaultState(T0);
+  st.storage.items.wheat = 4;
+  st.orders = [{ id: "order_r23", wants: { wheat: 2 }, rarity: "common", rewardCoins: 20, rewardXp: 2, expiresAt: T0 + 999999 }];
+  st.plots[0].cropId = "wheat";
+  st.plots[0].plantedAt = T0 - C.CROPS.wheat.growMs - 1000;
+  st.animals[0].lastWateredAt = T0 - C.CARE_COOLDOWN_MS - 1;
+  const frozen = JSON.stringify(st);
+  const suggestions = G.farmActionSuggestions(st, T0, { limit: 3 });
+  assert(suggestions[0] && suggestions[0].type === "harvest", "智慧助手排序優先成熟作物收成");
+  assert(suggestions.some((s) => s.type === "order"), "智慧助手列出可交付市集委託");
+  assert(JSON.stringify(st) === frozen, "farmActionSuggestions 為純讀取，不 mutate state");
+
+  const off = S.defaultState(T0);
+  off.stats.plantCount = 1;
+  off.flags.bridgeRepaired = true;
+  off.flags.eastForageDiscovered = true;
+  off.flags.forageNodes.east_herb_patch = T0 - C.FORAGE_NODE_COOLDOWN_MS + 60000;
+  const sum = G.applyOffline(off, T0 + 6 * 60 * 1000);
+  assert(sum.offlineMs === 6 * 60 * 1000, "離線摘要計入 6 分鐘離開時間");
+  assert(sum.forageReadyCount === 1 && sum.forageReady[0].nodeId === "east_herb_patch",
+    "離開期間採集點冷卻完成會進入摘要");
+
+  const oldLs = global.localStorage;
+  const store = { [C.GAME.saveKey]: "old-good-save" };
+  global.localStorage = {
+    getItem: (k) => store[k] || null,
+    setItem: (k, v) => { store[k] = v; },
+    removeItem: (k) => { delete store[k]; },
+  };
+  const good = S.safeSave(S.defaultState(T0));
+  const savedRaw = store[C.GAME.saveKey];
+  assert(good && good.ok && /"coins"/.test(savedRaw), "safeSave 可寫入正常存檔");
+  const circular = { version: C.GAME.version }; circular.self = circular;
+  const oldWarn = console.warn;
+  console.warn = () => {};
+  const bad = S.safeSave(circular);
+  assert(bad && bad.ok === false && store[C.GAME.saveKey] === savedRaw,
+    "safeSave 遇到不可序列化資料不覆蓋既有存檔");
+  const badState = S.safeSave(null);
+  console.warn = oldWarn;
+  assert(badState && badState.ok === false && store[C.GAME.saveKey] === savedRaw,
+    "safeSave 遇到壞 state 不覆蓋既有存檔");
+  if (oldLs) global.localStorage = oldLs; else delete global.localStorage;
+}
+
 console.log("");
 if (failed === 0) { console.log("✅ 全部 MVP2 系統測試通過"); process.exit(0); }
 else { console.error(`❌ ${failed} 項失敗`); process.exit(1); }

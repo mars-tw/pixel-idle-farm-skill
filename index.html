@@ -212,6 +212,22 @@
     padding: 6px 10px; border-radius: 999px; font-family: inherit; cursor: pointer;
     font-size: 11px; font-weight: 950; color: #2f6525; background: rgba(226,244,210,.9); border: 1.5px solid #aacb86; box-shadow: 0 2px 0 rgba(0,0,0,.08); }
   .quest-dock .qd-meta:disabled { opacity: .55; cursor: not-allowed; }
+  .smart-assistant { position: absolute; right: 10px; bottom: 10px; z-index: 9900; width: min(360px, calc(100% - 20px));
+    background: rgba(255,253,244,.96); border: 2px solid #b8cf8a; border-radius: 10px; box-shadow: 0 8px 24px rgba(38,55,22,.22);
+    overflow: hidden; color: #34441d; }
+  .sa-head { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; background: linear-gradient(180deg, #eef8dd, #dcefc4); }
+  .sa-head b { flex: 1; min-width: 0; font-size: 12px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sa-icon-btn { min-width: 44px; min-height: 44px; border: 1.5px solid #b8cf8a; border-radius: 8px; background: rgba(255,255,255,.72);
+    color: #345b27; font: inherit; font-weight: 950; cursor: pointer; }
+  .sa-list { display: grid; gap: 6px; padding: 8px; }
+  .sa-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; min-width: 0;
+    padding: 7px; background: rgba(255,248,223,.88); border: 1px solid rgba(184,207,138,.75); border-radius: 8px; }
+  .sa-title { font-size: 12px; font-weight: 950; color: #31451c; overflow-wrap: anywhere; line-height: 1.25; }
+  .sa-detail { margin-top: 2px; font-size: 11px; color: #6f6248; overflow-wrap: anywhere; line-height: 1.3; }
+  .sa-go { min-width: 58px; min-height: 44px; border: 1.5px solid #94bd68; border-radius: 8px; background: #e7f5dd;
+    color: #285b1d; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer; }
+  .smart-assistant.collapsed .sa-list { display: none; }
+  .smart-assistant.hidden { display: none; }
   .bridge-materials { margin-top: 8px; display: grid; gap: 5px; font-size: 12px; color: #6a4c16; }
   .bridge-materials .bm-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px;
     padding: 4px 7px; border-radius: 8px; background: rgba(255,255,255,.55); border: 1px solid rgba(194,173,130,.55); }
@@ -247,6 +263,14 @@
   .modal-card .btn { width: 100%; margin-top: 8px; background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; }
   .modal-card ol { margin: 0 0 8px 18px; display: flex; flex-direction: column; gap: 7px; font-size: 14px; }
   .modal-card ol b { color: #2c6f1e; }
+  .error-recovery { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 260;
+    width: min(420px, calc(100vw - 24px)); background: #fff8df; border: 2px solid #d4b468; border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.24); padding: 10px; color: #4a3a22; }
+  .error-recovery[hidden] { display: none; }
+  .er-title { font-size: 13px; font-weight: 950; margin-bottom: 4px; }
+  .er-copy { font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
+  .er-actions { display: flex; gap: 8px; }
+  .er-actions .btn { flex: 1; min-height: 44px; padding: 8px 10px; }
 
   /* ===== 底部工具列 ===== */
   .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
@@ -296,6 +320,8 @@
     .quest-dock .qd-title { font-size: 11px; }
     .quest-dock .qd-action { font-size: 10px; }
     .quest-dock .qd-meta { min-height: 44px; min-width: 48px; padding-inline: 9px; }
+    .smart-assistant { left: 8px; right: 8px; bottom: 8px; width: auto; max-width: none; }
+    .sa-row { grid-template-columns: minmax(0, 1fr) 58px; }
   }
   /* 世界：依 camera 平移 */
   #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0);
@@ -474,6 +500,7 @@
             <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
           </div>
           <div id="weatherLayer" data-audit="weather-layer" data-weather="clear" aria-hidden="true"></div>
+          <div id="smartAssistant" class="smart-assistant" data-audit="smart-assistant"></div>
         </div>
       </div>
       <!-- 幫手自動化：早期隱藏，升「幫手機器人」後解鎖；初期動作都要走到目標執行 -->
@@ -524,6 +551,7 @@
 
   <div class="toolbar">
     <button class="btn small ghost" id="genderToggle" title="切換主角性別">👧 主角</button>
+    <button class="btn small ghost" id="assistantToggle" data-audit="assistant-toggle">助手</button>
     <button class="btn small ghost" id="spriteToggle">🎨 像素圖</button>
     <button class="btn small ghost" id="howToBtn">❓ 玩法</button>
     <button class="btn small ghost" id="resetBtn">🗑️ 重置存檔</button>
@@ -563,6 +591,14 @@
 </div>
 
 <div id="toast-zone"></div>
+<div id="errorRecovery" class="error-recovery" data-audit="error-recovery" hidden>
+  <div class="er-title">發生小問題，進度已保存</div>
+  <div class="er-copy">可以先繼續遊玩；若畫面異常，請重新載入。</div>
+  <div class="er-actions">
+    <button class="btn ghost" id="errorContinue">繼續</button>
+    <button class="btn buy" id="errorReload">重載</button>
+  </div>
+</div>
 
 <script src="src/config.js"></script>
 <script src="src/game.js"></script>

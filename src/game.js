@@ -1521,6 +1521,190 @@
     };
   }
 
+  // ---------- R23：智慧農務助手（純讀取排序） ----------
+  function plotTileId(state, plotIndex) {
+    const tile = (state.map && state.map.tiles || []).find((t) => t.plotIndex === plotIndex);
+    return tile ? tile.id : null;
+  }
+  function stationTileId(state, station) {
+    const tile = (state.map && state.map.tiles || []).find((t) => t.station === station);
+    return tile ? tile.id : null;
+  }
+  function npcTileId(state, npcId) {
+    const tile = (state.map && state.map.tiles || []).find((t) => t.npc === npcId);
+    return tile ? tile.id : null;
+  }
+  function requestCanDeliver(state, req) {
+    if (!req || !req.wants) return false;
+    const items = (state.storage && state.storage.items) || {};
+    return Object.entries(req.wants).every(([id, qty]) => (items[id] || 0) >= qty);
+  }
+  function wantsText(wants) {
+    return Object.entries(wants || {}).map(([id, qty]) => {
+      const def = getItemDef(id) || { name: id };
+      return `${def.name}×${qty}`;
+    }).join("、");
+  }
+  function farmSeason(now) {
+    const m = new Date(now || Date.now()).getMonth();
+    return ["春", "春", "春", "夏", "夏", "夏", "秋", "秋", "秋", "冬", "冬", "冬"][m];
+  }
+  function affordableFeed(state, feedCost) {
+    const items = (state.storage && state.storage.items) || {};
+    return Object.entries(feedCost || {}).every(([id, qty]) => (items[id] || 0) >= qty);
+  }
+  function farmActionSuggestions(state, now, opts) {
+    opts = opts || {};
+    now = now || Date.now();
+    const limit = opts.limit || 3;
+    const season = opts.season || farmSeason(now);
+    const suggestions = [];
+    const active = activePlotCount(state);
+    const readyByCrop = {};
+    const readyTiles = {};
+    const emptyPlots = [];
+    for (let i = 0; i < Math.min((state.plots || []).length, active); i++) {
+      const plot = state.plots[i];
+      if (!plot || !plot.cropId) {
+        emptyPlots.push(i);
+        continue;
+      }
+      const progress = getCropProgress(state, plot, now);
+      if (!progress.ready) continue;
+      readyByCrop[plot.cropId] = (readyByCrop[plot.cropId] || 0) + 1;
+      if (!readyTiles[plot.cropId]) readyTiles[plot.cropId] = plotTileId(state, i);
+    }
+    for (const [cropId, count] of Object.entries(readyByCrop)) {
+      const crop = CROPS[cropId];
+      suggestions.push({
+        id: "harvest:" + cropId,
+        type: "harvest",
+        priority: 120,
+        valueScore: count * (crop ? crop.yield * crop.sellValue : 1),
+        title: `${crop ? crop.name : cropId}已成熟 ×${count}`,
+        detail: "先收成可釋放田地並避免空等。",
+        actionLabel: "前往",
+        tileId: readyTiles[cropId],
+      });
+    }
+
+    for (const order of (state.orders || [])) {
+      if (!requestCanDeliver(state, order)) continue;
+      const pay = orderPayout(state, order);
+      suggestions.push({
+        id: "order:" + order.id,
+        type: "order",
+        priority: 108,
+        valueScore: pay.coins,
+        title: `委託「${wantsText(order.wants)}」可交付`,
+        detail: `交付可得 ${pay.coins} 金與 ${pay.xp} XP。`,
+        actionLabel: "前往",
+        tileId: stationTileId(state, "order_board"),
+      });
+    }
+
+    for (const [npcId, req] of Object.entries((state && state.npcRequests) || {})) {
+      if (!requestCanDeliver(state, req)) continue;
+      const npc = (C.NPCS || {})[npcId] || { name: npcId };
+      suggestions.push({
+        id: "npc:" + npcId,
+        type: "npc-request",
+        priority: 112,
+        valueScore: (req.rewardCoins || 0) + (req.rewardXp || 0),
+        title: `${npc.name}的委託可交付`,
+        detail: `${wantsText(req.wants)} → ${req.rewardCoins || 0} 金。`,
+        actionLabel: "前往",
+        tileId: npcTileId(state, npcId),
+      });
+    }
+
+    for (const a of (state.animals || [])) {
+      const def = ANIMALS[a.type]; if (!def) continue;
+      const home = (state.buildings || []).find((b) => b.id === a.homeId);
+      const feedReady = now - (a.lastFedAt || 0) >= CARE_COOLDOWN_MS && affordableFeed(state, def.feedCost);
+      const waterReady = now - (a.lastWateredAt || 0) >= CARE_COOLDOWN_MS;
+      const groomReady = now - (a.lastGroomedAt || 0) >= CARE_COOLDOWN_MS;
+      const actions = [];
+      if (feedReady) actions.push("餵食");
+      if (waterReady) actions.push("補水");
+      if (groomReady) actions.push("梳理");
+      if (!actions.length) continue;
+      suggestions.push({
+        id: "animal:" + a.id,
+        type: "animal-care",
+        priority: 86,
+        valueScore: actions.length * 10 + Math.max(0, AFFINITY_MAX - animalAffinity(state, a, now)),
+        title: `${def.name}照護冷卻已好`,
+        detail: actions.join("、") + "可提升親密度。",
+        actionLabel: "前往",
+        tileId: home ? home.tileId : null,
+      });
+    }
+
+    if (state.flags && state.flags.bridgeRepaired && state.flags.eastForageDiscovered) {
+      for (const node of (C.FORAGE_NODES || [])) {
+        const st = forageNodeStatus(state, node.id, now);
+        if (!st || !st.ready || !st.unlocked) continue;
+        const tile = forageTile(state, node.id);
+        const item = st.item || {};
+        suggestions.push({
+          id: "forage:" + node.id,
+          type: "forage",
+          priority: node.requiresFlag ? 78 : 72,
+          valueScore: item.sellValue || 0,
+          title: `${node.name}已刷新`,
+          detail: `可採集${item.name || node.itemId}${item.season ? "（" + item.season + "）" : ""}。`,
+          actionLabel: "前往",
+          tileId: tile ? tile.id : null,
+        });
+      }
+    }
+
+    if (emptyPlots.length) {
+      let best = null;
+      for (const cropId of unlockedCrops(state)) {
+        const crop = CROPS[cropId]; if (!crop || state.coins < crop.seedCost) continue;
+        const net = sellUnitValue(state, crop.id, now) * crop.yield - crop.seedCost;
+        const minutes = Math.max(1, effectiveGrowMs(state, crop.id, now) / 60000);
+        const seasonBonus = crop.season && crop.season === season ? 1.08 : 1;
+        const score = (net / minutes) * seasonBonus;
+        if (!best || score > best.score) best = { crop, score, net, minutes };
+      }
+      if (best) {
+        suggestions.push({
+          id: "plant:" + best.crop.id,
+          type: "plant",
+          priority: 55,
+          valueScore: best.score,
+          title: `空田 ×${emptyPlots.length} → 種 ${best.crop.name}`,
+          detail: `本季${season}，預估淨值 ${best.net} 金。`,
+          actionLabel: "前往",
+          tileId: plotTileId(state, emptyPlots[0]),
+        });
+      }
+    }
+
+    return suggestions
+      .filter((s) => !!s.tileId)
+      .sort((a, b) => (b.priority - a.priority) || (b.valueScore - a.valueScore) || a.id.localeCompare(b.id))
+      .slice(0, limit);
+  }
+
+  function offlineForageRefreshes(state, last, offlineNow) {
+    const out = [];
+    if (!(state.flags && state.flags.bridgeRepaired && state.flags.eastForageDiscovered)) return out;
+    for (const node of (C.FORAGE_NODES || [])) {
+      if (node.requiresFlag && !state.flags[node.requiresFlag]) continue;
+      const collectedAt = (state.flags.forageNodes || {})[node.id] || 0;
+      if (!collectedAt) continue;
+      const readyAt = collectedAt + (node.cooldownMs || C.FORAGE_NODE_COOLDOWN_MS || 0);
+      if (readyAt > last && readyAt <= offlineNow) {
+        out.push({ nodeId: node.id, itemId: node.itemId, name: node.name, readyAt });
+      }
+    }
+    return out;
+  }
+
   // ---------- 離線進度 ----------
   // 回傳摘要：每作物收成、溢出損失、成熟未收的格數、補種次數、動物產品
   function applyOffline(state, now) {
@@ -1528,7 +1712,7 @@
     const rawMs = Math.max(0, now - last);
     const offlineMs = Math.min(rawMs, GAME.offlineCapMs);
     const cappedFrom = rawMs > GAME.offlineCapMs ? rawMs : 0;
-    const summary = { offlineMs, cappedFromMs: cappedFrom, perCrop: {}, lost: 0, readyPlots: 0, replanted: 0, coins: 0, xp: 0 };
+    const summary = { offlineMs, cappedFromMs: cappedFrom, perCrop: {}, lost: 0, readyPlots: 0, replanted: 0, coins: 0, xp: 0, forageReady: [] };
     if (offlineMs <= 0) { state.lastSeenAt = now; return summary; }
 
     const flags = helperFlags(state);
@@ -1593,6 +1777,8 @@
       a.lastProducedAt += cycles * def.produceMs;
     }
 
+    summary.forageReady = offlineForageRefreshes(state, last, offlineNow);
+    summary.forageReadyCount = summary.forageReady.length;
     checkAchievements(state);
     state.lastSeenAt = now;
     return summary;
@@ -1608,6 +1794,7 @@
     makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
+    farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物
     canAffordCost, spendCost, grantMaterials, getTile, clearObstacle,
     buildingUnlocked, buildingCount, canBuildOn, buildBuilding,

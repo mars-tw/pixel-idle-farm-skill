@@ -22,6 +22,7 @@
   let selectedSeed = "wheat";
   let spritesReady = false;
   let lastOrderSig = "";
+  let lastAssistantSig = "";
   let saveTimer = null;
   let selectedTileId = null;
   let moveTimer = null;
@@ -32,6 +33,9 @@
 
   const $ = (id) => document.getElementById(id);
   const now = () => Date.now();
+  const escapeHtml = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (ch) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
+  ));
 
   // ---------- 物品/建材顯示 ----------
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
@@ -481,6 +485,66 @@
       <button class="qd-meta qd-go" data-audit="quest-dock-go" ${targetId ? "" : "disabled"}>${targetId ? "前往" : "探索"}</button>`;
     const go = box.querySelector(".qd-go");
     if (go && targetId) go.onclick = (ev) => { ev.stopPropagation(); focusCameraOnTile(targetId); };
+  }
+  function syncAssistantToggle() {
+    const btn = $("assistantToggle"); if (!btn || !state) return;
+    const on = !state.settings || state.settings.smartAssistant !== false;
+    btn.textContent = on ? "助手" : "助手關";
+    if (btn.setAttribute) btn.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  function renderSmartAssistant(force) {
+    const box = $("smartAssistant"); if (!box || !state || !G.farmActionSuggestions) return;
+    if (!state.settings) state.settings = { smartAssistant: true, smartAssistantCollapsed: false };
+    const enabled = state.settings.smartAssistant !== false;
+    syncAssistantToggle();
+    if (!enabled) {
+      box.className = "smart-assistant hidden";
+      box.innerHTML = "";
+      lastAssistantSig = "off";
+      return;
+    }
+    const collapsed = !!state.settings.smartAssistantCollapsed;
+    const suggestions = G.farmActionSuggestions(state, now(), { limit: 3 });
+    const sig = [collapsed ? "c" : "o"].concat(suggestions.map((s) => [s.id, s.type, s.tileId, Math.round(s.valueScore || 0)].join(":"))).join("|");
+    if (!force && sig === lastAssistantSig) return;
+    lastAssistantSig = sig;
+    box.className = "smart-assistant" + (collapsed ? " collapsed" : "");
+    const rows = suggestions.length ? suggestions.map((s, idx) => `
+      <div class="sa-row" data-audit="assistant-row" data-rank="${idx + 1}" data-suggestion-id="${escapeHtml(s.id)}" data-suggestion-type="${escapeHtml(s.type)}" data-target-id="${escapeHtml(s.tileId)}">
+        <div>
+          <div class="sa-title">${escapeHtml(s.title)}</div>
+          <div class="sa-detail">${escapeHtml(s.detail || "")}</div>
+        </div>
+        <button class="sa-go" data-audit="assistant-go" data-target-id="${escapeHtml(s.tileId)}" data-suggestion-type="${escapeHtml(s.type)}">${escapeHtml(s.actionLabel || "前往")}</button>
+      </div>`).join("")
+      : `<div class="sa-row" data-audit="assistant-empty"><div><div class="sa-title">目前沒有急件</div><div class="sa-detail">可以整理倉庫、探索地圖或等待作物成熟。</div></div></div>`;
+    box.innerHTML = `
+      <div class="sa-head">
+        <button class="sa-icon-btn" data-audit="assistant-collapse" title="${collapsed ? "展開" : "收合"}">${collapsed ? "▴" : "▾"}</button>
+        <b>智慧農務助手</b>
+        <button class="sa-icon-btn" data-audit="assistant-close" title="關閉">×</button>
+      </div>
+      <div class="sa-list">${rows}</div>`;
+    const collapse = box.querySelector('[data-audit="assistant-collapse"]');
+    if (collapse) collapse.onclick = (ev) => {
+      ev.stopPropagation();
+      state.settings.smartAssistantCollapsed = !state.settings.smartAssistantCollapsed;
+      scheduleSave();
+      renderSmartAssistant(true);
+    };
+    const close = box.querySelector('[data-audit="assistant-close"]');
+    if (close) close.onclick = (ev) => {
+      ev.stopPropagation();
+      state.settings.smartAssistant = false;
+      scheduleSave();
+      renderSmartAssistant(true);
+    };
+    box.querySelectorAll(".sa-go").forEach((btn) => {
+      btn.onclick = (ev) => {
+        ev.stopPropagation();
+        focusCameraOnTile(btn.dataset.targetId);
+      };
+    });
   }
   function renderStory() {
     const box = $("storyPanel"); if (!box) return;
@@ -1796,17 +1860,21 @@
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
     renderResBar(); renderSeeds(); updateFarm(now());
-    renderStory(); renderQuestDock(); renderJournal(); syncHud();
+    renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud();
     if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
     scheduleSave();
   }
 
   // ---------- 離線摘要 ----------
   function showOfflineSummary(summary) {
-    if (summary.offlineMs < 30000) return false; // 離線 <30s 不打擾
+    if (!summary || summary.offlineMs < 5 * 60 * 1000) return false; // 離線 <5 分鐘不打擾
     const lines = [];
-    lines.push(`<div class="ml">離開時間 <span class="v">${fmtTime(summary.offlineMs)}</span></div>`);
-    const crops = Object.entries(summary.perCrop);
+    const minutes = Math.max(5, Math.round(summary.offlineMs / 60000));
+    const forageCount = summary.forageReadyCount || (summary.forageReady || []).length || 0;
+    lines.push(`<div class="ml" data-audit="offline-head">你離開的 ${minutes} 分鐘：離線收益 <span class="v">+${summary.coins || 0} 金</span></div>`);
+    lines.push(`<div class="ml" data-audit="offline-mature">作物成熟 <span class="v">${summary.readyPlots || 0} 株</span></div>`);
+    if (forageCount > 0) lines.push(`<div class="ml" data-audit="offline-forage">採集點已刷新 <span class="v">${forageCount} 處</span></div>`);
+    const crops = Object.entries(summary.perCrop || {});
     if (crops.length) {
       crops.forEach(([cid, n]) => lines.push(`<div class="ml">${window.CROPS[cid].emoji} ${window.CROPS[cid].name} 自動收成 <span class="v">+${n}</span></div>`));
     }
@@ -1815,13 +1883,41 @@
       products.forEach(([pid, n]) => lines.push(`<div class="ml">${itemEmoji(pid)} ${itemName(pid)} 動物產出 <span class="v">+${n}</span></div>`));
     }
     if (summary.replanted > 0) lines.push(`<div class="ml">🤖 幫手補種 <span class="v">${summary.replanted} 次</span></div>`);
-    if (summary.readyPlots > 0) lines.push(`<div class="ml">🌾 已成熟待收 <span class="v">${summary.readyPlots} 格</span></div>`);
     if (summary.lost > 0) lines.push(`<div class="ml" style="color:var(--bad)">📦 倉滿損失 <span class="v">${summary.lost}</span></div>`);
-    if (!crops.length && !products.length && !summary.readyPlots) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
+    if (!crops.length && !products.length && !summary.readyPlots && !forageCount && !(summary.coins > 0)) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
     if (summary.cappedFromMs > 0) lines.push(`<div class="tip">（離線收益上限 8 小時，實際離開 ${fmtTime(summary.cappedFromMs)}）</div>`);
     $("offlineBody").innerHTML = lines.join("");
     $("offlineModal").classList.add("show");
     return true;
+  }
+
+  let errorRecoveryBound = false;
+  function safeSaveNow() {
+    try {
+      if (!state) return { ok: false, reason: "no_state" };
+      state.lastSeenAt = now();
+      if (window.safeSave) return window.safeSave(state) || { ok: true };
+      window.save(state);
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, reason: "save_failed", error: e };
+    }
+  }
+  function showErrorRecovery(error) {
+    const saveResult = safeSaveNow();
+    try {
+      const box = $("errorRecovery"); if (!box) return saveResult;
+      box.hidden = false;
+      box.dataset.saved = saveResult && saveResult.ok ? "true" : "false";
+      box.dataset.errorName = error && error.name ? error.name : "error";
+    } catch (e) {}
+    return saveResult;
+  }
+  function setupErrorRecovery() {
+    if (errorRecoveryBound) return;
+    errorRecoveryBound = true;
+    window.addEventListener("error", (ev) => { showErrorRecovery(ev.error || ev.message); });
+    window.addEventListener("unhandledrejection", (ev) => { showErrorRecovery(ev.reason || ev); });
   }
 
   // ---------- 主迴圈 ----------
@@ -1844,6 +1940,7 @@
     if (helped.harvested > 0 || weatherChanged) { renderResBar(); }
     updateFarm(t);
     updateMap(t);       // 地圖：作物/動物成熟
+    renderSmartAssistant();
     tickPlayer(t);      // 玩家走路/動作/待機動畫
   }
 
@@ -1851,6 +1948,7 @@
   function init() {
     // 先載入存檔，state 必須在任何 render/onload 前就緒
     state = window.load() || window.defaultState(now());
+    setupErrorRecovery();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
 
     // 舊作物 sheet 僅供隱藏相容農場格（主地圖作物改用 atlas）
@@ -1874,7 +1972,7 @@
     G.updateWeather(state, now());
 
     buildFarm(); buildMap();
-    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
+    renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -1907,8 +2005,12 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
-      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
+      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
       clickTile: (id) => handleMapClick(id),
+      focusTile: (id) => focusCameraOnTile(id),
+      assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],
+      safeSaveNow: () => safeSaveNow(),
+      showErrorRecovery: () => showErrorRecovery(new Error("test")),
       focusQuestTarget: () => {
         const targetId = G.questMarkerTile ? G.questMarkerTile(state, now()) : null;
         if (targetId) focusCameraOnTile(targetId);
@@ -1961,14 +2063,23 @@
       paintIdlePlayer(); positionPlayer(false); toast(state.gender === "m" ? "🧑 主角：Kai（男）" : "👩 主角：Miri（女）");
       scheduleSave();
     };
+    $("assistantToggle").onclick = () => {
+      if (!state.settings) state.settings = { smartAssistant: true, smartAssistantCollapsed: false };
+      state.settings.smartAssistant = state.settings.smartAssistant === false;
+      if (state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
+      renderSmartAssistant(true);
+      scheduleSave();
+    };
     $("howToBtn").onclick = () => $("howToModal").classList.add("show");
     $("howToOk").onclick = () => $("howToModal").classList.remove("show");
     $("offlineOk").onclick = () => $("offlineModal").classList.remove("show");
+    if ($("errorContinue")) $("errorContinue").onclick = () => { $("errorRecovery").hidden = true; };
+    if ($("errorReload")) $("errorReload").onclick = () => window.location.reload();
     $("resetBtn").onclick = () => {
       if (confirm("確定重置存檔？所有進度會消失。")) {
         window.reset(); state = window.defaultState(now());
         selectedSeed = "wheat"; selectedTileId = null; buildFarm(); buildMap();
-        renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); updateFarm(now()); renderTileContext();
+        renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); updateFarm(now()); renderTileContext();
         G.refreshOrders(state, now()); renderOrders();
         window.save(state); toast("🗑️ 已重置");
       }

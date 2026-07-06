@@ -94,6 +94,55 @@ async function run() {
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
     await sleep(300);
 
+    // R23：離開期間摘要（重開且離線 >=5 分鐘）
+    const offlineRaw = await page.evaluate(() => {
+      const start = Date.now() - 6 * 60 * 1000;
+      const st = window.defaultState(start);
+      st.stats.plantCount = 1;
+      st.lastSeenAt = start;
+      st.plots[0].cropId = "wheat";
+      st.plots[0].plantedAt = start - window.CROPS.wheat.growMs - 1000;
+      st.flags.bridgeRepaired = true;
+      st.flags.eastForageDiscovered = true;
+      st.flags.forageNodes.east_herb_patch = start - window.FORAGE_NODE_COOLDOWN_MS + 60 * 1000;
+      return JSON.stringify(st);
+    });
+    await page.addInitScript(({ key, raw }) => {
+      if (!sessionStorage.getItem("__r23OfflineSeeded")) {
+        localStorage.setItem(key, raw);
+        sessionStorage.setItem("__r23OfflineSeeded", "1");
+      }
+    }, { key: "pixel_idle_farm_save_v1", raw: offlineRaw });
+    await page.reload();
+    await page.waitForFunction(() => window.__farm && window.__farm.state);
+    const offlineSummary = await page.evaluate(() => {
+      const modal = document.getElementById("offlineModal");
+      const body = document.getElementById("offlineBody");
+      return { shown: modal.classList.contains("show"), text: body.innerText,
+        head: body.querySelector('[data-audit="offline-head"]')?.textContent || "",
+        mature: body.querySelector('[data-audit="offline-mature"]')?.textContent || "",
+        forage: body.querySelector('[data-audit="offline-forage"]')?.textContent || "" };
+    });
+    assert(offlineSummary.shown && offlineSummary.head.includes("你離開的 6 分鐘") && offlineSummary.head.includes("離線收益 +0 金"),
+      `離線 >=5 分鐘重開顯示摘要與收益（${offlineSummary.head}）`);
+    assert(offlineSummary.mature.includes("作物成熟") && offlineSummary.mature.includes("1"),
+      `離線摘要列出成熟作物數（${offlineSummary.mature}）`);
+    assert(offlineSummary.forage.includes("採集點已刷新") && offlineSummary.forage.includes("1"),
+      `離線摘要列出採集點刷新（${offlineSummary.forage}）`);
+    await page.click("#offlineOk");
+    await page.evaluate(() => {
+      const fresh = window.defaultState(Date.now());
+      const live = window.__farm.state();
+      Object.keys(live).forEach((k) => delete live[k]);
+      Object.assign(live, fresh);
+      window.save(live);
+    });
+    await page.reload();
+    await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await page.waitForFunction(() => window.Atlas && window.Atlas.isReady && window.Atlas.isReady(), { timeout: 20000 });
+    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    await sleep(300);
+
     const chrome = await page.evaluate(() => ({
       title: document.title,
       heading: document.querySelector(".title") ? document.querySelector(".title").innerText : "",
@@ -324,9 +373,28 @@ async function run() {
       F.refresh();
       const marker = window.questMarkerTile(st, Date.now());
       const soil = st.map.tiles.find((t) => t.plotIndex === 0);
+      const row = document.querySelector('[data-audit="assistant-row"][data-rank="1"]');
+      const go = row && row.querySelector('[data-audit="assistant-go"]');
+      const rect = go ? go.getBoundingClientRect() : { width: 0, height: 0 };
+      const assistantBefore = { x: st.camera.x, y: st.camera.y, focus: st.camera.focusTileId };
+      if (go) go.click();
+      const assistantAfter = { x: st.camera.x, y: st.camera.y, focus: st.camera.focusTileId };
       F.setTool("hand"); F.clickTile(soil.id);
-      return { marker, soilId: soil.id };
+      return { marker, soilId: soil.id,
+        assistantType: row ? row.dataset.suggestionType : "",
+        assistantTarget: row ? row.dataset.targetId : "",
+        assistantText: row ? row.innerText : "",
+        assistantTap: { w: rect.width, h: rect.height },
+        assistantBefore, assistantAfter,
+        assistantOverflow: document.documentElement.scrollWidth - window.innerWidth };
     });
+    assert(harvest.assistantType === "harvest" && harvest.assistantTarget === harvest.soilId,
+      `智慧助手第一建議為成熟作物收成並指向麥田（type=${harvest.assistantType}, target=${harvest.assistantTarget}）`);
+    assert(harvest.assistantTap.w >= 44 && harvest.assistantTap.h >= 44 && harvest.assistantOverflow <= 2,
+      `助手前往按鈕 tap target >=44px 且無水平溢出（${Math.round(harvest.assistantTap.w)}×${Math.round(harvest.assistantTap.h)}, overflow=${harvest.assistantOverflow}）`);
+    assert(harvest.assistantAfter.focus === harvest.soilId &&
+      (harvest.assistantAfter.x !== harvest.assistantBefore.x || harvest.assistantAfter.y !== harvest.assistantBefore.y || harvest.assistantAfter.focus !== harvest.assistantBefore.focus),
+      `助手前往可用並設定鏡頭 focus（${harvest.assistantBefore.focus}→${harvest.assistantAfter.focus}）`);
     await waitArrive(page, 9000);
     await sleep(400);
     const harvestRes = await page.evaluate(() => {

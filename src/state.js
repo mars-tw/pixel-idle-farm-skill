@@ -171,6 +171,7 @@
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0 },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
+      settings: { smartAssistant: true, smartAssistantCollapsed: false },
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
       npcRequestLog: {}, // { [npcId]: { lastRequestAt: 0, fulfilledCount: 0 } }
@@ -230,6 +231,7 @@
     merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     merged.discoveries = Object.assign({ items: {} }, state.discoveries);
     merged.discoveries.items = Object.assign({}, state.discoveries && state.discoveries.items);
+    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false }, state.settings);
     const discoveredAtFallback = state.createdAt || state.lastSeenAt || Date.now();
     for (const [id, qty] of Object.entries(merged.stats.harvested || {})) {
       if (qty > 0 && !merged.discoveries.items[id]) merged.discoveries.items[id] = discoveredAtFallback;
@@ -257,15 +259,21 @@
     }
   }
 
-  // 存檔
-  function save(state) {
+  // 安全存檔：失敗時不覆蓋既有 localStorage 內容。
+  function safeSave(state) {
     if (typeof localStorage === "undefined") return;
     try {
-      localStorage.setItem(C.GAME.saveKey, JSON.stringify(state));
+      if (!state || typeof state !== "object" || !state.version) return { ok: false, reason: "bad_state" };
+      const raw = JSON.stringify(state);
+      JSON.parse(raw);
+      localStorage.setItem(C.GAME.saveKey, raw);
+      return { ok: true };
     } catch (e) {
       console.warn("存檔失敗：", e);
+      return { ok: false, reason: "exception", error: e };
     }
   }
+  function save(state) { safeSave(state); }
 
   // 清檔（測試用）
   function reset() {
@@ -273,7 +281,7 @@
     try { localStorage.removeItem(C.GAME.saveKey); } catch (e) {}
   }
 
-  const StateAPI = { defaultState, migrate, load, save, reset, makePlots };
+  const StateAPI = { defaultState, migrate, load, save, safeSave, reset, makePlots };
   if (typeof window !== "undefined") Object.assign(window, StateAPI);
   if (typeof module !== "undefined" && module.exports) module.exports = StateAPI;
 })(typeof window !== "undefined" ? window : globalThis);
