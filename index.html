@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5a9e3f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <style>
   :root {
@@ -273,9 +276,20 @@
   .setting-toggle { min-width: 72px; min-height: 44px; padding: 6px 10px; border: 1.5px solid #aacb86; border-radius: 9px;
     background: #e7f5dd; color: #285b1d; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer; }
   .setting-toggle[data-enabled="false"] { background: #f5e7d8; color: #7a3a17; border-color: #d7a676; }
+  .setting-mode-group { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .setting-mode { min-height: 44px; min-width: 58px; padding: 6px 9px; border: 1.5px solid var(--border-d); border-radius: 9px;
+    background: var(--cream-2); color: var(--ink); font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
+  .setting-mode.sel { border-color: #94bd68; background: #e7f5dd; color: #285b1d; }
   .offline-review { padding: 10px; border: 1.5px dashed #d4b468; border-radius: 10px; background: rgba(255,244,214,.72); color: #513d17; }
   .offline-review-title { font-size: 13px; font-weight: 950; margin-bottom: 4px; }
   .offline-review-body { display: grid; gap: 3px; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+  .save-manager { padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: #fff8df; display: grid; gap: 7px; }
+  .save-manager-title { font-size: 13px; font-weight: 950; color: #3d2f1c; }
+  .save-code { width: 100%; min-height: 74px; resize: vertical; border: 1.5px solid var(--border-d); border-radius: 9px;
+    padding: 8px; background: #fffdf4; color: var(--ink); font: 12px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+  .save-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .save-actions .btn { min-height: 44px; padding: 7px 8px; font-size: 12px; margin: 0; }
+  .save-status { min-height: 18px; font-size: 12px; font-weight: 850; color: #6f6248; overflow-wrap: anywhere; }
   .error-recovery { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 260;
     width: min(420px, calc(100vw - 24px)); background: #fff8df; border: 2px solid #d4b468; border-radius: 10px;
     box-shadow: 0 12px 30px rgba(0,0,0,.24); padding: 10px; color: #4a3a22; }
@@ -284,6 +298,10 @@
   .er-copy { font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
   .er-actions { display: flex; gap: 8px; }
   .er-actions .btn { flex: 1; min-height: 44px; padding: 8px 10px; }
+  .pwa-update { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 255;
+    width: min(420px, calc(100vw - 24px)); min-height: 44px; border: 2px solid #94bd68; border-radius: 10px;
+    background: #eef8dd; color: #285b1d; box-shadow: 0 12px 30px rgba(0,0,0,.22); padding: 9px 12px;
+    font-size: 13px; font-weight: 950; cursor: pointer; text-align: center; }
 
   /* ===== 底部工具列 ===== */
   .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
@@ -425,6 +443,14 @@
     animation: fogDrift 8s ease-in-out infinite alternate; }
   #weatherLayer.fog::after { background: linear-gradient(180deg, rgba(225,230,215,.18), rgba(150,160,145,.12)); }
   @keyframes fogDrift { from { background-position: 0 0, -30px 0; } to { background-position: 0 0, 30px 0; } }
+  html.perf-low #weatherLayer.rain::before { background-image: repeating-linear-gradient(115deg,
+      rgba(214,232,255,.38) 0 1px, transparent 1px 58px); opacity: .24; animation: none; }
+  html.perf-low #weatherLayer.sunny::after { background-image:
+      radial-gradient(72px 72px at 25% 32%, rgba(255,244,200,.22), transparent 72%); animation: none; }
+  html.perf-low #weatherLayer.windy::before { background-image: repeating-linear-gradient(12deg,
+      transparent 0 54px, rgba(238,255,224,.20) 54px 56px, transparent 56px 112px); animation: none; }
+  html.perf-low #weatherLayer.fog::before { background:
+      linear-gradient(180deg, rgba(238,242,230,.14), rgba(238,242,230,.24)); animation: none; }
   @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
   /* 動作 VFX（世界內，澆水/塵土/種子/收成/產物環）*/
   #vfxLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9500; }
@@ -614,6 +640,7 @@
 </div>
 
 <div id="toast-zone"></div>
+<div id="pwaUpdate" class="pwa-update" data-audit="pwa-update" hidden>新版本可用，點擊更新</div>
 <div id="errorRecovery" class="error-recovery" data-audit="error-recovery" hidden>
   <div class="er-title">發生小問題，進度已保存</div>
   <div class="er-copy">可以先繼續遊玩；若畫面異常，請重新載入。</div>

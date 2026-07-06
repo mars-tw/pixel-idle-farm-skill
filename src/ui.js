@@ -28,6 +28,11 @@
   let moveTimer = null;
   let atlasReady = false;
   let journalDetailSelection = null;
+  let perfMonitorStarted = false;
+  let perfAvgFps = 60;
+  let perfLowFrames = 0;
+  let perfStableFrames = 0;
+  let perfAutoLow = false;
   const plotEls = []; // 農地格 DOM 快取
   const tileEls = []; // 地圖磚 DOM 快取
 
@@ -37,6 +42,7 @@
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
+  const SAVE_BACKUP_SUFFIX = "_backup_r31";
 
   // ---------- 物品/建材顯示 ----------
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
@@ -493,6 +499,7 @@
     if (state.settings.smartAssistant == null) state.settings.smartAssistant = true;
     if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = false;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
+    if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
     if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
     return state.settings;
   }
@@ -504,6 +511,176 @@
       </div>
       <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}">${enabled ? "開啟" : "關閉"}</button>
     </div>`;
+  }
+  function performanceModeHtml(mode) {
+    const labels = { auto: "自動", high: "高", low: "低" };
+    const desc = mode === "auto"
+      ? `自動監測 FPS，低於 45fps 會降級天氣動畫。現在 ${document.documentElement.classList.contains("perf-low") ? "低階" : "高階"}。`
+      : (mode === "high" ? "鎖定完整天氣動畫與視覺密度。" : "鎖定低密度天氣動畫，降低耗電與卡頓。");
+    return `<div class="setting-row" data-audit="setting-performance">
+      <div>
+        <div class="setting-title">效能模式</div>
+        <div class="setting-desc" data-audit="performance-desc">${escapeHtml(desc)}</div>
+      </div>
+      <div class="setting-mode-group">
+        ${["auto", "high", "low"].map((m) => `<button class="setting-mode ${mode === m ? "sel" : ""}" data-audit="performance-mode" data-performance-mode="${m}">${labels[m]}</button>`).join("")}
+      </div>
+    </div>`;
+  }
+  function backupSaveKey() {
+    return ((window.GAME && window.GAME.saveKey) || "pixel_idle_farm_save_v1") + SAVE_BACKUP_SUFFIX;
+  }
+  function saveManagerHtml() {
+    const hasBackup = typeof localStorage !== "undefined" && !!localStorage.getItem(backupSaveKey());
+    return `<div class="save-manager" data-audit="save-manager">
+      <div class="save-manager-title">存檔管家</div>
+      <textarea class="save-code" id="saveCodeBox" data-audit="save-code" placeholder="匯出後會產生代碼；匯入時貼上代碼。"></textarea>
+      <div class="save-actions">
+        <button class="btn ghost" id="exportSaveBtn" data-audit="save-export">匯出存檔</button>
+        <button class="btn buy" id="importSaveBtn" data-audit="save-import">匯入存檔</button>
+        <button class="btn ghost" id="restoreBackupBtn" data-audit="save-restore" ${hasBackup ? "" : "disabled"}>還原備份</button>
+      </div>
+      <div class="save-status" id="saveStatus" data-audit="save-status"></div>
+    </div>`;
+  }
+  function setSaveStatus(msg, ok) {
+    const box = $("saveStatus"); if (!box) return;
+    box.textContent = msg;
+    box.style.color = ok ? "#2f6525" : "#9b3b25";
+  }
+  function encodeSaveText(text) {
+    if (typeof btoa !== "function") throw new Error("no_btoa");
+    return btoa(unescape(encodeURIComponent(text)));
+  }
+  function decodeSaveText(code) {
+    if (typeof atob !== "function") throw new Error("no_atob");
+    return decodeURIComponent(escape(atob(String(code || "").trim())));
+  }
+  function validateImportedSaveText(raw) {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || !parsed.version || typeof parsed.coins !== "number" || !parsed.storage) throw new Error("bad_save_shape");
+    const migrated = window.migrate(parsed);
+    if (!migrated || typeof migrated !== "object" || !migrated.version || !Array.isArray(migrated.plots) || !migrated.map || !Array.isArray(migrated.map.tiles)) throw new Error("bad_migrated_save");
+    return migrated;
+  }
+  async function exportSaveCode() {
+    try {
+      ensureSettings();
+      state.lastSeenAt = now();
+      window.save(state);
+      const raw = localStorage.getItem(window.GAME.saveKey) || JSON.stringify(state);
+      const code = encodeSaveText(raw);
+      const box = $("saveCodeBox"); if (box) { box.value = code; box.focus(); box.select && box.select(); }
+      if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+        try { await navigator.clipboard.writeText(code); } catch (e) {}
+      }
+      setSaveStatus("已匯出存檔代碼並嘗試複製。", true);
+      return code;
+    } catch (e) {
+      setSaveStatus("匯出失敗，請稍後再試。", false);
+      return null;
+    }
+  }
+  function importSaveCode() {
+    try {
+      const box = $("saveCodeBox");
+      const raw = decodeSaveText(box ? box.value : "");
+      const migrated = validateImportedSaveText(raw);
+      const currentRaw = localStorage.getItem(window.GAME.saveKey);
+      if (currentRaw) localStorage.setItem(backupSaveKey(), currentRaw);
+      const saved = window.safeSave ? window.safeSave(migrated) : null;
+      if (!saved || saved.ok === false) throw new Error("save_failed");
+      Object.keys(state).forEach((k) => delete state[k]);
+      Object.assign(state, migrated);
+      setSaveStatus("匯入成功，正在重新載入。", true);
+      setTimeout(() => window.location.reload(), 80);
+      return true;
+    } catch (e) {
+      setSaveStatus("匯入失敗：代碼無效或資料不相容，原存檔未覆蓋。", false);
+      return false;
+    }
+  }
+  function restoreBackupSave() {
+    try {
+      const raw = localStorage.getItem(backupSaveKey());
+      if (!raw) throw new Error("no_backup");
+      const migrated = validateImportedSaveText(raw);
+      const saved = window.safeSave ? window.safeSave(migrated) : null;
+      if (!saved || saved.ok === false) throw new Error("save_failed");
+      Object.keys(state).forEach((k) => delete state[k]);
+      Object.assign(state, migrated);
+      setSaveStatus("備份已還原，正在重新載入。", true);
+      setTimeout(() => window.location.reload(), 80);
+      return true;
+    } catch (e) {
+      setSaveStatus("還原失敗：找不到可用備份。", false);
+      return false;
+    }
+  }
+  function applyPerformanceMode() {
+    if (!state) return;
+    const settings = ensureSettings();
+    const mode = settings.performanceMode || "auto";
+    const low = mode === "low" || (mode === "auto" && perfAutoLow);
+    document.documentElement.dataset.performanceMode = mode;
+    document.documentElement.dataset.performanceTier = low ? "low" : "high";
+    document.documentElement.classList.toggle("perf-low", low);
+    const layer = $("weatherLayer");
+    if (layer) layer.dataset.performanceTier = low ? "low" : "high";
+  }
+  function startPerformanceMonitor() {
+    if (perfMonitorStarted) return;
+    perfMonitorStarted = true;
+    applyPerformanceMode();
+    if (typeof requestAnimationFrame !== "function") return;
+    const perf = (typeof performance !== "undefined" && performance.now) ? performance : { now: () => now() };
+    let last = perf.now();
+    const frame = (ts) => {
+      const t = typeof ts === "number" ? ts : perf.now();
+      const dt = Math.max(1, t - last);
+      last = t;
+      const fps = Math.min(120, 1000 / dt);
+      perfAvgFps = perfAvgFps * 0.92 + fps * 0.08;
+      const mode = state ? ensureSettings().performanceMode : "auto";
+      if (mode === "auto") {
+        if (perfAvgFps < 45) { perfLowFrames++; perfStableFrames = 0; }
+        else if (perfAvgFps > 53) { perfStableFrames++; perfLowFrames = 0; }
+        else { perfLowFrames = 0; perfStableFrames = 0; }
+        if (!perfAutoLow && perfLowFrames >= 30) { perfAutoLow = true; applyPerformanceMode(); renderSettingsPanel(); }
+        if (perfAutoLow && perfStableFrames >= 120) { perfAutoLow = false; applyPerformanceMode(); renderSettingsPanel(); }
+      } else if (perfAutoLow || perfLowFrames || perfStableFrames) {
+        perfAutoLow = false; perfLowFrames = 0; perfStableFrames = 0; applyPerformanceMode();
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+  function showPwaUpdatePrompt(worker) {
+    const box = $("pwaUpdate"); if (!box || !worker) return;
+    box.hidden = false;
+    box.onclick = () => {
+      worker.postMessage({ type: "SKIP_WAITING" });
+      box.hidden = true;
+    };
+  }
+  function setupPwa() {
+    if (typeof navigator === "undefined" || navigator.webdriver || !("serviceWorker" in navigator)) return;
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+    navigator.serviceWorker.register("./sw.js", { scope: "./" }).then((reg) => {
+      if (reg.waiting) showPwaUpdatePrompt(reg.waiting);
+      reg.addEventListener("updatefound", () => {
+        const worker = reg.installing;
+        if (!worker) return;
+        worker.addEventListener("statechange", () => {
+          if (worker.state === "installed" && navigator.serviceWorker.controller) showPwaUpdatePrompt(worker);
+        });
+      });
+    }).catch(() => {});
   }
   function compactOfflineSummary(summary) {
     const forageCount = summary.forageReadyCount || (summary.forageReady || []).length || 0;
@@ -558,7 +735,9 @@
     box.innerHTML = [
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
+      performanceModeHtml(settings.performanceMode || "auto"),
       offlineReviewHtml(state.lastOfflineSummary),
+      saveManagerHtml(),
     ].join("");
     box.querySelectorAll("[data-setting-key]").forEach((btn) => {
       btn.onclick = (ev) => {
@@ -572,6 +751,20 @@
         scheduleSave();
       };
     });
+    box.querySelectorAll("[data-performance-mode]").forEach((btn) => {
+      btn.onclick = (ev) => {
+        ev.stopPropagation();
+        ensureSettings();
+        state.settings.performanceMode = btn.dataset.performanceMode || "auto";
+        perfAutoLow = false; perfLowFrames = 0; perfStableFrames = 0;
+        applyPerformanceMode();
+        renderSettingsPanel();
+        scheduleSave();
+      };
+    });
+    const exportBtn = $("exportSaveBtn"); if (exportBtn) exportBtn.onclick = (ev) => { ev.stopPropagation(); exportSaveCode(); };
+    const importBtn = $("importSaveBtn"); if (importBtn) importBtn.onclick = (ev) => { ev.stopPropagation(); importSaveCode(); };
+    const restoreBtn = $("restoreBackupBtn"); if (restoreBtn) restoreBtn.onclick = (ev) => { ev.stopPropagation(); restoreBackupSave(); };
   }
   function renderSmartAssistant(force) {
     const box = $("smartAssistant"); if (!box || !state || !G.farmActionSuggestions) return;
@@ -2033,6 +2226,7 @@
     // 先載入存檔，state 必須在任何 render/onload 前就緒
     state = window.load() || window.defaultState(now());
     ensureSettings();
+    applyPerformanceMode();
     setupErrorRecovery();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
 
@@ -2084,6 +2278,8 @@
 
     bindToolbar();
     setupSideTabs();
+    startPerformanceMonitor();
+    setupPwa();
 
     // 測試/除錯掛鉤
     window.__farm = {
@@ -2097,6 +2293,11 @@
       assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],
       renderSettings: () => renderSettingsPanel(),
       lastOfflineSummary: () => state.lastOfflineSummary,
+      exportSaveCode: () => exportSaveCode(),
+      importSaveCode: () => importSaveCode(),
+      restoreBackupSave: () => restoreBackupSave(),
+      performanceInfo: () => ({ mode: ensureSettings().performanceMode, avgFps: perfAvgFps, autoLow: perfAutoLow, tier: document.documentElement.dataset.performanceTier || "high" }),
+      setPerformanceMode: (mode) => { ensureSettings(); state.settings.performanceMode = mode; perfAutoLow = false; applyPerformanceMode(); renderSettingsPanel(); },
       safeSaveNow: () => safeSaveNow(),
       showErrorRecovery: () => showErrorRecovery(new Error("test")),
       focusQuestTarget: () => {

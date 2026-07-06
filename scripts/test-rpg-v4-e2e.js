@@ -22,7 +22,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const MIME = { ".html": "text/html", ".js": "application/javascript", ".json": "application/json", ".png": "image/png", ".css": "text/css" };
+const MIME = { ".html": "text/html", ".js": "application/javascript", ".json": "application/json", ".webmanifest": "application/manifest+json", ".png": "image/png", ".css": "text/css" };
 
 let failed = 0;
 function assert(cond, msg) { if (cond) console.log("  ✓ " + msg); else { console.error("  ✗ " + msg); failed++; } }
@@ -87,6 +87,31 @@ async function run() {
     page.on("pageerror", (e) => errors.push("pageerror: " + (e && e.message)));
 
     await page.goto(base);
+    const pwaFiles = await page.evaluate(async () => {
+      const manifestRes = await fetch("manifest.webmanifest");
+      const manifest = await manifestRes.json();
+      const swRes = await fetch("sw.js");
+      const swText = await swRes.text();
+      let swSyntax = true;
+      try { new Function(swText); } catch (e) { swSyntax = e.message; }
+      return {
+        manifestOk: manifestRes.ok,
+        manifestName: manifest.name,
+        orientation: manifest.orientation,
+        iconSizes: (manifest.icons || []).map((i) => i.sizes).join(","),
+        swOk: swRes.ok,
+        swSyntax,
+        swHasVersion: swText.includes("CACHE_VERSION"),
+        swHasStrategies: swText.includes("networkFirst") && swText.includes("cacheFirst"),
+        swHasSkipWaiting: swText.includes("SKIP_WAITING"),
+        webdriver: navigator.webdriver === true,
+      };
+    });
+    assert(pwaFiles.manifestOk && pwaFiles.manifestName === "像素農場 RPG" && pwaFiles.orientation === "portrait" && pwaFiles.iconSizes.includes("192x192") && pwaFiles.iconSizes.includes("512x512"),
+      `PWA manifest 可取且含名稱/直式/icon（${pwaFiles.manifestName}, ${pwaFiles.iconSizes}）`);
+    assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting,
+      `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
+    assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.waitForFunction(() => window.__farm && window.__farm.state);
@@ -169,6 +194,66 @@ async function run() {
     assert(assistantOff.state === false && assistantOff.hidden && assistantOff.enabled === "false",
       "設定面板可關閉智慧農務助手並立即隱藏面板");
     await page.click('[data-setting-key="smartAssistant"]');
+    await page.click('[data-performance-mode="low"]');
+    const perfLow = await page.evaluate(() => ({
+      mode: window.__farm.state().settings.performanceMode,
+      tier: document.documentElement.dataset.performanceTier,
+      lowClass: document.documentElement.classList.contains("perf-low"),
+      desc: document.querySelector('[data-audit="performance-desc"]')?.textContent || "",
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+    }));
+    assert(perfLow.mode === "low" && perfLow.tier === "low" && perfLow.lowClass && perfLow.overflow <= 2,
+      `效能模式可鎖低階並套用天氣降級 class（tier=${perfLow.tier}, overflow=${perfLow.overflow}）`);
+    await page.click('[data-performance-mode="auto"]');
+    const perfAuto = await page.evaluate(() => window.__farm.performanceInfo());
+    assert(perfAuto.mode === "auto" && perfAuto.tier === "high", `效能模式可切回自動（mode=${perfAuto.mode}, tier=${perfAuto.tier}）`);
+    const exportBefore = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.coins = 246;
+      st.storage.items.wheat = 7;
+      window.save(st);
+      return { createdAt: st.createdAt, coins: st.coins, wheat: st.storage.items.wheat };
+    });
+    await page.click("#exportSaveBtn");
+    await page.waitForFunction((expected) => {
+      const code = document.getElementById("saveCodeBox").value || "";
+      if (code.length < 80) return false;
+      try {
+        const raw = JSON.parse(decodeURIComponent(escape(atob(code))));
+        return raw.createdAt === expected.createdAt && raw.coins === expected.coins && raw.storage.items.wheat === expected.wheat;
+      } catch (e) {
+        return false;
+      }
+    }, exportBefore);
+    const saveCode = await page.$eval("#saveCodeBox", (el) => el.value);
+    await page.evaluate(() => {
+      const fresh = window.defaultState(Date.now());
+      const live = window.__farm.state();
+      Object.keys(live).forEach((k) => delete live[k]);
+      Object.assign(live, fresh);
+      localStorage.removeItem(window.GAME.saveKey);
+    });
+    await page.fill("#saveCodeBox", saveCode);
+    await page.click("#importSaveBtn");
+    await page.waitForFunction((createdAt) => window.__farm && window.__farm.state && window.__farm.state().createdAt === createdAt, exportBefore.createdAt, { timeout: 8000 });
+    const importAfter = await page.evaluate(() => ({
+      createdAt: window.__farm.state().createdAt,
+      coins: window.__farm.state().coins,
+      wheat: window.__farm.state().storage.items.wheat || 0,
+    }));
+    assert(importAfter.createdAt === exportBefore.createdAt && importAfter.coins === 246 && importAfter.wheat === 7,
+      `匯出→清檔→匯入還原成功（coins=${importAfter.coins}, wheat=${importAfter.wheat}）`);
+    await page.click("#settingsBtn");
+    const rawBeforeBadImport = await page.evaluate(() => localStorage.getItem(window.GAME.saveKey));
+    await page.fill("#saveCodeBox", "bad-code");
+    await page.click("#importSaveBtn");
+    await sleep(200);
+    const badImport = await page.evaluate((rawBefore) => ({
+      sameRaw: localStorage.getItem(window.GAME.saveKey) === rawBefore,
+      status: document.getElementById("saveStatus")?.textContent || "",
+    }), rawBeforeBadImport);
+    assert(badImport.sameRaw && badImport.status.includes("匯入失敗"),
+      `壞代碼被拒且不覆蓋存檔（${badImport.status}）`);
     await page.click("#settingsOk");
     await page.evaluate(() => {
       const fresh = window.defaultState(Date.now());

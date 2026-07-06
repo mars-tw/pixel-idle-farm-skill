@@ -881,8 +881,10 @@ console.log("\n== 17. R23：智慧助手 / 離線摘要 / 安全存檔 ==");
   assert(JSON.stringify(st) === frozen, "farmActionSuggestions 為純讀取，不 mutate state");
 
   const migrated = S.migrate({ version: 1, coins: 5, settings: { smartAssistant: false }, map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } });
-  assert(migrated.settings.smartAssistant === false && migrated.settings.offlineSummary === true,
-    "舊存檔設定遷移保留助手偏好並補離線摘要預設");
+  assert(migrated.settings.smartAssistant === false && migrated.settings.offlineSummary === true && migrated.settings.performanceMode === "auto",
+    "舊存檔設定遷移保留助手偏好並補離線摘要/效能模式預設");
+  const badPerf = S.migrate({ version: 1, coins: 5, settings: { performanceMode: "turbo" }, map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } });
+  assert(badPerf.settings.performanceMode === "auto", "舊存檔非法效能模式會回復 auto");
   assert(migrated.lastOfflineSummary === null, "舊存檔遷移補 lastOfflineSummary 空值");
 
   const off = S.defaultState(T0);
