@@ -171,7 +171,7 @@
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0 },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
-      settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto" },
+      settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" },
       lastOfflineSummary: null,
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
@@ -232,8 +232,9 @@
     merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     merged.discoveries = Object.assign({ items: {} }, state.discoveries);
     merged.discoveries.items = Object.assign({}, state.discoveries && state.discoveries.items);
-    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto" }, state.settings);
+    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" }, state.settings);
     if (!["auto", "high", "low"].includes(merged.settings.performanceMode)) merged.settings.performanceMode = "auto";
+    if (!["small", "medium", "large"].includes(merged.settings.textSize)) merged.settings.textSize = "medium";
     merged.lastOfflineSummary = state.lastOfflineSummary || null;
     const discoveredAtFallback = state.createdAt || state.lastSeenAt || Date.now();
     for (const [id, qty] of Object.entries(merged.stats.harvested || {})) {

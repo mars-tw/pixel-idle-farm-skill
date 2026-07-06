@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5a9e3f">
+  <title>像素農場 RPG｜離線中</title>
+  <style>
+    :root { color-scheme: light; --green:#5a9e3f; --ink:#3a2c1a; --paper:#fffdf4; --line:#d8c9a6; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px;
+      font-family:"Segoe UI","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+      color:var(--ink); background:linear-gradient(170deg,#bfe3f5,#d8f0c8 55%,#7cb342 130%); }
+    main { width:min(420px,100%); background:var(--paper); border:2px solid var(--line); border-radius:14px;
+      padding:22px; box-shadow:0 12px 34px rgba(60,40,10,.18); }
+    h1 { margin:0 0 10px; font-size:22px; line-height:1.2; }
+    p { margin:0 0 16px; line-height:1.6; color:#6a5b43; }
+    button { width:100%; min-height:44px; border:0; border-radius:10px; background:var(--green); color:#17340f;
+      font:inherit; font-weight:900; cursor:pointer; }
+    button:focus-visible { outline:3px solid #2b6f8a; outline-offset:3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>目前離線中</h1>
+    <p>這台裝置還沒有完整快取遊戲內容。請恢復網路後重新載入，已安裝過的版本會優先使用本機快取。</p>
+    <button onclick="location.reload()">重新嘗試</button>
+  </main>
+</body>
+</html>

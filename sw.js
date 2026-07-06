@@ -1,17 +1,59 @@
-const CACHE_VERSION = "r31-20260706-1";
+const CACHE_VERSION = "r35-20260706-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
+const OFFLINE_URL = "./offline.html";
 const CORE_ASSETS = [
   "./",
   "./index.html",
+  OFFLINE_URL,
   "./manifest.webmanifest",
+  "./assets/manifest.json",
   "./src/config.js",
   "./src/game.js",
   "./src/state.js",
   "./src/atlas.js",
   "./src/ui.js",
+  "./assets/generated/crop-growth.png",
+  "./assets/generated/terrain-tileset.png",
+  "./assets/generated/ui-icons.png",
+  "./assets/generated/characters/miri-rowan-farm-actions-cutout.png",
+  "./assets/generated/characters/miri-rowan-walk-cycle-cutout.png",
   "./assets/generated/v4/manifest.json",
+  "./assets/generated/v4/animal-care-props-64.json",
+  "./assets/generated/v4/animal-care-props-64.png",
+  "./assets/generated/v4/animal-care-vfx-32.json",
+  "./assets/generated/v4/animal-care-vfx-32.png",
+  "./assets/generated/v4/animal-products-quality-32.json",
+  "./assets/generated/v4/animal-products-quality-32.png",
+  "./assets/generated/v4/animal-status-icons-32.json",
+  "./assets/generated/v4/animal-status-icons-32.png",
+  "./assets/generated/v4/animals-48.json",
+  "./assets/generated/v4/animals-48.png",
+  "./assets/generated/v4/animals-care-48.json",
+  "./assets/generated/v4/animals-care-48.png",
+  "./assets/generated/v4/buildings.json",
+  "./assets/generated/v4/buildings.png",
+  "./assets/generated/v4/crops-48.json",
+  "./assets/generated/v4/crops-48.png",
+  "./assets/generated/v4/max-actions-48x64.json",
+  "./assets/generated/v4/max-actions-48x64.png",
+  "./assets/generated/v4/max-walk-48x64.json",
+  "./assets/generated/v4/max-walk-48x64.png",
+  "./assets/generated/v4/miri-actions-48x64.json",
+  "./assets/generated/v4/miri-actions-48x64.png",
+  "./assets/generated/v4/miri-walk-48x64.json",
+  "./assets/generated/v4/miri-walk-48x64.png",
+  "./assets/generated/v4/npcs-48x64.json",
+  "./assets/generated/v4/npcs-48x64.png",
+  "./assets/generated/v4/structures-nature.json",
+  "./assets/generated/v4/structures-nature.png",
+  "./assets/generated/v4/terrain-organic-32.json",
+  "./assets/generated/v4/terrain-organic-32.png",
+  "./assets/generated/v3/action-vfx-32.json",
+  "./assets/generated/v3/action-vfx-32.png",
+  "./assets/generated/v3/props-stations.json",
+  "./assets/generated/v3/props-stations.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png"
 ];
@@ -30,7 +72,7 @@ async function networkFirst(request) {
     }
     return response;
   } catch (e) {
-    return (await cache.match(request)) || (await cache.match("./index.html")) || Response.error();
+    return (await cache.match(request)) || (await cache.match("./index.html")) || (await caches.match(OFFLINE_URL)) || Response.error();
   }
 }
 

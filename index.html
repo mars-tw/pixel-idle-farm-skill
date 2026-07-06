@@ -20,13 +20,15 @@
     --border: #d8c9a6; --border-d: #c2ad82;
     --shadow: 0 2px 0 rgba(0,0,0,.08), 0 6px 16px rgba(60,40,10,.14);
     --r: 14px;
+    --ui-font-scale: 1;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline: 3px solid #2b6f8a; outline-offset: 3px; }
   html, body { height: 100%; }
   body {
     font-family: "Segoe UI", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
     color: var(--ink); background: linear-gradient(170deg, var(--sky-1), var(--sky-2) 55%, var(--grass) 130%);
-    min-height: 100%; padding: 10px; line-height: 1.4;
+    min-height: 100%; padding: 10px; line-height: 1.4; font-size: calc(16px * var(--ui-font-scale));
     background-attachment: fixed;
   }
   img, .sprite { image-rendering: pixelated; image-rendering: crisp-edges; }
@@ -302,6 +304,18 @@
     width: min(420px, calc(100vw - 24px)); min-height: 44px; border: 2px solid #94bd68; border-radius: 10px;
     background: #eef8dd; color: #285b1d; box-shadow: 0 12px 30px rgba(0,0,0,.22); padding: 9px 12px;
     font-size: 13px; font-weight: 950; cursor: pointer; text-align: center; }
+  html.text-small { --ui-font-scale: .94; }
+  html.text-medium { --ui-font-scale: 1; }
+  html.text-large { --ui-font-scale: 1.12; }
+  .res, .btn, .order .o-wants, .pane-head, .tc-title, .story-title { font-size: calc(14px * var(--ui-font-scale)); }
+  .btn.small, .setting-toggle, .setting-mode, .sa-go, .quest, .story-copy, .tc-desc, .offline-review-body,
+  .journal-item, .journal-detail, .save-status { font-size: calc(12px * var(--ui-font-scale)); }
+  .side-tab, .setting-title, .save-manager-title, .offline-review-title, .er-title, .pwa-update {
+    font-size: calc(13px * var(--ui-font-scale));
+  }
+  .setting-desc, .quest-dock .qd-action, .quest-dock .qd-meta, .sa-detail, .sa-reason, .order .o-flavor,
+  .order .o-reward, .order .o-meta, .jd-row { font-size: calc(11px * var(--ui-font-scale)); }
+  .quest-dock .qd-title, .sa-head b, .sa-title { font-size: calc(12px * var(--ui-font-scale)); }
 
   /* ===== 底部工具列 ===== */
   .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
@@ -559,11 +573,11 @@
     <!-- 右：分頁側欄（故事 / 磚資訊 / 訂單 / 升級）-->
     <div class="panel side-panel">
       <div class="side-tabs" id="sideTabs">
-        <button class="side-tab" data-tab="tile">🔍 磚資訊</button>
-        <button class="side-tab" data-tab="orders">📜 訂單 <span class="tab-badge" id="ordersBadge"></span></button>
-        <button class="side-tab" data-tab="upgrades">⬆️ 升級</button>
-        <button class="side-tab sel" data-tab="story">📖 故事</button>
-        <button class="side-tab" data-tab="journal">📔 圖鑑</button>
+        <button class="side-tab" data-tab="tile" aria-label="切換到磚資訊分頁">🔍 磚資訊</button>
+        <button class="side-tab" data-tab="orders" aria-label="切換到訂單分頁">📜 訂單 <span class="tab-badge" id="ordersBadge"></span></button>
+        <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁">⬆️ 升級</button>
+        <button class="side-tab sel" data-tab="story" aria-label="切換到故事分頁" aria-selected="true">📖 故事</button>
+        <button class="side-tab" data-tab="journal" aria-label="切換到圖鑑分頁">📔 圖鑑</button>
       </div>
       <div class="side-body">
         <div class="side-pane" data-pane="tile">
@@ -591,7 +605,7 @@
 
   <div class="toolbar">
     <button class="btn small ghost" id="genderToggle" title="切換主角性別">👧 主角</button>
-    <button class="btn small ghost" id="settingsBtn" data-audit="settings-open">⚙️ 設定</button>
+    <button class="btn small ghost" id="settingsBtn" data-audit="settings-open" aria-label="開啟設定">⚙️ 設定</button>
     <button class="btn small ghost" id="spriteToggle">🎨 像素圖</button>
     <button class="btn small ghost" id="howToBtn">❓ 玩法</button>
     <button class="btn small ghost" id="resetBtn">🗑️ 重置存檔</button>
@@ -606,27 +620,27 @@
 </div>
 
 <!-- 設定 modal -->
-<div class="modal" id="settingsModal" data-audit="settings-modal">
+<div class="modal" id="settingsModal" data-audit="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
   <div class="modal-card settings-card">
-    <h2>⚙️ 設定</h2>
+    <h2 id="settingsTitle">⚙️ 設定</h2>
     <div class="settings-list" id="settingsList"></div>
     <button class="btn" id="settingsOk">完成</button>
   </div>
 </div>
 
 <!-- 離線摘要 modal -->
-<div class="modal" id="offlineModal">
+<div class="modal" id="offlineModal" role="dialog" aria-modal="true" aria-labelledby="offlineTitle">
   <div class="modal-card">
-    <h2>🌙 歡迎回來！</h2>
+    <h2 id="offlineTitle">🌙 歡迎回來！</h2>
     <div id="offlineBody"></div>
     <button class="btn" id="offlineOk">太好了，繼續種田 ▶</button>
   </div>
 </div>
 
 <!-- 玩法引導 modal -->
-<div class="modal" id="howToModal">
+<div class="modal" id="howToModal" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
   <div class="modal-card">
-    <h2>🌻 怎麼玩</h2>
+    <h2 id="howToTitle">🌻 怎麼玩</h2>
     <ol>
       <li><b>① 選種子</b>：點上方種子（看 🪙 成本）</li>
       <li><b>② 種植</b>：點農場的空地（土壤格）種下</li>

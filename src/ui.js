@@ -33,6 +33,11 @@
   let perfLowFrames = 0;
   let perfStableFrames = 0;
   let perfAutoLow = false;
+  let perfLastDowngradeReason = "尚未降級";
+  let pwaRegistration = null;
+  let pwaWaitingWorker = null;
+  let pwaUpdateStatus = "";
+  let lastModalFocus = null;
   const plotEls = []; // 農地格 DOM 快取
   const tileEls = []; // 地圖磚 DOM 快取
 
@@ -43,6 +48,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
+  const PWA_CACHE_VERSION = "r35-20260706-1";
 
   // ---------- 物品/建材顯示 ----------
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
@@ -87,6 +93,37 @@
   function scheduleSave() {
     if (saveTimer) return;
     saveTimer = setTimeout(() => { saveTimer = null; window.save(state); }, 600);
+  }
+  function focusFirstInModal(modal, preferredSelector) {
+    if (!modal || typeof modal.querySelector !== "function") return;
+    const target = (preferredSelector && modal.querySelector(preferredSelector)) ||
+      modal.querySelector("button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])");
+    if (target && typeof target.focus === "function") {
+      try { target.focus({ preventScroll: true }); }
+      catch (e) { target.focus(); }
+    }
+  }
+  function openModal(id, preferredSelector) {
+    const modal = $(id); if (!modal) return;
+    lastModalFocus = document.activeElement || lastModalFocus;
+    if (typeof modal.setAttribute === "function") {
+      modal.setAttribute("role", "dialog");
+      modal.setAttribute("aria-modal", "true");
+    }
+    modal.classList.add("show");
+    focusFirstInModal(modal, preferredSelector);
+  }
+  function closeModal(id) {
+    const modal = $(id); if (!modal) return false;
+    modal.classList.remove("show");
+    if (lastModalFocus && typeof lastModalFocus.focus === "function") {
+      setTimeout(() => lastModalFocus.focus(), 0);
+    }
+    return true;
+  }
+  function closeOpenModal() {
+    const modal = typeof document.querySelector === "function" ? document.querySelector(".modal.show") : null;
+    return modal && modal.id ? closeModal(modal.id) : false;
   }
 
   // ---------- 資源列 ----------
@@ -134,13 +171,20 @@
 
   // ---------- 側欄分頁 ----------
   function switchTab(name) {
-    document.querySelectorAll(".side-tab").forEach((b) => b.classList.toggle("sel", b.dataset.tab === name));
+    document.querySelectorAll(".side-tab").forEach((b) => {
+      const selected = b.dataset.tab === name;
+      b.classList.toggle("sel", selected);
+      if (b.setAttribute) b.setAttribute("aria-selected", selected ? "true" : "false");
+    });
     document.querySelectorAll(".side-pane").forEach((p) => p.classList.toggle("sel", p.dataset.pane === name));
     if (name === "story") renderStory();
     if (name === "journal") renderJournal();
   }
   function setupSideTabs() {
-    document.querySelectorAll(".side-tab").forEach((b) => { b.onclick = () => switchTab(b.dataset.tab); });
+    document.querySelectorAll(".side-tab").forEach((b) => {
+      if (!b.getAttribute || !b.getAttribute("aria-label")) b.setAttribute && b.setAttribute("aria-label", "切換到" + (b.textContent || "").trim() + "分頁");
+      b.onclick = () => switchTab(b.dataset.tab);
+    });
   }
 
   // 幫手自動化捷徑：早期隱藏（初期動作必須走到目標執行）；升「幫手機器人」後才解鎖
@@ -489,7 +533,7 @@
         ${cur && cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(true) : ""}
         ${cur && (cur.id === "collect_east_forage") ? forageRowsHtml(true) : ""}
       </div>
-      <button class="qd-meta qd-go" data-audit="quest-dock-go" ${targetId ? "" : "disabled"}>${targetId ? "前往" : "探索"}</button>`;
+      <button class="qd-meta qd-go" data-audit="quest-dock-go" aria-label="${targetId ? "前往目前任務目標" : "目前任務沒有可前往目標"}" ${targetId ? "" : "disabled"}>${targetId ? "前往" : "探索"}</button>`;
     const go = box.querySelector(".qd-go");
     if (go && targetId) go.onclick = (ev) => { ev.stopPropagation(); focusCameraOnTile(targetId); };
   }
@@ -500,6 +544,7 @@
     if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = false;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
+    if (!["small", "medium", "large"].includes(state.settings.textSize)) state.settings.textSize = "medium";
     if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
     return state.settings;
   }
@@ -509,7 +554,7 @@
         <div class="setting-title">${escapeHtml(title)}</div>
         <div class="setting-desc">${escapeHtml(desc)}</div>
       </div>
-      <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}">${enabled ? "開啟" : "關閉"}</button>
+      <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}" aria-label="${escapeHtml(title)}${enabled ? "已開啟" : "已關閉"}">${enabled ? "開啟" : "關閉"}</button>
     </div>`;
   }
   function performanceModeHtml(mode) {
@@ -524,6 +569,41 @@
       </div>
       <div class="setting-mode-group">
         ${["auto", "high", "low"].map((m) => `<button class="setting-mode ${mode === m ? "sel" : ""}" data-audit="performance-mode" data-performance-mode="${m}">${labels[m]}</button>`).join("")}
+      </div>
+    </div>`;
+  }
+  function textSizeHtml(size) {
+    const labels = { small: "小", medium: "中", large: "大" };
+    return `<div class="setting-row" data-audit="setting-text-size">
+      <div>
+        <div class="setting-title">文字大小</div>
+        <div class="setting-desc">調整主要 UI 文字尺寸，適合手機長時間遊玩。</div>
+      </div>
+      <div class="setting-mode-group">
+        ${["small", "medium", "large"].map((m) => `<button class="setting-mode ${size === m ? "sel" : ""}" data-audit="text-size-mode" data-text-size="${m}" aria-label="文字大小${labels[m]}">${labels[m]}</button>`).join("")}
+      </div>
+    </div>`;
+  }
+  function pwaVersionHtml() {
+    const waiting = !!pwaWaitingWorker || !!(pwaRegistration && pwaRegistration.waiting);
+    const status = pwaUpdateStatus || (typeof navigator !== "undefined" && "serviceWorker" in navigator ? "可手動檢查更新。" : "此瀏覽器不支援離線安裝。");
+    return `<div class="setting-row" data-audit="setting-pwa">
+      <div>
+        <div class="setting-title">版本 ${escapeHtml(PWA_CACHE_VERSION)}</div>
+        <div class="setting-desc" id="pwaUpdateStatus" data-audit="pwa-update-status">${escapeHtml(status)}</div>
+      </div>
+      <button class="setting-toggle" id="pwaCheckBtn" data-audit="pwa-check" aria-label="${waiting ? "套用新版本" : "檢查 PWA 更新"}">${waiting ? "套用更新" : "檢查更新"}</button>
+    </div>`;
+  }
+  function performanceTierLabel(tier) {
+    return tier === "low" ? "低" : "高";
+  }
+  function performanceDiagnosticsHtml() {
+    const info = performanceInfo();
+    return `<div class="setting-row" data-audit="setting-performance-diagnostics">
+      <div>
+        <div class="setting-title">效能診斷</div>
+        <div class="setting-desc" id="performanceDiagnostics" data-audit="performance-diagnostics">FPS ${Math.round(info.avgFps)}｜實際 ${performanceTierLabel(info.tier)}｜最近降級：${escapeHtml(info.lastDowngradeReason)}</div>
       </div>
     </div>`;
   }
@@ -617,6 +697,31 @@
       return false;
     }
   }
+  function applyTextSize() {
+    if (!state) return;
+    const settings = ensureSettings();
+    const size = settings.textSize || "medium";
+    const root = document.documentElement;
+    root.classList.toggle("text-small", size === "small");
+    root.classList.toggle("text-medium", size === "medium");
+    root.classList.toggle("text-large", size === "large");
+    root.dataset.textSize = size;
+  }
+  function performanceInfo() {
+    const tier = document.documentElement.dataset.performanceTier || "high";
+    return {
+      mode: ensureSettings().performanceMode,
+      avgFps: perfAvgFps,
+      autoLow: perfAutoLow,
+      tier,
+      lastDowngradeReason: perfLastDowngradeReason,
+    };
+  }
+  function updatePerformanceDiagnostics() {
+    const box = $("performanceDiagnostics"); if (!box) return;
+    const info = performanceInfo();
+    box.textContent = `FPS ${Math.round(info.avgFps)}｜實際 ${performanceTierLabel(info.tier)}｜最近降級：${info.lastDowngradeReason}`;
+  }
   function applyPerformanceMode() {
     if (!state) return;
     const settings = ensureSettings();
@@ -646,25 +751,68 @@
         if (perfAvgFps < 45) { perfLowFrames++; perfStableFrames = 0; }
         else if (perfAvgFps > 53) { perfStableFrames++; perfLowFrames = 0; }
         else { perfLowFrames = 0; perfStableFrames = 0; }
-        if (!perfAutoLow && perfLowFrames >= 30) { perfAutoLow = true; applyPerformanceMode(); renderSettingsPanel(); }
+        if (!perfAutoLow && perfLowFrames >= 30) {
+          perfAutoLow = true;
+          perfLastDowngradeReason = `FPS ${Math.round(perfAvgFps)} 低於 45，已降低天氣動畫密度`;
+          applyPerformanceMode(); renderSettingsPanel();
+        }
         if (perfAutoLow && perfStableFrames >= 120) { perfAutoLow = false; applyPerformanceMode(); renderSettingsPanel(); }
       } else if (perfAutoLow || perfLowFrames || perfStableFrames) {
         perfAutoLow = false; perfLowFrames = 0; perfStableFrames = 0; applyPerformanceMode();
       }
+      updatePerformanceDiagnostics();
       requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);
   }
   function showPwaUpdatePrompt(worker) {
     const box = $("pwaUpdate"); if (!box || !worker) return;
+    pwaWaitingWorker = worker;
+    pwaUpdateStatus = "新版本已下載，可套用更新。";
     box.hidden = false;
+    renderSettingsPanel();
     box.onclick = () => {
       worker.postMessage({ type: "SKIP_WAITING" });
       box.hidden = true;
     };
   }
+  function applyWaitingServiceWorker() {
+    const worker = pwaWaitingWorker || (pwaRegistration && pwaRegistration.waiting);
+    if (!worker) return false;
+    worker.postMessage({ type: "SKIP_WAITING" });
+    pwaWaitingWorker = null;
+    pwaUpdateStatus = "正在套用更新...";
+    const box = $("pwaUpdate"); if (box) box.hidden = true;
+    return true;
+  }
+  async function checkPwaUpdate() {
+    if (!pwaRegistration || typeof pwaRegistration.update !== "function") {
+      pwaUpdateStatus = "尚未註冊離線功能，請重新整理後再試。";
+      renderSettingsPanel();
+      return false;
+    }
+    try {
+      const reg = await pwaRegistration.update();
+      if ((reg && reg.waiting) || pwaWaitingWorker) {
+        showPwaUpdatePrompt((reg && reg.waiting) || pwaWaitingWorker);
+        return true;
+      }
+      pwaUpdateStatus = "已檢查，目前是最新版本。";
+      renderSettingsPanel();
+      return false;
+    } catch (e) {
+      pwaUpdateStatus = "檢查更新失敗，請確認網路後再試。";
+      renderSettingsPanel();
+      return false;
+    }
+  }
+  function handlePwaUpdateButton() {
+    if (applyWaitingServiceWorker()) return;
+    checkPwaUpdate();
+  }
   function setupPwa() {
-    if (typeof navigator === "undefined" || navigator.webdriver || !("serviceWorker" in navigator)) return;
+    const allowSwTest = typeof location !== "undefined" && new URLSearchParams(location.search || "").has("swtest");
+    if (typeof navigator === "undefined" || (navigator.webdriver && !allowSwTest) || !("serviceWorker" in navigator)) return;
     let refreshing = false;
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (refreshing) return;
@@ -672,6 +820,7 @@
       window.location.reload();
     });
     navigator.serviceWorker.register("./sw.js", { scope: "./" }).then((reg) => {
+      pwaRegistration = reg;
       if (reg.waiting) showPwaUpdatePrompt(reg.waiting);
       reg.addEventListener("updatefound", () => {
         const worker = reg.installing;
@@ -680,6 +829,7 @@
           if (worker.state === "installed" && navigator.serviceWorker.controller) showPwaUpdatePrompt(worker);
         });
       });
+      renderSettingsPanel();
     }).catch(() => {});
   }
   function compactOfflineSummary(summary) {
@@ -735,7 +885,10 @@
     box.innerHTML = [
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
+      textSizeHtml(settings.textSize || "medium"),
       performanceModeHtml(settings.performanceMode || "auto"),
+      performanceDiagnosticsHtml(),
+      pwaVersionHtml(),
       offlineReviewHtml(state.lastOfflineSummary),
       saveManagerHtml(),
     ].join("");
@@ -748,6 +901,16 @@
         if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
         renderSettingsPanel();
         renderSmartAssistant(true);
+        scheduleSave();
+      };
+    });
+    box.querySelectorAll("[data-text-size]").forEach((btn) => {
+      btn.onclick = (ev) => {
+        ev.stopPropagation();
+        ensureSettings();
+        state.settings.textSize = btn.dataset.textSize || "medium";
+        applyTextSize();
+        renderSettingsPanel();
         scheduleSave();
       };
     });
@@ -765,6 +928,8 @@
     const exportBtn = $("exportSaveBtn"); if (exportBtn) exportBtn.onclick = (ev) => { ev.stopPropagation(); exportSaveCode(); };
     const importBtn = $("importSaveBtn"); if (importBtn) importBtn.onclick = (ev) => { ev.stopPropagation(); importSaveCode(); };
     const restoreBtn = $("restoreBackupBtn"); if (restoreBtn) restoreBtn.onclick = (ev) => { ev.stopPropagation(); restoreBackupSave(); };
+    const pwaBtn = $("pwaCheckBtn"); if (pwaBtn) pwaBtn.onclick = (ev) => { ev.stopPropagation(); handlePwaUpdateButton(); };
+    updatePerformanceDiagnostics();
   }
   function renderSmartAssistant(force) {
     const box = $("smartAssistant"); if (!box || !state || !G.farmActionSuggestions) return;
@@ -789,14 +954,14 @@
           <div class="sa-detail">${escapeHtml(s.detail || "")}</div>
           <div class="sa-reason" data-audit="assistant-reason">${escapeHtml(s.reason || "")}</div>
         </div>
-        <button class="sa-go" data-audit="assistant-go" data-target-id="${escapeHtml(s.tileId)}" data-suggestion-type="${escapeHtml(s.type)}">${escapeHtml(s.actionLabel || "前往")}</button>
+        <button class="sa-go" data-audit="assistant-go" data-target-id="${escapeHtml(s.tileId)}" data-suggestion-type="${escapeHtml(s.type)}" aria-label="前往建議目標：${escapeHtml(s.title)}">${escapeHtml(s.actionLabel || "前往")}</button>
       </div>`).join("")
       : `<div class="sa-row" data-audit="assistant-empty"><div><div class="sa-title">目前沒有急件</div><div class="sa-detail">可以整理倉庫、探索地圖或等待作物成熟。</div></div></div>`;
     box.innerHTML = `
       <div class="sa-head">
-        <button class="sa-icon-btn" data-audit="assistant-collapse" title="${collapsed ? "展開" : "收合"}">${collapsed ? "▴" : "▾"}</button>
+        <button class="sa-icon-btn" data-audit="assistant-collapse" title="${collapsed ? "展開" : "收合"}" aria-label="${collapsed ? "展開智慧農務助手" : "收合智慧農務助手"}">${collapsed ? "▴" : "▾"}</button>
         <b>智慧農務助手</b>
-        <button class="sa-icon-btn" data-audit="assistant-close" title="關閉">×</button>
+        <button class="sa-icon-btn" data-audit="assistant-close" title="關閉" aria-label="關閉智慧農務助手">×</button>
       </div>
       <div class="sa-list">${rows}</div>`;
     const collapse = box.querySelector('[data-audit="assistant-collapse"]');
@@ -2164,7 +2329,7 @@
     if (!crops.length && !products.length && !summary.readyPlots && !forageCount && !(summary.coins > 0)) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
     if (summary.cappedFromMs > 0) lines.push(`<div class="tip">（離線收益上限 8 小時，實際離開 ${fmtTime(summary.cappedFromMs)}）</div>`);
     $("offlineBody").innerHTML = lines.join("");
-    $("offlineModal").classList.add("show");
+    openModal("offlineModal", "#offlineOk");
     return true;
   }
 
@@ -2226,6 +2391,7 @@
     // 先載入存檔，state 必須在任何 render/onload 前就緒
     state = window.load() || window.defaultState(now());
     ensureSettings();
+    applyTextSize();
     applyPerformanceMode();
     setupErrorRecovery();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
@@ -2258,6 +2424,9 @@
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
     // 鍵盤 WASD/方向鍵：一次走一格
     document.addEventListener("keydown", onKeyMove);
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape" && closeOpenModal()) ev.preventDefault();
+    });
 
     // sprite 切換鈕初始文字
     $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
@@ -2266,7 +2435,7 @@
     let shownModal = false;
     if (!state.stats || state.stats.plantCount === 0) {
       if ((state.coins === window.GAME.startCoins) && Object.keys(state.stats.harvested).length === 0) {
-        $("howToModal").classList.add("show"); shownModal = true;
+        openModal("howToModal", "#howToOk"); shownModal = true;
       }
     }
     if (!shownModal && state.settings.offlineSummary !== false) showOfflineSummary(summary);
@@ -2296,8 +2465,10 @@
       exportSaveCode: () => exportSaveCode(),
       importSaveCode: () => importSaveCode(),
       restoreBackupSave: () => restoreBackupSave(),
-      performanceInfo: () => ({ mode: ensureSettings().performanceMode, avgFps: perfAvgFps, autoLow: perfAutoLow, tier: document.documentElement.dataset.performanceTier || "high" }),
+      performanceInfo: () => performanceInfo(),
       setPerformanceMode: (mode) => { ensureSettings(); state.settings.performanceMode = mode; perfAutoLow = false; applyPerformanceMode(); renderSettingsPanel(); },
+      setTextSize: (size) => { ensureSettings(); state.settings.textSize = size; applyTextSize(); renderSettingsPanel(); },
+      pwaVersion: () => PWA_CACHE_VERSION,
       safeSaveNow: () => safeSaveNow(),
       showErrorRecovery: () => showErrorRecovery(new Error("test")),
       focusQuestTarget: () => {
@@ -2354,12 +2525,12 @@
     };
     $("settingsBtn").onclick = () => {
       renderSettingsPanel();
-      $("settingsModal").classList.add("show");
+      openModal("settingsModal", "#settingsOk");
     };
-    $("settingsOk").onclick = () => $("settingsModal").classList.remove("show");
-    $("howToBtn").onclick = () => $("howToModal").classList.add("show");
-    $("howToOk").onclick = () => $("howToModal").classList.remove("show");
-    $("offlineOk").onclick = () => $("offlineModal").classList.remove("show");
+    $("settingsOk").onclick = () => closeModal("settingsModal");
+    $("howToBtn").onclick = () => openModal("howToModal", "#howToOk");
+    $("howToOk").onclick = () => closeModal("howToModal");
+    $("offlineOk").onclick = () => closeModal("offlineModal");
     if ($("errorContinue")) $("errorContinue").onclick = () => { $("errorRecovery").hidden = true; };
     if ($("errorReload")) $("errorReload").onclick = () => window.location.reload();
     $("resetBtn").onclick = () => {

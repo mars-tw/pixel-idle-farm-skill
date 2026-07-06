@@ -67,6 +67,53 @@ async function storyProgress(page) {
     };
   });
 }
+async function clearServiceWorkerState(page) {
+  await page.evaluate(async () => {
+    if ("serviceWorker" in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((reg) => reg.unregister()));
+    }
+    if ("caches" in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter((key) => key.startsWith("pixel-farm-rpg-")).map((key) => caches.delete(key)));
+    }
+  });
+}
+async function reloadAllowAbort(page) {
+  try {
+    await page.reload({ waitUntil: "domcontentloaded" });
+  } catch (e) {
+    if (!/ERR_ABORTED|frame was detached/i.test(String(e && e.message))) throw e;
+  }
+}
+async function runTrueServiceWorkerOfflineTest(browser, base) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "allow" });
+  const page = await context.newPage();
+  try {
+    await page.goto(base + "?swtest=1");
+    await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
+    await reloadAllowAbort(page);
+    await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await page.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, { timeout: 10000 });
+    await context.setOffline(true);
+    await reloadAllowAbort(page);
+    await page.waitForFunction(() => window.__farm && window.__farm.state && document.getElementById("questDock") && document.getElementById("questDock").offsetHeight > 0, { timeout: 12000 });
+    const offlinePlayable = await page.evaluate(() => ({
+      swtest: new URLSearchParams(location.search).has("swtest"),
+      controlled: !!navigator.serviceWorker.controller,
+      questDock: document.getElementById("questDock").innerText,
+      tileCount: document.querySelectorAll("#groundLayer .gtile").length,
+      atlasReady: !!(window.Atlas && window.Atlas.isReady && window.Atlas.isReady()),
+    }));
+    assert(offlinePlayable.swtest && offlinePlayable.controlled && offlinePlayable.tileCount > 0 && offlinePlayable.questDock.length > 0 && offlinePlayable.atlasReady,
+      `真 SW 離線重載仍可載入遊戲（tiles=${offlinePlayable.tileCount}, atlas=${offlinePlayable.atlasReady}）`);
+  } finally {
+    await context.setOffline(false).catch(() => {});
+    await clearServiceWorkerState(page).catch(() => {});
+    await context.close();
+  }
+}
 
 async function run() {
   let chromium;
@@ -79,6 +126,7 @@ async function run() {
   const browser = await chromium.launch();
 
   try {
+  await runTrueServiceWorkerOfflineTest(browser, base);
   for (const vp of [{ w: 1280, h: 900, name: "桌面 1280x900" }, { w: 390, h: 844, name: "手機 390x844" }]) {
     console.log("\n== 視窗 " + vp.name + " ==");
     const page = await browser.newPage({ viewport: { width: vp.w, height: vp.h } });
@@ -104,12 +152,15 @@ async function run() {
         swHasVersion: swText.includes("CACHE_VERSION"),
         swHasStrategies: swText.includes("networkFirst") && swText.includes("cacheFirst"),
         swHasSkipWaiting: swText.includes("SKIP_WAITING"),
+        swHasFallback: swText.includes("OFFLINE_URL") && swText.includes("offline.html"),
+        swHasAllSrc: ["./src/config.js", "./src/game.js", "./src/state.js", "./src/atlas.js", "./src/ui.js"].every((p) => swText.includes(p)),
+        swVersion: (swText.match(/CACHE_VERSION\s*=\s*"([^"]+)"/) || [])[1] || "",
         webdriver: navigator.webdriver === true,
       };
     });
     assert(pwaFiles.manifestOk && pwaFiles.manifestName === "像素農場 RPG" && pwaFiles.orientation === "portrait" && pwaFiles.iconSizes.includes("192x192") && pwaFiles.iconSizes.includes("512x512"),
       `PWA manifest 可取且含名稱/直式/icon（${pwaFiles.manifestName}, ${pwaFiles.iconSizes}）`);
-    assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting,
+    assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting && pwaFiles.swHasFallback && pwaFiles.swHasAllSrc && pwaFiles.swVersion === "r35-20260706-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -163,7 +214,14 @@ async function run() {
       const gear = document.getElementById("settingsBtn").getBoundingClientRect();
       return {
         shown: modal.classList.contains("show"),
+        focusInside: modal.contains(document.activeElement),
         keys: toggles.map((el) => el.dataset.settingKey),
+        textSizes: [...document.querySelectorAll('button[data-audit="text-size-mode"]')].map((el) => el.dataset.textSize),
+        versionText: document.querySelector('[data-audit="setting-pwa"]')?.innerText || "",
+        pwaButton: document.querySelector('[data-audit="pwa-check"]')?.textContent || "",
+        diagnostics: document.querySelector('[data-audit="performance-diagnostics"]')?.textContent || "",
+        settingsAria: document.getElementById("settingsBtn").getAttribute("aria-label") || "",
+        tabAria: [...document.querySelectorAll(".side-tab")].map((el) => el.getAttribute("aria-label") || ""),
         reviewText: review ? review.innerText : "",
         saved: window.__farm.lastOfflineSummary(),
         gearTap: { w: gear.width, h: gear.height },
@@ -176,8 +234,25 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r35-20260706-1") &&
+      r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
+      `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
+    assert(r27Settings.settingsAria === "開啟設定" && r27Settings.tabAria.every((label) => label.includes("切換到")),
+      `主要設定與分頁 aria-label 完整（tabs=${r27Settings.tabAria.join(" / ")}）`);
     assert(r27Settings.gearTap.h >= 44 && r27Settings.overflow <= 2,
       `設定入口可點且無水平溢出（h=${Math.round(r27Settings.gearTap.h)}, overflow=${r27Settings.overflow}）`);
+    const textSizeBase = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector(".setting-title")).fontSize));
+    await page.click('[data-text-size="large"]');
+    const textSizeLarge = await page.evaluate((baseSize) => ({
+      setting: window.__farm.state().settings.textSize,
+      htmlClass: document.documentElement.classList.contains("text-large"),
+      font: parseFloat(getComputedStyle(document.querySelector(".setting-title")).fontSize),
+      baseSize,
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+    }), textSizeBase);
+    assert(textSizeLarge.setting === "large" && textSizeLarge.htmlClass && textSizeLarge.font > textSizeLarge.baseSize && textSizeLarge.overflow <= 2,
+      `文字大小「大」會套用 CSS 變數且無水平溢出（${textSizeLarge.baseSize}->${textSizeLarge.font}）`);
+    await page.click('[data-text-size="medium"]');
     await page.click('[data-setting-key="offlineSummary"]');
     const offlineOff = await page.evaluate(() => ({
       state: window.__farm.state().settings.offlineSummary,
@@ -254,7 +329,9 @@ async function run() {
     }), rawBeforeBadImport);
     assert(badImport.sameRaw && badImport.status.includes("匯入失敗"),
       `壞代碼被拒且不覆蓋存檔（${badImport.status}）`);
-    await page.click("#settingsOk");
+    await page.keyboard.press("Escape");
+    const escClosed = await page.evaluate(() => !document.getElementById("settingsModal").classList.contains("show"));
+    assert(escClosed, "Esc 可關閉設定 modal");
     await page.evaluate(() => {
       const fresh = window.defaultState(Date.now());
       const live = window.__farm.state();
@@ -280,11 +357,13 @@ async function run() {
       const el = document.getElementById("questDock");
       const r = el.getBoundingClientRect();
       return { text: el.innerText, h: r.height, visible: r.width > 0 && r.height > 0,
-        quest: el.dataset.quest, overflow: document.documentElement.scrollWidth - window.innerWidth };
+        quest: el.dataset.quest, goAria: el.querySelector('[data-audit="quest-dock-go"]')?.getAttribute("aria-label") || "",
+        overflow: document.documentElement.scrollWidth - window.innerWidth };
     });
     assert(dockInitial.visible && dockInitial.h >= 44, `任務 Dock 常駐且 tap target >=44px（${Math.round(dockInitial.h)}px）`);
     assert(dockInitial.quest === "intro_reopen_farm" && dockInitial.text.includes("主動作"),
       `任務 Dock 顯示當前任務與主動作（${dockInitial.quest}）`);
+    assert(dockInitial.goAria.includes("前往") || dockInitial.goAria.includes("目標"), `Dock 前往按鈕具 aria-label（${dockInitial.goAria}）`);
     assert(dockInitial.overflow <= 2, `任務 Dock 不造成水平溢出（${dockInitial.overflow}）`);
 
     // 1. 大世界 ≥22×12 + 世界像素 > 視口
@@ -512,6 +591,7 @@ async function run() {
         assistantText: row ? row.innerText : "",
         assistantReason: reason ? reason.textContent : "",
         assistantScore: row ? Number(row.dataset.valueScore || 0) : 0,
+        assistantAria: go ? go.getAttribute("aria-label") || "" : "",
         assistantTap: { w: rect.width, h: rect.height },
         assistantBefore, assistantAfter,
         assistantOverflow: document.documentElement.scrollWidth - window.innerWidth };
@@ -520,6 +600,7 @@ async function run() {
       `智慧助手第一建議為成熟作物收成並指向麥田（type=${harvest.assistantType}, target=${harvest.assistantTarget}）`);
     assert(harvest.assistantTap.w >= 44 && harvest.assistantTap.h >= 44 && harvest.assistantOverflow <= 2,
       `助手前往按鈕 tap target >=44px 且無水平溢出（${Math.round(harvest.assistantTap.w)}×${Math.round(harvest.assistantTap.h)}, overflow=${harvest.assistantOverflow}）`);
+    assert(harvest.assistantAria.includes("前往建議目標"), `助手前往按鈕具 aria-label（${harvest.assistantAria}）`);
     assert(harvest.assistantAfter.focus === harvest.soilId &&
       (harvest.assistantAfter.x !== harvest.assistantBefore.x || harvest.assistantAfter.y !== harvest.assistantBefore.y || harvest.assistantAfter.focus !== harvest.assistantBefore.focus),
       `助手前往可用並設定鏡頭 focus（${harvest.assistantBefore.focus}→${harvest.assistantAfter.focus}）`);
