@@ -34,6 +34,7 @@
   let perfStableFrames = 0;
   let perfAutoLow = false;
   let perfLastDowngradeReason = "尚未降級";
+  const perfEventHistory = [];
   let pwaRegistration = null;
   let pwaWaitingWorker = null;
   let pwaUpdateStatus = "";
@@ -598,12 +599,37 @@
   function performanceTierLabel(tier) {
     return tier === "low" ? "低" : "高";
   }
+  function fmtPerfEventTime(ms) {
+    try {
+      return new Date(ms).toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    } catch (e) {
+      return "--:--:--";
+    }
+  }
+  function recordPerformanceEvent(type, reason) {
+    const entry = {
+      type,
+      at: now(),
+      reason: reason || (type === "downgrade" ? "效能自動降級" : "效能恢復"),
+    };
+    if (type === "downgrade") perfLastDowngradeReason = entry.reason;
+    perfEventHistory.unshift(entry);
+    if (perfEventHistory.length > 5) perfEventHistory.length = 5;
+    updatePerformanceDiagnostics();
+  }
+  function performanceHistoryHtml() {
+    if (!perfEventHistory.length) return `<div class="perf-history-empty" data-audit="performance-history-empty">本次遊玩尚無降級或恢復事件。</div>`;
+    return `<div class="perf-history" data-audit="performance-history">${perfEventHistory.map((ev) =>
+      `<div class="perf-history-row" data-kind="${escapeHtml(ev.type)}"><b>${fmtPerfEventTime(ev.at)}</b><span>${escapeHtml(ev.reason)}</span></div>`
+    ).join("")}</div>`;
+  }
   function performanceDiagnosticsHtml() {
     const info = performanceInfo();
     return `<div class="setting-row" data-audit="setting-performance-diagnostics">
       <div>
         <div class="setting-title">效能診斷</div>
         <div class="setting-desc" id="performanceDiagnostics" data-audit="performance-diagnostics">FPS ${Math.round(info.avgFps)}｜實際 ${performanceTierLabel(info.tier)}｜最近降級：${escapeHtml(info.lastDowngradeReason)}</div>
+        ${performanceHistoryHtml()}
       </div>
     </div>`;
   }
@@ -715,12 +741,17 @@
       autoLow: perfAutoLow,
       tier,
       lastDowngradeReason: perfLastDowngradeReason,
+      history: perfEventHistory.slice(),
     };
   }
   function updatePerformanceDiagnostics() {
     const box = $("performanceDiagnostics"); if (!box) return;
     const info = performanceInfo();
     box.textContent = `FPS ${Math.round(info.avgFps)}｜實際 ${performanceTierLabel(info.tier)}｜最近降級：${info.lastDowngradeReason}`;
+    const history = (typeof document.querySelector === "function")
+      ? document.querySelector('[data-audit="performance-history"], [data-audit="performance-history-empty"]')
+      : null;
+    if (history) history.outerHTML = performanceHistoryHtml();
   }
   function applyPerformanceMode() {
     if (!state) return;
@@ -753,10 +784,18 @@
         else { perfLowFrames = 0; perfStableFrames = 0; }
         if (!perfAutoLow && perfLowFrames >= 30) {
           perfAutoLow = true;
-          perfLastDowngradeReason = `FPS ${Math.round(perfAvgFps)} 低於 45，已降低天氣動畫密度`;
-          applyPerformanceMode(); renderSettingsPanel();
+          const reason = `FPS ${Math.round(perfAvgFps)} 低於 45，已降低天氣動畫密度`;
+          applyPerformanceMode();
+          recordPerformanceEvent("downgrade", reason);
+          renderSettingsPanel();
         }
-        if (perfAutoLow && perfStableFrames >= 120) { perfAutoLow = false; applyPerformanceMode(); renderSettingsPanel(); }
+        if (perfAutoLow && perfStableFrames >= 120) {
+          perfAutoLow = false;
+          const reason = `FPS ${Math.round(perfAvgFps)} 回穩，已恢復高品質`;
+          applyPerformanceMode();
+          recordPerformanceEvent("restore", reason);
+          renderSettingsPanel();
+        }
       } else if (perfAutoLow || perfLowFrames || perfStableFrames) {
         perfAutoLow = false; perfLowFrames = 0; perfStableFrames = 0; applyPerformanceMode();
       }
@@ -918,9 +957,18 @@
       btn.onclick = (ev) => {
         ev.stopPropagation();
         ensureSettings();
-        state.settings.performanceMode = btn.dataset.performanceMode || "auto";
+        const beforeTier = document.documentElement.dataset.performanceTier || "high";
+        const nextMode = btn.dataset.performanceMode || "auto";
+        state.settings.performanceMode = nextMode;
         perfAutoLow = false; perfLowFrames = 0; perfStableFrames = 0;
         applyPerformanceMode();
+        const afterTier = document.documentElement.dataset.performanceTier || "high";
+        if (beforeTier !== afterTier) {
+          const reason = afterTier === "low"
+            ? (nextMode === "low" ? "手動鎖定低品質模式" : "效能自動降級")
+            : (nextMode === "high" ? "手動鎖定高品質模式" : "手動切回自動，恢復高品質");
+          recordPerformanceEvent(afterTier === "low" ? "downgrade" : "restore", reason);
+        }
         renderSettingsPanel();
         scheduleSave();
       };

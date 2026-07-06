@@ -114,6 +114,37 @@ async function runTrueServiceWorkerOfflineTest(browser, base) {
     await context.close();
   }
 }
+async function keyboardTabSmoke(page) {
+  await page.evaluate(() => {
+    document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show"));
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  });
+  const seen = [];
+  for (let i = 0; i < 14; i++) {
+    await page.keyboard.press("Tab");
+    const info = await page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el || el === document.body) return null;
+      const cs = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return {
+        tag: el.tagName,
+        id: el.id || "",
+        cls: String(el.className || ""),
+        text: (el.textContent || el.getAttribute("aria-label") || "").trim().slice(0, 40),
+        outlineStyle: cs.outlineStyle,
+        outlineWidth: parseFloat(cs.outlineWidth) || 0,
+        visible: r.width > 0 && r.height > 0,
+      };
+    });
+    if (info && info.visible) seen.push(info);
+  }
+  const distinct = new Map(seen.map((x) => [(x.id || x.cls || x.text), x]));
+  const focused = [...distinct.values()];
+  const visibleFocus = focused.filter((x) => x.outlineStyle !== "none" && x.outlineWidth >= 2);
+  const reachedMain = focused.some((x) => x.cls.includes("side-tab")) && focused.some((x) => x.id === "settingsBtn" || x.id === "howToBtn" || x.id === "resetBtn");
+  return { focused, visibleFocus, reachedMain };
+}
 
 async function run() {
   let chromium;
@@ -220,6 +251,13 @@ async function run() {
         versionText: document.querySelector('[data-audit="setting-pwa"]')?.innerText || "",
         pwaButton: document.querySelector('[data-audit="pwa-check"]')?.textContent || "",
         diagnostics: document.querySelector('[data-audit="performance-diagnostics"]')?.textContent || "",
+        perfHistoryEmpty: document.querySelector('[data-audit="performance-history-empty"]')?.textContent || "",
+        liveAttrs: {
+          toast: document.getElementById("toast-zone")?.getAttribute("aria-live") || "",
+          quest: document.getElementById("questDock")?.getAttribute("aria-live") || "",
+          pwa: document.getElementById("pwaUpdate")?.getAttribute("aria-live") || "",
+          error: document.getElementById("errorRecovery")?.getAttribute("aria-live") || "",
+        },
         settingsAria: document.getElementById("settingsBtn").getAttribute("aria-label") || "",
         tabAria: [...document.querySelectorAll(".side-tab")].map((el) => el.getAttribute("aria-label") || ""),
         reviewText: review ? review.innerText : "",
@@ -237,6 +275,8 @@ async function run() {
     assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r35-20260706-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
+    assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),
+      `動態通知容器具 aria-live=polite 且效能歷史有空狀態（${JSON.stringify(r27Settings.liveAttrs)}）`);
     assert(r27Settings.settingsAria === "開啟設定" && r27Settings.tabAria.every((label) => label.includes("切換到")),
       `主要設定與分頁 aria-label 完整（tabs=${r27Settings.tabAria.join(" / ")}）`);
     assert(r27Settings.gearTap.h >= 44 && r27Settings.overflow <= 2,
@@ -281,7 +321,16 @@ async function run() {
       `效能模式可鎖低階並套用天氣降級 class（tier=${perfLow.tier}, overflow=${perfLow.overflow}）`);
     await page.click('[data-performance-mode="auto"]');
     const perfAuto = await page.evaluate(() => window.__farm.performanceInfo());
+    const perfHistory = await page.evaluate(() => ({
+      history: window.__farm.performanceInfo().history || [],
+      rows: [...document.querySelectorAll('[data-audit="performance-history"] .perf-history-row')].map((el) => el.innerText),
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+    }));
     assert(perfAuto.mode === "auto" && perfAuto.tier === "high", `效能模式可切回自動（mode=${perfAuto.mode}, tier=${perfAuto.tier}）`);
+    assert(perfHistory.history.length >= 2 && perfHistory.history.length <= 5 &&
+      perfHistory.history.some((ev) => ev.type === "downgrade") && perfHistory.history.some((ev) => ev.type === "restore") &&
+      perfHistory.rows.length >= 2 && perfHistory.overflow <= 2,
+      `效能診斷保留最近降級/恢復歷史（${perfHistory.rows.join(" / ")}）`);
     const exportBefore = await page.evaluate(() => {
       const st = window.__farm.state();
       st.coins = 246;
@@ -344,6 +393,9 @@ async function run() {
     await page.waitForFunction(() => window.Atlas && window.Atlas.isReady && window.Atlas.isReady(), { timeout: 20000 });
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
     await sleep(300);
+    const tabSmoke = await keyboardTabSmoke(page);
+    assert(tabSmoke.focused.length >= 4 && tabSmoke.visibleFocus.length >= 4 && tabSmoke.reachedMain,
+      `鍵盤 Tab 可走訪主控件且 focus-visible 有樣式（${tabSmoke.focused.map((x) => x.id || x.cls || x.text).join(" > ")}）`);
 
     const chrome = await page.evaluate(() => ({
       title: document.title,

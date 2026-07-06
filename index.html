@@ -282,6 +282,9 @@
   .setting-mode { min-height: 44px; min-width: 58px; padding: 6px 9px; border: 1.5px solid var(--border-d); border-radius: 9px;
     background: var(--cream-2); color: var(--ink); font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
   .setting-mode.sel { border-color: #94bd68; background: #e7f5dd; color: #285b1d; }
+  .perf-history, .perf-history-empty { margin-top: 6px; display: grid; gap: 4px; font-size: 11px; line-height: 1.35; color: var(--ink-soft); }
+  .perf-history-row { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 6px; overflow-wrap: anywhere; }
+  .perf-history-row b { color: #6b5638; }
   .offline-review { padding: 10px; border: 1.5px dashed #d4b468; border-radius: 10px; background: rgba(255,244,214,.72); color: #513d17; }
   .offline-review-title { font-size: 13px; font-weight: 950; margin-bottom: 4px; }
   .offline-review-body { display: grid; gap: 3px; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
@@ -545,7 +548,7 @@
       <div class="seed-row" id="seedRow"></div>
       <!-- RPG 場景：16×12 世界 + camera 視口 + 分層（地面/物件 y-sort/標記/VFX/玩家）-->
       <div class="map-scene-wrap">
-        <div id="questDock" class="quest-dock" data-audit="quest-dock"><!-- 任務 Dock 由 JS 渲染 --></div>
+        <div id="questDock" class="quest-dock" data-audit="quest-dock" aria-live="polite" aria-atomic="true"><!-- 任務 Dock 由 JS 渲染 --></div>
         <div id="mapScene">
           <div id="mapWorld">
             <div id="groundLayer"></div>
@@ -653,9 +656,9 @@
   </div>
 </div>
 
-<div id="toast-zone"></div>
-<div id="pwaUpdate" class="pwa-update" data-audit="pwa-update" hidden>新版本可用，點擊更新</div>
-<div id="errorRecovery" class="error-recovery" data-audit="error-recovery" hidden>
+<div id="toast-zone" role="status" aria-live="polite" aria-atomic="false"></div>
+<div id="pwaUpdate" class="pwa-update" data-audit="pwa-update" role="status" aria-live="polite" aria-atomic="true" hidden>新版本可用，點擊更新</div>
+<div id="errorRecovery" class="error-recovery" data-audit="error-recovery" role="status" aria-live="polite" aria-atomic="true" hidden>
   <div class="er-title">發生小問題，進度已保存</div>
   <div class="er-copy">可以先繼續遊玩；若畫面異常，請重新載入。</div>
   <div class="er-actions">
