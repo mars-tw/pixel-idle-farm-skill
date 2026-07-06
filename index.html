@@ -224,6 +224,7 @@
     padding: 7px; background: rgba(255,248,223,.88); border: 1px solid rgba(184,207,138,.75); border-radius: 8px; }
   .sa-title { font-size: 12px; font-weight: 950; color: #31451c; overflow-wrap: anywhere; line-height: 1.25; }
   .sa-detail { margin-top: 2px; font-size: 11px; color: #6f6248; overflow-wrap: anywhere; line-height: 1.3; }
+  .sa-reason { margin-top: 3px; font-size: 11px; font-weight: 900; color: #8a5a14; overflow-wrap: anywhere; line-height: 1.3; }
   .sa-go { min-width: 58px; min-height: 44px; border: 1.5px solid #94bd68; border-radius: 8px; background: #e7f5dd;
     color: #285b1d; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer; }
   .smart-assistant.collapsed .sa-list { display: none; }
@@ -263,6 +264,18 @@
   .modal-card .btn { width: 100%; margin-top: 8px; background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; }
   .modal-card ol { margin: 0 0 8px 18px; display: flex; flex-direction: column; gap: 7px; font-size: 14px; }
   .modal-card ol b { color: #2c6f1e; }
+  .settings-card { max-width: 460px; }
+  .settings-list { display: grid; gap: 8px; }
+  .setting-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center;
+    min-width: 0; padding: 9px; background: #fff8df; border: 1.5px solid var(--border); border-radius: 10px; }
+  .setting-title { font-size: 13px; font-weight: 950; color: #3d2f1c; overflow-wrap: anywhere; }
+  .setting-desc { margin-top: 2px; font-size: 11px; line-height: 1.35; color: var(--ink-soft); overflow-wrap: anywhere; }
+  .setting-toggle { min-width: 72px; min-height: 44px; padding: 6px 10px; border: 1.5px solid #aacb86; border-radius: 9px;
+    background: #e7f5dd; color: #285b1d; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer; }
+  .setting-toggle[data-enabled="false"] { background: #f5e7d8; color: #7a3a17; border-color: #d7a676; }
+  .offline-review { padding: 10px; border: 1.5px dashed #d4b468; border-radius: 10px; background: rgba(255,244,214,.72); color: #513d17; }
+  .offline-review-title { font-size: 13px; font-weight: 950; margin-bottom: 4px; }
+  .offline-review-body { display: grid; gap: 3px; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
   .error-recovery { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 260;
     width: min(420px, calc(100vw - 24px)); background: #fff8df; border: 2px solid #d4b468; border-radius: 10px;
     box-shadow: 0 12px 30px rgba(0,0,0,.24); padding: 10px; color: #4a3a22; }
@@ -276,6 +289,7 @@
   .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
   .toolbar .btn { background: var(--cream); border: 1.5px solid var(--border-d); color: var(--ink); }
   /* 切換鈕固定寬度：像素圖/Emoji 文字長度不同，避免切換時工具列重新置中位移 */
+  #settingsBtn { min-height: 44px; }
   #spriteToggle { min-width: 104px; }
   footer { text-align: center; font-size: 11px; color: #4d6b3a; margin: 14px 0 4px; opacity: .8; }
   footer a { color: #2c6f1e; text-decoration: none; font-weight: 800; margin: 0 5px; white-space: nowrap; }
@@ -551,7 +565,7 @@
 
   <div class="toolbar">
     <button class="btn small ghost" id="genderToggle" title="切換主角性別">👧 主角</button>
-    <button class="btn small ghost" id="assistantToggle" data-audit="assistant-toggle">助手</button>
+    <button class="btn small ghost" id="settingsBtn" data-audit="settings-open">⚙️ 設定</button>
     <button class="btn small ghost" id="spriteToggle">🎨 像素圖</button>
     <button class="btn small ghost" id="howToBtn">❓ 玩法</button>
     <button class="btn small ghost" id="resetBtn">🗑️ 重置存檔</button>
@@ -563,6 +577,15 @@
     <a href="https://mars-tw.github.io/tower-defense-skill/" target="_blank" rel="noopener">無盡塔防</a>
     <a href="https://mars-tw.github.io/ashes-convoy/" target="_blank" rel="noopener">灰燼護航</a>
   </footer>
+</div>
+
+<!-- 設定 modal -->
+<div class="modal" id="settingsModal" data-audit="settings-modal">
+  <div class="modal-card settings-card">
+    <h2>⚙️ 設定</h2>
+    <div class="settings-list" id="settingsList"></div>
+    <button class="btn" id="settingsOk">完成</button>
+  </div>
 </div>
 
 <!-- 離線摘要 modal -->

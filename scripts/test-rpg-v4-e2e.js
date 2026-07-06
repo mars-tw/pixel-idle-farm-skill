@@ -130,6 +130,46 @@ async function run() {
     assert(offlineSummary.forage.includes("採集點已刷新") && offlineSummary.forage.includes("1"),
       `離線摘要列出採集點刷新（${offlineSummary.forage}）`);
     await page.click("#offlineOk");
+    await page.click("#settingsBtn");
+    const r27Settings = await page.evaluate(() => {
+      const modal = document.getElementById("settingsModal");
+      const toggles = [...document.querySelectorAll("[data-setting-key]")];
+      const review = document.querySelector('[data-audit="offline-review-summary"]');
+      const gear = document.getElementById("settingsBtn").getBoundingClientRect();
+      return {
+        shown: modal.classList.contains("show"),
+        keys: toggles.map((el) => el.dataset.settingKey),
+        reviewText: review ? review.innerText : "",
+        saved: window.__farm.lastOfflineSummary(),
+        gearTap: { w: gear.width, h: gear.height },
+        overflow: document.documentElement.scrollWidth - window.innerWidth,
+      };
+    });
+    assert(r27Settings.shown && r27Settings.keys.includes("smartAssistant") && r27Settings.keys.includes("offlineSummary"),
+      `設定面板集中助手與離線摘要偏好（keys=${r27Settings.keys.join(",")}）`);
+    assert(r27Settings.reviewText.includes("離開 6 分鐘") && r27Settings.reviewText.includes("離線收益 +0 金") &&
+      r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
+      r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
+      `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
+    assert(r27Settings.gearTap.h >= 44 && r27Settings.overflow <= 2,
+      `設定入口可點且無水平溢出（h=${Math.round(r27Settings.gearTap.h)}, overflow=${r27Settings.overflow}）`);
+    await page.click('[data-setting-key="offlineSummary"]');
+    const offlineOff = await page.evaluate(() => ({
+      state: window.__farm.state().settings.offlineSummary,
+      enabled: document.querySelector('[data-setting-key="offlineSummary"]').dataset.enabled,
+    }));
+    assert(offlineOff.state === false && offlineOff.enabled === "false", "設定面板可關閉離線摘要偏好");
+    await page.click('[data-setting-key="offlineSummary"]');
+    await page.click('[data-setting-key="smartAssistant"]');
+    const assistantOff = await page.evaluate(() => ({
+      state: window.__farm.state().settings.smartAssistant,
+      hidden: document.getElementById("smartAssistant").classList.contains("hidden"),
+      enabled: document.querySelector('[data-setting-key="smartAssistant"]').dataset.enabled,
+    }));
+    assert(assistantOff.state === false && assistantOff.hidden && assistantOff.enabled === "false",
+      "設定面板可關閉智慧農務助手並立即隱藏面板");
+    await page.click('[data-setting-key="smartAssistant"]');
+    await page.click("#settingsOk");
     await page.evaluate(() => {
       const fresh = window.defaultState(Date.now());
       const live = window.__farm.state();
@@ -375,6 +415,7 @@ async function run() {
       const soil = st.map.tiles.find((t) => t.plotIndex === 0);
       const row = document.querySelector('[data-audit="assistant-row"][data-rank="1"]');
       const go = row && row.querySelector('[data-audit="assistant-go"]');
+      const reason = row && row.querySelector('[data-audit="assistant-reason"]');
       const rect = go ? go.getBoundingClientRect() : { width: 0, height: 0 };
       const assistantBefore = { x: st.camera.x, y: st.camera.y, focus: st.camera.focusTileId };
       if (go) go.click();
@@ -384,6 +425,8 @@ async function run() {
         assistantType: row ? row.dataset.suggestionType : "",
         assistantTarget: row ? row.dataset.targetId : "",
         assistantText: row ? row.innerText : "",
+        assistantReason: reason ? reason.textContent : "",
+        assistantScore: row ? Number(row.dataset.valueScore || 0) : 0,
         assistantTap: { w: rect.width, h: rect.height },
         assistantBefore, assistantAfter,
         assistantOverflow: document.documentElement.scrollWidth - window.innerWidth };
@@ -395,6 +438,8 @@ async function run() {
     assert(harvest.assistantAfter.focus === harvest.soilId &&
       (harvest.assistantAfter.x !== harvest.assistantBefore.x || harvest.assistantAfter.y !== harvest.assistantBefore.y || harvest.assistantAfter.focus !== harvest.assistantBefore.focus),
       `助手前往可用並設定鏡頭 focus（${harvest.assistantBefore.focus}→${harvest.assistantAfter.focus}）`);
+    assert(harvest.assistantScore > 0 && harvest.assistantReason.includes("收成") && harvest.assistantReason.includes("+" + Math.round(harvest.assistantScore)) && harvest.assistantReason.includes("金"),
+      `助手建議顯示 valueScore 量化理由（score=${harvest.assistantScore}, reason=${harvest.assistantReason}）`);
     await waitArrive(page, 9000);
     await sleep(400);
     const harvestRes = await page.evaluate(() => {

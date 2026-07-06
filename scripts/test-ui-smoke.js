@@ -119,10 +119,12 @@ try {
   assert(true, "賣出/收成/澆水/收產物按鈕無例外");
 
   // modal 按鈕
+  elById["settingsBtn"]._fire("click");
+  elById["settingsOk"]._fire("click");
   elById["howToBtn"]._fire("click");
   elById["howToOk"]._fire("click");
   elById["offlineOk"]._fire("click");
-  assert(true, "modal 開關按鈕無例外");
+  assert(true, "設定/引導/離線 modal 開關按鈕無例外");
 } catch (e) {
   console.error("  ✗ 互動模擬拋錯:", e.stack);
   failed++;

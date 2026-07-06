@@ -36,6 +36,7 @@
   const escapeHtml = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (ch) => (
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
   ));
+  const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
 
   // ---------- 物品/建材顯示 ----------
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
@@ -486,34 +487,114 @@
     const go = box.querySelector(".qd-go");
     if (go && targetId) go.onclick = (ev) => { ev.stopPropagation(); focusCameraOnTile(targetId); };
   }
-  function syncAssistantToggle() {
-    const btn = $("assistantToggle"); if (!btn || !state) return;
-    const on = !state.settings || state.settings.smartAssistant !== false;
-    btn.textContent = on ? "助手" : "助手關";
-    if (btn.setAttribute) btn.setAttribute("aria-pressed", on ? "true" : "false");
+  function ensureSettings() {
+    if (!state) return {};
+    if (!state.settings) state.settings = {};
+    if (state.settings.smartAssistant == null) state.settings.smartAssistant = true;
+    if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = false;
+    if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
+    if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
+    return state.settings;
+  }
+  function settingRowHtml(key, title, desc, enabled) {
+    return `<div class="setting-row" data-audit="setting-row" data-setting-row="${escapeHtml(key)}">
+      <div>
+        <div class="setting-title">${escapeHtml(title)}</div>
+        <div class="setting-desc">${escapeHtml(desc)}</div>
+      </div>
+      <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}">${enabled ? "開啟" : "關閉"}</button>
+    </div>`;
+  }
+  function compactOfflineSummary(summary) {
+    const forageCount = summary.forageReadyCount || (summary.forageReady || []).length || 0;
+    return {
+      recordedAt: now(),
+      offlineMs: summary.offlineMs || 0,
+      cappedFromMs: summary.cappedFromMs || 0,
+      minutes: Math.max(5, Math.round((summary.offlineMs || 0) / 60000)),
+      coins: summary.coins || 0,
+      xp: summary.xp || 0,
+      readyPlots: summary.readyPlots || 0,
+      forageReadyCount: forageCount,
+      perCrop: Object.assign({}, summary.perCrop || {}),
+      products: Object.assign({}, summary.products || {}),
+      replanted: summary.replanted || 0,
+      lost: summary.lost || 0,
+    };
+  }
+  function recordOfflineSummary(summary) {
+    if (!state || !summary || summary.offlineMs < OFFLINE_SUMMARY_MIN_MS) return false;
+    state.lastOfflineSummary = compactOfflineSummary(summary);
+    return true;
+  }
+  function offlineReviewHtml(summary) {
+    if (!summary) {
+      return `<div class="offline-review" data-audit="offline-review">
+        <div class="offline-review-title">最近一次離線回顧</div>
+        <div class="offline-review-body" data-audit="offline-review-empty">尚無可回看的離線摘要。</div>
+      </div>`;
+    }
+    const forageCount = summary.forageReadyCount || 0;
+    const lines = [
+      `離開 ${summary.minutes || Math.max(5, Math.round((summary.offlineMs || 0) / 60000))} 分鐘`,
+      `離線收益 +${summary.coins || 0} 金`,
+      `作物成熟 ${summary.readyPlots || 0} 株`,
+      `採集點已刷新 ${forageCount} 處`,
+    ];
+    const crops = Object.entries(summary.perCrop || {});
+    if (crops.length) lines.push(`自動收成 ${crops.map(([cid, n]) => `${itemName(cid)}×${n}`).join("、")}`);
+    const products = Object.entries(summary.products || {});
+    if (products.length) lines.push(`動物產出 ${products.map(([pid, n]) => `${itemName(pid)}×${n}`).join("、")}`);
+    if (summary.replanted > 0) lines.push(`幫手補種 ${summary.replanted} 次`);
+    if (summary.lost > 0) lines.push(`倉滿損失 ${summary.lost}`);
+    return `<div class="offline-review" data-audit="offline-review">
+      <div class="offline-review-title">最近一次離線回顧</div>
+      <div class="offline-review-body" data-audit="offline-review-summary">${lines.map((line) => `<div>${escapeHtml(line)}</div>`).join("")}</div>
+    </div>`;
+  }
+  function renderSettingsPanel() {
+    const box = $("settingsList"); if (!box || !state) return;
+    const settings = ensureSettings();
+    box.innerHTML = [
+      settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
+      settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
+      offlineReviewHtml(state.lastOfflineSummary),
+    ].join("");
+    box.querySelectorAll("[data-setting-key]").forEach((btn) => {
+      btn.onclick = (ev) => {
+        ev.stopPropagation();
+        const key = btn.dataset.settingKey;
+        ensureSettings();
+        state.settings[key] = state.settings[key] === false;
+        if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
+        renderSettingsPanel();
+        renderSmartAssistant(true);
+        scheduleSave();
+      };
+    });
   }
   function renderSmartAssistant(force) {
     const box = $("smartAssistant"); if (!box || !state || !G.farmActionSuggestions) return;
-    if (!state.settings) state.settings = { smartAssistant: true, smartAssistantCollapsed: false };
-    const enabled = state.settings.smartAssistant !== false;
-    syncAssistantToggle();
+    const settings = ensureSettings();
+    const enabled = settings.smartAssistant !== false;
     if (!enabled) {
       box.className = "smart-assistant hidden";
       box.innerHTML = "";
       lastAssistantSig = "off";
       return;
     }
-    const collapsed = !!state.settings.smartAssistantCollapsed;
+    const collapsed = !!settings.smartAssistantCollapsed;
     const suggestions = G.farmActionSuggestions(state, now(), { limit: 3 });
-    const sig = [collapsed ? "c" : "o"].concat(suggestions.map((s) => [s.id, s.type, s.tileId, Math.round(s.valueScore || 0)].join(":"))).join("|");
+    const sig = [collapsed ? "c" : "o"].concat(suggestions.map((s) => [s.id, s.type, s.tileId, Math.round((s.valueScore || 0) * 10), s.reason].join(":"))).join("|");
     if (!force && sig === lastAssistantSig) return;
     lastAssistantSig = sig;
     box.className = "smart-assistant" + (collapsed ? " collapsed" : "");
     const rows = suggestions.length ? suggestions.map((s, idx) => `
-      <div class="sa-row" data-audit="assistant-row" data-rank="${idx + 1}" data-suggestion-id="${escapeHtml(s.id)}" data-suggestion-type="${escapeHtml(s.type)}" data-target-id="${escapeHtml(s.tileId)}">
+      <div class="sa-row" data-audit="assistant-row" data-rank="${idx + 1}" data-suggestion-id="${escapeHtml(s.id)}" data-suggestion-type="${escapeHtml(s.type)}" data-target-id="${escapeHtml(s.tileId)}" data-value-score="${escapeHtml(Math.round((s.valueScore || 0) * 10) / 10)}">
         <div>
           <div class="sa-title">${escapeHtml(s.title)}</div>
           <div class="sa-detail">${escapeHtml(s.detail || "")}</div>
+          <div class="sa-reason" data-audit="assistant-reason">${escapeHtml(s.reason || "")}</div>
         </div>
         <button class="sa-go" data-audit="assistant-go" data-target-id="${escapeHtml(s.tileId)}" data-suggestion-type="${escapeHtml(s.type)}">${escapeHtml(s.actionLabel || "前往")}</button>
       </div>`).join("")
@@ -528,6 +609,7 @@
     const collapse = box.querySelector('[data-audit="assistant-collapse"]');
     if (collapse) collapse.onclick = (ev) => {
       ev.stopPropagation();
+      ensureSettings();
       state.settings.smartAssistantCollapsed = !state.settings.smartAssistantCollapsed;
       scheduleSave();
       renderSmartAssistant(true);
@@ -535,9 +617,11 @@
     const close = box.querySelector('[data-audit="assistant-close"]');
     if (close) close.onclick = (ev) => {
       ev.stopPropagation();
+      ensureSettings();
       state.settings.smartAssistant = false;
       scheduleSave();
       renderSmartAssistant(true);
+      renderSettingsPanel();
     };
     box.querySelectorAll(".sa-go").forEach((btn) => {
       btn.onclick = (ev) => {
@@ -1867,7 +1951,7 @@
 
   // ---------- 離線摘要 ----------
   function showOfflineSummary(summary) {
-    if (!summary || summary.offlineMs < 5 * 60 * 1000) return false; // 離線 <5 分鐘不打擾
+    if (!summary || summary.offlineMs < OFFLINE_SUMMARY_MIN_MS) return false; // 離線 <5 分鐘不打擾
     const lines = [];
     const minutes = Math.max(5, Math.round(summary.offlineMs / 60000));
     const forageCount = summary.forageReadyCount || (summary.forageReady || []).length || 0;
@@ -1948,6 +2032,7 @@
   function init() {
     // 先載入存檔，state 必須在任何 render/onload 前就緒
     state = window.load() || window.defaultState(now());
+    ensureSettings();
     setupErrorRecovery();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
 
@@ -1968,6 +2053,7 @@
 
     // 離線結算（在 refreshOrders 前）
     const summary = G.applyOffline(state, now());
+    recordOfflineSummary(summary);
     G.refreshOrders(state, now());
     G.updateWeather(state, now());
 
@@ -1989,7 +2075,7 @@
         $("howToModal").classList.add("show"); shownModal = true;
       }
     }
-    if (!shownModal) showOfflineSummary(summary);
+    if (!shownModal && state.settings.offlineSummary !== false) showOfflineSummary(summary);
 
     window.save(state);
     setInterval(loop, window.GAME.tickMs);
@@ -2009,6 +2095,8 @@
       clickTile: (id) => handleMapClick(id),
       focusTile: (id) => focusCameraOnTile(id),
       assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],
+      renderSettings: () => renderSettingsPanel(),
+      lastOfflineSummary: () => state.lastOfflineSummary,
       safeSaveNow: () => safeSaveNow(),
       showErrorRecovery: () => showErrorRecovery(new Error("test")),
       focusQuestTarget: () => {
@@ -2063,13 +2151,11 @@
       paintIdlePlayer(); positionPlayer(false); toast(state.gender === "m" ? "🧑 主角：Kai（男）" : "👩 主角：Miri（女）");
       scheduleSave();
     };
-    $("assistantToggle").onclick = () => {
-      if (!state.settings) state.settings = { smartAssistant: true, smartAssistantCollapsed: false };
-      state.settings.smartAssistant = state.settings.smartAssistant === false;
-      if (state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
-      renderSmartAssistant(true);
-      scheduleSave();
+    $("settingsBtn").onclick = () => {
+      renderSettingsPanel();
+      $("settingsModal").classList.add("show");
     };
+    $("settingsOk").onclick = () => $("settingsModal").classList.remove("show");
     $("howToBtn").onclick = () => $("howToModal").classList.add("show");
     $("howToOk").onclick = () => $("howToModal").classList.remove("show");
     $("offlineOk").onclick = () => $("offlineModal").classList.remove("show");

@@ -873,8 +873,17 @@ console.log("\n== 17. R23：智慧助手 / 離線摘要 / 安全存檔 ==");
   const frozen = JSON.stringify(st);
   const suggestions = G.farmActionSuggestions(st, T0, { limit: 3 });
   assert(suggestions[0] && suggestions[0].type === "harvest", "智慧助手排序優先成熟作物收成");
+  assert(suggestions[0].reason && suggestions[0].reason.includes("收成") && suggestions[0].reason.includes("+" + Math.round(suggestions[0].valueScore)) && suggestions[0].reason.includes("金"),
+    "智慧助手 valueScore 可直接轉成收成量化理由");
   assert(suggestions.some((s) => s.type === "order"), "智慧助手列出可交付市集委託");
+  const orderSuggestion = suggestions.find((s) => s.type === "order");
+  assert(orderSuggestion && orderSuggestion.reason.includes("+20 金"), "智慧助手委託建議顯示量化獎勵理由");
   assert(JSON.stringify(st) === frozen, "farmActionSuggestions 為純讀取，不 mutate state");
+
+  const migrated = S.migrate({ version: 1, coins: 5, settings: { smartAssistant: false }, map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } });
+  assert(migrated.settings.smartAssistant === false && migrated.settings.offlineSummary === true,
+    "舊存檔設定遷移保留助手偏好並補離線摘要預設");
+  assert(migrated.lastOfflineSummary === null, "舊存檔遷移補 lastOfflineSummary 空值");
 
   const off = S.defaultState(T0);
   off.stats.plantCount = 1;

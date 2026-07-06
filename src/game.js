@@ -1576,13 +1576,15 @@
     }
     for (const [cropId, count] of Object.entries(readyByCrop)) {
       const crop = CROPS[cropId];
+      const valueScore = count * (crop ? crop.yield * sellUnitValue(state, crop.id, now) : 1);
       suggestions.push({
         id: "harvest:" + cropId,
         type: "harvest",
         priority: 120,
-        valueScore: count * (crop ? crop.yield * crop.sellValue : 1),
+        valueScore,
         title: `${crop ? crop.name : cropId}已成熟 ×${count}`,
         detail: "先收成可釋放田地並避免空等。",
+        reason: `${crop ? crop.name : cropId}收成 +${Math.round(valueScore)} 金`,
         actionLabel: "前往",
         tileId: readyTiles[cropId],
       });
@@ -1598,6 +1600,7 @@
         valueScore: pay.coins,
         title: `委託「${wantsText(order.wants)}」可交付`,
         detail: `交付可得 ${pay.coins} 金與 ${pay.xp} XP。`,
+        reason: `委託交付 +${Math.round(pay.coins)} 金 / ${pay.xp} XP`,
         actionLabel: "前往",
         tileId: stationTileId(state, "order_board"),
       });
@@ -1606,13 +1609,15 @@
     for (const [npcId, req] of Object.entries((state && state.npcRequests) || {})) {
       if (!requestCanDeliver(state, req)) continue;
       const npc = (C.NPCS || {})[npcId] || { name: npcId };
+      const valueScore = (req.rewardCoins || 0) + (req.rewardXp || 0);
       suggestions.push({
         id: "npc:" + npcId,
         type: "npc-request",
         priority: 112,
-        valueScore: (req.rewardCoins || 0) + (req.rewardXp || 0),
+        valueScore,
         title: `${npc.name}的委託可交付`,
         detail: `${wantsText(req.wants)} → ${req.rewardCoins || 0} 金。`,
+        reason: `鎮民委託 +${Math.round(req.rewardCoins || 0)} 金 / ${req.rewardXp || 0} XP`,
         actionLabel: "前往",
         tileId: npcTileId(state, npcId),
       });
@@ -1629,13 +1634,15 @@
       if (waterReady) actions.push("補水");
       if (groomReady) actions.push("梳理");
       if (!actions.length) continue;
+      const careGain = (feedReady ? CARE_GAIN.feed : 0) + (waterReady ? CARE_GAIN.water : 0) + (groomReady ? CARE_GAIN.groom : 0);
       suggestions.push({
         id: "animal:" + a.id,
         type: "animal-care",
         priority: 86,
-        valueScore: actions.length * 10 + Math.max(0, AFFINITY_MAX - animalAffinity(state, a, now)),
+        valueScore: careGain,
         title: `${def.name}照護冷卻已好`,
         detail: actions.join("、") + "可提升親密度。",
+        reason: `照護 +${careGain} 親密度，品質提升`,
         actionLabel: "前往",
         tileId: home ? home.tileId : null,
       });
@@ -1647,13 +1654,15 @@
         if (!st || !st.ready || !st.unlocked) continue;
         const tile = forageTile(state, node.id);
         const item = st.item || {};
+        const valueScore = item.sellValue || 0;
         suggestions.push({
           id: "forage:" + node.id,
           type: "forage",
           priority: node.requiresFlag ? 78 : 72,
-          valueScore: item.sellValue || 0,
+          valueScore,
           title: `${node.name}已刷新`,
           detail: `可採集${item.name || node.itemId}${item.season ? "（" + item.season + "）" : ""}。`,
+          reason: `${item.name || node.itemId}採集 +${Math.round(valueScore)} 金`,
           actionLabel: "前往",
           tileId: tile ? tile.id : null,
         });
@@ -1678,6 +1687,7 @@
           valueScore: best.score,
           title: `空田 ×${emptyPlots.length} → 種 ${best.crop.name}`,
           detail: `本季${season}，預估淨值 ${best.net} 金。`,
+          reason: `預估 ${best.score.toFixed(1)} 金/分鐘，淨值 +${Math.round(best.net)} 金`,
           actionLabel: "前往",
           tileId: plotTileId(state, emptyPlots[0]),
         });
