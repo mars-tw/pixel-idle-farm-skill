@@ -49,7 +49,9 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = "r35-20260706-1";
+  const PWA_CACHE_VERSION = "r44-20260707-1";
+  const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
+  const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
   // ---------- 物品/建材顯示 ----------
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
@@ -849,14 +851,39 @@
     if (applyWaitingServiceWorker()) return;
     checkPwaUpdate();
   }
+  function shouldAutoReloadOnControllerChange(loadAt) {
+    if (now() - loadAt > PWA_AUTO_RELOAD_WINDOW_MS) return false;
+    try {
+      if (sessionStorage.getItem(PWA_AUTO_RELOAD_SESSION_KEY)) return false;
+      sessionStorage.setItem(PWA_AUTO_RELOAD_SESSION_KEY, "1");
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function showPwaReloadPrompt() {
+    const box = $("pwaUpdate");
+    pwaWaitingWorker = null;
+    pwaUpdateStatus = "新版本已套用，點擊重新載入。";
+    if (box) {
+      box.hidden = false;
+      box.onclick = () => window.location.reload();
+    }
+    renderSettingsPanel();
+  }
   function setupPwa() {
     const allowSwTest = typeof location !== "undefined" && new URLSearchParams(location.search || "").has("swtest");
     if (typeof navigator === "undefined" || (navigator.webdriver && !allowSwTest) || !("serviceWorker" in navigator)) return;
+    const loadAt = now();
     let refreshing = false;
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
+      if (shouldAutoReloadOnControllerChange(loadAt)) {
+        refreshing = true;
+        window.location.reload();
+        return;
+      }
+      showPwaReloadPrompt();
     });
     navigator.serviceWorker.register("./sw.js", { scope: "./" }).then((reg) => {
       pwaRegistration = reg;
