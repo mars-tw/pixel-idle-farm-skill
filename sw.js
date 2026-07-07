@@ -1,66 +1,71 @@
-const CACHE_VERSION = "r44-20260707-1";
+const CACHE_VERSION = "r45-20260707-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
-const OFFLINE_URL = "./offline.html";
+const VERSION_QUERY = "?v=" + CACHE_VERSION;
+const OFFLINE_URL = versioned("./offline.html");
 const CORE_ASSETS = [
   "./",
-  "./index.html",
+  versioned("./index.html"),
   OFFLINE_URL,
-  "./manifest.webmanifest",
-  "./assets/manifest.json",
-  "./src/config.js",
-  "./src/game.js",
-  "./src/state.js",
-  "./src/atlas.js",
-  "./src/ui.js",
-  "./assets/generated/crop-growth.png",
-  "./assets/generated/terrain-tileset.png",
-  "./assets/generated/ui-icons.png",
-  "./assets/generated/farm-actors-buildings.png",
-  "./assets/generated/characters/miri-rowan-turnaround.png",
-  "./assets/generated/characters/miri-rowan-farm-actions.png",
-  "./assets/generated/characters/miri-rowan-farm-actions-cutout.png",
-  "./assets/generated/characters/miri-rowan-walk-cycle.png",
-  "./assets/generated/characters/miri-rowan-walk-cycle-cutout.png",
-  "./assets/generated/v4/manifest.json",
-  "./assets/generated/v4/animal-care-props-64.json",
-  "./assets/generated/v4/animal-care-props-64.png",
-  "./assets/generated/v4/animal-care-vfx-32.json",
-  "./assets/generated/v4/animal-care-vfx-32.png",
-  "./assets/generated/v4/animal-products-quality-32.json",
-  "./assets/generated/v4/animal-products-quality-32.png",
-  "./assets/generated/v4/animal-status-icons-32.json",
-  "./assets/generated/v4/animal-status-icons-32.png",
-  "./assets/generated/v4/animals-48.json",
-  "./assets/generated/v4/animals-48.png",
-  "./assets/generated/v4/animals-care-48.json",
-  "./assets/generated/v4/animals-care-48.png",
-  "./assets/generated/v4/buildings.json",
-  "./assets/generated/v4/buildings.png",
-  "./assets/generated/v4/crops-48.json",
-  "./assets/generated/v4/crops-48.png",
-  "./assets/generated/v4/max-actions-48x64.json",
-  "./assets/generated/v4/max-actions-48x64.png",
-  "./assets/generated/v4/max-walk-48x64.json",
-  "./assets/generated/v4/max-walk-48x64.png",
-  "./assets/generated/v4/miri-actions-48x64.json",
-  "./assets/generated/v4/miri-actions-48x64.png",
-  "./assets/generated/v4/miri-walk-48x64.json",
-  "./assets/generated/v4/miri-walk-48x64.png",
-  "./assets/generated/v4/npcs-48x64.json",
-  "./assets/generated/v4/npcs-48x64.png",
-  "./assets/generated/v4/structures-nature.json",
-  "./assets/generated/v4/structures-nature.png",
-  "./assets/generated/v4/terrain-organic-32.json",
-  "./assets/generated/v4/terrain-organic-32.png",
-  "./assets/generated/v3/action-vfx-32.json",
-  "./assets/generated/v3/action-vfx-32.png",
-  "./assets/generated/v3/props-stations.json",
-  "./assets/generated/v3/props-stations.png",
-  "./assets/icons/icon-192.png",
-  "./assets/icons/icon-512.png"
+  versioned("./manifest.webmanifest"),
+  versioned("./assets/manifest.json"),
+  versioned("./src/config.js"),
+  versioned("./src/game.js"),
+  versioned("./src/state.js"),
+  versioned("./src/atlas.js"),
+  versioned("./src/ui.js"),
+  versioned("./assets/generated/crop-growth.png"),
+  versioned("./assets/generated/terrain-tileset.png"),
+  versioned("./assets/generated/ui-icons.png"),
+  versioned("./assets/generated/farm-actors-buildings.png"),
+  versioned("./assets/generated/characters/miri-rowan-turnaround.png"),
+  versioned("./assets/generated/characters/miri-rowan-farm-actions.png"),
+  versioned("./assets/generated/characters/miri-rowan-farm-actions-cutout.png"),
+  versioned("./assets/generated/characters/miri-rowan-walk-cycle.png"),
+  versioned("./assets/generated/characters/miri-rowan-walk-cycle-cutout.png"),
+  versioned("./assets/generated/v4/manifest.json"),
+  versioned("./assets/generated/v4/animal-care-props-64.json"),
+  versioned("./assets/generated/v4/animal-care-props-64.png"),
+  versioned("./assets/generated/v4/animal-care-vfx-32.json"),
+  versioned("./assets/generated/v4/animal-care-vfx-32.png"),
+  versioned("./assets/generated/v4/animal-products-quality-32.json"),
+  versioned("./assets/generated/v4/animal-products-quality-32.png"),
+  versioned("./assets/generated/v4/animal-status-icons-32.json"),
+  versioned("./assets/generated/v4/animal-status-icons-32.png"),
+  versioned("./assets/generated/v4/animals-48.json"),
+  versioned("./assets/generated/v4/animals-48.png"),
+  versioned("./assets/generated/v4/animals-care-48.json"),
+  versioned("./assets/generated/v4/animals-care-48.png"),
+  versioned("./assets/generated/v4/buildings.json"),
+  versioned("./assets/generated/v4/buildings.png"),
+  versioned("./assets/generated/v4/crops-48.json"),
+  versioned("./assets/generated/v4/crops-48.png"),
+  versioned("./assets/generated/v4/max-actions-48x64.json"),
+  versioned("./assets/generated/v4/max-actions-48x64.png"),
+  versioned("./assets/generated/v4/max-walk-48x64.json"),
+  versioned("./assets/generated/v4/max-walk-48x64.png"),
+  versioned("./assets/generated/v4/miri-actions-48x64.json"),
+  versioned("./assets/generated/v4/miri-actions-48x64.png"),
+  versioned("./assets/generated/v4/miri-walk-48x64.json"),
+  versioned("./assets/generated/v4/miri-walk-48x64.png"),
+  versioned("./assets/generated/v4/npcs-48x64.json"),
+  versioned("./assets/generated/v4/npcs-48x64.png"),
+  versioned("./assets/generated/v4/structures-nature.json"),
+  versioned("./assets/generated/v4/structures-nature.png"),
+  versioned("./assets/generated/v4/terrain-organic-32.json"),
+  versioned("./assets/generated/v4/terrain-organic-32.png"),
+  versioned("./assets/generated/v3/action-vfx-32.json"),
+  versioned("./assets/generated/v3/action-vfx-32.png"),
+  versioned("./assets/generated/v3/props-stations.json"),
+  versioned("./assets/generated/v3/props-stations.png"),
+  versioned("./assets/icons/icon-192.png"),
+  versioned("./assets/icons/icon-512.png")
 ];
+
+function versioned(url) {
+  return url + VERSION_QUERY;
+}
 
 function isHtmlRequest(request) {
   return request.mode === "navigate" || (request.headers.get("accept") || "").includes("text/html");
@@ -72,16 +77,20 @@ async function networkFirst(request) {
     const response = await fetch(request);
     if (response && response.ok) {
       cache.put(request, response.clone());
-      if (request.mode === "navigate") cache.put("./index.html", response.clone());
+      if (request.mode === "navigate") cache.put(versioned("./index.html"), response.clone());
     }
     return response;
   } catch (e) {
-    return (await cache.match(request)) || (await cache.match("./index.html")) || (await caches.match(OFFLINE_URL)) || Response.error();
+    return (await cache.match(request, { ignoreSearch: false })) ||
+      (await cache.match(versioned("./index.html"), { ignoreSearch: false })) ||
+      (await cache.match("./index.html", { ignoreSearch: false })) ||
+      (await caches.match(OFFLINE_URL, { ignoreSearch: false })) ||
+      Response.error();
   }
 }
 
 async function cacheFirst(request) {
-  const cached = await caches.match(request);
+  const cached = await caches.match(request, { ignoreSearch: false });
   if (cached) return cached;
   const response = await fetch(request);
   if (response && response.ok) {

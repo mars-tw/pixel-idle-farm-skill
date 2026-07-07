@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const vm = require("vm");
 
 const ROOT = path.resolve(__dirname, "..");
 const PROBE_MISSING_CACHE = process.argv.includes("--probe-missing-cache");
@@ -14,45 +15,50 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
-function normalizeAssetPath(raw) {
+function normalizeAssetPath(raw, options = {}) {
   if (!raw || typeof raw !== "string") return null;
   let value = raw.trim().replace(/\\/g, "/");
   if (!value || /^(https?:|data:|mailto:|tel:|#)/i.test(value)) return null;
-  value = value.split("#")[0].split("?")[0];
+  value = options.keepQuery ? value.split("#")[0] : value.split("#")[0].split("?")[0];
   if (!value || value === "./") return ".";
   if (value.startsWith("./")) value = value.slice(2);
   if (value.startsWith("/")) value = value.slice(1);
   return value || null;
 }
 
+function stripAssetQuery(rel) {
+  return String(rel || "").split("?")[0];
+}
+
+function assetVersion(rel) {
+  const m = String(rel || "").match(/[?&]v=([^&]+)/);
+  return m ? m[1] : "";
+}
+
+function withVersion(rel, version) {
+  if (!rel || rel === ".") return rel;
+  return stripAssetQuery(rel) + "?v=" + version;
+}
+
 function localFileExists(rel) {
-  const target = rel === "." ? ROOT : path.join(ROOT, rel);
+  const clean = stripAssetQuery(rel);
+  const target = clean === "." ? ROOT : path.join(ROOT, clean);
   return fs.existsSync(target);
 }
 
-function parseSwCacheEntries(swText) {
-  const constants = {};
-  for (const m of swText.matchAll(/const\s+([A-Z0-9_]+)\s*=\s*"([^"]+)"/g)) constants[m[1]] = m[2];
-  const array = swText.match(/const\s+CORE_ASSETS\s*=\s*\[([\s\S]*?)\];/);
-  if (!array) return [];
-  const entries = [];
-  for (const token of array[1].split(",")) {
-    const trimmed = token.trim();
-    if (!trimmed) continue;
-    const quoted = trimmed.match(/^["']([^"']+)["']$/);
-    const value = quoted ? quoted[1] : constants[trimmed];
-    const normalized = normalizeAssetPath(value);
-    if (normalized) entries.push(normalized);
-  }
+function parseSwCacheMeta(swText) {
+  const sandbox = { self: { addEventListener: () => {} }, console };
+  vm.runInNewContext(swText + "\nglobalThis.__swMeta = { version: CACHE_VERSION, entries: CORE_ASSETS };", sandbox, { filename: "sw.js" });
+  const entries = (sandbox.__swMeta.entries || []).map((value) => normalizeAssetPath(value, { keepQuery: true })).filter(Boolean);
   if (PROBE_MISSING_CACHE) {
-    const idx = entries.indexOf("src/config.js");
+    const idx = entries.findIndex((entry) => stripAssetQuery(entry) === "src/config.js");
     if (idx >= 0) entries.splice(idx, 1);
   }
-  return entries;
+  return { version: sandbox.__swMeta.version, entries };
 }
 
 function collectHtmlLocalRefs(html) {
-  const refs = new Set(["index.html", "offline.html"]);
+  const refs = new Set(["index.html", "offline.html", "assets/manifest.json", "assets/generated/v4/manifest.json"]);
   const attrRe = /\b(?:src|href)=["']([^"']+)["']/gi;
   for (const m of html.matchAll(attrRe)) {
     const rel = normalizeAssetPath(m[1]);
@@ -64,6 +70,18 @@ function collectHtmlLocalRefs(html) {
     if (rel) refs.add(rel);
   }
   return refs;
+}
+
+function htmlVersionIssues(html, version) {
+  const issues = [];
+  const tagRe = /<(script|link)\b[^>]*\b(?:src|href)=["']([^"']+)["'][^>]*>/gi;
+  for (const m of html.matchAll(tagRe)) {
+    const rel = normalizeAssetPath(m[2], { keepQuery: true });
+    if (!rel) continue;
+    const v = assetVersion(rel);
+    if (v !== version) issues.push(`${m[1]} ${m[2]} version=${v || "(missing)"}`);
+  }
+  return issues;
 }
 
 function addManifestRefs(required) {
@@ -102,16 +120,22 @@ function addRuntimeAssetRefs(required) {
 
 function runSwCacheGuard() {
   console.log("== R39 SW 快取完整性守門 ==");
+  const swMeta = parseSwCacheMeta(read("sw.js"));
   const required = collectHtmlLocalRefs(read("index.html"));
   addManifestRefs(required);
   addRuntimeAssetRefs(required);
 
-  const swEntries = parseSwCacheEntries(read("sw.js"));
+  const swEntries = swMeta.entries;
   const swSet = new Set(swEntries);
-  const missing = [...required].filter((rel) => !swSet.has(rel));
+  const versionIssues = htmlVersionIssues(read("index.html"), swMeta.version);
+  const requiredVersioned = [...required].filter((rel) => rel !== ".").map((rel) => withVersion(rel, swMeta.version));
+  const missing = requiredVersioned.filter((rel) => !swSet.has(rel));
+  const unversioned = swEntries.filter((rel) => rel !== "." && assetVersion(rel) !== swMeta.version);
   const nonexistent = swEntries.filter((rel) => !localFileExists(rel));
 
-  assert(missing.length === 0, "index/manifest/runtime 關鍵本地資產皆列入 SW cache" + (missing.length ? "：\n    " + missing.join("\n    ") : ""));
+  assert(versionIssues.length === 0, `index.html 本地 script/link 皆帶 ?v=${swMeta.version}` + (versionIssues.length ? "：\n    " + versionIssues.join("\n    ") : ""));
+  assert(missing.length === 0, "index/manifest/runtime 關鍵本地資產皆以版本 URL 列入 SW cache" + (missing.length ? "：\n    " + missing.join("\n    ") : ""));
+  assert(unversioned.length === 0, `SW cache 清單皆帶 ?v=${swMeta.version}` + (unversioned.length ? "：\n    " + unversioned.join("\n    ") : ""));
   assert(nonexistent.length === 0, "SW cache 清單內檔案皆實際存在" + (nonexistent.length ? "：\n    " + nonexistent.join("\n    ") : ""));
 }
 

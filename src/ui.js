@@ -7,15 +7,17 @@
   "use strict";
   const G = window;          // game.js 把函式掛在 window
   const CROP_SHEET = window.CROP_SHEET;
+  const ASSET_VERSION_QUERY = window.FARM_VERSION_QUERY || "";
+  const assetUrl = (path) => path + ASSET_VERSION_QUERY;
   const ASSETS = {
-    crops: "assets/generated/crop-growth.png",
-    terrain: "assets/generated/terrain-tileset.png",
-    icons: "assets/generated/ui-icons.png",
+    crops: assetUrl("assets/generated/crop-growth.png"),
+    terrain: assetUrl("assets/generated/terrain-tileset.png"),
+    icons: assetUrl("assets/generated/ui-icons.png"),
     // 角色圖：優先用去背 cutout，失敗退原圖
-    actions: "assets/generated/characters/miri-rowan-farm-actions-cutout.png",
-    actionsRaw: "assets/generated/characters/miri-rowan-farm-actions.png",
-    walk: "assets/generated/characters/miri-rowan-walk-cycle-cutout.png",
-    walkRaw: "assets/generated/characters/miri-rowan-walk-cycle.png",
+    actions: assetUrl("assets/generated/characters/miri-rowan-farm-actions-cutout.png"),
+    actionsRaw: assetUrl("assets/generated/characters/miri-rowan-farm-actions.png"),
+    walk: assetUrl("assets/generated/characters/miri-rowan-walk-cycle-cutout.png"),
+    walkRaw: assetUrl("assets/generated/characters/miri-rowan-walk-cycle.png"),
   };
 
   let state = null;
@@ -49,7 +51,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = "r44-20260707-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r45-20260707-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -885,6 +887,7 @@
       }
       showPwaReloadPrompt();
     });
+    if (window.__farmPwaUpdatePending) showPwaReloadPrompt();
     navigator.serviceWorker.register("./sw.js", { scope: "./" }).then((reg) => {
       pwaRegistration = reg;
       if (reg.waiting) showPwaUpdatePrompt(reg.waiting);

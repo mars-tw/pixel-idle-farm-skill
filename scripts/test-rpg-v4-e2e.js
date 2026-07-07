@@ -146,6 +146,65 @@ async function keyboardTabSmoke(page) {
   return { focused, visibleFocus, reachedMain };
 }
 
+async function runShortDesktopLayoutTest(browser, base) {
+  const context = await browser.newContext({ viewport: { width: 1366, height: 700 }, serviceWorkers: "block" });
+  const page = await context.newPage();
+  try {
+    await page.goto(base);
+    await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    const mainControls = await page.evaluate(() => {
+      const ids = ["settingsBtn", "spriteToggle", "howToBtn", "resetBtn"];
+      return {
+        controls: ids.map((id) => {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ block: "center", inline: "nearest" });
+          const r = el ? el.getBoundingClientRect() : { width: 0, height: 0, top: 9999, bottom: 9999, left: 9999, right: 9999 };
+          const hit = el ? document.elementFromPoint(Math.min(innerWidth - 1, Math.max(0, r.left + r.width / 2)), Math.min(innerHeight - 1, Math.max(0, r.top + r.height / 2))) : null;
+          return { id, visible: !!el && r.width > 0 && r.height >= 40 && r.top >= 0 && r.bottom <= innerHeight && (hit === el || el.contains(hit)) };
+        }),
+        overflow: document.documentElement.scrollWidth - innerWidth,
+      };
+    });
+    assert(mainControls.controls.every((c) => c.visible) && mainControls.overflow <= 2,
+      `1366x700 主要工具按鈕可見可點且無水平溢出（${mainControls.controls.map((c) => c.id + "=" + c.visible).join(", ")}）`);
+    await page.locator("#settingsBtn").scrollIntoViewIfNeeded();
+    await page.click("#settingsBtn");
+    await page.waitForFunction(() => document.getElementById("settingsModal").classList.contains("show"));
+    const modalMetrics = await page.evaluate(() => {
+      const card = document.querySelector("#settingsModal .modal-card");
+      const cs = getComputedStyle(card);
+      const r = card.getBoundingClientRect();
+      return {
+        maxHeight: parseFloat(cs.maxHeight) || 0,
+        overflowY: cs.overflowY,
+        inViewport: r.top >= 0 && r.bottom <= innerHeight,
+      };
+    });
+    await page.locator("#pwaCheckBtn").scrollIntoViewIfNeeded();
+    await page.click("#pwaCheckBtn");
+    const pwaReachable = await page.evaluate(() => {
+      const btn = document.getElementById("pwaCheckBtn");
+      const ok = document.getElementById("settingsOk");
+      const status = document.getElementById("pwaUpdateStatus");
+      const br = btn.getBoundingClientRect();
+      ok.scrollIntoView({ block: "center" });
+      const or = ok.getBoundingClientRect();
+      return {
+        pwaButton: br.width > 0 && br.height >= 40 && br.top >= 0 && br.bottom <= innerHeight,
+        okButton: or.width > 0 && or.height >= 40 && or.top >= 0 && or.bottom <= innerHeight,
+        statusText: status ? status.textContent : "",
+        overflow: document.documentElement.scrollWidth - innerWidth,
+      };
+    });
+    assert(modalMetrics.maxHeight <= 668 && modalMetrics.overflowY === "auto" && modalMetrics.inViewport &&
+      pwaReachable.pwaButton && pwaReachable.okButton && pwaReachable.statusText.length > 0 && pwaReachable.overflow <= 2,
+      `1366x700 設定 modal 可滾動，檢查更新/確認按鈕可達可點（max=${modalMetrics.maxHeight}, overflow=${modalMetrics.overflowY}）`);
+  } finally {
+    await context.close();
+  }
+}
+
 async function run() {
   let chromium;
   try { ({ chromium } = require("playwright")); }
@@ -157,6 +216,7 @@ async function run() {
   const browser = await chromium.launch();
 
   try {
+  await runShortDesktopLayoutTest(browser, base);
   await runTrueServiceWorkerOfflineTest(browser, base);
   for (const vp of [{ w: 1280, h: 900, name: "桌面 1280x900" }, { w: 390, h: 844, name: "手機 390x844" }]) {
     console.log("\n== 視窗 " + vp.name + " ==");
@@ -173,8 +233,13 @@ async function run() {
       const swText = await swRes.text();
       const uiRes = await fetch("src/ui.js");
       const uiText = await uiRes.text();
+      const htmlRes = await fetch("index.html");
+      const htmlText = await htmlRes.text();
       let swSyntax = true;
       try { new Function(swText); } catch (e) { swSyntax = e.message; }
+      const swVersion = (swText.match(/CACHE_VERSION\s*=\s*"([^"]+)"/) || [])[1] || "";
+      const localRefs = [...htmlText.matchAll(/<(script|link)\b[^>]*\b(?:src|href)=["']([^"']+)["'][^>]*>/gi)]
+        .map((m) => m[2]).filter((url) => !/^(https?:|data:|mailto:|tel:|#)/i.test(url));
       return {
         manifestOk: manifestRes.ok,
         manifestName: manifest.name,
@@ -187,9 +252,15 @@ async function run() {
         swHasSkipWaiting: swText.includes("SKIP_WAITING"),
         swHasInstallSkipWaiting: /addEventListener\(["']install["'][\s\S]*self\.skipWaiting\(\)/.test(swText),
         swHasClientsClaim: swText.includes("clients.claim()"),
+        swHasCacheVersioned: swText.includes("VERSION_QUERY") && swText.includes("versioned(\"./src/ui.js\")") && swText.includes("ignoreSearch: false"),
         swHasFallback: swText.includes("OFFLINE_URL") && swText.includes("offline.html"),
         swHasAllSrc: ["./src/config.js", "./src/game.js", "./src/state.js", "./src/atlas.js", "./src/ui.js"].every((p) => swText.includes(p)),
-        swVersion: (swText.match(/CACHE_VERSION\s*=\s*"([^"]+)"/) || [])[1] || "",
+        swVersion,
+        htmlHasVersionedLocalRefs: localRefs.length >= 7 && localRefs.every((url) => new URL(url, location.href).searchParams.get("v") === swVersion),
+        htmlHasBootGuard: htmlText.includes("FARM_CACHE_VERSION") && htmlText.includes("getRegistration(\"./\")") &&
+          htmlText.includes("reg.update()") && htmlText.includes("controllerchange") &&
+          htmlText.includes("RELOAD_WINDOW_MS = 15000") && htmlText.includes("pixelFarmPwaAutoReloaded"),
+        uiHasAssetVersioning: uiText.includes("FARM_VERSION_QUERY") && uiText.includes("assetUrl(\"assets/generated/crop-growth.png\")"),
         uiHasControllerGuard: uiText.includes("controllerchange") && uiText.includes("PWA_AUTO_RELOAD_WINDOW_MS = 15000") &&
           uiText.includes("PWA_AUTO_RELOAD_SESSION_KEY") && uiText.includes("sessionStorage") &&
           uiText.includes("shouldAutoReloadOnControllerChange") && uiText.includes("showPwaReloadPrompt"),
@@ -199,8 +270,9 @@ async function run() {
     assert(pwaFiles.manifestOk && pwaFiles.manifestName === "像素農場 RPG" && pwaFiles.orientation === "portrait" && pwaFiles.iconSizes.includes("192x192") && pwaFiles.iconSizes.includes("512x512"),
       `PWA manifest 可取且含名稱/直式/icon（${pwaFiles.manifestName}, ${pwaFiles.iconSizes}）`);
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
-      pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasFallback && pwaFiles.swHasAllSrc &&
-      pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r44-20260707-1",
+      pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
+      pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r45-20260707-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -281,7 +353,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r44-20260707-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r45-20260707-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),

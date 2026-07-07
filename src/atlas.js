@@ -11,19 +11,21 @@
 (function (root) {
   "use strict";
   const BASE = "assets/generated/v4/";
+  const VERSION_QUERY = root.FARM_VERSION_QUERY || "";
+  const versioned = (url) => url + VERSION_QUERY;
   const state = { ready: false, sheets: {}, maps: {}, error: null };
   let readyResolve; const readyPromise = new Promise((r) => (readyResolve = r));
 
   async function load() {
     try {
-      const manifest = await fetch(BASE + "manifest.json").then((r) => r.json());
+      const manifest = await fetch(versioned(BASE + "manifest.json")).then((r) => r.json());
       const keys = Object.keys(manifest.sheets);
       await Promise.all(keys.map(async (key) => {
         const s = manifest.sheets[key];
         // manifest 內 map/image 已是正確 repo 相對路徑（v4 或沿用 v3），直接取用。
-        const map = await fetch(s.map).then((r) => r.json());
+        const map = await fetch(versioned(s.map)).then((r) => r.json());
         state.maps[key] = map;          // { image, meta, frames:{id:{x,y,w,h,anchor}} }
-        state.sheets[key] = s.image;    // 圖片路徑
+        state.sheets[key] = versioned(s.image);    // 圖片路徑
       }));
       state.ready = true;
     } catch (e) {
