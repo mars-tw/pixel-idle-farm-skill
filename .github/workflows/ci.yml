@@ -58,6 +58,8 @@ jobs:
         run: node scripts/validate-v4-atlas.js
       - name: 跑 Stage 4–11 RPG v4 E2E（大世界/camera/動作/故事鏈/探索/NPC對話/性別/動物照護/天氣視覺化/NPC委託/農場圖鑑/視覺/RWD/桌機+手機）
         run: node scripts/test-rpg-v4-e2e.js
+      - name: R46 RWD 9 視口矩陣守門（app-shell 零頁捲/互動元素零出界/水平溢出<=2px）
+        run: node scripts/test-rwd-matrix.js
 
   deploy:
     name: 部署 GitHub Pages

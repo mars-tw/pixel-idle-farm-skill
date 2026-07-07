@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r45-20260707-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r45-20260707-1">
+<link rel="manifest" href="manifest.webmanifest?v=r46-20260707-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r46-20260707-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r45-20260707-1";
+  const VERSION = "r46-20260707-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -566,6 +566,40 @@
   .jd-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 6px; }
   .jd-row b { color: #6b5638; }
   .jd-row span, .jd-note, .sq-lore { overflow-wrap: anywhere; }
+
+  /* ===== R46 app-shell：body 不捲、區域內捲（9 視口矩陣零頁捲） =====
+     原則：
+     1. body 固定 100dvh 不產生頁級捲動；.wrap 是垂直 flex 殼。
+     2. header 與底部工具列/系列 footer 常駐（flex 不縮），.main 佔剩餘高度。
+     3. 窄螢幕（<860px）：.main 整塊 overflow-y 內捲，內部面板取消巢狀捲動，
+        確保所有互動元素都位於「自身完整可見、可垂直捲動」的 .main 容器內。
+     4. 桌機（>=860px）：.main 不捲，左右面板各自內捲；地圖場景以 flex 自適應縮放，
+        smart assistant 清單限高內捲。
+     5. tab 列改 flex-wrap 換行，任何寬度不得溢出右緣。 */
+  body { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+  .wrap { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+  header { flex: 0 0 auto; }
+  .main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  .toolbar { flex: 0 0 auto; margin-top: 8px; }
+  footer { flex: 0 0 auto; margin: 6px 0 0; }
+  .panel { max-height: none; overflow: visible; }
+  .side-panel { overflow: visible; }
+  .side-tabs { flex-wrap: wrap; overflow: visible; position: sticky; top: 0; z-index: 30; }
+  @media (min-width: 860px) {
+    .main { overflow: hidden; align-items: stretch; }
+    .panel { min-height: 0; max-height: 100%; overflow-y: auto; }
+    .farm-panel { display: flex; flex-direction: column; }
+    .farm-panel > .tool-bar, .farm-panel > .seed-row, .farm-panel > .btn-row, .farm-panel > h2 { flex: 0 0 auto; }
+    .map-scene-wrap { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+    .map-scene-wrap .quest-dock { flex: 0 0 auto; }
+    #mapScene { flex: 1 1 260px; height: auto; min-height: 260px; max-height: 660px; }
+    .side-panel { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .side-tabs { flex: 0 0 auto; position: static; }
+    .side-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+    /* 智慧助手清單限高內捲（地圖場景在桌機恆完整可見，內捲容器不會出界；
+       上限 200px 確保整個助手面板 < #mapScene 的 260px 最小高度） */
+    .sa-list { max-height: min(30vh, 200px); overflow-y: auto; overscroll-behavior: contain; }
+  }
 </style>
 </head>
 <body>
@@ -702,10 +736,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r45-20260707-1"></script>
-<script src="src/game.js?v=r45-20260707-1"></script>
-<script src="src/state.js?v=r45-20260707-1"></script>
-<script src="src/atlas.js?v=r45-20260707-1"></script>
-<script src="src/ui.js?v=r45-20260707-1"></script>
+<script src="src/config.js?v=r46-20260707-1"></script>
+<script src="src/game.js?v=r46-20260707-1"></script>
+<script src="src/state.js?v=r46-20260707-1"></script>
+<script src="src/atlas.js?v=r46-20260707-1"></script>
+<script src="src/ui.js?v=r46-20260707-1"></script>
 </body>
 </html>
