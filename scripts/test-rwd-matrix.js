@@ -1,5 +1,5 @@
 /* =========================================================================
- * test-rwd-matrix.js — R46 RWD 9 視口矩陣守門（真瀏覽器）
+ * test-rwd-matrix.js — R47 RWD 9 視口矩陣守門（真瀏覽器）
  *
  * 驗收標準（硬性，任一違規即 exit 1）：
  *   1. 所有可互動元素（button/select/input/textarea/a[href]/[role=button]/[onclick]）
@@ -139,9 +139,9 @@ async function run() {
   const base = "http://127.0.0.1:" + server.address().port + "/index.html";
   const browser = await chromium.launch();
   try {
-    console.log("== R46 RWD 9 視口矩陣守門（overlay 先關閉） ==");
+    console.log("== R47 RWD 9 視口矩陣守門（overlay 先關閉） ==");
     for (const vp of VIEWPORTS) await auditViewport(browser, base, vp, true);
-    console.log("\n== R46 RWD 9 視口矩陣守門（overlay 開啟狀態） ==");
+    console.log("\n== R47 RWD 9 視口矩陣守門（overlay 開啟狀態） ==");
     for (const vp of VIEWPORTS) await auditViewport(browser, base, vp, false);
   } finally {
     await browser.close();
@@ -149,7 +149,7 @@ async function run() {
   }
 
   if (failed === 0) {
-    console.log("\n✅ R46 RWD 矩陣守門通過（9 視口 × overlay 開/關 全零違規）");
+    console.log("\n✅ R47 RWD 矩陣守門通過（9 視口 × overlay 開/關 全零違規）");
     process.exit(0);
   }
   console.error(`\n❌ ${failed} 項 RWD 守門失敗`);

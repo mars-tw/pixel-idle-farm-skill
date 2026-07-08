@@ -18,7 +18,9 @@ const FILES = { terrain: "terrain-organic-32", crops: "crops-48", walk: "miri-wa
   walk_m: "max-walk-48x64", actions_m: "max-actions-48x64", npcs: "npcs-48x64",
   // Stage 7：動物照護（互動物件/品質圖示/VFX/狀態圖示/happy+eating 動物）
   care_props: "animal-care-props-64", product_quality: "animal-products-quality-32",
-  care_vfx: "animal-care-vfx-32", animal_status: "animal-status-icons-32", animals_care: "animals-care-48" };
+  care_vfx: "animal-care-vfx-32", animal_status: "animal-status-icons-32", animals_care: "animals-care-48",
+  // R47：豐年祭・四季物產
+  crops2: "crops2-48", animals_duck: "animals-duck-48", product_quality_duck: "duck-egg-quality-32" };
 // 沿用 v3 的 sheets（站點/障礙/特效）
 const V3_REUSE = {
   props: { image: "assets/generated/v3/props-stations.png", map: "assets/generated/v3/props-stations.json" },

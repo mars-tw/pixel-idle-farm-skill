@@ -222,7 +222,15 @@ console.log("\n== 8. 等級曲線與作物解鎖 ==");
   const cornNetPerMin = ((corn.yield * corn.sellValue) - corn.seedCost) / (corn.growMs / 60000);
   assert(cornNetPerMin > 0 && cornNetPerMin < 12, `玉米期望淨利 ${cornNetPerMin.toFixed(1)} 金/分鐘，低於番茄後段爆發線`);
   st.xp = C.LEVEL_XP[4]; st.level = C.levelFromXp(st.xp);
-  assert(G.unlockedCrops(st).length === Object.keys(C.CROPS).length, `lv5 解鎖全部 ${Object.keys(C.CROPS).length} 作物`);
+  const lv5CropCount = Object.values(C.CROPS).filter((c) => c.unlockLevel <= 5).length;
+  assert(G.unlockedCrops(st).length === lv5CropCount, `lv5 解鎖 unlockLevel≤5 的 ${lv5CropCount} 種作物`);
+  st.xp = C.LEVEL_XP[7]; st.level = C.levelFromXp(st.xp);
+  assert(st.level === 8 && G.unlockedCrops(st).length === Object.keys(C.CROPS).length, `lv8 解鎖全部 ${Object.keys(C.CROPS).length} 種作物`);
+  for (const id of ["bell_pepper", "potato", "grapes", "melon"]) {
+    const crop = C.CROPS[id];
+    const netPerMin = ((crop.yield * crop.sellValue) - crop.seedCost) / (crop.growMs / 60000);
+    assert(crop.sheet === "crops2" && netPerMin > 0, `${crop.name} 使用 crops2 且經濟為正（${netPerMin.toFixed(1)} 金/分鐘）`);
+  }
 }
 
 console.log("\n== 9. 天氣（lv5 解鎖）==");
@@ -254,6 +262,18 @@ console.log("\n== 9. 天氣（lv5 解鎖）==");
   st.weather = { id: "fog", untilMs: T0 + 1e9 };
   assert(G.effectiveGrowMs(st, "wheat", T0) > growClear && G.sellUnitValue(st, "pumpkin", T0) > sellClear,
     "晨霧成長稍慢但售價提高");
+  st.weather = { id: "snow", untilMs: T0 + 1e9 };
+  assert(G.effectiveGrowMs(st, "wheat", T0) > growClear && G.sellUnitValue(st, "pumpkin", T0) > sellClear,
+    "降雪成長放慢但售價提高");
+  st.weather = { id: "storm", untilMs: T0 + 1e9 };
+  assert(G.effectiveGrowMs(st, "wheat", T0) < growClear && G.sellUnitValue(st, "pumpkin", T0) <= sellClear,
+    "暴風雨加速成長但售價不加成");
+  st.weather.untilMs = T0;
+  G.updateWeather(st, T0 + 1, () => 0.92);
+  assert(st.weather.id === "snow", "天氣機率可抽到降雪");
+  st.weather.untilMs = T0;
+  G.updateWeather(st, T0 + 1, () => 0.99);
+  assert(st.weather.id === "storm", "天氣機率可抽到暴風雨");
   // 訂單契約價不受天氣影響（Stage 6.5 起的既定設計，不是遺漏）
   const order = G.makeOrder(st, T0, makeRng(3));
   st.weather = { id: "sunny", untilMs: T0 + 1e9 };
@@ -263,11 +283,34 @@ console.log("\n== 9. 天氣（lv5 解鎖）==");
   assert(paySunny === payClear, "訂單契約價不受天氣影響（既定設計）");
 }
 
-console.log("\n== 10. 存檔遷移（向後相容）==");
+console.log("\n== 10. R47 季節與豐年祭訂單 ==");
+{
+  const st = S.defaultState(T0);
+  st.level = 8;
+  st.weather = { id: "clear", untilMs: T0 + 1e9 };
+  st.season = { id: "春", untilMs: T0 + 100 };
+  assert(G.currentSeason(st, T0) === "春", "目前季節讀 state.season");
+  assert(G.updateSeason(st, T0 + 101) && st.season.id === "夏", "季節到期後輪替到下一季");
+  st.season = { id: "春", untilMs: T0 + 1e9 };
+  const potatoSpring = G.sellUnitValue(st, "potato", T0);
+  st.season = { id: "夏", untilMs: T0 + 1e9 };
+  const potatoSummer = G.sellUnitValue(st, "potato", T0);
+  assert(potatoSpring > potatoSummer, "Lv6+ 當季作物直售 ×1.15");
+
+  const rngVals = [0.99, 0.9, 0.10, 0.30, 0.55, 0.40, 0.80, 0.60, 0.20, 0.70];
+  const rng = () => rngVals.length ? rngVals.shift() : 0.42;
+  const order = G.makeOrder(st, T0, rng, "festival");
+  const kinds = Object.keys(order.wants).length;
+  assert(order.rarity === "festival", "可生成豐年祭稀有度訂單");
+  assert(kinds >= 2 && kinds <= 3, `豐年祭訂單要求 2~3 種品項（實際 ${kinds}）`);
+}
+
+console.log("\n== 11. 存檔遷移（向後相容）==");
 {
   const old = { version: 0, coins: 5, plots: [{ id: "p01", cropId: "wheat", plantedAt: 123 }] };
   const m = S.migrate(old);
   assert(m.coins === 5 && m.storage && m.storage.items && m.upgrades && m.stats, "舊存檔欄位補齊不崩");
+  assert(m.season && m.season.id === "春", "舊存檔補齊季節預設");
   assert(m.version === C.GAME.version, "版本號更新");
 }
 

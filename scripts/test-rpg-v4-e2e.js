@@ -272,7 +272,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r46-20260707-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r47-20260708-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -353,7 +353,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r46-20260707-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r47-20260708-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),
@@ -1122,7 +1122,7 @@ async function run() {
       return { qualitySold: st.stats.qualitySold, quest: st.story.questId, ch3: ch3 ? ch3.getAttribute("data-progress3") : null };
     });
     assert(afterSell.qualitySold > 0, `賣出優質品後 qualitySold 增加（${afterSell.qualitySold}）`);
-    assert(afterSell.quest === null && afterSell.ch3 === "5/5", `第三章完成（照護完成度 ${afterSell.ch3}）`);
+    assert(afterSell.quest === "prepare_four_seasons" && afterSell.ch3 === "5/5", `第三章完成並接第四章（照護完成度 ${afterSell.ch3}, quest=${afterSell.quest}）`);
 
     // 19. Stage 10.0：第三章動物照護全完成後，NPC 對話進入 ch3done 階段
     const ch3Phase = await page.evaluate(() => window.Game.npcPhase(window.__farm.state()));
@@ -1375,15 +1375,15 @@ async function run() {
     assert(journalState.totalItems > 0, "圖鑑分頁渲染出內容");
     assert(journalState.cropFoundHasWheat === true, "作物圖鑑顯示已收成的小麥（真實故事進度累積，非灌資料）");
     assert(journalState.cropHasUndiscovered === true, "作物圖鑑仍有未發現項目（沒有全部提前曝光）");
-    assert(journalState.cropCompletion.includes("/6"), `作物圖鑑完成度包含 R15 玉米後的 6 作物總數（${journalState.cropCompletion}）`);
+    assert(journalState.cropCompletion.includes("/10"), `作物圖鑑完成度包含 R47 後的 10 作物總數（${journalState.cropCompletion}）`);
     assert(journalState.productFound === true, "產物圖鑑顯示已收集過的動物產品");
-    assert(journalState.forageCount === 6 && journalState.forageFound === 3 && journalState.forageHidden === 3,
-      `東林採集圖鑑顯示 3/6 已採、3 個未採集剪影（found=${journalState.forageFound} hidden=${journalState.forageHidden}）`);
-    assert(journalState.forageCompletion.includes("3/6") && journalState.forageCompletion.includes("50%"),
-      `東林採集完成度顯示 3/6 · 50%（${journalState.forageCompletion}）`);
+    assert(journalState.forageCount === 8 && journalState.forageFound === 3 && journalState.forageHidden === 5,
+      `東林採集圖鑑顯示 3/8 已採、5 個未採集剪影（found=${journalState.forageFound} hidden=${journalState.forageHidden}）`);
+    assert(journalState.forageCompletion.includes("3/8") && journalState.forageCompletion.includes("38%"),
+      `東林採集完成度顯示 3/8 · 38%（${journalState.forageCompletion}）`);
     assert(journalState.sideDone === true && journalState.sideCompletion.includes("1/4"),
       `鎮民支線圖鑑記錄老農 3/3 完成且完成度 1/4（${journalState.sideCompletion}）`);
-    assert(journalState.collectibleDone === true && journalState.collectibleCompletion.includes("1/1"),
+    assert(journalState.collectibleDone === true && journalState.collectibleCompletion.includes("1/2"),
       `收藏品圖鑑記錄東林年輪拓印（${journalState.collectibleCompletion}）`);
     assert(journalState.npcMetCount === 4 && journalState.npcUnmetCount === 0,
       `鎮民名錄：跑完故事鏈與回報流程後 4 位鎮民皆為真實互動遇見（met=${journalState.npcMetCount} unmet=${journalState.npcUnmetCount}）`);

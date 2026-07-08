@@ -11,6 +11,7 @@
     : root;
   const {
     GAME, CROPS, UPGRADES, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
+    SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL,
     WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
     levelFromXp,
     PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
@@ -151,10 +152,47 @@
     if (state.stats.fulfilledOrders >= 10) unlock("order10");
     if (state.stats.totalCoinsEarned >= 1000) unlock("coins1k");
     if (unlockedCrops(state).length >= Object.keys(CROPS).length) unlock("allCrops");
+    if (Object.keys(state.stats.collected || {}).some((id) => id === "duck_egg" || id.indexOf("duck_egg_") === 0)) unlock("duckKeeper");
+    const harvestedSeasons = {};
+    for (const [id, qty] of Object.entries(state.stats.harvested || {})) {
+      const crop = CROPS[id];
+      if (qty > 0 && crop && crop.season) harvestedSeasons[crop.season] = true;
+    }
+    if (Object.keys(harvestedSeasons).length >= 4) unlock("seasonalTable");
+    if ((state.stats.festivalOrders || 0) > 0) unlock("festivalDeal");
     return got;
   }
 
   // ---------- 售價 ----------
+  function seasonIndex(id) {
+    const idx = (SEASONS || []).findIndex((s) => s.id === id);
+    return idx >= 0 ? idx : 0;
+  }
+  function currentSeason(state, now) {
+    if (state.level < (SEASON_UNLOCK_LEVEL || 6)) return (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
+    if (!state.season || !(SEASONS || []).some((s) => s.id === state.season.id)) return (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
+    if (now >= (state.season.untilMs || 0)) {
+      const next = (seasonIndex(state.season.id) + 1) % Math.max(1, (SEASONS || []).length);
+      return SEASONS[next].id;
+    }
+    return state.season.id;
+  }
+  function updateSeason(state, now) {
+    const first = (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
+    if (!state.season) state.season = { id: first, untilMs: now + (SEASON_DURATION_MS || 0) };
+    if (state.level < (SEASON_UNLOCK_LEVEL || 6)) {
+      const changed = state.season.id !== first || state.season.untilMs !== 0;
+      state.season = { id: first, untilMs: 0 };
+      return changed;
+    }
+    const valid = (SEASONS || []).some((s) => s.id === state.season.id);
+    if (!valid || now >= (state.season.untilMs || 0)) {
+      const idx = valid ? (seasonIndex(state.season.id) + 1) % SEASONS.length : 0;
+      state.season = { id: SEASONS[idx].id, untilMs: now + SEASON_DURATION_MS };
+      return true;
+    }
+    return false;
+  }
   function sellMultiplier(state, now) {
     const lv = state.upgrades.sellBonus;
     const bonus = lv > 0 ? UPGRADES.sellBonus.levels[lv - 1].value : 0;
@@ -163,7 +201,8 @@
   }
   function sellUnitValue(state, itemId, now) {
     const def = getItemDef(itemId); // 作物或動物產品
-    return Math.max(1, Math.round((def ? def.sellValue : 0) * sellMultiplier(state, now)));
+    const seasonMul = def && def.season && state.level >= (SEASON_UNLOCK_LEVEL || 6) && def.season === currentSeason(state, now) ? 1.15 : 1;
+    return Math.max(1, Math.round((def ? def.sellValue : 0) * seasonMul * sellMultiplier(state, now)));
   }
 
   // ---------- 種植 / 收成 ----------
@@ -238,15 +277,17 @@
   // 作物 + 動物產品的訂單需求量範圍
   const ORDER_QTY = {
     wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], corn: [2, 5], strawberry: [2, 4], pumpkin: [1, 3],
-    egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5],
+    bell_pepper: [2, 5], potato: [3, 7], grapes: [2, 4], melon: [1, 2],
+    egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5], duck_egg: [2, 6],
     // Stage 7.1：品質分級品項明確給數量範圍，隨品質往下收（原本沒列到會 fallback [2,5]，
     // 對高單價的 premium 品項偏寬鬆）
     egg_good: [2, 5], egg_premium: [1, 3],
     milk_good: [1, 3], milk_premium: [1, 2],
     wool_good: [1, 2], wool_premium: [1, 1],
     honey_good: [1, 3], honey_premium: [1, 2],
+    duck_egg_good: [1, 4], duck_egg_premium: [1, 2],
     forest_herb: [2, 4], glow_mushroom: [1, 3], wild_berry: [1, 3], river_mint: [1, 3],
-    mooncap_spore: [1, 2], amber_resin: [1, 2],
+    mooncap_spore: [1, 2], amber_resin: [1, 2], forest_chestnut: [1, 2], frost_cherry: [1, 2],
   };
   const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
@@ -326,7 +367,9 @@
     for (const r of rarities) { if (roll < r.weight) { rarity = r; break; } roll -= r.weight; }
     const rarityId = Object.keys(ORDER_RARITY).find((k) => ORDER_RARITY[k] === rarity);
 
-    const nKinds = pool.length >= 2 && (rng || Math.random)() < 0.45 ? 2 : 1;
+    const nKinds = rarityId === "festival" && pool.length >= 2
+      ? rngInt(rng, 2, Math.min(3, pool.length))
+      : (pool.length >= 2 && (rng || Math.random)() < 0.45 ? 2 : 1);
     const wants = {}; let baseValue = 0, baseXp = 0;
     const chosen = [];
     for (let k = 0; k < nKinds; k++) {
@@ -397,11 +440,17 @@
     state.stats.totalCoinsEarned += pay.coins;
     addXp(state, pay.xp);
     state.stats.fulfilledOrders++;
+    if (order.rarity === "festival") {
+      state.stats.festivalOrders = (state.stats.festivalOrders || 0) + 1;
+      if (!state.collections) state.collections = {};
+      state.collections.festival_lantern = true;
+    }
     // 移除並補新單
     state.orders.splice(idx, 1);
     refreshOrders(state, now, rng);
+    const story = order.rarity === "festival" ? syncStoryProgress(state, "festival_order", now) : null;
     checkAchievements(state);
-    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul };
+    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story };
   }
   function trashOrder(state, orderId, now, rng) {
     const idx = state.orders.findIndex((o) => o.id === orderId);
@@ -450,7 +499,7 @@
     if (state.level < WEATHER_UNLOCK_LEVEL) { state.weather = { id: "clear", untilMs: 0 }; return false; }
     if (now < (state.weather.untilMs || 0)) return false;
     const roll = (rng || Math.random)();
-    const id = roll < 0.38 ? "clear" : roll < 0.60 ? "rain" : roll < 0.78 ? "sunny" : roll < 0.90 ? "windy" : "fog";
+    const id = roll < 0.32 ? "clear" : roll < 0.52 ? "rain" : roll < 0.68 ? "sunny" : roll < 0.80 ? "windy" : roll < 0.90 ? "fog" : roll < 0.96 ? "snow" : "storm";
     state.weather = { id, untilMs: now + WEATHER_DURATION_MS };
     return true;
   }
@@ -641,6 +690,7 @@
     a.lastProducedAt += cycles * def.produceMs;
     state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
     if (added > 0) recordDiscovery(state, productId, now);
+    if (added > 0) checkAchievements(state);
     return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, cycles };
   }
   function collectAllAnimals(state, now) {
@@ -684,6 +734,7 @@
     const { added, lost } = addToStorage(state, productId, 1);
     state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
     if (added > 0) recordDiscovery(state, productId, now);
+    if (added > 0) checkAchievements(state);
     a.lastProducedAt = now; // 重置週期
     return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, affinity: a.affinity, collectedFirst };
   }
@@ -806,6 +857,8 @@
     if (!state.story.completed) state.story.completed = {};
     if (!state.stats) state.stats = { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {} };
     if (!state.stats.harvested) state.stats.harvested = {};
+    if (!state.stats.collected) state.stats.collected = {};
+    if (typeof state.stats.festivalOrders !== "number") state.stats.festivalOrders = 0;
   }
   function hasCrop(state, cropId) {
     return (state.plots || []).some((p) => p && p.cropId === cropId);
@@ -816,6 +869,18 @@
   function hasCollectedQuality(state) {
     const c = state.stats.collected || {};
     return Object.keys(c).some((k) => isQualityItem(k) && c[k] > 0);
+  }
+  function harvestedSeasonCount(state) {
+    const seen = {};
+    for (const [id, qty] of Object.entries((state.stats && state.stats.harvested) || {})) {
+      const crop = CROPS[id];
+      if (qty > 0 && crop && crop.season) seen[crop.season] = true;
+    }
+    return Object.keys(seen).length;
+  }
+  function hasCollectedDuckEgg(state) {
+    const c = (state.stats && state.stats.collected) || {};
+    return Object.keys(c).some((id) => c[id] > 0 && (id === "duck_egg" || id.indexOf("duck_egg_") === 0));
   }
   function questSatisfied(state, q, event, now) {
     if (!q) return false;
@@ -838,6 +903,10 @@
     if (q.id === "raise_affinity_happy") return (state.animals || []).some((a) => animalAffinity(state, a, now) >= AFFINITY_HAPPY_THRESHOLD);
     if (q.id === "collect_quality_product") return hasCollectedQuality(state);
     if (q.id === "deliver_quality_order") return (state.stats.qualitySold || 0) > 0;
+    // 第四章（R47：豐年祭與四季物產）
+    if (q.id === "prepare_four_seasons") return harvestedSeasonCount(state) >= 4 || q.objective === event;
+    if (q.id === "welcome_ducks") return hasCollectedDuckEgg(state) || q.objective === event;
+    if (q.id === "finish_festival_order") return (state.stats.festivalOrders || 0) > 0 || q.objective === event;
     return q.trigger === event || q.objective === event;
   }
   function syncStoryProgress(state, event, now) {
@@ -884,6 +953,12 @@
       const s = (C.STRUCTURES || []).find((x) => x.id === m.id); if (!s) return null;
       const t = state.map.tiles.find((tl) => tl.structureId === s.id); return t ? t.id : null;
     }
+    if (m.kind === "building") {
+      const b = (state.buildings || []).find((x) => x.type === m.type);
+      if (b && b.tileId) return b.tileId;
+      const t = state.map.tiles.find((tl) => tl.terrain === "grass" && !tl.object && !tl.blocked && !tl.station && !tl.structureId && !tl.buildingId && !tl.npc);
+      return t ? t.id : null;
+    }
     if (m.kind === "soil") {
       const active = activePlotCount(state);
       for (const t of state.map.tiles) {
@@ -915,6 +990,11 @@
   // 第三章（動物照護）是否全完成（NPC 對話進 ch3done、開放 Stage 10 委託的前置條件）
   function chapter3Done(state) {
     const ids = C.CHAPTER3_QUESTS || [];
+    const done = (state.story && state.story.completed) || {};
+    return ids.length > 0 && ids.every((id) => done[id]);
+  }
+  function chapter4Done(state) {
+    const ids = C.CHAPTER4_QUESTS || [];
     const done = (state.story && state.story.completed) || {};
     return ids.length > 0 && ids.every((id) => done[id]);
   }
@@ -1121,8 +1201,9 @@
     const t = getTileById(state, tileId);
     return t && t.npc ? (C.NPCS || {})[t.npc] : null;
   }
-  // 對話階段：start → ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）→ ch3done（動物照護學完）
+  // 對話階段：start → ch1done → bridge → ch2done → ch3done → ch4done
   function npcPhase(state) {
+    if (chapter4Done(state)) return "ch4done";
     if (chapter3Done(state)) return "ch3done";
     if (chapter2Done(state)) return "ch2done";
     if (state.flags && state.flags.bridgeRepaired) return "bridge";
@@ -1133,7 +1214,7 @@
   // line 會換成委託台詞，並在回傳值附上 request 唯讀投影供 UI 判斷是否顯示交付按鈕。
   function npcDialogue(state, npcId, lineIdx) {
     const npc = (C.NPCS || {})[npcId]; if (!npc) return null;
-    const order = ["ch3done", "ch2done", "bridge", "ch1done", "start"];
+    const order = ["ch4done", "ch3done", "ch2done", "bridge", "ch1done", "start"];
     const phase = npcPhase(state);
     // 取目前階段的台詞；若該階段未定義，往較早階段回退
     let lines = null;
@@ -1462,10 +1543,12 @@
     const chapter1 = pct(C.PROLOGUE_QUESTS || []);
     const chapter2 = pct(C.CHAPTER2_QUESTS || []);
     const chapter3 = pct(C.CHAPTER3_QUESTS || []);
+    const chapter4 = pct(C.CHAPTER4_QUESTS || []);
     return {
       chapter1: Object.assign({ unlocked: true }, chapter1),
       chapter2: Object.assign({ unlocked: chapter1.total > 0 && chapter1.done >= chapter1.total }, chapter2),
       chapter3: Object.assign({ unlocked: chapter2.total > 0 && chapter2.done >= chapter2.total }, chapter3),
+      chapter4: Object.assign({ unlocked: chapter3.total > 0 && chapter3.done >= chapter3.total }, chapter4),
     };
   }
   function journalAchievements(state) {
@@ -1546,8 +1629,10 @@
     }).join("、");
   }
   function farmSeason(now) {
-    const m = new Date(now || Date.now()).getMonth();
-    return ["春", "春", "春", "夏", "夏", "夏", "秋", "秋", "秋", "冬", "冬", "冬"][m];
+    const seasons = SEASONS || [{ id: "春" }];
+    const span = SEASON_DURATION_MS || 1;
+    const idx = Math.floor(Math.max(0, now || 0) / span) % seasons.length;
+    return seasons[idx].id;
   }
   function affordableFeed(state, feedCost) {
     const items = (state.storage && state.storage.items) || {};
@@ -1557,7 +1642,7 @@
     opts = opts || {};
     now = now || Date.now();
     const limit = opts.limit || 3;
-    const season = opts.season || farmSeason(now);
+    const season = opts.season || currentSeason(state, now);
     const suggestions = [];
     const active = activePlotCount(state);
     const readyByCrop = {};
@@ -1815,7 +1900,7 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done,
+    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done,
     canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
     forageNodeDef, forageTile, forageNodeStatus, eastForageStatus, eastForageTargetTile,
     eastDeepStatus, canUnlockEastDeep, unlockEastDeep,
@@ -1828,6 +1913,7 @@
     // Stage 11：Farm Journal
     itemSourceHint, itemUsageSummary,
     journalCrops, journalProducts, journalForage, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalCollectibles, journalSummary,
+    currentSeason, updateSeason, harvestedSeasonCount, hasCollectedDuckEgg,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,

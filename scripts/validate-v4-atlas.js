@@ -49,11 +49,20 @@ const REQUIRED = {
     const cols = ["seed", "sprout", "young", "mature", "ready"];
     const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
   })(),
+  crops2: (() => {
+    const rows = ["bell_pepper", "potato", "grapes", "melon"];
+    const cols = ["seed", "sprout", "young", "mature", "ready"];
+    const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
+  })(),
   animals: (() => {
     const rows = ["chicken", "cow", "sheep", "bee"];
     const cols = ["idle_a", "idle_b", "walk_a", "walk_b"];
     const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
   })(),
+  animals_duck: [
+    "duck_idle_a", "duck_idle_b", "duck_walk_a", "duck_walk_b",
+    "duck_happy_a", "duck_happy_b", "duck_eating_a", "duck_eating_b",
+  ],
   buildings: ["farmhouse", "barn", "chicken_coop", "shop"],
   structures: ["oak"], // loose 抽取，只硬性要求 oak（tree 障礙用）；其餘裝飾為加分
   terrain: [].concat(
@@ -74,6 +83,7 @@ const REQUIRED = {
     const rows = ["egg", "milk", "wool", "honey"], cols = ["normal", "good", "premium"];
     const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
   })(),
+  product_quality_duck: ["duck_egg_normal", "duck_egg_good", "duck_egg_premium"],
   care_vfx: range(["feed_bits", "water_splash", "groom_sparkle", "affinity_heart", "quality_sparkle", "care_ready_ring"], 6),
   animal_status: range(["hungry", "thirsty", "needs_groom", "happy"], 4),
   animals_care: (() => {
@@ -81,11 +91,11 @@ const REQUIRED = {
     const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
   })(),
 };
-const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings", "structures",
-  "care_props", "animals_care"]);
+const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "crops2", "animals", "animals_duck", "buildings", "structures",
+  "care_props", "product_quality_duck", "animals_care"]);
 // 需做像素「非空白」檢查的 sheet（程序化 terrain / vfx 略過）
-const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "animals", "buildings",
-  "care_props", "product_quality", "animals_care"];
+const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "crops2", "animals", "animals_duck", "buildings",
+  "care_props", "product_quality", "product_quality_duck", "animals_care"];
 
 function server() {
   return new Promise((res) => {
@@ -139,7 +149,7 @@ async function pixelCheck(manifest) {
     for (const id of need) {
       const st = stats[id]; if (!st) continue; // 缺 frame 由結構檢查負責
       if (st.empty || st.cover < 0.012) fail(`${key}.${id}: 空白幀（覆蓋率 ${(st.cover * 100).toFixed(1)}%）`);
-      if (key === "crops" && st.edge > 0.06) fail(`${key}.${id}: 作物觸碰格邊被裁切（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
+      if ((key === "crops" || key === "crops2") && st.edge > 0.06) fail(`${key}.${id}: 作物觸碰格邊被裁切（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
       else if (st.edge > 0.18) warn(`${key}.${id}: 內容貼近格邊（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
     }
   }
@@ -180,10 +190,19 @@ async function main() {
   // renderer 解析：config 實際會用到的 crops/buildings/obstacles/stations frame
   try {
     const C = require(path.join(ROOT, "src", "config.js"));
-    const cropMap = JSON.parse(fs.readFileSync(path.join(V4, "crops-48.json"), "utf8")).frames;
     const stages = ["seed", "sprout", "young", "mature", "ready"];
-    for (const cid of Object.keys(C.CROPS)) for (const s of stages)
-      if (!cropMap[cid + "_" + s]) fail(`renderer: crops 缺遊戲作物 frame「${cid}_${s}」`);
+    const cropMaps = {};
+    for (const cid of Object.keys(C.CROPS)) {
+      const crop = C.CROPS[cid];
+      const sheetKey = crop.sheet || "crops";
+      if (!cropMaps[sheetKey]) {
+        const sheet = manifest.sheets[sheetKey];
+        if (!sheet) { fail(`renderer: crops 缺 sheet「${sheetKey}」`); continue; }
+        cropMaps[sheetKey] = JSON.parse(fs.readFileSync(path.join(ROOT, sheet.map), "utf8")).frames;
+      }
+      for (const s of stages)
+        if (!cropMaps[sheetKey][cid + "_" + s]) fail(`renderer: ${sheetKey} 缺遊戲作物 frame「${cid}_${s}」`);
+    }
     const bMap = JSON.parse(fs.readFileSync(path.join(V4, "buildings.json"), "utf8")).frames;
     for (const s of (C.STRUCTURES || [])) if (s.sheet === "buildings" && !bMap[s.frame]) fail(`renderer: buildings 缺結構 frame「${s.frame}」`);
     const propMap = JSON.parse(fs.readFileSync(path.join(ROOT, "assets/generated/v3/props-stations.json"), "utf8")).frames;
@@ -198,15 +217,39 @@ async function main() {
       else if (!propMap[o]) fail(`renderer: props 缺障礙 frame「${o}」`);
     }
     // Stage 7：品質分級圖示 / 動物 happy+eating 幀，config 實際用到的都要能解析
-    const qualMap = JSON.parse(fs.readFileSync(path.join(V4, "animal-products-quality-32.json"), "utf8")).frames;
+    const qualMaps = {};
     for (const pid of Object.keys(C.PRODUCTS)) {
       const p = C.PRODUCTS[pid]; const fid = p.baseProduct + "_" + p.quality;
-      if (!qualMap[fid]) fail(`renderer: product_quality 缺產品 frame「${fid}」（${pid}）`);
+      const sheetKey = p.qualitySheet || "product_quality";
+      if (!qualMaps[sheetKey]) {
+        const sheet = manifest.sheets[sheetKey];
+        if (!sheet) { fail(`renderer: product_quality 缺 sheet「${sheetKey}」`); continue; }
+        qualMaps[sheetKey] = JSON.parse(fs.readFileSync(path.join(ROOT, sheet.map), "utf8")).frames;
+      }
+      if (!qualMaps[sheetKey][fid]) fail(`renderer: ${sheetKey} 缺產品 frame「${fid}」（${pid}）`);
     }
-    const careAnimalMap = JSON.parse(fs.readFileSync(path.join(V4, "animals-care-48.json"), "utf8")).frames;
-    for (const aid of Object.keys(C.ANIMALS))
+    const animalMaps = {};
+    const animalFrames = (sheetKey) => {
+      if (!animalMaps[sheetKey]) {
+        const sheet = manifest.sheets[sheetKey];
+        if (!sheet) return null;
+        animalMaps[sheetKey] = JSON.parse(fs.readFileSync(path.join(ROOT, sheet.map), "utf8")).frames;
+      }
+      return animalMaps[sheetKey];
+    };
+    for (const aid of Object.keys(C.ANIMALS)) {
+      const a = C.ANIMALS[aid];
+      const baseKey = a.sheet || "animals";
+      const careKey = a.careSheet || "animals_care";
+      const base = animalFrames(baseKey);
+      const care = animalFrames(careKey);
+      if (!base) { fail(`renderer: animals 缺 sheet「${baseKey}」`); continue; }
+      if (!care) { fail(`renderer: animals_care 缺 sheet「${careKey}」`); continue; }
+      for (const suffix of ["idle_a", "idle_b", "walk_a", "walk_b"])
+        if (!base[aid + "_" + suffix]) fail(`renderer: ${baseKey} 缺動物 frame「${aid}_${suffix}」`);
       for (const suffix of ["happy_a", "happy_b", "eating_a", "eating_b"])
-        if (!careAnimalMap[aid + "_" + suffix]) fail(`renderer: animals_care 缺動物 frame「${aid}_${suffix}」`);
+        if (!care[aid + "_" + suffix]) fail(`renderer: ${careKey} 缺動物 frame「${aid}_${suffix}」`);
+    }
   } catch (e) { warn("renderer 解析檢查略過：" + e.message); }
 
   await pixelCheck(manifest);

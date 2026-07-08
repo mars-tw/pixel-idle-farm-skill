@@ -96,10 +96,14 @@ function main() {
     const C = require(path.join(ROOT, "src", "config.js"));
     const cropMap = JSON.parse(fs.readFileSync(path.join(V3, "crops-32.json"), "utf8")).frames;
     const stages = ["seed", "sprout", "young", "mature", "ready"];
-    for (const cid of Object.keys(C.CROPS)) for (const s of stages)
-      if (!cropMap[cid + "_" + s]) fail(`renderer: crops 缺遊戲作物 frame「${cid}_${s}」`);
+    for (const cid of Object.keys(C.CROPS)) {
+      const crop = C.CROPS[cid];
+      if (crop.sheet) continue; // R47 新作物走 v4 crops2，v3 舊 HUD sheet 不承載
+      for (const s of stages)
+        if (!cropMap[cid + "_" + s]) fail(`renderer: crops 缺遊戲作物 frame「${cid}_${s}」`);
+    }
     const propMap = JSON.parse(fs.readFileSync(path.join(V3, "props-stations.json"), "utf8")).frames;
-    const buildingFrame = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap", silo: "storage_crate", compostHeap: "compost_heap" };
+    const buildingFrame = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap", silo: "storage_crate", compostHeap: "compost_heap", duckPen: "chicken_coop", greenhouse: "compost_heap" };
     for (const t of Object.keys(buildingFrame)) if (!propMap[buildingFrame[t]]) fail(`renderer: props 缺建築 frame「${buildingFrame[t]}」`);
     // tree 為 Stage 4 障礙，改用 v4 structures:oak 呈現（不在 v3 props）；其餘障礙沿用 v3 props
     for (const o of Object.keys(C.OBSTACLES)) if (o !== "tree" && !propMap[o]) fail(`renderer: props 缺障礙 frame「${o}」`);

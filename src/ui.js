@@ -51,7 +51,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r46-20260707-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r47-20260708-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -142,6 +142,9 @@
     const wId = G.currentWeather(state, now());
     const w = window.WEATHER[wId];
     const weatherUnlocked = state.level >= window.WEATHER_UNLOCK_LEVEL;
+    const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
+    const sId = G.currentSeason ? G.currentSeason(state, now()) : "春";
+    const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
     $("resBar").innerHTML = `
       <div class="res coins"><span class="ic">🪙</span> ${fmtNum(state.coins)}</div>
       <div class="res level"><span class="ic">⭐</span>
@@ -150,6 +153,7 @@
       </div>
       <div class="res"><span class="ic">📦</span> ${used}<span class="sub">/${cap}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
+      ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub">${season.name}</span></div>` : ""}
       ${matChips()}`;
   }
   // 建材顯示（>0 才顯示，省空間）
@@ -270,7 +274,7 @@
       if (prog.wet && !prog.ready) { if (!wd) { wd = document.createElement("div"); wd.className = "wet-drop"; wd.textContent = "💧"; el.appendChild(wd); } wd.style.display = "block"; }
       else if (wd) wd.style.display = "none";
 
-      if (state.useSprites && spritesReady) {
+      if (state.useSprites && spritesReady && !crop.sheet) {
         sprite.style.display = "block"; emoji.style.display = "none";
         const x = (prog.stage / (CROP_SHEET.cols - 1)) * 100;
         const y = (crop.spriteRow / (CROP_SHEET.rows - 1)) * 100;
@@ -1236,7 +1240,7 @@
   const STAGE_NAME = ["seed", "sprout", "young", "mature", "ready"];
   // 遊戲建築 type → props atlas frame（v3 無 silo/bee_box 專屬圖，沿用近似物件）
   const BUILDING_FRAME = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap",
-    silo: "storage_crate", compostHeap: "compost_heap" };
+    silo: "storage_crate", compostHeap: "compost_heap", duckPen: "chicken_coop", greenhouse: "compost_heap" };
   // 障礙 → props frame（同名）
   const OBSTACLE_FRAME = { rock: "rock", stump: "stump", bush: "bush" };
   // ===== Stage 4：像素世界 + camera + 分層 y-sort 渲染器 =====
@@ -1432,8 +1436,10 @@
         const plot = state.plots[tile.plotIndex];
         if (!plot.cropId) continue;
         const prog = G.getCropProgress(state, plot, t);
+        const crop = window.CROPS[plot.cropId];
+        const sheet = (crop && crop.sheet) || "crops";
         const frame = plot.cropId + "_" + STAGE_NAME[prog.stage];
-        const el = addObjectPx(obDyn, "crops", frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop");
+        const el = addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop");
         if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; }
         if (prog.ready) addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
         else addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
@@ -1496,7 +1502,10 @@
         const status = G.animalStatus(state, a, t);
         const col = Math.floor(t / 320) % 2 === 0 ? "a" : "b";
         // 移動中沿用基礎 walk 幀；靜止時開心用 animals_care 開心姿態，其餘用基礎 idle 幀
-        const sheet = (!moving && status === "happy") ? "animals_care" : "animals";
+        const adef = window.ANIMALS[a.type] || {};
+        const baseSheet = adef.sheet || "animals";
+        const careSheet = adef.careSheet || "animals_care";
+        const sheet = (!moving && status === "happy") ? careSheet : baseSheet;
         const frame = a.type + "_" + (moving ? "walk_" : (status === "happy" ? "happy_" : "idle_")) + col;
         const el = addObjectPx(obDyn, sheet, frame, cx, baselineY, TILE * 0.82, "shadowed", 0, "animal");
         if (el) {
@@ -2444,6 +2453,7 @@
   function loop() {
     const t = now();
     const weatherChanged = G.updateWeather(state, t);
+    const seasonChanged = G.updateSeason ? G.updateSeason(state, t) : false;
     const helped = G.runHelperOnline(state, t);
     // 訂單過期補單
     G.refreshOrders(state, t);
@@ -2457,7 +2467,7 @@
       });
     }
     // 天氣自然到期改變時，資源列的天氣圖示也要跟著換，不然會跟地圖上的 #weatherLayer 對不上
-    if (helped.harvested > 0 || weatherChanged) { renderResBar(); }
+    if (helped.harvested > 0 || weatherChanged || seasonChanged) { renderResBar(); }
     updateFarm(t);
     updateMap(t);       // 地圖：作物/動物成熟
     renderSmartAssistant();
@@ -2494,6 +2504,7 @@
     recordOfflineSummary(summary);
     G.refreshOrders(state, now());
     G.updateWeather(state, now());
+    if (G.updateSeason) G.updateSeason(state, now());
 
     buildFarm(); buildMap();
     renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();

@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r46-20260707-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r46-20260707-1">
+<link rel="manifest" href="manifest.webmanifest?v=r47-20260708-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r47-20260708-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r46-20260707-1";
+  const VERSION = "r47-20260708-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -469,7 +469,7 @@
      的手足而非子元素，才不會被世界的 transform 一起搬移）*/
   #weatherLayer { position: absolute; inset: 0; z-index: 9700; pointer-events: none;
     opacity: 0; transition: opacity .6s ease; }
-  #weatherLayer.rain, #weatherLayer.sunny, #weatherLayer.windy, #weatherLayer.fog { opacity: 1; }
+  #weatherLayer.rain, #weatherLayer.sunny, #weatherLayer.windy, #weatherLayer.fog, #weatherLayer.snow, #weatherLayer.storm { opacity: 1; }
   #weatherLayer::before, #weatherLayer::after { content: ""; position: absolute; inset: 0; }
   #weatherLayer.rain::before { background-image: repeating-linear-gradient(115deg,
       rgba(214,232,255,.55) 0 2px, transparent 2px 34px); opacity: .38; animation: rainFall .5s linear infinite; }
@@ -495,6 +495,15 @@
     animation: fogDrift 8s ease-in-out infinite alternate; }
   #weatherLayer.fog::after { background: linear-gradient(180deg, rgba(225,230,215,.18), rgba(150,160,145,.12)); }
   @keyframes fogDrift { from { background-position: 0 0, -30px 0; } to { background-position: 0 0, 30px 0; } }
+  #weatherLayer.snow::before { background-image:
+      radial-gradient(circle at 12px 10px, rgba(255,255,255,.86) 0 1px, transparent 2px),
+      radial-gradient(circle at 34px 24px, rgba(235,248,255,.72) 0 1px, transparent 2px);
+    background-size: 48px 48px; animation: snowFall 1.8s linear infinite; }
+  #weatherLayer.snow::after { background: linear-gradient(180deg, rgba(225,240,255,.16), rgba(180,210,235,.18)); }
+  @keyframes snowFall { from { background-position: 0 0, 0 0; } to { background-position: 18px 64px, -12px 58px; } }
+  #weatherLayer.storm::before { background-image: repeating-linear-gradient(115deg,
+      rgba(150,205,255,.55) 0 2px, transparent 2px 11px); animation: rainFall .32s linear infinite; }
+  #weatherLayer.storm::after { background: linear-gradient(180deg, rgba(20,28,48,.25), rgba(12,18,34,.36)); mix-blend-mode: multiply; }
   html.perf-low #weatherLayer.rain::before { background-image: repeating-linear-gradient(115deg,
       rgba(214,232,255,.38) 0 1px, transparent 1px 58px); opacity: .24; animation: none; }
   html.perf-low #weatherLayer.sunny::after { background-image:
@@ -503,6 +512,9 @@
       transparent 0 54px, rgba(238,255,224,.20) 54px 56px, transparent 56px 112px); animation: none; }
   html.perf-low #weatherLayer.fog::before { background:
       linear-gradient(180deg, rgba(238,242,230,.14), rgba(238,242,230,.24)); animation: none; }
+  html.perf-low #weatherLayer.snow::before { background-image: radial-gradient(circle at 12px 10px, rgba(255,255,255,.7) 0 1px, transparent 2px); animation: none; }
+  html.perf-low #weatherLayer.storm::before { background-image: repeating-linear-gradient(115deg,
+      rgba(150,205,255,.45) 0 2px, transparent 2px 14px); animation: none; }
   @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
   /* 動作 VFX（世界內，澆水/塵土/種子/收成/產物環）*/
   #vfxLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9500; }
@@ -567,7 +579,7 @@
   .jd-row b { color: #6b5638; }
   .jd-row span, .jd-note, .sq-lore { overflow-wrap: anywhere; }
 
-  /* ===== R46 app-shell：body 不捲、區域內捲（9 視口矩陣零頁捲） =====
+  /* ===== R47 app-shell：body 不捲、區域內捲（9 視口矩陣零頁捲） =====
      原則：
      1. body 固定 100dvh 不產生頁級捲動；.wrap 是垂直 flex 殼。
      2. header 與底部工具列/系列 footer 常駐（flex 不縮），.main 佔剩餘高度。
@@ -736,10 +748,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r46-20260707-1"></script>
-<script src="src/game.js?v=r46-20260707-1"></script>
-<script src="src/state.js?v=r46-20260707-1"></script>
-<script src="src/atlas.js?v=r46-20260707-1"></script>
-<script src="src/ui.js?v=r46-20260707-1"></script>
+<script src="src/config.js?v=r47-20260708-1"></script>
+<script src="src/game.js?v=r47-20260708-1"></script>
+<script src="src/state.js?v=r47-20260708-1"></script>
+<script src="src/atlas.js?v=r47-20260708-1"></script>
+<script src="src/ui.js?v=r47-20260708-1"></script>
 </body>
 </html>

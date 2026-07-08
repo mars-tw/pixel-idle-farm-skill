@@ -30,8 +30,21 @@ const CROPS = {
   strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57" },
   corn:       { id: "corn",       name: "玉米",   growMs: 210000, seedCost: 20, yield: 4, sellValue: 12, xp: 12, unlockLevel: 4, spriteRow: 4, emoji: "🌽", color: "#f0c84a", season: "夏" },
   pumpkin:    { id: "pumpkin",    name: "南瓜",   growMs: 900000, seedCost: 85, yield: 3, sellValue: 80, xp: 55, unlockLevel: 5, spriteRow: 5, emoji: "🎃", color: "#e8821e" },
+  bell_pepper: { id: "bell_pepper", name: "甜椒", growMs: 360000, seedCost: 38, yield: 4, sellValue: 24, xp: 22, unlockLevel: 5, emoji: "🫑", color: "#4fae55", season: "夏", sheet: "crops2" },
+  potato:      { id: "potato",      name: "馬鈴薯", growMs: 480000, seedCost: 45, yield: 5, sellValue: 22, xp: 28, unlockLevel: 6, emoji: "🥔", color: "#b9834b", season: "春", sheet: "crops2" },
+  grapes:      { id: "grapes",      name: "葡萄", growMs: 720000, seedCost: 72, yield: 4, sellValue: 55, xp: 42, unlockLevel: 7, emoji: "🍇", color: "#7c4aa6", season: "秋", sheet: "crops2" },
+  melon:       { id: "melon",       name: "溫室甜瓜", growMs: 840000, seedCost: 90, yield: 3, sellValue: 90, xp: 58, unlockLevel: 8, emoji: "🍈", color: "#8fcf6a", season: "冬", sheet: "crops2" },
 };
 const CROP_SHEET = { cols: 5, rows: 6, stages: 5 }; // crop-growth.png 版面
+
+const SEASONS = [
+  { id: "春", name: "春季", icon: "🌸" },
+  { id: "夏", name: "夏季", icon: "☀️" },
+  { id: "秋", name: "秋季", icon: "🍂" },
+  { id: "冬", name: "冬季", icon: "❄️" },
+];
+const SEASON_DURATION_MS = 20 * 60 * 1000;
+const SEASON_UNLOCK_LEVEL = 6;
 
 // ===== 等級曲線（累計 XP 門檻）=====
 // 解鎖節奏對齊 game-design：碼表 lv2 約 20 秒、lv5 約 8 分鐘內可達
@@ -53,6 +66,7 @@ const UPGRADES = {
       { cost: 40,   value: 8 },
       { cost: 140,  value: 10 },
       { cost: 420,  value: 12 },
+      { cost: 1100, value: 12 },
     ],
   },
   growthSpeed: {
@@ -62,6 +76,7 @@ const UPGRADES = {
       { cost: 220,  value: 0.8 },
       { cost: 650,  value: 0.7 },
       { cost: 1800, value: 0.6 },
+      { cost: 4200, value: 0.52 },
     ],
   },
   sellBonus: {
@@ -71,6 +86,7 @@ const UPGRADES = {
       { cost: 260,  value: 0.30 },
       { cost: 720,  value: 0.50 },
       { cost: 2000, value: 0.80 },
+      { cost: 4800, value: 1.05 },
     ],
   },
   storageLevel: {
@@ -98,6 +114,7 @@ const ORDER_RARITY = {
   common:   { label: "一般", payMult: 1.35, xpMult: 1.0, weight: 60, color: "#9aa7b4" },
   good:     { label: "優質", payMult: 1.7,  xpMult: 1.4, weight: 30, color: "#3b9ae0" },
   premium:  { label: "高級", payMult: 2.2,  xpMult: 1.9, weight: 10, color: "#b06ae0" },
+  festival: { label: "豐年祭", payMult: 2.8, xpMult: 2.3, weight: 5, color: "#d88b2a" },
 };
 const ORDER_STREAK_BONUS = 0.05; // 每連續完成一單，獎金 +5%（上限見 game.js）
 const ORDER_STREAK_CAP = 1.0;    // 連單獎金上限 +100%
@@ -109,6 +126,8 @@ const WEATHER = {
   sunny: { id: "sunny", name: "豔陽", icon: "☀️", growthMul: 1.0,  sellMul: 1.25 }, // 售價提升
   windy: { id: "windy", name: "微風", icon: "🍃", growthMul: 0.9,  sellMul: 1.05 }, // 小幅成長與售價加成
   fog:   { id: "fog",   name: "晨霧", icon: "🌫️", growthMul: 1.15, sellMul: 1.10 }, // 成長稍慢、售價稍高
+  snow:  { id: "snow",  name: "降雪", icon: "🌨️", growthMul: 1.25, sellMul: 1.18 }, // 成長放慢、冬季貨價較高
+  storm: { id: "storm", name: "暴風雨", icon: "⛈️", growthMul: 0.82, sellMul: 0.95 }, // 小幅加速但市集人流變少
 };
 const WEATHER_UNLOCK_LEVEL = 5;
 const WEATHER_DURATION_MS = 10 * 60 * 1000; // 每段天氣 10 分鐘
@@ -119,6 +138,9 @@ const ACHIEVEMENTS = {
   order10:      { name: "可靠農戶", desc: "完成 10 筆訂單", icon: "📜" },
   coins1k:      { name: "小富農",   desc: "累計賺得 1000 金幣", icon: "💰" },
   allCrops:     { name: "全作物大師", desc: "解鎖全部作物", icon: "🏆" },
+  duckKeeper:   { name: "鴨舍新聲", desc: "收集任一品質的鴨蛋", icon: "🦆" },
+  seasonalTable:{ name: "四季餐桌", desc: "收成四種季節作物", icon: "🍽️" },
+  festivalDeal: { name: "豐年祭供應商", desc: "完成一張豐年祭訂單", icon: "🏮" },
 };
 
 // ===== MVP2：動物產品（可賣、可入訂單，與作物同存 storage.items）=====
@@ -133,6 +155,7 @@ function buildProducts() {
     milk:  { name: "牛奶", emoji: "🥛", sellValue: 18, source: "cow" },
     wool:  { name: "羊毛", emoji: "🧶", sellValue: 24, source: "sheep" },
     honey: { name: "蜂蜜", emoji: "🍯", sellValue: 15, source: "bee" },
+    duck_egg: { name: "鴨蛋", emoji: "🥚", sellValue: 9, source: "duck", qualitySheet: "product_quality_duck" },
   };
   const out = {};
   for (const bid of Object.keys(base)) {
@@ -141,6 +164,7 @@ function buildProducts() {
       const id = q === "normal" ? bid : bid + "_" + q;
       out[id] = { id, name: QUALITY_LABEL[q] + b.name, emoji: b.emoji, source: b.source,
         sellValue: Math.round(b.sellValue * QUALITY_SELL_MUL[q]), baseProduct: bid, quality: q };
+      if (b.qualitySheet) out[id].qualitySheet = b.qualitySheet;
     }
   }
   return out;
@@ -155,6 +179,8 @@ const FORAGE_ITEMS = {
   river_mint:    { id: "river_mint",    name: "溪畔薄荷", emoji: "🍃", sellValue: 7, region: "east", season: "春" },
   mooncap_spore: { id: "mooncap_spore", name: "月帽菇孢", emoji: "🌙", sellValue: 18, region: "east_deep", season: "冬" },
   amber_resin:   { id: "amber_resin",   name: "古樹琥珀脂", emoji: "🟠", sellValue: 24, region: "east_deep", season: "夏" },
+  forest_chestnut: { id: "forest_chestnut", name: "東林栗子", emoji: "🌰", sellValue: 20, region: "east_deep", season: "秋" },
+  frost_cherry:    { id: "frost_cherry",    name: "霜櫻果", emoji: "🍒", sellValue: 28, region: "east_deep", season: "冬" },
 };
 const FORAGE_NODE_COOLDOWN_MS = 10 * 60 * 1000;
 const EAST_DEEP_FORAGE_COOLDOWN_MS = 30 * 60 * 1000;
@@ -171,6 +197,10 @@ const FORAGE_NODES = [
     desc: "東林深處夜色較重的菇環，恢復很慢。", cooldownMs: EAST_DEEP_FORAGE_COOLDOWN_MS, requiresFlag: "eastDeepUnlocked" },
   { id: "deep_amber_root", itemId: "amber_resin", x: 21, y: 10, yield: 1, name: "古樹琥珀根",
     desc: "老樹根部滲出的琥珀色樹脂，少量即可入委託。", cooldownMs: EAST_DEEP_FORAGE_COOLDOWN_MS, requiresFlag: "eastDeepUnlocked" },
+  { id: "deep_chestnut_bush", itemId: "forest_chestnut", x: 20, y: 8, yield: 1, name: "東林栗木叢",
+    desc: "深處草地旁的秋栗，殼厚但香氣足。", cooldownMs: EAST_DEEP_FORAGE_COOLDOWN_MS, requiresFlag: "eastDeepUnlocked" },
+  { id: "deep_frost_cherry", itemId: "frost_cherry", x: 19, y: 10, yield: 1, name: "霜櫻果叢",
+    desc: "冬霜後才轉甜的小果，採收後要慢慢恢復。", cooldownMs: EAST_DEEP_FORAGE_COOLDOWN_MS, requiresFlag: "eastDeepUnlocked" },
 ];
 const EAST_FORAGE_REPORT = {
   npcId: "merchant",
@@ -188,6 +218,13 @@ const COLLECTIBLES = {
     emoji: "📜",
     source: "解鎖東林深處",
     desc: "古樹根旁留下的年輪拓印，只作收藏紀錄，不產生收益。",
+  },
+  festival_lantern: {
+    id: "festival_lantern",
+    name: "豐年祭小燈籠",
+    emoji: "🏮",
+    source: "完成豐年祭訂單",
+    desc: "祭典攤位留下的小燈籠，象徵農場能供應四季物產。",
   },
 };
 
@@ -245,8 +282,14 @@ const BUILDINGS = {
   beeBox:      { id: "beeBox", name: "蜂箱", emoji: "🐝", unlockLevel: 6,
                  cost: { coins: 320, wood: 6 }, effect: { unlockAnimal: ["bee"], capacity: 2, growthAura: 0.92 },
                  desc: "產蜂蜜 + 鄰近作物成長 ×0.92" },
+  duckPen:     { id: "duckPen", name: "鴨舍", emoji: "🦆", unlockLevel: 6,
+                 cost: { coins: 380, wood: 8, stone: 2 }, effect: { unlockAnimal: ["duck"], capacity: 3 },
+                 desc: "解鎖鴨，生產鴨蛋（最多 3 隻）" },
+  greenhouse:  { id: "greenhouse", name: "溫室", emoji: "🏡", unlockLevel: 8,
+                 cost: { coins: 760, wood: 10, stone: 6 }, effect: { growthAura: 0.88 },
+                 desc: "全年控溫，作物成長時間 ×0.88" },
 };
-const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "beeBox"];
+const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "beeBox", "duckPen", "greenhouse"];
 
 // ===== MVP2：動物（蓋家 → 計時生產 → 收集 → 入訂單/賣出；可餵食加速）=====
 // produceMs 生產週期、feedCost 餵食成本（用作物加速、立即產出）、unlockLevel 解鎖等級
@@ -255,6 +298,7 @@ const ANIMALS = {
   cow:     { id: "cow",     name: "牛",  emoji: "🐄", product: "milk",  produceMs: 20 * 60 * 1000, home: "barn",        unlockLevel: 5, cost: 220, feedCost: { carrot: 2 } },
   sheep:   { id: "sheep",   name: "羊",  emoji: "🐑", product: "wool",  produceMs: 30 * 60 * 1000, home: "barn",        unlockLevel: 5, cost: 180, feedCost: { carrot: 3 } },
   bee:     { id: "bee",     name: "蜜蜂", emoji: "🐝", product: "honey", produceMs: 15 * 60 * 1000, home: "beeBox",      unlockLevel: 6, cost: 120, feedCost: { wheat: 3 } },
+  duck:    { id: "duck",    name: "鴨",  emoji: "🦆", product: "duck_egg", produceMs: 10 * 60 * 1000, home: "duckPen", unlockLevel: 6, cost: 95, feedCost: { potato: 2 }, sheet: "animals_duck", careSheet: "animals_duck" },
 };
 
 // ===== 互動工具（roadmap：明確工具模式，點擊行為依工具改變）=====
@@ -357,25 +401,29 @@ const NPCS = {
     ch1done: ["麥香又飄回鎮上了，大家都在談論你。", "東邊那座橋年久失修——把它修好，就能踏進東林。"],
     bridge:  ["橋通了！東林的古樹是晨光鎮的老守護。", "去樹下看看，聽說藏著你祖母留下的舊物。"],
     ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"],
-    ch3done: ["作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。", "以後我這偶爾會帶點小委託來，別嫌我麻煩啊。"] } },
+    ch3done: ["作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。", "以後我這偶爾會帶點小委託來，別嫌我麻煩啊。"],
+    ch4done: ["豐年祭辦得穩，四季物產也站上檯面了。", "晨光鎮今年的招牌，就靠你的農場撐起來。"] } },
   merchant: { id: "merchant", name: "商人 蘿拉", title: "市集商人", frame: "merchant", lines: {
     start:   ["新鮮貨色看一下？等你有了作物，市集隨時收購。"],
     ch1done: ["你的麥子品質不錯，訂單看板上的客人會喜歡。"],
     bridge:  ["東林通了？那邊的野花蜜，以後說不定能進貨。"],
     ch2done: ["生意越來越好，多虧你把路打通了。"],
-    ch3done: ["聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！", "手頭有好貨的話，記得留一份給我試賣。"] } },
+    ch3done: ["聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！", "手頭有好貨的話，記得留一份給我試賣。"],
+    ch4done: ["四季貨架終於補齊，甜椒、葡萄和鴨蛋都能掛上祭典牌。", "豐年祭那張訂單，我會替你放在市集最顯眼的位置。"] } },
   elder: { id: "elder", name: "老農 班伯", title: "隔壁老農", frame: "elder", lines: {
     start:   ["雞舍那隻母雞養得還行，記得常餵牠。"],
     ch1done: ["想要更多蛋奶？把動物顧好，產量自然上來。"],
     bridge:  ["東林的草肥，以後放羊吃草最好。"],
     ch2done: ["下次該認真養群動物了——親密度高，產物品質才好。"],
-    ch3done: ["照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。", "手頭若有多的產物，拿來讓我瞧瞧成果也好。"] } },
+    ch3done: ["照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。", "手頭若有多的產物，拿來讓我瞧瞧成果也好。"],
+    ch4done: ["你連鴨都照顧得服服貼貼，這座農場真的成氣候了。", "季節會輪，手藝不能停，記得讓田地跟著天時走。"] } },
   child: { id: "child", name: "孩童 圖圖", title: "鎮上孩童", frame: "child", lines: {
     start:   ["你會種田嗎？教教我嘛！"],
     ch1done: ["哇，你收成了好多麥子！"],
     bridge:  ["橋修好了！我可以去河對面玩了嗎？"],
     ch2done: ["東林的古樹好大喔，你看過了嗎？"],
-    ch3done: ["我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？"] } },
+    ch3done: ["我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？"],
+    ch4done: ["豐年祭的燈籠超漂亮！下次我也要幫忙掛。"] } },
 };
 const NPC_PLACEMENT = [
   { type: "mayor",    x: 10, y: 4, facing: "down" },
@@ -389,16 +437,16 @@ const NPC_PLACEMENT = [
 // 確保永遠不會要求玩家還沒解鎖/還沒收集過的品項（沿用 D 系統的發現閥門）。
 const NPC_REQUEST_COOLDOWN_MS = 8 * 60 * 1000; // 交付後多久可再接下一張委託
 const NPC_REQUESTS = {
-  mayor:    { pool: ["wheat", "carrot", "tomato", "corn"], rewardMul: 1.0,
+  mayor:    { pool: ["wheat", "carrot", "tomato", "corn", "bell_pepper", "potato", "melon"], rewardMul: 1.0,
     flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？"],
     flavorDone:  ["有你真好，晨光鎮又熱鬧一場。"] },
-  merchant: { pool: ["strawberry", "corn", "pumpkin", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "egg_good", "egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
+  merchant: { pool: ["strawberry", "corn", "pumpkin", "bell_pepper", "potato", "grapes", "melon", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "egg_premium", "duck_egg_good", "duck_egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
     flavorOffer: ["市集缺貨，手頭有{item}嗎？"],
     flavorDone:  ["生意興隆，多虧你這批貨。"] },
-  elder:    { pool: ["egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
+  elder:    { pool: ["egg", "duck_egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "duck_egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
     flavorOffer: ["幫我張羅點{item}，我拿去燉湯。"],
     flavorDone:  ["這品質，照顧得很用心啊。"] },
-  child:    { pool: ["wheat", "carrot", "corn", "strawberry", "wild_berry"], rewardMul: 0.85,
+  child:    { pool: ["wheat", "carrot", "corn", "strawberry", "grapes", "wild_berry", "frost_cherry"], rewardMul: 0.85,
     flavorOffer: ["可以給我一點{item}嗎？我肚子餓了！"],
     flavorDone:  ["謝謝你！好好吃！"] },
 };
@@ -541,14 +589,25 @@ const QUESTS = {
     desc: "親密度夠高時收集，產物品質會提升。", next: "deliver_quality_order",
     objective: "collect_quality", marker: { kind: "structure", id: "coop" }, chapter: 3 },
   deliver_quality_order: { id: "deliver_quality_order", title: "賣出或交付優質產物",
-    desc: "把優質/頂級產物直售或交付訂單，讓晨光鎮嚐嚐用心照顧的成果。", next: null,
+    desc: "把優質/頂級產物直售或交付訂單，讓晨光鎮嚐嚐用心照顧的成果。", next: "prepare_four_seasons",
     objective: "deliver_quality", chapter: 3 },
+  // ===== 第四章：豐年祭・四季物產（R47）=====
+  prepare_four_seasons: { id: "prepare_four_seasons", title: "備齊四季物產",
+    desc: "至少收成四種不同季節的作物，讓祭典攤位有春夏秋冬的代表。",
+    next: "welcome_ducks", objective: "harvest_four_seasons", marker: { kind: "soil" }, chapter: 4 },
+  welcome_ducks: { id: "welcome_ducks", title: "迎接鴨舍新成員",
+    desc: "興建鴨舍、飼養鴨，收集一顆鴨蛋作為新物產樣品。",
+    next: "finish_festival_order", objective: "collect_duck_egg", marker: { kind: "building", type: "duckPen" }, chapter: 4 },
+  finish_festival_order: { id: "finish_festival_order", title: "完成豐年祭訂單",
+    desc: "交付一張豐年祭訂單，讓四季物產正式登上晨光鎮祭典。",
+    next: null, objective: "festival_order", marker: { kind: "station", type: "order_board" }, chapter: 4 },
 };
 const FIRST_QUEST = "intro_reopen_farm";
 // 章節任務分組（故事面板：第一章完成度 X/6，第二章 X/2、第三章 X/5 另計）
 const PROLOGUE_QUESTS = ["intro_reopen_farm", "plant_wheat", "first_water", "first_harvest", "first_delivery", "clear_old_path"];
 const CHAPTER2_QUESTS = ["repair_bridge", "explore_new_area", "discover_east_forage", "collect_east_forage", "report_east_forage"];
 const CHAPTER3_QUESTS = ["learn_animal_care", "feed_care_animal", "raise_affinity_happy", "collect_quality_product", "deliver_quality_order"];
+const CHAPTER4_QUESTS = ["prepare_four_seasons", "welcome_ducks", "finish_festival_order"];
 
 const MAP_DEFAULT = { width: MAP_W, height: MAP_H };
 // 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
@@ -556,7 +615,8 @@ const FACING_ROW = { down: 0, left: 1, right: 2, up: 3 };
 
 // ===== 匯出（瀏覽器掛 window、Node 用 module.exports）=====
 const CONFIG = {
-  GAME, CROPS, CROP_SHEET, LEVEL_XP, levelFromXp, xpForLevel,
+  GAME, CROPS, CROP_SHEET, SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL,
+  LEVEL_XP, levelFromXp, xpForLevel,
   UPGRADES, UPGRADE_ORDER, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
   WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
   PRODUCTS, FORAGE_ITEMS, FORAGE_NODES, FORAGE_NODE_COOLDOWN_MS, EAST_DEEP_FORAGE_COOLDOWN_MS,
@@ -567,7 +627,7 @@ const CONFIG = {
   MAP_LAYOUT, TERRAIN_CODE, OBSTACLE_CODE, PLAYER_START, MOVE_MS, FACING_ROW,
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
-  EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS,
+  EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS, CHAPTER4_QUESTS,
   NPCS, NPC_PLACEMENT, NPC_REQUESTS, NPC_REQUEST_COOLDOWN_MS, NPC_SIDE_QUESTS,
   QUALITY_TIERS, QUALITY_SELL_MUL, QUALITY_LABEL,
   AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,

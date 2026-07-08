@@ -506,7 +506,7 @@ console.log("\n== 13d. Stage 7：第三章任務鏈（老農對話 → 照護 �
   G.sellItem(st, qualKey, st.storage.items[qualKey], lastT);
   assert((st.stats.qualitySold || 0) > 0, "賣出優質品後 qualitySold 計數增加");
   const adv4 = G.syncStoryProgress(st, null, lastT);
-  assert(adv4.ok && st.story.questId === null, "賣出優質品後完成第三章任務鏈");
+  assert(adv4.ok && st.story.questId === "prepare_four_seasons", "R47 routes completed chapter 3 into chapter 4");
 }
 
 console.log("\n== 13e. Stage 10.0：NPC 對話階段補上 ch3done（第三章動物照護全完成後）==");
@@ -918,6 +918,81 @@ console.log("\n== 17. R23：智慧助手 / 離線摘要 / 安全存檔 ==");
   assert(badState && badState.ok === false && store[C.GAME.saveKey] === savedRaw,
     "safeSave 遇到壞 state 不覆蓋既有存檔");
   if (oldLs) global.localStorage = oldLs; else delete global.localStorage;
+}
+
+console.log("\n== 18. R47: four-season crops, ducks, festival story ==");
+{
+  assert(C.CROPS.bell_pepper.sheet === "crops2" && C.CROPS.potato.sheet === "crops2"
+    && C.CROPS.grapes.sheet === "crops2" && C.CROPS.melon.sheet === "crops2",
+    "R47 crops route to crops2 sheet");
+  assert(Object.keys(C.CROPS).length === 10, "crop config includes 10 crops after R47");
+  assert(C.ANIMALS.duck.sheet === "animals_duck" && C.ANIMALS.duck.careSheet === "animals_duck",
+    "duck uses animals_duck for base and care frames");
+  assert(C.PRODUCTS.duck_egg.qualitySheet === "product_quality_duck"
+    && C.PRODUCTS.duck_egg_good.qualitySheet === "product_quality_duck"
+    && C.PRODUCTS.duck_egg_premium.qualitySheet === "product_quality_duck",
+    "duck egg quality products route to product_quality_duck");
+
+  const duckSt = S.defaultState(T0);
+  duckSt.level = 8; duckSt.coins = 9999; duckSt.materials.wood = 20; duckSt.materials.stone = 20;
+  duckSt.storage.items.potato = 10;
+  const duckPen = G.buildBuilding(duckSt, firstBuildable(duckSt).id, "duckPen", T0);
+  assert(duckPen.ok, "duckPen can be built at level 8");
+  const duck = G.animalsInHome(duckSt, duckPen.building.id).find((a) => a.type === "duck");
+  assert(!!duck, "duckPen auto-adds one duck");
+  const t1 = T0 + C.CARE_COOLDOWN_MS + 1;
+  const f1 = G.feedAnimal(duckSt, duck.id, t1);
+  const w1 = G.waterAnimal(duckSt, duck.id, t1 + 1);
+  const g1 = G.groomAnimal(duckSt, duck.id, t1 + 2);
+  const f2 = G.feedAnimal(duckSt, duck.id, t1 + C.CARE_COOLDOWN_MS + 3);
+  assert(f1.ok && w1.ok && g1.ok && f2.ok && f2.product === "duck_egg_premium",
+    "duck care chain reaches premium duck egg");
+  duckSt.orders = [{ id: "duck_quality_order", wants: { duck_egg_premium: 1 }, rarity: "common", rewardCoins: 42, rewardXp: 8, expiresAt: T0 + 999999 }];
+  const soldBefore = duckSt.stats.qualitySold || 0;
+  const duckOrder = G.fulfillOrder(duckSt, "duck_quality_order", T0 + 999, () => 0.1);
+  assert(duckOrder.ok && (duckSt.stats.qualitySold || 0) > soldBefore, "duck premium egg can fulfill quality order");
+  assert(duckSt.achievements.duckKeeper === true, "duckKeeper achievement unlocks after duck egg collection");
+
+  const festivalSt = S.defaultState(T0);
+  festivalSt.level = 8; festivalSt.coins = 9999;
+  const festivalSeq = [0.99, 0.99, 0.0, 0.0, 0.22, 0.0, 0.44, 0.0];
+  let festivalIx = 0;
+  const festivalOrder = G.makeOrder(festivalSt, T0, () => festivalSeq[festivalIx++ % festivalSeq.length], "r47");
+  assert(festivalOrder.rarity === "festival" && Object.keys(festivalOrder.wants).length >= 2
+    && Object.keys(festivalOrder.wants).length <= 3,
+    "festival generated order requests 2-3 item kinds");
+
+  const storySt = S.defaultState(T0);
+  storySt.level = 8; storySt.coins = 9999;
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS)
+    .forEach((id) => (storySt.story.completed[id] = true));
+  storySt.story.questId = "prepare_four_seasons";
+  ["potato", "bell_pepper", "grapes", "melon"].forEach((id) => (storySt.stats.harvested[id] = 1));
+  const ch4a = G.syncStoryProgress(storySt, null, T0);
+  assert(ch4a.ok && ch4a.completedIds.includes("prepare_four_seasons") && storySt.story.questId === "welcome_ducks",
+    "chapter 4 advances after harvesting all four seasons");
+  storySt.stats.collected.duck_egg = 1;
+  const ch4b = G.syncStoryProgress(storySt, null, T0);
+  assert(ch4b.ok && ch4b.completedIds.includes("welcome_ducks") && storySt.story.questId === "finish_festival_order",
+    "chapter 4 advances after collecting duck egg");
+  storySt.storage.items.duck_egg = 2;
+  storySt.storage.items.potato = 1;
+  storySt.orders = [{ id: "festival_finish", wants: { duck_egg: 2, potato: 1 }, rarity: "festival", rewardCoins: 120, rewardXp: 20, expiresAt: T0 + 999999 }];
+  const ch4c = G.fulfillOrder(storySt, "festival_finish", T0 + 1, () => 0.1);
+  assert(ch4c.ok && ch4c.story && ch4c.story.completedIds.includes("finish_festival_order") && G.chapter4Done(storySt),
+    "festival order completes chapter 4");
+  assert(G.npcPhase(storySt) === "ch4done", "npc phase reaches ch4done");
+  assert(storySt.collections.festival_lantern === true, "festival order grants festival lantern collectible");
+  assert(storySt.achievements.seasonalTable && storySt.achievements.festivalDeal,
+    "seasonalTable and festivalDeal achievements unlock");
+
+  const journal = G.journalSummary(storySt, T0);
+  assert(journal.achievements.length === Object.keys(C.ACHIEVEMENTS).length, "journal achievement count follows config");
+  assert(journal.collectibles.length === Object.keys(C.COLLECTIBLES).length
+    && journal.collectibles.find((c) => c.id === "festival_lantern").unlocked === true,
+    "journal collectible count includes unlocked festival lantern");
+  assert(journal.chapters.chapter4.done === C.CHAPTER4_QUESTS.length && journal.chapters.chapter4.unlocked === true,
+    "journal chapter 4 completion is tracked");
 }
 
 console.log("");

@@ -323,6 +323,81 @@ function genTerrain(){
   return {png:c.toDataURL("image/png"),frames,meta:{w:512,h:512,frameW:32,frameH:32,cols:16,rows:16}};
 }
 
+// ---- R47：程序化像素 sheet（透明背景、全像素不抗鋸齒，alpha 僅 0/255）----
+function genCrops2(){
+  const cols=5,rows=4,fw=48,fh=48,anchor=[0.5,0.9];
+  const c=cv(cols*fw,rows*fh),x=c.getContext("2d");x.imageSmoothingEnabled=false;
+  const frames={}, cropRows=["bell_pepper","potato","grapes","melon"], stageCols=["seed","sprout","young","mature","ready"];
+  const putFrame=(r,col,draw)=>{const X=col*fw,Y=r*fh;draw(X,Y);frames[cropRows[r]+"_"+stageCols[col]]={x:X,y:Y,w:fw,h:fh,anchor};};
+  const soil=(X,Y,w)=>{rect(x,"#6f4a2b",X+24-(w>>1),Y+39,w,3);rect(x,"#553a22",X+25-(w>>1),Y+41,w-2,1);};
+  const leaf=(X,Y,dx,dy,w,h,c1)=>{rect(x,c1,X+24+dx,Y+36-dy,w,h);rect(x,"#3e7d32",X+24+dx,Y+36-dy+h-1,w,1);};
+  const stem=(X,Y,h)=>rect(x,"#4f8a2c",X+23,Y+38-h,3,h);
+  const seed=(X,Y,c1)=>{soil(X,Y,12);rect(x,c1,X+22,Y+35,5,4);rect(x,"#f1d38a",X+23,Y+34,3,1);};
+  const sprout=(X,Y)=>{soil(X,Y,15);stem(X,Y,9);leaf(X,Y,-8,10,7,4,"#77b94a");leaf(X,Y,3,12,8,4,"#8bcb56");};
+  const young=(X,Y)=>{soil(X,Y,20);stem(X,Y,17);leaf(X,Y,-13,19,11,5,"#6eae43");leaf(X,Y,3,22,12,5,"#89c957");leaf(X,Y,-5,13,10,4,"#5f9c33");};
+  const mature=(X,Y)=>{soil(X,Y,25);stem(X,Y,25);leaf(X,Y,-17,26,15,6,"#5f9c33");leaf(X,Y,2,29,17,6,"#86cb52");leaf(X,Y,-10,20,14,5,"#6eae43");leaf(X,Y,6,17,12,5,"#75b94b");};
+  for(let r=0;r<rows;r++){
+    putFrame(r,0,(X,Y)=>seed(X,Y,["#d94d38","#9b7344","#6e4aa8","#c9d66a"][r]));
+    putFrame(r,1,sprout);
+    putFrame(r,2,young);
+    putFrame(r,3,(X,Y)=>{mature(X,Y); if(r===2){rect(x,"#7348a8",X+18,Y+24,4,4);rect(x,"#5f358d",X+22,Y+27,4,4);} if(r===3){rect(x,"#6faa42",X+17,Y+30,9,6);rect(x,"#d8ed8a",X+19,Y+31,2,2);}});
+    putFrame(r,4,(X,Y)=>{
+      mature(X,Y);
+      if(r===0){
+        rect(x,"#d94d38",X+18,Y+24,8,10);rect(x,"#b9382d",X+18,Y+31,8,4);rect(x,"#f06b45",X+20,Y+25,3,3);
+        rect(x,"#f0c64e",X+28,Y+27,7,9);rect(x,"#c99b35",X+28,Y+33,7,3);rect(x,"#fff0a0",X+29,Y+28,2,2);
+      } else if(r===1){
+        rect(x,"#b9834b",X+15,Y+34,9,6);rect(x,"#8d6338",X+16,Y+39,7,2);rect(x,"#dfbd83",X+18,Y+35,2,1);
+        rect(x,"#c08a54",X+27,Y+32,8,7);rect(x,"#8d6338",X+29,Y+38,5,2);rect(x,"#e0c18b",X+29,Y+33,2,1);
+      } else if(r===2){
+        const pts=[[16,24],[20,24],[24,25],[18,28],[22,29],[26,30],[20,33],[24,34]];
+        for(const [gx,gy] of pts){rect(x,"#7042a0",X+gx,Y+gy,5,5);rect(x,"#b891d8",X+gx+1,Y+gy+1,1,1);}
+        rect(x,"#684225",X+18,Y+20,15,2);
+      } else {
+        rect(x,"#8fcf6a",X+14,Y+28,19,12);rect(x,"#5f9d45",X+15,Y+36,17,3);rect(x,"#d8ed8a",X+19,Y+30,5,3);
+        rect(x,"#6faa42",X+16,Y+32,16,1);rect(x,"#6faa42",X+18,Y+35,13,1);
+      }
+    });
+  }
+  return {png:c.toDataURL("image/png"),frames,meta:{w:cols*fw,h:rows*fh,frameW:fw,frameH:fh,cols,rows}};
+}
+
+function genDuckAnimals(){
+  const cols=4,rows=2,fw=48,fh=48,anchor=[0.5,0.9];
+  const c=cv(cols*fw,rows*fh),x=c.getContext("2d");x.imageSmoothingEnabled=false;
+  const frames={}, names=[["duck_idle_a","duck_idle_b","duck_walk_a","duck_walk_b"],["duck_happy_a","duck_happy_b","duck_eating_a","duck_eating_b"]];
+  const duck=(X,Y,opt)=>{
+    opt=opt||{};const bob=opt.bob||0,wing=opt.wing||0,eat=opt.eat||0,happy=!!opt.happy;
+    rect(x,"#e6b15a",X+17,Y+33+bob,6,3);rect(x,"#d98a35",X+16,Y+36+bob,7,2);
+    rect(x,"#e6b15a",X+30,Y+33-bob,7,3);rect(x,"#d98a35",X+31,Y+36-bob,7,2);
+    rect(x,"#f4d46a",X+12,Y+21+bob,21,13);rect(x,"#e4b94e",X+14,Y+31+bob,18,4);
+    rect(x,"#fff4b0",X+17,Y+22+bob,7,3);rect(x,"#d99f3f",X+18,Y+30+bob,10,2);
+    rect(x,wing?"#e2ad47":"#efc85b",X+16,Y+26+bob,10,6);rect(x,"#c8913a",X+17,Y+31+bob,8,1);
+    rect(x,"#f6dc7a",X+29,Y+16+bob,10,10);rect(x,"#e9bd59",X+31,Y+24+bob,8,3);
+    rect(x,"#f08a3c",X+38,Y+20+bob+eat,6,4);rect(x,"#b65b2b",X+42,Y+22+bob+eat,2,1);
+    rect(x,"#303040",X+35,Y+19+bob,2,2);
+    if(happy){rect(x,"#fff2a8",X+28,Y+13+bob,3,2);rect(x,"#fff2a8",X+36,Y+12+bob,2,2);}
+    if(eat){rect(x,"#77b94a",X+39,Y+29,6,3);rect(x,"#5f9c33",X+42,Y+27,2,3);}
+  };
+  const opts=[[{}, {bob:-1,wing:1}, {bob:1,wing:1}, {bob:-1}], [{happy:true,bob:-1}, {happy:true,wing:1}, {eat:1,bob:1}, {eat:2,wing:1}]];
+  for(let r=0;r<rows;r++)for(let col=0;col<cols;col++){const X=col*fw,Y=r*fh;duck(X,Y,opts[r][col]);frames[names[r][col]]={x:X,y:Y,w:fw,h:fh,anchor};}
+  return {png:c.toDataURL("image/png"),frames,meta:{w:cols*fw,h:rows*fh,frameW:fw,frameH:fh,cols,rows}};
+}
+
+function genDuckEggQuality(){
+  const cols=3,rows=1,fw=32,fh=32,anchor=[0.5,0.5];
+  const c=cv(cols*fw,rows*fh),x=c.getContext("2d");x.imageSmoothingEnabled=false;
+  const frames={}, ids=["duck_egg_normal","duck_egg_good","duck_egg_premium"];
+  const egg=(X,Y,base,shade,hi,spark)=>{
+    rect(x,base,X+12,Y+7,8,2);rect(x,base,X+9,Y+9,14,5);rect(x,base,X+8,Y+14,16,8);rect(x,base,X+10,Y+22,12,3);
+    rect(x,shade,X+9,Y+20,14,3);rect(x,shade,X+11,Y+25,8,1);rect(x,hi,X+12,Y+10,4,3);rect(x,hi,X+10,Y+14,2,2);
+    if(spark){rect(x,"#fff7b2",X+24,Y+7,2,2);rect(x,"#fff7b2",X+23,Y+8,4,1);rect(x,"#fff7b2",X+25,Y+6,1,4);}
+  };
+  const specs=[["#f2e8c9","#d6c295","#fff8df",false],["#f7efd3","#d9bd7a","#ffffff",false],["#ffe08a","#d7a742","#fff7b2",true]];
+  for(let i=0;i<cols;i++){const X=i*fw,Y=0;egg(X,Y,...specs[i]);frames[ids[i]]={x:X,y:Y,w:fw,h:fh,anchor};}
+  return {png:c.toDataURL("image/png"),frames,meta:{w:cols*fw,h:rows*fh,frameW:fw,frameH:fh,cols,rows}};
+}
+
 (async function(){
   const out={},log=[];
   out.terrain=genTerrain();log.push("terrain("+Object.keys(out.terrain.frames).length+")");
@@ -364,6 +439,10 @@ function genTerrain(){
 
   const careAnimalRows=["chicken","cow","sheep","bee"],careAnimalCols=["happy_a","happy_b","eating_a","eating_b"];
   out.animals_care=await sliceGrid("animals-care-48.png",4,4,48,48,(r,c)=>careAnimalRows[r]+"_"+careAnimalCols[c],[0.5,0.85],"baseline");if(out.animals_care)log.push("animals_care");
+
+  out.crops2=genCrops2();log.push("crops2");
+  out.animals_duck=genDuckAnimals();log.push("animals_duck");
+  out.product_quality_duck=genDuckEggQuality();log.push("product_quality_duck");
 
   const buildingNames=["farmhouse","barn","chicken_coop","shop"]; // 2x2：左上/右上/左下/右下
   out.buildings=await sliceGrid("buildings.png",2,2,256,256,(r,c)=>buildingNames[r*2+c],[0.5,0.96],"baseline");if(out.buildings)log.push("buildings");

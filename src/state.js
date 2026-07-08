@@ -153,6 +153,7 @@
       ordersSeededAt: 0,
       orderStreak: 0,
       weather: { id: "clear", untilMs: 0 },
+      season: { id: "春", untilMs: now + (C.SEASON_DURATION_MS || 0) },
       achievements: {},                        // { id: true }
       // ===== MVP2 =====
       materials: { wood: 0, stone: 0, compost: 0 },
@@ -168,7 +169,7 @@
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
       flags: { bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false },
-      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0 },
+      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0 },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
       settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" },
@@ -189,6 +190,9 @@
     merged.storage.items = Object.assign({}, state.storage && state.storage.items);
     merged.upgrades = Object.assign({}, def.upgrades, state.upgrades);
     merged.weather = Object.assign({ id: "clear", untilMs: 0 }, state.weather);
+    merged.season = Object.assign({ id: "春", untilMs: def.season.untilMs }, state.season);
+    if (!(C.SEASONS || []).some((s) => s.id === merged.season.id)) merged.season.id = "春";
+    if (typeof merged.season.untilMs !== "number") merged.season.untilMs = def.season.untilMs;
     merged.achievements = Object.assign({}, state.achievements);
     merged.stats = Object.assign({}, def.stats, state.stats);
     merged.stats.harvested = Object.assign({}, state.stats && state.stats.harvested);

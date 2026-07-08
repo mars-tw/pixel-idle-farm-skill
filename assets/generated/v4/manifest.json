@@ -197,6 +197,45 @@
       },
       "frameCount": 16
     },
+    "crops2": {
+      "image": "assets/generated/v4/crops2-48.png",
+      "map": "assets/generated/v4/crops2-48.json",
+      "meta": {
+        "w": 240,
+        "h": 192,
+        "frameW": 48,
+        "frameH": 48,
+        "cols": 5,
+        "rows": 4
+      },
+      "frameCount": 20
+    },
+    "animals_duck": {
+      "image": "assets/generated/v4/animals-duck-48.png",
+      "map": "assets/generated/v4/animals-duck-48.json",
+      "meta": {
+        "w": 192,
+        "h": 96,
+        "frameW": 48,
+        "frameH": 48,
+        "cols": 4,
+        "rows": 2
+      },
+      "frameCount": 8
+    },
+    "product_quality_duck": {
+      "image": "assets/generated/v4/duck-egg-quality-32.png",
+      "map": "assets/generated/v4/duck-egg-quality-32.json",
+      "meta": {
+        "w": 96,
+        "h": 32,
+        "frameW": 32,
+        "frameH": 32,
+        "cols": 3,
+        "rows": 1
+      },
+      "frameCount": 3
+    },
     "props": {
       "image": "assets/generated/v3/props-stations.png",
       "map": "assets/generated/v3/props-stations.json",

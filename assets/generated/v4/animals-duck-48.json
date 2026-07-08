@@ -1,0 +1,93 @@
+{
+  "image": "assets/generated/v4/animals-duck-48.png",
+  "meta": {
+    "w": 192,
+    "h": 96,
+    "frameW": 48,
+    "frameH": 48,
+    "cols": 4,
+    "rows": 2
+  },
+  "frames": {
+    "duck_idle_a": {
+      "x": 0,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_idle_b": {
+      "x": 48,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_walk_a": {
+      "x": 96,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_walk_b": {
+      "x": 144,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_happy_a": {
+      "x": 0,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_happy_b": {
+      "x": 48,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_eating_a": {
+      "x": 96,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "duck_eating_b": {
+      "x": 144,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    }
+  }
+}
