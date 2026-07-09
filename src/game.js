@@ -65,20 +65,29 @@
     m *= buildingGrowthAura(state); // MVP2：堆肥場/蜂箱等建築的成長加成
     return m;
   }
-  // 已蓋建築的成長光環連乘（compostHeap 0.90、beeBox 0.92…）
+  function buildingEffectLimit(def) {
+    return def && typeof def.maxCount === "number" && def.maxCount > 0 ? def.maxCount : Infinity;
+  }
+  function effectBuildingAllowed(seen, type, def) {
+    const used = seen[type] || 0;
+    if (used >= buildingEffectLimit(def)) return false;
+    seen[type] = used + 1;
+    return true;
+  }
+  // 已蓋建築的成長光環連乘（compostHeap 0.90、beeBox 0.92…），同類型依 maxCount 封頂。
   function buildingGrowthAura(state) {
-    let m = 1;
+    let m = 1; const seen = {};
     for (const b of state.buildings || []) {
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.growthAura) m *= def.effect.growthAura;
+      if (def && def.effect && def.effect.growthAura && effectBuildingAllowed(seen, b.type, def)) m *= def.effect.growthAura;
     }
     return m;
   }
   function buildingSeasonalBonus(state) {
-    let bonus = 0;
+    let bonus = 0; const seen = {};
     for (const b of state.buildings || []) {
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.seasonalSellBonus) bonus += def.effect.seasonalSellBonus;
+      if (def && def.effect && def.effect.seasonalSellBonus && effectBuildingAllowed(seen, b.type, def)) bonus += def.effect.seasonalSellBonus;
     }
     return bonus;
   }
@@ -113,9 +122,10 @@
   function storageCapacity(state) {
     const lv = state.upgrades.storageLevel;
     let cap = GAME.baseStorage + (lv > 0 ? UPGRADES.storageLevel.levels[lv - 1].value : 0);
+    const seen = {};
     for (const b of state.buildings || []) { // MVP2：筒倉等建築加倉容
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.storageBonus) cap += def.effect.storageBonus;
+      if (def && def.effect && def.effect.storageBonus && effectBuildingAllowed(seen, b.type, def)) cap += def.effect.storageBonus;
     }
     return cap;
   }
@@ -126,7 +136,7 @@
     const cap = storageCapacity(state);
     const free = Math.max(0, cap - storageUsed(state));
     const added = Math.min(qty, free);
-    state.storage.items[cropId] = (state.storage.items[cropId] || 0) + added;
+    if (added > 0) state.storage.items[cropId] = (state.storage.items[cropId] || 0) + added;
     return { added, lost: qty - added };
   }
   function ensureDiscoveryState(state) {
@@ -189,30 +199,51 @@
   function currentSeason(state, now) {
     if (state.level < (SEASON_UNLOCK_LEVEL || 6)) return (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
     if (!state.season || !(SEASONS || []).some((s) => s.id === state.season.id)) return (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
-    if (now >= (state.season.untilMs || 0)) {
-      const next = (seasonIndex(state.season.id) + 1) % Math.max(1, (SEASONS || []).length);
+    const duration = SEASON_DURATION_MS || 0;
+    if (duration > 0 && (state.season.untilMs || 0) > 0 && now >= state.season.untilMs) {
+      const advance = Math.floor((now - state.season.untilMs) / duration) + 1;
+      const next = (seasonIndex(state.season.id) + advance) % Math.max(1, (SEASONS || []).length);
       return SEASONS[next].id;
     }
     return state.season.id;
   }
-  function updateSeason(state, now) {
+  function advanceSeasonState(state, now) {
     const first = (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
     if (!state.season) state.season = { id: first, untilMs: now + (SEASON_DURATION_MS || 0) };
     if (state.level < (SEASON_UNLOCK_LEVEL || 6)) {
       const changed = state.season.id !== first || state.season.untilMs !== 0;
       state.season = { id: first, untilMs: 0 };
       recordSeasonReached(state, first);
-      return changed;
+      return { changed, advanced: 0, reached: [first] };
     }
     const valid = (SEASONS || []).some((s) => s.id === state.season.id);
-    if (!valid || now >= (state.season.untilMs || 0)) {
-      const idx = valid ? (seasonIndex(state.season.id) + 1) % SEASONS.length : 0;
-      state.season = { id: SEASONS[idx].id, untilMs: now + SEASON_DURATION_MS };
+    const duration = SEASON_DURATION_MS || 0;
+    if (!valid || !duration || (state.season.untilMs || 0) <= 0) {
+      const idx = valid ? seasonIndex(state.season.id) : 0;
+      state.season = { id: SEASONS[idx].id, untilMs: now + duration };
       recordSeasonReached(state, state.season.id);
-      return true;
+      return { changed: true, advanced: 0, reached: [state.season.id] };
+    }
+    if (now >= state.season.untilMs) {
+      const advance = Math.floor((now - state.season.untilMs) / duration) + 1;
+      const fromIdx = seasonIndex(state.season.id);
+      const reached = [];
+      const stepsToRecord = Math.min(advance, SEASONS.length);
+      for (let step = 1; step <= stepsToRecord; step++) {
+        const id = SEASONS[(fromIdx + step) % SEASONS.length].id;
+        reached.push(id);
+        recordSeasonReached(state, id);
+      }
+      if (advance >= SEASONS.length) for (const s of SEASONS) recordSeasonReached(state, s.id);
+      const idx = (fromIdx + advance) % SEASONS.length;
+      state.season = { id: SEASONS[idx].id, untilMs: state.season.untilMs + advance * duration };
+      return { changed: true, advanced: advance, reached };
     }
     recordSeasonReached(state, state.season.id);
-    return false;
+    return { changed: false, advanced: 0, reached: [state.season.id] };
+  }
+  function updateSeason(state, now) {
+    return advanceSeasonState(state, now).changed;
   }
   function sellMultiplier(state, now) {
     const lv = state.upgrades.sellBonus;
@@ -242,6 +273,7 @@
     state.coins -= cost;
     plot.cropId = cropId;
     plot.plantedAt = now;
+    delete plot.wateredAt;
     state.stats.plantCount++;
     return { ok: true };
   }
@@ -255,7 +287,7 @@
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
     if (added > 0) recordDiscovery(state, crop.id, now);
     const leveled = addXp(state, crop.xp);
-    plot.cropId = null; plot.plantedAt = 0;
+    plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt;
     checkAchievements(state);
     return { ok: true, cropId: crop.id, added, lost, xp: crop.xp, leveled };
   }
@@ -589,12 +621,17 @@
   // ---------- 建築 ----------
   function buildingUnlocked(state, type) { const d = BUILDINGS[type]; return !!d && state.level >= d.unlockLevel; }
   function buildingCount(state, type) { return (state.buildings || []).filter((b) => b.type === type).length; }
+  function buildingAtMaxCount(state, type) {
+    const def = BUILDINGS[type];
+    return !!(def && typeof def.maxCount === "number" && def.maxCount > 0 && buildingCount(state, type) >= def.maxCount);
+  }
   function canBuildOn(state, tile) { return !!tile && tile.terrain === "grass" && !tile.object && !tile.buildingId; }
   function buildBuilding(state, tileId, type, now) {
     now = now || Date.now();
     const def = BUILDINGS[type];
     if (!def) return { ok: false, reason: "unknown" };
     if (!buildingUnlocked(state, type)) return { ok: false, reason: "locked" };
+    if (buildingAtMaxCount(state, type)) return { ok: false, reason: "max_count" };
     const tile = getTile(state, tileId);
     if (!canBuildOn(state, tile)) return { ok: false, reason: "bad_tile" };
     if (!canAffordCost(state, def.cost)) return { ok: false, reason: "cost" };
@@ -992,7 +1029,7 @@
     // 第三章（Stage 7：動物照護）
     if (q.id === "learn_animal_care") return q.trigger === event;
     if (q.id === "feed_care_animal") return q.objective === event;
-    if (q.id === "raise_affinity_happy") return (state.animals || []).some((a) => animalAffinity(state, a, now) >= AFFINITY_HAPPY_THRESHOLD);
+    if (q.id === "raise_affinity_happy") return (state.animals || []).some((a) => (a.bestAffinity || animalAffinity(state, a, now)) >= AFFINITY_HAPPY_THRESHOLD);
     if (q.id === "collect_quality_product") return hasCollectedQuality(state);
     if (q.id === "deliver_quality_order") return (state.stats.qualitySold || 0) > 0;
     // 第四章（R47：豐年祭與四季物產）
@@ -1917,8 +1954,11 @@
     if (offlineMs <= 0) { state.lastSeenAt = now; return summary; }
 
     const flags = helperFlags(state);
-    const offlineNow = last + offlineMs; // 以離線結束點計算（天氣視為 clear）
+    const offlineNow = last + offlineMs; // 以離線結束點倍率計算；未分段積分整段離線天氣。
     const active = activePlotCount(state);
+    const seasonCatchup = advanceSeasonState(state, offlineNow);
+    summary.seasonsAdvanced = seasonCatchup.advanced || 0;
+    summary.seasonsReached = seasonCatchup.reached || [];
 
     for (let i = 0; i < Math.min(state.plots.length, active); i++) {
       const plot = state.plots[i];
@@ -1940,11 +1980,12 @@
         summary.perCrop[crop.id] = (summary.perCrop[crop.id] || 0) + added;
         summary.lost += lost;
         state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
+        if (added > 0) recordDiscovery(state, crop.id, offlineNow);
         summary.xp += crop.xp; addXp(state, crop.xp);
         actualCycles++;
         if (flags.autoPlant && c < cycles - 1) {
           if (state.coins < crop.seedCost) {
-            plot.cropId = null; plot.plantedAt = 0;
+            plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt;
             break;
           }
           state.coins -= crop.seedCost; summary.replanted++;
@@ -1957,7 +1998,7 @@
           if (plot.plantedAt > offlineNow) plot.plantedAt = offlineNow;
         }
       } else {
-        plot.cropId = null; plot.plantedAt = 0; // 只收一輪，格子清空
+        plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; // 只收一輪，格子清空
       }
     }
 
@@ -1975,6 +2016,7 @@
       summary.products[productId] = (summary.products[productId] || 0) + added;
       summary.lost += lost;
       state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
+      if (added > 0) recordDiscovery(state, productId, offlineNow);
       a.lastProducedAt += cycles * def.produceMs;
     }
 
@@ -1998,7 +2040,7 @@
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物
     canAffordCost, spendCost, grantMaterials, getTile, clearObstacle,
-    buildingUnlocked, buildingCount, canBuildOn, buildBuilding,
+    buildingUnlocked, buildingCount, buildingAtMaxCount, canBuildOn, buildBuilding,
     homeBuildingFor, animalCapacity, animalsInHome, isAnimalUnlocked,
     addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, collectHome, feedAnimal,
     // 可走動地圖：尋路 / 目標解析

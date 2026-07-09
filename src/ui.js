@@ -44,6 +44,9 @@
   let lastModalFocus = null;
   const plotEls = []; // 農地格 DOM 快取
   const tileEls = []; // 地圖磚 DOM 快取
+  let lastFarmRenderAt = 0;
+  let lastMapRenderAt = 0;
+  let lastAssistantRenderAt = 0;
 
   const $ = (id) => document.getElementById(id);
   const now = () => Date.now();
@@ -52,7 +55,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r48-20260709-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r49-20260710-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -458,7 +461,7 @@
       return { done, total: st ? Object.keys(st.wants).length : 2 };
     }
     if (id === "report_east_forage") return { done: flags.eastForageReported ? 1 : 0, total: 1 };
-    if (id === "raise_affinity_happy") return { done: (state.animals || []).some((a) => G.animalAffinity(state, a, now()) >= window.AFFINITY_HAPPY_THRESHOLD) ? 1 : 0, total: 1 };
+    if (id === "raise_affinity_happy") return { done: (state.animals || []).some((a) => Math.max(a.bestAffinity || 0, G.animalAffinity(state, a, now())) >= window.AFFINITY_HAPPY_THRESHOLD) ? 1 : 0, total: 1 };
     if (id === "collect_quality_product") return { done: G.hasCollectedQuality(state) ? 1 : 0, total: 1 };
     if (id === "deliver_quality_order") return { done: (state.stats && state.stats.qualitySold || 0) > 0 ? 1 : 0, total: 1 };
     if (id === "prepare_four_seasons") return { done: G.harvestedSeasonCount ? G.harvestedSeasonCount(state) : 0, total: 4 };
@@ -714,8 +717,8 @@
   function performanceModeHtml(mode) {
     const labels = { auto: "自動", high: "高", low: "低" };
     const desc = mode === "auto"
-      ? `自動監測 FPS，低於 45fps 會降級天氣動畫。現在 ${document.documentElement.classList.contains("perf-low") ? "低階" : "高階"}。`
-      : (mode === "high" ? "鎖定完整天氣動畫與視覺密度。" : "鎖定低密度天氣動畫，降低耗電與卡頓。");
+      ? `自動監測 FPS，低於 45fps 會節流地圖刷新並降級天氣動畫。現在 ${document.documentElement.classList.contains("perf-low") ? "低階" : "高階"}。`
+      : (mode === "high" ? "鎖定完整地圖刷新、天氣動畫與視覺密度。" : "鎖定低頻地圖刷新與低密度天氣動畫，降低耗電與卡頓。");
     return `<div class="setting-row" data-audit="setting-performance">
       <div>
         <div class="setting-title">效能模式</div>
@@ -917,6 +920,9 @@
     const layer = $("weatherLayer");
     if (layer) layer.dataset.performanceTier = low ? "low" : "high";
   }
+  function isLowPerformanceTier() {
+    return document.documentElement.dataset.performanceTier === "low";
+  }
   function startPerformanceMonitor() {
     if (perfMonitorStarted) return;
     perfMonitorStarted = true;
@@ -937,7 +943,7 @@
         else { perfLowFrames = 0; perfStableFrames = 0; }
         if (!perfAutoLow && perfLowFrames >= 30) {
           perfAutoLow = true;
-          const reason = `FPS ${Math.round(perfAvgFps)} 低於 45，已降低天氣動畫密度`;
+          const reason = `FPS ${Math.round(perfAvgFps)} 低於 45，已節流地圖刷新並降低天氣動畫密度`;
           applyPerformanceMode();
           recordPerformanceEvent("downgrade", reason);
           renderSettingsPanel();
@@ -1480,9 +1486,14 @@
       if (lockedArea) cls += " locked-area";
       if (prog && prog.wet && !prog.ready) cls += " wet";
       if (cell.tileId === selectedTileId) cls += " sel";
+      const kind = lockedArea ? "locked-area" : "";
+      const frame = terrainFrame(tile, prog);
+      const sig = cls + "|" + kind + "|" + frame;
+      if (cell.groundSig === sig) continue;
+      cell.groundSig = sig;
       cell.el.className = cls;
-      cell.el.dataset.kind = lockedArea ? "locked-area" : "";
-      window.Atlas.applyTo(cell.el, "terrain", terrainFrame(tile, prog));
+      cell.el.dataset.kind = kind;
+      window.Atlas.applyTo(cell.el, "terrain", frame);
     }
   }
   // 以「像素中心 + 腳底 baseline」放一個物件 sprite；依 frame 真實長寬比，z=baseline 做遮擋
@@ -2393,13 +2404,14 @@
       const def = window.BUILDINGS[type];
       const unlocked = G.buildingUnlocked(state, type);
       const afford = G.canAffordCost(state, def.cost);
+      const atMax = G.buildingAtMaxCount && G.buildingAtMaxCount(state, type);
       const costTxt = Object.entries(def.cost).map(([k, v]) => k === "coins" ? `🪙${v}` : `${v}${window.MATERIALS[k].emoji}`).join(" ");
       return `
-        <div class="build-opt ${unlocked && afford ? "" : "locked"}">
+        <div class="build-opt ${unlocked && afford && !atMax ? "" : "locked"}">
           <span class="bo-ic">${def.emoji}</span>
           <span class="bo-body"><span class="bo-name">${def.name}</span><br>
-            <span class="bo-cost">${def.desc} · ${costTxt}${unlocked ? "" : " · 🔒Lv" + def.unlockLevel}</span></span>
-          <button class="btn buy small bbtn" data-type="${type}" ${unlocked && afford ? "" : "disabled"}>蓋</button>
+            <span class="bo-cost">${def.desc} · ${costTxt}${atMax ? " · 已達上限" : unlocked ? "" : " · 🔒Lv" + def.unlockLevel}</span></span>
+          <button class="btn buy small bbtn" data-type="${type}" ${unlocked && afford && !atMax ? "" : "disabled"}>蓋</button>
         </div>`;
     }).join("");
     box.innerHTML = `<div class="tc-title">🟩 ${window.TERRAIN.grass.name}</div>
@@ -2411,6 +2423,7 @@
         if (r.ok) { playAction("hoe"); toast(window.BUILDINGS[b.dataset.type].emoji + " 已興建 " + window.BUILDINGS[b.dataset.type].name); afterChange(true); buildMap(); renderTileContext(); }
         else if (r.reason === "cost") toast("資源不足");
         else if (r.reason === "locked") toast("🔒 等級不足");
+        else if (r.reason === "max_count") toast("這種建築已達上限");
       };
     });
   }
@@ -2679,9 +2692,20 @@
     }
     // 天氣自然到期改變時，資源列的天氣圖示也要跟著換，不然會跟地圖上的 #weatherLayer 對不上
     if (helped.harvested > 0 || weatherChanged || seasonChanged) { renderResBar(); }
-    updateFarm(t);
-    updateMap(t);       // 地圖：作物/動物成熟
-    renderSmartAssistant();
+    const lowTier = isLowPerformanceTier();
+    const forceRender = helped.harvested > 0 || weatherChanged || seasonChanged;
+    if (!lowTier || forceRender || t - lastFarmRenderAt >= 1000) {
+      updateFarm(t);
+      lastFarmRenderAt = t;
+    }
+    if (!lowTier || forceRender || t - lastMapRenderAt >= 1000) {
+      updateMap(t);       // 地圖：作物/動物成熟
+      lastMapRenderAt = t;
+    }
+    if (!lowTier || t - lastAssistantRenderAt >= 1000) {
+      renderSmartAssistant();
+      lastAssistantRenderAt = t;
+    }
     tickPlayer(t);      // 玩家走路/動作/待機動畫
   }
 

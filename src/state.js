@@ -68,6 +68,41 @@
     }
     return map;
   }
+  function healthyMap(map) {
+    if (!map || map.width !== C.MAP_W || map.height !== C.MAP_H || !Array.isArray(map.tiles)) return false;
+    if (map.tiles.length !== C.MAP_W * C.MAP_H) return false;
+    const coords = new Set(), ids = new Set(), plotIndexes = new Set();
+    for (const tile of map.tiles) {
+      if (!tile || typeof tile.x !== "number" || typeof tile.y !== "number") return false;
+      if (tile.x < 0 || tile.x >= C.MAP_W || tile.y < 0 || tile.y >= C.MAP_H) return false;
+      const coord = tile.x + "," + tile.y;
+      if (coords.has(coord)) return false;
+      coords.add(coord);
+      const expectedId = "t" + tile.x + "_" + tile.y;
+      if (tile.id !== expectedId || ids.has(tile.id)) return false;
+      ids.add(tile.id);
+      if (!C.TERRAIN[tile.terrain]) return false;
+      if (tile.terrain === "soil") {
+        if (!Number.isInteger(tile.plotIndex) || tile.plotIndex < 0 || tile.plotIndex >= C.GAME.maxPlots) return false;
+        if (plotIndexes.has(tile.plotIndex)) return false;
+        plotIndexes.add(tile.plotIndex);
+      } else if (tile.plotIndex != null) return false;
+    }
+    return coords.size === C.MAP_W * C.MAP_H && plotIndexes.size === C.GAME.maxPlots;
+  }
+  function refreshDerivedMapFields(map) {
+    map.soilCount = (map.tiles || []).filter((t) => t.terrain === "soil").length;
+    applyRegions(map);
+    if (!map.tiles.some((t) => t.structureId)) applyStructures(map);
+    if (!map.tiles.some((t) => t.station)) applyStations(map);
+    if (!map.tiles.some((t) => t.npc)) applyNpcs(map);
+    applyEvents(map);
+    applyForage(map);
+    return map;
+  }
+  function nonNegativeNumber(value, fallback) {
+    return Number.isFinite(value) && value >= 0 ? value : fallback;
+  }
 
   // 由 MAP_LAYOUT 產生大世界（soil→plot、grass/path/water、障礙、多格建築、站點、橋、事件點）
   function makeMap() {
@@ -190,6 +225,11 @@
     merged.storage = Object.assign({ items: {} }, state.storage);
     merged.storage.items = Object.assign({}, state.storage && state.storage.items);
     merged.upgrades = Object.assign({}, def.upgrades, state.upgrades);
+    for (const key of Object.keys(C.UPGRADES || {})) {
+      const max = Array.isArray(C.UPGRADES[key].levels) ? C.UPGRADES[key].levels.length : 0;
+      const raw = Number.isFinite(merged.upgrades[key]) ? Math.floor(merged.upgrades[key]) : def.upgrades[key];
+      merged.upgrades[key] = Math.max(0, Math.min(max, raw || 0));
+    }
     merged.weather = Object.assign({ id: "clear", untilMs: 0 }, state.weather);
     merged.season = Object.assign({ id: "春", untilMs: def.season.untilMs }, state.season);
     if (!(C.SEASONS || []).some((s) => s.id === merged.season.id)) merged.season.id = "春";
@@ -210,16 +250,18 @@
     if (!Array.isArray(merged.orders)) merged.orders = [];
     // ===== MVP2 欄位補齊 =====
     merged.materials = Object.assign({ wood: 0, stone: 0, compost: 0 }, state.materials);
-    // 地圖：維度不符（升級到新版大世界）一律以新世界重建，並重置 buildings/animals/player（大改版）。
-    const sameDims = state.map && Array.isArray(state.map.tiles) && state.map.width === C.MAP_W && state.map.height === C.MAP_H;
-    if (sameDims) {
+    merged.coins = nonNegativeNumber(merged.coins, def.coins);
+    merged.xp = nonNegativeNumber(merged.xp, def.xp);
+    merged.level = Math.max(1, Math.floor(nonNegativeNumber(merged.level, def.level)));
+    for (const k of Object.keys(C.MATERIALS || {})) merged.materials[k] = nonNegativeNumber(merged.materials[k], 0);
+    for (const [id, qty] of Object.entries(merged.storage.items || {})) {
+      if (!Number.isFinite(qty) || qty <= 0) delete merged.storage.items[id];
+      else merged.storage.items[id] = Math.floor(qty);
+    }
+    // 地圖：尺寸相符但 tiles 不完整/不合法也視為髒存檔，重建地圖綁定資料。
+    if (healthyMap(state.map)) {
       merged.map = state.map;
-      applyRegions(merged.map);
-      if (!merged.map.tiles.some((t) => t.structureId)) applyStructures(merged.map);
-      if (!merged.map.tiles.some((t) => t.station)) applyStations(merged.map);
-      if (!merged.map.tiles.some((t) => t.npc)) applyNpcs(merged.map);
-      applyEvents(merged.map);
-      applyForage(merged.map);
+      refreshDerivedMapFields(merged.map);
       merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
       merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
       merged.player = Object.assign({}, def.player, state.player);

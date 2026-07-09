@@ -149,9 +149,19 @@ console.log("\n== 6. 升級扣費與數值變動 ==");
 {
   const st = S.defaultState(T0);
   st.coins = 10000;
+  const plotValues = C.UPGRADES.plotCount.levels.map((lv) => lv.value);
+  assert(plotValues.every((value, idx) => idx === 0 ? value > C.GAME.startPlots : value > plotValues[idx - 1])
+    && plotValues[plotValues.length - 1] === C.GAME.maxPlots,
+    `開墾升級每級都有實際增益（${C.GAME.startPlots}→${plotValues.join("→")}）`);
   const cap0 = G.activePlotCount(st);
-  G.buyUpgrade(st, "plotCount");
-  assert(G.activePlotCount(st) > cap0, "開墾後農地數增加");
+  let prevCap = cap0;
+  while (G.nextUpgrade(st, "plotCount")) {
+    const r = G.buyUpgrade(st, "plotCount");
+    const nextCap = G.activePlotCount(st);
+    assert(r.ok && nextCap > prevCap, `開墾 Lv${st.upgrades.plotCount} 實際增加農地（${prevCap}→${nextCap}）`);
+    prevCap = nextCap;
+  }
+  assert(G.activePlotCount(st) === C.GAME.maxPlots, "開墾滿級等於地圖 soil 上限");
   assert(st.plots.length >= G.activePlotCount(st), "plots 陣列已補足");
   const mult0 = G.growthMultiplier(st, T0);
   G.buyUpgrade(st, "growthSpeed");
@@ -299,6 +309,18 @@ console.log("\n== 10. R47 季節與豐年祭訂單 ==");
   st.season = { id: "春", untilMs: T0 + 100 };
   assert(G.currentSeason(st, T0) === "春", "目前季節讀 state.season");
   assert(G.updateSeason(st, T0 + 101) && st.season.id === "夏", "季節到期後輪替到下一季");
+  st.season = { id: "春", untilMs: T0 + C.SEASON_DURATION_MS };
+  const longNow = T0 + C.SEASON_DURATION_MS * 3 + 500;
+  assert(G.currentSeason(st, longNow) === "冬", "長時間未更新時 currentSeason 會推算多季後的正確季節");
+  const offSeason = S.defaultState(T0);
+  offSeason.level = 8;
+  offSeason.lastSeenAt = T0;
+  offSeason.season = { id: "春", untilMs: T0 + C.SEASON_DURATION_MS };
+  const offSum = G.applyOffline(offSeason, longNow);
+  assert(offSum.seasonsAdvanced === 3 && offSeason.season.id === "冬"
+    && offSeason.stats.seasonsReached.夏 && offSeason.stats.seasonsReached.秋 && offSeason.stats.seasonsReached.冬,
+    "離線結算依時長 catch-up 多個季節並記錄 seasonsReached");
+  assert(G.evaluateLetters(offSeason, longNow).includes("letter_winter"), "離線跨季後可解鎖對應季節信件");
   st.season = { id: "春", untilMs: T0 + 1e9 };
   const potatoSpring = G.sellUnitValue(st, "potato", T0);
   st.season = { id: "夏", untilMs: T0 + 1e9 };
@@ -320,6 +342,10 @@ console.log("\n== 11. 存檔遷移（向後相容）==");
   assert(m.coins === 5 && m.storage && m.storage.items && m.upgrades && m.stats, "舊存檔欄位補齊不崩");
   assert(m.season && m.season.id === "春", "舊存檔補齊季節預設");
   assert(m.version === C.GAME.version, "版本號更新");
+  const oldMaxPlot = S.migrate({ version: 1, coins: 5, upgrades: { plotCount: 4 }, map: S.defaultState(T0).map });
+  assert(oldMaxPlot.upgrades.plotCount === C.UPGRADES.plotCount.levels.length
+    && G.activePlotCount(oldMaxPlot) === C.GAME.maxPlots,
+    "舊存檔無效開墾 Lv4 會夾到現行滿級且仍維持最大農地");
 }
 
 console.log("");
