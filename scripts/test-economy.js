@@ -318,9 +318,23 @@ console.log("\n== 10. R47 季節與豐年祭訂單 ==");
   offSeason.season = { id: "春", untilMs: T0 + C.SEASON_DURATION_MS };
   const offSum = G.applyOffline(offSeason, longNow);
   assert(offSum.seasonsAdvanced === 3 && offSeason.season.id === "冬"
-    && offSeason.stats.seasonsReached.夏 && offSeason.stats.seasonsReached.秋 && offSeason.stats.seasonsReached.冬,
+    && offSeason.stats.seasonsReached.春 && offSeason.stats.seasonsReached.夏
+    && offSeason.stats.seasonsReached.秋 && offSeason.stats.seasonsReached.冬,
     "離線結算依時長 catch-up 多個季節並記錄 seasonsReached");
   assert(G.evaluateLetters(offSeason, longNow).includes("letter_winter"), "離線跨季後可解鎖對應季節信件");
+  const staleSeason = S.defaultState(T0);
+  staleSeason.level = 8;
+  staleSeason.lastSeenAt = T0;
+  staleSeason.season = { id: "夏", untilMs: T0 };
+  staleSeason.stats.seasonsReached = {};
+  staleSeason.mail.unlocked = {};
+  const staleNow = T0 + C.SEASON_DURATION_MS * 2 + 1;
+  const staleSum = G.applyOffline(staleSeason, staleNow);
+  const staleLetters = G.evaluateLetters(staleSeason, staleNow);
+  assert(staleSum.seasonsAdvanced === 3 && staleSeason.stats.seasonsReached.夏
+    && staleSeason.stats.seasonsReached.秋 && staleSeason.stats.seasonsReached.冬
+    && staleSeason.stats.seasonsReached.春 && staleLetters.includes("letter_summer"),
+    "首 tick 已過期的出發季會寫入 seasonsReached 並解鎖出發季信件");
   st.season = { id: "春", untilMs: T0 + 1e9 };
   const potatoSpring = G.sellUnitValue(st, "potato", T0);
   st.season = { id: "夏", untilMs: T0 + 1e9 };

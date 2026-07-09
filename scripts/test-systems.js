@@ -106,6 +106,29 @@ console.log("\n== 5. 建築解鎖動物 + 容量限制 ==");
   assert(G.buyAnimal(st, r.building.id, "chicken", T0).reason === "full", "超過容量被擋");
 }
 
+console.log("\n== 5a. R50：動物產能建築 maxCount 封頂 ==");
+{
+  const st = S.defaultState(T0);
+  st.level = 8; st.coins = 9999; st.materials.wood = 99; st.materials.stone = 99;
+  assert(G.buildingCount(st, "chickenCoop") === 1 && C.BUILDINGS.chickenCoop.maxCount === 2,
+    "雞舍含地圖常駐 1 座，全場 maxCount=2");
+  const coop1 = G.buildBuilding(st, firstBuildable(st).id, "chickenCoop", T0);
+  assert(coop1.ok, "雞舍可在常駐 1 座外再建 1 座");
+  assert(G.buildBuilding(st, firstBuildable(st).id, "chickenCoop", T0 + 1).reason === "max_count",
+    "第 3 座雞舍被 maxCount 擋下");
+  assert(G.buildingCount(st, "barn") === 1 && C.BUILDINGS.barn.maxCount === 2,
+    "畜舍含地圖常駐 1 座，全場 maxCount=2");
+  const barn1 = G.buildBuilding(st, firstBuildable(st).id, "barn", T0 + 2);
+  assert(barn1.ok, "畜舍可在常駐 1 座外再建 1 座");
+  assert(G.buildBuilding(st, firstBuildable(st).id, "barn", T0 + 3).reason === "max_count",
+    "第 3 座畜舍被 maxCount 擋下");
+  assert(C.BUILDINGS.duckPen.maxCount === 1, "鴨舍無常駐建築，全場 maxCount=1");
+  const duck1 = G.buildBuilding(st, firstBuildable(st).id, "duckPen", T0 + 4);
+  assert(duck1.ok, "鴨舍可建第 1 座");
+  assert(G.buildBuilding(st, firstBuildable(st).id, "duckPen", T0 + 5).reason === "max_count",
+    "第 2 座鴨舍被 maxCount 擋下");
+}
+
 console.log("\n== 5b. Stage 6.5：畜舍地圖常駐不代表動物解鎖，仍需等級（修正 Stage 4 迴歸）==");
 {
   const st = S.defaultState(T0); // Lv1（預設）；farmhouse/coop/barn/shop 從地圖建立就常駐（Stage 4 設計）
@@ -612,6 +635,32 @@ console.log("\n== 14c. R49：髒 map 不再因維度相符而被信任 ==");
   assert(m.coins === 77 && m.storage.items.wheat === 3 && m.story.questId === "repair_bridge"
     && m.story.completed.clear_old_path === true,
     "髒 map 重建不倒退金幣、倉庫與故事進度");
+  const base = S.defaultState(T0);
+  const legalTile = base.map.tiles.find((t) => t.terrain === "grass" && !t.object && !t.station
+    && !t.structureId && !t.blocked && !t.buildingId && !t.npc);
+  const preserved = S.migrate({
+    version: 1,
+    coins: 88,
+    map: { width: C.MAP_W, height: C.MAP_H, tiles: [] },
+    buildings: [
+      { id: "b_keep_coop", type: "chickenCoop", tileId: legalTile.id, builtAt: T0 - 1000, level: 1 },
+      { id: "b_bad_silo", type: "silo", tileId: "t99_99", builtAt: T0 - 1000, level: 1 },
+    ],
+    animals: [
+      { id: "a_keep_chicken", type: "chicken", homeId: "b_keep_coop", lastProducedAt: T0 - 5000 },
+      { id: "a_bad_duck", type: "duck", homeId: "missing_home", lastProducedAt: T0 - 5000 },
+    ],
+    player: { tileId: "t7_5", x: 0, y: 0, facing: "left", action: "idle" },
+  });
+  const keptTile = preserved.map.tiles.find((t) => t.id === legalTile.id);
+  const keptAnimal = preserved.animals.find((a) => a.id === "a_keep_chicken");
+  assert(preserved.buildings.some((b) => b.id === "b_keep_coop") && keptTile.buildingId === "b_keep_coop"
+    && !preserved.buildings.some((b) => b.id === "b_bad_silo"),
+    "髒 map 重建會保留可對應座標的合法建築，只移除無法落點的個別建築");
+  assert(keptAnimal && keptAnimal.homeId === "b_keep_coop" && !preserved.animals.some((a) => a.id === "a_bad_duck"),
+    "髒 map 重建會保留可對應家園的合法動物，只移除無家園動物");
+  assert(preserved.player.tileId === "t7_5" && preserved.player.x === 7 && preserved.player.y === 5,
+    "髒 map 重建保留合法玩家位置並重算座標");
 }
 
 console.log("\n== 15. Stage 10.1：NPC 重複委託（core logic）==");

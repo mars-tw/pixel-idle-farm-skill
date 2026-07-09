@@ -228,11 +228,16 @@
       const advance = Math.floor((now - state.season.untilMs) / duration) + 1;
       const fromIdx = seasonIndex(state.season.id);
       const reached = [];
+      const addReached = (id) => {
+        if (!id) return;
+        if (reached.indexOf(id) === -1) reached.push(id);
+        recordSeasonReached(state, id);
+      };
+      addReached(SEASONS[fromIdx].id);
       const stepsToRecord = Math.min(advance, SEASONS.length);
       for (let step = 1; step <= stepsToRecord; step++) {
         const id = SEASONS[(fromIdx + step) % SEASONS.length].id;
-        reached.push(id);
-        recordSeasonReached(state, id);
+        addReached(id);
       }
       if (advance >= SEASONS.length) for (const s of SEASONS) recordSeasonReached(state, s.id);
       const idx = (fromIdx + advance) % SEASONS.length;

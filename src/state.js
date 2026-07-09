@@ -103,6 +103,116 @@
   function nonNegativeNumber(value, fallback) {
     return Number.isFinite(value) && value >= 0 ? value : fallback;
   }
+  function tileById(map, id) {
+    return (map.tiles || []).find((t) => t.id === id) || null;
+  }
+  function structureForBuilding(b) {
+    if (!b || !b.type) return null;
+    const expectedById = b.id && b.id.slice(0, 2) === "b_" ? b.id.slice(2) : "";
+    return (C.STRUCTURES || []).find((s) => s.building === b.type
+      && (s.id === b.structureId || s.id === expectedById || b.tileId === "t" + s.x + "_" + s.y)) || null;
+  }
+  function clearBuildingIds(map) {
+    for (const tile of (map.tiles || [])) tile.buildingId = null;
+  }
+  function canPlacePreservedBuilding(tile) {
+    return !!(tile && tile.terrain === "grass" && !tile.object && !tile.station && !tile.structureId
+      && !tile.blocked && !tile.buildingId && !tile.npc);
+  }
+  function placeBuildingOnMap(map, b) {
+    const structure = structureForBuilding(b);
+    if (structure) {
+      const footprint = [];
+      for (let dy = 0; dy < structure.h; dy++) for (let dx = 0; dx < structure.w; dx++) {
+        const tile = (map.tiles || []).find((t) => t.x === structure.x + dx && t.y === structure.y + dy);
+        if (!tile || (tile.buildingId && tile.buildingId !== b.id)) return false;
+        footprint.push(tile);
+      }
+      footprint.forEach((tile) => { tile.buildingId = b.id; });
+      return true;
+    }
+    const tile = tileById(map, b.tileId);
+    if (!canPlacePreservedBuilding(tile)) return false;
+    tile.buildingId = b.id;
+    return true;
+  }
+  function sanitizeBuilding(raw, map, usedIds) {
+    if (!raw || typeof raw !== "object" || typeof raw.id !== "string" || !raw.id || usedIds.has(raw.id)) return null;
+    if (!C.BUILDINGS[raw.type]) return null;
+    const b = Object.assign({}, raw);
+    const structure = structureForBuilding(b);
+    if (structure) {
+      b.structureId = structure.id;
+      b.tileId = "t" + structure.x + "_" + structure.y;
+    } else if (typeof b.tileId !== "string" || !tileById(map, b.tileId)) {
+      return null;
+    }
+    if (!placeBuildingOnMap(map, b)) return null;
+    usedIds.add(b.id);
+    return b;
+  }
+  function buildingCanHouseAnimal(building, animalType) {
+    const def = building && C.BUILDINGS[building.type];
+    const unlocks = def && def.effect && def.effect.unlockAnimal;
+    return Array.isArray(unlocks) && unlocks.indexOf(animalType) !== -1;
+  }
+  function sanitizeAnimals(sourceAnimals, seededAnimals, buildings) {
+    const animals = [];
+    const usedIds = new Set();
+    const byId = {};
+    for (const b of buildings) byId[b.id] = b;
+    const source = Array.isArray(sourceAnimals) ? sourceAnimals : seededAnimals;
+    function add(raw) {
+      if (!raw || typeof raw !== "object" || !C.ANIMALS[raw.type]) return;
+      let home = byId[raw.homeId];
+      if (!buildingCanHouseAnimal(home, raw.type)) home = buildings.find((b) => buildingCanHouseAnimal(b, raw.type));
+      if (!home) return;
+      let id = typeof raw.id === "string" && raw.id ? raw.id : "a_" + raw.type + "_" + (animals.length + 1);
+      while (usedIds.has(id)) id = id + "_m";
+      const a = Object.assign({}, raw, { id, homeId: home.id });
+      usedIds.add(id);
+      animals.push(a);
+    }
+    (source || []).forEach(add);
+    return animals;
+  }
+  function canPlayerStandOn(map, tile, flags) {
+    if (!tile) return false;
+    if (tile.terrain === "water") return !!(tile.bridge && flags && flags.bridgeRepaired);
+    if (tile.region === "east" && !(flags && flags.bridgeRepaired)) return false;
+    if (tile.region === "east_deep" && !(flags && flags.eastDeepUnlocked)) return false;
+    return !!(C.TERRAIN[tile.terrain] && !tile.object && !tile.station && !tile.npc
+      && !tile.blocked && !tile.structureId && !tile.buildingId);
+  }
+  function sanitizePlayer(defPlayer, rawPlayer, map, flags) {
+    const player = Object.assign({}, defPlayer, rawPlayer);
+    const tile = tileById(map, player.tileId);
+    if (!canPlayerStandOn(map, tile, flags)) return Object.assign({}, defPlayer);
+    player.tileId = tile.id;
+    player.x = tile.x;
+    player.y = tile.y;
+    if (["up", "down", "left", "right"].indexOf(player.facing) === -1) player.facing = defPlayer.facing;
+    if (!player.action) player.action = defPlayer.action;
+    return player;
+  }
+  function rebuildMapPreservingEntities(state, now) {
+    const map = makeMap();
+    const seeded = seedStructures(map, now);
+    clearBuildingIds(map);
+    const buildings = [];
+    const usedBuildingIds = new Set();
+    const addBuilding = (raw) => {
+      const b = sanitizeBuilding(raw, map, usedBuildingIds);
+      if (b) buildings.push(b);
+    };
+    if (Array.isArray(state.buildings)) state.buildings.forEach(addBuilding);
+    seeded.buildings.forEach(addBuilding);
+    return {
+      map,
+      buildings,
+      animals: sanitizeAnimals(state.animals, seeded.animals, buildings),
+    };
+  }
 
   // 由 MAP_LAYOUT 產生大世界（soil→plot、grass/path/water、障礙、多格建築、站點、橋、事件點）
   function makeMap() {
@@ -258,16 +368,20 @@
       if (!Number.isFinite(qty) || qty <= 0) delete merged.storage.items[id];
       else merged.storage.items[id] = Math.floor(qty);
     }
+    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false }, state.flags);
+    merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
+    merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     // 地圖：尺寸相符但 tiles 不完整/不合法也視為髒存檔，重建地圖綁定資料。
     if (healthyMap(state.map)) {
       merged.map = state.map;
       refreshDerivedMapFields(merged.map);
       merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
       merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
-      merged.player = Object.assign({}, def.player, state.player);
+      merged.player = sanitizePlayer(def.player, state.player, merged.map, merged.flags);
     } else {
-      merged.map = def.map; merged.buildings = def.buildings; merged.animals = def.animals;
-      merged.player = def.player;
+      const rebuilt = rebuildMapPreservingEntities(state, def.createdAt || state.lastSeenAt || 0);
+      merged.map = rebuilt.map; merged.buildings = rebuilt.buildings; merged.animals = rebuilt.animals;
+      merged.player = sanitizePlayer(def.player, state.player, merged.map, merged.flags);
     }
     // Stage 7：舊存檔的動物物件補齊照護欄位（新蓋的已經有，這裡對舊資料是 no-op）
     // Stage 11：bestAffinity 用舊 affinity 值當合理預設（沒有歷史資料，只能用現值墊底）
@@ -279,9 +393,6 @@
     }
     merged.camera = Object.assign({ x: 0, y: 0, followPlayer: true, focusTileId: null, focusUntil: 0 }, state.camera);
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
-    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false }, state.flags);
-    merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
-    merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     merged.discoveries = Object.assign({ items: {} }, state.discoveries);
     merged.discoveries.items = Object.assign({}, state.discoveries && state.discoveries.items);
     merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" }, state.settings);
