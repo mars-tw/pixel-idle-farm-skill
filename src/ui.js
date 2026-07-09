@@ -55,14 +55,14 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r50-20260710-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r51-20260710-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
   // ---------- 物品/建材顯示 ----------
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
-  function itemEmoji(id) { const d = itemDef(id); if (d) return d.emoji; const m = (window.MATERIALS || {})[id]; return m ? m.emoji : "❔"; }
-  function itemName(id) { const d = itemDef(id); if (d) return d.name; const m = (window.MATERIALS || {})[id]; return m ? m.name : id; }
+  function itemEmoji(id) { const d = itemDef(id); if (d) return d.emoji; const m = (window.MATERIALS || {})[id]; if (m) return m.emoji; const c = (window.COLLECTIBLES || {})[id]; return c ? c.emoji : "❔"; }
+  function itemName(id) { const d = itemDef(id); if (d) return d.name; const m = (window.MATERIALS || {})[id]; if (m) return m.name; const c = (window.COLLECTIBLES || {})[id]; return c ? c.name : id; }
 
   // ---------- 工具 ----------
   function fmtTime(ms) {
@@ -283,7 +283,7 @@
       if (prog.wet && !prog.ready) { if (!wd) { wd = document.createElement("div"); wd.className = "wet-drop"; wd.textContent = "💧"; el.appendChild(wd); } wd.style.display = "block"; }
       else if (wd) wd.style.display = "none";
 
-      if (state.useSprites && spritesReady && !crop.sheet) {
+      if (state.useSprites && spritesReady && !crop.sheet && !crop.emojiOnly && Number.isFinite(crop.spriteRow)) {
         sprite.style.display = "block"; emoji.style.display = "none";
         const x = (prog.stage / (CROP_SHEET.cols - 1)) * 100;
         const y = (crop.spriteRow / (CROP_SHEET.rows - 1)) * 100;
@@ -481,11 +481,14 @@
     (window.LETTERS || []).forEach((l) => { byId[l.id] = l; });
     return CHAPTER5_LETTER_ORDER.map((id) => byId[id]).filter(Boolean);
   }
+  function mailboxLetters() {
+    return (window.LETTERS || []).slice();
+  }
   function unreadLetterCount() {
     const mail = state.mail || {};
     const unlocked = mail.unlocked || {};
     const read = mail.read || {};
-    return CHAPTER5_LETTER_ORDER.filter((id) => unlocked[id] && !read[id]).length;
+    return mailboxLetters().filter((l) => unlocked[l.id] && !read[l.id]).length;
   }
   function updateMailBadges() {
     const n = unreadLetterCount();
@@ -502,7 +505,8 @@
     if (!G.evaluateLetters || !state) return [];
     const ids = G.evaluateLetters(state, t);
     if (ids.length && notify) {
-      toast("📬 祖母寄來一封信…");
+      const first = letterById(ids[0]);
+      toast("📬 " + (first && first.from ? first.from : "信箱") + "寄來一封信…");
       const mailbox = stationTileOf("mailbox");
       if (mailbox) focusCameraOnTile(mailbox);
     }
@@ -537,12 +541,52 @@
       toast("還有信沒有讀完");
     }
   }
+  function seasonEventCardHtml() {
+    if (!G.seasonEventStatus) return "";
+    const status = G.seasonEventStatus(state, now());
+    if (!status || !status.event) return "";
+    const ev = status.event;
+    const missing = (status.missing || []).map((m) => {
+      if (m.id) return itemName(m.id) + " " + (m.have || 0) + "/" + m.need;
+      if (m.anySeasonCrop) return m.anySeasonCrop + "季作物 0/" + m.need;
+      if (m.any) return m.any.map(itemName).join("或");
+      return "材料不足";
+    }).join("、");
+    const stateText = status.claimed ? "本季已完成" : status.canClaim ? "可完成" : "需要：" + (missing || "物資不足");
+    return `
+      <section class="season-event-card ${status.claimed ? "done" : ""}" data-audit="season-event" data-event-id="${ev.id}">
+        <div>
+          <b>${ev.icon || "🌿"} ${escapeHtml(ev.name)}</b>
+          <p>${escapeHtml(ev.desc || "")}</p>
+          <em>${escapeHtml(stateText)}</em>
+        </div>
+        <button type="button" class="btn buy small" id="seasonEventClaimBtn" data-event-id="${ev.id}" ${status.canClaim ? "" : "disabled"}>${escapeHtml(ev.actionLabel || "完成")}</button>
+      </section>`;
+  }
+  function bindSeasonEventCard() {
+    const btn = $("seasonEventClaimBtn");
+    if (!btn || !G.claimSeasonEvent) return;
+    btn.onclick = () => {
+      const r = G.claimSeasonEvent(state, btn.dataset.eventId, now());
+      if (r.ok) {
+        toast((r.collectibleId ? itemEmoji(r.collectibleId) + " " : "") + r.message + (r.xp ? " +" + r.xp + " XP" : "") + (r.coins ? " +" + r.coins + " 🪙" : ""));
+        renderLettersModal();
+        afterChange(true);
+      } else if (r.reason === "requirements") {
+        toast("季節事件需要的物資不足");
+        renderLettersModal();
+      } else if (r.reason === "claimed") {
+        toast("本季已完成這件事");
+        renderLettersModal();
+      }
+    };
+  }
   function renderLettersModal() {
     const box = $("lettersBody"); if (!box) return;
     const mail = state.mail || { unlocked: {}, read: {}, replied: false };
     const unlocked = mail.unlocked || {};
     const read = mail.read || {};
-    const letters = chapter5Letters();
+    const letters = mailboxLetters();
     const firstReadable = letters.find((l) => unlocked[l.id]) || null;
     if (!selectedLetterId || !letterById(selectedLetterId) || !unlocked[selectedLetterId]) {
       selectedLetterId = (letters.find((l) => unlocked[l.id] && !read[l.id]) || firstReadable || letters[0] || {}).id || null;
@@ -571,6 +615,7 @@
         <p>修好更多地方、照顧動物、迎接四季與豐年祭，鎮長就會把祖母留下的信交到你手上。</p>
       </article>`;
     box.innerHTML = `
+      ${seasonEventCardHtml()}
       <div class="letters-layout">
         <div class="letters-list" data-audit="letter-list">${rows}</div>
         <div class="letters-reader">
@@ -586,14 +631,15 @@
     });
     const reply = $("letterReplyBtn");
     if (reply) reply.onclick = sendLetterReply;
+    bindSeasonEventCard();
   }
   function openLettersModal() {
     checkNewLetters(now(), false);
     const mail = state.mail || {};
     const unlocked = mail.unlocked || {};
     const read = mail.read || {};
-    const first = chapter5Letters().find((l) => unlocked[l.id] && !read[l.id]) ||
-      chapter5Letters().find((l) => unlocked[l.id]);
+    const first = mailboxLetters().find((l) => unlocked[l.id] && !read[l.id]) ||
+      mailboxLetters().find((l) => unlocked[l.id]);
     if (first) {
       selectedLetterId = first.id;
       if (G.readLetter) G.readLetter(state, first.id);
@@ -1434,8 +1480,8 @@
   const STAGE_NAME = ["seed", "sprout", "young", "mature", "ready"];
   // 遊戲建築 type → props atlas frame（v3 無 silo/bee_box 專屬圖，沿用近似物件）
   const BUILDING_FRAME = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap",
-    silo: "storage_crate", compostHeap: "compost_heap", duckPen: "chicken_coop", greenhouse: "compost_heap", festival_stall: "shop" };
-  const BUILDING_SHEET = { festival_stall: "buildings" };
+    silo: "storage_crate", compostHeap: "compost_heap", duckPen: "chicken_coop", greenhouse: "compost_heap", festival_stall: "shop", memory_garden: "flower_bed" };
+  const BUILDING_SHEET = { festival_stall: "buildings", memory_garden: "structures" };
   // 障礙 → props frame（同名）
   const OBSTACLE_FRAME = { rock: "rock", stump: "stump", bush: "bush" };
   // ===== Stage 4：像素世界 + camera + 分層 y-sort 渲染器 =====
@@ -1512,6 +1558,19 @@
     el.style.zIndex = Math.round(baselineY + (zAdjust || 0));
     if (f) { const st = window.Atlas.frameStyleFor(sheet, frame, w, h);
       if (st) { el.style.backgroundImage = st.backgroundImage; el.style.backgroundSize = st.backgroundSize; el.style.backgroundPosition = st.backgroundPosition; } }
+    worldEl.appendChild(el); if (arr) arr.push(el);
+    return el;
+  }
+  function addEmojiObjectPx(arr, emoji, cx, baselineY, sizePx, cls, zAdjust, kind) {
+    if (!worldEl) return null;
+    const size = sizePx || TILE * 0.8;
+    const el = document.createElement("div");
+    el.className = "ob emoji-ob " + (cls || "");
+    el.dataset.audit = "object"; el.dataset.kind = kind || "object";
+    el.textContent = emoji || "🌱";
+    el.style.left = pxv(Math.round(cx - size / 2)); el.style.top = pxv(Math.round(baselineY - size));
+    el.style.width = pxv(size); el.style.height = pxv(size);
+    el.style.zIndex = Math.round(baselineY + (zAdjust || 0));
     worldEl.appendChild(el); if (arr) arr.push(el);
     return el;
   }
@@ -1639,7 +1698,10 @@
         const crop = window.CROPS[plot.cropId];
         const sheet = (crop && crop.sheet) || "crops";
         const frame = plot.cropId + "_" + STAGE_NAME[prog.stage];
-        const el = addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop");
+        const hasFrame = crop && !crop.emojiOnly && window.Atlas.getFrame(sheet, frame);
+        const el = hasFrame
+          ? addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop")
+          : addEmojiObjectPx(obDyn, prog.stage <= 1 ? "🌱" : crop.emoji, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * (prog.ready ? 0.8 : 0.68), "crop", -2, "crop");
         if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; }
         if (prog.ready) addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
         else addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
@@ -2117,7 +2179,15 @@
         }
       }
       toast(n > 0 ? "💧 水井替 " + n + " 格作物澆水" : "目前沒有需要澆水的作物");
-      if (n > 0) { G.advanceStory(state, "water"); afterChange(false); }
+      let seasonEventClaimed = false;
+      if (G.seasonEventStatus && G.claimSeasonEvent) {
+        const ev = G.seasonEventStatus(state, t);
+        if (ev && ev.eventId === "summer_well_bless" && ev.canClaim) {
+          const r = G.claimSeasonEvent(state, "summer_well_bless", t);
+          if (r.ok) { seasonEventClaimed = true; toast("💧 " + r.message + (r.watered ? "，額外濕潤 " + r.watered + " 格" : "")); }
+        }
+      }
+      if (n > 0 || seasonEventClaimed) { if (n > 0) G.advanceStory(state, "water"); afterChange(false); }
     }
     updateMap(now());
   }
@@ -2675,7 +2745,12 @@
     if (seasonChanged) {
       const sid = G.currentSeason ? G.currentSeason(state, t) : (state.season && state.season.id);
       const s = (window.SEASONS || []).find((x) => x.id === sid);
-      if (s) toast(`${s.icon} ${s.name}到了，當季作物收購價提升。`);
+      const bias = G.seasonOrderBiasToast ? G.seasonOrderBiasToast(state, t) : "";
+      if (s) toast(`${s.icon} ${s.name}到了，當季作物收購價提升。${bias ? " " + bias : ""}`);
+      if (G.seasonEventStatus) {
+        const ev = G.seasonEventStatus(state, t);
+        if (ev && ev.event && ev.available) toast(`${ev.event.icon} 本季小事：${ev.event.name} 可在信箱查看。`);
+      }
     }
     checkNewLetters(t, true);
     const helped = G.runHelperOnline(state, t);

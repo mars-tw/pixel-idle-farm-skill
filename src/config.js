@@ -30,8 +30,10 @@ const CROPS = {
   strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57" },
   corn:       { id: "corn",       name: "玉米",   growMs: 210000, seedCost: 20, yield: 4, sellValue: 12, xp: 12, unlockLevel: 4, spriteRow: 4, emoji: "🌽", color: "#f0c84a", season: "夏" },
   pumpkin:    { id: "pumpkin",    name: "南瓜",   growMs: 900000, seedCost: 85, yield: 3, sellValue: 80, xp: 55, unlockLevel: 5, spriteRow: 5, emoji: "🎃", color: "#e8821e" },
+  radish:      { id: "radish",     name: "櫻桃蘿蔔", growMs: 90000, seedCost: 10, yield: 4, sellValue: 5, xp: 6, unlockLevel: 5, emoji: "🔴", color: "#d94b58", season: "春", emojiOnly: true },
   bell_pepper: { id: "bell_pepper", name: "甜椒", growMs: 360000, seedCost: 38, yield: 4, sellValue: 24, xp: 22, unlockLevel: 5, emoji: "🫑", color: "#4fae55", season: "夏", sheet: "crops2" },
   potato:      { id: "potato",      name: "馬鈴薯", growMs: 480000, seedCost: 45, yield: 5, sellValue: 22, xp: 28, unlockLevel: 6, emoji: "🥔", color: "#b9834b", season: "春", sheet: "crops2" },
+  sunflower:   { id: "sunflower",   name: "向日葵", growMs: 420000, seedCost: 48, yield: 3, sellValue: 26, xp: 26, orderXp: 40, unlockLevel: 6, emoji: "🌻", color: "#e0a72a", season: "夏", emojiOnly: true },
   grapes:      { id: "grapes",      name: "葡萄", growMs: 720000, seedCost: 72, yield: 4, sellValue: 55, xp: 42, unlockLevel: 7, emoji: "🍇", color: "#7c4aa6", season: "秋", sheet: "crops2" },
   melon:       { id: "melon",       name: "溫室甜瓜", growMs: 840000, seedCost: 90, yield: 3, sellValue: 90, xp: 58, unlockLevel: 8, emoji: "🍈", color: "#8fcf6a", season: "冬", sheet: "crops2" },
   pea:          { id: "pea",         name: "豌豆", growMs: 540000, seedCost: 54, yield: 5, sellValue: 28, xp: 32, unlockLevel: 6, emoji: "🫛", color: "#55b95d", season: "春", sheet: "crops3" },
@@ -48,6 +50,86 @@ const SEASONS = [
 ];
 const SEASON_DURATION_MS = 20 * 60 * 1000;
 const SEASON_UNLOCK_LEVEL = 6;
+const SEASON_ORDER_BIAS = {
+  春: {
+    id: "spring_pea_market",
+    name: "豌豆芽市",
+    icon: "🌸",
+    preferredItems: ["pea", "radish", "river_mint", "potato"],
+    weight: 4,
+    toast: "春季市集「豌豆芽市」偏好豌豆、櫻桃蘿蔔與溪畔薄荷。",
+  },
+  夏: {
+    id: "summer_river_pepper_week",
+    name: "河岸甜椒週",
+    icon: "☀️",
+    preferredItems: ["bell_pepper", "sunflower", "amber_resin", "corn"],
+    weight: 4,
+    toast: "夏季市集「河岸甜椒週」偏好甜椒、向日葵與河岸貨。",
+  },
+  秋: {
+    id: "autumn_grape_chestnut_bundle",
+    name: "葡萄栗子合單",
+    icon: "🍂",
+    preferredItems: ["grapes", "forest_chestnut", "sweet_potato", "wild_berry"],
+    weight: 4,
+    toast: "秋季市集「葡萄栗子合單」偏好葡萄、栗子與地瓜。",
+  },
+  冬: {
+    id: "winter_frost_leaf_hotpot",
+    name: "霜葉鍋物",
+    icon: "❄️",
+    preferredItems: ["winter_kale", "frost_cherry", "potato", "mooncap_spore"],
+    weight: 4,
+    toast: "冬季市集「霜葉鍋物」偏好冬羽甘藍、霜櫻果與暖鍋食材。",
+  },
+};
+const SEASON_EVENTS = {
+  spring_seed_swap: {
+    id: "spring_seed_swap",
+    season: "春",
+    name: "春播交換",
+    icon: "🌱",
+    desc: "把早春小麥交給鎮民換一張豌豆播種貼紙，順手記下今年第一輪播種。",
+    requires: { wheat: 5 },
+    reward: { xp: 8, collectible: "spring_seed_swap_sticker" },
+    actionLabel: "交換小麥",
+    done: "春播交換完成，豌豆芽市的第一張貼紙收進圖鑑。",
+  },
+  summer_well_bless: {
+    id: "summer_well_bless",
+    season: "夏",
+    name: "夏井祈願",
+    icon: "💧",
+    desc: "到井邊打水，替本季第一批乾土補上一輪濕潤。",
+    reward: { xp: 4, waterAll: true, collectible: "summer_well_charm" },
+    actionLabel: "汲水祈願",
+    station: "well",
+    done: "夏井祈願完成，水桶旁多了一枚小井繩結。",
+  },
+  autumn_share_basket: {
+    id: "autumn_share_basket",
+    season: "秋",
+    name: "秋收分籃",
+    icon: "🧺",
+    desc: "把一籃秋季作物分給孩子們，讓今年的收成有名字也有去處。",
+    requiresSeasonCrop: 3,
+    reward: { coins: 12, xp: 4, collectible: "autumn_share_label" },
+    actionLabel: "分出秋籃",
+    done: "秋收分籃完成，圖圖替籃子綁上了姓名牌。",
+  },
+  winter_hearth_soup: {
+    id: "winter_hearth_soup",
+    season: "冬",
+    name: "冬灶湯",
+    icon: "🍲",
+    desc: "交一份冬羽甘藍或兩份馬鈴薯，替班伯的灶邊湯鍋添料。",
+    requiresAny: { winter_kale: 1, potato: 2 },
+    reward: { xp: 7, collectible: "winter_soup_note" },
+    actionLabel: "添料入鍋",
+    done: "冬灶湯完成，班伯把湯鍋旁的照護短箋交給你。",
+  },
+};
 
 // ===== 等級曲線（累計 XP 門檻）=====
 // 解鎖節奏對齊 game-design：碼表 lv2 約 20 秒、lv5 約 8 分鐘內可達
@@ -144,6 +226,7 @@ const ACHIEVEMENTS = {
   seasonalTable:{ name: "四季餐桌", desc: "收成四種季節作物", icon: "🍽️" },
   festivalDeal: { name: "豐年祭供應商", desc: "完成一張豐年祭訂單", icon: "🏮" },
   letterKeeper: { name: "信箋守護者", desc: "讀完祖母留下的八封季節信", icon: "📬" },
+  neighborLetters: { name: "四鄰來信", desc: "讀完葛瑞、蘿拉、班伯與圖圖的鎮民附箋", icon: "💌", noBonus: true },
   fullPantry:   { name: "滿滿食物櫃", desc: "每一種作物都至少收成一次", icon: "🧺" },
   stallOwner:   { name: "四季攤主", desc: "興建豐年祭小攤", icon: "🎪" },
 };
@@ -245,6 +328,34 @@ const COLLECTIBLES = {
     source: "寫下給祖母的回信",
     desc: "舊布袋重新裝進新種子，提醒農場不是被繼承，而是被繼續照顧。",
   },
+  spring_seed_swap_sticker: {
+    id: "spring_seed_swap_sticker",
+    name: "春播交換貼紙",
+    emoji: "🌱",
+    source: "完成春播交換",
+    desc: "豌豆芽市的小貼紙，只記錄第一輪春播，不提供收益加成。",
+  },
+  summer_well_charm: {
+    id: "summer_well_charm",
+    name: "夏井繩結",
+    emoji: "💧",
+    source: "完成夏井祈願",
+    desc: "綁在井桶上的短繩結，提醒人們夏季先留水給田。",
+  },
+  autumn_share_label: {
+    id: "autumn_share_label",
+    name: "秋籃姓名牌",
+    emoji: "🏷️",
+    source: "完成秋收分籃",
+    desc: "圖圖寫上的小姓名牌，讓分享出去的收成也留在記憶裡。",
+  },
+  winter_soup_note: {
+    id: "winter_soup_note",
+    name: "冬灶湯短箋",
+    emoji: "🍲",
+    source: "完成冬灶湯",
+    desc: "班伯夾在照護筆記裡的小紙條，只作故事收藏。",
+  },
 };
 
 // ===== Stage 7：動物照護（餵食/澆水/梳理 → 親密度 → 產物品質）=====
@@ -310,6 +421,10 @@ const BUILDINGS = {
                  cost: { coins: 380, wood: 8, stone: 2 }, effect: { unlockAnimal: ["duck"], capacity: 3 },
                  maxCount: 1,
                  desc: "解鎖鴨，生產鴨蛋（每座最多 3 隻；全場最多 1 座）" },
+  memory_garden: { id: "memory_garden", name: "祖母花圃", emoji: "🏵️", unlockLevel: 4,
+                 cost: { wood: 6, compost: 4 }, effect: { orderXpBonus: 0.05, mailFlavor: true },
+                 maxCount: 1,
+                 desc: "訂單 XP +5%，並解鎖一封花圃短箋（最多 1 座；不影響售價或成長）" },
   greenhouse:  { id: "greenhouse", name: "溫室", emoji: "🏡", unlockLevel: 8,
                  cost: { coins: 760, wood: 10, stone: 6 }, effect: { growthAura: 0.88 },
                  maxCount: 1,
@@ -319,7 +434,7 @@ const BUILDINGS = {
                  maxCount: 1,
                  desc: "當季作物直售額外 +15%（最多 1 座生效）" },
 };
-const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "beeBox", "duckPen", "festival_stall", "greenhouse"];
+const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "memory_garden", "beeBox", "duckPen", "festival_stall", "greenhouse"];
 
 // ===== MVP2：動物（蓋家 → 計時生產 → 收集 → 入訂單/賣出；可餵食加速）=====
 // produceMs 生產週期、feedCost 餵食成本（用作物加速、立即產出）、unlockLevel 解鎖等級
@@ -424,7 +539,7 @@ const STATION_PLACEMENT = [
 ];
 
 // ===== Stage 6：NPC 鎮民（地圖實體，走近才能交談；台詞依故事進度變化）=====
-// phase：start（序章）→ ch1done（清完舊路）→ bridge（修好橋）→ ch2done（探索完東林）
+// phase：start（序章）→ ch1done → bridge → ch2done → ch3done → ch4done → ch5done → postscript
 const NPCS = {
   mayor: { id: "mayor", name: "鎮長 葛瑞", title: "晨光鎮長", frame: "mayor", lines: {
     start:   ["晨光鎮歡迎你回來，孩子。", "你祖母的田荒了好一陣，先到告示牌接第一張委託吧。"],
@@ -433,7 +548,8 @@ const NPCS = {
     ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"],
     ch3done: ["作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。", "以後我這偶爾會帶點小委託來，別嫌我麻煩啊。"],
     ch4done: ["豐年祭辦得穩，四季物產也站上檯面了。", "晨光鎮今年的招牌，就靠你的農場撐起來。"],
-    ch5done: ["你祖母把信交給我時，手一直按著那頂草帽。", "現在我懂了，她等的不是舊農場回來，是你願意把它往前帶。"] } },
+    ch5done: ["你祖母把信交給我時，手一直按著那頂草帽。", "現在我懂了，她等的不是舊農場回來，是你願意把它往前帶。"],
+    postscript: ["明年的豐年祭我想多留一排攤位，讓四季物產都有自己的牌子。", "農場不用急著變大，只要每一季都有人願意再走回來。"] } },
   merchant: { id: "merchant", name: "商人 蘿拉", title: "市集商人", frame: "merchant", lines: {
     start:   ["新鮮貨色看一下？等你有了作物，市集隨時收購。"],
     ch1done: ["你的麥子品質不錯，訂單看板上的客人會喜歡。"],
@@ -441,7 +557,8 @@ const NPCS = {
     ch2done: ["生意越來越好，多虧你把路打通了。"],
     ch3done: ["聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！", "手頭有好貨的話，記得留一份給我試賣。"],
     ch4done: ["四季貨架終於補齊，甜椒、葡萄和鴨蛋都能掛上祭典牌。", "豐年祭那張訂單，我會替你放在市集最顯眼的位置。"],
-    ch5done: ["你祖母以前總把最好的種子留到最後才賣，說那是替明年留路。", "你回的那封信，我會替她放在貨架最裡側，不給風吹走。"] } },
+    ch5done: ["你祖母以前總把最好的種子留到最後才賣，說那是替明年留路。", "你回的那封信，我會替她放在貨架最裡側，不給風吹走。"],
+    postscript: ["下季的貨單我先替你空著，甜椒、向日葵和葡萄都有人問。", "別把市集看成終點，它只是讓農場故事被更多人帶走的地方。"] } },
   elder: { id: "elder", name: "老農 班伯", title: "隔壁老農", frame: "elder", lines: {
     start:   ["雞舍那隻母雞養得還行，記得常餵牠。"],
     ch1done: ["想要更多蛋奶？把動物顧好，產量自然上來。"],
@@ -449,7 +566,8 @@ const NPCS = {
     ch2done: ["下次該認真養群動物了——親密度高，產物品質才好。"],
     ch3done: ["照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。", "手頭若有多的產物，拿來讓我瞧瞧成果也好。"],
     ch4done: ["你連鴨都照顧得服服貼貼，這座農場真的成氣候了。", "季節會輪，手藝不能停，記得讓田地跟著天時走。"],
-    ch5done: ["她那年把草帽掛在雞舍旁，說總有一天會有人接著戴。", "你照顧得好，動物知道，土地也知道。"] } },
+    ch5done: ["她那年把草帽掛在雞舍旁，說總有一天會有人接著戴。", "你照顧得好，動物知道，土地也知道。"],
+    postscript: ["花圃那邊若長了雜草，別急著拔光，有些小花會自己報季節。", "動物明天還是會餓，這很好，表示農場還在活著。"] } },
   child: { id: "child", name: "孩童 圖圖", title: "鎮上孩童", frame: "child", lines: {
     start:   ["你會種田嗎？教教我嘛！"],
     ch1done: ["哇，你收成了好多麥子！"],
@@ -457,7 +575,8 @@ const NPCS = {
     ch2done: ["東林的古樹好大喔，你看過了嗎？"],
     ch3done: ["我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？"],
     ch4done: ["豐年祭的燈籠超漂亮！下次我也要幫忙掛。"],
-    ch5done: ["我看見信箱亮了一下，好像故事真的住在裡面。", "以後我也要寫信，寫給長大後還記得農場的自己。"] } },
+    ch5done: ["我看見信箱亮了一下，好像故事真的住在裡面。", "以後我也要寫信，寫給長大後還記得農場的自己。"],
+    postscript: ["我在野餐地圖上又畫了一條路，等秋天我們去找栗子。", "如果你明年還在，我就把最大的向日葵留給農場門口。"] } },
 };
 const NPC_PLACEMENT = [
   { type: "mayor",    x: 10, y: 4, facing: "down" },
@@ -471,16 +590,16 @@ const NPC_PLACEMENT = [
 // 確保永遠不會要求玩家還沒解鎖/還沒收集過的品項（沿用 D 系統的發現閥門）。
 const NPC_REQUEST_COOLDOWN_MS = 8 * 60 * 1000; // 交付後多久可再接下一張委託
 const NPC_REQUESTS = {
-  mayor:    { pool: ["wheat", "carrot", "tomato", "corn", "bell_pepper", "potato", "melon"], rewardMul: 1.0,
+  mayor:    { pool: ["wheat", "carrot", "tomato", "radish", "corn", "bell_pepper", "sunflower", "potato", "melon"], rewardMul: 1.0,
     flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？"],
     flavorDone:  ["有你真好，晨光鎮又熱鬧一場。"] },
-  merchant: { pool: ["strawberry", "corn", "pumpkin", "bell_pepper", "potato", "grapes", "melon", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "egg_premium", "duck_egg_good", "duck_egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
+  merchant: { pool: ["strawberry", "corn", "pumpkin", "radish", "bell_pepper", "sunflower", "potato", "grapes", "melon", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "egg_premium", "duck_egg_good", "duck_egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
     flavorOffer: ["市集缺貨，手頭有{item}嗎？"],
     flavorDone:  ["生意興隆，多虧你這批貨。"] },
-  elder:    { pool: ["egg", "duck_egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "duck_egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
+  elder:    { pool: ["radish", "potato", "winter_kale", "egg", "duck_egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "duck_egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
     flavorOffer: ["幫我張羅點{item}，我拿去燉湯。"],
     flavorDone:  ["這品質，照顧得很用心啊。"] },
-  child:    { pool: ["wheat", "carrot", "corn", "strawberry", "grapes", "wild_berry", "frost_cherry"], rewardMul: 0.85,
+  child:    { pool: ["wheat", "carrot", "radish", "corn", "sunflower", "strawberry", "grapes", "wild_berry", "frost_cherry"], rewardMul: 0.85,
     flavorOffer: ["可以給我一點{item}嗎？我肚子餓了！"],
     flavorDone:  ["謝謝你！好好吃！"] },
 };
@@ -748,8 +867,83 @@ const LETTERS = [
       "現在輪到你寫一封信了，不必寫給過去的我，寫給明天還會走進這塊田的自己。"
     ],
   },
+  {
+    id: "letter_mayor_notice_back",
+    title: "葛瑞：公告欄背面的字",
+    from: "葛瑞",
+    season: "四季",
+    unlock: { type: "side_quest_done", npcId: "mayor" },
+    body: [
+      "我把舊公告欄翻修時，才看見背面刻著你祖母的字：『留一格給還沒回家的人。』",
+      "以前我只當那是她念舊，直到你把委託一張張接回來，鎮上的人又開始在欄前停步。",
+      "謝謝你讓這塊木板不只是公告，也像一扇重新打開的門。"
+    ],
+  },
+  {
+    id: "letter_merchant_ledger_leaf",
+    title: "蘿拉：市集帳本夾層",
+    from: "蘿拉",
+    season: "四季",
+    unlock: { type: "side_quest_done", npcId: "merchant" },
+    body: [
+      "整理帳本時，我找到一張你祖母留下的夾頁，上面只寫著『好貨要有人情味才賣得遠』。",
+      "你送來的森林香包和農產樣貨，讓這句話突然變得很會算帳。",
+      "下次來市集，我替你留一格最不怕風吹的位置。"
+    ],
+  },
+  {
+    id: "letter_elder_care_note",
+    title: "班伯：照護筆記末頁",
+    from: "班伯",
+    season: "四季",
+    unlock: { type: "side_quest_done", npcId: "elder" },
+    body: [
+      "照護筆記最後一頁本來是空的，我今天補上一行：『有人願意慢慢學，動物就願意慢慢信。』",
+      "你送來的蛋、草料和成果都不算誇張，卻很穩，這比一時的熱鬧更難得。",
+      "農場的聲音回來了，以後每天照常做就好。"
+    ],
+  },
+  {
+    id: "letter_child_picnic_map",
+    title: "圖圖：野餐地圖背面",
+    from: "圖圖",
+    season: "四季",
+    unlock: { type: "side_quest_done", npcId: "child" },
+    body: [
+      "我在野餐地圖背面畫了農場，田是方方的，橋是亮亮的，信箱旁邊有一顆大大的星星。",
+      "你給我的點心都很好吃，可是最好的是大家又有地方可以去。",
+      "等下次豐年祭，我要把這張地圖拿給所有人看。"
+    ],
+  },
+  {
+    id: "letter_memory_garden",
+    title: "花圃邊的短箋",
+    from: "祖母",
+    season: "四季",
+    unlock: { type: "building_owned", id: "memory_garden" },
+    body: [
+      "如果你替我留下一小塊花圃，請別把它整理得太整齊。",
+      "有些花會自己選地方長，像人會自己選回家的日子。",
+      "你若從旁邊走過，就當我在田埂上向你點頭。"
+    ],
+  },
 ];
-const CHAPTER5_LETTERS = LETTERS.map((l) => l.id);
+const CHAPTER5_LETTERS = [
+  "letter_first_delivery",
+  "letter_bridge",
+  "letter_animals",
+  "letter_spring",
+  "letter_summer",
+  "letter_autumn",
+  "letter_winter",
+  "letter_festival",
+];
+const TOWNSFOLK_LETTERS = [
+  "letter_mayor_notice_back",
+  "letter_merchant_ledger_leaf",
+  "letter_elder_care_note",
+  "letter_child_picnic_map",
+];
 
 const MAP_DEFAULT = { width: MAP_W, height: MAP_H };
 // 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
@@ -758,6 +952,7 @@ const FACING_ROW = { down: 0, left: 1, right: 2, up: 3 };
 // ===== 匯出（瀏覽器掛 window、Node 用 module.exports）=====
 const CONFIG = {
   GAME, CROPS, CROP_SHEET, SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL,
+  SEASON_ORDER_BIAS, SEASON_EVENTS,
   LEVEL_XP, levelFromXp, xpForLevel,
   UPGRADES, UPGRADE_ORDER, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
   WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
@@ -770,7 +965,7 @@ const CONFIG = {
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
   EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS, CHAPTER4_QUESTS,
-  LETTERS, CHAPTER5_LETTERS,
+  LETTERS, CHAPTER5_LETTERS, TOWNSFOLK_LETTERS,
   NPCS, NPC_PLACEMENT, NPC_REQUESTS, NPC_REQUEST_COOLDOWN_MS, NPC_SIDE_QUESTS,
   QUALITY_TIERS, QUALITY_SELL_MUL, QUALITY_LABEL,
   AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,

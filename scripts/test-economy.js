@@ -246,6 +246,21 @@ console.log("\n== 8. 等級曲線與作物解鎖 ==");
     const netPerMin = ((crop.yield * crop.sellValue) - crop.seedCost) / (crop.growMs / 60000);
     assert(crop.sheet === "crops3" && netPerMin > 0, `${crop.name} 使用 crops3 且經濟為正（${netPerMin.toFixed(1)} 金/分鐘）`);
   }
+  const radish = C.CROPS.radish;
+  const sunflower = C.CROPS.sunflower;
+  const strawberry = C.CROPS.strawberry;
+  const strawberryNetPerMin = ((strawberry.yield * strawberry.sellValue) - strawberry.seedCost) / (strawberry.growMs / 60000);
+  const radishNetPerMin = ((radish.yield * radish.sellValue) - radish.seedCost) / (radish.growMs / 60000);
+  const sunflowerNetPerMin = ((sunflower.yield * sunflower.sellValue) - sunflower.seedCost) / (sunflower.growMs / 60000);
+  assert(radish.unlockLevel === 5 && radish.season === "春" && radish.growMs === 90000 && radish.emojiOnly,
+    "P0 radish 櫻桃蘿蔔為 Lv5 春季 90s emoji 作物");
+  assert(radishNetPerMin > 0 && radishNetPerMin < strawberryNetPerMin,
+    `radish 淨利 ${radishNetPerMin.toFixed(1)} 金/分鐘，低於 strawberry ${strawberryNetPerMin.toFixed(1)}`);
+  assert(sunflower.unlockLevel === 6 && sunflower.season === "夏" && sunflower.emojiOnly && sunflower.orderXp > sunflower.xp,
+    "P0 sunflower 向日葵為 Lv6 夏季 emoji 作物，訂單 XP 偏高");
+  assert((sunflower.yield * sunflower.sellValue) < (strawberry.yield * strawberry.sellValue)
+    && sunflowerNetPerMin < strawberryNetPerMin,
+    "sunflower 單次直售期望與金/分鐘皆不超 strawberry");
   const seasonCounts = {};
   for (const crop of Object.values(C.CROPS)) if (crop.season) seasonCounts[crop.season] = (seasonCounts[crop.season] || 0) + 1;
   for (const season of ["春", "夏", "秋", "冬"]) assert((seasonCounts[season] || 0) >= 1, `${season} 至少有 1 種作物`);
@@ -347,6 +362,19 @@ console.log("\n== 10. R47 季節與豐年祭訂單 ==");
   const kinds = Object.keys(order.wants).length;
   assert(order.rarity === "festival", "可生成豐年祭稀有度訂單");
   assert(kinds >= 2 && kinds <= 3, `豐年祭訂單要求 2~3 種品項（實際 ${kinds}）`);
+
+  const biasSt = S.defaultState(T0);
+  biasSt.level = 8;
+  biasSt.weather = { id: "clear", untilMs: T0 + 1e9 };
+  biasSt.season = { id: "春", untilMs: T0 + 1e9 };
+  const peaSellValue = C.CROPS.pea.sellValue;
+  const springOrder = G.makeOrder(biasSt, T0, () => 0, "spring_bias");
+  assert((springOrder.wants.pea || 0) > 0, "P0 季節訂單偏壓：春季豌豆芽市強制帶入 pea");
+  assert(C.CROPS.pea.sellValue === peaSellValue, "季節訂單偏壓不改 pea base sellValue");
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).forEach((id) => (biasSt.story.completed[id] = true));
+  const npcReq = G.generateNpcRequest(biasSt, "mayor", T0 + 1, () => 0);
+  const npcItem = npcReq && Object.keys(npcReq.wants)[0];
+  assert(["radish", "potato"].includes(npcItem), `P0 NPC 委託也吃春季偏壓（${npcItem}）`);
 }
 
 console.log("\n== 11. 存檔遷移（向後相容）==");

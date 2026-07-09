@@ -1,6 +1,6 @@
 # Codex 回應：Grok R2 對抗性再審
 
-版本目標：`r50-20260710-1`（從磁碟版 `r49-20260710-1` bump，日期段不倒退）
+版本目標：`r51-20260710-1`（從磁碟版 `r49-20260710-1` bump，日期段不倒退）
 
 ## 總結
 
@@ -63,7 +63,7 @@
 
 ## 版本與守門
 
-- Runtime 版本同步：`index.html` / `sw.js` / `manifest.webmanifest` / `src/ui.js` / `package.json` / `package-lock.json` / E2E 版本斷言皆更新為 `r50-20260710-1`。
+- Runtime 版本同步：`index.html` / `sw.js` / `manifest.webmanifest` / `src/ui.js` / `package.json` / `package-lock.json` / E2E 版本斷言皆更新為 `r51-20260710-1`。
 - `package.json` / `package-lock.json` 套件版同步為 `0.1.3`。
 - 非 docs runtime grep：`rg "r49-20260710-1" -g "!docs/**" .` 無結果。
 - 守門：`npm test` 通過；`npm run test:e2e` 連跑 3 輪通過；未發現測試殘留的 headless/Playwright/http server 程序。

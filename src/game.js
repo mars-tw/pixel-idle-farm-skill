@@ -11,12 +11,12 @@
     : root;
   const {
     GAME, CROPS, UPGRADES, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
-    SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL,
+    SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL, SEASON_ORDER_BIAS, SEASON_EVENTS,
     WEATHER, WEATHER_UNLOCK_LEVEL, WEATHER_DURATION_MS, ACHIEVEMENTS,
     levelFromXp,
     PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
     BUILDINGS, BUILDING_ORDER, ANIMALS, MOISTURE_MUL,
-    LETTERS, CHAPTER5_LETTERS,
+    LETTERS, CHAPTER5_LETTERS, TOWNSFOLK_LETTERS,
     AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,
     CARE_GAIN, CARE_COOLDOWN_MS, STATUS_STALE_MS, QUALITY_TIERS,
   } = C;
@@ -91,6 +91,14 @@
     }
     return bonus;
   }
+  function buildingOrderXpBonus(state) {
+    let bonus = 0; const seen = {};
+    for (const b of state.buildings || []) {
+      const def = BUILDINGS[b.type];
+      if (def && def.effect && def.effect.orderXpBonus && effectBuildingAllowed(seen, b.type, def)) bonus += def.effect.orderXpBonus;
+    }
+    return bonus;
+  }
   function effectiveGrowMs(state, cropId, now) {
     const c = CROPS[cropId];
     return Math.max(1000, Math.floor(c.growMs * growthMultiplier(state, now)));
@@ -161,8 +169,12 @@
     return state.level - before; // 升了幾級
   }
   function achievementBonus(state) {
-    // 每個成就 +2% 售出（永久微加成，非必要）
-    return Object.keys(state.achievements).length * 0.02;
+    // 舊成就維持 +2% 售出；新內容可標 noBonus，避免內容收藏推高理論金幣上限。
+    return Object.keys(state.achievements || {}).reduce((sum, id) => {
+      const def = ACHIEVEMENTS[id];
+      if (def && def.noBonus) return sum;
+      return sum + (def && typeof def.bonus === "number" ? def.bonus : 0.02);
+    }, 0);
   }
   function checkAchievements(state) {
     const got = [];
@@ -181,6 +193,7 @@
     if ((state.stats.festivalOrders || 0) > 0) unlock("festivalDeal");
     const read = (state.mail && state.mail.read) || {};
     if ((CHAPTER5_LETTERS || []).length && (CHAPTER5_LETTERS || []).every((id) => read[id])) unlock("letterKeeper");
+    if ((TOWNSFOLK_LETTERS || []).length && (TOWNSFOLK_LETTERS || []).every((id) => read[id])) unlock("neighborLetters");
     if (Object.keys(CROPS).every((id) => ((state.stats.harvested || {})[id] || 0) > 0)) unlock("fullPantry");
     if ((state.buildings || []).some((b) => b.type === "festival_stall")) unlock("stallOwner");
     return got;
@@ -249,6 +262,138 @@
   }
   function updateSeason(state, now) {
     return advanceSeasonState(state, now).changed;
+  }
+  function seasonOrderBias(state, now) {
+    if (state.level < (SEASON_UNLOCK_LEVEL || 6)) return null;
+    const season = currentSeason(state, now);
+    return (SEASON_ORDER_BIAS || {})[season] || null;
+  }
+  function seasonOrderBiasToast(state, now) {
+    const bias = seasonOrderBias(state, now);
+    return bias ? bias.toast : "";
+  }
+  function seasonBiasItems(state, now, pool) {
+    const bias = seasonOrderBias(state, now);
+    if (!bias) return [];
+    const set = new Set(pool || []);
+    return (bias.preferredItems || []).filter((id) => set.has(id));
+  }
+  function weightedSeasonPick(state, now, rng, pool) {
+    if (!pool || !pool.length) return null;
+    const bias = seasonOrderBias(state, now);
+    const preferred = seasonBiasItems(state, now, pool);
+    if (!bias || !preferred.length) return rngPick(rng, pool);
+    const preferredSet = new Set(preferred);
+    const weighted = [];
+    const weight = Math.max(1, Math.floor(bias.weight || 1));
+    for (const id of pool) {
+      const n = preferredSet.has(id) ? weight : 1;
+      for (let i = 0; i < n; i++) weighted.push(id);
+    }
+    return rngPick(rng, weighted);
+  }
+  function forcedSeasonPick(state, now, rng, pool) {
+    const preferred = seasonBiasItems(state, now, pool);
+    return preferred.length ? rngPick(rng, preferred) : weightedSeasonPick(state, now, rng, pool);
+  }
+  function ensureSeasonEventState(state) {
+    if (!state.flags) state.flags = {};
+    if (!state.flags.seasonEventsClaimed) state.flags.seasonEventsClaimed = {};
+  }
+  function seasonEventForSeason(season) {
+    return Object.values(SEASON_EVENTS || {}).find((ev) => ev.season === season) || null;
+  }
+  function seasonCycleId(state, now) {
+    const season = currentSeason(state, now);
+    const duration = SEASON_DURATION_MS || 0;
+    let until = state.season && typeof state.season.untilMs === "number" ? state.season.untilMs : 0;
+    if (state.level < (SEASON_UNLOCK_LEVEL || 6) || !duration || until <= 0) return season + ":0";
+    if (now >= until) {
+      const advance = Math.floor((now - until) / duration) + 1;
+      until += advance * duration;
+    }
+    return season + ":" + Math.max(0, until - duration);
+  }
+  function requirementStatusForSeasonEvent(state, ev) {
+    const items = (state.storage && state.storage.items) || {};
+    const consumes = {};
+    const missing = [];
+    for (const [id, qty] of Object.entries(ev.requires || {})) {
+      if ((items[id] || 0) < qty) missing.push({ id, need: qty, have: items[id] || 0 });
+      else consumes[id] = qty;
+    }
+    if (ev.requiresSeasonCrop) {
+      const seasonal = Object.values(CROPS).filter((c) => c.season === ev.season).map((c) => c.id);
+      const chosen = seasonal.find((id) => (items[id] || 0) >= ev.requiresSeasonCrop);
+      if (chosen) consumes[chosen] = ev.requiresSeasonCrop;
+      else missing.push({ anySeasonCrop: ev.season, need: ev.requiresSeasonCrop, have: 0 });
+    }
+    if (ev.requiresAny) {
+      const chosen = Object.entries(ev.requiresAny).find(([id, qty]) => (items[id] || 0) >= qty);
+      if (chosen) consumes[chosen[0]] = chosen[1];
+      else missing.push({ any: Object.keys(ev.requiresAny), need: 1, have: 0 });
+    }
+    return { ok: missing.length === 0, consumes, missing };
+  }
+  function seasonEventStatus(state, now) {
+    ensureSeasonEventState(state);
+    if (state.level < (SEASON_UNLOCK_LEVEL || 6)) return { unlocked: false, event: null, available: false, claimed: false, canClaim: false };
+    const season = currentSeason(state, now);
+    const ev = seasonEventForSeason(season);
+    if (!ev) return { unlocked: true, event: null, available: false, claimed: false, canClaim: false };
+    const cycleId = seasonCycleId(state, now);
+    const claimed = !!state.flags.seasonEventsClaimed[cycleId];
+    const req = requirementStatusForSeasonEvent(state, ev);
+    return {
+      unlocked: true,
+      season,
+      cycleId,
+      eventId: ev.id,
+      event: ev,
+      available: !claimed,
+      claimed,
+      canClaim: !claimed && req.ok,
+      consumes: req.consumes,
+      missing: req.missing,
+    };
+  }
+  function consumeItems(state, consumes) {
+    for (const [id, qty] of Object.entries(consumes || {})) {
+      state.storage.items[id] = (state.storage.items[id] || 0) - qty;
+      if (state.storage.items[id] <= 0) delete state.storage.items[id];
+    }
+  }
+  function waterAllDryPlots(state, now) {
+    let watered = 0;
+    const active = activePlotCount(state);
+    for (let i = 0; i < Math.min((state.plots || []).length, active); i++) {
+      if (waterPlot(state, i, now).ok) watered++;
+    }
+    return watered;
+  }
+  function claimSeasonEvent(state, eventId, now) {
+    ensureSeasonEventState(state);
+    const status = seasonEventStatus(state, now);
+    const ev = status.event;
+    if (!ev || (eventId && ev.id !== eventId)) return { ok: false, reason: "not_available" };
+    if (status.claimed) return { ok: false, reason: "claimed", status };
+    if (!status.canClaim) return { ok: false, reason: "requirements", status };
+    consumeItems(state, status.consumes);
+    const reward = ev.reward || {};
+    const out = { ok: true, eventId: ev.id, cycleId: status.cycleId, xp: reward.xp || 0, coins: reward.coins || 0, collectibleId: reward.collectible || null, watered: 0, message: ev.done || ev.name };
+    if (reward.coins) {
+      state.coins += reward.coins;
+      state.stats.totalCoinsEarned = (state.stats.totalCoinsEarned || 0) + reward.coins;
+    }
+    if (reward.xp) addXp(state, reward.xp);
+    if (reward.waterAll) out.watered = waterAllDryPlots(state, now);
+    if (reward.collectible) {
+      if (!state.collections) state.collections = {};
+      state.collections[reward.collectible] = true;
+    }
+    state.flags.seasonEventsClaimed[status.cycleId] = { eventId: ev.id, claimedAt: now };
+    checkAchievements(state);
+    return out;
   }
   function sellMultiplier(state, now) {
     const lv = state.upgrades.sellBonus;
@@ -335,7 +480,7 @@
   // 作物 + 動物產品的訂單需求量範圍
   const ORDER_QTY = {
     wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], corn: [2, 5], strawberry: [2, 4], pumpkin: [1, 3],
-    bell_pepper: [2, 5], potato: [3, 7], grapes: [2, 4], melon: [1, 2],
+    radish: [3, 7], bell_pepper: [2, 5], potato: [3, 7], sunflower: [2, 4], grapes: [2, 4], melon: [1, 2],
     pea: [3, 7], sweet_potato: [2, 4], winter_kale: [2, 4],
     egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5], duck_egg: [2, 6],
     // Stage 7.1：品質分級品項明確給數量範圍，隨品質往下收（原本沒列到會 fallback [2,5]，
@@ -433,22 +578,28 @@
     const chosen = [];
     for (let k = 0; k < nKinds; k++) {
       let itemId; let guard = 0;
-      do { itemId = rngPick(rng, pool); guard++; } while (chosen.includes(itemId) && guard < 10);
+      do {
+        const candidatePool = pool.filter((id) => chosen.indexOf(id) === -1);
+        const pickPool = candidatePool.length ? candidatePool : pool;
+        itemId = k === 0 ? forcedSeasonPick(state, now, rng, pickPool) : weightedSeasonPick(state, now, rng, pickPool);
+        guard++;
+      } while (chosen.includes(itemId) && guard < 10);
       chosen.push(itemId);
       const [mn, mx] = ORDER_QTY[itemId] || [2, 5];
       const qty = rngInt(rng, mn, mx);
       wants[itemId] = (wants[itemId] || 0) + qty;
       const def = getItemDef(itemId);
       baseValue += (def ? def.sellValue : 0) * qty;
-      baseXp += (CROPS[itemId] ? CROPS[itemId].xp : Math.round((def ? def.sellValue : 0) * 0.6)) * qty;
+      baseXp += (CROPS[itemId] ? (CROPS[itemId].orderXp || CROPS[itemId].xp) : Math.round((def ? def.sellValue : 0) * 0.6)) * qty;
     }
     const id = "order_" + idSeed;
+    const xpBonus = buildingOrderXpBonus(state);
     return {
       id,
       wants,
       rarity: rarityId,
       rewardCoins: Math.round(baseValue * rarity.payMult),
-      rewardXp: Math.max(1, Math.round(baseXp * 0.5 * rarity.xpMult)),
+      rewardXp: Math.max(1, Math.round(baseXp * 0.5 * rarity.xpMult * (1 + xpBonus))),
       expiresAt: now + GAME.orderTtlMs,
       npcId: orderNpcIdFor(id),
     };
@@ -944,6 +1095,11 @@
     if (unlock.type === "festival_orders") return ((state.stats && state.stats.festivalOrders) || 0) >= (unlock.count || 1);
     if (unlock.type === "animal_happy") return (state.animals || []).some((a) => (a.bestAffinity || 0) >= AFFINITY_HAPPY_THRESHOLD);
     if (unlock.type === "level") return (state.level || 1) >= (unlock.level || 1);
+    if (unlock.type === "side_quest_done") {
+      const st = npcSideQuestStatus(state, unlock.npcId);
+      return !!(st && st.completed);
+    }
+    if (unlock.type === "building_owned") return buildingCount(state, unlock.id || unlock.building) > 0;
     return false;
   }
   function evaluateLetters(state, now) {
@@ -1339,9 +1495,9 @@
     const t = getTileById(state, tileId);
     return t && t.npc ? (C.NPCS || {})[t.npc] : null;
   }
-  // 對話階段：start → ch1done → bridge → ch2done → ch3done → ch4done
+  // 對話階段：start → ch1done → bridge → ch2done → ch3done → ch4done → postscript
   function npcPhase(state) {
-    if (chapter5Done(state)) return "ch5done";
+    if (chapter5Done(state)) return "postscript";
     if (chapter4Done(state)) return "ch4done";
     if (chapter3Done(state)) return "ch3done";
     if (chapter2Done(state)) return "ch2done";
@@ -1353,7 +1509,7 @@
   // line 會換成委託台詞，並在回傳值附上 request 唯讀投影供 UI 判斷是否顯示交付按鈕。
   function npcDialogue(state, npcId, lineIdx) {
     const npc = (C.NPCS || {})[npcId]; if (!npc) return null;
-    const order = ["ch5done", "ch4done", "ch3done", "ch2done", "bridge", "ch1done", "start"];
+    const order = ["postscript", "ch5done", "ch4done", "ch3done", "ch2done", "bridge", "ch1done", "start"];
     const phase = npcPhase(state);
     // 取目前階段的台詞；若該階段未定義，往較早階段回退
     let lines = null;
@@ -1482,7 +1638,7 @@
     const chk = canRequestFrom(state, npcId, now); if (!chk.ok) return null;
     const cfg = C.NPC_REQUESTS[npcId];
     const pool = npcRequestPool(state, npcId);
-    const itemId = rngPick(rng, pool);
+    const itemId = forcedSeasonPick(state, now, rng, pool);
     const [mn, mx] = ORDER_QTY[itemId] || [2, 5];
     const qty = Math.max(1, Math.round(rngInt(rng, mn, mx) * 0.6));
     const baseValue = sellUnitValue(state, itemId, now) * qty;
@@ -2036,9 +2192,10 @@
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, effectiveGrowMs, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
-    achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus,
+    achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder, orderNarrative,
+    seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
     makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,

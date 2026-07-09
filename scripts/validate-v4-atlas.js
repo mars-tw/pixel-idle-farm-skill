@@ -199,6 +199,7 @@ async function main() {
     const cropMaps = {};
     for (const cid of Object.keys(C.CROPS)) {
       const crop = C.CROPS[cid];
+      if (crop.emojiOnly) continue;
       const sheetKey = crop.sheet || "crops";
       if (!cropMaps[sheetKey]) {
         const sheet = manifest.sheets[sheetKey];

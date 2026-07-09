@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r50-20260710-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r50-20260710-1">
+<link rel="manifest" href="manifest.webmanifest?v=r51-20260710-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r51-20260710-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r50-20260710-1";
+  const VERSION = "r51-20260710-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -330,9 +330,15 @@
   .letter-paper.locked { filter: saturate(.78); color: #6a5639; }
   .letter-meta { font-size: 11px; color: #7d5b22; font-weight: 900; letter-spacing: 0; }
   .letters-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; font-weight: 900; color: #674a1a; }
+  .season-event-card { margin-bottom: 12px; padding: 10px 12px; border: 2px solid #c99a42; border-radius: 8px; background: #fff4c8;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; color: #4b3512; }
+  .season-event-card b { font-size: 13px; }
+  .season-event-card p { margin: 3px 0; font-size: 12px; line-height: 1.45; }
+  .season-event-card em { font-style: normal; font-size: 11px; font-weight: 900; color: #775421; }
+  .season-event-card.done { background: #edf6d8; border-color: #9fbd65; }
   .story-mail-btn { margin-top: 8px; width: 100%; }
   .ob.mail-unread::after { content: ""; position: absolute; right: -3px; top: -3px; width: 11px; height: 11px; border-radius: 999px; background: #d53a31; border: 2px solid #fff7d8; box-shadow: 0 0 0 2px rgba(120,35,25,.2); }
-  @media (max-width: 640px) { .letters-layout { grid-template-columns: 1fr; } .letter-paper { min-height: 240px; } }
+  @media (max-width: 640px) { .letters-layout { grid-template-columns: 1fr; } .letter-paper { min-height: 240px; } .season-event-card { grid-template-columns: 1fr; } }
   .settings-card { max-width: 460px; max-height: calc(100dvh - 32px); overflow-y: auto; }
   .settings-list { display: grid; gap: 8px; }
   .setting-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center;
@@ -460,6 +466,8 @@
   /* y-sort 物件 sprite（建築/障礙/作物/動物/站點），z-index = 腳底 baseline */
   .ob { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%;
     pointer-events: none; }
+  .ob.emoji-ob { display: flex; align-items: center; justify-content: center; font-size: 28px; line-height: 1;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.28)); }
   .ob.shadowed { filter: drop-shadow(0 2px 2px rgba(0,0,0,.28)); }
   .ob.broken { opacity: .5; filter: grayscale(.45) brightness(.85); }  /* Stage 5：斷橋未修 */
   .ob-bar { position: absolute; height: 4px; background: rgba(0,0,0,.42); border-radius: 3px; overflow: hidden; z-index: 8000; }
@@ -769,7 +777,7 @@
 <!-- 第五章：祖母的季節信箋 -->
 <div class="modal" id="lettersModal" role="dialog" aria-modal="true" aria-labelledby="lettersTitle">
   <div class="modal-card letters-modal-card">
-    <h2 id="lettersTitle">📬 祖母的季節信箋</h2>
+    <h2 id="lettersTitle">📬 農場信箱</h2>
     <div id="lettersBody"></div>
     <button class="btn ghost" id="lettersClose">關閉信箱</button>
   </div>
@@ -786,10 +794,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r50-20260710-1"></script>
-<script src="src/game.js?v=r50-20260710-1"></script>
-<script src="src/state.js?v=r50-20260710-1"></script>
-<script src="src/atlas.js?v=r50-20260710-1"></script>
-<script src="src/ui.js?v=r50-20260710-1"></script>
+<script src="src/config.js?v=r51-20260710-1"></script>
+<script src="src/game.js?v=r51-20260710-1"></script>
+<script src="src/state.js?v=r51-20260710-1"></script>
+<script src="src/atlas.js?v=r51-20260710-1"></script>
+<script src="src/ui.js?v=r51-20260710-1"></script>
 </body>
 </html>

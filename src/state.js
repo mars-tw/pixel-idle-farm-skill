@@ -314,7 +314,7 @@
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       mail: { unlocked: {}, read: {}, replied: false },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
-      flags: { bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false },
+      flags: { bridgeRepaired: false, eventsClaimed: {}, seasonEventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false },
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0, seasonsReached: {} },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
@@ -368,8 +368,9 @@
       if (!Number.isFinite(qty) || qty <= 0) delete merged.storage.items[id];
       else merged.storage.items[id] = Math.floor(qty);
     }
-    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false }, state.flags);
+    merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, seasonEventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false }, state.flags);
     merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);
+    merged.flags.seasonEventsClaimed = Object.assign({}, state.flags && state.flags.seasonEventsClaimed);
     merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     // 地圖：尺寸相符但 tiles 不完整/不合法也視為髒存檔，重建地圖綁定資料。
     if (healthyMap(state.map)) {

@@ -98,7 +98,7 @@ function main() {
     const stages = ["seed", "sprout", "young", "mature", "ready"];
     for (const cid of Object.keys(C.CROPS)) {
       const crop = C.CROPS[cid];
-      if (crop.sheet) continue; // R47 新作物走 v4 crops2，v3 舊 HUD sheet 不承載
+      if (crop.sheet || crop.emojiOnly) continue; // R47+ 新作物走 v4/emoji，v3 舊 HUD sheet 不承載
       for (const s of stages)
         if (!cropMap[cid + "_" + s]) fail(`renderer: crops 缺遊戲作物 frame「${cid}_${s}」`);
     }

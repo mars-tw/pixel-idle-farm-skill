@@ -1029,7 +1029,7 @@ console.log("\n== 18. R47: four-season crops, ducks, festival story ==");
   assert(C.CROPS.bell_pepper.sheet === "crops2" && C.CROPS.potato.sheet === "crops2"
     && C.CROPS.grapes.sheet === "crops2" && C.CROPS.melon.sheet === "crops2",
     "R47 crops route to crops2 sheet");
-  assert(Object.keys(C.CROPS).length === 13, "crop config includes 13 crops after R48");
+  assert(Object.keys(C.CROPS).length === 15, "crop config includes 15 crops after R51 P0");
   assert(C.ANIMALS.duck.sheet === "animals_duck" && C.ANIMALS.duck.careSheet === "animals_duck",
     "duck uses animals_duck for base and care frames");
   assert(C.PRODUCTS.duck_egg.qualitySheet === "product_quality_duck"
@@ -1108,9 +1108,9 @@ console.log("\n== 19. R48: grandma letters, crops3, festival stall ==");
   assert(C.COLLECTIBLES.grandma_hat && C.COLLECTIBLES.seed_pouch && C.ACHIEVEMENTS.letterKeeper
     && C.ACHIEVEMENTS.fullPantry && C.ACHIEVEMENTS.stallOwner,
     "R48 collectibles and achievements are registered");
-  assert(C.LETTERS.length === 8 && C.CHAPTER5_LETTERS.length === 8
+  assert(C.LETTERS.length === 13 && C.CHAPTER5_LETTERS.length === 8 && C.TOWNSFOLK_LETTERS.length === 4
     && C.LETTERS.every((l) => Array.isArray(l.body) && l.body.length >= 3 && l.body.length <= 6),
-    "chapter 5 includes eight complete 3-6 sentence letters");
+    "letters include eight grandma letters, four townsfolk notes, and one memory garden note");
 
   const letterSt = S.defaultState(T0);
   letterSt.level = 8;
@@ -1162,8 +1162,8 @@ console.log("\n== 19. R48: grandma letters, crops3, festival stall ==");
 
   const migrated = S.migrate({ version: 1, coins: 5, map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } });
   assert(migrated.mail && migrated.mail.unlocked && migrated.mail.read && migrated.mail.replied === false
-    && migrated.stats && migrated.stats.seasonsReached,
-    "old saves migrate mail and seasonsReached safely");
+    && migrated.stats && migrated.stats.seasonsReached && migrated.flags && migrated.flags.seasonEventsClaimed,
+    "old saves migrate mail, seasonsReached, and seasonEventsClaimed safely");
 
   const chapterSt = S.defaultState(T0);
   C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).concat(C.CHAPTER4_QUESTS)
@@ -1177,8 +1177,89 @@ console.log("\n== 19. R48: grandma letters, crops3, festival stall ==");
   assert(j.chapters.chapter5.unlocked === true && j.chapters.chapter5.done === C.CHAPTER5_LETTERS.length
     && j.chapters.chapter5.replied === true && j.chapters.chapter5.complete === true,
     "journal chapter 5 completion tracks letters and reply");
-  assert(G.chapter5Done(chapterSt) && G.npcPhase(chapterSt) === "ch5done",
-    "chapter5Done drives NPC phase ch5done");
+  assert(G.chapter5Done(chapterSt) && G.npcPhase(chapterSt) === "postscript",
+    "chapter5Done drives NPC phase postscript");
+}
+
+console.log("\n== 20. R51 P0: content quick wins ==");
+{
+  assert(C.SEASON_ORDER_BIAS.春.name === "豌豆芽市" && C.SEASON_ORDER_BIAS.夏.name === "河岸甜椒週"
+    && C.SEASON_ORDER_BIAS.秋.name === "葡萄栗子合單" && C.SEASON_ORDER_BIAS.冬.name === "霜葉鍋物",
+    "P0-1 四季訂單偏壓具名內容已註冊");
+
+  const sideLetterSt = S.defaultState(T0);
+  for (const npcId of Object.keys(C.NPC_SIDE_QUESTS)) {
+    const def = C.NPC_SIDE_QUESTS[npcId];
+    sideLetterSt.npcSideQuests[npcId] = { id: def.id, status: "done", completedSteps: def.steps.length, completedAt: T0 };
+  }
+  const unlocked = G.evaluateLetters(sideLetterSt, T0);
+  assert(C.TOWNSFOLK_LETTERS.every((id) => unlocked.includes(id)),
+    "P0-2 side_quest_done unlocks all four townsfolk notes");
+  const bonusBefore = G.achievementBonus(sideLetterSt);
+  for (const id of C.TOWNSFOLK_LETTERS) G.readLetter(sideLetterSt, id);
+  assert(sideLetterSt.achievements.neighborLetters === true && !sideLetterSt.achievements.letterKeeper,
+    "P0-2 reading four townsfolk notes unlocks 四鄰來信 without changing letterKeeper semantics");
+  assert(G.achievementBonus(sideLetterSt) === bonusBefore,
+    "P0-2 四鄰來信 is noBonus and does not increase permanent sell multiplier");
+
+  const memSt = S.defaultState(T0);
+  memSt.level = 4; memSt.materials.wood = 20; memSt.materials.compost = 20;
+  const mem = G.buildBuilding(memSt, firstBuildable(memSt).id, "memory_garden", T0);
+  assert(mem.ok && C.BUILDINGS.memory_garden.maxCount === 1, "P0-4 memory_garden can be built once at Lv4");
+  const mem2 = G.buildBuilding(memSt, firstBuildable(memSt).id, "memory_garden", T0 + 1);
+  assert(mem2.reason === "max_count", "P0-4 memory_garden maxCount:1 enforced");
+  assert(G.buildingGrowthAura(memSt) === 1 && G.buildingSeasonalBonus(memSt) === 0,
+    "P0-4 memory_garden has no growthAura or seasonal sell bonus");
+  const plainOrderSt = S.defaultState(T0);
+  plainOrderSt.level = 8; plainOrderSt.season = { id: "春", untilMs: T0 + 999999 };
+  const xpPlain = G.makeOrder(plainOrderSt, T0, () => 0, "plain");
+  memSt.level = 8; memSt.season = { id: "春", untilMs: T0 + 999999 };
+  const xpGarden = G.makeOrder(memSt, T0, () => 0, "garden");
+  assert(xpGarden.rewardCoins === xpPlain.rewardCoins && xpGarden.rewardXp > xpPlain.rewardXp,
+    "P0-4 memory_garden only boosts order XP, not order coins");
+  assert(G.evaluateLetters(memSt, T0).includes("letter_memory_garden"),
+    "P0-4 owning memory_garden unlocks its flavor letter");
+
+  const eventSt = S.defaultState(T0);
+  eventSt.level = 8;
+  eventSt.xp = C.LEVEL_XP[7];
+  eventSt.season = { id: "春", untilMs: T0 + C.SEASON_DURATION_MS };
+  eventSt.storage.items.wheat = 5;
+  const springStatus = G.seasonEventStatus(eventSt, T0);
+  const spring = G.claimSeasonEvent(eventSt, "spring_seed_swap", T0);
+  assert(springStatus.canClaim && spring.ok && eventSt.collections.spring_seed_swap_sticker
+    && (eventSt.storage.items.wheat || 0) === 0,
+    "P0-5 spring_seed_swap consumes wheat once and grants sticker + XP");
+  assert(G.claimSeasonEvent(eventSt, "spring_seed_swap", T0 + 1).reason === "claimed",
+    "P0-5 same seasonCycleId cannot be claimed twice");
+  eventSt.lastSeenAt = T0;
+  const offline = G.applyOffline(eventSt, T0 + C.SEASON_DURATION_MS + 1);
+  const summerStatus = G.seasonEventStatus(eventSt, T0 + C.SEASON_DURATION_MS + 1);
+  const summer = G.claimSeasonEvent(eventSt, "summer_well_bless", T0 + C.SEASON_DURATION_MS + 1);
+  assert(offline.seasonsAdvanced === 1 && summerStatus.eventId === "summer_well_bless" && summer.ok
+    && eventSt.collections.summer_well_charm,
+    "P0-5 offline season catch-up exposes the new current season event once");
+  eventSt.season = { id: "秋", untilMs: T0 + C.SEASON_DURATION_MS * 3 };
+  eventSt.storage.items.grapes = 3;
+  const autumn = G.claimSeasonEvent(eventSt, "autumn_share_basket", T0 + C.SEASON_DURATION_MS * 2);
+  assert(autumn.ok && autumn.coins === 12 && eventSt.collections.autumn_share_label,
+    "P0-5 autumn_share_basket grants only a small one-time coin reward and collectible");
+  eventSt.season = { id: "冬", untilMs: T0 + C.SEASON_DURATION_MS * 4 };
+  eventSt.storage.items.potato = 2;
+  const winter = G.claimSeasonEvent(eventSt, "winter_hearth_soup", T0 + C.SEASON_DURATION_MS * 3);
+  assert(winter.ok && winter.coins === 0 && eventSt.collections.winter_soup_note,
+    "P0-5 winter_hearth_soup grants no sellMul/coins, only XP + note");
+
+  const postSt = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).concat(C.CHAPTER4_QUESTS)
+    .forEach((id) => (postSt.story.completed[id] = true));
+  for (const id of C.CHAPTER5_LETTERS) postSt.mail.read[id] = true;
+  postSt.mail.replied = true;
+  for (const npcId of Object.keys(C.NPCS)) {
+    const d = G.npcDialogue(postSt, npcId, 0);
+    assert(d.phase === "postscript" && C.NPCS[npcId].lines.postscript.length === 2,
+      `P0-6 ${npcId} uses postscript after ch5done`);
+  }
 }
 
 console.log("");
