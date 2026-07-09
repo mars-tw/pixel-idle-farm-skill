@@ -16,6 +16,7 @@
     levelFromXp,
     PRODUCTS, getItemDef, itemSellValue, MATERIALS, TERRAIN, OBSTACLES,
     BUILDINGS, BUILDING_ORDER, ANIMALS, MOISTURE_MUL,
+    LETTERS, CHAPTER5_LETTERS,
     AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,
     CARE_GAIN, CARE_COOLDOWN_MS, STATUS_STALE_MS, QUALITY_TIERS,
   } = C;
@@ -72,6 +73,14 @@
       if (def && def.effect && def.effect.growthAura) m *= def.effect.growthAura;
     }
     return m;
+  }
+  function buildingSeasonalBonus(state) {
+    let bonus = 0;
+    for (const b of state.buildings || []) {
+      const def = BUILDINGS[b.type];
+      if (def && def.effect && def.effect.seasonalSellBonus) bonus += def.effect.seasonalSellBonus;
+    }
+    return bonus;
   }
   function effectiveGrowMs(state, cropId, now) {
     const c = CROPS[cropId];
@@ -160,6 +169,10 @@
     }
     if (Object.keys(harvestedSeasons).length >= 4) unlock("seasonalTable");
     if ((state.stats.festivalOrders || 0) > 0) unlock("festivalDeal");
+    const read = (state.mail && state.mail.read) || {};
+    if ((CHAPTER5_LETTERS || []).length && (CHAPTER5_LETTERS || []).every((id) => read[id])) unlock("letterKeeper");
+    if (Object.keys(CROPS).every((id) => ((state.stats.harvested || {})[id] || 0) > 0)) unlock("fullPantry");
+    if ((state.buildings || []).some((b) => b.type === "festival_stall")) unlock("stallOwner");
     return got;
   }
 
@@ -167,6 +180,11 @@
   function seasonIndex(id) {
     const idx = (SEASONS || []).findIndex((s) => s.id === id);
     return idx >= 0 ? idx : 0;
+  }
+  function recordSeasonReached(state, id) {
+    if (!state.stats) state.stats = {};
+    if (!state.stats.seasonsReached) state.stats.seasonsReached = {};
+    if (id) state.stats.seasonsReached[id] = true;
   }
   function currentSeason(state, now) {
     if (state.level < (SEASON_UNLOCK_LEVEL || 6)) return (SEASONS && SEASONS[0] && SEASONS[0].id) || "春";
@@ -183,14 +201,17 @@
     if (state.level < (SEASON_UNLOCK_LEVEL || 6)) {
       const changed = state.season.id !== first || state.season.untilMs !== 0;
       state.season = { id: first, untilMs: 0 };
+      recordSeasonReached(state, first);
       return changed;
     }
     const valid = (SEASONS || []).some((s) => s.id === state.season.id);
     if (!valid || now >= (state.season.untilMs || 0)) {
       const idx = valid ? (seasonIndex(state.season.id) + 1) % SEASONS.length : 0;
       state.season = { id: SEASONS[idx].id, untilMs: now + SEASON_DURATION_MS };
+      recordSeasonReached(state, state.season.id);
       return true;
     }
+    recordSeasonReached(state, state.season.id);
     return false;
   }
   function sellMultiplier(state, now) {
@@ -201,7 +222,7 @@
   }
   function sellUnitValue(state, itemId, now) {
     const def = getItemDef(itemId); // 作物或動物產品
-    const seasonMul = def && def.season && state.level >= (SEASON_UNLOCK_LEVEL || 6) && def.season === currentSeason(state, now) ? 1.15 : 1;
+    const seasonMul = def && def.season && state.level >= (SEASON_UNLOCK_LEVEL || 6) && def.season === currentSeason(state, now) ? 1.15 + buildingSeasonalBonus(state) : 1;
     return Math.max(1, Math.round((def ? def.sellValue : 0) * seasonMul * sellMultiplier(state, now)));
   }
 
@@ -278,6 +299,7 @@
   const ORDER_QTY = {
     wheat: [6, 14], carrot: [4, 9], tomato: [3, 6], corn: [2, 5], strawberry: [2, 4], pumpkin: [1, 3],
     bell_pepper: [2, 5], potato: [3, 7], grapes: [2, 4], melon: [1, 2],
+    pea: [3, 7], sweet_potato: [2, 4], winter_kale: [2, 4],
     egg: [3, 8], milk: [2, 4], wool: [2, 3], honey: [2, 5], duck_egg: [2, 6],
     // Stage 7.1：品質分級品項明確給數量範圍，隨品質往下收（原本沒列到會 fallback [2,5]，
     // 對高單價的 premium 品項偏寬鬆）
@@ -859,6 +881,76 @@
     if (!state.stats.harvested) state.stats.harvested = {};
     if (!state.stats.collected) state.stats.collected = {};
     if (typeof state.stats.festivalOrders !== "number") state.stats.festivalOrders = 0;
+    if (!state.stats.seasonsReached) state.stats.seasonsReached = {};
+  }
+  function ensureMailState(state) {
+    if (!state.mail) state.mail = { unlocked: {}, read: {}, replied: false };
+    if (!state.mail.unlocked) state.mail.unlocked = {};
+    if (!state.mail.read) state.mail.read = {};
+    state.mail.replied = !!state.mail.replied;
+    if (!state.collections) state.collections = {};
+  }
+  function letterById(id) {
+    return (LETTERS || []).find((l) => l.id === id) || null;
+  }
+  function letterUnlockSatisfied(state, unlock, now) {
+    unlock = unlock || {};
+    ensureStoryState(state);
+    if (unlock.type === "story_completed") return !!(state.story.completed && state.story.completed[unlock.id]);
+    if (unlock.type === "flag") return !!(state.flags && state.flags[unlock.flag]);
+    if (unlock.type === "season_reached") return !!(state.stats && state.stats.seasonsReached && state.stats.seasonsReached[unlock.season]);
+    if (unlock.type === "festival_orders") return ((state.stats && state.stats.festivalOrders) || 0) >= (unlock.count || 1);
+    if (unlock.type === "animal_happy") return (state.animals || []).some((a) => (a.bestAffinity || 0) >= AFFINITY_HAPPY_THRESHOLD);
+    if (unlock.type === "level") return (state.level || 1) >= (unlock.level || 1);
+    return false;
+  }
+  function evaluateLetters(state, now) {
+    ensureMailState(state);
+    ensureStoryState(state);
+    const newly = [];
+    for (const letter of (LETTERS || [])) {
+      if (state.mail.unlocked[letter.id]) continue;
+      if (!letterUnlockSatisfied(state, letter.unlock, now)) continue;
+      state.mail.unlocked[letter.id] = true;
+      newly.push(letter.id);
+    }
+    return newly;
+  }
+  function readLetter(state, id) {
+    ensureMailState(state);
+    const letter = letterById(id);
+    if (!letter) return { ok: false, reason: "unknown" };
+    if (!state.mail.unlocked[id]) return { ok: false, reason: "locked" };
+    const wasRead = !!state.mail.read[id];
+    state.mail.read[id] = true;
+    let collectibleId = null;
+    if (id === "letter_animals" && !state.collections.grandma_hat) {
+      state.collections.grandma_hat = true;
+      collectibleId = "grandma_hat";
+    }
+    checkAchievements(state);
+    return { ok: true, id, wasRead, collectibleId };
+  }
+  function allChapter5LettersRead(state) {
+    const read = (state.mail && state.mail.read) || {};
+    return (CHAPTER5_LETTERS || []).length > 0 && (CHAPTER5_LETTERS || []).every((id) => !!read[id]);
+  }
+  function chapter5ReadCount(state) {
+    const read = (state.mail && state.mail.read) || {};
+    return (CHAPTER5_LETTERS || []).filter((id) => !!read[id]).length;
+  }
+  function replyLetter(state) {
+    ensureMailState(state);
+    if (!allChapter5LettersRead(state)) return { ok: false, reason: "unread" };
+    const wasReplied = !!state.mail.replied;
+    state.mail.replied = true;
+    let collectibleId = null;
+    if (!state.collections.seed_pouch) {
+      state.collections.seed_pouch = true;
+      collectibleId = "seed_pouch";
+    }
+    checkAchievements(state);
+    return { ok: true, wasReplied, collectibleId };
   }
   function hasCrop(state, cropId) {
     return (state.plots || []).some((p) => p && p.cropId === cropId);
@@ -997,6 +1089,10 @@
     const ids = C.CHAPTER4_QUESTS || [];
     const done = (state.story && state.story.completed) || {};
     return ids.length > 0 && ids.every((id) => done[id]);
+  }
+  function chapter5Done(state) {
+    ensureMailState(state);
+    return allChapter5LettersRead(state) && !!state.mail.replied;
   }
   // 修橋條件：序章 6/6 + 木材/石頭足夠（用真資源，非按面板）
   function canRepairBridge(state) {
@@ -1203,6 +1299,7 @@
   }
   // 對話階段：start → ch1done → bridge → ch2done → ch3done → ch4done
   function npcPhase(state) {
+    if (chapter5Done(state)) return "ch5done";
     if (chapter4Done(state)) return "ch4done";
     if (chapter3Done(state)) return "ch3done";
     if (chapter2Done(state)) return "ch2done";
@@ -1214,7 +1311,7 @@
   // line 會換成委託台詞，並在回傳值附上 request 唯讀投影供 UI 判斷是否顯示交付按鈕。
   function npcDialogue(state, npcId, lineIdx) {
     const npc = (C.NPCS || {})[npcId]; if (!npc) return null;
-    const order = ["ch4done", "ch3done", "ch2done", "bridge", "ch1done", "start"];
+    const order = ["ch5done", "ch4done", "ch3done", "ch2done", "bridge", "ch1done", "start"];
     const phase = npcPhase(state);
     // 取目前階段的台詞；若該階段未定義，往較早階段回退
     let lines = null;
@@ -1544,11 +1641,20 @@
     const chapter2 = pct(C.CHAPTER2_QUESTS || []);
     const chapter3 = pct(C.CHAPTER3_QUESTS || []);
     const chapter4 = pct(C.CHAPTER4_QUESTS || []);
+    const mail = state.mail || {};
+    const read = mail.read || {};
+    const chapter4Complete = chapter4.total > 0 && chapter4.done >= chapter4.total;
+    const chapter5 = {
+      done: (CHAPTER5_LETTERS || []).filter((id) => !!read[id]).length,
+      total: (CHAPTER5_LETTERS || []).length,
+      replied: !!mail.replied,
+    };
     return {
       chapter1: Object.assign({ unlocked: true }, chapter1),
       chapter2: Object.assign({ unlocked: chapter1.total > 0 && chapter1.done >= chapter1.total }, chapter2),
       chapter3: Object.assign({ unlocked: chapter2.total > 0 && chapter2.done >= chapter2.total }, chapter3),
       chapter4: Object.assign({ unlocked: chapter3.total > 0 && chapter3.done >= chapter3.total }, chapter4),
+      chapter5: Object.assign({ unlocked: chapter4Complete, complete: chapter5.total > 0 && chapter5.done >= chapter5.total && chapter5.replied }, chapter5),
     };
   }
   function journalAchievements(state) {
@@ -1883,7 +1989,7 @@
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, effectiveGrowMs, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
-    achievementBonus, checkAchievements, sellMultiplier, sellUnitValue,
+    achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder, orderNarrative,
     makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
@@ -1900,7 +2006,7 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done,
+    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done, chapter5Done,
     canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
     forageNodeDef, forageTile, forageNodeStatus, eastForageStatus, eastForageTargetTile,
     eastDeepStatus, canUnlockEastDeep, unlockEastDeep,
@@ -1913,7 +2019,8 @@
     // Stage 11：Farm Journal
     itemSourceHint, itemUsageSummary,
     journalCrops, journalProducts, journalForage, journalNpcs, journalAnimals, journalWorldFlags, journalChapters, journalAchievements, journalCollectibles, journalSummary,
-    currentSeason, updateSeason, harvestedSeasonCount, hasCollectedDuckEgg,
+    currentSeason, updateSeason, recordSeasonReached, evaluateLetters, readLetter, replyLetter,
+    allChapter5LettersRead, chapter5ReadCount, harvestedSeasonCount, hasCollectedDuckEgg,
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,

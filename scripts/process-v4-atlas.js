@@ -26,6 +26,10 @@ const V3_REUSE = {
   props: { image: "assets/generated/v3/props-stations.png", map: "assets/generated/v3/props-stations.json" },
   vfx:   { image: "assets/generated/v3/action-vfx-32.png",  map: "assets/generated/v3/action-vfx-32.json" },
 };
+// 程式化補充 sheets：由獨立腳本產生，process-v4 不重切，但 manifest 要註冊。
+const LOCAL_SHEETS = {
+  crops3: { image: "assets/generated/v4/crops3-48.png", map: "assets/generated/v4/crops3-48.json" },
+};
 
 function server() {
   return new Promise((res) => {
@@ -68,6 +72,16 @@ function server() {
     const m = JSON.parse(fs.readFileSync(path.join(ROOT, r.map), "utf8"));
     manifest.sheets[key] = { image: r.image, map: r.map, meta: m.meta, frameCount: Object.keys(m.frames).length, reusedFrom: "v3" };
     console.log("  ↻ " + key + "（沿用 v3：" + Object.keys(m.frames).length + " frames）");
+  }
+  for (const key of Object.keys(LOCAL_SHEETS)) {
+    const r = LOCAL_SHEETS[key];
+    if (!fs.existsSync(path.join(ROOT, r.map)) || !fs.existsSync(path.join(ROOT, r.image))) {
+      console.warn("  ⚠ 缺本地 sheet " + key + "（先跑 generate-crops3-atlas.js）");
+      continue;
+    }
+    const m = JSON.parse(fs.readFileSync(path.join(ROOT, r.map), "utf8"));
+    manifest.sheets[key] = { image: r.image, map: r.map, meta: m.meta, frameCount: Object.keys(m.frames).length };
+    console.log("  + " + key + "（本地補充：" + Object.keys(m.frames).length + " frames）");
   }
   fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
   console.log("✅ v4 atlas 處理完成 → assets/generated/v4/");

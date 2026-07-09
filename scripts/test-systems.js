@@ -925,7 +925,7 @@ console.log("\n== 18. R47: four-season crops, ducks, festival story ==");
   assert(C.CROPS.bell_pepper.sheet === "crops2" && C.CROPS.potato.sheet === "crops2"
     && C.CROPS.grapes.sheet === "crops2" && C.CROPS.melon.sheet === "crops2",
     "R47 crops route to crops2 sheet");
-  assert(Object.keys(C.CROPS).length === 10, "crop config includes 10 crops after R47");
+  assert(Object.keys(C.CROPS).length === 13, "crop config includes 13 crops after R48");
   assert(C.ANIMALS.duck.sheet === "animals_duck" && C.ANIMALS.duck.careSheet === "animals_duck",
     "duck uses animals_duck for base and care frames");
   assert(C.PRODUCTS.duck_egg.qualitySheet === "product_quality_duck"
@@ -993,6 +993,88 @@ console.log("\n== 18. R47: four-season crops, ducks, festival story ==");
     "journal collectible count includes unlocked festival lantern");
   assert(journal.chapters.chapter4.done === C.CHAPTER4_QUESTS.length && journal.chapters.chapter4.unlocked === true,
     "journal chapter 4 completion is tracked");
+}
+
+console.log("\n== 19. R48: grandma letters, crops3, festival stall ==");
+{
+  assert(["pea", "sweet_potato", "winter_kale"].every((id) => C.CROPS[id] && C.CROPS[id].sheet === "crops3"),
+    "R48 crops route to crops3 sheet");
+  assert(C.BUILDINGS.festival_stall && C.BUILDINGS.festival_stall.effect.seasonalSellBonus === 0.15,
+    "festival_stall building has seasonal sell bonus");
+  assert(C.COLLECTIBLES.grandma_hat && C.COLLECTIBLES.seed_pouch && C.ACHIEVEMENTS.letterKeeper
+    && C.ACHIEVEMENTS.fullPantry && C.ACHIEVEMENTS.stallOwner,
+    "R48 collectibles and achievements are registered");
+  assert(C.LETTERS.length === 8 && C.CHAPTER5_LETTERS.length === 8
+    && C.LETTERS.every((l) => Array.isArray(l.body) && l.body.length >= 3 && l.body.length <= 6),
+    "chapter 5 includes eight complete 3-6 sentence letters");
+
+  const letterSt = S.defaultState(T0);
+  letterSt.level = 8;
+  assert(G.evaluateLetters(letterSt, T0).length === 0, "letters stay locked before unlock conditions");
+  letterSt.story.completed.first_delivery = true;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_first_delivery"), "first delivery unlocks first letter");
+  letterSt.flags.bridgeRepaired = true;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_bridge"), "bridge repair unlocks bridge letter");
+  if (!letterSt.animals.length) letterSt.animals.push({ id: "a_test", type: "chicken", homeId: "b_test" });
+  letterSt.animals[0].bestAffinity = C.AFFINITY_HAPPY_THRESHOLD;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_animals"), "happy animal unlocks animal letter");
+  letterSt.stats.seasonsReached.春 = true;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_spring"), "spring reached unlocks spring letter");
+  letterSt.stats.seasonsReached.夏 = true;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_summer"), "summer reached unlocks summer letter");
+  letterSt.stats.seasonsReached.秋 = true;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_autumn"), "autumn reached unlocks autumn letter");
+  letterSt.stats.seasonsReached.冬 = true;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_winter"), "winter reached unlocks winter letter");
+  letterSt.stats.festivalOrders = 1;
+  assert(G.evaluateLetters(letterSt, T0).includes("letter_festival"), "festival order unlocks festival letter");
+
+  const animalRead = G.readLetter(letterSt, "letter_animals");
+  assert(animalRead.ok && letterSt.collections.grandma_hat === true, "reading animal letter unlocks grandma_hat");
+  for (const id of C.CHAPTER5_LETTERS) {
+    letterSt.mail.unlocked[id] = true;
+    G.readLetter(letterSt, id);
+  }
+  assert(letterSt.achievements.letterKeeper === true, "reading all letters unlocks letterKeeper");
+  const reply = G.replyLetter(letterSt);
+  assert(reply.ok && letterSt.mail.replied === true && letterSt.collections.seed_pouch === true,
+    "replyLetter requires all read and unlocks seed_pouch");
+
+  for (const id of Object.keys(C.CROPS)) letterSt.stats.harvested[id] = 1;
+  letterSt.buildings.push({ id: "b_stall", type: "festival_stall" });
+  G.checkAchievements(letterSt);
+  assert(letterSt.achievements.fullPantry && letterSt.achievements.stallOwner,
+    "fullPantry and stallOwner achievements unlock");
+
+  const bonusSt = S.defaultState(T0);
+  bonusSt.level = 8;
+  bonusSt.weather = { id: "clear", untilMs: T0 + 999999 };
+  bonusSt.season = { id: "春", untilMs: T0 + 999999 };
+  bonusSt.buildings.push({ id: "stall_a", type: "festival_stall" }, { id: "stall_b", type: "festival_stall" });
+  assert(Math.abs(G.buildingSeasonalBonus(bonusSt) - 0.30) < 1e-9,
+    "two festival_stall buildings stack seasonal bonus to +0.30");
+  assert(G.sellUnitValue(bonusSt, "pea", T0) > C.CROPS.pea.sellValue,
+    "festival stall bonus applies to in-season crop sell value");
+
+  const migrated = S.migrate({ version: 1, coins: 5, map: { width: C.MAP_W, height: C.MAP_H, tiles: [] } });
+  assert(migrated.mail && migrated.mail.unlocked && migrated.mail.read && migrated.mail.replied === false
+    && migrated.stats && migrated.stats.seasonsReached,
+    "old saves migrate mail and seasonsReached safely");
+
+  const chapterSt = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).concat(C.CHAPTER4_QUESTS)
+    .forEach((id) => (chapterSt.story.completed[id] = true));
+  for (const id of C.CHAPTER5_LETTERS) {
+    chapterSt.mail.unlocked[id] = true;
+    chapterSt.mail.read[id] = true;
+  }
+  chapterSt.mail.replied = true;
+  const j = G.journalSummary(chapterSt, T0);
+  assert(j.chapters.chapter5.unlocked === true && j.chapters.chapter5.done === C.CHAPTER5_LETTERS.length
+    && j.chapters.chapter5.replied === true && j.chapters.chapter5.complete === true,
+    "journal chapter 5 completion tracks letters and reply");
+  assert(G.chapter5Done(chapterSt) && G.npcPhase(chapterSt) === "ch5done",
+    "chapter5Done drives NPC phase ch5done");
 }
 
 console.log("");

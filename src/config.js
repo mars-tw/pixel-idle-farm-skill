@@ -34,6 +34,9 @@ const CROPS = {
   potato:      { id: "potato",      name: "馬鈴薯", growMs: 480000, seedCost: 45, yield: 5, sellValue: 22, xp: 28, unlockLevel: 6, emoji: "🥔", color: "#b9834b", season: "春", sheet: "crops2" },
   grapes:      { id: "grapes",      name: "葡萄", growMs: 720000, seedCost: 72, yield: 4, sellValue: 55, xp: 42, unlockLevel: 7, emoji: "🍇", color: "#7c4aa6", season: "秋", sheet: "crops2" },
   melon:       { id: "melon",       name: "溫室甜瓜", growMs: 840000, seedCost: 90, yield: 3, sellValue: 90, xp: 58, unlockLevel: 8, emoji: "🍈", color: "#8fcf6a", season: "冬", sheet: "crops2" },
+  pea:          { id: "pea",         name: "豌豆", growMs: 540000, seedCost: 54, yield: 5, sellValue: 28, xp: 32, unlockLevel: 6, emoji: "🫛", color: "#55b95d", season: "春", sheet: "crops3" },
+  sweet_potato: { id: "sweet_potato", name: "地瓜", growMs: 660000, seedCost: 68, yield: 4, sellValue: 48, xp: 40, unlockLevel: 7, emoji: "🍠", color: "#c46a3a", season: "秋", sheet: "crops3" },
+  winter_kale:  { id: "winter_kale", name: "冬羽甘藍", growMs: 780000, seedCost: 84, yield: 4, sellValue: 64, xp: 52, unlockLevel: 8, emoji: "🥬", color: "#4f9f83", season: "冬", sheet: "crops3" },
 };
 const CROP_SHEET = { cols: 5, rows: 6, stages: 5 }; // crop-growth.png 版面
 
@@ -141,6 +144,9 @@ const ACHIEVEMENTS = {
   duckKeeper:   { name: "鴨舍新聲", desc: "收集任一品質的鴨蛋", icon: "🦆" },
   seasonalTable:{ name: "四季餐桌", desc: "收成四種季節作物", icon: "🍽️" },
   festivalDeal: { name: "豐年祭供應商", desc: "完成一張豐年祭訂單", icon: "🏮" },
+  letterKeeper: { name: "信箋守護者", desc: "讀完祖母留下的八封季節信", icon: "📬" },
+  fullPantry:   { name: "滿滿食物櫃", desc: "每一種作物都至少收成一次", icon: "🧺" },
+  stallOwner:   { name: "四季攤主", desc: "興建豐年祭小攤", icon: "🎪" },
 };
 
 // ===== MVP2：動物產品（可賣、可入訂單，與作物同存 storage.items）=====
@@ -226,6 +232,20 @@ const COLLECTIBLES = {
     source: "完成豐年祭訂單",
     desc: "祭典攤位留下的小燈籠，象徵農場能供應四季物產。",
   },
+  grandma_hat: {
+    id: "grandma_hat",
+    name: "祖母的草帽",
+    emoji: "👒",
+    source: "讀完祖母的動物照護信",
+    desc: "帽緣有補過的針腳，像是她在田埂上彎腰看小雞時留下的影子。",
+  },
+  seed_pouch: {
+    id: "seed_pouch",
+    name: "手縫種子袋",
+    emoji: "👝",
+    source: "寫下給祖母的回信",
+    desc: "舊布袋重新裝進新種子，提醒農場不是被繼承，而是被繼續照顧。",
+  },
 };
 
 // ===== Stage 7：動物照護（餵食/澆水/梳理 → 親密度 → 產物品質）=====
@@ -288,8 +308,11 @@ const BUILDINGS = {
   greenhouse:  { id: "greenhouse", name: "溫室", emoji: "🏡", unlockLevel: 8,
                  cost: { coins: 760, wood: 10, stone: 6 }, effect: { growthAura: 0.88 },
                  desc: "全年控溫，作物成長時間 ×0.88" },
+  festival_stall: { id: "festival_stall", name: "豐年祭小攤", emoji: "🎪", unlockLevel: 7,
+                 cost: { coins: 620, wood: 8, stone: 4 }, effect: { seasonalSellBonus: 0.15 },
+                 desc: "當季作物直售額外 +15%，可疊加" },
 };
-const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "beeBox", "duckPen", "greenhouse"];
+const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "beeBox", "duckPen", "festival_stall", "greenhouse"];
 
 // ===== MVP2：動物（蓋家 → 計時生產 → 收集 → 入訂單/賣出；可餵食加速）=====
 // produceMs 生產週期、feedCost 餵食成本（用作物加速、立即產出）、unlockLevel 解鎖等級
@@ -402,28 +425,32 @@ const NPCS = {
     bridge:  ["橋通了！東林的古樹是晨光鎮的老守護。", "去樹下看看，聽說藏著你祖母留下的舊物。"],
     ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"],
     ch3done: ["作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。", "以後我這偶爾會帶點小委託來，別嫌我麻煩啊。"],
-    ch4done: ["豐年祭辦得穩，四季物產也站上檯面了。", "晨光鎮今年的招牌，就靠你的農場撐起來。"] } },
+    ch4done: ["豐年祭辦得穩，四季物產也站上檯面了。", "晨光鎮今年的招牌，就靠你的農場撐起來。"],
+    ch5done: ["你祖母把信交給我時，手一直按著那頂草帽。", "現在我懂了，她等的不是舊農場回來，是你願意把它往前帶。"] } },
   merchant: { id: "merchant", name: "商人 蘿拉", title: "市集商人", frame: "merchant", lines: {
     start:   ["新鮮貨色看一下？等你有了作物，市集隨時收購。"],
     ch1done: ["你的麥子品質不錯，訂單看板上的客人會喜歡。"],
     bridge:  ["東林通了？那邊的野花蜜，以後說不定能進貨。"],
     ch2done: ["生意越來越好，多虧你把路打通了。"],
     ch3done: ["聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！", "手頭有好貨的話，記得留一份給我試賣。"],
-    ch4done: ["四季貨架終於補齊，甜椒、葡萄和鴨蛋都能掛上祭典牌。", "豐年祭那張訂單，我會替你放在市集最顯眼的位置。"] } },
+    ch4done: ["四季貨架終於補齊，甜椒、葡萄和鴨蛋都能掛上祭典牌。", "豐年祭那張訂單，我會替你放在市集最顯眼的位置。"],
+    ch5done: ["你祖母以前總把最好的種子留到最後才賣，說那是替明年留路。", "你回的那封信，我會替她放在貨架最裡側，不給風吹走。"] } },
   elder: { id: "elder", name: "老農 班伯", title: "隔壁老農", frame: "elder", lines: {
     start:   ["雞舍那隻母雞養得還行，記得常餵牠。"],
     ch1done: ["想要更多蛋奶？把動物顧好，產量自然上來。"],
     bridge:  ["東林的草肥，以後放羊吃草最好。"],
     ch2done: ["下次該認真養群動物了——親密度高，產物品質才好。"],
     ch3done: ["照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。", "手頭若有多的產物，拿來讓我瞧瞧成果也好。"],
-    ch4done: ["你連鴨都照顧得服服貼貼，這座農場真的成氣候了。", "季節會輪，手藝不能停，記得讓田地跟著天時走。"] } },
+    ch4done: ["你連鴨都照顧得服服貼貼，這座農場真的成氣候了。", "季節會輪，手藝不能停，記得讓田地跟著天時走。"],
+    ch5done: ["她那年把草帽掛在雞舍旁，說總有一天會有人接著戴。", "你照顧得好，動物知道，土地也知道。"] } },
   child: { id: "child", name: "孩童 圖圖", title: "鎮上孩童", frame: "child", lines: {
     start:   ["你會種田嗎？教教我嘛！"],
     ch1done: ["哇，你收成了好多麥子！"],
     bridge:  ["橋修好了！我可以去河對面玩了嗎？"],
     ch2done: ["東林的古樹好大喔，你看過了嗎？"],
     ch3done: ["我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？"],
-    ch4done: ["豐年祭的燈籠超漂亮！下次我也要幫忙掛。"] } },
+    ch4done: ["豐年祭的燈籠超漂亮！下次我也要幫忙掛。"],
+    ch5done: ["我看見信箱亮了一下，好像故事真的住在裡面。", "以後我也要寫信，寫給長大後還記得農場的自己。"] } },
 };
 const NPC_PLACEMENT = [
   { type: "mayor",    x: 10, y: 4, facing: "down" },
@@ -609,6 +636,114 @@ const CHAPTER2_QUESTS = ["repair_bridge", "explore_new_area", "discover_east_for
 const CHAPTER3_QUESTS = ["learn_animal_care", "feed_care_animal", "raise_affinity_happy", "collect_quality_product", "deliver_quality_order"];
 const CHAPTER4_QUESTS = ["prepare_four_seasons", "welcome_ducks", "finish_festival_order"];
 
+const LETTERS = [
+  {
+    id: "letter_first_delivery",
+    title: "第一封：田重新會呼吸",
+    from: "祖母",
+    season: "春",
+    unlock: { type: "story_completed", id: "first_delivery" },
+    body: [
+      "孩子，若你讀到這封信，表示第一批作物已經從土裡回到倉庫，也回到晨光鎮人的餐桌上。",
+      "你祖父第一次牽著我的手播種時，整塊田還硬得像睡著的石頭，我們也是從幾把小麥開始，慢慢聽見土地吐氣。",
+      "不要急著把荒蕪看成失敗，荒蕪有時只是等一個願意彎腰的人。",
+      "你肯回來，我就知道陽光農場還記得家的方向。"
+    ],
+  },
+  {
+    id: "letter_bridge",
+    title: "第二封：橋那邊的風",
+    from: "祖母",
+    season: "夏",
+    unlock: { type: "flag", flag: "bridgeRepaired" },
+    body: [
+      "東橋若修好了，你一定會先聽見河面上的風，聲音跟你小時候在門口追蜻蜓時一樣。",
+      "那座橋是你祖父跟鎮上的人一起搭的，他說農場不能只顧自己的田，也要替大家留一條路。",
+      "後來木板老了，我的膝蓋也老了，只能把那邊的林子交給時間看守。",
+      "現在你走過去時，請替我摸摸橋欄，跟它說一聲：我們回來了。"
+    ],
+  },
+  {
+    id: "letter_animals",
+    title: "第三封：母雞認得溫柔",
+    from: "祖母",
+    season: "春",
+    unlock: { type: "animal_happy" },
+    body: [
+      "動物其實比人更早知道一座農場有沒有被好好照顧。",
+      "旱災那年，我們省下井水給母雞喝，牠少下了好幾週的蛋，卻在第一場雨後站到門口叫我起床。",
+      "你祖父笑說，那不是催人工作，是牠在確認家裡的人還在。",
+      "如果牠們願意靠近你，就把草帽戴穩，慢慢說話，田邊所有活物都聽得懂溫柔。"
+    ],
+  },
+  {
+    id: "letter_spring",
+    title: "第四封：春天的第一把泥",
+    from: "祖母",
+    season: "春",
+    unlock: { type: "season_reached", season: "春" },
+    body: [
+      "春天來時，別只看花，先抓一把濕泥聞聞。",
+      "泥裡有去年的葉、有冬天慢慢化開的寒氣，也有你還沒種下去的盼望。",
+      "我年輕時總在春分前後種豌豆，因為它們攀得快，好像替人把心事往上拉。",
+      "若你覺得重新開始很笨拙，就讓春天教你，所有新芽一開始都站不穩。"
+    ],
+  },
+  {
+    id: "letter_summer",
+    title: "第五封：夏日要記得留水",
+    from: "祖母",
+    season: "夏",
+    unlock: { type: "season_reached", season: "夏" },
+    body: [
+      "夏天的晨光鎮會亮得讓人瞇眼，連石板路都像剛烤過。",
+      "旱災最嚴重那一年，我跟你祖父把水桶排在井邊，先給苗、再給雞，最後才輪到自己洗手。",
+      "那時我學會一件事：豐收不是把所有東西都拿到手，而是知道該替明天留下什麼。",
+      "你若種甜椒、玉米或地瓜，記得看天，也記得看自己的力氣。"
+    ],
+  },
+  {
+    id: "letter_autumn",
+    title: "第六封：秋天把名字留下",
+    from: "祖母",
+    season: "秋",
+    unlock: { type: "season_reached", season: "秋" },
+    body: [
+      "秋天是我最喜歡記帳的季節，因為每一筆收成後面都有一個人的名字。",
+      "葡萄送去給蘿拉，栗子留給圖圖，地瓜要挑幾條細長的，讓鎮長拿去分給巡路的人。",
+      "你祖父常說，農場的倉庫若只堆滿貨，就會變得很安靜；若記得要分給誰，門口才會熱鬧。",
+      "所以別怕把好東西拿出去，土地給你的，不會因為分享就變少。"
+    ],
+  },
+  {
+    id: "letter_winter",
+    title: "第七封：霜裡也有綠",
+    from: "祖母",
+    season: "冬",
+    unlock: { type: "season_reached", season: "冬" },
+    body: [
+      "冬天的田看起來慢，其實只是把力氣藏在土裡。",
+      "我晚年最愛種冬羽甘藍，葉子被霜碰過後反而更甜，像人經過一些冷日子，心也會變得更懂珍惜。",
+      "你祖父走後的第一個冬天，我每天都到田埂站一下，不說話，只看那些還肯發綠的葉。",
+      "孩子，若哪天你覺得孤單，就去看看冬天的菜，它們會告訴你：還能長。"
+    ],
+  },
+  {
+    id: "letter_festival",
+    title: "第八封：豐年祭的燈",
+    from: "祖母",
+    season: "四季",
+    unlock: { type: "festival_orders", count: 1 },
+    body: [
+      "若豐年祭的燈籠又掛起來了，我想晨光鎮一定比我記憶裡更亮。",
+      "我把這些信交給葛瑞時，沒有把話說滿，因為我不知道回來的人會不會怨我留下太多未完成的事。",
+      "可我一直相信，農場不是祖母的，也不是祖父的，它屬於每一個願意讓土地和人重新靠近的人。",
+      "現在輪到你寫一封信了，不必寫給過去的我，寫給明天還會走進這塊田的自己。"
+    ],
+  },
+];
+const CHAPTER5_LETTERS = LETTERS.map((l) => l.id);
+
 const MAP_DEFAULT = { width: MAP_W, height: MAP_H };
 // 走路方向 → walk-cycle sheet 列（4 列：下/左/右/上）
 const FACING_ROW = { down: 0, left: 1, right: 2, up: 3 };
@@ -628,6 +763,7 @@ const CONFIG = {
   STATIONS, STATION_PLACEMENT,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
   EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS, CHAPTER4_QUESTS,
+  LETTERS, CHAPTER5_LETTERS,
   NPCS, NPC_PLACEMENT, NPC_REQUESTS, NPC_REQUEST_COOLDOWN_MS, NPC_SIDE_QUESTS,
   QUALITY_TIERS, QUALITY_SELL_MUL, QUALITY_LABEL,
   AFFINITY_MAX, AFFINITY_DECAY_PER_HOUR, AFFINITY_HAPPY_THRESHOLD, AFFINITY_GOOD_THRESHOLD,

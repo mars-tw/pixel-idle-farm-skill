@@ -1,4 +1,4 @@
-const CACHE_VERSION = "r47-20260708-1";
+const CACHE_VERSION = "r48-20260709-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -45,6 +45,8 @@ const CORE_ASSETS = [
   versioned("./assets/generated/v4/crops-48.png"),
   versioned("./assets/generated/v4/crops2-48.json"),
   versioned("./assets/generated/v4/crops2-48.png"),
+  versioned("./assets/generated/v4/crops3-48.json"),
+  versioned("./assets/generated/v4/crops3-48.png"),
   versioned("./assets/generated/v4/duck-egg-quality-32.json"),
   versioned("./assets/generated/v4/duck-egg-quality-32.png"),
   versioned("./assets/generated/v4/max-actions-48x64.json"),

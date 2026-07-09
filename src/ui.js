@@ -22,6 +22,7 @@
 
   let state = null;
   let selectedSeed = "wheat";
+  let selectedLetterId = null;
   let spritesReady = false;
   let lastOrderSig = "";
   let lastAssistantSig = "";
@@ -51,7 +52,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r47-20260708-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r48-20260709-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -145,6 +146,7 @@
     const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
     const sId = G.currentSeason ? G.currentSeason(state, now()) : "春";
     const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
+    const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
     $("resBar").innerHTML = `
       <div class="res coins"><span class="ic">🪙</span> ${fmtNum(state.coins)}</div>
       <div class="res level"><span class="ic">⭐</span>
@@ -153,7 +155,7 @@
       </div>
       <div class="res"><span class="ic">📦</span> ${used}<span class="sub">/${cap}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
-      ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub">${season.name}</span></div>` : ""}
+      ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
       ${matChips()}`;
   }
   // 建材顯示（>0 才顯示，省空間）
@@ -166,13 +168,17 @@
   // ---------- 種子選擇 ----------
   function renderSeeds() {
     const row = $("seedRow"); row.innerHTML = "";
+    const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
+    const sId = G.currentSeason ? G.currentSeason(state, now()) : "";
     Object.values(window.CROPS).forEach((c) => {
       const unlocked = c.unlockLevel <= state.level;
       const el = document.createElement("div");
+      const inSeason = seasonUnlocked && c.season && c.season === sId;
+      const seasonBadge = c.season ? `<span class="seed-season ${inSeason ? "active" : ""}">${inSeason ? "當季 ×1.15" : c.season}</span>` : "";
       el.className = "seed" + (selectedSeed === c.id && unlocked ? " sel" : "") + (unlocked ? "" : " locked");
       el.innerHTML = unlocked
-        ? `<span class="se">${c.emoji}</span><span class="sn">${c.name}</span><span class="sc">🪙${c.seedCost}</span>`
-        : `<span class="se">🔒</span><span class="sn">${c.name}</span><span class="sc">Lv${c.unlockLevel}</span>`;
+        ? `<span class="se">${c.emoji}</span><span class="sn">${c.name}</span><span class="sc">🪙${c.seedCost}</span>${seasonBadge}`
+        : `<span class="se">🔒</span><span class="sn">${c.name}</span><span class="sc">Lv${c.unlockLevel}</span>${seasonBadge}`;
       if (unlocked) el.onclick = () => { selectedSeed = c.id; state.selectedSeed = c.id; renderSeeds(); };
       row.appendChild(el);
     });
@@ -362,11 +368,13 @@
         return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)}${have}/${q}</span>`;
       }).join("");
       const el = document.createElement("div");
-      el.className = "order";
+      const isFestival = o.rarity === "festival";
+      el.className = "order" + (isFestival ? " festival" : "");
       if (narrative) el.dataset.npc = narrative.npcId;
       el.innerHTML = `
         <div class="o-rarity" style="background:${rarity.color}"></div>
         <div class="o-body">
+          ${isFestival ? `<div class="festival-tag">🏮四季物產</div>` : ""}
           ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
           <div class="o-flavor">${narrative.offer}</div>` : ""}
           <div class="o-wants">${wantsHtml}</div>
@@ -429,6 +437,9 @@
   const CHAPTER2_ORDER = (typeof window !== "undefined" && window.CHAPTER2_QUESTS) || ["repair_bridge", "explore_new_area"];
   const CHAPTER3_ORDER = (typeof window !== "undefined" && window.CHAPTER3_QUESTS) ||
     ["learn_animal_care", "feed_care_animal", "raise_affinity_happy", "collect_quality_product", "deliver_quality_order"];
+  const CHAPTER4_ORDER = (typeof window !== "undefined" && window.CHAPTER4_QUESTS) ||
+    ["prepare_four_seasons", "welcome_ducks", "finish_festival_order"];
+  const CHAPTER5_LETTER_ORDER = (typeof window !== "undefined" && window.CHAPTER5_LETTERS) || [];
   function questStepProgress(id, completed) {
     if (completed[id]) return { done: 1, total: 1 };
     const harvested = (state.stats && state.stats.harvested) || {};
@@ -450,6 +461,9 @@
     if (id === "raise_affinity_happy") return { done: (state.animals || []).some((a) => G.animalAffinity(state, a, now()) >= window.AFFINITY_HAPPY_THRESHOLD) ? 1 : 0, total: 1 };
     if (id === "collect_quality_product") return { done: G.hasCollectedQuality(state) ? 1 : 0, total: 1 };
     if (id === "deliver_quality_order") return { done: (state.stats && state.stats.qualitySold || 0) > 0 ? 1 : 0, total: 1 };
+    if (id === "prepare_four_seasons") return { done: G.harvestedSeasonCount ? G.harvestedSeasonCount(state) : 0, total: 4 };
+    if (id === "welcome_ducks") return { done: G.hasCollectedDuckEgg && G.hasCollectedDuckEgg(state) ? 1 : 0, total: 1 };
+    if (id === "finish_festival_order") return { done: (state.stats && state.stats.festivalOrders || 0) > 0 ? 1 : 0, total: 1 };
     return { done: 0, total: 1 };
   }
   function questRow(id, completed, cur) {
@@ -458,6 +472,132 @@
     return `<div class="quest ${done ? "done" : ""} ${active ? "active" : ""}">
       <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span>
       <span class="qtext"><span>${q.title}</span><em>${step.done}/${step.total}</em></span></div>`;
+  }
+  function chapter5Letters() {
+    const byId = {};
+    (window.LETTERS || []).forEach((l) => { byId[l.id] = l; });
+    return CHAPTER5_LETTER_ORDER.map((id) => byId[id]).filter(Boolean);
+  }
+  function unreadLetterCount() {
+    const mail = state.mail || {};
+    const unlocked = mail.unlocked || {};
+    const read = mail.read || {};
+    return CHAPTER5_LETTER_ORDER.filter((id) => unlocked[id] && !read[id]).length;
+  }
+  function updateMailBadges() {
+    const n = unreadLetterCount();
+    const badge = $("storyBadge");
+    if (badge) {
+      badge.textContent = n > 0 ? String(n) : "";
+      badge.hidden = n <= 0;
+    }
+    document.querySelectorAll('.ob[data-station="mailbox"]').forEach((el) => {
+      el.classList.toggle("mail-unread", n > 0);
+    });
+  }
+  function checkNewLetters(t, notify) {
+    if (!G.evaluateLetters || !state) return [];
+    const ids = G.evaluateLetters(state, t);
+    if (ids.length && notify) {
+      toast("📬 祖母寄來一封信…");
+      const mailbox = stationTileOf("mailbox");
+      if (mailbox) focusCameraOnTile(mailbox);
+    }
+    if (ids.length) { renderStory(); renderJournal(); scheduleSave(); }
+    updateMailBadges();
+    return ids;
+  }
+  function letterById(id) {
+    return (window.LETTERS || []).find((l) => l.id === id) || null;
+  }
+  function letterBodyHtml(letter) {
+    const body = Array.isArray(letter.body) ? letter.body : [letter.body || ""];
+    return body.map((p) => `<p>${escapeHtml(p)}</p>`).join("");
+  }
+  function selectLetter(id) {
+    selectedLetterId = id;
+    if (G.readLetter) {
+      const r = G.readLetter(state, id);
+      if (r && r.collectibleId === "grandma_hat") toast("🎩 取得收藏：祖母的草帽");
+    }
+    renderLettersModal();
+    renderStory(); renderJournal(); updateMailBadges(); scheduleSave();
+  }
+  function sendLetterReply() {
+    if (!G.replyLetter) return;
+    const r = G.replyLetter(state);
+    if (r.ok) {
+      toast(r.wasReplied ? "📮 回信已放在信箱裡" : "📮 你把回信放進祖母留下的信箱");
+      if (r.collectibleId === "seed_pouch") toast("🌱 取得收藏：祖母的種子布袋");
+      renderLettersModal(); renderStory(); renderJournal(); updateMailBadges(); renderQuestDock(); scheduleSave();
+    } else {
+      toast("還有信沒有讀完");
+    }
+  }
+  function renderLettersModal() {
+    const box = $("lettersBody"); if (!box) return;
+    const mail = state.mail || { unlocked: {}, read: {}, replied: false };
+    const unlocked = mail.unlocked || {};
+    const read = mail.read || {};
+    const letters = chapter5Letters();
+    const firstReadable = letters.find((l) => unlocked[l.id]) || null;
+    if (!selectedLetterId || !letterById(selectedLetterId) || !unlocked[selectedLetterId]) {
+      selectedLetterId = (letters.find((l) => unlocked[l.id] && !read[l.id]) || firstReadable || letters[0] || {}).id || null;
+    }
+    const selected = selectedLetterId ? letterById(selectedLetterId) : null;
+    const selectedUnlocked = selected && unlocked[selected.id];
+    const allRead = CHAPTER5_LETTER_ORDER.length > 0 && CHAPTER5_LETTER_ORDER.every((id) => read[id]);
+    const rows = letters.map((l, idx) => {
+      const isUnlocked = !!unlocked[l.id];
+      const isRead = !!read[l.id];
+      return `<button type="button" class="letter-list-item ${selectedLetterId === l.id ? "sel" : ""} ${isUnlocked ? "" : "locked"}" data-letter-id="${l.id}" ${isUnlocked ? "" : "disabled"}>
+        <span>${isUnlocked ? (isRead ? "✓" : "●") : "🔒"}</span>
+        <b>${idx + 1}. ${escapeHtml(l.title)}</b>
+        <em>${isUnlocked ? escapeHtml(l.season || "四季") : "尚未送達"}</em>
+      </button>`;
+    }).join("");
+    const paper = selectedUnlocked ? `
+      <article class="letter-paper" data-audit="letter-paper">
+        <div class="letter-meta">${escapeHtml(selected.season || "四季")} · ${escapeHtml(selected.from || "祖母")}</div>
+        <h3>${escapeHtml(selected.title)}</h3>
+        ${letterBodyHtml(selected)}
+      </article>` : `
+      <article class="letter-paper locked" data-audit="letter-paper">
+        <div class="letter-meta">信箱還在等農場甦醒</div>
+        <h3>尚未送達的信</h3>
+        <p>修好更多地方、照顧動物、迎接四季與豐年祭，鎮長就會把祖母留下的信交到你手上。</p>
+      </article>`;
+    box.innerHTML = `
+      <div class="letters-layout">
+        <div class="letters-list" data-audit="letter-list">${rows}</div>
+        <div class="letters-reader">
+          ${paper}
+          <div class="letters-footer">
+            <span>${CHAPTER5_LETTER_ORDER.filter((id) => read[id]).length}/${CHAPTER5_LETTER_ORDER.length} 已讀${mail.replied ? " · 已回信" : ""}</span>
+            <button type="button" class="btn buy small" id="letterReplyBtn" ${allRead && !mail.replied ? "" : "disabled"}>寫下回信</button>
+          </div>
+        </div>
+      </div>`;
+    box.querySelectorAll("[data-letter-id]").forEach((btn) => {
+      btn.onclick = () => selectLetter(btn.dataset.letterId);
+    });
+    const reply = $("letterReplyBtn");
+    if (reply) reply.onclick = sendLetterReply;
+  }
+  function openLettersModal() {
+    checkNewLetters(now(), false);
+    const mail = state.mail || {};
+    const unlocked = mail.unlocked || {};
+    const read = mail.read || {};
+    const first = chapter5Letters().find((l) => unlocked[l.id] && !read[l.id]) ||
+      chapter5Letters().find((l) => unlocked[l.id]);
+    if (first) {
+      selectedLetterId = first.id;
+      if (G.readLetter) G.readLetter(state, first.id);
+    }
+    renderLettersModal();
+    renderStory(); renderJournal(); updateMailBadges(); scheduleSave();
+    openModal("lettersModal", "[data-letter-id]:not([disabled])");
   }
   function bridgeMaterialRowsHtml(compact) {
     if (!G.bridgeMaterialStatus) return "";
@@ -525,6 +665,9 @@
     if (cur.id === "raise_affinity_happy") return "主動作：持續照護同一隻動物到開心。";
     if (cur.id === "collect_quality_product") return "主動作：親密度高時收集優質或頂級產物。";
     if (cur.id === "deliver_quality_order") return "主動作：把優質產物賣到市集或交付訂單。";
+    if (cur.id === "prepare_four_seasons") return "主動作：春夏秋冬各收成至少一種作物。";
+    if (cur.id === "welcome_ducks") return "主動作：照顧鴨舍並收集一枚鴨蛋。";
+    if (cur.id === "finish_festival_order") return "主動作：完成一張豐年祭四季物產訂單。";
     return "主動作：" + cur.desc;
   }
   function renderQuestDock() {
@@ -534,10 +677,12 @@
     const targetId = G.questMarkerTile ? G.questMarkerTile(state, now()) : null;
     const title = cur ? cur.title : "自由經營";
     const action = questActionText(cur);
+    const isFestivalQuest = cur && cur.id === "finish_festival_order";
     box.dataset.quest = cur ? cur.id : "free";
     box.dataset.targetId = targetId || "";
+    box.classList.toggle("festival", !!isFestivalQuest);
     box.innerHTML = `<div class="qd-body">
-        <div class="qd-title"><span>📍</span><span>${title}</span></div>
+        <div class="qd-title"><span>📍</span><span>${title}</span>${isFestivalQuest ? `<em class="festival-tag">🏮四季物產</em>` : ""}</div>
         <div class="qd-action">${action}</div>
         ${cur && cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(true) : ""}
         ${cur && (cur.id === "collect_east_forage") ? forageRowsHtml(true) : ""}
@@ -1083,7 +1228,16 @@
     const ch2AllDone = ch2Done >= CHAPTER2_ORDER.length;
     const ch3Done = CHAPTER3_ORDER.filter((id) => completed[id]).length;
     const ch3Pct = Math.round(ch3Done / CHAPTER3_ORDER.length * 100);
-    const kicker = doneCount === 0 ? "序章" : ch2AllDone ? "第三章" : ch1Done ? "第二章" : "第一章";
+    const ch3AllDone = ch3Done >= CHAPTER3_ORDER.length;
+    const ch4Done = CHAPTER4_ORDER.filter((id) => completed[id]).length;
+    const ch4Pct = Math.round(ch4Done / CHAPTER4_ORDER.length * 100);
+    const ch4AllDone = ch4Done >= CHAPTER4_ORDER.length;
+    const mail = state.mail || {};
+    const mailRead = mail.read || {};
+    const letterDone = CHAPTER5_LETTER_ORDER.filter((id) => mailRead[id]).length;
+    const letterPct = CHAPTER5_LETTER_ORDER.length ? Math.round(letterDone / CHAPTER5_LETTER_ORDER.length * 100) : 0;
+    const ch5AllDone = CHAPTER5_LETTER_ORDER.length > 0 && letterDone >= CHAPTER5_LETTER_ORDER.length && !!mail.replied;
+    const kicker = doneCount === 0 ? "序章" : ch5AllDone ? "第五章" : ch4AllDone ? "第五章" : ch3AllDone ? "第四章" : ch2AllDone ? "第三章" : ch1Done ? "第二章" : "第一章";
     const title = cur ? cur.title : "陽光農場的新篇章";
     const copy = cur ? cur.desc
       : "阿軒割割陽光農場開源遊戲世界重新熱鬧了起來。東林已通，繼續開墾田地、迎接更多動物與市集訂單，讓這座農場成為玩家共創的 RPG 世界。";
@@ -1108,6 +1262,32 @@
         </div>
         <div class="quest-list">${CHAPTER3_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
       </div>` : "";
+    const ch4Html = ch3AllDone ? `
+      <div class="chapter2 chapter4">
+        <div class="story-kicker">第四章 · 四季物產</div>
+        <div class="story-progress chapter4-progress" data-progress4="${ch4Done}/${CHAPTER4_ORDER.length}">
+          <div class="story-progress-head"><span>四季完成度</span><b>${ch4Done}/${CHAPTER4_ORDER.length}</b></div>
+          <div class="story-progress-track"><i style="width:${ch4Pct}%"></i></div>
+        </div>
+        <div class="quest-list">${CHAPTER4_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
+      </div>` : "";
+    const letterRows = chapter5Letters().map((l) => {
+      const unlocked = !!((mail.unlocked || {})[l.id]);
+      const read = !!mailRead[l.id];
+      return `<div class="quest ${read ? "done" : ""} ${unlocked && !read ? "active" : ""}">
+        <span class="qmark">${read ? "✓" : unlocked ? "●" : "🔒"}</span>
+        <span class="qtext"><span>${escapeHtml(l.title)}</span><em>${unlocked ? (read ? "已讀" : "新信") : "未送達"}</em></span></div>`;
+    }).join("");
+    const ch5Html = ch4AllDone ? `
+      <div class="chapter2 chapter5">
+        <div class="story-kicker">第五章 · 祖母的季節信箋</div>
+        <div class="story-progress chapter5-progress" data-progress5="${letterDone}/${CHAPTER5_LETTER_ORDER.length}">
+          <div class="story-progress-head"><span>信箋完成度</span><b>${letterDone}/${CHAPTER5_LETTER_ORDER.length}${mail.replied ? "・已回信" : ""}</b></div>
+          <div class="story-progress-track"><i style="width:${letterPct}%"></i></div>
+        </div>
+        <div class="quest-list">${letterRows}</div>
+        <button type="button" class="btn ghost small story-mail-btn" id="openLettersFromStory">打開信箱</button>
+      </div>` : "";
     box.innerHTML = `<div class="story-card">
       <div class="story-kicker">${kicker}</div>
       <div class="story-title">${title}</div>
@@ -1119,9 +1299,13 @@
       <div class="quest-list">${quests}</div>
       ${ch2Html}
       ${ch3Html}
+      ${ch4Html}
+      ${ch5Html}
       ${cur ? `<div class="quest-hint">📍 ${cur.desc}　地圖上的 <b>金色箭頭</b> 會指向目標。${cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(false) : ""}${cur.id === "collect_east_forage" ? forageRowsHtml(false) : ""}</div>` : ""}
       ${dialogueLogHtml()}
     </div>`;
+    const openMail = $("openLettersFromStory");
+    if (openMail) openMail.onclick = openLettersModal;
   }
   // Stage 6：側欄對話記錄（走近 NPC 交談後累積）
   function dialogueLogHtml() {
@@ -1194,13 +1378,17 @@
       a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement", a.id)).join("");
     const collectibleRows = (j.collectibles || []).map((c) => item(c.unlocked,
       c.unlocked ? `${c.emoji} ${c.name}` : "◼ 未取得收藏品", "collectible", c.id)).join("");
-    const chapterLine = (label, ch) => ch.unlocked ? `<div>${label} ${ch.done}/${ch.total}</div>` : `<div>🔒 ${label}未解鎖</div>`;
+    const chapterLine = (label, ch) => ch.unlocked
+      ? `<div>${label} ${ch.done}/${ch.total}${ch.replied ? "・已回信" : ""}</div>`
+      : `<div>🔒 ${label}未解鎖</div>`;
     box.innerHTML = `<div class="story-card journal-card">
       <div class="story-kicker">章節完成度</div>
       <div class="journal-chapters">
         ${chapterLine("第一章", j.chapters.chapter1)}
         ${chapterLine("第二章", j.chapters.chapter2)}
         ${chapterLine("第三章", j.chapters.chapter3)}
+        ${chapterLine("第四章", j.chapters.chapter4)}
+        ${chapterLine("第五章", j.chapters.chapter5)}
       </div>
       ${detailHtml()}
       ${head("🌾 作物圖鑑", "crops")}<div class="journal-grid">${cropRows}</div>
@@ -1240,7 +1428,8 @@
   const STAGE_NAME = ["seed", "sprout", "young", "mature", "ready"];
   // 遊戲建築 type → props atlas frame（v3 無 silo/bee_box 專屬圖，沿用近似物件）
   const BUILDING_FRAME = { chickenCoop: "chicken_coop", barn: "barn", beeBox: "compost_heap",
-    silo: "storage_crate", compostHeap: "compost_heap", duckPen: "chicken_coop", greenhouse: "compost_heap" };
+    silo: "storage_crate", compostHeap: "compost_heap", duckPen: "chicken_coop", greenhouse: "compost_heap", festival_stall: "shop" };
+  const BUILDING_SHEET = { festival_stall: "buildings" };
   // 障礙 → props frame（同名）
   const OBSTACLE_FRAME = { rock: "rock", stump: "stump", bush: "bush" };
   // ===== Stage 4：像素世界 + camera + 分層 y-sort 渲染器 =====
@@ -1443,6 +1632,14 @@
         if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; }
         if (prog.ready) addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
         else addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
+      }
+      for (const b of (state.buildings || [])) {
+        if (!b || b.structureId || !b.tileId) continue;
+        const tile = G.getTileById(state, b.tileId); if (!tile) continue;
+        const frame = BUILDING_FRAME[b.type] || "storage_crate";
+        const sheet = BUILDING_SHEET[b.type] || "props";
+        const el = addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 1.08, "shadowed", 0, "building");
+        if (el) { el.dataset.buildingId = b.id; el.dataset.buildingType = b.type; el.dataset.tileId = tile.id; }
       }
       renderAnimals(t);
       renderNpcs(t);
@@ -1886,11 +2083,16 @@
       const r = G.sellAll(state, t);
       if (r.coins > 0) { spawnVfx(stationTileOf("storage"), "product_pop"); toast("🪙 賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的東西");
-    } else if (st.effect === "story" || st.effect === "mail") {
-      // 信箱/告示牌：推進序章任務
+    } else if (st.effect === "mail") {
+      G.advanceStory(state, "read_sign");
+      checkNewLetters(t, true);
+      openLettersModal();
+      renderStory(); renderQuestDock(); updateMap(now());
+    } else if (st.effect === "story") {
+      // 告示牌：推進序章任務
       const adv = G.advanceStory(state, "read_sign");
       const q = window.QUESTS[adv.completed === "intro_reopen_farm" ? "plant_wheat" : (state.story.questId || "intro_reopen_farm")];
-      toast("📖 " + (st.effect === "mail" ? "信箱" : "告示牌") + "：" + (q ? q.title : "陽光農場的近況"));
+      toast("📖 告示牌：" + (q ? q.title : "陽光農場的近況"));
       renderStory(); renderQuestDock(); updateMap(now());
     } else if (st.effect === "well") {
       let n = 0;
@@ -2388,9 +2590,12 @@
 
   // ---------- 統一刷新 ----------
   function afterChange(rerenderPanels) {
-    renderResBar(); renderSeeds(); updateFarm(now());
+    const t = now();
+    checkNewLetters(t, true);
+    renderResBar(); renderSeeds(); updateFarm(t);
     renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud();
-    if (rerenderPanels) { renderUpgrades(); updateMap(now()); }
+    if (rerenderPanels) { renderUpgrades(); updateMap(t); }
+    updateMailBadges();
     scheduleSave();
   }
 
@@ -2454,6 +2659,12 @@
     const t = now();
     const weatherChanged = G.updateWeather(state, t);
     const seasonChanged = G.updateSeason ? G.updateSeason(state, t) : false;
+    if (seasonChanged) {
+      const sid = G.currentSeason ? G.currentSeason(state, t) : (state.season && state.season.id);
+      const s = (window.SEASONS || []).find((x) => x.id === sid);
+      if (s) toast(`${s.icon} ${s.name}到了，當季作物收購價提升。`);
+    }
+    checkNewLetters(t, true);
     const helped = G.runHelperOnline(state, t);
     // 訂單過期補單
     G.refreshOrders(state, t);
@@ -2505,9 +2716,11 @@
     G.refreshOrders(state, now());
     G.updateWeather(state, now());
     if (G.updateSeason) G.updateSeason(state, now());
+    checkNewLetters(now(), false);
 
     buildFarm(); buildMap();
     renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
+    updateMailBadges();
     positionPlayer(false);
     // 視窗縮放：重新定位玩家
     window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
@@ -2516,6 +2729,8 @@
     document.addEventListener("keydown", (ev) => {
       if (ev.key === "Escape" && closeOpenModal()) ev.preventDefault();
     });
+    const lettersClose = $("lettersClose");
+    if (lettersClose) lettersClose.onclick = () => closeModal("lettersModal");
 
     // sprite 切換鈕初始文字
     $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
@@ -2545,7 +2760,8 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
-      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); },
+      refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); updateMailBadges(); },
+      openLetters: () => openLettersModal(),
       clickTile: (id) => handleMapClick(id),
       focusTile: (id) => focusCameraOnTile(id),
       assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],

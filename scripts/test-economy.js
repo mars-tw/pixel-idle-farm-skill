@@ -231,6 +231,14 @@ console.log("\n== 8. 等級曲線與作物解鎖 ==");
     const netPerMin = ((crop.yield * crop.sellValue) - crop.seedCost) / (crop.growMs / 60000);
     assert(crop.sheet === "crops2" && netPerMin > 0, `${crop.name} 使用 crops2 且經濟為正（${netPerMin.toFixed(1)} 金/分鐘）`);
   }
+  for (const id of ["pea", "sweet_potato", "winter_kale"]) {
+    const crop = C.CROPS[id];
+    const netPerMin = ((crop.yield * crop.sellValue) - crop.seedCost) / (crop.growMs / 60000);
+    assert(crop.sheet === "crops3" && netPerMin > 0, `${crop.name} 使用 crops3 且經濟為正（${netPerMin.toFixed(1)} 金/分鐘）`);
+  }
+  const seasonCounts = {};
+  for (const crop of Object.values(C.CROPS)) if (crop.season) seasonCounts[crop.season] = (seasonCounts[crop.season] || 0) + 1;
+  for (const season of ["春", "夏", "秋", "冬"]) assert((seasonCounts[season] || 0) >= 1, `${season} 至少有 1 種作物`);
 }
 
 console.log("\n== 9. 天氣（lv5 解鎖）==");

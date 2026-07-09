@@ -167,9 +167,10 @@
       interaction: { tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null },
       // ===== 故事任務（地圖驅動）=====
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
+      mail: { unlocked: {}, read: {}, replied: false },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
       flags: { bridgeRepaired: false, eventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false },
-      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0 },
+      stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0, seasonsReached: {} },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
       settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" },
@@ -197,6 +198,11 @@
     merged.stats = Object.assign({}, def.stats, state.stats);
     merged.stats.harvested = Object.assign({}, state.stats && state.stats.harvested);
     merged.stats.collected = Object.assign({}, state.stats && state.stats.collected);
+    merged.stats.seasonsReached = Object.assign({}, state.stats && state.stats.seasonsReached);
+    merged.mail = Object.assign({}, def.mail, state.mail);
+    merged.mail.unlocked = Object.assign({}, state.mail && state.mail.unlocked);
+    merged.mail.read = Object.assign({}, state.mail && state.mail.read);
+    merged.mail.replied = !!(state.mail && state.mail.replied);
     merged.npcRequests = Object.assign({}, state.npcRequests);
     merged.npcRequestLog = Object.assign({}, state.npcRequestLog);
     merged.npcSideQuests = Object.assign({}, state.npcSideQuests);

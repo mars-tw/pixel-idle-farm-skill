@@ -1,0 +1,163 @@
+{
+  "image": "assets/generated/v4/crops3-48.png",
+  "meta": {
+    "w": 240,
+    "h": 144,
+    "frameW": 48,
+    "frameH": 48,
+    "cols": 5,
+    "rows": 3
+  },
+  "frames": {
+    "pea_seed": {
+      "x": 0,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "pea_sprout": {
+      "x": 48,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "pea_young": {
+      "x": 96,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "pea_mature": {
+      "x": 144,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "pea_ready": {
+      "x": 192,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sweet_potato_seed": {
+      "x": 0,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sweet_potato_sprout": {
+      "x": 48,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sweet_potato_young": {
+      "x": 96,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sweet_potato_mature": {
+      "x": 144,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sweet_potato_ready": {
+      "x": 192,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "winter_kale_seed": {
+      "x": 0,
+      "y": 96,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "winter_kale_sprout": {
+      "x": 48,
+      "y": 96,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "winter_kale_young": {
+      "x": 96,
+      "y": 96,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "winter_kale_mature": {
+      "x": 144,
+      "y": 96,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "winter_kale_ready": {
+      "x": 192,
+      "y": 96,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    }
+  }
+}

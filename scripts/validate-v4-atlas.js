@@ -54,6 +54,11 @@ const REQUIRED = {
     const cols = ["seed", "sprout", "young", "mature", "ready"];
     const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
   })(),
+  crops3: (() => {
+    const rows = ["pea", "sweet_potato", "winter_kale"];
+    const cols = ["seed", "sprout", "young", "mature", "ready"];
+    const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
+  })(),
   animals: (() => {
     const rows = ["chicken", "cow", "sheep", "bee"];
     const cols = ["idle_a", "idle_b", "walk_a", "walk_b"];
@@ -91,10 +96,10 @@ const REQUIRED = {
     const out = []; for (const r of rows) for (const c of cols) out.push(r + "_" + c); return out;
   })(),
 };
-const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "crops2", "animals", "animals_duck", "buildings", "structures",
+const NEED_ANCHOR = new Set(["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "crops2", "crops3", "animals", "animals_duck", "buildings", "structures",
   "care_props", "product_quality_duck", "animals_care"]);
 // 需做像素「非空白」檢查的 sheet（程序化 terrain / vfx 略過）
-const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "crops2", "animals", "animals_duck", "buildings",
+const PIXEL_SHEETS = ["walk", "actions", "walk_m", "actions_m", "npcs", "crops", "crops2", "crops3", "animals", "animals_duck", "buildings",
   "care_props", "product_quality", "product_quality_duck", "animals_care"];
 
 function server() {
@@ -149,7 +154,7 @@ async function pixelCheck(manifest) {
     for (const id of need) {
       const st = stats[id]; if (!st) continue; // 缺 frame 由結構檢查負責
       if (st.empty || st.cover < 0.012) fail(`${key}.${id}: 空白幀（覆蓋率 ${(st.cover * 100).toFixed(1)}%）`);
-      if ((key === "crops" || key === "crops2") && st.edge > 0.06) fail(`${key}.${id}: 作物觸碰格邊被裁切（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
+      if ((key === "crops" || key === "crops2" || key === "crops3") && st.edge > 0.06) fail(`${key}.${id}: 作物觸碰格邊被裁切（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
       else if (st.edge > 0.18) warn(`${key}.${id}: 內容貼近格邊（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
     }
   }
