@@ -1179,6 +1179,19 @@ console.log("\n== 19. R48: grandma letters, crops3, festival stall ==");
     "journal chapter 5 completion tracks letters and reply");
   assert(G.chapter5Done(chapterSt) && G.npcPhase(chapterSt) === "postscript",
     "chapter5Done drives NPC phase postscript");
+
+  const preReplySt = S.defaultState(T0);
+  C.PROLOGUE_QUESTS.concat(C.CHAPTER2_QUESTS).concat(C.CHAPTER3_QUESTS).concat(C.CHAPTER4_QUESTS)
+    .forEach((id) => (preReplySt.story.completed[id] = true));
+  for (const id of C.CHAPTER5_LETTERS) preReplySt.mail.read[id] = true;
+  assert(!G.chapter5Done(preReplySt) && G.allChapter5LettersRead(preReplySt)
+    && G.npcPhase(preReplySt) === "ch5done",
+    "R3 ch5done：八封已讀但未回信時 NPC phase 可達 ch5done");
+  for (const npcId of Object.keys(C.NPCS)) {
+    const d = G.npcDialogue(preReplySt, npcId, 0);
+    assert(d.phase === "ch5done" && C.NPCS[npcId].lines.ch5done.length > 0,
+      `R3 ch5done：${npcId} 會播放 ch5done 台詞而非直接跳 postscript`);
+  }
 }
 
 console.log("\n== 20. R51 P0: content quick wins ==");
@@ -1239,6 +1252,26 @@ console.log("\n== 20. R51 P0: content quick wins ==");
   assert(offline.seasonsAdvanced === 1 && summerStatus.eventId === "summer_well_bless" && summer.ok
     && eventSt.collections.summer_well_charm,
     "P0-5 offline season catch-up exposes the new current season event once");
+  const multiSeasonSt = S.defaultState(T0);
+  multiSeasonSt.level = 8;
+  multiSeasonSt.xp = C.LEVEL_XP[7];
+  multiSeasonSt.lastSeenAt = T0;
+  multiSeasonSt.season = { id: "春", untilMs: T0 + C.SEASON_DURATION_MS };
+  multiSeasonSt.storage.items.grapes = 3;
+  const multiNow = T0 + C.SEASON_DURATION_MS * 2 + 1;
+  const multiOffline = G.applyOffline(multiSeasonSt, multiNow);
+  const multiStatus = G.seasonEventStatus(multiSeasonSt, multiNow);
+  const skippedSummer = (multiOffline.skippedSeasonEvents || []).find((e) => e.eventId === "summer_well_bless");
+  assert(multiOffline.seasonsAdvanced === 2 && multiSeasonSt.season.id === "秋" && skippedSummer,
+    "R3 季節事件：離線跨兩季時中間夏季事件關閉為 skipped，不補發");
+  assert(multiStatus.eventId === "autumn_share_basket" && multiStatus.available && !multiStatus.claimed
+    && !multiSeasonSt.flags.seasonEventsClaimed[multiStatus.cycleId],
+    "R3 季節事件：落地當前秋季事件仍可領，沒有被 skipped 誤去重");
+  assert(G.claimSeasonEvent(multiSeasonSt, "summer_well_bless", multiNow).reason === "not_available",
+    "R3 季節事件：離線跳過的中間季不提供補領入口");
+  const multiAutumn = G.claimSeasonEvent(multiSeasonSt, "autumn_share_basket", multiNow);
+  assert(multiAutumn.ok && multiSeasonSt.flags.seasonEventsClaimed[multiAutumn.cycleId].eventId === "autumn_share_basket",
+    "R3 季節事件：當前季可正常領取且領後以 cycleId 去重");
   eventSt.season = { id: "秋", untilMs: T0 + C.SEASON_DURATION_MS * 3 };
   eventSt.storage.items.grapes = 3;
   const autumn = G.claimSeasonEvent(eventSt, "autumn_share_basket", T0 + C.SEASON_DURATION_MS * 2);

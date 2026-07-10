@@ -254,8 +254,9 @@
       }
       if (advance >= SEASONS.length) for (const s of SEASONS) recordSeasonReached(state, s.id);
       const idx = (fromIdx + advance) % SEASONS.length;
+      const skippedSeasonEvents = closeSkippedSeasonEvents(state, fromIdx, state.season.untilMs, advance, now);
       state.season = { id: SEASONS[idx].id, untilMs: state.season.untilMs + advance * duration };
-      return { changed: true, advanced: advance, reached };
+      return { changed: true, advanced: advance, reached, skippedSeasonEvents };
     }
     recordSeasonReached(state, state.season.id);
     return { changed: false, advanced: 0, reached: [state.season.id] };
@@ -303,6 +304,25 @@
   function seasonEventForSeason(season) {
     return Object.values(SEASON_EVENTS || {}).find((ev) => ev.season === season) || null;
   }
+  function seasonCycleKey(season, cycleStartMs) {
+    return season + ":" + Math.max(0, cycleStartMs || 0);
+  }
+  function closeSkippedSeasonEvents(state, fromIdx, fromUntilMs, advance, now) {
+    const skipped = [];
+    if (state.level < (SEASON_UNLOCK_LEVEL || 6) || !SEASON_DURATION_MS || advance <= 0) return skipped;
+    ensureSeasonEventState(state);
+    for (let step = 0; step < advance; step++) {
+      const season = SEASONS[(fromIdx + step) % SEASONS.length].id;
+      const ev = seasonEventForSeason(season);
+      if (!ev) continue;
+      const cycleStart = fromUntilMs - SEASON_DURATION_MS + step * SEASON_DURATION_MS;
+      const cycleId = seasonCycleKey(season, cycleStart);
+      if (state.flags.seasonEventsClaimed[cycleId]) continue;
+      state.flags.seasonEventsClaimed[cycleId] = { eventId: ev.id, skippedAt: now, skipped: true };
+      skipped.push({ cycleId, eventId: ev.id, season });
+    }
+    return skipped;
+  }
   function seasonCycleId(state, now) {
     const season = currentSeason(state, now);
     const duration = SEASON_DURATION_MS || 0;
@@ -312,7 +332,7 @@
       const advance = Math.floor((now - until) / duration) + 1;
       until += advance * duration;
     }
-    return season + ":" + Math.max(0, until - duration);
+    return seasonCycleKey(season, until - duration);
   }
   function requirementStatusForSeasonEvent(state, ev) {
     const items = (state.storage && state.storage.items) || {};
@@ -1495,9 +1515,10 @@
     const t = getTileById(state, tileId);
     return t && t.npc ? (C.NPCS || {})[t.npc] : null;
   }
-  // 對話階段：start → ch1done → bridge → ch2done → ch3done → ch4done → postscript
+  // 對話階段：start → ch1done → bridge → ch2done → ch3done → ch4done → ch5done → postscript
   function npcPhase(state) {
     if (chapter5Done(state)) return "postscript";
+    if (allChapter5LettersRead(state)) return "ch5done";
     if (chapter4Done(state)) return "ch4done";
     if (chapter3Done(state)) return "ch3done";
     if (chapter2Done(state)) return "ch2done";
@@ -2120,6 +2141,7 @@
     const seasonCatchup = advanceSeasonState(state, offlineNow);
     summary.seasonsAdvanced = seasonCatchup.advanced || 0;
     summary.seasonsReached = seasonCatchup.reached || [];
+    summary.skippedSeasonEvents = seasonCatchup.skippedSeasonEvents || [];
 
     for (let i = 0; i < Math.min(state.plots.length, active); i++) {
       const plot = state.plots[i];

@@ -375,6 +375,23 @@ console.log("\n== 10. R47 季節與豐年祭訂單 ==");
   const npcReq = G.generateNpcRequest(biasSt, "mayor", T0 + 1, () => 0);
   const npcItem = npcReq && Object.keys(npcReq.wants)[0];
   assert(["radish", "potato"].includes(npcItem), `P0 NPC 委託也吃春季偏壓（${npcItem}）`);
+
+  const lockedBiasSt = S.defaultState(T0);
+  lockedBiasSt.level = 6;
+  lockedBiasSt.weather = { id: "clear", untilMs: T0 + 1e9 };
+  lockedBiasSt.season = { id: "秋", untilMs: T0 + 1e9 };
+  const autumnPool = G.availableOrderItems(lockedBiasSt);
+  const autumnPreferred = G.seasonBiasItems(lockedBiasSt, T0, autumnPool);
+  assert(autumnPreferred.length === 0,
+    "R3 偏壓邊界：Lv6 秋季偏好中的 Lv7 作物與未發現採集物不進偏壓池");
+  const lockedIds = ["grapes", "sweet_potato", "forest_chestnut", "wild_berry"];
+  const lockedRng = makeRng(3051);
+  let ghostOrder = false;
+  for (let i = 0; i < 40; i++) {
+    const o = G.makeOrder(lockedBiasSt, T0 + i, lockedRng, "locked_bias_" + i);
+    if (lockedIds.some((id) => (o.wants[id] || 0) > 0)) ghostOrder = true;
+  }
+  assert(!ghostOrder, "R3 偏壓邊界：未解鎖作物／未發現採集物不會出現在季節偏壓訂單");
 }
 
 console.log("\n== 11. 存檔遷移（向後相容）==");
