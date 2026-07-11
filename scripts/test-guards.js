@@ -214,8 +214,23 @@ function runCopyGuard() {
   assert(hits.length === 0, "index.html 與 src/*.js 可見字串無 U+FFFD/連續問號/mojibake" + (hits.length ? "：\n    " + hits.join("\n    ") : ""));
 }
 
+function runTouchFarmGuard() {
+  console.log("\n== R55 手機農土二段確認守門 ==");
+  const ui = read("src/ui.js");
+  const html = read("index.html");
+  assert(ui.includes('activationType === "touch"') && ui.includes("confirmTouchFarmAction(tileId, act.action)") &&
+    ui.includes("pending.tileId === signature.tileId") && ui.includes("pending.tool === signature.tool") &&
+    ui.includes("pending.seedId === signature.seedId"),
+    "touch 農土需同格、同工具、同種子與同動作二次確認");
+  assert(ui.includes('handleMapClick(id)') && ui.includes('return "mouse"'),
+    "桌面／程式化地圖操作維持單擊直達路徑");
+  assert(html.includes("touchActionPreview") && html.includes(".gtile.farm-plot") && html.includes(".gtile.touch-pending"),
+    "農土有視覺間距、選取高亮與動作預覽");
+}
+
 runSwCacheGuard();
 runCopyGuard();
+runTouchFarmGuard();
 
 if (failed === 0) {
   console.log("\n✅ R39 自動化守門測試通過");

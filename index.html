@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r54-20260711-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r54-20260711-1">
+<link rel="manifest" href="manifest.webmanifest?v=r55-20260712-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r55-20260712-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r54-20260711-1";
+  const VERSION = "r55-20260712-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -493,8 +493,10 @@
   #groundLayer { position: absolute; left: 0; top: 0; z-index: 0; }
   /* 地面磚（terrain atlas 背景；可點擊）*/
   .gtile { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%; }
+  .gtile.farm-plot { box-sizing: border-box; padding: 2px; background-clip: content-box; }
   .gtile.water { cursor: not-allowed; }
   .gtile.sel { box-shadow: inset 0 0 0 3px #ffe27a; }
+  .gtile.touch-pending { box-shadow: inset 0 0 0 4px #fff2a8, 0 0 0 2px rgba(114,76,24,.58); }
   .gtile.dest { box-shadow: inset 0 0 0 3px #6ee7ff; }
   .gtile.wet { box-shadow: inset 0 0 0 2px rgba(75,163,211,.5); }
   /* 未開墾鎖定農土：顯示荒草（terrainFrame 給 grass_clump），僅在角落放小巧淡鎖提示，
@@ -597,7 +599,12 @@
   html.perf-low #weatherLayer.snow::before { background-image: radial-gradient(circle at 12px 10px, rgba(255,255,255,.7) 0 1px, transparent 2px); animation: none; }
   html.perf-low #weatherLayer.storm::before { background-image: repeating-linear-gradient(115deg,
       rgba(150,205,255,.45) 0 2px, transparent 2px 14px); animation: none; }
+  html.perf-low .ob-dot, html.perf-low .qmarker { animation: none !important; }
   @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
+  .touch-action-preview { position: absolute; z-index: 9850; left: 8px; right: 8px; top: 8px;
+    padding: 8px 10px; border: 2px solid #fff2a8; border-radius: 9px; color: #fffdf2;
+    background: rgba(62,43,20,.92); box-shadow: 0 3px 10px rgba(25,15,5,.34);
+    font-size: 13px; font-weight: 850; line-height: 1.35; text-align: center; pointer-events: none; }
   /* 動作 VFX（世界內，澆水/塵土/種子/收成/產物環）*/
   #vfxLayer { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 9500; }
   .map-vfx { position: absolute; background-repeat: no-repeat; image-rendering: pixelated; transform: translate(-50%, -50%); }
@@ -720,6 +727,7 @@
             <div class="player" id="player" aria-hidden="true"><div class="p-sprite" id="playerSprite"></div></div>
           </div>
           <div id="weatherLayer" data-audit="weather-layer" data-weather="clear" aria-hidden="true"></div>
+          <div id="touchActionPreview" class="touch-action-preview" data-audit="touch-action-preview" aria-live="polite" hidden></div>
           <div id="smartAssistant" class="smart-assistant" data-audit="smart-assistant"></div>
         </div>
       </div>
@@ -839,10 +847,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r54-20260711-1"></script>
-<script src="src/game.js?v=r54-20260711-1"></script>
-<script src="src/state.js?v=r54-20260711-1"></script>
-<script src="src/atlas.js?v=r54-20260711-1"></script>
-<script src="src/ui.js?v=r54-20260711-1"></script>
+<script src="src/config.js?v=r55-20260712-1"></script>
+<script src="src/game.js?v=r55-20260712-1"></script>
+<script src="src/state.js?v=r55-20260712-1"></script>
+<script src="src/atlas.js?v=r55-20260712-1"></script>
+<script src="src/ui.js?v=r55-20260712-1"></script>
 </body>
 </html>

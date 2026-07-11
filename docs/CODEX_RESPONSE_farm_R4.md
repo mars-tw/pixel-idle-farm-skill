@@ -1,6 +1,6 @@
 # Codex Response farm R4
 
-目標版本：`r54-20260711-1`
+目標版本：`r55-20260712-1`
 
 ## 結論
 
@@ -24,7 +24,7 @@
 - `src/ui.js`：FX 節點上限與清理、low/reduced JS guard、離線季節摘要、AudioContext resume guard。
 - `index.html`：low/reduced CSS guard。
 - `scripts/test-rpg-v4-e2e.js`：真 SW 離線測試在切 offline 前後等待 atlas ready，避免 headless 連跑競態。
-- `package.json`、`index.html`、`manifest.webmanifest`、`sw.js`、`scripts/test-rpg-v4-e2e.js`：版本同步到 `r54-20260711-1`。
+- `package.json`、`index.html`、`manifest.webmanifest`、`sw.js`、`scripts/test-rpg-v4-e2e.js`：版本同步到 `r55-20260712-1`。
 
 ## 延後項
 

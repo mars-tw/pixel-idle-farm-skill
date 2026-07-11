@@ -207,6 +207,72 @@ async function runShortDesktopLayoutTest(browser, base) {
   }
 }
 
+async function runTouchFarmConfirmationTest(browser, base) {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+    serviceWorkers: "block",
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto(base);
+    await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    const ids = await page.evaluate(() => window.__farm.state().map.tiles.filter((t) => t.plotIndex != null).slice(0, 3).map((t) => t.id));
+    const touch = (id) => page.evaluate((tileId) => {
+      const el = document.querySelector(`.gtile[data-tile-id="${tileId}"]`);
+      el.dispatchEvent(new PointerEvent("click", { bubbles: true, pointerType: "touch" }));
+    }, id);
+    const mouse = (id) => page.evaluate((tileId) => {
+      const el = document.querySelector(`.gtile[data-tile-id="${tileId}"]`);
+      el.dispatchEvent(new PointerEvent("click", { bubbles: true, pointerType: "mouse" }));
+    }, id);
+
+    const coinsBefore = await page.evaluate(() => window.__farm.state().coins);
+    await touch(ids[0]);
+    const first = await page.evaluate(() => ({
+      coins: window.__farm.state().coins,
+      crop: window.__farm.state().plots[0].cropId,
+      moving: window.__farm.moving(),
+      pending: window.__farm.touchFarmPreview(),
+      preview: document.getElementById("touchActionPreview").innerText,
+      highlighted: !!document.querySelector(".gtile.touch-pending"),
+    }));
+    assert(first.coins === coinsBefore && !first.crop && !first.moving && first.pending && first.pending.tileId === ids[0] &&
+      first.preview.includes("再點同格確認") && first.highlighted,
+      "手機首點農土只選取高亮並顯示動作／成本預覽，不扣資源也不移動");
+
+    await touch(ids[1]);
+    const changed = await page.evaluate(() => ({
+      coins: window.__farm.state().coins,
+      crops: window.__farm.state().plots.slice(0, 2).map((p) => p.cropId),
+      pending: window.__farm.touchFarmPreview(),
+    }));
+    assert(changed.coins === coinsBefore && changed.crops.every((crop) => !crop) && changed.pending && changed.pending.tileId === ids[1],
+      "手機走錯相鄰農土只改選取，不沿用前格確認且不扣資源");
+
+    await touch(ids[1]);
+    await waitArrive(page, 9000);
+    const confirmed = await page.evaluate(() => ({
+      coins: window.__farm.state().coins,
+      crop: window.__farm.state().plots[1].cropId,
+      pending: window.__farm.touchFarmPreview(),
+    }));
+    assert(confirmed.crop === "wheat" && confirmed.coins === coinsBefore - windowSeedCost() && confirmed.pending === null,
+      "手機第二次點同格才執行種植並清除預覽");
+
+    await mouse(ids[2]);
+    await waitArrive(page, 9000);
+    const desktop = await page.evaluate(() => ({ crop: window.__farm.state().plots[2].cropId, pending: window.__farm.touchFarmPreview() }));
+    assert(desktop.crop === "wheat" && desktop.pending === null, "滑鼠點農土維持單擊直接操作");
+  } finally {
+    await context.close();
+  }
+}
+
+function windowSeedCost() { return 1; }
+
 async function run() {
   let chromium;
   try { ({ chromium } = require("playwright")); }
@@ -219,6 +285,7 @@ async function run() {
 
   try {
   await runShortDesktopLayoutTest(browser, base);
+  await runTouchFarmConfirmationTest(browser, base);
   await runTrueServiceWorkerOfflineTest(browser, base);
   for (const vp of [{ w: 1280, h: 900, name: "桌面 1280x900" }, { w: 390, h: 844, name: "手機 390x844" }]) {
     console.log("\n== 視窗 " + vp.name + " ==");
@@ -274,7 +341,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r54-20260711-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r55-20260712-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -355,7 +422,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r54-20260711-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r55-20260712-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),

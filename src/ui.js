@@ -28,6 +28,8 @@
   let lastAssistantSig = "";
   let saveTimer = null;
   let selectedTileId = null;
+  let pendingTouchFarmAction = null;
+  let lastTouchMapAt = 0;
   let moveTimer = null;
   let atlasReady = false;
   let journalDetailSelection = null;
@@ -47,6 +49,7 @@
   let lastFarmRenderAt = 0;
   let lastMapRenderAt = 0;
   let lastAssistantRenderAt = 0;
+  let perfNeedsBaseline = false;
 
   const $ = (id) => document.getElementById(id);
   const now = () => Date.now();
@@ -55,7 +58,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r54-20260711-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r55-20260712-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -453,7 +456,7 @@
       el.innerHTML = unlocked
         ? `<span class="se">${c.emoji}</span><span class="sn">${c.name}</span><span class="sc">🪙${c.seedCost}</span>${seasonBadge}`
         : `<span class="se">🔒</span><span class="sn">${c.name}</span><span class="sc">Lv${c.unlockLevel}</span>${seasonBadge}`;
-      if (unlocked) el.onclick = () => { selectedSeed = c.id; state.selectedSeed = c.id; renderSeeds(); };
+      if (unlocked) el.onclick = () => { clearTouchFarmPreview(); selectedSeed = c.id; state.selectedSeed = c.id; renderSeeds(); };
       row.appendChild(el);
     });
   }
@@ -490,7 +493,7 @@
 
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
-  function setTool(t) { state.interaction.tool = t; renderToolbar(); renderQuestDock(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
+  function setTool(t) { clearTouchFarmPreview(); state.interaction.tool = t; renderToolbar(); renderQuestDock(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
   function renderToolbar() {
     const bar = $("toolBar"); if (!bar) return; bar.innerHTML = "";
     window.TOOL_ORDER.forEach((id) => {
@@ -1256,6 +1259,12 @@
     let last = perf.now();
     const frame = (ts) => {
       const t = typeof ts === "number" ? ts : perf.now();
+      if (document.hidden || perfNeedsBaseline) {
+        last = t;
+        perfNeedsBaseline = false;
+        requestAnimationFrame(frame);
+        return;
+      }
       const dt = Math.max(1, t - last);
       last = t;
       const fps = Math.min(120, 1000 / dt);
@@ -1786,12 +1795,13 @@
     groundEl.innerHTML = ""; tileEls.length = 0;
     for (const tile of state.map.tiles) {
       const el = document.createElement("div");
-      el.className = "gtile " + tile.terrain;
+      el.className = "gtile " + tile.terrain + (tile.plotIndex != null ? " farm-plot" : "");
       el.dataset.tileId = tile.id;
       el.dataset.audit = "ground-tile"; el.dataset.terrain = tile.terrain;
       el.style.left = pxv(tile.x * TILE); el.style.top = pxv(tile.y * TILE);
       el.style.width = pxv(TILE); el.style.height = pxv(TILE);
-      el.addEventListener("click", () => handleMapClick(tile.id));
+      el.addEventListener("touchend", () => { lastTouchMapAt = now(); }, { passive: true });
+      el.addEventListener("click", (ev) => handleMapClick(tile.id, mapActivationType(ev)));
       groundEl.appendChild(el);
       tileEls.push({ el, tileId: tile.id });
     }
@@ -1813,10 +1823,12 @@
       const lockedArea = (tile.region === "east" && !(state.flags && state.flags.bridgeRepaired))
         || (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)); // 東林/深處封鎖區
       let cls = "gtile " + tile.terrain;
+      if (tile.plotIndex != null) cls += " farm-plot";
       if (locked) cls += " locked";
       if (lockedArea) cls += " locked-area";
       if (prog && prog.wet && !prog.ready) cls += " wet";
       if (cell.tileId === selectedTileId) cls += " sel";
+      if (pendingTouchFarmAction && cell.tileId === pendingTouchFarmAction.tileId) cls += " touch-pending";
       const kind = lockedArea ? "locked-area" : "";
       const frame = terrainFrame(tile, prog);
       const sig = cls + "|" + kind + "|" + frame;
@@ -2216,8 +2228,58 @@
     };
     step();
   }
-  // 點地圖磚：依工具決定移動或動作
-  function handleMapClick(tileId) {
+  function mapActivationType(ev) {
+    if (!ev) return "direct";
+    if (ev.pointerType) return ev.pointerType;
+    if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return "touch";
+    if (now() - lastTouchMapAt < 700) return "touch";
+    return "mouse";
+  }
+  function touchFarmActionText(action) {
+    if (action === "plant") {
+      const crop = window.CROPS[selectedSeed];
+      return `種植 ${crop.emoji}${crop.name}（🪙${crop.seedCost}）`;
+    }
+    if (action === "harvest") return "收成這格作物";
+    if (action === "water") return "澆水這格作物";
+    return "執行農作";
+  }
+  function renderTouchFarmPreview() {
+    const el = $("touchActionPreview"); if (!el) return;
+    if (!pendingTouchFarmAction) { el.hidden = true; el.textContent = ""; return; }
+    el.hidden = false;
+    el.textContent = "預覽：" + touchFarmActionText(pendingTouchFarmAction.action) + " · 再點同格確認";
+  }
+  function clearTouchFarmPreview(repaint) {
+    if (!pendingTouchFarmAction) return;
+    pendingTouchFarmAction = null;
+    renderTouchFarmPreview();
+    if (repaint !== false) paintGround();
+  }
+  function confirmTouchFarmAction(tileId, action) {
+    const signature = {
+      tileId,
+      action,
+      tool: currentTool(),
+      seedId: action === "plant" ? selectedSeed : null,
+    };
+    const pending = pendingTouchFarmAction;
+    const confirmed = !!pending && pending.tileId === signature.tileId && pending.action === signature.action &&
+      pending.tool === signature.tool && pending.seedId === signature.seedId;
+    if (confirmed) {
+      clearTouchFarmPreview(false);
+      return true;
+    }
+    pendingTouchFarmAction = signature;
+    renderTouchFarmPreview();
+    paintGround();
+    toast("👆 " + touchFarmActionText(action) + "；再點同格確認");
+    return false;
+  }
+  // 點地圖磚：依工具決定移動或動作；touch 農土先預覽、同格第二點才確認。
+  function handleMapClick(tileId, activationType) {
+    const isTouch = activationType === "touch";
+    if (pendingTouchFarmAction && (!isTouch || pendingTouchFarmAction.tileId !== tileId)) clearTouchFarmPreview(false);
     selectedTileId = tileId; state.interaction.selectedTileId = tileId;
     const tile = G.getTileById(state, tileId);
     const tool = currentTool();
@@ -2237,8 +2299,12 @@
     if (tile.npc) { useNpc(tile); updateMap(now()); return; }
 
     const act = actionTargetFor(tool, tile);
-    if (act.invalid) { toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
-    if (act.action) { spawnRing(tileId, true); moveAndAct(tileId, act.action); updateMap(now()); return; }
+    if (act.invalid) { clearTouchFarmPreview(false); toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
+    if (act.action) {
+      if (isTouch && tile.plotIndex != null && !confirmTouchFarmAction(tileId, act.action)) { updateMap(now()); return; }
+      clearTouchFarmPreview(false);
+      spawnRing(tileId, true); moveAndAct(tileId, act.action); updateMap(now()); return;
+    }
     // 無動作：若可走就走過去
     if (G.isWalkable(state, tile)) {
       const path = G.bfsPath(state, state.player.tileId, tileId);
@@ -3049,6 +3115,7 @@
 
   // ---------- 主迴圈 ----------
   function loop() {
+    if (document.hidden) return;
     const t = now();
     const weatherChanged = G.updateWeather(state, t);
     const seasonChanged = G.updateSeason ? G.updateSeason(state, t) : false;
@@ -3095,6 +3162,20 @@
     tickPlayer(t);      // 玩家走路/動作/待機動畫
   }
 
+  function setupVisibilityLifecycle() {
+    document.addEventListener("visibilitychange", () => {
+      perfNeedsBaseline = true;
+      if (document.hidden) {
+        state.lastSeenAt = now();
+        window.save(state);
+        return;
+      }
+      loop();
+      updateMap(now());
+      positionPlayer(false);
+    });
+  }
+
   // ---------- 初始化 ----------
   function init() {
     // 先載入存檔，state 必須在任何 render/onload 前就緒
@@ -3104,6 +3185,7 @@
     applyPerformanceMode();
     setupAudioUnlock();
     setupErrorRecovery();
+    setupVisibilityLifecycle();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
 
     // 舊作物 sheet 僅供隱藏相容農場格（主地圖作物改用 atlas）
@@ -3157,7 +3239,7 @@
 
     window.save(state);
     setInterval(loop, window.GAME.tickMs);
-    setInterval(() => window.save(state), window.GAME.autosaveMs);
+    setInterval(() => { if (!document.hidden) window.save(state); }, window.GAME.autosaveMs);
     window.addEventListener("beforeunload", () => { state.lastSeenAt = now(); window.save(state); });
 
     bindToolbar();
@@ -3174,6 +3256,7 @@
       refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); updateMailBadges(); },
       openLetters: () => openLettersModal(),
       clickTile: (id) => handleMapClick(id),
+      touchFarmPreview: () => pendingTouchFarmAction ? { ...pendingTouchFarmAction } : null,
       focusTile: (id) => focusCameraOnTile(id),
       assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],
       renderSettings: () => renderSettingsPanel(),
