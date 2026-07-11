@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r53-20260711-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r53-20260711-1">
+<link rel="manifest" href="manifest.webmanifest?v=r54-20260711-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r54-20260711-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r53-20260711-1";
+  const VERSION = "r54-20260711-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -336,8 +336,9 @@
   @keyframes seasonWash { 0% { opacity: 0; } 28% { opacity: 1; } 100% { opacity: 0; } }
   @keyframes mailBellRing { 0%,100% { transform: rotate(0); } 18% { transform: rotate(-8deg); } 36% { transform: rotate(7deg); } 54% { transform: rotate(-5deg); } 72% { transform: rotate(3deg); } }
   html.perf-low #screenFxLayer, html.perf-low .mature-flash { display: none; }
+  html.perf-low .coin-pop, html.perf-low .crop-mature-pop, html.perf-low .float, html.perf-low .mail-bell-ring { animation: none !important; }
   @media (prefers-reduced-motion: reduce) {
-    .juice-particle, .juice-coin, .combo-float, .level-fanfare, .coin-pop, .crop-mature-pop, .mature-flash, .season-wash, .mail-bell-ring {
+    .juice-particle, .juice-coin, .combo-float, .level-fanfare, .coin-pop, .crop-mature-pop, .mature-flash, .season-wash, .mail-bell-ring, .float, .plot.ready, .ob-dot {
       animation: none !important;
     }
     #screenFxLayer { display: none; }
@@ -838,10 +839,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r53-20260711-1"></script>
-<script src="src/game.js?v=r53-20260711-1"></script>
-<script src="src/state.js?v=r53-20260711-1"></script>
-<script src="src/atlas.js?v=r53-20260711-1"></script>
-<script src="src/ui.js?v=r53-20260711-1"></script>
+<script src="src/config.js?v=r54-20260711-1"></script>
+<script src="src/game.js?v=r54-20260711-1"></script>
+<script src="src/state.js?v=r54-20260711-1"></script>
+<script src="src/atlas.js?v=r54-20260711-1"></script>
+<script src="src/ui.js?v=r54-20260711-1"></script>
 </body>
 </html>

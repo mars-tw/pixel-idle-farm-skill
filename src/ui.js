@@ -55,12 +55,13 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r53-20260711-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r54-20260711-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
   // ---------- 物品/建材顯示 ----------
   const FX_MAX_PARTICLES = 28;
+  const FX_MAX_NODES = 72;
   const FX_SEASON_COLORS = {
     "春": "rgba(255, 214, 168, .44)",
     "夏": "rgba(255, 235, 142, .38)",
@@ -106,6 +107,7 @@
     setTimeout(() => t.remove(), 2100);
   }
   function floatText(x, y, text, color) {
+    if (!shouldUseJuiceFx()) return;
     const f = document.createElement("div");
     f.className = "float"; f.textContent = text; f.style.color = color || "#fff";
     f.style.left = x + "px"; f.style.top = y + "px";
@@ -132,6 +134,28 @@
     }
     return layer;
   }
+  function trimFxLayer(layer, room) {
+    if (!layer || !layer.children) return;
+    const keepRoom = Math.max(0, room || 0);
+    while (layer.children.length + keepRoom > FX_MAX_NODES) {
+      const first = layer.children[0];
+      if (!first) break;
+      const before = layer.children.length;
+      first.remove();
+      if (layer.children.length === before) break;
+    }
+  }
+  function removeFxNode(el, ms) {
+    if (!el) return;
+    let done = false;
+    const cleanup = () => {
+      if (done) return;
+      done = true;
+      el.remove();
+    };
+    try { el.addEventListener("animationend", cleanup, { once: true }); } catch (e) {}
+    setTimeout(cleanup, ms);
+  }
   function elementCenter(el) {
     if (!el || !el.getBoundingClientRect) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const r = el.getBoundingClientRect();
@@ -145,6 +169,7 @@
     const layer = rootFxLayer(); if (!layer) return;
     const list = Array.isArray(glyphs) ? glyphs : [glyphs || "*"];
     const count = Math.min((opts && opts.count) || 10, FX_MAX_PARTICLES);
+    trimFxLayer(layer, count);
     for (let i = 0; i < count; i++) {
       const p = document.createElement("div");
       p.className = "juice-particle" + (opts && opts.className ? " " + opts.className : "");
@@ -158,10 +183,11 @@
       p.style.setProperty("--jr", (Math.random() * 120 - 60).toFixed(0) + "deg");
       p.style.animationDelay = (Math.random() * 55).toFixed(0) + "ms";
       layer.appendChild(p);
-      setTimeout(() => p.remove(), 980);
+      removeFxNode(p, 980);
     }
   }
   function popCoinHud() {
+    if (!shouldUseJuiceFx()) return;
     const coin = document.querySelector(".res.coins");
     if (!coin) return;
     coin.classList.remove("coin-pop");
@@ -170,13 +196,14 @@
     setTimeout(() => coin.classList.remove("coin-pop"), 360);
   }
   function flyCoinsToHud(x, y, count) {
-    popCoinHud();
     if (!shouldUseJuiceFx()) return;
+    popCoinHud();
     const target = document.querySelector(".res.coins");
     const layer = rootFxLayer();
     if (!target || !layer) return;
     const end = elementCenter(target);
     const n = Math.min(count || 3, 8);
+    trimFxLayer(layer, n);
     for (let i = 0; i < n; i++) {
       const c = document.createElement("div");
       c.className = "juice-coin";
@@ -189,7 +216,7 @@
       c.style.setProperty("--ty", (end.y - sy) + "px");
       c.style.animationDelay = (i * 45) + "ms";
       layer.appendChild(c);
-      setTimeout(() => c.remove(), 900);
+      removeFxNode(c, 900);
     }
   }
   function harvestComboText(x, y) {
@@ -204,8 +231,9 @@
     el.textContent = "combo x" + harvestCombo;
     el.style.left = x + "px";
     el.style.top = (y - 28) + "px";
+    trimFxLayer(layer, 1);
     layer.appendChild(el);
-    setTimeout(() => el.remove(), 820);
+    removeFxNode(el, 820);
   }
   function screenBurstFromEl(el, glyphs, opts) {
     const c = elementCenter(el);
@@ -228,12 +256,13 @@
     const f = document.createElement("div");
     f.className = "mature-flash";
     el.appendChild(f);
-    setTimeout(() => f.remove(), 620);
+    removeFxNode(f, 620);
   }
   function cropMatureCue(key, tileId, el) {
     if (!key) return;
     if (cropReadySeen.has(key)) return;
     cropReadySeen.add(key);
+    if (!shouldUseJuiceFx()) return;
     if (el) {
       el.classList.remove("crop-mature-pop");
       void el.offsetWidth;
@@ -258,8 +287,9 @@
     fan.textContent = "Level up";
     fan.style.left = c.x + "px";
     fan.style.top = (c.y + 8) + "px";
+    trimFxLayer(layer, 1);
     layer.appendChild(fan);
-    setTimeout(() => fan.remove(), 1150);
+    removeFxNode(fan, 1150);
   }
   function mailArriveFx() {
     const mailbox = stationTileOf("mailbox");
@@ -278,18 +308,19 @@
     const wash = document.createElement("div");
     wash.className = "season-wash";
     wash.style.background = FX_SEASON_COLORS[seasonId] || "rgba(255, 244, 204, .35)";
+    trimFxLayer(layer, 1);
     layer.appendChild(wash);
-    setTimeout(() => wash.remove(), 1050);
+    removeFxNode(wash, 1050);
   }
-  function unlockAudio() {
-    if (audioUnlocked || !state) return;
+  function unlockAudio(forceResume) {
+    if (!state) return;
     const settings = ensureSettings();
     if (settings.soundEnabled === false) return;
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
     try {
       audioCtx = audioCtx || new Ctx();
-      if (audioCtx.resume) audioCtx.resume().catch(() => {});
+      if (audioCtx.resume && (!audioUnlocked || forceResume || audioCtx.state === "suspended")) audioCtx.resume().catch(() => {});
       audioUnlocked = true;
     } catch (e) {}
   }
@@ -298,11 +329,22 @@
     ["pointerdown", "keydown", "touchstart"].forEach((ev) => {
       try { document.addEventListener(ev, unlockAudio, opts); } catch (e) {}
     });
+    try {
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && audioUnlocked) unlockAudio(true);
+      });
+    } catch (e) {}
+    try {
+      window.addEventListener("pageshow", () => {
+        if (audioUnlocked) unlockAudio(true);
+      });
+    } catch (e) {}
   }
   function playSound(kind) {
     if (!state || ensureSettings().soundEnabled === false) return;
-    if (!audioUnlocked) unlockAudio();
+    unlockAudio(true);
     const ctx = audioCtx;
+    if (ctx && ctx.state === "closed") { audioCtx = null; audioUnlocked = false; return; }
     if (!ctx || !ctx.createOscillator || !ctx.createGain) return;
     const patterns = {
       harvest: [[520, .035], [760, .045]],
@@ -1353,6 +1395,9 @@
       products: Object.assign({}, summary.products || {}),
       replanted: summary.replanted || 0,
       lost: summary.lost || 0,
+      seasonsAdvanced: summary.seasonsAdvanced || 0,
+      seasonsReached: (summary.seasonsReached || []).slice(0, 8),
+      skippedSeasonEvents: (summary.skippedSeasonEvents || []).slice(0, 8),
     };
   }
   function recordOfflineSummary(summary) {
@@ -1380,6 +1425,8 @@
     if (products.length) lines.push(`動物產出 ${products.map(([pid, n]) => `${itemName(pid)}×${n}`).join("、")}`);
     if (summary.replanted > 0) lines.push(`幫手補種 ${summary.replanted} 次`);
     if (summary.lost > 0) lines.push(`倉滿損失 ${summary.lost}`);
+    if (summary.seasonsAdvanced > 0) lines.push(`季節推進 ${summary.seasonsAdvanced} 次`);
+    if ((summary.skippedSeasonEvents || []).length) lines.push(`已結束節慶 ${summary.skippedSeasonEvents.length} 個`);
     return `<div class="offline-review" data-audit="offline-review">
       <div class="offline-review-title">最近一次離線回顧</div>
       <div class="offline-review-body" data-audit="offline-review-summary">${lines.map((line) => `<div>${escapeHtml(line)}</div>`).join("")}</div>
@@ -1406,6 +1453,7 @@
         ensureSettings();
         state.settings[key] = state.settings[key] === false;
         if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
+        if (key === "soundEnabled" && state.settings.soundEnabled !== false) unlockAudio(true);
         renderSettingsPanel();
         renderSmartAssistant(true);
         scheduleSave();
@@ -2078,12 +2126,14 @@
     sp.style.width = size + "px"; sp.style.height = size + "px";
     sp.style.left = (el.offsetLeft + el.offsetWidth / 2) + "px";
     sp.style.top = (el.offsetTop + el.offsetHeight * ((opts && opts.yf) || 0.5)) + "px";
+    trimFxLayer(layer, 1);
     layer.appendChild(sp);
     let f = 0;
     const paint = () => { const stl = window.Atlas.frameStyleFor(sheet, vfxRow + "_" + String(f).padStart(2, "0"), size, size);
       if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; } };
     paint();
     const iv = setInterval(() => { f++; if (f > 5) { clearInterval(iv); sp.remove(); return; } paint(); }, 75);
+    setTimeout(() => { clearInterval(iv); sp.remove(); }, 650);
   }
   function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1.05 }); }
   function stationTileOf(type) { const t = state.map.tiles.find((x) => x.station === type); return t ? t.id : null; }
@@ -2936,6 +2986,21 @@
     lines.push(`<div class="ml" data-audit="offline-head">你離開的 ${minutes} 分鐘：離線收益 <span class="v">+${summary.coins || 0} 金</span></div>`);
     lines.push(`<div class="ml" data-audit="offline-mature">作物成熟 <span class="v">${summary.readyPlots || 0} 株</span></div>`);
     if (forageCount > 0) lines.push(`<div class="ml" data-audit="offline-forage">採集點已刷新 <span class="v">${forageCount} 處</span></div>`);
+    if (summary.seasonsAdvanced > 0) {
+      const reached = (summary.seasonsReached || []).map((id) => {
+        const s = (window.SEASONS || []).find((x) => x.id === id);
+        return s ? s.name : id;
+      });
+      const label = reached.length ? `（${reached.join("、")}）` : "";
+      lines.push(`<div class="ml" data-audit="offline-seasons">季節推進 <span class="v">${summary.seasonsAdvanced} 次</span>${escapeHtml(label)}</div>`);
+    }
+    if ((summary.skippedSeasonEvents || []).length) {
+      const names = summary.skippedSeasonEvents.map((sk) => {
+        const ev = Object.values(window.SEASON_EVENTS || {}).find((x) => x.id === sk.eventId);
+        return ev ? ev.name : sk.eventId;
+      });
+      lines.push(`<div class="ml" data-audit="offline-skipped-events">已結束節慶 <span class="v">${names.map(escapeHtml).join("、")}</span></div>`);
+    }
     const crops = Object.entries(summary.perCrop || {});
     if (crops.length) {
       crops.forEach(([cid, n]) => lines.push(`<div class="ml">${window.CROPS[cid].emoji} ${window.CROPS[cid].name} 自動收成 <span class="v">+${n}</span></div>`));
