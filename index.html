@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r52-20260710-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r52-20260710-1">
+<link rel="manifest" href="manifest.webmanifest?v=r53-20260711-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r53-20260711-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r52-20260710-1";
+  const VERSION = "r53-20260711-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -298,6 +298,50 @@
   @keyframes floatUp { 0%{ opacity:0; transform: translate(-50%,0) scale(.8);} 20%{opacity:1; transform: translate(-50%,-6px) scale(1.1);} 100%{ opacity:0; transform: translate(-50%,-40px);} }
 
   /* ===== Modal（離線摘要 / 設定 / 引導） ===== */
+  #screenFxLayer { position: fixed; inset: 0; z-index: 245; pointer-events: none; overflow: hidden; }
+  .juice-particle, .juice-coin, .combo-float, .level-fanfare {
+    position: fixed; left: 0; top: 0; transform: translate(-50%, -50%);
+    pointer-events: none; font-weight: 950; text-shadow: 0 2px 4px rgba(0,0,0,.26);
+    will-change: transform, opacity;
+  }
+  .juice-particle { font-size: 20px; animation: juiceBurst .82s cubic-bezier(.18,.8,.24,1) forwards; }
+  .water-drop-particle { filter: drop-shadow(0 1px 2px rgba(50,120,180,.45)); }
+  .reward-particle, .level-particle, .mail-particle { font-size: 18px; }
+  .juice-coin { font-size: 18px; animation: coinFly .78s cubic-bezier(.2,.82,.22,1) forwards; }
+  .combo-float { color: #fff7cf; font-size: 12px; letter-spacing: 0; animation: comboFloat .74s ease-out forwards; }
+  .level-fanfare { color: #fff6b8; font-size: 15px; padding: 3px 8px; border-radius: 999px;
+    background: rgba(74,53,0,.72); border: 1px solid rgba(255,226,122,.75); animation: fanfarePop 1.05s ease-out forwards; }
+  .coin-pop { animation: coinHudPop .34s ease-out; }
+  .crop-mature-pop { animation: maturePop .56s cubic-bezier(.2,.9,.2,1); filter: drop-shadow(0 0 8px rgba(255,230,120,.9)); }
+  .mature-flash { position: absolute; inset: -12%; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,247,178,.7), rgba(255,247,178,.24) 45%, transparent 70%);
+    animation: matureFlash .56s ease-out forwards; mix-blend-mode: screen; }
+  .season-wash { position: fixed; inset: 0; pointer-events: none; animation: seasonWash 1s ease-in-out forwards; }
+  .mail-bell-ring { animation: mailBellRing .78s ease-in-out; transform-origin: 50% 15%; }
+  @keyframes juiceBurst {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(.65) rotate(0); }
+    16% { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--jx)), calc(-50% + var(--jy))) scale(1.05) rotate(var(--jr)); }
+  }
+  @keyframes coinFly {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); }
+    12% { opacity: 1; transform: translate(-50%, -62%) scale(1.05); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(.55); }
+  }
+  @keyframes comboFloat { from { opacity: 0; transform: translate(-50%, 0) scale(.85); } 30% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -32px) scale(1.05); } }
+  @keyframes fanfarePop { 0% { opacity: 0; transform: translate(-50%, 8px) scale(.82); } 18% { opacity: 1; transform: translate(-50%, -4px) scale(1.04); } 100% { opacity: 0; transform: translate(-50%, -34px) scale(.98); } }
+  @keyframes coinHudPop { 0%,100% { transform: scale(1); } 38% { transform: scale(1.12); filter: brightness(1.18); } }
+  @keyframes maturePop { 0% { transform: translateY(0) scale(.92); } 45% { transform: translateY(-8px) scale(1.08); } 100% { transform: translateY(0) scale(1); } }
+  @keyframes matureFlash { from { opacity: .95; transform: scale(.65); } to { opacity: 0; transform: scale(1.45); } }
+  @keyframes seasonWash { 0% { opacity: 0; } 28% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes mailBellRing { 0%,100% { transform: rotate(0); } 18% { transform: rotate(-8deg); } 36% { transform: rotate(7deg); } 54% { transform: rotate(-5deg); } 72% { transform: rotate(3deg); } }
+  html.perf-low #screenFxLayer, html.perf-low .mature-flash { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .juice-particle, .juice-coin, .combo-float, .level-fanfare, .coin-pop, .crop-mature-pop, .mature-flash, .season-wash, .mail-bell-ring {
+      animation: none !important;
+    }
+    #screenFxLayer { display: none; }
+  }
   .modal { position: fixed; inset: 0; background: rgba(20,16,8,.66); display: none; align-items: center;
     justify-content: center; z-index: 150; padding: 16px; overflow-y: auto; }
   .modal.show { display: flex; }
@@ -794,10 +838,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r52-20260710-1"></script>
-<script src="src/game.js?v=r52-20260710-1"></script>
-<script src="src/state.js?v=r52-20260710-1"></script>
-<script src="src/atlas.js?v=r52-20260710-1"></script>
-<script src="src/ui.js?v=r52-20260710-1"></script>
+<script src="src/config.js?v=r53-20260711-1"></script>
+<script src="src/game.js?v=r53-20260711-1"></script>
+<script src="src/state.js?v=r53-20260711-1"></script>
+<script src="src/atlas.js?v=r53-20260711-1"></script>
+<script src="src/ui.js?v=r53-20260711-1"></script>
 </body>
 </html>

@@ -55,11 +55,24 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r52-20260710-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r53-20260711-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
   // ---------- 物品/建材顯示 ----------
+  const FX_MAX_PARTICLES = 28;
+  const FX_SEASON_COLORS = {
+    "春": "rgba(255, 214, 168, .44)",
+    "夏": "rgba(255, 235, 142, .38)",
+    "秋": "rgba(238, 155, 82, .40)",
+    "冬": "rgba(188, 225, 255, .42)",
+  };
+  const cropReadySeen = new Set();
+  let harvestCombo = 0;
+  let harvestComboTimer = null;
+  let audioCtx = null;
+  let audioUnlocked = false;
+
   function itemDef(id) { return window.getItemDef ? window.getItemDef(id) : (window.CROPS[id] || (window.PRODUCTS || {})[id]); }
   function itemEmoji(id) { const d = itemDef(id); if (d) return d.emoji; const m = (window.MATERIALS || {})[id]; if (m) return m.emoji; const c = (window.COLLECTIBLES || {})[id]; return c ? c.emoji : "❔"; }
   function itemName(id) { const d = itemDef(id); if (d) return d.name; const m = (window.MATERIALS || {})[id]; if (m) return m.name; const c = (window.COLLECTIBLES || {})[id]; return c ? c.name : id; }
@@ -98,6 +111,222 @@
     f.style.left = x + "px"; f.style.top = y + "px";
     document.body.appendChild(f);
     setTimeout(() => f.remove(), 900);
+  }
+  function reducedMotion() {
+    try {
+      return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    } catch (e) {
+      return false;
+    }
+  }
+  function shouldUseJuiceFx() {
+    return !reducedMotion() && !isLowPerformanceTier();
+  }
+  function rootFxLayer() {
+    let layer = $("screenFxLayer");
+    if (!layer && document.body) {
+      layer = document.createElement("div");
+      layer.id = "screenFxLayer";
+      layer.setAttribute("aria-hidden", "true");
+      document.body.appendChild(layer);
+    }
+    return layer;
+  }
+  function elementCenter(el) {
+    if (!el || !el.getBoundingClientRect) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width, h: r.height };
+  }
+  function tileCenter(tileId) {
+    return elementCenter(tileElOf(tileId));
+  }
+  function screenBurst(x, y, glyphs, opts) {
+    if (!shouldUseJuiceFx()) return;
+    const layer = rootFxLayer(); if (!layer) return;
+    const list = Array.isArray(glyphs) ? glyphs : [glyphs || "*"];
+    const count = Math.min((opts && opts.count) || 10, FX_MAX_PARTICLES);
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement("div");
+      p.className = "juice-particle" + (opts && opts.className ? " " + opts.className : "");
+      p.textContent = list[i % list.length];
+      const angle = (-105 + Math.random() * 210) * Math.PI / 180;
+      const dist = ((opts && opts.distance) || 54) * (0.55 + Math.random() * 0.75);
+      p.style.left = x + "px";
+      p.style.top = y + "px";
+      p.style.setProperty("--jx", Math.cos(angle) * dist + "px");
+      p.style.setProperty("--jy", Math.sin(angle) * dist - Math.random() * 18 + "px");
+      p.style.setProperty("--jr", (Math.random() * 120 - 60).toFixed(0) + "deg");
+      p.style.animationDelay = (Math.random() * 55).toFixed(0) + "ms";
+      layer.appendChild(p);
+      setTimeout(() => p.remove(), 980);
+    }
+  }
+  function popCoinHud() {
+    const coin = document.querySelector(".res.coins");
+    if (!coin) return;
+    coin.classList.remove("coin-pop");
+    void coin.offsetWidth;
+    coin.classList.add("coin-pop");
+    setTimeout(() => coin.classList.remove("coin-pop"), 360);
+  }
+  function flyCoinsToHud(x, y, count) {
+    popCoinHud();
+    if (!shouldUseJuiceFx()) return;
+    const target = document.querySelector(".res.coins");
+    const layer = rootFxLayer();
+    if (!target || !layer) return;
+    const end = elementCenter(target);
+    const n = Math.min(count || 3, 8);
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement("div");
+      c.className = "juice-coin";
+      c.textContent = "\ud83e\ude99";
+      const sx = x + (Math.random() * 28 - 14);
+      const sy = y + (Math.random() * 18 - 9);
+      c.style.left = sx + "px";
+      c.style.top = sy + "px";
+      c.style.setProperty("--tx", (end.x - sx) + "px");
+      c.style.setProperty("--ty", (end.y - sy) + "px");
+      c.style.animationDelay = (i * 45) + "ms";
+      layer.appendChild(c);
+      setTimeout(() => c.remove(), 900);
+    }
+  }
+  function harvestComboText(x, y) {
+    if (!shouldUseJuiceFx()) return;
+    harvestCombo++;
+    if (harvestComboTimer) clearTimeout(harvestComboTimer);
+    harvestComboTimer = setTimeout(() => { harvestCombo = 0; harvestComboTimer = null; }, 1400);
+    if (harvestCombo <= 1) return;
+    const layer = rootFxLayer(); if (!layer) return;
+    const el = document.createElement("div");
+    el.className = "combo-float";
+    el.textContent = "combo x" + harvestCombo;
+    el.style.left = x + "px";
+    el.style.top = (y - 28) + "px";
+    layer.appendChild(el);
+    setTimeout(() => el.remove(), 820);
+  }
+  function screenBurstFromEl(el, glyphs, opts) {
+    const c = elementCenter(el);
+    screenBurst(c.x, c.y, glyphs, opts);
+    return c;
+  }
+  function cropHarvestFx(tileId, crop, added) {
+    const c = tileCenter(tileId);
+    screenBurst(c.x, c.y, [crop && crop.emoji ? crop.emoji : "\ud83c\udf3e"], { count: Math.min(12, 5 + (added || 1)), distance: 62 });
+    flyCoinsToHud(c.x, c.y, 4);
+    harvestComboText(c.x, c.y);
+  }
+  function waterSplashFx(tileId) {
+    const c = tileCenter(tileId);
+    screenBurst(c.x, c.y, ["\ud83d\udca7"], { count: 7, distance: 36, className: "water-drop-particle" });
+  }
+  function softFlashAt(tileId) {
+    if (!shouldUseJuiceFx()) return;
+    const el = tileElOf(tileId); if (!el) return;
+    const f = document.createElement("div");
+    f.className = "mature-flash";
+    el.appendChild(f);
+    setTimeout(() => f.remove(), 620);
+  }
+  function cropMatureCue(key, tileId, el) {
+    if (!key) return;
+    if (cropReadySeen.has(key)) return;
+    cropReadySeen.add(key);
+    if (el) {
+      el.classList.remove("crop-mature-pop");
+      void el.offsetWidth;
+      el.classList.add("crop-mature-pop");
+      setTimeout(() => el.classList.remove("crop-mature-pop"), 620);
+    }
+    softFlashAt(tileId);
+  }
+  function resetCropMatureCue(key) {
+    if (key) cropReadySeen.delete(key);
+  }
+  function orderCompleteFx(anchorEl, coins) {
+    const c = screenBurstFromEl(anchorEl, ["\ud83c\udfab", "\u2b50"], { count: 18, distance: 86, className: "reward-particle" });
+    flyCoinsToHud(c.x, c.y, Math.min(8, Math.max(3, Math.round((coins || 0) / 20))));
+  }
+  function levelUpFx(anchorEl) {
+    const c = screenBurstFromEl(anchorEl || document.querySelector(".res.level"), ["\u2728", "\u2b50", "\ud83c\udf31"], { count: 20, distance: 92, className: "level-particle" });
+    if (!shouldUseJuiceFx()) return;
+    const layer = rootFxLayer(); if (!layer) return;
+    const fan = document.createElement("div");
+    fan.className = "level-fanfare";
+    fan.textContent = "Level up";
+    fan.style.left = c.x + "px";
+    fan.style.top = (c.y + 8) + "px";
+    layer.appendChild(fan);
+    setTimeout(() => fan.remove(), 1150);
+  }
+  function mailArriveFx() {
+    const mailbox = stationTileOf("mailbox");
+    const el = mailbox ? tileElOf(mailbox) : document.querySelector('.ob[data-station="mailbox"]');
+    if (el && shouldUseJuiceFx()) {
+      el.classList.remove("mail-bell-ring");
+      void el.offsetWidth;
+      el.classList.add("mail-bell-ring");
+      setTimeout(() => el.classList.remove("mail-bell-ring"), 900);
+    }
+    if (el) screenBurstFromEl(el, ["\ud83d\udd14", "\u2709"], { count: 8, distance: 42, className: "mail-particle" });
+  }
+  function seasonTransitionFx(seasonId) {
+    if (!shouldUseJuiceFx()) return;
+    const layer = rootFxLayer(); if (!layer) return;
+    const wash = document.createElement("div");
+    wash.className = "season-wash";
+    wash.style.background = FX_SEASON_COLORS[seasonId] || "rgba(255, 244, 204, .35)";
+    layer.appendChild(wash);
+    setTimeout(() => wash.remove(), 1050);
+  }
+  function unlockAudio() {
+    if (audioUnlocked || !state) return;
+    const settings = ensureSettings();
+    if (settings.soundEnabled === false) return;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    try {
+      audioCtx = audioCtx || new Ctx();
+      if (audioCtx.resume) audioCtx.resume().catch(() => {});
+      audioUnlocked = true;
+    } catch (e) {}
+  }
+  function setupAudioUnlock() {
+    const opts = { once: true, passive: true };
+    ["pointerdown", "keydown", "touchstart"].forEach((ev) => {
+      try { document.addEventListener(ev, unlockAudio, opts); } catch (e) {}
+    });
+  }
+  function playSound(kind) {
+    if (!state || ensureSettings().soundEnabled === false) return;
+    if (!audioUnlocked) unlockAudio();
+    const ctx = audioCtx;
+    if (!ctx || !ctx.createOscillator || !ctx.createGain) return;
+    const patterns = {
+      harvest: [[520, .035], [760, .045]],
+      water: [[360, .05], [520, .04]],
+      coin: [[900, .035], [1180, .045]],
+      order: [[520, .06], [780, .06], [1040, .08]],
+      mail: [[740, .06], [620, .06]],
+      level: [[440, .06], [660, .08], [990, .10]],
+    };
+    const seq = patterns[kind] || patterns.coin;
+    let t0 = ctx.currentTime || 0;
+    seq.forEach(([freq, dur], idx) => {
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = kind === "water" ? "triangle" : "square";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, t0 + idx * 0.055);
+        gain.gain.exponentialRampToValueAtTime(0.045, t0 + idx * 0.055 + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + idx * 0.055 + dur);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t0 + idx * 0.055); osc.stop(t0 + idx * 0.055 + dur + 0.02);
+      } catch (e) {}
+    });
   }
   function scheduleSave() {
     if (saveTimer) return;
@@ -272,11 +501,14 @@
       const plot = state.plots[i];
       if (!plot || !plot.cropId) {
         el.className = "plot empty";
+        resetCropMatureCue("plot:" + i);
         sprite.style.display = emoji.style.display = bar.style.display = timer.style.display = readyTag.style.display = "none";
         continue;
       }
       const crop = window.CROPS[plot.cropId];
       const prog = G.getCropProgress(state, plot, t);
+      if (prog.ready) cropMatureCue("plot:" + i, null, el);
+      else resetCropMatureCue("plot:" + i);
       el.className = "plot" + (prog.ready ? " ready" : " growing") + (prog.wet && !prog.ready ? " wet" : "");
       // 濕土水滴標記
       let wd = el.querySelector(".wet-drop");
@@ -319,7 +551,7 @@
     }
     if (tool === "water") {
       const r = G.waterPlot(state, i, t);
-      if (r.ok) { playAction("water"); floatText(cx, cy, "💧", "#bfe6f7"); afterChange(false); }
+      if (r.ok) { playAction("water"); playSound("water"); screenBurst(cx, cy, ["\ud83d\udca7"], { count: 7, distance: 36, className: "water-drop-particle" }); floatText(cx, cy, "💧", "#bfe6f7"); afterChange(false); }
       else if (r.reason === "empty") toast("💧 只有種了作物的乾土需要澆水");
       else if (r.reason === "ready") toast("已成熟，不需澆水");
       else if (r.reason === "already_wet") toast("💧 這格已是濕土");
@@ -344,9 +576,10 @@
       const r = G.harvest(state, i, t);
       if (r.ok) {
         playAction("harvest");
+        playSound("harvest"); playSound("coin"); screenBurst(cx, cy, [crop.emoji], { count: Math.min(12, 5 + r.added), distance: 58 }); flyCoinsToHud(cx, cy, 4); harvestComboText(cx, cy);
         floatText(cx, cy, "+" + r.added + " " + crop.emoji, "#dff5c8");
         if (r.lost > 0) toast("📦 倉庫滿了，損失 " + r.lost + " " + crop.name);
-        if (r.leveled > 0) toast("🎉 升到 Lv " + state.level + "！");
+        if (r.leveled > 0) { levelUpFx(plotEls[i]); playSound("level"); toast("🎉 升到 Lv " + state.level + "！"); }
         afterChange(true);
       }
     }
@@ -390,7 +623,7 @@
         </div>`;
       el.querySelector(".ful").onclick = () => {
         const r = G.fulfillOrder(state, o.id, now());
-        if (r.ok) { G.advanceStory(state, "deliver"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
+        if (r.ok) { G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
         else toast("作物不足，無法交付");
       };
       el.querySelector(".trash").onclick = () => {
@@ -424,6 +657,7 @@
         el.querySelector("button").onclick = () => {
           const r = G.buyUpgrade(state, key);
           if (r.ok) {
+            levelUpFx(el); playSound("level");
             toast(def.icon + " " + def.name + " → Lv " + r.level);
             if (key === "plotCount") buildFarm();
             afterChange(true); renderUpgrades(); renderSeeds();
@@ -507,6 +741,7 @@
     if (ids.length && notify) {
       const first = letterById(ids[0]);
       toast("📬 " + (first && first.from ? first.from : "信箱") + "寄來一封信…");
+      mailArriveFx(); playSound("mail");
       const mailbox = stationTileOf("mailbox");
       if (mailbox) focusCameraOnTile(mailbox);
     }
@@ -746,6 +981,7 @@
     if (state.settings.smartAssistant == null) state.settings.smartAssistant = true;
     if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = false;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
+    if (state.settings.soundEnabled == null) state.settings.soundEnabled = true;
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(state.settings.textSize)) state.settings.textSize = "medium";
     if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
@@ -1155,6 +1391,7 @@
     box.innerHTML = [
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
+      settingRowHtml("soundEnabled", "Sound effects", "Tiny WebAudio feedback after the first tap or key press.", settings.soundEnabled !== false),
       textSizeHtml(settings.textSize || "medium"),
       performanceModeHtml(settings.performanceMode || "auto"),
       performanceDiagnosticsHtml(),
@@ -1693,7 +1930,7 @@
       for (const tile of state.map.tiles) {
         if (tile.plotIndex == null || tile.plotIndex >= active) continue;
         const plot = state.plots[tile.plotIndex];
-        if (!plot.cropId) continue;
+        if (!plot.cropId) { resetCropMatureCue("map:" + tile.plotIndex); continue; }
         const prog = G.getCropProgress(state, plot, t);
         const crop = window.CROPS[plot.cropId];
         const sheet = (crop && crop.sheet) || "crops";
@@ -1703,8 +1940,13 @@
           ? addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop")
           : addEmojiObjectPx(obDyn, prog.stage <= 1 ? "🌱" : crop.emoji, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * (prog.ready ? 0.8 : 0.68), "crop", -2, "crop");
         if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; }
-        if (prog.ready) addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
-        else addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
+        if (prog.ready) {
+          cropMatureCue("map:" + tile.plotIndex, tile.id, el);
+          addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
+        } else {
+          resetCropMatureCue("map:" + tile.plotIndex);
+          addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
+        }
       }
       for (const b of (state.buildings || [])) {
         if (!b || b.structureId || !b.tileId) continue;
@@ -1826,6 +2068,7 @@
     sow: "seed_scatter", plant: "seed_scatter", harvest: "harvest_pop", collect: "product_pop" };
   let vfxSpawnCount = 0;
   function spawnVfx(tileId, vfxRow, opts) {
+    if (!shouldUseJuiceFx()) return;
     if (!atlasReady || !vfxRow) return;
     const layer = $("vfxLayer"); const el = tileElOf(tileId); if (!layer || !el) return;
     const sheet = (opts && opts.sheet) || "vfx"; // Stage 7：動物照護 VFX 用獨立的 care_vfx sheet
@@ -1992,7 +2235,7 @@
     } else if (s.interaction === "shop") {
       playAction("collect");
       const r = G.sellAll(state, t);
-      if (r.coins > 0) { spawnVfx(state.player.tileId, "product_pop"); toast("🪙 市集賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
+      if (r.coins > 0) { spawnVfx(state.player.tileId, "product_pop"); const c = tileCenter(state.player.tileId); flyCoinsToHud(c.x, c.y, 6); playSound("coin"); toast("🪙 市集賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的東西");
     } else { // home（農舍）
       playAction("use");
@@ -2154,7 +2397,7 @@
       switchTab("orders"); renderOrders(); toast("📜 " + st.name + "：查看市集訂單");
     } else if (st.effect === "sell") {
       const r = G.sellAll(state, t);
-      if (r.coins > 0) { spawnVfx(stationTileOf("storage"), "product_pop"); toast("🪙 賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
+      if (r.coins > 0) { const sid = stationTileOf("storage"); spawnVfx(sid, "product_pop"); const c = tileCenter(sid); flyCoinsToHud(c.x, c.y, 6); playSound("coin"); toast("🪙 賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的東西");
     } else if (st.effect === "mail") {
       G.advanceStory(state, "read_sign");
@@ -2276,10 +2519,11 @@
     } else if (action === "harvest") {
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
-        toast("🧺 收成 " + r.added + " " + crop.name); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) toast("🎉 升 Lv " + state.level); afterChange(true); }
+        cropHarvestFx(tileId, crop, r.added); playSound("harvest"); playSound("coin");
+        toast("🧺 收成 " + r.added + " " + crop.name); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
-      if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
+      if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
       if (r.ok) { playAction("hoe", face); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
@@ -2357,6 +2601,7 @@
           if (r.ok) {
             const cfg = (window.NPC_REQUESTS || {})[tile.npc];
             const doneLine = r.doneLine || (cfg && cfg.flavorDone && cfg.flavorDone[0]) || "謝謝你！";
+            orderCompleteFx($("tileContext"), r.coins); playSound("order"); playSound("coin");
             toast("🎁 " + npc.name + "：「" + doneLine + "」+" + fmtNum(r.coins) + " 🪙");
             pushDialogueLog({ name: npc.name, line: doneLine });
             playAction("use", state.player.facing); afterChange(true); renderTileContext();
@@ -2744,6 +2989,7 @@
     const seasonChanged = G.updateSeason ? G.updateSeason(state, t) : false;
     if (seasonChanged) {
       const sid = G.currentSeason ? G.currentSeason(state, t) : (state.season && state.season.id);
+      seasonTransitionFx(sid);
       const s = (window.SEASONS || []).find((x) => x.id === sid);
       const bias = G.seasonOrderBiasToast ? G.seasonOrderBiasToast(state, t) : "";
       if (s) toast(`${s.icon} ${s.name}到了，當季作物收購價提升。${bias ? " " + bias : ""}`);
@@ -2791,6 +3037,7 @@
     ensureSettings();
     applyTextSize();
     applyPerformanceMode();
+    setupAudioUnlock();
     setupErrorRecovery();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
 
@@ -2891,12 +3138,12 @@
   function bindToolbar() {
     $("harvestAllBtn").onclick = () => {
       const r = G.harvestAll(state, now());
-      if (r.totalAdded > 0) { toast("🧺 收成 " + r.totalAdded + " 個作物"); if (r.totalLost) toast("📦 倉滿損失 " + r.totalLost); afterChange(true); }
+      if (r.totalAdded > 0) { const c = elementCenter($("mapScene")); screenBurst(c.x, c.y, ["\ud83c\udf3e", "\ud83e\udd55", "\ud83c\udf45"], { count: 16, distance: 88 }); flyCoinsToHud(c.x, c.y, 5); harvestComboText(c.x, c.y); playSound("harvest"); playSound("coin"); toast("🧺 收成 " + r.totalAdded + " 個作物"); if (r.totalLost) toast("📦 倉滿損失 " + r.totalLost); afterChange(true); }
       else toast("沒有成熟的作物");
     };
     $("sellAllBtn").onclick = () => {
       const r = G.sellAll(state, now());
-      if (r.coins > 0) { playAction("carry"); toast("🪙 賣出 " + r.qty + " 個，得 " + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
+      if (r.coins > 0) { playAction("carry"); const c = elementCenter($("sellAllBtn")); flyCoinsToHud(c.x, c.y, 6); playSound("coin"); toast("🪙 賣出 " + r.qty + " 個，得 " + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的作物");
     };
     // 澆水（全部）：對所有可澆的乾土作物澆水變濕土加速（綁角色澆水動畫）
@@ -2906,13 +3153,14 @@
         if (G.waterPlot(state, i, t).ok) n++;
       }
       playAction("water");
+      if (n > 0) { const c = elementCenter($("mapScene")); screenBurst(c.x, c.y, ["\ud83d\udca7"], { count: Math.min(16, 4 + n), distance: 82, className: "water-drop-particle" }); playSound("water"); }
       toast(n > 0 ? "💧 澆水 " + n + " 格，變濕土加速成長" : "沒有需要澆水的作物");
       if (n > 0) afterChange(false);
     };
     // 收集全部動物產物
     $("collectAllBtn").onclick = () => {
       const r = G.collectAllAnimals(state, now());
-      if (r.total > 0) { playAction("carry"); toast("🧺 收集 " + r.total + " 份產物"); afterChange(true); renderTileContext(); updateMap(now()); }
+      if (r.total > 0) { playAction("carry"); const c = elementCenter($("collectAllBtn")); screenBurst(c.x, c.y, ["\u2b50"], { count: 10, distance: 58 }); playSound("coin"); toast("🧺 收集 " + r.total + " 份產物"); afterChange(true); renderTileContext(); updateMap(now()); }
       else toast("目前沒有可收集的產物");
     };
     $("spriteToggle").onclick = () => {
