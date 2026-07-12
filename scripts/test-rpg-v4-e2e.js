@@ -341,7 +341,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r56-20260713-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r57-20260713-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -422,7 +422,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r56-20260713-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r57-20260713-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),
@@ -1492,6 +1492,42 @@ async function run() {
     assert(journalDetailState.collectible.includes("純收藏") && journalDetailState.collectible.includes("東林年輪拓印"),
       "收藏品詳情顯示非通膨用途");
     assert(journalDetailState.overflow <= 2, `收藏冊詳情頁無水平溢出（${journalDetailState.overflow}）`);
+
+    // 29. R57：商店三連圖 fixture——成排 atlas 作物、季相地標、地面專用靜讀層
+    const promoScenes = [];
+    for (const id of ["spring", "summer", "winter"]) {
+      promoScenes.push(await page.evaluate((sceneId) => {
+        const fixture = window.__farm.applyPromoScene(sceneId);
+        const crops = [...document.querySelectorAll('[data-audit="object"][data-kind="crop"]')];
+        const landmark = document.querySelector('[data-audit="object"][data-kind="event-point"]');
+        const ground = document.getElementById("groundLayer");
+        return {
+          id: sceneId, fixture,
+          cropCount: crops.length,
+          cropSheets: [...new Set(crops.map((el) => el.dataset.sheet))],
+          cropEmoji: crops.some((el) => el.classList.contains("emoji-ob")),
+          landmarkFrame: landmark ? landmark.dataset.frame : "",
+          groundSeasonOpacity: getComputedStyle(ground, "::before").opacity,
+          groundWeatherOpacity: getComputedStyle(ground, "::after").opacity,
+          groundSeasonColor: getComputedStyle(ground, "::before").backgroundColor,
+          groundWeatherImage: getComputedStyle(ground, "::after").backgroundImage,
+          overflow: document.documentElement.scrollWidth - window.innerWidth,
+        };
+      }, id));
+    }
+    const [promoSpring, promoSummer, promoWinter] = promoScenes;
+    assert(promoScenes.every((s) => s.fixture && s.cropCount === 12 && !s.cropEmoji && s.overflow <= 2),
+      "宣傳三連圖各有 12 格成排 atlas 作物、主地圖零 emoji 且無水平溢出");
+    assert(promoSpring.landmarkFrame === "oak_spring" && promoSummer.landmarkFrame === "oak" && promoWinter.landmarkFrame === "oak_winter",
+      `地標隨季節切幀（${promoSpring.landmarkFrame}/${promoSummer.landmarkFrame}/${promoWinter.landmarkFrame}）`);
+    const promoAutumn = await page.evaluate(() => {
+      window.__farm.applyPromoScene("autumn");
+      const landmark = document.querySelector('[data-audit="object"][data-kind="event-point"]');
+      return landmark ? landmark.dataset.frame : "";
+    });
+    assert(promoAutumn === "oak_autumn", `秋季地標使用紅葉實幀（${promoAutumn}）`);
+    assert(promoSpring.groundSeasonColor !== "rgba(0, 0, 0, 0)" && promoWinter.groundWeatherImage !== "none",
+      `季節 base 與冬雪 weather cue 只在 groundLayer（${promoSpring.groundSeasonColor}/${promoWinter.groundWeatherImage.slice(0, 24)}）`);
 
     // 14. 無 console / pageerror
     assert(errors.length === 0, "無 console 錯誤 / pageerror" + (errors.length ? "：" + errors.slice(0, 3).join(" | ") : ""));

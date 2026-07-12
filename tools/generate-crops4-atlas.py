@@ -72,6 +72,8 @@ def leaf(row, col, cx, cy, direction=1, scale=1):
     outlined_ellipse(row, col, (cx - rx, cy - ry, cx + rx, cy + ry), P["leaf"], P["stem_dark"])
     line(row, col, ((cx - direction * rx + 1, cy + 1), (cx + direction * rx - 1, cy - 1)), P["stem_dark"])
     rect(row, col, (cx - 1, cy - ry + 1, cx, cy - ry + 2), P["leaf_hi"])
+    # crops1/crops3 use small broken highlights rather than flat leaf fills.
+    rect(row, col, (cx + direction, cy - 1, cx + direction + 1, cy), P["leaf_hi"])
 
 
 def radish_root(row, col, cx, cy, rx, ry, ready=False):
@@ -83,7 +85,7 @@ def radish_root(row, col, cx, cy, rx, ry, ready=False):
 
 def radish_stage(stage):
     row, col = 0, stage
-    soil(row, col, 17 if stage >= 3 else 19, 15 if stage >= 3 else 11)
+    soil(row, col, 18 if stage >= 3 else 19, 12 if stage >= 3 else 10)
     if stage == 0:
         outlined_ellipse(row, col, (21, 33, 27, 38), P["radish_dark"])
         rect(row, col, (22, 34, 23, 35), P["radish_hi"])
@@ -106,13 +108,16 @@ def radish_stage(stage):
         leaf(row, col, 20, 18, -1)
         leaf(row, col, 28, 17, 1)
     else:
-        radish_root(row, col, 24, 34, 9, 8, True)
+        radish_root(row, col, 23, 34, 8, 8, True)
+        radish_root(row, col, 32, 37, 4, 4, True)
         line(row, col, ((24, 28), (24, 13)), P["stem_dark"], 2)
-        leaf(row, col, 14, 22, -1)
-        leaf(row, col, 34, 20, 1)
+        line(row, col, ((31, 34), (30, 24)), P["stem_dark"], 2)
+        leaf(row, col, 13, 24, -1)
+        leaf(row, col, 35, 23, 1)
         leaf(row, col, 19, 15, -1)
         leaf(row, col, 29, 14, 1)
         leaf(row, col, 24, 20, -1)
+        leaf(row, col, 31, 27, 1)
 
 
 def sunflower_head(row, col, cx, cy, radius, open_flower=True):
@@ -152,6 +157,7 @@ def sunflower_stage(stage):
         leaf(row, col, 16, 32, -1)
         leaf(row, col, 32, 27, 1)
         leaf(row, col, 18, 22, -1)
+        leaf(row, col, 30, 20, 1)
         sunflower_head(row, col, 24, 14, 4, True)
     else:
         line(row, col, ((24, 41), (24, 17)), P["stem_dark"], 4)
@@ -160,7 +166,11 @@ def sunflower_stage(stage):
         leaf(row, col, 34, 29, 1)
         leaf(row, col, 16, 24, -1)
         leaf(row, col, 32, 21, 1)
-        sunflower_head(row, col, 24, 13, 6, True)
+        leaf(row, col, 20, 29, -1)
+        leaf(row, col, 29, 33, 1)
+        # A slightly smaller head matches the crops1/crops3 ready-stage mass;
+        # extra leaves carry the detail instead of one oversized yellow disk.
+        sunflower_head(row, col, 24, 14, 5, True)
 
 
 for index in range(len(STAGES)):

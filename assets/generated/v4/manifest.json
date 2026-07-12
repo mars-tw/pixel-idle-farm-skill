@@ -85,13 +85,13 @@
       "map": "assets/generated/v4/structures-nature.json",
       "meta": {
         "w": 1024,
-        "h": 412,
+        "h": 784,
         "frameW": 0,
         "frameH": 0,
         "cols": 0,
-        "rows": 4
+        "rows": 6
       },
-      "frameCount": 10
+      "frameCount": 16
     },
     "walk_m": {
       "image": "assets/generated/v4/max-walk-48x64.png",

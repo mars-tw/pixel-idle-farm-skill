@@ -74,7 +74,7 @@ const REQUIRED = {
     "duck_happy_a", "duck_happy_b", "duck_eating_a", "duck_eating_b",
   ],
   buildings: ["farmhouse", "barn", "chicken_coop", "shop"],
-  structures: ["oak"], // loose 抽取，只硬性要求 oak（tree 障礙用）；其餘裝飾為加分
+  structures: ["oak", "oak_spring", "oak_autumn", "oak_winter", "bush_big_spring", "bush_big_autumn", "bush_big_winter"],
   terrain: [].concat(
     ["grass_center_01", "grass_center_02", "grass_center_03", "grass_center_04", "grass_flower_01", "grass_flower_02", "grass_clump_01"],
     SFX.map((s) => "path_" + s), SFX.map((s) => "soil_dry_" + s),

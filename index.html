@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r56-20260713-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r56-20260713-1">
+<link rel="manifest" href="manifest.webmanifest?v=r57-20260713-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r57-20260713-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r56-20260713-1";
+  const VERSION = "r57-20260713-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -519,7 +519,27 @@
   /* 世界：依 camera 平移 */
   #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0);
     transition: transform .2s ease-out; will-change: transform; }
-  #groundLayer { position: absolute; left: 0; top: 0; z-index: 0; }
+  #groundLayer { position: absolute; left: 0; top: 0; z-index: 0; isolation: isolate; }
+  /* R57：地面季相與濕／雪靜讀只覆蓋 groundLayer，不再把作物、角色一起染色。
+     season base（::before）× weather ground cue（::after）× weatherLayer 粒子（天）。 */
+  #groundLayer::before, #groundLayer::after { content: ""; position: absolute; inset: 0;
+    pointer-events: none; z-index: 2; transition: opacity .45s ease; }
+  #groundLayer::before { opacity: .18; mix-blend-mode: multiply; }
+  #groundLayer::after { opacity: 0; }
+  #mapScene[data-season="春"] #groundLayer::before { background: rgba(206,229,170,.28); }
+  #mapScene[data-season="夏"] #groundLayer::before { background: rgba(147,190,91,.22); }
+  #mapScene[data-season="秋"] #groundLayer::before { background: rgba(197,143,65,.30); opacity: .25; }
+  #mapScene[data-season="冬"] #groundLayer::before { background: rgba(154,181,188,.30); opacity: .30; }
+  #mapScene[data-weather="rain"] #groundLayer::after,
+  #mapScene[data-weather="storm"] #groundLayer::after { opacity: .30; mix-blend-mode: multiply;
+    background: repeating-linear-gradient(135deg, rgba(41,71,91,.34) 0 2px, rgba(66,91,102,.15) 2px 8px); }
+  #mapScene[data-weather="storm"] #groundLayer::after { opacity: .42; }
+  #mapScene[data-weather="snow"] #groundLayer::after { opacity: .76; mix-blend-mode: normal;
+    background:
+      radial-gradient(circle at 7px 5px, rgba(247,251,249,.88) 0 1px, transparent 2px),
+      radial-gradient(ellipse at 25px 29px, rgba(229,239,238,.68) 0 3px, transparent 4px);
+    background-size: 32px 32px, 48px 48px; }
+  #mapScene[data-weather="fog"] #groundLayer::after { opacity: .20; background: rgba(223,230,221,.48); }
   /* 地面磚（terrain atlas 背景；可點擊）*/
   .gtile { position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-size: 100% 100%; }
   .gtile.farm-plot { box-sizing: border-box; padding: 2px; background-clip: content-box; }
@@ -630,8 +650,22 @@
       rgba(150,205,255,.45) 0 2px, transparent 2px 14px); animation: none; }
   html.perf-low #mapScene::before { opacity: .68; transition: none; }
   html.perf-low #mapScene::after { opacity: .72; transition: none; }
+  html.perf-low #groundLayer::before { opacity: .12; transition: none; }
+  html.perf-low #groundLayer::after { opacity: .16; transition: none; }
+  html.perf-low #mapScene[data-weather="snow"] #groundLayer::after { opacity: .42; }
   html.perf-low .ob-dot, html.perf-low .qmarker { animation: none !important; }
-  @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
+  html[data-promo-scene] .smart-assistant,
+  html[data-promo-scene] .ob-bar,
+  html[data-promo-scene] .ob-dot,
+  html[data-promo-scene] .qmarker,
+  html[data-promo-scene] .touch-action-preview { display: none !important; }
+  html[data-promo-scene="winter"] #weatherLayer.snow { opacity: .48; }
+  html[data-promo-scene="winter"] #mapScene::after { opacity: .56; }
+  html[data-promo-scene="winter"] #mapScene[data-weather="snow"] #groundLayer::after { opacity: .48; }
+  @media (prefers-reduced-motion: reduce) {
+    #weatherLayer::before, #weatherLayer::after { animation: none !important; }
+    #groundLayer::before, #groundLayer::after { transition: none !important; }
+  }
   .touch-action-preview { position: absolute; z-index: 9850; left: 8px; right: 8px; top: 8px;
     padding: 8px 10px; border: 2px solid #fff2a8; border-radius: 9px; color: #fffdf2;
     background: rgba(62,43,20,.92); box-shadow: 0 3px 10px rgba(25,15,5,.34);
@@ -878,10 +912,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r56-20260713-1"></script>
-<script src="src/game.js?v=r56-20260713-1"></script>
-<script src="src/state.js?v=r56-20260713-1"></script>
-<script src="src/atlas.js?v=r56-20260713-1"></script>
-<script src="src/ui.js?v=r56-20260713-1"></script>
+<script src="src/config.js?v=r57-20260713-1"></script>
+<script src="src/game.js?v=r57-20260713-1"></script>
+<script src="src/state.js?v=r57-20260713-1"></script>
+<script src="src/atlas.js?v=r57-20260713-1"></script>
+<script src="src/ui.js?v=r57-20260713-1"></script>
 </body>
 </html>

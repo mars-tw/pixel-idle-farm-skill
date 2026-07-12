@@ -2,11 +2,11 @@
   "image": "assets/generated/v4/structures-nature.png",
   "meta": {
     "w": 1024,
-    "h": 412,
+    "h": 784,
     "frameW": 0,
     "frameH": 0,
     "cols": 0,
-    "rows": 4
+    "rows": 6
   },
   "frames": {
     "oak": {
@@ -104,6 +104,66 @@
       "y": 208,
       "w": 55,
       "h": 200,
+      "anchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "oak_spring": {
+      "x": 4,
+      "y": 416,
+      "w": 200,
+      "h": 197,
+      "anchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "oak_autumn": {
+      "x": 208,
+      "y": 416,
+      "w": 200,
+      "h": 197,
+      "anchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "oak_winter": {
+      "x": 412,
+      "y": 416,
+      "w": 200,
+      "h": 197,
+      "anchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "bush_big_spring": {
+      "x": 616,
+      "y": 416,
+      "w": 200,
+      "h": 163,
+      "anchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "bush_big_autumn": {
+      "x": 820,
+      "y": 416,
+      "w": 200,
+      "h": 163,
+      "anchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "bush_big_winter": {
+      "x": 4,
+      "y": 617,
+      "w": 200,
+      "h": 163,
       "anchor": [
         0.5,
         0.97

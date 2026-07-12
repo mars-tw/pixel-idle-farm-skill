@@ -58,7 +58,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r56-20260713-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r57-20260713-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1875,12 +1875,20 @@
   function addStructure(s) {
     const cx = (s.x + s.w / 2) * TILE;
     const baselineY = (s.y + s.h) * TILE;
-    const el = addObjectPx(obStatic, s.sheet, s.frame, cx, baselineY, s.w * TILE, "shadowed", 0, "structure");
+    const frame = s.sheet === "structures" ? seasonalStructureFrame(s.frame) : s.frame;
+    const el = addObjectPx(obStatic, s.sheet, frame, cx, baselineY, s.w * TILE, "shadowed", 0, "structure");
     if (el) el.dataset.structureId = s.id;
   }
   const OBSTACLE_SHEET = { rock: "props", stump: "props", bush: "props", tree: "structures" };
   const OBSTACLE_FRAME2 = { rock: "rock", stump: "stump", bush: "bush", tree: "oak" };
   const OBSTACLE_SCALE = { rock: 1.05, stump: 1.0, bush: 1.1, tree: 1.8 };
+  const SEASON_FRAME_SUFFIX = { "春": "spring", "秋": "autumn", "冬": "winter" };
+  function seasonalStructureFrame(frame, t) {
+    const season = G.currentSeason ? G.currentSeason(state, t || now()) : "春";
+    const suffix = SEASON_FRAME_SUFFIX[season];
+    const candidate = suffix ? frame + "_" + suffix : frame;
+    return suffix && window.Atlas && window.Atlas.hasFrame("structures", candidate) ? candidate : frame;
+  }
   // 靜態物件：多格建築 / 障礙 / 站點（buildScene 與清障時重建）
   function buildStaticObjects() {
     for (const e of obStatic) e.remove(); obStatic.length = 0;
@@ -1889,7 +1897,8 @@
     for (const tile of state.map.tiles) {
       if (!tile.object) continue;
       const sheet = OBSTACLE_SHEET[tile.object] || "props";
-      const frame = OBSTACLE_FRAME2[tile.object] || tile.object;
+      const baseFrame = OBSTACLE_FRAME2[tile.object] || tile.object;
+      const frame = sheet === "structures" ? seasonalStructureFrame(baseFrame) : baseFrame;
       const el = addObjectPx(obStatic, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * (OBSTACLE_SCALE[tile.object] || 1), "shadowed", 0, "obstacle");
       if (el) { el.dataset.object = tile.object; el.dataset.tileId = tile.id; }
     }
@@ -1909,7 +1918,7 @@
     // Stage 5：事件點（東林古樹，地標）
     for (const tile of state.map.tiles) {
       if (!tile.event) continue;
-      const el = addObjectPx(obStatic, "structures", "oak", (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 2.0, "shadowed", 0, "event-point");
+      const el = addObjectPx(obStatic, "structures", seasonalStructureFrame("oak"), (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 2.0, "shadowed", 0, "event-point");
       if (el) { el.dataset.event = tile.event; el.dataset.tileId = tile.id; }
     }
     for (const tile of state.map.tiles) {
@@ -1977,7 +1986,11 @@
     const sId = G.currentSeason ? G.currentSeason(state, t) : "春";
     document.documentElement.dataset.season = sId;
     const scene = $("mapScene");
-    if (scene) scene.dataset.season = sId;
+    if (scene) {
+      const changed = !!scene.dataset.season && scene.dataset.season !== sId;
+      scene.dataset.season = sId;
+      if (changed && atlasReady && worldEl) buildStaticObjects();
+    }
   }
   // Stage 9：天氣視覺化——只在天氣真的變了才切 class，避免每個 tick 重啟 CSS 動畫
   function updateWeatherLayer(t) {
@@ -2022,8 +2035,9 @@
       for (const b of (state.buildings || [])) {
         if (!b || b.structureId || !b.tileId) continue;
         const tile = G.getTileById(state, b.tileId); if (!tile) continue;
-        const frame = BUILDING_FRAME[b.type] || "storage_crate";
+        const baseFrame = BUILDING_FRAME[b.type] || "storage_crate";
         const sheet = BUILDING_SHEET[b.type] || "props";
+        const frame = sheet === "structures" ? seasonalStructureFrame(baseFrame, t) : baseFrame;
         const el = addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 1.08, "shadowed", 0, "building");
         if (el) { el.dataset.buildingId = b.id; el.dataset.buildingType = b.type; el.dataset.tileId = tile.id; }
       }
@@ -3188,6 +3202,36 @@
   }
 
   // ---------- 初始化 ----------
+  // 商店宣傳三連圖 fixture：只由明確的 debug/e2e 呼叫觸發，不改預設存檔或玩法規則。
+  function applyPromoScene(id) {
+    const scenes = {
+      spring: { season: "春", weather: "clear", crops: ["radish", "pea"] },
+      summer: { season: "夏", weather: "sunny", crops: ["sunflower", "corn", "bell_pepper"] },
+      autumn: { season: "秋", weather: "clear", crops: ["sweet_potato", "grapes", "pumpkin"] },
+      winter: { season: "冬", weather: "snow", crops: ["winter_kale"] },
+    };
+    const scene = scenes[id]; if (!scene) return null;
+    const t = now();
+    state.level = Math.max(9, state.level || 1);
+    state.upgrades.plotCount = 3;
+    state.season = { id: scene.season, untilMs: t + (window.SEASON_DURATION_MS || 1200000) };
+    state.weather = { id: scene.weather, untilMs: t + (window.WEATHER_DURATION_MS || 180000) };
+    for (let i = 0; i < state.plots.length; i++) {
+      const cropId = scene.crops[i % scene.crops.length];
+      const crop = window.CROPS[cropId];
+      state.plots[i].cropId = cropId;
+      state.plots[i].plantedAt = t - crop.growMs - 1000;
+      state.plots[i].wateredAt = state.plots[i].plantedAt;
+    }
+    state.player.tileId = "t7_3"; state.player.facing = "left";
+    state.camera = Object.assign({}, state.camera, { followPlayer: true, focusTileId: null, focusUntil: 0 });
+    document.documentElement.dataset.promoScene = id;
+    document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show"));
+    buildMap(); updateMap(t); positionPlayer(false); syncHud();
+    if (worldEl) worldEl.style.transition = "none";
+    return { id, season: scene.season, weather: scene.weather, crops: scene.crops.slice() };
+  }
+
   function init() {
     // 先載入存檔，state 必須在任何 render/onload 前就緒
     state = window.load() || window.defaultState(now());
@@ -3291,6 +3335,7 @@
       vfxSpawns: () => vfxSpawnCount,
       activeTab: () => { const b = document.querySelector(".side-tab.sel"); return b ? b.dataset.tab : null; },
       stationTile: (type) => stationTileOf(type),
+      applyPromoScene,
     };
   }
 

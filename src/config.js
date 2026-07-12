@@ -30,7 +30,7 @@ const CROPS = {
   strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57" },
   corn:       { id: "corn",       name: "玉米",   growMs: 210000, seedCost: 20, yield: 4, sellValue: 12, xp: 12, unlockLevel: 4, spriteRow: 4, emoji: "🌽", color: "#f0c84a", season: "夏" },
   pumpkin:    { id: "pumpkin",    name: "南瓜",   growMs: 900000, seedCost: 85, yield: 3, sellValue: 80, xp: 55, unlockLevel: 5, spriteRow: 5, emoji: "🎃", color: "#e8821e" },
-  radish:      { id: "radish",     name: "櫻桃蘿蔔", growMs: 90000, seedCost: 10, yield: 4, sellValue: 5, xp: 6, unlockLevel: 5, emoji: "🔴", color: "#d94b58", season: "春", sheet: "crops4" },
+  radish:      { id: "radish",     name: "櫻桃蘿蔔", growMs: 90000, seedCost: 10, yield: 4, sellValue: 5, xp: 6, unlockLevel: 5, emoji: "🌱", color: "#d94b58", season: "春", sheet: "crops4" },
   bell_pepper: { id: "bell_pepper", name: "甜椒", growMs: 360000, seedCost: 38, yield: 4, sellValue: 24, xp: 22, unlockLevel: 5, emoji: "🫑", color: "#4fae55", season: "夏", sheet: "crops2" },
   potato:      { id: "potato",      name: "馬鈴薯", growMs: 480000, seedCost: 45, yield: 5, sellValue: 22, xp: 28, unlockLevel: 6, emoji: "🥔", color: "#b9834b", season: "春", sheet: "crops2" },
   sunflower:   { id: "sunflower",   name: "向日葵", growMs: 420000, seedCost: 48, yield: 3, sellValue: 26, xp: 26, orderXp: 40, unlockLevel: 6, emoji: "🌻", color: "#e0a72a", season: "夏", sheet: "crops4" },
