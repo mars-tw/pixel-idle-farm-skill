@@ -341,7 +341,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r55-20260712-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r56-20260713-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -422,7 +422,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r55-20260712-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r56-20260713-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),
@@ -1356,16 +1356,27 @@ async function run() {
     assert(rareResult.mooncap >= 1 && rareResult.discovered && rareResult.firstSeen > 0,
       `東林深處稀有採集可完成並寫入首次發現時間（tile=${rareClick.tileId}）`);
 
-    // 27. Stage 9：天氣視覺化——強制切換天氣，#weatherLayer 的 class/data-weather 要跟著變
+    // 27. Stage 9/V1：天氣視覺化 + 常駐季節底調
+    const winterAmbient = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.level = Math.max(st.level, 6);
+      st.season = { id: "冬", untilMs: Date.now() + 999999, cycle: 1 };
+      window.__farm.refresh();
+      const scene = document.getElementById("mapScene");
+      return { scene: scene.dataset.season, root: document.documentElement.dataset.season };
+    });
+    assert(winterAmbient.scene === "冬" && winterAmbient.root === "冬",
+      `冬季常駐底調同步到天空與地圖（root=${winterAmbient.root}, scene=${winterAmbient.scene}）`);
+
     const rainState = await page.evaluate(() => {
       const st = window.__farm.state();
       st.level = Math.max(st.level, 5); // 天氣 Lv5 解鎖，故事鏈跑到這裡不一定已經到 Lv5
       st.weather = { id: "rain", untilMs: Date.now() + 999999 };
       window.__farm.refresh();
       const el = document.getElementById("weatherLayer");
-      return { cls: el.className, data: el.getAttribute("data-weather"), overflow: document.documentElement.scrollWidth - window.innerWidth };
+      return { cls: el.className, data: el.getAttribute("data-weather"), scene: document.getElementById("mapScene").dataset.weather, overflow: document.documentElement.scrollWidth - window.innerWidth };
     });
-    assert(rainState.cls === "rain" && rainState.data === "rain", `降雨：#weatherLayer 套上 rain（class=${rainState.cls} data-weather=${rainState.data}）`);
+    assert(rainState.cls === "rain" && rainState.data === "rain" && rainState.scene === "rain", `降雨：粒子層與地面濕潤層同步（class=${rainState.cls} data-weather=${rainState.data} scene=${rainState.scene}）`);
     assert(rainState.overflow <= 2, `降雨疊圖不造成水平溢出（${rainState.overflow}）`);
 
     const sunnyState = await page.evaluate(() => {

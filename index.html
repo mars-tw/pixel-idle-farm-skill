@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#5a9e3f">
-<link rel="manifest" href="manifest.webmanifest?v=r55-20260712-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r55-20260712-1">
+<link rel="manifest" href="manifest.webmanifest?v=r56-20260713-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r56-20260713-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r55-20260712-1";
+  const VERSION = "r56-20260713-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -55,6 +55,10 @@
     --r: 14px;
     --ui-font-scale: 1;
   }
+  html[data-season="春"] { --sky-1: #c8e9f3; --sky-2: #dff2cf; --grass: #82bd50; --grass-d: #5fa443; }
+  html[data-season="夏"] { --sky-1: #aedbf0; --sky-2: #cde7aa; --grass: #68a83f; --grass-d: #477f32; }
+  html[data-season="秋"] { --sky-1: #e9d09a; --sky-2: #e7c478; --grass: #b39343; --grass-d: #837132; }
+  html[data-season="冬"] { --sky-1: #d7e1e5; --sky-2: #e7e9df; --grass: #aeb9a8; --grass-d: #858f84; }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   :focus-visible { outline: 3px solid #2b6f8a; outline-offset: 3px; }
   html, body { height: 100%; }
@@ -476,6 +480,31 @@
     overflow: hidden; border-radius: 14px; cursor: pointer; touch-action: none;
     background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate;
     box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
+  #mapScene::before, #mapScene::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+  #mapScene::before { z-index: 9600; transition: background .65s ease, opacity .65s ease; }
+  #mapScene::after { z-index: 9650; transition: background .45s ease, opacity .45s ease; }
+  #mapScene[data-season="春"] { background: linear-gradient(180deg, #9dce7b, #83b961); }
+  #mapScene[data-season="春"]::before { background: linear-gradient(145deg, rgba(255,218,226,.11), transparent 38%, rgba(188,235,151,.10)); }
+  #mapScene[data-season="夏"] { background: linear-gradient(180deg, #70a94a, #568c38); }
+  #mapScene[data-season="夏"]::before { background: linear-gradient(150deg, rgba(255,226,132,.12), transparent 52%, rgba(32,91,31,.08)); }
+  #mapScene[data-season="秋"] { background: linear-gradient(180deg, #bea35b, #9a843f); }
+  #mapScene[data-season="秋"]::before { background: linear-gradient(150deg, rgba(255,205,105,.15), rgba(178,106,44,.10)); mix-blend-mode: color; }
+  #mapScene[data-season="冬"] { background: linear-gradient(180deg, #cbd4cb, #aeb9ae); }
+  #mapScene[data-season="冬"]::before { background: linear-gradient(160deg, rgba(236,247,255,.22), rgba(184,196,203,.13)); mix-blend-mode: saturation; }
+  #mapScene[data-weather="clear"]::after { background: linear-gradient(155deg, rgba(255,250,222,.06), transparent 48%); }
+  #mapScene[data-weather="sunny"]::after { background: linear-gradient(150deg, rgba(255,225,142,.15), transparent 52%, rgba(255,193,82,.07)); }
+  #mapScene[data-weather="rain"]::after { background:
+      repeating-linear-gradient(0deg, transparent 0 31px, rgba(180,215,231,.08) 31px 32px),
+      linear-gradient(180deg, rgba(43,69,91,.10), rgba(31,55,72,.24)); mix-blend-mode: multiply; }
+  #mapScene[data-weather="storm"]::after { background:
+      repeating-linear-gradient(0deg, transparent 0 23px, rgba(154,195,219,.10) 23px 24px),
+      linear-gradient(180deg, rgba(28,42,64,.18), rgba(17,30,47,.34)); mix-blend-mode: multiply; }
+  #mapScene[data-weather="snow"]::after { background:
+      radial-gradient(ellipse at 16% 92%, rgba(255,255,255,.32), transparent 35%),
+      radial-gradient(ellipse at 78% 84%, rgba(248,253,255,.28), transparent 38%),
+      linear-gradient(180deg, rgba(229,242,250,.10), rgba(242,248,250,.25)); }
+  #mapScene[data-weather="fog"]::after { background: linear-gradient(180deg, rgba(240,244,237,.14), rgba(218,226,218,.22)); }
+  #mapScene[data-weather="windy"]::after { background: linear-gradient(105deg, transparent, rgba(228,247,211,.09), transparent); }
   /* isolation: isolate 讓 #weatherLayer 的 mix-blend-mode 只跟地圖場景內的內容混色，
      不會跨到場景外的其他 UI（Stage 9）*/
   @media (max-width: 859px) { #mapScene { height: 52vh; min-height: 300px; } }
@@ -599,6 +628,8 @@
   html.perf-low #weatherLayer.snow::before { background-image: radial-gradient(circle at 12px 10px, rgba(255,255,255,.7) 0 1px, transparent 2px); animation: none; }
   html.perf-low #weatherLayer.storm::before { background-image: repeating-linear-gradient(115deg,
       rgba(150,205,255,.45) 0 2px, transparent 2px 14px); animation: none; }
+  html.perf-low #mapScene::before { opacity: .68; transition: none; }
+  html.perf-low #mapScene::after { opacity: .72; transition: none; }
   html.perf-low .ob-dot, html.perf-low .qmarker { animation: none !important; }
   @media (prefers-reduced-motion: reduce) { #weatherLayer::before, #weatherLayer::after { animation: none !important; } }
   .touch-action-preview { position: absolute; z-index: 9850; left: 8px; right: 8px; top: 8px;
@@ -847,10 +878,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r55-20260712-1"></script>
-<script src="src/game.js?v=r55-20260712-1"></script>
-<script src="src/state.js?v=r55-20260712-1"></script>
-<script src="src/atlas.js?v=r55-20260712-1"></script>
-<script src="src/ui.js?v=r55-20260712-1"></script>
+<script src="src/config.js?v=r56-20260713-1"></script>
+<script src="src/game.js?v=r56-20260713-1"></script>
+<script src="src/state.js?v=r56-20260713-1"></script>
+<script src="src/atlas.js?v=r56-20260713-1"></script>
+<script src="src/ui.js?v=r56-20260713-1"></script>
 </body>
 </html>

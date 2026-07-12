@@ -1,0 +1,113 @@
+{
+  "image": "assets/generated/v4/crops4-48.png",
+  "meta": {
+    "w": 240,
+    "h": 96,
+    "frameW": 48,
+    "frameH": 48,
+    "cols": 5,
+    "rows": 2
+  },
+  "frames": {
+    "radish_seed": {
+      "x": 0,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "radish_sprout": {
+      "x": 48,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "radish_young": {
+      "x": 96,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "radish_mature": {
+      "x": 144,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "radish_ready": {
+      "x": 192,
+      "y": 0,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sunflower_seed": {
+      "x": 0,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sunflower_sprout": {
+      "x": 48,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sunflower_young": {
+      "x": 96,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sunflower_mature": {
+      "x": 144,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "sunflower_ready": {
+      "x": 192,
+      "y": 48,
+      "w": 48,
+      "h": 48,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    }
+  }
+}

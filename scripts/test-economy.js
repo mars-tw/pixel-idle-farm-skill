@@ -252,12 +252,12 @@ console.log("\n== 8. 等級曲線與作物解鎖 ==");
   const strawberryNetPerMin = ((strawberry.yield * strawberry.sellValue) - strawberry.seedCost) / (strawberry.growMs / 60000);
   const radishNetPerMin = ((radish.yield * radish.sellValue) - radish.seedCost) / (radish.growMs / 60000);
   const sunflowerNetPerMin = ((sunflower.yield * sunflower.sellValue) - sunflower.seedCost) / (sunflower.growMs / 60000);
-  assert(radish.unlockLevel === 5 && radish.season === "春" && radish.growMs === 90000 && radish.emojiOnly,
-    "P0 radish 櫻桃蘿蔔為 Lv5 春季 90s emoji 作物");
+  assert(radish.unlockLevel === 5 && radish.season === "春" && radish.growMs === 90000 && radish.sheet === "crops4" && !radish.emojiOnly,
+    "P0 radish 櫻桃蘿蔔為 Lv5 春季 90s crops4 像素作物");
   assert(radishNetPerMin > 0 && radishNetPerMin < strawberryNetPerMin,
     `radish 淨利 ${radishNetPerMin.toFixed(1)} 金/分鐘，低於 strawberry ${strawberryNetPerMin.toFixed(1)}`);
-  assert(sunflower.unlockLevel === 6 && sunflower.season === "夏" && sunflower.emojiOnly && sunflower.orderXp > sunflower.xp,
-    "P0 sunflower 向日葵為 Lv6 夏季 emoji 作物，訂單 XP 偏高");
+  assert(sunflower.unlockLevel === 6 && sunflower.season === "夏" && sunflower.sheet === "crops4" && !sunflower.emojiOnly && sunflower.orderXp > sunflower.xp,
+    "P0 sunflower 向日葵為 Lv6 夏季 crops4 像素作物，訂單 XP 偏高");
   assert((sunflower.yield * sunflower.sellValue) < (strawberry.yield * strawberry.sellValue)
     && sunflowerNetPerMin < strawberryNetPerMin,
     "sunflower 單次直售期望與金/分鐘皆不超 strawberry");

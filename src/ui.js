@@ -58,7 +58,7 @@
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r55-20260712-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r56-20260713-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1971,15 +1971,26 @@
     return "grass_center_01";
   }
   // 動態物件（作物 + 狀態、動物、任務標記）每 tick 重建；地面/靜態物件另管。
+  // 季節是常駐底調：同步到 html（天空）與 mapScene（地圖 tint），不靠轉場動畫表意。
+  function updateSeasonAmbient(t) {
+    if (!state) return;
+    const sId = G.currentSeason ? G.currentSeason(state, t) : "春";
+    document.documentElement.dataset.season = sId;
+    const scene = $("mapScene");
+    if (scene) scene.dataset.season = sId;
+  }
   // Stage 9：天氣視覺化——只在天氣真的變了才切 class，避免每個 tick 重啟 CSS 動畫
   function updateWeatherLayer(t) {
     const el = $("weatherLayer"); if (!el || !state) return;
     const wId = G.currentWeather(state, t);
+    const scene = $("mapScene");
+    if (scene) scene.dataset.weather = wId;
     if (el.dataset.weather === wId) return;
     el.dataset.weather = wId;
     el.className = wId === "clear" ? "" : wId;
   }
   function updateMap(t) {
+    updateSeasonAmbient(t);
     updateWeatherLayer(t);
     if (!state.map || tileEls.length === 0) return;
     paintGround();

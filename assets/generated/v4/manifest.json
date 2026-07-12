@@ -223,6 +223,19 @@
       },
       "frameCount": 15
     },
+    "crops4": {
+      "image": "assets/generated/v4/crops4-48.png",
+      "map": "assets/generated/v4/crops4-48.json",
+      "meta": {
+        "w": 240,
+        "h": 96,
+        "frameW": 48,
+        "frameH": 48,
+        "cols": 5,
+        "rows": 2
+      },
+      "frameCount": 10
+    },
     "animals_duck": {
       "image": "assets/generated/v4/animals-duck-48.png",
       "map": "assets/generated/v4/animals-duck-48.json",
