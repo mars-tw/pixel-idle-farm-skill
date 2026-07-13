@@ -30,6 +30,7 @@
   let selectedTileId = null;
   let pendingTouchFarmAction = null;
   let lastTouchMapAt = 0;
+  let lastMapPointer = null;
   let moveTimer = null;
   let atlasReady = false;
   let journalDetailSelection = null;
@@ -57,8 +58,10 @@
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
   ));
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
+  const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
+  const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r57-20260713-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r58-20260713-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1800,8 +1803,12 @@
       el.dataset.audit = "ground-tile"; el.dataset.terrain = tile.terrain;
       el.style.left = pxv(tile.x * TILE); el.style.top = pxv(tile.y * TILE);
       el.style.width = pxv(TILE); el.style.height = pxv(TILE);
+      el.addEventListener("pointerdown", (ev) => {
+        if (!ev.pointerType) return;
+        lastMapPointer = { pointerType: ev.pointerType, tileId: tile.id, at: now() };
+      }, { passive: true });
       el.addEventListener("touchend", () => { lastTouchMapAt = now(); }, { passive: true });
-      el.addEventListener("click", (ev) => handleMapClick(tile.id, mapActivationType(ev)));
+      el.addEventListener("click", (ev) => handleMapClick(tile.id, mapActivationType(ev, tile.id)));
       groundEl.appendChild(el);
       tileEls.push({ el, tileId: tile.id });
     }
@@ -2253,11 +2260,23 @@
     };
     step();
   }
-  function mapActivationType(ev) {
+  function mapActivationType(ev, tileId) {
     if (!ev) return "direct";
-    if (ev.pointerType) return ev.pointerType;
+    if (ev.pointerType) {
+      lastMapPointer = null;
+      return ev.pointerType;
+    }
+    if (typeof window.PointerEvent === "function") {
+      const pointer = lastMapPointer;
+      lastMapPointer = null;
+      if (pointer && pointer.tileId === tileId && now() - pointer.at <= MAP_POINTER_SEQUENCE_MAX_AGE_MS) {
+        return pointer.pointerType;
+      }
+      if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return "touch";
+      return "mouse";
+    }
     if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return "touch";
-    if (now() - lastTouchMapAt < 700) return "touch";
+    if (now() - lastTouchMapAt <= LEGACY_TOUCH_CLICK_WINDOW_MS) return "touch";
     return "mouse";
   }
   function touchFarmActionText(action) {

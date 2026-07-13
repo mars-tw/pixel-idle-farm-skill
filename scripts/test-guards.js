@@ -224,6 +224,11 @@ function runTouchFarmGuard() {
     "touch 農土需同格、同工具、同種子與同動作二次確認");
   assert(ui.includes('handleMapClick(id)') && ui.includes('return "mouse"'),
     "桌面／程式化地圖操作維持單擊直達路徑");
+  assert(ui.includes('typeof window.PointerEvent === "function"') &&
+    ui.includes("lastMapPointer = { pointerType: ev.pointerType") &&
+    ui.includes("LEGACY_TOUCH_CLICK_WINDOW_MS = 350") &&
+    !ui.includes("lastTouchMapAt < 700"),
+    "PointerEvent 優先，350ms 時窗只保留給無 PointerEvent 的舊瀏覽器");
   assert(html.includes("touchActionPreview") && html.includes(".gtile.farm-plot") && html.includes(".gtile.touch-pending"),
     "農土有視覺間距、選取高亮與動作預覽");
 }
