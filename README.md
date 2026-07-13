@@ -1,5 +1,7 @@
 # 阿軒割割陽光農場
 
+![cover](assets/cover.png)
+
 [![CI & Deploy Pages](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Play Online](https://img.shields.io/badge/Play-Pages-brightgreen)](https://mars-tw.github.io/pixel-idle-farm-skill/)
