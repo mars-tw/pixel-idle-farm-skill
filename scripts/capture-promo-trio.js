@@ -5,7 +5,7 @@ const path = require("path");
 const { chromium } = require("playwright");
 
 const ROOT = path.resolve(__dirname, "..");
-const OUT = path.join(ROOT, "references", "promo", "r58-20260713-1");
+const OUT = path.join(ROOT, "references", "promo", "r59-20260714-1");
 const MIME = { ".html": "text/html", ".js": "application/javascript", ".json": "application/json", ".webmanifest": "application/manifest+json", ".png": "image/png" };
 
 function startServer() {

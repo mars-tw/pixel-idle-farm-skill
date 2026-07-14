@@ -23,7 +23,7 @@
       "size": "1024x1536",
       "grid": "6 columns x 12 rows",
       "rows": ["water_down","water_up","water_side","hoe_down","hoe_up","hoe_side","sow_down","sow_up","sow_side","harvest_down","harvest_up","harvest_side"],
-      "prompt": "Pixel RPG farming ACTION spritesheet for farmer Miri Rowan, same outfit and proportions as the walk sheet. Twelve rows, six animation frames each. Group 1 WATERING with a watering can and small water arc: facing down, facing up (back), facing side. Group 2 HOEING the soil with a hoe and a small dirt puff: down, up, side. Group 3 SOWING seeds with a scatter of seeds: down, up, side. Group 4 HARVESTING pulling a crop up: down, up, side. Tools and effects stay inside each frame. Feet on baseline, clean separated frames, transparent background, no scenery."
+      "prompt": "Pixel RPG farming ACTION spritesheet for farmer Miri Rowan, same outfit, head size, full-body proportions and exact scale as the walk sheet. Twelve rows, six animation frames each. Group 1 WATERING with a watering can and small water arc: facing down, facing up (back), facing side. Group 2 HOEING the soil with a hoe and a small dirt puff: down, up, side. Group 3 SOWING seeds with a scatter of seeds: down, up, side. Group 4 HARVESTING pulling a crop up: down, up, side. Every frame shows the complete body from hair to both boots with 8-12% headroom; hoe_up must never be a portrait or half-body crop. Tools and effects stay secondary and inside each frame. Feet on one baseline, clean separated frames, transparent background, no scenery."
     },
     {
       "id": "miri-actions-b-48x64-v4",
@@ -31,7 +31,7 @@
       "size": "1024x1536",
       "grid": "6 columns x 12 rows",
       "rows": ["idle_down","idle_up","idle_side","collect_down","collect_up","collect_side","build_down","build_up","build_side","use_down","use_up","use_side"],
-      "prompt": "Pixel RPG ACTION spritesheet for farmer Miri Rowan, same outfit and proportions as the walk sheet. Twelve rows, six frames each. Group 1 IDLE breathing pose: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Feet on baseline, clean separated frames, transparent background, no scenery."
+      "prompt": "Pixel RPG ACTION spritesheet for farmer Miri Rowan, same outfit, head size, full-body proportions and exact scale as the walk sheet. Twelve rows, six frames each. Group 1 subtle IDLE breathing pose at walk-sheet scale: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Every frame shows the complete body from hair to both boots with 8-12% headroom; idle is never a portrait, close-up, bust or giant head. Feet on one baseline, clean separated frames, transparent background, no scenery."
     },
     {
       "id": "max-walk-48x64-v4",
@@ -47,7 +47,7 @@
       "size": "1024x1536",
       "grid": "6 columns x 12 rows",
       "rows": ["water_down","water_up","water_side","hoe_down","hoe_up","hoe_side","sow_down","sow_up","sow_side","harvest_down","harvest_up","harvest_side"],
-      "prompt": "Pixel RPG farming ACTION spritesheet for the MALE farmer Kai (short brown hair, cream shirt, moss-green overalls, red scarf, tan boots), same outfit and proportions as his walk sheet. Twelve rows, six animation frames each. Group 1 WATERING with a watering can and small water arc: facing down, facing up (back), facing side. Group 2 HOEING the soil with a hoe and a small dirt puff: down, up, side. Group 3 SOWING seeds with a scatter of seeds: down, up, side. Group 4 HARVESTING pulling a crop up: down, up, side. Tools and effects stay inside each frame. Feet on baseline, clean separated frames, transparent background, no scenery."
+      "prompt": "Pixel RPG farming ACTION spritesheet for the MALE farmer Kai (short brown hair, cream shirt, moss-green overalls, red scarf, tan boots), same outfit, head size, full-body proportions and exact scale as his walk sheet. Twelve rows, six animation frames each. Group 1 WATERING with a watering can and small water arc: facing down, facing up (back), facing side. Group 2 HOEING the soil with a hoe and a small dirt puff: down, up, side. Group 3 SOWING seeds with a scatter of seeds: down, up, side. Group 4 HARVESTING pulling a crop up: down, up, side. Every frame shows the complete body from hair to both boots with 8-12% headroom; hoe_up and harvest_side must never be a portrait or half-body crop. Tools and effects stay secondary and inside each frame. Feet on one baseline, clean separated frames, transparent background, no scenery."
     },
     {
       "id": "max-actions-b-48x64-v4",
@@ -55,7 +55,7 @@
       "size": "1024x1536",
       "grid": "6 columns x 12 rows",
       "rows": ["idle_down","idle_up","idle_side","collect_down","collect_up","collect_side","build_down","build_up","build_side","use_down","use_up","use_side"],
-      "prompt": "Pixel RPG ACTION spritesheet for the MALE farmer Kai (short brown hair, cream shirt, moss-green overalls, red scarf, tan boots), same outfit and proportions as his walk sheet. Twelve rows, six frames each. Group 1 IDLE breathing pose: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Feet on baseline, clean separated frames, transparent background, no scenery."
+      "prompt": "Pixel RPG ACTION spritesheet for the MALE farmer Kai (short brown hair, cream shirt, moss-green overalls, red scarf, tan boots), same outfit, head size, full-body proportions and exact scale as his walk sheet. Twelve rows, six frames each. Group 1 subtle IDLE breathing pose at walk-sheet scale: facing down, up, side. Group 2 COLLECTING picking up a basket of products: down, up, side. Group 3 BUILDING hammering with a mallet: down, up, side. Group 4 USING a station reaching out a hand to operate it: down, up, side. Every frame shows the complete body from hair to both boots with 8-12% headroom; idle is never a portrait, close-up, bust or giant head. Feet on one baseline, clean separated frames, transparent background, no scenery."
     },
     {
       "id": "npcs-48x64-v4",
@@ -126,6 +126,14 @@
       "grid": "5 columns x 6 rows",
       "rows": ["wheat","carrot","tomato","strawberry","corn","pumpkin"],
       "prompt": "Pixel RPG crop GROWTH spritesheet. ONLY the crop plants, absolutely NO person, NO farmer, NO human character anywhere. Six rows: wheat, carrot, tomato, strawberry, corn, pumpkin. Five columns left to right: seed mound, sprout, young plant, mature plant, ready-to-harvest. Each crop grows from a stable bottom baseline, centered in its cell with clear transparent padding so nothing touches the cell edges, consistent scale within and across rows, ready stage clearly fuller than mature. No soil block behind the crop, transparent background, no text, no checkerboard."
+    },
+    {
+      "id": "crops2-48-v4",
+      "targetFile": "crops2-48x48.png",
+      "size": "1024x1024",
+      "grid": "5 columns x 4 rows",
+      "rows": ["bell_pepper","potato","grapes","melon"],
+      "prompt": "Pixel RPG crop GROWTH spritesheet matching crops-48 quality. ONLY crop plants, no person or tools. Four rows: bell pepper, potato, purple grapes on a compact vine, green-striped melon vine. Five columns: detailed seed mound, sprout, young, mature, abundant ready-to-harvest. Use crisp dark pixel outlines, warm upper-left highlights, four to six shade ramps, organic leaf clusters, distinct crop silhouettes and a stable bottom baseline. Seed and sprout stages must be meaningful sprites, not colored blocks or sticks. Ready stages are visibly fuller than mature. Generous transparent padding, no touching cell edges, no text, no checkerboard."
     },
     {
       "id": "animals-32-v4",

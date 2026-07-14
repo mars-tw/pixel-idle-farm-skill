@@ -29,6 +29,7 @@ const V3_REUSE = {
 // 程式化補充 sheets：由獨立腳本產生，process-v4 不重切，但 manifest 要註冊。
 const LOCAL_SHEETS = {
   crops3: { image: "assets/generated/v4/crops3-48.png", map: "assets/generated/v4/crops3-48.json" },
+  crops4: { image: "assets/generated/v4/crops4-48.png", map: "assets/generated/v4/crops4-48.json" },
 };
 
 function server() {

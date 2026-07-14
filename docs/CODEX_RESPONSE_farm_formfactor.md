@@ -9,7 +9,7 @@
 
 ## 版本與驗證
 
-- app／HTML query／manifest icon／SW cache／UI fallback／e2e 版本錨已同步 `r58-20260713-1`；`package.json index.html manifest.webmanifest sw.js src scripts` 內舊 `r57-20260713-1` grep = 0（歷史 review／response 文件不改寫）。
+- app／HTML query／manifest icon／SW cache／UI fallback／e2e 版本錨已同步 `r59-20260714-1`；`package.json index.html manifest.webmanifest sw.js src scripts` 內舊版本 grep = 0。
 - `npm test`：PASS。
 - `npm run test:e2e` ×3：PASS（145.3s／144.5s／145.1s），每輪含 RPG e2e 與 9 視口 × overlay 開／關 RWD 矩陣。
 - `git diff --check`：PASS。

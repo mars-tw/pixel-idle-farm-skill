@@ -440,7 +440,8 @@ function genDuckEggQuality(){
   const careAnimalRows=["chicken","cow","sheep","bee"],careAnimalCols=["happy_a","happy_b","eating_a","eating_b"];
   out.animals_care=await sliceGrid("animals-care-48.png",4,4,48,48,(r,c)=>careAnimalRows[r]+"_"+careAnimalCols[c],[0.5,0.85],"baseline");if(out.animals_care)log.push("animals_care");
 
-  out.crops2=genCrops2();log.push("crops2");
+  const crop2Rows=["bell_pepper","potato","grapes","melon"];
+  out.crops2=await sliceGrid("crops2-48x48.png",5,4,48,48,(r,c)=>crop2Rows[r]+"_"+cropCols[c],[0.5,0.9],"baseline",{fill:0.78,wfill:0.78});if(out.crops2)log.push("crops2");
   out.animals_duck=genDuckAnimals();log.push("animals_duck");
   out.product_quality_duck=genDuckEggQuality();log.push("product_quality_duck");
 

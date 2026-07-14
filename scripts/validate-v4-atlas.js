@@ -129,6 +129,7 @@ async function pixelCheck(manifest) {
   catch (e) { warn("無法啟動 chromium（" + e.message.split("\n")[0] + "），略過像素級檢查"); return; }
   const s = await server(); const port = s.address().port;
   const page = await browser.newPage();
+  const qualityStats = {};
   await page.goto("http://127.0.0.1:" + port + "/"); // 與圖片同源，避免 canvas 被跨來源汙染
   for (const key of PIXEL_SHEETS) {
     const sheet = manifest.sheets[key]; if (!sheet) continue;
@@ -144,23 +145,42 @@ async function pixelCheck(manifest) {
       const out = {};
       for (const id of want) {
         const f = frames[id]; if (!f) continue;
-        let on = 0, edge = 0, edgeTot = 0;
+        let on = 0, edge = 0, edgeTot = 0, minY = f.h, maxY = -1;
         for (let y = 0; y < f.h; y++) for (let x = 0; x < f.w; x++) {
           const a = d[((f.y + y) * meta.w + (f.x + x)) * 4 + 3];
-          if (a > 40) on++;
+          if (a > 40) { on++; if (y < minY) minY = y; if (y > maxY) maxY = y; }
           const onEdge = x <= 1 || y <= 1 || x >= f.w - 2 || y >= f.h - 2;
           if (onEdge) { edgeTot++; if (a > 60) edge++; }
         }
-        out[id] = { cover: on / (f.w * f.h), edge: edge / Math.max(1, edgeTot), empty: !!f.empty };
+        out[id] = { cover: on / (f.w * f.h), edge: edge / Math.max(1, edgeTot), empty: !!f.empty,
+          bboxH: maxY >= minY ? maxY - minY + 1 : 0, bottom: maxY };
       }
       return out;
     }, { url, frames: map.frames, meta: map.meta, want: [...need] });
     if (stats.error) { fail(`${key}: 像素檢查載入失敗 ${sheet.image}`); continue; }
+    qualityStats[key] = stats;
     for (const id of need) {
       const st = stats[id]; if (!st) continue; // 缺 frame 由結構檢查負責
       if (st.empty || st.cover < 0.012) fail(`${key}.${id}: 空白幀（覆蓋率 ${(st.cover * 100).toFixed(1)}%）`);
       if (["crops", "crops2", "crops3", "crops4"].includes(key) && st.edge > 0.06) fail(`${key}.${id}: 作物觸碰格邊被裁切（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
       else if (st.edge > 0.18) warn(`${key}.${id}: 內容貼近格邊（邊緣 ${(st.edge * 100).toFixed(0)}%）`);
+    }
+  }
+  // P0 action-sheet guard: full bodies must remain at walk-sheet scale. This catches
+  // the former hoe_up head-only fragments and oversized idle portraits after a regen.
+  for (const [walkKey, actionKey] of [["walk", "actions"], ["walk_m", "actions_m"]]) {
+    const walkRef = qualityStats[walkKey] && qualityStats[walkKey].walk_down_00;
+    const actions = qualityStats[actionKey];
+    if (!walkRef || !actions) continue;
+    const rows = ACTION_ROWS.concat(["idle_down", "idle_up", "idle_side"]);
+    for (const id of range(rows, 6)) {
+      const st = actions[id]; if (!st) continue;
+      if (st.bboxH < walkRef.bboxH * 0.9)
+        fail(`${actionKey}.${id}: 全身高度 ${st.bboxH}px，低於 walk 基準 ${walkRef.bboxH}px 的 90%`);
+      if (st.bottom < walkRef.bottom - 2)
+        fail(`${actionKey}.${id}: 腳底 baseline ${st.bottom}px，高於 walk 基準 ${walkRef.bottom}px 超過 2px`);
+      if (id.startsWith("idle_") && st.cover > 0.45)
+        fail(`${actionKey}.${id}: idle 覆蓋率 ${(st.cover * 100).toFixed(1)}%，疑似巨臉/近景`);
     }
   }
   await browser.close(); s.close();
