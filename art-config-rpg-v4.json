@@ -136,6 +136,38 @@
       "prompt": "Pixel RPG crop GROWTH spritesheet matching crops-48 quality. ONLY crop plants, no person or tools. Four rows: bell pepper, potato, purple grapes on a compact vine, green-striped melon vine. Five columns: detailed seed mound, sprout, young, mature, abundant ready-to-harvest. Use crisp dark pixel outlines, warm upper-left highlights, four to six shade ramps, organic leaf clusters, distinct crop silhouettes and a stable bottom baseline. Seed and sprout stages must be meaningful sprites, not colored blocks or sticks. Ready stages are visibly fuller than mature. Generous transparent padding, no touching cell edges, no text, no checkerboard."
     },
     {
+      "id": "crops3-48-v4",
+      "targetFile": "crops3-48x48.png",
+      "size": "1536x1024",
+      "grid": "5 columns x 3 rows",
+      "rows": ["pea","sweet_potato","winter_kale"],
+      "prompt": "Pixel RPG crop GROWTH spritesheet matching crops-48 and crops2-48 quality. ONLY crop plants, no person or tools. Three rows: pea, sweet potato, winter kale. Five columns: detailed seed mound, sprout, young, mature, abundant ready-to-harvest. Use crisp dark warm outlines, upper-left highlights, four to six shade ramps, organic leaf clusters, distinct crop silhouettes and a stable bottom baseline. Pea ready has clear plump pods, sweet potato ready has visible orange-purple tubers at the base, winter kale ready is a dense frosty blue-green rosette. Seed and sprout stages are meaningful sprites, never colored blocks or sticks. Ready stages are visibly fuller than mature. Generous transparent padding, no touching cell edges, no text, no checkerboard."
+    },
+    {
+      "id": "crops4-48-v4",
+      "targetFile": "crops4-48x48.png",
+      "size": "1536x1024",
+      "grid": "5 columns x 2 rows",
+      "rows": ["radish","sunflower"],
+      "prompt": "Pixel RPG crop GROWTH spritesheet matching crops-48 and crops2-48 quality. ONLY crop plants, no person or tools. Two rows: radish and sunflower. Five columns: detailed seed mound, sprout, young, mature, abundant ready-to-harvest. Use crisp dark warm outlines, upper-left highlights, four to six shade ramps, organic leaves, distinct silhouettes and a stable bottom baseline. Radish grows from a tiny red seed/root to a lush ready cluster with ruby-pink bulbs. Sunflower grows from a striped seed to a tall ready golden bloom with a dimensional seed center. Seed and sprout stages are meaningful sprites, never colored blocks or sticks. Ready stages are visibly fuller than mature. Generous transparent padding, no touching cell edges, no text, no checkerboard."
+    },
+    {
+      "id": "animals-duck-48-v4",
+      "targetFile": "animals-duck-48.png",
+      "size": "1024x1024",
+      "grid": "4 columns x 2 rows",
+      "rows": ["idle_walk","happy_eating"],
+      "prompt": "Polished pixel RPG golden farm duck spritesheet matching animals-48 in volume, outline weight, upper-left lighting, soft shade ramps and 48x48 scale. EXACTLY four columns by two rows. Top row: idle_a, idle_b, walk_a, walk_b. Bottom row: happy_a, happy_b, eating_a, eating_b. The two walk frames visibly alternate near and far webbed-foot positions and articulate the wing/body pose, never merely translate or bob one identical sprite. Happy frames use two distinct lifted-wing poses. Eating frames use two distinct head-down pecking poses. Same duck identity facing right in every cell, soft pixel ground shadow, generous transparent padding, no props, no text, no checkerboard."
+    },
+    {
+      "id": "duck-egg-quality-32-v4",
+      "targetFile": "duck-egg-quality-32.png",
+      "size": "1536x1024",
+      "grid": "3 columns x 1 row",
+      "rows": ["duck_egg"],
+      "prompt": "Polished pixel RPG duck egg quality icon spritesheet matching animal-products-quality-32. Exactly three columns in one row: normal, good, premium. All use one broad pale blue-green duck egg silhouette, centered and consistent in scale. Normal has restrained slate outline and soft highlight; good has a richer turquoise rim plus a clear white-cyan shine; premium has an unmistakable warm gold outline, luminous highlight and several separated gold-white sparkles. Rounded three-dimensional volume, upper-left lighting, readable at 32x32, generous transparent padding, no labels, no letters, no numbers, no text, no checkerboard."
+    },
+    {
       "id": "animals-32-v4",
       "targetFile": "animals-32x32.png",
       "size": "1024x1024",

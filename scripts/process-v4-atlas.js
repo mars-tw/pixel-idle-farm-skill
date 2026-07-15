@@ -19,19 +19,14 @@ const FILES = { terrain: "terrain-organic-32", crops: "crops-48", walk: "miri-wa
   // Stage 7：動物照護（互動物件/品質圖示/VFX/狀態圖示/happy+eating 動物）
   care_props: "animal-care-props-64", product_quality: "animal-products-quality-32",
   care_vfx: "animal-care-vfx-32", animal_status: "animal-status-icons-32", animals_care: "animals-care-48",
-  // R47：豐年祭・四季物產
-  crops2: "crops2-48", animals_duck: "animals-duck-48", product_quality_duck: "duck-egg-quality-32" };
+  // R47／R60：豐年祭・四季物產；R60 將鴨子、鴨蛋與 crops3/4 全部改走生成源圖切幀。
+  crops2: "crops2-48", crops3: "crops3-48", crops4: "crops4-48",
+  animals_duck: "animals-duck-48", product_quality_duck: "duck-egg-quality-32" };
 // 沿用 v3 的 sheets（站點/障礙/特效）
 const V3_REUSE = {
   props: { image: "assets/generated/v3/props-stations.png", map: "assets/generated/v3/props-stations.json" },
   vfx:   { image: "assets/generated/v3/action-vfx-32.png",  map: "assets/generated/v3/action-vfx-32.json" },
 };
-// 程式化補充 sheets：由獨立腳本產生，process-v4 不重切，但 manifest 要註冊。
-const LOCAL_SHEETS = {
-  crops3: { image: "assets/generated/v4/crops3-48.png", map: "assets/generated/v4/crops3-48.json" },
-  crops4: { image: "assets/generated/v4/crops4-48.png", map: "assets/generated/v4/crops4-48.json" },
-};
-
 function server() {
   return new Promise((res) => {
     const s = http.createServer((rq, rs) => {
@@ -73,16 +68,6 @@ function server() {
     const m = JSON.parse(fs.readFileSync(path.join(ROOT, r.map), "utf8"));
     manifest.sheets[key] = { image: r.image, map: r.map, meta: m.meta, frameCount: Object.keys(m.frames).length, reusedFrom: "v3" };
     console.log("  ↻ " + key + "（沿用 v3：" + Object.keys(m.frames).length + " frames）");
-  }
-  for (const key of Object.keys(LOCAL_SHEETS)) {
-    const r = LOCAL_SHEETS[key];
-    if (!fs.existsSync(path.join(ROOT, r.map)) || !fs.existsSync(path.join(ROOT, r.image))) {
-      console.warn("  ⚠ 缺本地 sheet " + key + "（先跑 generate-crops3-atlas.js）");
-      continue;
-    }
-    const m = JSON.parse(fs.readFileSync(path.join(ROOT, r.map), "utf8"));
-    manifest.sheets[key] = { image: r.image, map: r.map, meta: m.meta, frameCount: Object.keys(m.frames).length };
-    console.log("  + " + key + "（本地補充：" + Object.keys(m.frames).length + " frames）");
   }
   fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
   console.log("✅ v4 atlas 處理完成 → assets/generated/v4/");

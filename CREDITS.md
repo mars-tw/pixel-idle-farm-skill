@@ -1,10 +1,10 @@
 # Credits
 
-本文件盤點《晨光農場》R59（`r59-20260714-1`）在 repo 內使用的素材、字型、圖示與第三方開發工具。最後檢查日期：2026-07-15。
+本文件盤點《晨光農場》R60（`r60-20260715-1`）在 repo 內使用的素材、字型、圖示與第三方開發工具。最後檢查日期：2026-07-15。
 
 ## 視覺素材與 AI 揭露
 
-- `assets/generated/` 下的角色、作物、動物、建築、場景物件與 VFX，主要由 OpenAI 圖像生成工具協助製作。repo 內的 `art-config*.json`、素材 manifest 與生成腳本將主要模型記為 `gpt-image-2`；R59 的 Miri／Kai 動作圖集與 `crops2` 作物圖集則由內建 `imagegen` 工作流程重繪。
+- `assets/generated/` 下的角色、作物、動物、建築、場景物件與 VFX，主要由 OpenAI 圖像生成工具協助製作。repo 內的 `art-config*.json`、素材 manifest 與生成腳本將主要模型記為 `gpt-image-2`；R59 的 Miri／Kai 動作圖集與 `crops2` 作物圖集，以及 R60 的鴨子、鴨蛋品質與 `crops3`／`crops4` 作物圖集，均由內建 `imagegen` 工作流程重繪。
 - 生成後的來源圖會經專案內腳本去背、裁切、縮放、像素修整、anchor 設定與 JSON frame map 產生；部分地形、季相與補充圖集由 JavaScript／Python 程序化產生或修整。因此執行時 atlas 並非未處理的模型輸出。
 - `assets/cover.png` 為專案的 AI 輔助像素風封面。`references/visual-targets/` 內圖片是製作參考，不是直接載入遊戲的 runtime atlas。
 - `references/promo/` 與 `artifacts/` 內圖片為本遊戲畫面截圖；README 使用其中的春、夏、冬季宣傳截圖。

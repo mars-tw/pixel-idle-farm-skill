@@ -30,6 +30,7 @@ Thumbs.db
 *.orig
 .playwright-mcp/
 scratchpad/
+tmp/
 playwright-report/
 test-results/
 blob-report/
