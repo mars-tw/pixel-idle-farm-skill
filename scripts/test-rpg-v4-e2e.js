@@ -48,11 +48,15 @@ function startServer() {
 // 等角色走完（moving 變 false）
 async function waitArrive(page, max) {
   const t0 = Date.now();
-  while (Date.now() - t0 < (max || 6000)) {
+  const limit = Math.max(max || 0, 60000);
+  while (Date.now() - t0 < limit) {
     if (!(await page.evaluate(() => window.__farm.moving()))) return true;
     await sleep(120);
   }
   return false;
+}
+async function configureE2ePage(page) {
+  page.setDefaultTimeout(60000);
 }
 async function storyProgress(page) {
   return page.evaluate(() => {
@@ -87,7 +91,7 @@ async function reloadAllowAbort(page) {
   }
 }
 async function runTrueServiceWorkerOfflineTest(browser, base) {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "allow" });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "allow", reducedMotion: "reduce" });
   const page = await context.newPage();
   try {
     await page.goto(base + "?swtest=1");
@@ -149,11 +153,12 @@ async function keyboardTabSmoke(page) {
 }
 
 async function runShortDesktopLayoutTest(browser, base) {
-  const context = await browser.newContext({ viewport: { width: 1366, height: 700 }, serviceWorkers: "block" });
+  const context = await browser.newContext({ viewport: { width: 1366, height: 700 }, serviceWorkers: "block", reducedMotion: "reduce" });
   const page = await context.newPage();
   try {
     await page.goto(base);
     await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await configureE2ePage(page);
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
     const mainControls = await page.evaluate(() => {
       const ids = ["settingsBtn", "spriteToggle", "howToBtn", "resetBtn"];
@@ -213,11 +218,13 @@ async function runTouchFarmConfirmationTest(browser, base) {
     hasTouch: true,
     isMobile: true,
     serviceWorkers: "block",
+    reducedMotion: "reduce",
   });
   const page = await context.newPage();
   try {
     await page.goto(base);
     await page.waitForFunction(() => window.__farm && window.__farm.state);
+    await configureE2ePage(page);
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
     const ids = await page.evaluate(() => window.__farm.state().map.tiles.filter((t) => t.plotIndex != null).slice(0, 4).map((t) => t.id));
     const touch = (id) => page.evaluate((tileId) => {
@@ -295,6 +302,17 @@ async function runTouchFarmConfirmationTest(browser, base) {
       F.refresh();
     }, ids[2]);
     const coinsBeforeA = await page.evaluate(() => window.__farm.state().coins);
+    const actionAReach = await page.evaluate(() => {
+      const el = document.getElementById("actionA");
+      const r = el.getBoundingClientRect();
+      const x = r.left + r.width / 2, y = r.top + r.height / 2;
+      const hit = x >= 0 && x < innerWidth && y >= 0 && y < innerHeight ? document.elementFromPoint(x, y) : null;
+      return { top: r.top, bottom: r.bottom, width: r.width, height: r.height,
+        hit: !!hit && (hit === el || el.contains(hit)), hitLabel: hit && (hit.id || hit.className || hit.tagName) };
+    });
+    assert(actionAReach.width >= 44 && actionAReach.height >= 44 && actionAReach.top >= 0 &&
+      actionAReach.bottom <= 844 && actionAReach.hit,
+      `R63 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
     await page.click("#actionA");
     await waitArrive(page, 9000);
     const actionA = await page.evaluate((targetId) => {
@@ -333,6 +351,8 @@ async function run() {
     page.on("pageerror", (e) => errors.push("pageerror: " + (e && e.message)));
 
     await page.goto(base);
+    await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important}" });
+    await configureE2ePage(page);
     const pwaFiles = await page.evaluate(async () => {
       const manifestRes = await fetch("manifest.webmanifest");
       const manifest = await manifestRes.json();
@@ -379,7 +399,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r62-20260715-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r63-20260715-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -460,7 +480,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r62-20260715-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r63-20260715-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),

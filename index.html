@@ -11,13 +11,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r62-20260715-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r62-20260715-1">
+<link rel="manifest" href="manifest.webmanifest?v=r63-20260715-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r63-20260715-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r62-20260715-1";
+  const VERSION = "r63-20260715-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -67,6 +67,7 @@
   html[data-season="秋"] { --sky-1: #e9d09a; --sky-2: #e7c478; --grass: #b39343; --grass-d: #837132; }
   html[data-season="冬"] { --sky-1: #d7e1e5; --sky-2: #e7e9df; --grass: #aeb9a8; --grass-d: #858f84; }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  button, [role="button"] { min-width: 44px; min-height: 44px; }
   :focus-visible { outline: 3px solid #2b6f8a; outline-offset: 3px; }
   html, body { height: 100%; }
   body {
@@ -216,7 +217,7 @@
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn.harvest { background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; flex: 1; }
   .btn.sell { background: linear-gradient(180deg, #ffd270, var(--coin)); color: #5a3d00; flex: 1; }
-  .btn.small { padding: 6px 10px; min-height: 36px; font-size: 12px; }
+  .btn.small { padding: 6px 10px; min-height: 44px; font-size: 12px; }
   .btn.buy { background: linear-gradient(180deg, #ffd270, var(--coin)); color: #5a3d00; }
   .btn.ghost { background: var(--cream-2); color: var(--ink); border: 1.5px solid var(--border-d); }
 
@@ -289,7 +290,7 @@
   .quest-dock .qd-meta:disabled { opacity: .55; cursor: not-allowed; }
   .quest-dock.festival { border-color: #dfa132; background: linear-gradient(180deg, #fff5d6, #f7df9b); }
   .quest-dock .qd-title .festival-tag { margin: 0 0 0 4px; }
-  .smart-assistant { position: absolute; right: 10px; bottom: 10px; z-index: 9900; width: min(360px, calc(100% - 20px));
+  .smart-assistant { position: absolute; right: 10px; top: 10px; bottom: auto; z-index: 9900; width: min(360px, calc(100% - 20px));
     background: rgba(255,253,244,.96); border: 2px solid #b8cf8a; border-radius: 10px; box-shadow: 0 8px 24px rgba(38,55,22,.22);
     overflow: hidden; color: #34441d; }
   .sa-head { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; background: linear-gradient(180deg, #eef8dd, #dcefc4); }
@@ -373,18 +374,21 @@
     }
     #screenFxLayer { display: none; }
   }
-  .modal { position: fixed; inset: 0; background: rgba(20,16,8,.66); display: none; align-items: center;
-    justify-content: center; z-index: 150; padding: 16px; overflow-y: auto; }
+  .modal { position: fixed; inset: 0; background: rgba(20,16,8,.76); display: none; align-items: center;
+    justify-content: center; z-index: 20000; padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); overflow: hidden; }
   .modal.show { display: flex; }
+  body:has(.modal.show) .wrap { pointer-events: none; user-select: none; }
   .modal-card { background: var(--cream); border: 3px solid var(--border-d); border-radius: 18px;
-    padding: 22px; max-width: 420px; width: 100%; box-shadow: 0 16px 50px rgba(0,0,0,.4);
-    max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; }
+    padding: clamp(12px, 3dvh, 22px); max-width: 420px; width: 100%; box-shadow: 0 16px 50px rgba(0,0,0,.4);
+    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; overflow: hidden; overscroll-behavior: contain; }
   .modal-card h2 { font-size: 21px; font-weight: 900; color: #4a3a22; margin-bottom: 12px; text-align: center; }
+  .modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
   .modal-card .ml { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
   .modal-card .ml:last-of-type { border-bottom: none; }
   .modal-card .ml .v { margin-left: auto; font-weight: 800; }
   .modal-card .tip { font-size: 12px; color: var(--ink-soft); margin: 10px 0; line-height: 1.6; }
-  .modal-card .btn { width: 100%; margin-top: 8px; background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; }
+  .modal-card > .btn { flex: 0 0 auto; width: 100%; min-height: 44px; margin-top: 8px; background: linear-gradient(180deg, #8fd06a, var(--grass-d)); color: #1f3a13; }
   .modal-card ol { margin: 0 0 8px 18px; display: flex; flex-direction: column; gap: 7px; font-size: 14px; }
   .modal-card ol b { color: #2c6f1e; }
   .letters-modal-card { width: min(94vw, 780px); max-width: 780px; }
@@ -745,7 +749,7 @@
   .journal-card { margin-bottom: 0; }
   .journal-chapters { display: flex; gap: 10px; font-size: 12px; margin-bottom: 8px; flex-wrap: wrap; }
   .journal-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
-  .journal-item { font: inherit; font-size: 12px; text-align: left; padding: 6px 8px; min-height: 32px; border-radius: 6px;
+  .journal-item { font: inherit; font-size: 12px; text-align: left; padding: 6px 8px; min-height: 44px; border-radius: 6px;
     background: #f4f1e8; border: 1px solid #e3ddc8; color: inherit; cursor: pointer; max-width: 100%; }
   .journal-item.found { background: #eaf7e0; border-color: #bfe6a3; }
   .journal-item.undiscovered, .journal-item.locked { color: var(--ink-soft); opacity: .7; }
@@ -784,7 +788,7 @@
     .farm-panel > .tool-bar, .farm-panel > .seed-row, .farm-panel > .btn-row, .farm-panel > h2 { flex: 0 0 auto; }
     .map-scene-wrap { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
     .map-scene-wrap .quest-dock { flex: 0 0 auto; }
-    #mapScene { flex: 0 0 auto; height: min(72vh, var(--map-world-height, 576px)); min-height: min(420px, var(--map-world-height, 576px)); max-height: none; }
+    #mapScene { flex: 1 1 0; height: auto; min-height: 0; max-height: min(72dvh, var(--map-world-height, 576px)); }
     .side-panel { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
     .side-tabs { flex: 0 0 auto; position: static; }
     .side-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
@@ -843,29 +847,30 @@
     background: rgba(67,103,35,.82); font-size: 20px; pointer-events: auto;
   }
   @media (max-width: 859px) {
-    .mobile-controls { display: block; }
-    .scene-action-bar { bottom: 92px; }
     .smart-assistant { top: 66px; left: auto; right: 8px; bottom: auto; width: min(340px, calc(100% - 16px)); max-height: 30vh; }
     .smart-assistant .sa-list { max-height: 20vh; overflow-y: auto; }
     .toolbar { gap: 5px; }
-    .toolbar .btn { min-height: 38px; padding: 6px 8px; font-size: 11px; }
+    .toolbar .btn { min-height: 44px; padding: 6px 8px; font-size: 11px; }
   }
-  @media (min-width: 860px) {
-    html.has-touch .mobile-controls { display: block; }
-    html.has-touch .scene-action-bar { bottom: 92px; }
+  @media (max-width: 859px) {
+    html.mobile-controls-enabled .mobile-controls { display: block; }
+    html.mobile-controls-enabled .scene-action-bar { bottom: 194px; overflow-x: auto; justify-content: flex-start; }
+    html.mobile-controls-enabled #mapScene:has(.scene-action-bar:not([hidden])) .smart-assistant { display: none; }
   }
   @media (max-width: 859px) and (max-height: 480px) {
     .smart-assistant { width: min(280px, calc(100% - 16px)); }
     .smart-assistant .sa-list { display: none; }
   }
   @media (max-width: 480px) {
+    #mapScene { height: min(50dvh, var(--map-world-height, 576px)); min-height: 300px; }
     #mapScene .seed-row { max-width: calc(100vw - 24px); }
-    #mapScene .seed { min-width: 43px; min-height: 43px; padding: 3px 5px; }
+    #mapScene .seed { min-width: 44px; min-height: 44px; padding: 3px 5px; }
     #mapScene .seed .sn, #mapScene .seed .sc, #mapScene .seed-season { display: none; }
     .dpad { left: 8px; bottom: 8px; grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 48px); }
     .dpad-btn, .action-a { min-width: 48px; min-height: 48px; }
     .action-a { right: 10px; bottom: 14px; min-width: 60px; min-height: 60px; }
     .scene-action-btn { min-width: 50px; min-height: 50px; }
+    html.mobile-controls-enabled .scene-action-bar { bottom: 172px; }
   }
 </style>
 </head>
@@ -976,7 +981,7 @@
 <div class="modal" id="settingsModal" data-audit="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
   <div class="modal-card settings-card">
     <h2 id="settingsTitle">⚙️ 設定</h2>
-    <div class="settings-list" id="settingsList"></div>
+    <div class="settings-list modal-body" id="settingsList"></div>
     <button class="btn" id="settingsOk">完成</button>
   </div>
 </div>
@@ -985,7 +990,7 @@
 <div class="modal" id="offlineModal" role="dialog" aria-modal="true" aria-labelledby="offlineTitle">
   <div class="modal-card">
     <h2 id="offlineTitle">🌙 歡迎回來！</h2>
-    <div id="offlineBody"></div>
+    <div id="offlineBody" class="modal-body"></div>
     <button class="btn" id="offlineOk">太好了，繼續種田 ▶</button>
   </div>
 </div>
@@ -994,14 +999,16 @@
 <div class="modal" id="howToModal" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
   <div class="modal-card">
     <h2 id="howToTitle">🌻 怎麼玩</h2>
-    <ol>
-      <li><b>① 選種子</b>：點上方種子（看 🪙 成本）</li>
-      <li><b>② 種植</b>：點農場的空地（土壤格）種下</li>
-      <li><b>③ 等成熟</b>：作物會長大，成熟會發光跳動</li>
-      <li><b>④ 收成 → 賣出</b>：點成熟作物收進倉庫，再「賣出」或交「市集訂單」換更多金幣</li>
-      <li><b>⑤ 升級</b>：買升級開更多地、加速、自動收成（離線也運作）</li>
-    </ol>
-    <p class="tip">💡 訂單比直售更划算（連續完成有加成）。升「幫手機器人」後離開也會自動幫你收成、回來看離線收益！</p>
+    <div class="modal-body">
+      <ol>
+        <li><b>① 選種子</b>：點上方種子（看 🪙 成本）</li>
+        <li><b>② 種植</b>：點農場的空地（土壤格）種下</li>
+        <li><b>③ 等成熟</b>：作物會長大，成熟會發光跳動</li>
+        <li><b>④ 收成 → 賣出</b>：點成熟作物收進倉庫，再「賣出」或交「市集訂單」換更多金幣</li>
+        <li><b>⑤ 升級</b>：買升級開更多地、加速、自動收成（離線也運作）</li>
+      </ol>
+      <p class="tip">💡 訂單比直售更划算（連續完成有加成）。升「幫手機器人」後離開也會自動幫你收成、回來看離線收益！</p>
+    </div>
     <button class="btn" id="howToOk">開始種田 ▶</button>
   </div>
 </div>
@@ -1010,7 +1017,7 @@
 <div class="modal" id="lettersModal" role="dialog" aria-modal="true" aria-labelledby="lettersTitle">
   <div class="modal-card letters-modal-card">
     <h2 id="lettersTitle">📬 農場信箱</h2>
-    <div id="lettersBody"></div>
+    <div id="lettersBody" class="modal-body"></div>
     <button class="btn ghost" id="lettersClose">關閉信箱</button>
   </div>
 </div>
@@ -1026,10 +1033,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r62-20260715-1"></script>
-<script src="src/game.js?v=r62-20260715-1"></script>
-<script src="src/state.js?v=r62-20260715-1"></script>
-<script src="src/atlas.js?v=r62-20260715-1"></script>
-<script src="src/ui.js?v=r62-20260715-1"></script>
+<script src="src/config.js?v=r63-20260715-1"></script>
+<script src="src/game.js?v=r63-20260715-1"></script>
+<script src="src/state.js?v=r63-20260715-1"></script>
+<script src="src/atlas.js?v=r63-20260715-1"></script>
+<script src="src/ui.js?v=r63-20260715-1"></script>
 </body>
 </html>

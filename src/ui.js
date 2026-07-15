@@ -65,7 +65,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r62-20260715-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r63-20260715-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -396,16 +396,23 @@
   function openModal(id, preferredSelector) {
     const modal = $(id); if (!modal) return;
     lastModalFocus = document.activeElement || lastModalFocus;
+    document.querySelectorAll(".modal.show").forEach((open) => {
+      if (open !== modal) open.classList.remove("show");
+    });
     if (typeof modal.setAttribute === "function") {
       modal.setAttribute("role", "dialog");
       modal.setAttribute("aria-modal", "true");
     }
+    if (document.body && document.body.classList) document.body.classList.add("modal-open");
     modal.classList.add("show");
     focusFirstInModal(modal, preferredSelector);
   }
   function closeModal(id) {
     const modal = $(id); if (!modal) return false;
     modal.classList.remove("show");
+    if (typeof document.querySelector !== "function" || !document.querySelector(".modal.show")) {
+      if (document.body && document.body.classList) document.body.classList.remove("modal-open");
+    }
     if (lastModalFocus && typeof lastModalFocus.focus === "function") {
       setTimeout(() => lastModalFocus.focus(), 0);
     }
@@ -3412,11 +3419,11 @@
     if (nt && G.isWalkable(state, nt)) walkPath([nt.id]);
     else { player.frame = 0; paintPlayer("walk", WALK_ROW[dir], 0, false); } // 撞牆只轉向
   }
-  function setTouchCapabilityClass() {
-    const nav = (typeof navigator !== "undefined" ? navigator : window.navigator) || {};
-    const coarse = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
-    const hasTouch = (nav.maxTouchPoints || 0) > 0 || coarse;
-    document.documentElement.classList.toggle("has-touch", !!hasTouch);
+  function setPrimaryPointerClass() {
+    const primaryCoarse = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    const narrow = window.innerWidth <= 859;
+    document.documentElement.classList.toggle("primary-coarse", primaryCoarse);
+    document.documentElement.classList.toggle("mobile-controls-enabled", primaryCoarse && narrow);
   }
   function stepPlayerDir(dir) {
     if (moveTimer || !state || !state.player) return;
@@ -3457,9 +3464,13 @@
   function setupSceneControls() {
     if (sceneControlBound) return;
     sceneControlBound = true;
-    setTouchCapabilityClass();
-    window.addEventListener("resize", setTouchCapabilityClass);
-    window.addEventListener("pointerdown", (ev) => { if (ev.pointerType === "touch") document.documentElement.classList.add("has-touch"); }, { passive: true });
+    setPrimaryPointerClass();
+    window.addEventListener("resize", setPrimaryPointerClass);
+    if (window.matchMedia) {
+      const primaryPointer = window.matchMedia("(pointer: coarse)");
+      if (primaryPointer.addEventListener) primaryPointer.addEventListener("change", setPrimaryPointerClass);
+      else if (primaryPointer.addListener) primaryPointer.addListener(setPrimaryPointerClass);
+    }
     document.querySelectorAll(".dpad-btn[data-dir]").forEach((btn) => {
       btn.addEventListener("pointerdown", (ev) => {
         ev.preventDefault(); ev.stopPropagation();

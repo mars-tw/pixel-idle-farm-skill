@@ -241,6 +241,10 @@ function runTouchFarmGuard() {
   assert(html.includes("sceneActionBar") && html.includes("seedHud") && html.includes(".scene-action-bar") &&
     html.includes(".seed-hud") && html.includes(".mobile-controls"),
     "地圖內 action dock、作物 quickbar 與手機控制盤樣式存在");
+  assert(ui.includes("setPrimaryPointerClass()") && ui.includes('matchMedia("(pointer: coarse)")') &&
+    ui.includes('classList.toggle("mobile-controls-enabled", primaryCoarse && narrow)') &&
+    !ui.includes("maxTouchPoints") && !html.includes("html.has-touch"),
+    "R63 手機控制盤只依主指標 coarse + 窄寬度分流，不再把觸控能力當手機");
 }
 
 runSwCacheGuard();

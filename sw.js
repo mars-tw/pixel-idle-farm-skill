@@ -1,4 +1,4 @@
-const CACHE_VERSION = "r62-20260715-1";
+const CACHE_VERSION = "r63-20260715-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
