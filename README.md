@@ -1,76 +1,115 @@
-# 阿軒割割陽光農場
+# 晨光農場（Pixel Idle Farm）
 
-![cover](assets/cover.png)
+![晨光農場封面](assets/cover.png)
 
 [![CI & Deploy Pages](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/mars-tw/pixel-idle-farm-skill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Play Online](https://img.shields.io/badge/Play-Pages-brightgreen)](https://mars-tw.github.io/pixel-idle-farm-skill/)
+[![Play Online](https://img.shields.io/badge/Play-GitHub%20Pages-brightgreen)](https://mars-tw.github.io/pixel-idle-farm-skill/)
 
-一款純原生 HTML/CSS/JavaScript 製作的像素農場 RPG。玩家在 22 x 12 的可走動地圖上種植、接訂單、照顧動物、修橋進入東林，並透過 localStorage 保存進度與離線收益。
+《晨光農場》是一款以原生 HTML、CSS 與 JavaScript 製作的像素放置農場 RPG。玩家能在可走動的大地圖上耕作、接市集與 NPC 委託、照顧動物、修橋探索東林，並透過本機存檔與時間差結算持續累積農場進度。
 
-## 主要內容
+**[立即線上遊玩](https://mars-tw.github.io/pixel-idle-farm-skill/)** ・目前遊戲版本：**R59**（`r59-20260714-1`）
 
-- 可走動像素農場：22 x 12 tile map、camera 跟隨、任務目標鏡頭導引、y-sort 分層與 v4 sprite atlas。
-- 種植循環：小麥、胡蘿蔔、番茄、草莓、南瓜；支援澆水、成長加速、離線最多 8 小時。
-- 市集訂單：同時 3 張、12 分鐘期限，訂單獎勵在生成時固定；連單每次 +5%，最高 +100%。
-- 新手保底：第一張交付任務會固定生成 2 小麥新手訂單，避免卡在隨機需求。
-- 任務 Dock：序章 6 步、東林 5 步、動物照護 5 步；地圖金色箭頭與「前往」會指向當前目標。
-- 修橋與東林：完成序章並收集木材 6、石頭 4 後修復東橋，解鎖東林古樹、藥草叢與螢光菇木。
-- 東林內容鏈：辨認採集點、收集東林藥草與螢光菇、回報商人後，採集品會進入 NPC 委託池。
-- NPC 與敘事訂單：村長、商人、老農與孩子會依章節變換台詞；市集訂單顯示委託人與感謝語。
-- 動物與品質：雞、牛、羊、蜜蜂可生產蛋、牛奶、羊毛與蜂蜜；餵食、補水、梳理提升親密度並產出優質/頂級品。
-- 建築與升級：田地上限 12、成長加速、售價加成、倉庫容量、幫手自動收成/補種；另有堆肥場、筒倉、雞舍、畜棚與蜂箱。
+## 最新特色
 
-## 玩法
+- **R59 主角動作圖集重繪**：Miri 與 Kai 各有 144 幀、24 列 × 6 幀的農務動作 atlas；澆水、鋤地、播種、收成、採集與建造皆以逐幀動作呈現，走路也有四方向步態與明顯肢體姿勢變化。
+- **R59 作物品質重繪**：甜椒、馬鈴薯、葡萄與溫室甜瓜重新製作為 48 × 48 像素、五階段成長圖集；全遊戲共有 15 種作物與四季限定品項。
+- **放置與離線進度**：作物、動物、季節與採集點依時間戳結算，離線收益最多計算 8 小時；升級幫手機器人後可自動收成，最高等級還能自動補種。
+- **可探索農場世界**：22 × 12 tile map、camera 跟隨、y-sort 遮擋、任務目標導引、橋梁修復、東林採集與 NPC 對話／委託。
+- **動物照護與品質經濟**：雞、牛、羊、蜜蜂與鴨會生產三種品質等級的農產品；餵食、補水與梳理會影響親密度及產出品質。
+- **四季與天氣**：季節作物、節慶、祖母信箋、季相樹木、雨濕與雪地效果，讓農場隨時間改變。
+- **PWA 與響應式介面**：支援 Service Worker 快取、安裝式體驗、本機 `localStorage` 存檔，以及桌機與手機版面。
 
-1. 走到告示牌或信箱啟動序章，依任務 Dock 種下小麥、澆水、收成並交付第一張訂單。
-2. 清除舊路與地圖障礙取得木材、石頭，材料足夠後走到斷橋修復。
-3. 過橋探索東林，採集藥草與螢光菇並回報商人。
-4. 解鎖動物照護後，透過餵食、補水、梳理提升親密度，收集高品質產物。
-5. 以市集訂單、NPC 委託與直售累積金幣，再回頭升級田地、倉庫、建築與自動化。
+## 畫面截圖
 
-## 關鍵數值
+### 春季農場
 
-| 類別 | 現況 |
+![春季農場地圖、作物與鎮民](references/promo/r57-20260713-1/spring.png)
+
+### 夏季農場
+
+![夏季農場地圖、季節作物與建築](references/promo/r57-20260713-1/summer.png)
+
+### 冬季農場
+
+![冬季農場地圖、降雪與季相樹木](references/promo/r57-20260713-1/winter.png)
+
+## 操作說明
+
+### 滑鼠與觸控
+
+1. 從地圖上方選擇「手、澆水、清除、建造、查看」工具；種植時再選擇種子。
+2. 點擊地圖目標，主角會自動走到可互動位置並執行動作。
+3. 觸控裝置操作農地時，第一次點擊會顯示預覽，再點同一格才確認執行；滑鼠點擊則直接操作。
+4. 從右側／下方分頁查看磚資訊、市集訂單、升級、故事與圖鑑；任務 Dock 的「前往／探索」可帶你前往目前目標。
+
+### 鍵盤
+
+- `W` `A` `S` `D` 或方向鍵：一次移動一格。
+- `Esc`：關閉目前開啟的對話框。
+
+### 建議開局流程
+
+1. 走到告示牌或信箱啟動序章。
+2. 選小麥種子，在農地種植並澆水。
+3. 成熟後以「手」收成，再完成第一張市集訂單。
+4. 清除樹樁與石塊取得材料，修復東邊斷橋。
+5. 探索東林、照顧動物並用訂單收益升級田地、倉庫與自動化。
+
+## 技術棧
+
+| 類別 | 使用技術 |
 |---|---|
-| 存檔 | `pixel_idle_farm_save_v1`，schema version 1 |
-| 地圖 | 22 x 12，tile 48px，東林從 x >= 17 開始 |
-| 起始 | 16 金幣、6 塊田、倉庫 30 |
-| 作物 | 小麥 15 秒、胡蘿蔔 45 秒、番茄 120 秒、草莓 300 秒、南瓜 900 秒 |
-| 訂單 | 3 欄、12 分鐘、連單 +5% 至 +100% |
-| 修橋 | 木材 6、石頭 4；需序章 6/6 |
-| 東林採集 | 藥草/螢光菇各 10 分鐘冷卻，回報商人後進委託池 |
-| 親密度 | 0-100；35 以上 good，70 以上 premium |
-| 離線 | 最多 8 小時 |
+| 執行環境 | 原生 HTML5、CSS3、JavaScript（無前端框架、無 runtime 套件） |
+| 儲存與離線 | `localStorage`、Service Worker、Web App Manifest |
+| 像素素材 | PNG sprite atlas、JSON frame map、專案內生成／切圖工具 |
+| 測試 | Node.js、Playwright、DOM smoke、經濟／系統測試、atlas validators、RWD E2E |
+| CI/CD | GitHub Actions、GitHub Pages |
 
-## 專案結構
+素材與工具來源揭露請見 [CREDITS.md](CREDITS.md)；圖集製作方式另見 [v4 美術管線](references/art-pipeline-v4.md)。
 
-| 檔案 | 說明 |
-|---|---|
-| `index.html` | 遊戲主頁、CSS、DOM 容器與系列 footer |
-| `src/config.js` | 作物、升級、訂單、地圖、橋、東林、NPC、任務與品質數值 |
-| `src/state.js` | localStorage 存檔、遷移、地圖與旗標初始值 |
-| `src/game.js` | 種植、訂單、修橋、採集、NPC 委託、動物照護與任務推進規則 |
-| `src/ui.js` | UI、任務 Dock、地圖渲染、camera、互動面板 |
-| `src/atlas.js` | v4 atlas 載入與 frame 查詢 |
-| `references/data-model.md` | 存檔 shape、主要常數與測試契約 |
+## 本地開發
 
-## 測試
+需求：建議使用 **Node.js 22**、npm、Python 3；完整 E2E 另需 Playwright Chromium。
 
 ```bash
+git clone https://github.com/mars-tw/pixel-idle-farm-skill.git
+cd pixel-idle-farm-skill
+npm ci
+npm start
+```
+
+開啟 <http://localhost:8000/>。本專案沒有 build step，靜態伺服器會直接提供 repo 根目錄內容。
+
+### 執行測試
+
+```bash
+# 單元、系統、UI smoke 與 atlas 驗證
 npm test
+
+# 第一次執行 E2E 前安裝瀏覽器
+npx playwright install chromium
+
+# RPG 流程與 9 組響應式視口矩陣
 npm run test:e2e
 ```
 
-`npm test` 會跑經濟、系統、UI smoke 與 v3/v4 atlas 驗證；E2E 另檢查 RPG 地圖、任務、RWD 與互動流程。
+GitHub Actions 會在 pull request 與 `main` push 執行測試；只有 `main` 的測試與 E2E 全部通過後才部署 GitHub Pages。
 
-## 📋 更新日誌
+## 專案結構
 
-- R5：新增新手訂單保底、任務 Dock、修橋材料導引與斷橋互動。
-- R9：補上東林內容鏈、採集樣品回報、訂單敘事化與任務鏡頭導引。
-- R7 前後：動物親密度、品質產物、照護互動與多章任務串接完成。
-- 早期版本：完成 v4 AI pixel atlas、22 x 12 RPG 地圖、離線收益與原生 localStorage 存檔。
+| 路徑 | 說明 |
+|---|---|
+| `index.html` | 頁面結構、樣式、PWA 啟動與社群分享 metadata |
+| `src/config.js` | 作物、動物、地圖、任務、季節、訂單與經濟設定 |
+| `src/state.js` | 存檔、遷移與初始狀態 |
+| `src/game.js` | 遊戲規則與時間差結算 |
+| `src/ui.js` | UI、地圖渲染、camera、輸入與逐幀動畫 |
+| `src/atlas.js` | atlas 與 frame map 載入 |
+| `assets/generated/` | 執行時 sprite atlas 與來源圖 |
+| `scripts/` | 測試、截圖、素材生成與 atlas 處理工具 |
+| `references/` | 設計、資料模型與美術管線文件 |
 
-## 授權
+## 授權與致謝
 
-[MIT](LICENSE) © 2026 mars-tw
+本專案採 [MIT License](LICENSE)，Copyright © 2026 mars-tw。AI 輔助素材、系統字型、Unicode emoji 與開發工具的完整說明請見 [CREDITS.md](CREDITS.md)。

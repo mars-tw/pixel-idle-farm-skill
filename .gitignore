@@ -1,11 +1,16 @@
-# 依賴 / 建置（本專案零依賴，保險起見仍忽略）
+# 依賴 / 建置
 node_modules/
 dist/
 build/
+coverage/
+.npm/
+.pnpm-store/
+.yarn/
 
 # 環境與金鑰（絕不提交 API key）
 .env
 .env.*
+!.env.example
 *.key
 
 # 編輯器 / 系統
@@ -13,8 +18,24 @@ build/
 Thumbs.db
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # 暫存 / 測試輸出
 *.log
+*.tmp
+*.temp
+*.bak
+*.orig
 .playwright-mcp/
 scratchpad/
+playwright-report/
+test-results/
+blob-report/
+
+# Python 工具快取與虛擬環境
+__pycache__/
+*.py[cod]
+.venv/
+venv/
