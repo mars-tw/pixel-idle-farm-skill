@@ -11,13 +11,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r60-20260715-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r60-20260715-1">
+<link rel="manifest" href="manifest.webmanifest?v=r61-20260715-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r61-20260715-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r60-20260715-1";
+  const VERSION = "r61-20260715-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -76,7 +76,7 @@
     background-attachment: fixed;
   }
   img, .sprite { image-rendering: pixelated; image-rendering: crisp-edges; }
-  .wrap { max-width: 1080px; margin: 0 auto; }
+  .wrap { width: min(100%, 1720px); max-width: none; margin: 0 auto; }
 
   /* ===== 頂部標題 + 資源列 ===== */
   header { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
@@ -101,7 +101,7 @@
   /* ===== 主版面 ===== */
   .main { display: grid; grid-template-columns: 1fr; gap: 12px; }
   /* 世界優先：桌面場景佔大、側欄精簡分頁 */
-  @media (min-width: 860px) { .main { grid-template-columns: minmax(0, 72%) minmax(0, 28%); align-items: start; } }
+  @media (min-width: 860px) { .main { grid-template-columns: minmax(0, 1fr) clamp(260px, 24vw, 390px); align-items: start; } }
   /* 分頁側欄 */
   .side-panel { padding: 0; overflow: auto; }
   /* Stage 11：多加一個分頁後，窄螢幕改水平捲動而不是把每個分頁擠到看不清楚 */
@@ -172,11 +172,30 @@
 
   /* ===== 種子選擇 ===== */
   .seed-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
+  .seed-hud {
+    position: absolute; left: 8px; top: 8px; z-index: 9860; max-width: calc(100% - 16px);
+    pointer-events: auto;
+  }
+  #mapScene .seed-row { display: block; margin: 0; max-width: min(620px, calc(100vw - 36px)); }
+  .seed-quickbar, .seed-drawer { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
+  .seed-drawer {
+    margin-top: 6px; max-width: min(620px, calc(100vw - 36px)); padding: 7px;
+    border: 2px solid rgba(112,82,38,.42); border-radius: 8px;
+    background: rgba(255,253,244,.96); box-shadow: 0 8px 24px rgba(42,30,12,.22);
+    overflow-x: auto; overscroll-behavior-x: contain;
+  }
   .seed {
     display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 60px; min-height: 56px;
     padding: 6px 8px; border-radius: 11px; cursor: pointer; background: var(--cream-2);
     border: 2px solid var(--border); font-weight: 800; transition: all .1s; position: relative;
   }
+  #mapScene .seed {
+    min-width: 48px; min-height: 46px; padding: 4px 6px; border-radius: 8px;
+    background: rgba(255,253,244,.94); box-shadow: 0 2px 8px rgba(42,30,12,.16);
+  }
+  #mapScene .seed .se { font-size: 19px; }
+  #mapScene .seed .sn { max-width: 54px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #mapScene .seed.more { justify-content: center; min-width: 44px; }
   .seed .se { font-size: 22px; line-height: 1; }
   .seed .sn { font-size: 11px; }
   .seed .sc { font-size: 10px; color: #9a6b00; font-weight: 800; }
@@ -483,7 +502,7 @@
   /* ===== RPG 場景：固定像素世界 + camera 視口 + 分層 y-sort ===== */
   .map-scene-wrap { position: relative; margin-bottom: 10px; }
   /* 視口：地圖為主畫面，桌機佔大、手機保留可玩 */
-  #mapScene { position: relative; width: 100%; height: 60vh; max-height: 660px; min-height: 320px;
+  #mapScene { position: relative; width: 100%; height: min(72vh, var(--map-world-height, 576px)); max-height: none; min-height: 360px;
     overflow: hidden; border-radius: 14px; cursor: pointer; touch-action: none;
     background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate;
     box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
@@ -514,7 +533,7 @@
   #mapScene[data-weather="windy"]::after { background: linear-gradient(105deg, transparent, rgba(228,247,211,.09), transparent); }
   /* isolation: isolate 讓 #weatherLayer 的 mix-blend-mode 只跟地圖場景內的內容混色，
      不會跨到場景外的其他 UI（Stage 9）*/
-  @media (max-width: 859px) { #mapScene { height: 52vh; min-height: 300px; } }
+  @media (max-width: 859px) { #mapScene { height: min(58vh, var(--map-world-height, 576px)); min-height: 330px; } }
   @media (max-width: 560px) {
     .quest-dock { min-height: 48px; padding: 7px 9px; }
     .quest-dock .qd-title { font-size: 11px; }
@@ -765,13 +784,88 @@
     .farm-panel > .tool-bar, .farm-panel > .seed-row, .farm-panel > .btn-row, .farm-panel > h2 { flex: 0 0 auto; }
     .map-scene-wrap { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
     .map-scene-wrap .quest-dock { flex: 0 0 auto; }
-    #mapScene { flex: 1 1 260px; height: auto; min-height: 260px; max-height: 660px; }
+    #mapScene { flex: 0 0 auto; height: min(72vh, var(--map-world-height, 576px)); min-height: min(420px, var(--map-world-height, 576px)); max-height: none; }
     .side-panel { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
     .side-tabs { flex: 0 0 auto; position: static; }
     .side-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
     /* 智慧助手清單限高內捲（地圖場景在桌機恆完整可見，內捲容器不會出界；
        上限 200px 確保整個助手面板 < #mapScene 的 260px 最小高度） */
     .sa-list { max-height: min(30vh, 200px); overflow-y: auto; overscroll-behavior: contain; }
+  }
+  .scene-action-bar {
+    position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+    z-index: 9880; display: flex; gap: 8px; align-items: center; justify-content: center;
+    max-width: calc(100% - 24px); padding: 7px; border: 2px solid rgba(74,53,22,.36);
+    border-radius: 10px; background: rgba(255,253,244,.94); box-shadow: 0 8px 24px rgba(42,30,12,.26);
+    pointer-events: auto;
+  }
+  .scene-action-bar[hidden] { display: none; }
+  .scene-action-btn, .build-wheel-btn, .object-bubble-btn {
+    min-width: 54px; min-height: 54px; border: 2px solid rgba(126,97,44,.42); border-radius: 8px;
+    background: linear-gradient(180deg, #fffdf4, #efe3c2); color: #342716; font: inherit; font-weight: 950;
+    cursor: pointer; box-shadow: 0 2px 0 rgba(0,0,0,.14); display: inline-flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1px;
+  }
+  .scene-action-btn:disabled, .build-wheel-btn:disabled, .object-bubble-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .scene-action-btn .sab-ic, .build-wheel-btn .bw-ic, .object-bubble-btn .obb-ic { font-size: 23px; line-height: 1; }
+  .scene-action-btn .sab-t, .build-wheel-btn .bw-t, .object-bubble-btn .obb-t { font-size: 10px; line-height: 1; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .build-wheel, .object-bubble {
+    position: absolute; z-index: 9890; display: grid; grid-template-columns: repeat(3, minmax(48px, 1fr));
+    gap: 6px; min-width: 176px; max-width: min(280px, calc(100% - 20px)); padding: 8px;
+    border: 2px solid rgba(74,53,22,.36); border-radius: 10px; background: rgba(255,253,244,.96);
+    box-shadow: 0 10px 28px rgba(42,30,12,.28); transform: translate(-50%, calc(-100% - 8px));
+    pointer-events: auto;
+  }
+  .object-bubble { grid-template-columns: repeat(2, minmax(54px, 1fr)); min-width: 132px; }
+  .build-wheel[hidden], .object-bubble[hidden] { display: none; }
+  #mapWorld .ob[data-kind="crop"], #mapWorld .ob[data-kind="building"], #mapWorld .ob[data-kind="animal"],
+  #mapWorld .ob[data-kind="structure"], #mapWorld .ob[data-kind="station"], #mapWorld .ob[data-kind="obstacle"],
+  #mapWorld .ob[data-kind="bridge"], #mapWorld .ob[data-kind="event-point"], #mapWorld .ob[data-kind="forage"],
+  #mapWorld .ob[data-kind="npc"] { pointer-events: auto; cursor: pointer; }
+  .mobile-controls { display: none; position: absolute; inset: auto 0 0 0; height: 184px; z-index: 9900; pointer-events: none; }
+  .dpad {
+    position: absolute; left: 12px; bottom: 12px; display: grid; grid-template-columns: repeat(3, 54px);
+    grid-template-rows: repeat(3, 54px); gap: 4px; pointer-events: auto;
+  }
+  .dpad-btn, .action-a {
+    min-width: 54px; min-height: 54px; border: 2px solid rgba(255,253,244,.82); border-radius: 999px;
+    background: rgba(48,38,22,.72); color: #fffdf4; font: inherit; font-size: 24px; font-weight: 950;
+    box-shadow: 0 4px 16px rgba(0,0,0,.26); cursor: pointer; touch-action: none;
+  }
+  .dpad-btn:active, .action-a:active { transform: translateY(1px); filter: brightness(1.12); }
+  .dpad-btn[data-dir="up"] { grid-column: 2; grid-row: 1; }
+  .dpad-btn[data-dir="left"] { grid-column: 1; grid-row: 2; }
+  .dpad-center { grid-column: 2; grid-row: 2; border-radius: 999px; background: rgba(255,253,244,.22); border: 1px solid rgba(255,253,244,.38); }
+  .dpad-btn[data-dir="right"] { grid-column: 3; grid-row: 2; }
+  .dpad-btn[data-dir="down"] { grid-column: 2; grid-row: 3; }
+  .action-a {
+    position: absolute; right: 16px; bottom: 20px; min-width: 66px; min-height: 66px;
+    background: rgba(67,103,35,.82); font-size: 20px; pointer-events: auto;
+  }
+  @media (max-width: 859px) {
+    .mobile-controls { display: block; }
+    .scene-action-bar { bottom: 92px; }
+    .smart-assistant { top: 66px; left: auto; right: 8px; bottom: auto; width: min(340px, calc(100% - 16px)); max-height: 30vh; }
+    .smart-assistant .sa-list { max-height: 20vh; overflow-y: auto; }
+    .toolbar { gap: 5px; }
+    .toolbar .btn { min-height: 38px; padding: 6px 8px; font-size: 11px; }
+  }
+  @media (min-width: 860px) {
+    html.has-touch .mobile-controls { display: block; }
+    html.has-touch .scene-action-bar { bottom: 92px; }
+  }
+  @media (max-width: 859px) and (max-height: 480px) {
+    .smart-assistant { width: min(280px, calc(100% - 16px)); }
+    .smart-assistant .sa-list { display: none; }
+  }
+  @media (max-width: 480px) {
+    #mapScene .seed-row { max-width: calc(100vw - 24px); }
+    #mapScene .seed { min-width: 43px; min-height: 43px; padding: 3px 5px; }
+    #mapScene .seed .sn, #mapScene .seed .sc, #mapScene .seed-season { display: none; }
+    .dpad { left: 8px; bottom: 8px; grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 48px); }
+    .dpad-btn, .action-a { min-width: 48px; min-height: 48px; }
+    .action-a { right: 10px; bottom: 14px; min-width: 60px; min-height: 60px; }
+    .scene-action-btn { min-width: 50px; min-height: 50px; }
   }
 </style>
 </head>
@@ -787,11 +881,11 @@
     <div class="panel farm-panel">
       <h2>🌾 我的農場 <span class="hint" id="farmHint">選工具 → 點地圖：走過去並動作</span></h2>
       <div class="tool-bar" id="toolBar"></div>
-      <div class="seed-row" id="seedRow"></div>
       <!-- RPG 場景：16×12 世界 + camera 視口 + 分層（地面/物件 y-sort/標記/VFX/玩家）-->
       <div class="map-scene-wrap">
         <div id="questDock" class="quest-dock" data-audit="quest-dock" aria-live="polite" aria-atomic="true"><!-- 任務 Dock 由 JS 渲染 --></div>
         <div id="mapScene">
+          <div class="seed-hud" id="seedHud" data-audit="seed-hud"><div class="seed-row" id="seedRow"></div></div>
           <div id="mapWorld">
             <div id="groundLayer"></div>
             <div id="markerLayer"></div>
@@ -801,6 +895,19 @@
           <div id="weatherLayer" data-audit="weather-layer" data-weather="clear" aria-hidden="true"></div>
           <div id="touchActionPreview" class="touch-action-preview" data-audit="touch-action-preview" aria-live="polite" hidden></div>
           <div id="smartAssistant" class="smart-assistant" data-audit="smart-assistant"></div>
+          <div id="sceneActionBar" class="scene-action-bar" data-audit="scene-action-bar" aria-live="polite" hidden></div>
+          <div id="buildWheel" class="build-wheel" data-audit="build-wheel" hidden></div>
+          <div id="objectBubble" class="object-bubble" data-audit="object-bubble" hidden></div>
+          <div id="mobileControls" class="mobile-controls" data-audit="mobile-controls" aria-label="Mobile controls">
+            <div class="dpad" aria-label="Move">
+              <button class="dpad-btn" data-dir="up" aria-label="Move up" type="button" tabindex="-1">▲</button>
+              <button class="dpad-btn" data-dir="left" aria-label="Move left" type="button" tabindex="-1">◀</button>
+              <span class="dpad-center" aria-hidden="true"></span>
+              <button class="dpad-btn" data-dir="right" aria-label="Move right" type="button" tabindex="-1">▶</button>
+              <button class="dpad-btn" data-dir="down" aria-label="Move down" type="button" tabindex="-1">▼</button>
+            </div>
+            <button class="action-a" id="actionA" type="button" aria-label="Action" tabindex="-1">A</button>
+          </div>
         </div>
       </div>
       <!-- 幫手自動化：早期隱藏，升「幫手機器人」後解鎖；初期動作都要走到目標執行 -->
@@ -919,10 +1026,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r60-20260715-1"></script>
-<script src="src/game.js?v=r60-20260715-1"></script>
-<script src="src/state.js?v=r60-20260715-1"></script>
-<script src="src/atlas.js?v=r60-20260715-1"></script>
-<script src="src/ui.js?v=r60-20260715-1"></script>
+<script src="src/config.js?v=r61-20260715-1"></script>
+<script src="src/game.js?v=r61-20260715-1"></script>
+<script src="src/state.js?v=r61-20260715-1"></script>
+<script src="src/atlas.js?v=r61-20260715-1"></script>
+<script src="src/ui.js?v=r61-20260715-1"></script>
 </body>
 </html>

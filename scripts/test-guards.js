@@ -215,13 +215,22 @@ function runCopyGuard() {
 }
 
 function runTouchFarmGuard() {
-  console.log("\n== R55 手機農土二段確認守門 ==");
+  console.log("\n== R61 手機地圖內 UX 守門 ==");
   const ui = read("src/ui.js");
   const html = read("index.html");
-  assert(ui.includes('activationType === "touch"') && ui.includes("confirmTouchFarmAction(tileId, act.action)") &&
-    ui.includes("pending.tileId === signature.tileId") && ui.includes("pending.tool === signature.tool") &&
-    ui.includes("pending.seedId === signature.seedId"),
-    "touch 農土需同格、同工具、同種子與同動作二次確認");
+  assert(ui.includes('activationType === "touch"') && ui.includes("renderSceneActionsForSelection()") &&
+    ui.includes("sceneActionsForTile(tile)") && ui.includes('if (isTouch && tile.plotIndex != null)'),
+    "touch 農土改由地圖內 action dock 承接，不再要求二次確認");
+  assert(ui.includes("setupSceneControls()") && ui.includes("stepPlayerDir(dir)") &&
+    ui.includes("activateFacingTile()") && html.includes("mobileControls") && html.includes("actionA"),
+    "手機有 D-pad 與 A 鍵，且重用逐格移動/面向目標動作");
+  assert(ui.includes("showBuildWheel(tile)") && ui.includes("G.buildBuilding(state, tileId, type") &&
+    html.includes("buildWheel"),
+    "建造工具以地圖內輪盤直接呼叫 buildBuilding");
+  assert(ui.includes("showAnimalBubble") && ui.includes("showBuildingBubble") &&
+    ui.includes("G.feedAnimal") && ui.includes("G.waterAnimal") && ui.includes("G.groomAnimal") &&
+    html.includes("objectBubble"),
+    "建築/動物照護改為地圖內小氣泡並重用 care/collect 函式");
   assert(ui.includes('handleMapClick(id)') && ui.includes('return "mouse"'),
     "桌面／程式化地圖操作維持單擊直達路徑");
   assert(ui.includes('typeof window.PointerEvent === "function"') &&
@@ -229,8 +238,9 @@ function runTouchFarmGuard() {
     ui.includes("LEGACY_TOUCH_CLICK_WINDOW_MS = 350") &&
     !ui.includes("lastTouchMapAt < 700"),
     "PointerEvent 優先，350ms 時窗只保留給無 PointerEvent 的舊瀏覽器");
-  assert(html.includes("touchActionPreview") && html.includes(".gtile.farm-plot") && html.includes(".gtile.touch-pending"),
-    "農土有視覺間距、選取高亮與動作預覽");
+  assert(html.includes("sceneActionBar") && html.includes("seedHud") && html.includes(".scene-action-bar") &&
+    html.includes(".seed-hud") && html.includes(".mobile-controls"),
+    "地圖內 action dock、作物 quickbar 與手機控制盤樣式存在");
 }
 
 runSwCacheGuard();

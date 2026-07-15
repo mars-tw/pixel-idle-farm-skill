@@ -219,55 +219,91 @@ async function runTouchFarmConfirmationTest(browser, base) {
     await page.goto(base);
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
-    const ids = await page.evaluate(() => window.__farm.state().map.tiles.filter((t) => t.plotIndex != null).slice(0, 3).map((t) => t.id));
+    const ids = await page.evaluate(() => window.__farm.state().map.tiles.filter((t) => t.plotIndex != null).slice(0, 4).map((t) => t.id));
     const touch = (id) => page.evaluate((tileId) => {
       const el = document.querySelector(`.gtile[data-tile-id="${tileId}"]`);
       el.dispatchEvent(new PointerEvent("click", { bubbles: true, pointerType: "touch" }));
     }, id);
-    const mouseAfterTouchEnd = (id) => page.evaluate((tileId) => {
-      const el = document.querySelector(`.gtile[data-tile-id="${tileId}"]`);
-      el.dispatchEvent(new Event("touchend", { bubbles: true }));
-      el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    }, id);
 
     const coinsBefore = await page.evaluate(() => window.__farm.state().coins);
+    const controls = await page.evaluate(() => {
+      const mc = document.getElementById("mobileControls").getBoundingClientRect();
+      const a = document.getElementById("actionA").getBoundingClientRect();
+      const seed = document.getElementById("seedHud").getBoundingClientRect();
+      return {
+        mobile: mc.width > 0 && mc.height > 0,
+        actionA: a.width >= 44 && a.height >= 44,
+        dpad: document.querySelectorAll(".dpad-btn[data-dir]").length,
+        seedHud: seed.width > 0 && seed.height > 0,
+        overflow: document.documentElement.scrollWidth - innerWidth,
+      };
+    });
+    assert(controls.mobile && controls.actionA && controls.dpad === 4 && controls.seedHud && controls.overflow <= 2,
+      `R61 手機控制盤/種子 HUD 在地圖內顯示且無橫向溢出：A=${controls.actionA}, dpad=${controls.dpad}, overflow=${controls.overflow}`);
+
     await touch(ids[0]);
-    const first = await page.evaluate(() => ({
+    const dock = await page.evaluate(() => ({
       coins: window.__farm.state().coins,
       crop: window.__farm.state().plots[0].cropId,
-      moving: window.__farm.moving(),
       pending: window.__farm.touchFarmPreview(),
-      preview: document.getElementById("touchActionPreview").innerText,
-      highlighted: !!document.querySelector(".gtile.touch-pending"),
+      visible: !document.getElementById("sceneActionBar").hidden,
+      actions: [...document.querySelectorAll("#sceneActionBar [data-action]")].map((b) => b.dataset.action),
+      bar: document.getElementById("sceneActionBar").getBoundingClientRect(),
     }));
-    assert(first.coins === coinsBefore && !first.crop && !first.moving && first.pending && first.pending.tileId === ids[0] &&
-      first.preview.includes("再點同格確認") && first.highlighted,
-      "手機首點農土只選取高亮並顯示動作／成本預覽，不扣資源也不移動");
+    assert(dock.coins === coinsBefore && !dock.crop && dock.pending === null && dock.visible &&
+      dock.actions.includes("plant") && dock.bar.width > 0 && dock.bar.height >= 44,
+      `R61 觸控點空農地改顯示地圖內 action dock，不再二次確認：actions=${dock.actions.join(",")}`);
 
-    await touch(ids[1]);
-    const changed = await page.evaluate(() => ({
-      coins: window.__farm.state().coins,
-      crops: window.__farm.state().plots.slice(0, 2).map((p) => p.cropId),
-      pending: window.__farm.touchFarmPreview(),
-    }));
-    assert(changed.coins === coinsBefore && changed.crops.every((crop) => !crop) && changed.pending && changed.pending.tileId === ids[1],
-      "手機走錯相鄰農土只改選取，不沿用前格確認且不扣資源");
-
-    await touch(ids[1]);
+    await page.click('#sceneActionBar [data-action="plant"]');
     await waitArrive(page, 9000);
-    const confirmed = await page.evaluate(() => ({
+    const planted = await page.evaluate(() => ({
       coins: window.__farm.state().coins,
-      crop: window.__farm.state().plots[1].cropId,
+      crop: window.__farm.state().plots[0].cropId,
       pending: window.__farm.touchFarmPreview(),
     }));
-    assert(confirmed.crop === "wheat" && confirmed.coins === coinsBefore - windowSeedCost() && confirmed.pending === null,
-      "手機第二次點同格才執行種植並清除預覽");
+    assert(planted.crop === "wheat" && planted.coins === coinsBefore - windowSeedCost() && planted.pending === null,
+      `R61 action dock 種植會走既有移動/種植流程：crop=${planted.crop}, coins=${planted.coins}`);
 
-    await mouseAfterTouchEnd(ids[2]);
+    await page.evaluate(() => {
+      const F = window.__farm; const st = F.state();
+      const start = window.Game.getTileXY(st, 7, 5);
+      st.player.tileId = start.id; st.player.x = start.x; st.player.y = start.y; st.player.facing = "up";
+      F.refresh();
+    });
+    await page.click('.dpad-btn[data-dir="up"]');
+    await waitArrive(page, 3000);
+    const moved = await page.evaluate(() => {
+      const st = window.__farm.state();
+      return { tile: st.player.tileId, x: st.player.x, y: st.player.y, facing: st.player.facing };
+    });
+    assert(moved.tile === "t7_4" && moved.facing === "up",
+      `R61 D-pad 逐格移動重用玩家移動狀態：tile=${moved.tile}, facing=${moved.facing}`);
+
+    await page.evaluate((targetId) => {
+      const F = window.__farm; const st = F.state();
+      const target = window.Game.getTile(st, targetId);
+      const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+      for (const [dx, dy] of dirs) {
+        const stand = window.Game.getTileXY(st, target.x + dx, target.y + dy);
+        if (stand && window.Game.isWalkable(st, stand)) {
+          st.player.tileId = stand.id; st.player.x = stand.x; st.player.y = stand.y;
+          st.player.facing = window.Game.facingTo(stand, target);
+          break;
+        }
+      }
+      F.setTool("hand");
+      F.refresh();
+    }, ids[2]);
+    const coinsBeforeA = await page.evaluate(() => window.__farm.state().coins);
+    await page.click("#actionA");
     await waitArrive(page, 9000);
-    const desktop = await page.evaluate(() => ({ crop: window.__farm.state().plots[2].cropId, pending: window.__farm.touchFarmPreview() }));
-    assert(desktop.crop === "wheat" && desktop.pending === null,
-      "混合裝置 touchend 後立即 MouseEvent 點農土仍維持單擊直接操作");
+    const actionA = await page.evaluate((targetId) => {
+      const st = window.__farm.state();
+      const tile = window.Game.getTile(st, targetId);
+      return { crop: st.plots[tile.plotIndex].cropId, coins: st.coins, facing: st.player.facing };
+    }, ids[2]);
+    assert(actionA.crop === "wheat" && actionA.coins === coinsBeforeA - windowSeedCost(),
+      `R61 A 鍵會對面向農地執行情境動作：crop=${actionA.crop}, facing=${actionA.facing}`);
   } finally {
     await context.close();
   }
@@ -343,7 +379,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r60-20260715-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r61-20260715-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -424,7 +460,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r60-20260715-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r61-20260715-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),
@@ -586,17 +622,30 @@ async function run() {
     const cam = await page.evaluate(async () => {
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       const F = window.__farm; const st = F.state();
+      st.camera.focusTileId = null; st.camera.focusUntil = 0;
       const before = { x: st.camera.x, y: st.camera.y };
-      // 直接把角色放到地圖最下方一個可走磚再重定位（避免長距離等待）
-      const far = st.map.tiles.filter((t) => window.isWalkable(st, t)).sort((a, b) => b.y - a.y)[0];
-      st.player.tileId = far.id; st.player.x = far.x; st.player.y = far.y;
+      const scene = document.getElementById("mapScene");
+      const tilePx = window.TILE_PX || 48;
+      const worldW = st.map.width * tilePx, worldH = st.map.height * tilePx;
+      const vw = scene.clientWidth, vh = scene.clientHeight;
+      const expectedCam = (tile) => {
+        const px = (tile.x + 0.5) * tilePx, py = (tile.y + 0.5) * tilePx;
+        let x = vw / 2 - px, y = vh / 2 - py;
+        x = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, x));
+        y = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, y));
+        return { x, y };
+      };
+      const far = st.map.tiles.filter((t) => window.isWalkable(st, t))
+        .map((t) => ({ tile: t, cam: expectedCam(t) }))
+        .sort((a, b) => (Math.abs(b.cam.x - before.x) + Math.abs(b.cam.y - before.y)) - (Math.abs(a.cam.x - before.x) + Math.abs(a.cam.y - before.y)))[0];
+      st.player.tileId = far.tile.id; st.player.x = far.tile.x; st.player.y = far.tile.y;
       F.refresh(); await sleep(300);
       const after = { x: F.state().camera.x, y: F.state().camera.y };
       const wt = getComputedStyle(document.getElementById("mapWorld")).transform;
-      return { before, after, farY: far.y, transform: wt };
+      return { before, after, farX: far.tile.x, farY: far.tile.y, expected: far.cam, transform: wt };
     });
     assert(cam.before.y !== cam.after.y || cam.before.x !== cam.after.x,
-      `camera 隨角色移動而平移（y ${cam.before.y}→${cam.after.y}）`);
+      `camera 隨角色移動而平移（x ${cam.before.x}→${cam.after.x}, y ${cam.before.y}→${cam.after.y}, target=${cam.farX},${cam.farY}）`);
     assert(cam.transform && cam.transform !== "none", "世界層套用 transform 位移（camera）");
 
     // 3. 視覺：地面磚 atlas / 物件 sprite / 0 emoji / 無格線
