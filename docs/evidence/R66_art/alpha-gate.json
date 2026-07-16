@@ -1,0 +1,496 @@
+{
+  "release": "R66",
+  "status": "PASS",
+  "assets": [
+    {
+      "slug": "crop_wheat",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.360352,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 22,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_carrot",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.323242,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 22,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_tomato",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.457031,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 23,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_strawberry",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.395508,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 28,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_corn",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.488281,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 31,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_pumpkin",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.413086,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 35,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_radish",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.484375,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 24,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_bell_pepper",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.489258,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 14,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_potato",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.474609,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 26,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_sunflower",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.441406,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 25,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_grapes",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.461914,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 26,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_melon",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.492188,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 17,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_pea",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.314453,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 14,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_sweet_potato",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.375,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 23,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "crop_winter_kale",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.493164,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 27,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tool_plant",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.387695,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 26,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tool_harvest",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.483398,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 22,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tool_water",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.552734,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 33,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tool_clear",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.469727,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 29,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tool_build",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.532227,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 25,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tool_inspect",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.446289,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 26,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tab_tile",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.628906,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 29,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tab_orders",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.493164,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 23,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tab_upgrades",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.494141,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 25,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tab_story",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.509766,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 31,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "tab_journal",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.558594,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 23,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "system_coin",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.550781,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 20,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "system_xp",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.47168,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 32,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "system_storage",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.579102,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 32,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "system_settings",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.549805,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 23,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "system_help",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.366211,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 38,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "system_reset",
+      "pass": true,
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.488281,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 31,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "assistant_idle",
+      "pass": true,
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.344971,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 35,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "assistant_tip",
+      "pass": true,
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.366943,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 42,
+      "invalid_palette_colours": []
+    },
+    {
+      "slug": "assistant_alert",
+      "pass": true,
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_occupancy": 0.333984,
+      "corners_clear": true,
+      "transparent_rgb_pixels": 0,
+      "palette_colours": 41,
+      "invalid_palette_colours": []
+    }
+  ]
+}

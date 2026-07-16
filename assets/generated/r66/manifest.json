@@ -1,0 +1,1473 @@
+{
+  "schema_version": "farm-r66-ui.v1",
+  "release": "R66",
+  "prompt_version": "farm-r66-ui-v1.0",
+  "generated_at": "2026-07-17",
+  "requested_model": "gpt-image-2",
+  "actual_model": "gpt-image-2",
+  "generation_interface": "Codex built-in image_gen",
+  "style_contract": {
+    "palette": "R62",
+    "outline": "1px #251d35",
+    "light": "warm top-left",
+    "matte": "#ff00ff"
+  },
+  "counts": {
+    "crops": 15,
+    "tools": 6,
+    "tabs": 5,
+    "systems": 6,
+    "icons": 32,
+    "assistant_skins": 3
+  },
+  "runtime": {
+    "atlas": "ui-icons-32.png",
+    "frames": "ui-icons-32.json",
+    "sha256": {
+      "atlas": "89315b2f696644c79b50d2554fc3f3280a9f5d2ab8eb6be0fffc930e718f4ad3",
+      "frames": "87b9d22e563a97634e5f04f200460aa2010b4f3c9e08f124cf9dce21c0bfef85"
+    }
+  },
+  "alpha_gate": {
+    "status": "PASS",
+    "passed": 35,
+    "total": 35
+  },
+  "assets": [
+    {
+      "slug": "crop_wheat",
+      "label": "小麥",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a ripe tied sheaf of golden wheat with three grain heads. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_wheat.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f605ed",
+      "outputs": {
+        "master": "masters_opaque/crop_wheat.png",
+        "mask": "masks/crop_wheat-mask.png",
+        "rgba": "rgba/crop_wheat.png",
+        "native": "native/crop_wheat-32.png"
+      },
+      "sha256": {
+        "source": "5925bfa95840af8adbbb91b95bc2f81808d97bfe6008c855633f90ded8c5ee69",
+        "master": "db32c7f72d9f0114014466aea48bac26099b0c60fb948ed5ffd45c3cf2f13f4c",
+        "mask": "6be0d4d78f9b2870d787c55afbc12e3cd53f6b6dbdfdb30a69f7ae4df935a693",
+        "rgba": "873585dc243018b09e2259a7e493d72d617114f912acdb92a5b8ed5f7b873a9e",
+        "native": "8a22d11b3d9a0157dc8b4c15caf56f2a2ce956a8921cba6b5a8d3c5797d20227"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.360352,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 22,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_carrot",
+      "label": "胡蘿蔔",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one bright orange carrot with a compact leafy green crown. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_carrot.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa03f7",
+      "outputs": {
+        "master": "masters_opaque/crop_carrot.png",
+        "mask": "masks/crop_carrot-mask.png",
+        "rgba": "rgba/crop_carrot.png",
+        "native": "native/crop_carrot-32.png"
+      },
+      "sha256": {
+        "source": "7182e2e5fa2b3d93181410e4bd92cb841bfd25354ee0893f54b57fe1a6805cc5",
+        "master": "478b70cba72dd65f0877328ab33b631fb16ed70de0429ec282148792e52ca769",
+        "mask": "0c37ca8a343fb4841132757c4b92e8eceb5c71fbd1ed70ddb32894d37e9572c6",
+        "rgba": "bf41abefd283bb6e6b7ee4bc099992120d47e90b13c9b5ca79a910242db050ac",
+        "native": "76c0ff15dc87e1b6535154b02df3a0fb8ea3479b4539fc8d248d136b15e77eb7"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.323242,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 22,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_tomato",
+      "label": "番茄",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one ripe red tomato with a crisp five-point green calyx. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_tomato.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f903f6",
+      "outputs": {
+        "master": "masters_opaque/crop_tomato.png",
+        "mask": "masks/crop_tomato-mask.png",
+        "rgba": "rgba/crop_tomato.png",
+        "native": "native/crop_tomato-32.png"
+      },
+      "sha256": {
+        "source": "4d9c0c9444a3def2d6095f85da8ce3559050f36e915305e61f5f4d851d5aea30",
+        "master": "989d6cfadcc0adf265281921231156fc85ec4420d1e0317aacc3bf444bcace84",
+        "mask": "97968ef086d43f884a2bdc7ba7a48f50b9abb10cc933046d7833220ba0948be2",
+        "rgba": "737919e76a6a926a9967dc5f58192e708f0c223883dbcd8dbcc19ead7308297e",
+        "native": "48d95fd9f63fbad1e78bb90bc22afc5a4da113c44df58e057807ba2c138a39a4"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.457031,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 23,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_strawberry",
+      "label": "草莓",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one ripe heart-shaped strawberry with green leaves and chunky cream seeds. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_strawberry.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f403f0",
+      "outputs": {
+        "master": "masters_opaque/crop_strawberry.png",
+        "mask": "masks/crop_strawberry-mask.png",
+        "rgba": "rgba/crop_strawberry.png",
+        "native": "native/crop_strawberry-32.png"
+      },
+      "sha256": {
+        "source": "57956a58a545f6457b8898e139f07fd60a115d29e7b4c6971a4f8a33fc0795d3",
+        "master": "ab44020af47f14b45f6cd0fca6a84093a77242006350cbe820e42eda187c43e9",
+        "mask": "eac5ac41d87a0e1de35899e95a0420a52be162a6fe1619b9bbe569295e4c417b",
+        "rgba": "e551a5cd1bbca3d62f7b2488cd694de3046c45c93943213097ddc2b7bfbb966c",
+        "native": "249ffdf7a3446c5e3b1c25923e775b204d639db768ec94965b7e652f8bbc432a"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.395508,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 28,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_corn",
+      "label": "玉米",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one golden ear of corn partly wrapped by two green husk leaves. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_corn.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f903f5",
+      "outputs": {
+        "master": "masters_opaque/crop_corn.png",
+        "mask": "masks/crop_corn-mask.png",
+        "rgba": "rgba/crop_corn.png",
+        "native": "native/crop_corn-32.png"
+      },
+      "sha256": {
+        "source": "f6b9093ed7e8306597668ef52ac1a6b9bc98feec998b18eccc48d90e538f05ea",
+        "master": "7e81178f59f40594bec4416966858b4004c1e91477ae559bab6101078c27c3a7",
+        "mask": "faea9cd3fd346c58242af4f662088e8b48b14025f6f396fa915001b4632dd9e8",
+        "rgba": "0a4badbfedb438ae4c0da16713753bd46045ab2ab2e77a17756aa5b26cc9c892",
+        "native": "2d4a32114daf4ff02a294d3be238bb9886ced3b2b9205f3e7d1149f11ecb5fd9"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.488281,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 31,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_pumpkin",
+      "label": "南瓜",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 game UI icon concept master for 128/64/32 export. Primary request: one isolated ripe golden pumpkin crop icon with two broad green leaves, short curled vine, and one tiny white blossom; no soil tile. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy pixel farm RPG sprite concept; autumn Morninglight Farm palette; stepped pixel clusters. Composition: centered, about 62% fill, readable at 48x48, generous padding. Lighting: consistent warm top-left light. Constraints: no magenta in subject; uniform background; no shadow, gradient, texture, floor, glow, reflection, anti-aliased vector edge, UI frame, emoji, text, logo, or watermark.",
+      "source_mode": "reused_wave0_calibration",
+      "source": "assets/generated/r66/source/crop_pumpkin.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fc03f9",
+      "outputs": {
+        "master": "masters_opaque/crop_pumpkin.png",
+        "mask": "masks/crop_pumpkin-mask.png",
+        "rgba": "rgba/crop_pumpkin.png",
+        "native": "native/crop_pumpkin-32.png"
+      },
+      "sha256": {
+        "source": "270af9b1d62cb0bc9c6d5793413f093800616a9379d7dbe6ac46c0596a574943",
+        "master": "fa4cb598c83f961e95e9deffd245053eea19a8aff3cf236081adaca8c43977a7",
+        "mask": "92389a30f7a4fae3f02345bf5e9a1194062758120dd06e0a66b3e230fef9379d",
+        "rgba": "2bfe6b525ac96cc22fcd71ca1eec659b63b57cd1a5b85c72c0fbf374c60cb5ff",
+        "native": "cc28b1631b18b229dc50bbe4544bc85b255e4358454ab809e82220ed7795a426"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.413086,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 35,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_radish",
+      "label": "蘿蔔",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one round red radish with a white root tip and three green leaves. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_radish.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f705f2",
+      "outputs": {
+        "master": "masters_opaque/crop_radish.png",
+        "mask": "masks/crop_radish-mask.png",
+        "rgba": "rgba/crop_radish.png",
+        "native": "native/crop_radish-32.png"
+      },
+      "sha256": {
+        "source": "09c8a978f1050c12968d6740387233dd62a9f1aac7ff03448834b36b748c2480",
+        "master": "e13d1230a778715bca362e20f4ded55abde33d9f0064d6dd88435a2429f96635",
+        "mask": "058082c695910ed85f88dd18bc397e38551be7be8c3bf2dffa02f9e14d5b0f78",
+        "rgba": "17fc0da41ecc9af36dd6e63468593a5c6df701a82ce8551abc9f5b236c01477a",
+        "native": "e27864af4098c0e9beeba503da5b7e409cc51ac76e2399570973c9f4301b8574"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.484375,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 24,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_bell_pepper",
+      "label": "甜椒",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one glossy red bell pepper with a short green stem. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_bell_pepper.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f803f1",
+      "outputs": {
+        "master": "masters_opaque/crop_bell_pepper.png",
+        "mask": "masks/crop_bell_pepper-mask.png",
+        "rgba": "rgba/crop_bell_pepper.png",
+        "native": "native/crop_bell_pepper-32.png"
+      },
+      "sha256": {
+        "source": "0dd3cad3363b7d0cfe53b56ea81fe792f3830033708f778a96a251080101aef6",
+        "master": "01a038688e4f59c852b306fe5dbcfeee78cdf2f7c00f8897d7d553043ad4c69f",
+        "mask": "5ad9fc4d4c2f1ce1d34f5320064e68db3c91e9840dee97709eeaea54f6359811",
+        "rgba": "69e64a5a19a00a43007b4a56c3dd78b5daa568c9a8e99f76afbdd014060be94e",
+        "native": "7df985e9b9ccf5ee47d6dd88a5cd2a079dac429324d1b3ea7590697064be365d"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.489258,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 14,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_potato",
+      "label": "馬鈴薯",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one warm brown potato with a few readable eye dimples. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_potato.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa06e9",
+      "outputs": {
+        "master": "masters_opaque/crop_potato.png",
+        "mask": "masks/crop_potato-mask.png",
+        "rgba": "rgba/crop_potato.png",
+        "native": "native/crop_potato-32.png"
+      },
+      "sha256": {
+        "source": "ff6fe041c977fa273de670a3551b570c0ace5e2f9cefff0641373ba8888be840",
+        "master": "fecf0718ecc8c03bceadc856417ba1c1d5d90ccc79bd52d3645326f262e55704",
+        "mask": "616f1baba599efe0ae7186f11ffc947a9b6aad9468cfb75969bfab51eb230b5a",
+        "rgba": "43be491664e2061189d431d050eb3554ff8b748387ea5bbe0782c7fabe34fe47",
+        "native": "d7e74de1e34485b311fc2c4d6ab63aaa2e84d0853b77104ecce53fbd7da9335a"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.474609,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 26,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_sunflower",
+      "label": "向日葵",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one cheerful sunflower head with gold petals and a dark seed center. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_sunflower.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f703eb",
+      "outputs": {
+        "master": "masters_opaque/crop_sunflower.png",
+        "mask": "masks/crop_sunflower-mask.png",
+        "rgba": "rgba/crop_sunflower.png",
+        "native": "native/crop_sunflower-32.png"
+      },
+      "sha256": {
+        "source": "39907428093c8172da3f8f4880abdbce9d693d6518e3652b9da92fb8d1ce8352",
+        "master": "fd1f00aad7ec904cf5617eb7675029ea60165f8b1cab275a95ae8e3cba2b84ab",
+        "mask": "226c03b380e2b0c7cdc1ac2aa2202807dcab5df4474735bcb017c8302f2dc6c1",
+        "rgba": "93c7838f43b2924d67f3bec68b95ae704202be30747bd2bcb6cbb044f7b646ec",
+        "native": "e9284e4f8783d111bc06b97389fb31664f96e0a3c6e769d3036dc9ae37537307"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.441406,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 25,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_grapes",
+      "label": "葡萄",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one compact bunch of violet grapes with one broad green leaf. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_grapes.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f804f2",
+      "outputs": {
+        "master": "masters_opaque/crop_grapes.png",
+        "mask": "masks/crop_grapes-mask.png",
+        "rgba": "rgba/crop_grapes.png",
+        "native": "native/crop_grapes-32.png"
+      },
+      "sha256": {
+        "source": "609af30d2c0c441fb091663ab3003195d6c30789903fe886e26d1561d9455458",
+        "master": "29eb79dbd58665accc3589f9e8f3021b995c9f4cd4ae02c6b3bdd646027c2c4e",
+        "mask": "b8c8835a1193aaea925bfc0c65be8541a19d6ecaef5af1b1bed341a0f9b8531d",
+        "rgba": "2d2fdcbbcdffe6e758aa0a91f14092570d01f830d96671c2afa6818e2922e406",
+        "native": "a84cb9b88139376de2a30c076904521fe8cabc568e9903fed05c4e3c817452a0"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.461914,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 26,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_melon",
+      "label": "香瓜",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one round striped green melon with a short curled vine. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_melon.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb03f5",
+      "outputs": {
+        "master": "masters_opaque/crop_melon.png",
+        "mask": "masks/crop_melon-mask.png",
+        "rgba": "rgba/crop_melon.png",
+        "native": "native/crop_melon-32.png"
+      },
+      "sha256": {
+        "source": "6470c0d3f149a45f59ddb50757e9cf540223abaa7924ee8faf8fe0f1f7a7f5d0",
+        "master": "f98a4fc80a19062b0631b3c1dc407bbac895536c443359f5cec1aafc427de123",
+        "mask": "885381b11f85e227c154f7dd074b3760822e726ba90a8c545d8f20790a0a6095",
+        "rgba": "f832c417a714c2c7d9b5ca13edf1235b9bd4a34b11c52252c43624bbc7ed4152",
+        "native": "2f7fc407bc681ed5d2b63f87f4a6574cffe6aa47019075a8a6e033e4351f985d"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.492188,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 17,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_pea",
+      "label": "豌豆",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one open green pea pod showing three round peas and one tiny leaf. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_pea.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f804f3",
+      "outputs": {
+        "master": "masters_opaque/crop_pea.png",
+        "mask": "masks/crop_pea-mask.png",
+        "rgba": "rgba/crop_pea.png",
+        "native": "native/crop_pea-32.png"
+      },
+      "sha256": {
+        "source": "6db12726ae6e7386d6ebc33241748fe1947ca9e67433ec156a0152e058db7401",
+        "master": "7422841dc4563ee63f5ea7f9f306ff5327b8b0fdb764b8e0343b442737d6aed6",
+        "mask": "f6263bfb88ec7804f5d84c9411cc374b90c22c3af4a9104c4a6498617b709858",
+        "rgba": "08f5d742faa70c9bf3fc46a2356fa45c90d954f3c330e7d715b0fa34e00d3ffa",
+        "native": "81c5a73f5c4dbcfee8e53e33d89c7e7d4c0e93eb1cfa2ca4a027c63f359435c2"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.314453,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 14,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_sweet_potato",
+      "label": "地瓜",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one reddish-purple sweet potato with a cut golden end and a small green leaf. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_sweet_potato.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f903f7",
+      "outputs": {
+        "master": "masters_opaque/crop_sweet_potato.png",
+        "mask": "masks/crop_sweet_potato-mask.png",
+        "rgba": "rgba/crop_sweet_potato.png",
+        "native": "native/crop_sweet_potato-32.png"
+      },
+      "sha256": {
+        "source": "c1dda50f7199174b8ca1e97f07fec06cf27728a898b764ff95b9293bee4ffbec",
+        "master": "7b40b3fe2780247f4c73731f324fe5939417edd716ce3b088afec63da361d9c9",
+        "mask": "0be9937dffca183d46e730ec86e40de5e0dee6055a037c36763651c8f01d4ae7",
+        "rgba": "946284516f2b1d4dcf06397b798c08fab477146f22fec291fb69ceea716e14f6",
+        "native": "eab90510e8cc37c81d217f03fa1920c2d584aae8f93cb2369d1e01773d4b3c01"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.375,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 23,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "crop_winter_kale",
+      "label": "冬羽甘藍",
+      "category": "crop",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one compact winter kale rosette with layered blue-green leaves. Category: crop. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/crop_winter_kale.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f903f5",
+      "outputs": {
+        "master": "masters_opaque/crop_winter_kale.png",
+        "mask": "masks/crop_winter_kale-mask.png",
+        "rgba": "rgba/crop_winter_kale.png",
+        "native": "native/crop_winter_kale-32.png"
+      },
+      "sha256": {
+        "source": "d2a9c2ad3bb32c2caaae30251057791706a6e5c991416a285b540e1b044aee07",
+        "master": "67c78bb26b0beaeda44633ac70115db8fc9e57c733572abefc0162c64b4d210d",
+        "mask": "17b7d4adc5ea7b7b9d63c029c8f04c401edc9487e4bab5afa5d2aa1b904a6cca",
+        "rgba": "4e20170addaac4cb52bb2834d140f72feaa88db40b714b89b5ba40b9c7bd87ae",
+        "native": "86aa59eed842dff22715e6763bd56c746fe52f6dc64575bfeb6ddc2f992e1ed8"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.493164,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 27,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tool_plant",
+      "label": "種植",
+      "category": "tool",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a seed pouch with one seed and a fresh sprout. Category: tool. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tool_plant.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb04f1",
+      "outputs": {
+        "master": "masters_opaque/tool_plant.png",
+        "mask": "masks/tool_plant-mask.png",
+        "rgba": "rgba/tool_plant.png",
+        "native": "native/tool_plant-32.png"
+      },
+      "sha256": {
+        "source": "7e5c0687c34da519ccc2cffd7dff1d091f43a661ce62995b2be99ed97820ffe4",
+        "master": "6e5c124df18a2d12db890a0642c69eebd465162bb2287f92ae92a8a8ea246b26",
+        "mask": "2655ba40885715a74ddc4505226a06af9038f9f64dbe2618aa8a4228a6694f74",
+        "rgba": "31c99d6b58ca9991e32e241ebf344bb53281d6d6c7fe8d1936f6972c99679d53",
+        "native": "fc2e016fbbbba09fa5c7f964734e434549664dd979dfe0727c77074bfb498810"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.387695,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 26,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tool_harvest",
+      "label": "收成",
+      "category": "tool",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a small curved harvest sickle crossing one wheat head. Category: tool. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tool_harvest.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f704f0",
+      "outputs": {
+        "master": "masters_opaque/tool_harvest.png",
+        "mask": "masks/tool_harvest-mask.png",
+        "rgba": "rgba/tool_harvest.png",
+        "native": "native/tool_harvest-32.png"
+      },
+      "sha256": {
+        "source": "400ae04c584898388ca52a0cbc6e7610fc212c7aac2cc59ca9faea1f7fb87ac0",
+        "master": "43e60920b8236dcec659b935753e0b6570611bae0a9a1a934be31d7cf4bbe72c",
+        "mask": "27ff4035861301832602c29ccb2ac702babf7f563b94f8aa801faed13e2d1bee",
+        "rgba": "214b7d3d5dc3f7717d76e9fcf0b168c8473c4c8e7333f5ac9b892fd343dc160d",
+        "native": "c8518ac4b31f031c842ad319709064adf9c73b3b90cca0f8b59acbd5df74b445"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.483398,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 22,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tool_water",
+      "label": "澆水",
+      "category": "tool",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a compact blue-green watering can with three water drops. Category: tool. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tool_water.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb04f8",
+      "outputs": {
+        "master": "masters_opaque/tool_water.png",
+        "mask": "masks/tool_water-mask.png",
+        "rgba": "rgba/tool_water.png",
+        "native": "native/tool_water-32.png"
+      },
+      "sha256": {
+        "source": "78d279c040405820dcbc729e97a2bf309974ce762dc6afb094e6ab9803899e8a",
+        "master": "310b64cb81b666ee85419d6bd8204e0052c0c03f828ffcdfe9e85a065590573e",
+        "mask": "da1e2676ef26038da35ba8c898c50ae39af4e51fe406df92e692da7abf61e215",
+        "rgba": "f658e5a7332d52d416daa89dff97cf3b1b00b8df935c441268356efba3778fe5",
+        "native": "61b9c5e0c95f1882be09c49873364e82b2ebed9b214833c229380c5eab6b97c4"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.552734,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 33,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tool_clear",
+      "label": "清理",
+      "category": "tool",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a sturdy farm hoe with one loosened soil clod. Category: tool. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tool_clear.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb03f9",
+      "outputs": {
+        "master": "masters_opaque/tool_clear.png",
+        "mask": "masks/tool_clear-mask.png",
+        "rgba": "rgba/tool_clear.png",
+        "native": "native/tool_clear-32.png"
+      },
+      "sha256": {
+        "source": "7da9a4dc1311f8d22905fd911fbb833942de8d63d636d7cfc1161a13dfff0926",
+        "master": "08db124316a301e4e06a1c341551f03db6625be373c7fd016e68af46d0a03e3b",
+        "mask": "f61455932e6037399552fc9d30571df9b9fe925d24e24573b2459758c09030a0",
+        "rgba": "8c4411346ff6f09629ae93bd66d6ad6ec612bb970eab1451d906acf095de511b",
+        "native": "399f87f549825a2e60aa38383b6c506cee1756a260f1eff1a180077606fae3e3"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.469727,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 29,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tool_build",
+      "label": "建造",
+      "category": "tool",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a wood-handled hammer crossing one short fence plank. Category: tool. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tool_build.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f904f4",
+      "outputs": {
+        "master": "masters_opaque/tool_build.png",
+        "mask": "masks/tool_build-mask.png",
+        "rgba": "rgba/tool_build.png",
+        "native": "native/tool_build-32.png"
+      },
+      "sha256": {
+        "source": "1c5589d844bbea08e7bfdac5a9dc0a2ac6489c01d6ee602f4ba9cc995485423d",
+        "master": "0a938d63a92666e9e14f568e147c1ae7d71116986f5083361e1c32482f07cbaf",
+        "mask": "d35bd0b955ade4371566d427d9a90c0020ad76bbc2aa5572834e9e046f935f7c",
+        "rgba": "64fb92383d9ebd2f20174d2d9e311b43d1ebbc9fff0d32c0bae71c5147a2d8d3",
+        "native": "230e583533823b41980c04d95fa059cf8ddf182e733fe0fcfdf1252077e8979a"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.532227,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 25,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tool_inspect",
+      "label": "檢視",
+      "category": "tool",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a brass-rimmed magnifying glass over one green leaf. Category: tool. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tool_inspect.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb03f8",
+      "outputs": {
+        "master": "masters_opaque/tool_inspect.png",
+        "mask": "masks/tool_inspect-mask.png",
+        "rgba": "rgba/tool_inspect.png",
+        "native": "native/tool_inspect-32.png"
+      },
+      "sha256": {
+        "source": "20cff6934d391604e9200faf757aa8f1ab3840e9445e61496163e99331198a7f",
+        "master": "2abb2d2f4d674ada1114cfa7fe8735a3dd26d1273d5a835663bdc02acf01ef7f",
+        "mask": "3e428c633447a74c919bd05008ad6b35b32a0b08553b51bf6f96733141036e21",
+        "rgba": "91bb022d4916a3aaf2285d8f711a24644f76bd5b965e3dd874909a5f638321af",
+        "native": "0b27e5122eb3bc1bbe16e0b97485b199d7b5aac398cc4787c4d6a9415d095641"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.446289,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 26,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tab_tile",
+      "label": "地塊",
+      "category": "tab",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a compact tilled-soil plot with one fresh sprout. Category: tab. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tab_tile.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa03ea",
+      "outputs": {
+        "master": "masters_opaque/tab_tile.png",
+        "mask": "masks/tab_tile-mask.png",
+        "rgba": "rgba/tab_tile.png",
+        "native": "native/tab_tile-32.png"
+      },
+      "sha256": {
+        "source": "227eaf9c6d9ba49d19120cbee87cf4023a1be38f267ab218595bb115905a3383",
+        "master": "ae52d435f9a85236065eba0aab4f7444c8e5f73e7bd728219db4b854f04a9a82",
+        "mask": "ea092e93780f0eb7b4ee48181b50e7d81000a1d49a5ba5d3a22cb32e3cf95942",
+        "rgba": "28eaa12c2af4d8cef7d22632c0c21f63068f10ec0acf976035673d16b9985275",
+        "native": "def5daab99ecf7527dcd9c0ff6256f20ee84e09b4b8b96a52c485d6dc011658b"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.628906,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 29,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tab_orders",
+      "label": "訂單",
+      "category": "tab",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a cream farm order clipboard with two abstract check marks and no writing. Category: tab. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tab_orders.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa04ef",
+      "outputs": {
+        "master": "masters_opaque/tab_orders.png",
+        "mask": "masks/tab_orders-mask.png",
+        "rgba": "rgba/tab_orders.png",
+        "native": "native/tab_orders-32.png"
+      },
+      "sha256": {
+        "source": "f7dd8a34518ac3f1f908ee1a4bf2c28a4cf598d50a1f08a778a6c37561f0b3e5",
+        "master": "a85346b27929cce5c9b67b380840823a4e082b5821875612fb62151c44cf379d",
+        "mask": "278800e1be6c273e23cf046c2f87868aa037f9726d3ff051508e49c9a99c17d5",
+        "rgba": "0558032631afb087c2327fd91b7841221936e6d52d008565285410a1699f5808",
+        "native": "fb670dd61dc19d7453e91f4ba3f98b651293a2072ad8074922ca2ffaa9c2de30"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.493164,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 23,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tab_upgrades",
+      "label": "升級",
+      "category": "tab",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a small timber barn with an upward gold arrow and no writing. Category: tab. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tab_upgrades.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb03f8",
+      "outputs": {
+        "master": "masters_opaque/tab_upgrades.png",
+        "mask": "masks/tab_upgrades-mask.png",
+        "rgba": "rgba/tab_upgrades.png",
+        "native": "native/tab_upgrades-32.png"
+      },
+      "sha256": {
+        "source": "aacab75881badfa5b825d78d1a7f3d26f6f890968e9c4f5402e2551de7b2b702",
+        "master": "5eef3ef33c79518920ecc37ef19a4fe3c46c64f678b3638648f8d2a5aa413d4f",
+        "mask": "45594219dc341b7ad823501487cb33a668dd8c89f5fda66a37c74fea914966d9",
+        "rgba": "0abd2d0283ab079e1d757826f4c3b9d8860d488e95d9d7b6d22e90dd36114e40",
+        "native": "7ee130a604d8cab04ee2b65d18fca392f6a8434a182f530b90666d4319dd4055"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.494141,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 25,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tab_story",
+      "label": "故事",
+      "category": "tab",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated an open cream storybook with a tiny sunrise symbol and no writing. Category: tab. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tab_story.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f706f6",
+      "outputs": {
+        "master": "masters_opaque/tab_story.png",
+        "mask": "masks/tab_story-mask.png",
+        "rgba": "rgba/tab_story.png",
+        "native": "native/tab_story-32.png"
+      },
+      "sha256": {
+        "source": "796e0e32b1fb90daff954ba2a93fe0222a430d08916df2aabc66a9fc45211657",
+        "master": "6cd19865d429b656f38088f317f1092da9877923949927793acb90da3dbb06bd",
+        "mask": "e3aaa63a60ed1e2aa5f0e2a071ef1a7304fcee60eb0d03e07d926deabcbe6241",
+        "rgba": "886b7141982a1163d407cfc3c51be0c5d118865b7e680a265a9123a8bd3815b0",
+        "native": "bd36ad5628ee8ce3410fd6988e8fc5f770ff97961ef29c1d44a3190d3fbaccb4"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.509766,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 31,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "tab_journal",
+      "label": "圖鑑",
+      "category": "tab",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a closed green field journal with a pressed leaf emblem and no writing. Category: tab. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/tab_journal.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb03f8",
+      "outputs": {
+        "master": "masters_opaque/tab_journal.png",
+        "mask": "masks/tab_journal-mask.png",
+        "rgba": "rgba/tab_journal.png",
+        "native": "native/tab_journal-32.png"
+      },
+      "sha256": {
+        "source": "ed5aea71d72c23fba593e5265771704f767468baedf3c045cb0ea1639d9c354e",
+        "master": "3a847473bdad63cc1f2643f12d876be162bd585fcb265c66f36026acac436f2d",
+        "mask": "05ad97900fc4f34f4bff82241689733f11687704ed2763c6eb1cf684829a6b67",
+        "rgba": "7d497d359fb0e7e911e8e3d4ebf97d745576f67635a66863840bc21177692884",
+        "native": "b6d7f6a13f3f6d0e972c53a5c665eb1ec3bb39020d90af447c907b8ed6cc90c5"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.558594,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 23,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "system_coin",
+      "label": "金幣",
+      "category": "system",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one embossed gold farm coin with a simple sprout emblem. Category: system. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/system_coin.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa04ee",
+      "outputs": {
+        "master": "masters_opaque/system_coin.png",
+        "mask": "masks/system_coin-mask.png",
+        "rgba": "rgba/system_coin.png",
+        "native": "native/system_coin-32.png"
+      },
+      "sha256": {
+        "source": "20fac2e8a7bc280db3660dd147cd4c641d0e099e34896909ffdd78c36ec97ba3",
+        "master": "ca4225950db0000546dccabdccc78497e5c2986efcacfe05b9907046b2f0d34a",
+        "mask": "7e4fc17e8c51a87ab3a373340e314fa761a43b79df1d0b7844937dd0eb02ab60",
+        "rgba": "6f8fe128e1eefb3c9ca136c000d4c601eeaa2bc39a3f0fcfbfae975f5ee3135e",
+        "native": "6c47602a01a60ee90db61097f54d46dc82d49f467c67bfd958dfde85eef34144"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.550781,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 20,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "system_xp",
+      "label": "經驗",
+      "category": "system",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one warm gold five-point experience star with a tiny green leaf accent. Category: system. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/system_xp.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f805f5",
+      "outputs": {
+        "master": "masters_opaque/system_xp.png",
+        "mask": "masks/system_xp-mask.png",
+        "rgba": "rgba/system_xp.png",
+        "native": "native/system_xp-32.png"
+      },
+      "sha256": {
+        "source": "fd34962a0583a9f5e3f5cac1650594921a14f4cde10862d043a46a2c95df73ad",
+        "master": "873aa27e5716c66e0b2e5656b8a96d6beebcf46707af591511275ee5eb58dc14",
+        "mask": "5015b86286690e08353dc819b3896014855ee222775a6dd5f6c84c2e3c5f8028",
+        "rgba": "69e1984e89c0407b91a7835a8fe78aa9122d4c8f683f970b7105671b285f1992",
+        "native": "183e5ef8a81cdc7cab46250f7001cee95266fbb8f5e322ab5f6b6986990d54ba"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.47168,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 32,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "system_storage",
+      "label": "倉庫",
+      "category": "system",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated a compact wood-and-brass storage crate with one cream sack. Category: system. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/system_storage.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa04f4",
+      "outputs": {
+        "master": "masters_opaque/system_storage.png",
+        "mask": "masks/system_storage-mask.png",
+        "rgba": "rgba/system_storage.png",
+        "native": "native/system_storage-32.png"
+      },
+      "sha256": {
+        "source": "acf9ca042dcd4f03034ef81a85f9ed5dfb597f5c92c082acdf493b7238b8eae8",
+        "master": "933629f53dd0184cf4cd40c6f338e250a6e591d732f725f732e2ecb301352b48",
+        "mask": "7c568ec5128083cbc32cbc6f32ab42c256979b94fc2b669745c08f993dc19806",
+        "rgba": "eb9ca3fa3377edd55f3eacfa23a4f4924778cac1a3828ccc8f35aca891c59bb8",
+        "native": "d0c5e40f0eb4743f68d889916b4ca73650978f7cb9b7609f8d7b17650f6d7974"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.579102,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 32,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "system_settings",
+      "label": "設定",
+      "category": "system",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one brass gear around a small green leaf hub. Category: system. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/system_settings.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fb03f8",
+      "outputs": {
+        "master": "masters_opaque/system_settings.png",
+        "mask": "masks/system_settings-mask.png",
+        "rgba": "rgba/system_settings.png",
+        "native": "native/system_settings-32.png"
+      },
+      "sha256": {
+        "source": "5c7b014d04ab15f8a8e85adf207d2009c2777a63cb0d4e0a2ea22654c0bbe257",
+        "master": "8d8ba6736d2099c6e8106039f92d8df48e2439bc09a6a85f4ea23d3cdc774378",
+        "mask": "ff8f3f97a6425d7114cefe99f190e3b82730341b890924a0b3a027d7f0498065",
+        "rgba": "d654e01f364143d7e718ca545cfdcaede167f045245e21f4dc764930dc8493a6",
+        "native": "f247964df719cfeb812be5d43fa0230d1de3ba98d12cf875ce4dd0d976f2d9cd"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.549805,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 23,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "system_help",
+      "label": "說明",
+      "category": "system",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one warm brass farm lantern with a tiny cream question-shaped glow that is symbolic, not typography. Category: system. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/system_help.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa03f7",
+      "outputs": {
+        "master": "masters_opaque/system_help.png",
+        "mask": "masks/system_help-mask.png",
+        "rgba": "rgba/system_help.png",
+        "native": "native/system_help-32.png"
+      },
+      "sha256": {
+        "source": "7bf2ddab90947211b293e6b58e4a35cc456d2fcef05750e4dc181f319d5eca2e",
+        "master": "f90a4d22b10bb04df767c4099ee0a0f9e38f94c18ec87d4f6a5ce00b5c53c110",
+        "mask": "03c08d5c61bca7a8be8a6ba73d51ce765f47f00359decd89698874a15298d3bd",
+        "rgba": "df239f888b677d93c926e8cd6c1206f2398fbb3bbdc6cf056ab91b1852b57978",
+        "native": "3f51c720000a3ffcd3ecfd6d5f6e1f44f7da704b4948e826d39a1e50ba224ba9"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.366211,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 38,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "system_reset",
+      "label": "重置",
+      "category": "system",
+      "native_size": 32,
+      "prompt": "Use case: stylized-concept. Asset type: 512x512 opaque game UI icon concept master for native 32px export. Primary request: one isolated one green circular sprout arrow wrapping around a small cream ledger with no writing. Category: system. Scene/backdrop: perfectly flat solid #ff00ff chroma-key background. Style/medium: cozy Morninglight Farm pixel RPG; R62 controlled palette; stepped hard-edged pixel clusters; 1px-equivalent deep plum-brown contour; no antialias blur. Composition: centered 62% fill, generous safe padding, readable at 32px. Lighting: warm top-left key light and restrained cool lower-right shadow. Constraints: no magenta in subject; uniform matte without shadow, gradient, texture, glow spill, reflection, floor, checkerboard, transparency, UI frame, emoji, text, logo, watermark, duplicate subject, or scenery.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/system_reset.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f904dd",
+      "outputs": {
+        "master": "masters_opaque/system_reset.png",
+        "mask": "masks/system_reset-mask.png",
+        "rgba": "rgba/system_reset.png",
+        "native": "native/system_reset-32.png"
+      },
+      "sha256": {
+        "source": "9703cfe08277a7443db16f039a96e332fde599d0fde3c1ee777bba804902a7d5",
+        "master": "fbec0b6d72fe4e26369efe8e4d0596357fef10e713a87be5c99eeefe516ffe33",
+        "mask": "b4a566aa9c023ab2a3ef3292b134aa67b4b19b847d4e63e05932099f393525fe",
+        "rgba": "bf7df9058e07ee646e9009219e696051284a32fcc6d67748509232d3e24f860c",
+        "native": "fd060af9a13e302a3aeb00a2cad1782f9379d402918049a4c784defe52f0010b"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.488281,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 31,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "assistant_idle",
+      "label": "助理待機",
+      "category": "assistant",
+      "native_size": 64,
+      "prompt": "Create one 512x512 opaque concept master for the same Morninglight Farm smart-assistant mascot: preserve the acorn-shaped brass and forest-green head, pale blue square eyes, single leaf antenna, warm cream neckerchief, compact bust silhouette and exact proportions. State variant: idle: neutral friendly expression, leaf antenna resting naturally, no accessory. Match the R62 controlled warm gold, brown, forest-green, cream and cool-shadow palette; 1px-equivalent deep plum-brown contour; top-left warm key light; crisp hard-edged pixel clusters. Center with generous safe margin on perfectly flat solid #ff00ff matte. No matte gradient, shadow, text, letters, numbers, logo, border, UI panel, scenery, extra character, transparency, or checkerboard. Concept master for deterministic native 64px RGBA cleanup.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/assistant_idle.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#fa08e3",
+      "outputs": {
+        "master": "masters_opaque/assistant_idle.png",
+        "mask": "masks/assistant_idle-mask.png",
+        "rgba": "rgba/assistant_idle.png",
+        "native": "native/assistant_idle-64.png"
+      },
+      "sha256": {
+        "source": "21bdd43fa6ba6500c88031b481b8eb47aadcf87662ebd8f43701de96247c8e48",
+        "master": "7a7341dc8441d75d792969277c9460980da2248093da994fed1cfeaccc3aea05",
+        "mask": "749f7abaa63f142d93e796ccd0422c06ba5663e35aee697cb944634d8bf4e5ce",
+        "rgba": "9111a1683e02514fe063c52c9373e930e42d79f38970a1f38dcf46d73bd3e5b6",
+        "native": "0dd37a4b8e349dc11ba2454012e53ff4e741f78785255b1dbd65d6218f6a8b03"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          64,
+          64
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.344971,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 35,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "assistant_tip",
+      "label": "助理提示",
+      "category": "assistant",
+      "native_size": 64,
+      "prompt": "Create one 512x512 opaque concept master for the same Morninglight Farm smart-assistant mascot: preserve the acorn-shaped brass and forest-green head, pale blue square eyes, single leaf antenna, warm cream neckerchief, compact bust silhouette and exact proportions. State variant: helpful tip: attentive expression, leaf antenna tilted, tiny cream note-tab with green sprout badge. Match the R62 controlled warm gold, brown, forest-green, cream and cool-shadow palette; 1px-equivalent deep plum-brown contour; top-left warm key light; crisp hard-edged pixel clusters. Center with generous safe margin on perfectly flat solid #ff00ff matte. No matte gradient, shadow, text, letters, numbers, logo, border, UI panel, scenery, extra character, transparency, or checkerboard. Concept master for deterministic native 64px RGBA cleanup.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/assistant_tip.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f904e0",
+      "outputs": {
+        "master": "masters_opaque/assistant_tip.png",
+        "mask": "masks/assistant_tip-mask.png",
+        "rgba": "rgba/assistant_tip.png",
+        "native": "native/assistant_tip-64.png"
+      },
+      "sha256": {
+        "source": "f8bc36ec56439970f721261d097ef2cee489fb7352c68bf316c820a9d59f8641",
+        "master": "86ffae85bbd560e98658775c0206f9d8aaabb87053caabf4af5c8d29b198caf9",
+        "mask": "d625ba374e7633e8c9c266555da73f40cad798cb805fca8023b5ca1dc715e213",
+        "rgba": "d8b6832aa6b657db6bda03e47886a9f71f5375c89567374a8e884d70d482cc26",
+        "native": "01b6524b92a129fd3b04589ba9d6c890bc36c1595203349cb6870e39a8efc54d"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          64,
+          64
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.366943,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 42,
+        "invalid_palette_colours": []
+      }
+    },
+    {
+      "slug": "assistant_alert",
+      "label": "助理提醒",
+      "category": "assistant",
+      "native_size": 64,
+      "prompt": "Create one 512x512 opaque concept master for the same Morninglight Farm smart-assistant mascot: preserve the acorn-shaped brass and forest-green head, pale blue square eyes, single leaf antenna, warm cream neckerchief, compact bust silhouette and exact proportions. State variant: gentle alert: focused friendly expression, upright leaf antenna, amber forehead indicator and tiny gold spark. Match the R62 controlled warm gold, brown, forest-green, cream and cool-shadow palette; 1px-equivalent deep plum-brown contour; top-left warm key light; crisp hard-edged pixel clusters. Center with generous safe margin on perfectly flat solid #ff00ff matte. No matte gradient, shadow, text, letters, numbers, logo, border, UI panel, scenery, extra character, transparency, or checkerboard. Concept master for deterministic native 64px RGBA cleanup.",
+      "source_mode": "generated_r66",
+      "source": "assets/generated/r66/source/assistant_alert.png",
+      "requested_model": "gpt-image-2",
+      "actual_model": "gpt-image-2",
+      "generation_interface": "Codex built-in image_gen",
+      "source_c2pa_gpt_image_2_0": true,
+      "matte": "#ff00ff",
+      "estimated_matte": "#f904dd",
+      "outputs": {
+        "master": "masters_opaque/assistant_alert.png",
+        "mask": "masks/assistant_alert-mask.png",
+        "rgba": "rgba/assistant_alert.png",
+        "native": "native/assistant_alert-64.png"
+      },
+      "sha256": {
+        "source": "28a5f0fe4ff1a230fe323cc96d152d86e52ed9aac3fa711288df82340430648e",
+        "master": "414a08054b4e6f81aae47df98506f9e6c71d2714b03cd89763d80bc9f18b3e27",
+        "mask": "1dede96d4f5176e1d0b2aca8292461c8947527de837fea8dd504ea217a0336a9",
+        "rgba": "75dde5cc4f6eb78da0baf39ede8a28357f0ea67c02517f3bfb82769ae48073b8",
+        "native": "cd15e142cea378146f178c60735644fde31608fb2d31086c75a602d3aed94ac3"
+      },
+      "alpha_gate": {
+        "pass": true,
+        "size": [
+          64,
+          64
+        ],
+        "mode": "RGBA",
+        "alpha_occupancy": 0.333984,
+        "corners_clear": true,
+        "transparent_rgb_pixels": 0,
+        "palette_colours": 41,
+        "invalid_palette_colours": []
+      }
+    }
+  ]
+}

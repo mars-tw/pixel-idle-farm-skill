@@ -8,7 +8,7 @@
 
 《晨光農場》是一款以原生 HTML、CSS 與 JavaScript 製作的像素放置農場 RPG。玩家能在可走動的大地圖上耕作、接市集與 NPC 委託、照顧動物、修橋探索東林，並透過本機存檔與時間差結算持續累積農場進度。
 
-**[立即線上遊玩](https://mars-tw.github.io/pixel-idle-farm-skill/)** ・目前遊戲版本：**R65**（`r65-20260716-1`）
+**[立即線上遊玩](https://mars-tw.github.io/pixel-idle-farm-skill/)** ・目前遊戲版本：**R66**（`r66-20260716-1`）
 
 ## 最新特色
 

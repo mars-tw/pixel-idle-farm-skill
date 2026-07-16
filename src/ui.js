@@ -64,11 +64,13 @@
   const escapeHtml = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (ch) => (
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
   ));
+  const uiIcon = (slug, extra) => `<span class="ui-icon i-${String(slug).replace(/_/g, "-")}${extra ? " " + extra : ""}" aria-hidden="true"></span>`;
+  const TOOL_UI_ICONS = { hand: "tool_plant", water: "tool_water", clear: "tool_clear", build: "tool_build", inspect: "tool_inspect" };
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r65-20260716-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r66-20260716-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -456,12 +458,12 @@
     const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
     const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
     $("resBar").innerHTML = `
-      <div class="res coins"><span class="ic">🪙</span> ${fmtNum(state.coins)}</div>
-      <div class="res level"><span class="ic">⭐</span>
+      <div class="res coins">${uiIcon("system_coin")} ${fmtNum(state.coins)}</div>
+      <div class="res level">${uiIcon("system_xp")}
         <div><div>Lv ${state.level}</div><div class="xp-track"><div class="xp-fill" style="width:${xpPct}%"></div></div></div>
         <span class="sub">${nextXp != null ? xpInLv + "/" + xpNeed : "MAX"}</span>
       </div>
-      <div class="res"><span class="ic">📦</span> ${used}<span class="sub">/${cap}</span></div>
+      <div class="res">${uiIcon("system_storage")} ${used}<span class="sub">/${cap}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
       ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
       ${matChips()}`;
@@ -501,7 +503,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${c.emoji}</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.seedCost}</span>${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.seedCost}</span>${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">Lv${c.unlockLevel}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
@@ -607,12 +609,12 @@
   // Stage 6：主角性別按鈕標籤
   function syncGenderBtn() {
     const b = $("genderToggle"); if (!b) return;
-    b.textContent = state.gender === "m" ? "👦 主角" : "👧 主角";
+    b.textContent = state.gender === "m" ? "男主角" : "女主角";
   }
 
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
-  function setTool(t) { clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble(); state.interaction.tool = t; renderToolbar(); renderQuestDock(); renderSceneActionsForSelection(); $("farmHint").textContent = window.TOOLS[t].icon + " " + window.TOOLS[t].desc; scheduleSave(); }
+  function setTool(t) { clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble(); state.interaction.tool = t; renderToolbar(); renderQuestDock(); renderSceneActionsForSelection(); $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(window.TOOLS[t].desc); scheduleSave(); }
   function renderToolbar() {
     const bar = $("toolBar"); if (!bar) return; bar.innerHTML = "";
     window.TOOL_ORDER.forEach((id) => {
@@ -620,7 +622,7 @@
       const el = document.createElement("div");
       el.className = "tool" + (currentTool() === id ? " sel" : "");
       el.title = t.desc;
-      el.innerHTML = `<span class="ti">${t.icon}</span><span class="tn">${t.name}</span>`;
+      el.innerHTML = `<span class="ti">${uiIcon(TOOL_UI_ICONS[id])}</span><span class="tn">${t.name}</span>`;
       el.onclick = () => setTool(id);
       bar.appendChild(el);
     });
@@ -1689,10 +1691,14 @@
     }
     const collapsed = !!settings.smartAssistantCollapsed;
     const suggestions = G.farmActionSuggestions(state, now(), { limit: 3 });
-    const sig = [collapsed ? "c" : "o"].concat(suggestions.map((s) => [s.id, s.type, s.tileId, Math.round((s.valueScore || 0) * 10), s.reason].join(":"))).join("|");
+    const primary = suggestions[0] || null;
+    const assistantSkin = !primary ? "idle" : primary.priority >= 100 ? "alert" : "tip";
+    const assistantStatus = assistantSkin === "alert" ? "有可立即處理的農務" : assistantSkin === "tip" ? "有一則農務建議" : "農場狀態安穩";
+    const sig = [collapsed ? "c" : "o", assistantSkin].concat(suggestions.map((s) => [s.id, s.type, s.tileId, Math.round((s.valueScore || 0) * 10), s.reason].join(":"))).join("|");
     if (!force && sig === lastAssistantSig) return;
     lastAssistantSig = sig;
-    box.className = "smart-assistant" + (collapsed ? " collapsed" : "");
+    box.className = "smart-assistant assistant-" + assistantSkin + (collapsed ? " collapsed" : "");
+    box.dataset.assistantSkin = assistantSkin;
     const rows = suggestions.length ? suggestions.map((s, idx) => `
       <div class="sa-row" data-audit="assistant-row" data-rank="${idx + 1}" data-suggestion-id="${escapeHtml(s.id)}" data-suggestion-type="${escapeHtml(s.type)}" data-target-id="${escapeHtml(s.tileId)}" data-value-score="${escapeHtml(Math.round((s.valueScore || 0) * 10) / 10)}">
         <div>
@@ -1705,8 +1711,9 @@
       : `<div class="sa-row" data-audit="assistant-empty"><div><div class="sa-title">目前沒有急件</div><div class="sa-detail">可以整理倉庫、探索地圖或等待作物成熟。</div></div></div>`;
     box.innerHTML = `
       <div class="sa-head">
-        <button class="sa-icon-btn" data-audit="assistant-collapse" title="${collapsed ? "展開" : "收合"}" aria-label="${collapsed ? "展開智慧農務助手" : "收合智慧農務助手"}">${collapsed ? "▴" : "▾"}</button>
-        <b>智慧農務助手</b>
+        <span class="sa-skin sa-skin-${assistantSkin}" aria-hidden="true"></span>
+        <span class="sa-copy"><b>智慧農務助手</b><small>${assistantStatus}</small></span>
+        <button class="sa-icon-btn" data-audit="assistant-collapse" title="${collapsed ? "展開" : "收合"}" aria-label="${collapsed ? "展開智慧農務助手" : "收合智慧農務助手"}">${collapsed ? "▾" : "▴"}</button>
         <button class="sa-icon-btn" data-audit="assistant-close" title="關閉" aria-label="關閉智慧農務助手">×</button>
       </div>
       <div class="sa-list">${rows}</div>`;
@@ -3939,7 +3946,7 @@
     if (lettersClose) lettersClose.onclick = () => closeModal("lettersModal");
 
     // sprite 切換鈕初始文字
-    $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
+    $("spriteToggle").textContent = state.useSprites ? "像素圖" : "符號圖";
 
     // 首次玩顯示引導；否則顯示離線摘要
     let shownModal = false;
@@ -4027,7 +4034,7 @@
     };
     $("spriteToggle").onclick = () => {
       state.useSprites = !state.useSprites;
-      $("spriteToggle").textContent = state.useSprites ? "🎨 像素圖" : "🔤 Emoji";
+      $("spriteToggle").textContent = state.useSprites ? "像素圖" : "符號圖";
       updateFarm(now()); scheduleSave();
     };
     // Stage 6：主角性別切換（女 Miri ↔ 男 Kai），即時換 sprite

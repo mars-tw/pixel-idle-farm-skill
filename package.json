@@ -1,11 +1,11 @@
 {
   "name": "pixel-idle-farm",
-  "version": "0.1.8",
-  "appVersion": "r65-20260716-1",
+  "version": "0.1.9",
+  "appVersion": "r66-20260716-1",
   "description": "純原生網頁像素放置農場遊戲 — Claude Code Skill。零依賴 HTML/CSS/JS，localStorage 存檔，時間差離線收益。",
   "type": "commonjs",
   "scripts": {
-    "test": "node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js",
+    "test": "node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js",
     "test:economy": "node scripts/test-economy.js",
     "test:systems": "node scripts/test-systems.js",
     "test:ui": "node scripts/test-ui-smoke.js",
@@ -20,6 +20,8 @@
     "art:seasonal-structures": "python tools/generate-seasonal-structures.py",
     "art:crops4": "python tools/generate-crops4-atlas.py",
     "art:r62:polish": "python tools/generate-r62-polish.py",
+    "art:r66:ui": "python tools/generate-r66-ui.py",
+    "test:art:r66": "python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js",
     "promo:capture": "node scripts/capture-promo-trio.js",
     "start": "python -m http.server 8000",
     "test:rwd": "node scripts/test-rwd-matrix.js"

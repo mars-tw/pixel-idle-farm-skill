@@ -312,7 +312,7 @@ async function runTouchFarmConfirmationTest(browser, base) {
     });
     assert(actionAReach.width >= 44 && actionAReach.height >= 44 && actionAReach.top >= 0 &&
       actionAReach.bottom <= 844 && actionAReach.hit,
-      `R65 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
+      `R66 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
     await page.click("#actionA");
     await waitArrive(page, 9000);
     const actionA = await page.evaluate((targetId) => {
@@ -340,7 +340,7 @@ async function run() {
   const browser = await chromium.launch();
 
   try {
-  console.log("\n== R65 preflight gates ==");
+  console.log("\n== R66 preflight gates ==");
   await runShortDesktopLayoutTest(browser, base);
   await runTouchFarmConfirmationTest(browser, base);
   await runTrueServiceWorkerOfflineTest(browser, base);
@@ -400,7 +400,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r65-20260716-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r66-20260716-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -483,7 +483,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r65-20260716-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r66-20260716-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.soundVolume === "55" && r27Settings.soundVolumeText === "55%",
@@ -661,7 +661,7 @@ async function run() {
     assert(dockInitial.goAria.includes("前往") || dockInitial.goAria.includes("目標"), `Dock 前往按鈕具 aria-label（${dockInitial.goAria}）`);
     assert(dockInitial.overflow <= 2, `任務 Dock 不造成水平溢出（${dockInitial.overflow}）`);
 
-    // 1. R65：整圖模式預設完整可見 + 原尺寸模式可切換
+    // 1. R66：整圖模式預設完整可見 + 原尺寸模式可切換
     const world = await page.evaluate(() => {
       const st = window.__farm.state();
       const scene = document.getElementById("mapScene"), wEl = document.getElementById("mapWorld");

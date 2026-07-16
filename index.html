@@ -11,13 +11,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r65-20260716-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r65-20260716-1">
+<link rel="manifest" href="manifest.webmanifest?v=r66-20260716-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r66-20260716-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r65-20260716-1";
+  const VERSION = "r66-20260716-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -83,6 +83,19 @@
   header { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
   .title { font-size: clamp(15px, 3.4vw, 18px); font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: 0; line-height: 1.15; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; max-width: min(100%, 620px); }
   .title small { font-size: 11px; color: #4d6b3a; font-weight: 600; opacity: .8; }
+  /* R66：32 格 native atlas；所有 runtime icon 都維持 32px 像素網格。 */
+  .ui-icon { display: inline-block; flex: 0 0 32px; width: 32px; height: 32px;
+    background-image: url("assets/generated/r66/ui-icons-32.png"); background-size: 256px 128px;
+    background-repeat: no-repeat; image-rendering: pixelated; vertical-align: middle; }
+  .i-crop-wheat{background-position:0 0}.i-crop-carrot{background-position:-32px 0}.i-crop-tomato{background-position:-64px 0}.i-crop-strawberry{background-position:-96px 0}
+  .i-crop-corn{background-position:-128px 0}.i-crop-pumpkin{background-position:-160px 0}.i-crop-radish{background-position:-192px 0}.i-crop-bell-pepper{background-position:-224px 0}
+  .i-crop-potato{background-position:0 -32px}.i-crop-sunflower{background-position:-32px -32px}.i-crop-grapes{background-position:-64px -32px}.i-crop-melon{background-position:-96px -32px}
+  .i-crop-pea{background-position:-128px -32px}.i-crop-sweet-potato{background-position:-160px -32px}.i-crop-winter-kale{background-position:-192px -32px}.i-tool-plant{background-position:-224px -32px}
+  .i-tool-harvest{background-position:0 -64px}.i-tool-water{background-position:-32px -64px}.i-tool-clear{background-position:-64px -64px}.i-tool-build{background-position:-96px -64px}
+  .i-tool-inspect{background-position:-128px -64px}.i-tab-tile{background-position:-160px -64px}.i-tab-orders{background-position:-192px -64px}.i-tab-upgrades{background-position:-224px -64px}
+  .i-tab-story{background-position:0 -96px}.i-tab-journal{background-position:-32px -96px}.i-system-coin{background-position:-64px -96px}.i-system-xp{background-position:-96px -96px}
+  .i-system-storage{background-position:-128px -96px}.i-system-settings{background-position:-160px -96px}.i-system-help{background-position:-192px -96px}.i-system-reset{background-position:-224px -96px}
+  .btn .ui-icon, .side-tab .ui-icon, .pane-head .ui-icon, h2 .ui-icon { margin: -4px 2px -4px -2px; }
   .res-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: stretch; }
   .res {
     display: flex; align-items: center; gap: 6px; background: var(--cream);
@@ -90,6 +103,7 @@
     box-shadow: var(--shadow); font-weight: 800; font-size: 13px; min-height: 36px;
   }
   .res .ic { font-size: 18px; line-height: 1; }
+  .res .ui-icon { margin: -3px 0; }
   .res .sub { font-size: 11px; color: var(--ink-soft); font-weight: 700; }
   .res.coins { color: #9a6b00; } .res.coins .ic { filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
   .res.level { color: #2b6f8a; }
@@ -301,7 +315,13 @@
     background: rgba(255,253,244,.96); border: 2px solid #b8cf8a; border-radius: 10px; box-shadow: 0 8px 24px rgba(38,55,22,.22);
     overflow: hidden; color: #34441d; }
   .sa-head { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; background: linear-gradient(180deg, #eef8dd, #dcefc4); }
-  .sa-head b { flex: 1; min-width: 0; font-size: 12px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sa-skin { flex: 0 0 48px; width: 48px; height: 48px; background-repeat: no-repeat; background-position: center; background-size: contain; image-rendering: pixelated; }
+  .sa-skin-idle { background-image: url("assets/generated/r66/native/assistant_idle-64.png"); }
+  .sa-skin-tip { background-image: url("assets/generated/r66/native/assistant_tip-64.png"); }
+  .sa-skin-alert { background-image: url("assets/generated/r66/native/assistant_alert-64.png"); }
+  .sa-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.15; }
+  .sa-copy b { min-width: 0; font-size: 12px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sa-copy small { margin-top: 2px; color: #6f6248; font-size: 10px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sa-icon-btn { min-width: 44px; min-height: 44px; border: 1.5px solid #b8cf8a; border-radius: 8px; background: rgba(255,255,255,.72);
     color: #345b27; font: inherit; font-weight: 950; cursor: pointer; }
   .sa-list { display: grid; gap: 6px; padding: 8px; }
@@ -313,6 +333,8 @@
   .sa-go { min-width: 58px; min-height: 44px; border: 1.5px solid #94bd68; border-radius: 8px; background: #e7f5dd;
     color: #285b1d; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer; }
   .smart-assistant.collapsed .sa-list { display: none; }
+  .smart-assistant.collapsed { width: min(250px, calc(100% - 20px)); }
+  .smart-assistant.collapsed .sa-head { min-height: 60px; }
   .smart-assistant.hidden { display: none; }
   .side-list-more { width: 100%; margin-top: 8px; }
   .side-list-note { font-size: 11px; color: var(--ink-soft); margin-top: 6px; line-height: 1.35; }
@@ -565,7 +587,10 @@
     .quest-dock .qd-title { font-size: 11px; }
     .quest-dock .qd-action { font-size: 10px; }
     .quest-dock .qd-meta { min-height: 44px; min-width: 48px; padding-inline: 9px; }
-    .smart-assistant { left: 8px; right: 8px; bottom: 8px; width: auto; max-width: none; }
+    .smart-assistant { left: auto; right: 8px; bottom: auto; width: min(340px, calc(100% - 16px)); max-width: none; }
+    .smart-assistant.collapsed { width: min(238px, calc(100% - 16px)); }
+    .smart-assistant.collapsed .sa-skin { flex-basis: 44px; width: 44px; height: 44px; }
+    .smart-assistant.collapsed .sa-icon-btn[data-audit="assistant-close"] { display: none; }
     .sa-row { grid-template-columns: minmax(0, 1fr) 58px; }
   }
   /* 世界：依 camera 平移 */
@@ -901,14 +926,14 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="title">🌅 阿軒割割陽光農場開源遊戲世界 <small>Open Farm World</small></div>
+    <div class="title"><span class="ui-icon i-crop-sunflower" aria-hidden="true"></span>阿軒割割陽光農場開源遊戲世界 <small>Open Farm World</small></div>
     <div class="res-bar" id="resBar"><!-- 資源列由 JS 渲染 --></div>
   </header>
 
   <div class="main">
     <!-- 左：可走動農場地圖（主要遊戲畫面）-->
     <div class="panel farm-panel">
-      <h2>🌾 我的農場 <span class="hint" id="farmHint">選工具 → 點地圖：走過去並動作</span></h2>
+      <h2><span class="ui-icon i-crop-wheat" aria-hidden="true"></span>我的農場 <span class="hint" id="farmHint">選工具 → 點地圖：走過去並動作</span></h2>
       <div class="tool-bar" id="toolBar"></div>
       <!-- RPG 場景：16×12 世界 + camera 視口 + 分層（地面/物件 y-sort/標記/VFX/玩家）-->
       <div class="map-scene-wrap">
@@ -942,11 +967,11 @@
       </div>
       <!-- 幫手自動化：早期隱藏，升「幫手機器人」後解鎖；初期動作都要走到目標執行 -->
       <div class="btn-row" id="globalActions" style="margin-top:10px; display:none">
-        <span class="auto-tag">🤖 幫手</span>
-        <button class="btn harvest" id="harvestAllBtn">🧺 全部收成</button>
-        <button class="btn sell" id="sellAllBtn">🪙 全部賣出</button>
-        <button class="btn water" id="waterAllBtn" title="澆水加速成長">💧 全部澆水</button>
-        <button class="btn small buy" id="collectAllBtn">🧺 收產物</button>
+        <span class="auto-tag">幫手</span>
+        <button class="btn harvest" id="harvestAllBtn"><span class="ui-icon i-tool-harvest" aria-hidden="true"></span>全部收成</button>
+        <button class="btn sell" id="sellAllBtn"><span class="ui-icon i-system-coin" aria-hidden="true"></span>全部賣出</button>
+        <button class="btn water" id="waterAllBtn" title="澆水加速成長"><span class="ui-icon i-tool-water" aria-hidden="true"></span>全部澆水</button>
+        <button class="btn small buy" id="collectAllBtn"><span class="ui-icon i-tool-harvest" aria-hidden="true"></span>收產物</button>
       </div>
       <!-- 舊作物格（相容/除錯用，預設隱藏）-->
       <div class="farm" id="farm" style="display:none"></div>
@@ -956,11 +981,11 @@
     <!-- 右：分頁側欄（故事 / 磚資訊 / 訂單 / 升級）-->
     <div class="panel side-panel">
       <div class="side-tabs" id="sideTabs">
-        <button class="side-tab" data-tab="tile" aria-label="切換到磚資訊分頁">🔍 磚資訊</button>
-        <button class="side-tab" data-tab="orders" aria-label="切換到訂單分頁">📜 訂單 <span class="tab-badge" id="ordersBadge"></span></button>
-        <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁">⬆️ 升級</button>
-        <button class="side-tab sel" data-tab="story" aria-label="切換到故事分頁" aria-selected="true">📖 故事 <span class="tab-badge" id="storyBadge" hidden></span></button>
-        <button class="side-tab" data-tab="journal" aria-label="切換到圖鑑分頁">📔 圖鑑</button>
+        <button class="side-tab" data-tab="tile" aria-label="切換到磚資訊分頁"><span class="ui-icon i-tab-tile" aria-hidden="true"></span>磚資訊</button>
+        <button class="side-tab" data-tab="orders" aria-label="切換到訂單分頁"><span class="ui-icon i-tab-orders" aria-hidden="true"></span>訂單 <span class="tab-badge" id="ordersBadge"></span></button>
+        <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁"><span class="ui-icon i-tab-upgrades" aria-hidden="true"></span>升級</button>
+        <button class="side-tab sel" data-tab="story" aria-label="切換到故事分頁" aria-selected="true"><span class="ui-icon i-tab-story" aria-hidden="true"></span>故事 <span class="tab-badge" id="storyBadge" hidden></span></button>
+        <button class="side-tab" data-tab="journal" aria-label="切換到圖鑑分頁"><span class="ui-icon i-tab-journal" aria-hidden="true"></span>圖鑑</button>
       </div>
       <div class="side-body">
         <div class="side-pane" data-pane="tile">
@@ -987,15 +1012,15 @@
   </div>
 
   <div class="toolbar">
-    <button class="btn small ghost" id="genderToggle" title="切換主角性別">👧 主角</button>
-    <button class="btn small ghost" id="settingsBtn" data-audit="settings-open" aria-label="開啟設定">⚙️ 設定</button>
-    <button class="btn small ghost" id="spriteToggle">🎨 像素圖</button>
-    <button class="btn small ghost" id="howToBtn">❓ 玩法</button>
-    <button class="btn small ghost" id="resetBtn">🗑️ 重置存檔</button>
+    <button class="btn small ghost" id="genderToggle" title="切換主角性別">主角</button>
+    <button class="btn small ghost" id="settingsBtn" data-audit="settings-open" aria-label="開啟設定"><span class="ui-icon i-system-settings" aria-hidden="true"></span>設定</button>
+    <button class="btn small ghost" id="spriteToggle">像素圖</button>
+    <button class="btn small ghost" id="howToBtn"><span class="ui-icon i-system-help" aria-hidden="true"></span>玩法</button>
+    <button class="btn small ghost" id="resetBtn"><span class="ui-icon i-system-reset" aria-hidden="true"></span>重置存檔</button>
   </div>
 
   <footer class="series-footer" aria-label="阿軒的小遊戲系列">
-    🎮 阿軒的小遊戲系列
+    阿軒的小遊戲系列
     <a href="https://mars-tw.github.io/web-card-game-skill/templates/card-battle/" target="_blank" rel="noopener">卡牌對戰</a>
     <a href="https://mars-tw.github.io/tower-defense-skill/" target="_blank" rel="noopener">無盡塔防</a>
     <a href="https://mars-tw.github.io/ashes-convoy/" target="_blank" rel="noopener">灰燼護航</a>
@@ -1005,7 +1030,7 @@
 <!-- 設定 modal -->
 <div class="modal" id="settingsModal" data-audit="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
   <div class="modal-card settings-card">
-    <h2 id="settingsTitle">⚙️ 設定</h2>
+    <h2 id="settingsTitle"><span class="ui-icon i-system-settings" aria-hidden="true"></span>設定</h2>
     <div class="settings-list modal-body" id="settingsList"></div>
     <button class="btn" id="settingsOk">完成</button>
   </div>
@@ -1023,7 +1048,7 @@
 <!-- 玩法引導 modal -->
 <div class="modal" id="howToModal" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
   <div class="modal-card">
-    <h2 id="howToTitle">🌻 怎麼玩</h2>
+    <h2 id="howToTitle"><span class="ui-icon i-system-help" aria-hidden="true"></span>怎麼玩</h2>
     <div class="modal-body">
       <ol>
         <li><b>① 移動</b>：桌機用 WASD/方向鍵，手機用左下 D-pad；走到目標旁邊再互動。</li>
@@ -1061,10 +1086,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r65-20260716-1"></script>
-<script src="src/game.js?v=r65-20260716-1"></script>
-<script src="src/state.js?v=r65-20260716-1"></script>
-<script src="src/atlas.js?v=r65-20260716-1"></script>
-<script src="src/ui.js?v=r65-20260716-1"></script>
+<script src="src/config.js?v=r66-20260716-1"></script>
+<script src="src/game.js?v=r66-20260716-1"></script>
+<script src="src/state.js?v=r66-20260716-1"></script>
+<script src="src/atlas.js?v=r66-20260716-1"></script>
+<script src="src/ui.js?v=r66-20260716-1"></script>
 </body>
 </html>

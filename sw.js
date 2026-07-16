@@ -1,4 +1,4 @@
-const CACHE_VERSION = "r65-20260716-1";
+const CACHE_VERSION = "r66-20260716-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -18,6 +18,12 @@ const CORE_ASSETS = [
   versioned("./assets/generated/crop-growth.png"),
   versioned("./assets/generated/terrain-tileset.png"),
   versioned("./assets/generated/ui-icons.png"),
+  versioned("./assets/generated/r66/manifest.json"),
+  versioned("./assets/generated/r66/ui-icons-32.json"),
+  versioned("./assets/generated/r66/ui-icons-32.png"),
+  versioned("./assets/generated/r66/native/assistant_idle-64.png"),
+  versioned("./assets/generated/r66/native/assistant_tip-64.png"),
+  versioned("./assets/generated/r66/native/assistant_alert-64.png"),
   versioned("./assets/generated/farm-actors-buildings.png"),
   versioned("./assets/generated/characters/miri-rowan-turnaround.png"),
   versioned("./assets/generated/characters/miri-rowan-farm-actions.png"),

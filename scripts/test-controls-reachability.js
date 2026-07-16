@@ -1,10 +1,10 @@
-/* farm R65 control reachability gate: primary-pointer routing + viewport hit testing + fit-map visibility. */
+/* farm R66 control reachability gate: primary-pointer routing + viewport hit testing + fit-map visibility. */
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const EVIDENCE = path.join(ROOT, "docs", "evidence", "R65_map", "controls");
+const EVIDENCE = path.join(ROOT, "docs", "evidence", "R66_art", "controls");
 const MIME = {
   ".html": "text/html", ".js": "application/javascript", ".json": "application/json",
   ".webmanifest": "application/manifest+json", ".png": "image/png",
@@ -242,17 +242,17 @@ async function run() {
   const base = `http://127.0.0.1:${server.address().port}/index.html`;
   const browser = await chromium.launch();
   try {
-    console.log("== farm R65 控制與整圖守門 ==");
+    console.log("== farm R66 控制與整圖守門 ==");
     for (const config of VIEWPORTS) await runViewport(browser, base, config);
   } finally {
     await browser.close();
     server.close();
   }
   if (failed) {
-    console.error(`\n❌ R65 控制與整圖守門失敗：${failed} 項`);
+    console.error(`\n❌ R66 控制與整圖守門失敗：${failed} 項`);
     process.exit(1);
   }
-  console.log("\n✅ R65 控制與整圖守門通過（7 種裝置／視口）");
+  console.log("\n✅ R66 控制與整圖守門通過（7 種裝置／視口）");
 }
 
-run().catch((error) => { console.error("R65 控制與整圖守門執行失敗：", error); process.exit(1); });
+run().catch((error) => { console.error("R66 控制與整圖守門執行失敗：", error); process.exit(1); });

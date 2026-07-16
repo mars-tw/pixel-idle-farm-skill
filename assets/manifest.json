@@ -72,6 +72,18 @@
       "cutout": "assets/generated/characters/miri-rowan-farm-actions-cutout.png",
       "cutoutNote": "Background-removed (edge flood-fill) transparent版，遊戲實際渲染用；缺檔時 fallback 原圖。",
       "status": "generated-preview"
+    },
+    {
+      "id": "r66-ui-icons",
+      "file": "assets/generated/r66/ui-icons-32.png",
+      "manifest": "assets/generated/r66/manifest.json",
+      "type": "native-ui-icon-atlas",
+      "grid": "8 columns x 4 rows",
+      "recommendedTileSize": 32,
+      "gameplayUse": "R66 formal UI: 15 crops, 6 tools, 5 tabs and 6 system icons; plus three 64px smart-assistant collapsed-state skins.",
+      "model": "gpt-image-2",
+      "pipeline": "512px opaque concept master -> matte decontamination -> R62 palette native cleanup",
+      "status": "production"
     }
   ]
 }
