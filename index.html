@@ -11,13 +11,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r64-20260716-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r64-20260716-1">
+<link rel="manifest" href="manifest.webmanifest?v=r65-20260716-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r65-20260716-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r64-20260716-1";
+  const VERSION = "r65-20260716-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -73,21 +73,21 @@
   body {
     font-family: "Segoe UI", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
     color: var(--ink); background: linear-gradient(170deg, var(--sky-1), var(--sky-2) 55%, var(--grass) 130%);
-    min-height: 100%; padding: 10px; line-height: 1.4; font-size: calc(16px * var(--ui-font-scale));
+    min-height: 100%; padding: 8px; line-height: 1.4; font-size: calc(16px * var(--ui-font-scale));
     background-attachment: fixed;
   }
   img, .sprite { image-rendering: pixelated; image-rendering: crisp-edges; }
-  .wrap { width: min(100%, 1720px); max-width: none; margin: 0 auto; }
+  .wrap { width: min(100%, 1720px); max-width: none; margin: 0 auto; min-width: 0; }
 
   /* ===== 頂部標題 + 資源列 ===== */
-  header { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .title { font-size: clamp(16px, 3.8vw, 20px); font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: 0; line-height: 1.2; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; max-width: min(100%, 620px); }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .title { font-size: clamp(15px, 3.4vw, 18px); font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: 0; line-height: 1.15; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; max-width: min(100%, 620px); }
   .title small { font-size: 11px; color: #4d6b3a; font-weight: 600; opacity: .8; }
-  .res-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; }
+  .res-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: stretch; }
   .res {
     display: flex; align-items: center; gap: 6px; background: var(--cream);
-    border: 1.5px solid var(--border); border-radius: 12px; padding: 6px 11px;
-    box-shadow: var(--shadow); font-weight: 800; font-size: 14px; min-height: 40px;
+    border: 1.5px solid var(--border); border-radius: 10px; padding: 4px 9px;
+    box-shadow: var(--shadow); font-weight: 800; font-size: 13px; min-height: 36px;
   }
   .res .ic { font-size: 18px; line-height: 1; }
   .res .sub { font-size: 11px; color: var(--ink-soft); font-weight: 700; }
@@ -100,11 +100,11 @@
   .season-chip small { font-size: 9px; color: #8a6b2a; font-weight: 850; }
 
   /* ===== 主版面 ===== */
-  .main { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; overflow-x: hidden; }
   /* 世界優先：桌面場景佔大、側欄精簡分頁 */
   @media (min-width: 860px) { .main { grid-template-columns: minmax(0, 1fr) clamp(260px, 24vw, 390px); align-items: start; } }
   /* 分頁側欄 */
-  .side-panel { padding: 0; overflow: auto; }
+  .side-panel { padding: 0; overflow: auto; min-width: 0; }
   /* Stage 11：多加一個分頁後，窄螢幕改水平捲動而不是把每個分頁擠到看不清楚 */
   .side-tabs { display: flex; border-bottom: 2px solid var(--border); background: var(--cream-2);
     overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -119,6 +119,7 @@
   .pane-head { font-size: 14px; font-weight: 900; color: #4a3a22; margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
 
   .panel {
+    min-width: 0;
     background: var(--cream); border: 2px solid var(--border-d); border-radius: var(--r);
     box-shadow: var(--shadow); padding: 12px; position: relative;
     max-height: calc(100dvh - 20px); overflow-y: auto;
@@ -127,7 +128,7 @@
   .panel h2 .hint { font-size: 11px; color: var(--ink-soft); font-weight: 600; margin-left: auto; }
 
   /* ===== 農場 grid ===== */
-  .farm-panel { background: linear-gradient(180deg, #cfeecb, #b6dfa6); border-color: #8fc47e; }
+  .farm-panel { background: linear-gradient(180deg, #cfeecb, #b6dfa6); border-color: #8fc47e; min-width: 0; }
   .farm {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
     background: #6f9e54; padding: 10px; border-radius: 12px;
@@ -283,14 +284,20 @@
     color: #513d17; box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 2px 8px rgba(90,65,20,.12); }
   .quest-dock .qd-body { min-width: 0; flex: 1; }
   .quest-dock .qd-title { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .quest-dock .qd-title > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .quest-dock .qd-summary { flex: 0 1 auto; max-width: 42%; color: #77520d; font-weight: 850; }
   .quest-dock .qd-action { margin-top: 2px; font-size: 11px; font-weight: 800; color: #77520d; line-height: 1.35; }
+  .quest-dock:not(.expanded) .qd-action,
+  .quest-dock:not(.expanded) .bridge-materials { display: none; }
+  .quest-dock .qd-actions { flex: 0 0 auto; display: inline-flex; gap: 6px; align-items: center; }
   .quest-dock .qd-meta { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 52px;
     padding: 6px 10px; border-radius: 999px; font-family: inherit; cursor: pointer;
     font-size: 11px; font-weight: 950; color: #2f6525; background: rgba(226,244,210,.9); border: 1.5px solid #aacb86; box-shadow: 0 2px 0 rgba(0,0,0,.08); }
+  .quest-dock .qd-toggle { min-width: 44px; width: 44px; padding-inline: 0; color: #70501c; background: rgba(255,255,255,.68); border-color: rgba(194,173,130,.85); }
   .quest-dock .qd-meta:disabled { opacity: .55; cursor: not-allowed; }
   .quest-dock.festival { border-color: #dfa132; background: linear-gradient(180deg, #fff5d6, #f7df9b); }
   .quest-dock .qd-title .festival-tag { margin: 0 0 0 4px; }
-  .smart-assistant { position: absolute; right: 10px; top: 10px; bottom: auto; z-index: 9900; width: min(360px, calc(100% - 20px));
+  .smart-assistant { position: absolute; right: 10px; top: 60px; bottom: auto; z-index: 9900; width: min(360px, calc(100% - 20px));
     background: rgba(255,253,244,.96); border: 2px solid #b8cf8a; border-radius: 10px; box-shadow: 0 8px 24px rgba(38,55,22,.22);
     overflow: hidden; color: #34441d; }
   .sa-head { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; background: linear-gradient(180deg, #eef8dd, #dcefc4); }
@@ -307,6 +314,8 @@
     color: #285b1d; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer; }
   .smart-assistant.collapsed .sa-list { display: none; }
   .smart-assistant.hidden { display: none; }
+  .side-list-more { width: 100%; margin-top: 8px; }
+  .side-list-note { font-size: 11px; color: var(--ink-soft); margin-top: 6px; line-height: 1.35; }
   .bridge-materials { margin-top: 8px; display: grid; gap: 5px; font-size: 12px; color: #6a4c16; }
   .bridge-materials .bm-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px;
     padding: 4px 7px; border-radius: 8px; background: rgba(255,255,255,.55); border: 1px solid rgba(194,173,130,.55); }
@@ -486,9 +495,9 @@
   .btn.water { background: linear-gradient(180deg, #7fd0ee, var(--water)); color: #04303f; flex: 0 0 auto; }
 
   /* ===== 工具列 ===== */
-  .tool-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 9px; }
-  .tool { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 52px; min-height: 48px;
-    padding: 5px 8px; border-radius: 11px; cursor: pointer; background: var(--cream-2); border: 2px solid var(--border);
+  .tool-bar { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tool { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 48px; min-height: 44px;
+    padding: 3px 7px; border-radius: 9px; cursor: pointer; background: var(--cream-2); border: 2px solid var(--border);
     font-weight: 800; transition: all .1s; }
   .tool .ti { font-size: 19px; line-height: 1; } .tool .tn { font-size: 10px; }
   .tool.sel { border-color: var(--water); background: #e2f3fb; box-shadow: 0 0 0 2px rgba(75,163,211,.25); transform: translateY(-2px); }
@@ -507,9 +516,9 @@
   @media (max-width: 560px) { .farmer { width: 56px; height: 56px; left: 4px; bottom: 4px; } }
 
   /* ===== RPG 場景：固定像素世界 + camera 視口 + 分層 y-sort ===== */
-  .map-scene-wrap { position: relative; margin-bottom: 10px; }
+  .map-scene-wrap { position: relative; margin-bottom: 8px; min-width: 0; max-width: 100%; }
   /* 視口：地圖為主畫面，桌機佔大、手機保留可玩 */
-  #mapScene { position: relative; width: 100%; height: min(72vh, var(--map-world-height, 576px)); max-height: none; min-height: 360px;
+  #mapScene { position: relative; width: 100%; max-width: 100%; height: min(74vh, 760px); max-height: none; min-height: 320px;
     overflow: hidden; border-radius: 14px; cursor: pointer; touch-action: none;
     background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate;
     box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
@@ -540,7 +549,17 @@
   #mapScene[data-weather="windy"]::after { background: linear-gradient(105deg, transparent, rgba(228,247,211,.09), transparent); }
   /* isolation: isolate 讓 #weatherLayer 的 mix-blend-mode 只跟地圖場景內的內容混色，
      不會跨到場景外的其他 UI（Stage 9）*/
-  @media (max-width: 859px) { #mapScene { height: min(58vh, var(--map-world-height, 576px)); min-height: 330px; } }
+  #mapScene[data-map-mode="natural"] { overflow: auto; touch-action: pan-x pan-y; }
+  #mapScene[data-map-mode="fit"] { overflow: hidden; }
+  #mapScene[data-fit-tile="tiny"] .map-fit-toggle { border-color: #d39a3a; color: #744509; background: #ffedbe; }
+  .map-fit-toggle {
+    position: absolute; right: 10px; top: 10px; z-index: 9895;
+    min-width: 78px; min-height: 44px; padding: 6px 10px; border-radius: 999px;
+    border: 2px solid rgba(104,137,74,.62); background: rgba(255,253,244,.94);
+    color: #2f6525; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(38,55,22,.18);
+  }
+  @media (max-width: 859px) { #mapScene { height: min(60vh, 640px); min-height: 310px; } }
   @media (max-width: 560px) {
     .quest-dock { min-height: 48px; padding: 7px 9px; }
     .quest-dock .qd-title { font-size: 11px; }
@@ -550,7 +569,7 @@
     .sa-row { grid-template-columns: minmax(0, 1fr) 58px; }
   }
   /* 世界：依 camera 平移 */
-  #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0);
+  #mapWorld { position: absolute; left: 0; top: 0; transform: translate(0,0); transform-origin: 0 0;
     transition: transform .2s ease-out; will-change: transform; }
   #groundLayer { position: absolute; left: 0; top: 0; z-index: 0; isolation: isolate; }
   /* R57：地面季相與濕／雪靜讀只覆蓋 groundLayer，不再把作物、角色一起染色。
@@ -787,11 +806,13 @@
   @media (min-width: 860px) {
     .main { overflow: hidden; align-items: stretch; }
     .panel { min-height: 0; max-height: 100%; overflow-y: auto; }
+    .farm-panel { padding: 8px; }
     .farm-panel { display: flex; flex-direction: column; }
     .farm-panel > .tool-bar, .farm-panel > .seed-row, .farm-panel > .btn-row, .farm-panel > h2 { flex: 0 0 auto; }
+    .farm-panel > h2 { margin-bottom: 6px; }
     .map-scene-wrap { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
     .map-scene-wrap .quest-dock { flex: 0 0 auto; }
-    #mapScene { flex: 1 1 0; height: auto; min-height: 0; max-height: min(72dvh, var(--map-world-height, 576px)); }
+    #mapScene { flex: 1 1 0; height: auto; min-height: 0; max-height: none; }
     .side-panel { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
     .side-tabs { flex: 0 0 auto; position: static; }
     .side-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
@@ -865,7 +886,7 @@
     .smart-assistant .sa-list { display: none; }
   }
   @media (max-width: 480px) {
-    #mapScene { height: min(50dvh, var(--map-world-height, 576px)); min-height: 300px; }
+    #mapScene { height: min(54dvh, 560px); min-height: 300px; }
     #mapScene .seed-row { max-width: calc(100vw - 24px); }
     #mapScene .seed { min-width: 44px; min-height: 44px; padding: 3px 5px; }
     #mapScene .seed .sn, #mapScene .seed .sc, #mapScene .seed-season { display: none; }
@@ -893,6 +914,7 @@
       <div class="map-scene-wrap">
         <div id="questDock" class="quest-dock" data-audit="quest-dock" aria-live="polite" aria-atomic="true"><!-- 任務 Dock 由 JS 渲染 --></div>
         <div id="mapScene">
+          <button id="mapFitToggle" class="map-fit-toggle" type="button" data-audit="map-fit-toggle" aria-label="切換地圖顯示模式">整圖</button>
           <div class="seed-hud" id="seedHud" data-audit="seed-hud"><div class="seed-row" id="seedRow"></div></div>
           <div id="mapWorld">
             <div id="groundLayer"></div>
@@ -1039,10 +1061,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r64-20260716-1"></script>
-<script src="src/game.js?v=r64-20260716-1"></script>
-<script src="src/state.js?v=r64-20260716-1"></script>
-<script src="src/atlas.js?v=r64-20260716-1"></script>
-<script src="src/ui.js?v=r64-20260716-1"></script>
+<script src="src/config.js?v=r65-20260716-1"></script>
+<script src="src/game.js?v=r65-20260716-1"></script>
+<script src="src/state.js?v=r65-20260716-1"></script>
+<script src="src/atlas.js?v=r65-20260716-1"></script>
+<script src="src/ui.js?v=r65-20260716-1"></script>
 </body>
 </html>

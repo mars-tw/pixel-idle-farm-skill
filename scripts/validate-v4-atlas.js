@@ -111,6 +111,11 @@ function server() {
   return new Promise((res) => {
     const s = http.createServer((rq, rs) => {
       let p = decodeURIComponent(rq.url.split("?")[0]); if (p === "/") p = "/index.html";
+      if (p === "/__pixel_check.html") {
+        rs.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+        rs.end("<!doctype html><meta charset=\"utf-8\"><title>atlas pixel check</title>");
+        return;
+      }
       const fp = path.join(ROOT, p);
       if (!fp.startsWith(ROOT) || !fs.existsSync(fp) || fs.statSync(fp).isDirectory()) { rs.writeHead(404); rs.end(); return; }
       rs.writeHead(200, { "Content-Type": MIME[path.extname(fp)] || "application/octet-stream" });
@@ -130,6 +135,11 @@ async function pixelCheck(manifest) {
   const s = await server(); const port = s.address().port;
   const page = await browser.newPage();
   const qualityStats = {};
+  const originalGoto = page.goto.bind(page);
+  page.goto = (url, options) => originalGoto(
+    url === "http://127.0.0.1:" + port + "/" ? "http://127.0.0.1:" + port + "/__pixel_check.html" : url,
+    options || { waitUntil: "domcontentloaded" },
+  );
   await page.goto("http://127.0.0.1:" + port + "/"); // 與圖片同源，避免 canvas 被跨來源汙染
   for (const key of PIXEL_SHEETS) {
     const sheet = manifest.sheets[key]; if (!sheet) continue;

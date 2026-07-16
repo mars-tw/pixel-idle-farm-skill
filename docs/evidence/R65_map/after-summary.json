@@ -1,0 +1,152 @@
+[
+  {
+    "tag": "1920x1080",
+    "mode": "fit",
+    "fitTile": 57,
+    "scene": {
+      "x": 110,
+      "y": 211.1875,
+      "w": 1298,
+      "h": 769.421875,
+      "scrollW": 1299,
+      "scrollH": 769,
+      "clientW": 1298,
+      "clientH": 769
+    },
+    "world": {
+      "x": 132,
+      "y": 254.1875,
+      "w": 1254,
+      "h": 684,
+      "offsetW": 1254,
+      "offsetH": 684
+    },
+    "page": {
+      "scrollW": 1920,
+      "scrollH": 1080,
+      "innerW": 1920,
+      "innerH": 1080
+    },
+    "fullVisible": true
+  },
+  {
+    "tag": "1440x780",
+    "mode": "fit",
+    "fitTile": 37,
+    "scene": {
+      "x": 18,
+      "y": 211.1875,
+      "w": 1046.40625,
+      "h": 469.421875,
+      "scrollW": 1046,
+      "scrollH": 469,
+      "clientW": 1046,
+      "clientH": 469
+    },
+    "world": {
+      "x": 134,
+      "y": 224.1875,
+      "w": 814,
+      "h": 444,
+      "offsetW": 814,
+      "offsetH": 444
+    },
+    "page": {
+      "scrollW": 1440,
+      "scrollH": 780,
+      "innerW": 1440,
+      "innerH": 780
+    },
+    "fullVisible": true
+  },
+  {
+    "tag": "1366x600",
+    "mode": "fit",
+    "fitTile": 22,
+    "scene": {
+      "x": 18,
+      "y": 211.1875,
+      "w": 990.171875,
+      "h": 289.421875,
+      "scrollW": 990,
+      "scrollH": 289,
+      "clientW": 990,
+      "clientH": 289
+    },
+    "world": {
+      "x": 271,
+      "y": 224.1875,
+      "w": 484,
+      "h": 264,
+      "offsetW": 484,
+      "offsetH": 264
+    },
+    "page": {
+      "scrollW": 1366,
+      "scrollH": 600,
+      "innerW": 1366,
+      "innerH": 600
+    },
+    "fullVisible": true
+  },
+  {
+    "tag": "1280x640",
+    "mode": "fit",
+    "fitTile": 25,
+    "scene": {
+      "x": 18,
+      "y": 211.1875,
+      "w": 924.8125,
+      "h": 329.421875,
+      "scrollW": 925,
+      "scrollH": 329,
+      "clientW": 925,
+      "clientH": 329
+    },
+    "world": {
+      "x": 206,
+      "y": 226.1875,
+      "w": 550,
+      "h": 300,
+      "offsetW": 550,
+      "offsetH": 300
+    },
+    "page": {
+      "scrollW": 1280,
+      "scrollH": 640,
+      "innerW": 1280,
+      "innerH": 640
+    },
+    "fullVisible": true
+  },
+  {
+    "tag": "390x844",
+    "mode": "fit",
+    "fitTile": 14,
+    "scene": {
+      "x": 22,
+      "y": 239.4375,
+      "w": 346,
+      "h": 455.75,
+      "scrollW": 346,
+      "scrollH": 456,
+      "clientW": 346,
+      "clientH": 456
+    },
+    "world": {
+      "x": 41,
+      "y": 383.4375,
+      "w": 308,
+      "h": 168,
+      "offsetW": 308,
+      "offsetH": 168
+    },
+    "page": {
+      "scrollW": 390,
+      "scrollH": 844,
+      "innerW": 390,
+      "innerH": 844
+    },
+    "fullVisible": true
+  }
+]

@@ -1,10 +1,10 @@
-/* farm R64 control reachability gate: primary-pointer routing + viewport hit testing. */
+/* farm R65 control reachability gate: primary-pointer routing + viewport hit testing + fit-map visibility. */
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const EVIDENCE = path.join(ROOT, "docs", "evidence", "R64", "controls");
+const EVIDENCE = path.join(ROOT, "docs", "evidence", "R65_map", "controls");
 const MIME = {
   ".html": "text/html", ".js": "application/javascript", ".json": "application/json",
   ".webmanifest": "application/manifest+json", ".png": "image/png",
@@ -148,6 +148,37 @@ async function assertTouchActionDock(page, tag) {
     `${tag} action dock 與 D-pad 不重疊，動作選擇時暫收助手`);
 }
 
+async function assertFitMapVisible(page, tag) {
+  const result = await page.evaluate(() => {
+    const scene = document.getElementById("mapScene");
+    const world = document.getElementById("mapWorld");
+    const tile = document.querySelector("#groundLayer .gtile");
+    const sr = scene.getBoundingClientRect();
+    const wr = world.getBoundingClientRect();
+    const tr = tile ? tile.getBoundingClientRect() : null;
+    return {
+      mode: scene.dataset.mapMode,
+      scrollW: scene.scrollWidth,
+      clientW: scene.clientWidth,
+      scrollH: scene.scrollHeight,
+      clientH: scene.clientHeight,
+      sceneW: sr.width,
+      sceneH: sr.height,
+      worldW: wr.width,
+      worldH: wr.height,
+      tileW: tr ? tr.width : 0,
+      tileH: tr ? tr.height : 0,
+    };
+  });
+  assert(result.mode === "fit", `${tag} 預設整圖模式（mode=${result.mode}）`);
+  assert(result.scrollH <= result.clientH + 2 && result.scrollW <= result.clientW + 2,
+    `${tag} 世界完整可見且 #mapScene 零內捲（scroll ${result.scrollW}×${result.scrollH}, client ${result.clientW}×${result.clientH}）`);
+  assert(result.worldW <= result.sceneW + 2 && result.worldH <= result.sceneH + 2,
+    `${tag} 地圖視覺框完整落在場景內（world ${Math.round(result.worldW)}×${Math.round(result.worldH)}, scene ${Math.round(result.sceneW)}×${Math.round(result.sceneH)}）`);
+  assert(result.tileW >= 10 && result.tileH >= 10,
+    `${tag} 整圖模式 tile 仍可辨識或可切原尺寸（tile ${Math.round(result.tileW)}×${Math.round(result.tileH)}）`);
+}
+
 async function runViewport(browser, base, config) {
   const context = await browser.newContext({
     viewport: { width: config.width, height: config.height },
@@ -176,6 +207,7 @@ async function runViewport(browser, base, config) {
       `${config.name} D-pad 分流正確（primaryCoarse=${device.primaryCoarse}, enabled=${device.mobileClass}）`);
     assert(device.pageScroll <= 2 && device.overflowX <= 2,
       `${config.name} 無頁級捲動／水平溢出（y=${device.pageScroll}, x=${device.overflowX}）`);
+    await assertFitMapVisible(page, config.name);
 
     const selector = [
       "#toolBar .tool", "#questDock button:not([disabled])", ".toolbar button",
@@ -210,17 +242,17 @@ async function run() {
   const base = `http://127.0.0.1:${server.address().port}/index.html`;
   const browser = await chromium.launch();
   try {
-    console.log("== farm R64 控制可達性守門 ==");
+    console.log("== farm R65 控制與整圖守門 ==");
     for (const config of VIEWPORTS) await runViewport(browser, base, config);
   } finally {
     await browser.close();
     server.close();
   }
   if (failed) {
-    console.error(`\n❌ R64 控制可達性守門失敗：${failed} 項`);
+    console.error(`\n❌ R65 控制與整圖守門失敗：${failed} 項`);
     process.exit(1);
   }
-  console.log("\n✅ R64 控制可達性守門通過（7 種裝置／視口）");
+  console.log("\n✅ R65 控制與整圖守門通過（7 種裝置／視口）");
 }
 
-run().catch((error) => { console.error("R64 控制可達性守門執行失敗：", error); process.exit(1); });
+run().catch((error) => { console.error("R65 控制與整圖守門執行失敗：", error); process.exit(1); });

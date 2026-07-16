@@ -55,6 +55,9 @@
   let recentSeeds = [];
   let sceneControlBound = false;
   let dpadRepeatTimer = null;
+  let questDockExpanded = false;
+  const sideListExpanded = {};
+  let lastMapFitSig = "";
 
   const $ = (id) => document.getElementById(id);
   const now = () => Date.now();
@@ -65,7 +68,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r64-20260716-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r65-20260716-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -555,6 +558,45 @@
       b.onclick = () => switchTab(b.dataset.tab);
     });
   }
+  function visibleListItems(key, items, limit) {
+    const all = Array.isArray(items) ? items : [];
+    return sideListExpanded[key] ? all : all.slice(0, limit);
+  }
+  function sideListMoreHtml(key, total, shown) {
+    if (total <= shown) return "";
+    return `<button type="button" class="btn ghost small side-list-more" data-list-more="${escapeHtml(key)}" aria-label="顯示更多項目">顯示更多 ${total - shown}</button>`;
+  }
+  function compactRowsHtml(key, rows, limit) {
+    const all = (rows || []).filter(Boolean);
+    const visible = visibleListItems(key, all, limit);
+    return visible.join("") + sideListMoreHtml(key, all.length, visible.length);
+  }
+  function bindListMore(container, renderFn) {
+    if (!container) return;
+    container.querySelectorAll("[data-list-more]").forEach((btn) => {
+      btn.onclick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        sideListExpanded[btn.dataset.listMore] = true;
+        renderFn();
+      };
+    });
+  }
+  function appendListMore(container, key, total, shown, renderFn) {
+    if (!container || total <= shown) return;
+    if (typeof container.insertAdjacentHTML === "function") {
+      container.insertAdjacentHTML("beforeend", sideListMoreHtml(key, total, shown));
+      bindListMore(container, renderFn);
+      return;
+    }
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn ghost small side-list-more";
+    btn.dataset.listMore = key;
+    btn.textContent = "顯示更多 " + (total - shown);
+    btn.onclick = () => { sideListExpanded[key] = true; renderFn(); };
+    container.appendChild(btn);
+  }
 
   // 幫手自動化捷徑：早期隱藏（初期動作必須走到目標執行）；升「幫手機器人」後才解鎖
   function syncHud() {
@@ -716,7 +758,14 @@
     $("streakHint").innerHTML = state.orderStreak > 0
       ? `<span class="streak-badge">🔥 連單 ${state.orderStreak}（獎金 ×${streakMul.toFixed(2)}）</span>` : "";
     if (state.orders.length === 0) { box.innerHTML = `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`; return; }
-    state.orders.forEach((o) => {
+    const ordered = state.orders.slice().sort((a, b) => {
+      const ca = G.canFulfill(state, a) ? 1 : 0;
+      const cb = G.canFulfill(state, b) ? 1 : 0;
+      if (ca !== cb) return cb - ca;
+      return (a.expiresAt || 0) - (b.expiresAt || 0);
+    });
+    const visibleOrders = visibleListItems("orders", ordered, 4);
+    visibleOrders.forEach((o) => {
       const rarity = window.ORDER_RARITY[o.rarity];
       const pay = G.orderPayout(state, o);
       const can = G.canFulfill(state, o);
@@ -754,13 +803,21 @@
       };
       box.appendChild(el);
     });
+    appendListMore(box, "orders", ordered.length, visibleOrders.length, renderOrders);
     lastOrderSig = orderSig();
   }
 
   // ---------- 升級 ----------
   function renderUpgrades() {
     const box = $("upgrades"); box.innerHTML = "";
-    window.UPGRADE_ORDER.forEach((key) => {
+    const upgradeKeys = window.UPGRADE_ORDER.slice().sort((a, b) => {
+      const na = G.nextUpgrade(state, a), nb = G.nextUpgrade(state, b);
+      const ba = na && state.coins >= na.cost ? 0 : na ? 1 : 2;
+      const bb = nb && state.coins >= nb.cost ? 0 : nb ? 1 : 2;
+      return ba - bb;
+    });
+    const visibleUpgrades = visibleListItems("upgrades", upgradeKeys, 4);
+    visibleUpgrades.forEach((key) => {
       const def = window.UPGRADES[key];
       const lv = state.upgrades[key];
       const max = G.upgradeMaxLevel(key);
@@ -789,6 +846,7 @@
       }
       box.appendChild(el);
     });
+    appendListMore(box, "upgrades", upgradeKeys.length, visibleUpgrades.length, renderUpgrades);
   }
 
   // ---------- 故事 / 任務（地圖驅動：state.story 任務鏈）----------
@@ -1088,13 +1146,19 @@
     box.dataset.quest = cur ? cur.id : "free";
     box.dataset.targetId = targetId || "";
     box.classList.toggle("festival", !!isFestivalQuest);
+    box.classList.toggle("expanded", questDockExpanded);
     box.innerHTML = `<div class="qd-body">
-        <div class="qd-title"><span>📍</span><span>${title}</span>${isFestivalQuest ? `<em class="festival-tag">🏮四季物產</em>` : ""}</div>
+        <div class="qd-title"><span>📍</span><span>${title}</span><span class="qd-summary">${action}</span>${isFestivalQuest ? `<em class="festival-tag">🏮四季物產</em>` : ""}</div>
         <div class="qd-action">${action}</div>
         ${cur && cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(true) : ""}
         ${cur && (cur.id === "collect_east_forage") ? forageRowsHtml(true) : ""}
       </div>
-      <button class="qd-meta qd-go" data-audit="quest-dock-go" aria-label="${targetId ? "前往目前任務目標" : "目前任務沒有可前往目標"}" ${targetId ? "" : "disabled"}>${targetId ? "前往" : "探索"}</button>`;
+      <div class="qd-actions">
+        <button class="qd-meta qd-toggle" data-audit="quest-dock-toggle" aria-label="${questDockExpanded ? "收合任務詳情" : "展開任務詳情"}">${questDockExpanded ? "收" : "詳"}</button>
+        <button class="qd-meta qd-go" data-audit="quest-dock-go" aria-label="${targetId ? "前往目前任務目標" : "目前任務沒有可前往目標"}" ${targetId ? "" : "disabled"}>${targetId ? "前往" : "探索"}</button>
+      </div>`;
+    const toggle = box.querySelector(".qd-toggle");
+    if (toggle) toggle.onclick = (ev) => { ev.stopPropagation(); questDockExpanded = !questDockExpanded; renderQuestDock(); };
     const go = box.querySelector(".qd-go");
     if (go && targetId) go.onclick = (ev) => { ev.stopPropagation(); focusCameraOnTile(targetId); };
   }
@@ -1102,12 +1166,13 @@
     if (!state) return {};
     if (!state.settings) state.settings = {};
     if (state.settings.smartAssistant == null) state.settings.smartAssistant = true;
-    if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = false;
+    if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = true;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
     if (state.settings.soundEnabled == null) state.settings.soundEnabled = true;
     state.settings.soundVolume = clamp01(state.settings.soundVolume, 0.55);
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(state.settings.textSize)) state.settings.textSize = "medium";
+    if (!["fit", "natural"].includes(state.settings.mapViewMode)) state.settings.mapViewMode = "fit";
     if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
     return state.settings;
   }
@@ -1554,7 +1619,7 @@
         const key = btn.dataset.settingKey;
         ensureSettings();
         state.settings[key] = state.settings[key] === false;
-        if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
+        if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = true;
         if (key === "soundEnabled" && state.settings.soundEnabled !== false) { unlockAudio(true); playSound("ui"); }
         else playSound("ui");
         renderSettingsPanel();
@@ -1695,7 +1760,7 @@
     const title = cur ? cur.title : "陽光農場的新篇章";
     const copy = cur ? cur.desc
       : "阿軒割割陽光農場開源遊戲世界重新熱鬧了起來。東林已通，繼續開墾田地、迎接更多動物與市集訂單，讓這座農場成為玩家共創的 RPG 世界。";
-    const quests = QUEST_ORDER.map((id) => questRow(id, completed, cur)).join("");
+    const quests = compactRowsHtml("story-main", QUEST_ORDER.map((id) => questRow(id, completed, cur)), 4);
     // 第二章：序章 6/6 後才顯示，獨立完成度（不影響主面板 0/6 讀值）
     const ch2Html = ch1Done ? `
       <div class="chapter2">
@@ -1704,7 +1769,7 @@
           <div class="story-progress-head"><span>探索完成度</span><b>${ch2Done}/${CHAPTER2_ORDER.length}</b></div>
           <div class="story-progress-track"><i style="width:${ch2Pct}%"></i></div>
         </div>
-        <div class="quest-list">${CHAPTER2_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch2", CHAPTER2_ORDER.map((id) => questRow(id, completed, cur)), 3)}</div>
       </div>` : "";
     // 第三章：第二章 2/2 後才顯示，獨立完成度（Stage 7 動物照護）
     const ch3Html = ch2AllDone ? `
@@ -1714,7 +1779,7 @@
           <div class="story-progress-head"><span>照護完成度</span><b>${ch3Done}/${CHAPTER3_ORDER.length}</b></div>
           <div class="story-progress-track"><i style="width:${ch3Pct}%"></i></div>
         </div>
-        <div class="quest-list">${CHAPTER3_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch3", CHAPTER3_ORDER.map((id) => questRow(id, completed, cur)), 3)}</div>
       </div>` : "";
     const ch4Html = ch3AllDone ? `
       <div class="chapter2 chapter4">
@@ -1723,7 +1788,7 @@
           <div class="story-progress-head"><span>四季完成度</span><b>${ch4Done}/${CHAPTER4_ORDER.length}</b></div>
           <div class="story-progress-track"><i style="width:${ch4Pct}%"></i></div>
         </div>
-        <div class="quest-list">${CHAPTER4_ORDER.map((id) => questRow(id, completed, cur)).join("")}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch4", CHAPTER4_ORDER.map((id) => questRow(id, completed, cur)), 3)}</div>
       </div>` : "";
     const letterRows = chapter5Letters().map((l) => {
       const unlocked = !!((mail.unlocked || {})[l.id]);
@@ -1739,7 +1804,13 @@
           <div class="story-progress-head"><span>信箋完成度</span><b>${letterDone}/${CHAPTER5_LETTER_ORDER.length}${mail.replied ? "・已回信" : ""}</b></div>
           <div class="story-progress-track"><i style="width:${letterPct}%"></i></div>
         </div>
-        <div class="quest-list">${letterRows}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch5", chapter5Letters().map((l) => {
+          const unlocked = !!((mail.unlocked || {})[l.id]);
+          const read = !!mailRead[l.id];
+          return `<div class="quest ${read ? "done" : ""} ${unlocked && !read ? "active" : ""}">
+            <span class="qmark">${read ? "✅" : unlocked ? "📬" : "🔒"}</span>
+            <span class="qtext"><span>${escapeHtml(l.title)}</span><em>${unlocked ? (read ? "已讀" : "未讀") : "未解鎖"}</em></span></div>`;
+        }), 3)}</div>
         <button type="button" class="btn ghost small story-mail-btn" id="openLettersFromStory">打開信箱</button>
       </div>` : "";
     box.innerHTML = `<div class="story-card">
@@ -1760,6 +1831,7 @@
     </div>`;
     const openMail = $("openLettersFromStory");
     if (openMail) openMail.onclick = openLettersModal;
+    bindListMore(box, renderStory);
   }
   // Stage 6：側欄對話記錄（走近 NPC 交談後累積）
   function dialogueLogHtml() {
@@ -1812,26 +1884,31 @@
         <div class="jd-row"><b>首次發現</b><span data-audit="journal-first-seen">${fmtDate(entry.firstDiscoveredAt)}</span></div>
       </div>`;
     };
-    const cropRows = j.crops.map((c) => {
+    const cropRows = compactRowsHtml("journal-crops", j.crops.map((c) => {
       if (!c.unlocked) return item(false, "🔒 未解鎖", "crop", c.id);
       if (!c.discovered) return item(false, "❔ 尚未發現", "crop", c.id);
       return item(true, `${c.emoji} ${c.name}`, "crop", c.id);
-    }).join("");
-    const productRows = j.products.map((p) =>
-      item(p.discovered, p.discovered ? `${p.emoji} ${p.name}` : "❔ 尚未發現", "product", p.id)).join("");
-    const forageRows = (j.forage || []).map((f) =>
-      item(f.discovered, f.discovered ? `${f.emoji} ${f.name}${f.season ? "・" + f.season : ""}` : "◼ 未採集", "forage", f.id)).join("");
+    }), 5);
+    const productRows = compactRowsHtml("journal-products", j.products.map((p) =>
+      item(p.discovered, p.discovered ? `${p.emoji} ${p.name}` : "❔ 尚未發現", "product", p.id)), 5);
+    const forageRows = compactRowsHtml("journal-forage", (j.forage || []).map((f) =>
+      item(f.discovered, f.discovered ? `${f.emoji} ${f.name}${f.season ? "・" + f.season : ""}` : "◼ 未採集", "forage", f.id)), 5);
     const npcMetCount = j.npcs.filter((n) => n.met).length;
-    const npcRows = j.npcs.map((n) => item(n.met,
-      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}${n.sideQuest && n.sideQuest.completed ? "・支線完成" : ""}` : "❔ 尚未遇見", "npc", n.id)).join("");
+    const npcRows = compactRowsHtml("journal-npcs", j.npcs.map((n) => item(n.met,
+      n.met ? `🧑 ${n.name}・${n.title}${n.requestsCompleted > 0 ? "・已完成 " + n.requestsCompleted + " 次委託" : ""}${n.sideQuest && n.sideQuest.completed ? "・支線完成" : ""}` : "❔ 尚未遇見", "npc", n.id)), 5);
     // discovered 要用 everGood||everHappy，不能只看 everHappy——不然「曾達良好」的文字
     // 顯示了，但 CSS class/data-discovered 卻標成 undiscovered，兩者互相矛盾
-    const animalRows = j.animals.map((a) => item(a.everGood || a.everHappy,
-      `${a.everHappy ? "💛" : a.everGood ? "🤍" : "⬜"} ${a.name}${a.everHappy ? "・曾達開心" : a.everGood ? "・曾達良好" : "・尚未達標"}`, "animal", a.id)).join("");
-    const achRows = j.achievements.map((a) => item(a.unlocked,
-      a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement", a.id)).join("");
-    const collectibleRows = (j.collectibles || []).map((c) => item(c.unlocked,
-      c.unlocked ? `${c.emoji} ${c.name}` : "◼ 未取得收藏品", "collectible", c.id)).join("");
+    const animalRows = compactRowsHtml("journal-animals", j.animals.map((a) => item(a.everGood || a.everHappy,
+      `${a.everHappy ? "💛" : a.everGood ? "🤍" : "⬜"} ${a.name}${a.everHappy ? "・曾達開心" : a.everGood ? "・曾達良好" : "・尚未達標"}`, "animal", a.id)), 5);
+    const achRows = compactRowsHtml("journal-achievements", j.achievements.map((a) => item(a.unlocked,
+      a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement", a.id)), 5);
+    const collectibleRows = compactRowsHtml("journal-collectibles", (j.collectibles || []).map((c) => item(c.unlocked,
+      c.unlocked ? `${c.emoji} ${c.name}` : "◼ 未取得收藏品", "collectible", c.id)), 5);
+    const npcSideRows = compactRowsHtml("journal-npc-sidequests", j.npcs.map((n) => {
+      const sq = n.sideQuest;
+      const lore = sq && sq.loreUnlocked ? `<span class="sq-lore">・${sq.lore}</span>` : "";
+      return item(!!(sq && sq.completed), sq ? `${sq.completed ? "✅" : sq.status === "active" ? "📌" : sq.status === "available" ? "📮" : "🔒"} ${n.name}・${sq.chainTitle || sq.title} ${sq.completedSteps}/${sq.totalSteps}${lore}` : "❔ 尚無支線", "npc-sidequest", n.id);
+    }), 5);
     const chapterLine = (label, ch) => ch.unlocked
       ? `<div>${label} ${ch.done}/${ch.total}${ch.replied ? "・已回信" : ""}</div>`
       : `<div>🔒 ${label}未解鎖</div>`;
@@ -1849,11 +1926,7 @@
       ${head("🥚 產物與品質圖鑑", "products")}<div class="journal-grid">${productRows}</div>
       ${head("🌲 東林採集", "forage")}<div class="journal-grid" data-audit="journal-forage">${forageRows}</div>
       ${head("🧑 鎮民名錄（" + npcMetCount + "/" + j.npcs.length + "）", "npcs")}<div class="journal-grid">${npcRows}</div>
-      ${head("📬 鎮民支線", "npcSideQuests")}<div class="journal-grid">${j.npcs.map((n) => {
-        const sq = n.sideQuest;
-        const lore = sq && sq.loreUnlocked ? `<span class="sq-lore">・${sq.lore}</span>` : "";
-        return item(!!(sq && sq.completed), sq ? `${sq.completed ? "✅" : sq.status === "active" ? "📌" : sq.status === "available" ? "📮" : "🔒"} ${n.name}・${sq.chainTitle || sq.title} ${sq.completedSteps}/${sq.totalSteps}${lore}` : "❔ 尚無支線", "npc-sidequest", n.id);
-      }).join("")}</div>
+      ${head("📬 鎮民支線", "npcSideQuests")}<div class="journal-grid">${npcSideRows}</div>
       ${head("🐾 動物親密度里程碑", "animals")}<div class="journal-grid">${animalRows}</div>
       ${head("🌉 世界旗標", "world")}
       <div class="journal-grid">
@@ -1873,6 +1946,7 @@
         renderJournal();
       });
     });
+    bindListMore(box, renderJournal);
   }
 
   // ====================================================================
@@ -1887,16 +1961,79 @@
   // 障礙 → props frame（同名）
   const OBSTACLE_FRAME = { rock: "rock", stump: "stump", bush: "bush" };
   // ===== Stage 4：像素世界 + camera + 分層 y-sort 渲染器 =====
-  const TILE = window.TILE_PX || 48;
+  const BASE_TILE = window.TILE_PX || 48;
+  const MIN_READABLE_TILE = 14;
+  const MAX_FIT_TILE = 72;
+  const FIT_OVERFLOW_GUTTER = 24;
+  let TILE = BASE_TILE;
   let worldEl = null, groundEl = null;
   const obStatic = [], obDyn = [];   // 物件層 sprite（靜態：建築/障礙/站點；動態：作物/動物/狀態）
   const pxv = (n) => n + "px";
+
+  function mapViewMode() {
+    const settings = ensureSettings();
+    return settings.mapViewMode === "natural" ? "natural" : "fit";
+  }
+  function fitTileForScene(scene) {
+    if (!scene || !state || !state.map) return BASE_TILE;
+    const vw = Math.max(1, (scene.clientWidth || scene.getBoundingClientRect().width || 1) - FIT_OVERFLOW_GUTTER);
+    const vh = Math.max(1, (scene.clientHeight || scene.getBoundingClientRect().height || 1) - FIT_OVERFLOW_GUTTER);
+    const raw = Math.min(vw / state.map.width, vh / state.map.height);
+    if (!Number.isFinite(raw) || raw <= 0) return BASE_TILE;
+    return Math.max(10, Math.min(MAX_FIT_TILE, Math.floor(raw)));
+  }
+  function syncMapModeUi(fitTile) {
+    const scene = $("mapScene");
+    const btn = $("mapFitToggle");
+    const mode = mapViewMode();
+    if (scene) {
+      scene.dataset.mapMode = mode;
+      scene.dataset.fitTile = mode === "fit" && fitTile < MIN_READABLE_TILE ? "tiny" : "ok";
+      scene.style.setProperty("--map-tile-px", pxv(TILE));
+    }
+    if (btn) {
+      const natural = mode === "natural";
+      btn.textContent = natural ? "原尺寸" : "整圖";
+      btn.title = natural ? "切換為整張地圖完整顯示" : "切換為原尺寸場景內捲動";
+      if (btn.setAttribute) {
+        btn.setAttribute("aria-pressed", natural ? "true" : "false");
+        btn.setAttribute("aria-label", btn.title);
+      }
+    }
+  }
+  function applyMapViewSizing(force) {
+    const scene = $("mapScene");
+    if (!scene || !state || !state.map) return false;
+    const mode = mapViewMode();
+    const fitTile = fitTileForScene(scene);
+    const nextTile = mode === "natural" ? BASE_TILE : fitTile;
+    const sig = [mode, nextTile, scene.clientWidth, scene.clientHeight].join("|");
+    const changed = force || nextTile !== TILE || sig !== lastMapFitSig;
+    TILE = nextTile;
+    lastMapFitSig = sig;
+    syncMapModeUi(fitTile);
+    return changed;
+  }
+  function rebuildMapForView() {
+    applyMapViewSizing(true);
+    buildMap();
+    updateMap(now());
+    positionPlayer(false);
+  }
+  function toggleMapViewMode() {
+    ensureSettings();
+    state.settings.mapViewMode = mapViewMode() === "natural" ? "fit" : "natural";
+    lastMapFitSig = "";
+    rebuildMapForView();
+    scheduleSave();
+  }
 
   function buildMap() { buildScene(); }          // 相容舊呼叫名
   function buildScene() {
     const scene = $("mapScene"); if (!scene) return;
     worldEl = $("mapWorld"); groundEl = $("groundLayer");
     if (!worldEl || !groundEl) return;
+    applyMapViewSizing(false);
     const W = state.map.width * TILE, H = state.map.height * TILE;
     scene.style.setProperty("--map-world-width", pxv(W));
     scene.style.setProperty("--map-world-height", pxv(H));
@@ -2337,6 +2474,18 @@
     if (!tile) tile = G.getTileById(state, state.player.tileId);
     if (!tile) return;
     const px0 = (tile.x + 0.5) * TILE, py0 = (tile.y + 0.5) * TILE;
+    if (mapViewMode() === "natural") {
+      const maxX = Math.max(0, worldW - vw), maxY = Math.max(0, worldH - vh);
+      const left = Math.min(maxX, Math.max(0, px0 - vw / 2));
+      const top = Math.min(maxY, Math.max(0, py0 - vh / 2));
+      state.camera.x = -left; state.camera.y = -top;
+      if (!animate) scene.scrollTo(left, top);
+      else scene.scrollTo({ left, top, behavior: "smooth" });
+      if (!animate) worldEl.style.transition = "none";
+      worldEl.style.transform = "translate(0px,0px)";
+      if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
+      return;
+    }
     let camX = vw / 2 - px0, camY = vh / 2 - py0;
     camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
     camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
@@ -3542,6 +3691,8 @@
     });
     const action = $("actionA");
     if (action) action.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); activateFacingTile(); });
+    const fitToggle = $("mapFitToggle");
+    if (fitToggle) fitToggle.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); toggleMapViewMode(); });
     const world = $("mapWorld");
     if (world) {
       world.addEventListener("pointerdown", (ev) => {
@@ -3778,7 +3929,7 @@
     positionPlayer(false);
     setupSceneControls();
     // 視窗縮放：重新定位玩家
-    window.addEventListener("resize", () => { updateMap(now()); positionPlayer(false); });
+    window.addEventListener("resize", () => { lastMapFitSig = ""; rebuildMapForView(); });
     // 鍵盤 WASD/方向鍵：一次走一格
     document.addEventListener("keydown", onKeyMove);
     document.addEventListener("keydown", (ev) => {

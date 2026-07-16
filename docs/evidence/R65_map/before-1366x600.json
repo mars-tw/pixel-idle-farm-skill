@@ -1,0 +1,22 @@
+{
+  "scene": {
+    "w": 978.171875,
+    "h": 259.421875,
+    "scrollW": 1075,
+    "scrollH": 442,
+    "clientW": 978,
+    "clientH": 259
+  },
+  "world": {
+    "w": 1056,
+    "h": 576,
+    "offsetW": 1056,
+    "offsetH": 576
+  },
+  "page": {
+    "scrollW": 1366,
+    "scrollH": 600,
+    "innerW": 1366,
+    "innerH": 600
+  }
+}

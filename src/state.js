@@ -365,7 +365,7 @@
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0, seasonsReached: {} },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
-      settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium" },
+      settings: { smartAssistant: true, smartAssistantCollapsed: true, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium", mapViewMode: "fit" },
       lastOfflineSummary: null,
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
@@ -443,9 +443,10 @@
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
     merged.discoveries = Object.assign({ items: {} }, state.discoveries);
     merged.discoveries.items = Object.assign({}, state.discoveries && state.discoveries.items);
-    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium" }, state.settings);
+    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: true, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium", mapViewMode: "fit" }, state.settings);
     if (!["auto", "high", "low"].includes(merged.settings.performanceMode)) merged.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(merged.settings.textSize)) merged.settings.textSize = "medium";
+    if (!["fit", "natural"].includes(merged.settings.mapViewMode)) merged.settings.mapViewMode = "fit";
     merged.settings.soundVolume = Math.max(0, Math.min(1, Number.isFinite(merged.settings.soundVolume) ? merged.settings.soundVolume : 0.55));
     merged.lastOfflineSummary = state.lastOfflineSummary || null;
     const discoveredAtFallback = state.createdAt || state.lastSeenAt || Date.now();

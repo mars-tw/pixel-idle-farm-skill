@@ -1,0 +1,29 @@
+{
+  "mode": "fit",
+  "fitTile": 22,
+  "scene": {
+    "x": 18,
+    "y": 211.1875,
+    "w": 990.171875,
+    "h": 289.421875,
+    "scrollW": 990,
+    "scrollH": 289,
+    "clientW": 990,
+    "clientH": 289
+  },
+  "world": {
+    "x": 271,
+    "y": 224.1875,
+    "w": 484,
+    "h": 264,
+    "offsetW": 484,
+    "offsetH": 264
+  },
+  "page": {
+    "scrollW": 1366,
+    "scrollH": 600,
+    "innerW": 1366,
+    "innerH": 600
+  },
+  "fullVisible": true
+}

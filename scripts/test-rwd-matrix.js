@@ -27,6 +27,9 @@ function assert(cond, msg) { if (cond) console.log("  ✓ " + msg); else { conso
 
 const VIEWPORTS = [
   { w: 1920, h: 1080, kind: "desktop" },
+  { w: 1440, h: 780, kind: "desktop" },
+  { w: 1366, h: 600, kind: "desktop" },
+  { w: 1280, h: 640, kind: "desktop" },
   { w: 1366, h: 700, kind: "desktop" },
   { w: 1280, h: 720, kind: "desktop" },
   { w: 1024, h: 768, kind: "desktop" },

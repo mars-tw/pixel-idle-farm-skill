@@ -94,7 +94,7 @@ async function runTrueServiceWorkerOfflineTest(browser, base) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "allow", reducedMotion: "reduce" });
   const page = await context.newPage();
   try {
-    await page.goto(base + "?swtest=1");
+    await page.goto(base + "?swtest=1", { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
     await reloadAllowAbort(page);
@@ -156,7 +156,7 @@ async function runShortDesktopLayoutTest(browser, base) {
   const context = await browser.newContext({ viewport: { width: 1366, height: 700 }, serviceWorkers: "block", reducedMotion: "reduce" });
   const page = await context.newPage();
   try {
-    await page.goto(base);
+    await page.goto(base, { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await configureE2ePage(page);
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
@@ -222,7 +222,7 @@ async function runTouchFarmConfirmationTest(browser, base) {
   });
   const page = await context.newPage();
   try {
-    await page.goto(base);
+    await page.goto(base, { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await configureE2ePage(page);
     await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
@@ -312,7 +312,7 @@ async function runTouchFarmConfirmationTest(browser, base) {
     });
     assert(actionAReach.width >= 44 && actionAReach.height >= 44 && actionAReach.top >= 0 &&
       actionAReach.bottom <= 844 && actionAReach.hit,
-      `R64 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
+      `R65 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
     await page.click("#actionA");
     await waitArrive(page, 9000);
     const actionA = await page.evaluate((targetId) => {
@@ -340,6 +340,7 @@ async function run() {
   const browser = await chromium.launch();
 
   try {
+  console.log("\n== R65 preflight gates ==");
   await runShortDesktopLayoutTest(browser, base);
   await runTouchFarmConfirmationTest(browser, base);
   await runTrueServiceWorkerOfflineTest(browser, base);
@@ -350,7 +351,7 @@ async function run() {
     page.on("console", (m) => { if (m.type() === "error" && !/favicon/.test(m.text())) errors.push("console: " + m.text()); });
     page.on("pageerror", (e) => errors.push("pageerror: " + (e && e.message)));
 
-    await page.goto(base);
+    await page.goto(base, { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important}" });
     await configureE2ePage(page);
     const pwaFiles = await page.evaluate(async () => {
@@ -399,7 +400,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r64-20260716-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r65-20260716-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -482,7 +483,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r64-20260716-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r65-20260716-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.soundVolume === "55" && r27Settings.soundVolumeText === "55%",
@@ -660,47 +661,45 @@ async function run() {
     assert(dockInitial.goAria.includes("前往") || dockInitial.goAria.includes("目標"), `Dock 前往按鈕具 aria-label（${dockInitial.goAria}）`);
     assert(dockInitial.overflow <= 2, `任務 Dock 不造成水平溢出（${dockInitial.overflow}）`);
 
-    // 1. 大世界 ≥22×12 + 世界像素 > 視口
+    // 1. R65：整圖模式預設完整可見 + 原尺寸模式可切換
     const world = await page.evaluate(() => {
       const st = window.__farm.state();
       const scene = document.getElementById("mapScene"), wEl = document.getElementById("mapWorld");
+      const tile = document.querySelector("#groundLayer .gtile");
+      const tr = tile ? tile.getBoundingClientRect() : null;
       return { w: st.map.width, h: st.map.height,
         worldW: wEl.offsetWidth, worldH: wEl.offsetHeight,
-        sceneW: scene.clientWidth, sceneH: scene.clientHeight };
+        sceneW: scene.clientWidth, sceneH: scene.clientHeight,
+        scrollW: scene.scrollWidth, scrollH: scene.scrollHeight,
+        mode: scene.dataset.mapMode, tileW: tr ? tr.width : 0 };
     });
     assert(world.w >= 22 && world.h >= 12, `地圖 ≥22×12（${world.w}×${world.h}）`);
-    assert(world.worldW > world.sceneW || world.worldH > world.sceneH,
-      `世界像素大於視口可平移（world ${world.worldW}×${world.worldH} > scene ${world.sceneW}×${world.sceneH}）`);
-
-    // 2. camera follow：移動角色 → camera 平移
-    const cam = await page.evaluate(async () => {
+    assert(world.mode === "fit" && world.scrollH <= world.sceneH + 2 && world.scrollW <= world.sceneW + 2 &&
+      world.worldW <= world.sceneW + 2 && world.worldH <= world.sceneH + 2,
+      `整圖模式完整可見且零內捲（mode=${world.mode}, world ${world.worldW}×${world.worldH}, scene ${world.sceneW}×${world.sceneH}, scroll ${world.scrollW}×${world.scrollH}）`);
+    assert(world.tileW >= 10, `整圖模式 tile 有最低辨識度（${Math.round(world.tileW)}px）`);
+    const naturalMode = await page.evaluate(async () => {
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      document.getElementById("mapFitToggle").click();
+      await sleep(300);
       const F = window.__farm; const st = F.state();
       st.camera.focusTileId = null; st.camera.focusUntil = 0;
-      const before = { x: st.camera.x, y: st.camera.y };
       const scene = document.getElementById("mapScene");
       const tilePx = window.TILE_PX || 48;
-      const worldW = st.map.width * tilePx, worldH = st.map.height * tilePx;
-      const vw = scene.clientWidth, vh = scene.clientHeight;
-      const expectedCam = (tile) => {
-        const px = (tile.x + 0.5) * tilePx, py = (tile.y + 0.5) * tilePx;
-        let x = vw / 2 - px, y = vh / 2 - py;
-        x = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, x));
-        y = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, y));
-        return { x, y };
-      };
-      const far = st.map.tiles.filter((t) => window.isWalkable(st, t))
-        .map((t) => ({ tile: t, cam: expectedCam(t) }))
-        .sort((a, b) => (Math.abs(b.cam.x - before.x) + Math.abs(b.cam.y - before.y)) - (Math.abs(a.cam.x - before.x) + Math.abs(a.cam.y - before.y)))[0];
-      st.player.tileId = far.tile.id; st.player.x = far.tile.x; st.player.y = far.tile.y;
+      const before = { left: scene.scrollLeft, top: scene.scrollTop };
+      const far = st.map.tiles.filter((t) => window.isWalkable(st, t)).sort((a, b) => (b.x + b.y) - (a.x + a.y))[0];
+      st.player.tileId = far.id; st.player.x = far.x; st.player.y = far.y;
       F.refresh(); await sleep(300);
-      const after = { x: F.state().camera.x, y: F.state().camera.y };
-      const wt = getComputedStyle(document.getElementById("mapWorld")).transform;
-      return { before, after, farX: far.tile.x, farY: far.tile.y, expected: far.cam, transform: wt };
+      const after = { left: scene.scrollLeft, top: scene.scrollTop };
+      return { mode: scene.dataset.mapMode, before, after, farX: far.x, farY: far.y,
+        tilePx, worldW: document.getElementById("mapWorld").offsetWidth, sceneW: scene.clientWidth };
     });
-    assert(cam.before.y !== cam.after.y || cam.before.x !== cam.after.x,
-      `camera 隨角色移動而平移（x ${cam.before.x}→${cam.after.x}, y ${cam.before.y}→${cam.after.y}, target=${cam.farX},${cam.farY}）`);
-    assert(cam.transform && cam.transform !== "none", "世界層套用 transform 位移（camera）");
+    assert(naturalMode.mode === "natural" && naturalMode.worldW > naturalMode.sceneW && naturalMode.tilePx === 48,
+      `原尺寸模式可切換且使用 48px tile（mode=${naturalMode.mode}, worldW=${naturalMode.worldW}, sceneW=${naturalMode.sceneW}）`);
+    assert(naturalMode.after.left !== naturalMode.before.left || naturalMode.after.top !== naturalMode.before.top,
+      `原尺寸模式鏡頭以場景內捲動跟隨（scroll ${naturalMode.before.left},${naturalMode.before.top}→${naturalMode.after.left},${naturalMode.after.top} target=${naturalMode.farX},${naturalMode.farY}）`);
+    await page.evaluate(() => document.getElementById("mapFitToggle").click());
+    await sleep(300);
 
     // 3. 視覺：地面磚 atlas / 物件 sprite / 0 emoji / 無格線
     const render = await page.evaluate(() => {
@@ -890,6 +889,9 @@ async function run() {
       F.refresh();
       const marker = window.questMarkerTile(st, Date.now());
       const soil = st.map.tiles.find((t) => t.plotIndex === 0);
+      const assistant = document.getElementById("smartAssistant");
+      const collapse = document.querySelector('[data-audit="assistant-collapse"]');
+      if (assistant && assistant.classList.contains("collapsed") && collapse) collapse.click();
       const row = document.querySelector('[data-audit="assistant-row"][data-rank="1"]');
       const go = row && row.querySelector('[data-audit="assistant-go"]');
       const reason = row && row.querySelector('[data-audit="assistant-reason"]');
@@ -1010,6 +1012,11 @@ async function run() {
     assert(pre.bridgeOb >= 1 && pre.eventOb >= 1, `斷橋 / 事件點 data-audit 可稽核（bridge=${pre.bridgeOb} event=${pre.eventOb}）`);
 
     // 12. 修橋材料導引：不灌 state，依 Dock/marker 清大樹與兩顆巨石湊齊木6石4
+    await page.evaluate(() => {
+      const dock = document.getElementById("questDock");
+      const toggle = document.querySelector('[data-audit="quest-dock-toggle"]');
+      if (dock && !dock.classList.contains("expanded") && toggle) toggle.click();
+    });
     const matStart = await page.evaluate(() => {
       const st = window.__farm.state();
       const s = window.Game.bridgeMaterialStatus(st);
@@ -1086,6 +1093,11 @@ async function run() {
         before,
         after: { x: st.camera.x, y: st.camera.y },
         quest: document.getElementById("questDock").dataset.quest,
+        mapMode: document.getElementById("mapScene").dataset.mapMode,
+        sceneScrollW: document.getElementById("mapScene").scrollWidth,
+        sceneScrollH: document.getElementById("mapScene").scrollHeight,
+        sceneClientW: document.getElementById("mapScene").clientWidth,
+        sceneClientH: document.getElementById("mapScene").clientHeight,
         btnW: rect ? rect.width : 0,
         btnH: rect ? rect.height : 0,
         overflow: document.documentElement.scrollWidth - window.innerWidth,
@@ -1095,9 +1107,12 @@ async function run() {
       `Dock 前往把鏡頭 focus 到目前任務 marker（target=${dockGuide.target} focus=${dockGuide.focus}）`);
     assert(dockGuide.btnW >= 44 && dockGuide.btnH >= 44 && dockGuide.overflow <= 2,
       `Dock 前往 tap target >=44px 且無水平溢出（${Math.round(dockGuide.btnW)}×${Math.round(dockGuide.btnH)} overflow=${dockGuide.overflow}）`);
-    if (vp.w <= 560) {
+    if (vp.w <= 560 && dockGuide.mapMode !== "fit") {
       assert(dockGuide.before.x !== dockGuide.after.x || dockGuide.before.y !== dockGuide.after.y,
         `手機 Dock 前往觸發 camera 平移（x ${dockGuide.before.x}→${dockGuide.after.x}, y ${dockGuide.before.y}→${dockGuide.after.y}）`);
+    } else if (vp.w <= 560) {
+      assert(dockGuide.sceneScrollW <= dockGuide.sceneClientW + 2 && dockGuide.sceneScrollH <= dockGuide.sceneClientH + 2,
+        `手機 Dock 前往維持整圖完整可見（mode=${dockGuide.mapMode}, scroll=${dockGuide.sceneScrollW}×${dockGuide.sceneScrollH}/${dockGuide.sceneClientW}×${dockGuide.sceneClientH}）`);
     } else {
       assert(dockGuide.focus === dockGuide.target, "桌機 Dock 前往設定 marker focus（視口較寬時可能已在 clamp 邊界）");
     }
@@ -1118,6 +1133,11 @@ async function run() {
       return {
         claimed: !!(st.flags.eventsClaimed && st.flags.eventsClaimed.east_clearing),
         quest: st.story.questId, coins: st.coins, camX: st.camera.x, playerX: st.player.x,
+        mapMode: document.getElementById("mapScene").dataset.mapMode,
+        sceneScrollW: document.getElementById("mapScene").scrollWidth,
+        sceneScrollH: document.getElementById("mapScene").scrollHeight,
+        sceneClientW: document.getElementById("mapScene").clientWidth,
+        sceneClientH: document.getElementById("mapScene").clientHeight,
         ch2: ch2 ? ch2.getAttribute('data-progress2') : null,
         lockedAfter: document.querySelectorAll('#groundLayer [data-kind="locked-area"]').length,
       };
@@ -1125,7 +1145,10 @@ async function run() {
     assert(explore.eastReachable, "修橋後：東林 BFS 可達");
     assert(explore.marker === explore.eventId, "探索任務標記指向東林事件點");
     assert(exploreRes.claimed && exploreRes.coins > explore.coinsBefore, `走到東林古樹觸發一次性獎勵（+${exploreRes.coins - explore.coinsBefore} 金）`);
-    assert(exploreRes.playerX >= 17 && exploreRes.camX < -50, `角色進入東林、camera 跟隨平移（playerX=${exploreRes.playerX} camX=${exploreRes.camX}）`);
+    assert(exploreRes.playerX >= 17 && (exploreRes.mapMode === "fit"
+      ? exploreRes.sceneScrollW <= exploreRes.sceneClientW + 2 && exploreRes.sceneScrollH <= exploreRes.sceneClientH + 2
+      : exploreRes.camX < -50),
+      `角色進入東林且地圖模式有效（mode=${exploreRes.mapMode}, playerX=${exploreRes.playerX}, camX=${exploreRes.camX}, scroll=${exploreRes.sceneScrollW}×${exploreRes.sceneScrollH}/${exploreRes.sceneClientW}×${exploreRes.sceneClientH}）`);
     assert(exploreRes.quest === "discover_east_forage" && exploreRes.ch2 === "2/5",
       `探索後接東林採集鏈（第二章 ${exploreRes.ch2}，quest=${exploreRes.quest}）`);
     assert(exploreRes.lockedAfter > 0 && exploreRes.lockedAfter < 30,
@@ -1533,6 +1556,13 @@ async function run() {
     // 28. Stage 11/R19：農場圖鑑——用故事鏈跑到這裡已經真實累積的發現狀態驗證
     await page.click('[data-tab="journal"]');
     await sleep(300);
+    await page.evaluate(() => {
+      let guard = 0;
+      while (document.querySelector("[data-list-more]") && guard++ < 30) {
+        document.querySelector("[data-list-more]").click();
+      }
+    });
+    await sleep(100);
     const journalState = await page.evaluate(() => {
       const items = [...document.querySelectorAll('[data-audit="journal-item"]')];
       const byCat = (cat) => items.filter((el) => el.dataset.category === cat);
