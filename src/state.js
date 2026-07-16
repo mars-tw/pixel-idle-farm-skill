@@ -91,13 +91,44 @@
     return coords.size === C.MAP_W * C.MAP_H && plotIndexes.size === C.GAME.maxPlots;
   }
   function refreshDerivedMapFields(map) {
+    const canonical = makeMap();
+    const byId = {};
+    for (const tile of (canonical.tiles || [])) byId[tile.id] = tile;
+    for (const tile of (map.tiles || [])) {
+      const ref = byId[tile.id];
+      if (!ref) continue;
+      tile.region = ref.region || null;
+      tile.bridge = !!ref.bridge;
+      tile.event = ref.event || null;
+      tile.forage = ref.forage || null;
+      if (ref.terrain === "soil") {
+        tile.terrain = "soil";
+        tile.plotIndex = ref.plotIndex;
+      } else if (tile.terrain === "soil" || tile.plotIndex != null) {
+        tile.terrain = ref.terrain;
+        tile.plotIndex = null;
+      } else {
+        tile.terrain = ref.terrain;
+      }
+      if (ref.structureId) {
+        tile.structureId = ref.structureId;
+        tile.blocked = true;
+        tile.station = null;
+        tile.npc = null;
+        tile.npcFacing = null;
+        tile.object = null;
+      } else {
+        tile.structureId = null;
+        tile.blocked = false;
+        tile.station = ref.station || null;
+        tile.npc = ref.npc || null;
+        tile.npcFacing = ref.npc ? (ref.npcFacing || "down") : null;
+        if (ref.station || ref.npc || ref.bridge || ref.event || ref.forage) {
+          tile.object = null;
+        }
+      }
+    }
     map.soilCount = (map.tiles || []).filter((t) => t.terrain === "soil").length;
-    applyRegions(map);
-    if (!map.tiles.some((t) => t.structureId)) applyStructures(map);
-    if (!map.tiles.some((t) => t.station)) applyStations(map);
-    if (!map.tiles.some((t) => t.npc)) applyNpcs(map);
-    applyEvents(map);
-    applyForage(map);
     return map;
   }
   function nonNegativeNumber(value, fallback) {
@@ -213,6 +244,22 @@
       animals: sanitizeAnimals(state.animals, seeded.animals, buildings),
     };
   }
+  function reconcileBuildingsOnMap(map, rawBuildings, seededBuildings) {
+    clearBuildingIds(map);
+    const buildings = [];
+    const usedBuildingIds = new Set();
+    const addBuilding = (raw) => {
+      const b = sanitizeBuilding(raw, map, usedBuildingIds);
+      if (b) buildings.push(b);
+    };
+    if (Array.isArray(rawBuildings)) rawBuildings.forEach(addBuilding);
+    for (const seeded of (seededBuildings || [])) {
+      const structure = structureForBuilding(seeded);
+      const alreadyPresent = structure && buildings.some((b) => b.structureId === structure.id);
+      if (!alreadyPresent) addBuilding(seeded);
+    }
+    return buildings;
+  }
 
   // 由 MAP_LAYOUT 產生大世界（soil→plot、grass/path/water、障礙、多格建築、站點、橋、事件點）
   function makeMap() {
@@ -318,7 +365,7 @@
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0, seasonsReached: {} },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
-      settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" },
+      settings: { smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium" },
       lastOfflineSummary: null,
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
       npcRequests: {},   // { [npcId]: { id, npcId, wants:{itemId:qty}, rewardCoins, rewardXp, createdAt } }
@@ -376,8 +423,8 @@
     if (healthyMap(state.map)) {
       merged.map = state.map;
       refreshDerivedMapFields(merged.map);
-      merged.buildings = Array.isArray(state.buildings) ? state.buildings : def.buildings;
-      merged.animals = Array.isArray(state.animals) ? state.animals : def.animals;
+      merged.buildings = reconcileBuildingsOnMap(merged.map, state.buildings, def.buildings);
+      merged.animals = sanitizeAnimals(Array.isArray(state.animals) ? state.animals : def.animals, def.animals, merged.buildings);
       merged.player = sanitizePlayer(def.player, state.player, merged.map, merged.flags);
     } else {
       const rebuilt = rebuildMapPreservingEntities(state, def.createdAt || state.lastSeenAt || 0);
@@ -396,9 +443,10 @@
     merged.story = Object.assign({ questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] }, state.story);
     merged.discoveries = Object.assign({ items: {} }, state.discoveries);
     merged.discoveries.items = Object.assign({}, state.discoveries && state.discoveries.items);
-    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, performanceMode: "auto", textSize: "medium" }, state.settings);
+    merged.settings = Object.assign({ smartAssistant: true, smartAssistantCollapsed: false, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium" }, state.settings);
     if (!["auto", "high", "low"].includes(merged.settings.performanceMode)) merged.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(merged.settings.textSize)) merged.settings.textSize = "medium";
+    merged.settings.soundVolume = Math.max(0, Math.min(1, Number.isFinite(merged.settings.soundVolume) ? merged.settings.soundVolume : 0.55));
     merged.lastOfflineSummary = state.lastOfflineSummary || null;
     const discoveredAtFallback = state.createdAt || state.lastSeenAt || Date.now();
     for (const [id, qty] of Object.entries(merged.stats.harvested || {})) {

@@ -312,7 +312,7 @@ async function runTouchFarmConfirmationTest(browser, base) {
     });
     assert(actionAReach.width >= 44 && actionAReach.height >= 44 && actionAReach.top >= 0 &&
       actionAReach.bottom <= 844 && actionAReach.hit,
-      `R63 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
+      `R64 A 鍵在互動後仍完整可見可點（top=${Math.round(actionAReach.top)}, bottom=${Math.round(actionAReach.bottom)}, hit=${actionAReach.hitLabel}）`);
     await page.click("#actionA");
     await waitArrive(page, 9000);
     const actionA = await page.evaluate((targetId) => {
@@ -399,7 +399,7 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r63-20260715-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r64-20260716-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
@@ -456,6 +456,8 @@ async function run() {
         focusInside: modal.contains(document.activeElement),
         keys: toggles.map((el) => el.dataset.settingKey),
         textSizes: [...document.querySelectorAll('button[data-audit="text-size-mode"]')].map((el) => el.dataset.textSize),
+        soundVolume: document.querySelector('[data-audit="sound-volume"]')?.value || "",
+        soundVolumeText: document.querySelector('[data-audit="sound-volume-value"]')?.textContent || "",
         versionText: document.querySelector('[data-audit="setting-pwa"]')?.innerText || "",
         pwaButton: document.querySelector('[data-audit="pwa-check"]')?.textContent || "",
         diagnostics: document.querySelector('[data-audit="performance-diagnostics"]')?.textContent || "",
@@ -474,15 +476,17 @@ async function run() {
         overflow: document.documentElement.scrollWidth - window.innerWidth,
       };
     });
-    assert(r27Settings.shown && r27Settings.keys.includes("smartAssistant") && r27Settings.keys.includes("offlineSummary"),
+    assert(r27Settings.shown && r27Settings.keys.includes("smartAssistant") && r27Settings.keys.includes("offlineSummary") && r27Settings.keys.includes("soundEnabled"),
       `設定面板集中助手與離線摘要偏好（keys=${r27Settings.keys.join(",")}）`);
     assert(r27Settings.reviewText.includes("離開 6 分鐘") && r27Settings.reviewText.includes("離線收益 +0 金") &&
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r63-20260715-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r64-20260716-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
+    assert(r27Settings.soundVolume === "55" && r27Settings.soundVolumeText === "55%",
+      `設定面板含程序化音效音量控制（${r27Settings.soundVolumeText}）`);
     assert(r27Settings.perfHistoryEmpty.includes("尚無") && Object.values(r27Settings.liveAttrs).every((v) => v === "polite"),
       `動態通知容器具 aria-live=polite 且效能歷史有空狀態（${JSON.stringify(r27Settings.liveAttrs)}）`);
     assert(r27Settings.settingsAria === "開啟設定" && r27Settings.tabAria.every((label) => label.includes("切換到")),
@@ -517,6 +521,36 @@ async function run() {
     assert(assistantOff.state === false && assistantOff.hidden && assistantOff.enabled === "false",
       "設定面板可關閉智慧農務助手並立即隱藏面板");
     await page.click('[data-setting-key="smartAssistant"]');
+    const textareaKeys = await page.evaluate(() => {
+      const st = window.__farm.state();
+      st.player.tileId = "t7_5";
+      st.player.x = 7;
+      st.player.y = 5;
+      st.player.facing = "down";
+      window.__farm.refresh();
+      const box = document.getElementById("saveCodeBox");
+      box.value = "";
+      box.focus();
+      return { beforeTile: st.player.tileId, activeId: document.activeElement && document.activeElement.id };
+    });
+    await page.keyboard.type("wasd");
+    await page.keyboard.press("ArrowLeft");
+    const textareaAfterKeys = await page.evaluate((beforeTile) => {
+      const st = window.__farm.state();
+      const box = document.getElementById("saveCodeBox");
+      return {
+        activeId: document.activeElement && document.activeElement.id,
+        value: box.value,
+        selectionStart: box.selectionStart,
+        playerTile: st.player.tileId,
+        facing: st.player.facing,
+        preventedMove: st.player.tileId === beforeTile,
+      };
+    }, textareaKeys.beforeTile);
+    assert(textareaKeys.activeId === "saveCodeBox" && textareaAfterKeys.activeId === "saveCodeBox"
+      && textareaAfterKeys.value === "wasd" && textareaAfterKeys.selectionStart === 3
+      && textareaAfterKeys.preventedMove && textareaAfterKeys.facing === "down",
+      `設定 textarea 聚焦時 WASD/方向鍵不被全域移動攔截（value=${textareaAfterKeys.value}, tile=${textareaAfterKeys.playerTile}, cursor=${textareaAfterKeys.selectionStart}）`);
     await page.click('[data-performance-mode="low"]');
     const perfLow = await page.evaluate(() => ({
       mode: window.__farm.state().settings.performanceMode,
@@ -679,6 +713,7 @@ async function run() {
         if (getComputedStyle(o).backgroundImage.includes("url(")) objImg++;
         if (reEmoji.test(o.textContent || "")) emoji++;
       }
+      const bushes = obs.filter((o) => o.dataset.kind === "obstacle" && o.dataset.object === "bush");
       const ps = document.getElementById("playerSprite");
       const ti = getComputedStyle(tiles[0]);
       // 取同一列相鄰兩磚，驗證精確貼合（無格線間隙）
@@ -687,6 +722,9 @@ async function run() {
       const t10 = tiles.find((t) => t.dataset.tileId === "t1_0");
       const abut = t00 && t10 ? Math.abs((t10.offsetLeft) - (t00.offsetLeft + t00.offsetWidth)) : 99;
       return { tiles: tiles.length, imgTiles, obs: obs.length, objImg, emoji,
+        bushCount: bushes.length,
+        bushSheets: [...new Set(bushes.map((o) => o.dataset.sheet))],
+        bushFrames: [...new Set(bushes.map((o) => o.dataset.frame))],
         playerImg: getComputedStyle(ps).backgroundImage.includes("url("),
         pos: ti.position, abut, tileBorder: ti.borderTopWidth };
     });
@@ -695,6 +733,8 @@ async function run() {
     assert(render.obs >= 8, `物件 sprite 數量（建築/障礙/站點/作物/動物，共 ${render.obs}）`);
     assert(render.objImg === render.obs, `全部物件以 atlas sprite 呈現（${render.objImg}/${render.obs}）`);
     assert(render.emoji === 0, `主地圖物件 0 emoji（實際 ${render.emoji}）`);
+    assert(render.bushCount >= 1 && render.bushSheets.join(",") === "structures" && render.bushFrames.every((f) => f.indexOf("bush_big") === 0),
+      `主畫面 bush 障礙使用 v4 季相 bush_big 素材（${render.bushSheets.join(",")} / ${render.bushFrames.join(",")}）`);
     assert(render.playerImg, "角色 Miri 使用 atlas sprite");
     assert(render.pos === "absolute" && render.abut <= 1, `地面磚絕對定位精確貼合無格線（鄰磚間隙 ${render.abut}px）`);
     assert(parseFloat(render.tileBorder) === 0, "地面磚無邊框線");

@@ -11,13 +11,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r63-20260715-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r63-20260715-1">
+<link rel="manifest" href="manifest.webmanifest?v=r64-20260716-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r64-20260716-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r63-20260715-1";
+  const VERSION = "r64-20260716-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -431,6 +431,9 @@
   .setting-mode { min-height: 44px; min-width: 58px; padding: 6px 9px; border: 1.5px solid var(--border-d); border-radius: 9px;
     background: var(--cream-2); color: var(--ink); font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
   .setting-mode.sel { border-color: #94bd68; background: #e7f5dd; color: #285b1d; }
+  .setting-slider { min-width: 142px; display: grid; grid-template-columns: minmax(96px, 1fr) 40px; gap: 8px; align-items: center; }
+  .setting-slider input { width: 100%; min-height: 44px; accent-color: #6fb54b; }
+  .setting-slider output { font-size: 12px; font-weight: 950; color: #3d2f1c; text-align: right; }
   .perf-history, .perf-history-empty { margin-top: 6px; display: grid; gap: 4px; font-size: 11px; line-height: 1.35; color: var(--ink-soft); }
   .perf-history-row { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 6px; overflow-wrap: anywhere; }
   .perf-history-row b { color: #6b5638; }
@@ -1001,13 +1004,16 @@
     <h2 id="howToTitle">🌻 怎麼玩</h2>
     <div class="modal-body">
       <ol>
-        <li><b>① 選種子</b>：點上方種子（看 🪙 成本）</li>
-        <li><b>② 種植</b>：點農場的空地（土壤格）種下</li>
-        <li><b>③ 等成熟</b>：作物會長大，成熟會發光跳動</li>
-        <li><b>④ 收成 → 賣出</b>：點成熟作物收進倉庫，再「賣出」或交「市集訂單」換更多金幣</li>
-        <li><b>⑤ 升級</b>：買升級開更多地、加速、自動收成（離線也運作）</li>
+        <li><b>① 移動</b>：桌機用 WASD/方向鍵，手機用左下 D-pad；走到目標旁邊再互動。</li>
+        <li><b>② 工具模式</b>：手可種植/收成，水壺可澆水，清除可移除石頭、樹樁與灌木，建造可放建築。</li>
+        <li><b>③ 行動鍵</b>：手機右下 A 會執行面前最合適的動作；點地圖也會開啟可用動作。</li>
+        <li><b>④ 站點</b>：信箱看信與任務，訂單看板交貨，水井替田澆水，倉庫與市集可處理庫存。</li>
+        <li><b>⑤ 任務</b>：上方任務會標出下一步；先種麥、澆水、交首單，再清路與修橋進東林。</li>
+        <li><b>⑥ 動物</b>：蓋雞舍、畜舍或鴨舍後可飼養動物；餵食、澆水、梳理會提高產物品質。</li>
+        <li><b>⑦ 橋梁</b>：清樹樁得木、清石頭得石，材料足夠後到東邊斷橋修復，解鎖東林採集。</li>
+        <li><b>⑧ 離線</b>：幫手機器人會在離線時收成/補種，離線收益最多計入 8 小時。</li>
       </ol>
-      <p class="tip">💡 訂單比直售更划算（連續完成有加成）。升「幫手機器人」後離開也會自動幫你收成、回來看離線收益！</p>
+      <p class="tip">💡 訂單通常比直售划算，連續完成會加成；設定裡可回看最近一次離線摘要。</p>
     </div>
     <button class="btn" id="howToOk">開始種田 ▶</button>
   </div>
@@ -1033,10 +1039,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r63-20260715-1"></script>
-<script src="src/game.js?v=r63-20260715-1"></script>
-<script src="src/state.js?v=r63-20260715-1"></script>
-<script src="src/atlas.js?v=r63-20260715-1"></script>
-<script src="src/ui.js?v=r63-20260715-1"></script>
+<script src="src/config.js?v=r64-20260716-1"></script>
+<script src="src/game.js?v=r64-20260716-1"></script>
+<script src="src/state.js?v=r64-20260716-1"></script>
+<script src="src/atlas.js?v=r64-20260716-1"></script>
+<script src="src/ui.js?v=r64-20260716-1"></script>
 </body>
 </html>

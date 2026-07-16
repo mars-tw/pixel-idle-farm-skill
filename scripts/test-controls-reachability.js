@@ -1,10 +1,10 @@
-/* farm R63 control reachability gate: primary-pointer routing + viewport hit testing. */
+/* farm R64 control reachability gate: primary-pointer routing + viewport hit testing. */
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const EVIDENCE = path.join(ROOT, "docs", "evidence", "R63_controls");
+const EVIDENCE = path.join(ROOT, "docs", "evidence", "R64", "controls");
 const MIME = {
   ".html": "text/html", ".js": "application/javascript", ".json": "application/json",
   ".webmanifest": "application/manifest+json", ".png": "image/png",
@@ -160,7 +160,7 @@ async function runViewport(browser, base, config) {
   const page = await context.newPage();
   page.on("pageerror", (error) => errors.push(String(error)));
   try {
-    await page.goto(base + "?r63-controls=1", { waitUntil: "domcontentloaded", timeout: 30000 });
+    await page.goto(base + "?r64-controls=1", { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state, null, { timeout: 15000 });
     await closeInitialModal(page);
 
@@ -210,17 +210,17 @@ async function run() {
   const base = `http://127.0.0.1:${server.address().port}/index.html`;
   const browser = await chromium.launch();
   try {
-    console.log("== farm R63 控制可達性守門 ==");
+    console.log("== farm R64 控制可達性守門 ==");
     for (const config of VIEWPORTS) await runViewport(browser, base, config);
   } finally {
     await browser.close();
     server.close();
   }
   if (failed) {
-    console.error(`\n❌ R63 控制可達性守門失敗：${failed} 項`);
+    console.error(`\n❌ R64 控制可達性守門失敗：${failed} 項`);
     process.exit(1);
   }
-  console.log("\n✅ R63 控制可達性守門通過（7 種裝置／視口）");
+  console.log("\n✅ R64 控制可達性守門通過（7 種裝置／視口）");
 }
 
-run().catch((error) => { console.error("R63 控制可達性守門執行失敗：", error); process.exit(1); });
+run().catch((error) => { console.error("R64 控制可達性守門執行失敗：", error); process.exit(1); });

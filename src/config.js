@@ -388,10 +388,10 @@ const TERRAIN = {
 
 // ===== MVP2：障礙物（可清除 → 取建材 + 釋出草地）=====
 const OBSTACLES = {
-  rock:  { id: "rock",  name: "巨石", emoji: "🪨", clearCost: 25, grants: { stone: 2 },   tall: false, desc: "清除得石材，釋出草地" },
-  stump: { id: "stump", name: "樹樁", emoji: "🪵", clearCost: 18, grants: { wood: 2 },    tall: false, desc: "清除得木材，釋出草地" },
+  rock:  { id: "rock",  name: "巨石", emoji: "🪨", clearCost: 12, grants: { stone: 2 },   tall: false, desc: "清除得石材，釋出草地" },
+  stump: { id: "stump", name: "樹樁", emoji: "🪵", clearCost: 8,  grants: { wood: 2 },    tall: false, desc: "清除得木材，釋出草地" },
   bush:  { id: "bush",  name: "灌木", emoji: "🌿", clearCost: 10, grants: { compost: 3 }, tall: false, desc: "清除得堆肥，釋出草地" },
-  tree:  { id: "tree",  name: "大樹", emoji: "🌳", clearCost: 40, grants: { wood: 4 },    tall: true,  desc: "高大會遮擋；清除得木材，釋出草地" },
+  tree:  { id: "tree",  name: "大樹", emoji: "🌳", clearCost: 18, grants: { wood: 4 },    tall: true,  desc: "高大會遮擋；清除得木材，釋出草地" },
 };
 
 // ===== MVP2：建築（生產模組，蓋在草地，影響經濟/進度）=====

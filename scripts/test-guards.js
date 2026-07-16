@@ -244,7 +244,7 @@ function runTouchFarmGuard() {
   assert(ui.includes("setPrimaryPointerClass()") && ui.includes('matchMedia("(pointer: coarse)")') &&
     ui.includes('classList.toggle("mobile-controls-enabled", primaryCoarse && narrow)') &&
     !ui.includes("maxTouchPoints") && !html.includes("html.has-touch"),
-    "R63 手機控制盤只依主指標 coarse + 窄寬度分流，不再把觸控能力當手機");
+    "R64 手機控制盤只依主指標 coarse + 窄寬度分流，不再把觸控能力當手機");
 }
 
 runSwCacheGuard();

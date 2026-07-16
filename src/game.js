@@ -574,12 +574,12 @@
       id: TUTORIAL_DELIVERY_ORDER_ID,
       wants: { wheat: CROPS.wheat.yield },
       rarity: "common",
-      rewardCoins: 110,
-      rewardXp: 8,
+      rewardCoins: 45,
+      rewardXp: 3,
       expiresAt: now + GAME.orderTtlMs,
       tutorial: true,
       npcId: "mayor",
-      flavor: "鎮長先替你掛一張首收小麥委託，交付 2 份就能完成。",
+      flavor: "鎮長先替你掛一張首收小麥委託，交付 2 份就能拿到開墾補助。",
       thanks: "第一批小麥收到了，農場重新開張有個好開始。",
     };
   }

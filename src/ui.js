@@ -65,7 +65,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r63-20260715-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r64-20260716-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -322,6 +322,14 @@
     layer.appendChild(wash);
     removeFxNode(wash, 1050);
   }
+  function clamp01(value, fallback) {
+    const n = Number(value);
+    return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : fallback;
+  }
+  function soundVolume() {
+    const settings = ensureSettings();
+    return settings.soundEnabled === false ? 0 : clamp01(settings.soundVolume, 0.55);
+  }
   function unlockAudio(forceResume) {
     if (!state) return;
     const settings = ensureSettings();
@@ -352,28 +360,34 @@
   }
   function playSound(kind) {
     if (!state || ensureSettings().soundEnabled === false) return;
+    const volume = soundVolume();
+    if (volume <= 0) return;
     unlockAudio(true);
     const ctx = audioCtx;
     if (ctx && ctx.state === "closed") { audioCtx = null; audioUnlocked = false; return; }
     if (!ctx || !ctx.createOscillator || !ctx.createGain) return;
     const patterns = {
-      harvest: [[520, .035], [760, .045]],
-      water: [[360, .05], [520, .04]],
-      coin: [[900, .035], [1180, .045]],
-      order: [[520, .06], [780, .06], [1040, .08]],
-      mail: [[740, .06], [620, .06]],
-      level: [[440, .06], [660, .08], [990, .10]],
+      plant: [[260, .035, "triangle", .65], [410, .045, "triangle", .7]],
+      harvest: [[520, .035, "square", .85], [760, .045, "square", .9]],
+      water: [[330, .055, "triangle", .55], [520, .045, "sine", .45]],
+      feed: [[220, .04, "triangle", .55], [330, .055, "triangle", .65]],
+      groom: [[640, .035, "sine", .45], [880, .04, "sine", .5]],
+      coin: [[900, .035, "square", .75], [1180, .045, "square", .8]],
+      order: [[520, .06, "square", .75], [780, .06, "square", .85], [1040, .08, "square", .9]],
+      mail: [[740, .06, "triangle", .75], [620, .06, "triangle", .65]],
+      level: [[440, .06, "triangle", .85], [660, .08, "triangle", .95], [990, .10, "square", 1]],
+      ui: [[620, .025, "triangle", .38]],
     };
     const seq = patterns[kind] || patterns.coin;
     let t0 = ctx.currentTime || 0;
-    seq.forEach(([freq, dur], idx) => {
+    seq.forEach(([freq, dur, wave, amp], idx) => {
       try {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = kind === "water" ? "triangle" : "square";
+        osc.type = wave || (kind === "water" ? "triangle" : "square");
         osc.frequency.value = freq;
         gain.gain.setValueAtTime(0.0001, t0 + idx * 0.055);
-        gain.gain.exponentialRampToValueAtTime(0.045, t0 + idx * 0.055 + 0.01);
+        gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, 0.055 * volume * (amp || 1)), t0 + idx * 0.055 + 0.01);
         gain.gain.exponentialRampToValueAtTime(0.0001, t0 + idx * 0.055 + dur);
         osc.connect(gain); gain.connect(ctx.destination);
         osc.start(t0 + idx * 0.055); osc.stop(t0 + idx * 0.055 + dur + 0.02);
@@ -676,6 +690,7 @@
         return;
       }
       playAction("sow");
+      playSound("plant");
       afterChange(true);
     } else {
       const prog = G.getCropProgress(state, plot, t);
@@ -1090,6 +1105,7 @@
     if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = false;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
     if (state.settings.soundEnabled == null) state.settings.soundEnabled = true;
+    state.settings.soundVolume = clamp01(state.settings.soundVolume, 0.55);
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(state.settings.textSize)) state.settings.textSize = "medium";
     if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
@@ -1102,6 +1118,19 @@
         <div class="setting-desc">${escapeHtml(desc)}</div>
       </div>
       <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}" aria-label="${escapeHtml(title)}${enabled ? "已開啟" : "已關閉"}">${enabled ? "開啟" : "關閉"}</button>
+    </div>`;
+  }
+  function soundVolumeHtml(volume, enabled) {
+    const pct = Math.round(clamp01(volume, 0.55) * 100);
+    return `<div class="setting-row" data-audit="setting-sound-volume">
+      <div>
+        <div class="setting-title">音量</div>
+        <div class="setting-desc">調整種植、收成、澆水、餵食、升級與 UI 確認音效。</div>
+      </div>
+      <label class="setting-slider" aria-label="音效音量">
+        <input type="range" min="0" max="100" step="5" value="${pct}" data-audit="sound-volume" ${enabled ? "" : "disabled"}>
+        <output id="soundVolumeValue" data-audit="sound-volume-value">${pct}%</output>
+      </label>
     </div>`;
   }
   function performanceModeHtml(mode) {
@@ -1510,7 +1539,8 @@
     box.innerHTML = [
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
-      settingRowHtml("soundEnabled", "Sound effects", "Tiny WebAudio feedback after the first tap or key press.", settings.soundEnabled !== false),
+      settingRowHtml("soundEnabled", "音效", "首次點擊或按鍵後，主要操作會播放短促 WebAudio 回饋。", settings.soundEnabled !== false),
+      soundVolumeHtml(settings.soundVolume, settings.soundEnabled !== false),
       textSizeHtml(settings.textSize || "medium"),
       performanceModeHtml(settings.performanceMode || "auto"),
       performanceDiagnosticsHtml(),
@@ -1525,11 +1555,24 @@
         ensureSettings();
         state.settings[key] = state.settings[key] === false;
         if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = false;
-        if (key === "soundEnabled" && state.settings.soundEnabled !== false) unlockAudio(true);
+        if (key === "soundEnabled" && state.settings.soundEnabled !== false) { unlockAudio(true); playSound("ui"); }
+        else playSound("ui");
         renderSettingsPanel();
         renderSmartAssistant(true);
         scheduleSave();
       };
+    });
+    box.querySelectorAll("[data-audit='sound-volume']").forEach((slider) => {
+      const update = (preview) => {
+        ensureSettings();
+        state.settings.soundVolume = clamp01(Number(slider.value) / 100, 0.55);
+        const out = $("soundVolumeValue");
+        if (out) out.textContent = Math.round(state.settings.soundVolume * 100) + "%";
+        if (preview && state.settings.soundEnabled !== false) { unlockAudio(true); playSound("ui"); }
+        scheduleSave();
+      };
+      slider.oninput = () => update(false);
+      slider.onchange = () => update(true);
     });
     box.querySelectorAll("[data-text-size]").forEach((btn) => {
       btn.onclick = (ev) => {
@@ -1537,6 +1580,7 @@
         ensureSettings();
         state.settings.textSize = btn.dataset.textSize || "medium";
         applyTextSize();
+        playSound("ui");
         renderSettingsPanel();
         scheduleSave();
       };
@@ -1557,6 +1601,7 @@
             : (nextMode === "high" ? "手動鎖定高品質模式" : "手動切回自動，恢復高品質");
           recordPerformanceEvent(afterTier === "low" ? "downgrade" : "restore", reason);
         }
+        playSound("ui");
         renderSettingsPanel();
         scheduleSave();
       };
@@ -1948,9 +1993,9 @@
     const el = addObjectPx(obStatic, s.sheet, frame, cx, baselineY, s.w * TILE, "shadowed", 0, "structure");
     if (el) el.dataset.structureId = s.id;
   }
-  const OBSTACLE_SHEET = { rock: "props", stump: "props", bush: "props", tree: "structures" };
-  const OBSTACLE_FRAME2 = { rock: "rock", stump: "stump", bush: "bush", tree: "oak" };
-  const OBSTACLE_SCALE = { rock: 1.05, stump: 1.0, bush: 1.1, tree: 1.8 };
+  const OBSTACLE_SHEET = { rock: "props", stump: "props", bush: "structures", tree: "structures" };
+  const OBSTACLE_FRAME2 = { rock: "rock", stump: "stump", bush: "bush_big", tree: "oak" };
+  const OBSTACLE_SCALE = { rock: 1.05, stump: 1.0, bush: 1.35, tree: 1.8 };
   const SEASON_FRAME_SUFFIX = { "春": "spring", "秋": "autumn", "冬": "winter" };
   function seasonalStructureFrame(frame, t) {
     const season = G.currentSeason ? G.currentSeason(state, t || now()) : "春";
@@ -2433,6 +2478,7 @@
     const r = G.buildBuilding(state, tileId, type, now());
     if (r.ok) {
       playAction("hoe");
+      playSound("ui");
       spawnVfx(tileId, "soil_dust");
       toast(def.emoji + " " + def.name);
       hideBuildWheel();
@@ -2626,10 +2672,10 @@
     else if (action === "water") r = G.waterAnimal(state, animalId, now());
     else if (action === "groom") r = G.groomAnimal(state, animalId, now());
     if (!r || !r.ok) { toast("現在不能執行"); renderSceneActionsForSelection(); return; }
-    if (action === "collect") { playAction("carry"); spawnVfx(tileId, "product_pop"); toast("收集 " + (r.added || 0) + " " + itemName(r.product)); }
-    if (action === "feed") { playAction("sow"); spawnVfx(tileId, "feed_bits", { sheet: "care_vfx" }); toast("餵食 +" + itemName(r.product)); G.advanceStory(state, "care_animal", now()); }
-    if (action === "water") { playAction("water"); spawnVfx(tileId, "water_splash", { sheet: "care_vfx" }); toast("澆水"); G.advanceStory(state, "care_animal", now()); }
-    if (action === "groom") { playAction("build"); spawnVfx(tileId, "groom_sparkle", { sheet: "care_vfx" }); toast("梳理"); G.advanceStory(state, "care_animal", now()); }
+    if (action === "collect") { playAction("carry"); playSound("coin"); spawnVfx(tileId, "product_pop"); toast("收集 " + (r.added || 0) + " " + itemName(r.product)); }
+    if (action === "feed") { playAction("sow"); playSound("feed"); spawnVfx(tileId, "feed_bits", { sheet: "care_vfx" }); toast("餵食 +" + itemName(r.product)); G.advanceStory(state, "care_animal", now()); }
+    if (action === "water") { playAction("water"); playSound("water"); spawnVfx(tileId, "water_splash", { sheet: "care_vfx" }); toast("澆水"); G.advanceStory(state, "care_animal", now()); }
+    if (action === "groom") { playAction("build"); playSound("groom"); spawnVfx(tileId, "groom_sparkle", { sheet: "care_vfx" }); toast("梳理"); G.advanceStory(state, "care_animal", now()); }
     hideObjectBubble();
     afterChange(true);
   }
@@ -3018,7 +3064,7 @@
     const face = state.player.facing;
     if (action === "plant") {
       const r = G.plant(state, tile.plotIndex, selectedSeed, t);
-      if (r.ok) { playAction("sow", face); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); afterChange(true); }
+      if (r.ok) { playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); afterChange(true); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       const r = G.harvest(state, tile.plotIndex, t);
@@ -3030,7 +3076,7 @@
       if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
-      if (r.ok) { playAction("hoe", face); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
+      if (r.ok) { playAction("hoe", face); playSound("ui"); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
       else if (r.reason === "no_coins") { spawnRing(tileId, false); toast("🪙 金幣不足"); }
     } else if (action === "build") {
       playAction("hoe", face); spawnVfx(tileId, "soil_dust"); renderTileContext(); // 顯示建築選單（玩家已走到旁邊）
@@ -3239,7 +3285,7 @@
     box.querySelectorAll(".bbtn").forEach((b) => {
       b.onclick = () => {
         const r = G.buildBuilding(state, tile.id, b.dataset.type, now());
-        if (r.ok) { playAction("hoe"); toast(window.BUILDINGS[b.dataset.type].emoji + " 已興建 " + window.BUILDINGS[b.dataset.type].name); afterChange(true); buildMap(); renderTileContext(); }
+        if (r.ok) { playAction("hoe"); playSound("ui"); toast(window.BUILDINGS[b.dataset.type].emoji + " 已興建 " + window.BUILDINGS[b.dataset.type].name); afterChange(true); buildMap(); renderTileContext(); }
         else if (r.reason === "cost") toast("資源不足");
         else if (r.reason === "locked") toast("🔒 等級不足");
         else if (r.reason === "max_count") toast("這種建築已達上限");
@@ -3302,6 +3348,7 @@
       const r = G.collectAnimal(state, btn.dataset.id, now());
       if (r.ok) {
         playAction("carry");
+        playSound("coin");
         if (r.tier !== "normal") spawnVfx(tile.id, "quality_sparkle", { scale: 1.1, sheet: "care_vfx" });
         toast((r.tier === "premium" ? "✨ " : r.tier === "good" ? "🌟 " : "🧺 ") + "收集 " + r.added + " " + itemName(r.product));
         afterChange(true); renderTileContext(); updateMap(now());
@@ -3310,7 +3357,7 @@
     box.querySelectorAll(".afeed").forEach((btn) => btn.onclick = () => {
       const r = G.feedAnimal(state, btn.dataset.id, now());
       if (r.ok) {
-        playAction("sow"); spawnVfx(tile.id, "feed_bits", { sheet: "care_vfx" });
+        playAction("sow"); playSound("feed"); spawnVfx(tile.id, "feed_bits", { sheet: "care_vfx" });
         const extra = r.collectedFirst && r.collectedFirst.added ? "（另收 " + r.collectedFirst.added + " 份已成熟的）" : "";
         toast("🌾 餵食 → +1 " + itemName(r.product) + extra + "・親密度 " + r.affinity.toFixed(0));
         G.advanceStory(state, "care_animal", now());
@@ -3321,7 +3368,7 @@
     box.querySelectorAll(".awater").forEach((btn) => btn.onclick = () => {
       const r = G.waterAnimal(state, btn.dataset.id, now());
       if (r.ok) {
-        playAction("water"); spawnVfx(tile.id, "water_splash", { sheet: "care_vfx" });
+        playAction("water"); playSound("water"); spawnVfx(tile.id, "water_splash", { sheet: "care_vfx" });
         toast("💧 澆水 → 親密度 " + r.affinity.toFixed(0));
         G.advanceStory(state, "care_animal", now());
         afterChange(true); renderTileContext();
@@ -3330,7 +3377,7 @@
     box.querySelectorAll(".agroom").forEach((btn) => btn.onclick = () => {
       const r = G.groomAnimal(state, btn.dataset.id, now());
       if (r.ok) {
-        playAction("build"); spawnVfx(tile.id, "groom_sparkle", { sheet: "care_vfx" });
+        playAction("build"); playSound("groom"); spawnVfx(tile.id, "groom_sparkle", { sheet: "care_vfx" });
         toast("🧹 梳理 → 親密度 " + r.affinity.toFixed(0));
         G.advanceStory(state, "care_animal", now());
         afterChange(true); renderTileContext();
@@ -3338,7 +3385,7 @@
     });
     box.querySelectorAll(".abuy").forEach((btn) => btn.onclick = () => {
       const r = G.buyAnimal(state, btn.dataset.bid, btn.dataset.type, now());
-      if (r.ok) { toast("🐣 新動物入住！"); afterChange(true); renderTileContext(); }
+      if (r.ok) { playSound("ui"); toast("🐣 新動物入住！"); afterChange(true); renderTileContext(); }
       else if (r.reason === "no_coins") toast("🪙 金幣不足");
       else if (r.reason === "full") toast("已達容量上限");
       else if (r.reason === "locked") { toast("🔒 尚未達到解鎖等級"); renderTileContext(); }
@@ -3408,10 +3455,19 @@
     paintIdlePlayer();
   }
   // 鍵盤一次走一格（WASD / 方向鍵）
+  function isTextEntryTarget(target) {
+    if (!target) return false;
+    const tag = String(target.tagName || "").toLowerCase();
+    return tag === "input" || tag === "textarea" || tag === "select" || target.isContentEditable === true;
+  }
+  function hasOpenModal() {
+    return !!(typeof document.querySelector === "function" && document.querySelector(".modal.show"));
+  }
   function onKeyMove(e) {
     const dirMap = { ArrowUp: "up", w: "up", W: "up", ArrowDown: "down", s: "down", S: "down",
                      ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right" };
     const dir = dirMap[e.key]; if (!dir) return;
+    if (isTextEntryTarget(e.target) || hasOpenModal()) return;
     e.preventDefault();
     const dd = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[dir];
     state.player.facing = dir;
