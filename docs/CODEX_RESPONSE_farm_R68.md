@@ -83,3 +83,10 @@
 - 生成／來源：`docs/evidence/R68/source-manifest.json`、`prompts.json`、`c2pa-verification.json`、`assets/generated/r68/manifest.json`
 - 量化：`contrast-gate.json`、`safe-crop-gate.json`、`texture-memory.json`、`performance-gate.json`、`controls-summary.json`、`ci-green.json`
 - 圖像：`before-1440x780.png`、`after-loading-desktop-1440x780.png`、`after-loading-mobile-390x844.png`、`after-loading-tablet-820x1180.png`、`after-activity-panel-1366x768.png`、`quality-low-med-high.png`、`style-board.png`、`palette-r68.png`
+
+## 總稽核審計附註（Claude，2026-07-17）
+
+- Grok 對抗複審 P0 採納：上表「rAF p95」判定由 PASS 改為【待淨機重測】——併發機況量測不作出貨判定；六線收工後由總稽核淨機三跑取中位，不過線即依本報告 rollback 節回退。
+- 部署理由：本輪僅新增靜態視覺資產（loading/面板底圖），不動遊戲迴圈；且併發劣勢下 16.70ms 仍 ≤18ms，風險可控。
+- Grok P1 備查：SHA 前 8 碼屬內容定址契約非放寬（建議未來雙閘）；首屏互動閘為相對閘，後續輪次應補固定硬預算；Wave1 殘留 P2 項需另輪重開，本輪 PASS 不代表殘留結清。
+- C2PA 5/5 由總稽核親驗（gpt-image 2.x）；R67 歷史證據圖遭測試覆寫已還原凍結。
