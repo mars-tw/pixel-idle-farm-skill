@@ -1,0 +1,46 @@
+{
+  "release": "R67",
+  "version": "r67-20260717-1",
+  "date": "2026-07-17",
+  "status": "PASS",
+  "mobile_menu_overlap": {
+    "viewport": "390x844",
+    "audit_baseline": [
+      "orders<>resetBtn ox=43 oy=42",
+      "upgrades<>resetBtn ox=50 oy=42"
+    ],
+    "local_reproduction": [
+      "orders<>resetBtn ox=44 oy=39",
+      "upgrades<>resetBtn ox=50 oy=39"
+    ],
+    "after": "0 non-modal pair overlaps in main scene, side-tabs state, and bottom-toolbar state"
+  },
+  "modal_exclusion": {
+    "background": "native inert on .wrap while a modal is open",
+    "focus": "inside active modal",
+    "desktop_background_controls_checked": 5,
+    "mobile_background_controls_checked": 10,
+    "synthetic_input_mutations": 0,
+    "inputs": ["ArrowRight", "D-pad left pointerdown/up", "actionA click"]
+  },
+  "control_gate": {
+    "viewports": 7,
+    "minimum_target_px": 44,
+    "parent_child_pairs_excluded": true,
+    "result": "PASS"
+  },
+  "gates": {
+    "npm test": "PASS",
+    "npm run test:e2e": "PASS",
+    "npm run test:rwd": "PASS",
+    "npm run test:controls": "PASS",
+    "git diff --check": "PASS",
+    "secret_scan": "PASS (0 matches)"
+  },
+  "screenshots": {
+    "controls/desktop-1366x600.png": "cf41634a512d50cecc15730d0c32671a9882cab3d6dd0bf912757b54e0be3609",
+    "controls/desktop-1440x780.png": "cb14c8d7f4c00616785b761a53e6ad186e30b50f36dc1ba10c5910ef1e91eac9",
+    "controls/mobile-390x844.png": "89c2871770281014da4f614f0821ad20c970eb7eed5f298e42fded2fbea25d74",
+    "controls/mobile-menu-390x844.png": "c417cd8d0012b6df31fa3c62eb895cd4f78427805b640346cc0ff16aa65ad6a5"
+  }
+}

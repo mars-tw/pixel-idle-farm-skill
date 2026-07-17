@@ -11,13 +11,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r66-20260716-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r66-20260716-1">
+<link rel="manifest" href="manifest.webmanifest?v=r67-20260717-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r67-20260717-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r66-20260716-1";
+  const VERSION = "r67-20260717-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -898,8 +898,25 @@
   @media (max-width: 859px) {
     .smart-assistant { top: 66px; left: auto; right: 8px; bottom: auto; width: min(340px, calc(100% - 16px)); max-height: 30vh; }
     .smart-assistant .sa-list { max-height: 20vh; overflow-y: auto; }
+    /* R67：手機由整個 app shell 捲動；側欄與其後的底部工具列依正常流排列成獨立區段。 */
+    .wrap { overflow-y: auto; overscroll-behavior: contain; }
+    .main { flex: 0 0 auto; overflow: visible; }
     .toolbar { gap: 5px; }
     .toolbar .btn { min-height: 44px; padding: 6px 8px; font-size: 11px; }
+    /* R67：手機底列固定為五個等寬分區，避免 reset 掉到第二列後與側欄 tabs 互壓。 */
+    .side-tabs { position: static; z-index: auto; }
+    .toolbar {
+      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%;
+      margin-top: 0; padding-top: 6px; border-top: 2px solid rgba(127,99,48,.28);
+      background: linear-gradient(180deg, rgba(246,239,216,.96), rgba(232,222,188,.98));
+    }
+    .toolbar .btn {
+      min-width: 0; width: 100%; padding: 4px 2px; font-size: 10px; line-height: 1.1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    #spriteToggle { min-width: 0; }
+    footer { display: none; }
   }
   @media (max-width: 859px) {
     html.mobile-controls-enabled .mobile-controls { display: block; }
@@ -1086,10 +1103,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r66-20260716-1"></script>
-<script src="src/game.js?v=r66-20260716-1"></script>
-<script src="src/state.js?v=r66-20260716-1"></script>
-<script src="src/atlas.js?v=r66-20260716-1"></script>
-<script src="src/ui.js?v=r66-20260716-1"></script>
+<script src="src/config.js?v=r67-20260717-1"></script>
+<script src="src/game.js?v=r67-20260717-1"></script>
+<script src="src/state.js?v=r67-20260717-1"></script>
+<script src="src/atlas.js?v=r67-20260717-1"></script>
+<script src="src/ui.js?v=r67-20260717-1"></script>
 </body>
 </html>

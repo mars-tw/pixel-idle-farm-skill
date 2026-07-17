@@ -119,7 +119,12 @@ async function auditViewport(browser, base, vp, closeOverlays) {
     await page.waitForTimeout(900);
     if (closeOverlays) {
       // 前置：關閉教學/導覽 overlay（首次遊玩「怎麼玩」引導、離線摘要等 modal）
-      await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+      await page.evaluate(() => {
+        const modal = document.querySelector(".modal.show");
+        const close = modal && modal.querySelector("#howToOk, #offlineOk, #settingsOk, #lettersClose");
+        if (close) close.click();
+      });
+      await page.waitForFunction(() => !document.querySelector(".modal.show"));
       await page.waitForTimeout(300);
     }
     const res = await auditPage(page);

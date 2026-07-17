@@ -1,10 +1,10 @@
-/* farm R66 control reachability gate: primary-pointer routing + viewport hit testing + fit-map visibility. */
+/* farm R67 control reachability gate: modal mutual exclusion + non-modal overlap + viewport hit testing. */
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const EVIDENCE = path.join(ROOT, "docs", "evidence", "R66_art", "controls");
+const EVIDENCE = path.join(ROOT, "docs", "evidence", "R67_menu", "controls");
 const MIME = {
   ".html": "text/html", ".js": "application/javascript", ".json": "application/json",
   ".webmanifest": "application/manifest+json", ".png": "image/png",
@@ -80,13 +80,27 @@ function assertReachable(tag, metrics) {
     (unreachable.length ? `：${unreachable.map((item) => `${item.label}(hit=${item.hit}, top=${Math.round(item.top)}, bottom=${Math.round(item.bottom)})`).join(", ")}` : ""));
 }
 
-async function assertModal(page, tag) {
-  await page.click("#howToBtn");
+async function assertModal(page, tag, options = {}) {
+  if (options.programmaticOpen) await page.evaluate(() => document.getElementById("howToBtn").click());
+  else await page.click("#howToBtn");
   await page.waitForFunction(() => document.getElementById("howToModal").classList.contains("show"));
   const result = await page.evaluate(() => {
     const modal = document.getElementById("howToModal");
     const close = document.getElementById("howToOk");
     const background = document.getElementById("settingsBtn");
+    const appShell = document.querySelector(".wrap");
+    const backgroundControls = [
+      "#genderToggle", "#settingsBtn", "#spriteToggle", "#howToBtn", "#resetBtn",
+      "#mobileControls .dpad-btn", "#actionA",
+    ].flatMap((selector) => [...document.querySelectorAll(selector)]).filter((el) => {
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return rect.width > 0 && rect.height > 0 && style.display !== "none" && style.visibility !== "hidden";
+    });
+    const visibleBackgroundControls = backgroundControls.filter((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.right > 0 && rect.bottom > 0 && rect.left < innerWidth && rect.top < innerHeight;
+    });
     const r = close.getBoundingClientRect();
     const br = background.getBoundingClientRect();
     const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
@@ -97,12 +111,86 @@ async function assertModal(page, tag) {
       backgroundBlocked: !(backgroundHit === background || background.contains(backgroundHit)),
       backgroundHit: backgroundHit && (backgroundHit.id || backgroundHit.className || backgroundHit.tagName),
       zIndex: Number(getComputedStyle(modal).zIndex),
+      appShellInert: !!appShell && appShell.inert && appShell.hasAttribute("inert"),
+      allBackgroundInert: backgroundControls.length > 0 && backgroundControls.every((el) => !!el.closest("[inert]")),
+      visibleBackgroundBlocked: visibleBackgroundControls.every((el) => {
+        const rect = el.getBoundingClientRect();
+        const x = Math.max(0, Math.min(innerWidth - 1, rect.left + rect.width / 2));
+        const y = Math.max(0, Math.min(innerHeight - 1, rect.top + rect.height / 2));
+        const top = document.elementFromPoint(x, y);
+        return !!top && modal.contains(top);
+      }),
+      focusInside: modal.contains(document.activeElement),
+      backgroundCount: backgroundControls.length,
+      visibleBackgroundCount: visibleBackgroundControls.length,
     };
   });
   assert(result.closeVisible && result.closeHit, `${tag}「怎麼玩」關閉鈕固定在視口內且可點`);
   assert(result.backgroundBlocked && result.zIndex > 9900,
     `${tag} modal 高於遊戲控制並攔截背景點擊（hit=${result.backgroundHit}, z=${result.zIndex}）`);
+  assert(result.appShellInert && result.allBackgroundInert && result.visibleBackgroundBlocked && result.focusInside,
+    `${tag} modal 開啟時背景 ${result.backgroundCount} 顆控制全數 inert、可見 ${result.visibleBackgroundCount} 顆由 modal 攔截，焦點留在 modal`);
+  const playerBefore = await page.evaluate(() => {
+    const player = window.__farm.state().player;
+    return { x: player.x, y: player.y, facing: player.facing };
+  });
+  await page.keyboard.press("ArrowRight");
+  await page.evaluate(() => {
+    const dpad = document.querySelector('.dpad-btn[data-dir="left"]');
+    const action = document.getElementById("actionA");
+    if (dpad) {
+      dpad.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 67, pointerType: "touch" }));
+      dpad.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 67, pointerType: "touch" }));
+    }
+    if (action) action.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  await page.waitForTimeout(80);
+  const playerAfter = await page.evaluate(() => {
+    const player = window.__farm.state().player;
+    return { x: player.x, y: player.y, facing: player.facing };
+  });
+  assert(JSON.stringify(playerAfter) === JSON.stringify(playerBefore),
+    `${tag} modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態`);
   await page.click("#howToOk");
+  const restored = await page.evaluate(() => {
+    const appShell = document.querySelector(".wrap");
+    return !!appShell && !appShell.inert && !appShell.hasAttribute("inert") && !document.body.classList.contains("modal-open");
+  });
+  assert(restored, `${tag} modal 關閉後解除背景 inert`);
+}
+
+async function assertNonModalNoOverlap(page, tag) {
+  const result = await page.evaluate(() => {
+    const selectors = "button, a[href], input:not([type='hidden']), select, textarea, [role='button'], [tabindex]:not([tabindex='-1'])";
+    const controls = [...document.querySelectorAll(selectors)].filter((el) => {
+      if (el.closest(".modal") || el.disabled || el.closest("[inert]")) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 &&
+        rect.width > 0 && rect.height > 0 && rect.right > 0 && rect.bottom > 0 && rect.left < innerWidth && rect.top < innerHeight;
+    });
+    const label = (el) => el.id || el.getAttribute("aria-label") || el.getAttribute("data-tab") ||
+      (el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 24) || el.className || el.tagName;
+    const overlaps = [];
+    for (let i = 0; i < controls.length; i++) {
+      const a = controls[i];
+      const ar = a.getBoundingClientRect();
+      for (let j = i + 1; j < controls.length; j++) {
+        const b = controls[j];
+        if (a.contains(b) || b.contains(a)) continue;
+        const br = b.getBoundingClientRect();
+        const overlapX = Math.min(ar.right, br.right) - Math.max(ar.left, br.left);
+        const overlapY = Math.min(ar.bottom, br.bottom) - Math.max(ar.top, br.top);
+        if (overlapX > 1 && overlapY > 1) {
+          overlaps.push(`${label(a)}<>${label(b)}(ox=${Math.round(overlapX)},oy=${Math.round(overlapY)},a=${Math.round(ar.top)}-${Math.round(ar.bottom)},b=${Math.round(br.top)}-${Math.round(br.bottom)})`);
+        }
+      }
+    }
+    return { count: controls.length, overlaps };
+  });
+  assert(result.count > 0 && result.overlaps.length === 0,
+    `${tag} 非 modal 互動元素兩兩不相交（排除父子，共 ${result.count} 顆）` +
+      (result.overlaps.length ? `：${result.overlaps.slice(0, 12).join(", ")}` : ""));
 }
 
 async function assertTouchActionDock(page, tag) {
@@ -192,7 +280,7 @@ async function runViewport(browser, base, config) {
   page.on("pageerror", (error) => errors.push(String(error)));
   try {
     await page.goto(base + "?r64-controls=1", { waitUntil: "domcontentloaded", timeout: 30000 });
-    await page.waitForFunction(() => window.__farm && window.__farm.state, null, { timeout: 15000 });
+    await page.waitForFunction(() => window.__farm && window.__farm.state, null, { timeout: 45000 });
     await closeInitialModal(page);
 
     const device = await page.evaluate(() => ({
@@ -210,11 +298,13 @@ async function runViewport(browser, base, config) {
     await assertFitMapVisible(page, config.name);
 
     const selector = [
-      "#toolBar .tool", "#questDock button:not([disabled])", ".toolbar button",
+      "#toolBar .tool", "#questDock button:not([disabled])", expectsMobileControls ? "" : ".toolbar button",
       "#smartAssistant button", "#seedHud .seed:not(.locked)",
       expectsMobileControls ? "#mobileControls button" : "",
     ].filter(Boolean).join(",");
     assertReachable(config.name, await controlMetrics(page, selector));
+    await assertNonModalNoOverlap(page, `${config.name} 主場景`);
+    await assertModal(page, `${config.name} 主場景`, { programmaticOpen: expectsMobileControls });
 
     if (config.evidence) {
       fs.mkdirSync(EVIDENCE, { recursive: true });
@@ -223,7 +313,16 @@ async function runViewport(browser, base, config) {
 
     await page.locator(".side-tabs").scrollIntoViewIfNeeded();
     assertReachable(`${config.name} 側欄 tabs`, await controlMetrics(page, ".side-tabs button"));
-    await assertModal(page, config.name);
+    await assertNonModalNoOverlap(page, `${config.name} 側欄分頁`);
+    if (expectsMobileControls) {
+      await page.locator(".toolbar").scrollIntoViewIfNeeded();
+      assertReachable(`${config.name} 底部工具列`, await controlMetrics(page, ".toolbar button"));
+      await assertNonModalNoOverlap(page, `${config.name} 底部工具列`);
+      if (config.evidence) {
+        await page.screenshot({ path: path.join(EVIDENCE, "mobile-menu-390x844.png"), fullPage: false });
+      }
+      await assertModal(page, `${config.name} 底部工具列`);
+    }
     if (expectsMobileControls) {
       await page.locator("#mapScene").scrollIntoViewIfNeeded();
       await assertTouchActionDock(page, config.name);
@@ -242,17 +341,20 @@ async function run() {
   const base = `http://127.0.0.1:${server.address().port}/index.html`;
   const browser = await chromium.launch();
   try {
-    console.log("== farm R66 控制與整圖守門 ==");
-    for (const config of VIEWPORTS) await runViewport(browser, base, config);
+    console.log("== farm R67 控制與選單守門 ==");
+    const viewportFilter = String(process.env.CONTROLS_VIEWPORT || "").trim();
+    const selectedViewports = viewportFilter ? VIEWPORTS.filter((config) => config.name.includes(viewportFilter)) : VIEWPORTS;
+    if (!selectedViewports.length) throw new Error(`找不到控制守門視口：${viewportFilter}`);
+    for (const config of selectedViewports) await runViewport(browser, base, config);
   } finally {
     await browser.close();
     server.close();
   }
   if (failed) {
-    console.error(`\n❌ R66 控制與整圖守門失敗：${failed} 項`);
+    console.error(`\n❌ R67 控制與選單守門失敗：${failed} 項`);
     process.exit(1);
   }
-  console.log("\n✅ R66 控制與整圖守門通過（7 種裝置／視口）");
+  console.log(`\n✅ R67 控制與選單守門通過（${String(process.env.CONTROLS_VIEWPORT || "").trim() ? "篩選" : "7 種"}裝置／視口）`);
 }
 
-run().catch((error) => { console.error("R66 控制與整圖守門執行失敗：", error); process.exit(1); });
+run().catch((error) => { console.error("R67 控制與選單守門執行失敗：", error); process.exit(1); });

@@ -70,7 +70,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r66-20260716-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r67-20260717-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -412,6 +412,19 @@
       catch (e) { target.focus(); }
     }
   }
+  function setModalBackgroundInert(inert) {
+    const appShell = typeof document.querySelector === "function" ? document.querySelector(".wrap") : null;
+    if (appShell) {
+      if (inert) {
+        if (typeof appShell.setAttribute === "function") appShell.setAttribute("inert", "");
+        appShell.inert = true;
+      } else {
+        if (typeof appShell.removeAttribute === "function") appShell.removeAttribute("inert");
+        appShell.inert = false;
+      }
+    }
+    if (document.body && document.body.classList) document.body.classList.toggle("modal-open", !!inert);
+  }
   function openModal(id, preferredSelector) {
     const modal = $(id); if (!modal) return;
     lastModalFocus = document.activeElement || lastModalFocus;
@@ -422,15 +435,15 @@
       modal.setAttribute("role", "dialog");
       modal.setAttribute("aria-modal", "true");
     }
-    if (document.body && document.body.classList) document.body.classList.add("modal-open");
     modal.classList.add("show");
+    setModalBackgroundInert(true);
     focusFirstInModal(modal, preferredSelector);
   }
   function closeModal(id) {
     const modal = $(id); if (!modal) return false;
     modal.classList.remove("show");
     if (typeof document.querySelector !== "function" || !document.querySelector(".modal.show")) {
-      if (document.body && document.body.classList) document.body.classList.remove("modal-open");
+      setModalBackgroundInert(false);
     }
     if (lastModalFocus && typeof lastModalFocus.focus === "function") {
       setTimeout(() => lastModalFocus.focus(), 0);
@@ -557,7 +570,7 @@
   function setupSideTabs() {
     document.querySelectorAll(".side-tab").forEach((b) => {
       if (!b.getAttribute || !b.getAttribute("aria-label")) b.setAttribute && b.setAttribute("aria-label", "切換到" + (b.textContent || "").trim() + "分頁");
-      b.onclick = () => switchTab(b.dataset.tab);
+      b.onclick = () => { if (!hasOpenModal()) switchTab(b.dataset.tab); };
     });
   }
   function visibleListItems(key, items, limit) {
@@ -2857,6 +2870,7 @@
   }
   // 點地圖磚：桌機保留點擊即操作；觸控先給地圖內 action dock。
   function handleMapClick(tileId, activationType) {
+    if (hasOpenModal()) return;
     const isTouch = activationType === "touch";
     if (pendingTouchFarmAction && (!isTouch || pendingTouchFarmAction.tileId !== tileId)) clearTouchFarmPreview(false);
     hideBuildWheel(); hideObjectBubble();
@@ -3638,7 +3652,7 @@
     document.documentElement.classList.toggle("mobile-controls-enabled", primaryCoarse && narrow);
   }
   function stepPlayerDir(dir) {
-    if (moveTimer || !state || !state.player) return;
+    if (hasOpenModal() || moveTimer || !state || !state.player) return;
     const dd = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[dir];
     if (!dd) return;
     state.player.facing = dir;
@@ -3658,6 +3672,7 @@
     return G.getTileXY(state, state.player.x + dd[0], state.player.y + dd[1]);
   }
   function activateFacingTile() {
+    if (hasOpenModal()) return;
     const tile = facingTile();
     if (!tile) { toast("前方沒有目標"); return; }
     selectedTileId = tile.id;
@@ -3686,6 +3701,7 @@
     document.querySelectorAll(".dpad-btn[data-dir]").forEach((btn) => {
       btn.addEventListener("pointerdown", (ev) => {
         ev.preventDefault(); ev.stopPropagation();
+        if (hasOpenModal()) { stopDpadRepeat(); return; }
         const dir = btn.dataset.dir;
         stepPlayerDir(dir);
         stopDpadRepeat();
@@ -3703,6 +3719,7 @@
     const world = $("mapWorld");
     if (world) {
       world.addEventListener("pointerdown", (ev) => {
+        if (hasOpenModal()) return;
         const ob = ev.target && ev.target.closest ? ev.target.closest(".ob[data-kind]") : null;
         if (ob && ev.pointerType) lastMapPointer = { pointerType: ev.pointerType, tileId: ob.dataset.tileId || "", at: now() };
       }, { passive: true });
@@ -3891,6 +3908,7 @@
     state.camera = Object.assign({}, state.camera, { followPlayer: true, focusTileId: null, focusUntil: 0 });
     document.documentElement.dataset.promoScene = id;
     document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show"));
+    setModalBackgroundInert(false);
     buildMap(); updateMap(t); positionPlayer(false); syncHud();
     if (worldEl) worldEl.style.transition = "none";
     return { id, season: scene.season, weather: scene.weather, crops: scene.crops.slice() };

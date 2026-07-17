@@ -28,6 +28,17 @@ let failed = 0;
 function assert(cond, msg) { if (cond) console.log("  ✓ " + msg); else { console.error("  ✗ " + msg); failed++; } }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+async function dismissOpenModal(page) {
+  await page.evaluate(() => {
+    const modal = document.querySelector(".modal.show");
+    if (!modal) return;
+    const close = modal.querySelector("#howToOk, #offlineOk, #settingsOk, #lettersClose");
+    if (!close) throw new Error(`modal ${modal.id || "unknown"} 缺正式關閉控制`);
+    close.click();
+  });
+  await page.waitForFunction(() => !document.querySelector(".modal.show"));
+}
+
 function startServer() {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
@@ -121,10 +132,8 @@ async function runTrueServiceWorkerOfflineTest(browser, base) {
   }
 }
 async function keyboardTabSmoke(page) {
-  await page.evaluate(() => {
-    document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show"));
-    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-  });
+  await dismissOpenModal(page);
+  await page.evaluate(() => { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); });
   const seen = [];
   for (let i = 0; i < 14; i++) {
     await page.keyboard.press("Tab");
@@ -159,7 +168,7 @@ async function runShortDesktopLayoutTest(browser, base) {
     await page.goto(base, { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await configureE2ePage(page);
-    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    await dismissOpenModal(page);
     const mainControls = await page.evaluate(() => {
       const ids = ["settingsBtn", "spriteToggle", "howToBtn", "resetBtn"];
       return {
@@ -225,7 +234,7 @@ async function runTouchFarmConfirmationTest(browser, base) {
     await page.goto(base, { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await configureE2ePage(page);
-    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    await dismissOpenModal(page);
     const ids = await page.evaluate(() => window.__farm.state().map.tiles.filter((t) => t.plotIndex != null).slice(0, 4).map((t) => t.id));
     const touch = (id) => page.evaluate((tileId) => {
       const el = document.querySelector(`.gtile[data-tile-id="${tileId}"]`);
@@ -340,7 +349,7 @@ async function run() {
   const browser = await chromium.launch();
 
   try {
-  console.log("\n== R66 preflight gates ==");
+  console.log("\n== R67 preflight gates ==");
   await runShortDesktopLayoutTest(browser, base);
   await runTouchFarmConfirmationTest(browser, base);
   await runTrueServiceWorkerOfflineTest(browser, base);
@@ -400,14 +409,14 @@ async function run() {
     assert(pwaFiles.swOk && pwaFiles.swSyntax === true && pwaFiles.swHasVersion && pwaFiles.swHasStrategies && pwaFiles.swHasSkipWaiting &&
       pwaFiles.swHasInstallSkipWaiting && pwaFiles.swHasClientsClaim && pwaFiles.swHasCacheVersioned && pwaFiles.swHasFallback &&
       pwaFiles.swHasAllSrc && pwaFiles.htmlHasVersionedLocalRefs && pwaFiles.htmlHasBootGuard &&
-      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r66-20260716-1",
+      pwaFiles.uiHasAssetVersioning && pwaFiles.uiHasControllerGuard && pwaFiles.swVersion === "r67-20260717-1",
       `SW 檔存在、語法有效，含版本鍵/快取策略/skipWaiting（syntax=${pwaFiles.swSyntax}）`);
     assert(pwaFiles.webdriver === true, "E2E 環境 navigator.webdriver=true，可跳過 SW 註冊");
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await page.waitForFunction(() => window.Atlas && window.Atlas.isReady && window.Atlas.isReady(), { timeout: 20000 });
-    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    await dismissOpenModal(page);
     await sleep(300);
 
     // R23：離開期間摘要（重開且離線 >=5 分鐘）
@@ -483,7 +492,7 @@ async function run() {
       r27Settings.reviewText.includes("作物成熟 1 株") && r27Settings.reviewText.includes("採集點已刷新 1 處") &&
       r27Settings.saved && r27Settings.saved.readyPlots === 1 && r27Settings.saved.forageReadyCount === 1,
       `設定面板可回看最近一次離線摘要（${r27Settings.reviewText.replace(/\n/g, " / ")}）`);
-    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r66-20260716-1") &&
+    assert(r27Settings.focusInside && r27Settings.textSizes.join(",") === "small,medium,large" && r27Settings.versionText.includes("r67-20260717-1") &&
       r27Settings.pwaButton.includes("檢查更新") && r27Settings.diagnostics.includes("FPS") && r27Settings.diagnostics.includes("實際"),
       `設定面板含焦點移入/文字大小/PWA 版本/效能診斷（${r27Settings.diagnostics}）`);
     assert(r27Settings.soundVolume === "55" && r27Settings.soundVolumeText === "55%",
@@ -634,7 +643,7 @@ async function run() {
     await page.reload();
     await page.waitForFunction(() => window.__farm && window.__farm.state);
     await page.waitForFunction(() => window.Atlas && window.Atlas.isReady && window.Atlas.isReady(), { timeout: 20000 });
-    await page.evaluate(() => document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show")));
+    await dismissOpenModal(page);
     await sleep(300);
     const tabSmoke = await keyboardTabSmoke(page);
     assert(tabSmoke.focused.length >= 4 && tabSmoke.visibleFocus.length >= 4 && tabSmoke.reachedMain,
