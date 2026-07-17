@@ -346,7 +346,7 @@ def main() -> None:
         "references": references,
         "assets": source_assets,
     }
-    (EVIDENCE / "source-manifest.json").write_text(json.dumps(source_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (EVIDENCE / "source-manifest.json").write_text(json.dumps(source_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     runtime_manifest = {
         "release": "R68",
@@ -380,7 +380,7 @@ def main() -> None:
         "budgetMobileMiB": 32,
         "budgetPass": decoded_total <= 32 * 1024 * 1024,
     }
-    (OUT / "manifest.json").write_text(json.dumps(runtime_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (OUT / "manifest.json").write_text(json.dumps(runtime_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     memory = {
         "formula": "width x height x 4 bytes RGBA",
         "assets": {asset: {tier: data["metrics"]["decodedBytesRGBA"] for tier, data in tiers.items()} for asset, tiers in runtime_assets.items()},

@@ -24,7 +24,7 @@ const CORE_ASSETS = [
   versioned("./assets/generated/r66/native/assistant_idle-64.png"),
   versioned("./assets/generated/r66/native/assistant_tip-64.png"),
   versioned("./assets/generated/r66/native/assistant_alert-64.png"),
-  "./assets/generated/r68/manifest.json?v=fe05c3c4",
+  "./assets/generated/r68/manifest.json?v=2a95c231",
   "./assets/generated/r68/loading-spring-low.png?v=7b001bb9",
   "./assets/generated/r68/loading-spring-med.png?v=1ff5a60e",
   "./assets/generated/r68/loading-spring-high.png?v=8c6373c4",

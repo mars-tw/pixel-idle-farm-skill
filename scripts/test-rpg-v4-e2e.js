@@ -441,6 +441,13 @@ async function run() {
     }, { key: "pixel_idle_farm_save_v1", raw: offlineRaw });
     await page.reload();
     await page.waitForFunction(() => window.__farm && window.__farm.state);
+    // R68 起初始 modal 延後到 loading 收場後才顯示：先等 loading 移除，再輪詢離線摘要出現（硬上限；
+    // 逾時不吞錯——由下方既有斷言以 shown/head 實值報失敗，真回歸仍會紅）
+    await page.waitForFunction(() => !document.getElementById("startupLoading"), { timeout: 20000 });
+    await page.waitForFunction(() => {
+      const m = document.getElementById("offlineModal");
+      return m && m.classList.contains("show");
+    }, { timeout: 8000 }).catch(() => {});
     const offlineSummary = await page.evaluate(() => {
       const modal = document.getElementById("offlineModal");
       const body = document.getElementById("offlineBody");
