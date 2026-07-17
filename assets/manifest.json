@@ -84,6 +84,17 @@
       "model": "gpt-image-2",
       "pipeline": "512px opaque concept master -> matte decontamination -> R62 palette native cleanup",
       "status": "production"
+    },
+    {
+      "id": "r68-seasonal-loading-and-activity-panel",
+      "file": "assets/generated/r68/manifest.json",
+      "manifest": "assets/generated/r68/manifest.json",
+      "type": "seasonal-loading-backgrounds-and-ui-panel",
+      "tiers": ["low", "med", "high"],
+      "gameplayUse": "R68 visual-only four-season loading screens and existing seasonal activity-card background.",
+      "model": "gpt-image-2",
+      "pipeline": "C2PA master -> fixed-size BOX sampling -> hue-shift shadow tint -> R62 66-colour quantization -> region-selective dithering",
+      "status": "production"
     }
   ]
 }

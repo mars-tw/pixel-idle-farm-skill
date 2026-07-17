@@ -7,6 +7,8 @@
 - `assets/generated/` 下的角色、作物、動物、建築、場景物件與 VFX，主要由 OpenAI 圖像生成工具協助製作。repo 內的 `art-config*.json`、素材 manifest 與生成腳本將主要模型記為 `gpt-image-2`；R59 的 Miri／Kai 動作圖集與 `crops2` 作物圖集，以及 R60 的鴨子、鴨蛋品質與 `crops3`／`crops4` 作物圖集，均由內建 `imagegen` 工作流程重繪。
 - R66 正式 UI 使用 `gpt-image-2` 經 Codex 內建 `image_gen` 製作 512px 概念母版：15 個作物、6 個工具、5 個分頁、6 個系統圖示，以及 3 張智慧農務助手狀態皮膚。金色南瓜沿用已通過 Wave 0 校準的同模型母版；其餘 34 張為 R66 生成。完整 prompt、來源／中間層／runtime SHA-256、模型與 C2PA 偵測結果記於 `assets/generated/r66/manifest.json`。
 - R66 runtime 載入 `assets/generated/r66/ui-icons-32.png`（8×4、native 32px）與 `assets/generated/r66/native/assistant_*-64.png`。生成母版均先以 `#ff00ff` matte 去背、邊緣去汙，再經 R62 限定 palette、1px 深色輪廓與原生像素清稿；遊戲不直接載入 512px 模型輸出。
+- R68 四季 loading 與既有活動面板底圖由 Codex 內建 `imagegen`（`gpt-image-2`）生成；五張含 C2PA 的原始母版保存在 `docs/evidence/R68/masters/`，runtime 與母版分軌，不互相覆寫。
+- R68 runtime 經 `tools/process-r68-visuals.py` 確定性後製：固定 BOX 像素網格、每季 hue-shift 陰影、R62 統一 66 色盤、僅天空／遠景或面板外框套用選擇性 dithering，並保留深色 1px 原生像素輪廓。完整 prompt、reference hash、C2PA 摘要與 master/runtime SHA-256 見 `docs/evidence/R68/source-manifest.json` 與 `assets/generated/r68/manifest.json`。
 - 生成後的來源圖會經專案內腳本去背、裁切、縮放、像素修整、anchor 設定與 JSON frame map 產生；部分地形、季相與補充圖集由 JavaScript／Python 程序化產生或修整。因此執行時 atlas 並非未處理的模型輸出。
 - `assets/cover.png` 為專案的 AI 輔助像素風封面。`references/visual-targets/` 內圖片是製作參考，不是直接載入遊戲的 runtime atlas。
 - `references/promo/` 與 `artifacts/` 內圖片為本遊戲畫面截圖；README 使用其中的春、夏、冬季宣傳截圖。

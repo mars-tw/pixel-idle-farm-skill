@@ -11,13 +11,31 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r67-20260717-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r67-20260717-1">
+<link rel="manifest" href="manifest.webmanifest?v=r68-20260717-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r68-20260717-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
   "use strict";
-  const VERSION = "r67-20260717-1";
+  performance.mark("farm-loading-start");
+  const loadingSeasonNames = { "春": "spring", "夏": "summer", "秋": "autumn", "冬": "winter", spring: "spring", summer: "summer", autumn: "autumn", winter: "winter" };
+  const loadingSources = {
+    spring: "assets/generated/r68/loading-spring-low.png?v=7b001bb9",
+    summer: "assets/generated/r68/loading-summer-low.png?v=dd952edd",
+    autumn: "assets/generated/r68/loading-autumn-low.png?v=bae800a8",
+    winter: "assets/generated/r68/loading-winter-low.png?v=c557e0d0",
+  };
+  try {
+    const loadingParams = new URLSearchParams(location.search || "");
+    const saved = JSON.parse(localStorage.getItem("pixel_idle_farm_save_v1") || "null");
+    window.FARM_LOADING_SEASON = loadingSeasonNames[loadingParams.get("r68-season")] || loadingSeasonNames[saved && saved.season && saved.season.id] || "spring";
+  } catch (error) { window.FARM_LOADING_SEASON = "spring"; }
+  const loadingPreload = document.createElement("link");
+  loadingPreload.rel = "preload";
+  loadingPreload.as = "image";
+  loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
+  document.head.appendChild(loadingPreload);
+  const VERSION = "r68-20260717-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -61,6 +79,31 @@
     --shadow: 0 2px 0 rgba(0,0,0,.08), 0 6px 16px rgba(60,40,10,.14);
     --r: 14px;
     --ui-font-scale: 1;
+    --r68-loading-spring: url("assets/generated/r68/loading-spring-low.png?v=7b001bb9");
+    --r68-loading-summer: url("assets/generated/r68/loading-summer-low.png?v=dd952edd");
+    --r68-loading-autumn: url("assets/generated/r68/loading-autumn-low.png?v=bae800a8");
+    --r68-loading-winter: url("assets/generated/r68/loading-winter-low.png?v=c557e0d0");
+    --r68-activity-panel: url("assets/generated/r68/activity-panel-med.png?v=e100dd7f");
+  }
+  html.perf-low {
+    --r68-loading-spring: url("assets/generated/r68/loading-spring-low.png?v=7b001bb9");
+    --r68-loading-summer: url("assets/generated/r68/loading-summer-low.png?v=dd952edd");
+    --r68-loading-autumn: url("assets/generated/r68/loading-autumn-low.png?v=bae800a8");
+    --r68-loading-winter: url("assets/generated/r68/loading-winter-low.png?v=c557e0d0");
+    --r68-activity-panel: url("assets/generated/r68/activity-panel-low.png?v=efe3dacd");
+  }
+  html[data-performance-mode="auto"] {
+    --r68-loading-spring: url("assets/generated/r68/loading-spring-med.png?v=1ff5a60e");
+    --r68-loading-summer: url("assets/generated/r68/loading-summer-med.png?v=0c46dfa1");
+    --r68-loading-autumn: url("assets/generated/r68/loading-autumn-med.png?v=961675fc");
+    --r68-loading-winter: url("assets/generated/r68/loading-winter-med.png?v=8b5c0616");
+  }
+  html[data-performance-mode="high"] {
+    --r68-loading-spring: url("assets/generated/r68/loading-spring-high.png?v=8c6373c4");
+    --r68-loading-summer: url("assets/generated/r68/loading-summer-high.png?v=e226121d");
+    --r68-loading-autumn: url("assets/generated/r68/loading-autumn-high.png?v=56d75371");
+    --r68-loading-winter: url("assets/generated/r68/loading-winter-high.png?v=ee1876fe");
+    --r68-activity-panel: url("assets/generated/r68/activity-panel-high.png?v=c772fbfc");
   }
   html[data-season="春"] { --sky-1: #c8e9f3; --sky-2: #dff2cf; --grass: #82bd50; --grass-d: #5fa443; }
   html[data-season="夏"] { --sky-1: #aedbf0; --sky-2: #cde7aa; --grass: #68a83f; --grass-d: #477f32; }
@@ -77,6 +120,29 @@
     background-attachment: fixed;
   }
   img, .sprite { image-rendering: pixelated; image-rendering: crisp-edges; }
+  .startup-loading {
+    position: fixed; inset: 0; z-index: 30000; overflow: hidden; display: grid; place-items: end center;
+    background: #251d35; isolation: isolate; color: #fff4d8;
+  }
+  .startup-loading.is-leaving { opacity: 0; transition: opacity .16s linear; pointer-events: none; }
+  .startup-loading-art { position: absolute; inset: 0; z-index: -2; background-position: center; background-size: cover;
+    background-repeat: no-repeat; image-rendering: pixelated; }
+  .startup-loading[data-season="spring"] .startup-loading-art { background-image: var(--r68-loading-spring); }
+  .startup-loading[data-season="summer"] .startup-loading-art { background-image: var(--r68-loading-summer); }
+  .startup-loading[data-season="autumn"] .startup-loading-art { background-image: var(--r68-loading-autumn); }
+  .startup-loading[data-season="winter"] .startup-loading-art { background-image: var(--r68-loading-winter); }
+  .startup-loading::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(37,29,53,.03) 48%, rgba(37,29,53,.76) 100%); }
+  .startup-loading-copy { width: min(92vw, 520px); margin: 0 0 max(28px, env(safe-area-inset-bottom)); padding: 12px 16px;
+    border: 2px solid #eee3c8; box-shadow: 0 0 0 2px #49364b, 0 8px 24px rgba(37,29,53,.34);
+    background: rgba(37,29,53,.94); text-align: center; image-rendering: pixelated; }
+  .startup-loading-copy strong { display: block; color: #fff0a3; font-size: clamp(20px, 5vw, 30px); letter-spacing: .12em; }
+  .startup-loading-copy span { display: block; margin-top: 3px; color: #fff4d8; font-size: 13px; font-weight: 800; }
+  .startup-loading-progress { width: 100%; height: 6px; margin-top: 9px; border: 1px solid #eee3c8; background: #49364b; overflow: hidden; }
+  .startup-loading-progress::after { content: ""; display: block; width: 58%; height: 100%; background: #f5e678;
+    animation: r68Loading 1.1s steps(6, end) infinite alternate; }
+  @keyframes r68Loading { from { transform: translateX(-84%); } to { transform: translateX(150%); } }
+  @media (prefers-reduced-motion: reduce) { .startup-loading-progress::after { animation: none; width: 100%; } }
   .wrap { width: min(100%, 1720px); max-width: none; margin: 0 auto; min-width: 0; }
 
   /* ===== 頂部標題 + 資源列 ===== */
@@ -440,12 +506,15 @@
   .letter-paper.locked { filter: saturate(.78); color: #6a5639; }
   .letter-meta { font-size: 11px; color: #7d5b22; font-weight: 900; letter-spacing: 0; }
   .letters-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; font-weight: 900; color: #674a1a; }
-  .season-event-card { margin-bottom: 12px; padding: 10px 12px; border: 2px solid #c99a42; border-radius: 8px; background: #fff4c8;
-    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; color: #4b3512; }
-  .season-event-card b { font-size: 13px; }
-  .season-event-card p { margin: 3px 0; font-size: 12px; line-height: 1.45; }
-  .season-event-card em { font-style: normal; font-size: 11px; font-weight: 900; color: #775421; }
-  .season-event-card.done { background: #edf6d8; border-color: #9fbd65; }
+  .season-event-card { margin-bottom: 12px; min-height: 132px; padding: 22px 24px; border: 2px solid #7a5a3b; border-radius: 8px;
+    background-color: #fff4d8; background-image: var(--r68-activity-panel); background-position: center; background-size: 100% 100%; background-repeat: no-repeat;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; color: #4b3512; image-rendering: pixelated; }
+  .season-event-card > div { min-width: 0; padding: 6px 0; }
+  .season-event-card b { font-size: 13px; color: #4b3512; }
+  .season-event-card p { margin: 3px 0; font-size: 12px; line-height: 1.45; color: #3a2c1a; }
+  .season-event-card em { font-style: normal; font-size: 11px; font-weight: 900; color: #49364b; }
+  .season-event-card .btn { border: 2px solid #70473f; background: #f5e678; color: #3a2c1a; }
+  .season-event-card.done { border-color: #5d8447; filter: saturate(.92); }
   .story-mail-btn { margin-top: 8px; width: 100%; }
   .ob.mail-unread::after { content: ""; position: absolute; right: -3px; top: -3px; width: 11px; height: 11px; border-radius: 999px; background: #d53a31; border: 2px solid #fff7d8; box-shadow: 0 0 0 2px rgba(120,35,25,.2); }
   @media (max-width: 640px) { .letters-layout { grid-template-columns: 1fr; } .letter-paper { min-height: 240px; } .season-event-card { grid-template-columns: 1fr; } }
@@ -940,7 +1009,60 @@
   }
 </style>
 </head>
-<body>
+<body class="r68-loading">
+<div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="晨光農場載入中">
+  <div class="startup-loading-art" id="startupLoadingArt" aria-hidden="true"></div>
+  <div class="startup-loading-copy">
+    <strong>晨光農場</strong>
+    <span>四季晨光正在甦醒</span>
+    <div class="startup-loading-progress" aria-hidden="true"></div>
+  </div>
+</div>
+<script>
+(() => {
+  "use strict";
+  const loading = document.getElementById("startupLoading");
+  const params = new URLSearchParams(location.search || "");
+  const seasonNames = { "春": "spring", "夏": "summer", "秋": "autumn", "冬": "winter", spring: "spring", summer: "summer", autumn: "autumn", winter: "winter" };
+  let season = window.FARM_LOADING_SEASON || seasonNames[params.get("r68-season")] || "spring";
+  if (!params.has("r68-season")) {
+    try {
+      const saved = JSON.parse(localStorage.getItem("pixel_idle_farm_save_v1") || "null");
+      season = seasonNames[saved && saved.season && saved.season.id] || season;
+    } catch (error) { /* malformed saves are handled by the existing state loader */ }
+  }
+  loading.dataset.season = season;
+  const sources = {
+    spring: "assets/generated/r68/loading-spring-low.png?v=7b001bb9",
+    summer: "assets/generated/r68/loading-summer-low.png?v=dd952edd",
+    autumn: "assets/generated/r68/loading-autumn-low.png?v=bae800a8",
+    winter: "assets/generated/r68/loading-winter-low.png?v=c557e0d0",
+  };
+  const image = new Image();
+  image.decoding = "async";
+  image.src = sources[season];
+  window.__farmLoadingReady = (image.decode ? image.decode() : new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; }))
+    .then(() => {
+      loading.dataset.assetLoaded = "true";
+      performance.mark("farm-visual-focus-ready");
+      return true;
+    });
+  window.__finishFarmLoading = (seasonId) => {
+    loading.dataset.season = seasonNames[seasonId] || loading.dataset.season;
+    return window.__farmLoadingReady.then(() => new Promise((resolve) => {
+      if (params.has("r68-hold-loading")) { resolve(false); return; }
+      loading.classList.add("is-leaving");
+      setTimeout(() => {
+        loading.setAttribute("aria-busy", "false");
+        loading.remove();
+        document.body.classList.remove("r68-loading");
+        performance.mark("farm-interactive-ready");
+        resolve(true);
+      }, 170);
+    }));
+  };
+})();
+</script>
 <div class="wrap">
   <header>
     <div class="title"><span class="ui-icon i-crop-sunflower" aria-hidden="true"></span>阿軒割割陽光農場開源遊戲世界 <small>Open Farm World</small></div>
@@ -1103,10 +1225,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r67-20260717-1"></script>
-<script src="src/game.js?v=r67-20260717-1"></script>
-<script src="src/state.js?v=r67-20260717-1"></script>
-<script src="src/atlas.js?v=r67-20260717-1"></script>
-<script src="src/ui.js?v=r67-20260717-1"></script>
+<script src="src/config.js?v=r68-20260717-1"></script>
+<script src="src/game.js?v=r68-20260717-1"></script>
+<script src="src/state.js?v=r68-20260717-1"></script>
+<script src="src/atlas.js?v=r68-20260717-1"></script>
+<script src="src/ui.js?v=r68-20260717-1"></script>
 </body>
 </html>

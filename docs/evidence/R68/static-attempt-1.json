@@ -1,0 +1,8 @@
+{
+  "release": "R68",
+  "attempt": 1,
+  "status": "LEGACY_GUARD_FAIL_RETAINED",
+  "cause": "The existing SW guard required the app version on every cached URL, while Wave 2 requires the exact SHA-256 prefix on generated runtime assets.",
+  "resolution": "The guard now recomputes and requires the exact SHA-256 prefix for assets/generated/r68 and retains the app-version assertion for every other local asset.",
+  "assertionsRelaxed": false
+}

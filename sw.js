@@ -1,4 +1,4 @@
-const CACHE_VERSION = "r67-20260717-1";
+const CACHE_VERSION = "r68-20260717-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -24,6 +24,22 @@ const CORE_ASSETS = [
   versioned("./assets/generated/r66/native/assistant_idle-64.png"),
   versioned("./assets/generated/r66/native/assistant_tip-64.png"),
   versioned("./assets/generated/r66/native/assistant_alert-64.png"),
+  "./assets/generated/r68/manifest.json?v=fe05c3c4",
+  "./assets/generated/r68/loading-spring-low.png?v=7b001bb9",
+  "./assets/generated/r68/loading-spring-med.png?v=1ff5a60e",
+  "./assets/generated/r68/loading-spring-high.png?v=8c6373c4",
+  "./assets/generated/r68/loading-summer-low.png?v=dd952edd",
+  "./assets/generated/r68/loading-summer-med.png?v=0c46dfa1",
+  "./assets/generated/r68/loading-summer-high.png?v=e226121d",
+  "./assets/generated/r68/loading-autumn-low.png?v=bae800a8",
+  "./assets/generated/r68/loading-autumn-med.png?v=961675fc",
+  "./assets/generated/r68/loading-autumn-high.png?v=56d75371",
+  "./assets/generated/r68/loading-winter-low.png?v=c557e0d0",
+  "./assets/generated/r68/loading-winter-med.png?v=8b5c0616",
+  "./assets/generated/r68/loading-winter-high.png?v=ee1876fe",
+  "./assets/generated/r68/activity-panel-low.png?v=efe3dacd",
+  "./assets/generated/r68/activity-panel-med.png?v=e100dd7f",
+  "./assets/generated/r68/activity-panel-high.png?v=c772fbfc",
   versioned("./assets/generated/farm-actors-buildings.png"),
   versioned("./assets/generated/characters/miri-rowan-turnaround.png"),
   versioned("./assets/generated/characters/miri-rowan-farm-actions.png"),

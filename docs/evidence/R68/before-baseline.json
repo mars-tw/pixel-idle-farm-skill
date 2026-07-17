@@ -1,0 +1,10 @@
+{
+  "release": "R68-before",
+  "profile": "Fast 3G / 4x CPU / 1366x768 / local concurrent machine",
+  "interactiveReadyMs": 5915,
+  "mainVisualReadyMs": 6342,
+  "interactiveRegressionLimitMs": 6506.5,
+  "measuredAt": "2026-07-17T08:55:44.555Z",
+  "trust": "concurrent-untrusted",
+  "note": "Concurrent-machine baseline; final shipment is rechecked by clean-machine audit."
+}

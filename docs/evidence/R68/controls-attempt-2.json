@@ -1,0 +1,11 @@
+{
+  "release": "R68",
+  "attempt": 2,
+  "status": "COUNT_ACCOUNTING_FAIL_RETAINED",
+  "trust": "concurrent-untrusted",
+  "reachableControlsCounted": 156,
+  "expected": 164,
+  "visualAndInteractionAssertions": "PASS",
+  "cause": "Two touch viewports each verified four action-dock controls, but those eight new controls were not added to the aggregate counter.",
+  "assertionsRelaxed": false
+}

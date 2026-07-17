@@ -116,6 +116,7 @@ async function auditViewport(browser, base, vp, closeOverlays) {
     const page = await context.newPage();
     await page.goto(base, { waitUntil: "networkidle", timeout: 30000 }).catch(() => {});
     await page.waitForFunction(() => window.__farm && window.__farm.state, null, { timeout: 15000 }).catch(() => {});
+    await page.waitForFunction(() => !document.getElementById("startupLoading"), null, { timeout: 15000 }).catch(() => {});
     await page.waitForTimeout(900);
     if (closeOverlays) {
       // 前置：關閉教學/導覽 overlay（首次遊玩「怎麼玩」引導、離線摘要等 modal）

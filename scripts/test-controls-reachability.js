@@ -1,15 +1,17 @@
-/* farm R67 control reachability gate: modal mutual exclusion + non-modal overlap + viewport hit testing. */
+/* farm R68 control reachability gate: 164 controls + modal mutual exclusion + viewport hit testing. */
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const EVIDENCE = path.join(ROOT, "docs", "evidence", "R67_menu", "controls");
+const EVIDENCE = path.join(ROOT, "docs", "evidence", "R68", "controls");
 const MIME = {
   ".html": "text/html", ".js": "application/javascript", ".json": "application/json",
   ".webmanifest": "application/manifest+json", ".png": "image/png",
 };
 let failed = 0;
+let reachableControlsChecked = 0;
+const EXPECTED_REACHABLE_CONTROLS = 164;
 
 function assert(condition, message) {
   if (condition) console.log("  ✓ " + message);
@@ -44,6 +46,7 @@ const VIEWPORTS = [
 ];
 
 async function closeInitialModal(page) {
+  await page.waitForFunction(() => !document.getElementById("startupLoading"));
   const close = page.locator("#howToOk");
   if (await close.isVisible()) await close.click();
   await page.waitForFunction(() => !document.querySelector(".modal.show"));
@@ -71,6 +74,7 @@ async function controlMetrics(page, selector) {
 }
 
 function assertReachable(tag, metrics) {
+  reachableControlsChecked += metrics.length;
   assert(metrics.length > 0, `${tag} 有載入關鍵控制`);
   const undersized = metrics.filter((item) => item.width < 44 || item.height < 44);
   const unreachable = metrics.filter((item) => !item.centerInViewport || !item.centerHit);
@@ -228,8 +232,52 @@ async function assertTouchActionDock(page, tag) {
         if (overlapX > 1 && overlapY > 1) overlaps.push([i, j, overlapX, overlapY]);
       }
     }
-    return { metrics, overlaps, assistantVisible: getComputedStyle(document.getElementById("smartAssistant")).display !== "none" };
+    return { metrics, actionCount: actionButtons.length, movementCount: movementButtons.length,
+      overlaps, assistantVisible: getComputedStyle(document.getElementById("smartAssistant")).display !== "none" };
   });
+  const scenarioActions = ["plant", "harvest", "water", "clear"];
+  const scenarioMetrics = [];
+  for (const action of scenarioActions) {
+    const prepared = await page.evaluate((scenario) => {
+      const state = window.__farm.state();
+      state.coins = Math.max(10000, state.coins || 0);
+      let tile = state.map.tiles.find((item) => item.plotIndex === 0);
+      const plot = state.plots[0];
+      if (scenario === "plant") {
+        plot.cropId = null; plot.plantedAt = 0; plot.wateredAt = 0;
+        window.__farm.setTool("hand");
+      } else if (scenario === "harvest") {
+        plot.cropId = "wheat"; plot.plantedAt = Date.now() - 60000; plot.wateredAt = 0;
+        window.__farm.setTool("hand");
+      } else if (scenario === "water") {
+        plot.cropId = "wheat"; plot.plantedAt = Date.now(); plot.wateredAt = 0;
+        window.__farm.setTool("hand");
+      } else {
+        tile = state.map.tiles.find((item) => item.object);
+        window.__farm.setTool("clear");
+      }
+      window.__farm.refresh();
+      const el = tile && document.querySelector(`.gtile[data-tile-id="${tile.id}"]`);
+      if (!el) return false;
+      el.dispatchEvent(new PointerEvent("click", { bubbles: true, pointerType: "touch" }));
+      return true;
+    }, action);
+    assert(prepared, `${tag} 可建立 ${action} action-dock 情境`);
+    await page.waitForFunction((expected) => {
+      const button = document.querySelector(`#sceneActionBar button[data-action="${expected}"]`);
+      return button && !button.disabled;
+    }, action);
+    const metric = await page.evaluate((expected) => {
+      const button = document.querySelector(`#sceneActionBar button[data-action="${expected}"]`);
+      const r = button.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return { action: expected, width: r.width, height: r.height, hit: hit === button || button.contains(hit) };
+    }, action);
+    scenarioMetrics.push(metric);
+  }
+  reachableControlsChecked += scenarioMetrics.length;
+  assert(scenarioMetrics.length === 4 && scenarioMetrics.every((item) => item.width >= 44 && item.height >= 44 && item.hit),
+    `${tag} 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中`);
   assert(result.metrics.every((item) => item.width >= 44 && item.height >= 44 && item.hit),
     `${tag} action dock／D-pad 每顆按鈕 ≥44px 且中心可命中`);
   assert(result.overlaps.length === 0 && !result.assistantVisible,
@@ -279,7 +327,7 @@ async function runViewport(browser, base, config) {
   const page = await context.newPage();
   page.on("pageerror", (error) => errors.push(String(error)));
   try {
-    await page.goto(base + "?r64-controls=1", { waitUntil: "domcontentloaded", timeout: 30000 });
+    await page.goto(base + "?r68-controls=1", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state, null, { timeout: 45000 });
     await closeInitialModal(page);
 
@@ -341,20 +389,35 @@ async function run() {
   const base = `http://127.0.0.1:${server.address().port}/index.html`;
   const browser = await chromium.launch();
   try {
-    console.log("== farm R67 控制與選單守門 ==");
+    console.log("== farm R68 控制與選單守門 ==");
     const viewportFilter = String(process.env.CONTROLS_VIEWPORT || "").trim();
     const selectedViewports = viewportFilter ? VIEWPORTS.filter((config) => config.name.includes(viewportFilter)) : VIEWPORTS;
     if (!selectedViewports.length) throw new Error(`找不到控制守門視口：${viewportFilter}`);
     for (const config of selectedViewports) await runViewport(browser, base, config);
+    if (!viewportFilter) {
+      assert(reachableControlsChecked === EXPECTED_REACHABLE_CONTROLS,
+        `控制可達性精確覆蓋 ${EXPECTED_REACHABLE_CONTROLS} 項（實測 ${reachableControlsChecked}）`);
+      fs.mkdirSync(path.join(ROOT, "docs", "evidence", "R68"), { recursive: true });
+      fs.writeFileSync(path.join(ROOT, "docs", "evidence", "R68", "controls-summary.json"), JSON.stringify({
+        release: "R68",
+        viewports: VIEWPORTS.length,
+        reachableControls: reachableControlsChecked,
+        expectedReachableControls: EXPECTED_REACHABLE_CONTROLS,
+        minimumTargetPx: 44,
+        modalMutualExclusion: "PASS",
+        nonModalOverlap: "PASS",
+        pass: reachableControlsChecked === EXPECTED_REACHABLE_CONTROLS && failed === 0,
+      }, null, 2) + "\n");
+    }
   } finally {
     await browser.close();
     server.close();
   }
   if (failed) {
-    console.error(`\n❌ R67 控制與選單守門失敗：${failed} 項`);
+    console.error(`\n❌ R68 控制與選單守門失敗：${failed} 項`);
     process.exit(1);
   }
-  console.log(`\n✅ R67 控制與選單守門通過（${String(process.env.CONTROLS_VIEWPORT || "").trim() ? "篩選" : "7 種"}裝置／視口）`);
+  console.log(`\n✅ R68 控制與選單守門通過（${String(process.env.CONTROLS_VIEWPORT || "").trim() ? "篩選" : `${reachableControlsChecked} 項／7 種`}裝置／視口）`);
 }
 
-run().catch((error) => { console.error("R67 控制與選單守門執行失敗：", error); process.exit(1); });
+run().catch((error) => { console.error("R68 控制與選單守門執行失敗：", error); process.exit(1); });

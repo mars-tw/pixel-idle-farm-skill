@@ -1,0 +1,9 @@
+{
+  "release": "R68",
+  "attempt": 1,
+  "status": "SETUP_TIMEOUT_RETAINED",
+  "trust": "concurrent-untrusted",
+  "enteredAssertions": false,
+  "error": "page.goto domcontentloaded exceeded 30000ms before the first viewport assertion",
+  "assertionsRelaxed": false
+}

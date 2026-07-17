@@ -1,0 +1,35 @@
+{
+  "formula": "width x height x 4 bytes RGBA",
+  "assets": {
+    "loading-spring": {
+      "low": 262144,
+      "med": 589824,
+      "high": 1048576
+    },
+    "loading-summer": {
+      "low": 262144,
+      "med": 589824,
+      "high": 1048576
+    },
+    "loading-autumn": {
+      "low": 262144,
+      "med": 589824,
+      "high": 1048576
+    },
+    "loading-winter": {
+      "low": 262144,
+      "med": 589824,
+      "high": 1048576
+    },
+    "activity-panel": {
+      "low": 204800,
+      "med": 524288,
+      "high": 1179648
+    }
+  },
+  "allTiersBytes": 9510912,
+  "allTiersMiB": 9.07,
+  "desktopBudgetMiB": 64,
+  "mobileBudgetMiB": 32,
+  "pass": true
+}

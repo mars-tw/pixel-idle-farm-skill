@@ -1,0 +1,31 @@
+{
+  "release": "R68",
+  "command": "npm run test:ci",
+  "exitCode": 0,
+  "durationSeconds": 272.6,
+  "staticVisualAssertions": 94,
+  "controls": {
+    "reachable": 164,
+    "expected": 164,
+    "minimumTargetPx": 44,
+    "modalMutualExclusion": "PASS"
+  },
+  "safeCrop": {
+    "seasons": 4,
+    "viewports": 12,
+    "assertions": 48,
+    "safeInset": 0.08,
+    "pass": true
+  },
+  "performance": {
+    "profile": "Fast 3G / 4x CPU / 1366x768 / local concurrent machine",
+    "trust": "concurrent-untrusted",
+    "focusReadyMs": 1089.5,
+    "focusLimitMs": 3000,
+    "interactiveReadyMs": 4063.4,
+    "interactiveRegressionLimitMs": 6506.5,
+    "rafP95Ms": 16.7,
+    "rafP95LimitMs": 18
+  },
+  "result": "PASS"
+}

@@ -1,0 +1,12 @@
+{
+  "release": "R68",
+  "attempt": 3,
+  "status": "SCENARIO_COVERAGE_FAIL_RETAINED",
+  "trust": "concurrent-untrusted",
+  "reachableControlsCounted": 158,
+  "expected": 164,
+  "visualAndInteractionAssertions": "PASS",
+  "cause": "The action dock truthfully renders one contextual action at a time; four simultaneous controls was an invalid fixture assumption.",
+  "next": "Exercise existing plant, harvest, water, and clear states sequentially on each touch viewport.",
+  "assertionsRelaxed": false
+}

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
+const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const PROBE_MISSING_CACHE = process.argv.includes("--probe-missing-cache");
@@ -38,6 +39,19 @@ function assetVersion(rel) {
 function withVersion(rel, version) {
   if (!rel || rel === ".") return rel;
   return stripAssetQuery(rel) + "?v=" + version;
+}
+
+function expectedAssetVersion(rel, appVersion) {
+  const clean = stripAssetQuery(rel);
+  if (!clean.startsWith("assets/generated/r68/")) return appVersion;
+  const target = path.join(ROOT, clean);
+  if (!fs.existsSync(target)) return "(missing-file)";
+  return crypto.createHash("sha256").update(fs.readFileSync(target)).digest("hex").slice(0, 8);
+}
+
+function withExpectedVersion(rel, appVersion) {
+  if (!rel || rel === ".") return rel;
+  return withVersion(rel, expectedAssetVersion(rel, appVersion));
 }
 
 function localFileExists(rel) {
@@ -128,14 +142,14 @@ function runSwCacheGuard() {
   const swEntries = swMeta.entries;
   const swSet = new Set(swEntries);
   const versionIssues = htmlVersionIssues(read("index.html"), swMeta.version);
-  const requiredVersioned = [...required].filter((rel) => rel !== ".").map((rel) => withVersion(rel, swMeta.version));
+  const requiredVersioned = [...required].filter((rel) => rel !== ".").map((rel) => withExpectedVersion(rel, swMeta.version));
   const missing = requiredVersioned.filter((rel) => !swSet.has(rel));
-  const unversioned = swEntries.filter((rel) => rel !== "." && assetVersion(rel) !== swMeta.version);
+  const unversioned = swEntries.filter((rel) => rel !== "." && assetVersion(rel) !== expectedAssetVersion(rel, swMeta.version));
   const nonexistent = swEntries.filter((rel) => !localFileExists(rel));
 
   assert(versionIssues.length === 0, `index.html 本地 script/link 皆帶 ?v=${swMeta.version}` + (versionIssues.length ? "：\n    " + versionIssues.join("\n    ") : ""));
-  assert(missing.length === 0, "index/manifest/runtime 關鍵本地資產皆以版本 URL 列入 SW cache" + (missing.length ? "：\n    " + missing.join("\n    ") : ""));
-  assert(unversioned.length === 0, `SW cache 清單皆帶 ?v=${swMeta.version}` + (unversioned.length ? "：\n    " + unversioned.join("\n    ") : ""));
+  assert(missing.length === 0, "index/manifest/runtime 關鍵本地資產皆以可驗證版本 URL 列入 SW cache" + (missing.length ? "：\n    " + missing.join("\n    ") : ""));
+  assert(unversioned.length === 0, `SW cache 清單皆帶精確版本（R68 生成圖為 SHA-256 前 8 碼，其餘為 ${swMeta.version}）` + (unversioned.length ? "：\n    " + unversioned.join("\n    ") : ""));
   assert(nonexistent.length === 0, "SW cache 清單內檔案皆實際存在" + (nonexistent.length ? "：\n    " + nonexistent.join("\n    ") : ""));
 }
 

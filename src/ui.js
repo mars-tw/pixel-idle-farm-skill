@@ -70,7 +70,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r67-20260717-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r68-20260717-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -985,7 +985,7 @@
     }).join("、");
     const stateText = status.claimed ? "本季已完成" : status.canClaim ? "可完成" : "需要：" + (missing || "物資不足");
     return `
-      <section class="season-event-card ${status.claimed ? "done" : ""}" data-audit="season-event" data-event-id="${ev.id}">
+      <section class="season-event-card ${status.claimed ? "done" : ""}" data-audit="season-event" data-event-id="${ev.id}" data-season="${escapeHtml(ev.season || "春")}">
         <div>
           <b>${ev.icon || "🌿"} ${escapeHtml(ev.name)}</b>
           <p>${escapeHtml(ev.desc || "")}</p>
@@ -3967,13 +3967,15 @@
     $("spriteToggle").textContent = state.useSprites ? "像素圖" : "符號圖";
 
     // 首次玩顯示引導；否則顯示離線摘要
-    let shownModal = false;
-    if (!state.stats || state.stats.plantCount === 0) {
-      if ((state.coins === window.GAME.startCoins) && Object.keys(state.stats.harvested).length === 0) {
-        openModal("howToModal", "#howToOk"); shownModal = true;
+    function showInitialModal() {
+      let shownModal = false;
+      if (!state.stats || state.stats.plantCount === 0) {
+        if ((state.coins === window.GAME.startCoins) && Object.keys(state.stats.harvested).length === 0) {
+          openModal("howToModal", "#howToOk"); shownModal = true;
+        }
       }
+      if (!shownModal && state.settings.offlineSummary !== false) showOfflineSummary(summary);
     }
-    if (!shownModal && state.settings.offlineSummary !== false) showOfflineSummary(summary);
 
     window.save(state);
     setInterval(loop, window.GAME.tickMs);
@@ -4020,6 +4022,18 @@
       stationTile: (type) => stationTileOf(type),
       applyPromoScene,
     };
+    let loadingFinished = Promise.resolve(true);
+    if (typeof window.__finishFarmLoading === "function") {
+      const loadingSeason = G.currentSeason ? G.currentSeason(state, now()) : "春";
+      loadingFinished = window.__finishFarmLoading(loadingSeason).catch(() => {
+        const loading = document.getElementById("startupLoading");
+        if (loading) loading.remove();
+        document.body.classList.remove("r68-loading");
+        performance.mark("farm-interactive-ready");
+        return true;
+      });
+    }
+    loadingFinished.then((finished) => { if (finished) showInitialModal(); });
   }
 
   function bindToolbar() {

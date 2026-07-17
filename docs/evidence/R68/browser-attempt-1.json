@@ -1,0 +1,28 @@
+{
+  "release": "R68",
+  "attempt": 1,
+  "trust": "concurrent-untrusted",
+  "status": "FAIL_RETAINED",
+  "performance": {
+    "focusReadyMs": 3320,
+    "focusLimitMs": 3000,
+    "focusPass": false,
+    "interactiveReadyMs": 4498,
+    "interactiveRegressionLimitMs": 6506.5,
+    "interactivePass": true
+  },
+  "p95": {
+    "p95Ms": 16.8,
+    "limitMs": 18,
+    "pass": true
+  },
+  "safeCrop": {
+    "matrix": "4 seasons x 12 viewports",
+    "pass": true
+  },
+  "loadingModalExclusion": {
+    "viewports": ["1440x780", "390x844", "820x1180"],
+    "pass": true
+  },
+  "secondaryFailure": "Activity-panel fixture timed out because it did not open the existing letters modal entrypoint."
+}

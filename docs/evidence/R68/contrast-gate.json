@@ -1,0 +1,165 @@
+{
+  "release": "R68",
+  "threshold": 4.5,
+  "sampling": "Every runtime background pixel in normalized text zone [0.075, 0.17, 0.755, 0.84] against intended title/body/meta colours.",
+  "tiers": {
+    "low": {
+      "normalizedBox": [
+        0.075,
+        0.17,
+        0.755,
+        0.84
+      ],
+      "minimumContrast": {
+        "title": 7.369673152650222,
+        "body": 8.611537696245021,
+        "meta": 7.002016761774369
+      },
+      "pass45": true,
+      "luminanceStdDev": 0.05487026186556734,
+      "readabilityNoiseLimit": 0.12,
+      "readabilityNoisePass": true
+    },
+    "med": {
+      "normalizedBox": [
+        0.075,
+        0.17,
+        0.755,
+        0.84
+      ],
+      "minimumContrast": {
+        "title": 7.369673152650222,
+        "body": 8.611537696245021,
+        "meta": 7.002016761774369
+      },
+      "pass45": true,
+      "luminanceStdDev": 0.05486193191643617,
+      "readabilityNoiseLimit": 0.12,
+      "readabilityNoisePass": true
+    },
+    "high": {
+      "normalizedBox": [
+        0.075,
+        0.17,
+        0.755,
+        0.84
+      ],
+      "minimumContrast": {
+        "title": 5.556224568179327,
+        "body": 6.492504664263491,
+        "meta": 5.279037041769429
+      },
+      "pass45": true,
+      "luminanceStdDev": 0.05542909002139799,
+      "readabilityNoiseLimit": 0.12,
+      "readabilityNoisePass": true
+    }
+  },
+  "loadingCopy": {
+    "loading-spring": {
+      "low": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      },
+      "med": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      },
+      "high": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      }
+    },
+    "loading-summer": {
+      "low": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.908766607386237,
+          "body": 12.521631061698836
+        },
+        "pass45": true
+      },
+      "med": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.908766607386237,
+          "body": 12.521631061698836
+        },
+        "pass45": true
+      },
+      "high": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.908766607386237,
+          "body": 12.521631061698836
+        },
+        "pass45": true
+      }
+    },
+    "loading-autumn": {
+      "low": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      },
+      "med": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      },
+      "high": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      }
+    },
+    "loading-winter": {
+      "low": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      },
+      "med": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      },
+      "high": {
+        "overlay": "#251D35 at 94%",
+        "minimumContrast": {
+          "title": 11.85824397711838,
+          "body": 12.4685083700434
+        },
+        "pass45": true
+      }
+    }
+  },
+  "pass": true
+}

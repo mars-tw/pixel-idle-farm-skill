@@ -1,0 +1,25 @@
+{
+  "performance": {
+    "focusReadyMs": 1089.5,
+    "interactiveReadyMs": 4063.4000000953674,
+    "loadingResource": {
+      "name": "http://127.0.0.1:53200/assets/generated/r68/loading-spring-low.png?v=7b001bb9",
+      "duration": 771.2000002861023,
+      "transferSize": 76080
+    },
+    "profile": "Fast 3G / 4x CPU / 1366x768 / local concurrent machine",
+    "trust": "concurrent-untrusted",
+    "focusLimitMs": 3000,
+    "interactiveRegressionLimitMs": 6506.5,
+    "focusPass": true,
+    "interactivePass": true,
+    "pageErrors": []
+  },
+  "p95": {
+    "samples": 180,
+    "p95Ms": 16.700000000000273,
+    "limitMs": 18,
+    "trust": "concurrent-untrusted",
+    "pass": true
+  }
+}

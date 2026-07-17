@@ -1,0 +1,72 @@
+{
+  "release": "R68",
+  "verifier": "tools/process-r68-visuals.py",
+  "assets": {
+    "loading-spring": {
+      "file": "docs/evidence/R68/masters/loading-spring-master.png",
+      "sha256": "750f62f5860e4fbf016db6c379bb9c3d9c82b61a5874a5f93dab28e237596a5c",
+      "pass": true,
+      "softwareAgent": {
+        "name": "gpt-image",
+        "version": "2.0",
+        "display": "gpt-image 2.0"
+      },
+      "markerOffset": 2860,
+      "c2paActionsV2Present": true,
+      "trainedAlgorithmicMediaPresent": true
+    },
+    "loading-summer": {
+      "file": "docs/evidence/R68/masters/loading-summer-master.png",
+      "sha256": "f01a73226db31c28c98b25383263a6b80476484ce1e47c681f611493881b5e5a",
+      "pass": true,
+      "softwareAgent": {
+        "name": "gpt-image",
+        "version": "2.0",
+        "display": "gpt-image 2.0"
+      },
+      "markerOffset": 2860,
+      "c2paActionsV2Present": true,
+      "trainedAlgorithmicMediaPresent": true
+    },
+    "loading-autumn": {
+      "file": "docs/evidence/R68/masters/loading-autumn-master.png",
+      "sha256": "8c36fffc4161690b6b4a46e68f83b76ebc845c9e2f81e20fa908882146e70f8a",
+      "pass": true,
+      "softwareAgent": {
+        "name": "gpt-image",
+        "version": "2.0",
+        "display": "gpt-image 2.0"
+      },
+      "markerOffset": 2860,
+      "c2paActionsV2Present": true,
+      "trainedAlgorithmicMediaPresent": true
+    },
+    "loading-winter": {
+      "file": "docs/evidence/R68/masters/loading-winter-master.png",
+      "sha256": "a4e8053627788d13e3fabbf8ac3de502c1e20377250e3731caace267b94e8b09",
+      "pass": true,
+      "softwareAgent": {
+        "name": "gpt-image",
+        "version": "2.0",
+        "display": "gpt-image 2.0"
+      },
+      "markerOffset": 2860,
+      "c2paActionsV2Present": true,
+      "trainedAlgorithmicMediaPresent": true
+    },
+    "activity-panel": {
+      "file": "docs/evidence/R68/masters/activity-panel-master.png",
+      "sha256": "ad4c004a289df974093f795dfc67c93d46ecb4323ea6c14839634f5134786797",
+      "pass": true,
+      "softwareAgent": {
+        "name": "gpt-image",
+        "version": "2.0",
+        "display": "gpt-image 2.0"
+      },
+      "markerOffset": 2860,
+      "c2paActionsV2Present": true,
+      "trainedAlgorithmicMediaPresent": true
+    }
+  },
+  "pass": true
+}

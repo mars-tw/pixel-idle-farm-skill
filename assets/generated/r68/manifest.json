@@ -1,0 +1,408 @@
+{
+  "release": "R68",
+  "version": "r68-20260717-1",
+  "modelSlug": "gpt-image-2",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5"
+  ],
+  "referenceHashes": [
+    {
+      "file": "docs/evidence/R62_polish/overall-after.png",
+      "sha256": "669a626b52b3c49e626024c01cdd891f59f5ac70317eb0a22e269996bb003808"
+    },
+    {
+      "file": "assets/generated/v4/terrain-organic-32.png",
+      "sha256": "8461dd97e5dde4c73fda60addfa760ba1b652e0025015a14d3a39c8274c1873d"
+    },
+    {
+      "file": "assets/generated/r66/ui-icons-32.png",
+      "sha256": "89315b2f696644c79b50d2554fc3f3280a9f5d2ab8eb6be0fffc930e718f4ad3"
+    },
+    {
+      "file": "docs/evidence/R62_polish/palette-r62.png",
+      "sha256": "1cc733c99611ed8a175ec0622ad2b28b2c83e34bb68a1dff5796babbba1f1df8"
+    }
+  ],
+  "pipeline": {
+    "tool": "tools/process-r68-visuals.py",
+    "pillowVersion": "12.2.0",
+    "steps": [
+      "verify embedded C2PA softwareAgent name=gpt-image and version=2.x",
+      "BOX resize to fixed low/med/high native pixel grids",
+      "hue-shift shadows toward the per-season violet/blue shadow ramp at <=22%",
+      "normalize activity-panel text zone with 82% #FFF4D8 blend",
+      "quantize to the fixed R62 66-colour palette without global dithering",
+      "apply Floyd-Steinberg dithering only to declared sky/distant-foliage or panel-border masks",
+      "write optimized PNG deterministically and calculate SHA-256"
+    ],
+    "selectiveDitherMasks": {
+      "loading": "top 34% sky plus outer 8% atmosphere strips through 64% height",
+      "activityPanel": "outer 7.5% x / 16% y border only"
+    },
+    "focalBoxNormalized": [
+      0.35,
+      0.32,
+      0.65,
+      0.68
+    ],
+    "safeAreaViewportInset": 0.08
+  },
+  "assets": {
+    "loading-spring": {
+      "low": {
+        "file": "assets/generated/r68/loading-spring-low.png",
+        "sha256": "7b001bb982339bfd141b91217fe9baf58f28a3112b192f27c9abcf8229a51901",
+        "contentHashQuery": "7b001bb9",
+        "metrics": {
+          "width": 256,
+          "height": 256,
+          "decodedBytesRGBA": 262144,
+          "fileBytes": 75780,
+          "uniqueColours": 59,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 57,
+          "outlinePixels": 1231
+        }
+      },
+      "med": {
+        "file": "assets/generated/r68/loading-spring-med.png",
+        "sha256": "1ff5a60ecc7bf7628f0e25ca9b342af37c159d5ceaafb594291383fa06c3c579",
+        "contentHashQuery": "1ff5a60e",
+        "metrics": {
+          "width": 384,
+          "height": 384,
+          "decodedBytesRGBA": 589824,
+          "fileBytes": 168788,
+          "uniqueColours": 62,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 60,
+          "outlinePixels": 3176
+        }
+      },
+      "high": {
+        "file": "assets/generated/r68/loading-spring-high.png",
+        "sha256": "8c6373c4027275dcb69b0d3892b17736e5b1832d36ac210f79e6682b404dccdc",
+        "contentHashQuery": "8c6373c4",
+        "metrics": {
+          "width": 512,
+          "height": 512,
+          "decodedBytesRGBA": 1048576,
+          "fileBytes": 284555,
+          "uniqueColours": 63,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 61,
+          "outlinePixels": 6239
+        }
+      }
+    },
+    "loading-summer": {
+      "low": {
+        "file": "assets/generated/r68/loading-summer-low.png",
+        "sha256": "dd952edd00b3459f1bcc8bc7e3d171b79c5f5e81e093744970475b53637c9352",
+        "contentHashQuery": "dd952edd",
+        "metrics": {
+          "width": 256,
+          "height": 256,
+          "decodedBytesRGBA": 262144,
+          "fileBytes": 86685,
+          "uniqueColours": 59,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 57,
+          "outlinePixels": 5261
+        }
+      },
+      "med": {
+        "file": "assets/generated/r68/loading-summer-med.png",
+        "sha256": "0c46dfa1e08afd234a9c7dd5865378482fffd5738a15a9a86b4474d64dad6e4e",
+        "contentHashQuery": "0c46dfa1",
+        "metrics": {
+          "width": 384,
+          "height": 384,
+          "decodedBytesRGBA": 589824,
+          "fileBytes": 187108,
+          "uniqueColours": 62,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 60,
+          "outlinePixels": 12731
+        }
+      },
+      "high": {
+        "file": "assets/generated/r68/loading-summer-high.png",
+        "sha256": "e226121d06f4155ae9041b1f82bc388530eb67b2a8d82078a96b35b4b0c217cd",
+        "contentHashQuery": "e226121d",
+        "metrics": {
+          "width": 512,
+          "height": 512,
+          "decodedBytesRGBA": 1048576,
+          "fileBytes": 321082,
+          "uniqueColours": 64,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 62,
+          "outlinePixels": 23601
+        }
+      }
+    },
+    "loading-autumn": {
+      "low": {
+        "file": "assets/generated/r68/loading-autumn-low.png",
+        "sha256": "bae800a8a972ab41373e7a123d1f34be44af0ccd646808c17ce32bb03b33862c",
+        "contentHashQuery": "bae800a8",
+        "metrics": {
+          "width": 256,
+          "height": 256,
+          "decodedBytesRGBA": 262144,
+          "fileBytes": 86804,
+          "uniqueColours": 57,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 55,
+          "outlinePixels": 2509
+        }
+      },
+      "med": {
+        "file": "assets/generated/r68/loading-autumn-med.png",
+        "sha256": "961675fc21dbb04c4ff27bcb4e1b4208a2dd84cbf7e9451e8b1d22b1eb6571fe",
+        "contentHashQuery": "961675fc",
+        "metrics": {
+          "width": 384,
+          "height": 384,
+          "decodedBytesRGBA": 589824,
+          "fileBytes": 198043,
+          "uniqueColours": 61,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 59,
+          "outlinePixels": 7063
+        }
+      },
+      "high": {
+        "file": "assets/generated/r68/loading-autumn-high.png",
+        "sha256": "56d75371a4eb8f6d2274d828afa393605f4079161bb0e1b0dc1cb3789ee81c0f",
+        "contentHashQuery": "56d75371",
+        "metrics": {
+          "width": 512,
+          "height": 512,
+          "decodedBytesRGBA": 1048576,
+          "fileBytes": 348391,
+          "uniqueColours": 66,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 64,
+          "outlinePixels": 14102
+        }
+      }
+    },
+    "loading-winter": {
+      "low": {
+        "file": "assets/generated/r68/loading-winter-low.png",
+        "sha256": "c557e0d0f99c22594b2788c63f24ba929cb4b7b526a4c62018cad62921d1c89d",
+        "contentHashQuery": "c557e0d0",
+        "metrics": {
+          "width": 256,
+          "height": 256,
+          "decodedBytesRGBA": 262144,
+          "fileBytes": 85775,
+          "uniqueColours": 54,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 52,
+          "outlinePixels": 675
+        }
+      },
+      "med": {
+        "file": "assets/generated/r68/loading-winter-med.png",
+        "sha256": "8b5c061614dbbbb5f89d5e94f7c14b961efcca807ff2eee3678c16ef4c34a30d",
+        "contentHashQuery": "8b5c0616",
+        "metrics": {
+          "width": 384,
+          "height": 384,
+          "decodedBytesRGBA": 589824,
+          "fileBytes": 194261,
+          "uniqueColours": 55,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 53,
+          "outlinePixels": 2303
+        }
+      },
+      "high": {
+        "file": "assets/generated/r68/loading-winter-high.png",
+        "sha256": "ee1876fea3634bfd085c946feb9b2ac0eb17f8d6a6159ad53bd1dd3e2e1b78b2",
+        "contentHashQuery": "ee1876fe",
+        "metrics": {
+          "width": 512,
+          "height": 512,
+          "decodedBytesRGBA": 1048576,
+          "fileBytes": 339770,
+          "uniqueColours": 59,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 57,
+          "outlinePixels": 4924
+        }
+      }
+    },
+    "activity-panel": {
+      "low": {
+        "file": "assets/generated/r68/activity-panel-low.png",
+        "sha256": "efe3dacda89ce166e2dc9fceb83f7945ab78cc66fe38532d7202ca6e5bfad051",
+        "contentHashQuery": "efe3dacd",
+        "metrics": {
+          "width": 320,
+          "height": 160,
+          "decodedBytesRGBA": 204800,
+          "fileBytes": 34754,
+          "uniqueColours": 64,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 62,
+          "outlinePixels": 650,
+          "textZone": {
+            "normalizedBox": [
+              0.075,
+              0.17,
+              0.755,
+              0.84
+            ],
+            "minimumContrast": {
+              "title": 7.369673152650222,
+              "body": 8.611537696245021,
+              "meta": 7.002016761774369
+            },
+            "pass45": true,
+            "luminanceStdDev": 0.05487026186556734,
+            "readabilityNoiseLimit": 0.12,
+            "readabilityNoisePass": true
+          }
+        }
+      },
+      "med": {
+        "file": "assets/generated/r68/activity-panel-med.png",
+        "sha256": "e100dd7f4275e2d869d0731e13ec1e2d00258eabd07c5c41f3cca2c30c583604",
+        "contentHashQuery": "e100dd7f",
+        "metrics": {
+          "width": 512,
+          "height": 256,
+          "decodedBytesRGBA": 524288,
+          "fileBytes": 75346,
+          "uniqueColours": 66,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 64,
+          "outlinePixels": 2885,
+          "textZone": {
+            "normalizedBox": [
+              0.075,
+              0.17,
+              0.755,
+              0.84
+            ],
+            "minimumContrast": {
+              "title": 7.369673152650222,
+              "body": 8.611537696245021,
+              "meta": 7.002016761774369
+            },
+            "pass45": true,
+            "luminanceStdDev": 0.05486193191643617,
+            "readabilityNoiseLimit": 0.12,
+            "readabilityNoisePass": true
+          }
+        }
+      },
+      "high": {
+        "file": "assets/generated/r68/activity-panel-high.png",
+        "sha256": "c772fbfc49b4166f4670a87fc2642e01eb905c77c3ee54de813f3f1344a00ad8",
+        "contentHashQuery": "c772fbfc",
+        "metrics": {
+          "width": 768,
+          "height": 384,
+          "decodedBytesRGBA": 1179648,
+          "fileBytes": 144581,
+          "uniqueColours": 66,
+          "outOfPalettePixels": 0,
+          "luminanceSteps": 64,
+          "outlinePixels": 7762,
+          "textZone": {
+            "normalizedBox": [
+              0.075,
+              0.17,
+              0.755,
+              0.84
+            ],
+            "minimumContrast": {
+              "title": 5.556224568179327,
+              "body": 6.492504664263491,
+              "meta": 5.279037041769429
+            },
+            "pass45": true,
+            "luminanceStdDev": 0.05542909002139799,
+            "readabilityNoiseLimit": 0.12,
+            "readabilityNoisePass": true
+          }
+        }
+      }
+    }
+  },
+  "decodedTextureBytesAllTiers": 9510912,
+  "decodedTextureMiBAllTiers": 9.07,
+  "budgetDesktopMiB": 64,
+  "budgetMobileMiB": 32,
+  "budgetPass": true
+}
