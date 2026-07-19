@@ -70,7 +70,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r70-20260719-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r72-20260719-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -493,6 +493,16 @@
     if (!id || id === selectedSeed) return;
     recentSeeds = [selectedSeed].concat(recentSeeds.filter((x) => x && x !== id && x !== selectedSeed)).slice(0, 4);
   }
+  // R72（D-2 教學引導斷點）：一次性情境提示——首次接觸該介面才提示，之後不再打擾。
+  // 旗標存 localStorage（非存檔 state，避免動到存檔 schema）。
+  function onceHint(key, message) {
+    try {
+      const flag = "pixel_farm_hint_" + key;
+      if (!window.localStorage || window.localStorage.getItem(flag)) return;
+      window.localStorage.setItem(flag, "1");
+      toast(message);
+    } catch (e) { /* 私隱模式等 localStorage 不可用時靜默略過 */ }
+  }
   function chooseSeed(id) {
     const c = window.CROPS[id];
     if (!c || c.unlockLevel > state.level) return;
@@ -544,7 +554,11 @@
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
     more.title = "全部種子";
     more.innerHTML = `<span class="se">${seedDrawerOpen ? "×" : "+"}</span><span class="sn">全部</span>`;
-    more.onclick = () => { seedDrawerOpen = !seedDrawerOpen; renderSeeds(); };
+    more.onclick = () => {
+      seedDrawerOpen = !seedDrawerOpen;
+      renderSeeds();
+      if (seedDrawerOpen) onceHint("seed_drawer", "🌱 種子欄可左右捲動看全部；再點×收起");
+    };
     quick.appendChild(more);
     row.appendChild(quick);
 
@@ -953,6 +967,21 @@
     document.querySelectorAll('.ob[data-station="mailbox"]').forEach((el) => {
       el.classList.toggle("mail-unread", n > 0);
     });
+  }
+  // R72（D-1 收成→升級回饋閉環）：升級分頁徽章＝目前買得起的升級數。
+  // 手機抽片預設收合看不到升級清單，靠徽章把「收成賺到錢→該升級了」的時機帶到常駐頁籤欄。
+  function updateUpgradesBadge() {
+    const badge = $("upgradesBadge");
+    if (!badge) return;
+    let n = 0;
+    try {
+      (window.UPGRADE_ORDER || []).forEach((key) => {
+        const next = G.nextUpgrade(state, key);
+        if (next && state.coins >= next.cost) n++;
+      });
+    } catch (e) { n = 0; }
+    badge.textContent = n > 0 ? String(n) : "";
+    badge.hidden = n <= 0;
   }
   function checkNewLetters(t, notify) {
     if (!G.evaluateLetters || !state) return [];
@@ -2634,6 +2663,47 @@
     const y = Math.max(74, Math.min(scene.clientHeight - pad, pt.y));
     el.style.left = x + "px";
     el.style.top = y + "px";
+    el.style.maxHeight = "";
+    // R72 P0：先錨點、後全框夾擠——原本只夾錨點，輪盤全框可被推出
+    // 「場景可視範圍 ∩（視口 − 固定底欄）」外（橫式 844×390 建造輪 7 格僅 1 格可點；
+    // #mapScene overflow:hidden 也會直接裁掉出界格）。
+    if (typeof el.getBoundingClientRect !== "function" || typeof scene.getBoundingClientRect !== "function") return;
+    const clampBox = () => {
+      const sr = scene.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      if (!sr || !r || !r.width || !r.height) return null;
+      const viewW = window.innerWidth || sr.right;
+      const viewH = window.innerHeight || sr.bottom;
+      const inset = measureFixedBottomInset().inset;
+      const minLeft = Math.max(sr.left, 0) + 6;
+      const maxRight = Math.min(sr.right, viewW) - 6;
+      const minTop = Math.max(sr.top, 0) + 6;
+      const maxBottom = Math.min(sr.bottom, viewH - inset) - 6;
+      let dx = 0, dy = 0;
+      if (r.right > maxRight) dx = maxRight - r.right;
+      if (r.left + dx < minLeft) dx = minLeft - r.left; // 左緣優先：寬度放不下時保住左上可點
+      if (r.bottom > maxBottom) dy = maxBottom - r.bottom;
+      if (r.top + dy < minTop) dy = minTop - r.top;   // 上緣優先：高度不足時走捲動/限高保底
+      if (dx || dy) {
+        const curLeft = parseFloat(el.style.left) || 0;
+        const curTop = parseFloat(el.style.top) || 0;
+        el.style.left = (curLeft + dx) + "px";
+        el.style.top = (curTop + dy) + "px";
+      }
+      return { fits: r.height <= (maxBottom - minTop), avail: maxBottom - minTop };
+    };
+    let res = clampBox();
+    // 場景大半在摺疊外時（橫式常見），先把場景捲進視野再夾一次
+    // （#mapScene 的 scroll-margin-bottom 已含 --fixed-bottom-inset，不會捲到固定底欄後面）
+    if (res && !res.fits && typeof scene.scrollIntoView === "function") {
+      try { scene.scrollIntoView({ block: "nearest" }); } catch (e) { scene.scrollIntoView(); }
+      res = clampBox();
+    }
+    // 仍放不下：限高 + 內捲（CSS overflow-y:auto）保證每格可捲入可點
+    if (res && !res.fits && res.avail > 60) {
+      el.style.maxHeight = Math.floor(res.avail) + "px";
+      clampBox();
+    }
   }
   function buildCostText(def) {
     return Object.entries(def.cost || {}).map(([k, v]) => k === "coins" ? "C" + v : v + ((window.MATERIALS[k] && window.MATERIALS[k].emoji) || k)).join(" ");
@@ -2665,6 +2735,7 @@
     });
     box.hidden = false;
     placeSceneOverlay(box, tileViewportPoint(tile.id, 0.15));
+    onceHint("build_wheel", "🏗 點選項即建造；點空白處取消");
   }
   function buildFromWheel(tileId, type) {
     const def = window.BUILDINGS[type];
@@ -2742,6 +2813,7 @@
       bar.appendChild(b);
     });
     bar.hidden = false;
+    syncSceneActionBarInset(); // R72：橫式只讓出與固定控制盤的實際交疊
   }
   function runSceneAction(action, tileId) {
     const tile = G.getTileById(state, tileId); if (!tile) return;
@@ -3669,11 +3741,65 @@
     if (nt && G.isWalkable(state, nt)) walkPath([nt.id]);
     else { player.frame = 0; paintPlayer("walk", WALK_ROW[dir], 0, false); } // 撞牆只轉向
   }
+  // R72：固定層避讓——實測視口固定底欄（頁籤欄＋直式工具列）總高，
+  // 寫回 --fixed-bottom-inset / --tabs-inset 供 modal/sheet/橫幅/浮層統一讓位。
+  // mock DOM（ui-smoke）無 matchMedia/querySelector/getComputedStyle：全程守衛式呼叫。
+  function measureFixedBottomInset() {
+    const gcs = (typeof window.getComputedStyle === "function") ? window.getComputedStyle : null;
+    const viewH = window.innerHeight || 0;
+    const query = (sel) => (typeof document.querySelector === "function" ? document.querySelector(sel) : null);
+    const fixedRect = (el) => {
+      if (!el || !gcs || !viewH || typeof el.getBoundingClientRect !== "function") return null;
+      let cs = null;
+      try { cs = gcs(el); } catch (e) { return null; }
+      if (!cs || cs.position !== "fixed" || cs.display === "none" || cs.visibility === "hidden") return null;
+      const r = el.getBoundingClientRect();
+      return r && r.height > 0 ? r : null;
+    };
+    const tabsRect = fixedRect(query(".side-tabs"));
+    const toolbarRect = fixedRect(query(".toolbar"));
+    const tabsInset = tabsRect ? Math.max(0, Math.round(viewH - tabsRect.top)) : 0;
+    let inset = tabsInset;
+    if (toolbarRect) inset = tabsInset + Math.max(0, Math.round(toolbarRect.height));
+    return { tabsInset, inset };
+  }
+  function updateFixedBottomInset() {
+    const doc = document.documentElement;
+    if (!doc || !doc.style || typeof doc.style.setProperty !== "function") return;
+    const m = measureFixedBottomInset();
+    doc.style.setProperty("--tabs-inset", m.tabsInset + "px");
+    doc.style.setProperty("--fixed-bottom-inset", m.inset + "px");
+  }
+  // R72：橫式 D-pad 固定於視口底時，scene-action-bar 只需讓出「場景底 ∩ 控制盤」的實際交疊，
+  // 不再固定抬 158px（曾抬進種子快捷列，蓋住「×全部」）。
+  function syncSceneActionBarInset() {
+    const bar = $("sceneActionBar"), scene = $("mapScene"), mc = $("mobileControls");
+    if (!bar || !scene || !bar.style) return;
+    const gcs = (typeof window.getComputedStyle === "function") ? window.getComputedStyle : null;
+    const doc = document.documentElement;
+    const mobileOn = !!(doc && doc.classList && doc.classList.contains && doc.classList.contains("mobile-controls-enabled"));
+    if (!gcs || !mobileOn || !mc || typeof scene.getBoundingClientRect !== "function" || typeof mc.getBoundingClientRect !== "function") {
+      bar.style.bottom = ""; return;
+    }
+    let mcs = null;
+    try { mcs = gcs(mc); } catch (e) { bar.style.bottom = ""; return; }
+    if (!mcs || mcs.position !== "fixed" || mcs.display === "none") { bar.style.bottom = ""; return; } // 直式：控制盤在場景內，維持 CSS 讓位
+    const sr = scene.getBoundingClientRect();
+    const mr = mc.getBoundingClientRect();
+    if (!sr || !mr) { bar.style.bottom = ""; return; }
+    const overlap = Math.max(0, Math.round(sr.bottom - mr.top));
+    bar.style.bottom = (overlap > 0 ? overlap + 12 : 12) + "px";
+  }
+  function syncFixedLayerAvoidance() {
+    updateFixedBottomInset();
+    syncSceneActionBarInset();
+  }
   function setPrimaryPointerClass() {
     const primaryCoarse = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
     const narrow = window.innerWidth <= 859 || window.innerHeight <= 480; // R70：寬橫式手機（如 932×430）亦屬行動姿勢
     document.documentElement.classList.toggle("primary-coarse", primaryCoarse);
     document.documentElement.classList.toggle("mobile-controls-enabled", primaryCoarse && narrow);
+    syncFixedLayerAvoidance();
   }
   function stepPlayerDir(dir) {
     if (hasOpenModal() || moveTimer || !state || !state.player) return;
@@ -3770,6 +3896,7 @@
     renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); renderSceneActionsForSelection();
     if (rerenderPanels) { renderUpgrades(); updateMap(t); }
     updateMailBadges();
+    updateUpgradesBadge();
     scheduleSave();
   }
 
@@ -3981,6 +4108,7 @@
     buildFarm(); buildMap();
     renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); syncGenderBtn(); updateFarm(now()); renderTileContext();
     updateMailBadges();
+    updateUpgradesBadge();
     positionPlayer(false);
     setupSceneControls();
     // 視窗縮放：重新定位玩家

@@ -1,0 +1,61 @@
+{
+  "release": "R72",
+  "mode": "hue-shift shadow polish",
+  "sheets": {
+    "crops-48": {
+      "frames": 30,
+      "touchedPixels": 8961,
+      "meanLumaBefore": 108.56,
+      "meanLumaAfter": 107.7,
+      "meanLumaDrift": 0.008,
+      "minLuminanceSteps32": 13,
+      "alphaUnchanged": true
+    },
+    "crops2-48": {
+      "frames": 20,
+      "touchedPixels": 8463,
+      "meanLumaBefore": 84.64,
+      "meanLumaAfter": 83.58,
+      "meanLumaDrift": 0.0125,
+      "minLuminanceSteps32": 8,
+      "alphaUnchanged": true
+    },
+    "crops3-48": {
+      "frames": 15,
+      "touchedPixels": 6361,
+      "meanLumaBefore": 84.93,
+      "meanLumaAfter": 84.14,
+      "meanLumaDrift": 0.0093,
+      "minLuminanceSteps32": 12,
+      "alphaUnchanged": true
+    },
+    "crops4-48": {
+      "frames": 10,
+      "touchedPixels": 4622,
+      "meanLumaBefore": 83.2,
+      "meanLumaAfter": 82.32,
+      "meanLumaDrift": 0.0106,
+      "minLuminanceSteps32": 11,
+      "alphaUnchanged": true
+    },
+    "buildings": {
+      "frames": 4,
+      "touchedPixels": 109212,
+      "meanLumaBefore": 85.78,
+      "meanLumaAfter": 83.74,
+      "meanLumaDrift": 0.0238,
+      "minLuminanceSteps32": 17,
+      "alphaUnchanged": true
+    },
+    "structures-nature": {
+      "frames": 16,
+      "touchedPixels": 227373,
+      "meanLumaBefore": 92.74,
+      "meanLumaAfter": 91.53,
+      "meanLumaDrift": 0.0129,
+      "minLuminanceSteps32": 17,
+      "alphaUnchanged": true
+    }
+  },
+  "pass": true
+}

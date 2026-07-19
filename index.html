@@ -11,8 +11,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r70-20260719-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r70-20260719-1">
+<link rel="manifest" href="manifest.webmanifest?v=r72-20260719-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r72-20260719-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r70-20260719-1";
+  const VERSION = "r72-20260719-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -79,6 +79,10 @@
     --shadow: 0 2px 0 rgba(0,0,0,.08), 0 6px 16px rgba(60,40,10,.14);
     --r: 14px;
     --ui-font-scale: 1;
+    /* R72：固定層避讓——底部固定欄（頁籤+工具列）+安全區總高，JS 實測回寫；
+       所有 modal/sheet/浮層的 bottom / padding-bottom / max-height 一律引用，不得各自硬編。 */
+    --fixed-bottom-inset: 0px;
+    --tabs-inset: 0px;
     --r68-loading-spring: url("assets/generated/r68/loading-spring-low.png?v=7b001bb9");
     --r68-loading-summer: url("assets/generated/r68/loading-summer-low.png?v=dd952edd");
     --r68-loading-autumn: url("assets/generated/r68/loading-autumn-low.png?v=bae800a8");
@@ -413,7 +417,7 @@
   .auto-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; color: #6c7a32; background: rgba(226,244,210,.7); border: 1.5px solid #aacb86; border-radius: 8px; padding: 3px 8px; }
 
   /* ===== Toast ===== */
-  #toast-zone { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 200;
+  #toast-zone { position: fixed; left: 50%; bottom: calc(var(--fixed-bottom-inset, 0px) + 18px); transform: translateX(-50%); z-index: 200;
     display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; }
   .toast { background: rgba(40,30,12,.92); color: #fff; padding: 8px 16px; border-radius: 20px;
     font-weight: 800; font-size: 13px; box-shadow: 0 4px 14px rgba(0,0,0,.3); animation: toastIn .25s, toastOut .3s 1.7s forwards; }
@@ -472,12 +476,12 @@
     #screenFxLayer { display: none; }
   }
   .modal { position: fixed; inset: 0; background: rgba(20,16,8,.76); display: none; align-items: center;
-    justify-content: center; z-index: 20000; padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); overflow: hidden; }
+    justify-content: center; z-index: 20000; padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) calc(max(8px, env(safe-area-inset-bottom)) + var(--fixed-bottom-inset, 0px)) max(8px, env(safe-area-inset-left)); overflow: hidden; }
   .modal.show { display: flex; }
   body:has(.modal.show) .wrap { pointer-events: none; user-select: none; }
   .modal-card { background: var(--cream); border: 3px solid var(--border-d); border-radius: 18px;
     padding: clamp(12px, 3dvh, 22px); max-width: 420px; width: 100%; box-shadow: 0 16px 50px rgba(0,0,0,.4);
-    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom) - var(--fixed-bottom-inset, 0px));
     display: flex; flex-direction: column; overflow: hidden; overscroll-behavior: contain; }
   .modal-card h2 { font-size: 21px; font-weight: 900; color: #4a3a22; margin-bottom: 12px; text-align: center; }
   .modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
@@ -518,7 +522,7 @@
   .story-mail-btn { margin-top: 8px; width: 100%; }
   .ob.mail-unread::after { content: ""; position: absolute; right: -3px; top: -3px; width: 11px; height: 11px; border-radius: 999px; background: #d53a31; border: 2px solid #fff7d8; box-shadow: 0 0 0 2px rgba(120,35,25,.2); }
   @media (max-width: 640px) { .letters-layout { grid-template-columns: 1fr; } .letter-paper { min-height: 240px; } .season-event-card { grid-template-columns: 1fr; } }
-  .settings-card { max-width: 460px; max-height: calc(100dvh - 32px); overflow-y: auto; }
+  .settings-card { max-width: 460px; max-height: calc(100dvh - 32px - var(--fixed-bottom-inset, 0px)); overflow-y: auto; }
   .settings-list { display: grid; gap: 8px; }
   .setting-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center;
     min-width: 0; padding: 9px; background: #fff8df; border: 1.5px solid var(--border); border-radius: 10px; }
@@ -547,7 +551,8 @@
   .save-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
   .save-actions .btn { min-height: 44px; padding: 7px 8px; font-size: 12px; margin: 0; }
   .save-status { min-height: 18px; font-size: 12px; font-weight: 850; color: #6f6248; overflow-wrap: anywhere; }
-  .error-recovery { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 260;
+  /* R72：錯誤恢復/更新橫幅避讓固定底欄（menuscan P0：繼續/重載 0/2 被 #sideTabs 蓋） */
+  .error-recovery { position: fixed; left: 50%; bottom: calc(var(--fixed-bottom-inset, 0px) + 16px); transform: translateX(-50%); z-index: 9940;
     width: min(420px, calc(100vw - 24px)); background: #fff8df; border: 2px solid #d4b468; border-radius: 10px;
     box-shadow: 0 12px 30px rgba(0,0,0,.24); padding: 10px; color: #4a3a22; }
   .error-recovery[hidden] { display: none; }
@@ -555,7 +560,7 @@
   .er-copy { font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
   .er-actions { display: flex; gap: 8px; }
   .er-actions .btn { flex: 1; min-height: 44px; padding: 8px 10px; }
-  .pwa-update { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 255;
+  .pwa-update { position: fixed; left: 50%; bottom: calc(var(--fixed-bottom-inset, 0px) + 16px); transform: translateX(-50%); z-index: 9935;
     width: min(420px, calc(100vw - 24px)); min-height: 44px; border: 2px solid #94bd68; border-radius: 10px;
     background: #eef8dd; color: #285b1d; box-shadow: 0 12px 30px rgba(0,0,0,.22); padding: 9px 12px;
     font-size: 13px; font-weight: 950; cursor: pointer; text-align: center; }
@@ -614,6 +619,8 @@
     /* R70：isolation 建立的棧上下文曾把 z9900 控制盤困在場景層、被後續 side-panel 蓋住——
        上下文整體抬到 z5（抽片 9790/頁籤 9800/彈窗為根層不受影響） */
     background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate; z-index: 5;
+    /* R72：建造輪開啟時 scrollIntoView 讓開固定底欄用 */
+    scroll-margin: 8px 8px calc(var(--fixed-bottom-inset, 0px) + 8px) 8px;
     box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
   #mapScene::before, #mapScene::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
   #mapScene::before { z-index: 9600; transition: background .65s ease, opacity .65s ease; }
@@ -933,12 +940,16 @@
   .scene-action-btn:disabled, .build-wheel-btn:disabled, .object-bubble-btn:disabled { opacity: .5; cursor: not-allowed; }
   .scene-action-btn .sab-ic, .build-wheel-btn .bw-ic, .object-bubble-btn .obb-ic { font-size: 23px; line-height: 1; }
   .scene-action-btn .sab-t, .build-wheel-btn .bw-t, .object-bubble-btn .obb-t { font-size: 10px; line-height: 1; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* R72：建造輪/物件泡泡抬到 D-pad(9900) 之上（選擇期間優先可點；menuscan P0 844×390 僅 1/7 可點），
+     並限高內捲保底——超出「場景可視範圍 − 固定底欄」時整框由 JS 夾擠回可視區 */
   .build-wheel, .object-bubble {
-    position: absolute; z-index: 9890; display: grid; grid-template-columns: repeat(3, minmax(48px, 1fr));
+    position: absolute; z-index: 9910; display: grid; grid-template-columns: repeat(3, minmax(48px, 1fr));
     gap: 6px; min-width: 176px; max-width: min(280px, calc(100% - 20px)); padding: 8px;
     border: 2px solid rgba(74,53,22,.36); border-radius: 10px; background: rgba(255,253,244,.96);
     box-shadow: 0 10px 28px rgba(42,30,12,.28); transform: translate(-50%, calc(-100% - 8px));
     pointer-events: auto;
+    max-height: calc(100dvh - var(--fixed-bottom-inset, 0px) - 24px);
+    overflow-y: auto; overscroll-behavior: contain;
   }
   .object-bubble { grid-template-columns: repeat(2, minmax(54px, 1fr)); min-width: 132px; }
   .build-wheel[hidden], .object-bubble[hidden] { display: none; }
@@ -974,6 +985,11 @@
     .main { flex: 0 0 auto; overflow: visible; }
     .toolbar { gap: 5px; }
     .toolbar .btn { min-height: 44px; padding: 6px 8px; font-size: 11px; }
+    /* R72：固定層避讓變數靜態 fallback（JS 未跑前）——頁籤欄 48+2px 邊框+安全區 */
+    :root {
+      --tabs-inset: calc(50px + env(safe-area-inset-bottom, 0px));
+      --fixed-bottom-inset: calc(50px + env(safe-area-inset-bottom, 0px));
+    }
     /* R69：老闆指示——關鍵按鈕須在遊戲畫面內零捲動可點。
        側頁籤改為視口固定底欄；選中分頁改為底部抽片（內部捲動），點同一頁籤可收合。 */
     .side-tabs {
@@ -985,23 +1001,23 @@
     }
     .side-tab { min-height: 48px; }
     .side-panel .side-pane.sel {
-      position: fixed; top: auto; left: 0; right: 0; bottom: 50px; z-index: 9790;
+      position: fixed; top: auto; left: 0; right: 0; bottom: var(--fixed-bottom-inset, 50px); z-index: 9790;
       max-height: 52dvh; overflow-y: auto; overscroll-behavior: contain;
       background: var(--cream); border-top: 2px solid var(--border);
       padding: 10px 12px 12px; box-shadow: 0 -10px 30px rgba(0,0,0,.18);
     }
     .side-panel .side-pane.sel::before { content: ""; display: block; width: 38px; height: 4px; border-radius: 2px; background: rgba(90,70,40,.45); margin: 0 auto 8px; }
     .side-panel.panes-collapsed .side-pane.sel { display: none; }
-    .wrap { padding-bottom: 58px; }
+    .wrap { padding-bottom: calc(var(--fixed-bottom-inset, 50px) + 8px); }
   }
-  /* R69：直式手機——底部工具列（女主角/設定/像素園/玩法/重置）也固定，疊在頁籤欄上方；抽片再上移 */
+  /* R69：直式手機——底部工具列（女主角/設定/像素園/玩法/重置）也固定，疊在頁籤欄上方；抽片再上移
+     R72：工具列以 --tabs-inset 對齊頁籤頂、抽片/內容以 --fixed-bottom-inset 讓開（修工具列蓋抽片底 ~6px） */
   @media (max-width: 859px) and (orientation: portrait) {
+    :root { --fixed-bottom-inset: calc(102px + env(safe-area-inset-bottom, 0px)); }
     .toolbar {
-      position: fixed; top: auto; left: 0; right: 0; bottom: calc(50px + env(safe-area-inset-bottom, 0px)); z-index: 9795; margin: 0;
+      position: fixed; top: auto; left: 0; right: 0; bottom: var(--tabs-inset, calc(50px + env(safe-area-inset-bottom, 0px))); z-index: 9795; margin: 0;
       border-top: 1px solid rgba(127,99,48,.35);
     }
-    .side-panel .side-pane.sel { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
-    .wrap { padding-bottom: 106px; }
   }
   @media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
     .toolbar {
@@ -1020,7 +1036,10 @@
   @media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
     html.mobile-controls-enabled .mobile-controls { display: block; }
     html.mobile-controls-enabled .scene-action-bar { bottom: 194px; overflow-x: auto; justify-content: flex-start; }
-    html.mobile-controls-enabled #mapScene:has(.scene-action-bar:not([hidden])) .smart-assistant { display: none; }
+    /* R72：建造輪/物件泡泡開啟時也暫收助手（原僅 scene-action-bar；助手 z9900 曾蓋輪盤） */
+    html.mobile-controls-enabled #mapScene:has(.scene-action-bar:not([hidden])) .smart-assistant,
+    html.mobile-controls-enabled #mapScene:has(.build-wheel:not([hidden])) .smart-assistant,
+    html.mobile-controls-enabled #mapScene:has(.object-bubble:not([hidden])) .smart-assistant { display: none; }
   }
   @media (any-pointer: coarse) and (max-height: 480px) {
     .smart-assistant { width: min(280px, calc(100% - 16px)); }
@@ -1032,8 +1051,9 @@
     .action-a { right: 12px; bottom: 14px; min-width: 56px; min-height: 56px; }
     /* R70：橫式種子快捷列讓開 D-pad 柱與 A 鍵（老闆回報視覺重疊；守門同步補橫式視口） */
     #mapScene .seed-hud { left: auto; right: 84px; top: 8px; max-width: calc(100vw - 240px); }
-    /* R70：橫式底部三層互搶重構——流內內容讓出 D-pad/A 高度；頁籤欄水平內縮 */
-    .wrap { padding-bottom: 164px; }
+    /* R70：橫式底部三層互搶重構——流內內容讓出 D-pad/A 高度；頁籤欄水平內縮
+       R72：同時保證讓出固定底欄實高（JS 實測值） */
+    .wrap { padding-bottom: max(164px, calc(var(--fixed-bottom-inset, 0px) + 14px)); }
     .side-tabs { left: 170px; right: 88px; border-radius: 12px 12px 0 0; }
     .side-panel .side-pane.sel { left: 170px; right: 88px; }
     html.mobile-controls-enabled .scene-action-bar { bottom: 158px; }
@@ -1046,7 +1066,9 @@
   }
   @media (max-width: 480px) {
     #mapScene { height: min(54dvh, 560px); min-height: 300px; }
-    #mapScene .seed-row { max-width: calc(100vw - 24px); }
+    /* R72：種子快捷列讓開右上「整圖」鈕（menuscan：×全部被 #mapFitToggle 蓋）；放不下換行 */
+    #mapScene .seed-row { max-width: calc(100vw - 116px); }
+    #mapScene .seed-quickbar { flex-wrap: wrap; }
     #mapScene .seed { min-width: 44px; min-height: 44px; padding: 3px 5px; }
     #mapScene .seed .sn, #mapScene .seed .sc, #mapScene .seed-season { display: none; }
     .dpad { left: 8px; bottom: 8px; grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 48px); }
@@ -1170,7 +1192,7 @@
       <div class="side-tabs" id="sideTabs">
         <button class="side-tab" data-tab="tile" aria-label="切換到磚資訊分頁"><span class="ui-icon i-tab-tile" aria-hidden="true"></span>磚資訊</button>
         <button class="side-tab" data-tab="orders" aria-label="切換到訂單分頁"><span class="ui-icon i-tab-orders" aria-hidden="true"></span>訂單 <span class="tab-badge" id="ordersBadge"></span></button>
-        <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁"><span class="ui-icon i-tab-upgrades" aria-hidden="true"></span>升級</button>
+        <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁"><span class="ui-icon i-tab-upgrades" aria-hidden="true"></span>升級 <span class="tab-badge" id="upgradesBadge"></span></button>
         <button class="side-tab sel" data-tab="story" aria-label="切換到故事分頁" aria-selected="true"><span class="ui-icon i-tab-story" aria-hidden="true"></span>故事 <span class="tab-badge" id="storyBadge" hidden></span></button>
         <button class="side-tab" data-tab="journal" aria-label="切換到圖鑑分頁"><span class="ui-icon i-tab-journal" aria-hidden="true"></span>圖鑑</button>
       </div>
@@ -1273,10 +1295,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r70-20260719-1"></script>
-<script src="src/game.js?v=r70-20260719-1"></script>
-<script src="src/state.js?v=r70-20260719-1"></script>
-<script src="src/atlas.js?v=r70-20260719-1"></script>
-<script src="src/ui.js?v=r70-20260719-1"></script>
+<script src="src/config.js?v=r72-20260719-1"></script>
+<script src="src/game.js?v=r72-20260719-1"></script>
+<script src="src/state.js?v=r72-20260719-1"></script>
+<script src="src/atlas.js?v=r72-20260719-1"></script>
+<script src="src/ui.js?v=r72-20260719-1"></script>
 </body>
 </html>

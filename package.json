@@ -25,7 +25,10 @@
     "test:art:r66": "python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js",
     "promo:capture": "node scripts/capture-promo-trio.js",
     "start": "python -m http.server 8000",
-    "test:rwd": "node scripts/test-rwd-matrix.js"
+    "test:rwd": "node scripts/test-rwd-matrix.js",
+    "test:r72": "node scripts/test-r72-fixed-layers.js",
+    "test:r72:night": "node scripts/test-r72-night-gate.js",
+    "art:r72:polish": "python tools/r72_pixel_polish.py --dry-run"
   },
   "keywords": [
     "idle-game",
