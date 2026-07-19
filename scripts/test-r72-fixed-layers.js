@@ -80,11 +80,27 @@ async function assertClickableBanner(page, tag, config) {
       `${tag} 錯誤恢復 ${sel} 在視口內且命中自身（hit=${m.hitName}, bottom=${Math.round(m.bottom || 0)}）`);
   }
   await page.locator("#errorReload").click({ trial: true }); // 真實 hit-test，不觸發 reload
+  // R72.1（R72-10）：兩橫幅同時顯示須垂直堆疊、不互蓋
+  const both = await page.evaluate(() => {
+    const pwaEl = document.getElementById("pwaUpdate");
+    pwaEl.hidden = false;
+    window.__farm.showErrorRecovery();
+    const er = document.getElementById("errorRecovery").getBoundingClientRect();
+    const pw = pwaEl.getBoundingClientRect();
+    const overlapX = Math.min(er.right, pw.right) - Math.max(er.left, pw.left);
+    const overlapY = Math.min(er.bottom, pw.bottom) - Math.max(er.top, pw.top);
+    const cx = pw.left + pw.width / 2, cy = pw.top + pw.height / 2;
+    const hit = document.elementFromPoint(cx, cy);
+    return { overlap: overlapX > 1 && overlapY > 1, pwBottom: Math.round(pw.bottom), erTop: Math.round(er.top),
+      pwHitSelf: !!hit && (hit === pwaEl || pwaEl.contains(hit)) };
+  });
+  assert(!both.overlap && both.pwHitSelf && both.pwBottom <= both.erTop + 2,
+    `${tag} 錯誤恢復＋PWA 橫幅同顯垂直堆疊不互蓋（pwaBottom=${both.pwBottom} ≤ erTop=${both.erTop}）且更新橫幅可點`);
   await page.locator("#errorContinue").click();              // 真實 click
   await page.waitForFunction(() => document.getElementById("errorRecovery").hidden);
-  assert(true, `${tag} 錯誤恢復「繼續」真實 click 後收合、「重載」actionability 通過`);
+  const pwaReset = await page.evaluate(() => document.getElementById("pwaUpdate").style.bottom === "");
+  assert(pwaReset, `${tag} 錯誤恢復「繼續」真實 click 後收合、「重載」actionability 通過、更新橫幅復位`);
 
-  await page.evaluate(() => { document.getElementById("pwaUpdate").hidden = false; });
   const pwa = await hitMetric(page, "#pwaUpdate");
   assert(pwa.found && pwa.inView && pwa.hitSelf, `${tag} PWA 更新橫幅命中自身（hit=${pwa.hitName}）`);
   await page.evaluate(() => { document.getElementById("pwaUpdate").hidden = true; });
@@ -283,6 +299,23 @@ async function runViewport(browser, base, config) {
     if (config.mobile) await assertSeedDrawer(page, config.name);
     await assertBuildWheel(page, config.name, config);
     await snap(page, config, "overview");
+    // R72.1（R72-02）：旋轉案例——直式跑完轉橫式，斷言 inset 由 JS 重測且錯誤恢復按鈕仍可點
+    if (config.rotateTo) {
+      await page.setViewportSize(config.rotateTo);
+      await page.waitForFunction((expectedWidth) => window.innerWidth === expectedWidth, config.rotateTo.width);
+      await page.waitForTimeout(250); // resize handler → syncFixedLayerAvoidance
+      const inset = await page.evaluate(() => {
+        const inline = parseFloat(document.documentElement.style.getPropertyValue("--fixed-bottom-inset"));
+        const tabs = document.querySelector(".side-tabs");
+        const cs = getComputedStyle(tabs);
+        const expected = cs.position === "fixed" && cs.display !== "none"
+          ? Math.max(0, Math.round(innerHeight - tabs.getBoundingClientRect().top)) : 0;
+        return { inline, expected };
+      });
+      assert(Number.isFinite(inset.inline) && Math.abs(inset.inline - inset.expected) <= 2,
+        `${config.name} 旋轉 ${config.rotateTo.width}x${config.rotateTo.height} 後 inset 重測（inline=${inset.inline}, 實測=${inset.expected}）`);
+      await assertClickableBanner(page, `${config.name} 旋轉後`);
+    }
     const realErrors = errors.filter((e) => !e.includes("test"));
     assert(realErrors.length === 0, `${config.name} 無 pageerror` + (realErrors.length ? `：${realErrors.join(" | ")}` : ""));
   } finally {
@@ -297,10 +330,12 @@ async function run() {
   const browser = await chromium.launch();
   try {
     console.log("== R72 固定層避讓驗證 ==");
+    // R72.1（R72-12）：截圖檔名由 snap() 統一產生 after-{w}x{h}-{label}.png，
+    // 不再掛與實檔脫鉤的 evidence 欄位；rotateTo 為 R72-02 旋轉案例。
     const viewports = [
-      { name: "phone-390x844", width: 390, height: 844, touch: true, mobile: true, evidence: "after-390x844-build-wheel.png" },
-      { name: "phone-landscape-844x390", width: 844, height: 390, touch: true, mobile: true, evidence: "after-844x390-build-wheel.png" },
-      { name: "desktop-1366x768", width: 1366, height: 768, touch: false, mobile: false, evidence: "after-1366x768.png" },
+      { name: "phone-390x844", width: 390, height: 844, touch: true, mobile: true, rotateTo: { width: 844, height: 390 } },
+      { name: "phone-landscape-844x390", width: 844, height: 390, touch: true, mobile: true },
+      { name: "desktop-1366x768", width: 1366, height: 768, touch: false, mobile: false },
     ];
     for (const config of viewports) await runViewport(browser, base, config);
   } finally {

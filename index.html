@@ -79,8 +79,23 @@
     --shadow: 0 2px 0 rgba(0,0,0,.08), 0 6px 16px rgba(60,40,10,.14);
     --r: 14px;
     --ui-font-scale: 1;
-    /* R72：固定層避讓——底部固定欄（頁籤+工具列）+安全區總高，JS 實測回寫；
-       所有 modal/sheet/浮層的 bottom / padding-bottom / max-height 一律引用，不得各自硬編。 */
+    /* R72：固定層避讓——底部固定欄（頁籤+工具列）總高，JS 實測回寫；行動媒體另有靜態 fallback（R72-08）。
+       【口徑（R72.1 裁定）】量測值＝視口底到最上層固定欄頂＝已含底欄自身的 safe-area padding；
+       引用端「單一來源單次扣減」：底部讓位一律寫 max(env(safe-area-inset-bottom), var(--fixed-bottom-inset))，
+       不得在 var 之外再疊加 env()（重複扣減）。
+       【z 階表（R72.1 R72-04 文件化；新增固定層請按表插階，勿再撞層）】
+         5     #mapScene（isolation 棧上下文；內部：9500 vfx／9700 weather／9850 touch-preview／
+                9860 seed-hud／9880 scene-action-bar／9895 map-fit-toggle／
+                9900 mobile-controls・smart-assistant／9910 build-wheel・object-bubble）
+         30    .side-tabs（桌機 sticky）
+         9790  .side-pane.sel 抽片（行動 fixed）
+         9795  .toolbar（直式行動 fixed）
+         9800  .side-tabs（行動 fixed 底欄）
+         9920  #toast-zone（高於固定欄、低於橫幅）
+         9935  .pwa-update
+         9940  .error-recovery
+         20000 .modal
+         30000 .startup-loading */
     --fixed-bottom-inset: 0px;
     --tabs-inset: 0px;
     --r68-loading-spring: url("assets/generated/r68/loading-spring-low.png?v=7b001bb9");
@@ -417,7 +432,8 @@
   .auto-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; color: #6c7a32; background: rgba(226,244,210,.7); border: 1.5px solid #aacb86; border-radius: 8px; padding: 3px 8px; }
 
   /* ===== Toast ===== */
-  #toast-zone { position: fixed; left: 50%; bottom: calc(var(--fixed-bottom-inset, 0px) + 18px); transform: translateX(-50%); z-index: 200;
+  /* R72.1（R72-03）：toast 抬到固定欄（9800）之上、橫幅（9935/9940）之下 */
+  #toast-zone { position: fixed; left: 50%; bottom: calc(var(--fixed-bottom-inset, 0px) + 18px); transform: translateX(-50%); z-index: 9920;
     display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; }
   .toast { background: rgba(40,30,12,.92); color: #fff; padding: 8px 16px; border-radius: 20px;
     font-weight: 800; font-size: 13px; box-shadow: 0 4px 14px rgba(0,0,0,.3); animation: toastIn .25s, toastOut .3s 1.7s forwards; }
@@ -475,13 +491,14 @@
     }
     #screenFxLayer { display: none; }
   }
+  /* R72.1（R72-01）：--fixed-bottom-inset 已含底欄 safe-area——底部讓位 max(env, var+8px) 單次扣減，不再疊加 env */
   .modal { position: fixed; inset: 0; background: rgba(20,16,8,.76); display: none; align-items: center;
-    justify-content: center; z-index: 20000; padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) calc(max(8px, env(safe-area-inset-bottom)) + var(--fixed-bottom-inset, 0px)) max(8px, env(safe-area-inset-left)); overflow: hidden; }
+    justify-content: center; z-index: 20000; padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom, 0px), calc(var(--fixed-bottom-inset, 0px) + 8px)) max(8px, env(safe-area-inset-left)); overflow: hidden; }
   .modal.show { display: flex; }
   body:has(.modal.show) .wrap { pointer-events: none; user-select: none; }
   .modal-card { background: var(--cream); border: 3px solid var(--border-d); border-radius: 18px;
     padding: clamp(12px, 3dvh, 22px); max-width: 420px; width: 100%; box-shadow: 0 16px 50px rgba(0,0,0,.4);
-    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom) - var(--fixed-bottom-inset, 0px));
+    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - max(env(safe-area-inset-bottom, 0px), var(--fixed-bottom-inset, 0px)));
     display: flex; flex-direction: column; overflow: hidden; overscroll-behavior: contain; }
   .modal-card h2 { font-size: 21px; font-weight: 900; color: #4a3a22; margin-bottom: 12px; text-align: center; }
   .modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
@@ -522,7 +539,8 @@
   .story-mail-btn { margin-top: 8px; width: 100%; }
   .ob.mail-unread::after { content: ""; position: absolute; right: -3px; top: -3px; width: 11px; height: 11px; border-radius: 999px; background: #d53a31; border: 2px solid #fff7d8; box-shadow: 0 0 0 2px rgba(120,35,25,.2); }
   @media (max-width: 640px) { .letters-layout { grid-template-columns: 1fr; } .letter-paper { min-height: 240px; } .season-event-card { grid-template-columns: 1fr; } }
-  .settings-card { max-width: 460px; max-height: calc(100dvh - 32px - var(--fixed-bottom-inset, 0px)); overflow-y: auto; }
+  /* R72.1（R72-09）：設定卡去三重扣高（modal padding／modal-card max-height／自身各扣一次）——與 modal-card 同口徑單次扣減 */
+  .settings-card { max-width: 460px; max-height: calc(100dvh - 32px - max(env(safe-area-inset-bottom, 0px), var(--fixed-bottom-inset, 0px))); overflow-y: auto; }
   .settings-list { display: grid; gap: 8px; }
   .setting-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center;
     min-width: 0; padding: 9px; background: #fff8df; border: 1.5px solid var(--border); border-radius: 10px; }
@@ -985,7 +1003,8 @@
     .main { flex: 0 0 auto; overflow: visible; }
     .toolbar { gap: 5px; }
     .toolbar .btn { min-height: 44px; padding: 6px 8px; font-size: 11px; }
-    /* R72：固定層避讓變數靜態 fallback（JS 未跑前）——頁籤欄 48+2px 邊框+安全區 */
+    /* R72／R72.1（R72-08）：固定層避讓變數靜態 fallback（首屏 JS 未跑前或量測失敗時仍有基本避讓）
+       ——頁籤欄常態高 48+2px 邊框+安全區；直式另於 portrait 區塊覆寫含工具列總高。JS 實測後以 inline style 覆寫。 */
     :root {
       --tabs-inset: calc(50px + env(safe-area-inset-bottom, 0px));
       --fixed-bottom-inset: calc(50px + env(safe-area-inset-bottom, 0px));

@@ -45,3 +45,22 @@
 - 秘密掃描 `sk-proj-…|sk-[a-z0-9]{40}|xai-…` 零命中（排除 .git/node_modules）。
 - 證據 before/after（390×844、844×390、1366×768）入 docs/evidence/r72/；R60-R68 歷史證據不可覆寫。
 - docs/CODEX_RESPONSE_R72.md 報告；main 分支繁中 commit，不 push。
+
+## F. R72.1 硬化補丁（Grok 對抗複審 NO_P0，七項回鍋裁定）
+
+| id | 內容 | 狀態 |
+|---|---|---|
+| R72-01/09 | `--fixed-bottom-inset` 已含底欄 safe-area——modal/.settings-card 不得再疊加 env()；設定卡三重扣高去重，收斂 `max(env, var)` 單一來源單次扣減＋口徑註解 | 已修 |
+| R72-03 | `#toast-zone` z200 被 9800 固定欄蓋 → 抬 9920（低於橫幅 9935/9940） | 已修 |
+| R72-04 | index.html `:root` 註解文件化 z 階表（5/30/9790/9795/9800/9920/9935/9940/20000/30000＋場景內部階） | 已修 |
+| R72-08 | 手機媒體查詢內 `--fixed-bottom-inset` 靜態 fallback（JS 失敗/首屏前基本避讓）——R72 已具備，補裁定編號註解 | 已修 |
+| R72-10 | error-recovery＋pwa-update 同顯垂直堆疊（syncBottomBanners 實測錯誤橫幅高度上移更新橫幅），守門加同顯不互蓋斷言 | 已修 |
+| R72-02 | test-r72-fixed-layers 補旋轉案例：390×844→setViewportSize 844×390，斷言 inset 重測＋錯誤恢復按鈕仍可點 | 已修 |
+| R72-12 | 守門 viewport config 移除與實檔脫鉤的 evidence 欄位，截圖檔名統一由 snap() 產生 | 已修 |
+
+### 記錄在案不阻擋本輪（Grok 裁定列殘留）
+- R72-05：多固定層並存（抽片＋橫幅＋toast 同顯）組合守門——下輪納入。
+- R72-06：SW 版本斷言集中化（e2e 測試釘散在兩處）——下輪重構。
+- R72-07：控制守門清點納入新 UI（upgradesBadge 屬 span 非控制，暫不影響 224）——待 C-02 動守門計數時一併。
+- R72-11：美術視覺快照回歸（polish 後 baseline diff）——Codex 美術輪（A-02/A-03）一併建。
+- R72-13：v4 atlas PNG content-hash 定址（現走 ?v= 版本鏈）——Codex 佇列/下輪。

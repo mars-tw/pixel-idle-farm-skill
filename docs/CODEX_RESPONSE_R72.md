@@ -61,3 +61,16 @@
 - menuscan P1 殘留未在本輪範圍：橫式設定 modal 長捲（可捲達，僅無捲動提示）、圖鑑 844 六屏長、信箱鎖定列表項被關閉鈕遮（可捲達）——建議併入下輪。
 - 工具列 5→3 鍵（C-02）、天氣 tile 化（A-01）、icon 清償（A-02）、主角呼吸幀（A-03）仍屬 Codex 佇列，未動。
 - package.json `appVersion` 停在 r68-20260717-1（R70/R71 亦未動，版本鏈守門不含此欄；如需對齊建議下輪連同守門一起擴充）。
+
+## 七、R72.1 硬化補丁（Grok 對抗複審 NO_P0 七項回鍋）
+
+- **R72-01/09 扣減口徑去重**：`--fixed-bottom-inset` 量測值＝視口底到最上層固定欄頂（已含底欄 safe-area padding）。`.modal` padding-bottom 改 `max(8px, env(safe-area-inset-bottom), calc(var(--fixed-bottom-inset) + 8px))`、`.modal-card`/`.settings-card` max-height 改 `… - max(env(safe-area-inset-bottom), var(--fixed-bottom-inset))`——單一來源單次扣減，口徑寫入 `:root` 註解；設定卡三重扣高（modal padding／modal-card／自身）收斂。
+- **R72-03**：`#toast-zone` z 200 → 9920（高於固定欄 9800、低於橫幅 9935/9940）。
+- **R72-04**：z 階表文件化於 index.html `:root` 註解（5／30／9790／9795／9800／9920／9935／9940／20000／30000＋#mapScene 內部 9500〜9910）。
+- **R72-08**：行動媒體 `--fixed-bottom-inset`/`--tabs-inset` 靜態 fallback（R72 已具備）補裁定編號與語意註解——JS 失敗或首屏前仍有基本避讓。
+- **R72-10**：新增 `syncBottomBanners()`——錯誤恢復與 PWA 更新橫幅同顯時，更新橫幅上移「錯誤橫幅實高＋8px」垂直堆疊；收合/旋轉即重算復位。守門加「同顯不互蓋＋更新橫幅可點＋收合復位」斷言。
+- **R72-02**：test-r72-fixed-layers 補旋轉案例——390×844 跑完 setViewportSize 844×390，斷言 inline `--fixed-bottom-inset` 與頁籤欄實測一致（±2px）且錯誤恢復按鈕仍可真實 click。
+- **R72-12**：守門 viewport config 移除與實檔脫鉤的 `evidence` 欄位，截圖檔名統一由 `snap()` 產生 `after-{w}x{h}-{label}.png`。
+
+R72.1 重跑：test-r72-fixed-layers（含旋轉案例與雙橫幅斷言）＋ test-rwd-matrix ＋ npm test 全綠。
+Grok 裁定記錄在案不阻擋（R72-05/06/07/11/13）已列入 OPTIM_PLAN_R72.md §F 殘留節。

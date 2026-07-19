@@ -1583,6 +1583,7 @@
       box.hidden = false;
       box.onclick = () => window.location.reload();
     }
+    syncBottomBanners(); // R72.1（R72-10）：與錯誤恢復橫幅垂直堆疊
     renderSettingsPanel();
   }
   function setupPwa() {
@@ -3793,6 +3794,7 @@
   function syncFixedLayerAvoidance() {
     updateFixedBottomInset();
     syncSceneActionBarInset();
+    syncBottomBanners(); // R72.1（R72-10）：旋轉/縮放後重算橫幅堆疊偏移
   }
   function setPrimaryPointerClass() {
     const primaryCoarse = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
@@ -3958,6 +3960,20 @@
       return { ok: false, reason: "save_failed", error: e };
     }
   }
+  // R72.1（R72-10）：錯誤恢復與 PWA 更新橫幅同座標——同時顯示時把更新橫幅往上堆疊
+  // （偏移＝錯誤橫幅實高＋8px），互不遮蓋；任一收合即復位。mock DOM 守衛式呼叫。
+  function syncBottomBanners() {
+    try {
+      const er = $("errorRecovery"), pwa = $("pwaUpdate");
+      if (!pwa || !pwa.style) return;
+      if (!er || er.hidden || pwa.hidden || typeof er.getBoundingClientRect !== "function") {
+        pwa.style.bottom = "";
+        return;
+      }
+      const h = (er.getBoundingClientRect() || {}).height || 0;
+      pwa.style.bottom = "calc(var(--fixed-bottom-inset, 0px) + " + Math.round(16 + h + 8) + "px)";
+    } catch (e) {}
+  }
   function showErrorRecovery(error) {
     const saveResult = safeSaveNow();
     try {
@@ -3965,6 +3981,7 @@
       box.hidden = false;
       box.dataset.saved = saveResult && saveResult.ok ? "true" : "false";
       box.dataset.errorName = error && error.name ? error.name : "error";
+      syncBottomBanners();
     } catch (e) {}
     return saveResult;
   }
@@ -4242,7 +4259,7 @@
     $("howToBtn").onclick = () => openModal("howToModal", "#howToOk");
     $("howToOk").onclick = () => closeModal("howToModal");
     $("offlineOk").onclick = () => closeModal("offlineModal");
-    if ($("errorContinue")) $("errorContinue").onclick = () => { $("errorRecovery").hidden = true; };
+    if ($("errorContinue")) $("errorContinue").onclick = () => { $("errorRecovery").hidden = true; syncBottomBanners(); };
     if ($("errorReload")) $("errorReload").onclick = () => window.location.reload();
     $("resetBtn").onclick = () => {
       if (confirm("確定重置存檔？所有進度會消失。")) {
