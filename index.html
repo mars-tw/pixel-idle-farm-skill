@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta property="og:title" content="晨光農場 SUNRISE FARM">
 <meta property="og:description" content="在溫暖晨光中耕作、照顧動物並累積離線收益，打造四季流轉的療癒像素農場。">
 <meta property="og:url" content="https://mars-tw.github.io/pixel-idle-farm-skill/">
@@ -11,8 +11,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r69-20260719-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r69-20260719-1">
+<link rel="manifest" href="manifest.webmanifest?v=r70-20260719-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r70-20260719-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r69-20260719-1";
+  const VERSION = "r70-20260719-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -611,7 +611,9 @@
   /* 視口：地圖為主畫面，桌機佔大、手機保留可玩 */
   #mapScene { position: relative; width: 100%; max-width: 100%; height: min(74vh, 760px); max-height: none; min-height: 320px;
     overflow: hidden; border-radius: 14px; cursor: pointer; touch-action: none;
-    background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate;
+    /* R70：isolation 建立的棧上下文曾把 z9900 控制盤困在場景層、被後續 side-panel 蓋住——
+       上下文整體抬到 z5（抽片 9790/頁籤 9800/彈窗為根層不受影響） */
+    background: linear-gradient(180deg, #8fc46f, #79ad58); isolation: isolate; z-index: 5;
     box-shadow: inset 0 3px 12px rgba(0,0,0,.22), 0 6px 18px rgba(60,40,10,.18), 0 0 0 5px rgba(70,123,45,.14); }
   #mapScene::before, #mapScene::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
   #mapScene::before { z-index: 9600; transition: background .65s ease, opacity .65s ease; }
@@ -650,7 +652,7 @@
     color: #2f6525; font: inherit; font-size: 12px; font-weight: 950; cursor: pointer;
     box-shadow: 0 4px 14px rgba(38,55,22,.18);
   }
-  @media (max-width: 859px) { #mapScene { height: min(60vh, 640px); min-height: 310px; } }
+  @media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) { #mapScene { height: min(60vh, 640px); min-height: 310px; } }
   @media (max-width: 560px) {
     .quest-dock { min-height: 48px; padding: 7px 9px; }
     .quest-dock .qd-title { font-size: 11px; }
@@ -964,7 +966,7 @@
     position: absolute; right: 16px; bottom: 20px; min-width: 66px; min-height: 66px;
     background: rgba(67,103,35,.82); font-size: 20px; pointer-events: auto;
   }
-  @media (max-width: 859px) {
+  @media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
     .smart-assistant { top: 66px; left: auto; right: 8px; bottom: auto; width: min(340px, calc(100% - 16px)); max-height: 30vh; }
     .smart-assistant .sa-list { max-height: 20vh; overflow-y: auto; }
     /* R67：手機由整個 app shell 捲動；側欄與其後的底部工具列依正常流排列成獨立區段。 */
@@ -976,6 +978,7 @@
        側頁籤改為視口固定底欄；選中分頁改為底部抽片（內部捲動），點同一頁籤可收合。 */
     .side-tabs {
       position: fixed; top: auto; left: 0; right: 0; bottom: 0; z-index: 9800; height: auto;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
       border-bottom: none; border-top: 2px solid var(--border);
       background: linear-gradient(180deg, rgba(246,239,216,.98), rgba(232,222,188,.99));
       box-shadow: 0 -6px 18px rgba(0,0,0,.14);
@@ -987,19 +990,20 @@
       background: var(--cream); border-top: 2px solid var(--border);
       padding: 10px 12px 12px; box-shadow: 0 -10px 30px rgba(0,0,0,.18);
     }
+    .side-panel .side-pane.sel::before { content: ""; display: block; width: 38px; height: 4px; border-radius: 2px; background: rgba(90,70,40,.45); margin: 0 auto 8px; }
     .side-panel.panes-collapsed .side-pane.sel { display: none; }
     .wrap { padding-bottom: 58px; }
   }
   /* R69：直式手機——底部工具列（女主角/設定/像素園/玩法/重置）也固定，疊在頁籤欄上方；抽片再上移 */
   @media (max-width: 859px) and (orientation: portrait) {
     .toolbar {
-      position: fixed; top: auto; left: 0; right: 0; bottom: 50px; z-index: 9795; margin: 0;
+      position: fixed; top: auto; left: 0; right: 0; bottom: calc(50px + env(safe-area-inset-bottom, 0px)); z-index: 9795; margin: 0;
       border-top: 1px solid rgba(127,99,48,.35);
     }
-    .side-panel .side-pane.sel { bottom: 96px; }
+    .side-panel .side-pane.sel { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     .wrap { padding-bottom: 106px; }
   }
-  @media (max-width: 859px) {
+  @media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
     .toolbar {
       display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%;
       margin-top: 0; padding-top: 6px; border-top: 2px solid rgba(127,99,48,.28);
@@ -1013,12 +1017,12 @@
     #spriteToggle { min-width: 0; }
     footer { display: none; }
   }
-  @media (max-width: 859px) {
+  @media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
     html.mobile-controls-enabled .mobile-controls { display: block; }
     html.mobile-controls-enabled .scene-action-bar { bottom: 194px; overflow-x: auto; justify-content: flex-start; }
     html.mobile-controls-enabled #mapScene:has(.scene-action-bar:not([hidden])) .smart-assistant { display: none; }
   }
-  @media (max-width: 859px) and (max-height: 480px) {
+  @media (any-pointer: coarse) and (max-height: 480px) {
     .smart-assistant { width: min(280px, calc(100% - 16px)); }
     .smart-assistant .sa-list { display: none; }
     /* R69：橫式手機地圖高於視口時，D-pad/A 改釘在視口底，玩法鍵永不出界 */
@@ -1026,6 +1030,19 @@
     .dpad { left: 10px; bottom: 10px; grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); }
     .dpad-btn, .action-a { min-width: 44px; min-height: 44px; font-size: 18px; }
     .action-a { right: 12px; bottom: 14px; min-width: 56px; min-height: 56px; }
+    /* R70：橫式種子快捷列讓開 D-pad 柱與 A 鍵（老闆回報視覺重疊；守門同步補橫式視口） */
+    #mapScene .seed-hud { left: auto; right: 84px; top: 8px; max-width: calc(100vw - 240px); }
+    /* R70：橫式底部三層互搶重構——流內內容讓出 D-pad/A 高度；頁籤欄水平內縮 */
+    .wrap { padding-bottom: 164px; }
+    .side-tabs { left: 170px; right: 88px; border-radius: 12px 12px 0 0; }
+    .side-panel .side-pane.sel { left: 170px; right: 88px; }
+    html.mobile-controls-enabled .scene-action-bar { bottom: 158px; }
+    .smart-assistant { position: fixed; top: 6px; right: 92px; left: auto; bottom: auto; width: min(280px, calc(100vw - 280px)); }
+    .smart-assistant .sa-list { display: none; }
+    /* R70：寬橫式手機（932×430 等）未落入 ≤859 母媒體——此處自足啟用控制盤與地圖高度優先 */
+    html.mobile-controls-enabled .mobile-controls { display: block; }
+    #mapScene { height: calc(100dvh - 148px); min-height: 200px; }
+    html.mobile-controls-enabled .mobile-controls { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
   }
   @media (max-width: 480px) {
     #mapScene { height: min(54dvh, 560px); min-height: 300px; }
@@ -1256,10 +1273,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r69-20260719-1"></script>
-<script src="src/game.js?v=r69-20260719-1"></script>
-<script src="src/state.js?v=r69-20260719-1"></script>
-<script src="src/atlas.js?v=r69-20260719-1"></script>
-<script src="src/ui.js?v=r69-20260719-1"></script>
+<script src="src/config.js?v=r70-20260719-1"></script>
+<script src="src/game.js?v=r70-20260719-1"></script>
+<script src="src/state.js?v=r70-20260719-1"></script>
+<script src="src/atlas.js?v=r70-20260719-1"></script>
+<script src="src/ui.js?v=r70-20260719-1"></script>
 </body>
 </html>

@@ -70,7 +70,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r69-20260719-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r70-20260719-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -542,8 +542,8 @@
     quickIds.slice(0, 5).forEach((id) => quick.appendChild(seedChip(window.CROPS[id], seasonUnlocked, sId, true)));
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
-    more.title = "All seeds";
-    more.innerHTML = `<span class="se">${seedDrawerOpen ? "×" : "+"}</span><span class="sn">All</span>`;
+    more.title = "全部種子";
+    more.innerHTML = `<span class="se">${seedDrawerOpen ? "×" : "+"}</span><span class="sn">全部</span>`;
     more.onclick = () => { seedDrawerOpen = !seedDrawerOpen; renderSeeds(); };
     quick.appendChild(more);
     row.appendChild(quick);
@@ -569,7 +569,7 @@
   }
   function setupSideTabs() {
     const mobileTabsQuery = (typeof window.matchMedia === "function")
-      ? window.matchMedia("(max-width: 859px)")
+      ? window.matchMedia("(max-width: 859px), (any-pointer: coarse) and (max-height: 480px)")
       : { matches: false };
     const panel = (typeof document.querySelector === "function") ? document.querySelector(".side-panel") : null;
     document.querySelectorAll(".side-tab").forEach((b) => {
@@ -587,6 +587,14 @@
     });
     // R69：手機初始收合抽片（地圖優先）；桌機不動
     if (mobileTabsQuery.matches && panel) panel.classList.add("panes-collapsed");
+    // R70：點抽片外（地圖等處）收合抽片；捕獲相位吞掉該次點擊，避免收合同時觸發地圖動作
+    if (typeof document.addEventListener === "function") document.addEventListener("pointerdown", (ev) => {
+      if (!mobileTabsQuery.matches || !panel || panel.classList.contains("panes-collapsed")) return;
+      if (hasOpenModal()) return;
+      if (ev.target && ev.target.closest && (ev.target.closest(".side-panel") || ev.target.closest(".side-tabs") || ev.target.closest(".toolbar"))) return;
+      panel.classList.add("panes-collapsed");
+      ev.stopPropagation(); ev.preventDefault();
+    }, true);
   }
   function visibleListItems(key, items, limit) {
     const all = Array.isArray(items) ? items : [];
@@ -3662,7 +3670,7 @@
   }
   function setPrimaryPointerClass() {
     const primaryCoarse = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
-    const narrow = window.innerWidth <= 859;
+    const narrow = window.innerWidth <= 859 || window.innerHeight <= 480; // R70：寬橫式手機（如 932×430）亦屬行動姿勢
     document.documentElement.classList.toggle("primary-coarse", primaryCoarse);
     document.documentElement.classList.toggle("mobile-controls-enabled", primaryCoarse && narrow);
   }
@@ -3798,7 +3806,7 @@
     }
     if (summary.replanted > 0) lines.push(`<div class="ml">🤖 幫手補種 <span class="v">${summary.replanted} 次</span></div>`);
     if (summary.lost > 0) lines.push(`<div class="ml" style="color:var(--bad)">📦 倉滿損失 <span class="v">${summary.lost}</span></div>`);
-    if (!crops.length && !products.length && !summary.readyPlots && !forageCount && !(summary.coins > 0)) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
+    if (!crops.length && !products.length && !summary.readyPlots && !forageCount && !(summary.coins > 0) && !(summary.seasonsAdvanced > 0) && !((summary.skippedSeasonEvents || []).length)) lines.push(`<div class="ml">農場靜悄悄，沒有新進度</div>`);
     if (summary.cappedFromMs > 0) lines.push(`<div class="tip">（離線收益上限 8 小時，實際離開 ${fmtTime(summary.cappedFromMs)}）</div>`);
     $("offlineBody").innerHTML = lines.join("");
     openModal("offlineModal", "#offlineOk");

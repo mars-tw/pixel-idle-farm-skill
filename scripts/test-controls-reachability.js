@@ -11,7 +11,7 @@ const MIME = {
 };
 let failed = 0;
 let reachableControlsChecked = 0;
-const EXPECTED_REACHABLE_CONTROLS = 164;
+const EXPECTED_REACHABLE_CONTROLS = 224; // R70：新增兩個橫式手機視口（844×390/932×430）
 
 function assert(condition, message) {
   if (condition) console.log("  ✓ " + message);
@@ -43,6 +43,9 @@ const VIEWPORTS = [
   { name: "touch-laptop-1366x640", width: 1366, height: 640, touch: true, mobile: false },
   { name: "phone-390x844", width: 390, height: 844, touch: true, mobile: true, evidence: "mobile-390x844.png" },
   { name: "tablet-820x1180", width: 820, height: 1180, touch: true, mobile: true },
+  // R70：老闆回報橫式 D-pad×種子鍵重疊、守門卻無橫式視口——補盲區
+  { name: "phone-landscape-844x390", width: 844, height: 390, touch: true, mobile: true },
+  { name: "phone-landscape-932x430", width: 932, height: 430, touch: true, mobile: true },
 ];
 
 async function closeInitialModal(page) {
@@ -219,8 +222,13 @@ async function assertTouchActionDock(page, tag) {
       const r = el.getBoundingClientRect();
       const x = r.left + r.width / 2, y = r.top + r.height / 2;
       const hit = document.elementFromPoint(x, y);
+      const ok = hit === el || el.contains(hit);
       return { width: r.width, height: r.height, top: r.top, bottom: r.bottom, left: r.left, right: r.right,
-        hit: hit === el || el.contains(hit) };
+        hit: ok,
+        hitName: hit ? (hit.id || hit.getAttribute("aria-label") || String(hit.className).slice(0, 30) || hit.TAG) : "none",
+        stack: ok ? undefined : document.elementsFromPoint(x, y).slice(0, 5).map((e) => e.id || String(e.className).slice(0, 20) || e.tagName),
+        mcDisplay: ok ? undefined : getComputedStyle(document.getElementById("mobileControls")).display,
+        scrollY: ok ? undefined : (document.querySelector(".wrap").scrollTop + "," + window.scrollY) };
     });
     const overlaps = [];
     for (let i = 0; i < actionButtons.length; i++) {
@@ -279,7 +287,7 @@ async function assertTouchActionDock(page, tag) {
   assert(scenarioMetrics.length === 4 && scenarioMetrics.every((item) => item.width >= 44 && item.height >= 44 && item.hit),
     `${tag} 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中`);
   assert(result.metrics.every((item) => item.width >= 44 && item.height >= 44 && item.hit),
-    `${tag} action dock／D-pad 每顆按鈕 ≥44px 且中心可命中`);
+    `${tag} action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：` + JSON.stringify(result.metrics.filter((item) => !(item.width >= 44 && item.height >= 44 && item.hit))));
   assert(result.overlaps.length === 0 && !result.assistantVisible,
     `${tag} action dock 與 D-pad 不重疊，動作選擇時暫收助手`);
 }
