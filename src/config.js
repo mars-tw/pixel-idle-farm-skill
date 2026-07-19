@@ -23,12 +23,19 @@ const GAME = {
 // growMs 成長毫秒、seedCost 種子成本、yield 收成數量、sellValue 單位直售價、
 // xp 每次收成 XP、unlockLevel 解鎖等級、spriteRow crop-growth.png 的列、
 // emoji 後備圖示、color 後備色塊（土壤上作物色）
+// R71（B-01 縮幅）：flavor＝圖鑑「祖母手札」一句話（祖母信件文風）。欄位契約一次定案：
+// 沒有 flavor 的品項圖鑑不顯示手札列，後續輪次純資料補齊即可，不再動 UI。
 const CROPS = {
-  wheat:      { id: "wheat",      name: "小麥",   growMs: 15000,  seedCost: 1,  yield: 2, sellValue: 1,  xp: 1,  unlockLevel: 1, spriteRow: 0, emoji: "🌾", color: "#e3c567" },
-  carrot:     { id: "carrot",     name: "胡蘿蔔", growMs: 45000,  seedCost: 4,  yield: 3, sellValue: 3,  xp: 3,  unlockLevel: 2, spriteRow: 1, emoji: "🥕", color: "#f08a3c" },
-  tomato:     { id: "tomato",     name: "番茄",   growMs: 120000, seedCost: 12, yield: 4, sellValue: 8,  xp: 8,  unlockLevel: 3, spriteRow: 2, emoji: "🍅", color: "#e0473b" },
-  strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57" },
-  corn:       { id: "corn",       name: "玉米",   growMs: 210000, seedCost: 20, yield: 4, sellValue: 12, xp: 12, unlockLevel: 4, spriteRow: 4, emoji: "🌽", color: "#f0c84a", season: "夏" },
+  wheat:      { id: "wheat",      name: "小麥",   growMs: 15000,  seedCost: 1,  yield: 2, sellValue: 1,  xp: 1,  unlockLevel: 1, spriteRow: 0, emoji: "🌾", color: "#e3c567",
+    flavor: "第一把小麥別急著賣，先捧在手心聞聞太陽的味道，那是農場醒過來的聲音。" },
+  carrot:     { id: "carrot",     name: "胡蘿蔔", growMs: 45000,  seedCost: 4,  yield: 3, sellValue: 3,  xp: 3,  unlockLevel: 2, spriteRow: 1, emoji: "🥕", color: "#f08a3c",
+    flavor: "胡蘿蔔要拔得慢，像把土裡的心事輕輕請出來，急了就斷在半路。" },
+  tomato:     { id: "tomato",     name: "番茄",   growMs: 120000, seedCost: 12, yield: 4, sellValue: 8,  xp: 8,  unlockLevel: 3, spriteRow: 2, emoji: "🍅", color: "#e0473b",
+    flavor: "番茄紅得最透的那顆，留給路過的孩子，田邊的甜要有人分享才算數。" },
+  strawberry: { id: "strawberry", name: "草莓",   growMs: 300000, seedCost: 30, yield: 5, sellValue: 22, xp: 18, unlockLevel: 4, spriteRow: 3, emoji: "🍓", color: "#e23e57",
+    flavor: "草莓嬌氣，彎腰摘它的人可不能嬌氣，趁露水未乾時下手最甜。" },
+  corn:       { id: "corn",       name: "玉米",   growMs: 210000, seedCost: 20, yield: 4, sellValue: 12, xp: 12, unlockLevel: 4, spriteRow: 4, emoji: "🌽", color: "#f0c84a", season: "夏",
+    flavor: "夏天的玉米聽得見雷聲就長得快，你祖父總說那是天在替我們數日子。" },
   pumpkin:    { id: "pumpkin",    name: "南瓜",   growMs: 900000, seedCost: 85, yield: 3, sellValue: 80, xp: 55, unlockLevel: 5, spriteRow: 5, emoji: "🎃", color: "#e8821e" },
   radish:      { id: "radish",     name: "櫻桃蘿蔔", growMs: 90000, seedCost: 10, yield: 4, sellValue: 5, xp: 6, unlockLevel: 5, emoji: "🌱", color: "#d94b58", season: "春", sheet: "crops4" },
   bell_pepper: { id: "bell_pepper", name: "甜椒", growMs: 360000, seedCost: 38, yield: 4, sellValue: 24, xp: 22, unlockLevel: 5, emoji: "🫑", color: "#4fae55", season: "夏", sheet: "crops2" },
@@ -42,11 +49,13 @@ const CROPS = {
 };
 const CROP_SHEET = { cols: 5, rows: 6, stages: 5 }; // crop-growth.png 版面
 
+// R71（B-03 第二 commit）：broadcast＝換季時的「晨光鎮廣播」一句話，
+// 換季 toast 與離線摘要（有 seasonsAdvanced 時）共用；純文案，可整段回退。
 const SEASONS = [
-  { id: "春", name: "春季", icon: "🌸" },
-  { id: "夏", name: "夏季", icon: "☀️" },
-  { id: "秋", name: "秋季", icon: "🍂" },
-  { id: "冬", name: "冬季", icon: "❄️" },
+  { id: "春", name: "春季", icon: "🌸", broadcast: "晨光鎮廣播：春季到站，河風轉暖，請各位把種子和盼望一起拿出來曬曬。" },
+  { id: "夏", name: "夏季", icon: "☀️", broadcast: "晨光鎮廣播：夏季到站，日頭正烈，先給田裡補水，再給自己留一壺涼茶。" },
+  { id: "秋", name: "秋季", icon: "🍂", broadcast: "晨光鎮廣播：秋季到站，穀倉開門，請記得替每一筆收成留下名字。" },
+  { id: "冬", name: "冬季", icon: "❄️", broadcast: "晨光鎮廣播：冬季到站，爐火湯鍋就位，霜底下還有綠意慢慢在長。" },
 ];
 const SEASON_DURATION_MS = 20 * 60 * 1000;
 const SEASON_UNLOCK_LEVEL = 6;
@@ -261,9 +270,13 @@ const PRODUCTS = buildProducts();
 
 // ===== Stage 12: East Forest forage, stored as items so orders/NPC requests can reuse it. =====
 const FORAGE_ITEMS = {
-  forest_herb:   { id: "forest_herb",   name: "東林藥草", emoji: "🌿", sellValue: 4, region: "east" },
-  glow_mushroom: { id: "glow_mushroom", name: "螢光菇",   emoji: "🍄", sellValue: 5, region: "east" },
-  wild_berry:    { id: "wild_berry",    name: "東林野莓", emoji: "🫐", sellValue: 6, region: "east", season: "秋" },
+  // R71（B-01）：flavor 契約同 CROPS——祖母手札一句話，無 flavor 則圖鑑不顯示手札列。
+  forest_herb:   { id: "forest_herb",   name: "東林藥草", emoji: "🌿", sellValue: 4, region: "east",
+    flavor: "橋那邊的藥草要傍晚採，葉背帶一點涼氣的才留得住藥性。" },
+  glow_mushroom: { id: "glow_mushroom", name: "螢光菇",   emoji: "🍄", sellValue: 5, region: "east",
+    flavor: "螢光菇會替迷路的人留一盞小燈，摘下它之前，記得先說聲謝謝。" },
+  wild_berry:    { id: "wild_berry",    name: "東林野莓", emoji: "🫐", sellValue: 6, region: "east", season: "秋",
+    flavor: "最甜的野莓總長在最扎手的那叢，秋天教人先學會耐心，再嚐甜。" },
   river_mint:    { id: "river_mint",    name: "溪畔薄荷", emoji: "🍃", sellValue: 7, region: "east", season: "春" },
   mooncap_spore: { id: "mooncap_spore", name: "月帽菇孢", emoji: "🌙", sellValue: 18, region: "east_deep", season: "冬" },
   amber_resin:   { id: "amber_resin",   name: "古樹琥珀脂", emoji: "🟠", sellValue: 24, region: "east_deep", season: "夏" },
@@ -589,19 +602,29 @@ const NPC_PLACEMENT = [
 // pool 只是候選白名單，實際生成時會跟 availableOrderItems(state) 取交集，
 // 確保永遠不會要求玩家還沒解鎖/還沒收集過的品項（沿用 D 系統的發現閥門）。
 const NPC_REQUEST_COOLDOWN_MS = 8 * 60 * 1000; // 交付後多久可再接下一張委託
+// R71（B-02 縮幅）：flavorOffer/flavorDone 各 2 變體/人；選句用該張委託的 createdAt
+// 取模（決定性，不引入 Math.random），同一張委託反覆對話永遠同一句，offer/done 同索引成組。
 const NPC_REQUESTS = {
   mayor:    { pool: ["wheat", "carrot", "tomato", "radish", "corn", "bell_pepper", "sunflower", "potato", "melon"], rewardMul: 1.0,
-    flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？"],
-    flavorDone:  ["有你真好，晨光鎮又熱鬧一場。"] },
+    flavorOffer: ["鎮上想辦點小活動，能否勻些{item}給我？",
+                  "公告欄剛貼出新活動，帳上還缺{item}，能請農場支援一批嗎？"],
+    flavorDone:  ["有你真好，晨光鎮又熱鬧一場。",
+                  "我會把農場記在活動謝名單的第一行。"] },
   merchant: { pool: ["strawberry", "corn", "pumpkin", "radish", "bell_pepper", "sunflower", "potato", "grapes", "melon", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "egg_premium", "duck_egg_good", "duck_egg_premium", "milk_good", "milk_premium", "wool_good", "wool_premium", "honey_good", "honey_premium"], rewardMul: 1.15,
-    flavorOffer: ["市集缺貨，手頭有{item}嗎？"],
-    flavorDone:  ["生意興隆，多虧你這批貨。"] },
+    flavorOffer: ["市集缺貨，手頭有{item}嗎？",
+                  "外地旅人指名要{item}，價錢好談，貨先到先贏。"],
+    flavorDone:  ["生意興隆，多虧你這批貨。",
+                  "這批我記你一筆好價，下次有稀罕貨先想到我。"] },
   elder:    { pool: ["radish", "potato", "winter_kale", "egg", "duck_egg", "milk", "wool", "honey", "forest_herb", "glow_mushroom", "wild_berry", "river_mint", "mooncap_spore", "amber_resin", "forest_chestnut", "frost_cherry", "egg_good", "duck_egg_good", "milk_good", "wool_good", "honey_good"], rewardMul: 1.1,
-    flavorOffer: ["幫我張羅點{item}，我拿去燉湯。"],
-    flavorDone:  ["這品質，照顧得很用心啊。"] },
+    flavorOffer: ["幫我張羅點{item}，我拿去燉湯。",
+                  "入夜前想備妥{item}，老骨頭的湯鍋等不了太晚。"],
+    flavorDone:  ["這品質，照顧得很用心啊。",
+                  "嗯，這手藝你祖母看了也會點頭。"] },
   child:    { pool: ["wheat", "carrot", "radish", "corn", "sunflower", "strawberry", "grapes", "wild_berry", "frost_cherry"], rewardMul: 0.85,
-    flavorOffer: ["可以給我一點{item}嗎？我肚子餓了！"],
-    flavorDone:  ["謝謝你！好好吃！"] },
+    flavorOffer: ["可以給我一點{item}嗎？我肚子餓了！",
+                  "我想帶{item}去野餐分給大家，可以先給我一份嗎？"],
+    flavorDone:  ["謝謝你！好好吃！",
+                  "耶！我要把最好吃的留到最後一口！"] },
 };
 
 // ===== R15/R19：鎮民一次性支線（固定小委託；不使用隨機報酬公式）=====

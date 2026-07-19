@@ -1526,6 +1526,12 @@
     if (chapter1Done(state)) return "ch1done";
     return "start";
   }
+  // R71（B-02）：委託台詞 2 變體選句——用該張委託的 createdAt 當種子取模，決定性選句，
+  // 不引入 Math.random：同一張委託反覆開對話永遠同一句，offer/done 用同一索引成組。
+  function npcFlavorLine(list, seed) {
+    if (!Array.isArray(list) || !list.length) return "";
+    return list[Math.abs(Math.floor(seed || 0)) % list.length];
+  }
   // 回傳此 NPC 在目前階段要說的一段台詞（lineIdx 由 UI 傳入做循環）；若有進行中委託，
   // line 會換成委託台詞，並在回傳值附上 request 唯讀投影供 UI 判斷是否顯示交付按鈕。
   function npcDialogue(state, npcId, lineIdx) {
@@ -1547,7 +1553,7 @@
       const itemId = Object.keys(req.wants)[0];
       const itemName = (getItemDef(itemId) || {}).name || itemId;
       const canDeliver = canFulfillNpcRequest(state, npcId);
-      line = (req.flavorOffer || (cfg && cfg.flavorOffer && cfg.flavorOffer[0]) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
+      line = (req.flavorOffer || npcFlavorLine(cfg && cfg.flavorOffer, req.createdAt) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
       request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp,
         canDeliver, sideQuestId: req.sideQuestId || null, sideQuestStepId: req.sideQuestStepId || null };
     }
@@ -1722,8 +1728,12 @@
       });
     }
     checkAchievements(state);
+    // R71（B-02）：一般委託沒有自帶 flavorDone（支線/東林回報才有），用 createdAt 取模
+    // 選 2 變體之一，跟 npcDialogue 的 flavorOffer 同種子同索引，offer/done 口吻成組。
+    const doneCfg = (C.NPC_REQUESTS || {})[npcId];
     return { ok: true, coins: req.rewardCoins, xp: req.rewardXp, npcId, story,
-      sideQuestId: req.sideQuestId || null, doneLine: req.flavorDone || null };
+      sideQuestId: req.sideQuestId || null,
+      doneLine: req.flavorDone || npcFlavorLine(doneCfg && doneCfg.flavorDone, req.createdAt) || null };
   }
   // 放棄委託：清掉這張委託並跟交付一樣進冷卻——冷卻要一致，否則玩家能用「棄了重抽」
   // 無限刷到好賠率的品項，失去節流意義；用來解掉抽到「幾乎摸不到」品項時的卡關委託。
@@ -1794,6 +1804,7 @@
       season: c.season || "全年",
       sellValue: c.sellValue,
       usage: itemUsageSummary(c.id),
+      flavor: c.flavor || "", // R71：祖母手札；空字串＝該品項尚無手札，UI 不顯示該列
       firstDiscoveredAt: firstDiscoveredAt(state, c.id),
     }));
   }
@@ -1818,6 +1829,7 @@
         source: nodes.map((n) => n.name).join("、") || (f.region === "east_deep" ? "東林深處" : "東林"),
         sellValue: f.sellValue,
         usage: itemUsageSummary(id),
+        flavor: f.flavor || "", // R71：祖母手札；空字串＝尚無手札，UI 不顯示該列
         firstDiscoveredAt: firstDiscoveredAt(state, id) };
     });
   }

@@ -1924,6 +1924,7 @@
         <div class="jd-row"><b>來源</b><span>${entry.source || entry.sourceHint || "農場"}</span></div>
         <div class="jd-row"><b>季節</b><span>${entry.season || "全年"}</span></div>
         <div class="jd-row"><b>用途</b><span>${(entry.usage || []).join("／") || "收藏"}</span></div>
+        ${entry.flavor ? `<div class="jd-row jd-flavor" data-audit="journal-flavor"><b>手札</b><span>${entry.flavor}</span></div>` : ""}
         <div class="jd-row"><b>首次發現</b><span data-audit="journal-first-seen">${fmtDate(entry.firstDiscoveredAt)}</span></div>
       </div>`;
     };
@@ -3788,6 +3789,11 @@
       });
       const label = reached.length ? `（${reached.join("、")}）` : "";
       lines.push(`<div class="ml" data-audit="offline-seasons">季節推進 <span class="v">${summary.seasonsAdvanced} 次</span>${escapeHtml(label)}</div>`);
+      // R71（B-03 第二 commit）：離線期間有換季時，附上「回來時這一季」的晨光鎮廣播句。
+      // 只掛在 seasonsAdvanced > 0 之下——沿用 R70 修正後的 P2-08 條件，勿回退成無條件顯示。
+      const curSeasonId = state && G && G.currentSeason ? G.currentSeason(state, now()) : (state && state.season && state.season.id);
+      const curSeason = (window.SEASONS || []).find((x) => x.id === curSeasonId);
+      if (curSeason && curSeason.broadcast) lines.push(`<div class="ml" data-audit="offline-season-broadcast">📻 ${escapeHtml(curSeason.broadcast)}</div>`);
     }
     if ((summary.skippedSeasonEvents || []).length) {
       const names = summary.skippedSeasonEvents.map((sk) => {
@@ -3853,7 +3859,8 @@
       seasonTransitionFx(sid);
       const s = (window.SEASONS || []).find((x) => x.id === sid);
       const bias = G.seasonOrderBiasToast ? G.seasonOrderBiasToast(state, t) : "";
-      if (s) toast(`${s.icon} ${s.name}到了，當季作物收購價提升。${bias ? " " + bias : ""}`);
+      // R71（B-03 第二 commit）：換季 toast 附帶「晨光鎮廣播」一句（純文案，可整段回退）
+      if (s) toast(`${s.icon} ${s.name}到了，當季作物收購價提升。${s.broadcast ? " 📻 " + s.broadcast : ""}${bias ? " " + bias : ""}`);
       if (G.seasonEventStatus) {
         const ev = G.seasonEventStatus(state, t);
         if (ev && ev.event && ev.available) toast(`${ev.event.icon} 本季小事：${ev.event.name} 可在信箱查看。`);
