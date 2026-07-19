@@ -568,8 +568,10 @@
     if (name === "journal") renderJournal();
   }
   function setupSideTabs() {
-    const mobileTabsQuery = window.matchMedia("(max-width: 859px)");
-    const panel = document.querySelector(".side-panel");
+    const mobileTabsQuery = (typeof window.matchMedia === "function")
+      ? window.matchMedia("(max-width: 859px)")
+      : { matches: false };
+    const panel = (typeof document.querySelector === "function") ? document.querySelector(".side-panel") : null;
     document.querySelectorAll(".side-tab").forEach((b) => {
       if (!b.getAttribute || !b.getAttribute("aria-label")) b.setAttribute && b.setAttribute("aria-label", "切換到" + (b.textContent || "").trim() + "分頁");
       b.onclick = () => {
