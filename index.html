@@ -11,8 +11,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r68-20260717-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r68-20260717-1">
+<link rel="manifest" href="manifest.webmanifest?v=r69-20260719-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r69-20260719-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r68-20260717-1";
+  const VERSION = "r69-20260719-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -972,8 +972,34 @@
     .main { flex: 0 0 auto; overflow: visible; }
     .toolbar { gap: 5px; }
     .toolbar .btn { min-height: 44px; padding: 6px 8px; font-size: 11px; }
-    /* R67：手機底列固定為五個等寬分區，避免 reset 掉到第二列後與側欄 tabs 互壓。 */
-    .side-tabs { position: static; z-index: auto; }
+    /* R69：老闆指示——關鍵按鈕須在遊戲畫面內零捲動可點。
+       側頁籤改為視口固定底欄；選中分頁改為底部抽片（內部捲動），點同一頁籤可收合。 */
+    .side-tabs {
+      position: fixed; top: auto; left: 0; right: 0; bottom: 0; z-index: 9800; height: auto;
+      border-bottom: none; border-top: 2px solid var(--border);
+      background: linear-gradient(180deg, rgba(246,239,216,.98), rgba(232,222,188,.99));
+      box-shadow: 0 -6px 18px rgba(0,0,0,.14);
+    }
+    .side-tab { min-height: 48px; }
+    .side-panel .side-pane.sel {
+      position: fixed; top: auto; left: 0; right: 0; bottom: 50px; z-index: 9790;
+      max-height: 52dvh; overflow-y: auto; overscroll-behavior: contain;
+      background: var(--cream); border-top: 2px solid var(--border);
+      padding: 10px 12px 12px; box-shadow: 0 -10px 30px rgba(0,0,0,.18);
+    }
+    .side-panel.panes-collapsed .side-pane.sel { display: none; }
+    .wrap { padding-bottom: 58px; }
+  }
+  /* R69：直式手機——底部工具列（女主角/設定/像素園/玩法/重置）也固定，疊在頁籤欄上方；抽片再上移 */
+  @media (max-width: 859px) and (orientation: portrait) {
+    .toolbar {
+      position: fixed; top: auto; left: 0; right: 0; bottom: 50px; z-index: 9795; margin: 0;
+      border-top: 1px solid rgba(127,99,48,.35);
+    }
+    .side-panel .side-pane.sel { bottom: 96px; }
+    .wrap { padding-bottom: 106px; }
+  }
+  @media (max-width: 859px) {
     .toolbar {
       display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%;
       margin-top: 0; padding-top: 6px; border-top: 2px solid rgba(127,99,48,.28);
@@ -995,6 +1021,11 @@
   @media (max-width: 859px) and (max-height: 480px) {
     .smart-assistant { width: min(280px, calc(100% - 16px)); }
     .smart-assistant .sa-list { display: none; }
+    /* R69：橫式手機地圖高於視口時，D-pad/A 改釘在視口底，玩法鍵永不出界 */
+    html.mobile-controls-enabled .mobile-controls { position: fixed; left: 0; right: 0; bottom: 0; height: 150px; }
+    .dpad { left: 10px; bottom: 10px; grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); }
+    .dpad-btn, .action-a { min-width: 44px; min-height: 44px; font-size: 18px; }
+    .action-a { right: 12px; bottom: 14px; min-width: 56px; min-height: 56px; }
   }
   @media (max-width: 480px) {
     #mapScene { height: min(54dvh, 560px); min-height: 300px; }
@@ -1225,10 +1256,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r68-20260717-1"></script>
-<script src="src/game.js?v=r68-20260717-1"></script>
-<script src="src/state.js?v=r68-20260717-1"></script>
-<script src="src/atlas.js?v=r68-20260717-1"></script>
-<script src="src/ui.js?v=r68-20260717-1"></script>
+<script src="src/config.js?v=r69-20260719-1"></script>
+<script src="src/game.js?v=r69-20260719-1"></script>
+<script src="src/state.js?v=r69-20260719-1"></script>
+<script src="src/atlas.js?v=r69-20260719-1"></script>
+<script src="src/ui.js?v=r69-20260719-1"></script>
 </body>
 </html>

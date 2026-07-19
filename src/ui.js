@@ -70,7 +70,7 @@
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r68-20260717-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r69-20260719-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -568,10 +568,23 @@
     if (name === "journal") renderJournal();
   }
   function setupSideTabs() {
+    const mobileTabsQuery = window.matchMedia("(max-width: 859px)");
+    const panel = document.querySelector(".side-panel");
     document.querySelectorAll(".side-tab").forEach((b) => {
       if (!b.getAttribute || !b.getAttribute("aria-label")) b.setAttribute && b.setAttribute("aria-label", "切換到" + (b.textContent || "").trim() + "分頁");
-      b.onclick = () => { if (!hasOpenModal()) switchTab(b.dataset.tab); };
+      b.onclick = () => {
+        if (hasOpenModal()) return;
+        // R69：手機頁籤為固定底欄——點已選中的頁籤＝收合/展開抽片，保持地圖為主畫面
+        if (mobileTabsQuery.matches && panel && b.classList.contains("sel")) {
+          panel.classList.toggle("panes-collapsed");
+          return;
+        }
+        if (panel) panel.classList.remove("panes-collapsed");
+        switchTab(b.dataset.tab);
+      };
     });
+    // R69：手機初始收合抽片（地圖優先）；桌機不動
+    if (mobileTabsQuery.matches && panel) panel.classList.add("panes-collapsed");
   }
   function visibleListItems(key, items, limit) {
     const all = Array.isArray(items) ? items : [];
