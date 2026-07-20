@@ -25,6 +25,9 @@
   let selectedLetterId = null;
   let spritesReady = false;
   let lastOrderSig = "";
+  let pendingTrashOrderId = null;
+  let pendingTrashUntil = 0;
+  let pendingTrashTimer = null;
   let lastAssistantSig = "";
   let saveTimer = null;
   let selectedTileId = null;
@@ -69,8 +72,9 @@
   const OFFLINE_SUMMARY_MIN_MS = 5 * 60 * 1000;
   const MAP_POINTER_SEQUENCE_MAX_AGE_MS = 350;
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
+  const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r72-20260719-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r73-20260720-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -557,7 +561,15 @@
     more.onclick = () => {
       seedDrawerOpen = !seedDrawerOpen;
       renderSeeds();
-      if (seedDrawerOpen) onceHint("seed_drawer", "🌱 種子欄可左右捲動看全部；再點×收起");
+      if (seedDrawerOpen) {
+        // R73：橫式固定系統工具列新增後，從側欄返回再展開種子時先把場景帶回可視區；
+        // #mapScene 的 scroll-margin-bottom 已沿用 --fixed-bottom-inset，不會把種子列捲進工具列後方。
+        const scene = $("mapScene");
+        if (scene && typeof scene.scrollIntoView === "function") {
+          try { scene.scrollIntoView({ block: "nearest", inline: "nearest" }); } catch (e) { scene.scrollIntoView(); }
+        }
+        onceHint("seed_drawer", "🌱 種子欄可左右捲動看全部；再點×收起");
+      }
     };
     quick.appendChild(more);
     row.appendChild(quick);
@@ -804,8 +816,25 @@
 
   // ---------- 訂單 ----------
   function orderSig() { return state.orders.map((o) => o.id).join("|") + "#" + state.orderStreak; }
+  function clearPendingOrderTrash(orderId, rerender) {
+    if (orderId && pendingTrashOrderId !== orderId) return;
+    if (pendingTrashTimer) clearTimeout(pendingTrashTimer);
+    pendingTrashTimer = null;
+    pendingTrashOrderId = null;
+    pendingTrashUntil = 0;
+    if (rerender) renderOrders();
+  }
+  function requestOrderTrash(orderId) {
+    clearPendingOrderTrash();
+    pendingTrashOrderId = orderId;
+    pendingTrashUntil = now() + ORDER_TRASH_CONFIRM_MS;
+    pendingTrashTimer = setTimeout(() => clearPendingOrderTrash(orderId, true), ORDER_TRASH_CONFIRM_MS);
+    renderOrders();
+    toast("⚠️ 要丟棄這張訂單嗎？5 秒內按「確認丟棄」");
+  }
   function renderOrders() {
     const box = $("orders"); box.innerHTML = "";
+    if (pendingTrashOrderId && !state.orders.some((order) => order.id === pendingTrashOrderId)) clearPendingOrderTrash();
     const streakMul = 1 + Math.min(window.ORDER_STREAK_CAP, state.orderStreak * window.ORDER_STREAK_BONUS);
     $("streakHint").innerHTML = state.orderStreak > 0
       ? `<span class="streak-badge">🔥 連單 ${state.orderStreak}（獎金 ×${streakMul.toFixed(2)}）</span>` : "";
@@ -829,7 +858,9 @@
       }).join("");
       const el = document.createElement("div");
       const isFestival = o.rarity === "festival";
+      const confirmingTrash = pendingTrashOrderId === o.id && pendingTrashUntil > now();
       el.className = "order" + (isFestival ? " festival" : "");
+      el.dataset.orderId = o.id;
       if (narrative) el.dataset.npc = narrative.npcId;
       el.innerHTML = `
         <div class="o-rarity" style="background:${rarity.color}"></div>
@@ -842,16 +873,27 @@
           <div class="o-meta">${rarity.label} · ⏳ ${fmtTime(Math.max(0, o.expiresAt - now()))}</div>
         </div>
         <div class="o-actions">
-          <button class="btn buy small ful" ${can ? "" : "disabled"}>交付</button>
-          <button class="btn ghost small trash">丟棄</button>
+          ${confirmingTrash
+            ? `<button class="btn ghost small trash-cancel">保留</button>
+          <button class="btn small trash-confirm">確認丟棄</button>`
+            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>交付</button>
+          <button class="btn ghost small trash">丟棄</button>`}
         </div>`;
-      el.querySelector(".ful").onclick = () => {
-        const r = G.fulfillOrder(state, o.id, now());
-        if (r.ok) { G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
-        else toast("作物不足，無法交付");
-      };
-      el.querySelector(".trash").onclick = () => {
-        G.trashOrder(state, o.id, now()); toast("🗑️ 已丟棄（連單中斷）"); afterChange(true); renderOrders();
+      const fulfill = el.querySelector(".ful");
+      if (fulfill) fulfill.onclick = () => {
+          const r = G.fulfillOrder(state, o.id, now());
+          if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
+          else toast("作物不足，無法交付");
+        };
+      const trash = el.querySelector(".trash");
+      if (trash) trash.onclick = () => requestOrderTrash(o.id);
+      const cancelTrash = el.querySelector(".trash-cancel");
+      if (cancelTrash) cancelTrash.onclick = () => { clearPendingOrderTrash(o.id, true); toast("已保留訂單"); };
+      const confirmTrash = el.querySelector(".trash-confirm");
+      if (confirmTrash) confirmTrash.onclick = () => {
+        if (pendingTrashOrderId !== o.id || pendingTrashUntil <= now()) { clearPendingOrderTrash(o.id, true); return; }
+        clearPendingOrderTrash(o.id);
+        G.trashOrder(state, o.id, now()); toast("🗑️ 已確認丟棄（連單中斷）"); afterChange(true); renderOrders();
       };
       box.appendChild(el);
     });
@@ -1356,6 +1398,17 @@
       <div class="save-status" id="saveStatus" data-audit="save-status"></div>
     </div>`;
   }
+  function settingsSeriesLinksHtml() {
+    return `<section class="settings-series" data-audit="settings-series" aria-labelledby="settingsSeriesTitle">
+      <div class="settings-series-title" id="settingsSeriesTitle">🪧 其他遊戲</div>
+      <div class="settings-series-copy">離開農場前，也可以逛逛阿軒的小遊戲系列。</div>
+      <div class="settings-series-links" id="settingsSeriesLinks">
+        <a href="https://mars-tw.github.io/web-card-game-skill/templates/card-battle/" target="_blank" rel="noopener">卡牌對戰</a>
+        <a href="https://mars-tw.github.io/tower-defense-skill/" target="_blank" rel="noopener">無盡塔防</a>
+        <a href="https://mars-tw.github.io/ashes-convoy/" target="_blank" rel="noopener">灰燼護航</a>
+      </div>
+    </section>`;
+  }
   function setSaveStatus(msg, ok) {
     const box = $("saveStatus"); if (!box) return;
     box.textContent = msg;
@@ -1679,6 +1732,7 @@
       performanceDiagnosticsHtml(),
       pwaVersionHtml(),
       offlineReviewHtml(state.lastOfflineSummary),
+      settingsSeriesLinksHtml(),
       saveManagerHtml(),
     ].join("");
     box.querySelectorAll("[data-setting-key]").forEach((btn) => {
@@ -2202,7 +2256,12 @@
     const baselineY = (s.y + s.h) * TILE;
     const frame = s.sheet === "structures" ? seasonalStructureFrame(s.frame) : s.frame;
     const el = addObjectPx(obStatic, s.sheet, frame, cx, baselineY, s.w * TILE, "shadowed", 0, "structure");
-    if (el) el.dataset.structureId = s.id;
+    if (el) {
+      el.dataset.structureId = s.id;
+      // R73 FARM-R1-02：大型結構圖像也必須指向 footprint 代表磚，否則 touch click 會沿用上次選取。
+      const tile = state.map.tiles.find((item) => item.structureId === s.id);
+      if (tile) el.dataset.tileId = tile.id;
+    }
   }
   const OBSTACLE_SHEET = { rock: "props", stump: "props", bush: "structures", tree: "structures" };
   const OBSTACLE_FRAME2 = { rock: "rock", stump: "stump", bush: "bush_big", tree: "oak" };
@@ -3884,6 +3943,11 @@
         if (ob.dataset.structureId) {
           const bld = state.buildings.find((x) => x.structureId === ob.dataset.structureId);
           if (bld) { showBuildingBubble(bld.id, ob); return; }
+          // 固定結構（市集／農舍）沒有 state.buildings；用代表 footprint 更新 selection 再互動。
+          if (!ob.dataset.tileId) {
+            const tile = state.map.tiles.find((item) => item.structureId === ob.dataset.structureId);
+            if (tile) ob.dataset.tileId = tile.id;
+          }
         }
         if (ob.dataset.tileId) handleMapClick(ob.dataset.tileId, mapActivationType(ev, ob.dataset.tileId));
       });

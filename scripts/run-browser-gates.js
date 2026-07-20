@@ -10,6 +10,7 @@ const SCRIPTS = [
   "scripts/test-rwd-matrix.js",
   "scripts/test-controls-reachability.js",
   "scripts/test-r68-browser.js",
+  "scripts/test-r73-playtest.js",
 ];
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

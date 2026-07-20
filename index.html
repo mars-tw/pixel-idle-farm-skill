@@ -11,8 +11,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r72-20260719-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r72-20260719-1">
+<link rel="manifest" href="manifest.webmanifest?v=r73-20260720-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r73-20260720-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r72-20260719-1";
+  const VERSION = "r73-20260720-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -89,7 +89,7 @@
                 9900 mobile-controls・smart-assistant／9910 build-wheel・object-bubble）
          30    .side-tabs（桌機 sticky）
          9790  .side-pane.sel 抽片（行動 fixed）
-         9795  .toolbar（直式行動 fixed）
+         9795  .toolbar（行動 fixed；橫式縮在 D-pad／A 鍵之間）
          9800  .side-tabs（行動 fixed 底欄）
          9920  #toast-zone（高於固定欄、低於橫幅）
          9935  .pwa-update
@@ -340,6 +340,8 @@
   .order .o-reward .xp { color: #2b6f8a; }
   .order .o-meta { font-size: 10px; color: var(--ink-soft); margin-top: 1px; }
   .order .o-actions { display: flex; flex-direction: column; gap: 4px; }
+  .order .trash-confirm { background: #f2c3ad; color: #7d2717; border-color: #c96f50; }
+  .order .trash-cancel { background: #e7f5dd; color: #285b1d; border-color: #94bd68; }
   .streak-badge { font-size: 11px; font-weight: 800; color: #b5560a; }
 
   /* ===== 升級 ===== */
@@ -569,6 +571,15 @@
   .save-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
   .save-actions .btn { min-height: 44px; padding: 7px 8px; font-size: 12px; margin: 0; }
   .save-status { min-height: 18px; font-size: 12px; font-weight: 850; color: #6f6248; overflow-wrap: anywhere; }
+  .settings-series { padding: 10px; border: 1.5px dashed #b68a43; border-radius: 10px;
+    background: linear-gradient(180deg, #fff3c8, #f3dfaa); display: grid; gap: 7px; }
+  .settings-series-title { font-size: 13px; font-weight: 950; color: #5c3d16; }
+  .settings-series-copy { font-size: 11px; line-height: 1.4; color: #765b32; }
+  .settings-series-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .settings-series-links a { min-width: 0; min-height: 44px; padding: 7px 5px; border: 1.5px solid #9f7a3e; border-radius: 8px;
+    background: rgba(255,253,244,.82); color: #2c6f1e; font-size: 12px; font-weight: 900; text-decoration: none;
+    display: flex; align-items: center; justify-content: center; text-align: center; }
+  .settings-series-links a:hover, .settings-series-links a:focus-visible { background: #e7f5dd; border-color: #5a9e3f; outline: 2px solid rgba(90,158,63,.28); outline-offset: 1px; }
   /* R72：錯誤恢復/更新橫幅避讓固定底欄（menuscan P0：繼續/重載 0/2 被 #sideTabs 蓋） */
   .error-recovery { position: fixed; left: 50%; bottom: calc(var(--fixed-bottom-inset, 0px) + 16px); transform: translateX(-50%); z-index: 9940;
     width: min(420px, calc(100vw - 24px)); background: #fff8df; border: 2px solid #d4b468; border-radius: 10px;
@@ -1073,6 +1084,14 @@
     /* R70：橫式底部三層互搶重構——流內內容讓出 D-pad/A 高度；頁籤欄水平內縮
        R72：同時保證讓出固定底欄實高（JS 實測值） */
     .wrap { padding-bottom: max(164px, calc(var(--fixed-bottom-inset, 0px) + 14px)); }
+    /* R73 FARM-R1-01：橫式矮視口的系統工具列也固定在頁籤上方；左右避開 D-pad 與 A 鍵。
+       bottom 沿用 --tabs-inset，JS 會把工具列+頁籤總高回寫 --fixed-bottom-inset 給抽片/浮層共同避讓。 */
+    .toolbar {
+      position: fixed; top: auto; left: 170px; right: 88px;
+      bottom: var(--tabs-inset, calc(50px + env(safe-area-inset-bottom, 0px)));
+      z-index: 9795; width: auto; margin: 0; border-radius: 12px 12px 0 0;
+      border-top: 1px solid rgba(127,99,48,.35);
+    }
     .side-tabs { left: 170px; right: 88px; border-radius: 12px 12px 0 0; }
     .side-panel .side-pane.sel { left: 170px; right: 88px; }
     html.mobile-controls-enabled .scene-action-bar { bottom: 158px; }
@@ -1314,10 +1333,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r72-20260719-1"></script>
-<script src="src/game.js?v=r72-20260719-1"></script>
-<script src="src/state.js?v=r72-20260719-1"></script>
-<script src="src/atlas.js?v=r72-20260719-1"></script>
-<script src="src/ui.js?v=r72-20260719-1"></script>
+<script src="src/config.js?v=r73-20260720-1"></script>
+<script src="src/game.js?v=r73-20260720-1"></script>
+<script src="src/state.js?v=r73-20260720-1"></script>
+<script src="src/atlas.js?v=r73-20260720-1"></script>
+<script src="src/ui.js?v=r73-20260720-1"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@ const MIME = {
 };
 let failed = 0;
 let reachableControlsChecked = 0;
-const EXPECTED_REACHABLE_CONTROLS = 224; // R70：新增兩個橫式手機視口（844×390/932×430）
+const EXPECTED_REACHABLE_CONTROLS = 236; // R73：4 個行動視口各納入設定內 3 條系列連結（224+12）
 
 function assert(condition, message) {
   if (condition) console.log("  ✓ " + message);
@@ -164,6 +164,19 @@ async function assertModal(page, tag, options = {}) {
     return !!appShell && !appShell.inert && !appShell.hasAttribute("inert") && !document.body.classList.contains("modal-open");
   });
   assert(restored, `${tag} modal 關閉後解除背景 inert`);
+}
+
+async function assertSettingsSeriesLinks(page, tag) {
+  await page.locator("#settingsBtn").click();
+  await page.waitForFunction(() => document.getElementById("settingsModal").classList.contains("show"));
+  const links = page.locator("#settingsSeriesLinks a");
+  assert(await links.count() === 3, `${tag} 設定內載入 3 條系列連結`);
+  for (let i = 0; i < 3; i++) {
+    await links.nth(i).scrollIntoViewIfNeeded();
+    assertReachable(`${tag} 系列連結 ${i + 1}`, await controlMetrics(page, `#settingsSeriesLinks a:nth-child(${i + 1})`));
+  }
+  await page.locator("#settingsOk").click();
+  await page.waitForFunction(() => !document.querySelector(".modal.show"));
 }
 
 async function assertNonModalNoOverlap(page, tag) {
@@ -374,6 +387,7 @@ async function runViewport(browser, base, config) {
       await page.locator(".toolbar").scrollIntoViewIfNeeded();
       assertReachable(`${config.name} 底部工具列`, await controlMetrics(page, ".toolbar button"));
       await assertNonModalNoOverlap(page, `${config.name} 底部工具列`);
+      await assertSettingsSeriesLinks(page, config.name);
       if (config.evidence) {
         await page.screenshot({ path: path.join(EVIDENCE, "mobile-menu-390x844.png"), fullPage: false });
       }

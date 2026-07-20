@@ -1,7 +1,7 @@
 {
   "name": "pixel-idle-farm",
   "version": "0.1.11",
-  "appVersion": "r68-20260717-1",
+  "appVersion": "r73-20260720-1",
   "description": "純原生網頁像素放置農場遊戲 — Claude Code Skill。零依賴 HTML/CSS/JS，localStorage 存檔，時間差離線收益。",
   "type": "commonjs",
   "scripts": {
@@ -28,6 +28,7 @@
     "test:rwd": "node scripts/test-rwd-matrix.js",
     "test:r72": "node scripts/test-r72-fixed-layers.js",
     "test:r72:night": "node scripts/test-r72-night-gate.js",
+    "test:r73": "node scripts/test-r73-playtest.js",
     "art:r72:polish": "python tools/r72_pixel_polish.py --dry-run"
   },
   "keywords": [

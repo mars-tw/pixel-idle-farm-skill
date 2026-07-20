@@ -306,10 +306,11 @@ async function runViewport(browser, base, config) {
       await page.waitForTimeout(250); // resize handler → syncFixedLayerAvoidance
       const inset = await page.evaluate(() => {
         const inline = parseFloat(document.documentElement.style.getPropertyValue("--fixed-bottom-inset"));
-        const tabs = document.querySelector(".side-tabs");
-        const cs = getComputedStyle(tabs);
-        const expected = cs.position === "fixed" && cs.display !== "none"
-          ? Math.max(0, Math.round(innerHeight - tabs.getBoundingClientRect().top)) : 0;
+        // R73：橫式也有 fixed toolbar，口徑改量所有可見 fixed 底欄中最上方的 top。
+        const tops = [document.querySelector(".side-tabs"), document.querySelector(".toolbar")]
+          .filter((el) => el && getComputedStyle(el).position === "fixed" && getComputedStyle(el).display !== "none")
+          .map((el) => el.getBoundingClientRect().top);
+        const expected = tops.length ? Math.max(0, Math.round(innerHeight - Math.min(...tops))) : 0;
         return { inline, expected };
       });
       assert(Number.isFinite(inset.inline) && Math.abs(inset.inline - inset.expected) <= 2,
