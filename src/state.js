@@ -171,6 +171,12 @@
     if (!raw || typeof raw !== "object" || typeof raw.id !== "string" || !raw.id || usedIds.has(raw.id)) return null;
     if (!C.BUILDINGS[raw.type]) return null;
     const b = Object.assign({}, raw);
+    // R74：R73 以前的建物可能沒有 level；保留原建物/座標，僅補 Lv1。
+    // 同時把非數字、低於 1 或高於定義上限的值夾回合法範圍，避免髒存檔讀壞效果表。
+    const levels = C.BUILDINGS[b.type].levels;
+    const maxLevel = Array.isArray(levels) && levels.length ? levels.length : 1;
+    const rawLevel = Number.isFinite(b.level) ? Math.floor(b.level) : 1;
+    b.level = Math.max(1, Math.min(maxLevel, rawLevel));
     const structure = structureForBuilding(b);
     if (structure) {
       b.structureId = structure.id;

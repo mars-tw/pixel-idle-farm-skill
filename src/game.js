@@ -74,12 +74,34 @@
     seen[type] = used + 1;
     return true;
   }
+  function buildingMaxLevel(type) {
+    const def = BUILDINGS[type];
+    return def && Array.isArray(def.levels) && def.levels.length ? def.levels.length : 1;
+  }
+  function buildingLevel(building) {
+    if (!building || !BUILDINGS[building.type]) return 0;
+    const raw = Number.isFinite(building.level) ? Math.floor(building.level) : 1;
+    return Math.max(1, Math.min(buildingMaxLevel(building.type), raw));
+  }
+  function buildingLevelData(building) {
+    const def = building && BUILDINGS[building.type];
+    if (!def) return null;
+    if (!Array.isArray(def.levels) || !def.levels.length) {
+      return { cost: def.cost || {}, effect: def.effect || {}, effectLabel: def.desc || "" };
+    }
+    return def.levels[buildingLevel(building) - 1] || def.levels[0];
+  }
+  function buildingEffect(building) {
+    const level = buildingLevelData(building);
+    return (level && level.effect) || {};
+  }
   // 已蓋建築的成長光環連乘（compostHeap 0.90、beeBox 0.92…），同類型依 maxCount 封頂。
   function buildingGrowthAura(state) {
     let m = 1; const seen = {};
     for (const b of state.buildings || []) {
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.growthAura && effectBuildingAllowed(seen, b.type, def)) m *= def.effect.growthAura;
+      const effect = buildingEffect(b);
+      if (def && effect.growthAura && effectBuildingAllowed(seen, b.type, def)) m *= effect.growthAura;
     }
     return m;
   }
@@ -87,7 +109,8 @@
     let bonus = 0; const seen = {};
     for (const b of state.buildings || []) {
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.seasonalSellBonus && effectBuildingAllowed(seen, b.type, def)) bonus += def.effect.seasonalSellBonus;
+      const effect = buildingEffect(b);
+      if (def && effect.seasonalSellBonus && effectBuildingAllowed(seen, b.type, def)) bonus += effect.seasonalSellBonus;
     }
     return bonus;
   }
@@ -95,7 +118,8 @@
     let bonus = 0; const seen = {};
     for (const b of state.buildings || []) {
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.orderXpBonus && effectBuildingAllowed(seen, b.type, def)) bonus += def.effect.orderXpBonus;
+      const effect = buildingEffect(b);
+      if (def && effect.orderXpBonus && effectBuildingAllowed(seen, b.type, def)) bonus += effect.orderXpBonus;
     }
     return bonus;
   }
@@ -133,7 +157,8 @@
     const seen = {};
     for (const b of state.buildings || []) { // MVP2：筒倉等建築加倉容
       const def = BUILDINGS[b.type];
-      if (def && def.effect && def.effect.storageBonus && effectBuildingAllowed(seen, b.type, def)) cap += def.effect.storageBonus;
+      const effect = buildingEffect(b);
+      if (def && effect.storageBonus && effectBuildingAllowed(seen, b.type, def)) cap += effect.storageBonus;
     }
     return cap;
   }
@@ -821,6 +846,35 @@
     }
     return { ok: true, building: b };
   }
+  function nextBuildingUpgrade(state, buildingId) {
+    const building = (state.buildings || []).find((b) => b.id === buildingId);
+    if (!building) return null;
+    const def = BUILDINGS[building.type];
+    const level = buildingLevel(building);
+    const maxLevel = buildingMaxLevel(building.type);
+    if (!def || level >= maxLevel) return null;
+    const next = def.levels[level]; // level 是目前 1-based，剛好指向下一級的 0-based 索引
+    return {
+      building,
+      fromLevel: level,
+      level: level + 1,
+      maxLevel,
+      cost: next.cost || {},
+      effect: next.effect || {},
+      effectLabel: next.effectLabel || "",
+      current: buildingLevelData(building),
+    };
+  }
+  function upgradeBuilding(state, buildingId) {
+    const building = (state.buildings || []).find((b) => b.id === buildingId);
+    if (!building) return { ok: false, reason: "gone" };
+    const next = nextBuildingUpgrade(state, buildingId);
+    if (!next) return { ok: false, reason: "maxed", level: buildingLevel(building) };
+    if (!canAffordCost(state, next.cost)) return { ok: false, reason: "cost", cost: next.cost };
+    spendCost(state, next.cost);
+    building.level = next.level;
+    return Object.assign({ ok: true }, next, { building, current: buildingLevelData(building) });
+  }
 
   // ---------- 動物 ----------
   function homeBuildingFor(state, animalType) {
@@ -830,8 +884,7 @@
   function animalCapacity(state, buildingId) {
     const b = (state.buildings || []).find((x) => x.id === buildingId);
     if (!b) return 0;
-    const def = BUILDINGS[b.type];
-    return def && def.effect ? (def.effect.capacity || 0) : 0;
+    return buildingEffect(b).capacity || 0;
   }
   function animalsInHome(state, buildingId) { return (state.animals || []).filter((a) => a.homeId === buildingId); }
 
@@ -2224,7 +2277,8 @@
 
   const GameAPI = {
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
-    growthMultiplier, buildingGrowthAura, effectiveGrowMs, isWet, waterPlot,
+    growthMultiplier, buildingGrowthAura, buildingMaxLevel, buildingLevel, buildingLevelData, buildingEffect,
+    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,

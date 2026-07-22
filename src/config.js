@@ -408,45 +408,90 @@ const OBSTACLES = {
 };
 
 // ===== MVP2：建築（生產模組，蓋在草地，影響經濟/進度）=====
-// cost 可含 coins 與建材；effect 解讀於 game.js
+// R74：levels 沿用全域升級的逐級資料風格；第 1 筆同時是建造成本與 Lv1 效果，
+// 後續每筆是升到該級的成本與「該級完整效果」（不是與前級相加）。
+// Lv2 金幣約為建造價 1.8～2.7 倍，Lv3 再為 Lv2 的 2.2～3 倍，並持續吃對應建材；
+// 三段封頂避免瞬間無限升級，前期仍保留一個可企及的首次強化目標。
 const BUILDINGS = {
   compostHeap: { id: "compostHeap", name: "堆肥場", emoji: "🍂", unlockLevel: 2,
-                 cost: { coins: 60, compost: 3 }, effect: { growthAura: 0.90 },
+                 levels: [
+                   { cost: { coins: 60, compost: 3 }, effect: { growthAura: 0.90 }, effectLabel: "作物成長時間 ×0.90" },
+                   { cost: { coins: 160, compost: 5 }, effect: { growthAura: 0.84 }, effectLabel: "作物成長時間 ×0.84" },
+                   { cost: { coins: 480, compost: 9 }, effect: { growthAura: 0.78 }, effectLabel: "作物成長時間 ×0.78" },
+                 ],
                  maxCount: 1,
-                 desc: "作物成長時間 ×0.90（全場，最多 1 座生效）" },
+                 desc: "Lv1 作物成長時間 ×0.90（全場，最多 1 座生效）" },
   silo:        { id: "silo", name: "筒倉", emoji: "🏗️", unlockLevel: 3,
-                 cost: { coins: 180, stone: 4 }, effect: { storageBonus: 90 },
+                 levels: [
+                   { cost: { coins: 180, stone: 4 }, effect: { storageBonus: 90 }, effectLabel: "倉庫容量 +90" },
+                   { cost: { coins: 360, stone: 7 }, effect: { storageBonus: 170 }, effectLabel: "倉庫容量 +170" },
+                   { cost: { coins: 980, stone: 12 }, effect: { storageBonus: 300 }, effectLabel: "倉庫容量 +300" },
+                 ],
                  maxCount: 1,
-                 desc: "倉庫容量 +90（最多 1 座生效）" },
+                 desc: "Lv1 倉庫容量 +90（最多 1 座生效）" },
   chickenCoop: { id: "chickenCoop", name: "雞舍", emoji: "🐔", unlockLevel: 3,
-                 cost: { coins: 140, wood: 4 }, effect: { unlockAnimal: ["chicken"], capacity: 3 },
+                 levels: [
+                   { cost: { coins: 140, wood: 4 }, effect: { unlockAnimal: ["chicken"], capacity: 3 }, effectLabel: "可住 3 隻雞" },
+                   { cost: { coins: 320, wood: 7 }, effect: { unlockAnimal: ["chicken"], capacity: 4 }, effectLabel: "可住 4 隻雞" },
+                   { cost: { coins: 820, wood: 12 }, effect: { unlockAnimal: ["chicken"], capacity: 5 }, effectLabel: "可住 5 隻雞" },
+                 ],
                  maxCount: 2,
-                 desc: "解鎖雞，生產雞蛋（每座最多 3 隻；全場最多 2 座）" },
+                 desc: "解鎖雞，生產雞蛋（Lv1 每座 3 隻；全場最多 2 座）" },
   barn:        { id: "barn", name: "畜舍", emoji: "🛖", unlockLevel: 5,
-                 cost: { coins: 420, wood: 10, stone: 4 }, effect: { unlockAnimal: ["cow", "sheep"], capacity: 4 },
+                 levels: [
+                   { cost: { coins: 420, wood: 10, stone: 4 }, effect: { unlockAnimal: ["cow", "sheep"], capacity: 4 }, effectLabel: "可住 4 隻牛羊" },
+                   { cost: { coins: 760, wood: 14, stone: 6 }, effect: { unlockAnimal: ["cow", "sheep"], capacity: 5 }, effectLabel: "可住 5 隻牛羊" },
+                   { cost: { coins: 1800, wood: 22, stone: 10 }, effect: { unlockAnimal: ["cow", "sheep"], capacity: 6 }, effectLabel: "可住 6 隻牛羊" },
+                 ],
                  maxCount: 2,
-                 desc: "解鎖牛與羊（每座最多 4 隻；全場最多 2 座）" },
+                 desc: "解鎖牛與羊（Lv1 每座 4 隻；全場最多 2 座）" },
   beeBox:      { id: "beeBox", name: "蜂箱", emoji: "🐝", unlockLevel: 6,
-                 cost: { coins: 320, wood: 6 }, effect: { unlockAnimal: ["bee"], capacity: 2, growthAura: 0.92 },
+                 levels: [
+                   { cost: { coins: 320, wood: 6 }, effect: { unlockAnimal: ["bee"], capacity: 2, growthAura: 0.92 }, effectLabel: "可住 2 群蜂・成長 ×0.92" },
+                   { cost: { coins: 680, wood: 10, compost: 4 }, effect: { unlockAnimal: ["bee"], capacity: 3, growthAura: 0.88 }, effectLabel: "可住 3 群蜂・成長 ×0.88" },
+                   { cost: { coins: 1540, wood: 18, compost: 8 }, effect: { unlockAnimal: ["bee"], capacity: 4, growthAura: 0.84 }, effectLabel: "可住 4 群蜂・成長 ×0.84" },
+                 ],
                  maxCount: 1,
-                 desc: "產蜂蜜 + 作物成長 ×0.92（最多 1 座生效）" },
+                 desc: "Lv1 產蜂蜜 + 作物成長 ×0.92（最多 1 座生效）" },
   duckPen:     { id: "duckPen", name: "鴨舍", emoji: "🦆", unlockLevel: 6,
-                 cost: { coins: 380, wood: 8, stone: 2 }, effect: { unlockAnimal: ["duck"], capacity: 3 },
+                 levels: [
+                   { cost: { coins: 380, wood: 8, stone: 2 }, effect: { unlockAnimal: ["duck"], capacity: 3 }, effectLabel: "可住 3 隻鴨" },
+                   { cost: { coins: 720, wood: 12, stone: 4 }, effect: { unlockAnimal: ["duck"], capacity: 4 }, effectLabel: "可住 4 隻鴨" },
+                   { cost: { coins: 1580, wood: 20, stone: 8 }, effect: { unlockAnimal: ["duck"], capacity: 5 }, effectLabel: "可住 5 隻鴨" },
+                 ],
                  maxCount: 1,
-                 desc: "解鎖鴨，生產鴨蛋（每座最多 3 隻；全場最多 1 座）" },
+                 desc: "解鎖鴨，生產鴨蛋（Lv1 每座 3 隻；全場最多 1 座）" },
   memory_garden: { id: "memory_garden", name: "祖母花圃", emoji: "🏵️", unlockLevel: 4,
-                 cost: { wood: 6, compost: 4 }, effect: { orderXpBonus: 0.05, mailFlavor: true },
+                 levels: [
+                   { cost: { wood: 6, compost: 4 }, effect: { orderXpBonus: 0.05, mailFlavor: true }, effectLabel: "訂單 XP +5%" },
+                   { cost: { coins: 240, wood: 10, compost: 7 }, effect: { orderXpBonus: 0.08, mailFlavor: true }, effectLabel: "訂單 XP +8%" },
+                   { cost: { coins: 720, wood: 18, compost: 12 }, effect: { orderXpBonus: 0.12, mailFlavor: true }, effectLabel: "訂單 XP +12%" },
+                 ],
                  maxCount: 1,
-                 desc: "訂單 XP +5%，並解鎖一封花圃短箋（最多 1 座；不影響售價或成長）" },
+                 desc: "Lv1 訂單 XP +5%，並解鎖一封花圃短箋（最多 1 座）" },
   greenhouse:  { id: "greenhouse", name: "溫室", emoji: "🏡", unlockLevel: 8,
-                 cost: { coins: 760, wood: 10, stone: 6 }, effect: { growthAura: 0.88 },
+                 levels: [
+                   { cost: { coins: 760, wood: 10, stone: 6 }, effect: { growthAura: 0.88 }, effectLabel: "作物成長時間 ×0.88" },
+                   { cost: { coins: 1500, wood: 18, stone: 10 }, effect: { growthAura: 0.82 }, effectLabel: "作物成長時間 ×0.82" },
+                   { cost: { coins: 3400, wood: 28, stone: 18 }, effect: { growthAura: 0.76 }, effectLabel: "作物成長時間 ×0.76" },
+                 ],
                  maxCount: 1,
-                 desc: "全年控溫，作物成長時間 ×0.88（最多 1 座生效）" },
+                 desc: "Lv1 全年控溫，作物成長時間 ×0.88（最多 1 座生效）" },
   festival_stall: { id: "festival_stall", name: "豐年祭小攤", emoji: "🎪", unlockLevel: 7,
-                 cost: { coins: 620, wood: 8, stone: 4 }, effect: { seasonalSellBonus: 0.15 },
+                 levels: [
+                   { cost: { coins: 620, wood: 8, stone: 4 }, effect: { seasonalSellBonus: 0.15 }, effectLabel: "當季作物直售 +15%" },
+                   { cost: { coins: 1300, wood: 14, stone: 7 }, effect: { seasonalSellBonus: 0.24 }, effectLabel: "當季作物直售 +24%" },
+                   { cost: { coins: 3000, wood: 24, stone: 12 }, effect: { seasonalSellBonus: 0.35 }, effectLabel: "當季作物直售 +35%" },
+                 ],
                  maxCount: 1,
-                 desc: "當季作物直售額外 +15%（最多 1 座生效）" },
+                 desc: "Lv1 當季作物直售額外 +15%（最多 1 座生效）" },
 };
+// 舊有建造、動物解鎖與靜態稽核仍讀 def.cost / def.effect；由 levels[0] 衍生，
+// 避免保留兩份可能漂移的 Lv1 真值。
+for (const def of Object.values(BUILDINGS)) {
+  def.cost = def.levels[0].cost;
+  def.effect = def.levels[0].effect;
+}
 const BUILDING_ORDER = ["compostHeap", "silo", "chickenCoop", "barn", "memory_garden", "beeBox", "duckPen", "festival_stall", "greenhouse"];
 
 // ===== MVP2：動物（蓋家 → 計時生產 → 收集 → 入訂單/賣出；可餵食加速）=====

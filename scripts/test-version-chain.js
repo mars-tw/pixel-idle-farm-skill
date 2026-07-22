@@ -1,4 +1,4 @@
-// R73 版本鏈守門：package appVersion、index runtime VERSION、UI fallback、SW cache version，
+// R74 版本鏈守門：package appVersion、index runtime VERSION、UI fallback、SW cache version，
 // 以及 index.html / manifest.webmanifest 的所有 ?v= 參數必須一致；
 // 除 SHA-8 內容定址資產（assets/generated/r68/ 豁免）外，必須等於 sw.js 的 CACHE_VERSION。
 // 動機：R69 曾發生 manifest icons 停留舊版的漂移（安裝圖示與 SW 預快取走不同 URL）。

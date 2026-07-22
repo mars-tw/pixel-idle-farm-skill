@@ -74,7 +74,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r73-20260720-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r74-20260722-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -902,6 +902,77 @@
   }
 
   // ---------- 升級 ----------
+  function buildingInstanceName(building) {
+    const def = window.BUILDINGS[building.type];
+    const same = (state.buildings || []).filter((b) => b.type === building.type);
+    const index = same.findIndex((b) => b.id === building.id);
+    return (def ? def.name : building.type) + (same.length > 1 ? " #" + (index + 1) : "");
+  }
+  function buildingResourceAmount(key) {
+    return key === "coins" ? state.coins : ((state.materials && state.materials[key]) || 0);
+  }
+  function buildingCostChipsHtml(cost) {
+    return Object.entries(cost || {}).map(([key, need]) => {
+      const have = buildingResourceAmount(key);
+      const icon = key === "coins" ? "🪙" : ((window.MATERIALS[key] && window.MATERIALS[key].emoji) || key);
+      return `<span class="cost-chip ${have >= need ? "" : "miss"}" title="持有 ${fmtNum(have)}">${icon} ${fmtNum(need)}</span>`;
+    }).join("");
+  }
+  function buildingUpgradeCardHtml(building, context) {
+    const def = window.BUILDINGS[building.type];
+    if (!def) return "";
+    const level = G.buildingLevel(building);
+    const max = G.buildingMaxLevel(building.type);
+    const current = G.buildingLevelData(building) || {};
+    const next = G.nextBuildingUpgrade(state, building.id);
+    const affordable = !!next && G.canAffordCost(state, next.cost);
+    const steps = Array.from({ length: max }, (_, idx) => `<i class="${idx < level ? "on" : ""}"></i>`).join("");
+    return `<section class="building-upgrade-card ${context ? "context" : ""} ${next ? "" : "maxed"}" data-building-upgrade-card="${escapeHtml(building.id)}">
+      <span class="bu-icon" aria-hidden="true">${def.emoji}</span>
+      <div class="bu-main">
+        <div class="bu-title">${escapeHtml(buildingInstanceName(building))} <span class="bu-level">Lv ${level}/${max}</span>
+          ${next ? `<span class="afford-badge ${affordable ? "" : "miss"}">${affordable ? "可負擔" : "資源不足"}</span>` : ""}
+        </div>
+        <span class="bu-meter" aria-label="建物等級 ${level} / ${max}">${steps}</span>
+        <div class="bu-effect"><b>目前</b> ${escapeHtml(current.effectLabel || def.desc || "")}</div>
+        <div class="bu-effect bu-next">${next ? `<b>下一級</b> ${escapeHtml(next.effectLabel || "效果提升")}` : "✓ 已達最高效果"}</div>
+      </div>
+      ${next
+        ? `<button type="button" class="btn buy small building-upgrade-btn" data-building-id="${escapeHtml(building.id)}" aria-label="升級${escapeHtml(buildingInstanceName(building))}到 Lv ${next.level}" ${affordable ? "" : "disabled"}>升到 Lv ${next.level}</button>`
+        : `<span class="u-maxed">✓ 滿級</span>`}
+      ${next ? `<div class="bu-costs"><span class="bu-cost-label">升級成本</span>${buildingCostChipsHtml(next.cost)}</div>` : ""}
+    </section>`;
+  }
+  function performBuildingUpgrade(buildingId, anchorEl) {
+    const r = G.upgradeBuilding(state, buildingId);
+    if (r.ok) {
+      const def = window.BUILDINGS[r.building.type];
+      levelUpFx(anchorEl); playSound("level");
+      spawnVfx(r.building.tileId, "quality_sparkle", { scale: 1.15, sheet: "care_vfx" });
+      toast(def.emoji + " " + def.name + " 升到 Lv " + r.level + "・" + (r.current.effectLabel || "效果提升"));
+      afterChange(true);
+      renderTileContext();
+      updateMap(now());
+    } else if (r.reason === "cost") {
+      toast("升級資源不足");
+      renderUpgrades(); renderTileContext();
+    } else if (r.reason === "maxed") toast("這棟建物已滿級");
+  }
+  function bindBuildingUpgradeButtons(root) {
+    (root || document).querySelectorAll(".building-upgrade-btn").forEach((btn) => {
+      btn.onclick = () => performBuildingUpgrade(btn.dataset.buildingId, btn.closest(".building-upgrade-card"));
+    });
+  }
+  function renderBuildingUpgrades() {
+    const box = $("buildingUpgrades"); if (!box) return;
+    // 最近放置的建物優先，讓玩家蓋完後進升級分頁立刻看見剛才那一棟；同時維持既有建物相對順序。
+    const buildings = (state.buildings || []).filter((b) => window.BUILDINGS[b.type]).map((b, index) => ({ b, index }))
+      .sort((a, b) => ((b.b.builtAt || 0) - (a.b.builtAt || 0)) || a.index - b.index).map((entry) => entry.b);
+    box.innerHTML = buildings.length
+      ? buildings.map((b) => buildingUpgradeCardHtml(b, false)).join("")
+      : `<div class="building-upgrade-empty">在草地放置建物後，這裡會出現它的等級與升級路線。</div>`;
+    bindBuildingUpgradeButtons(box);
+  }
   function renderUpgrades() {
     const box = $("upgrades"); box.innerHTML = "";
     const upgradeKeys = window.UPGRADE_ORDER.slice().sort((a, b) => {
@@ -941,6 +1012,7 @@
       box.appendChild(el);
     });
     appendListMore(box, "upgrades", upgradeKeys.length, visibleUpgrades.length, renderUpgrades);
+    renderBuildingUpgrades();
   }
 
   // ---------- 故事 / 任務（地圖驅動：state.story 任務鏈）----------
@@ -1011,6 +1083,7 @@
     });
   }
   // R72（D-1 收成→升級回饋閉環）：升級分頁徽章＝目前買得起的升級數。
+  // R74：同一徽章也納入逐棟建物升級，維持「看到數字就有可負擔動作」的既有語言。
   // 手機抽片預設收合看不到升級清單，靠徽章把「收成賺到錢→該升級了」的時機帶到常駐頁籤欄。
   function updateUpgradesBadge() {
     const badge = $("upgradesBadge");
@@ -1020,6 +1093,10 @@
       (window.UPGRADE_ORDER || []).forEach((key) => {
         const next = G.nextUpgrade(state, key);
         if (next && state.coins >= next.cost) n++;
+      });
+      (state.buildings || []).forEach((building) => {
+        const next = G.nextBuildingUpgrade(state, building.id);
+        if (next && G.canAffordCost(state, next.cost)) n++;
       });
     } catch (e) { n = 0; }
     badge.textContent = n > 0 ? String(n) : "";
@@ -2947,11 +3024,24 @@
           if (tile && tile.structureId) useStructure(tile);
           hideObjectBubble();
         }
+        if (action === "upgrade") {
+          const tile = G.getTileById(state, bld.tileId);
+          if (tile) {
+            selectedTileId = tile.id;
+            state.interaction.selectedTileId = tile.id;
+            const panel = document.querySelector(".side-panel");
+            if (panel) panel.classList.remove("panes-collapsed");
+            switchTab("tile");
+            renderTileContext();
+          }
+          hideObjectBubble();
+        }
       };
       box.appendChild(btn);
     };
-    const isHome = def.effect && def.effect.unlockAnimal;
+    const isHome = G.buildingEffect(bld).unlockAnimal;
     add(isHome ? "collect" : "use", isHome ? "🧺" : "●", isHome ? "收集" : "使用", true);
+    add("upgrade", "⬆", "升級", true);
     box.hidden = false;
     placeSceneOverlay(box, elementViewportPoint(anchorEl, 0.08));
   }
@@ -3624,8 +3714,10 @@
   function renderBuildingContext(box, tile) {
     const b = state.buildings.find((x) => x.id === tile.buildingId);
     const def = window.BUILDINGS[b.type];
-    const isHome = def.effect && def.effect.unlockAnimal;
-    let html = `<div class="tc-title">${def.emoji} ${def.name}</div><div class="tc-desc">${def.desc}</div>`;
+    const effect = G.buildingEffect(b);
+    const isHome = effect.unlockAnimal;
+    let html = `<div class="tc-title">${def.emoji} ${def.name} <span class="bu-level">Lv ${G.buildingLevel(b)}/${G.buildingMaxLevel(b.type)}</span></div><div class="tc-desc">${def.desc}</div>`;
+    html += buildingUpgradeCardHtml(b, true);
     if (isHome) {
       const animals = G.animalsInHome(state, b.id);
       const cap = G.animalCapacity(state, b.id);
@@ -3657,7 +3749,7 @@
       // 買動物：Stage 6.5 起畜舍/雞舍地圖常駐不代表解鎖，仍需等級（ANIMALS[type].unlockLevel）；
       // Stage 7.1 修正：畜舍可養牛「和」羊，逐一列出 unlockAnimal 全部類型，不只 [0]（原本羊在 UI 上永遠買不到）
       if (animals.length < cap) {
-        html += (def.effect.unlockAnimal || []).map((animalType) => {
+        html += (effect.unlockAnimal || []).map((animalType) => {
           const adef = window.ANIMALS[animalType];
           if (state.level >= adef.unlockLevel) {
             return `<button class="btn buy small abuy" data-bid="${b.id}" data-type="${animalType}">＋ 買一隻${adef.name}（🪙${adef.cost}）</button>`;
@@ -3670,6 +3762,7 @@
       html += `</div>`;
     }
     box.innerHTML = html;
+    bindBuildingUpgradeButtons(box);
     box.querySelectorAll(".acol").forEach((btn) => btn.onclick = () => {
       const r = G.collectAnimal(state, btn.dataset.id, now());
       if (r.ok) {

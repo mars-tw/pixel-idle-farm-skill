@@ -11,7 +11,7 @@ const MIME = {
 };
 let failed = 0;
 let reachableControlsChecked = 0;
-const EXPECTED_REACHABLE_CONTROLS = 236; // R73：4 個行動視口各納入設定內 3 條系列連結（224+12）
+const EXPECTED_REACHABLE_CONTROLS = 272; // R74：9 視口各新增 2 張建物卡＋泡泡入口＋磚資訊升級鈕（236+36）
 
 function assert(condition, message) {
   if (condition) console.log("  ✓ " + message);
@@ -177,6 +177,38 @@ async function assertSettingsSeriesLinks(page, tag) {
   }
   await page.locator("#settingsOk").click();
   await page.waitForFunction(() => !document.querySelector(".modal.show"));
+}
+
+async function assertBuildingUpgradeControls(page, tag) {
+  await page.evaluate(() => {
+    const state = window.__farm.state();
+    state.coins = 10000;
+    state.materials = { wood: 100, stone: 100, compost: 100 };
+    window.__farm.refresh();
+  });
+  await page.locator('.side-tab[data-tab="upgrades"]').click();
+  for (const id of ["b_coop", "b_barn"]) {
+    const selector = `#buildingUpgrades .building-upgrade-btn[data-building-id="${id}"]`;
+    const button = page.locator(selector);
+    await button.scrollIntoViewIfNeeded();
+    assertReachable(`${tag} ${id} 建物卡升級鈕`, await controlMetrics(page, selector));
+  }
+  await page.evaluate(() => {
+    const panel = document.querySelector(".side-panel");
+    if (panel) panel.classList.add("panes-collapsed");
+    const coop = document.querySelector('.ob[data-structure-id="coop"]');
+    if (coop) coop.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  await page.waitForFunction(() => {
+    const bubble = document.getElementById("objectBubble");
+    return bubble && !bubble.hidden && bubble.querySelector('[data-action="upgrade"]');
+  });
+  assertReachable(`${tag} 建物泡泡升級入口`, await controlMetrics(page, '#objectBubble [data-action="upgrade"]'));
+  await page.locator('#objectBubble [data-action="upgrade"]').click();
+  await page.waitForFunction(() => document.querySelector('#tileContext .building-upgrade-btn[data-building-id="b_coop"]'));
+  const contextSelector = '#tileContext .building-upgrade-btn[data-building-id="b_coop"]';
+  await page.locator(contextSelector).scrollIntoViewIfNeeded();
+  assertReachable(`${tag} 磚資訊建物升級鈕`, await controlMetrics(page, contextSelector));
 }
 
 async function assertNonModalNoOverlap(page, tag) {
@@ -397,6 +429,7 @@ async function runViewport(browser, base, config) {
       await page.locator("#mapScene").scrollIntoViewIfNeeded();
       await assertTouchActionDock(page, config.name);
     }
+    await assertBuildingUpgradeControls(page, config.name);
     assert(errors.length === 0, `${config.name} 無 pageerror` + (errors.length ? `：${errors.join(" | ")}` : ""));
   } finally {
     await context.close();

@@ -11,8 +11,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r73-20260720-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r73-20260720-1">
+<link rel="manifest" href="manifest.webmanifest?v=r74-20260722-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r74-20260722-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r73-20260720-1";
+  const VERSION = "r74-20260722-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -355,6 +355,39 @@
   .up .u-name .lv { font-size: 11px; color: var(--ink-soft); font-weight: 700; }
   .up .u-desc { font-size: 11px; color: var(--ink-soft); }
   .up .u-maxed { font-size: 12px; font-weight: 800; color: var(--good); }
+  /* R74：單棟建物成長卡。以木作刻度呈現 1→3 級，沿用 R72 頁籤徽章的「可負擔」提示語彙。 */
+  .building-upgrades-head { margin-top: 14px; padding-top: 12px; border-top: 1.5px dashed var(--border-d); }
+  .building-upgrade-list { display: flex; flex-direction: column; gap: 8px; }
+  .building-upgrade-card {
+    display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 8px 9px; align-items: center;
+    padding: 9px; border: 1.5px solid var(--border); border-left: 5px solid #79984c; border-radius: 11px;
+    background: linear-gradient(180deg, #fffaf0, #f3e8cc); box-shadow: inset 0 1px 0 rgba(255,255,255,.76);
+  }
+  .building-upgrade-card.maxed { border-left-color: #c49a4c; }
+  .bu-icon { align-self: start; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px;
+    background: #e6d6aa; border: 1px solid #bfa66b; font-size: 22px; }
+  .bu-main { min-width: 0; }
+  .bu-title { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; font-size: 13px; font-weight: 900; color: #3d2f1c; }
+  .bu-level { color: var(--ink-soft); font-size: 11px; font-weight: 800; }
+  .afford-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 1px 6px; border-radius: 999px;
+    background: #dff2c9; border: 1px solid #93bb67; color: #285b1d; font-size: 10px; font-weight: 950; }
+  .afford-badge.miss { background: #fff0dc; border-color: #d69863; color: #8b3c24; }
+  .bu-meter { display: grid; grid-template-columns: repeat(3, 18px); gap: 3px; margin-top: 5px; }
+  .bu-meter i { display: block; height: 5px; border-radius: 2px; background: #d8cba9; box-shadow: inset 0 1px 1px rgba(70,49,18,.18); }
+  .bu-meter i.on { background: #79984c; }
+  .bu-effect { margin-top: 5px; color: #5f503a; font-size: 11px; line-height: 1.35; }
+  .bu-effect b { color: #3f6f2c; }
+  .bu-next { color: #7a5b22; }
+  .bu-costs { grid-column: 2 / -1; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; min-width: 0; }
+  .bu-cost-label { color: var(--ink-soft); font-size: 10px; font-weight: 850; }
+  .cost-chip { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 6px; border-radius: 7px;
+    border: 1px solid #c9b27a; background: #fff8df; color: #5f4b24; font-size: 11px; font-weight: 850; }
+  .cost-chip.miss { border-color: #d69863; background: #fff0dc; color: #8b3c24; }
+  .building-upgrade-btn { min-width: 84px; min-height: 44px; margin: 0; }
+  .building-upgrade-card .u-maxed { color: var(--good); font-size: 12px; font-weight: 900; }
+  .building-upgrade-card.context { margin-bottom: 9px; }
+  .building-upgrade-empty { padding: 9px; border: 1.5px dashed var(--border); border-radius: 9px;
+    color: var(--ink-soft); font-size: 12px; line-height: 1.45; background: rgba(255,255,255,.44); }
 
   /* ===== 故事 ===== */
   .story-card { background: linear-gradient(180deg, #fffaf0, #f2e7ca); border: 2px solid var(--border);
@@ -1245,6 +1278,8 @@
         <div class="side-pane" data-pane="upgrades">
           <div class="pane-head">農場升級</div>
           <div class="upgrades" id="upgrades"></div>
+          <div class="pane-head building-upgrades-head">已放置建物</div>
+          <div class="building-upgrade-list" id="buildingUpgrades"></div>
         </div>
         <div class="side-pane sel" data-pane="story">
           <div class="pane-head">陽光農場手札</div>
@@ -1333,10 +1368,10 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r73-20260720-1"></script>
-<script src="src/game.js?v=r73-20260720-1"></script>
-<script src="src/state.js?v=r73-20260720-1"></script>
-<script src="src/atlas.js?v=r73-20260720-1"></script>
-<script src="src/ui.js?v=r73-20260720-1"></script>
+<script src="src/config.js?v=r74-20260722-1"></script>
+<script src="src/game.js?v=r74-20260722-1"></script>
+<script src="src/state.js?v=r74-20260722-1"></script>
+<script src="src/atlas.js?v=r74-20260722-1"></script>
+<script src="src/ui.js?v=r74-20260722-1"></script>
 </body>
 </html>
