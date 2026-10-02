@@ -289,6 +289,20 @@
       },
       "frameCount": 48,
       "reusedFrom": "v3"
+    },
+    "world_projects": {
+      "image": "assets/generated/r76/world-projects-96.png",
+      "map": "assets/generated/r76/world-projects-96.json",
+      "meta": {
+        "w": 192,
+        "h": 192,
+        "frameW": 96,
+        "frameH": 96,
+        "cols": 2,
+        "rows": 2
+      },
+      "frameCount": 4,
+      "generatedBy": "process-world-project-art.js"
     }
   }
 }

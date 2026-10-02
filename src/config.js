@@ -529,10 +529,12 @@ function buildV4Layout() {
   // 農土田 4×3 = 12 plots（cols2-5, rows1-3）
   for (let y = 1; y <= 3; y++) for (let x = 2; x <= 5; x++) set(x, y, "S");
   // 步道網（北南主道 col7、西側連田 row4、北橫道 row3、西道 col1、南橫道 row9、東道 col14、中橫道 row6）
-  vline(7, 1, 9); hline(4, 1, 7); hline(3, 7, 14); vline(1, 4, 9);
-  hline(9, 1, 14); vline(14, 3, 9); hline(6, 7, 11);
+  vline(7, 1, 9); hline(4, 4, 7); hline(3, 7, 14);
+  hline(9, 3, 10); hline(6, 7, 11); vline(10, 9, 10);
+  vline(14, 3, 4);
   // 池塘（左下 3×2）+ 旁草地放水井
   for (let y = 10; y <= 11; y++) for (let x = 0; x <= 2; x++) set(x, y, "w");
+  set(0, 9, "w");
   // 障礙（可清/遮擋）
   set(4, 0, "T"); set(13, 0, "T"); set(9, 7, "T");   // 大樹（遮擋）
   set(3, 6, "R"); set(10, 5, "R");                   // 巨石
@@ -552,6 +554,8 @@ const MAP_LAYOUT = buildV4Layout();
 const TERRAIN_CODE = { S: "soil", g: "grass", p: "path", w: "water" };
 const OBSTACLE_CODE = { R: "rock", U: "stump", b: "bush", T: "tree" };
 const PLAYER_START = { x: 7, y: 5 };  // 主道中央，可達田地/站點/建築
+const WORLD_PROJECT_SITES = { fishing_dock: "t2_9", picnic_table: "t10_10", garden: "t6_2" };
+const PICNIC_NPC_SEATS = { mayor: "t8_10", merchant: "t11_10", elder: "t9_11", child: "t12_10" };
 const MOVE_MS = 200;                  // 每格移動 tween 毫秒
 // ===== Stage 5：修橋成本 + 事件點 =====
 const BRIDGE_COST = { wood: 6, stone: 4 };   // 修橋消耗（清樹樁得木材、清石得石頭）
@@ -1031,6 +1035,7 @@ const CONFIG = {
   TOOLS, TOOL_ORDER, MOISTURE_MUL,
   MAP_LAYOUT, TERRAIN_CODE, OBSTACLE_CODE, PLAYER_START, MOVE_MS, FACING_ROW,
   STATIONS, STATION_PLACEMENT,
+  WORLD_PROJECT_SITES, PICNIC_NPC_SEATS,
   MAP_W, MAP_H, TILE_PX, STRUCTURES, QUESTS, FIRST_QUEST,
   EAST_REGION_MIN_X, BRIDGE_COST, EVENTS, PROLOGUE_QUESTS, CHAPTER2_QUESTS, CHAPTER3_QUESTS, CHAPTER4_QUESTS,
   LETTERS, CHAPTER5_LETTERS, TOWNSFOLK_LETTERS,

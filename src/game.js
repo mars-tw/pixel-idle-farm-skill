@@ -826,7 +826,7 @@
     const def = BUILDINGS[type];
     return !!(def && typeof def.maxCount === "number" && def.maxCount > 0 && buildingCount(state, type) >= def.maxCount);
   }
-  function canBuildOn(state, tile) { return !!tile && tile.terrain === "grass" && !tile.object && !tile.buildingId; }
+  function canBuildOn(state, tile) { return !!tile && tile.terrain === "grass" && !tile.object && !tile.buildingId && !tile.adventureSite && !tile.station && !tile.npc && !tile.structureId && !tile.blocked && !tile.event && !tile.forage; }
   function buildBuilding(state, tileId, type, now) {
     now = now || Date.now();
     const def = BUILDINGS[type];
@@ -1369,7 +1369,8 @@
   function canRepairBridge(state) {
     if (!state.flags) return { ok: false, reason: "flags" };
     if (state.flags.bridgeRepaired) return { ok: false, reason: "done" };
-    if (!chapter1Done(state)) return { ok: false, reason: "chapter", need: C.BRIDGE_COST };
+    const riverChapter = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_meal);
+    if (!chapter1Done(state) && !riverChapter) return { ok: false, reason: "chapter", need: C.BRIDGE_COST };
     const status = bridgeMaterialStatus(state);
     for (const k in status.missing) if (status.missing[k] > 0) return { ok: false, reason: "materials", need: status.cost, status };
     return { ok: true, need: C.BRIDGE_COST, status };
@@ -1389,7 +1390,7 @@
   }
   function bridgeMaterialTargetTile(state) {
     if (state.flags && state.flags.bridgeRepaired) return null;
-    if (!chapter1Done(state)) return bridgeTile(state);
+    if (!chapter1Done(state) && !(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_meal)) return bridgeTile(state);
     const status = bridgeMaterialStatus(state);
     for (const k of ["wood", "stone"]) {
       if ((status.missing[k] || 0) <= 0) continue;

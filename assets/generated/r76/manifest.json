@@ -1,0 +1,212 @@
+{
+  "release": "R76",
+  "generator": "Codex built-in image_gen",
+  "softwareAgent": "ChatGPT / gpt-image",
+  "exactModelVersion": "not exposed by the tool or source metadata",
+  "prompts": "assets/generated/r76/prompts.json",
+  "pipeline": {
+    "frameSize": 96,
+    "gutter": 6,
+    "boundsAlphaThreshold": 128,
+    "scaling": "nearest-neighbor, common bounding box per family",
+    "alpha": "binary pixel alpha",
+    "paletteSource": "assets/generated/r68/manifest.json",
+    "palette": [
+      "#251D35",
+      "#352941",
+      "#49364B",
+      "#5B4758",
+      "#344657",
+      "#3F584B",
+      "#4C6C48",
+      "#5D8447",
+      "#72A04B",
+      "#8ABB52",
+      "#A8D263",
+      "#D0E47A",
+      "#483044",
+      "#5A3A42",
+      "#70473F",
+      "#895641",
+      "#A96D47",
+      "#C78A52",
+      "#E0AC65",
+      "#F0D082",
+      "#2F3450",
+      "#34465F",
+      "#355E74",
+      "#397B8B",
+      "#4397A6",
+      "#5DB3BC",
+      "#83CED0",
+      "#B7E5D4",
+      "#522D43",
+      "#71313F",
+      "#93383E",
+      "#B9483F",
+      "#D65E42",
+      "#EB794A",
+      "#F49A56",
+      "#F7C56A",
+      "#5B423C",
+      "#7A5A3B",
+      "#9A783B",
+      "#B9983F",
+      "#D5B747",
+      "#E8D255",
+      "#F5E678",
+      "#FFF0A3",
+      "#423047",
+      "#573750",
+      "#70405C",
+      "#8E4B6C",
+      "#AE5D7D",
+      "#CE7895",
+      "#E9A0AD",
+      "#F5C8BD",
+      "#32303E",
+      "#464754",
+      "#5C5F69",
+      "#777B7E",
+      "#969991",
+      "#B5B5A4",
+      "#D4CFB5",
+      "#EEE3C8",
+      "#FFF4D8",
+      "#385878",
+      "#4D78A0",
+      "#6B9FC1",
+      "#94C6DB",
+      "#C7E7E5"
+    ]
+  },
+  "runtime": {
+    "image": "assets/generated/r76/world-projects-96.png",
+    "map": "assets/generated/r76/world-projects-96.json",
+    "sha256": "78e609f003a19ed73a698e353db3515d8f5ad2246fdf51e815afad8d6caffe9b"
+  },
+  "sources": [
+    {
+      "id": "fishing_dock_broken",
+      "family": "dock",
+      "file": "fishing-dock-broken.png",
+      "sha256": "4703290a6b5974209924cd70da34b045050fb151b34f67e27c50370f05fd0013",
+      "path": "assets/generated/r76/source/fishing-dock-broken.png"
+    },
+    {
+      "id": "fishing_dock_repaired",
+      "family": "dock",
+      "file": "fishing-dock.png",
+      "sha256": "6e3f88ce6c06c160ca3fc2abc3e84d2104410bb61368717778ab92e1f0c41392",
+      "path": "assets/generated/r76/source/fishing-dock.png"
+    },
+    {
+      "id": "picnic_table_broken",
+      "family": "picnic",
+      "file": "picnic-table-broken.png",
+      "sha256": "c5681d9f0ad00b6f25c98ebdcb17b44507109b7959d54b1870f13aa70de1b22d",
+      "path": "assets/generated/r76/source/picnic-table-broken.png"
+    },
+    {
+      "id": "picnic_table_repaired",
+      "family": "picnic",
+      "file": "picnic-table.png",
+      "sha256": "7f5a90c5de1047a291e9e15f3354f45d3ed77217d6bf81765923f0a9758d3954",
+      "path": "assets/generated/r76/source/picnic-table.png"
+    }
+  ],
+  "metrics": {
+    "fishing_dock_broken": {
+      "bbox": [
+        6,
+        8,
+        87,
+        90
+      ],
+      "coveragePixels": 4520,
+      "colourCount": 33,
+      "sourceBbox": {
+        "x0": 329,
+        "y0": 334,
+        "x1": 925,
+        "y1": 932
+      },
+      "familyBbox": {
+        "x0": 329,
+        "y0": 334,
+        "x1": 945,
+        "y1": 932
+      },
+      "sourceScale": 0.13614262560777957
+    },
+    "fishing_dock_repaired": {
+      "bbox": [
+        6,
+        8,
+        90,
+        90
+      ],
+      "coveragePixels": 4831,
+      "colourCount": 42,
+      "sourceBbox": {
+        "x0": 330,
+        "y0": 337,
+        "x1": 945,
+        "y1": 929
+      },
+      "familyBbox": {
+        "x0": 329,
+        "y0": 334,
+        "x1": 945,
+        "y1": 932
+      },
+      "sourceScale": 0.13614262560777957
+    },
+    "picnic_table_broken": {
+      "bbox": [
+        6,
+        44,
+        90,
+        90
+      ],
+      "coveragePixels": 2587,
+      "colourCount": 26,
+      "sourceBbox": {
+        "x0": 96,
+        "y0": 388,
+        "x1": 1156,
+        "y1": 959
+      },
+      "familyBbox": {
+        "x0": 96,
+        "y0": 282,
+        "x1": 1156,
+        "y1": 960
+      },
+      "sourceScale": 0.07917059377945335
+    },
+    "picnic_table_repaired": {
+      "bbox": [
+        6,
+        36,
+        90,
+        90
+      ],
+      "coveragePixels": 2695,
+      "colourCount": 46,
+      "sourceBbox": {
+        "x0": 98,
+        "y0": 282,
+        "x1": 1156,
+        "y1": 960
+      },
+      "familyBbox": {
+        "x0": 96,
+        "y0": 282,
+        "x1": 1156,
+        "y1": 960
+      },
+      "sourceScale": 0.07917059377945335
+    }
+  }
+}

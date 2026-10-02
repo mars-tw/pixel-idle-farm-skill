@@ -69,6 +69,11 @@ function server() {
     manifest.sheets[key] = { image: r.image, map: r.map, meta: m.meta, frameCount: Object.keys(m.frames).length, reusedFrom: "v3" };
     console.log("  ↻ " + key + "（沿用 v3：" + Object.keys(m.frames).length + " frames）");
   }
+  const worldMap = path.join(ROOT, "assets/generated/r76/world-projects-96.json");
+  if (fs.existsSync(worldMap)) {
+    const m = JSON.parse(fs.readFileSync(worldMap, "utf8"));
+    manifest.sheets.world_projects = { image: m.image, map: "assets/generated/r76/world-projects-96.json", meta: m.meta, frameCount: Object.keys(m.frames).length, reusedFrom: "r76" };
+  }
   fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
   console.log("✅ v4 atlas 處理完成 → assets/generated/v4/");
 })();

@@ -1,0 +1,53 @@
+{
+  "image": "assets/generated/r76/world-projects-96.png",
+  "meta": {
+    "w": 192,
+    "h": 192,
+    "frameW": 96,
+    "frameH": 96,
+    "cols": 2,
+    "rows": 2
+  },
+  "frames": {
+    "fishing_dock_broken": {
+      "x": 0,
+      "y": 0,
+      "w": 96,
+      "h": 96,
+      "anchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "fishing_dock_repaired": {
+      "x": 96,
+      "y": 0,
+      "w": 96,
+      "h": 96,
+      "anchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "picnic_table_broken": {
+      "x": 0,
+      "y": 96,
+      "w": 96,
+      "h": 96,
+      "anchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "picnic_table_repaired": {
+      "x": 96,
+      "y": 96,
+      "w": 96,
+      "h": 96,
+      "anchor": [
+        0.5,
+        0.9375
+      ]
+    }
+  }
+}

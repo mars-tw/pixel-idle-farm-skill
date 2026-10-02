@@ -30,6 +30,12 @@ jobs:
         run: node scripts/test-economy.js
       - name: MVP2 系統測試（地圖/動物/建築/產品訂單）
         run: node scripts/test-systems.js
+      - name: R75 復興主線、料理、釣魚、重複委託與存檔
+        run: node scripts/test-adventure.js
+      - name: R76 世界場址與野餐居民存檔回歸
+        run: node scripts/test-world-migration.js
+      - name: 檢查執行時與快取版本一致
+        run: node scripts/test-version-chain.js
       - name: UI 煙霧測試（mock DOM）
         run: node scripts/test-ui-smoke.js
       - name: 驗證 v3 atlas（props/vfx 沿用來源：尺寸/必要 frame/錨點）
@@ -45,7 +51,7 @@ jobs:
           for f in src/*.js scripts/*.js; do node -c "$f" && echo "✓ $f"; done
 
   e2e:
-    name: Stage 4–11 RPG 場景 E2E（真瀏覽器 + atlas 像素驗證）
+    name: R75 世界重製 E2E（真實玩法 + RWD + atlas）
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -58,10 +64,10 @@ jobs:
           npx playwright install --with-deps chromium
       - name: 驗證 v4 atlas 像素品質（空白幀/作物觸邊，需 chromium）
         run: node scripts/validate-v4-atlas.js
-      - name: 跑 Stage 4–11 RPG v4 E2E（大世界/camera/動作/故事鏈/探索/NPC對話/性別/動物照護/天氣視覺化/NPC委託/農場圖鑑/視覺/RWD/桌機+手機）
-        run: node scripts/test-rpg-v4-e2e.js
-      - name: R46 RWD 9 視口矩陣守門（app-shell 零頁捲/互動元素零出界/水平溢出<=2px）
-        run: node scripts/test-rwd-matrix.js
+      - name: R76 專用物件透明度、色盤、留白、錨點與來源雜湊
+        run: node scripts/test-world-project-art.js
+      - name: 世界主畫面、四視口、真 UI 第一章、後段互動與防重複結算
+        run: npm run test:e2e
 
   deploy:
     name: 部署 GitHub Pages
@@ -74,10 +80,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: actions/configure-pages@v5
-      - name: 上傳網站（repo 根目錄含 index.html / src / assets）
+      - name: 準備網站檔案（僅 runtime 與授權文件）
+        run: |
+          mkdir -p _site
+          cp index.html offline.html manifest.webmanifest sw.js LICENSE CREDITS.md _site/
+          cp -R src assets _site/
+      - name: 上傳網站
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "_site"
       - name: 部署
         id: deployment
         uses: actions/deploy-pages@v4

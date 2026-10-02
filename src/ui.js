@@ -74,7 +74,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r74-20260722-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r76-20261002-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -559,6 +559,7 @@
     more.title = "全部種子";
     more.innerHTML = `<span class="se">${seedDrawerOpen ? "×" : "+"}</span><span class="sn">全部</span>`;
     more.onclick = () => {
+      if (window.FarmWorld) { window.FarmWorld.openSeedBag(); return; }
       seedDrawerOpen = !seedDrawerOpen;
       renderSeeds();
       if (seedDrawerOpen) {
@@ -592,6 +593,7 @@
     document.querySelectorAll(".side-pane").forEach((p) => p.classList.toggle("sel", p.dataset.pane === name));
     if (name === "story") renderStory();
     if (name === "journal") renderJournal();
+    if (window.FarmWorld) window.FarmWorld.renderPanels();
   }
   function setupSideTabs() {
     const mobileTabsQuery = (typeof window.matchMedia === "function")
@@ -602,6 +604,13 @@
       if (!b.getAttribute || !b.getAttribute("aria-label")) b.setAttribute && b.setAttribute("aria-label", "切換到" + (b.textContent || "").trim() + "分頁");
       b.onclick = () => {
         if (hasOpenModal()) return;
+        if (window.FarmWorld && panel) {
+          const same = b.classList.contains("sel") && panel.classList.contains("world-panel-open");
+          panel.classList.toggle("world-panel-open", !same);
+          panel.classList.remove("panes-collapsed");
+          switchTab(b.dataset.tab);
+          return;
+        }
         // R69：手機頁籤為固定底欄——點已選中的頁籤＝收合/展開抽片，保持地圖為主畫面
         if (mobileTabsQuery.matches && panel && b.classList.contains("sel")) {
           panel.classList.toggle("panes-collapsed");
@@ -615,6 +624,7 @@
     if (mobileTabsQuery.matches && panel) panel.classList.add("panes-collapsed");
     // R70：點抽片外（地圖等處）收合抽片；捕獲相位吞掉該次點擊，避免收合同時觸發地圖動作
     if (typeof document.addEventListener === "function") document.addEventListener("pointerdown", (ev) => {
+      if (window.FarmWorld) return;
       if (!mobileTabsQuery.matches || !panel || panel.classList.contains("panes-collapsed")) return;
       if (hasOpenModal()) return;
       if (ev.target && ev.target.closest && (ev.target.closest(".side-panel") || ev.target.closest(".side-tabs") || ev.target.closest(".toolbar"))) return;
@@ -681,8 +691,10 @@
     const bar = $("toolBar"); if (!bar) return; bar.innerHTML = "";
     window.TOOL_ORDER.forEach((id) => {
       const t = window.TOOLS[id];
-      const el = document.createElement("div");
+      const el = document.createElement("button");
       el.className = "tool" + (currentTool() === id ? " sel" : "");
+      el.type = "button";
+      if (el.setAttribute) el.setAttribute("aria-label", t.name);
       el.title = t.desc;
       el.innerHTML = `<span class="ti">${uiIcon(TOOL_UI_ICONS[id])}</span><span class="tn">${t.name}</span>`;
       el.onclick = () => setTool(id);
@@ -1323,6 +1335,7 @@
   }
   function renderQuestDock() {
     const box = $("questDock"); if (!box) return;
+    if (window.FarmWorld && window.FarmWorld.renderObjective(state)) return;
     if (G.syncStoryProgress) G.syncStoryProgress(state);
     const cur = G.currentQuest(state);
     const targetId = G.questMarkerTile ? G.questMarkerTile(state, now()) : null;
@@ -1358,7 +1371,7 @@
     state.settings.soundVolume = clamp01(state.settings.soundVolume, 0.55);
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(state.settings.textSize)) state.settings.textSize = "medium";
-    if (!["fit", "natural"].includes(state.settings.mapViewMode)) state.settings.mapViewMode = "fit";
+    if (!["fit", "natural"].includes(state.settings.mapViewMode)) state.settings.mapViewMode = "natural";
     if (state.lastOfflineSummary === undefined) state.lastOfflineSummary = null;
     return state.settings;
   }
@@ -1811,6 +1824,7 @@
       offlineReviewHtml(state.lastOfflineSummary),
       settingsSeriesLinksHtml(),
       saveManagerHtml(),
+      window.FarmWorld ? `<div class="setting-row"><div><div class="setting-title">農場主角</div><div class="setting-desc">${state.gender === "m" ? "Kai" : "Miri"}</div></div><button class="btn ghost" id="settingGenderButton">切換主角</button></div><button class="btn ghost" id="settingResetButton">重置農場存檔</button>` : "",
     ].join("");
     box.querySelectorAll("[data-setting-key]").forEach((btn) => {
       btn.onclick = (ev) => {
@@ -1871,6 +1885,8 @@
       };
     });
     const exportBtn = $("exportSaveBtn"); if (exportBtn) exportBtn.onclick = (ev) => { ev.stopPropagation(); exportSaveCode(); };
+    const genderBtn = $("settingGenderButton"); if (genderBtn) genderBtn.onclick = () => { $("genderToggle").click(); renderSettingsPanel(); };
+    const resetBtn = $("settingResetButton"); if (resetBtn) resetBtn.onclick = () => { $("resetBtn").click(); renderSettingsPanel(); };
     const importBtn = $("importSaveBtn"); if (importBtn) importBtn.onclick = (ev) => { ev.stopPropagation(); importSaveCode(); };
     const restoreBtn = $("restoreBackupBtn"); if (restoreBtn) restoreBtn.onclick = (ev) => { ev.stopPropagation(); restoreBackupSave(); };
     const pwaBtn = $("pwaCheckBtn"); if (pwaBtn) pwaBtn.onclick = (ev) => { ev.stopPropagation(); handlePwaUpdateButton(); };
@@ -2211,7 +2227,8 @@
     if (!scene || !state || !state.map) return false;
     const mode = mapViewMode();
     const fitTile = fitTileForScene(scene);
-    const nextTile = mode === "natural" ? BASE_TILE : fitTile;
+    const naturalTile = window.FarmWorld ? Math.ceil(Math.max(64, scene.clientHeight / state.map.height, scene.clientWidth / 18) / 8) * 8 : BASE_TILE;
+    const nextTile = mode === "natural" ? naturalTile : fitTile;
     const sig = [mode, nextTile, scene.clientWidth, scene.clientHeight].join("|");
     const changed = force || nextTile !== TILE || sig !== lastMapFitSig;
     TILE = nextTile;
@@ -2505,6 +2522,7 @@
       renderAnimals(t);
       renderNpcs(t);
       renderMarkers(t);
+      if (window.FarmWorld) window.FarmWorld.paintWorld(state, TILE, t);
     }
     positionPlayer(true);
   }
@@ -2599,11 +2617,11 @@
   // 任務標記：目前任務目標磚上方浮動箭頭
   function renderMarkers(t) {
     const mEl = $("markerLayer"); if (!mEl) return; mEl.innerHTML = "";
-    const targetId = G.questMarkerTile(state, t); if (!targetId) return;
+    const targetId = window.FarmWorld ? window.FarmWorld.markerTile(state) : G.questMarkerTile(state, t); if (!targetId) return;
     const tile = G.getTileById(state, targetId); if (!tile) return;
     const m = document.createElement("div"); m.className = "qmarker";
     m.dataset.audit = "quest-marker";
-    m.dataset.quest = (state.story && state.story.questId) || "";
+    m.dataset.quest = window.FarmWorld ? ($("questDock").dataset.quest || "") : ((state.story && state.story.questId) || "");
     m.dataset.tileId = targetId;
     m.innerHTML = '<div class="qdot"></div><div class="qpin"></div>';
     m.style.left = pxv((tile.x + 0.5) * TILE); m.style.top = pxv(tile.y * TILE);
@@ -2684,7 +2702,7 @@
     if (!tile) tile = G.getTileById(state, state.player.tileId);
     if (!tile) return;
     const px0 = (tile.x + 0.5) * TILE, py0 = (tile.y + 0.5) * TILE;
-    if (mapViewMode() === "natural") {
+    if (mapViewMode() === "natural" && !window.FarmWorld) {
       const maxX = Math.max(0, worldW - vw), maxY = Math.max(0, worldH - vh);
       const left = Math.min(maxX, Math.max(0, px0 - vw / 2));
       const top = Math.min(maxY, Math.max(0, py0 - vh / 2));
@@ -2697,8 +2715,14 @@
       return;
     }
     let camX = vw / 2 - px0, camY = vh / 2 - py0;
-    camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
-    camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
+    if (window.FarmWorld && mapViewMode() === "natural") {
+      const fringe = TILE * 4;
+      camX = Math.min(fringe, Math.max(vw - worldW - fringe, camX));
+      camY = Math.min(fringe, Math.max(vh - worldH - fringe, camY));
+    } else {
+      camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
+      camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
+    }
     state.camera.x = camX; state.camera.y = camY;
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
@@ -2706,6 +2730,8 @@
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
+    window.__farmJourney = null;
+    player.oneShot = false;
     clearCameraFocus();
     if (!path || path.length === 0) { if (onArrive) onArrive(); else setPlayerIdle(); return; }
     state.player.action = "walk";
@@ -3078,9 +3104,15 @@
     box.hidden = false;
     placeSceneOverlay(box, elementViewportPoint(anchorEl, 0.1));
   }
-  function careAnimalFromBubble(animalId, action) {
+  function careAnimalFromBubble(animalId, action, arrived) {
     const a = state.animals.find((x) => x.id === animalId); if (!a) return;
     const tileId = homeTileIdForAnimal(a);
+    if (window.FarmWorld && !arrived) {
+      hideObjectBubble();
+      const animation = action === "water" ? "water" : action === "feed" ? "sow" : "collect";
+      if (!window.__farm.travelAndDo(tileId, animation, () => careAnimalFromBubble(animalId, action, true))) toast("先走完這段路，再照顧動物。");
+      return;
+    }
     let r = null;
     if (action === "collect") r = G.collectAnimal(state, animalId, now());
     else if (action === "feed") r = G.feedAnimal(state, animalId, now());
@@ -3123,8 +3155,9 @@
     selectedTileId = tileId; state.interaction.selectedTileId = tileId;
     const tile = G.getTileById(state, tileId);
     const tool = currentTool();
+    if (tile && tile.adventureSite && window.FarmWorld) { window.FarmWorld.visitSite(tile.adventureSite); return; }
     renderTileContext();
-    switchTab("tile"); // 點磚自動顯示磚資訊分頁
+    if (!window.FarmWorld) switchTab("tile");
     renderSceneActionsForSelection();
     if (tool === "inspect") { updateMap(now()); inspectTile(tile); return; }
 
@@ -3200,11 +3233,13 @@
       }
     } else if (s.interaction === "shop") {
       playAction("collect");
+      if (window.FarmWorld) { window.FarmWorld.openMarket(); return; }
       const r = G.sellAll(state, t);
       if (r.coins > 0) { spawnVfx(state.player.tileId, "product_pop"); const c = tileCenter(state.player.tileId); flyCoinsToHud(c.x, c.y, 6); playSound("coin"); toast("🪙 市集賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
       else toast("倉庫沒有可賣的東西");
     } else { // home（農舍）
       playAction("use");
+      if (window.FarmWorld) { window.FarmWorld.openKitchen(); return; }
       const cap = G.storageCapacity(state), used = G.storageUsed(state);
       toast("🏠 農舍・Lv " + state.level + "・🪙 " + fmtNum(state.coins) + "・📦 " + used + "/" + cap);
     }
@@ -3225,7 +3260,7 @@
       state.player.facing = G.facingTo(stand, tile);
       const chk = G.canRepairBridge(state);
       if (!chk.ok) {
-        if (chk.reason === "chapter") toast("⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
+        if (chk.reason === "chapter") toast(window.FarmWorld ? "先把第一餐帶給班伯，再來修橋。" : "⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
         else if (chk.reason === "materials") toast("🪵 修橋材料不足，跟著任務 Dock 清大樹與巨石");
         else toast("目前無法修橋");
         spawnRing(tile.id, false); renderTileContext(); renderQuestDock(); return;
@@ -3281,7 +3316,7 @@
     spawnRing(tile.id, true);
     walkPath(plan.path, () => {
       const cur = G.currentQuest(state);
-      if (cur && cur.id === "discover_east_forage" && !state.flags.eastForageDiscovered) {
+      if (((cur && cur.id === "discover_east_forage") || window.FarmWorld) && !state.flags.eastForageDiscovered) {
         const r = G.discoverForage(state, tile.forage, now());
         if (r.ok) {
           playAction("use", state.player.facing);
@@ -3328,6 +3363,9 @@
         if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
       }
       const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
+      if (window.FarmWorld && d) d.line = window.FarmWorld.dialogue(tile.npc, d.line);
+      if (window.AdventureAPI) window.AdventureAPI.record(state, { type: "talk", npcId: tile.npc }, now());
+      if (window.FarmWorld && tile.npc === "mayor") G.advanceStory(state, "read_sign");
       npcLineIdx[tile.npc] = (npcLineIdx[tile.npc] || 0) + 1;
       activeTalk = { npcId: tile.npc, until: now() + 2600 };
       if (!state.story.dialogueSeen) state.story.dialogueSeen = {};
@@ -3361,6 +3399,7 @@
     const t = now();
     if (st.effect === "orders") {
       switchTab("orders"); renderOrders(); toast("📜 " + st.name + "：查看市集訂單");
+      if (window.FarmWorld) window.FarmWorld.openPanel("orders");
     } else if (st.effect === "sell") {
       const r = G.sellAll(state, t);
       if (r.coins > 0) { const sid = stationTileOf("storage"); spawnVfx(sid, "product_pop"); const c = tileCenter(sid); flyCoinsToHud(c.x, c.y, 6); playSound("coin"); toast("🪙 賣出 " + r.qty + " 個 → +" + fmtNum(r.coins) + " 金"); afterChange(true); renderOrders(); }
@@ -3471,31 +3510,39 @@
     walkPath(plan.path, () => {
       const stand = G.getTileById(state, plan.standId);
       state.player.facing = G.facingTo(stand, target);
-      resolveAction(action, tileId);
+      if (!window.FarmWorld) { resolveAction(action, tileId); return; }
+      const token = {};
+      window.__farmJourney = token;
+      const animation = { plant: "sow", harvest: "harvest", water: "water", clear: "hoe", build: "hoe", collect: "collect" }[action];
+      playAction(animation || "collect", state.player.facing);
+      setTimeout(() => {
+        if (window.__farmJourney !== token) return;
+        resolveAction(action, tileId, true);
+      }, 430);
     });
   }
-  function resolveAction(action, tileId) {
+  function resolveAction(action, tileId, animationStarted) {
     const tile = G.getTileById(state, tileId);
     const t = now();
     const face = state.player.facing;
     if (action === "plant") {
       const r = G.plant(state, tile.plotIndex, selectedSeed, t);
-      if (r.ok) { playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); afterChange(true); }
+      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); afterChange(true); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       const r = G.harvest(state, tile.plotIndex, t);
-      if (r.ok) { playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
+      if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); playSound("coin");
         toast("🧺 收成 " + r.added + " " + crop.name); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
-      if (r.ok) { playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
+      if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
-      if (r.ok) { playAction("hoe", face); playSound("ui"); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
+      if (r.ok) { if (!animationStarted) playAction("hoe", face); playSound("ui"); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
       else if (r.reason === "no_coins") { spawnRing(tileId, false); toast("🪙 金幣不足"); }
     } else if (action === "build") {
-      playAction("hoe", face); spawnVfx(tileId, "soil_dust"); renderTileContext(); // 顯示建築選單（玩家已走到旁邊）
+      if (!animationStarted) playAction("hoe", face); spawnVfx(tileId, "soil_dust"); renderTileContext();
       toast("🏗️ 選一個建築蓋在這裡");
     } else if (action === "collect") {
       const b = state.buildings.find((x) => x.id === tile.buildingId);
@@ -3888,6 +3935,7 @@
     const dir = dirMap[e.key]; if (!dir) return;
     if (isTextEntryTarget(e.target) || hasOpenModal()) return;
     e.preventDefault();
+    if (moveTimer) return;
     const dd = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[dir];
     state.player.facing = dir;
     const nt = G.getTileXY(state, state.player.x + dd[0], state.player.y + dd[1]);
@@ -3928,6 +3976,7 @@
   function syncSceneActionBarInset() {
     const bar = $("sceneActionBar"), scene = $("mapScene"), mc = $("mobileControls");
     if (!bar || !scene || !bar.style) return;
+    if (window.FarmWorld) { bar.style.bottom = ""; return; }
     const gcs = (typeof window.getComputedStyle === "function") ? window.getComputedStyle : null;
     const doc = document.documentElement;
     const mobileOn = !!(doc && doc.classList && doc.classList.contains && doc.classList.contains("mobile-controls-enabled"));
@@ -4056,6 +4105,7 @@
     if (rerenderPanels) { renderUpgrades(); updateMap(t); }
     updateMailBadges();
     updateUpgradesBadge();
+    if (window.FarmWorld) window.FarmWorld.refresh(state);
     scheduleSave();
   }
 
@@ -4196,7 +4246,8 @@
       renderSmartAssistant();
       lastAssistantRenderAt = t;
     }
-    tickPlayer(t);      // 玩家走路/動作/待機動畫
+    if (typeof window.requestAnimationFrame !== "function") tickPlayer(t);
+    if (window.FarmWorld) window.FarmWorld.tick(state, t);
   }
 
   function setupVisibilityLifecycle() {
@@ -4249,6 +4300,7 @@
     // 先載入存檔，state 必須在任何 render/onload 前就緒
     state = window.load() || window.defaultState(now());
     ensureSettings();
+    if (window.FarmWorld) window.FarmWorld.prepare(state);
     applyTextSize();
     applyPerformanceMode();
     setupAudioUnlock();
@@ -4291,6 +4343,16 @@
     document.addEventListener("keydown", onKeyMove);
     document.addEventListener("keydown", (ev) => {
       if (ev.key === "Escape" && closeOpenModal()) ev.preventDefault();
+      if (ev.key === "Tab") {
+        const modal = document.querySelector(".modal.show");
+        if (!modal) return;
+        const controls = Array.from(modal.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'))
+          .filter((node) => node.getBoundingClientRect().width > 0 && node.getBoundingClientRect().height > 0);
+        if (!controls.length) return;
+        const index = controls.indexOf(document.activeElement);
+        const next = index < 0 ? (ev.shiftKey ? controls.length - 1 : 0) : (index + (ev.shiftKey ? -1 : 1) + controls.length) % controls.length;
+        ev.preventDefault(); controls[next].focus();
+      }
     });
     const lettersClose = $("lettersClose");
     if (lettersClose) lettersClose.onclick = () => closeModal("lettersModal");
@@ -4300,6 +4362,7 @@
 
     // 首次玩顯示引導；否則顯示離線摘要
     function showInitialModal() {
+      if (window.FarmWorld) { window.FarmWorld.welcome(state, summary); return; }
       let shownModal = false;
       if (!state.stats || state.stats.plantCount === 0) {
         if ((state.coins === window.GAME.startCoins) && Object.keys(state.stats.harvested).length === 0) {
@@ -4311,6 +4374,14 @@
 
     window.save(state);
     setInterval(loop, window.GAME.tickMs);
+    if (typeof window.requestAnimationFrame === "function") {
+      const animate = () => {
+        if (!document.hidden) tickPlayer(now());
+        else player.last = 0;
+        window.requestAnimationFrame(animate);
+      };
+      window.requestAnimationFrame(animate);
+    }
     setInterval(() => { if (!document.hidden) window.save(state); }, window.GAME.autosaveMs);
     window.addEventListener("beforeunload", () => { state.lastSeenAt = now(); window.save(state); });
 
@@ -4348,11 +4419,39 @@
         return targetId;
       },
       setTool: (t) => setTool(t),
+      selectSeed: (id) => { if (G.isCropUnlocked(state, id)) chooseSeed(id); },
       moving: () => !!moveTimer,
       vfxSpawns: () => vfxSpawnCount,
       activeTab: () => { const b = document.querySelector(".side-tab.sel"); return b ? b.dataset.tab : null; },
       stationTile: (type) => stationTileOf(type),
       applyPromoScene,
+      travelAndDo: (tileId, action, effect) => {
+        if (hasOpenModal() || moveTimer) return false;
+        const tile = G.getTileById(state, tileId);
+        if (!tile) return false;
+        const plan = G.pathToAdjacent(state, state.player.tileId, tileId);
+        if (!plan) return false;
+        selectedTileId = null; state.interaction.selectedTileId = null;
+        hideSceneActions(); hideBuildWheel(); hideObjectBubble();
+        const token = {};
+        walkPath(plan.path, () => {
+          window.__farmJourney = token;
+          state.player.facing = G.facingTo(G.getTileById(state, state.player.tileId), tile);
+          playAction(action || "collect");
+          spawnRing(tileId, true);
+          setTimeout(() => {
+            if (window.__farmJourney !== token || state.player.action === "walk") return;
+            effect(); afterChange(true);
+          }, 430);
+        });
+        return true;
+      },
+      toast,
+      selectTab: switchTab,
+      openModal,
+      closeModal,
+      paintMap: () => { buildStaticObjects(); updateMap(now()); },
+      careAnimal: careAnimalFromBubble,
     };
     let loadingFinished = Promise.resolve(true);
     if (typeof window.__finishFarmLoading === "function") {
@@ -4421,10 +4520,14 @@
     $("resetBtn").onclick = () => {
       if (confirm("確定重置存檔？所有進度會消失。")) {
         window.reset(); state = window.defaultState(now());
+        if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
+        window.__farmJourney = null; player.oneShot = false;
+        if (window.FarmWorld) window.FarmWorld.prepare(state);
         selectedSeed = "wheat"; selectedTileId = null; buildFarm(); buildMap();
         renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); updateFarm(now()); renderTileContext();
         G.refreshOrders(state, now()); renderOrders();
         window.save(state); toast("🗑️ 已重置");
+        if (window.FarmWorld) window.FarmWorld.refresh(state);
       }
     };
   }

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "r74-20260722-1";
+const CACHE_VERSION = "r76-20261002-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -15,6 +15,11 @@ const CORE_ASSETS = [
   versioned("./src/state.js"),
   versioned("./src/atlas.js"),
   versioned("./src/ui.js"),
+  versioned("./src/world.css"),
+  versioned("./src/adventure.js"),
+  versioned("./src/world-ui.js"),
+  versioned("./assets/generated/r76/world-projects-96.png"),
+  versioned("./assets/generated/r76/world-projects-96.json"),
   versioned("./assets/generated/crop-growth.png"),
   versioned("./assets/generated/terrain-tileset.png"),
   versioned("./assets/generated/ui-icons.png"),

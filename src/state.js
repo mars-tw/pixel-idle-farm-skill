@@ -137,6 +137,61 @@
   function tileById(map, id) {
     return (map.tiles || []).find((t) => t.id === id) || null;
   }
+  function freeWorldTile(tile) {
+    return !!(tile && ["grass", "path"].includes(tile.terrain) && tile.plotIndex == null
+      && !tile.object && !tile.station && !tile.structureId && !tile.buildingId && !tile.npc
+      && !tile.bridge && !tile.event && !tile.forage && !tile.adventureSite && !tile.region && !tile.blocked);
+  }
+  function nearestWorldTile(map, preferred, allowed) {
+    return (map.tiles || []).filter(allowed).sort((a, b) => {
+      const distance = (tile) => Math.abs(tile.x - preferred.x) + Math.abs(tile.y - preferred.y);
+      return distance(a) - distance(b) || a.y - b.y || a.x - b.x;
+    })[0] || null;
+  }
+  function relocatePicnicNpcs(map, adventure, player, rawBuildings) {
+    if (!(adventure && adventure.claimed && adventure.claimed.c3_harvest_picnic)) return;
+    const occupied = new Set((rawBuildings || []).filter((b) => b && C.BUILDINGS[b.type]).map((b) => b.tileId));
+    Object.values(adventure.siteTiles || C.WORLD_PROJECT_SITES || {}).forEach((id) => occupied.add(id));
+    for (const tile of map.tiles) { if (tile.npc) { tile.npc = null; tile.npcFacing = null; } }
+    const saved = adventure.partyTiles || {};
+    const positions = {};
+    for (const [id, defaultId] of Object.entries(C.PICNIC_NPC_SEATS || {})) {
+      const preferred = tileById(map, saved[id]) || tileById(map, defaultId);
+      if (!preferred) continue;
+      const allowed = (tile) => freeWorldTile(tile) && !occupied.has(tile.id) && (!player || tile.id !== player.tileId);
+      const tile = allowed(preferred) ? preferred : nearestWorldTile(map, preferred, allowed);
+      if (tile) { tile.npc = id; tile.npcFacing = "down"; positions[id] = tile.id; }
+    }
+    adventure.partyTiles = positions;
+  }
+  function preserveBuiltGround(map, rawBuildings) {
+    for (const b of (rawBuildings || [])) {
+      if (!b || !C.BUILDINGS[b.type] || structureForBuilding(b)) continue;
+      const tile = tileById(map, b.tileId);
+      if (!tile || tile.plotIndex != null || tile.object || tile.station || tile.structureId || tile.npc || tile.bridge || tile.event || tile.forage) continue;
+      // Roads and shoreline edits must not erase an existing custom building.
+      tile.terrain = "grass";
+    }
+  }
+  function configureWorld(state) {
+    if (!state || !state.map || !state.adventure || typeof state.adventure !== "object" || Array.isArray(state.adventure)) return state;
+    const map = state.map, adventure = state.adventure;
+    for (const tile of map.tiles) {
+      if (!tile.adventureSite) continue;
+      delete tile.adventureSite;
+      if (!tile.structureId) tile.blocked = false;
+    }
+    const saved = adventure.siteTiles || {}, positions = {};
+    for (const [id, defaultId] of Object.entries(C.WORLD_PROJECT_SITES || {})) {
+      const preferred = tileById(map, saved[id]) || tileById(map, defaultId);
+      if (!preferred) continue;
+      const tile = freeWorldTile(preferred) ? preferred : nearestWorldTile(map, preferred, freeWorldTile);
+      if (tile) { tile.adventureSite = id; tile.blocked = true; positions[id] = tile.id; }
+    }
+    adventure.siteTiles = positions;
+    relocatePicnicNpcs(map, adventure, state.player, state.buildings);
+    return state;
+  }
   function structureForBuilding(b) {
     if (!b || !b.type) return null;
     const expectedById = b.id && b.id.slice(0, 2) === "b_" ? b.id.slice(2) : "";
@@ -235,6 +290,8 @@
   function rebuildMapPreservingEntities(state, now) {
     const map = makeMap();
     const seeded = seedStructures(map, now);
+    relocatePicnicNpcs(map, state.adventure, state.player, state.buildings);
+    preserveBuiltGround(map, state.buildings);
     clearBuildingIds(map);
     const buildings = [];
     const usedBuildingIds = new Set();
@@ -298,7 +355,7 @@
         });
       }
     }
-    const map = { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex };
+    const map = { width: layout[0].length, height: layout.length, tiles, soilCount: plotIndex, landscapeVersion: 75 };
     applyRegions(map);
     applyStructures(map);
     applyStations(map);
@@ -428,7 +485,18 @@
     // 地圖：尺寸相符但 tiles 不完整/不合法也視為髒存檔，重建地圖綁定資料。
     if (healthyMap(state.map)) {
       merged.map = state.map;
+      if (merged.map.landscapeVersion !== 75) {
+        for (const tile of merged.map.tiles) {
+          if (tile.plotIndex != null || tile.object || tile.buildingId || tile.structureId || tile.station || tile.npc || tile.forage || tile.event || tile.bridge) continue;
+          const code = C.MAP_LAYOUT[tile.y][tile.x];
+          const terrain = C.TERRAIN_CODE[code];
+          if (["grass", "path", "water"].includes(terrain)) tile.terrain = terrain;
+        }
+        merged.map.landscapeVersion = 75;
+      }
       refreshDerivedMapFields(merged.map);
+      relocatePicnicNpcs(merged.map, merged.adventure, state.player, state.buildings);
+      preserveBuiltGround(merged.map, state.buildings);
       merged.buildings = reconcileBuildingsOnMap(merged.map, state.buildings, def.buildings);
       merged.animals = sanitizeAnimals(Array.isArray(state.animals) ? state.animals : def.animals, def.animals, merged.buildings);
       merged.player = sanitizePlayer(def.player, state.player, merged.map, merged.flags);
@@ -465,6 +533,8 @@
     merged.collections = Object.assign({}, state.collections);
     merged.gender = state.gender === "m" ? "m" : "f"; // Stage 6：主角性別
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
+    configureWorld(merged);
+    merged.player = sanitizePlayer(def.player, merged.player, merged.map, merged.flags);
     merged.version = C.GAME.version;
     return merged;
   }
@@ -504,7 +574,7 @@
     try { localStorage.removeItem(C.GAME.saveKey); } catch (e) {}
   }
 
-  const StateAPI = { defaultState, migrate, load, save, safeSave, reset, makePlots };
+  const StateAPI = { defaultState, migrate, load, save, safeSave, reset, makePlots, configureWorld };
   if (typeof window !== "undefined") Object.assign(window, StateAPI);
   if (typeof module !== "undefined" && module.exports) module.exports = StateAPI;
 })(typeof window !== "undefined" ? window : globalThis);

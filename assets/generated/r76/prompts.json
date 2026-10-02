@@ -1,0 +1,29 @@
+{
+  "generator": "Codex built-in image_gen",
+  "transparent_background": true,
+  "exact_model_version": "Not exposed; source softwareAgent identifies ChatGPT / gpt-image only.",
+  "assets": [
+    {
+      "id": "picnic_table_repaired",
+      "source": "source/picnic-table.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single isolated original pixel-art game sprite for a sunny 2D top-down farming RPG. Create ONLY one repaired rustic picnic table with two low benches, an understated blue-and-ivory tablecloth, a little basket with two wheat buns, and a small flower jar. Three-quarter OVERHEAD orthographic camera matching a conventional top-down pixel farming RPG, NOT a diamond isometric camera. The front faces the bottom of the image. Clear readable silhouette, chunky carefully placed pixels, dark warm one-pixel logical outlines, warm natural timber with blue cloth accents, limited approximately 24-color palette, consistent soft sunlight from upper left. It should feel like a polished 96x96 native game sprite enlarged by exact nearest-neighbor pixels. Draw all table legs and benches COMPLETELY inside the canvas with ample empty padding on every side. ONE object, centered, modest detail that remains legible at game scale. Actual transparent alpha background. No ground patch, no grass, no baked-in shadow, no checkerboard pattern, no UI, no labels, no text, no characters, no logos, no watermark. Original design. This must be usable as a clean standalone game prop, not a scene or a sprite sheet."
+    },
+    {
+      "id": "fishing_dock_repaired",
+      "source": "source/fishing-dock.png",
+      "prompt": "Use case: stylized-concept. Asset type: ONE original pixel-art fishing dock sprite for a sunny 2D top-down farming RPG. A SMALL repaired timber fishing platform with five horizontal warm wooden planks, two short posts at the BACK corners, a simple fishing rod leaning beside a small blue tackle bucket on the right, a tiny coil of rope. The platform projects slightly toward the bottom of the image, with the top planks clearly visible. Orthographic three-quarter OVERHEAD camera with front toward bottom, conventional top-down RPG projection, NOT isometric diamond. Crisp chunky pixel clusters and a dark warm one-pixel logical outline, approximately 24 colors, subtle upper-left sunlight. Match the scale and warmth of a handcrafted 96x96 native pixel game sprite enlarged by nearest-neighbor. Prioritize clear silhouette at small game scale and keep the fishing rod relatively short so it does not dominate. ENTIRE platform, posts, rod and bucket fully contained with at least 15 percent EMPTY padding on all four sides. Exactly one object centered. Truly transparent alpha background, NO water, NO ground patch, NO grass, NO baked-in cast shadow, NO text, NO border, NO UI, NO labels, NO people, NO logos, NO watermark. This is a clean standalone usable game prop, not a concept scene, not a sprite sheet."
+    },
+    {
+      "id": "picnic_table_broken",
+      "source": "source/picnic-table-broken.png",
+      "reference": "source/picnic-table.png",
+      "prompt": "Edit this picnic-table game sprite into its unrepaired abandoned state. Preserve the EXACT overhead camera, canvas size, object position, table and bench silhouette, footprint, pixel-art style, overall proportions, upper-left light, and bottom feet baseline. Change only its condition: remove the blue tablecloth, bread basket and flower jar completely; make two tabletop planks visibly split and misaligned, one bench slat broken, dull aged gray-brown wood, a very small tuft of green moss on one corner. It must read as the SAME table before restoration, not a replacement design. Retain dark pixel outlines, crisp pixel clusters and a restricted palette. Keep all legs and benches intact inside the original bounds. Actual transparent alpha background; absolutely no added ground, checkerboard, shadow, labels, text, characters, watermark, border or new objects."
+    },
+    {
+      "id": "fishing_dock_broken",
+      "source": "source/fishing-dock-broken.png",
+      "reference": "source/fishing-dock.png",
+      "prompt": "Edit this repaired fishing-platform pixel RPG sprite into its broken abandoned state. Keep EXACTLY the same overhead orthographic camera, canvas size, platform placement, footprint, two back posts, bottom feet baseline, chunky pixel style and original dimensions. Change condition only: remove the fishing rod, blue bucket and rope coil; make two central horizontal platform planks cracked with a visible missing plank gap, lightly gray weathered wood, loosen the rope bindings and add a tiny tuft of moss near one back post. It must clearly be the SAME fishing dock before restoration, with the same main silhouette. Keep all platform supports and posts inside the original object bounds. Restrained colors, dark pixel outline, upper-left lighting. Preserve genuine transparent alpha, with no water, ground, grass patch, cast shadow, background checkerboard, UI, text, labels, characters, logo, border or watermark. A single isolated usable game sprite."
+    }
+  ]
+}

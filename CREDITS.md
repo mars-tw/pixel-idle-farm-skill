@@ -1,8 +1,10 @@
 # Credits
 
-本文件盤點《晨光農場》R67（`r67-20260717-1`）在 repo 內使用的素材、字型、圖示與第三方開發工具。最後檢查日期：2026-07-17。
+本文件盤點《阿軒割割陽光農場開源遊戲世界》的素材、字型、圖示與第三方開發工具。最後更新日期：2026-10-02（R76）。
 
 ## 視覺素材與 AI 揭露
+
+- R76 專用釣台與野餐桌共四張損壞／修復來源圖，由 Codex 內建 `image_gen` 製作，保留原始透明 PNG 與完整提示詞。來源 metadata 揭露 `ChatGPT / gpt-image`，精確版本未揭露，不把本輪標成 `gpt-image-2` API 生成。runtime 經 `scripts/process-world-project-art.js` 對齊共同 bbox、96px frame、腳底錨點與既有 66 色盤；來源、處理契約和 SHA-256 見 `assets/generated/r76/manifest.json`。
 
 - `assets/generated/` 下的角色、作物、動物、建築、場景物件與 VFX，主要由 OpenAI 圖像生成工具協助製作。repo 內的 `art-config*.json`、素材 manifest 與生成腳本將主要模型記為 `gpt-image-2`；R59 的 Miri／Kai 動作圖集與 `crops2` 作物圖集，以及 R60 的鴨子、鴨蛋品質與 `crops3`／`crops4` 作物圖集，均由內建 `imagegen` 工作流程重繪。
 - R66 正式 UI 使用 `gpt-image-2` 經 Codex 內建 `image_gen` 製作 512px 概念母版：15 個作物、6 個工具、5 個分頁、6 個系統圖示，以及 3 張智慧農務助手狀態皮膚。金色南瓜沿用已通過 Wave 0 校準的同模型母版；其餘 34 張為 R66 生成。完整 prompt、來源／中間層／runtime SHA-256、模型與 C2PA 偵測結果記於 `assets/generated/r66/manifest.json`。

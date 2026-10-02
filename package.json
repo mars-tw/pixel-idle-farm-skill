@@ -1,11 +1,15 @@
 {
   "name": "pixel-idle-farm",
   "version": "0.1.12",
-  "appVersion": "r74-20260722-1",
+  "appVersion": "r76-20261002-1",
   "description": "純原生網頁像素放置農場遊戲 — Claude Code Skill。零依賴 HTML/CSS/JS，localStorage 存檔，時間差離線收益。",
   "type": "commonjs",
   "scripts": {
-    "test": "node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-r74-building-upgrades.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js",
+    "test": "node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-adventure.js && node scripts/test-world-migration.js && node scripts/test-r74-building-upgrades.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js",
+    "test:world": "node scripts/test-adventure.js && node scripts/test-world-rework-e2e.js",
+    "art:world": "node scripts/process-world-project-art.js",
+    "test:world-art": "node scripts/test-world-project-art.js",
+    "test:world-migration": "node scripts/test-world-migration.js",
     "test:economy": "node scripts/test-economy.js",
     "test:systems": "node scripts/test-systems.js",
     "test:ui": "node scripts/test-ui-smoke.js",

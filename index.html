@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta property="og:title" content="晨光農場 SUNRISE FARM">
-<meta property="og:description" content="在溫暖晨光中耕作、照顧動物並累積離線收益，打造四季流轉的療癒像素農場。">
+<meta property="og:title" content="阿軒割割陽光農場開源遊戲世界">
+<meta property="og:description" content="接下祖母的農場，種田、做料理、釣魚、修復河畔，把收穫帶去和鎮民分享。">
 <meta property="og:url" content="https://mars-tw.github.io/pixel-idle-farm-skill/">
 <meta property="og:image" content="https://mars-tw.github.io/pixel-idle-farm-skill/assets/cover.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r74-20260722-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r74-20260722-1">
+<link rel="manifest" href="manifest.webmanifest?v=r76-20261002-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r76-20261002-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r74-20260722-1";
+  const VERSION = "r76-20261002-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -1149,12 +1149,13 @@
     html.mobile-controls-enabled .scene-action-bar { bottom: 172px; }
   }
 </style>
+<link rel="stylesheet" href="src/world.css?v=r76-20261002-1">
 </head>
 <body class="r68-loading">
-<div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="晨光農場載入中">
+<div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="陽光農場載入中">
   <div class="startup-loading-art" id="startupLoadingArt" aria-hidden="true"></div>
   <div class="startup-loading-copy">
-    <strong>晨光農場</strong>
+    <strong>陽光農場</strong>
     <span>四季晨光正在甦醒</span>
     <div class="startup-loading-progress" aria-hidden="true"></div>
   </div>
@@ -1206,7 +1207,7 @@
 </script>
 <div class="wrap">
   <header>
-    <div class="title"><span class="ui-icon i-crop-sunflower" aria-hidden="true"></span>阿軒割割陽光農場開源遊戲世界 <small>Open Farm World</small></div>
+    <div class="title" title="阿軒割割陽光農場開源遊戲世界">陽光農場 <small>阿軒割割・開源遊戲世界</small></div>
     <div class="res-bar" id="resBar"><!-- 資源列由 JS 渲染 --></div>
   </header>
 
@@ -1230,6 +1231,8 @@
           <div id="weatherLayer" data-audit="weather-layer" data-weather="clear" aria-hidden="true"></div>
           <div id="touchActionPreview" class="touch-action-preview" data-audit="touch-action-preview" aria-live="polite" hidden></div>
           <div id="smartAssistant" class="smart-assistant" data-audit="smart-assistant"></div>
+          <div id="worldLocation" class="world-location" aria-live="polite"></div>
+          <button id="worldMinimap" class="world-minimap" aria-label="農場地圖，點選位置前往" title="農場地圖，點選位置前往"><canvas width="220" height="120" aria-hidden="true"></canvas></button>
           <div id="sceneActionBar" class="scene-action-bar" data-audit="scene-action-bar" aria-live="polite" hidden></div>
           <div id="buildWheel" class="build-wheel" data-audit="build-wheel" hidden></div>
           <div id="objectBubble" class="object-bubble" data-audit="object-bubble" hidden></div>
@@ -1269,6 +1272,7 @@
       </div>
       <div class="side-body">
         <div class="side-pane" data-pane="tile">
+          <div class="pane-head">目標資訊</div>
           <div class="tile-context" id="tileContext"><div class="tc-empty">點地圖磚查看資訊與動作</div></div>
         </div>
         <div class="side-pane" data-pane="orders">
@@ -1283,7 +1287,8 @@
         </div>
         <div class="side-pane sel" data-pane="story">
           <div class="pane-head">陽光農場手札</div>
-          <div id="storyPanel"></div>
+          <div id="adventurePanel"></div>
+          <details class="legacy-story"><summary>農務紀錄與祖母信箋</summary><div id="storyPanel"></div></details>
         </div>
         <div class="side-pane" data-pane="journal">
           <div class="pane-head">農場圖鑑</div>
@@ -1368,10 +1373,12 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r74-20260722-1"></script>
-<script src="src/game.js?v=r74-20260722-1"></script>
-<script src="src/state.js?v=r74-20260722-1"></script>
-<script src="src/atlas.js?v=r74-20260722-1"></script>
-<script src="src/ui.js?v=r74-20260722-1"></script>
+<script src="src/config.js?v=r76-20261002-1"></script>
+<script src="src/game.js?v=r76-20261002-1"></script>
+<script src="src/adventure.js?v=r76-20261002-1"></script>
+<script src="src/state.js?v=r76-20261002-1"></script>
+<script src="src/atlas.js?v=r76-20261002-1"></script>
+<script src="src/world-ui.js?v=r76-20261002-1"></script>
+<script src="src/ui.js?v=r76-20261002-1"></script>
 </body>
 </html>

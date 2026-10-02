@@ -6,12 +6,10 @@ const { spawnSync } = require("child_process");
 const ROOT = path.resolve(__dirname, "..");
 const REQUIRED_BYTES = 2 * 1024 * 1024 * 1024;
 const SCRIPTS = [
-  "scripts/test-rpg-v4-e2e.js",
-  "scripts/test-rwd-matrix.js",
-  "scripts/test-controls-reachability.js",
-  "scripts/test-r68-browser.js",
-  "scripts/test-r73-playtest.js",
-  "scripts/test-r74-building-upgrades-e2e.js",
+  "scripts/test-world-project-art.js",
+  // Historical scripts assert the replaced R74 sidebar geometry and opening modal.
+  // R75 checks the actual new world, real chapter-one play and late-system fixtures.
+  "scripts/test-world-rework-e2e.js",
 ];
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
