@@ -11,8 +11,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#5a9e3f">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r76-20261002-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r76-20261002-1">
+<link rel="manifest" href="manifest.webmanifest?v=r77-20261002-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r77-20261002-1">
 <title>阿軒割割陽光農場開源遊戲世界</title>
 <script>
 (() => {
@@ -35,7 +35,7 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r76-20261002-1";
+  const VERSION = "r77-20261002-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
   window.FARM_CACHE_VERSION = VERSION;
@@ -168,18 +168,42 @@
   header { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
   .title { font-size: clamp(15px, 3.4vw, 18px); font-weight: 900; color: #2c4a1e; text-shadow: 0 1px 0 #fff; letter-spacing: 0; line-height: 1.15; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; max-width: min(100%, 620px); }
   .title small { font-size: 11px; color: #4d6b3a; font-weight: 600; opacity: .8; }
-  /* R66：32 格 native atlas；所有 runtime icon 都維持 32px 像素網格。 */
-  .ui-icon { display: inline-block; flex: 0 0 32px; width: 32px; height: 32px;
-    background-image: url("assets/generated/r66/ui-icons-32.png"); background-size: 256px 128px;
-    background-repeat: no-repeat; image-rendering: pixelated; vertical-align: middle; }
-  .i-crop-wheat{background-position:0 0}.i-crop-carrot{background-position:-32px 0}.i-crop-tomato{background-position:-64px 0}.i-crop-strawberry{background-position:-96px 0}
-  .i-crop-corn{background-position:-128px 0}.i-crop-pumpkin{background-position:-160px 0}.i-crop-radish{background-position:-192px 0}.i-crop-bell-pepper{background-position:-224px 0}
-  .i-crop-potato{background-position:0 -32px}.i-crop-sunflower{background-position:-32px -32px}.i-crop-grapes{background-position:-64px -32px}.i-crop-melon{background-position:-96px -32px}
-  .i-crop-pea{background-position:-128px -32px}.i-crop-sweet-potato{background-position:-160px -32px}.i-crop-winter-kale{background-position:-192px -32px}.i-tool-plant{background-position:-224px -32px}
-  .i-tool-harvest{background-position:0 -64px}.i-tool-water{background-position:-32px -64px}.i-tool-clear{background-position:-64px -64px}.i-tool-build{background-position:-96px -64px}
-  .i-tool-inspect{background-position:-128px -64px}.i-tab-tile{background-position:-160px -64px}.i-tab-orders{background-position:-192px -64px}.i-tab-upgrades{background-position:-224px -64px}
-  .i-tab-story{background-position:0 -96px}.i-tab-journal{background-position:-32px -96px}.i-system-coin{background-position:-64px -96px}.i-system-xp{background-position:-96px -96px}
-  .i-system-storage{background-position:-128px -96px}.i-system-settings{background-position:-160px -96px}.i-system-help{background-position:-192px -96px}.i-system-reset{background-position:-224px -96px}
+  /* Individual alpha PNGs scale with the icon box, without atlas clipping. */
+  .ui-icon { display: inline-block; flex: 0 0 auto; width: 32px; height: 32px;
+    background-size: contain; background-position: center; background-repeat: no-repeat;
+    image-rendering: pixelated; vertical-align: middle; }
+  .i-crop-wheat{background-image:url("assets/generated/r66/native/crop_wheat-32.png?v=r77-20261002-1")}
+  .i-crop-carrot{background-image:url("assets/generated/r66/native/crop_carrot-32.png?v=r77-20261002-1")}
+  .i-crop-tomato{background-image:url("assets/generated/r66/native/crop_tomato-32.png?v=r77-20261002-1")}
+  .i-crop-strawberry{background-image:url("assets/generated/r66/native/crop_strawberry-32.png?v=r77-20261002-1")}
+  .i-crop-corn{background-image:url("assets/generated/r66/native/crop_corn-32.png?v=r77-20261002-1")}
+  .i-crop-pumpkin{background-image:url("assets/generated/r66/native/crop_pumpkin-32.png?v=r77-20261002-1")}
+  .i-crop-radish{background-image:url("assets/generated/r66/native/crop_radish-32.png?v=r77-20261002-1")}
+  .i-crop-bell-pepper{background-image:url("assets/generated/r66/native/crop_bell_pepper-32.png?v=r77-20261002-1")}
+  .i-crop-potato{background-image:url("assets/generated/r66/native/crop_potato-32.png?v=r77-20261002-1")}
+  .i-crop-sunflower{background-image:url("assets/generated/r66/native/crop_sunflower-32.png?v=r77-20261002-1")}
+  .i-crop-grapes{background-image:url("assets/generated/r66/native/crop_grapes-32.png?v=r77-20261002-1")}
+  .i-crop-melon{background-image:url("assets/generated/r66/native/crop_melon-32.png?v=r77-20261002-1")}
+  .i-crop-pea{background-image:url("assets/generated/r66/native/crop_pea-32.png?v=r77-20261002-1")}
+  .i-crop-sweet-potato{background-image:url("assets/generated/r66/native/crop_sweet_potato-32.png?v=r77-20261002-1")}
+  .i-crop-winter-kale{background-image:url("assets/generated/r66/native/crop_winter_kale-32.png?v=r77-20261002-1")}
+  .i-tool-plant{background-image:url("assets/generated/r66/native/tool_plant-32.png?v=r77-20261002-1")}
+  .i-tool-harvest{background-image:url("assets/generated/r66/native/tool_harvest-32.png?v=r77-20261002-1")}
+  .i-tool-water{background-image:url("assets/generated/r66/native/tool_water-32.png?v=r77-20261002-1")}
+  .i-tool-clear{background-image:url("assets/generated/r66/native/tool_clear-32.png?v=r77-20261002-1")}
+  .i-tool-build{background-image:url("assets/generated/r66/native/tool_build-32.png?v=r77-20261002-1")}
+  .i-tool-inspect{background-image:url("assets/generated/r66/native/tool_inspect-32.png?v=r77-20261002-1")}
+  .i-tab-tile{background-image:url("assets/generated/r66/native/tab_tile-32.png?v=r77-20261002-1")}
+  .i-tab-orders{background-image:url("assets/generated/r66/native/tab_orders-32.png?v=r77-20261002-1")}
+  .i-tab-upgrades{background-image:url("assets/generated/r66/native/tab_upgrades-32.png?v=r77-20261002-1")}
+  .i-tab-story{background-image:url("assets/generated/r66/native/tab_story-32.png?v=r77-20261002-1")}
+  .i-tab-journal{background-image:url("assets/generated/r66/native/tab_journal-32.png?v=r77-20261002-1")}
+  .i-system-coin{background-image:url("assets/generated/r66/native/system_coin-32.png?v=r77-20261002-1")}
+  .i-system-xp{background-image:url("assets/generated/r66/native/system_xp-32.png?v=r77-20261002-1")}
+  .i-system-storage{background-image:url("assets/generated/r66/native/system_storage-32.png?v=r77-20261002-1")}
+  .i-system-settings{background-image:url("assets/generated/r66/native/system_settings-32.png?v=r77-20261002-1")}
+  .i-system-help{background-image:url("assets/generated/r66/native/system_help-32.png?v=r77-20261002-1")}
+  .i-system-reset{background-image:url("assets/generated/r66/native/system_reset-32.png?v=r77-20261002-1")}
   .btn .ui-icon, .side-tab .ui-icon, .pane-head .ui-icon, h2 .ui-icon { margin: -4px 2px -4px -2px; }
   .res-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: stretch; }
   .res {
@@ -786,7 +810,7 @@
   .ob-bar { position: absolute; height: 4px; background: rgba(0,0,0,.42); border-radius: 3px; overflow: hidden; z-index: 8000; }
   .ob-bar > i { display: block; height: 100%; background: linear-gradient(90deg, #b6e36a, #6ec04a); }
   .ob-dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ffe27a;
-    box-shadow: 0 0 8px #ffd23c; animation: readyPulse 1s infinite; z-index: 8000; }
+    box-shadow: 0 0 8px #ffd23c; animation: readyPulse 1s infinite; z-index: 8000; pointer-events: none; }
   /* Stage 10：NPC 委託可交付時用綠色點區分於「未讀對話」的金色點 */
   .ob-dot-ready { background: #7bdb7b; box-shadow: 0 0 8px #4bc94b; }
   @keyframes readyPulse { 0%,100%{ transform: scale(1); opacity: 1;} 50%{ transform: scale(1.3); opacity: .7;} }
@@ -800,6 +824,8 @@
     box-shadow: 0 0 10px rgba(255,200,60,.9); margin: 0 auto 1px; }
   .qmarker .qpin { width: 0; height: 0; margin: 0 auto; border-left: 7px solid transparent; border-right: 7px solid transparent;
     border-top: 10px solid #ffcf3a; filter: drop-shadow(0 2px 1px rgba(0,0,0,.35)); }
+  .qmarker-ready .qdot { background: #7bdb7b; box-shadow: 0 0 8px #4bc94b; }
+  .qmarker-ready .qpin { border-top-color: #7bdb7b; }
   @keyframes qbob { 0%,100%{ transform: translate(-50%,-100%);} 50%{ transform: translate(-50%,-118%);} }
   /* Stage 6：NPC 對話泡泡（地圖上，名 + 台詞）*/
   .npc-bubble { position: absolute; transform: translate(-50%, -100%); z-index: 9200; max-width: 190px;
@@ -1149,7 +1175,7 @@
     html.mobile-controls-enabled .scene-action-bar { bottom: 172px; }
   }
 </style>
-<link rel="stylesheet" href="src/world.css?v=r76-20261002-1">
+<link rel="stylesheet" href="src/world.css?v=r77-20261002-1">
 </head>
 <body class="r68-loading">
 <div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="陽光農場載入中">
@@ -1373,12 +1399,12 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r76-20261002-1"></script>
-<script src="src/game.js?v=r76-20261002-1"></script>
-<script src="src/adventure.js?v=r76-20261002-1"></script>
-<script src="src/state.js?v=r76-20261002-1"></script>
-<script src="src/atlas.js?v=r76-20261002-1"></script>
-<script src="src/world-ui.js?v=r76-20261002-1"></script>
-<script src="src/ui.js?v=r76-20261002-1"></script>
+<script src="src/config.js?v=r77-20261002-1"></script>
+<script src="src/game.js?v=r77-20261002-1"></script>
+<script src="src/adventure.js?v=r77-20261002-1"></script>
+<script src="src/state.js?v=r77-20261002-1"></script>
+<script src="src/atlas.js?v=r77-20261002-1"></script>
+<script src="src/world-ui.js?v=r77-20261002-1"></script>
+<script src="src/ui.js?v=r77-20261002-1"></script>
 </body>
 </html>

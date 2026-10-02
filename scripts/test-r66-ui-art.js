@@ -40,8 +40,9 @@ for (const slug of expected.concat(assistant)) {
     `${slug} has slug/prompt/native hash and matching file`);
 }
 
-assert(expected.every((slug) => html.includes(`.i-${slug.replace(/_/g, "-")}`)), "index CSS maps all 32 atlas positions");
-assert(ui.includes('uiIcon("crop_" + c.id)') && Object.values({ hand: "tool_plant", water: "tool_water", clear: "tool_clear", build: "tool_build", inspect: "tool_inspect" }).every((slug) => ui.includes(slug)), "crop and tool renderers use the formal atlas");
+assert(expected.every((slug) => html.includes(`.i-${slug.replace(/_/g, "-")}`) && html.includes(assets.get(slug).outputs.native)), "index CSS maps all 32 individual transparent native icons");
+assert(html.includes("background-size: contain; background-position: center;"), "responsive icons scale the whole image without atlas clipping");
+assert(ui.includes('uiIcon("crop_" + c.id)') && Object.values({ hand: "tool_plant", water: "tool_water", clear: "tool_clear", build: "tool_build", inspect: "tool_inspect" }).every((slug) => ui.includes(slug)), "crop and tool renderers use the formal transparent icons");
 assert(["tab-tile", "tab-orders", "tab-upgrades", "tab-story", "tab-journal", "system-settings", "system-help", "system-reset"].every((slug) => html.includes(`i-${slug}`)), "tabs and system controls are wired to formal icons");
 assert(assistant.every((slug) => html.includes(`${slug}-64.png`)) && ui.includes('primary.priority >= 100 ? "alert" : "tip"'), "three smart-assistant skins are wired to idle/tip/alert state selection");
 assert(ui.includes("smartAssistantCollapsed = true") && html.includes(".smart-assistant.collapsed"), "first-session smart assistant remains collapsed");

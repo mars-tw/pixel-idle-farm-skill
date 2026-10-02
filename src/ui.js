@@ -74,7 +74,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r76-20261002-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r77-20261002-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -2536,6 +2536,13 @@
     const el = document.createElement("div"); el.className = "ob-dot" + (variant ? " ob-dot-" + variant : "");
     el.style.left = pxv(Math.round(cx - 5)); el.style.top = pxv(top);
     worldEl.appendChild(el); obDyn.push(el);
+    return el;
+  }
+  function npcIndicatorTop(tile) {
+    const sprite = obDyn.find((el) => el.dataset.kind === "npc" && el.dataset.tileId === tile.id);
+    const frame = window.Atlas.getFrame("npcs", tile.npc + "_idle_a");
+    const spriteTop = sprite ? parseFloat(sprite.style.top) : Math.round((tile.y + 1) * TILE - TILE * (frame ? frame.h / frame.w : 4 / 3));
+    return spriteTop - Math.max(14, Math.round(TILE * .18));
   }
   function strHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
   // Stage 7：地圖上動物頭上的照護狀態小圖示（hungry/thirsty/needs_groom 才顯示，happy 不額外標，
@@ -2597,6 +2604,7 @@
   // Stage 6：NPC 鎮民 — 固定站位、front-facing 呼吸 idle；交談中切 talk 幀；掛 data-audit=npc
   let activeTalk = null; // { npcId, until }
   function renderNpcs(t) {
+    const questTarget = window.FarmWorld ? window.FarmWorld.markerTile(state) : G.questMarkerTile(state, t);
     for (const tile of state.map.tiles) {
       if (!tile.npc) continue;
       const npc = window.NPCS[tile.npc]; if (!npc) continue;
@@ -2609,9 +2617,12 @@
       // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
       const req = state.npcRequests && state.npcRequests[tile.npc];
       const sq = G.npcSideQuestStatus ? G.npcSideQuestStatus(state, tile.npc) : null;
-      if (req && G.canFulfillNpcRequest(state, tile.npc)) addDot(cx, baselineY - TILE * 1.15, "ready");
-      else if (sq && sq.status === "available") addDot(cx, baselineY - TILE * 1.15);
-      else if (!(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) addDot(cx, baselineY - TILE * 1.15);
+      if (tile.id === questTarget) continue; // The quest arrow is the single indicator for this NPC.
+      const ready = req && G.canFulfillNpcRequest(state, tile.npc);
+      if (ready || (sq && sq.status === "available") || !(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) {
+        const dot = addDot(cx, npcIndicatorTop(tile) - 11, ready ? "ready" : null);
+        dot.dataset.npc = tile.npc; dot.dataset.tileId = tile.id; dot.dataset.kind = "npc-indicator";
+      }
     }
   }
   // 任務標記：目前任務目標磚上方浮動箭頭
@@ -2624,7 +2635,13 @@
     m.dataset.quest = window.FarmWorld ? ($("questDock").dataset.quest || "") : ((state.story && state.story.questId) || "");
     m.dataset.tileId = targetId;
     m.innerHTML = '<div class="qdot"></div><div class="qpin"></div>';
-    m.style.left = pxv((tile.x + 0.5) * TILE); m.style.top = pxv(tile.y * TILE);
+    m.style.left = pxv((tile.x + 0.5) * TILE);
+    m.style.top = pxv(tile.npc ? npcIndicatorTop(tile) : tile.y * TILE);
+    if (tile.npc) {
+      m.dataset.npc = tile.npc;
+      const req = state.npcRequests && state.npcRequests[tile.npc];
+      if (req && G.canFulfillNpcRequest(state, tile.npc)) m.classList.add("qmarker-ready");
+    }
     mEl.appendChild(m);
   }
   // ---- 動作 VFX 疊層（地圖可見回饋）----
@@ -3383,7 +3400,7 @@
     const b = document.createElement("div");
     b.className = "npc-bubble"; b.dataset.audit = "dialogue-bubble"; b.dataset.npc = d.id;
     b.innerHTML = `<div class="nb-name">${d.name}</div><div class="nb-line">${d.line}</div>`;
-    b.style.left = pxv((tile.x + 0.5) * TILE); b.style.top = pxv(tile.y * TILE - 4);
+    b.style.left = pxv((tile.x + 0.5) * TILE); b.style.top = pxv(npcIndicatorTop(tile));
     worldEl.appendChild(b);
     if (bubbleTimer) clearTimeout(bubbleTimer);
     bubbleTimer = setTimeout(() => { const e = worldEl && worldEl.querySelector(".npc-bubble"); if (e) e.remove(); }, 2800);

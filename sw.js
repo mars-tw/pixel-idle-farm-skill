@@ -1,4 +1,4 @@
-const CACHE_VERSION = "r76-20261002-1";
+const CACHE_VERSION = "r77-20261002-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -26,6 +26,40 @@ const CORE_ASSETS = [
   versioned("./assets/generated/r66/manifest.json"),
   versioned("./assets/generated/r66/ui-icons-32.json"),
   versioned("./assets/generated/r66/ui-icons-32.png"),
+  ...[
+    "crop_wheat",
+    "crop_carrot",
+    "crop_tomato",
+    "crop_strawberry",
+    "crop_corn",
+    "crop_pumpkin",
+    "crop_radish",
+    "crop_bell_pepper",
+    "crop_potato",
+    "crop_sunflower",
+    "crop_grapes",
+    "crop_melon",
+    "crop_pea",
+    "crop_sweet_potato",
+    "crop_winter_kale",
+    "tool_plant",
+    "tool_harvest",
+    "tool_water",
+    "tool_clear",
+    "tool_build",
+    "tool_inspect",
+    "tab_tile",
+    "tab_orders",
+    "tab_upgrades",
+    "tab_story",
+    "tab_journal",
+    "system_coin",
+    "system_xp",
+    "system_storage",
+    "system_settings",
+    "system_help",
+    "system_reset"
+  ].map((slug) => versioned("./assets/generated/r66/native/" + slug + "-32.png")),
   versioned("./assets/generated/r66/native/assistant_idle-64.png"),
   versioned("./assets/generated/r66/native/assistant_tip-64.png"),
   versioned("./assets/generated/r66/native/assistant_alert-64.png"),
