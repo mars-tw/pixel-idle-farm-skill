@@ -825,11 +825,11 @@
     "pass": true
   },
   "performance": {
-    "focusReadyMs": 1089.5,
-    "interactiveReadyMs": 4063.4000000953674,
+    "focusReadyMs": 1064.2000002861023,
+    "interactiveReadyMs": 4004.5999999046326,
     "loadingResource": {
-      "name": "http://127.0.0.1:53200/assets/generated/r68/loading-spring-low.png?v=7b001bb9",
-      "duration": 771.2000002861023,
+      "name": "http://127.0.0.1:55267/assets/generated/r68/loading-spring-low.png?v=7b001bb9",
+      "duration": 821.0999999046326,
       "transferSize": 76080
     },
     "profile": "Fast 3G / 4x CPU / 1366x768 / local concurrent machine",
@@ -867,7 +867,7 @@
   "activityPanel": {
     "eventId": "spring_seed_swap",
     "season": "春",
-    "backgroundImage": "url(\"http://127.0.0.1:53200/assets/generated/r68/activity-panel-med.png?v=e100dd7f\")",
+    "backgroundImage": "url(\"http://127.0.0.1:55267/assets/generated/r68/activity-panel-med.png?v=e100dd7f\")",
     "openModals": 1
   }
 }
