@@ -1,0 +1,4 @@
+PASS three residents have distinct first, wrong, matched replies and persist exact latest taste
+PASS read-only animation observation agrees with reel eligibility on every phase boundary without mutating saves
+PASS three new notebook images have exact palette, source hashes and offline cache entries
+VERIFIED content R2 3 rule groups

@@ -1,0 +1,182 @@
+{
+  "status": "VERIFIED",
+  "thresholds": {
+    "brightness": [
+      0.3,
+      0.75
+    ],
+    "saturationMin": 0.32,
+    "nearBlackMax": 0.35,
+    "lowSaturationMax": 0.2
+  },
+  "metrics": [
+    {
+      "path": "assets/generated/content-r9/idle-merchant.png",
+      "brightness": 0.5765337578330301,
+      "saturation": 0.4973242330099248,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0006443298969072165
+    },
+    {
+      "path": "assets/generated/content-r9/reach-merchant.png",
+      "brightness": 0.5799315443244137,
+      "saturation": 0.5019443160675351,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0006489292667099286
+    },
+    {
+      "path": "assets/generated/content-r9/hold-merchant.png",
+      "brightness": 0.5823824749284128,
+      "saturation": 0.5098862619704986,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0006548788474132286
+    },
+    {
+      "path": "assets/generated/content-r9/sit-merchant.png",
+      "brightness": 0.5677930746766792,
+      "saturation": 0.5012511839342578,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0012158054711246201
+    },
+    {
+      "path": "assets/generated/content-r9/sip-merchant.png",
+      "brightness": 0.568084030252773,
+      "saturation": 0.5013390329535607,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0005998800239952009
+    },
+    {
+      "path": "assets/generated/content-r9/offer-merchant.png",
+      "brightness": 0.567014472455649,
+      "saturation": 0.49960505108256353,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.002380952380952381
+    },
+    {
+      "path": "assets/generated/content-r9/idle-elder.png",
+      "brightness": 0.5447570332480819,
+      "saturation": 0.46106372548708324,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.05393505778756191
+    },
+    {
+      "path": "assets/generated/content-r9/reach-elder.png",
+      "brightness": 0.5550656416855746,
+      "saturation": 0.4554210159602574,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.06102475532527346
+    },
+    {
+      "path": "assets/generated/content-r9/hold-elder.png",
+      "brightness": 0.5777833066761447,
+      "saturation": 0.4585681534419334,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0755287009063444
+    },
+    {
+      "path": "assets/generated/content-r9/sit-elder.png",
+      "brightness": 0.5551066881247195,
+      "saturation": 0.4575006262253748,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.06141820212171971
+    },
+    {
+      "path": "assets/generated/content-r9/sip-elder.png",
+      "brightness": 0.5537611794446923,
+      "saturation": 0.46551486780965495,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.03683640303358613
+    },
+    {
+      "path": "assets/generated/content-r9/offer-elder.png",
+      "brightness": 0.5456709878549333,
+      "saturation": 0.4599966418059532,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.049723756906077346
+    },
+    {
+      "path": "assets/generated/content-r9/idle-child.png",
+      "brightness": 0.5689433007700586,
+      "saturation": 0.5378302487319163,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0014255167498218105
+    },
+    {
+      "path": "assets/generated/content-r9/reach-child.png",
+      "brightness": 0.5670636189258312,
+      "saturation": 0.5323660014488875,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.001358695652173913
+    },
+    {
+      "path": "assets/generated/content-r9/hold-child.png",
+      "brightness": 0.5859222240428205,
+      "saturation": 0.5449641615759119,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.001392757660167131
+    },
+    {
+      "path": "assets/generated/content-r9/sit-child.png",
+      "brightness": 0.5611353492803771,
+      "saturation": 0.5305914463874954,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0006393861892583121
+    },
+    {
+      "path": "assets/generated/content-r9/sip-child.png",
+      "brightness": 0.5728035095373131,
+      "saturation": 0.5232518800157985,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0012360939431396785
+    },
+    {
+      "path": "assets/generated/content-r9/offer-child.png",
+      "brightness": 0.5522542033440455,
+      "saturation": 0.5276260794159577,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0023752969121140144
+    },
+    {
+      "path": "assets/generated/content-r9/idle-player.png",
+      "brightness": 0.585048034147605,
+      "saturation": 0.5155346637563073,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0011487650775416428
+    },
+    {
+      "path": "assets/generated/content-r9/reach-player.png",
+      "brightness": 0.5988916807214402,
+      "saturation": 0.5239351088147509,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0011702750146284377
+    },
+    {
+      "path": "assets/generated/content-r9/hold-player.png",
+      "brightness": 0.5968691439279674,
+      "saturation": 0.5331245041290104,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0011655011655011655
+    },
+    {
+      "path": "assets/generated/content-r9/sit-player.png",
+      "brightness": 0.5741260283641015,
+      "saturation": 0.5200971521336513,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0005624296962879641
+    },
+    {
+      "path": "assets/generated/content-r9/sip-player.png",
+      "brightness": 0.5720503103202065,
+      "saturation": 0.5205157485141078,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.002240896358543417
+    },
+    {
+      "path": "assets/generated/content-r9/offer-player.png",
+      "brightness": 0.571842664776754,
+      "saturation": 0.51465754617339,
+      "nearBlack": 0.0,
+      "lowSaturation": 0.0018072289156626507
+    }
+  ]
+}

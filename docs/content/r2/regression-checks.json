@@ -1,0 +1,308 @@
+[
+  {
+    "name": "npm-test",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 9.31,
+    "log": "docs/content/r2/logs/npm-test.txt"
+  },
+  {
+    "name": "content-r2-unit",
+    "command": [
+      "node",
+      "scripts/test-content-r2.js"
+    ],
+    "exitCode": 0,
+    "seconds": 0.19,
+    "log": "docs/content/r2/logs/content-r2-unit.txt"
+  },
+  {
+    "name": "content-r2-browser",
+    "command": [
+      "node",
+      "scripts/test-content-r2-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 169.59,
+    "log": "docs/content/r2/logs/content-r2-browser.txt"
+  },
+  {
+    "name": "test-npc-indicators",
+    "command": [
+      "node",
+      "scripts/test-npc-indicators.js"
+    ],
+    "exitCode": 0,
+    "seconds": 5.56,
+    "log": "docs/content/r2/logs/test-npc-indicators.txt"
+  },
+  {
+    "name": "test-world-project-art",
+    "command": [
+      "node",
+      "scripts/test-world-project-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 1.16,
+    "log": "docs/content/r2/logs/test-world-project-art.txt"
+  },
+  {
+    "name": "test-world-rework-e2e",
+    "command": [
+      "node",
+      "scripts/test-world-rework-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 167.54,
+    "log": "docs/content/r2/logs/test-world-rework-e2e.txt"
+  },
+  {
+    "name": "test-r79-fun-e2e",
+    "command": [
+      "node",
+      "scripts/test-r79-fun-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 58.41,
+    "log": "docs/content/r2/logs/test-r79-fun-e2e.txt"
+  },
+  {
+    "name": "test-r80-mobile",
+    "command": [
+      "node",
+      "scripts/test-r80-mobile.js"
+    ],
+    "exitCode": 0,
+    "seconds": 32.07,
+    "log": "docs/content/r2/logs/test-r80-mobile.txt"
+  },
+  {
+    "name": "test-r81-review",
+    "command": [
+      "node",
+      "scripts/test-r81-review.js"
+    ],
+    "exitCode": 0,
+    "seconds": 50.33,
+    "log": "docs/content/r2/logs/test-r81-review.txt"
+  },
+  {
+    "name": "test-rwd-matrix",
+    "command": [
+      "node",
+      "scripts/test-rwd-matrix.js"
+    ],
+    "exitCode": 0,
+    "seconds": 48.28,
+    "log": "docs/content/r2/logs/test-rwd-matrix.txt"
+  },
+  {
+    "name": "test-controls-reachability",
+    "command": [
+      "node",
+      "scripts/test-controls-reachability.js"
+    ],
+    "exitCode": 0,
+    "seconds": 17.46,
+    "log": "docs/content/r2/logs/test-controls-reachability.txt"
+  },
+  {
+    "name": "test-r82-art",
+    "command": [
+      "node",
+      "scripts/test-r82-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 1.99,
+    "log": "docs/content/r2/logs/test-r82-art.txt"
+  },
+  {
+    "name": "test-r83-art",
+    "command": [
+      "node",
+      "scripts/test-r83-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 4.66,
+    "log": "docs/content/r2/logs/test-r83-art.txt"
+  },
+  {
+    "name": "test-r84-art",
+    "command": [
+      "node",
+      "scripts/test-r84-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 25.31,
+    "log": "docs/content/r2/logs/test-r84-art.txt"
+  },
+  {
+    "name": "test-r85-art",
+    "command": [
+      "node",
+      "scripts/test-r85-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 15.48,
+    "log": "docs/content/r2/logs/test-r85-art.txt"
+  },
+  {
+    "name": "test-r86-art",
+    "command": [
+      "node",
+      "scripts/test-r86-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 16.44,
+    "log": "docs/content/r2/logs/test-r86-art.txt"
+  },
+  {
+    "name": "test-r87-art",
+    "command": [
+      "node",
+      "scripts/test-r87-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 19.9,
+    "log": "docs/content/r2/logs/test-r87-art.txt"
+  },
+  {
+    "name": "test-r88-art",
+    "command": [
+      "node",
+      "scripts/test-r88-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 21.58,
+    "log": "docs/content/r2/logs/test-r88-art.txt"
+  },
+  {
+    "name": "test-r89-art",
+    "command": [
+      "node",
+      "scripts/test-r89-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 37.65,
+    "log": "docs/content/r2/logs/test-r89-art.txt"
+  },
+  {
+    "name": "test-content-r1-e2e",
+    "command": [
+      "node",
+      "scripts/test-content-r1-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 50.6,
+    "log": "docs/content/r2/logs/test-content-r1-e2e.txt"
+  },
+  {
+    "name": "test-water-quest-guide",
+    "command": [
+      "node",
+      "scripts/test-water-quest-guide.js"
+    ],
+    "exitCode": 0,
+    "seconds": 13.19,
+    "log": "docs/content/r2/logs/test-water-quest-guide.txt"
+  },
+  {
+    "name": "test-r72-night-gate",
+    "command": [
+      "node",
+      "scripts/test-r72-night-gate.js"
+    ],
+    "exitCode": 0,
+    "seconds": 25.64,
+    "log": "docs/content/r2/logs/test-r72-night-gate.txt"
+  },
+  {
+    "name": "performance-compare",
+    "command": [
+      "node",
+      "scripts/measure-content-r2.js"
+    ],
+    "exitCode": 1,
+    "seconds": 226.81,
+    "log": "docs/content/r2/logs/performance-compare.txt"
+  },
+  {
+    "name": "carp-continuity",
+    "command": [
+      "node",
+      "scripts/capture-content-r2-rhythms.js"
+    ],
+    "exitCode": 1,
+    "seconds": 0.74,
+    "log": "docs/content/r2/logs/carp-continuity.txt"
+  },
+  {
+    "name": "performance-sunpatch-compare",
+    "command": [
+      "node",
+      "scripts/measure-content-r2.js",
+      "--sunpatch"
+    ],
+    "exitCode": 1,
+    "seconds": 99.17,
+    "log": "docs/content/r2/logs/performance-sunpatch-compare.txt"
+  },
+  {
+    "name": "content-r2-unit-final",
+    "command": [
+      "node",
+      "scripts/test-content-r2.js"
+    ],
+    "exitCode": 0,
+    "seconds": 0.13,
+    "log": "docs/content/r2/logs/content-r2-unit-final.txt"
+  },
+  {
+    "name": "version-chain-final",
+    "command": [
+      "node",
+      "scripts/test-version-chain.js"
+    ],
+    "exitCode": 0,
+    "seconds": 0.06,
+    "log": "docs/content/r2/logs/version-chain-final.txt"
+  },
+  {
+    "name": "carp-continuity-final",
+    "command": [
+      "node",
+      "scripts/capture-content-r2-rhythms.js"
+    ],
+    "exitCode": 0,
+    "seconds": 5.45,
+    "log": "docs/content/r2/logs/carp-continuity-final.txt"
+  },
+  {
+    "name": "performance-original-r79-compare",
+    "command": [
+      "node",
+      "scripts/measure-content-r2.js",
+      "--sunpatch-original"
+    ],
+    "exitCode": 0,
+    "seconds": 65.49,
+    "log": "docs/content/r2/logs/performance-original-r79-compare.txt"
+  },
+  {
+    "name": "performance-complete-fixture-compare",
+    "command": [
+      "node",
+      "scripts/measure-content-r2.js",
+      "--complete-fixture"
+    ],
+    "exitCode": 1,
+    "seconds": 230.21,
+    "log": "docs/content/r2/logs/performance-complete-fixture-compare.txt"
+  }
+]

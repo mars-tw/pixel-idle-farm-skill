@@ -1,0 +1,20 @@
+PASS first basket has no unearned reread
+PASS cancel retains bread and never delivers later
+PASS walking delivery spends only once on arrival
+PASS merchant normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS merchant/sweet consumes one bread at the actual resident
+PASS merchant wrong reply differs from first clue
+PASS merchant normal farm conversation remembers wrong
+PASS merchant/sour consumes one bread at the actual resident
+AssertionError [ERR_ASSERTION]: merchant matching taste completes distinct response
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r2-e2e.js:8:21)
+    at neighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r2-e2e.js:43:29)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r2-e2e.js:70:132 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

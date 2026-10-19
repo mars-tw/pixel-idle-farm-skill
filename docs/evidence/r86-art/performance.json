@@ -1,0 +1,28 @@
+{
+  "status": "VERIFIED",
+  "source": "docs/evidence/r86-art/regression/r79/r79-fun-e2e.json",
+  "sourceSha256": "1709b08896b5554b3232eb59d800fb7a78c1a7316f2d4a8a7c08c07245d91c45",
+  "measurements": {
+    "desktop": {
+      "runsP95Ms": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "trust": "concurrent-load (other agents share this machine)"
+    },
+    "mobile": {
+      "runsP95Ms": [
+        16.8,
+        16.8,
+        16.7
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "trust": "concurrent-load (other agents share this machine)"
+    }
+  },
+  "trust": "Concurrent machine load; reference only, not native-device shipment proof"
+}

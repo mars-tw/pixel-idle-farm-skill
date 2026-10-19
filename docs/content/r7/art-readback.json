@@ -1,0 +1,203 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "masters": 2,
+  "assets": [
+    {
+      "file": "sit-merchant.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.606,
+      "alphaBounds": [
+        2,
+        2,
+        46,
+        62
+      ]
+    },
+    {
+      "file": "eat-merchant.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.588,
+      "alphaBounds": [
+        2,
+        2,
+        45,
+        62
+      ]
+    },
+    {
+      "file": "reach-merchant.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.406,
+      "alphaBounds": [
+        2,
+        10,
+        46,
+        62
+      ]
+    },
+    {
+      "file": "sit-elder.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.536,
+      "alphaBounds": [
+        4,
+        2,
+        43,
+        62
+      ]
+    },
+    {
+      "file": "eat-elder.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.536,
+      "alphaBounds": [
+        4,
+        2,
+        43,
+        62
+      ]
+    },
+    {
+      "file": "reach-elder.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.464,
+      "alphaBounds": [
+        2,
+        3,
+        46,
+        62
+      ]
+    },
+    {
+      "file": "sit-child.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.436,
+      "alphaBounds": [
+        7,
+        2,
+        41,
+        62
+      ]
+    },
+    {
+      "file": "eat-child.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.451,
+      "alphaBounds": [
+        7,
+        2,
+        41,
+        62
+      ]
+    },
+    {
+      "file": "reach-child.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.467,
+      "alphaBounds": [
+        3,
+        2,
+        45,
+        62
+      ]
+    },
+    {
+      "file": "idle-merchant.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.525,
+      "alphaBounds": [
+        6,
+        2,
+        42,
+        62
+      ]
+    },
+    {
+      "file": "idle-elder.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.454,
+      "alphaBounds": [
+        6,
+        2,
+        42,
+        62
+      ]
+    },
+    {
+      "file": "idle-child.png",
+      "size": [
+        48,
+        64
+      ],
+      "visible": 0.498,
+      "alphaBounds": [
+        3,
+        2,
+        44,
+        62
+      ]
+    },
+    {
+      "file": "trace-flower.png",
+      "size": [
+        28,
+        19
+      ],
+      "visible": 0.831,
+      "alphaBounds": [
+        0,
+        0,
+        28,
+        19
+      ]
+    },
+    {
+      "file": "quiet-water.webp",
+      "size": [
+        256,
+        160
+      ],
+      "visible": 1.0,
+      "alphaBounds": [
+        0,
+        0,
+        256,
+        160
+      ]
+    }
+  ]
+}

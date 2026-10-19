@@ -1,0 +1,71 @@
+/* R89 cream paper and generated native-pixel ingredients; no replacement map skin. */
+#worldModal[data-content-view='basket'] .content-illustration{max-height:150px;object-fit:cover;opacity:.68}
+.basket-flavor{display:block;width:clamp(100px,22dvh,180px);height:auto;image-rendering:pixelated;margin:-110px auto 8px;position:relative;pointer-events:none;filter:drop-shadow(0 4px 1px #3e2f2344)}
+.content-illustration[hidden]~.basket-flavor{margin-top:8px}
+#basketSelection{flex:0 0 100%;margin:0;color:#3e2f23;font-size:13px;line-height:1.5;background:#f5e4bd;padding:5px;box-sizing:border-box}
+.basket-carrying{padding:0;background:transparent;pointer-events:none;display:block;inset:0}
+.basket-carrying>div{position:absolute;top:calc(var(--safe-top,0px) + 176px);left:8px;right:8px;max-width:620px;margin:auto;padding:5px 8px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:4px 8px;font-size:14px;box-shadow:0 2px 4px #3e2f2333}
+.basket-carrying button{pointer-events:auto;margin:0;min-height:44px;grid-column:3;grid-row:1;padding:5px 8px;font-size:13px}
+.basket-carrying small{grid-column:1/-1;margin:0;font-size:12px;line-height:1.5}
+.carry-name{font-weight:700}.carry-distance{font-size:12px}.carry-direction{position:absolute;font-size:30px;color:#d95737;text-shadow:1px 1px #fff6e3,-1px -1px #fff6e3;line-height:1;transform-origin:center;pointer-events:none}
+.carry-target{position:fixed;z-index:9940;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 1px 1px #3e2f23)}
+.handover-actor{position:fixed;z-index:9930;pointer-events:none;image-rendering:pixelated;object-fit:contain}
+body[data-delivering='merchant']:has(.handover-actor) .ob[data-npc='merchant'],body[data-delivering='elder']:has(.handover-actor) .ob[data-npc='elder'],body[data-delivering='child']:has(.handover-actor) .ob[data-npc='child']{visibility:hidden}
+.ob.actor-behind{opacity:.43;filter:saturate(.75)}
+.memory-token{display:flex;align-items:center;gap:12px;margin:6px 0;text-align:left}.memory-token img{image-rendering:pixelated;width:64px;height:64px;object-fit:contain}.memory-token figcaption{font-size:13px;color:#5a3e28}
+.story-occasion.matched{border:0;border-bottom:2px solid #b38d61;background:transparent;box-shadow:none;padding:8px 0;color:#3e2f23}
+.story-occasion.memory-merchant{border-bottom:3px double #c78a52}.story-occasion.memory-elder{border-left:6px solid #8b5e34;padding-left:10px}.story-occasion.memory-child{border-bottom:2px dashed #6a994e}
+.farm-memory,.farm-gathering{position:absolute;background:transparent;border:0;padding:0;min-width:44px;min-height:44px;cursor:pointer;image-rendering:pixelated;touch-action:manipulation}
+.farm-memory img,.farm-gathering img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;pointer-events:none}.farm-memory:hover,.farm-memory:focus-visible{outline:2px solid #ffb627}
+.farm-gathering img{position:absolute;width:30%;height:60%;bottom:0}.farm-gathering .table-merchant{left:-8%}.farm-gathering .table-elder{right:-8%;bottom:30%}.farm-gathering .table-child{right:2%;bottom:-18%}
+.gather-basket{display:block;width:128px;height:128px;object-fit:contain;image-rendering:pixelated;float:right;margin:0 0 8px 12px}.gather-list{clear:both;padding:8px;border-top:1px solid #b38d61;font-size:14px}
+.gather-review{border-bottom:2px solid #b38d61;padding-bottom:12px}.gather-review h3{font-family:KaiTi,serif}.gather-seats p{border-left:3px solid #b38d61;padding-left:10px}
+#worldGatheringButton{min-height:48px;border:2px solid #8b5e34;background:#f5e4bd;color:#395847;margin:8px 0;font:inherit;padding:8px}
+#worldModal[data-content-view='response'] .content-footer{flex-wrap:wrap}#gatheringEntry{flex-basis:100%}
+.pond-elapsed:empty{display:none}.pond-stage[data-motion='wide-swell'] .pond-bobber{transform:translateY(38px);opacity:.25}.pond-stage[data-motion='bent-wake'] .pond-bobber{transform:translate(74px,40px);opacity:.2}.pond-stage[data-motion='splash-gone'] .pond-effects{opacity:.2}
+#worldModal[data-learned='true'] #worldCatch:not(:disabled){background:#ffce63;color:#3e2f23;border-color:#8b5e34;font-weight:700}
+@media(max-width:350px){.basket-flavor{width:108px;margin-top:-95px}#basketSelection{font-size:12px}.basket-carrying>div{top:158px}.memory-token img{width:52px;height:52px}}
+@media(orientation:landscape) and (max-height:600px){.basket-carrying>div{top:64px;max-width:530px}.basket-flavor{float:left;width:88px;margin:0 10px 0 -100px}#worldModal[data-content-view='basket'] .content-illustration{height:105px}#basketSelection{font-size:12px}.memory-token{display:none}.gather-basket{width:80px;height:80px}}
+
+/* R7 delivery is a single strip. The world remains reachable beneath it. */
+body[data-delivering] header,body[data-delivering] #questDock,body[data-delivering] .seed-hud,body[data-delivering] #farmMenu,body[data-delivering] .side-tabs,body[data-delivering] .scene-action-bar,body[data-delivering] .world-location,body[data-delivering] #worldMinimap,body[data-delivering] #farmDock{visibility:hidden!important;pointer-events:none!important}
+body[data-delivering] .basket-carrying>div{top:calc(var(--safe-top,0px) + 8px);left:8px;right:8px;grid-template-columns:auto 1fr auto;min-height:52px;padding:4px 8px;box-sizing:border-box;background:#fff6e3;border:2px solid #8b5e34}
+body[data-delivering] .basket-carrying[data-phase='walking'] .carry-receipt{display:none}
+body[data-delivering] .mobile-controls .dpad{opacity:.28;transition:opacity .2s}
+body[data-delivering] .mobile-controls .dpad:active{opacity:.8}
+body[data-delivering] .carry-target{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 3px #fff6e3)}
+body:has(.handover-player) #player .p-sprite{visibility:hidden!important}
+.handover-player{position:fixed;z-index:9930;pointer-events:none;image-rendering:pixelated;object-fit:contain}
+.handover-parcel{position:fixed;z-index:9935;pointer-events:none;image-rendering:pixelated;object-fit:contain}
+.carry-label{position:fixed;z-index:9941;pointer-events:none;color:#3e2f23;background:#fff6e3;border:1px solid #8b5e34;font:12px 'Microsoft JhengHei',sans-serif;padding:1px 3px}
+.handover-actor[data-pose='reach']{transform:scaleX(-1)}
+.pond-stage[data-motion='closed-rings'] .pond-bobber,.pond-stage[data-motion='straight-wake'] .pond-bobber,.pond-stage[data-motion='short-splash'] .pond-bobber{opacity:0}
+#worldModal[data-content-view='fishing'] .pond-stage{height:clamp(190px,30dvh,310px);border:0;box-shadow:inset 0 0 0 2px #8b5e3466;clip-path:polygon(3% 0,97% 0,100% 8%,100% 92%,97% 100%,3% 100%,0 92%,0 8%)}
+#worldModal[data-content-view='fishing'] .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r13-20261019-1');background-position:center;background-size:cover}
+#worldModal[data-content-view='fishing'] #worldCatch:not(:disabled){background:#ffce63;color:#3e2f23;border-color:#8b5e34;font-weight:700;box-shadow:none}
+.pond-catch{display:block;width:100%;height:auto;max-height:170px;object-fit:contain;image-rendering:pixelated}.pond-catch[hidden]{display:none}
+#worldModal[data-fishing-state='caught'] .pond-stage{height:110px;opacity:.75}
+@media(max-width:350px){.carry-name{font-size:13px}.basket-carrying .carry-distance{font-size:12px}body[data-delivering] .basket-carrying>div{gap:4px}.basket-carrying button{font-size:12px}#worldModal[data-content-view='fishing'] .pond-stage{height:165px}.pond-catch{max-height:110px}}
+@media(orientation:landscape) and (max-height:600px){#worldModal[data-content-view='fishing'] .pond-stage{height:150px}.pond-catch{width:40%;height:90px;float:left}}
+
+/* Same map component in the completion view; all three stools have real seated actors. */
+.gather-stage{position:relative;height:285px;min-height:240px;margin:0 -6px 10px;overflow:hidden;background:url('../assets/generated/r89/garden-1536.webp') 55% 54%/780px auto;image-rendering:pixelated;isolation:isolate}
+.gather-stage::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent 38%,#ffe8a322 55%,transparent 72%)}
+.gather-stage .meal-table,.farm-gathering .meal-table{position:absolute;left:50%;top:50%;width:240px;height:120px;transform:translate(-50%,-50%);background-repeat:no-repeat;image-rendering:pixelated;z-index:3;pointer-events:none}
+.gather-stage .meal-trace,.farm-gathering .meal-trace{position:absolute!important;width:64px!important;height:64px!important;object-fit:contain;pointer-events:none;image-rendering:pixelated;bottom:auto}
+.meal-trace-merchant{left:calc(50% - 137px);top:42%;z-index:4}.meal-trace-elder{left:calc(50% + 40px);top:17%;z-index:1}.meal-trace-child{left:calc(50% + 48px);top:53%;z-index:4}
+.gather-stage .meal-trace-child,.farm-gathering .meal-trace-child{width:42px!important;height:29px!important;left:calc(50% + 22px);top:45%;z-index:4}
+.gather-stage .meal-person,.farm-gathering .meal-person{position:absolute!important;width:72px!important;height:96px!important;object-fit:contain;image-rendering:pixelated;pointer-events:none;bottom:auto}
+.meal-person-merchant{left:calc(50% - 117px);top:15%;z-index:2}.meal-person-elder{left:calc(50% - 15px);top:9%;z-index:2}.meal-person-child{left:calc(50% + 46px);top:48%;z-index:5}
+.farm-gathering{background:none!important;isolation:isolate;overflow:visible}
+.farm-gathering .meal-person{display:none}
+body[data-reunion] .farm-gathering .meal-person{display:block}
+body[data-reunion] .ob[data-npc='merchant'],body[data-reunion] .ob[data-npc='elder'],body[data-reunion] .ob[data-npc='child']{visibility:hidden}
+body[data-reunion] #questDock,body[data-reunion] .seed-hud{visibility:hidden}
+.farm-memory:focus-visible,.farm-gathering:focus-visible{outline:3px solid #d95737;outline-offset:4px}
+.memory-caption,.farm-gathering::after{position:absolute;left:50%;top:100%;translate:-50% 0;white-space:nowrap;font:12px 'Microsoft JhengHei',sans-serif;color:#3e2f23;background:#fff6e3;border:1px solid #8b5e34;padding:2px 4px;pointer-events:none}
+.farm-gathering::after{content:'點桌子・翻聚餐手記';top:92%;z-index:6}
+.memory-caption,.farm-gathering::after{pointer-events:auto}
+#worldModal[data-content-view='gathering-complete'] .gather-seats p{margin:8px 0;font-size:14px;line-height:1.5}
+@media(max-width:350px){.gather-stage{height:218px;min-height:218px}.gather-stage .meal-table{width:240px;height:120px}.gather-stage .meal-person{width:60px!important;height:80px!important}#worldModal[data-content-view='gathering-complete'] .gather-seats p{font-size:12px}}
+@media(orientation:landscape) and (max-height:600px){.gather-stage{float:left;width:47%;height:210px;min-height:210px;margin:0 12px 0 0}}

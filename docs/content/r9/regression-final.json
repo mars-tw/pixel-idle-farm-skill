@@ -1,0 +1,333 @@
+{
+  "status": "VERIFIED",
+  "trust": "Aggregate successful actual script runs. The initial full runner stopped at R4; later individual failures remain BLOCKED in original receipts. Each listed script has an actual successful exit. Implementation/fixture corrections are recorded in test-attempts.json; no old assertion weakened.",
+  "receipts": [
+    {
+      "path": "docs/content/r9/regression-checks.json",
+      "status": "BLOCKED",
+      "sha256": "fe7f06b0bb130db3524f3f7d4d2fa23c943e132f920b5d950f2d0358c9fcc18f"
+    },
+    {
+      "path": "docs/content/r9/regression-complete-checks.json",
+      "status": "VERIFIED",
+      "sha256": "a8c7d09996e26f3c2c95e8fd650075e71b115263e2ac14583fb32ec22568dcaa"
+    },
+    {
+      "path": "docs/content/r9/regression-done-checks.json",
+      "status": "BLOCKED",
+      "sha256": "4c66169fc72c6165018432a04791b21b754d3ddc62315103b7c861b8b9176bb8"
+    },
+    {
+      "path": "docs/content/r9/regression-first-checks.json",
+      "status": "BLOCKED",
+      "sha256": "fe7f06b0bb130db3524f3f7d4d2fa23c943e132f920b5d950f2d0358c9fcc18f"
+    },
+    {
+      "path": "docs/content/r9/regression-last-checks.json",
+      "status": "BLOCKED",
+      "sha256": "226e9789f7c4fb80f3c7034f44c484b13da76d6d22872ad8ea3c87f6bffa9fda"
+    },
+    {
+      "path": "docs/content/r9/regression-middle-checks.json",
+      "status": "BLOCKED",
+      "sha256": "f30f5baf6db9a44fa4392b01df0502cf75d155065066e1887ece4b7ec1a45fbe"
+    },
+    {
+      "path": "docs/content/r9/regression-r6-token-failure-checks.json",
+      "status": "BLOCKED",
+      "sha256": "226e9789f7c4fb80f3c7034f44c484b13da76d6d22872ad8ea3c87f6bffa9fda"
+    },
+    {
+      "path": "docs/content/r9/regression-r7-phase-failure-checks.json",
+      "status": "BLOCKED",
+      "sha256": "c6878f082cce508aa44f0f18e3d194d846a5009c29799c7a12d111241be48380"
+    },
+    {
+      "path": "docs/content/r9/regression-r7-pointer-failure-checks.json",
+      "status": "BLOCKED",
+      "sha256": "4c66169fc72c6165018432a04791b21b754d3ddc62315103b7c861b8b9176bb8"
+    },
+    {
+      "path": "docs/content/r9/regression-release-checks.json",
+      "status": "VERIFIED",
+      "sha256": "a4dae566e7ae25572e343efc8e7dbffef96f24cb4fe6ef64e8b256af93cec333"
+    },
+    {
+      "path": "docs/content/r9/regression-resolved-checks.json",
+      "status": "BLOCKED",
+      "sha256": "c6878f082cce508aa44f0f18e3d194d846a5009c29799c7a12d111241be48380"
+    }
+  ],
+  "initialPassedBrowserScripts": [
+    "scripts/test-npc-indicators.js",
+    "scripts/test-world-project-art.js",
+    "scripts/test-world-rework-e2e.js",
+    "scripts/test-r79-fun-e2e.js",
+    "scripts/test-r80-mobile.js",
+    "scripts/test-r81-review.js",
+    "scripts/test-rwd-matrix.js",
+    "scripts/test-controls-reachability.js",
+    "scripts/test-r82-art.js",
+    "scripts/test-r83-art.js",
+    "scripts/test-r84-art.js",
+    "scripts/test-r85-art.js",
+    "scripts/test-r86-art.js",
+    "scripts/test-r87-art.js",
+    "scripts/test-r88-art.js",
+    "scripts/test-r89-art.js",
+    "scripts/test-content-r1-e2e.js",
+    "scripts/test-content-r2-e2e.js",
+    "scripts/test-content-r3-e2e.js"
+  ],
+  "verifiedBrowserScripts": [
+    {
+      "path": "scripts/test-npc-indicators.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-world-project-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-world-rework-e2e.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r79-fun-e2e.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r80-mobile.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r81-review.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-rwd-matrix.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-controls-reachability.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r82-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r83-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r84-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r85-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r86-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r87-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r88-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-r89-art.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-content-r1-e2e.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-content-r2-e2e.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-content-r3-e2e.js",
+      "evidence": "docs/content/r9/regression-2.log",
+      "verifiedBecause": "Next script started after successful exit in the initial sequential runner"
+    },
+    {
+      "path": "scripts/test-content-r4-e2e.js",
+      "commandReceipt": {
+        "command": [
+          "node",
+          "scripts/test-content-r4-e2e.js"
+        ],
+        "start": "2026-10-19T01:23:55.529Z",
+        "end": "2026-10-19T01:27:57.693Z",
+        "exitCode": 0,
+        "log": "docs/content/r9/regression-resume-2.log",
+        "sha256": "ff64314cd766712c230f4d7115540a1d16adcee3419630e9cc9d53b9322c5b2d"
+      }
+    },
+    {
+      "path": "scripts/test-content-r5-e2e.js",
+      "commandReceipt": {
+        "command": [
+          "node",
+          "scripts/test-content-r5-e2e.js"
+        ],
+        "start": "2026-10-19T01:27:57.695Z",
+        "end": "2026-10-19T01:31:43.867Z",
+        "exitCode": 0,
+        "log": "docs/content/r9/regression-resume-3.log",
+        "sha256": "4cfa6d6a303d7f78e23f7e25ddf176aac449ba84430081135411055def3a5ebe"
+      }
+    },
+    {
+      "path": "scripts/test-content-r6-e2e.js",
+      "commandReceipt": {
+        "command": [
+          "node",
+          "scripts/test-content-r6-e2e.js"
+        ],
+        "start": "2026-10-19T01:36:25.474Z",
+        "end": "2026-10-19T01:40:13.643Z",
+        "exitCode": 0,
+        "log": "docs/content/r9/regression-done-2.log",
+        "sha256": "2f70555812617b51fde790eb3c34e1bc1e6d2471e31ad45d9b2421b6b2393fbe"
+      }
+    },
+    {
+      "path": "scripts/test-content-r7-e2e.js",
+      "commandReceipt": {
+        "command": [
+          "node",
+          "scripts/test-content-r7-e2e.js"
+        ],
+        "start": "2026-10-19T01:53:42.387Z",
+        "end": "2026-10-19T01:57:33.907Z",
+        "exitCode": 0,
+        "log": "docs/content/r9/regression-complete-2.log",
+        "sha256": "1ef9834368cb0b54e834d730c9d9096d266c57546775526893cbc35b21ac9ed4"
+      }
+    },
+    {
+      "path": "scripts/test-content-r8-e2e.js",
+      "commandReceipt": {
+        "command": [
+          "node",
+          "scripts/test-content-r8-e2e.js"
+        ],
+        "start": "2026-10-19T01:57:33.909Z",
+        "end": "2026-10-19T02:00:38.501Z",
+        "exitCode": 0,
+        "log": "docs/content/r9/regression-complete-3.log",
+        "sha256": "95845969da3b955c33fb9415ab98da27272b902ef396c8365d5df303a5087b56"
+      }
+    },
+    {
+      "path": "scripts/test-content-r9-e2e.js",
+      "commandReceipt": {
+        "command": [
+          "node",
+          "scripts/test-content-r9-e2e.js"
+        ],
+        "start": "2026-10-19T02:00:38.502Z",
+        "end": "2026-10-19T02:04:52.708Z",
+        "exitCode": 0,
+        "log": "docs/content/r9/regression-complete-4.log",
+        "sha256": "0941bc4a21e49a93f736a506f6a4b942ef4c66df73ba20b8951811940f3ebe3b"
+      }
+    }
+  ],
+  "verifiedBrowserScriptCount": 25,
+  "latestNpmTest": {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "start": "2026-10-19T02:09:50.117Z",
+    "end": "2026-10-19T02:09:57.340Z",
+    "exitCode": 0,
+    "log": "docs/content/r9/regression-release-1.log",
+    "sha256": "bf94feb9a2164aa44ba7cba93d660f70866c8fe04b173f53f15276e314f3e602"
+  },
+  "extraGuards": [
+    {
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "start": "2026-10-19T02:04:52.711Z",
+      "end": "2026-10-19T02:05:05.297Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-5.log",
+      "sha256": "738b4fd134b25b30bbccc219169cbae15cf6aa2231a9a50b509a0733d3c7105c"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "start": "2026-10-19T02:05:05.299Z",
+      "end": "2026-10-19T02:05:30.241Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-6.log",
+      "sha256": "4a6feacfef4dcd30bfe4fd53312e57f00e58abaeb97e0043a3bc8f3b958cce9d"
+    }
+  ],
+  "sourceHashes": {
+    "index.html": "2872331779c282591c2619a4e5b88b78cd05ce21641b41125c731581396506da",
+    "sw.js": "3bd5244caaa7c12e4d28919d8ea44e142635bf9e7c8e1ac1180192f7a08077f2",
+    "package.json": "e6eae64cb7bb0cd00c9bd4f268c88db684c5470d278afc3621ad072c2e2db5dd",
+    "manifest.webmanifest": "ca2940e8aa8b6f4c6dfd68acf67e25d28f10c126a8713d19c3a59f92a3de601c",
+    "src/adventure.js": "a440083f93bc946debcc60b4cd446dec5214a6949f06ea39d668b97f541ac1d9",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/atlas.js": "8a634d6883b822daf48a53c7a927dd54141d6054f252307b5770fe43960c0a22",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/content-r1.js": "dd0985ab34b1419523899911b3d7cb08884e0a6ec116716575112c45c1a602ba",
+    "src/content-r6.js": "a22b95c519fc0be9494e431aededa0eb9044ac90d9093b31ff264157ff8b872f",
+    "src/content-r8.js": "6bfb38bfeefc642127accb7776ef9976855e56549bfd7f251139ae5572dc917f",
+    "src/daily-ui.js": "28cb51650fbf53e133dc9c01056478983f7521a5373f365d7bad7f08688d4975",
+    "src/daily.js": "4abcd251fa0f1c5385cf9deffce11641c801a4dc602e94d525ea7970aed9daa4",
+    "src/game.js": "8756bffb7e284ff503e691c2dc358a490ea05750789f506602d8be12a99bf77b",
+    "src/heirloom-ui.js": "f45fb552a0d429ded39f168863a1381d90c0bd4d21b298ba0c490a33afeff8d5",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "bfa0102e65696bd0aa506692d97e6162a3710eccd61b7612a440d8f558cb7619",
+    "src/ui.js": "97034c140d9ffd7f0c078b2bd810d0798aeda0fe768c794b74dac76b916bd0eb",
+    "src/world-ui.js": "7ef0129bb01b91b4f4907bbf6ead5038bfac42b488a37302dd49285830f58365",
+    "src/art-r82.css": "41e6f7de16caf8699c1ad530ac589fc89bcb687695272210e0eea2eadcff5806",
+    "src/art-r83.css": "8c0a0e214b51d1c89cf877095cddebdf99c7a322f1f0ac3cba92478634190a8f",
+    "src/art-r84.css": "ab4a0df23a7b6d7b56e61ee38f804463d4a695803e51c752ffe36f655f56471a",
+    "src/art-r85.css": "fd316cb13e94b1435bb7d65d60c174e9ff0d8d651cc8173135d627898b0d13b1",
+    "src/art-r86.css": "18d9ee15a7b147e86bcad3eca752adbf476c65e01f492ebdc6e7b4bdbc4d513b",
+    "src/art-r87.css": "7d8f3414d5836bc6a18e9b4578e801be95c4af78ae8881cac0fb945428ffd063",
+    "src/art-r88.css": "79ddbe8032d3a7245b5709bad1451355661b18e03fa44173834dbf3445837ed2",
+    "src/art-r89.css": "791a043d70fa203ac0d67fb7c7fd1cc9b6821ea703534b4ef2bdddb0e0a4603f",
+    "src/content-r1.css": "3355bcab7fdeb8edcadd156e9d3ff7f243de1e01c850686e370d1a55123a4603",
+    "src/content-r6.css": "fc40c90f7ef8cdffb1ff3ed26d8bf419aef021b72a1856c7bea44abaa3e3125c",
+    "src/content-r8.css": "482f2ad440a3ac21c71d118bae60e5f6b83fb04464c9a53ac86c0826eab41bf0",
+    "src/content-r9.css": "3c6a332855184bf46cc5f1ec6acade92bd0eef5a4c9d359b01b72cf83b0b1bd1",
+    "src/world.css": "63e43d96060fbd04bd1e5b40decfbdb405bea693a31d89b8b041d5e997fb850e"
+  }
+}

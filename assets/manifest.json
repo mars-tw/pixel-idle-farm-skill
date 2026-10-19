@@ -54,8 +54,18 @@
       "file": "assets/generated/characters/miri-rowan-walk-cycle.png",
       "type": "character-animation-sheet",
       "grid": "4 rows x 4 columns",
-      "rows": ["walk-down", "walk-left", "walk-right", "walk-up"],
-      "frames": ["idle-step", "left-foot", "idle-step", "right-foot"],
+      "rows": [
+        "walk-down",
+        "walk-left",
+        "walk-right",
+        "walk-up"
+      ],
+      "frames": [
+        "idle-step",
+        "left-foot",
+        "idle-step",
+        "right-foot"
+      ],
       "recommendedFps": 8,
       "gameplayUse": "Visible player movement feedback while crossing farm map tiles.",
       "status": "generated-preview"
@@ -65,8 +75,20 @@
       "file": "assets/generated/characters/miri-rowan-farm-actions.png",
       "type": "character-animation-sheet",
       "grid": "6 rows x 4 columns",
-      "rows": ["idle-down", "hoe-side", "water-side", "sow-down", "harvest-down", "carry-down"],
-      "frames": ["anticipation", "action", "contact-or-peak", "recovery"],
+      "rows": [
+        "idle-down",
+        "hoe-side",
+        "water-side",
+        "sow-down",
+        "harvest-down",
+        "carry-down"
+      ],
+      "frames": [
+        "anticipation",
+        "action",
+        "contact-or-peak",
+        "recovery"
+      ],
       "recommendedFps": 6,
       "gameplayUse": "Visible action feedback for hoeing, watering, sowing, harvesting, carrying and animal product collection.",
       "cutout": "assets/generated/characters/miri-rowan-farm-actions-cutout.png",
@@ -90,11 +112,29 @@
       "file": "assets/generated/r68/manifest.json",
       "manifest": "assets/generated/r68/manifest.json",
       "type": "seasonal-loading-backgrounds-and-ui-panel",
-      "tiers": ["low", "med", "high"],
+      "tiers": [
+        "low",
+        "med",
+        "high"
+      ],
       "gameplayUse": "R68 visual-only four-season loading screens and existing seasonal activity-card background.",
       "model": "gpt-image-2",
       "pipeline": "C2PA master -> fixed-size BOX sampling -> hue-shift shadow tint -> R62 66-colour quantization -> region-selective dithering",
       "status": "production"
     }
-  ]
+  ],
+  "round83": {
+    "manifest": "assets/generated/r83/manifest.json",
+    "atlas": "assets/generated/r83/atlas.json",
+    "generator": "image_gen.imagegen",
+    "actualModelSlug": null,
+    "prompts": "docs/art/PROMPTS_R83.json"
+  },
+  "r84Art": {
+    "manifest": "assets/generated/r84/manifest.json",
+    "model": null,
+    "tool": "image_gen.imagegen",
+    "masterCount": 9,
+    "runtimeImageCount": 29
+  }
 }

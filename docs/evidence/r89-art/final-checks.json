@@ -1,0 +1,199 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "sequential": true,
+  "checks": [
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "run",
+        "test:ci"
+      ],
+      "label": "ci",
+      "exitCode": 0,
+      "elapsedSeconds": 490.625,
+      "log": "docs/evidence/r89-art/logs/ci.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "label": "water-guide",
+      "exitCode": 0,
+      "elapsedSeconds": 12.384,
+      "log": "docs/evidence/r89-art/logs/water-guide.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "label": "night",
+      "exitCode": 0,
+      "elapsedSeconds": 25.063,
+      "log": "docs/evidence/r89-art/logs/night.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r89-art.js"
+      ],
+      "label": "comparison",
+      "exitCode": 0,
+      "elapsedSeconds": 7.661,
+      "log": "docs/evidence/r89-art/logs/comparison.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r89-store.js"
+      ],
+      "label": "store",
+      "exitCode": 0,
+      "elapsedSeconds": 59.026,
+      "log": "docs/evidence/r89-art/logs/store.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r89-art.js"
+      ],
+      "label": "art",
+      "exitCode": 0,
+      "elapsedSeconds": 35.002,
+      "log": "docs/evidence/r89-art/logs/art.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-version-chain.js"
+      ],
+      "label": "version",
+      "exitCode": 0,
+      "elapsedSeconds": 0.039,
+      "log": "docs/evidence/r89-art/logs/version.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-npc-indicators.js"
+      ],
+      "label": "npc-after-layout",
+      "exitCode": 0,
+      "elapsedSeconds": 4.92,
+      "log": "docs/evidence/r89-art/logs/npc-after-layout.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r89-art.js"
+      ],
+      "label": "comparison",
+      "exitCode": 0,
+      "elapsedSeconds": 7.475,
+      "log": "docs/evidence/r89-art/logs/comparison.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r89-store.js"
+      ],
+      "label": "store",
+      "exitCode": 0,
+      "elapsedSeconds": 58.797,
+      "log": "docs/evidence/r89-art/logs/store.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r88-art.js"
+      ],
+      "label": "legacy-art-after-layout",
+      "exitCode": 0,
+      "elapsedSeconds": 17.508,
+      "log": "docs/evidence/r89-art/logs/legacy-art-after-layout.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r89-art.js"
+      ],
+      "label": "art",
+      "exitCode": 0,
+      "elapsedSeconds": 33.85,
+      "log": "docs/evidence/r89-art/logs/art.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-version-chain.js"
+      ],
+      "label": "version",
+      "exitCode": 0,
+      "elapsedSeconds": 0.055,
+      "log": "docs/evidence/r89-art/logs/version.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-npc-indicators.js"
+      ],
+      "label": "npc-after-layout",
+      "exitCode": 0,
+      "elapsedSeconds": 4.787,
+      "log": "docs/evidence/r89-art/logs/npc-after-layout.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r89-art.js"
+      ],
+      "label": "comparison",
+      "exitCode": 0,
+      "elapsedSeconds": 7.474,
+      "log": "docs/evidence/r89-art/logs/comparison.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r89-store.js"
+      ],
+      "label": "store",
+      "exitCode": 0,
+      "elapsedSeconds": 58.402,
+      "log": "docs/evidence/r89-art/logs/store.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r88-art.js"
+      ],
+      "label": "legacy-art-after-layout",
+      "exitCode": 0,
+      "elapsedSeconds": 18.529,
+      "log": "docs/evidence/r89-art/logs/legacy-art-after-layout.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r89-art.js"
+      ],
+      "label": "art",
+      "exitCode": 0,
+      "elapsedSeconds": 34.952,
+      "log": "docs/evidence/r89-art/logs/art.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-version-chain.js"
+      ],
+      "label": "version",
+      "exitCode": 0,
+      "elapsedSeconds": 0.04,
+      "log": "docs/evidence/r89-art/logs/version.txt"
+    }
+  ]
+}

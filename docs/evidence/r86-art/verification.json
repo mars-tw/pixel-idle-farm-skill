@@ -1,0 +1,267 @@
+{
+  "status": "VERIFIED",
+  "masters": 8,
+  "runtimeImages": 19,
+  "alpha": [
+    {
+      "path": "assets/generated/r86/walk.png",
+      "occupancy": 0.4117567274305556,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/actions.png",
+      "occupancy": 0.2496880425347222,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/drop-16.png",
+      "occupancy": 0.015625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/farming-actions.png",
+      "occupancy": 0.25588198061342593,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/miri-0.png",
+      "occupancy": 0.5440625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/miri-1.png",
+      "occupancy": 0.5515625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/miri-2.png",
+      "occupancy": 0.5325,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/stamp-water-32.png",
+      "occupancy": 0.26171875,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/stamp-harvest-32.png",
+      "occupancy": 0.2568359375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/stamp-basket-32.png",
+      "occupancy": 0.3134765625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/paper-128.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/binding-8.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/leaf-light-128.png",
+      "occupancy": 0.26068115234375,
+      "partial": 4271,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/canopy-shadow-128.png",
+      "occupancy": 0.75946044921875,
+      "partial": 12443,
+      "corners": [
+        3,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/leaf-ground-128.png",
+      "occupancy": 0.8409423828125,
+      "partial": 13778,
+      "corners": [
+        3,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/logo-320.png",
+      "occupancy": 0.4869419642857143,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r86/app-icon-64.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/app-icon-192.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r86/app-icon-512.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    }
+  ],
+  "characterDoubleGates": {
+    "assets/generated/r86/walk.png": true,
+    "assets/generated/r86/actions.png": true,
+    "assets/generated/r86/farming-actions.png": true,
+    "assets/generated/r86/miri-0.png": true,
+    "assets/generated/r86/miri-1.png": true,
+    "assets/generated/r86/miri-2.png": true
+  },
+  "storeCount": 12,
+  "secretScan": {
+    "matches": 0,
+    "files": 2302,
+    "scope": "repo only, no secrets directory access"
+  },
+  "runtimeOldVersionMatches": 0,
+  "javascriptSyntax": true,
+  "package": {
+    "status": "VERIFIED",
+    "method": "Existing GitHub workflow runtime allowlist: root runtime + src + assets; compare starting commit with current on-disk bytes",
+    "baseCommit": "1fa220d",
+    "beforeBytes": 104818477,
+    "afterBytes": 105396487,
+    "deltaBytes": 578010,
+    "newImageBytes": 501159,
+    "nativePackageMeasured": false,
+    "docsExcluded": true
+  },
+  "limitations": [
+    "No independent score; 8/10 target awaits rescore",
+    "No human 3-second or 5-second recognition test",
+    "No native iOS/Android device validation"
+  ]
+}

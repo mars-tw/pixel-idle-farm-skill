@@ -185,3 +185,168 @@ header { position: fixed; z-index: 9902; top: max(18px, env(safe-area-inset-top)
   #mapScene:has(.scene-action-bar:not([hidden])) .mobile-controls { visibility: hidden; }
   #mapScene:has(.scene-action-bar:not([hidden])) .seed-hud { visibility: hidden; }
 }
+
+/* ===== R79 好玩＋美觀 ===== */
+/* 晴天環境光：左上暖色斜光＋緩慢飄過的雲影。只用 transform 動畫（合成層），不重繪整個畫面。 */
+#weatherLayer[data-weather="clear"] { opacity: 1; overflow: hidden; }
+#weatherLayer[data-weather="clear"]::before {
+  background: linear-gradient(128deg, rgba(255,226,150,.26) 0%, rgba(255,214,140,.10) 28%, transparent 52%),
+              radial-gradient(120% 90% at 50% 120%, transparent 55%, rgba(34,52,30,.16) 100%);
+  mix-blend-mode: soft-light;
+}
+#weatherLayer[data-weather="clear"]::after {
+  inset: -40%;
+  background:
+    radial-gradient(18% 12% at 22% 30%, rgba(30,52,36,.16), transparent 70%),
+    radial-gradient(22% 14% at 64% 58%, rgba(30,52,36,.13), transparent 72%),
+    radial-gradient(16% 10% at 86% 18%, rgba(30,52,36,.12), transparent 70%),
+    radial-gradient(20% 12% at 38% 84%, rgba(30,52,36,.12), transparent 72%);
+  /* 不用 mix-blend-mode：混色層一動就得整個場景重新合成（實測桌機 p95 33ms），一般透明疊色只需合成層位移 */
+  animation: r79CloudDrift 90s linear infinite;
+  will-change: transform;
+}
+@keyframes r79CloudDrift { from { transform: translate3d(-12%, -4%, 0); } to { transform: translate3d(12%, 4%, 0); } }
+html[data-performance-tier="low"] #weatherLayer[data-weather="clear"]::after { animation: none; }
+
+/* 陽光光斑：落在田上的暖色光柱、光池、上升光點與剩餘時間條 */
+.sun-beam { position: absolute; pointer-events: none; image-rendering: auto; animation: r79SunIn .5s ease-out both; }
+.sun-beam .sun-ray { position: absolute; left: 6%; right: 6%; top: 0; bottom: 18%;
+  background: linear-gradient(180deg, rgba(255,240,170,0) 0%, rgba(255,232,140,.32) 55%, rgba(255,222,110,.5) 100%);
+  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%); mix-blend-mode: screen; animation: r79SunPulse 2.4s ease-in-out infinite; }
+.sun-beam .sun-pool { position: absolute; left: -12%; right: -12%; bottom: 2%; height: 34%;
+  background: radial-gradient(50% 50% at 50% 55%, rgba(255,244,170,.75), rgba(255,214,90,.35) 55%, transparent 74%);
+  mix-blend-mode: screen; animation: r79SunPulse 2.4s ease-in-out infinite reverse; }
+.sun-beam .sun-mote { position: absolute; bottom: 14%; width: 5px; height: 5px; border-radius: 50%; background: #fff6c4;
+  box-shadow: 0 0 6px 2px rgba(255,226,120,.85); opacity: 0; animation: r79Mote 2.2s ease-out infinite; }
+.sun-beam .sun-mote.m1 { left: 28%; }
+.sun-beam .sun-mote.m2 { left: 56%; animation-delay: .7s; }
+.sun-beam .sun-mote.m3 { left: 74%; animation-delay: 1.4s; }
+.sun-beam .sun-timer { position: absolute; left: 18%; right: 18%; bottom: 36%; height: 4px; border-radius: 3px;
+  background: rgba(70,52,10,.55); box-shadow: 0 0 0 1px rgba(255,240,180,.7); overflow: hidden; }
+.sun-beam .sun-timer i { display: block; height: 100%; background: linear-gradient(90deg, #ffd65a, #fff2a8);
+  transform-origin: left center; transform: scaleX(calc(1 - var(--sun-progress, 0)));
+  animation: r79SunTimer var(--sun-left, 16s) linear forwards; }
+.sun-beam.caught { animation: r79SunCaught .5s ease-out forwards; }
+@keyframes r79SunIn { from { opacity: 0; transform: translateY(-14px) scaleY(.7); } to { opacity: 1; transform: none; } }
+@keyframes r79SunPulse { 0%,100% { opacity: .78; } 50% { opacity: 1; } }
+@keyframes r79Mote { 0% { opacity: 0; transform: translateY(0) scale(.6); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-46px) scale(1); } }
+@keyframes r79SunTimer { to { transform: scaleX(0); } }
+@keyframes r79SunCaught { 0% { opacity: 1; filter: brightness(1.6); } 100% { opacity: 0; transform: scale(1.25); } }
+html[data-performance-tier="low"] .sun-beam .sun-mote { display: none; }
+html[data-performance-tier="low"] .sun-beam .sun-ray, html[data-performance-tier="low"] .sun-beam .sun-pool { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  #weatherLayer[data-weather="clear"]::after { animation: none; }
+  .sun-beam, .sun-beam .sun-ray, .sun-beam .sun-pool, .sun-beam.caught { animation: none; }
+  .sun-beam .sun-mote { display: none; }
+  .sun-beam .sun-timer i { animation: none; }
+}
+.sun-particle { filter: drop-shadow(0 0 4px rgba(255,214,90,.9)); }
+
+/* 任務列提示：等待倒數與光斑引導 */
+.world-objective-hint { margin-top: 6px; padding: 4px 8px; border-radius: 4px; font-size: 12px; line-height: 1.45; background: rgba(233,209,114,.16); color: #fff3c4; }
+.world-objective-hint.sun { background: linear-gradient(90deg, rgba(255,214,90,.34), rgba(255,214,90,.12)); color: #fff6cf; box-shadow: inset 3px 0 0 #ffd65a; }
+
+/* 收成回饋：連收越多越大越金；作物飛向倉庫 */
+.combo-float { font-size: 15px; padding: 1px 8px; border-radius: 999px; background: rgba(40,58,30,.55); }
+.combo-float.combo-warm { font-size: 18px; color: #ffe680; }
+.combo-float.combo-hot { font-size: 22px; color: #ffd24a; background: rgba(90,56,0,.7); box-shadow: 0 0 10px rgba(255,200,60,.6); }
+.juice-item { font-size: 20px; }
+
+/* toast：NPC 對話框開著時移到對話框上方，不互相壓住 */
+body:has(#worldDialogue:not([hidden])) #toast-zone { bottom: calc(var(--world-dialogue-top-gap, 220px)); }
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  body:has(#worldDialogue:not([hidden])) #toast-zone { bottom: calc(var(--world-dialogue-top-gap, 380px)); }
+  /* 手機直式資源列：讓出右側系統鈕欄位，最多一行五顆 */
+  .res-bar { max-width: calc(100vw - 24px - 54px); }
+  .res-bar .res { padding: 3px 6px; gap: 3px; }
+  .res-bar .res .ui-icon { width: 20px; height: 20px; }
+  .res-bar .res.level .xp-track { width: 44px; }
+}
+
+/* 種子列跟著任務列底部（任務列多一行提示時不互壓） */
+.seed-hud, #mapScene .seed-hud { top: var(--world-seed-top, 260px); }
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .seed-hud, #mapScene .seed-hud { top: var(--world-seed-top, calc(var(--world-quest-top, 112px) + 132px)); }
+  .res-bar .res.level .sub { display: none; }
+  .res-bar { gap: 3px; }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .seed-hud, #mapScene .seed-hud { top: var(--world-seed-top, 179px); }
+}
+@media (max-width: 420px) and (max-height: 650px) {
+  #mapScene .seed-hud { top: calc(var(--world-quest-top, 112px) + 52px); }
+}
+/* R79：資源列換成兩行時，系統鈕往下，「原尺寸／整圖」切換也跟著往下，不互疊（桌機／矮筆電） */
+@media (min-width: 860px) and (min-height: 501px) {
+  .map-fit-toggle { top: calc(var(--world-system-top, 78px) + 62px); }
+}
+
+/* R80: daily goals stay a single card; the return button never scrolls away. */
+.daily-open { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  width: 53px; min-width: 44px; min-height: 57px; padding: 3px; border: 0; border-radius: 4px; font-size: 11px; color: #345a50; background: transparent; cursor: pointer; }
+.daily-open .ui-icon { width: 24px; height: 24px; }
+.daily-open[data-ready="true"]::after { content: ""; position: absolute; top: 4px; right: 5px; width: 9px; height: 9px; border-radius: 50%; background: #b96024; box-shadow: 0 0 0 2px #fff2ce; }
+.daily-modal-card { width: 510px; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #f7fbf1; color: #294c3b; border: 2px solid #b5cfa1; }
+.daily-modal-card h2 { font-size: 21px; margin: 0; text-align: left; }
+#dailyDate, #dailyFooter { margin: 0; font-size: 12px; line-height: 1.5; color: #50684c; }
+.daily-tabs { display: flex; gap: 8px; flex-shrink: 0; }
+.daily-modal button { min-height: 44px; min-width: 44px; font-size: 14px; border: 1px solid #a7c29a; border-radius: 6px; background: #e7efdc; color: #244d38; padding: 6px 12px; cursor: pointer; touch-action: manipulation; }
+.daily-tabs button { flex: 1; }
+.daily-tabs button[aria-pressed="true"], #dailyClaim:not(:disabled) { background: #315f44; color: #fff9df; border-color: #315f44; }
+.daily-modal button:disabled { opacity: .62; cursor: default; }
+#dailyBody { min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 12px; background: #fffdf0; border: 1px solid #d2dab8; border-radius: 6px; }
+#dailyBody h3 { font-size: 18px; margin: 6px 0; line-height: 1.4; }
+#dailyBody p { font-size: 14px; line-height: 1.6; margin: 4px 0 10px; }
+.daily-kicker { color: #637854; font-size: 12px; }
+.daily-progress { font-variant-numeric: tabular-nums; font-weight: 700; }
+.daily-result { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.daily-nav { display: flex; align-items: center; justify-content: center; gap: 22px; flex-shrink: 0; }
+#dailyClose, .daily-modal-card > div:first-child, #dailyFooter { flex-shrink: 0; }
+.world-close, .world-modal-close, .map-fit-toggle { min-width: 44px; min-height: 44px; }
+.world-objective-bottom button, .adventure-quest button, .project-row button, .recipe-row button { min-height: 44px; min-width: 44px; }
+#mapScene[data-map-mode="fit"] #mapWorld { overflow: clip; }
+.action-a[data-harvest="ready"] { background: #466b28; border-color: #ffe59c; box-shadow: 0 0 0 3px #ffe59c55; }
+.action-a[data-harvest="busy"] { background: #596b40; }
+.action-a { font-size: 12px; line-height: 1.25; touch-action: manipulation; }
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .daily-open { flex: 1; width: auto; min-height: 46px; font-size: 10px; }
+  .daily-open .ui-icon { width: 20px; height: 20px; }
+  .side-tabs { gap: 0; }
+  .action-a { width: 72px; min-width: 72px; border-radius: 18px; }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .side-tabs { max-width: 278px; }
+  .side-tab { min-width: 44px; }
+  .daily-open { min-height: 44px; font-size: 10px; }
+  .daily-open .ui-icon { display: none; }
+  .tool-bar { right: 300px; }
+  .action-a { right: 12px; }
+  .daily-modal-card { width: 620px; gap: 5px; padding: 10px 14px; }
+  .daily-modal-card > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  #dailyBody { display: flex; align-items: center; gap: 16px; padding: 8px 12px; }
+  .daily-copy { flex: 1; }
+  .daily-result { flex-direction: column; flex-shrink: 0; gap: 2px; }
+  #dailyBody p { margin-bottom: 2px; }
+  #dailyFooter { text-align: center; }
+}
+/* R81: farm stationery, with the existing crop atlas; no generated artwork stand-in. */
+#questDock[data-quest="first_sun_basket"] { border-color: #d3a94f; background: #fff6d9; color: #594329; }
+#questDock[data-quest="first_sun_basket"] .world-chapter { color: #826233; }
+#questDock[data-quest="first_sun_basket"] .world-objective-detail { color: #654b2c; }
+#questDock[data-quest="first_sun_basket"] .world-objective-bottom { color: #654b2c; }
+#questDock[data-quest="first_sun_basket"] button { background: #735034; color: #fff9e8; border-color: #b88a44; }
+.heirloom-paper { border-left: 4px solid #b48244; padding: 8px 12px; color: #594329; width: 100%; }
+.heirloom-paper h3 { color: #5c3d24; }
+.heirloom-reply { padding: 10px; background: #f3e6c6; border-radius: 5px; }
+#dailyBody .heirloom-caption { font-size: 12px; color: #78623e; }
+.heirloom-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.heirloom-choices button { flex: 1; background: #735034; border-color: #735034; color: #fff9e8; }
+.daily-nav[hidden] { display: none; }
+.daily-tabs button { padding: 6px 8px; }
+#worldSunBegin, #worldBegin { display: block; width: 100%; margin-top: 10px; }
+@media (max-height: 500px) and (min-width: 600px) {
+  .heirloom-paper { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; padding: 2px 10px; }
+  .heirloom-paper h3, .heirloom-paper .daily-kicker { grid-column: 1 / -1; }
+  .heirloom-paper .heirloom-caption { margin: 0; }
+}
+.heirloom-illustration { max-width: 100%; max-height: 200px; object-fit: contain; image-rendering: pixelated; }

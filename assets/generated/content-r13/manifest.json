@@ -1,0 +1,243 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "prompts": "docs/art/PROMPTS_CONTENT_R13.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r13/actors.png",
+      "sha256": "b11b28aa7898c2989962ad4c26fedf979140e1f5a25c8ac869a4ad40e99eb96c",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "docs/art/masters/content-r13/river.png",
+      "sha256": "5def2f5b091487b7d388d00d167c1b020985803e0695b62aa3f1f2943c2f83c7",
+      "width": 724,
+      "height": 2172
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r13/fishing-0.png",
+      "sha256": "43931bf4794c77a68596dd8dc7ee90442a0410c9e068800da4394e3969978393",
+      "width": 96,
+      "height": 96,
+      "sourceMaster": "docs/art/masters/content-r13/actors.png",
+      "crop": [
+        0,
+        0,
+        512,
+        512
+      ]
+    },
+    {
+      "path": "assets/generated/content-r13/fishing-1.png",
+      "sha256": "b3c4b072fddee453cac4dc3f0e5da9908ce44dfa7e6834eed30ded2005cb9e48",
+      "width": 96,
+      "height": 96,
+      "sourceMaster": "docs/art/masters/content-r13/actors.png",
+      "crop": [
+        512,
+        0,
+        1024,
+        512
+      ]
+    },
+    {
+      "path": "assets/generated/content-r13/fishing-2.png",
+      "sha256": "3cc236fd78845a5d5e6d94f88aeaef220b93fadc977ff1f14149989c296fa542",
+      "width": 96,
+      "height": 96,
+      "sourceMaster": "docs/art/masters/content-r13/actors.png",
+      "crop": [
+        1024,
+        0,
+        1536,
+        512
+      ]
+    },
+    {
+      "path": "assets/generated/content-r13/creek.png",
+      "sha256": "2f4f0e32f7a68dae551554571939b288b82c15da1b228fffe0a2f20cd2846539",
+      "width": 154,
+      "height": 1024,
+      "sourceMaster": "docs/art/masters/content-r13/river.png",
+      "pixelGrid": "R89 1536x1024 over 30x20 tiles; creek 3x20 tiles"
+    }
+  ],
+  "derived": [
+    {
+      "path": "assets/generated/content-r13/wait-merchant.png",
+      "sha256": "24f9af192b2dd92b7fdb490418f77d78ee470a1c549aba50e071bcafa853c7f0",
+      "width": 48,
+      "height": 64,
+      "source": "assets/generated/content-r9/sit-merchant.png",
+      "sourceSha256": "24f9af192b2dd92b7fdb490418f77d78ee470a1c549aba50e071bcafa853c7f0",
+      "exactCopy": true,
+      "fixedLowerRows": 18
+    },
+    {
+      "path": "assets/generated/content-r13/wait-elder.png",
+      "sha256": "a3c14f590484e075729d28bff4a95a5ff8940e4a32bd4267a63faa6ed07b6441",
+      "width": 48,
+      "height": 64,
+      "source": "assets/generated/content-r9/sit-elder.png",
+      "sourceSha256": "a3c14f590484e075729d28bff4a95a5ff8940e4a32bd4267a63faa6ed07b6441",
+      "exactCopy": true,
+      "fixedLowerRows": 18
+    },
+    {
+      "path": "assets/generated/content-r13/wait-child.png",
+      "sha256": "85af82d97888484d991718e9f6a7c89e3ed57d2269fe58081c45fc7d2a1a6b5d",
+      "width": 48,
+      "height": 64,
+      "source": "assets/generated/content-r9/sit-child.png",
+      "sourceSha256": "85af82d97888484d991718e9f6a7c89e3ed57d2269fe58081c45fc7d2a1a6b5d",
+      "exactCopy": true,
+      "fixedLowerRows": 18
+    },
+    {
+      "path": "assets/generated/content-r13/river_carp-color.png",
+      "sha256": "fed8eca0257f7e35c656af32e421e9ddb88e98f211d3effa994acfa633f708c2",
+      "width": 128,
+      "height": 112,
+      "source": "assets/generated/content-r8/river_carp-3.png",
+      "sourceSha256": "fed8eca0257f7e35c656af32e421e9ddb88e98f211d3effa994acfa633f708c2",
+      "alphaUnchanged": true
+    },
+    {
+      "path": "assets/generated/content-r13/river_carp-shadow.png",
+      "sha256": "2b43e8a073699fdaaccaa7ee589cd0896fe283f395ae6b2253da569e683453a7",
+      "width": 128,
+      "height": 112,
+      "source": "assets/generated/content-r8/river_carp-3.png",
+      "sourceSha256": "fed8eca0257f7e35c656af32e421e9ddb88e98f211d3effa994acfa633f708c2",
+      "alphaUnchanged": true
+    },
+    {
+      "path": "assets/generated/content-r13/silver_dace-color.png",
+      "sha256": "46093c846df49a962d49fd977b19d7ef2d23b31695d6ae0cdeabef21be0a8b5e",
+      "width": 128,
+      "height": 112,
+      "source": "assets/generated/content-r8/silver_dace-3.png",
+      "sourceSha256": "46093c846df49a962d49fd977b19d7ef2d23b31695d6ae0cdeabef21be0a8b5e",
+      "alphaUnchanged": true
+    },
+    {
+      "path": "assets/generated/content-r13/silver_dace-shadow.png",
+      "sha256": "e6dd7610433049f6b9acb32e740c2cf8f2180188497c5321f6b793e6fe4816b0",
+      "width": 128,
+      "height": 112,
+      "source": "assets/generated/content-r8/silver_dace-3.png",
+      "sourceSha256": "46093c846df49a962d49fd977b19d7ef2d23b31695d6ae0cdeabef21be0a8b5e",
+      "alphaUnchanged": true
+    },
+    {
+      "path": "assets/generated/content-r13/river_perch-color.png",
+      "sha256": "5d00057261911414b3e9666c8aa92bc0c105211e82e4106e953fe28264056900",
+      "width": 128,
+      "height": 112,
+      "source": "assets/generated/content-r8/river_perch-3.png",
+      "sourceSha256": "5d00057261911414b3e9666c8aa92bc0c105211e82e4106e953fe28264056900",
+      "alphaUnchanged": true
+    },
+    {
+      "path": "assets/generated/content-r13/river_perch-shadow.png",
+      "sha256": "a0f8198436ab59ff1aded4ea550e59debd656daf19331a86bd2a69154ba3f027",
+      "width": 128,
+      "height": 112,
+      "source": "assets/generated/content-r8/river_perch-3.png",
+      "sourceSha256": "5d00057261911414b3e9666c8aa92bc0c105211e82e4106e953fe28264056900",
+      "alphaUnchanged": true
+    }
+  ]
+}

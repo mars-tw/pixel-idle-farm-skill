@@ -1,0 +1,54 @@
+{
+  "status": "VERIFIED",
+  "initialUntrackedStorePaths": false,
+  "archivedOnlyNewTestOutputs": [
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/iphone-03-basket.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/iphone-03-basket.png",
+      "sha256": "1fbf198170e0732a103801c2c23b06f1d8a727d47a2094bc5ce94f9259df7927"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/iphone-04-note.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/iphone-04-note.png",
+      "sha256": "216e174f889fcb6a850f1998697add9d1bac4641e09a039a251dc1c3d228bc8c"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/iphone-05-daily.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/iphone-05-daily.png",
+      "sha256": "67b8b678d566cfcf642cee07c96a1a52d0b4bff0845c523c140cb509c5f1e57b"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/iphone-06-same-age.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/iphone-06-same-age.png",
+      "sha256": "b3b9a69bcb15bcafda1bd271e4299f68d53f09ac549d941f19c41a7fe8ad14c9"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/ipad-03-basket.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/ipad-03-basket.png",
+      "sha256": "c84dbf5d4f627c9ca9370727cc1325cfe0be2e6e7c8516599bca7efc2895f71a"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/ipad-04-note.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/ipad-04-note.png",
+      "sha256": "6765d805f179d206aa31ba732bf3aba7b15b4cf78c962198f26a1be8ab833edf"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/ipad-05-daily.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/ipad-05-daily.png",
+      "sha256": "51a33c32638af17a484a7c12bf7eb40c2d04bf0586634c3d2d99142c50d3c947"
+    },
+    {
+      "generatedBy": "existing R81 review and R86/R87 art regression",
+      "source": "docs/store/screenshots/ipad-06-same-age.png",
+      "archive": "docs/content/r1/regression/docs/store/screenshots/ipad-06-same-age.png",
+      "sha256": "8364f82038d855262c26dced712ca1ee486e3658d3b2c38b18bbe58d9cb822fc"
+    }
+  ]
+}

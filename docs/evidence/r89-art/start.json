@@ -1,0 +1,6 @@
+{
+  "commit": "8b1193eda8d7035542e8161af8657dca15fa9b9b",
+  "branch": "main",
+  "status": " M docs/evidence/R68/source-manifest.json\n?? docs/art/ART_RESCORE2_MUSE.md\n?? docs/art/ART_RESCORE3_MUSE.md\n?? docs/art/ART_RESCORE4_MUSE.md\n?? docs/art/ART_RESCORE5_MUSE.md\n?? docs/art/ART_RESCORE6_MUSE.md\n?? docs/art/ART_RESCORE7_MUSE.md\n?? docs/art/ART_RESCORE_MUSE.md\n?? docs/art/ART_REVIEW_MUSE.md\n?? docs/art/compare/r89/\n?? docs/audit_openclose/\n?? docs/playtest/\n?? scripts/audit-oc-r1.js\n?? scripts/capture-r89-art.js\n",
+  "round": "R89 / art8"
+}

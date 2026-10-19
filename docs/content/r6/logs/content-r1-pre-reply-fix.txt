@@ -1,0 +1,36 @@
+PASS empty meal basket visibly directs player to the existing kitchen
+PASS ten real kitchen actions consume twenty wheat
+PASS cancel during carrying spends nothing and never completes the story later
+PASS merchant/plain: double tap spends one actual bread only at resident action frame
+PASS merchant: first story and taste clue are earned
+PASS merchant/sweet: double tap spends one actual bread only at resident action frame
+PASS merchant: wrong taste never opens remembered-taste reply
+PASS merchant/sour: double tap spends one actual bread only at resident action frame
+PASS merchant: matching remembered preference opens a unique reply
+PASS merchant: clear completion feedback
+PASS elder/plain: double tap spends one actual bread only at resident action frame
+PASS elder: first story and taste clue are earned
+PASS elder/sweet: double tap spends one actual bread only at resident action frame
+PASS elder: wrong taste never opens remembered-taste reply
+PASS elder/hot: double tap spends one actual bread only at resident action frame
+PASS elder: matching remembered preference opens a unique reply
+PASS elder: clear completion feedback
+PASS child/plain: double tap spends one actual bread only at resident action frame
+PASS child: first story and taste clue are earned
+PASS child/sour: double tap spends one actual bread only at resident action frame
+PASS child: wrong taste never opens remembered-taste reply
+PASS child/sweet: double tap spends one actual bread only at resident action frame
+PASS child: matching remembered preference opens a unique reply
+PASS child: clear completion feedback
+PASS all three stories, delivery counts and matched replies persist through actual reload
+AssertionError [ERR_ASSERTION]: earned taste conversation can be reread after reload
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\.audit-tmp\r6-regression\scripts\test-content-r1-e2e.js:14:37)
+    at playNeighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\.audit-tmp\r6-regression\scripts\test-content-r1-e2e.js:94:5)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\.audit-tmp\r6-regression\scripts\test-content-r1-e2e.js:208:20 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

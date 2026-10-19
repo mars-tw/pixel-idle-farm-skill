@@ -1,0 +1,35 @@
+{
+  "round": "content-r3",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "merchant",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Asset: a WIDE 2:1 native 256x128 PIXEL SPRITE DIORAMA for a phone farm game. Image 1 is STYLE reference ONLY, the actual 48x64 game sprites: match their small heads, full-body proportions, simple pixel faces and sprite outlines exactly. Generate a NEW scene, not a sprite sheet. LORA short auburn hair, red gingham scarf, cream blouse, forest-green apron, and MIRI red twin braids, straw hat red ribbon, cream shirt, green overalls, sit FULL BODY on two stools outside a little market stall; red gingham wicker basket between them, two teacups and small bowl of purple berries. Top-down three-quarter orthographic RPG world camera, no horizon, no sky. Each person is only 48 native pixels tall, characters occupy one third of scene HEIGHT, quiet grassy ground surrounds them, chunky wood stall and low orchard fence at back. Exactly the same density as world sprites, limited 24 flat colors, large clean pixel clusters, NO tiny texture, NO painterly brushwork, NO detailed anime faces, NO close-up portraits, NO dense leaves. Right-upper honey sun and cool slate contact shadows. No text, no UI, no grid.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14ff2-a005-7ea0-a7c5-72628147f851\\exec-dc2cc943-8ca8-48cb-823d-0044cb70b094.png",
+      "master": "docs/art/masters/content-r3/merchant.png",
+      "references": [
+        "assets/generated/r89/walk.png"
+      ]
+    },
+    {
+      "id": "elder",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Asset: a WIDE 2:1 native 256x128 PIXEL SPRITE DIORAMA for a phone farm game. Image 1 is STYLE reference ONLY, the actual 48x64 game sprites: match their small heads, full-body proportions, simple pixel faces and sprite outlines exactly. Generate a NEW scene, not a sprite sheet. BAMBER an elderly white-bearded farmer, straw hat green band, cream shirt and brown overalls, and MIRI red twin braids, straw hat red ribbon, cream shirt, green overalls, sit FULL BODY beside a small outdoor brick stove and a wooden table; red gingham wicker basket, TWO plates of steaming bread on the table, repaired fishing rod leaned against wooden shed wall, a little brown hen beside the stove. Top-down three-quarter orthographic RPG world camera, no horizon, no sky. Each person is only 48 native pixels tall, characters occupy one third of scene HEIGHT, quiet grassy ground surrounds them, chunky open shed and low garden fence at back. Exactly the same density as world sprites, limited 24 flat colors, large clean pixel clusters, NO tiny texture, NO painterly brushwork, NO detailed anime faces, NO close-up portraits, NO dense leaves. Right-upper honey sun and cool slate contact shadows. No text, no UI, no grid.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14ff2-a005-7ea0-a7c5-72628147f851\\exec-d2337de8-cba2-4425-a2d5-38a62f344b18.png",
+      "master": "docs/art/masters/content-r3/elder.png",
+      "references": [
+        "assets/generated/r89/walk.png"
+      ]
+    },
+    {
+      "id": "child",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Asset: a WIDE 2:1 native 256x128 PIXEL SPRITE DIORAMA for a phone farm game. Image 1 is STYLE reference ONLY, the actual 48x64 game sprites: match their small heads, full-body proportions, simple pixel faces and sprite outlines exactly. Generate a NEW scene, not a sprite sheet. TUTU a small tousled auburn-haired boy in cream shirt and green overalls, and MIRI red twin braids, straw hat red ribbon, cream shirt, green overalls, sit FULL BODY beside a low picnic table. A third complete EMPTY wooden chair is prominently visible at right front with a third plate of bread on its seat. Open little notebook with pressed yellow flower on table, red gingham wicker basket at right, bread shared between them. Top-down three-quarter orthographic RPG world camera, no horizon, no sky. Each person is only 48 native pixels tall, characters occupy one third of scene HEIGHT, quiet grassy ground surrounds them, a low orchard fence at back, open meadow. Exactly the same density as world sprites, limited 24 flat colors, large clean pixel clusters, NO tiny texture, NO painterly brushwork, NO detailed anime faces, NO close-up portraits, NO dense leaves. Right-upper honey sun and cool slate contact shadows. No text, no UI, no grid.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14ff2-a005-7ea0-a7c5-72628147f851\\exec-1fa5fe82-8fb5-446f-965d-9cbc0c51ed15.png",
+      "master": "docs/art/masters/content-r3/child.png",
+      "references": [
+        "assets/generated/r89/walk.png"
+      ]
+    }
+  ]
+}

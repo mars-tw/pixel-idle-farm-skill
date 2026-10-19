@@ -1,0 +1,65 @@
+{
+  "release": "R72",
+  "gate": {
+    "storm": 56,
+    "default": 72
+  },
+  "maxSeasonSpread": 0.35,
+  "seasons": {
+    "春": {
+      "sky1": "#c8e9f3",
+      "sky2": "#dff2cf",
+      "grass": "#82bd50",
+      "grassD": "#5fa443"
+    },
+    "夏": {
+      "sky1": "#aedbf0",
+      "sky2": "#cde7aa",
+      "grass": "#68a83f",
+      "grassD": "#477f32"
+    },
+    "秋": {
+      "sky1": "#e9d09a",
+      "sky2": "#e7c478",
+      "grass": "#b39343",
+      "grassD": "#837132"
+    },
+    "冬": {
+      "sky1": "#d7e1e5",
+      "sky2": "#e7e9df",
+      "grass": "#aeb9a8",
+      "grassD": "#858f84"
+    }
+  },
+  "measurements": {
+    "春-clear": 129.5,
+    "春-sunny": 130.4,
+    "春-rain": 125.8,
+    "春-storm": 124,
+    "春-snow": 134,
+    "春-fog": 135.5,
+    "春-windy": 130.9,
+    "夏-clear": 129.1,
+    "夏-sunny": 130,
+    "夏-rain": 125.6,
+    "夏-storm": 123.8,
+    "夏-snow": 133.8,
+    "夏-fog": 135.3,
+    "夏-windy": 130.5,
+    "秋-clear": 128.9,
+    "秋-sunny": 129.8,
+    "秋-rain": 125.5,
+    "秋-storm": 123.7,
+    "秋-snow": 133.6,
+    "秋-fog": 135.2,
+    "秋-windy": 130.2,
+    "冬-clear": 128.9,
+    "冬-sunny": 129.8,
+    "冬-rain": 125.5,
+    "冬-storm": 123.7,
+    "冬-snow": 133.6,
+    "冬-fog": 135.2,
+    "冬-windy": 130.3
+  },
+  "pass": true
+}

@@ -1,0 +1,66 @@
+{
+  "status": "VERIFIED",
+  "archived": [
+    {
+      "source": "docs/store/screenshots/ipad-03-basket.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/ipad-03-basket.png",
+      "sha256": "c84dbf5d4f627c9ca9370727cc1325cfe0be2e6e7c8516599bca7efc2895f71a"
+    },
+    {
+      "source": "docs/store/screenshots/ipad-04-note.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/ipad-04-note.png",
+      "sha256": "6765d805f179d206aa31ba732bf3aba7b15b4cf78c962198f26a1be8ab833edf"
+    },
+    {
+      "source": "docs/store/screenshots/ipad-05-daily.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/ipad-05-daily.png",
+      "sha256": "91977938f36ee0e47febf9e2aff8987a043f56d110bc8875e5f77397a5e8fa47"
+    },
+    {
+      "source": "docs/store/screenshots/ipad-06-same-age.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/ipad-06-same-age.png",
+      "sha256": "ae53c017a9f941517dad9e99fa17e154dbffc40fc9c2def5f4f8a8a77a8f3c56"
+    },
+    {
+      "source": "docs/store/screenshots/iphone-03-basket.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/iphone-03-basket.png",
+      "sha256": "1fbf198170e0732a103801c2c23b06f1d8a727d47a2094bc5ce94f9259df7927"
+    },
+    {
+      "source": "docs/store/screenshots/iphone-04-note.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/iphone-04-note.png",
+      "sha256": "216e174f889fcb6a850f1998697add9d1bac4641e09a039a251dc1c3d228bc8c"
+    },
+    {
+      "source": "docs/store/screenshots/iphone-05-daily.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/iphone-05-daily.png",
+      "sha256": "1d655e7c09fd02c0dd00b47d5d51ced990a496fbae9bfe040f488672407db766"
+    },
+    {
+      "source": "docs/store/screenshots/iphone-06-same-age.png",
+      "archive": "docs/content/r8/regression-generated/docs/store/screenshots/iphone-06-same-age.png",
+      "sha256": "4b2ac35a0aa0ec6dea0b9f14e40d3bccb72fb2907b3bbf6506159463ea8d54ee"
+    }
+  ],
+  "restoredAfterReleaseUnit": [],
+  "before": [
+    {
+      "source": "docs/content/r7/phone-pond-river_perch-sinking.png",
+      "path": "docs/content/r8/before/phone-pond-river_perch-sinking.png",
+      "sha256": "3d4519cb7d2c67bf4f7266ec83509d3bb6cbf5338d7df16db02827f832f4f39c",
+      "trust": "Historical R7 original retained at task start. Not a fresh old-version run."
+    },
+    {
+      "source": "docs/content/r7/phone-memory-elder-farm-object.png",
+      "path": "docs/content/r8/before/phone-memory-elder-farm-object.png",
+      "sha256": "9eba2c59c2e7a26ddb41f168c23184cd28c2884325ab77bc209a6ec81a108bf8",
+      "trust": "Historical R7 original retained at task start. Not a fresh old-version run."
+    },
+    {
+      "source": "docs/content/r7/phone-gathering-farm-seated.png",
+      "path": "docs/content/r8/before/phone-gathering-farm-seated.png",
+      "sha256": "7668ba5052037d1e6b1204295ea1ada7b02ffbee4fb834fef30c86ce016a709a",
+      "trust": "Historical R7 original retained at task start. Not a fresh old-version run."
+    }
+  ]
+}

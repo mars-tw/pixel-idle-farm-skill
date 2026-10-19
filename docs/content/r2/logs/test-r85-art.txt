@@ -1,0 +1,94 @@
+PASS 9 real masters, 26 images; actual tool and undisclosed model recorded
+PASS source/output hash docs/art/character-sheets/miri-r85.png
+PASS source/output hash docs/art/masters/r85/walk.png
+PASS source/output hash docs/art/masters/r85/actions.png
+PASS source/output hash docs/art/masters/r85/story.png
+PASS source/output hash docs/art/masters/r85/terrain.png
+PASS source/output hash docs/art/masters/r85/panel.png
+PASS source/output hash docs/art/masters/r85/icons.png
+PASS source/output hash docs/art/masters/r85/logo.png
+PASS source/output hash docs/art/masters/r85/app.png
+PASS source/output hash assets/generated/r85/miri-0.png
+PASS source/output hash assets/generated/r85/miri-1.png
+PASS source/output hash assets/generated/r85/miri-2.png
+PASS source/output hash assets/generated/r85/walk.png
+PASS source/output hash assets/generated/r85/actions.png
+PASS source/output hash assets/generated/r85/farming-actions.png
+PASS source/output hash assets/generated/r85/welcome-384.webp
+PASS source/output hash assets/generated/r85/basket-384.webp
+PASS source/output hash assets/generated/r85/table-result-384.webp
+PASS source/output hash assets/generated/r85/doorstep-result-384.webp
+PASS source/output hash assets/generated/r85/album-128.png
+PASS source/output hash assets/generated/r85/paper-128.png
+PASS source/output hash assets/generated/r85/stamp-32.png
+PASS source/output hash assets/generated/r85/wheat-32.png
+PASS source/output hash assets/generated/r85/basket-32.png
+PASS source/output hash assets/generated/r85/water-32.png
+PASS source/output hash assets/generated/r85/sun-32.png
+PASS source/output hash assets/generated/r85/note-32.png
+PASS source/output hash assets/generated/r85/bow-32.png
+PASS source/output hash assets/generated/r85/cups-32.png
+PASS source/output hash assets/generated/r85/logo-320.png
+PASS source/output hash assets/generated/r85/app-icon-64.png
+PASS source/output hash assets/generated/r85/app-icon-192.png
+PASS source/output hash assets/generated/r85/app-icon-512.png
+PASS source/output hash assets/generated/r85/terrain.png
+PASS source/output hash assets/generated/r85/keepsakes.png
+PASS character brightness/saturation double gate walk.png
+PASS character brightness/saturation double gate actions.png
+PASS character brightness/saturation double gate farming-actions.png
+PASS character brightness/saturation double gate miri-0.png
+PASS character brightness/saturation double gate miri-1.png
+PASS character brightness/saturation double gate miri-2.png
+PASS walk row 0: six poses with actual limb changes
+PASS walk row 1: six poses with actual limb changes
+PASS walk row 2: six poses with actual limb changes
+PASS walk row 3: six poses with actual limb changes
+PASS actions row 0: six poses with actual limb changes
+PASS actions row 1: six poses with actual limb changes
+PASS actions row 2: six poses with actual limb changes
+PASS actions row 3: six poses with actual limb changes
+PASS actions row 4: six poses with actual limb changes
+PASS actions row 5: six poses with actual limb changes
+PASS actions row 6: six poses with actual limb changes
+PASS actions row 7: six poses with actual limb changes
+PASS 390x844 same-age wheat in/out of sunlight
+PASS 390x844 broad ground light, generated nonuniform leaf projection and dust
+PASS 390x844 feet off wheat, separate unchanged physics root and contact shadows
+PASS 390x844 readable hero size
+PASS 390x844 single three-page navigation above content, one border system
+PASS 390x844 all three actual claim actions leave three distinct legible farm seals
+PASS 390x844 single explicit wheat inventory quantity
+PASS 390x844 dedicated basket banner visible
+PASS 390x844 full paper story, no green void or journal tabs
+PASS 390x844 story dialogue carries no completion seal
+PASS 844x390 same-age wheat in/out of sunlight
+PASS 844x390 broad ground light, generated nonuniform leaf projection and dust
+PASS 844x390 feet off wheat, separate unchanged physics root and contact shadows
+PASS 844x390 readable hero size
+PASS 844x390 single three-page navigation above content, one border system
+PASS 844x390 all three actual claim actions leave three distinct legible farm seals
+PASS 844x390 single explicit wheat inventory quantity
+PASS 844x390 full paper story, no green void or journal tabs
+PASS 844x390 story dialogue carries no completion seal
+PASS 1032x1376 same-age wheat in/out of sunlight
+PASS 1032x1376 broad ground light, generated nonuniform leaf projection and dust
+PASS 1032x1376 feet off wheat, separate unchanged physics root and contact shadows
+PASS 1032x1376 readable hero size
+PASS 1032x1376 single three-page navigation above content, one border system
+PASS 1032x1376 all three actual claim actions leave three distinct legible farm seals
+PASS 1032x1376 single explicit wheat inventory quantity
+PASS 1032x1376 dedicated basket banner visible
+PASS 1032x1376 full paper story, no green void or journal tabs
+PASS 1032x1376 story dialogue carries no completion seal
+PASS 1366x600 same-age wheat in/out of sunlight
+PASS 1366x600 broad ground light, generated nonuniform leaf projection and dust
+PASS 1366x600 feet off wheat, separate unchanged physics root and contact shadows
+PASS 1366x600 readable hero size
+PASS 1366x600 single three-page navigation above content, one border system
+PASS 1366x600 all three actual claim actions leave three distinct legible farm seals
+PASS 1366x600 single explicit wheat inventory quantity
+PASS 1366x600 full paper story, no green void or journal tabs
+PASS 1366x600 story dialogue carries no completion seal
+PASS no browser errors or missing images
+VERIFIED R85 93 checks

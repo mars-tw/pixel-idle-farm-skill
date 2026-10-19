@@ -1,0 +1,274 @@
+{
+  "status": "VERIFIED",
+  "masterCount": 9,
+  "runtimeImageCount": 29,
+  "records": [
+    {
+      "path": "assets/generated/r84/keepsakes.png",
+      "sha256": "f768fc669dc85948076facedea70156b9e4d55b97a5fcfef5dc2ae6563cb93c2",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/miri-0.png",
+      "sha256": "7a239bd700456a92fc0f51a67019eec63993c5c9b61f8ad9cbe5f9ee3410356c",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/miri-1.png",
+      "sha256": "06466cc90073272335d3d7106d0b593c4fd33c74102f9bcda64348b0dcccb320",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/miri-2.png",
+      "sha256": "f6402a4ee6908cf575c9aab7cf4eb2202bcb624535841914ea1056c52dc7c1e7",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/grey-0.png",
+      "sha256": "2834f8dd2c60f0f36ad47712bb0a866992b49a14755f31a60e0aa67ef29630a2",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/grey-1.png",
+      "sha256": "5a86a68494b210e25250e9ce08c8f83469a42207c7a8b36cc7a067b18066bf9e",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/grey-2.png",
+      "sha256": "29b1da33d6fff38a0bc36b14db3d76791fbccc9cfc587939f5de2a1e9dd02a4d",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/grandma-0.png",
+      "sha256": "b4923c1c4821fa312c5ef4c2233be7f97655d2eb9de5353aef0d05fcfdf406a6",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/grandma-1.png",
+      "sha256": "17440d6f0f9f67b47fdbe637f14906c9bb31398aa8bc87b616410c5de307c3d0",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/grandma-2.png",
+      "sha256": "9956fd61c31a333ee822f20b140523d90ff5e83492d19a3c762730ee696ffea8",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/table-result.webp",
+      "sha256": "49b73cb7728ca686f2405400a0996dad959398d19994405b338c3d69656d598a",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/doorstep-result.webp",
+      "sha256": "fea8dbb4d3f6ed3638c58c285ff9ad8e3b8b7030ca49bd61a6a18b7721f8f37c",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/heirloom/r84/table-result.webp",
+      "sha256": "49b73cb7728ca686f2405400a0996dad959398d19994405b338c3d69656d598a",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/heirloom/r84/doorstep-result.webp",
+      "sha256": "fea8dbb4d3f6ed3638c58c285ff9ad8e3b8b7030ca49bd61a6a18b7721f8f37c",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/panel-192.png",
+      "sha256": "7ab0e229cedb62ca5ea2c7b2fcbc0d55f2621ec9c618430c80bb8b133af1dbb3",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/paper-128.png",
+      "sha256": "5f06349843f65a7a0279f116c6c1c67e34cb09abb5af456d2bcd3fca7df66f49",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/menu-32.png",
+      "sha256": "c4d098c01e52ddbcbc6a0a90a1d8eb3b92d0a98a6351b0e836a0e8251a1869e6",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/face-32.png",
+      "sha256": "8265b877e75110b0ec374a489bd8bd0a1aa447d20fb8ae9e5e4cb0eb1cf07217",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/cups-32.png",
+      "sha256": "fbb060000cbaceb7a8eb5e368434d440da136fd01cd58cf8e624b39d017cc94a",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/wheat-32.png",
+      "sha256": "4a747c7c6d63ff355ede2f84e62da0603ca9c55073f8d4b11ef05da902155b5f",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/basket-32.png",
+      "sha256": "7c87546c3a743ff2843dffde155cc7666011b2b38ca7e061326ad255477d1d01",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/water-32.png",
+      "sha256": "4860e90b82c6fdb27beeaa298ef2393008b021b0ff79647de4188e4d209aa50c",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/note-32.png",
+      "sha256": "dfe81c0fb781f72293a1dd86e58809529406edca267b2a461fc7e98b4c83e23e",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/sun-32.png",
+      "sha256": "07e28cf222df753a40bbadf2a3939dc9b8f4da6e2b7afa6de6895b958ee98be5",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/logo-320.png",
+      "sha256": "3540541b64c144ff8358e0585201781bbc8668eb1d19421cd4ace46d98caf2ca",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r84/app-icon-64.png",
+      "sha256": "98eea325f7a548ed769b427275edb689be3c47777608ad11fd31c900837d7ff7",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/app-icon-192.png",
+      "sha256": "b24ce87f1192330a0ea64b0d0d4e1409edc1dac2a219955d680d1460fe80b13d",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/app-icon-512.png",
+      "sha256": "e183375126b6a2d19c5865d260ae47a024b144d646f0ef8aa0082b145b8db2f9",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r84/terrain.png",
+      "sha256": "84ca69429c7eaceaa8fd0676c4c502c5a5a1c8eac2c226678fa730183b214961",
+      "binaryAlpha": true,
+      "transparentRGBClear": true,
+      "palette": true,
+      "cutout": false
+    }
+  ],
+  "characterDoubleGatePassed": 9,
+  "qualityExceptions": {
+    "assets/generated/r84/panel-192.png": {
+      "brightness": 0.8810418832124864,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.20557255833359536,
+      "lowSaturationFraction": 0.8462185329861112,
+      "gatePass": false
+    },
+    "assets/generated/r84/paper-128.png": {
+      "brightness": 0.9574471863511029,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.15317692689868917,
+      "lowSaturationFraction": 0.99853515625,
+      "gatePass": false
+    },
+    "assets/generated/r84/cups-32.png": {
+      "brightness": 0.6425841794460975,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.3820823068550731,
+      "lowSaturationFraction": 0.2801556420233463,
+      "gatePass": false
+    },
+    "assets/generated/r84/note-32.png": {
+      "brightness": 0.6331234423655044,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.3488308675949608,
+      "lowSaturationFraction": 0.41647597254004576,
+      "gatePass": false
+    }
+  },
+  "qualityExceptionReason": "Cream paper and white porcelain are intentionally low-saturation surfaces, not character art. Raw failures are retained, never labeled double-gate pass.",
+  "limitations": [
+    "64px images are available for human recognition review; no timed human study was performed."
+  ]
+}

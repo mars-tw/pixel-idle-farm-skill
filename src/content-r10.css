@@ -1,0 +1,29 @@
+/* R10: one parcel, legible water silhouettes and actual sharing decisions. */
+.handover-parcel{transition:left .24s linear;filter:drop-shadow(0 2px 1px #3e2f2344)}
+body[data-delivering] .ob[data-frame^='fruit_tree'],body[data-delivering] .ob[data-frame^='oak']{opacity:.20;pointer-events:none}
+body[data-delivering] .ob[data-npc='mayor']{width:64px!important;height:86px!important}
+/* Never paint an empty mailbox progress capsule from the generic contact-shadow rule. */
+.ob.mail-unread::after{left:auto!important;bottom:auto!important;width:11px!important;height:11px!important;right:-3px;top:-3px;background:#d53a31!important;box-shadow:none!important;border:2px solid #fff6e3}
+body[data-reunion] .sun-beam,body[data-reunion] .sun-pool,body[data-reunion] .player::before,body[data-reunion] .player::after,body[data-reunion] .ob-dot,body[data-reunion] .qmarker{visibility:hidden!important}
+.pond-stage .pond-bobber{transition:none;opacity:1;transform:none}
+.pond-stage[data-motion='wide-swell'] .pond-bobber{transform:translateY(10px);opacity:.8}
+.pond-stage[data-motion='bent-wake'] .pond-bobber{transform:translateX(44px);opacity:1}
+.pond-stage[data-reel='active'] .pond-bobber{transform:translateY(40px)!important;opacity:.22!important;filter:none!important}
+.fish-comparison img{filter:brightness(0) saturate(0);opacity:.65}
+#worldModal[data-fishing-state='caught'] .pond-stage{opacity:1;background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r13-20261019-1')}
+.gather-stage .meal-table,.farm-gathering .meal-table{width:240px!important;height:150px!important;scale:1;left:170px;top:154px;background-image:url('../assets/generated/content-r10/table.png?v=content-r13-20261019-1')!important;background-size:240px 150px!important;background-position:center!important}
+.gather-stage .meal-person-merchant,.farm-gathering .meal-person-merchant{left:84px;top:62px}
+.gather-stage .meal-person-elder,.farm-gathering .meal-person-elder{left:192px;top:62px}
+.gather-stage .meal-person-child,.farm-gathering .meal-person-child{left:202px;top:160px}
+.gather-stage .meal-player,.farm-gathering .meal-player{left:84px;top:160px}
+.gather-stage .meal-trace-merchant,.farm-gathering .meal-trace-merchant{left:91px;top:122px;width:48px!important;height:48px!important;content:url('../assets/generated/content-r10/cup.png?v=content-r13-20261019-1')}
+.gather-stage .meal-trace-elder,.farm-gathering .meal-trace-elder{left:191px;top:126px;width:64px!important;height:48px!important;content:url('../assets/generated/content-r10/hot.png?v=content-r13-20261019-1')}
+.gather-stage .meal-trace-child,.farm-gathering .meal-trace-child{left:280px;top:198px}
+.gather-shared{margin:4px 0;min-height:48px;line-height:1.5}
+.gather-choices .neighbor-tabs{margin:4px 0;gap:4px}.gather-choices .neighbor-tabs button{font-size:14px;min-height:44px}
+.serving-foods{display:flex;gap:4px}.serving-foods button{flex:1;min-width:0;min-height:60px;padding:4px;border:2px solid #b38d61;background:#fff6e3;color:#3e2f23;font:13px 'Microsoft JhengHei',sans-serif}
+.serving-foods button[aria-pressed='true']{border-color:#d95737;background:#f5e4bd}.serving-foods img{display:block;width:38px;height:30px;object-fit:contain;image-rendering:pixelated;margin:auto}
+.serving-history summary{min-height:44px;display:flex;align-items:center;cursor:pointer}.serving-history p,.serving-journal p{font-size:14px;line-height:1.5;border-bottom:1px solid #b38d61;padding:6px 0}
+#worldModal[data-content-view='gathering-complete'] .content-footer{margin-top:4px;padding-top:4px}
+@media(max-width:350px){.gather-stage{min-height:210px;height:210px}.gather-choices .neighbor-tabs button{font-size:12px;padding:4px}.serving-foods button{font-size:12px}.gather-shared{font-size:12px}}
+@media(orientation:landscape) and (max-height:600px){.gather-stage{width:45%;height:230px}.gather-choices{overflow:hidden}.serving-foods{flex-wrap:wrap}.serving-foods button{min-height:60px}.gather-choices .neighbor-tabs{flex-wrap:wrap}}

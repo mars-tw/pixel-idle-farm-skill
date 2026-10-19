@@ -1,0 +1,165 @@
+{
+  "status": "VERIFIED",
+  "actors": [
+    {
+      "id": "merchant",
+      "standingAlphaBounds": [
+        [
+          6,
+          2,
+          41,
+          62
+        ],
+        [
+          2,
+          2,
+          47,
+          62
+        ],
+        [
+          6,
+          2,
+          47,
+          62
+        ]
+      ],
+      "headAndFeetIdentical": true,
+      "seatedFeetIdentical": true,
+      "upperBodyChangeBounds": [
+        [
+          6,
+          3,
+          41,
+          46
+        ],
+        [
+          2,
+          2,
+          45,
+          46
+        ]
+      ],
+      "minimumHalfHeadWidth": 14
+    },
+    {
+      "id": "elder",
+      "standingAlphaBounds": [
+        [
+          2,
+          2,
+          45,
+          62
+        ],
+        [
+          2,
+          2,
+          47,
+          62
+        ],
+        [
+          2,
+          2,
+          45,
+          62
+        ]
+      ],
+      "headAndFeetIdentical": true,
+      "seatedFeetIdentical": true,
+      "upperBodyChangeBounds": [
+        [
+          3,
+          2,
+          46,
+          46
+        ],
+        [
+          1,
+          2,
+          47,
+          46
+        ]
+      ],
+      "minimumHalfHeadWidth": 14
+    },
+    {
+      "id": "child",
+      "standingAlphaBounds": [
+        [
+          7,
+          2,
+          41,
+          62
+        ],
+        [
+          6,
+          2,
+          46,
+          62
+        ],
+        [
+          7,
+          2,
+          42,
+          62
+        ]
+      ],
+      "headAndFeetIdentical": true,
+      "seatedFeetIdentical": true,
+      "upperBodyChangeBounds": [
+        [
+          6,
+          2,
+          41,
+          46
+        ],
+        [
+          1,
+          2,
+          46,
+          46
+        ]
+      ],
+      "minimumHalfHeadWidth": 14
+    },
+    {
+      "id": "player",
+      "standingAlphaBounds": [
+        [
+          1,
+          4,
+          47,
+          62
+        ],
+        [
+          1,
+          4,
+          47,
+          62
+        ],
+        [
+          1,
+          4,
+          47,
+          62
+        ]
+      ],
+      "headAndFeetIdentical": true,
+      "seatedFeetIdentical": true,
+      "upperBodyChangeBounds": [
+        [
+          1,
+          6,
+          47,
+          46
+        ],
+        [
+          1,
+          6,
+          47,
+          46
+        ]
+      ],
+      "minimumHalfHeadWidth": 14
+    }
+  ]
+}

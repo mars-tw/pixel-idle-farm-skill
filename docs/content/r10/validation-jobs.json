@@ -1,0 +1,6 @@
+[
+  {
+    "script": "scripts/test-content-r10-e2e.js",
+    "exitCode": 1
+  }
+]

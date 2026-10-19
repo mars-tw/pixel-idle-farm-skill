@@ -1,0 +1,946 @@
+{
+  "status": "VERIFIED",
+  "frames": 94,
+  "gates": [
+    {
+      "file": "walk.png",
+      "row": 0,
+      "col": 0,
+      "brightness": 0.4196571813925244,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.530166545885011,
+      "lowSaturationFraction": 0.022819885900570498,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 0,
+      "col": 1,
+      "brightness": 0.41808685896223435,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5311421124718396,
+      "lowSaturationFraction": 0.01527331189710611,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 0,
+      "col": 2,
+      "brightness": 0.4197422687092146,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5317124489775449,
+      "lowSaturationFraction": 0.022029897718332022,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 0,
+      "col": 3,
+      "brightness": 0.4217341705913134,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.529670422088405,
+      "lowSaturationFraction": 0.026687598116169546,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 0,
+      "col": 4,
+      "brightness": 0.4180637155306567,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5306427325492254,
+      "lowSaturationFraction": 0.02142857142857143,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 0,
+      "col": 5,
+      "brightness": 0.4186159959551911,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5371778188624904,
+      "lowSaturationFraction": 0.010475423045930701,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 1,
+      "col": 0,
+      "brightness": 0.407968518907563,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5181280021974061,
+      "lowSaturationFraction": 0.020833333333333332,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 1,
+      "col": 1,
+      "brightness": 0.41678438040092997,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5222885474609162,
+      "lowSaturationFraction": 0.02237136465324385,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 1,
+      "col": 2,
+      "brightness": 0.4125587615777829,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5230710863404495,
+      "lowSaturationFraction": 0.01867704280155642,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 1,
+      "col": 3,
+      "brightness": 0.4182454939368434,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5285972659486445,
+      "lowSaturationFraction": 0.022257551669316374,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 1,
+      "col": 4,
+      "brightness": 0.40721623254521794,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5201409633134192,
+      "lowSaturationFraction": 0.019388516032811335,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 1,
+      "col": 5,
+      "brightness": 0.41250680029494524,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5214429245337767,
+      "lowSaturationFraction": 0.023023791250959325,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 2,
+      "col": 0,
+      "brightness": 0.41033720849956146,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5243890963804554,
+      "lowSaturationFraction": 0.01875901875901876,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 2,
+      "col": 1,
+      "brightness": 0.41140845183290703,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5262747393713585,
+      "lowSaturationFraction": 0.018115942028985508,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 2,
+      "col": 2,
+      "brightness": 0.40956226834647574,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5248389209931552,
+      "lowSaturationFraction": 0.02157164869029276,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 2,
+      "col": 3,
+      "brightness": 0.41270635376614956,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5192171316785006,
+      "lowSaturationFraction": 0.0202854996243426,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 2,
+      "col": 4,
+      "brightness": 0.41066590316008494,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5192992939748807,
+      "lowSaturationFraction": 0.01989683124539425,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 2,
+      "col": 5,
+      "brightness": 0.41074269453422396,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5254853325502349,
+      "lowSaturationFraction": 0.018315018315018316,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 3,
+      "col": 0,
+      "brightness": 0.42182429062070687,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5263365205271836,
+      "lowSaturationFraction": 0.016719745222929936,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 3,
+      "col": 1,
+      "brightness": 0.43020134967583173,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5282893635750073,
+      "lowSaturationFraction": 0.01850362027353178,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 3,
+      "col": 2,
+      "brightness": 0.42395785436370625,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.527346549386515,
+      "lowSaturationFraction": 0.01568627450980392,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 3,
+      "col": 3,
+      "brightness": 0.4252737449101046,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.526969844877091,
+      "lowSaturationFraction": 0.018370607028753993,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 3,
+      "col": 4,
+      "brightness": 0.4193815481862352,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5297966832786931,
+      "lowSaturationFraction": 0.012028869286287089,
+      "gatePass": true
+    },
+    {
+      "file": "walk.png",
+      "row": 3,
+      "col": 5,
+      "brightness": 0.4312772423529412,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.527725085994909,
+      "lowSaturationFraction": 0.0224,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 0,
+      "col": 0,
+      "brightness": 0.5060799700643617,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5264397328411463,
+      "lowSaturationFraction": 0.029443838604143947,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 0,
+      "col": 1,
+      "brightness": 0.5033500309132662,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5399536400934397,
+      "lowSaturationFraction": 0.019144144144144143,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 0,
+      "col": 2,
+      "brightness": 0.5073993083409529,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.531165261297539,
+      "lowSaturationFraction": 0.01865284974093264,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 0,
+      "col": 3,
+      "brightness": 0.5051457084123971,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5470539743930551,
+      "lowSaturationFraction": 0.011088709677419355,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 0,
+      "col": 4,
+      "brightness": 0.47043932623881957,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5437391665706125,
+      "lowSaturationFraction": 0.014428412874583796,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 0,
+      "col": 5,
+      "brightness": 0.4684352756632065,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5376147721078577,
+      "lowSaturationFraction": 0.03636363636363636,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 1,
+      "col": 0,
+      "brightness": 0.4677607756737946,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5349018495151961,
+      "lowSaturationFraction": 0.02447980416156671,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 1,
+      "col": 1,
+      "brightness": 0.46102782864545594,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5243949105592765,
+      "lowSaturationFraction": 0.019036954087346025,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 1,
+      "col": 2,
+      "brightness": 0.47490523939808477,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5268124918579762,
+      "lowSaturationFraction": 0.018604651162790697,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 1,
+      "col": 3,
+      "brightness": 0.48939687751413746,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5271682227640142,
+      "lowSaturationFraction": 0.014866204162537165,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 1,
+      "col": 4,
+      "brightness": 0.46003258404133424,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5277280970854878,
+      "lowSaturationFraction": 0.022050716648291068,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 1,
+      "col": 5,
+      "brightness": 0.46500364517431686,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5301811641651296,
+      "lowSaturationFraction": 0.028604118993135013,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 2,
+      "col": 0,
+      "brightness": 0.476756193438914,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5425901652071519,
+      "lowSaturationFraction": 0.02403846153846154,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 2,
+      "col": 1,
+      "brightness": 0.4698038643700574,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5332236038790423,
+      "lowSaturationFraction": 0.017679558011049725,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 2,
+      "col": 2,
+      "brightness": 0.48297193831240365,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5283424282442698,
+      "lowSaturationFraction": 0.014606741573033709,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 2,
+      "col": 3,
+      "brightness": 0.49286142312480546,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5351838870368398,
+      "lowSaturationFraction": 0.013888888888888888,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 2,
+      "col": 4,
+      "brightness": 0.4674772766884531,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5284569394510413,
+      "lowSaturationFraction": 0.023333333333333334,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 2,
+      "col": 5,
+      "brightness": 0.4732074253756485,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5336414392160816,
+      "lowSaturationFraction": 0.0286368843069874,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 3,
+      "col": 0,
+      "brightness": 0.4840231277949776,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.53572222030032,
+      "lowSaturationFraction": 0.009868421052631578,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 3,
+      "col": 1,
+      "brightness": 0.4888871741142809,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5344395659552985,
+      "lowSaturationFraction": 0.012875536480686695,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 3,
+      "col": 2,
+      "brightness": 0.49938726817042606,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5231288026613219,
+      "lowSaturationFraction": 0.015037593984962405,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 3,
+      "col": 3,
+      "brightness": 0.4692555027307727,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5288448669642464,
+      "lowSaturationFraction": 0.01141552511415525,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 3,
+      "col": 4,
+      "brightness": 0.4878170062370062,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5316838934285218,
+      "lowSaturationFraction": 0.011434511434511435,
+      "gatePass": true
+    },
+    {
+      "file": "actions.png",
+      "row": 3,
+      "col": 5,
+      "brightness": 0.47757849745663233,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5330411435416353,
+      "lowSaturationFraction": 0.008869179600886918,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 0,
+      "col": 0,
+      "brightness": 0.44176547132942523,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5331191258712333,
+      "lowSaturationFraction": 0.02663230240549828,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 0,
+      "col": 1,
+      "brightness": 0.4566304241438511,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5257780555327575,
+      "lowSaturationFraction": 0.03963133640552995,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 0,
+      "col": 2,
+      "brightness": 0.4728777996902036,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5319808448564916,
+      "lowSaturationFraction": 0.02697495183044316,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 0,
+      "col": 3,
+      "brightness": 0.4688675358839187,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5386945208148908,
+      "lowSaturationFraction": 0.024844720496894408,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 0,
+      "col": 4,
+      "brightness": 0.45196118454242756,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5502873996025912,
+      "lowSaturationFraction": 0.018010291595197257,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 0,
+      "col": 5,
+      "brightness": 0.43993534262867157,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5341197394114262,
+      "lowSaturationFraction": 0.026336791699920193,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 1,
+      "col": 0,
+      "brightness": 0.44545269323671494,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5377614432871521,
+      "lowSaturationFraction": 0.019927536231884056,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 1,
+      "col": 1,
+      "brightness": 0.47022722457258764,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5175107760200263,
+      "lowSaturationFraction": 0.05024630541871921,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 1,
+      "col": 2,
+      "brightness": 0.48352152826956024,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5189510669751821,
+      "lowSaturationFraction": 0.040776699029126215,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 1,
+      "col": 3,
+      "brightness": 0.47469483635833515,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5291771019725766,
+      "lowSaturationFraction": 0.040892193308550186,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 1,
+      "col": 4,
+      "brightness": 0.4496489664400792,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5431056549899029,
+      "lowSaturationFraction": 0.020928116469517744,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 1,
+      "col": 5,
+      "brightness": 0.4333743747990999,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5409080280500019,
+      "lowSaturationFraction": 0.02459016393442623,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 2,
+      "col": 0,
+      "brightness": 0.4410784391101732,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5312341502512486,
+      "lowSaturationFraction": 0.023318385650224215,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 2,
+      "col": 1,
+      "brightness": 0.4654906484513191,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5097879322508655,
+      "lowSaturationFraction": 0.046065259117082535,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 2,
+      "col": 2,
+      "brightness": 0.4732232032685686,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5240544696700666,
+      "lowSaturationFraction": 0.03002729754322111,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 2,
+      "col": 3,
+      "brightness": 0.4733735993418346,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5208905172619822,
+      "lowSaturationFraction": 0.043706293706293704,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 2,
+      "col": 4,
+      "brightness": 0.4464641884291227,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5489616033548076,
+      "lowSaturationFraction": 0.019417475728155338,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 2,
+      "col": 5,
+      "brightness": 0.4386532642073779,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5338094086922007,
+      "lowSaturationFraction": 0.02711864406779661,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 3,
+      "col": 0,
+      "brightness": 0.4517300033233632,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5423393001302648,
+      "lowSaturationFraction": 0.0009416195856873823,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 3,
+      "col": 1,
+      "brightness": 0.44562100566789214,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5413678096771287,
+      "lowSaturationFraction": 0.001953125,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 3,
+      "col": 2,
+      "brightness": 0.4311744812050694,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5228804867675245,
+      "lowSaturationFraction": 0.02097902097902098,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 3,
+      "col": 3,
+      "brightness": 0.4569820531375995,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5443558905251978,
+      "lowSaturationFraction": 0.0008787346221441124,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 3,
+      "col": 4,
+      "brightness": 0.4626920567075751,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.54218750593263,
+      "lowSaturationFraction": 0.008093525179856115,
+      "gatePass": true
+    },
+    {
+      "file": "tend.png",
+      "row": 3,
+      "col": 5,
+      "brightness": 0.4678600234017658,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5324510424433094,
+      "lowSaturationFraction": 0.0189873417721519,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 0,
+      "col": 0,
+      "brightness": 0.5448776327896278,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5156902149149809,
+      "lowSaturationFraction": 0.08406524466750313,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 0,
+      "col": 1,
+      "brightness": 0.5416212475443272,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5129420659767016,
+      "lowSaturationFraction": 0.08615188257817485,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 0,
+      "col": 2,
+      "brightness": 0.5443561203452657,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.518126539525607,
+      "lowSaturationFraction": 0.07548430193720775,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 0,
+      "col": 3,
+      "brightness": 0.5511118684285308,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5218067115352989,
+      "lowSaturationFraction": 0.07125603864734299,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 1,
+      "col": 0,
+      "brightness": 0.45063614310200206,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5248675240996586,
+      "lowSaturationFraction": 0.021078735275883446,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 1,
+      "col": 1,
+      "brightness": 0.4480179976788223,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5226865536228894,
+      "lowSaturationFraction": 0.026168224299065422,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 1,
+      "col": 2,
+      "brightness": 0.4459830809598779,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5260550909620346,
+      "lowSaturationFraction": 0.017639902676399026,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 1,
+      "col": 3,
+      "brightness": 0.45425181949078136,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5284923258118082,
+      "lowSaturationFraction": 0.01373134328358209,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 2,
+      "col": 0,
+      "brightness": 0.4412903710580358,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.46950048086201135,
+      "lowSaturationFraction": 0.09684361549497848,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 2,
+      "col": 1,
+      "brightness": 0.445383063583815,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4724511193965844,
+      "lowSaturationFraction": 0.09104046242774566,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 2,
+      "col": 2,
+      "brightness": 0.44486561409491326,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.47695275996502706,
+      "lowSaturationFraction": 0.08550724637681159,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 2,
+      "col": 3,
+      "brightness": 0.45370680611246605,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.47411742141350516,
+      "lowSaturationFraction": 0.08924806746310611,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 3,
+      "col": 0,
+      "brightness": 0.41905070134266914,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5220755624309731,
+      "lowSaturationFraction": 0.015696533682145193,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 3,
+      "col": 1,
+      "brightness": 0.41882945528013055,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5180893596292119,
+      "lowSaturationFraction": 0.0178335535006605,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 3,
+      "col": 2,
+      "brightness": 0.41379153434051213,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5198372007991356,
+      "lowSaturationFraction": 0.017759562841530054,
+      "gatePass": true
+    },
+    {
+      "file": "npcs.png",
+      "row": 3,
+      "col": 3,
+      "brightness": 0.4244459603654546,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5292098046017346,
+      "lowSaturationFraction": 0.009345794392523364,
+      "gatePass": true
+    },
+    {
+      "file": "portraits.png",
+      "row": 0,
+      "col": 0,
+      "brightness": 0.5743769163260122,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.535128230087142,
+      "lowSaturationFraction": 0.09452296819787986,
+      "gatePass": true
+    },
+    {
+      "file": "portraits.png",
+      "row": 0,
+      "col": 1,
+      "brightness": 0.5677381937086281,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5359364388796446,
+      "lowSaturationFraction": 0.10168506682161534,
+      "gatePass": true
+    },
+    {
+      "file": "portraits.png",
+      "row": 0,
+      "col": 2,
+      "brightness": 0.5767597981613327,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5387777747178868,
+      "lowSaturationFraction": 0.09224441833137485,
+      "gatePass": true
+    },
+    {
+      "file": "portraits.png",
+      "row": 1,
+      "col": 0,
+      "brightness": 0.5206949227561524,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4799210017721326,
+      "lowSaturationFraction": 0.1465252581635501,
+      "gatePass": true
+    },
+    {
+      "file": "portraits.png",
+      "row": 1,
+      "col": 1,
+      "brightness": 0.49092234553000463,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4459759877184624,
+      "lowSaturationFraction": 0.16063714902807774,
+      "gatePass": true
+    },
+    {
+      "file": "portraits.png",
+      "row": 1,
+      "col": 2,
+      "brightness": 0.5337979199810846,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4735489863629201,
+      "lowSaturationFraction": 0.1510192362905541,
+      "gatePass": true
+    }
+  ]
+}

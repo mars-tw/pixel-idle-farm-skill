@@ -1,0 +1,224 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "prompts": "docs/art/PROMPTS_CONTENT_R6.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r6/tokens.png",
+      "sha256": "3aab9cab4e041bcb1e9762148758f0659686ff8200b8fbb9c5e8fe651f28d413",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "path": "docs/art/masters/content-r6/baskets.png",
+      "sha256": "1fce251d1ee289eb11627626b9a0e271ed1f328c152bb6c017a0fd981ea06584",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "path": "docs/art/masters/content-r6/gathering.png",
+      "sha256": "f65f8659d2aa810f064f07c287c0736baac75d5446f7bf70c22f6bd046975ae9",
+      "width": 1774,
+      "height": 887
+    },
+    {
+      "path": "docs/art/masters/content-r6/receive.png",
+      "sha256": "44bb06b41ad975b747149acd2cd469d3791b70cdc4c05d130762eaaae9a170a8",
+      "width": 1254,
+      "height": 1254
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r6/token-merchant.png",
+      "sha256": "1402cf6e7e5d765e32bdf107b2dbbcab98614403129595c08aac0697feebddab",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/token-elder.png",
+      "sha256": "c816f54d7d33c5e120fadc25cd8ff837205c14a4e3e8d84105cf8cd533822601",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/token-child.png",
+      "sha256": "77f8f893d0c945b5750a2a72f781f077bc579de6934352df6a93c33ec7742eaf",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/basket-plain.png",
+      "sha256": "aac5f88c6f2f27c5220269b8807679e690bb0f720b85573c043515e28815b22e",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/basket-sweet.png",
+      "sha256": "dc35e33795d6e40a0981e59189a4860726d7710a467bcad2fa051f32deefa18b",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/basket-sour.png",
+      "sha256": "d3b0509fd33f9e08a5e43556aa78d4b50de4d262b3c5cdeadb0ffb6e0b28ab64",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/basket-hot.png",
+      "sha256": "3ce31c673fc1c6cfa54a4e0a8c1c1ebe0ac7b72f590afa575742c6dcea46e3c2",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/gathering.webp",
+      "sha256": "d2d500fc1629e70c8cf436e97396f70f3d3bcd2211a0196339c539fd92f25256",
+      "width": 512,
+      "height": 256
+    },
+    {
+      "path": "assets/generated/content-r6/receive-merchant-0.png",
+      "sha256": "50ae39d508808a05282ef7e6378c5727d9e26ded937f6d1b8cc15bfaa9bfe29c",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-merchant-1.png",
+      "sha256": "8697da47e59d3ce250c1f13165abd7dabf91406f21df073703ef95edff4b4131",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-merchant-2.png",
+      "sha256": "8bf415137079f54013911ed17cb18f35bf81e3696b2969aaac5ddb83acc72c89",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-elder-0.png",
+      "sha256": "03ecfe1f958bd685ce64b1b96aaa66647b9447b4b2b967f2799da40a06cb5ace",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-elder-1.png",
+      "sha256": "d02fcb33366719da1f39ce7f42b106c582d39e2216155fe210e465b0b551c547",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-elder-2.png",
+      "sha256": "1471d65e8028eed57002104763649fbd571ce71f85ee5ef43ae539d8c41c8743",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-child-0.png",
+      "sha256": "150c59968baadcc63095992c34aff14c90e5d302da87533a900ae2fb294ec1e4",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-child-1.png",
+      "sha256": "16b090cb2aeeaf0257e6aaeeb6732ae91c9bd843e49915ea2182d90a18080bdf",
+      "width": 96,
+      "height": 128
+    },
+    {
+      "path": "assets/generated/content-r6/receive-child-2.png",
+      "sha256": "26110e4c0578a93f2f3df5134207b3239dd0ecd5872374c3201dd7a7db317a27",
+      "width": 96,
+      "height": 128
+    }
+  ]
+}

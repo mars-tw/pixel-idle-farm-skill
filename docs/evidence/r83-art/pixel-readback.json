@@ -1,0 +1,529 @@
+{
+  "status": "VERIFIED",
+  "images": [
+    {
+      "path": "assets/generated/r83/walk.png",
+      "size": [
+        288,
+        256
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/walk-alpha.png",
+        "sha256": "7b204cff55b31e5032a95957d9d2c40c03f18bfc928fbabe8afc8bea621bb323"
+      }
+    },
+    {
+      "path": "assets/generated/r83/npcs.png",
+      "size": [
+        192,
+        256
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/npcs-alpha.png",
+        "sha256": "b542c7b7186152fbd4f5a8304c45697cebb055fac1e2cc072bcbecb8987233da"
+      }
+    },
+    {
+      "path": "assets/generated/r83/actions.png",
+      "size": [
+        288,
+        256
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/actions-alpha.png",
+        "sha256": "2450b757d243a43580fd0ed910f346dd99309eb111b2ffee501e93042bd4f38d"
+      }
+    },
+    {
+      "path": "assets/generated/r83/tend.png",
+      "size": [
+        288,
+        256
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/tend-alpha.png",
+        "sha256": "15f4013c11df36515f1cfe277f88b88b8d59d0ab40765e2327eaf3bdda40e1e2"
+      }
+    },
+    {
+      "path": "assets/generated/r83/farming-actions.png",
+      "size": [
+        288,
+        1536
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/farming-actions-alpha.png",
+        "sha256": "a355b482e311ba15704b0e9aacd110ad3ce5c3f427c417455d31bf2b3b149d5c"
+      }
+    },
+    {
+      "path": "assets/generated/r83/crops.png",
+      "size": [
+        240,
+        288
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/crops-alpha.png",
+        "sha256": "8ea8190e6c4a31caa272b7c47a72773b301f03ff192481a23ac6ba3ab3f694b5"
+      }
+    },
+    {
+      "path": "assets/generated/r83/cropslate.png",
+      "size": [
+        240,
+        432
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/cropslate-alpha.png",
+        "sha256": "42c6bf7ca21bde88ca0fcfef4f8d6c6aeb9252350378d59b3fbe8c028cb9a747"
+      }
+    },
+    {
+      "path": "assets/generated/r83/cropsseason.png",
+      "size": [
+        240,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/cropsseason-alpha.png",
+        "sha256": "0e0c7ab08fdde15b991847a258b267dce0794225ab02525a1fa9d1d5a649991f"
+      }
+    },
+    {
+      "path": "assets/generated/r83/world.png",
+      "size": [
+        384,
+        288
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/world-alpha.png",
+        "sha256": "0fd2781d9010cdc3aacde36cf5ce6aa27d079baa139887e1d2684a5ea81a0ab0"
+      }
+    },
+    {
+      "path": "assets/generated/r83/terrain.png",
+      "size": [
+        512,
+        512
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/terrain-alpha.png",
+        "sha256": "2771429f1814f147eba58ae8e44076b89c0c69f9d0b5a951869a01912c556cbc"
+      }
+    },
+    {
+      "path": "assets/generated/r83/portraits.png",
+      "size": [
+        240,
+        160
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/portraits-alpha.png",
+        "sha256": "492e69186c4a2707e64028068d4158b43d08ec4d41926ca02a432a4083600dd0"
+      }
+    },
+    {
+      "path": "assets/generated/r83/grey-0.png",
+      "size": [
+        80,
+        80
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/grey-0-alpha.png",
+        "sha256": "f3ab5dd7d40b750bcc1c5ad140a2819a4dd2b0b56087826ff0a94c3f4682f465"
+      }
+    },
+    {
+      "path": "assets/generated/r83/grey-1.png",
+      "size": [
+        80,
+        80
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/grey-1-alpha.png",
+        "sha256": "b1725dff456e2dbe6df1259305da07f5a858a5e9616a12adc190ab24f2b2ae87"
+      }
+    },
+    {
+      "path": "assets/generated/r83/grey-2.png",
+      "size": [
+        80,
+        80
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/grey-2-alpha.png",
+        "sha256": "fb876641762fcd403590a73a89993612f69770b67f96e85c50001ded61ba5657"
+      }
+    },
+    {
+      "path": "assets/generated/r83/grandma-0.png",
+      "size": [
+        80,
+        80
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/grandma-0-alpha.png",
+        "sha256": "d29ca87ec1e5073bf24e9e0319e7b814c2cbc97ca2184a1d6d889e841495ced2"
+      }
+    },
+    {
+      "path": "assets/generated/r83/grandma-1.png",
+      "size": [
+        80,
+        80
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/grandma-1-alpha.png",
+        "sha256": "5b588d3f37372544ab44bd47fc46989dd847232836589228ff932e5c7eccd8bc"
+      }
+    },
+    {
+      "path": "assets/generated/r83/grandma-2.png",
+      "size": [
+        80,
+        80
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/grandma-2-alpha.png",
+        "sha256": "3577234e1711c34c6635f88589a3ccac0fa65ccd842ae537600e5878891634ae"
+      }
+    },
+    {
+      "path": "assets/generated/r83/farmer-face-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/farmer-face-64-alpha.png",
+        "sha256": "ba5b8a29052e217550dee9b1da1397763e65794df9adfd21a0082e1a83936fd8"
+      }
+    },
+    {
+      "path": "assets/generated/r83/welcome-384.webp",
+      "size": [
+        384,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/basket-384.webp",
+      "size": [
+        384,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/door-r82.webp",
+      "size": [
+        384,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/table-r82.webp",
+      "size": [
+        384,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/panel-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/paper-128.png",
+      "size": [
+        128,
+        128
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/icons.png",
+      "size": [
+        128,
+        64
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/icons-alpha.png",
+        "sha256": "770d5387b6d7067f53a035d44ec546c5371d304376ba9e497b8c26d775e42f31"
+      }
+    },
+    {
+      "path": "assets/generated/r83/basket-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/basket-32-alpha.png",
+        "sha256": "0ceb7ea08254ed1a6f1b3a9a38d5d89122ac194b983e0d915889d4b5306b650b"
+      }
+    },
+    {
+      "path": "assets/generated/r83/note-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/note-32-alpha.png",
+        "sha256": "a02ae2ee76b4ebf855f69a851f488c0574c997306d95b7d515bc89f77d49aab3"
+      }
+    },
+    {
+      "path": "assets/generated/r83/wheat-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/wheat-32-alpha.png",
+        "sha256": "5a02260b42d013eaf84fa5c55357ac62ba7cae5800704b62de1d66ad384ede0d"
+      }
+    },
+    {
+      "path": "assets/generated/r83/stamp-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/stamp-32-alpha.png",
+        "sha256": "2d0e506f2477f43ce4ed2c09647ee89b89c6df923f204b2752985df7bdff61db"
+      }
+    },
+    {
+      "path": "assets/generated/r83/water-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/water-32-alpha.png",
+        "sha256": "19bab77615501e9161ed6b33ed3dc166fd54a9df03edba51caf44265e0765aa8"
+      }
+    },
+    {
+      "path": "assets/generated/r83/seed-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/seed-32-alpha.png",
+        "sha256": "42bc6344b8db421c5ff9a678fff6d1aa209b6c3019bc90b1c8c7e8883dba1afb"
+      }
+    },
+    {
+      "path": "assets/generated/r83/sun-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/sun-32-alpha.png",
+        "sha256": "c1656e7ddadbbbca372cd44313cb3ffe1d328400155d1c2b1615dc81a618ba8e"
+      }
+    },
+    {
+      "path": "assets/generated/r83/tea-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/tea-32-alpha.png",
+        "sha256": "24e7bba75b2920446aa9d45dc8f000c371e2dd1d90af3871d5cc8824037eb3ff"
+      }
+    },
+    {
+      "path": "assets/generated/r83/logo-320.png",
+      "size": [
+        320,
+        112
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": {
+        "path": "docs/evidence/r83-art/masks/logo-320-alpha.png",
+        "sha256": "7302891280fadf86ff3f4f90b7d5a012fd4920ef4e88e8b08af3b89a4b3042fa"
+      }
+    },
+    {
+      "path": "assets/generated/r83/app-icon-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/app-icon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/generated/r83/app-icon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/heirloom/r83/table-r82.webp",
+      "size": [
+        384,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    },
+    {
+      "path": "assets/heirloom/r83/doorstep-r82.webp",
+      "size": [
+        384,
+        192
+      ],
+      "binaryAlpha": true,
+      "commonPalette": true,
+      "cleanTransparentRGB": true,
+      "alphaMask": null
+    }
+  ],
+  "cropFrames": 75,
+  "mainCharacter": {
+    "nativeVisibleBox": [
+      4,
+      5,
+      44,
+      58
+    ],
+    "phone390RootWidth": 96,
+    "phone390VisibleWidth": 80.0
+  }
+}

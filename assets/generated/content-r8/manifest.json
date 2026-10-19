@@ -1,0 +1,384 @@
+{
+  "round": "content-r8",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "prompts": "docs/art/PROMPTS_CONTENT_R8.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r8/fish.png",
+      "sha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "width": 1536,
+      "height": 1024,
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "path": "docs/art/masters/content-r8/keepsakes.png",
+      "sha256": "c7fb77675a820c7ac75454b08bb2d2945971b6a165ac6ed11aee65e19638f8f3",
+      "width": 2172,
+      "height": 724,
+      "tool": "image_gen.imagegen"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r8/river_carp-0.png",
+      "sha256": "d5378600899e36d15b6cd56e202d9c884d5e11ae32300295c4baf64d022a6d6a",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        0,
+        0,
+        384,
+        341
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/river_carp-1.png",
+      "sha256": "cea296ea804b12f5da6548677ffaa8e8dbfe7759ade3fe421d5b3093744893cf",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        384,
+        0,
+        768,
+        341
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/river_carp-2.png",
+      "sha256": "2eaf3a082df1009005519668672cfe4a482c45c52aa3ded5be92b9ee8ff80ea4",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        768,
+        0,
+        1152,
+        341
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/river_carp-3.png",
+      "sha256": "fed8eca0257f7e35c656af32e421e9ddb88e98f211d3effa994acfa633f708c2",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        1152,
+        0,
+        1536,
+        341
+      ],
+      "kind": "fish-portrait"
+    },
+    {
+      "path": "assets/generated/content-r8/silver_dace-0.png",
+      "sha256": "6ac5bc967d4386a8ac1ab8e5779be6bc2c7fd38de8117f6e6c5e6c76a9db863b",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        0,
+        341,
+        384,
+        683
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/silver_dace-1.png",
+      "sha256": "ecbb1f274c614b8864efe223ee932f1442a188e1ff10ba83a7e0119a7cbb1003",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        384,
+        341,
+        768,
+        683
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/silver_dace-2.png",
+      "sha256": "90de3d337dfd9d53b824d57c935468492e3d72903b1091ddb599fb2996d2f7c5",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        768,
+        341,
+        1152,
+        683
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/silver_dace-3.png",
+      "sha256": "46093c846df49a962d49fd977b19d7ef2d23b31695d6ae0cdeabef21be0a8b5e",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        1152,
+        341,
+        1536,
+        683
+      ],
+      "kind": "fish-portrait"
+    },
+    {
+      "path": "assets/generated/content-r8/river_perch-0.png",
+      "sha256": "2a235a5ad8b917e290496d73f0ac11f44cc2c55a50772c90d618d86e2f770550",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        0,
+        683,
+        384,
+        1024
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/river_perch-1.png",
+      "sha256": "c848dd4670b74a8509be3ab85e37858e6fcba34dbbc68dd23624027e8f17b9e5",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        384,
+        683,
+        768,
+        1024
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/river_perch-2.png",
+      "sha256": "25c2b2ae57af23163c097d3554862f3a04653d0554f7a0d18ecdfed9d2789e83",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        768,
+        683,
+        1152,
+        1024
+      ],
+      "kind": "water-frame"
+    },
+    {
+      "path": "assets/generated/content-r8/river_perch-3.png",
+      "sha256": "5d00057261911414b3e9666c8aa92bc0c105211e82e4106e953fe28264056900",
+      "width": 128,
+      "height": 112,
+      "source": "docs/art/masters/content-r8/fish.png",
+      "sourceSha256": "409b444fae4bfc1e8a3aebf523a96670dc503a2285c7c65e4e78209930b80d07",
+      "crop": [
+        1152,
+        683,
+        1536,
+        1024
+      ],
+      "kind": "fish-portrait"
+    },
+    {
+      "path": "assets/generated/content-r8/token-merchant.png",
+      "sha256": "ae634d3f67c9c68851091d42245f448fa8816e356c84b34df0cb631b5cf02b51",
+      "width": 64,
+      "height": 64,
+      "source": "docs/art/masters/content-r8/keepsakes.png",
+      "sourceSha256": "c7fb77675a820c7ac75454b08bb2d2945971b6a165ac6ed11aee65e19638f8f3",
+      "crop": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "kind": "keepsake"
+    },
+    {
+      "path": "assets/generated/content-r8/token-elder.png",
+      "sha256": "28da028d29290a3a33a815b0e870de92ce2f950b8a54943128719ef6e22715dd",
+      "width": 64,
+      "height": 64,
+      "source": "docs/art/masters/content-r8/keepsakes.png",
+      "sourceSha256": "c7fb77675a820c7ac75454b08bb2d2945971b6a165ac6ed11aee65e19638f8f3",
+      "crop": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "kind": "keepsake"
+    },
+    {
+      "path": "assets/generated/content-r8/token-child.png",
+      "sha256": "7a3c6ebae61ad85d2fd839dc14224b9ad9dfc41a7db6df7e437be2742e2c0803",
+      "width": 64,
+      "height": 64,
+      "source": "docs/art/masters/content-r8/keepsakes.png",
+      "sourceSha256": "c7fb77675a820c7ac75454b08bb2d2945971b6a165ac6ed11aee65e19638f8f3",
+      "crop": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "kind": "keepsake"
+    },
+    {
+      "path": "assets/generated/content-r8/gesture-merchant.png",
+      "sha256": "5017d89c10b54e0127aef1f8cd82a2bd9d8aed0cf85cce9e21bc48cf755449d0",
+      "width": 48,
+      "height": 64,
+      "source": "assets/generated/content-r7/eat-merchant.png",
+      "sourceSha256": "3bc126bf56c239d170eb6acf8554ef9e68ee0ae96c3f1e9ce16719d3d5af15dc",
+      "fixedLowerBodySource": "assets/generated/content-r7/sit-merchant.png",
+      "fixedLowerBodySha256": "eebdf9e6cceb375cf6dfd70d47af2da3701f018c7586e10ad2ac362e0c7e22da",
+      "fixedRows": [
+        42,
+        64
+      ],
+      "kind": "articulated-pose-derivative"
+    },
+    {
+      "path": "assets/generated/content-r8/gesture-elder.png",
+      "sha256": "e2a291e0bc4c58414df3621c8786518b4efcfa12f50877e8ce2d6cc5953df691",
+      "width": 48,
+      "height": 64,
+      "source": "assets/generated/content-r7/eat-elder.png",
+      "sourceSha256": "d0da646b3a8683a59dfccf45e776e3f30a3ce549ff69decd59b4a22f403c6015",
+      "fixedLowerBodySource": "assets/generated/content-r7/sit-elder.png",
+      "fixedLowerBodySha256": "b2c407c2eb68b0cd4d46030f563c3d2168232a0eadf71d11759e45a13e09eff3",
+      "fixedRows": [
+        42,
+        64
+      ],
+      "kind": "articulated-pose-derivative"
+    },
+    {
+      "path": "assets/generated/content-r8/gesture-child.png",
+      "sha256": "5fc59c6b29a700d6971a439de8f023b6893cdb3c2cfa9d3dff7badfe86740715",
+      "width": 48,
+      "height": 64,
+      "source": "assets/generated/content-r7/eat-child.png",
+      "sourceSha256": "8d19867d97bfb44b4554433e754107dc32920c58fca78f89b755b8bb9282f770",
+      "fixedLowerBodySource": "assets/generated/content-r7/sit-child.png",
+      "fixedLowerBodySha256": "4af7d4e0358b88b5d1409b0047cce3743db96969115f26cf0ae48e7241d8e9e6",
+      "fixedRows": [
+        42,
+        64
+      ],
+      "kind": "articulated-pose-derivative"
+    }
+  ],
+  "generatedOutputs": 15,
+  "retainedDerivatives": 3
+}

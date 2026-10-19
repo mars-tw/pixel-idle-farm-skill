@@ -1,0 +1,30 @@
+{
+  "status": "VERIFIED",
+  "source": "docs/evidence/r88-art/regression/docs/evidence/r79/r79-fun-e2e.json",
+  "sourceSha256": "4bc5caf58885c909d59bdeea9ea558d268dbc71625f4dff6cb1c600094104346",
+  "measurements": {
+    "desktop": {
+      "runsP95Ms": [
+        16.7,
+        16.8,
+        33.3
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "browserIsolation": "fresh headless process per sample; identical scene and assertions",
+      "trust": "concurrent-load (other agents share this machine)"
+    },
+    "mobile": {
+      "runsP95Ms": [
+        16.7,
+        16.7,
+        16.7
+      ],
+      "medianP95Ms": 16.7,
+      "limitMs": 18,
+      "browserIsolation": "fresh headless process per sample; identical scene and assertions",
+      "trust": "concurrent-load (other agents share this machine)"
+    }
+  },
+  "trust": "Shared concurrent machine; reference only, not native-device shipment proof"
+}

@@ -1,0 +1,2727 @@
+
+> pixel-idle-farm@0.1.22 test:ci
+> npm test && npm run test:e2e
+
+
+> pixel-idle-farm@0.1.22 test
+> node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-adventure.js && node scripts/test-world-migration.js && node scripts/test-r74-building-upgrades.js && node scripts/test-r79-sunpatch.js && node scripts/test-r80-daily.js && node scripts/test-r81-heirloom.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js
+
+✓ 版本鏈一致（CACHE_VERSION=r88-20261018-1）
+== R39 SW 快取完整性守門 ==
+  ✓ index.html 本地 script/link 皆帶 ?v=r88-20261018-1
+  ✓ index/manifest/runtime 關鍵本地資產皆以可驗證版本 URL 列入 SW cache
+  ✓ SW cache 清單皆帶精確版本（R68 生成圖為 SHA-256 前 8 碼，其餘為 r88-20261018-1）
+  ✓ SW cache 清單內檔案皆實際存在
+
+== R39 文案品質守門 ==
+  ✓ index.html 與 src/*.js 可見字串無 U+FFFD/連續問號/mojibake
+
+== R61 手機地圖內 UX 守門 ==
+  ✓ touch 農土改由地圖內 action dock 承接，不再要求二次確認
+  ✓ 手機有 D-pad 與 A 鍵，且重用逐格移動/面向目標動作
+  ✓ 建造工具以地圖內輪盤直接呼叫 buildBuilding
+  ✓ 建築/動物照護改為地圖內小氣泡並重用 care/collect 函式
+  ✓ 桌面／程式化地圖操作維持單擊直達路徑
+  ✓ PointerEvent 優先，350ms 時窗只保留給無 PointerEvent 的舊瀏覽器
+  ✓ 地圖內 action dock、作物 quickbar 與手機控制盤樣式存在
+  ✓ R64 手機控制盤只依主指標 coarse + 窄寬度分流，不再把觸控能力當手機
+
+✅ R39 自動化守門測試通過
+== 1. 成長與收成 ==
+  ✓ 可種小麥
+  ✓ 種小麥扣 1 金
+  ✓ 7.5s 時約半熟、未成熟
+  ✓ 15s 後成熟、階段 4
+  ✓ 收成得 2 小麥
+  ✓ 倉庫有 2 小麥
+  ✓ 收成得 1 XP
+
+== 2. 賣出與經濟為正 ==
+  ✓ 賣 2 小麥得 2 金
+  ✓ 賣出加 2 金
+  ✓ 一輪小麥淨 +1 金
+
+== 3. 理想玩法進度節奏（首收 <20s / 升級 <3min / 新作物 <8min）==
+    首次收成: 15s, 第2次升級: 166s, 解鎖胡蘿蔔(lv2): 30s, 等級: 5, 金幣: 20
+  ✓ 首次收成 < 20s（實際 15s）
+  ✓ 第 2 次升級 < 3min（實際 166s）
+  ✓ 新作物(胡蘿蔔)解鎖 < 8min（實際 30s）
+  ✓ 10 分鐘內至少 lv2
+
+== 4. 倉庫容量與溢出 ==
+  ✓ 初始容量 30
+  ✓ 倉滿時新增全溢出
+  ✓ 擴倉後容量提高
+
+== 5. 訂單：生成 / 完成優於直售 / 連單 ==
+  ✓ 生成 3 筆訂單
+  ✓ 訂單要求至少一種作物
+  ✓ 訂單獎金(28) > 直售(21)
+  ✓ 完成訂單得金幣
+  ✓ 連單 +1
+  ✓ 完成後自動補單
+  ✓ 丟單後連單歸零
+
+== 6. 升級扣費與數值變動 ==
+  ✓ 開墾升級每級都有實際增益（6→8→10→12）
+  ✓ 開墾 Lv1 實際增加農地（6→8）
+  ✓ 開墾 Lv2 實際增加農地（8→10）
+  ✓ 開墾 Lv3 實際增加農地（10→12）
+  ✓ 開墾滿級等於地圖 soil 上限
+  ✓ plots 陣列已補足
+  ✓ 肥沃土壤後成長倍率下降（更快）
+  ✓ 市集人脈後番茄售價提高
+
+== 7. 離線進度：無幫手成熟 / 幫手自動收 / 自動補種多輪 / 上限 ==
+  ✓ 無幫手：成熟格數記為 1
+  ✓ 無幫手：未自動入庫
+  ✓ 幫手 lv1：自動收成 2 小麥
+  ✓ 幫手 lv1：收成後格子清空（不自動補種）
+  ✓ 幫手 lv2：60s 自動補種多輪收成（實際 8）
+  ✓ 幫手 lv2：補種多次（實際 3）
+  ✓ 幫手 lv2：結束時仍有作物在長
+  ✓ 幫手 lv2：沒錢時只收已種的一輪
+  ✓ 幫手 lv2：沒錢時不補種
+  ✓ 幫手 lv2：沒錢補種後格子清空
+  ✓ 離線時間被截到 8h 上限
+  ✓ 有記錄超出上限的原始時間
+
+== 8. 等級曲線與作物解鎖 ==
+  ✓ lv1 只解鎖小麥
+  ✓ 達門檻升 lv2 解鎖胡蘿蔔
+  ✓ lv4 解鎖 R15 新作物玉米
+  ✓ 玉米期望淨利 8.0 金/分鐘，低於番茄後段爆發線
+  ✓ lv5 解鎖 unlockLevel≤5 的 8 種作物
+  ✓ lv8 解鎖全部 15 種作物
+  ✓ 甜椒 使用 crops2 且經濟為正（9.7 金/分鐘）
+  ✓ 馬鈴薯 使用 crops2 且經濟為正（8.1 金/分鐘）
+  ✓ 葡萄 使用 crops2 且經濟為正（12.3 金/分鐘）
+  ✓ 溫室甜瓜 使用 crops2 且經濟為正（12.9 金/分鐘）
+  ✓ 豌豆 使用 crops3 且經濟為正（9.6 金/分鐘）
+  ✓ 地瓜 使用 crops3 且經濟為正（11.3 金/分鐘）
+  ✓ 冬羽甘藍 使用 crops3 且經濟為正（13.2 金/分鐘）
+  ✓ P0 radish 櫻桃蘿蔔為 Lv5 春季 90s crops4 像素作物
+  ✓ radish 淨利 6.7 金/分鐘，低於 strawberry 16.0
+  ✓ P0 sunflower 向日葵為 Lv6 夏季 crops4 像素作物，訂單 XP 偏高
+  ✓ sunflower 單次直售期望與金/分鐘皆不超 strawberry
+  ✓ 春 至少有 1 種作物
+  ✓ 夏 至少有 1 種作物
+  ✓ 秋 至少有 1 種作物
+  ✓ 冬 至少有 1 種作物
+
+== 9. 天氣（lv5 解鎖）==
+  ✓ lv1 永遠晴朗（天氣未解鎖）
+  ✓ lv5 後天氣會變化
+  ✓ 降雨時成長更快
+  ✓ 過期天氣不會繼續生效
+  ✓ 豔陽時售價更高
+  ✓ 微風同時小幅加速成長並提高售價
+  ✓ 晨霧成長稍慢但售價提高
+  ✓ 降雪成長放慢但售價提高
+  ✓ 暴風雨加速成長但售價不加成
+  ✓ 天氣機率可抽到降雪
+  ✓ 天氣機率可抽到暴風雨
+  ✓ 訂單契約價不受天氣影響（既定設計）
+
+== 10. R47 季節與豐年祭訂單 ==
+  ✓ 目前季節讀 state.season
+  ✓ 季節到期後輪替到下一季
+  ✓ 長時間未更新時 currentSeason 會推算多季後的正確季節
+  ✓ 離線結算依時長 catch-up 多個季節並記錄 seasonsReached
+  ✓ 離線跨季後可解鎖對應季節信件
+  ✓ 首 tick 已過期的出發季會寫入 seasonsReached 並解鎖出發季信件
+  ✓ Lv6+ 當季作物直售 ×1.15
+  ✓ 可生成豐年祭稀有度訂單
+  ✓ 豐年祭訂單要求 2~3 種品項（實際 3）
+  ✓ P0 季節訂單偏壓：春季豌豆芽市強制帶入 pea
+  ✓ 季節訂單偏壓不改 pea base sellValue
+  ✓ P0 NPC 委託也吃春季偏壓（radish）
+  ✓ R3 偏壓邊界：Lv6 秋季偏好中的 Lv7 作物與未發現採集物不進偏壓池
+  ✓ R3 偏壓邊界：未解鎖作物／未發現採集物不會出現在季節偏壓訂單
+
+== 11. 存檔遷移（向後相容）==
+  ✓ 舊存檔欄位補齊不崩
+  ✓ 舊存檔補齊季節預設
+  ✓ 版本號更新
+  ✓ 舊存檔無效開墾 Lv4 會夾到現行滿級且仍維持最大農地
+
+✅ 全部經濟測試通過
+== 1. manifest 資源路徑有效 ==
+  ✓ manifest 全部 9 個素材檔存在
+
+== 2. 地圖磚效果改變作物成長（堆肥場 growthAura）==
+  ✓ 可蓋堆肥場
+  ✓ 堆肥場讓小麥成長更快（15000→13500ms）
+  ✓ 成長光環 = 0.90
+  ✓ 同類成長光環建築達 maxCount 後不可再蓋
+  ✓ 舊存檔重複堆肥場只計入 1 座效果
+  ✓ 全部 growthAura 建築各只計 1 座，總倍率封頂 0.7286
+
+== 3. 清障礙改變磚狀態並給建材 ==
+  ✓ 地圖有樹樁障礙
+  ✓ 可清除樹樁
+  ✓ 清除後磚變草地（object=null）
+  ✓ 清樹樁得 2 木材
+  ✓ 清障計數 +1
+  ✓ 清除後該磚可興建
+
+== 4. 建築解鎖：倉儲行為（筒倉）==
+  ✓ 可蓋筒倉
+  ✓ 筒倉倉容 +90（30→120）
+  ✓ 舊存檔重複筒倉不再無限增加倉容
+
+== 5. 建築解鎖動物 + 容量限制 ==
+  ✓ 等級不足無法蓋雞舍
+  ✓ lv3 可蓋雞舍
+  ✓ 蓋雞舍自動入住 1 隻雞
+  ✓ 雞已解鎖
+  ✓ 可買到容量上限 3 隻
+  ✓ 超過容量被擋
+
+== 5a. R50：動物產能建築 maxCount 封頂 ==
+  ✓ 雞舍含地圖常駐 1 座，全場 maxCount=2
+  ✓ 雞舍可在常駐 1 座外再建 1 座
+  ✓ 第 3 座雞舍被 maxCount 擋下
+  ✓ 畜舍含地圖常駐 1 座，全場 maxCount=2
+  ✓ 畜舍可在常駐 1 座外再建 1 座
+  ✓ 第 3 座畜舍被 maxCount 擋下
+  ✓ 鴨舍無常駐建築，全場 maxCount=1
+  ✓ 鴨舍可建第 1 座
+  ✓ 第 2 座鴨舍被 maxCount 擋下
+
+== 5b. Stage 6.5：畜舍地圖常駐不代表動物解鎖，仍需等級（修正 Stage 4 迴歸）==
+  ✓ 畜舍從地圖常駐建築就已存在（Stage 4 設計，不需玩家另外建造）
+  ✓ Lv1 畜舍雖已存在，牛尚未解鎖（ANIMALS.cow.unlockLevel=5）
+  ✓ Lv1 即使金幣足夠也買不到牛
+  ✓ 起始雞不受此檢查影響（seedStructures 直接塞入，非經 buyAnimal）
+  ✓ Lv1 仍可收集起始雞的蛋
+  ✓ Lv5 牛解鎖
+  ✓ Lv5 可以買牛
+
+== 5c. Stage 7.1：同一建築有多種 unlockAnimal 時都能買（原本 UI 只賣 [0]，羊永遠買不到）==
+  ✓ 畜舍設定同時解鎖牛與羊
+  ✓ 牛與羊在 Lv5 都判定為已解鎖
+  ✓ 可以買牛
+  ✓ 可以買羊（Stage 7.1 前 UI 邏輯永遠買不到）
+
+== 6. 動物產品計時（online）+ 收集 ==
+  ✓ 未到週期不產出
+  ✓ 到週期後成熟
+  ✓ 收集得 1 顆蛋
+  ✓ 蛋進倉庫
+
+== 7. 動物產品（offline）多輪 + 上限 ==
+  ✓ 離線自動產 5 顆蛋（實際 5）
+  ✓ 離線蛋入倉
+
+== 8. 餵食立即產出（花作物）==
+  ✓ 餵食立即產蛋
+  ✓ 餵食扣 2 小麥
+  ✓ 餵食得 1 蛋
+
+== 9. 動物產品可滿足訂單（Stage 6.5：須先收集過才進訂單池）==
+  ✓ 蓋雞舍但還沒收過蛋，訂單池不含雞蛋（避免 Lv1 隨機訂單一開局就要蛋）
+  ✓ 收集一次蛋
+  ✓ 收過蛋後訂單池才含雞蛋
+  ✓ 用雞蛋完成訂單得金幣
+  ✓ 完成訂單扣 3 蛋
+  ✓ 金幣增加
+
+== 10. 賣出動物產品（價格用產品定義）==
+  ✓ 賣 3 牛奶得 54 金
+
+== 11. 濕土澆水：比乾土更快成長 ==
+  ✓ 可對種植中的乾土澆水
+  ✓ 澆水後變濕土
+  ✓ 濕土剩餘時間更短（乾 45000 > 濕 33750）
+  ✓ 同輪不可重複澆水
+  ✓ 空地不可澆水
+  ✓ 收成重種後恢復乾土
+
+== 11b. Stage 6.5：離線收益也要吃到濕土加速（修正 applyOffline 沒套用 MOISTURE_MUL）==
+  ✓ 乾土在濕土成熟時間點離線結束時還沒熟
+  ✓ 濕土離線也吃到加速，同時間已自動收成一輪（yield 3，實際 {"carrot":3}）
+  ✓ 離線自動收成會記錄作物首次發現時間
+
+== 12. 工具模式 state.interaction ==
+  ✓ 預設工具為 hand
+  ✓ 工具集含 water/clear 等 5 種
+
+== 13. 故事任務完成度同步（作物先完成也會補進度）==
+  ✓ 未讀告示前種植不會跳過序章
+  ✓ 讀告示後補認已種小麥，完成度從序章推到澆水
+  ✓ 下一任務是澆水（first_water）
+  ✓ 已澆水的小麥會補進 first_water 完成度
+  ✓ 收成小麥後 first_harvest 完成度增加
+  ✓ 首收後生成 2 小麥新手保底訂單
+  ✓ 新手保底訂單報酬維持 45 金 / 3 XP，不跳過早期升級節奏
+  ✓ 首收後新手保底訂單立即可交付
+  ✓ 交付訂單後 first_delivery 完成度增加
+  ✓ 清掉樹樁完成序章最後一關
+  ✓ 序章 6 關全部完成
+  ✓ 序章後接第二章「修橋」（repair_bridge）
+
+== 13b. Stage 5/12：修橋解鎖東林 + 採集鏈 + 商人回報 ==
+  ✓ 地圖有斷橋（水上、bridge=true）
+  ✓ 地圖有東林事件點（region=east）
+  ✓ 修橋前：斷橋與東林封鎖區不可走
+  ✓ 修橋前：BFS 無法抵達東林
+  ✓ 序章未完成不能修橋
+  ✓ 建材不足不能修橋（需真資源）
+  ✓ 修橋材料清單顯示木6石4缺口
+  ✓ 清樹樁後材料清單更新為木材 2/6
+  ✓ 木材不足時任務目標轉向大樹
+  ✓ 清大樹後木材備齊，仍缺石頭 4
+  ✓ 石頭不足時第 1 個任務目標轉向巨石
+  ✓ 石頭不足時第 2 個任務目標轉向巨石
+  ✓ 依材料導引清障後湊齊木6石4
+  ✓ 序章完成 + 木6石4 → 修橋成功
+  ✓ 修橋消耗木材 6、石頭 4
+  ✓ 修橋推進到「探索新區」（explore_new_area）
+  ✓ 修橋後：橋可走、東林解鎖
+  ✓ 修橋後：BFS 可抵達東林事件點
+  ✓ 首次抵達東林古樹給一次性獎勵
+  ✓ 事件獎勵 +120 金
+  ✓ 探索新區後接東林採集鏈（discover_east_forage）
+  ✓ 事件獎勵僅一次
+  ✓ 東林採集鏈 marker 指向採集點
+  ✓ 回報前東林採集物不進訂單/委託池
+  ✓ 辨認採集點後推進到收集樣品
+  ✓ 東林有 4 個限定採集點（R15 新增野莓/薄荷）
+  ✓ 可依 UI 採集東林藥草與螢光菇各 1 份
+  ✓ R15 新增東林野莓與溪畔薄荷可採集並入庫
+  ✓ 東林限定材料進入倉庫
+  ✓ 收集完成後接商人回報（report_east_forage）
+  ✓ 回報任務建立商人特殊委託
+  ✓ 材料齊全時商人回報委託可交付
+  ✓ 商人回報獎勵 +18 金，使用 NPC 委託結算
+  ✓ 商人回報消耗東林樣品
+  ✓ 回報後完成第二章，接上第三章「跟老農學動物照護」
+  ✓ 回報後已採集的東林採集物進入訂單/委託池
+
+== 13b2. R19：東林深處（成本門檻 + 稀有採集 + 收藏品）==
+  ✓ 地圖有東林深處入口（east_deep）
+  ✓ 東林深處有 2 個稀有採集點且位於子區域
+  ✓ 未解鎖前深處採集點 BFS 不可達
+  ✓ 未解鎖前不可採深處稀有物
+  ✓ 東林深處顯示明確成本缺口
+  ✓ 補齊 90 金/木4/石2 後可解鎖東林深處
+  ✓ 解鎖深處後寫入旗標與非通膨收藏品
+  ✓ 東林深處解鎖消耗 90 金、木4、石2
+  ✓ 解鎖後深處採集點 BFS 可達
+  ✓ 可採集月帽菇孢與古樹琥珀脂並入庫
+  ✓ 深處稀有採集點有低頻冷卻
+  ✓ 收藏品完成度記錄東林年輪拓印
+  ✓ 深處稀有採集期望值 1.4 金/分鐘，低頻高價但不壓過作物曲線
+
+== 13c. Stage 7：動物照護（親密度/品質分級/冷卻/衰減）==
+  ✓ 初始親密度 0
+  ✓ 0 親密度 = normal 品質
+  ✓ 第 1 次餵食：normal 品質，item id 為 egg
+  ✓ 冷卻中重複餵食被擋（Stage 7.1 新增，防止免成本狂點衝品質）
+  ✓ 冷卻後第 2 次餵食（親密度 44）：good 品質，item id 為 egg_good
+  ✓ 澆水成功（跟餵食是不同動作類型，不受餵食冷卻影響）
+  ✓ 冷卻中重複澆水被擋
+  ✓ 冷卻結束後可再次澆水
+  ✓ 梳理後達到開心門檻（94 >= 70）
+  ✓ 開心門檻以上狀態為 happy
+  ✓ 24 小時沒照護，親密度衰減回 0
+  ✓ 衰減後品質回到 normal
+  ✓ 高親密度時收集得 premium 品質
+  ✓ 餵食前自動收集 3 輪已累積的待收產物
+  ✓ 倉庫拿到 3（自動收集）+1（餵食獎勵）= 4 顆蛋，沒有被吞掉
+  ✓ 離線收成依高親密度給 premium 品質（實際 {"egg_premium":2}）
+  ✓ 離線動物產物會記錄首次發現時間
+  ✓ 養到開心任務看 bestAffinity，不因現值衰減而卡關
+
+== 13d. Stage 7：第三章任務鏈（老農對話 → 照護 → 開心 → 優質品 → 賣出）==
+  ✓ 地圖有老農 NPC
+  ✓ 任務標記指向老農
+  ✓ 跟老農對話推進到「餵食/澆水/梳理」任務
+  ✓ 任務標記指向雞舍（structure marker kind）
+  ✓ 照護動物後推進到「養到開心」任務
+  ✓ 親密度衝高並已收集優質品後，一次連跳兩關（不需分開觸發）
+  ✓ 接下來是「賣出優質品」任務
+  ✓ 倉庫已有優質/頂級品項
+  ✓ 賣出優質品後 qualitySold 計數增加
+  ✓ R47 routes completed chapter 3 into chapter 4
+
+== 13e. Stage 10.0：NPC 對話階段補上 ch3done（第三章動物照護全完成後）==
+  ✓ 初始階段 start
+  ✓ 序章完成後進 ch1done
+  ✓ 修橋後進 bridge
+  ✓ 只探索東林古樹但尚未回報採集前仍維持 bridge
+  ✓ 第二章任務鏈全部完成後 chapter2Done() 為 true
+  ✓ 採集並回報東林後進 ch2done
+  ✓ 第三章任務鏈尚未完成前 chapter3Done() 為 false
+  ✓ 第三章任務鏈全部完成後 chapter3Done() 為 true
+  ✓ 第三章動物照護全完成後進 ch3done（優先於 ch2done）
+  ✓ mayor 有 ch3done 台詞（作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。）
+  ✓ merchant 有 ch3done 台詞（聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！）
+  ✓ elder 有 ch3done 台詞（照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。）
+  ✓ child 有 ch3done 台詞（我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？）
+  ✓ 不存在的 NPC id 回傳 null
+
+== 14. 存檔遷移補齊 MVP2 欄位 ==
+  ✓ 舊存檔補齊 materials/map/buildings/animals
+  ✓ 舊存檔補齊 interaction.tool
+  ✓ 地圖磚數正確
+  ✓ R19 舊存檔地圖補上東林深處入口事件點
+  ✓ R19 舊存檔地圖補上東林深處稀有採集點
+  ✓ 舊存檔補齊 eastDeepUnlocked/discoveries/collections
+  ✓ 舊存檔用既有收成/收集紀錄回填首次發現時間
+
+== 14b. Stage 7：舊存檔的動物物件補齊照護欄位 ==
+  ✓ 舊動物補齊 affinity（預設 0）
+  ✓ 舊動物補齊 lastCaredAt
+  ✓ 舊動物補齊 lastFedAt/lastWateredAt/lastGroomedAt
+  ✓ 舊存檔補齊 stats.qualitySold
+
+== 14c. R49：髒 map 不再因維度相符而被信任 ==
+  ✓ 空 tiles 髒地圖會重建為完整新版地圖
+  ✓ 重建地圖含站點、常駐結構與事件點
+  ✓ 髒 map 重建不倒退金幣、倉庫與故事進度
+  ✓ 髒 map 重建會保留可對應座標的合法建築，只移除無法落點的個別建築
+  ✓ 髒 map 重建會保留可對應家園的合法動物，只移除無家園動物
+  ✓ 髒 map 重建保留合法玩家位置並重算座標
+
+== 14d. R64：半壞健康 map 會補齊必要站點、結構、NPC 與橋梁 ==
+  ✓ 缺水井站點會補回
+  ✓ 缺信箱站點會補回
+  ✓ 缺訂單看板站點會補回
+  ✓ 缺單一 NPC 時仍補齊所有必要 NPC
+  ✓ 缺雞舍 footprint structureId 會補齊
+  ✓ 缺斷橋旗標/地形會補回
+  ✓ 預置雞舍 building 記錄與 footprint buildingId 會重新接回
+
+== 15. Stage 10.1：NPC 重複委託（core logic）==
+  ✓ 不存在的 NPC id 回傳 reason=no_npc（實際 no_npc）
+  ✓ 第三章未完成前，NPC 不會開委託（reason=story）
+  ✓ 測試前置：第三章已標記完成
+  ✓ 玩家尚未發現任何可委託品項時不生成委託（實際 reason=no_pool）
+  ✓ no_pool 時 generateNpcRequest 回傳 null（不強行生成）
+  ✓ 已發現 elder 委託池內至少一項品項後，canRequestFrom 為 true
+  ✓ generateNpcRequest 產生委託物件
+  ✓ 委託只要求已發現的品項（egg），數量>0
+  ✓ 委託有正報酬
+  ✓ 委託存進 state.npcRequests[npcId]
+  ✓ 庫存不足時 canFulfillNpcRequest 為 false
+  ✓ 補足庫存後 canFulfillNpcRequest 為 true
+  ✓ fulfillNpcRequest 成功
+  ✓ coins 正確入帳
+  ✓ 委託扣除庫存正確（egg 用完後歸零/移除）
+  ✓ 交付後委託從 state.npcRequests 移除
+  ✓ npcRequestLog 完成次數遞增為 1
+  ✓ npcRequestLog 記錄最後交付時間
+  ✓ stats.npcRequestsCompleted 遞增
+  ✓ 交付後立刻詢問應在冷卻中（實際 reason=cooldown）
+  ✓ 冷卻時間過後可再接新委託（時間戳現算，不用計數器）
+  ✓ 沒有進行中委託時 fulfillNpcRequest 回傳 reason=none（實際 none）
+
+== 15b. Stage 10.1：舊存檔補齊 NPC 委託欄位 ==
+  ✓ 舊存檔補齊空的 npcRequests
+  ✓ 舊存檔補齊空的 npcRequestLog
+  ✓ 舊存檔補齊空的 npcSideQuests
+  ✓ 舊存檔補齊 stats.npcRequestsCompleted
+
+== 15c. Stage 10 審核修正：品質委託計數、放棄委託、報酬吃 sellBonus ==
+  ✓ elder 委託池含品質分級品項時可正常生成
+  ✓ 交付含品質品項的委託成功
+  ✓ 交付品質分級品項後 qualitySold 增加（實際 1）
+  ✓ 冷卻已過後可再生成新委託（放棄測試前置）
+  ✓ declineNpcRequest 成功
+  ✓ 放棄後委託從 state.npcRequests 移除
+  ✓ 放棄後立即詢問應在冷卻中（實際 reason=cooldown）
+  ✓ 沒有進行中委託時 declineNpcRequest 回傳 ok=false
+  ✓ 兩邊都能成功生成委託（比較報酬前置）
+  ✓ sellBonus 升級後委託報酬跟著提升（32 → 37），報酬基準吃當下 sellUnitValue
+
+== 15d. R19：鎮民三段連鎖支線（固定報酬 + 背景文本）==
+  ✓ 第三章完成後鎮長支線可接
+  ✓ mayor 支線設定為 3 段
+  ✓ mayor 生成第 1/3 段支線委託
+  ✓ mayor 第 1/3 段交付固定報酬
+  ✓ mayor 完成步數更新為 1/3
+  ✓ mayor 第 1/3 段完成後狀態正確
+  ✓ mayor 生成第 2/3 段支線委託
+  ✓ mayor 第 2/3 段交付固定報酬
+  ✓ mayor 完成步數更新為 2/3
+  ✓ mayor 第 2/3 段完成後狀態正確
+  ✓ mayor 生成第 3/3 段支線委託
+  ✓ mayor 第 3/3 段交付固定報酬
+  ✓ mayor 完成步數更新為 3/3
+  ✓ mayor 第 3/3 段完成後狀態正確
+  ✓ mayor 完成三段後解鎖小鎮背景文本
+  ✓ mayor 三段完成後不重複生成
+  ✓ merchant 支線設定為 3 段
+  ✓ merchant 生成第 1/3 段支線委託
+  ✓ merchant 第 1/3 段交付固定報酬
+  ✓ merchant 完成步數更新為 1/3
+  ✓ merchant 第 1/3 段完成後狀態正確
+  ✓ merchant 生成第 2/3 段支線委託
+  ✓ merchant 第 2/3 段交付固定報酬
+  ✓ merchant 完成步數更新為 2/3
+  ✓ merchant 第 2/3 段完成後狀態正確
+  ✓ merchant 生成第 3/3 段支線委託
+  ✓ merchant 第 3/3 段交付固定報酬
+  ✓ merchant 完成步數更新為 3/3
+  ✓ merchant 第 3/3 段完成後狀態正確
+  ✓ merchant 完成三段後解鎖小鎮背景文本
+  ✓ merchant 三段完成後不重複生成
+  ✓ elder 支線設定為 3 段
+  ✓ elder 生成第 1/3 段支線委託
+  ✓ elder 第 1/3 段交付固定報酬
+  ✓ elder 完成步數更新為 1/3
+  ✓ elder 第 1/3 段完成後狀態正確
+  ✓ elder 生成第 2/3 段支線委託
+  ✓ elder 第 2/3 段交付固定報酬
+  ✓ elder 完成步數更新為 2/3
+  ✓ elder 第 2/3 段完成後狀態正確
+  ✓ elder 生成第 3/3 段支線委託
+  ✓ elder 第 3/3 段交付固定報酬
+  ✓ elder 完成步數更新為 3/3
+  ✓ elder 第 3/3 段完成後狀態正確
+  ✓ elder 完成三段後解鎖小鎮背景文本
+  ✓ elder 三段完成後不重複生成
+  ✓ child 支線設定為 3 段
+  ✓ child 生成第 1/3 段支線委託
+  ✓ child 第 1/3 段交付固定報酬
+  ✓ child 完成步數更新為 1/3
+  ✓ child 第 1/3 段完成後狀態正確
+  ✓ child 生成第 2/3 段支線委託
+  ✓ child 第 2/3 段交付固定報酬
+  ✓ child 完成步數更新為 2/3
+  ✓ child 第 2/3 段完成後狀態正確
+  ✓ child 生成第 3/3 段支線委託
+  ✓ child 第 3/3 段交付固定報酬
+  ✓ child 完成步數更新為 3/3
+  ✓ child 第 3/3 段完成後狀態正確
+  ✓ child 完成三段後解鎖小鎮背景文本
+  ✓ child 三段完成後不重複生成
+  ✓ 圖鑑支線完成度統計全部完成
+  ✓ R19 四條三段支線總增發 133 金 / 36 XP（固定值可審）
+  ✓ R15 舊支線 done 紀錄在 R19 視為第一段完成，可續接第二章
+
+== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層）==
+  ✓ Lv1 小麥已解鎖但尚未發現（沒收成過）
+  ✓ Lv1 南瓜（unlockLevel 5）尚未解鎖
+  ✓ Lv1 時胡蘿蔔（unlockLevel 2）尚未解鎖
+  ✓ Lv2 時胡蘿蔔剛好解鎖（邊界值）
+  ✓ 成就總數與 ACHIEVEMENTS 設定一致
+  ✓ 全新存檔沒有任何成就解鎖
+  ✓ 解鎖後的成就 unlocked 正確反映（實際讀 state.achievements）
+  ✓ 只有解鎖的那一項是 true，其餘成就仍是 false（不會互相污染）
+  ✓ 收成小麥後作物圖鑑該項目變已發現
+  ✓ 沒收成過的作物仍是未發現（不會被連帶洩漏）
+  ✓ 收集 egg 後產物圖鑑該項目變已發現
+  ✓ egg_good 不因為 egg 已發現而連帶曝光
+  ✓ egg_premium 不因為 egg 已發現而連帶曝光
+  ✓ 東林採集圖鑑總數與 FORAGE_ITEMS 對得上
+  ✓ 未採集前東林採集完成度 0%
+  ✓ 採集東林野莓後該圖鑑項目揭露
+  ✓ 未採集的溪畔薄荷仍維持隱藏
+  ✓ 東林採集完成度可回報 1/8
+  ✓ 作物圖鑑完成度 total 會隨 R15 新作物玉米更新
+  ✓ 收藏冊詳情資料含首次發現時間、來源與用途
+  ✓ 未發現的深處採集物只提供來源提示，不提供首次發現時間
+  ✓ 作物收成會寫入首次發現時間，詳情用途含市集訂單
+  ✓ NPC 名錄總數與 NPCS 設定一致
+  ✓ 已互動過的老農 met=true
+  ✓ 只有互動過的那位 NPC met=true，其餘仍未遇見
+  ✓ 尚未完成過委託時，NPC 名錄的完成次數為 0
+  ✓ NPC 名錄的完成次數讀 npcRequestLog[npcId].fulfilledCount（不是隨便一個計數器）
+  ✓ 沒交過委託的其他 NPC 完成次數仍是 0（不會互相污染）
+  ✓ bestAffinity 曾達開心門檻，即使現值已衰減仍算數
+  ✓ bestAffinity 不隨時間衰減
+  ✓ 曾達開心門檻的動物，同時也滿足較低的 everGood 門檻
+  ✓ currentTier 讀現值（已大幅衰減至 0），跟 bestAffinity 的歷史高水位是兩回事
+  ✓ 剛照護完、尚未衰減時，currentTier 反映當下親密度（premium，門檻 70，現值 80）
+  ✓ bestAffinity 40 只達 good 門檻，未達 happy
+  ✓ 第一章一開始就看得到
+  ✓ 序章尚未全部完成前，第二章維持未解鎖
+  ✓ 第一章完成度算法跟 PROLOGUE_QUESTS 對得上
+  ✓ 序章全部完成後，第二章解鎖
+  ✓ 第二章剛解鎖，完成度 0
+  ✓ 第二章尚未完成前，第三章維持未解鎖
+  ✓ 第二章全部完成後，完成度對得上 CHAPTER2_QUESTS 長度
+  ✓ 第二章全部完成後，第三章解鎖（chapter2→chapter3 的正向轉換，不只測過 false）
+  ✓ 第三章剛解鎖，完成度 0
+  ✓ 世界旗標讀取正確（東橋）
+  ✓ 世界旗標讀取正確（東林空地，明確欄位而非事件清單長度）
+  ✓ 世界旗標與收藏品讀取東林深處解鎖/拓印紀錄
+  ✓ journalSummary 頂層 npcRequestsCompleted 讀 stats.npcRequestsCompleted（實際 7）
+  ✓ journalSummary 不會 mutate state（純讀取彙總）
+
+== 16b. Stage 11.1：舊存檔動物物件補齊 bestAffinity ==
+  ✓ 舊動物沒有 bestAffinity 時，用舊 affinity 值當合理預設（實際 42）
+
+== 17. R23：智慧助手 / 離線摘要 / 安全存檔 ==
+  ✓ 智慧助手排序優先成熟作物收成
+  ✓ 智慧助手 valueScore 可直接轉成收成量化理由
+  ✓ 智慧助手列出可交付市集委託
+  ✓ 智慧助手委託建議顯示量化獎勵理由
+  ✓ farmActionSuggestions 為純讀取，不 mutate state
+  ✓ 舊存檔設定遷移保留助手偏好並補離線摘要/音效/效能模式/文字大小預設
+  ✓ 空 tiles 髒存檔會重建成完整地圖與正確農土數
+  ✓ 遷移後地圖 tile id 完整且不重複
+  ✓ 舊存檔非法效能/文字設定會回復預設
+  ✓ 舊存檔音量設定會夾在 0-1 範圍
+  ✓ 舊存檔遷移補 lastOfflineSummary 空值
+  ✓ 離線摘要計入 6 分鐘離開時間
+  ✓ 離開期間採集點冷卻完成會進入摘要
+  ✓ safeSave 可寫入正常存檔
+  ✓ safeSave 遇到不可序列化資料不覆蓋既有存檔
+  ✓ safeSave 遇到壞 state 不覆蓋既有存檔
+
+== 18. R47: four-season crops, ducks, festival story ==
+  ✓ R47 crops route to crops2 sheet
+  ✓ crop config includes 15 crops after R51 P0
+  ✓ duck uses animals_duck for base and care frames
+  ✓ duck egg quality products route to product_quality_duck
+  ✓ duckPen can be built at level 8
+  ✓ duckPen auto-adds one duck
+  ✓ duck care chain reaches premium duck egg
+  ✓ duck premium egg can fulfill quality order
+  ✓ duckKeeper achievement unlocks after duck egg collection
+  ✓ festival generated order requests 2-3 item kinds
+  ✓ chapter 4 advances after harvesting all four seasons
+  ✓ chapter 4 advances after collecting duck egg
+  ✓ festival order completes chapter 4
+  ✓ npc phase reaches ch4done
+  ✓ festival order grants festival lantern collectible
+  ✓ seasonalTable and festivalDeal achievements unlock
+  ✓ journal achievement count follows config
+  ✓ journal collectible count includes unlocked festival lantern
+  ✓ journal chapter 4 completion is tracked
+
+== 19. R48: grandma letters, crops3, festival stall ==
+  ✓ R48 crops route to crops3 sheet
+  ✓ festival_stall building has seasonal sell bonus
+  ✓ R48 collectibles and achievements are registered
+  ✓ letters include eight grandma letters, four townsfolk notes, and one memory garden note
+  ✓ letters stay locked before unlock conditions
+  ✓ first delivery unlocks first letter
+  ✓ bridge repair unlocks bridge letter
+  ✓ happy animal unlocks animal letter
+  ✓ spring reached unlocks spring letter
+  ✓ summer reached unlocks summer letter
+  ✓ autumn reached unlocks autumn letter
+  ✓ winter reached unlocks winter letter
+  ✓ festival order unlocks festival letter
+  ✓ reading animal letter unlocks grandma_hat
+  ✓ reading all letters unlocks letterKeeper
+  ✓ replyLetter requires all read and unlocks seed_pouch
+  ✓ fullPantry and stallOwner achievements unlock
+  ✓ legacy duplicate festival_stall is capped to one +0.15 seasonal bonus
+  ✓ festival stall bonus applies to in-season crop sell value
+  ✓ old saves migrate mail, seasonsReached, and seasonEventsClaimed safely
+  ✓ journal chapter 5 completion tracks letters and reply
+  ✓ chapter5Done drives NPC phase postscript
+  ✓ R3 ch5done：八封已讀但未回信時 NPC phase 可達 ch5done
+  ✓ R3 ch5done：mayor 會播放 ch5done 台詞而非直接跳 postscript
+  ✓ R3 ch5done：merchant 會播放 ch5done 台詞而非直接跳 postscript
+  ✓ R3 ch5done：elder 會播放 ch5done 台詞而非直接跳 postscript
+  ✓ R3 ch5done：child 會播放 ch5done 台詞而非直接跳 postscript
+
+== 20. R51 P0: content quick wins ==
+  ✓ P0-1 四季訂單偏壓具名內容已註冊
+  ✓ P0-2 side_quest_done unlocks all four townsfolk notes
+  ✓ P0-2 reading four townsfolk notes unlocks 四鄰來信 without changing letterKeeper semantics
+  ✓ P0-2 四鄰來信 is noBonus and does not increase permanent sell multiplier
+  ✓ P0-4 memory_garden can be built once at Lv4
+  ✓ P0-4 memory_garden maxCount:1 enforced
+  ✓ P0-4 memory_garden has no growthAura or seasonal sell bonus
+  ✓ P0-4 memory_garden only boosts order XP, not order coins
+  ✓ P0-4 owning memory_garden unlocks its flavor letter
+  ✓ P0-5 spring_seed_swap consumes wheat once and grants sticker + XP
+  ✓ P0-5 same seasonCycleId cannot be claimed twice
+  ✓ P0-5 offline season catch-up exposes the new current season event once
+  ✓ R3 季節事件：離線跨兩季時中間夏季事件關閉為 skipped，不補發
+  ✓ R3 季節事件：落地當前秋季事件仍可領，沒有被 skipped 誤去重
+  ✓ R3 季節事件：離線跳過的中間季不提供補領入口
+  ✓ R3 季節事件：當前季可正常領取且領後以 cycleId 去重
+  ✓ P0-5 autumn_share_basket grants only a small one-time coin reward and collectible
+  ✓ P0-5 winter_hearth_soup grants no sellMul/coins, only XP + note
+  ✓ P0-6 mayor uses postscript after ch5done
+  ✓ P0-6 merchant uses postscript after ch5done
+  ✓ P0-6 elder uses postscript after ch5done
+  ✓ P0-6 child uses postscript after ch5done
+
+✅ 全部 MVP2 系統測試通過
+PASS new state is additive, deterministic, and has nine causally ordered quests
+PASS old save migration uses harvested quantities, not map key counts
+PASS minimal legacy saves and care lower bounds migrate without resetting the save
+PASS pre-accumulated actions are visible while locked and survive quest activation
+PASS repeated claims and save reloads grant rewards only once
+PASS ready state persists, but missing delivery items cannot be claimed
+PASS all project resource checks are atomic and restoration is one-time
+PASS cooking checks all ingredients, consumes once, and never pollutes crop storage
+PASS fish requires a real restored dock, respects 30s cooldown, and pays no coins
+PASS eight-hour absence does not bank casts; catch capacity bounds every quantity
+PASS injected RNG is bounded and invalid RNG does not add a catch or start cooldown
+PASS unknown IDs, invalid counts, failed actions, and NaN time cannot grant rewards
+PASS mixed meal/catch delivery does not consume any resource when one is missing
+PASS extreme legacy balances cannot overflow into non-finite or unsafe reward quantities
+PASS corrupt adventure quantities are finite and bounded; NaN resources are not spendable
+PASS ready and claimed partial adventure saves retain their status and cooldown
+PASS query descriptors are detached and project sites match the new world
+PASS CommonJS and browser window.AdventureAPI have the same pure API
+PASS full three-chapter run uses real crops, care, orders and forage; no material injection
+PASS renewable material purchases are atomic, bounded and never free
+PASS river commissions consume meals and fish once per cycle and survive reload
+
+Adventure tests: 21 passed, 0 failed.
+PASS actual CONFIG: picnic relocation preserves a new coop and its animal across repeated reloads.
+PASS actual CONFIG: occupied garden site relocates, retains building/animal, and keeps its interaction target after reload.
+PASS R74 shoreline/road fixture: existing building wins over new landscape and picnic site.
+PASS corrupt map and invalid adventure fixture: world bindings rebuild without overlapping entities or new construction on NPCs/stations.
+== R74-1. 建物逐級資料與有限成本曲線 ==
+  ✓ 堆肥場 有 Lv1～Lv3 成本、效果與說明
+  ✓ 堆肥場 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 堆肥場 金幣成本逐級上升（60→160→480）
+  ✓ 筒倉 有 Lv1～Lv3 成本、效果與說明
+  ✓ 筒倉 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 筒倉 金幣成本逐級上升（180→360→980）
+  ✓ 雞舍 有 Lv1～Lv3 成本、效果與說明
+  ✓ 雞舍 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 雞舍 金幣成本逐級上升（140→320→820）
+  ✓ 畜舍 有 Lv1～Lv3 成本、效果與說明
+  ✓ 畜舍 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 畜舍 金幣成本逐級上升（420→760→1800）
+  ✓ 祖母花圃 有 Lv1～Lv3 成本、效果與說明
+  ✓ 祖母花圃 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 祖母花圃 金幣成本逐級上升（0→240→720）
+  ✓ 蜂箱 有 Lv1～Lv3 成本、效果與說明
+  ✓ 蜂箱 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 蜂箱 金幣成本逐級上升（320→680→1540）
+  ✓ 鴨舍 有 Lv1～Lv3 成本、效果與說明
+  ✓ 鴨舍 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 鴨舍 金幣成本逐級上升（380→720→1580）
+  ✓ 豐年祭小攤 有 Lv1～Lv3 成本、效果與說明
+  ✓ 豐年祭小攤 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 豐年祭小攤 金幣成本逐級上升（620→1300→3000）
+  ✓ 溫室 有 Lv1～Lv3 成本、效果與說明
+  ✓ 溫室 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 溫室 金幣成本逐級上升（760→1500→3400）
+
+== R74-2. 堆肥場升級扣資源、改效果且三級封頂 ==
+  ✓ 新建堆肥場是 Lv1，成長倍率 ×0.90
+  ✓ Lv1 明確指向 Lv2 與下一級 ×0.84 效果
+  ✓ 升級只扣該級金幣與堆肥成本
+  ✓ 堆肥場 Lv2 即時套用成長倍率 ×0.84
+  ✓ 堆肥場可升到 Lv3，倍率 ×0.78
+  ✓ Lv3 封頂，不會出現無限升級
+
+== R74-3. 不足時 fail-closed；筒倉與動物舍有真實逐棟增益 ==
+  ✓ 資源不足不扣款、不升級
+  ✓ 筒倉逐級提高總倉容（120→200→330）
+  ✓ 預置畜舍 Lv1 容量 4
+  ✓ 只升這棟畜舍後容量成為 5
+
+== R74-4. R73 舊存檔缺 level 安全遷移 ==
+  ✓ 缺 level 的舊存檔保留全部 4 棟建物（含 b_compostHeap_3、b_silo_4）
+  ✓ 舊存檔遷移保留每棟建物與原地圖 footprint/磚綁定
+  ✓ 舊建物缺 level 時一致安全預設 Lv1
+  ✓ 遷移後 Lv1 堆肥與筒倉效果可正常計算
+
+== R74-5. 已有等級保留，髒等級夾回合法範圍 ==
+  ✓ 合法 Lv2 在遷移後保留
+  ✓ 超過上限的髒 level 夾回 Lv3
+
+✅ R74 單棟建物成長線與舊存檔遷移測試通過
+R79 陽光光斑
+  ✓ 沒有種過作物時不會出現光斑
+  ✓ 種下第一株後約 4 秒出現第一道光，且只第一次標記 first
+  ✓ 光斑 16 秒後消失，間隔後再出現，第二次不再標記 first
+  ✓ 在光裡收成多 1 份、多 2 經驗，統計 +1，同一格不能重複領
+  ✓ 光外收成維持原本產量
+  ✓ 在光裡澆水：立刻推進 30% 成長時間，且仍是濕土
+  ✓ 在光裡種下：作物一開始就長了 30%
+  ✓ 長週期作物的加速有 3 分鐘上限
+  ✓ 雨天、雪天、霧、暴風雨不出光斑，會延後重試
+  ✓ 晴朗天氣間隔較短
+  ✓ 離線很久回來只補一道光，不會連續觸發
+  ✓ 優先照在可收成的田
+  ✓ 壞掉的存檔欄位會被修正，不會丟例外
+  ✓ 離線結算不會吃到過期光斑的加成
+
+✅ R79 sunpatch PASS (14 checks)
+PASS new farmer gets reachable wheat basket and no free rewards
+PASS basket uses only crops unlocked at the start of the day
+PASS successful watering counts once; invalid and repeated watering do not count
+PASS harvest counts stored produce only and never unripe input
+PASS lost harvest in full storage gives no daily progress
+PASS basket cannot be delivered without enough stock and pays only once
+PASS all three real tasks grant exactly one stamp and compost
+PASS Taiwan midnight resets progress and preserves earned stamps
+PASS a stale previous-day claim cannot consume produce or give coins
+PASS clock rollback cannot replay a stamped day
+PASS missing several days grants no free stamps and no streak penalty
+PASS three nonconsecutive visits unlock the first story memento
+PASS seven days unlock both text collectibles and persist through migration
+PASS old saves have no fabricated daily progress; malformed fields are repaired
+PASS quick harvest ignores locked and unripe plots
+PASS quick harvest chooses sunshine over distance and yields no immediate mutation
+PASS quick harvest never selects produce that cannot entirely fit
+PASS offline return never creates stamps or claims rewards automatically
+PASS unknown daily actions and invalid quantities never grant progress
+PASS higher-level farmers receive a rotating crop basket over several days
+R80 daily: 20 passed
+PASS old saves do not invent sunlight or a delivered story
+PASS malformed story state is bounded
+PASS starting the route spends no coins and awards no produce
+PASS ordinary wheat cannot unlock the sunlight recipe
+PASS sunlit watering marks this crop; harvest records only at maturity
+PASS planting in sunlight counts; no stale marker on a new planting
+PASS a harvest in active sunlight counts
+PASS sunlit carrots cannot substitute for the wheat task
+PASS full warehouse with zero added produce does not advance recipe
+PASS delivery refuses shortage and consumes nothing
+PASS delivery refuses arbitrary choice and leaves wheat intact
+PASS table spends exactly two wheat once and persists its own note
+PASS doorstep spends exactly two wheat once and persists its own note
+PASS two choices have different remembered responses
+PASS clock rollback and daily rollover cannot replay delivery
+PASS a saved sunlight-touched crop preserves its provenance across reopening
+PASS reopening mid-walk or mid-action clears abandoned callbacks and preserves the physics tile
+R81 heirloom: 17 passed
+== UI 煙霧測試（mock DOM）==
+  ✓ 四個腳本載入 + init() 執行無例外
+  ✓ 地圖場景磚已建立（266 磚）
+  ✓ 點地圖磚無例外
+  ✓ 工具列 5 個工具
+  ✓ 賣出/收成/澆水/收產物按鈕無例外
+  ✓ 設定/引導/離線 modal 開關按鈕無例外
+
+✅ UI 煙霧測試通過
+  ✓ walk: 24 frames, 288x256
+  ✓ actions: 72 frames, 288x768
+  ✓ vfx: 48 frames, 192x256
+  ✓ crops: 30 frames, 160x192
+  ✓ terrain: 49 frames, 512x512
+  ✓ props: 16 frames, 512x512
+
+✅ v3 atlas 驗證通過
+  ✓ walk: 24 frames, 288x256
+  ✓ actions: 144 frames, 288x1536
+  ✓ walk_m: 24 frames, 288x256
+  ✓ actions_m: 144 frames, 288x1536
+  ✓ npcs: 16 frames, 192x256
+  ✓ crops: 30 frames, 240x288
+  ✓ crops2: 20 frames, 240x192
+  ✓ crops3: 15 frames, 240x144
+  ✓ crops4: 10 frames, 240x96
+  ✓ animals: 16 frames, 192x192
+  ✓ animals_duck: 8 frames, 192x96
+  ✓ buildings: 4 frames, 512x512
+  ✓ structures: 16 frames, 1024x784
+  ✓ terrain: 49 frames, 512x512
+  ✓ props: 16 frames, 512x512
+  ✓ vfx: 48 frames, 192x256
+  ✓ care_props: 16 frames, 256x256
+  ✓ product_quality: 12 frames, 96x128
+  ✓ product_quality_duck: 3 frames, 96x32
+  ✓ care_vfx: 36 frames, 192x192
+  ✓ animal_status: 16 frames, 128x128
+  ✓ animals_care: 16 frames, 192x192
+
+✅ v4 atlas 驗證通過
+{"release": "R66", "counts": {"crops": 15, "tools": 6, "tabs": 5, "systems": 6, "icons": 32, "assistant_skins": 3}, "alpha_gate": {"status": "PASS", "passed": 35, "total": 35}}
+  ✅ manifest records R66 and actual gpt-image-2 provenance
+  ✅ manifest count contract is 15/6/5/6 + 3 skins
+  ✅ manifest alpha gate is 35/35 PASS
+  ✅ 8x4 atlas frame map contains the exact 32 formal icons
+  ✅ runtime atlas SHA-256 matches manifest
+  ✅ crop_wheat has slug/prompt/native hash and matching file
+  ✅ crop_carrot has slug/prompt/native hash and matching file
+  ✅ crop_tomato has slug/prompt/native hash and matching file
+  ✅ crop_strawberry has slug/prompt/native hash and matching file
+  ✅ crop_corn has slug/prompt/native hash and matching file
+  ✅ crop_pumpkin has slug/prompt/native hash and matching file
+  ✅ crop_radish has slug/prompt/native hash and matching file
+  ✅ crop_bell_pepper has slug/prompt/native hash and matching file
+  ✅ crop_potato has slug/prompt/native hash and matching file
+  ✅ crop_sunflower has slug/prompt/native hash and matching file
+  ✅ crop_grapes has slug/prompt/native hash and matching file
+  ✅ crop_melon has slug/prompt/native hash and matching file
+  ✅ crop_pea has slug/prompt/native hash and matching file
+  ✅ crop_sweet_potato has slug/prompt/native hash and matching file
+  ✅ crop_winter_kale has slug/prompt/native hash and matching file
+  ✅ tool_plant has slug/prompt/native hash and matching file
+  ✅ tool_harvest has slug/prompt/native hash and matching file
+  ✅ tool_water has slug/prompt/native hash and matching file
+  ✅ tool_clear has slug/prompt/native hash and matching file
+  ✅ tool_build has slug/prompt/native hash and matching file
+  ✅ tool_inspect has slug/prompt/native hash and matching file
+  ✅ tab_tile has slug/prompt/native hash and matching file
+  ✅ tab_orders has slug/prompt/native hash and matching file
+  ✅ tab_upgrades has slug/prompt/native hash and matching file
+  ✅ tab_story has slug/prompt/native hash and matching file
+  ✅ tab_journal has slug/prompt/native hash and matching file
+  ✅ system_coin has slug/prompt/native hash and matching file
+  ✅ system_xp has slug/prompt/native hash and matching file
+  ✅ system_storage has slug/prompt/native hash and matching file
+  ✅ system_settings has slug/prompt/native hash and matching file
+  ✅ system_help has slug/prompt/native hash and matching file
+  ✅ system_reset has slug/prompt/native hash and matching file
+  ✅ assistant_idle has slug/prompt/native hash and matching file
+  ✅ assistant_tip has slug/prompt/native hash and matching file
+  ✅ assistant_alert has slug/prompt/native hash and matching file
+  ✅ index CSS maps all 32 individual transparent native icons
+  ✅ responsive icons scale the whole image without atlas clipping
+  ✅ crop and tool renderers use the formal transparent icons
+  ✅ tabs and system controls are wired to formal icons
+  ✅ three smart-assistant skins are wired to idle/tip/alert state selection
+  ✅ first-session smart assistant remains collapsed
+
+R66 UI art contract PASS
+{"c2paPass": true, "decodedMiB": 9.07, "budgetPass": true}
+== R68 seasonal visual static gates ==
+  ✓ manifest release/version/model are exact
+  ✓ runtime manifest uses its exact content hash in the SW offline list
+  ✓ shared palette has exactly 66 unique colours
+  ✓ Python C2PA verification is PASS for 5/5 masters
+  ✓ source manifest records model, four reference hashes, and five prompt-bound masters
+  ✓ loading-spring master is evidence-only
+  ✓ loading-spring master SHA-256 matches
+  ✓ loading-spring embedded softwareAgent is gpt-image 2.0
+  ✓ loading-spring/low runtime SHA-256 matches
+  ✓ loading-spring/low content hash query is SHA prefix
+  ✓ loading-spring/low palette, multi-value, and outline gates pass
+  ✓ loading-spring/low runtime references use exact content hash in UI and SW
+  ✓ loading-spring/med runtime SHA-256 matches
+  ✓ loading-spring/med content hash query is SHA prefix
+  ✓ loading-spring/med palette, multi-value, and outline gates pass
+  ✓ loading-spring/med runtime references use exact content hash in UI and SW
+  ✓ loading-spring/high runtime SHA-256 matches
+  ✓ loading-spring/high content hash query is SHA prefix
+  ✓ loading-spring/high palette, multi-value, and outline gates pass
+  ✓ loading-spring/high runtime references use exact content hash in UI and SW
+  ✓ loading-spring low/med/high tiers are three real distinct assets
+  ✓ loading-summer master is evidence-only
+  ✓ loading-summer master SHA-256 matches
+  ✓ loading-summer embedded softwareAgent is gpt-image 2.0
+  ✓ loading-summer/low runtime SHA-256 matches
+  ✓ loading-summer/low content hash query is SHA prefix
+  ✓ loading-summer/low palette, multi-value, and outline gates pass
+  ✓ loading-summer/low runtime references use exact content hash in UI and SW
+  ✓ loading-summer/med runtime SHA-256 matches
+  ✓ loading-summer/med content hash query is SHA prefix
+  ✓ loading-summer/med palette, multi-value, and outline gates pass
+  ✓ loading-summer/med runtime references use exact content hash in UI and SW
+  ✓ loading-summer/high runtime SHA-256 matches
+  ✓ loading-summer/high content hash query is SHA prefix
+  ✓ loading-summer/high palette, multi-value, and outline gates pass
+  ✓ loading-summer/high runtime references use exact content hash in UI and SW
+  ✓ loading-summer low/med/high tiers are three real distinct assets
+  ✓ loading-autumn master is evidence-only
+  ✓ loading-autumn master SHA-256 matches
+  ✓ loading-autumn embedded softwareAgent is gpt-image 2.0
+  ✓ loading-autumn/low runtime SHA-256 matches
+  ✓ loading-autumn/low content hash query is SHA prefix
+  ✓ loading-autumn/low palette, multi-value, and outline gates pass
+  ✓ loading-autumn/low runtime references use exact content hash in UI and SW
+  ✓ loading-autumn/med runtime SHA-256 matches
+  ✓ loading-autumn/med content hash query is SHA prefix
+  ✓ loading-autumn/med palette, multi-value, and outline gates pass
+  ✓ loading-autumn/med runtime references use exact content hash in UI and SW
+  ✓ loading-autumn/high runtime SHA-256 matches
+  ✓ loading-autumn/high content hash query is SHA prefix
+  ✓ loading-autumn/high palette, multi-value, and outline gates pass
+  ✓ loading-autumn/high runtime references use exact content hash in UI and SW
+  ✓ loading-autumn low/med/high tiers are three real distinct assets
+  ✓ loading-winter master is evidence-only
+  ✓ loading-winter master SHA-256 matches
+  ✓ loading-winter embedded softwareAgent is gpt-image 2.0
+  ✓ loading-winter/low runtime SHA-256 matches
+  ✓ loading-winter/low content hash query is SHA prefix
+  ✓ loading-winter/low palette, multi-value, and outline gates pass
+  ✓ loading-winter/low runtime references use exact content hash in UI and SW
+  ✓ loading-winter/med runtime SHA-256 matches
+  ✓ loading-winter/med content hash query is SHA prefix
+  ✓ loading-winter/med palette, multi-value, and outline gates pass
+  ✓ loading-winter/med runtime references use exact content hash in UI and SW
+  ✓ loading-winter/high runtime SHA-256 matches
+  ✓ loading-winter/high content hash query is SHA prefix
+  ✓ loading-winter/high palette, multi-value, and outline gates pass
+  ✓ loading-winter/high runtime references use exact content hash in UI and SW
+  ✓ loading-winter low/med/high tiers are three real distinct assets
+  ✓ activity-panel master is evidence-only
+  ✓ activity-panel master SHA-256 matches
+  ✓ activity-panel embedded softwareAgent is gpt-image 2.0
+  ✓ activity-panel/low runtime SHA-256 matches
+  ✓ activity-panel/low content hash query is SHA prefix
+  ✓ activity-panel/low palette, multi-value, and outline gates pass
+  ✓ activity-panel/low runtime references use exact content hash in UI and SW
+  ✓ activity-panel/med runtime SHA-256 matches
+  ✓ activity-panel/med content hash query is SHA prefix
+  ✓ activity-panel/med palette, multi-value, and outline gates pass
+  ✓ activity-panel/med runtime references use exact content hash in UI and SW
+  ✓ activity-panel/high runtime SHA-256 matches
+  ✓ activity-panel/high content hash query is SHA prefix
+  ✓ activity-panel/high palette, multi-value, and outline gates pass
+  ✓ activity-panel/high runtime references use exact content hash in UI and SW
+  ✓ activity-panel low/med/high tiers are three real distinct assets
+  ✓ all tiers decoded texture total 9.07MiB <= mobile 32MiB and desktop 64MiB
+  ✓ activity-panel title/body/meta minimum contrast is >=4.5:1 in every tier
+  ✓ activity-panel text-zone local luminance noise stays <=0.12 in every tier
+  ✓ loading title/body contrast is >=4.5:1 over every seasonal tier
+  ✓ loading focal bbox and 8% viewport safe area are commandized
+  ✓ loading screen uses cover framing and emits performance focus mark
+  ✓ generated panel is bound only to the existing season-event card
+  ✓ runtime old version reference count is zero
+  ✓ style board and low/med/high same-scene evidence exist
+
+✅ R68 static visual gates PASS (94 assertions)
+
+> pixel-idle-farm@0.1.22 test:e2e
+> node scripts/run-browser-gates.js
+
+[memory] scripts/test-npc-indicators.js attempt 1: 10891MiB free
+PASS desktop: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS mobile: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS small: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS landscape: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS 32 transparent UI icons at 20/24/28/32px: individual image, clear corners, no atlas clipping.
+[memory] scripts/test-world-project-art.js attempt 1: 10916MiB free
+PASS R76 art: 4 exact frames, real alpha, shared palette, 6px padding, matching scale/feet, provenance hashes and SW cache.
+[memory] scripts/test-world-rework-e2e.js attempt 1: 10934MiB free
+R75 real-browser review http://127.0.0.1:58409/index.html
+DEVICE desktop 1440x900
+CHAPTER_ONE_UI desktop 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE mobile 390x844
+CHAPTER_ONE_UI mobile 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE landscape 844x390
+CHAPTER_ONE_UI landscape 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE small 320x568
+CHAPTER_ONE_UI small 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+FIXTURE CHAPTER_ONE_EARNED_DOCK: Unmodified genuinely earned chapter-one save; dock still broken, exact earned materials.
+FIXTURE UI_RESTORED_DOCK_FISHING: Dock restored by the preceding real UI fixture; relocated by a real journey, no fish/cooldown injection.
+WAIT UI_RESTORED_DOCK_FISHING real cooldown 28653ms; lastFishAt is not backdated
+FIXTURE LATE_RECIPES_INGREDIENTS_PICNIC_FIXTURE: Earned chapter-one claims retained; explicitly supplies wheat8/carrot4/mint2 and restored picnic table for recipe tests. NOT chapter-two completion.
+FIXTURE MISSING_WHEAT_COOK_GUARD: only inventory wheat is removed for negative UI/API guard
+FIXTURE EARNED_EMPTY_PLOT_IMPACT_CANCEL: Earned chapter-one save with empty harvested plots; only MOVE_MS is shortened. No crop/inventory/event injection.
+FIXTURE EARNED_MARKET_MATERIALS_UI: Unmodified earned chapter-one coins/materials; market purchase uses real buttons and nontrivial travel.
+R75 SUMMARY {"passed":370,"failed":0}
+[memory] scripts/test-r79-fun-e2e.js attempt 1: 10053MiB free
+PASS copy: no English combo/Level up strings in runtime UI
+PASS copy: Chinese 連收 ×N and 升級！ present
+PASS sun: player planted through the real quest button
+PASS sun: first sunpatch appears on its own within ~4s of planting
+PASS sun: first sunpatch is explained once by the mayor
+PASS sun: quest dock shows sunpatch countdown
+PASS sun: harvest inside sunlight stores wheat yield 2 + 1
+PASS sun: sun catch counted once
+PASS sun: catch shows golden float text and toast
+PASS feedback: storage chip is addressable for harvest fly-to
+PASS sun: no page errors
+PASS redirect desktop: player was mid-walk when pressing 前往
+PASS redirect desktop: no 'wait until walk ends' rejection
+PASS redirect desktop: redirected walk reaches the quest NPC and talks
+PASS redirect desktop: no page errors
+PASS redirect phone: player was mid-walk when pressing 前往
+PASS redirect phone: no 'wait until walk ends' rejection
+PASS redirect phone: redirected walk reaches the quest NPC and talks
+PASS redirect phone: no page errors
+PASS hint: waiting for harvest shows soonest ripening countdown
+PASS hint: taller quest dock never covers the seed bar (phone)
+PASS hud phone Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud phone Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv7: resource chips stay clear of system buttons and inside viewport
+PASS toast desktop: identical message within 2.5s shows once
+PASS toast desktop: at most 3 toasts at once
+PASS toast desktop: toasts move above the NPC dialogue
+PASS toast landscape: identical message within 2.5s shows once
+PASS toast landscape: at most 3 toasts at once
+PASS toast landscape: toasts move above the NPC dialogue
+PASS toast phone: identical message within 2.5s shows once
+PASS toast phone: at most 3 toasts at once
+PASS toast phone: toasts move above the NPC dialogue
+PASS music: plays after first user gesture when sound+music are on
+PASS music: loop source is the R79 track
+PASS music: settings has a 背景音樂 toggle
+PASS music: toggle off pauses the music
+PASS perf desktop: rAF p95 median of 3 runs 16.8ms <= 18ms (sunpatch + ambient light on)
+PASS perf mobile: rAF p95 median of 3 runs 16.7ms <= 18ms (sunpatch + ambient light on)
+R79 SUMMARY {"passed":44,"failed":0}
+[memory] scripts/test-r80-mobile.js attempt 1: 10034MiB free
+PASS 390x844 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":54,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":54,"height":54.296875,"inside":true,"hit":true}]
+PASS 390x844 no page overflow
+PASS 390x844 daily controls 44px visible hit targets [{"id":"dailyToday","width":112.65625,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":112.671875,"height":44,"inside":true,"hit":true},{"id":"","width":316,"height":113.796875,"inside":true,"hit":true},{"id":"","width":316,"height":113.796875,"inside":true,"hit":true},{"id":"","width":316,"height":93.65625,"inside":true,"hit":true},{"id":"dailyClose","width":348,"height":48,"inside":true,"hit":true}]
+PASS 390x844 daily blocks background controls
+PASS 390x844 opens reachable first task
+PASS 390x844 basket reachable in two pages
+PASS 390x844 basket return controls 44px visible hit targets [{"id":"","width":316,"height":113.796875,"inside":true,"hit":true},{"id":"","width":316,"height":113.796875,"inside":true,"hit":true},{"id":"","width":316,"height":93.65625,"inside":true,"hit":true},{"id":"dailyClose","width":348,"height":48,"inside":true,"hit":true}]
+PASS 390x844 collection explains nonconsecutive visits
+PASS 390x844 return restores controls
+PASS first minute: real tutorial planting and watering progress the daily goal
+PASS first daily reward 44px visible hit targets [{"id":"dailyClaim","width":100,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":348,"height":48,"inside":true,"hit":true}]
+PASS first minute: claim real watering reward
+PASS 390x844 repeated touch does not reward before impact
+PASS 390x844 impact stores crop while recovery remains protected
+PASS 390x844 repeated touch settles one crop exactly once
+PASS 390x844 quick harvest advances actual daily produce goal
+PASS 390x844 basket consumes exactly two actual crops
+PASS 390x844 claim keeps focus inside the dialog
+PASS daily loop: three earned rewards give first stamp
+PASS daily stamp persists after real save and reload
+PASS live portrait-to-landscape rotation 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 390x844 full storage leaves ripe crop intact
+PASS 390x844 seventh-stamp story is readable
+PASS 390x844 no page errors
+PASS 844x390 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":51.421875,"height":45.078125,"inside":true,"hit":true},{"id":"farmMore","width":51.421875,"height":45.078125,"inside":true,"hit":true}]
+PASS 844x390 no page overflow
+PASS 844x390 daily controls 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"","width":234,"height":44,"inside":true,"hit":true},{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 844x390 daily blocks background controls
+PASS 844x390 opens reachable first task
+PASS 844x390 basket reachable in two pages
+PASS 844x390 basket return controls 44px visible hit targets [{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"","width":234,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 844x390 collection explains nonconsecutive visits
+PASS 844x390 return restores controls
+PASS 844x390 repeated touch does not reward before impact
+PASS 844x390 impact stores crop while recovery remains protected
+PASS 844x390 repeated touch settles one crop exactly once
+PASS 844x390 quick harvest advances actual daily produce goal
+PASS 844x390 basket consumes exactly two actual crops
+PASS 844x390 claim keeps focus inside the dialog
+PASS 844x390 full storage leaves ripe crop intact
+PASS 844x390 seventh-stamp story is readable
+PASS 844x390 no page errors
+PASS 1366x600 farm controls 44px visible hit targets [{"id":"dailyOpen","width":77.140625,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":77.15625,"height":54.296875,"inside":true,"hit":true}]
+PASS 1366x600 no page overflow
+PASS 1366x600 daily controls 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 daily blocks background controls
+PASS 1366x600 opens reachable first task
+PASS 1366x600 basket reachable in two pages
+PASS 1366x600 basket return controls 44px visible hit targets [{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 collection explains nonconsecutive visits
+PASS 1366x600 return restores controls
+PASS 1366x600 no page errors
+PASS 1280x640 farm controls 44px visible hit targets [{"id":"dailyOpen","width":77.140625,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":77.15625,"height":54.296875,"inside":true,"hit":true}]
+PASS 1280x640 no page overflow
+PASS 1280x640 daily controls 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 daily blocks background controls
+PASS 1280x640 opens reachable first task
+PASS 1280x640 basket reachable in two pages
+PASS 1280x640 basket return controls 44px visible hit targets [{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 collection explains nonconsecutive visits
+PASS 1280x640 return restores controls
+PASS 1280x640 no page errors
+R80 after: 62 passed
+[memory] scripts/test-r81-review.js attempt 1: 10774MiB free
+PASS 375x667 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":311,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":311,"h":44,"inside":true,"hit":true}]
+PASS 375x667 welcome no page overflow
+PASS 375x667 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.859375,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":51.859375,"h":54.296875,"inside":true,"hit":true}]
+PASS 375x667 farm no page overflow
+PASS 375x667 recipe reachable 44px controls [{"id":"dailyToday","w":109.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":109.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":109.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":339,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":339,"h":48,"inside":true,"hit":true}]
+PASS 375x667 recipe no page overflow
+PASS 390x844 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":326,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":326,"h":44,"inside":true,"hit":true}]
+PASS 390x844 welcome no page overflow
+PASS 390x844 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":54,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":54,"h":54.296875,"inside":true,"hit":true}]
+PASS 390x844 farm no page overflow
+PASS 390x844 recipe reachable 44px controls [{"id":"dailyToday","w":112.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":112.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":112.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":348,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":348,"h":48,"inside":true,"hit":true}]
+PASS 390x844 recipe no page overflow
+PASS 844x390 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":406.8125,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":406.8125,"h":44,"inside":true,"hit":true}]
+PASS 844x390 welcome no page overflow
+PASS 844x390 farm reachable 44px controls [{"id":"","w":94.71875,"h":46,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.421875,"h":45.078125,"inside":true,"hit":true},{"id":"farmMore","w":51.421875,"h":45.078125,"inside":true,"hit":true}]
+PASS 844x390 farm no page overflow
+PASS 844x390 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 844x390 recipe no page overflow
+PASS 430x932 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":366,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":366,"h":44,"inside":true,"hit":true}]
+PASS 430x932 welcome no page overflow
+PASS 430x932 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":59.71875,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":59.71875,"h":54.296875,"inside":true,"hit":true}]
+PASS 430x932 farm no page overflow
+PASS 430x932 recipe reachable 44px controls [{"id":"dailyToday","w":126,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":126,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":126,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":388,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":388,"h":48,"inside":true,"hit":true}]
+PASS 430x932 recipe no page overflow
+PASS 768x1024 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 768x1024 welcome no page overflow
+PASS 768x1024 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 768x1024 farm no page overflow
+PASS 768x1024 recipe reachable 44px controls [{"id":"dailyToday","w":238.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":238.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":238.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":726,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":726,"h":48,"inside":true,"hit":true}]
+PASS 768x1024 recipe no page overflow
+PASS 1024x768 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1024x768 welcome no page overflow
+PASS 1024x768 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1024x768 farm no page overflow
+PASS 1024x768 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1024x768 recipe no page overflow
+PASS 1032x1376 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1032x1376 welcome no page overflow
+PASS 1032x1376 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1032x1376 farm no page overflow
+PASS 1032x1376 recipe reachable 44px controls [{"id":"dailyToday","w":326.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":326.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":326.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":990,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":990,"h":48,"inside":true,"hit":true}]
+PASS 1032x1376 recipe no page overflow
+PASS 1376x1032 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1376x1032 welcome no page overflow
+PASS 1376x1032 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1376x1032 farm no page overflow
+PASS 1376x1032 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1376x1032 recipe no page overflow
+PASS 1366x600 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 welcome no page overflow
+PASS 1366x600 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1366x600 farm no page overflow
+PASS 1366x600 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 recipe no page overflow
+PASS 1280x640 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 welcome no page overflow
+PASS 1280x640 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1280x640 farm no page overflow
+PASS 1280x640 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 recipe no page overflow
+JOURNEY 0 {"ready":false,"kind":"plant","moving":false,"action":"idle","sun":false}
+JOURNEY 10 {"ready":false,"kind":"harvest","moving":false,"action":"idle","sun":false}
+PASS real touch journey grew and harvested sunlight wheat without fixtures {"h":{"started":true,"sunWheat":2,"delivered":false,"choice":null,"deliveredAt":0,"wheat":2,"ready":true,"note":null},"stats":{"harvested":{"wheat":2},"fulfilledOrders":0,"totalCoinsEarned":0,"plantCount":2,"cleared":0,"collected":{},"qualitySold":0,"npcRequestsCompleted":0,"festivalOrders":0,"seasonsReached":{"春":true},"sunCatches":2}}
+PASS earned basket choices reachable 44px controls [{"id":"heirloomDoorstep","w":190,"h":173.5,"inside":true,"hit":true},{"id":"heirloomTable","w":190,"h":173.5,"inside":true,"hit":true},{"id":"dailyClose","w":388,"h":48,"inside":true,"hit":true}]
+PASS earned basket choices no page overflow
+PASS selection is visible and does not deliver before confirmation
+PASS cold start to first remembered note under three real minutes
+PASS actual walk-and-impact delivery consumes exactly two wheat
+PASS chosen table story is immediately readable
+PASS unlocked note return reachable 44px controls [{"id":"dailyClose","w":390,"h":48,"inside":true,"hit":true}]
+PASS unlocked note return no page overflow
+PASS completed opening returns to the larger farm story
+PASS resting in settings blocks farm input
+PASS movement is blocked while settings are open
+PASS return from rest restores farm input
+PASS browser freeze/resume and reload retain the remembered choice
+PASS new story modules are actually in offline cache
+PASS delivery written to persistent storage
+PASS review journey has no uncaught browser errors
+PASS review journey has no HTTP errors
+PASS all observed game requests stay on the current origin
+PASS real Chromium process restart loads earned progress with network disabled
+PASS reopened note offers no duplicate delivery
+PASS iPad independently earns the basket with real input and growth
+PASS iPad delivery choices reachable 44px controls [{"id":"heirloomDoorstep","w":491,"h":173.5,"inside":true,"hit":true},{"id":"heirloomTable","w":491,"h":173.5,"inside":true,"hit":true},{"id":"dailyClose","w":990,"h":48,"inside":true,"hit":true}]
+PASS iPad delivery choices no page overflow
+PASS selection is visible and does not deliver before confirmation
+PASS iPad doorstep choice earns its different note through real delivery
+PASS iPad first note under three real minutes
+PASS iPad earned note reachable 44px controls [{"id":"dailyClose","w":820,"h":48,"inside":true,"hit":true}]
+PASS iPad earned note no page overflow
+PASS iPad live landscape rotation reachable 44px controls [{"id":"dailyClose","w":820,"h":48,"inside":true,"hit":true}]
+PASS iPad live landscape rotation no page overflow
+PASS iPad live landscape farm reachable 44px controls [{"id":"","w":92.65625,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS iPad live landscape farm no page overflow
+[memory] scripts/test-rwd-matrix.js attempt 1: 18694MiB free
+== R47 RWD 9 視口矩陣守門（overlay 先關閉） ==
+  ✓ 1920x1080(desktop) 可互動元素已載入（103 個）
+  ✓ 1920x1080(desktop) 互動元素零出界（違規 0）
+  ✓ 1920x1080(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1920x1080(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1440x780(desktop) 可互動元素已載入（103 個）
+  ✓ 1440x780(desktop) 互動元素零出界（違規 0）
+  ✓ 1440x780(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1440x780(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x600(desktop) 可互動元素已載入（103 個）
+  ✓ 1366x600(desktop) 互動元素零出界（違規 0）
+  ✓ 1366x600(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x600(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x640(desktop) 可互動元素已載入（103 個）
+  ✓ 1280x640(desktop) 互動元素零出界（違規 0）
+  ✓ 1280x640(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x640(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x700(desktop) 可互動元素已載入（103 個）
+  ✓ 1366x700(desktop) 互動元素零出界（違規 0）
+  ✓ 1366x700(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x700(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x720(desktop) 可互動元素已載入（103 個）
+  ✓ 1280x720(desktop) 互動元素零出界（違規 0）
+  ✓ 1280x720(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x720(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1024x768(desktop) 可互動元素已載入（103 個）
+  ✓ 1024x768(desktop) 互動元素零出界（違規 0）
+  ✓ 1024x768(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1024x768(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 820x1180(tablet) 可互動元素已載入（103 個）
+  ✓ 820x1180(tablet) 互動元素零出界（違規 0）
+  ✓ 820x1180(tablet) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 820x1180(tablet) 水平溢出 <= 2px（實測 0）
+  ✓ 768x1024(tablet) 可互動元素已載入（103 個）
+  ✓ 768x1024(tablet) 互動元素零出界（違規 0）
+  ✓ 768x1024(tablet) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 768x1024(tablet) 水平溢出 <= 2px（實測 0）
+  ✓ 390x844(mobile) 可互動元素已載入（103 個）
+  ✓ 390x844(mobile) 互動元素零出界（違規 0）
+  ✓ 390x844(mobile) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 390x844(mobile) 水平溢出 <= 2px（實測 0）
+  ✓ 360x640(mobile) 可互動元素已載入（103 個）
+  ✓ 360x640(mobile) 互動元素零出界（違規 0）
+  ✓ 360x640(mobile) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 360x640(mobile) 水平溢出 <= 2px（實測 0）
+  ✓ 844x390(landscape) 可互動元素已載入（103 個）
+  ✓ 844x390(landscape) 互動元素零出界（違規 0）
+  ✓ 844x390(landscape) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 844x390(landscape) 水平溢出 <= 2px（實測 0）
+
+== R47 RWD 9 視口矩陣守門（overlay 開啟狀態） ==
+  ✓ 1920x1080(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1920x1080(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1920x1080(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1920x1080(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1440x780(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1440x780(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1440x780(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1440x780(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x600(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1366x600(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1366x600(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x600(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x640(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1280x640(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1280x640(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x640(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x700(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1366x700(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1366x700(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x700(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x720(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1280x720(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1280x720(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x720(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1024x768(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1024x768(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1024x768(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1024x768(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 820x1180(tablet, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 820x1180(tablet, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 820x1180(tablet, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 820x1180(tablet, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 768x1024(tablet, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 768x1024(tablet, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 768x1024(tablet, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 768x1024(tablet, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 390x844(mobile, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 390x844(mobile, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 390x844(mobile, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 390x844(mobile, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 360x640(mobile, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 360x640(mobile, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 360x640(mobile, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 360x640(mobile, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 844x390(landscape, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 844x390(landscape, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 844x390(landscape, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 844x390(landscape, overlay 未關) 水平溢出 <= 2px（實測 0）
+
+✅ R47 RWD 矩陣守門通過（9 視口 × overlay 開/關 全零違規）
+[memory] scripts/test-controls-reachability.js attempt 1: 11177MiB free
+== farm R68 控制與選單守門 ==
+  ✓ desktop-1920x1080 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1920x1080 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1920x1080 切換後整圖模式（mode=fit）
+  ✓ desktop-1920x1080 世界完整可見且 #mapScene 零內捲（scroll 1920×1080, client 1920×1080）
+  ✓ desktop-1920x1080 地圖視覺框完整落在場景內（world 1584×864, scene 1920×1080）
+  ✓ desktop-1920x1080 整圖模式 tile 仍可辨識或可切原尺寸（tile 72×72）
+  ✓ desktop-1920x1080 有載入關鍵控制
+  ✓ desktop-1920x1080 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 主場景 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1920x1080 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1920x1080 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1920x1080 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1920x1080 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1920x1080 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1920x1080 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1920x1080 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1920x1080 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1920x1080 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 農務牌 1 有載入關鍵控制
+  ✓ desktop-1920x1080 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 農務牌 2 有載入關鍵控制
+  ✓ desktop-1920x1080 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 農務牌 3 有載入關鍵控制
+  ✓ desktop-1920x1080 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 今日農務沒有翻頁
+  ✓ desktop-1920x1080 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1920x1080 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1920x1080 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1920x1080 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1920x1080 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 無 pageerror
+  ✓ desktop-1440x780 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1440x780 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1440x780 切換後整圖模式（mode=fit）
+  ✓ desktop-1440x780 世界完整可見且 #mapScene 零內捲（scroll 1440×780, client 1440×780）
+  ✓ desktop-1440x780 地圖視覺框完整落在場景內（world 1386×756, scene 1440×780）
+  ✓ desktop-1440x780 整圖模式 tile 仍可辨識或可切原尺寸（tile 63×63）
+  ✓ desktop-1440x780 有載入關鍵控制
+  ✓ desktop-1440x780 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1440x780 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1440x780 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1440x780 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1440x780 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1440x780 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1440x780 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1440x780 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1440x780 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1440x780 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 農務牌 1 有載入關鍵控制
+  ✓ desktop-1440x780 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 農務牌 2 有載入關鍵控制
+  ✓ desktop-1440x780 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 農務牌 3 有載入關鍵控制
+  ✓ desktop-1440x780 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 今日農務沒有翻頁
+  ✓ desktop-1440x780 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1440x780 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1440x780 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1440x780 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1440x780 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 無 pageerror
+  ✓ desktop-1366x600 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1366x600 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1366x600 切換後整圖模式（mode=fit）
+  ✓ desktop-1366x600 世界完整可見且 #mapScene 零內捲（scroll 1366×600, client 1366×600）
+  ✓ desktop-1366x600 地圖視覺框完整落在場景內（world 1056×576, scene 1366×600）
+  ✓ desktop-1366x600 整圖模式 tile 仍可辨識或可切原尺寸（tile 48×48）
+  ✓ desktop-1366x600 有載入關鍵控制
+  ✓ desktop-1366x600 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 主場景 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1366x600 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1366x600 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1366x600 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1366x600 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1366x600 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1366x600 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1366x600 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1366x600 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1366x600 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 農務牌 1 有載入關鍵控制
+  ✓ desktop-1366x600 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 農務牌 2 有載入關鍵控制
+  ✓ desktop-1366x600 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 農務牌 3 有載入關鍵控制
+  ✓ desktop-1366x600 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 今日農務沒有翻頁
+  ✓ desktop-1366x600 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1366x600 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1366x600 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1366x600 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1366x600 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 無 pageerror
+  ✓ desktop-1280x640 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1280x640 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1280x640 切換後整圖模式（mode=fit）
+  ✓ desktop-1280x640 世界完整可見且 #mapScene 零內捲（scroll 1280×640, client 1280×640）
+  ✓ desktop-1280x640 地圖視覺框完整落在場景內（world 1122×612, scene 1280×640）
+  ✓ desktop-1280x640 整圖模式 tile 仍可辨識或可切原尺寸（tile 51×51）
+  ✓ desktop-1280x640 有載入關鍵控制
+  ✓ desktop-1280x640 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1280x640 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1280x640 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1280x640 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1280x640 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1280x640 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1280x640 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1280x640 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1280x640 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1280x640 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 農務牌 1 有載入關鍵控制
+  ✓ desktop-1280x640 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 農務牌 2 有載入關鍵控制
+  ✓ desktop-1280x640 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 農務牌 3 有載入關鍵控制
+  ✓ desktop-1280x640 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 今日農務沒有翻頁
+  ✓ desktop-1280x640 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1280x640 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1280x640 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1280x640 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1280x640 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 無 pageerror
+  ✓ touch-laptop-1366x640 D-pad 分流正確（primaryCoarse=true, enabled=false）
+  ✓ touch-laptop-1366x640 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ touch-laptop-1366x640 切換後整圖模式（mode=fit）
+  ✓ touch-laptop-1366x640 世界完整可見且 #mapScene 零內捲（scroll 1366×640, client 1366×640）
+  ✓ touch-laptop-1366x640 地圖視覺框完整落在場景內（world 1122×612, scene 1366×640）
+  ✓ touch-laptop-1366x640 整圖模式 tile 仍可辨識或可切原尺寸（tile 51×51）
+  ✓ touch-laptop-1366x640 有載入關鍵控制
+  ✓ touch-laptop-1366x640 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 主場景 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ touch-laptop-1366x640 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ touch-laptop-1366x640 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ touch-laptop-1366x640 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ touch-laptop-1366x640 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ touch-laptop-1366x640 主場景 modal 關閉後解除背景 inert
+  ✓ touch-laptop-1366x640 側欄 tabs 有載入關鍵控制
+  ✓ touch-laptop-1366x640 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ touch-laptop-1366x640 日誌三張農務牌 有載入關鍵控制
+  ✓ touch-laptop-1366x640 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 農務牌 1 有載入關鍵控制
+  ✓ touch-laptop-1366x640 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 農務牌 2 有載入關鍵控制
+  ✓ touch-laptop-1366x640 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 農務牌 3 有載入關鍵控制
+  ✓ touch-laptop-1366x640 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 今日農務沒有翻頁
+  ✓ touch-laptop-1366x640 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ touch-laptop-1366x640 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ touch-laptop-1366x640 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 建物泡泡升級入口 有載入關鍵控制
+  ✓ touch-laptop-1366x640 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ touch-laptop-1366x640 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 無 pageerror
+  ✓ phone-390x844 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ phone-390x844 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ phone-390x844 切換後整圖模式（mode=fit）
+  ✓ phone-390x844 世界完整可見且 #mapScene 零內捲（scroll 390×844, client 390×844）
+  ✓ phone-390x844 地圖視覺框完整落在場景內（world 352×192, scene 390×844）
+  ✓ phone-390x844 整圖模式 tile 仍可辨識或可切原尺寸（tile 16×16）
+  ✓ phone-390x844 有載入關鍵控制
+  ✓ phone-390x844 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ phone-390x844 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-390x844 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-390x844 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-390x844 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-390x844 主場景 modal 關閉後解除背景 inert
+  ✓ phone-390x844 側欄 tabs 有載入關鍵控制
+  ✓ phone-390x844 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ phone-390x844 日誌三張農務牌 有載入關鍵控制
+  ✓ phone-390x844 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 農務牌 1 有載入關鍵控制
+  ✓ phone-390x844 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 農務牌 2 有載入關鍵控制
+  ✓ phone-390x844 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 農務牌 3 有載入關鍵控制
+  ✓ phone-390x844 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 今日農務沒有翻頁
+  ✓ phone-390x844 底部工具列 有載入關鍵控制
+  ✓ phone-390x844 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ phone-390x844 設定內載入 3 條系列連結
+  ✓ phone-390x844 系列連結 1 有載入關鍵控制
+  ✓ phone-390x844 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 系列連結 2 有載入關鍵控制
+  ✓ phone-390x844 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 系列連結 3 有載入關鍵控制
+  ✓ phone-390x844 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-390x844 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-390x844 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-390x844 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-390x844 底部工具列 modal 關閉後解除背景 inert
+  ✓ phone-390x844 可由觸控農地開啟 action dock
+  ✓ phone-390x844 可建立 plant action-dock 情境
+  ✓ phone-390x844 可建立 harvest action-dock 情境
+  ✓ phone-390x844 可建立 water action-dock 情境
+  ✓ phone-390x844 可建立 clear action-dock 情境
+  ✓ phone-390x844 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ phone-390x844 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ phone-390x844 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ phone-390x844 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-390x844 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-390x844 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 建物泡泡升級入口 有載入關鍵控制
+  ✓ phone-390x844 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ phone-390x844 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 無 pageerror
+  ✓ tablet-820x1180 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ tablet-820x1180 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ tablet-820x1180 切換後整圖模式（mode=fit）
+  ✓ tablet-820x1180 世界完整可見且 #mapScene 零內捲（scroll 820×1180, client 820×1180）
+  ✓ tablet-820x1180 地圖視覺框完整落在場景內（world 792×432, scene 820×1180）
+  ✓ tablet-820x1180 整圖模式 tile 仍可辨識或可切原尺寸（tile 36×36）
+  ✓ tablet-820x1180 有載入關鍵控制
+  ✓ tablet-820x1180 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ tablet-820x1180 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ tablet-820x1180 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ tablet-820x1180 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ tablet-820x1180 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ tablet-820x1180 主場景 modal 關閉後解除背景 inert
+  ✓ tablet-820x1180 側欄 tabs 有載入關鍵控制
+  ✓ tablet-820x1180 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ tablet-820x1180 日誌三張農務牌 有載入關鍵控制
+  ✓ tablet-820x1180 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 農務牌 1 有載入關鍵控制
+  ✓ tablet-820x1180 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 農務牌 2 有載入關鍵控制
+  ✓ tablet-820x1180 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 農務牌 3 有載入關鍵控制
+  ✓ tablet-820x1180 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 今日農務沒有翻頁
+  ✓ tablet-820x1180 底部工具列 有載入關鍵控制
+  ✓ tablet-820x1180 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ tablet-820x1180 設定內載入 3 條系列連結
+  ✓ tablet-820x1180 系列連結 1 有載入關鍵控制
+  ✓ tablet-820x1180 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 系列連結 2 有載入關鍵控制
+  ✓ tablet-820x1180 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 系列連結 3 有載入關鍵控制
+  ✓ tablet-820x1180 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ tablet-820x1180 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ tablet-820x1180 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ tablet-820x1180 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ tablet-820x1180 底部工具列 modal 關閉後解除背景 inert
+  ✓ tablet-820x1180 可由觸控農地開啟 action dock
+  ✓ tablet-820x1180 可建立 plant action-dock 情境
+  ✓ tablet-820x1180 可建立 harvest action-dock 情境
+  ✓ tablet-820x1180 可建立 water action-dock 情境
+  ✓ tablet-820x1180 可建立 clear action-dock 情境
+  ✓ tablet-820x1180 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ tablet-820x1180 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ tablet-820x1180 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ tablet-820x1180 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ tablet-820x1180 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ tablet-820x1180 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 建物泡泡升級入口 有載入關鍵控制
+  ✓ tablet-820x1180 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ tablet-820x1180 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 無 pageerror
+  ✓ phone-landscape-844x390 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ phone-landscape-844x390 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ phone-landscape-844x390 切換後整圖模式（mode=fit）
+  ✓ phone-landscape-844x390 世界完整可見且 #mapScene 零內捲（scroll 844×390, client 844×390）
+  ✓ phone-landscape-844x390 地圖視覺框完整落在場景內（world 660×360, scene 844×390）
+  ✓ phone-landscape-844x390 整圖模式 tile 仍可辨識或可切原尺寸（tile 30×30）
+  ✓ phone-landscape-844x390 有載入關鍵控制
+  ✓ phone-landscape-844x390 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 主場景 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-844x390 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-844x390 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-844x390 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-844x390 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-844x390 主場景 modal 關閉後解除背景 inert
+  ✓ phone-landscape-844x390 側欄 tabs 有載入關鍵控制
+  ✓ phone-landscape-844x390 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-844x390 日誌三張農務牌 有載入關鍵控制
+  ✓ phone-landscape-844x390 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 農務牌 1 有載入關鍵控制
+  ✓ phone-landscape-844x390 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 農務牌 2 有載入關鍵控制
+  ✓ phone-landscape-844x390 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 農務牌 3 有載入關鍵控制
+  ✓ phone-landscape-844x390 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 今日農務沒有翻頁
+  ✓ phone-landscape-844x390 底部工具列 有載入關鍵控制
+  ✓ phone-landscape-844x390 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-844x390 設定內載入 3 條系列連結
+  ✓ phone-landscape-844x390 系列連結 1 有載入關鍵控制
+  ✓ phone-landscape-844x390 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 系列連結 2 有載入關鍵控制
+  ✓ phone-landscape-844x390 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 系列連結 3 有載入關鍵控制
+  ✓ phone-landscape-844x390 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-844x390 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-844x390 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-844x390 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-844x390 底部工具列 modal 關閉後解除背景 inert
+  ✓ phone-landscape-844x390 可由觸控農地開啟 action dock
+  ✓ phone-landscape-844x390 可建立 plant action-dock 情境
+  ✓ phone-landscape-844x390 可建立 harvest action-dock 情境
+  ✓ phone-landscape-844x390 可建立 water action-dock 情境
+  ✓ phone-landscape-844x390 可建立 clear action-dock 情境
+  ✓ phone-landscape-844x390 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ phone-landscape-844x390 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ phone-landscape-844x390 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ phone-landscape-844x390 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-844x390 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-844x390 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 建物泡泡升級入口 有載入關鍵控制
+  ✓ phone-landscape-844x390 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ phone-landscape-844x390 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 無 pageerror
+  ✓ phone-landscape-932x430 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ phone-landscape-932x430 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ phone-landscape-932x430 切換後整圖模式（mode=fit）
+  ✓ phone-landscape-932x430 世界完整可見且 #mapScene 零內捲（scroll 932×430, client 932×430）
+  ✓ phone-landscape-932x430 地圖視覺框完整落在場景內（world 726×396, scene 932×430）
+  ✓ phone-landscape-932x430 整圖模式 tile 仍可辨識或可切原尺寸（tile 33×33）
+  ✓ phone-landscape-932x430 有載入關鍵控制
+  ✓ phone-landscape-932x430 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 主場景 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-932x430 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-932x430 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-932x430 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-932x430 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-932x430 主場景 modal 關閉後解除背景 inert
+  ✓ phone-landscape-932x430 側欄 tabs 有載入關鍵控制
+  ✓ phone-landscape-932x430 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-932x430 日誌三張農務牌 有載入關鍵控制
+  ✓ phone-landscape-932x430 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 農務牌 1 有載入關鍵控制
+  ✓ phone-landscape-932x430 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 農務牌 2 有載入關鍵控制
+  ✓ phone-landscape-932x430 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 農務牌 3 有載入關鍵控制
+  ✓ phone-landscape-932x430 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 今日農務沒有翻頁
+  ✓ phone-landscape-932x430 底部工具列 有載入關鍵控制
+  ✓ phone-landscape-932x430 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-932x430 設定內載入 3 條系列連結
+  ✓ phone-landscape-932x430 系列連結 1 有載入關鍵控制
+  ✓ phone-landscape-932x430 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 系列連結 2 有載入關鍵控制
+  ✓ phone-landscape-932x430 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 系列連結 3 有載入關鍵控制
+  ✓ phone-landscape-932x430 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-932x430 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-932x430 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-932x430 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-932x430 底部工具列 modal 關閉後解除背景 inert
+  ✓ phone-landscape-932x430 可由觸控農地開啟 action dock
+  ✓ phone-landscape-932x430 可建立 plant action-dock 情境
+  ✓ phone-landscape-932x430 可建立 harvest action-dock 情境
+  ✓ phone-landscape-932x430 可建立 water action-dock 情境
+  ✓ phone-landscape-932x430 可建立 clear action-dock 情境
+  ✓ phone-landscape-932x430 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ phone-landscape-932x430 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ phone-landscape-932x430 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ phone-landscape-932x430 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-932x430 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-932x430 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 建物泡泡升級入口 有載入關鍵控制
+  ✓ phone-landscape-932x430 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ phone-landscape-932x430 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 無 pageerror
+  ✓ 控制可達性精確覆蓋 339 項（實測 339）
+
+✅ R68 控制與選單守門通過（339 項／7 種裝置／視口）
+[memory] scripts/test-r82-art.js attempt 1: 12424MiB free
+PASS exact tool disclosure without invented model slug
+PASS eight independently generated source assets retained
+PASS asset hash assets/generated/r82/welcome-384.webp
+PASS asset hash assets/heirloom/table-r82.webp
+PASS asset hash assets/heirloom/doorstep-r82.webp
+PASS asset hash assets/generated/r82/paper-192.png
+PASS asset hash assets/generated/r82/farmer-96.png
+PASS asset hash docs/evidence/r82-art/farmer-64.png
+PASS asset hash assets/generated/r82/farmer-face-64.png
+PASS asset hash assets/generated/r82/logo-320.png
+PASS asset hash assets/generated/r82/basket-32.png
+PASS asset hash assets/generated/r82/note-32.png
+PASS asset hash assets/generated/r82/wheat-32.png
+PASS asset hash assets/generated/r82/stamp-32.png
+PASS asset hash assets/generated/r82/water-32.png
+PASS asset hash assets/generated/r82/seed-32.png
+PASS asset hash assets/generated/r82/sun-32.png
+PASS asset hash assets/generated/r82/tea-32.png
+PASS asset hash assets/generated/r82/icons-128.png
+PASS asset hash assets/generated/r82/app-icon-48.png
+PASS asset hash assets/generated/r82/app-icon-192.png
+PASS asset hash assets/generated/r82/app-icon-512.png
+PASS asset hash docs/art/masters/welcome.png
+PASS asset hash docs/art/masters/farmer.png
+PASS asset hash docs/art/masters/table.png
+PASS asset hash docs/art/masters/door.png
+PASS asset hash docs/art/masters/paper.png
+PASS asset hash docs/art/masters/icons.png
+PASS asset hash docs/art/masters/logo.png
+PASS asset hash docs/art/masters/app.png
+PASS new asset payload stays below 256KiB
+PASS farmer brightness and saturation double gate
+PASS decoded size, nonempty and common palette assets/generated/r82/welcome-384.webp
+PASS decoded size, nonempty and common palette assets/heirloom/table-r82.webp
+PASS decoded size, nonempty and common palette assets/heirloom/doorstep-r82.webp
+PASS decoded size, nonempty and common palette assets/generated/r82/paper-192.png
+PASS decoded size, nonempty and common palette assets/generated/r82/farmer-96.png
+PASS binary alpha and clean corners assets/generated/r82/farmer-96.png
+PASS decoded size, nonempty and common palette assets/generated/r82/farmer-face-64.png
+PASS binary alpha and clean corners assets/generated/r82/farmer-face-64.png
+PASS decoded size, nonempty and common palette assets/generated/r82/logo-320.png
+PASS binary alpha and clean corners assets/generated/r82/logo-320.png
+PASS decoded size, nonempty and common palette assets/generated/r82/basket-32.png
+PASS binary alpha and clean corners assets/generated/r82/basket-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/note-32.png
+PASS binary alpha and clean corners assets/generated/r82/note-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/wheat-32.png
+PASS binary alpha and clean corners assets/generated/r82/wheat-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/stamp-32.png
+PASS binary alpha and clean corners assets/generated/r82/stamp-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/water-32.png
+PASS binary alpha and clean corners assets/generated/r82/water-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/seed-32.png
+PASS binary alpha and clean corners assets/generated/r82/seed-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/sun-32.png
+PASS binary alpha and clean corners assets/generated/r82/sun-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/tea-32.png
+PASS binary alpha and clean corners assets/generated/r82/tea-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/icons-128.png
+PASS binary alpha and clean corners assets/generated/r82/icons-128.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-48.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-192.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-512.png
+PASS welcome displays the generated farm-table background
+PASS generated Traditional Chinese logo loaded
+PASS actual farm control uses current R88 art water-32.png
+PASS actual farm control uses current R88 art note-32.png
+PASS actual farm control uses current R88 art wheat-32.png
+PASS daily task displays a native generated icon
+PASS basket page displays its real illustration
+PASS earned choice has distinct doorstep and table illustrations
+PASS doorstep story uses its own generated scene
+PASS table story uses its own generated scene
+PASS runtime has no uncaught errors or missing art
+[memory] scripts/test-r83-art.js attempt 1: 12422MiB free
+PASS actual tool named; undisclosed model slug not invented
+PASS eighteen generated masters retained
+PASS hash docs/art/masters/r83/walk.png
+PASS hash docs/art/masters/r83/actions.png
+PASS hash docs/art/masters/r83/crops.png
+PASS hash docs/art/masters/r83/world.png
+PASS hash docs/art/masters/r83/terrain.png
+PASS hash docs/art/masters/r83/portraits.png
+PASS hash docs/art/masters/r83/welcome.png
+PASS hash docs/art/masters/r83/basket.png
+PASS hash docs/art/masters/r83/table.png
+PASS hash docs/art/masters/r83/door.png
+PASS hash docs/art/masters/r83/tend.png
+PASS hash docs/art/masters/r83/panel.png
+PASS hash docs/art/masters/r83/icons.png
+PASS hash docs/art/masters/r83/logo.png
+PASS hash docs/art/masters/r83/app.png
+PASS hash docs/art/masters/r83/cropslate.png
+PASS hash docs/art/masters/r83/cropsseason.png
+PASS hash docs/art/masters/r83/npcs.png
+PASS hash assets/generated/r83/walk.png
+PASS hash assets/generated/r83/npcs.png
+PASS hash assets/generated/r83/actions.png
+PASS hash assets/generated/r83/tend.png
+PASS hash assets/generated/r83/farming-actions.png
+PASS hash assets/generated/r83/crops.png
+PASS hash assets/generated/r83/cropslate.png
+PASS hash assets/generated/r83/cropsseason.png
+PASS hash assets/generated/r83/world.png
+PASS hash assets/generated/r83/terrain.png
+PASS hash assets/generated/r83/portraits.png
+PASS hash assets/generated/r83/grey-0.png
+PASS hash assets/generated/r83/grey-1.png
+PASS hash assets/generated/r83/grey-2.png
+PASS hash assets/generated/r83/grandma-0.png
+PASS hash assets/generated/r83/grandma-1.png
+PASS hash assets/generated/r83/grandma-2.png
+PASS hash assets/generated/r83/farmer-face-64.png
+PASS hash assets/generated/r83/welcome-384.webp
+PASS hash assets/generated/r83/basket-384.webp
+PASS hash assets/generated/r83/door-r82.webp
+PASS hash assets/generated/r83/table-r82.webp
+PASS hash assets/generated/r83/panel-192.png
+PASS hash assets/generated/r83/paper-128.png
+PASS hash assets/generated/r83/icons.png
+PASS hash assets/generated/r83/basket-32.png
+PASS hash assets/generated/r83/note-32.png
+PASS hash assets/generated/r83/wheat-32.png
+PASS hash assets/generated/r83/stamp-32.png
+PASS hash assets/generated/r83/water-32.png
+PASS hash assets/generated/r83/seed-32.png
+PASS hash assets/generated/r83/sun-32.png
+PASS hash assets/generated/r83/tea-32.png
+PASS hash assets/generated/r83/logo-320.png
+PASS hash assets/generated/r83/app-icon-64.png
+PASS hash assets/generated/r83/app-icon-192.png
+PASS hash assets/generated/r83/app-icon-512.png
+PASS hash assets/heirloom/r83/table-r82.webp
+PASS hash assets/heirloom/r83/doorstep-r82.webp
+PASS brightness and saturation double gate Walk
+PASS brightness and saturation double gate Npcs
+PASS brightness and saturation double gate Actions
+PASS brightness and saturation double gate Tend
+PASS brightness and saturation double gate Crops
+PASS brightness and saturation double gate CropsLate
+PASS brightness and saturation double gate CropsSeason
+PASS brightness and saturation double gate World
+PASS brightness and saturation double gate Portraits
+PASS brightness and saturation double gate FarmerFace
+PASS brightness and saturation double gate Icons
+PASS generated image delivery payload below 1.4 MiB
+PASS Walk direction 0: six distinct poses with lower-body change
+PASS Walk direction 1: six distinct poses with lower-body change
+PASS Walk direction 2: six distinct poses with lower-body change
+PASS Walk direction 3: six distinct poses with lower-body change
+PASS Actions direction 0: six distinct poses with lower-body change
+PASS Actions direction 1: six distinct poses with lower-body change
+PASS Actions direction 2: six distinct poses with lower-body change
+PASS Actions direction 3: six distinct poses with lower-body change
+PASS Tend direction 0: six distinct poses with lower-body change
+PASS Tend direction 1: six distinct poses with lower-body change
+PASS Tend direction 2: six distinct poses with lower-body change
+PASS Tend direction 3: six distinct poses with lower-body change
+PASS new generated welcome 390x844
+PASS new straw-hat walk sprite >=40 CSS pixels 390x844
+PASS all crop atlases, ground and farm buildings use new generated assets 390x844
+PASS three direct task cards 390x844
+PASS task cards 44px and unobscured 390x844
+PASS basket and welcome have distinct art 390x844
+PASS two rendered generated leaf-light projections 390x844
+PASS light occupies the ground, no vertical pillar 390x844
+PASS new generated welcome 844x390
+PASS new straw-hat walk sprite >=40 CSS pixels 844x390
+PASS all crop atlases, ground and farm buildings use new generated assets 844x390
+PASS three direct task cards 844x390
+PASS task cards 44px and unobscured 844x390
+PASS basket and welcome have distinct art 844x390
+PASS two rendered generated leaf-light projections 844x390
+PASS light occupies the ground, no vertical pillar 844x390
+PASS new generated welcome 1032x1376
+PASS new straw-hat walk sprite >=40 CSS pixels 1032x1376
+PASS all crop atlases, ground and farm buildings use new generated assets 1032x1376
+PASS three direct task cards 1032x1376
+PASS task cards 44px and unobscured 1032x1376
+PASS basket and welcome have distinct art 1032x1376
+PASS two rendered generated leaf-light projections 1032x1376
+PASS light occupies the ground, no vertical pillar 1032x1376
+PASS new generated welcome 1366x600
+PASS new straw-hat walk sprite >=40 CSS pixels 1366x600
+PASS all crop atlases, ground and farm buildings use new generated assets 1366x600
+PASS three direct task cards 1366x600
+PASS task cards 44px and unobscured 1366x600
+PASS basket and welcome have distinct art 1366x600
+PASS two rendered generated leaf-light projections 1366x600
+PASS light occupies the ground, no vertical pillar 1366x600
+PASS no uncaught runtime errors or missing assets
+R83 VERIFIED 116 checks
+[memory] scripts/test-r84-art.js attempt 1: 11644MiB free
+PASS 320x568 opaque character >=40px, no rectangle
+PASS 320x568 seven 44px controls in exactly one row
+PASS 320x568 no horizontal overflow
+PASS 320x568 world area >=60% (0.6156)
+PASS 320x568 no right-hand test toolbar in default view
+PASS 320x568 every drawer entry remains reachable
+PASS 320x568 three chores with no page arrows
+PASS 320x568 all three chores reachable without scrolling
+PASS 320x568 all ready rewards reachable on their cards
+PASS 320x568 three claimed chores visibly stamped
+PASS 320x568 one unambiguous wheat quantity slot
+PASS 320x568 recipe action reachable without scrolling
+PASS 320x568 dialogue hides every dock child and movement
+PASS 320x568 rendered generated nonuniform leaf-light projection
+PASS 320x568 actual tree shadows in world coordinates
+PASS 320x568 table result has no journal navigation
+PASS 320x568 table story has a pure spoken reply and clears every background HUD control
+PASS 320x568 table title and reply text remain visible and uncovered
+PASS 320x568 table has distinct aftermath art
+PASS 320x568 doorstep result has no journal navigation
+PASS 320x568 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 320x568 doorstep title and reply text remain visible and uncovered
+PASS 320x568 doorstep has distinct aftermath art
+PASS 320x568 basket and two-chair porch are real world objects
+PASS 390x844 opaque character >=40px, no rectangle
+PASS 390x844 seven 44px controls in exactly one row
+PASS 390x844 no horizontal overflow
+PASS 390x844 world area >=60% (0.7477)
+PASS 390x844 no right-hand test toolbar in default view
+PASS 390x844 every drawer entry remains reachable
+PASS 390x844 three chores with no page arrows
+PASS 390x844 all three chores reachable without scrolling
+PASS 390x844 all ready rewards reachable on their cards
+PASS 390x844 three claimed chores visibly stamped
+PASS 390x844 one unambiguous wheat quantity slot
+PASS 390x844 recipe action reachable without scrolling
+PASS 390x844 dialogue hides every dock child and movement
+PASS 390x844 rendered generated nonuniform leaf-light projection
+PASS 390x844 actual tree shadows in world coordinates
+PASS 390x844 table result has no journal navigation
+PASS 390x844 table story has a pure spoken reply and clears every background HUD control
+PASS 390x844 table title and reply text remain visible and uncovered
+PASS 390x844 table has distinct aftermath art
+PASS 390x844 doorstep result has no journal navigation
+PASS 390x844 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 390x844 doorstep title and reply text remain visible and uncovered
+PASS 390x844 doorstep has distinct aftermath art
+PASS 390x844 basket and two-chair porch are real world objects
+PASS 844x390 opaque character >=40px, no rectangle
+PASS 844x390 seven 44px controls in exactly one row
+PASS 844x390 no horizontal overflow
+PASS 844x390 no right-hand test toolbar in default view
+PASS 844x390 every drawer entry remains reachable
+PASS 844x390 three chores with no page arrows
+PASS 844x390 all three chores reachable without scrolling
+PASS 844x390 all ready rewards reachable on their cards
+PASS 844x390 three claimed chores visibly stamped
+PASS 844x390 one unambiguous wheat quantity slot
+PASS 844x390 recipe action reachable without scrolling
+PASS 844x390 dialogue hides every dock child and movement
+PASS 844x390 rendered generated nonuniform leaf-light projection
+PASS 844x390 actual tree shadows in world coordinates
+PASS 844x390 table result has no journal navigation
+PASS 844x390 table story has a pure spoken reply and clears every background HUD control
+PASS 844x390 table title and reply text remain visible and uncovered
+PASS 844x390 table has distinct aftermath art
+PASS 844x390 doorstep result has no journal navigation
+PASS 844x390 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 844x390 doorstep title and reply text remain visible and uncovered
+PASS 844x390 doorstep has distinct aftermath art
+PASS 844x390 basket and two-chair porch are real world objects
+PASS 768x1024 opaque character >=40px, no rectangle
+PASS 768x1024 seven 44px controls in exactly one row
+PASS 768x1024 no horizontal overflow
+PASS 768x1024 world area >=60% (0.8667)
+PASS 768x1024 no right-hand test toolbar in default view
+PASS 768x1024 every drawer entry remains reachable
+PASS 768x1024 three chores with no page arrows
+PASS 768x1024 all three chores reachable without scrolling
+PASS 768x1024 all ready rewards reachable on their cards
+PASS 768x1024 three claimed chores visibly stamped
+PASS 768x1024 one unambiguous wheat quantity slot
+PASS 768x1024 recipe action reachable without scrolling
+PASS 768x1024 dialogue hides every dock child and movement
+PASS 768x1024 rendered generated nonuniform leaf-light projection
+PASS 768x1024 actual tree shadows in world coordinates
+PASS 768x1024 table result has no journal navigation
+PASS 768x1024 table story has a pure spoken reply and clears every background HUD control
+PASS 768x1024 table title and reply text remain visible and uncovered
+PASS 768x1024 table has distinct aftermath art
+PASS 768x1024 doorstep result has no journal navigation
+PASS 768x1024 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 768x1024 doorstep title and reply text remain visible and uncovered
+PASS 768x1024 doorstep has distinct aftermath art
+PASS 768x1024 basket and two-chair porch are real world objects
+PASS 1024x768 opaque character >=40px, no rectangle
+PASS 1024x768 seven 44px controls in exactly one row
+PASS 1024x768 no horizontal overflow
+PASS 1024x768 no right-hand test toolbar in default view
+PASS 1024x768 every drawer entry remains reachable
+PASS 1024x768 three chores with no page arrows
+PASS 1024x768 all three chores reachable without scrolling
+PASS 1024x768 all ready rewards reachable on their cards
+PASS 1024x768 three claimed chores visibly stamped
+PASS 1024x768 one unambiguous wheat quantity slot
+PASS 1024x768 recipe action reachable without scrolling
+PASS 1024x768 dialogue hides every dock child and movement
+PASS 1024x768 rendered generated nonuniform leaf-light projection
+PASS 1024x768 actual tree shadows in world coordinates
+PASS 1024x768 table result has no journal navigation
+PASS 1024x768 table story has a pure spoken reply and clears every background HUD control
+PASS 1024x768 table title and reply text remain visible and uncovered
+PASS 1024x768 table has distinct aftermath art
+PASS 1024x768 doorstep result has no journal navigation
+PASS 1024x768 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 1024x768 doorstep title and reply text remain visible and uncovered
+PASS 1024x768 doorstep has distinct aftermath art
+PASS 1024x768 basket and two-chair porch are real world objects
+PASS 1032x1376 opaque character >=40px, no rectangle
+PASS 1032x1376 seven 44px controls in exactly one row
+PASS 1032x1376 no horizontal overflow
+PASS 1032x1376 world area >=60% (0.8898)
+PASS 1032x1376 no right-hand test toolbar in default view
+PASS 1032x1376 every drawer entry remains reachable
+PASS 1032x1376 three chores with no page arrows
+PASS 1032x1376 all three chores reachable without scrolling
+PASS 1032x1376 all ready rewards reachable on their cards
+PASS 1032x1376 three claimed chores visibly stamped
+PASS 1032x1376 one unambiguous wheat quantity slot
+PASS 1032x1376 recipe action reachable without scrolling
+PASS 1032x1376 dialogue hides every dock child and movement
+PASS 1032x1376 rendered generated nonuniform leaf-light projection
+PASS 1032x1376 actual tree shadows in world coordinates
+PASS 1032x1376 table result has no journal navigation
+PASS 1032x1376 table story has a pure spoken reply and clears every background HUD control
+PASS 1032x1376 table title and reply text remain visible and uncovered
+PASS 1032x1376 table has distinct aftermath art
+PASS 1032x1376 doorstep result has no journal navigation
+PASS 1032x1376 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 1032x1376 doorstep title and reply text remain visible and uncovered
+PASS 1032x1376 doorstep has distinct aftermath art
+PASS 1032x1376 basket and two-chair porch are real world objects
+PASS 1366x600 opaque character >=40px, no rectangle
+PASS 1366x600 seven 44px controls in exactly one row
+PASS 1366x600 no horizontal overflow
+PASS 1366x600 no right-hand test toolbar in default view
+PASS 1366x600 every drawer entry remains reachable
+PASS 1366x600 three chores with no page arrows
+PASS 1366x600 all three chores reachable without scrolling
+PASS 1366x600 all ready rewards reachable on their cards
+PASS 1366x600 three claimed chores visibly stamped
+PASS 1366x600 one unambiguous wheat quantity slot
+PASS 1366x600 recipe action reachable without scrolling
+PASS 1366x600 dialogue hides every dock child and movement
+PASS 1366x600 rendered generated nonuniform leaf-light projection
+PASS 1366x600 actual tree shadows in world coordinates
+PASS 1366x600 table result has no journal navigation
+PASS 1366x600 table story has a pure spoken reply and clears every background HUD control
+PASS 1366x600 table title and reply text remain visible and uncovered
+PASS 1366x600 table has distinct aftermath art
+PASS 1366x600 doorstep result has no journal navigation
+PASS 1366x600 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 1366x600 doorstep title and reply text remain visible and uncovered
+PASS 1366x600 doorstep has distinct aftermath art
+PASS 1366x600 basket and two-chair porch are real world objects
+PASS no page errors or missing assets
+VERIFIED R84 166 checks
+[memory] scripts/test-r85-art.js attempt 1: 10563MiB free
+PASS 9 real masters, 26 images; actual tool and undisclosed model recorded
+PASS source/output hash docs/art/character-sheets/miri-r85.png
+PASS source/output hash docs/art/masters/r85/walk.png
+PASS source/output hash docs/art/masters/r85/actions.png
+PASS source/output hash docs/art/masters/r85/story.png
+PASS source/output hash docs/art/masters/r85/terrain.png
+PASS source/output hash docs/art/masters/r85/panel.png
+PASS source/output hash docs/art/masters/r85/icons.png
+PASS source/output hash docs/art/masters/r85/logo.png
+PASS source/output hash docs/art/masters/r85/app.png
+PASS source/output hash assets/generated/r85/miri-0.png
+PASS source/output hash assets/generated/r85/miri-1.png
+PASS source/output hash assets/generated/r85/miri-2.png
+PASS source/output hash assets/generated/r85/walk.png
+PASS source/output hash assets/generated/r85/actions.png
+PASS source/output hash assets/generated/r85/farming-actions.png
+PASS source/output hash assets/generated/r85/welcome-384.webp
+PASS source/output hash assets/generated/r85/basket-384.webp
+PASS source/output hash assets/generated/r85/table-result-384.webp
+PASS source/output hash assets/generated/r85/doorstep-result-384.webp
+PASS source/output hash assets/generated/r85/album-128.png
+PASS source/output hash assets/generated/r85/paper-128.png
+PASS source/output hash assets/generated/r85/stamp-32.png
+PASS source/output hash assets/generated/r85/wheat-32.png
+PASS source/output hash assets/generated/r85/basket-32.png
+PASS source/output hash assets/generated/r85/water-32.png
+PASS source/output hash assets/generated/r85/sun-32.png
+PASS source/output hash assets/generated/r85/note-32.png
+PASS source/output hash assets/generated/r85/bow-32.png
+PASS source/output hash assets/generated/r85/cups-32.png
+PASS source/output hash assets/generated/r85/logo-320.png
+PASS source/output hash assets/generated/r85/app-icon-64.png
+PASS source/output hash assets/generated/r85/app-icon-192.png
+PASS source/output hash assets/generated/r85/app-icon-512.png
+PASS source/output hash assets/generated/r85/terrain.png
+PASS source/output hash assets/generated/r85/keepsakes.png
+PASS character brightness/saturation double gate walk.png
+PASS character brightness/saturation double gate actions.png
+PASS character brightness/saturation double gate farming-actions.png
+PASS character brightness/saturation double gate miri-0.png
+PASS character brightness/saturation double gate miri-1.png
+PASS character brightness/saturation double gate miri-2.png
+PASS walk row 0: six poses with actual limb changes
+PASS walk row 1: six poses with actual limb changes
+PASS walk row 2: six poses with actual limb changes
+PASS walk row 3: six poses with actual limb changes
+PASS actions row 0: six poses with actual limb changes
+PASS actions row 1: six poses with actual limb changes
+PASS actions row 2: six poses with actual limb changes
+PASS actions row 3: six poses with actual limb changes
+PASS actions row 4: six poses with actual limb changes
+PASS actions row 5: six poses with actual limb changes
+PASS actions row 6: six poses with actual limb changes
+PASS actions row 7: six poses with actual limb changes
+PASS 390x844 same-age wheat in/out of sunlight
+PASS 390x844 broad ground light, generated nonuniform leaf projection and dust
+PASS 390x844 feet off wheat, separate unchanged physics root and contact shadows
+PASS 390x844 readable hero size
+PASS 390x844 single three-page navigation above content, one border system
+PASS 390x844 all three actual claim actions leave three distinct legible farm seals
+PASS 390x844 single explicit wheat inventory quantity
+PASS 390x844 dedicated basket banner visible
+PASS 390x844 full paper story, no green void or journal tabs
+PASS 390x844 story dialogue carries no completion seal
+PASS 844x390 same-age wheat in/out of sunlight
+PASS 844x390 broad ground light, generated nonuniform leaf projection and dust
+PASS 844x390 feet off wheat, separate unchanged physics root and contact shadows
+PASS 844x390 readable hero size
+PASS 844x390 single three-page navigation above content, one border system
+PASS 844x390 all three actual claim actions leave three distinct legible farm seals
+PASS 844x390 single explicit wheat inventory quantity
+PASS 844x390 full paper story, no green void or journal tabs
+PASS 844x390 story dialogue carries no completion seal
+PASS 1032x1376 same-age wheat in/out of sunlight
+PASS 1032x1376 broad ground light, generated nonuniform leaf projection and dust
+PASS 1032x1376 feet off wheat, separate unchanged physics root and contact shadows
+PASS 1032x1376 readable hero size
+PASS 1032x1376 single three-page navigation above content, one border system
+PASS 1032x1376 all three actual claim actions leave three distinct legible farm seals
+PASS 1032x1376 single explicit wheat inventory quantity
+PASS 1032x1376 dedicated basket banner visible
+PASS 1032x1376 full paper story, no green void or journal tabs
+PASS 1032x1376 story dialogue carries no completion seal
+PASS 1366x600 same-age wheat in/out of sunlight
+PASS 1366x600 broad ground light, generated nonuniform leaf projection and dust
+PASS 1366x600 feet off wheat, separate unchanged physics root and contact shadows
+PASS 1366x600 readable hero size
+PASS 1366x600 single three-page navigation above content, one border system
+PASS 1366x600 all three actual claim actions leave three distinct legible farm seals
+PASS 1366x600 single explicit wheat inventory quantity
+PASS 1366x600 full paper story, no green void or journal tabs
+PASS 1366x600 story dialogue carries no completion seal
+PASS no browser errors or missing images
+VERIFIED R85 93 checks
+[memory] scripts/test-r86-art.js attempt 1: 10662MiB free
+PASS 8 generated masters, 19 runtime images; actual tool recorded
+PASS source and output hash docs/art/character-sheets/miri-r86.png
+PASS source and output hash docs/art/masters/r86/leaf.png
+PASS source and output hash docs/art/masters/r86/panel.png
+PASS source and output hash docs/art/masters/r86/stamps.png
+PASS source and output hash docs/art/masters/r86/walk.png
+PASS source and output hash docs/art/masters/r86/actions.png
+PASS source and output hash docs/art/masters/r86/logo.png
+PASS source and output hash docs/art/masters/r86/app.png
+PASS source and output hash assets/generated/r86/walk.png
+PASS source and output hash assets/generated/r86/actions.png
+PASS source and output hash assets/generated/r86/drop-16.png
+PASS source and output hash assets/generated/r86/farming-actions.png
+PASS source and output hash assets/generated/r86/miri-0.png
+PASS source and output hash assets/generated/r86/miri-1.png
+PASS source and output hash assets/generated/r86/miri-2.png
+PASS source and output hash assets/generated/r86/stamp-water-32.png
+PASS source and output hash assets/generated/r86/stamp-harvest-32.png
+PASS source and output hash assets/generated/r86/stamp-basket-32.png
+PASS source and output hash assets/generated/r86/paper-128.png
+PASS source and output hash assets/generated/r86/binding-8.png
+PASS source and output hash assets/generated/r86/leaf-light-128.png
+PASS source and output hash assets/generated/r86/canopy-shadow-128.png
+PASS source and output hash assets/generated/r86/leaf-ground-128.png
+PASS source and output hash assets/generated/r86/logo-320.png
+PASS source and output hash assets/generated/r86/app-icon-64.png
+PASS source and output hash assets/generated/r86/app-icon-192.png
+PASS source and output hash assets/generated/r86/app-icon-512.png
+PASS character double gate walk.png
+PASS character double gate actions.png
+PASS character double gate farming-actions.png
+PASS character double gate miri-0.png
+PASS character double gate miri-1.png
+PASS character double gate miri-2.png
+PASS walk row 0 six genuine changing poses
+PASS walk row 1 six genuine changing poses
+PASS walk row 2 six genuine changing poses
+PASS walk row 3 six genuine changing poses
+PASS actions row 0 six genuine changing poses
+PASS actions row 1 six genuine changing poses
+PASS actions row 2 six genuine changing poses
+PASS actions row 3 six genuine changing poses
+PASS actions row 4 six genuine changing poses
+PASS actions row 5 six genuine changing poses
+PASS actions row 6 six genuine changing poses
+PASS actions row 7 six genuine changing poses
+PASS 390x844 exact same-age wheat fixture, lit/unlit same stage
+PASS 390x844 generated directional lighting and matching sunlit hero
+PASS 390x844 readable visual and separate physics
+PASS 390x844 album controls at least44px and hit reachable
+PASS 390x844 separate rows, binding clipped, background chapter hidden
+PASS 390x844 whole portrait album requires no scroll
+PASS 390x844 three distinct red-ink stamps after claim
+PASS 390x844 only one daily completion count, today3/3
+PASS 390x844 basket controls reachable
+PASS 390x844 basket note and footer not overlapped
+PASS 320x568 exact same-age wheat fixture, lit/unlit same stage
+PASS 320x568 generated directional lighting and matching sunlit hero
+PASS 320x568 readable visual and separate physics
+PASS 320x568 album controls at least44px and hit reachable
+PASS 320x568 separate rows, binding clipped, background chapter hidden
+PASS 320x568 three distinct red-ink stamps after claim
+PASS 320x568 only one daily completion count, today3/3
+PASS 320x568 basket controls reachable
+PASS 320x568 basket note and footer not overlapped
+PASS 844x390 exact same-age wheat fixture, lit/unlit same stage
+PASS 844x390 generated directional lighting and matching sunlit hero
+PASS 844x390 readable visual and separate physics
+PASS 844x390 album controls at least44px and hit reachable
+PASS 844x390 separate rows, binding clipped, background chapter hidden
+PASS 844x390 three distinct red-ink stamps after claim
+PASS 844x390 only one daily completion count, today3/3
+PASS 844x390 basket controls reachable
+PASS 844x390 basket note and footer not overlapped
+PASS 1032x1376 exact same-age wheat fixture, lit/unlit same stage
+PASS 1032x1376 generated directional lighting and matching sunlit hero
+PASS 1032x1376 readable visual and separate physics
+PASS 1032x1376 album controls at least44px and hit reachable
+PASS 1032x1376 separate rows, binding clipped, background chapter hidden
+PASS 1032x1376 whole portrait album requires no scroll
+PASS 1032x1376 three distinct red-ink stamps after claim
+PASS 1032x1376 only one daily completion count, today3/3
+PASS 1032x1376 basket controls reachable
+PASS 1032x1376 basket note and footer not overlapped
+PASS 1366x600 exact same-age wheat fixture, lit/unlit same stage
+PASS 1366x600 generated directional lighting and matching sunlit hero
+PASS 1366x600 readable visual and separate physics
+PASS 1366x600 album controls at least44px and hit reachable
+PASS 1366x600 separate rows, binding clipped, background chapter hidden
+PASS 1366x600 three distinct red-ink stamps after claim
+PASS 1366x600 only one daily completion count, today3/3
+PASS 1366x600 basket controls reachable
+PASS 1366x600 basket note and footer not overlapped
+PASS 430x932 exact same-age wheat fixture, lit/unlit same stage
+PASS 430x932 generated directional lighting and matching sunlit hero
+PASS 430x932 readable visual and separate physics
+PASS 430x932 album controls at least44px and hit reachable
+PASS 430x932 separate rows, binding clipped, background chapter hidden
+PASS 430x932 whole portrait album requires no scroll
+PASS 430x932 three distinct red-ink stamps after claim
+PASS 430x932 only one daily completion count, today3/3
+PASS 430x932 basket controls reachable
+PASS 430x932 basket note and footer not overlapped
+PASS no browser errors or missing artwork
+VERIFIED R86 104 checks, browser closed
+[memory] scripts/test-r87-art.js attempt 1: 11565MiB free
+PASS 10 generated masters, real tool and undisclosed model recorded
+PASS source/output hash docs/art/character-sheets/miri-r87.png
+PASS source/output hash docs/art/masters/r87/walk.png
+PASS source/output hash docs/art/masters/r87/actions.png
+PASS source/output hash docs/art/masters/r87/leaf.png
+PASS source/output hash docs/art/masters/r87/terrain.png
+PASS source/output hash docs/art/masters/r87/tree.png
+PASS source/output hash docs/art/masters/r87/panel.png
+PASS source/output hash docs/art/masters/r87/icons.png
+PASS source/output hash docs/art/masters/r87/logo.png
+PASS source/output hash docs/art/masters/r87/app.png
+PASS source/output hash assets/generated/r87/walk.png
+PASS source/output hash assets/generated/r87/actions.png
+PASS source/output hash assets/generated/r87/farming-actions.png
+PASS source/output hash assets/generated/r87/miri-0.png
+PASS source/output hash assets/generated/r87/miri-1.png
+PASS source/output hash assets/generated/r87/miri-2.png
+PASS source/output hash assets/generated/r87/terrain.png
+PASS source/output hash assets/generated/r87/apple-tree.png
+PASS source/output hash assets/generated/r87/leaf-light.png
+PASS source/output hash assets/generated/r87/canopy-shadow.png
+PASS source/output hash assets/generated/r87/leaf-ground.png
+PASS source/output hash assets/generated/r87/paper-128.png
+PASS source/output hash assets/generated/r87/binding-8.png
+PASS source/output hash assets/generated/r87/wheat-32.png
+PASS source/output hash assets/generated/r87/basket-32.png
+PASS source/output hash assets/generated/r87/water-32.png
+PASS source/output hash assets/generated/r87/note-32.png
+PASS source/output hash assets/generated/r87/hat-32.png
+PASS source/output hash assets/generated/r87/sprout-32.png
+PASS source/output hash assets/generated/r87/logo-320.png
+PASS source/output hash assets/generated/r87/app-icon-64.png
+PASS source/output hash assets/generated/r87/app-icon-192.png
+PASS source/output hash assets/generated/r87/app-icon-512.png
+PASS character brightness/saturation double gate walk.png
+PASS character brightness/saturation double gate actions.png
+PASS character brightness/saturation double gate farming-actions.png
+PASS character brightness/saturation double gate miri-0.png
+PASS character brightness/saturation double gate miri-1.png
+PASS character brightness/saturation double gate miri-2.png
+PASS walk 0: six actual poses with limb changes
+PASS walk 1: six actual poses with limb changes
+PASS walk 2: six actual poses with limb changes
+PASS walk 3: six actual poses with limb changes
+PASS actions 0: six actual poses with limb changes
+PASS actions 1: six actual poses with limb changes
+PASS actions 2: six actual poses with limb changes
+PASS actions 3: six actual poses with limb changes
+PASS actions 4: six actual poses with limb changes
+PASS actions 5: six actual poses with limb changes
+PASS actions 6: six actual poses with limb changes
+PASS actions 7: six actual poses with limb changes
+PASS 320x568 same-age same-stage wheat in SAME ROW, one inside light
+PASS 320x568 tree-anchored shadow casts left/down onto mission soil
+PASS 320x568 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 320x568 readable character, physics separate
+PASS 320x568 all album controls 44px and reachable
+PASS 320x568 resource bar FULLY hidden and one three-page navigation
+PASS 320x568 basket choice/return controls reachable
+PASS 320x568 explicit choice consequences and binding inset3px
+PASS 320x568 pure spoken reply, no completion seal on dialogue
+PASS 320x568 story return stays44px, inside viewport and uncovered
+PASS 320x568 story empty top is below1/8 viewport
+PASS 390x844 same-age same-stage wheat in SAME ROW, one inside light
+PASS 390x844 tree-anchored shadow casts left/down onto mission soil
+PASS 390x844 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 390x844 readable character, physics separate
+PASS 390x844 all album controls 44px and reachable
+PASS 390x844 resource bar FULLY hidden and one three-page navigation
+PASS 390x844 basket choice/return controls reachable
+PASS 390x844 explicit choice consequences and binding inset3px
+PASS 390x844 pure spoken reply, no completion seal on dialogue
+PASS 390x844 story return stays44px, inside viewport and uncovered
+PASS 390x844 story empty top is below1/8 viewport
+PASS 390x844 portrait story uses at least70percent of height
+PASS 844x390 same-age same-stage wheat in SAME ROW, one inside light
+PASS 844x390 tree-anchored shadow casts left/down onto mission soil
+PASS 844x390 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 844x390 readable character, physics separate
+PASS 844x390 all album controls 44px and reachable
+PASS 844x390 resource bar FULLY hidden and one three-page navigation
+PASS 844x390 basket choice/return controls reachable
+PASS 844x390 explicit choice consequences and binding inset3px
+PASS 844x390 pure spoken reply, no completion seal on dialogue
+PASS 844x390 story return stays44px, inside viewport and uncovered
+PASS 1366x600 same-age same-stage wheat in SAME ROW, one inside light
+PASS 1366x600 tree-anchored shadow casts left/down onto mission soil
+PASS 1366x600 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 1366x600 readable character, physics separate
+PASS 1366x600 all album controls 44px and reachable
+PASS 1366x600 resource bar FULLY hidden and one three-page navigation
+PASS 1366x600 basket choice/return controls reachable
+PASS 1366x600 explicit choice consequences and binding inset3px
+PASS 1366x600 pure spoken reply, no completion seal on dialogue
+PASS 1366x600 story return stays44px, inside viewport and uncovered
+PASS 1366x600 story empty top is below1/8 viewport
+PASS 430x932 same-age same-stage wheat in SAME ROW, one inside light
+PASS 430x932 tree-anchored shadow casts left/down onto mission soil
+PASS 430x932 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 430x932 readable character, physics separate
+PASS iphone shared store camera keeps the entire apple-tree silhouette visible
+PASS iphone store02 actual water animation with unchanged same-age comparison {"action":"water","sameAge":true,"rootHeight":96,"frame":3,"image":"url(\"http://127.0.0.1:56223/assets/generated/r88/farming-actions.png?v=r88-20261018-1\")"}
+PASS iphone store02/store06 identical visual root height
+PASS 430x932 all album controls 44px and reachable
+PASS 430x932 resource bar FULLY hidden and one three-page navigation
+PASS 430x932 basket choice/return controls reachable
+PASS 430x932 explicit choice consequences and binding inset3px
+PASS 430x932 pure spoken reply, no completion seal on dialogue
+PASS 430x932 story return stays44px, inside viewport and uncovered
+PASS 430x932 story empty top is below1/8 viewport
+PASS 430x932 portrait story uses at least70percent of height
+PASS 1032x1376 same-age same-stage wheat in SAME ROW, one inside light
+PASS 1032x1376 tree-anchored shadow casts left/down onto mission soil
+PASS 1032x1376 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 1032x1376 readable character, physics separate
+PASS ipad shared store camera keeps the entire apple-tree silhouette visible
+PASS ipad store02 actual water animation with unchanged same-age comparison {"action":"water","sameAge":true,"rootHeight":138.65625,"frame":3,"image":"url(\"http://127.0.0.1:56223/assets/generated/r88/farming-actions.png?v=r88-20261018-1\")"}
+PASS ipad store02/store06 identical visual root height
+PASS 1032x1376 all album controls 44px and reachable
+PASS 1032x1376 resource bar FULLY hidden and one three-page navigation
+PASS 1032x1376 basket choice/return controls reachable
+PASS 1032x1376 explicit choice consequences and binding inset3px
+PASS 1032x1376 pure spoken reply, no completion seal on dialogue
+PASS 1032x1376 story return stays44px, inside viewport and uncovered
+PASS 1032x1376 story empty top is below1/8 viewport
+PASS 1032x1376 portrait story uses at least70percent of height
+PASS no page errors or missing artwork
+VERIFIED R87 127 checks, browser/server closed
+[memory] scripts/test-r88-art.js attempt 1: 21192MiB free
+PASS R88 eight actual generated masters, undisclosed model slug is not guessed
+PASS R88 artwork hash docs/art/masters/r88/garden.png
+PASS R88 artwork hash docs/art/masters/r88/light.png
+PASS R88 artwork hash docs/art/character-sheets/miri-r88.png
+PASS R88 artwork hash docs/art/masters/r88/objects.png
+PASS R88 artwork hash docs/art/masters/r88/panel.png
+PASS R88 artwork hash docs/art/masters/r88/icons.png
+PASS R88 artwork hash docs/art/masters/r88/logo.png
+PASS R88 artwork hash docs/art/masters/r88/app.png
+PASS R88 artwork hash assets/generated/r88/garden-384.webp
+PASS R88 artwork hash assets/generated/r88/grass-32.png
+PASS R88 artwork hash assets/generated/r88/path-32.png
+PASS R88 artwork hash assets/generated/r88/soil-dry-64.png
+PASS R88 artwork hash assets/generated/r88/soil-wet-64.png
+PASS R88 artwork hash assets/generated/r88/soil-moist-64.png
+PASS R88 artwork hash assets/generated/r88/bucket-64.png
+PASS R88 artwork hash assets/generated/r88/fence-64.png
+PASS R88 artwork hash assets/generated/r88/flowers-64.png
+PASS R88 artwork hash assets/generated/r88/wheat-32.png
+PASS R88 artwork hash assets/generated/r88/basket-32.png
+PASS R88 artwork hash assets/generated/r88/water-32.png
+PASS R88 artwork hash assets/generated/r88/note-32.png
+PASS R88 artwork hash assets/generated/r88/hat-32.png
+PASS R88 artwork hash assets/generated/r88/sprout-32.png
+PASS R88 artwork hash assets/generated/r88/miri-0.png
+PASS R88 artwork hash assets/generated/r88/miri-1.png
+PASS R88 artwork hash assets/generated/r88/miri-2.png
+PASS R88 artwork hash assets/generated/r88/paper-128.png
+PASS R88 artwork hash assets/generated/r88/album-256.png
+PASS R88 artwork hash assets/generated/r88/binding-8.png
+PASS R88 artwork hash assets/generated/r88/logo-320.png
+PASS R88 artwork hash assets/generated/r88/app-icon-64.png
+PASS R88 artwork hash assets/generated/r88/app-icon-192.png
+PASS R88 artwork hash assets/generated/r88/app-icon-512.png
+PASS R88 artwork hash assets/generated/r88/leaf-light.png
+PASS R88 artwork hash assets/generated/r88/canopy-shadow.png
+PASS R88 artwork hash assets/generated/r88/walk.png
+PASS R88 artwork hash assets/generated/r88/farming-actions.png
+PASS R88 artwork hash assets/generated/r88/welcome-512.webp
+PASS R88 artwork hash assets/generated/r88/basket-512.webp
+PASS R88 artwork hash assets/generated/r88/table-result-512.webp
+PASS R88 artwork hash assets/generated/r88/doorstep-result-512.webp
+PASS R88 brightness and saturation gate assets/generated/r88/miri-0.png
+PASS R88 brightness and saturation gate assets/generated/r88/miri-1.png
+PASS R88 brightness and saturation gate assets/generated/r88/miri-2.png
+PASS R88 brightness and saturation gate assets/generated/r88/walk.png
+PASS R88 brightness and saturation gate assets/generated/r88/farming-actions.png
+PASS every retained limb pose keeps its original silhouette; basket-only color correction
+PASS retained R87: 10 generated masters, real tool and undisclosed model recorded
+PASS source/output hash docs/art/character-sheets/miri-r87.png
+PASS source/output hash docs/art/masters/r87/walk.png
+PASS source/output hash docs/art/masters/r87/actions.png
+PASS source/output hash docs/art/masters/r87/leaf.png
+PASS source/output hash docs/art/masters/r87/terrain.png
+PASS source/output hash docs/art/masters/r87/tree.png
+PASS source/output hash docs/art/masters/r87/panel.png
+PASS source/output hash docs/art/masters/r87/icons.png
+PASS source/output hash docs/art/masters/r87/logo.png
+PASS source/output hash docs/art/masters/r87/app.png
+PASS source/output hash assets/generated/r87/walk.png
+PASS source/output hash assets/generated/r87/actions.png
+PASS source/output hash assets/generated/r87/farming-actions.png
+PASS source/output hash assets/generated/r87/miri-0.png
+PASS source/output hash assets/generated/r87/miri-1.png
+PASS source/output hash assets/generated/r87/miri-2.png
+PASS source/output hash assets/generated/r87/terrain.png
+PASS source/output hash assets/generated/r87/apple-tree.png
+PASS source/output hash assets/generated/r87/leaf-light.png
+PASS source/output hash assets/generated/r87/canopy-shadow.png
+PASS source/output hash assets/generated/r87/leaf-ground.png
+PASS source/output hash assets/generated/r87/paper-128.png
+PASS source/output hash assets/generated/r87/binding-8.png
+PASS source/output hash assets/generated/r87/wheat-32.png
+PASS source/output hash assets/generated/r87/basket-32.png
+PASS source/output hash assets/generated/r87/water-32.png
+PASS source/output hash assets/generated/r87/note-32.png
+PASS source/output hash assets/generated/r87/hat-32.png
+PASS source/output hash assets/generated/r87/sprout-32.png
+PASS source/output hash assets/generated/r87/logo-320.png
+PASS source/output hash assets/generated/r87/app-icon-64.png
+PASS source/output hash assets/generated/r87/app-icon-192.png
+PASS source/output hash assets/generated/r87/app-icon-512.png
+PASS character brightness/saturation double gate walk.png
+PASS character brightness/saturation double gate actions.png
+PASS character brightness/saturation double gate farming-actions.png
+PASS character brightness/saturation double gate miri-0.png
+PASS character brightness/saturation double gate miri-1.png
+PASS character brightness/saturation double gate miri-2.png
+PASS walk 0: six actual poses with limb changes
+PASS walk 1: six actual poses with limb changes
+PASS walk 2: six actual poses with limb changes
+PASS walk 3: six actual poses with limb changes
+PASS actions 0: six actual poses with limb changes
+PASS actions 1: six actual poses with limb changes
+PASS actions 2: six actual poses with limb changes
+PASS actions 3: six actual poses with limb changes
+PASS actions 4: six actual poses with limb changes
+PASS actions 5: six actual poses with limb changes
+PASS actions 6: six actual poses with limb changes
+PASS actions 7: six actual poses with limb changes
+PASS 320x568 same-age same-stage wheat in SAME ROW, one inside light
+PASS 320x568 tree-anchored shadow casts left/down onto mission soil
+PASS 320x568 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 320x568 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 320x568 readable character, physics separate
+PASS 320x568 generated bucket, low fence and flowers are real nonblocking world art
+PASS 320x568 all album controls 44px and reachable
+PASS 320x568 resource bar FULLY hidden and one three-page navigation
+PASS 320x568 basket choice/return controls reachable
+PASS 320x568 selection visibly marked, no wheat spent before second confirmation
+PASS 320x568 explicit choice consequences and binding inset3px
+PASS 320x568 pure spoken reply, no completion seal on dialogue
+PASS 320x568 story return stays44px, inside viewport and uncovered
+PASS 320x568 story empty top is below1/8 viewport
+PASS 320x568 story blank below return is at most one eighth
+PASS 390x844 same-age same-stage wheat in SAME ROW, one inside light
+PASS 390x844 tree-anchored shadow casts left/down onto mission soil
+PASS 390x844 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 390x844 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 390x844 readable character, physics separate
+PASS 390x844 generated bucket, low fence and flowers are real nonblocking world art
+PASS 390x844 all album controls 44px and reachable
+PASS 390x844 three existing chore cards fill the page without a large paper void
+PASS 390x844 resource bar FULLY hidden and one three-page navigation
+PASS 390x844 basket choice/return controls reachable
+PASS 390x844 selection visibly marked, no wheat spent before second confirmation
+PASS 390x844 explicit choice consequences and binding inset3px
+PASS 390x844 pure spoken reply, no completion seal on dialogue
+PASS 390x844 story return stays44px, inside viewport and uncovered
+PASS 390x844 story empty top is below1/8 viewport
+PASS 390x844 story blank below return is at most one eighth
+PASS 390x844 portrait story uses at least70percent of height
+PASS 844x390 same-age same-stage wheat in SAME ROW, one inside light
+PASS 844x390 tree-anchored shadow casts left/down onto mission soil
+PASS 844x390 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 844x390 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 844x390 readable character, physics separate
+PASS 844x390 generated bucket, low fence and flowers are real nonblocking world art
+PASS 844x390 all album controls 44px and reachable
+PASS 844x390 resource bar FULLY hidden and one three-page navigation
+PASS 844x390 basket choice/return controls reachable
+PASS 844x390 selection visibly marked, no wheat spent before second confirmation
+PASS 844x390 explicit choice consequences and binding inset3px
+PASS 844x390 pure spoken reply, no completion seal on dialogue
+PASS 844x390 story return stays44px, inside viewport and uncovered
+PASS 1366x600 same-age same-stage wheat in SAME ROW, one inside light
+PASS 1366x600 tree-anchored shadow casts left/down onto mission soil
+PASS 1366x600 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 1366x600 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 1366x600 readable character, physics separate
+PASS 1366x600 generated bucket, low fence and flowers are real nonblocking world art
+PASS 1366x600 all album controls 44px and reachable
+PASS 1366x600 resource bar FULLY hidden and one three-page navigation
+PASS 1366x600 basket choice/return controls reachable
+PASS 1366x600 selection visibly marked, no wheat spent before second confirmation
+PASS 1366x600 explicit choice consequences and binding inset3px
+PASS 1366x600 pure spoken reply, no completion seal on dialogue
+PASS 1366x600 story return stays44px, inside viewport and uncovered
+PASS 1366x600 story empty top is below1/8 viewport
+PASS 430x932 same-age same-stage wheat in SAME ROW, one inside light
+PASS 430x932 tree-anchored shadow casts left/down onto mission soil
+PASS 430x932 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 430x932 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 430x932 readable character, physics separate
+PASS 430x932 generated bucket, low fence and flowers are real nonblocking world art
+PASS iphone shared store camera keeps the entire apple-tree silhouette visible
+PASS iphone store02 actual water animation with unchanged same-age comparison {"action":"water","sameAge":true,"rootHeight":96,"frame":3,"image":"url(\"http://127.0.0.1:54635/assets/generated/r88/farming-actions.png?v=r88-20261018-1\")"}
+PASS iphone store02/store06 identical visual root height
+PASS 430x932 all album controls 44px and reachable
+PASS 430x932 three existing chore cards fill the page without a large paper void
+PASS 430x932 resource bar FULLY hidden and one three-page navigation
+PASS 430x932 basket choice/return controls reachable
+PASS 430x932 selection visibly marked, no wheat spent before second confirmation
+PASS 430x932 explicit choice consequences and binding inset3px
+PASS 430x932 pure spoken reply, no completion seal on dialogue
+PASS 430x932 story return stays44px, inside viewport and uncovered
+PASS 430x932 story empty top is below1/8 viewport
+PASS 430x932 story blank below return is at most one eighth
+PASS 430x932 portrait story uses at least70percent of height
+PASS 1032x1376 same-age same-stage wheat in SAME ROW, one inside light
+PASS 1032x1376 tree-anchored shadow casts left/down onto mission soil
+PASS 1032x1376 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 1032x1376 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 1032x1376 readable character, physics separate
+PASS 1032x1376 generated bucket, low fence and flowers are real nonblocking world art
+PASS ipad shared store camera keeps the entire apple-tree silhouette visible
+PASS ipad store02 actual water animation with unchanged same-age comparison {"action":"water","sameAge":true,"rootHeight":138.65625,"frame":3,"image":"url(\"http://127.0.0.1:54635/assets/generated/r88/farming-actions.png?v=r88-20261018-1\")"}
+PASS ipad store02/store06 identical visual root height
+PASS 1032x1376 all album controls 44px and reachable
+PASS 1032x1376 three existing chore cards fill the page without a large paper void
+PASS 1032x1376 resource bar FULLY hidden and one three-page navigation
+PASS 1032x1376 basket choice/return controls reachable
+PASS 1032x1376 selection visibly marked, no wheat spent before second confirmation
+PASS 1032x1376 explicit choice consequences and binding inset3px
+PASS 1032x1376 pure spoken reply, no completion seal on dialogue
+PASS 1032x1376 story return stays44px, inside viewport and uncovered
+PASS 1032x1376 story empty top is below1/8 viewport
+PASS 1032x1376 story blank below return is at most one eighth
+PASS 1032x1376 existing seating illustration fills tablet story void
+PASS 1032x1376 portrait story uses at least70percent of height
+PASS no page errors or missing artwork
+VERIFIED R88 201 checks, browser/server closed
+
+✅ Browser gates ran sequentially; every browser process closed by its owning script.

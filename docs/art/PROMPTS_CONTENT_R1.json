@@ -1,0 +1,18 @@
+{
+  "round": "CONTENT_R1",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "neighbor-pond-sheet",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14f92-7e4b-72c3-b92b-7e75cc2828f6/exec-42d53295-f95f-43ab-af68-0e7cb6515dc8.png",
+      "master": "docs/art/masters/content-r1/neighbors-pond.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Create ONE production illustration sheet, exactly 1024x2048 portrait, FOUR equal horizontal 1024x512 panels stacked vertically with no frame or gutters. Each panel will be cropped and reduced to NATIVE512x256; keep consistent large crisp pixel clusters and warm light with the attached farm story reference, faces readable at native size. NO text. No grids inside the four panels. Use attached character sprite reference: merchant LORA is red-auburn short-haired woman in green apron, cream shirt, red gingham headscarf; elder BAMBER is elderly white-bearded farmer wearing straw hat with green band, brown work overalls cream shirt and walking stick; child TUTU is tousled auburn-haired boy in green overalls cream shirt holding a small notebook. MIRI is red twin braids, straw hat red gingham band, cream shirt green overalls, open wicker basket with outside red cloth. Panel1 TOP: Lora at her quiet wooden produce stall, takes a small red-gingham harvest basket from Miri, moves her wooden stool OUT from behind the stall and sets TWO cream teacups between them; friendly candid pause after a busy market, apple trees and warm leaf shade. Panel2 SECOND: Bamber seated by a humble farmhouse stove in open shed, a steaming bread plate on red gingham cloth, Miri in doorway offering picnic basket, a resting brown hen nearby and simple hand-mended fishing rod leaned beside wall; kind weathered face, warm copper light, distinct straw-hat elder identity from sprite sheet. Panel3 THIRD: Tutu beside a low garden picnic table, excitedly opens a small notebook containing a pressed yellow flower, shares carrot bread with Miri; EMPTY spare chair with second little plate as key story prop; cottage fence, sunlit meadow, warm storybook farm. Panel4 BOTTOM: peaceful pond surface, low reeds and timber fishing dock at right edge, dappled upper-right sunlight, a small RED and CREAM fishing bobber centered on water with subtle concentric ripples. No people, no fish species, no UI text, no progress bar, broad quiet teal-green water center. All four panels composition self-contained, full-width2:1 scenes, no border, consistent right-upper warm sun and cool slate shadows, no label or lettering anywhere.",
+      "references": [
+        "assets/generated/r83/npcs.png",
+        "docs/art/masters/r89/story.png"
+      ]
+    }
+  ]
+}

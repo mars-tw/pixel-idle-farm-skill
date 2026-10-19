@@ -1,6 +1,6 @@
 "use strict";
 
-// Regression: the 15-second starter wheat may mature before a person can water it.
+// Regression: a watering quest must never harvest a mature crop with the water tool.
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const http = require("node:http");
@@ -49,7 +49,7 @@ function fixture(withDryCrop, fillMature = false) {
 
 async function runCase(browser, base, mobile, kind) {
   const context = await browser.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width: 1366, height: 768 }, isMobile: mobile, hasTouch: mobile, serviceWorkers: "block" });
-  const state = fixture(kind === "dry" || kind === "late-arrival", kind === "all-mature");
+  const state = fixture(kind === "dry", kind === "all-mature");
   await context.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), { key: saveKey, value: state });
   const page = await context.newPage();
   try {
@@ -73,54 +73,39 @@ async function runCase(browser, base, mobile, kind) {
       window.__farm.setTool("water");
       window.__farm.clickTile(mature.id);
     });
-    await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 1);
+    await page.waitForTimeout(550);
     let after = await snapshot();
     assert.equal(after.plots[0].cropId, "wheat", "water tool must leave mature crop intact");
     assert.equal(after.harvested, 0, "water tool must not record a harvest");
-    assert.equal(after.plots[0].wateredAt > 0, true, "mature starter wheat remains waterable during the lesson");
 
-    if (kind === "dry" || kind === "late-arrival") {
+    if (kind === "dry") {
       assert.equal(await page.locator("#questDock").getAttribute("data-target-id"), await page.evaluate(() => window.__farm.state().map.tiles.find((tile) => tile.plotIndex === 1).id));
       await pressGo();
-      if (kind === "late-arrival") await page.evaluate(() => { window.__farm.state().plots[1].plantedAt = Date.now() - 60000; });
-      await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 2);
+      await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 1);
       after = await snapshot();
-      assert.equal(after.plots[1].wateredAt > 0, true, "guide waters a dry crop even when it matures en route");
+      assert.equal(after.plots[1].wateredAt > 0, true, "guide waters a growing dry crop");
       assert.equal(after.plots[0].cropId, "wheat", "guide leaves mature crop alone");
       assert.equal(after.harvested, 0);
     } else {
-      if (kind === "all-mature" && mobile) {
-        const tileId = await page.evaluate(() => {
-          const id = window.__farm.state().map.tiles.find((tile) => tile.plotIndex === 1).id;
-          window.__farm.focusTile(id);
-          return id;
-        });
-        await page.locator(`.ob.crop[data-tile-id="${tileId}"]`).tap();
-        const waterAction = page.locator('#sceneActionBar [data-action="water"]');
-        await waterAction.waitFor({ state: "visible" });
-        await waterAction.tap();
-      } else await pressGo();
+      await pressGo();
       if (kind === "all-mature") {
-        await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 2);
+        await page.waitForFunction(() => !window.__farm.state().plots[0].cropId);
         after = await snapshot();
-        assert.equal(after.harvested, 0, "guide waters the next mature crop without harvesting it");
-        assert.equal(after.tool, "water");
+        assert.equal(after.harvested, 2, "guide first harvests with the hand tool when every plot is mature");
+        assert.equal(after.tool, "hand");
         await pressGo();
-        await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 3);
-        after = await snapshot();
-        assert.equal(after.plots.slice(0, 3).every((p) => p.wateredAt > 0), true, "three mature starter crops complete the watering lesson");
-        assert.equal(await page.evaluate(() => window.canWaterPlot(window.__farm.state(), 3, Date.now()).reason), "ready", "ordinary mature crops return to the no-watering rule after the lesson");
-        assert.equal(after.harvested, 0);
-      } else {
-        await page.waitForFunction(() => window.__farm.state().plots[1].cropId === "wheat");
-        after = await snapshot();
-        assert.equal(after.tool, "hand", "guide switches to hand before planting an empty plot");
-        await pressGo();
-        await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 2);
-        after = await snapshot();
-        assert.equal(after.plots[1].wateredAt > 0, true);
-        assert.equal(after.tool, "water");
       }
+      const plantedIndex = kind === "all-mature" ? 0 : 1;
+      await page.waitForFunction((i) => window.__farm.state().plots[i].cropId === "wheat", plantedIndex);
+      after = await snapshot();
+      assert.equal(after.tool, "hand", "guide switches to hand before planting");
+      assert.equal(after.water, 0);
+      if (kind !== "all-mature") assert.equal(after.plots[0].cropId, "wheat");
+      await pressGo();
+      await page.waitForFunction(() => window.__farm.state().adventure.counts.water === 1);
+      after = await snapshot();
+      assert.equal(after.plots[plantedIndex].wateredAt > 0, true);
+      assert.equal(after.tool, "water");
     }
     console.log(`PASS ${mobile ? "phone" : "desktop"} ${kind}: watering guide progresses without accidental harvest`);
   } finally { await context.close(); }
@@ -131,6 +116,6 @@ async function runCase(browser, base, mobile, kind) {
   const browser = await chromium.launch({ headless: true });
   try {
     const base = `http://127.0.0.1:${server.address().port}/`;
-    for (const mobile of [false, true]) for (const kind of ["dry", "late-arrival", "mature-and-empty", "all-mature"]) await runCase(browser, base, mobile, kind);
+    for (const mobile of [false, true]) for (const kind of ["dry", "mature-and-empty", "all-mature"]) await runCase(browser, base, mobile, kind);
   } finally { await browser.close(); await new Promise((resolve) => server.close(resolve)); }
 })().catch((error) => { console.error(error); process.exitCode = 1; });

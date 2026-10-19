@@ -1,0 +1,29 @@
+{
+  "status": "BLOCKED",
+  "startedAt": "2026-10-19T01:03:53.497Z",
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-19T01:03:53.498Z",
+      "end": "2026-10-19T01:04:01.078Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-1.log",
+      "sha256": "ae1ed0af09a74253603cb9430a6a96fe83e8cbc3e8e100858d72dafa2b6a9783"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/run-browser-gates.js"
+      ],
+      "start": "2026-10-19T01:04:01.081Z",
+      "end": "2026-10-19T01:22:34.994Z",
+      "exitCode": 1,
+      "log": "docs/content/r9/regression-2.log",
+      "sha256": "5e9ddad3bbc6e56db7844587781bd5eb4517568db1ae08cae0bed76f727ed4dc"
+    }
+  ],
+  "endedAt": "2026-10-19T01:22:34.997Z"
+}

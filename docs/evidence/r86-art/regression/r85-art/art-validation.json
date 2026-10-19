@@ -1,0 +1,319 @@
+{
+  "status": "VERIFIED",
+  "checks": 93,
+  "headless": true,
+  "rows": [
+    {
+      "w": 390,
+      "h": 844,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 86.5,
+          "y": 328.90625,
+          "w": 73,
+          "h": 97.328125
+        },
+        "visual": {
+          "x": 56.26000213623047,
+          "y": 328.90625,
+          "w": 73.00000762939453,
+          "h": 97.328125
+        },
+        "stance": "-30.24px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.6) 0%, rgba(62, 47, 35, 0.333) 42%, rgba(0, 0, 0, 0) 74%)",
+        "beam": {
+          "x": 35.15625,
+          "y": 327.59375,
+          "w": 158.390625,
+          "h": 129.59375
+        },
+        "leafImage": "url(\"http://127.0.0.1:60331/assets/generated/r86/leaf-ground-128.png\")",
+        "leafVisible": true,
+        "motes": 3,
+        "canopy": "323.8,63.823999999999984",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.69) -1px -2px 0px)",
+            "box": {
+              "x": 85.36358642578125,
+              "y": 356.7271728515625,
+              "w": 75.50718688964844,
+              "h": 75.5072021484375
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 162,
+              "y": 366,
+              "w": 66.234375,
+              "h": 66.234375
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksAbove": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 321.5,
+          "y": 124.546875,
+          "w": 73,
+          "h": 97.328125
+        },
+        "visual": {
+          "x": 294.6199951171875,
+          "y": 124.546875,
+          "w": 73,
+          "h": 97.328125
+        },
+        "stance": "-26.88px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.6) 0%, rgba(62, 47, 35, 0.333) 42%, rgba(0, 0, 0, 0) 74%)",
+        "beam": {
+          "x": 279.90625,
+          "y": 134.1875,
+          "w": 140.796875,
+          "h": 115.1875
+        },
+        "leafImage": "url(\"http://127.0.0.1:60331/assets/generated/r86/leaf-ground-128.png\")",
+        "leafVisible": true,
+        "motes": 3,
+        "canopy": "287.6,57.288",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.69) -1px -2px 0px)",
+            "box": {
+              "x": 324.8787536621094,
+              "y": 159.75750732421875,
+              "w": 67.11749267578125,
+              "h": 67.11749267578125
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 393,
+              "y": 168,
+              "w": 58.875,
+              "h": 58.875
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksAbove": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    },
+    {
+      "w": 1032,
+      "h": 1376,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 322.5,
+          "y": 514.390625,
+          "w": 147,
+          "h": 196
+        },
+        "visual": {
+          "x": 272.1000061035156,
+          "y": 514.390625,
+          "w": 147,
+          "h": 196
+        },
+        "stance": "-50.4px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.6) 0%, rgba(62, 47, 35, 0.333) 42%, rgba(0, 0, 0, 0) 74%)",
+        "beam": {
+          "x": 249.59375,
+          "y": 546,
+          "w": 264,
+          "h": 216
+        },
+        "leafImage": "url(\"http://127.0.0.1:60331/assets/generated/r86/leaf-ground-128.png\")",
+        "leafVisible": true,
+        "motes": 3,
+        "canopy": "540,107.03999999999999",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.69) -1px -2px 0px)",
+            "box": {
+              "x": 333.27264404296875,
+              "y": 594.5452880859375,
+              "w": 125.8453369140625,
+              "h": 125.8453369140625
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 461,
+              "y": 610,
+              "w": 110.390625,
+              "h": 110.390625
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksAbove": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    },
+    {
+      "w": 1366,
+      "h": 600,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 465,
+          "y": 186.9375,
+          "w": 110,
+          "h": 146.65625
+        },
+        "visual": {
+          "x": 431.3999938964844,
+          "y": 186.9375,
+          "w": 110.00003051757812,
+          "h": 146.65625
+        },
+        "stance": "-33.6px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.6) 0%, rgba(62, 47, 35, 0.333) 42%, rgba(0, 0, 0, 0) 74%)",
+        "beam": {
+          "x": 422.390625,
+          "y": 224,
+          "w": 176,
+          "h": 144
+        },
+        "leafImage": "url(\"http://127.0.0.1:60331/assets/generated/r86/leaf-ground-128.png\")",
+        "leafVisible": true,
+        "motes": 3,
+        "canopy": "360,71.35999999999999",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.69) -1px -2px 0px)",
+            "box": {
+              "x": 477.84844970703125,
+              "y": 255.69686889648438,
+              "w": 83.8968505859375,
+              "h": 83.89688110351562
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 563,
+              "y": 266,
+              "w": 73.59375,
+              "h": 73.59375
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksAbove": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Visual comparison fixtures are labeled. Timed human recognition and independent 8/10 rescore remain unperformed."
+  ]
+}

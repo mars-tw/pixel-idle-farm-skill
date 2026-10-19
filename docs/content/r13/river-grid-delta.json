@@ -1,0 +1,22 @@
+{
+  "status": "VERIFIED",
+  "kind": "decorative river bounds only; pointer-events none; no state, collider, input or economy changes",
+  "from": "top:${-size}px;width:${size*3}px;height:${size*14}px",
+  "to": "top:${-size*4}px;width:${size*3}px;height:${size*20}px",
+  "files": [
+    {
+      "path": "src/content-r6.js",
+      "beforeSha256": "f285f3da290df5c85fe222cf7065eb703c5b3410033f7bddee350c05af2a8733",
+      "afterSha256": "02d05238f6005a32126af762a78f1f719e7d644366268609dfad22b59d48b9f6",
+      "replacements": 1,
+      "beforeSnapshot": "docs/content/r13/source-snapshots/river-grid-before/src/content-r6.js"
+    }
+  ],
+  "affectedTests": [
+    "npm test",
+    "node scripts/test-r79-fun-e2e.js",
+    "node scripts/test-controls-reachability.js",
+    "node scripts/audit-content-r13-evidence.js",
+    "node scripts/measure-content-r13.js"
+  ]
+}

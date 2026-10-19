@@ -1,0 +1,7 @@
+PASS new packing art decodes after controlled offline reload
+PASS offline normal basket entry uses the new packing image
+PASS new pressed-flower scene decodes offline
+PASS offline matched story uses the new illustration
+PASS packing fallback retains diagnostics without exposing filenames
+PASS packing illustration recovers in the same page
+PASS missing and retried art never spends food or changes memories

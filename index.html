@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta property="og:title" content="阿軒割割陽光農場開源遊戲世界">
-<meta property="og:description" content="接下祖母的農場，種田、做料理、釣魚、修復河畔，把收穫帶去和鎮民分享。">
+<meta property="og:title" content="陽光農場：籃底的手記">
+<meta property="og:description" content="跟著光斑照料小麥，替鄰居留一籃收穫。你選的送法，會留下不同的祖母手記。">
 <meta property="og:url" content="https://mars-tw.github.io/pixel-idle-farm-skill/">
 <meta property="og:image" content="https://mars-tw.github.io/pixel-idle-farm-skill/assets/cover.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#5a9e3f">
+<meta name="theme-color" content="#FFB627">
 <link rel="canonical" href="https://mars-tw.github.io/pixel-idle-farm-skill/">
-<link rel="manifest" href="manifest.webmanifest?v=r79-20261013-1">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=r79-20261013-1">
-<title>阿軒割割陽光農場開源遊戲世界</title>
+<link rel="manifest" href="manifest.webmanifest?v=content-r13-20261019-1">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/generated/r89/app-icon-192.png?v=content-r13-20261019-1">
+<title>陽光農場：籃底的手記</title>
 <script>
 (() => {
   "use strict";
@@ -35,9 +35,22 @@
   loadingPreload.as = "image";
   loadingPreload.href = loadingSources[window.FARM_LOADING_SEASON];
   document.head.appendChild(loadingPreload);
-  const VERSION = "r79-20261013-1";
+  const VERSION = "content-r13-20261019-1";
   const RELOAD_WINDOW_MS = 15000;
   const SESSION_KEY = "pixelFarmPwaAutoReloaded";
+  const RELOAD_PENDING_KEY = SESSION_KEY + "Pending";
+  // The public completion flag means the replacement page has actually loaded.
+  // Publishing it before navigation lets an explicit reload race the first one.
+  try {
+    if (sessionStorage.getItem(RELOAD_PENDING_KEY)) {
+      window.__farmPwaReloading = true;
+      window.addEventListener("load", () => {
+        sessionStorage.setItem(SESSION_KEY, VERSION);
+        sessionStorage.removeItem(RELOAD_PENDING_KEY);
+        window.__farmPwaReloading = false;
+      }, { once: true });
+    }
+  } catch (_) {}
   window.FARM_CACHE_VERSION = VERSION;
   window.FARM_VERSION_QUERY = "?v=" + VERSION;
   const params = new URLSearchParams(location.search || "");
@@ -48,17 +61,18 @@
   function tryAutoReload() {
     if (refreshing || Date.now() - startedAt > RELOAD_WINDOW_MS) return false;
     try {
-      if (sessionStorage.getItem(SESSION_KEY)) return false;
-      sessionStorage.setItem(SESSION_KEY, VERSION);
+      if (sessionStorage.getItem(SESSION_KEY) || sessionStorage.getItem(RELOAD_PENDING_KEY)) return false;
+      sessionStorage.setItem(RELOAD_PENDING_KEY, VERSION);
     } catch (e) {
       return false;
     }
     refreshing = true;
+    window.__farmPwaReloading = true;
     location.reload();
     return true;
   }
   navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (!tryAutoReload()) window.__farmPwaUpdatePending = true;
+    if (!tryAutoReload() && !window.__farmPwaReloading) window.__farmPwaUpdatePending = true;
   });
   navigator.serviceWorker.getRegistration("./").then((reg) => {
     if (reg && typeof reg.update === "function") reg.update().catch(() => {});
@@ -172,38 +186,38 @@
   .ui-icon { display: inline-block; flex: 0 0 auto; width: 32px; height: 32px;
     background-size: contain; background-position: center; background-repeat: no-repeat;
     image-rendering: pixelated; vertical-align: middle; }
-  .i-crop-wheat{background-image:url("assets/generated/r66/native/crop_wheat-32.png?v=r79-20261013-1")}
-  .i-crop-carrot{background-image:url("assets/generated/r66/native/crop_carrot-32.png?v=r79-20261013-1")}
-  .i-crop-tomato{background-image:url("assets/generated/r66/native/crop_tomato-32.png?v=r79-20261013-1")}
-  .i-crop-strawberry{background-image:url("assets/generated/r66/native/crop_strawberry-32.png?v=r79-20261013-1")}
-  .i-crop-corn{background-image:url("assets/generated/r66/native/crop_corn-32.png?v=r79-20261013-1")}
-  .i-crop-pumpkin{background-image:url("assets/generated/r66/native/crop_pumpkin-32.png?v=r79-20261013-1")}
-  .i-crop-radish{background-image:url("assets/generated/r66/native/crop_radish-32.png?v=r79-20261013-1")}
-  .i-crop-bell-pepper{background-image:url("assets/generated/r66/native/crop_bell_pepper-32.png?v=r79-20261013-1")}
-  .i-crop-potato{background-image:url("assets/generated/r66/native/crop_potato-32.png?v=r79-20261013-1")}
-  .i-crop-sunflower{background-image:url("assets/generated/r66/native/crop_sunflower-32.png?v=r79-20261013-1")}
-  .i-crop-grapes{background-image:url("assets/generated/r66/native/crop_grapes-32.png?v=r79-20261013-1")}
-  .i-crop-melon{background-image:url("assets/generated/r66/native/crop_melon-32.png?v=r79-20261013-1")}
-  .i-crop-pea{background-image:url("assets/generated/r66/native/crop_pea-32.png?v=r79-20261013-1")}
-  .i-crop-sweet-potato{background-image:url("assets/generated/r66/native/crop_sweet_potato-32.png?v=r79-20261013-1")}
-  .i-crop-winter-kale{background-image:url("assets/generated/r66/native/crop_winter_kale-32.png?v=r79-20261013-1")}
-  .i-tool-plant{background-image:url("assets/generated/r66/native/tool_plant-32.png?v=r79-20261013-1")}
-  .i-tool-harvest{background-image:url("assets/generated/r66/native/tool_harvest-32.png?v=r79-20261013-1")}
-  .i-tool-water{background-image:url("assets/generated/r66/native/tool_water-32.png?v=r79-20261013-1")}
-  .i-tool-clear{background-image:url("assets/generated/r66/native/tool_clear-32.png?v=r79-20261013-1")}
-  .i-tool-build{background-image:url("assets/generated/r66/native/tool_build-32.png?v=r79-20261013-1")}
-  .i-tool-inspect{background-image:url("assets/generated/r66/native/tool_inspect-32.png?v=r79-20261013-1")}
-  .i-tab-tile{background-image:url("assets/generated/r66/native/tab_tile-32.png?v=r79-20261013-1")}
-  .i-tab-orders{background-image:url("assets/generated/r66/native/tab_orders-32.png?v=r79-20261013-1")}
-  .i-tab-upgrades{background-image:url("assets/generated/r66/native/tab_upgrades-32.png?v=r79-20261013-1")}
-  .i-tab-story{background-image:url("assets/generated/r66/native/tab_story-32.png?v=r79-20261013-1")}
-  .i-tab-journal{background-image:url("assets/generated/r66/native/tab_journal-32.png?v=r79-20261013-1")}
-  .i-system-coin{background-image:url("assets/generated/r66/native/system_coin-32.png?v=r79-20261013-1")}
-  .i-system-xp{background-image:url("assets/generated/r66/native/system_xp-32.png?v=r79-20261013-1")}
-  .i-system-storage{background-image:url("assets/generated/r66/native/system_storage-32.png?v=r79-20261013-1")}
-  .i-system-settings{background-image:url("assets/generated/r66/native/system_settings-32.png?v=r79-20261013-1")}
-  .i-system-help{background-image:url("assets/generated/r66/native/system_help-32.png?v=r79-20261013-1")}
-  .i-system-reset{background-image:url("assets/generated/r66/native/system_reset-32.png?v=r79-20261013-1")}
+  .i-crop-wheat{background-image:url("assets/generated/r66/native/crop_wheat-32.png?v=content-r13-20261019-1")}
+  .i-crop-carrot{background-image:url("assets/generated/r66/native/crop_carrot-32.png?v=content-r13-20261019-1")}
+  .i-crop-tomato{background-image:url("assets/generated/r66/native/crop_tomato-32.png?v=content-r13-20261019-1")}
+  .i-crop-strawberry{background-image:url("assets/generated/r66/native/crop_strawberry-32.png?v=content-r13-20261019-1")}
+  .i-crop-corn{background-image:url("assets/generated/r66/native/crop_corn-32.png?v=content-r13-20261019-1")}
+  .i-crop-pumpkin{background-image:url("assets/generated/r66/native/crop_pumpkin-32.png?v=content-r13-20261019-1")}
+  .i-crop-radish{background-image:url("assets/generated/r66/native/crop_radish-32.png?v=content-r13-20261019-1")}
+  .i-crop-bell-pepper{background-image:url("assets/generated/r66/native/crop_bell_pepper-32.png?v=content-r13-20261019-1")}
+  .i-crop-potato{background-image:url("assets/generated/r66/native/crop_potato-32.png?v=content-r13-20261019-1")}
+  .i-crop-sunflower{background-image:url("assets/generated/r66/native/crop_sunflower-32.png?v=content-r13-20261019-1")}
+  .i-crop-grapes{background-image:url("assets/generated/r66/native/crop_grapes-32.png?v=content-r13-20261019-1")}
+  .i-crop-melon{background-image:url("assets/generated/r66/native/crop_melon-32.png?v=content-r13-20261019-1")}
+  .i-crop-pea{background-image:url("assets/generated/r66/native/crop_pea-32.png?v=content-r13-20261019-1")}
+  .i-crop-sweet-potato{background-image:url("assets/generated/r66/native/crop_sweet_potato-32.png?v=content-r13-20261019-1")}
+  .i-crop-winter-kale{background-image:url("assets/generated/r66/native/crop_winter_kale-32.png?v=content-r13-20261019-1")}
+  .i-tool-plant{background-image:url("assets/generated/r66/native/tool_plant-32.png?v=content-r13-20261019-1")}
+  .i-tool-harvest{background-image:url("assets/generated/r66/native/tool_harvest-32.png?v=content-r13-20261019-1")}
+  .i-tool-water{background-image:url("assets/generated/r66/native/tool_water-32.png?v=content-r13-20261019-1")}
+  .i-tool-clear{background-image:url("assets/generated/r66/native/tool_clear-32.png?v=content-r13-20261019-1")}
+  .i-tool-build{background-image:url("assets/generated/r66/native/tool_build-32.png?v=content-r13-20261019-1")}
+  .i-tool-inspect{background-image:url("assets/generated/r66/native/tool_inspect-32.png?v=content-r13-20261019-1")}
+  .i-tab-tile{background-image:url("assets/generated/r66/native/tab_tile-32.png?v=content-r13-20261019-1")}
+  .i-tab-orders{background-image:url("assets/generated/r66/native/tab_orders-32.png?v=content-r13-20261019-1")}
+  .i-tab-upgrades{background-image:url("assets/generated/r66/native/tab_upgrades-32.png?v=content-r13-20261019-1")}
+  .i-tab-story{background-image:url("assets/generated/r66/native/tab_story-32.png?v=content-r13-20261019-1")}
+  .i-tab-journal{background-image:url("assets/generated/r66/native/tab_journal-32.png?v=content-r13-20261019-1")}
+  .i-system-coin{background-image:url("assets/generated/r66/native/system_coin-32.png?v=content-r13-20261019-1")}
+  .i-system-xp{background-image:url("assets/generated/r66/native/system_xp-32.png?v=content-r13-20261019-1")}
+  .i-system-storage{background-image:url("assets/generated/r66/native/system_storage-32.png?v=content-r13-20261019-1")}
+  .i-system-settings{background-image:url("assets/generated/r66/native/system_settings-32.png?v=content-r13-20261019-1")}
+  .i-system-help{background-image:url("assets/generated/r66/native/system_help-32.png?v=content-r13-20261019-1")}
+  .i-system-reset{background-image:url("assets/generated/r66/native/system_reset-32.png?v=content-r13-20261019-1")}
   .btn .ui-icon, .side-tab .ui-icon, .pane-head .ui-icon, h2 .ui-icon { margin: -4px 2px -4px -2px; }
   .res-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: stretch; }
   .res {
@@ -1175,7 +1189,23 @@
     html.mobile-controls-enabled .scene-action-bar { bottom: 172px; }
   }
 </style>
-<link rel="stylesheet" href="src/world.css?v=r79-20261013-1">
+<link rel="stylesheet" href="src/world.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r82.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r83.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r84.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r85.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r86.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r87.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r88.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/art-r89.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r1.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r6.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r8.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r9.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r10.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r11.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r12.css?v=content-r13-20261019-1">
+<link rel="stylesheet" href="src/content-r13.css?v=content-r13-20261019-1">
 </head>
 <body class="r68-loading">
 <div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="陽光農場載入中">
@@ -1233,7 +1263,7 @@
 </script>
 <div class="wrap">
   <header>
-    <div class="title" title="阿軒割割陽光農場開源遊戲世界">陽光農場 <small>阿軒割割・開源遊戲世界</small></div>
+    <div class="title" title="陽光農場：籃底的手記"><img class="farm-logo" src="assets/generated/r89/logo-320.png?v=content-r13-20261019-1" alt="陽光農場" width="160" height="64"><small>籃底的手記</small></div>
     <div class="res-bar" id="resBar"><!-- 資源列由 JS 渲染 --></div>
   </header>
 
@@ -1295,6 +1325,7 @@
         <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁"><span class="ui-icon i-tab-upgrades" aria-hidden="true"></span>升級 <span class="tab-badge" id="upgradesBadge"></span></button>
         <button class="side-tab sel" data-tab="story" aria-label="切換到故事分頁" aria-selected="true"><span class="ui-icon i-tab-story" aria-hidden="true"></span>故事 <span class="tab-badge" id="storyBadge" hidden></span></button>
         <button class="side-tab" data-tab="journal" aria-label="切換到圖鑑分頁"><span class="ui-icon i-tab-journal" aria-hidden="true"></span>圖鑑</button>
+        <button class="daily-open" id="dailyOpen" type="button" aria-label="晨光日誌"><span class="ui-icon i-tab-story" aria-hidden="true"></span>日誌</button>
       </div>
       <div class="side-body">
         <div class="side-pane" data-pane="tile">
@@ -1332,12 +1363,6 @@
     <button class="btn small ghost" id="resetBtn"><span class="ui-icon i-system-reset" aria-hidden="true"></span>重置存檔</button>
   </div>
 
-  <footer class="series-footer" aria-label="阿軒的小遊戲系列">
-    阿軒的小遊戲系列
-    <a href="https://mars-tw.github.io/web-card-game-skill/templates/card-battle/" target="_blank" rel="noopener">卡牌對戰</a>
-    <a href="https://mars-tw.github.io/tower-defense-skill/" target="_blank" rel="noopener">無盡塔防</a>
-    <a href="https://mars-tw.github.io/ashes-convoy/" target="_blank" rel="noopener">灰燼護航</a>
-  </footer>
 </div>
 
 <!-- 設定 modal -->
@@ -1364,8 +1389,9 @@
     <h2 id="howToTitle"><span class="ui-icon i-system-help" aria-hidden="true"></span>怎麼玩</h2>
     <div class="modal-body">
       <ol>
-        <li><b>① 移動</b>：桌機用 WASD/方向鍵，手機用左下 D-pad；走到目標旁邊再互動。</li>
+        <li><b>① 移動</b>：點地圖選目的地，或用左下方向盤；走到目標旁邊再互動。</li>
         <li><b>② 工具模式</b>：手可種植/收成，水壺可澆水，清除可移除石頭、樹樁與灌木，建造可放建築。</li>
+        <li><b>☀ 陽光光斑</b>：田上不時會灑下一道光，約 16 秒後散去。在光裡種下或澆水，作物馬上長快一截；在光裡收成多一份。雨天和起霧時不會出現，放著不玩也不會累積。</li>
         <li><b>③ 行動鍵</b>：手機右下 A 會執行面前最合適的動作；點地圖也會開啟可用動作。</li>
         <li><b>④ 站點</b>：信箱看信與任務，訂單看板交貨，水井替田澆水，倉庫與市集可處理庫存。</li>
         <li><b>⑤ 任務</b>：上方任務會標出下一步；先種麥、澆水、交首單，再清路與修橋進東林。</li>
@@ -1388,6 +1414,15 @@
   </div>
 </div>
 
+<div class="modal daily-modal" id="dailyModal" role="dialog" aria-modal="true" aria-labelledby="dailyTitle">
+  <div class="modal-card daily-modal-card">
+    <div><h2 id="dailyTitle">晨光日誌</h2><p id="dailyDate"></p></div>
+    <div class="daily-tabs"><button id="dailyToday" type="button" aria-pressed="true">今日農務</button><button id="dailyCollection" type="button" aria-pressed="false">祖母手記</button><button id="dailyHeirloom" type="button" aria-pressed="false">陽光餐籃</button></div>
+    <div id="dailyBody" aria-live="polite"></div>
+    <div class="daily-nav"><button id="dailyPrev" type="button" aria-label="上一項">←</button><span id="dailyPage"></span><button id="dailyNext" type="button" aria-label="下一項">→</button></div>
+    <p id="dailyFooter"></p><button class="btn ghost" id="dailyClose" type="button">返回農場</button>
+  </div>
+</div>
 <div id="toast-zone" role="status" aria-live="polite" aria-atomic="false"></div>
 <div id="pwaUpdate" class="pwa-update" data-audit="pwa-update" role="status" aria-live="polite" aria-atomic="true" hidden>新版本可用，點擊更新</div>
 <div id="errorRecovery" class="error-recovery" data-audit="error-recovery" role="status" aria-live="polite" aria-atomic="true" hidden>
@@ -1399,12 +1434,20 @@
   </div>
 </div>
 
-<script src="src/config.js?v=r79-20261013-1"></script>
-<script src="src/game.js?v=r79-20261013-1"></script>
-<script src="src/adventure.js?v=r79-20261013-1"></script>
-<script src="src/state.js?v=r79-20261013-1"></script>
-<script src="src/atlas.js?v=r79-20261013-1"></script>
-<script src="src/world-ui.js?v=r79-20261013-1"></script>
-<script src="src/ui.js?v=r79-20261013-1"></script>
+<script src="src/config.js?v=content-r13-20261019-1"></script>
+<script src="src/daily.js?v=content-r13-20261019-1"></script>
+<script src="src/heirloom.js?v=content-r13-20261019-1"></script>
+<script src="src/game.js?v=content-r13-20261019-1"></script>
+<script src="src/adventure.js?v=content-r13-20261019-1"></script>
+<script src="src/state.js?v=content-r13-20261019-1"></script>
+<script src="src/atlas.js?v=content-r13-20261019-1"></script>
+<script src="src/world-ui.js?v=content-r13-20261019-1"></script>
+<script src="src/content-r1.js?v=content-r13-20261019-1"></script>
+<script src="src/content-r8.js?v=content-r13-20261019-1"></script>
+<script src="src/content-r6.js?v=content-r13-20261019-1"></script>
+<script src="src/daily-ui.js?v=content-r13-20261019-1"></script>
+<script src="src/heirloom-ui.js?v=content-r13-20261019-1"></script>
+<script src="src/ui.js?v=content-r13-20261019-1"></script>
+<script src="src/art-r84.js?v=content-r13-20261019-1"></script>
 </body>
 </html>

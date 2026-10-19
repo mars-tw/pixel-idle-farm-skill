@@ -1,0 +1,364 @@
+{
+  "status": "BLOCKED",
+  "startedAt": "2026-10-19T04:28:41.054Z",
+  "sourceHashes": {
+    "index.html": "cc2f3eb6042ed4ad81c3a57acca977d77b57c606da04addfb7f07b1606f93ad4",
+    "sw.js": "da1b0584ed9734783b7547fad10b4dd5f4e4290b9c9309df3a4d3172c9da4a2b",
+    "manifest.webmanifest": "9212d9a139e02cb7dd99d43af1a2bb27d1447fc53d85374152db44991f1541e0",
+    "package.json": "761a789a52fab1df006ac4521e268176ab6720fe32b664eee1f8fbb4cea69c9e",
+    "package-lock.json": "078d5992be265c26633a21b0f4703d756c5572aecc13ff2e1ba707d811b1539a",
+    "src/adventure.js": "9eea910f940cbb8d47e58c267ccdb890868997f5f9239b99f33aa04621cd93cf",
+    "src/art-r82.css": "d54cb3dea3c883137f3eae08396329d365b80eb47eb199d3d829f033b92b404f",
+    "src/art-r83.css": "82b85993863104d32e99544fb5a51d06f8fa03eb8ce1b8e0c8eb999ec392e1fd",
+    "src/art-r84.css": "3a1dd11022d149e67000f1123f4910f35f60f3c3491a31d679eed0291f177817",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/art-r85.css": "21976198c0f7f846dfcdacbc1cfac0ef77a75579bb9e13f4e160e2eaac861405",
+    "src/art-r86.css": "55a72c616b8bc4e926bc21d2571ee627ead7c2dd27c80af80d8d2fa02231587f",
+    "src/art-r87.css": "7d8f3414d5836bc6a18e9b4578e801be95c4af78ae8881cac0fb945428ffd063",
+    "src/art-r88.css": "79ddbe8032d3a7245b5709bad1451355661b18e03fa44173834dbf3445837ed2",
+    "src/art-r89.css": "791a043d70fa203ac0d67fb7c7fd1cc9b6821ea703534b4ef2bdddb0e0a4603f",
+    "src/atlas.js": "8a634d6883b822daf48a53c7a927dd54141d6054f252307b5770fe43960c0a22",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/content-r1.css": "222e3ebb26ba40e530b50d788ebf4979c4e784727201fcd19e159cb5ee1c8a3c",
+    "src/content-r1.js": "85c5aaf348452f0de021a5ecbb9603df9e3de37d1054a30782d091d2200503e8",
+    "src/content-r10.css": "05d9e6881028628c82b549a9e6c9e3fa69f96ea7f2345d944bd5090c44752aeb",
+    "src/content-r11.css": "797dc650e7a1335cdf4d557ee302f6be1fbf9d9561c1284246cff0f9e1bb00d5",
+    "src/content-r6.css": "520df405a6d4841e6a3160a3e63467fa2059348634870dc000a0b782d0557be4",
+    "src/content-r6.js": "ec42982d34a36c1cd9e6d5f2d83328357674d389d984cc3691844a98ee75eac8",
+    "src/content-r8.css": "482f2ad440a3ac21c71d118bae60e5f6b83fb04464c9a53ac86c0826eab41bf0",
+    "src/content-r8.js": "c4d60577e7693cf94363e1af01fd5982f167584188a25ff7a706c36db21eb9ff",
+    "src/content-r9.css": "3c6a332855184bf46cc5f1ec6acade92bd0eef5a4c9d359b01b72cf83b0b1bd1",
+    "src/daily-ui.js": "dd4708d76f7f6275cff2913c282aedc4dee49f909768ff27ce24c6a8db069c3a",
+    "src/daily.js": "4abcd251fa0f1c5385cf9deffce11641c801a4dc602e94d525ea7970aed9daa4",
+    "src/game.js": "8756bffb7e284ff503e691c2dc358a490ea05750789f506602d8be12a99bf77b",
+    "src/heirloom-ui.js": "f45fb552a0d429ded39f168863a1381d90c0bd4d21b298ba0c490a33afeff8d5",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "bfa0102e65696bd0aa506692d97e6162a3710eccd61b7612a440d8f558cb7619",
+    "src/ui.js": "53cc39977005cbce47248a1fbcd170da9519a7cfeb8b1f337c249a9ba9cd1cae",
+    "src/world-ui.js": "7d986d1eb005dbcb2c22c05f286ef964aff4b9c4c5cb84d247a6fc94a633a144",
+    "src/world.css": "63e43d96060fbd04bd1e5b40decfbdb405bea693a31d89b8b041d5e997fb850e"
+  },
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-19T04:28:41.063Z",
+      "end": "2026-10-19T04:28:48.808Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test.log",
+      "sha256": "45c72a4e77d1b59dcfaad410dbe0e6b3af1220cddf998c6023a62a74ca842c07"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-npc-indicators.js"
+      ],
+      "start": "2026-10-19T04:28:48.810Z",
+      "end": "2026-10-19T04:28:53.652Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-npc-indicators.js.log",
+      "sha256": "a2963ed2c0f07785bccf99417154cb2f537c34f37f7bcdb2a5280e928c79f9d0"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-world-project-art.js"
+      ],
+      "start": "2026-10-19T04:28:53.654Z",
+      "end": "2026-10-19T04:28:54.560Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-world-project-art.js.log",
+      "sha256": "043702fb61ecc31a60f2240e375a27cbc8e30b88b8dce5516e6522df38aaf96e"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-world-rework-e2e.js"
+      ],
+      "start": "2026-10-19T04:28:54.562Z",
+      "end": "2026-10-19T04:31:38.212Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-world-rework-e2e.js.log",
+      "sha256": "b19c15af0636a9a9d041fb29d48066a3032e525a2a1fe9e73f685eac5947d41f"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r79-fun-e2e.js"
+      ],
+      "start": "2026-10-19T04:31:38.214Z",
+      "end": "2026-10-19T04:32:29.773Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r79-fun-e2e.js.log",
+      "sha256": "ea1c60c78e70db20ad2d9b283d4737986b71d5222a8f1de852c91ce4ec37bee9"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r80-mobile.js"
+      ],
+      "start": "2026-10-19T04:32:29.774Z",
+      "end": "2026-10-19T04:33:02.884Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r80-mobile.js.log",
+      "sha256": "8ef6bfaea9501f16a89a2fa6f63e14b4d4e12146be21b6e1d618af66c288ef03"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r81-review.js"
+      ],
+      "start": "2026-10-19T04:33:02.886Z",
+      "end": "2026-10-19T04:33:56.507Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r81-review.js.log",
+      "sha256": "717c9fd16907622144becd3945ca42b51234e357778f5dbacadf8e0643ba5634"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-rwd-matrix.js"
+      ],
+      "start": "2026-10-19T04:33:56.511Z",
+      "end": "2026-10-19T04:34:42.896Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-rwd-matrix.js.log",
+      "sha256": "c37add6c4126be3810ed1627e588263b470be7346094d26e3c0de484dea3571b"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-controls-reachability.js"
+      ],
+      "start": "2026-10-19T04:34:42.897Z",
+      "end": "2026-10-19T04:34:58.860Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-controls-reachability.js.log",
+      "sha256": "ef70197614434d47a7b37fe9296650bb8eb35aee4691ab1c170ac74993045390"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r82-art.js"
+      ],
+      "start": "2026-10-19T04:34:58.862Z",
+      "end": "2026-10-19T04:35:00.065Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r82-art.js.log",
+      "sha256": "3f30a739f38bb69b550e5d81ff59a5663ba0a21698705d53a5c85fc823426f28"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r83-art.js"
+      ],
+      "start": "2026-10-19T04:35:00.067Z",
+      "end": "2026-10-19T04:35:04.283Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r83-art.js.log",
+      "sha256": "ea293ee007f58d7ac8477cb77657141a64be9d96fda53c66fdd327b2d6d5d9bc"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r84-art.js"
+      ],
+      "start": "2026-10-19T04:35:04.285Z",
+      "end": "2026-10-19T04:35:27.675Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r84-art.js.log",
+      "sha256": "0cf59735209f0e938df42710689a2ba7ac82dd7ac881ec2f9ed766f4bea71958"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r85-art.js"
+      ],
+      "start": "2026-10-19T04:35:27.677Z",
+      "end": "2026-10-19T04:35:42.194Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r85-art.js.log",
+      "sha256": "2cdab268172d6f6022e09c2e9a240b7562f7eae37986f695dd388ddbb64122fc"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r86-art.js"
+      ],
+      "start": "2026-10-19T04:35:42.196Z",
+      "end": "2026-10-19T04:35:56.638Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r86-art.js.log",
+      "sha256": "dccf414b2098f0ef18cdaa8a5d6ccd3a2e3714c299e03789c5ce06d049280a1b"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r87-art.js"
+      ],
+      "start": "2026-10-19T04:35:56.640Z",
+      "end": "2026-10-19T04:36:15.761Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r87-art.js.log",
+      "sha256": "28082146f3573345ff6ba5ef722f366ad5bbef2f301bea2850c0fe7236bc2806"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r88-art.js"
+      ],
+      "start": "2026-10-19T04:36:15.763Z",
+      "end": "2026-10-19T04:36:35.459Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r88-art.js.log",
+      "sha256": "cc31a7147401e984449202237648fa8df158465ec61033ffcb7a44c9a6695d7d"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r89-art.js"
+      ],
+      "start": "2026-10-19T04:36:35.461Z",
+      "end": "2026-10-19T04:37:10.267Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r89-art.js.log",
+      "sha256": "182fb78f2250ea82b076b639bf3cb0307815233a1c2ec1d58e12e630c62194bc"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r1-e2e.js"
+      ],
+      "start": "2026-10-19T04:37:10.269Z",
+      "end": "2026-10-19T04:38:47.312Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r1-e2e.js.log",
+      "sha256": "e25582fb333491f52a1d250330ff0791cdbc176ba4e664accad81decc3295d5e"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r2-e2e.js"
+      ],
+      "start": "2026-10-19T04:38:47.314Z",
+      "end": "2026-10-19T04:42:23.055Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r2-e2e.js.log",
+      "sha256": "a8eed65a890294071f421ed3bfa088cd6751a48fa564a7954e85edb977a2f93c"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r3-e2e.js"
+      ],
+      "start": "2026-10-19T04:42:23.057Z",
+      "end": "2026-10-19T04:46:09.459Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r3-e2e.js.log",
+      "sha256": "fc68a70f745f2ae8f779755c961bcf608d7bc31f11c8251d721da07f4cde7e58"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r4-e2e.js"
+      ],
+      "start": "2026-10-19T04:46:09.461Z",
+      "end": "2026-10-19T04:49:37.020Z",
+      "exitCode": 1,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r4-e2e.js.log",
+      "sha256": "e8c46c062209a5f52759ab15d945d3a9dc851177d7e932a959a66d196c57e7d1"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r5-e2e.js"
+      ],
+      "start": "2026-10-19T04:49:37.023Z",
+      "end": "2026-10-19T04:53:46.592Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r5-e2e.js.log",
+      "sha256": "4cfa6d6a303d7f78e23f7e25ddf176aac449ba84430081135411055def3a5ebe"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r6-e2e.js"
+      ],
+      "start": "2026-10-19T04:53:46.594Z",
+      "end": "2026-10-19T04:57:49.321Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r6-e2e.js.log",
+      "sha256": "082e80daafb4860e966141ce331426af83ef86d9fd3ecc44de5ae23d85c5fb2d"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r7-e2e.js"
+      ],
+      "start": "2026-10-19T04:57:49.323Z",
+      "end": "2026-10-19T05:01:54.291Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r7-e2e.js.log",
+      "sha256": "ffdcc30216b9c3a1bf06cda8b21383aae64d6c83f624591a87857f3efbe2f072"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r8-e2e.js"
+      ],
+      "start": "2026-10-19T05:01:54.293Z",
+      "end": "2026-10-19T05:05:13.295Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r8-e2e.js.log",
+      "sha256": "95845969da3b955c33fb9415ab98da27272b902ef396c8365d5df303a5087b56"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r9-e2e.js"
+      ],
+      "start": "2026-10-19T05:05:13.297Z",
+      "end": "2026-10-19T05:06:28.595Z",
+      "exitCode": 1,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r9-e2e.js.log",
+      "sha256": "2215d0a45f4fec577f8d7eac71c3cdfb11995f1f82585e2a67fad99dab177e6c"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r10-e2e.js"
+      ],
+      "start": "2026-10-19T05:06:28.597Z",
+      "end": "2026-10-19T05:07:46.005Z",
+      "exitCode": 1,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-content-r10-e2e.js.log",
+      "sha256": "6cf8921093ec7674839be982ed9f8b8324aee45eea7aa17b0081c158b15f18f7"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "start": "2026-10-19T05:07:46.007Z",
+      "end": "2026-10-19T05:07:58.615Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-water-quest-guide.js.log",
+      "sha256": "738b4fd134b25b30bbccc219169cbae15cf6aa2231a9a50b509a0733d3c7105c"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "start": "2026-10-19T05:07:58.617Z",
+      "end": "2026-10-19T05:08:23.553Z",
+      "exitCode": 0,
+      "log": "docs/content/r11/logs/2026-10-19T04-28-41-062Z/test-r72-night-gate.js.log",
+      "sha256": "4a6feacfef4dcd30bfe4fd53312e57f00e58abaeb97e0043a3bc8f3b958cce9d"
+    }
+  ],
+  "sourcesUnchanged": true,
+  "endedAt": "2026-10-19T05:08:23.561Z"
+}

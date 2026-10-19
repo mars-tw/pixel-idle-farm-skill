@@ -1,0 +1,5545 @@
+{
+  "status": "BLOCKED",
+  "fixture": "Mid-game chapter/dock and wheat20/carrot4/berries4 supplied; bread is cooked, all nine deliveries and six catches use UI; no clock advance, no granted catches or cooldown resets. Resize/read-only and offline sessions reuse saves earned in this run.",
+  "checks": [
+    "capacity never displays over-limit ratio: phone-basket-before.png",
+    "first basket has no unearned reread",
+    "capacity never displays over-limit ratio: phone-delivery-cancel-before.png",
+    "cancel retains bread and never delivers later",
+    "cancel visibly confirms the same bread count",
+    "capacity never displays over-limit ratio: phone-delivery-cancel-after.png",
+    "capacity never displays over-limit ratio: phone-delivery-walking-1.png",
+    "capacity never displays over-limit ratio: phone-delivery-walking-2.png",
+    "capacity never displays over-limit ratio: phone-delivery-walking-3.png",
+    "walking delivery spends only once on arrival",
+    "capacity never displays over-limit ratio: phone-story-merchant-first.png",
+    "merchant first delivery speaks about today, not an earlier unseen gift",
+    "merchant normal farm conversation remembers first",
+    "capacity never displays over-limit ratio: phone-memory-merchant-first.png",
+    "basket does not reveal remembered preference",
+    "merchant recall is attached to this resident",
+    "recall page gives situation without flavor or ingredient names",
+    "merchant recall hides stale farm speech behind paper",
+    "capacity never displays over-limit ratio: phone-recall-merchant-context.png",
+    "merchant recall gives context without taste answer",
+    "merchant recall return retains selection without spending",
+    "capacity never displays over-limit ratio: phone-recall-merchant-entry.png",
+    "capacity never displays over-limit ratio: phone-taste-merchant-sweet-packed.png",
+    "merchant/sweet consumes one bread at the actual resident",
+    "capacity never displays over-limit ratio: phone-taste-merchant-wrong.png",
+    "merchant wrong reply differs from first clue",
+    "merchant normal farm conversation remembers wrong",
+    "capacity never displays over-limit ratio: phone-memory-merchant-wrong.png",
+    "capacity never displays over-limit ratio: phone-taste-merchant-sour-packed.png",
+    "merchant/sour consumes one bread at the actual resident",
+    "merchant matching taste completes distinct response",
+    "capacity never displays over-limit ratio: phone-taste-merchant-matched.png",
+    "merchant matched page has distinct red-gingham bookmark",
+    "merchant normal farm conversation remembers matched",
+    "capacity never displays over-limit ratio: phone-memory-merchant-matched.png",
+    "capacity never displays over-limit ratio: phone-taste-elder-plain-packed.png",
+    "elder/plain consumes one bread at the actual resident",
+    "capacity never displays over-limit ratio: phone-story-elder-first.png",
+    "elder first delivery speaks about today, not an earlier unseen gift",
+    "elder normal farm conversation remembers first",
+    "capacity never displays over-limit ratio: phone-memory-elder-first.png",
+    "basket does not reveal remembered preference",
+    "elder recall is attached to this resident",
+    "recall page gives situation without flavor or ingredient names",
+    "elder recall hides stale farm speech behind paper",
+    "capacity never displays over-limit ratio: phone-recall-elder-context.png",
+    "elder recall gives context without taste answer",
+    "elder recall return retains selection without spending",
+    "capacity never displays over-limit ratio: phone-recall-elder-entry.png",
+    "capacity never displays over-limit ratio: phone-taste-elder-sweet-packed.png",
+    "elder/sweet consumes one bread at the actual resident",
+    "capacity never displays over-limit ratio: phone-taste-elder-wrong.png",
+    "elder wrong reply differs from first clue",
+    "elder normal farm conversation remembers wrong",
+    "capacity never displays over-limit ratio: phone-memory-elder-wrong.png",
+    "capacity never displays over-limit ratio: phone-taste-elder-hot-packed.png",
+    "elder/hot consumes one bread at the actual resident",
+    "elder matching taste completes distinct response",
+    "capacity never displays over-limit ratio: phone-taste-elder-matched.png",
+    "elder matched page has distinct red-gingham bookmark",
+    "elder normal farm conversation remembers matched",
+    "capacity never displays over-limit ratio: phone-memory-elder-matched.png",
+    "capacity never displays over-limit ratio: phone-taste-child-plain-packed.png",
+    "child/plain consumes one bread at the actual resident",
+    "capacity never displays over-limit ratio: phone-story-child-first.png",
+    "child first delivery speaks about today, not an earlier unseen gift",
+    "child normal farm conversation remembers first",
+    "capacity never displays over-limit ratio: phone-memory-child-first.png",
+    "basket does not reveal remembered preference",
+    "child recall is attached to this resident",
+    "recall page gives situation without flavor or ingredient names",
+    "child recall hides stale farm speech behind paper",
+    "capacity never displays over-limit ratio: phone-recall-child-context.png",
+    "child recall gives context without taste answer",
+    "child recall return retains selection without spending",
+    "capacity never displays over-limit ratio: phone-recall-child-entry.png",
+    "capacity never displays over-limit ratio: phone-taste-child-sour-packed.png",
+    "child/sour consumes one bread at the actual resident",
+    "capacity never displays over-limit ratio: phone-taste-child-wrong.png",
+    "child wrong reply differs from first clue",
+    "child normal farm conversation remembers wrong",
+    "capacity never displays over-limit ratio: phone-memory-child-wrong.png",
+    "capacity never displays over-limit ratio: phone-taste-child-sweet-packed.png",
+    "child/sweet consumes one bread at the actual resident",
+    "child matching taste completes distinct response",
+    "capacity never displays over-limit ratio: phone-taste-child-matched.png",
+    "child matched page has distinct red-gingham bookmark",
+    "child normal farm conversation remembers matched",
+    "capacity never displays over-limit ratio: phone-memory-child-matched.png",
+    "nine deliveries and all memories survive real reload",
+    "capacity never displays over-limit ratio: phone-pond-river_carp-waiting.png",
+    "waiting reel visibly muted river_carp",
+    "river_carp early reel explains why and grants no fish",
+    "capacity never displays over-limit ratio: phone-pond-river_carp-early.png",
+    "river_carp expired cast explains late reel without reward",
+    "capacity never displays over-limit ratio: phone-pond-river_carp-late.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_carp-1.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_carp-2.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_carp-3.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_carp-4.png",
+    "river_carp visible submerged frame and enabled reel agree",
+    "river_carp success has no reel label",
+    "capacity never displays over-limit ratio: phone-pond-river_carp-caught.png",
+    "river_carp countdown follows actual elapsed seconds",
+    "capacity never displays over-limit ratio: phone-pond-river_carp-cooldown.png",
+    "capacity never displays over-limit ratio: phone-note-river_carp-first.png",
+    "river_carp catch and illustrated note survive reload",
+    "river_carp reload cannot bypass cooldown",
+    "river_carp full30s cooldown elapsed without time advance",
+    "river_carp learned from earned and reloaded notebook",
+    "river_carp earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-river_carp-1-tap-48.png",
+    "river_carp earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-river_carp-2-still-49.png",
+    "river_carp earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-river_carp-3-tap-50.png",
+    "capacity never displays over-limit ratio: phone-water-river_carp-submerging.png",
+    "capacity never displays over-limit ratio: phone-water-river_carp-masked.png",
+    "river_carp impact window still active after evidence frames",
+    "river_carp second real catch gives exactly second fish and one note",
+    "capacity never displays over-limit ratio: phone-pond-river_carp-caught-again.png",
+    "capacity never displays over-limit ratio: phone-pond-silver_dace-waiting.png",
+    "waiting reel visibly muted silver_dace",
+    "silver_dace early reel explains why and grants no fish",
+    "capacity never displays over-limit ratio: phone-pond-silver_dace-early.png",
+    "silver_dace expired cast explains late reel without reward",
+    "capacity never displays over-limit ratio: phone-pond-silver_dace-late.png",
+    "capacity never displays over-limit ratio: phone-rhythm-silver_dace-1.png",
+    "capacity never displays over-limit ratio: phone-rhythm-silver_dace-2.png",
+    "capacity never displays over-limit ratio: phone-rhythm-silver_dace-3.png",
+    "silver_dace visible submerged frame and enabled reel agree",
+    "silver_dace success has no reel label",
+    "capacity never displays over-limit ratio: phone-pond-silver_dace-caught.png",
+    "silver_dace countdown follows actual elapsed seconds",
+    "capacity never displays over-limit ratio: phone-pond-silver_dace-cooldown.png",
+    "capacity never displays over-limit ratio: phone-note-silver_dace-first.png",
+    "silver_dace catch and illustrated note survive reload",
+    "silver_dace reload cannot bypass cooldown",
+    "silver_dace full30s cooldown elapsed without time advance",
+    "silver_dace learned from earned and reloaded notebook",
+    "silver_dace earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-silver_dace-0-still-63.png",
+    "silver_dace earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-silver_dace-0-still-64.png",
+    "capacity never displays over-limit ratio: phone-water-silver_dace-submerging.png",
+    "capacity never displays over-limit ratio: phone-water-silver_dace-masked.png",
+    "silver_dace impact window still active after evidence frames",
+    "silver_dace second real catch gives exactly second fish and one note",
+    "capacity never displays over-limit ratio: phone-pond-silver_dace-caught-again.png",
+    "capacity never displays over-limit ratio: phone-pond-river_perch-waiting.png",
+    "waiting reel visibly muted river_perch",
+    "river_perch early reel explains why and grants no fish",
+    "capacity never displays over-limit ratio: phone-pond-river_perch-early.png",
+    "river_perch expired cast explains late reel without reward",
+    "capacity never displays over-limit ratio: phone-pond-river_perch-late.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_perch-1.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_perch-2.png",
+    "capacity never displays over-limit ratio: phone-rhythm-river_perch-3.png",
+    "river_perch visible submerged frame and enabled reel agree",
+    "river_perch success has no reel label",
+    "capacity never displays over-limit ratio: phone-pond-river_perch-caught.png",
+    "river_perch countdown follows actual elapsed seconds",
+    "capacity never displays over-limit ratio: phone-pond-river_perch-cooldown.png",
+    "capacity never displays over-limit ratio: phone-note-river_perch-first.png",
+    "river_perch catch and illustrated note survive reload",
+    "river_perch reload cannot bypass cooldown",
+    "river_perch full30s cooldown elapsed without time advance",
+    "river_perch learned from earned and reloaded notebook",
+    "river_perch earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-river_perch-1-pull-77.png",
+    "river_perch earned cast has no rhythm or fish answer",
+    "capacity never displays over-limit ratio: phone-learned-river_perch-2-still-78.png",
+    "capacity never displays over-limit ratio: phone-water-river_perch-submerging.png",
+    "capacity never displays over-limit ratio: phone-water-river_perch-masked.png",
+    "river_perch impact window still active after evidence frames",
+    "river_perch second real catch gives exactly second fish and one note",
+    "capacity never displays over-limit ratio: phone-pond-river_perch-caught-again.png",
+    "capacity never displays over-limit ratio: phone-six-320-story-merchant.png",
+    "320 merchant nonblank decoded story",
+    "capacity never displays over-limit ratio: phone-six-320-story-elder.png",
+    "320 elder nonblank decoded story",
+    "capacity never displays over-limit ratio: phone-six-320-story-child.png",
+    "320 child nonblank decoded story",
+    "capacity never displays over-limit ratio: phone-six-320-note-river_carp.png",
+    "320 river_carp nonblank decoded note",
+    "capacity never displays over-limit ratio: phone-six-320-note-silver_dace.png",
+    "320 silver_dace nonblank decoded note",
+    "capacity never displays over-limit ratio: phone-six-320-note-river_perch.png",
+    "320 river_perch nonblank decoded note",
+    "capacity never displays over-limit ratio: phone-six-430-story-merchant.png",
+    "430 merchant nonblank decoded story",
+    "capacity never displays over-limit ratio: phone-six-430-story-elder.png",
+    "430 elder nonblank decoded story",
+    "capacity never displays over-limit ratio: phone-six-430-story-child.png",
+    "430 child nonblank decoded story",
+    "capacity never displays over-limit ratio: phone-six-430-note-river_carp.png",
+    "430 river_carp nonblank decoded note",
+    "capacity never displays over-limit ratio: phone-six-430-note-silver_dace.png",
+    "430 silver_dace nonblank decoded note",
+    "capacity never displays over-limit ratio: phone-six-430-note-river_perch.png",
+    "430 river_perch nonblank decoded note",
+    "missing merchant preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing merchant has decoded generated placeholder",
+    "missing merchant retries successfully without reopening page",
+    "missing merchant retains original text on retry",
+    "capacity never displays over-limit ratio: phone-art-merchant-restored.png",
+    "missing elder preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing elder has decoded generated placeholder",
+    "missing elder retries successfully without reopening page",
+    "missing elder retains original text on retry",
+    "capacity never displays over-limit ratio: phone-art-elder-restored.png",
+    "missing child preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing child has decoded generated placeholder",
+    "missing child retries successfully without reopening page",
+    "missing child retains original text on retry",
+    "capacity never displays over-limit ratio: phone-art-child-restored.png",
+    "missing river_carp preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing river_carp has decoded generated placeholder",
+    "missing river_carp retries successfully without reopening page",
+    "missing river_carp retains original text on retry",
+    "capacity never displays over-limit ratio: phone-art-river_carp-restored.png",
+    "missing silver_dace preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing silver_dace has decoded generated placeholder",
+    "missing silver_dace retries successfully without reopening page",
+    "missing silver_dace retains original text on retry",
+    "capacity never displays over-limit ratio: phone-art-silver_dace-restored.png",
+    "missing river_perch preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing river_perch has decoded generated placeholder",
+    "missing river_perch retries successfully without reopening page",
+    "missing river_perch retains original text on retry",
+    "capacity never displays over-limit ratio: phone-art-river_perch-restored.png",
+    "320x568 .world-modal-close >=44px visible and hittable: [{\"w\":44,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "320x568 #sendNeighbor >=44px visible and hittable: [{\"w\":268,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "320x568 #basketKitchen >=44px visible and hittable: [{\"w\":85.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "320x568 #readNeighbor >=44px visible and hittable: [{\"w\":85.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "320x568 #recallNeighbor >=44px visible and hittable: [{\"w\":85.34375,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "320x568 [data-neighbor] >=44px visible and hittable: [{\"w\":84.65625,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":84.671875,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":86.671875,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "320x568 [data-taste] >=44px visible and hittable: [{\"w\":64,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":62,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":62,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":62,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "320 no keyboard instructions",
+    "full-width send and three horizontal secondary controls 320",
+    "capacity never displays over-limit ratio: phone-basket-320x568.png",
+    "recall page gives situation without flavor or ingredient names",
+    "320 matched completion persists on reread",
+    "430x932 .world-modal-close >=44px visible and hittable: [{\"w\":44,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "430x932 #sendNeighbor >=44px visible and hittable: [{\"w\":370,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "430x932 #basketKitchen >=44px visible and hittable: [{\"w\":119.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "430x932 #readNeighbor >=44px visible and hittable: [{\"w\":119.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "430x932 #recallNeighbor >=44px visible and hittable: [{\"w\":119.34375,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "430x932 [data-neighbor] >=44px visible and hittable: [{\"w\":118.65625,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":118.671875,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":120.671875,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "430x932 [data-taste] >=44px visible and hittable: [{\"w\":89.5,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":87.5,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":87.5,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":87.5,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "430 no keyboard instructions",
+    "full-width send and three horizontal secondary controls 430",
+    "capacity never displays over-limit ratio: phone-basket-430x932.png",
+    "recall page gives situation without flavor or ingredient names",
+    "430 matched completion persists on reread",
+    "844x390 .world-modal-close >=44px visible and hittable: [{\"w\":44,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "844x390 #sendNeighbor >=44px visible and hittable: [{\"w\":687.984375,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "844x390 #basketKitchen >=44px visible and hittable: [{\"w\":225.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "844x390 #readNeighbor >=44px visible and hittable: [{\"w\":225.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "844x390 #recallNeighbor >=44px visible and hittable: [{\"w\":225.328125,\"h\":48,\"visible\":true,\"hit\":true}]",
+    "844x390 [data-neighbor] >=44px visible and hittable: [{\"w\":224.65625,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":224.671875,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":226.671875,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "844x390 [data-taste] >=44px visible and hittable: [{\"w\":169,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":167,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":167,\"h\":44,\"visible\":true,\"hit\":true},{\"w\":167,\"h\":44,\"visible\":true,\"hit\":true}]",
+    "844 no keyboard instructions"
+  ],
+  "screenshots": [
+    "docs/content/r4/phone-basket-before.png",
+    "docs/content/r4/phone-delivery-cancel-before.png",
+    "docs/content/r4/phone-delivery-cancel-after.png",
+    "docs/content/r4/phone-delivery-walking-1.png",
+    "docs/content/r4/phone-delivery-walking-2.png",
+    "docs/content/r4/phone-delivery-walking-3.png",
+    "docs/content/r4/phone-story-merchant-first.png",
+    "docs/content/r4/phone-memory-merchant-first.png",
+    "docs/content/r4/phone-recall-merchant-context.png",
+    "docs/content/r4/phone-recall-merchant-entry.png",
+    "docs/content/r4/phone-taste-merchant-sweet-packed.png",
+    "docs/content/r4/phone-taste-merchant-wrong.png",
+    "docs/content/r4/phone-memory-merchant-wrong.png",
+    "docs/content/r4/phone-taste-merchant-sour-packed.png",
+    "docs/content/r4/phone-taste-merchant-matched.png",
+    "docs/content/r4/phone-memory-merchant-matched.png",
+    "docs/content/r4/phone-taste-elder-plain-packed.png",
+    "docs/content/r4/phone-story-elder-first.png",
+    "docs/content/r4/phone-memory-elder-first.png",
+    "docs/content/r4/phone-recall-elder-context.png",
+    "docs/content/r4/phone-recall-elder-entry.png",
+    "docs/content/r4/phone-taste-elder-sweet-packed.png",
+    "docs/content/r4/phone-taste-elder-wrong.png",
+    "docs/content/r4/phone-memory-elder-wrong.png",
+    "docs/content/r4/phone-taste-elder-hot-packed.png",
+    "docs/content/r4/phone-taste-elder-matched.png",
+    "docs/content/r4/phone-memory-elder-matched.png",
+    "docs/content/r4/phone-taste-child-plain-packed.png",
+    "docs/content/r4/phone-story-child-first.png",
+    "docs/content/r4/phone-memory-child-first.png",
+    "docs/content/r4/phone-recall-child-context.png",
+    "docs/content/r4/phone-recall-child-entry.png",
+    "docs/content/r4/phone-taste-child-sour-packed.png",
+    "docs/content/r4/phone-taste-child-wrong.png",
+    "docs/content/r4/phone-memory-child-wrong.png",
+    "docs/content/r4/phone-taste-child-sweet-packed.png",
+    "docs/content/r4/phone-taste-child-matched.png",
+    "docs/content/r4/phone-memory-child-matched.png",
+    "docs/content/r4/phone-pond-river_carp-waiting.png",
+    "docs/content/r4/phone-pond-river_carp-early.png",
+    "docs/content/r4/phone-pond-river_carp-late.png",
+    "docs/content/r4/phone-rhythm-river_carp-1.png",
+    "docs/content/r4/phone-rhythm-river_carp-2.png",
+    "docs/content/r4/phone-rhythm-river_carp-3.png",
+    "docs/content/r4/phone-rhythm-river_carp-4.png",
+    "docs/content/r4/phone-pond-river_carp-caught.png",
+    "docs/content/r4/phone-pond-river_carp-cooldown.png",
+    "docs/content/r4/phone-note-river_carp-first.png",
+    "docs/content/r4/phone-learned-river_carp-1-tap-48.png",
+    "docs/content/r4/phone-learned-river_carp-2-still-49.png",
+    "docs/content/r4/phone-learned-river_carp-3-tap-50.png",
+    "docs/content/r4/phone-water-river_carp-submerging.png",
+    "docs/content/r4/phone-water-river_carp-masked.png",
+    "docs/content/r4/phone-pond-river_carp-caught-again.png",
+    "docs/content/r4/phone-pond-silver_dace-waiting.png",
+    "docs/content/r4/phone-pond-silver_dace-early.png",
+    "docs/content/r4/phone-pond-silver_dace-late.png",
+    "docs/content/r4/phone-rhythm-silver_dace-1.png",
+    "docs/content/r4/phone-rhythm-silver_dace-2.png",
+    "docs/content/r4/phone-rhythm-silver_dace-3.png",
+    "docs/content/r4/phone-pond-silver_dace-caught.png",
+    "docs/content/r4/phone-pond-silver_dace-cooldown.png",
+    "docs/content/r4/phone-note-silver_dace-first.png",
+    "docs/content/r4/phone-learned-silver_dace-0-still-63.png",
+    "docs/content/r4/phone-learned-silver_dace-0-still-64.png",
+    "docs/content/r4/phone-water-silver_dace-submerging.png",
+    "docs/content/r4/phone-water-silver_dace-masked.png",
+    "docs/content/r4/phone-pond-silver_dace-caught-again.png",
+    "docs/content/r4/phone-pond-river_perch-waiting.png",
+    "docs/content/r4/phone-pond-river_perch-early.png",
+    "docs/content/r4/phone-pond-river_perch-late.png",
+    "docs/content/r4/phone-rhythm-river_perch-1.png",
+    "docs/content/r4/phone-rhythm-river_perch-2.png",
+    "docs/content/r4/phone-rhythm-river_perch-3.png",
+    "docs/content/r4/phone-pond-river_perch-caught.png",
+    "docs/content/r4/phone-pond-river_perch-cooldown.png",
+    "docs/content/r4/phone-note-river_perch-first.png",
+    "docs/content/r4/phone-learned-river_perch-1-pull-77.png",
+    "docs/content/r4/phone-learned-river_perch-2-still-78.png",
+    "docs/content/r4/phone-water-river_perch-submerging.png",
+    "docs/content/r4/phone-water-river_perch-masked.png",
+    "docs/content/r4/phone-pond-river_perch-caught-again.png",
+    "docs/content/r4/phone-six-320-story-merchant.png",
+    "docs/content/r4/phone-six-320-story-elder.png",
+    "docs/content/r4/phone-six-320-story-child.png",
+    "docs/content/r4/phone-six-320-note-river_carp.png",
+    "docs/content/r4/phone-six-320-note-silver_dace.png",
+    "docs/content/r4/phone-six-320-note-river_perch.png",
+    "docs/content/r4/phone-six-430-story-merchant.png",
+    "docs/content/r4/phone-six-430-story-elder.png",
+    "docs/content/r4/phone-six-430-story-child.png",
+    "docs/content/r4/phone-six-430-note-river_carp.png",
+    "docs/content/r4/phone-six-430-note-silver_dace.png",
+    "docs/content/r4/phone-six-430-note-river_perch.png",
+    "docs/content/r4/phone-art-merchant-missing.png",
+    "docs/content/r4/phone-art-merchant-restored.png",
+    "docs/content/r4/phone-art-elder-missing.png",
+    "docs/content/r4/phone-art-elder-restored.png",
+    "docs/content/r4/phone-art-child-missing.png",
+    "docs/content/r4/phone-art-child-restored.png",
+    "docs/content/r4/phone-art-river_carp-missing.png",
+    "docs/content/r4/phone-art-river_carp-restored.png",
+    "docs/content/r4/phone-art-silver_dace-missing.png",
+    "docs/content/r4/phone-art-silver_dace-restored.png",
+    "docs/content/r4/phone-art-river_perch-missing.png",
+    "docs/content/r4/phone-art-river_perch-restored.png",
+    "docs/content/r4/phone-basket-320x568.png",
+    "docs/content/r4/phone-basket-430x932.png"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r4/phone-basket-before.png",
+      "at": 1792345749512,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_5",
+          "x": 7,
+          "y": 5,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-delivery-cancel-before.png",
+      "at": 1792345756390,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "left",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 0,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-delivery-cancel-after.png",
+      "at": 1792345759524,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-delivery-walking-1.png",
+      "at": 1792345759815,
+      "state": {
+        "resident": "merchant",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t9_6",
+          "x": 9,
+          "y": 6,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 5,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-delivery-walking-2.png",
+      "at": 1792345760047,
+      "state": {
+        "resident": "merchant",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t9_5",
+          "x": 9,
+          "y": 5,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 1,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-delivery-walking-3.png",
+      "at": 1792345760280,
+      "state": {
+        "resident": "merchant",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t9_3",
+          "x": 9,
+          "y": 3,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 3,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-story-merchant-first.png",
+      "at": 1792345762183,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345761702
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-merchant-first.png",
+      "at": 1792345762447,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345761702
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-recall-merchant-context.png",
+      "at": 1792345762807,
+      "state": {
+        "resident": "merchant",
+        "view": "recall",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345761702
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-recall-merchant-entry.png",
+      "at": 1792345762916,
+      "state": {
+        "resident": "merchant",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345761702
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-merchant-sweet-packed.png",
+      "at": 1792345763061,
+      "state": {
+        "resident": "merchant",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345761702
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-merchant-wrong.png",
+      "at": 1792345763662,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 8,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345763587
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-merchant-wrong.png",
+      "at": 1792345763991,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 8,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345763587
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-merchant-sour-packed.png",
+      "at": 1792345764307,
+      "state": {
+        "resident": "merchant",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 8,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345763587
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-merchant-matched.png",
+      "at": 1792345764924,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 7,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-merchant-matched.png",
+      "at": 1792345765226,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 7,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-elder-plain-packed.png",
+      "at": 1792345765955,
+      "state": {
+        "resident": "elder",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 7,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-story-elder-first.png",
+      "at": 1792345768872,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345768752
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-elder-first.png",
+      "at": 1792345769090,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345768752
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-recall-elder-context.png",
+      "at": 1792345769380,
+      "state": {
+        "resident": "elder",
+        "view": "recall",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345768752
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-recall-elder-entry.png",
+      "at": 1792345769458,
+      "state": {
+        "resident": "elder",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345768752
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-elder-sweet-packed.png",
+      "at": 1792345769572,
+      "state": {
+        "resident": "elder",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345768752
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-elder-wrong.png",
+      "at": 1792345770172,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 5,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345770103
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-elder-wrong.png",
+      "at": 1792345770477,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 5,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345770103
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-elder-hot-packed.png",
+      "at": 1792345770743,
+      "state": {
+        "resident": "elder",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 5,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345770103
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-elder-matched.png",
+      "at": 1792345771712,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 4,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-elder-matched.png",
+      "at": 1792345771923,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 4,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-child-plain-packed.png",
+      "at": 1792345772445,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 4,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-story-child-first.png",
+      "at": 1792345773407,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345773336
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-child-first.png",
+      "at": 1792345773725,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345773336
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-recall-child-context.png",
+      "at": 1792345774200,
+      "state": {
+        "resident": "child",
+        "view": "recall",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345773336
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-recall-child-entry.png",
+      "at": 1792345774294,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345773336
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-child-sour-packed.png",
+      "at": 1792345774427,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345773336
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-child-wrong.png",
+      "at": 1792345775175,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 2,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 2,
+            "lastTaste": "sour",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345774952
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-child-wrong.png",
+      "at": 1792345775479,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 2,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 2,
+            "lastTaste": "sour",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345774952
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-child-sweet-packed.png",
+      "at": 1792345775743,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 2,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 2,
+            "lastTaste": "sour",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792345774952
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-taste-child-matched.png",
+      "at": 1792345776618,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-memory-child-matched.png",
+      "at": 1792345776916,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_carp-waiting.png",
+      "at": 1792345778945,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.2 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345778784
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_carp-early.png",
+      "at": 1792345779505,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_carp-late.png",
+      "at": 1792345782791,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_carp-1.png",
+      "at": 1792345783790,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.9 秒",
+        "pose": "tap",
+        "phase": "1",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345782822
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_carp-2.png",
+      "at": 1792345784056,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.2 秒",
+        "pose": "still",
+        "phase": "2",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345782822
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_carp-3.png",
+      "at": 1792345784501,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.7 秒",
+        "pose": "tap",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345782822
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_carp-4.png",
+      "at": 1792345784757,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.9 秒",
+        "pose": "strike",
+        "phase": "4",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345782822
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_carp-caught.png",
+      "at": 1792345784858,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_carp-cooldown.png",
+      "at": 1792345786031,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-note-river_carp-first.png",
+      "at": 1792345786142,
+      "state": {
+        "view": "note",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-river_carp-1-tap-48.png",
+      "at": 1792345816150,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.0 秒",
+        "pose": "tap",
+        "phase": "1",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345815166
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-river_carp-2-still-49.png",
+      "at": 1792345816425,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.3 秒",
+        "pose": "still",
+        "phase": "2",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345815166
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-river_carp-3-tap-50.png",
+      "at": 1792345816838,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.7 秒",
+        "pose": "tap",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345815166
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-water-river_carp-submerging.png",
+      "at": 1792345817113,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.9 秒",
+        "pose": "strike",
+        "phase": "4",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345815166
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-water-river_carp-masked.png",
+      "at": 1792345817178,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.0 秒",
+        "pose": "strike",
+        "phase": "4",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345815166
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_carp-caught-again.png",
+      "at": 1792345817284,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-silver_dace-waiting.png",
+      "at": 1792345818649,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.2 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345818438
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-silver_dace-early.png",
+      "at": 1792345818796,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-silver_dace-late.png",
+      "at": 1792345822503,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-silver_dace-1.png",
+      "at": 1792345822619,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.1 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345822544
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-silver_dace-2.png",
+      "at": 1792345823719,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.2 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345822544
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-silver_dace-3.png",
+      "at": 1792345824842,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.3 秒",
+        "pose": "strike",
+        "phase": "1",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345822544
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-silver_dace-caught.png",
+      "at": 1792345824974,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-silver_dace-cooldown.png",
+      "at": 1792345826154,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-note-silver_dace-first.png",
+      "at": 1792345826302,
+      "state": {
+        "view": "note",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-silver_dace-0-still-63.png",
+      "at": 1792345856117,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.8 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345855348
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-silver_dace-0-still-64.png",
+      "at": 1792345856830,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.5 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345855348
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-water-silver_dace-submerging.png",
+      "at": 1792345857612,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.3 秒",
+        "pose": "strike",
+        "phase": "1",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345855348
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-water-silver_dace-masked.png",
+      "at": 1792345857676,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.3 秒",
+        "pose": "strike",
+        "phase": "1",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345855348
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-silver_dace-caught-again.png",
+      "at": 1792345857778,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_perch-waiting.png",
+      "at": 1792345859027,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.2 秒",
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345858849
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_perch-early.png",
+      "at": 1792345859143,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_perch-late.png",
+      "at": 1792345862358,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_perch-1.png",
+      "at": 1792345863149,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.8 秒",
+        "pose": "pull",
+        "phase": "1",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345862389
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_perch-2.png",
+      "at": 1792345863760,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.4 秒",
+        "pose": "still",
+        "phase": "2",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345862389
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-rhythm-river_perch-3.png",
+      "at": 1792345864474,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.1 秒",
+        "pose": "strike",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345862389
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_perch-caught.png",
+      "at": 1792345864599,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_perch-cooldown.png",
+      "at": 1792345865777,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-note-river_perch-first.png",
+      "at": 1792345865910,
+      "state": {
+        "view": "note",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-river_perch-1-pull-77.png",
+      "at": 1792345895702,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 0.7 秒",
+        "pose": "pull",
+        "phase": "1",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345894979
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-learned-river_perch-2-still-78.png",
+      "at": 1792345896336,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 1.4 秒",
+        "pose": "still",
+        "phase": "2",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345894979
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-water-river_perch-submerging.png",
+      "at": 1792345897070,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.1 秒",
+        "pose": "strike",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345894979
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-water-river_perch-masked.png",
+      "at": 1792345897135,
+      "state": {
+        "view": "fishing",
+        "elapsed": "這一竿 2.2 秒",
+        "pose": "strike",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345894979
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-pond-river_perch-caught-again.png",
+      "at": 1792345897259,
+      "state": {
+        "view": "fishing",
+        "elapsed": "",
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-320-story-merchant.png",
+      "at": 1792345898423,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-320-story-elder.png",
+      "at": 1792345899222,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-320-story-child.png",
+      "at": 1792345899938,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-320-note-river_carp.png",
+      "at": 1792345901555,
+      "state": {
+        "view": "note",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345900784
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-320-note-silver_dace.png",
+      "at": 1792345902857,
+      "state": {
+        "view": "note",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345902387
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-320-note-river_perch.png",
+      "at": 1792345904122,
+      "state": {
+        "view": "note",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-430-story-merchant.png",
+      "at": 1792345904832,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-430-story-elder.png",
+      "at": 1792345905612,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-430-story-child.png",
+      "at": 1792345906362,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-430-note-river_carp.png",
+      "at": 1792345907697,
+      "state": {
+        "view": "note",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792345907196
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-430-note-silver_dace.png",
+      "at": 1792345909157,
+      "state": {
+        "view": "note",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792345908538
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-six-430-note-river_perch.png",
+      "at": 1792345910515,
+      "state": {
+        "view": "note",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-art-merchant-restored.png",
+      "at": 1792345911841,
+      "state": {
+        "resident": "merchant",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-art-elder-restored.png",
+      "at": 1792345913099,
+      "state": {
+        "resident": "elder",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-art-child-restored.png",
+      "at": 1792345913926,
+      "state": {
+        "resident": "child",
+        "view": "response",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-art-river_carp-restored.png",
+      "at": 1792345915348,
+      "state": {
+        "view": "note",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345914731
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-art-silver_dace-restored.png",
+      "at": 1792345916969,
+      "state": {
+        "view": "note",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792345916200
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-art-river_perch-restored.png",
+      "at": 1792345918634,
+      "state": {
+        "view": "note",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-basket-320x568.png",
+      "at": 1792345919407,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r4/phone-basket-430x932.png",
+      "at": 1792345920261,
+      "state": {
+        "resident": "child",
+        "view": "basket",
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345764830
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345771254
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792345776269
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "failure": "AssertionError [ERR_ASSERTION]: full-width send and three horizontal secondary controls 844\n    at check (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r4-e2e.js:8:21)\n    at layoutAndOverflow (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r4-e2e.js:89:4)\n    at async C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r4-e2e.js:111:199"
+}

@@ -1,0 +1,617 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "clockAccelerated": false,
+  "progressInjected": false,
+  "cameraOnlyFocus": true,
+  "journeys": [
+    {
+      "platform": "iphone",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "deviceScaleFactor": 3,
+      "choice": "table",
+      "elapsedMs": 26237,
+      "realInput": true,
+      "progressInjected": false,
+      "earned": {
+        "h": {
+          "started": true,
+          "sunWheat": 2,
+          "delivered": false,
+          "choice": null,
+          "deliveredAt": 0,
+          "wheat": 8,
+          "ready": true,
+          "note": null
+        },
+        "daily": {
+          "day": 20744,
+          "date": "2026-10-18",
+          "nextAt": 1792339200000,
+          "tasks": [
+            {
+              "id": "water",
+              "title": "替新芽添水",
+              "detail": "種下作物後，用澆水工具照顧它。每株只算一次。",
+              "have": 3,
+              "need": 2,
+              "coins": 4,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "harvest",
+              "title": "收一籃新鮮",
+              "detail": "成熟後點右下角收成鍵。作物進倉庫才算數。",
+              "have": 8,
+              "need": 8,
+              "coins": 6,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "basket",
+              "title": "小麥餐籃",
+              "detail": "留 2 份小麥給鄰居，交付後會從倉庫取走。種子袋裡可以選種。",
+              "have": 8,
+              "need": 2,
+              "coins": 6,
+              "cropId": "wheat",
+              "claimed": false,
+              "ready": true
+            }
+          ],
+          "stamps": 0,
+          "stamped": false,
+          "done": 0,
+          "keepsakes": [
+            {
+              "at": 3,
+              "id": "pressed_wheat",
+              "name": "祖母壓的小麥",
+              "text": "第一年收成不好，她還是留了一穗。她說，肯再種一次的人，總會等到下一季。",
+              "owned": false
+            },
+            {
+              "at": 7,
+              "id": "table_note",
+              "name": "餐桌下的紙條",
+              "text": "桌子修好那天，祖母在背面寫了每個人的名字。你的名字旁邊，空著一格給下一個回來的人。",
+              "owned": false
+            }
+          ]
+        },
+        "stats": {
+          "harvested": {
+            "wheat": 8
+          },
+          "fulfilledOrders": 0,
+          "totalCoinsEarned": 0,
+          "plantCount": 4,
+          "cleared": 0,
+          "collected": {},
+          "qualitySold": 0,
+          "npcRequestsCompleted": 0,
+          "festivalOrders": 0,
+          "seasonsReached": {
+            "春": true
+          },
+          "sunCatches": 2
+        }
+      },
+      "moment": {
+        "action": "water",
+        "frame": "-324px -192px",
+        "plants": [
+          {
+            "i": 0,
+            "crop": "wheat",
+            "ageMs": 7884,
+            "stage": 2,
+            "sunlit": true,
+            "inSunlightField": true,
+            "sunGrown": false
+          },
+          {
+            "i": 1,
+            "crop": "wheat",
+            "ageMs": 9817,
+            "stage": 3,
+            "sunlit": false,
+            "inSunlightField": true,
+            "sunGrown": true
+          },
+          {
+            "i": 2,
+            "crop": "wheat",
+            "ageMs": 5019,
+            "stage": 1,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 3,
+            "crop": "wheat",
+            "ageMs": 3603,
+            "stage": 0,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "platform": "ipad",
+      "viewport": {
+        "width": 1032,
+        "height": 1376
+      },
+      "deviceScaleFactor": 2,
+      "choice": "doorstep",
+      "elapsedMs": 27302,
+      "realInput": true,
+      "progressInjected": false,
+      "earned": {
+        "h": {
+          "started": true,
+          "sunWheat": 2,
+          "delivered": false,
+          "choice": null,
+          "deliveredAt": 0,
+          "wheat": 8,
+          "ready": true,
+          "note": null
+        },
+        "daily": {
+          "day": 20744,
+          "date": "2026-10-18",
+          "nextAt": 1792339200000,
+          "tasks": [
+            {
+              "id": "water",
+              "title": "替新芽添水",
+              "detail": "種下作物後，用澆水工具照顧它。每株只算一次。",
+              "have": 3,
+              "need": 2,
+              "coins": 4,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "harvest",
+              "title": "收一籃新鮮",
+              "detail": "成熟後點右下角收成鍵。作物進倉庫才算數。",
+              "have": 8,
+              "need": 8,
+              "coins": 6,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "basket",
+              "title": "小麥餐籃",
+              "detail": "留 2 份小麥給鄰居，交付後會從倉庫取走。種子袋裡可以選種。",
+              "have": 8,
+              "need": 2,
+              "coins": 6,
+              "cropId": "wheat",
+              "claimed": false,
+              "ready": true
+            }
+          ],
+          "stamps": 0,
+          "stamped": false,
+          "done": 0,
+          "keepsakes": [
+            {
+              "at": 3,
+              "id": "pressed_wheat",
+              "name": "祖母壓的小麥",
+              "text": "第一年收成不好，她還是留了一穗。她說，肯再種一次的人，總會等到下一季。",
+              "owned": false
+            },
+            {
+              "at": 7,
+              "id": "table_note",
+              "name": "餐桌下的紙條",
+              "text": "桌子修好那天，祖母在背面寫了每個人的名字。你的名字旁邊，空著一格給下一個回來的人。",
+              "owned": false
+            }
+          ]
+        },
+        "stats": {
+          "harvested": {
+            "wheat": 8
+          },
+          "fulfilledOrders": 0,
+          "totalCoinsEarned": 0,
+          "plantCount": 4,
+          "cleared": 0,
+          "collected": {},
+          "qualitySold": 0,
+          "npcRequestsCompleted": 0,
+          "festivalOrders": 0,
+          "seasonsReached": {
+            "春": true
+          },
+          "sunCatches": 2
+        }
+      },
+      "moment": {
+        "action": "water",
+        "frame": "-469.125px -278px",
+        "plants": [
+          {
+            "i": 0,
+            "crop": "wheat",
+            "ageMs": 6468,
+            "stage": 1,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 1,
+            "crop": "wheat",
+            "ageMs": 8425,
+            "stage": 2,
+            "sunlit": false,
+            "inSunlightField": true,
+            "sunGrown": true
+          },
+          {
+            "i": 2,
+            "crop": "wheat",
+            "ageMs": 3623,
+            "stage": 0,
+            "sunlit": true,
+            "inSunlightField": true,
+            "sunGrown": false
+          },
+          {
+            "i": 3,
+            "crop": "wheat",
+            "ageMs": 2231,
+            "stage": 0,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          }
+        ]
+      },
+      "errors": []
+    }
+  ],
+  "screenshots": [
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.875,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/iphone-01-welcome.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-01-welcome.png",
+      "sha256": "4fa1bae807c85fa12c63f16854e3c229473a28c9ae6816f3f19d2d30e89cb37c"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.875,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/iphone-02-sunlight.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-02-sunlight.png",
+      "sha256": "4353e3e6593f3fe8fb8d0bbf7bc48975ac1e48c7c0b232f789e1c842ff85aa8e"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 358.9801025390625,
+            "y": 16.736555099487305,
+            "right": 422.8948669433594,
+            "bottom": 50.06031608581543,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/iphone-03-basket.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-03-basket.png",
+      "sha256": "666afe8b65e980a53cdbcf5374c798ba9c29e40b5c7185361fb1d575e3a9a1c3"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/iphone-04-note.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-04-note.png",
+      "sha256": "b86dc9b574e727b9af7f168174855031df8a7369f6d9390951c8e7b09c2c5433"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 178.40625,
+            "y": 17.203125,
+            "right": 226.59375,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 229.59375,
+            "y": 17.203125,
+            "right": 308.59375,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 311.59375,
+            "y": 17.203125,
+            "right": 373.953125,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 376.953125,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/iphone-05-daily.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-05-daily.png",
+      "sha256": "1e2b3258e3dcdbc81e0afbed082baf1bf300fffc96cf68be6d3ca8aac7b09f08"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.078125,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/ipad-01-welcome.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-01-welcome.png",
+      "sha256": "86a39bb1c7acc406f2593097757f3195d0aa6f7906e1364568ce37e6a29adb78"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.078125,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/ipad-02-sunlight.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-02-sunlight.png",
+      "sha256": "2848771f87e5e533e76708b158ccec230fa25f45fd14b94afd12a85cac27f1da"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 921.7730712890625,
+            "y": 17.869056701660156,
+            "right": 1012.3051147460938,
+            "bottom": 56.724693298339844,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/ipad-03-basket.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-03-basket.png",
+      "sha256": "f628370b14f2c4beceb2f30461bd8f4b0bab2bc48eee6400ae89d23defdbade5"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/ipad-04-note.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-04-note.png",
+      "sha256": "8743887ff0f5a326a31ac1d6d02a47aeb039c1fd7a933d74efbe0d0f3ee030b7"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 625.953125,
+            "y": 18,
+            "right": 700.734375,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 706.734375,
+            "y": 18,
+            "right": 852.265625,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 858.265625,
+            "y": 18,
+            "right": 948.5,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 954.5,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "path": "docs/evidence/r87-art/store-real/ipad-05-daily.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-05-daily.png",
+      "sha256": "d912c603b2b2deddd3adba978c91c741dd7716c64c14543b606d83582f82d5a0"
+    }
+  ]
+}

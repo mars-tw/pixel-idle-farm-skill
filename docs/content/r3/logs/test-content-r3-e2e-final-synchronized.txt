@@ -1,0 +1,273 @@
+PASS capacity never displays over-limit ratio: phone-basket-before.png
+PASS first basket has no unearned reread
+PASS capacity never displays over-limit ratio: phone-delivery-cancel-before.png
+PASS cancel retains bread and never delivers later
+PASS cancel visibly confirms the same bread count
+PASS capacity never displays over-limit ratio: phone-delivery-cancel-after.png
+PASS capacity never displays over-limit ratio: phone-delivery-walking-1.png
+PASS capacity never displays over-limit ratio: phone-delivery-walking-2.png
+PASS capacity never displays over-limit ratio: phone-delivery-walking-3.png
+PASS walking delivery spends only once on arrival
+PASS capacity never displays over-limit ratio: phone-story-merchant-first.png
+PASS merchant first delivery speaks about today, not an earlier unseen gift
+PASS merchant normal farm conversation remembers first
+PASS capacity never displays over-limit ratio: phone-memory-merchant-first.png
+PASS basket does not reveal remembered preference
+PASS merchant recall is attached to this resident
+PASS merchant recall hides stale farm speech behind paper
+PASS capacity never displays over-limit ratio: phone-recall-merchant-context.png
+PASS merchant recall gives context without taste answer
+PASS merchant recall return retains selection without spending
+PASS capacity never displays over-limit ratio: phone-recall-merchant-entry.png
+PASS capacity never displays over-limit ratio: phone-taste-merchant-sweet-packed.png
+PASS merchant/sweet consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-taste-merchant-wrong.png
+PASS merchant wrong reply differs from first clue
+PASS merchant normal farm conversation remembers wrong
+PASS capacity never displays over-limit ratio: phone-memory-merchant-wrong.png
+PASS capacity never displays over-limit ratio: phone-taste-merchant-sour-packed.png
+PASS merchant/sour consumes one bread at the actual resident
+PASS merchant matching taste completes distinct response
+PASS capacity never displays over-limit ratio: phone-taste-merchant-matched.png
+PASS merchant matched page has distinct red-gingham bookmark
+PASS merchant normal farm conversation remembers matched
+PASS capacity never displays over-limit ratio: phone-memory-merchant-matched.png
+PASS capacity never displays over-limit ratio: phone-taste-elder-plain-packed.png
+PASS elder/plain consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-story-elder-first.png
+PASS elder first delivery speaks about today, not an earlier unseen gift
+PASS elder normal farm conversation remembers first
+PASS capacity never displays over-limit ratio: phone-memory-elder-first.png
+PASS basket does not reveal remembered preference
+PASS elder recall is attached to this resident
+PASS elder recall hides stale farm speech behind paper
+PASS capacity never displays over-limit ratio: phone-recall-elder-context.png
+PASS elder recall gives context without taste answer
+PASS elder recall return retains selection without spending
+PASS capacity never displays over-limit ratio: phone-recall-elder-entry.png
+PASS capacity never displays over-limit ratio: phone-taste-elder-sweet-packed.png
+PASS elder/sweet consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-taste-elder-wrong.png
+PASS elder wrong reply differs from first clue
+PASS elder normal farm conversation remembers wrong
+PASS capacity never displays over-limit ratio: phone-memory-elder-wrong.png
+PASS capacity never displays over-limit ratio: phone-taste-elder-hot-packed.png
+PASS elder/hot consumes one bread at the actual resident
+PASS elder matching taste completes distinct response
+PASS capacity never displays over-limit ratio: phone-taste-elder-matched.png
+PASS elder matched page has distinct red-gingham bookmark
+PASS elder normal farm conversation remembers matched
+PASS capacity never displays over-limit ratio: phone-memory-elder-matched.png
+PASS capacity never displays over-limit ratio: phone-taste-child-plain-packed.png
+PASS child/plain consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-story-child-first.png
+PASS child first delivery speaks about today, not an earlier unseen gift
+PASS child normal farm conversation remembers first
+PASS capacity never displays over-limit ratio: phone-memory-child-first.png
+PASS basket does not reveal remembered preference
+PASS child recall is attached to this resident
+PASS child recall hides stale farm speech behind paper
+PASS capacity never displays over-limit ratio: phone-recall-child-context.png
+PASS child recall gives context without taste answer
+PASS child recall return retains selection without spending
+PASS capacity never displays over-limit ratio: phone-recall-child-entry.png
+PASS capacity never displays over-limit ratio: phone-taste-child-sour-packed.png
+PASS child/sour consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-taste-child-wrong.png
+PASS child wrong reply differs from first clue
+PASS child normal farm conversation remembers wrong
+PASS capacity never displays over-limit ratio: phone-memory-child-wrong.png
+PASS capacity never displays over-limit ratio: phone-taste-child-sweet-packed.png
+PASS child/sweet consumes one bread at the actual resident
+PASS child matching taste completes distinct response
+PASS capacity never displays over-limit ratio: phone-taste-child-matched.png
+PASS child matched page has distinct red-gingham bookmark
+PASS child normal farm conversation remembers matched
+PASS capacity never displays over-limit ratio: phone-memory-child-matched.png
+PASS nine deliveries and all memories survive real reload
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-waiting.png
+PASS waiting reel visibly muted river_carp
+PASS river_carp early reel explains why and grants no fish
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-early.png
+PASS river_carp expired cast explains late reel without reward
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-late.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-1.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-2.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-3.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-4.png
+PASS river_carp visible submerged frame and enabled reel agree
+PASS river_carp success has no reel label
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-caught.png
+PASS river_carp countdown follows actual elapsed seconds
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-cooldown.png
+PASS capacity never displays over-limit ratio: phone-note-river_carp-first.png
+PASS river_carp catch and illustrated note survive reload
+PASS river_carp reload cannot bypass cooldown
+PASS river_carp full30s cooldown elapsed without time advance
+PASS river_carp second real catch gives exactly second fish and one note
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-caught-again.png
+PASS capacity never displays over-limit ratio: phone-pond-silver_dace-waiting.png
+PASS waiting reel visibly muted silver_dace
+PASS silver_dace early reel explains why and grants no fish
+PASS capacity never displays over-limit ratio: phone-pond-silver_dace-early.png
+PASS silver_dace expired cast explains late reel without reward
+PASS capacity never displays over-limit ratio: phone-pond-silver_dace-late.png
+PASS capacity never displays over-limit ratio: phone-rhythm-silver_dace-1.png
+PASS capacity never displays over-limit ratio: phone-rhythm-silver_dace-2.png
+PASS capacity never displays over-limit ratio: phone-rhythm-silver_dace-3.png
+PASS silver_dace visible submerged frame and enabled reel agree
+PASS silver_dace success has no reel label
+PASS capacity never displays over-limit ratio: phone-pond-silver_dace-caught.png
+PASS silver_dace countdown follows actual elapsed seconds
+PASS capacity never displays over-limit ratio: phone-pond-silver_dace-cooldown.png
+PASS capacity never displays over-limit ratio: phone-note-silver_dace-first.png
+PASS silver_dace catch and illustrated note survive reload
+PASS silver_dace reload cannot bypass cooldown
+PASS silver_dace full30s cooldown elapsed without time advance
+PASS silver_dace second real catch gives exactly second fish and one note
+PASS capacity never displays over-limit ratio: phone-pond-silver_dace-caught-again.png
+PASS capacity never displays over-limit ratio: phone-pond-river_perch-waiting.png
+PASS waiting reel visibly muted river_perch
+PASS river_perch early reel explains why and grants no fish
+PASS capacity never displays over-limit ratio: phone-pond-river_perch-early.png
+PASS river_perch expired cast explains late reel without reward
+PASS capacity never displays over-limit ratio: phone-pond-river_perch-late.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_perch-1.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_perch-2.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_perch-3.png
+PASS river_perch visible submerged frame and enabled reel agree
+PASS river_perch success has no reel label
+PASS capacity never displays over-limit ratio: phone-pond-river_perch-caught.png
+PASS river_perch countdown follows actual elapsed seconds
+PASS capacity never displays over-limit ratio: phone-pond-river_perch-cooldown.png
+PASS capacity never displays over-limit ratio: phone-note-river_perch-first.png
+PASS river_perch catch and illustrated note survive reload
+PASS river_perch reload cannot bypass cooldown
+PASS river_perch full30s cooldown elapsed without time advance
+PASS river_perch second real catch gives exactly second fish and one note
+PASS capacity never displays over-limit ratio: phone-pond-river_perch-caught-again.png
+PASS capacity never displays over-limit ratio: phone-six-320-story-merchant.png
+PASS 320 merchant nonblank decoded story
+PASS capacity never displays over-limit ratio: phone-six-320-story-elder.png
+PASS 320 elder nonblank decoded story
+PASS capacity never displays over-limit ratio: phone-six-320-story-child.png
+PASS 320 child nonblank decoded story
+PASS capacity never displays over-limit ratio: phone-six-320-note-river_carp.png
+PASS 320 river_carp nonblank decoded note
+PASS capacity never displays over-limit ratio: phone-six-320-note-silver_dace.png
+PASS 320 silver_dace nonblank decoded note
+PASS capacity never displays over-limit ratio: phone-six-320-note-river_perch.png
+PASS 320 river_perch nonblank decoded note
+PASS capacity never displays over-limit ratio: phone-six-430-story-merchant.png
+PASS 430 merchant nonblank decoded story
+PASS capacity never displays over-limit ratio: phone-six-430-story-elder.png
+PASS 430 elder nonblank decoded story
+PASS capacity never displays over-limit ratio: phone-six-430-story-child.png
+PASS 430 child nonblank decoded story
+PASS capacity never displays over-limit ratio: phone-six-430-note-river_carp.png
+PASS 430 river_carp nonblank decoded note
+PASS capacity never displays over-limit ratio: phone-six-430-note-silver_dace.png
+PASS 430 silver_dace nonblank decoded note
+PASS capacity never displays over-limit ratio: phone-six-430-note-river_perch.png
+PASS 430 river_perch nonblank decoded note
+PASS missing merchant preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing merchant has decoded generated placeholder
+PASS missing merchant retries successfully without reopening page
+PASS missing merchant retains original text on retry
+PASS capacity never displays over-limit ratio: phone-art-merchant-restored.png
+PASS missing elder preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing elder has decoded generated placeholder
+PASS missing elder retries successfully without reopening page
+PASS missing elder retains original text on retry
+PASS capacity never displays over-limit ratio: phone-art-elder-restored.png
+PASS missing child preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing child has decoded generated placeholder
+PASS missing child retries successfully without reopening page
+PASS missing child retains original text on retry
+PASS capacity never displays over-limit ratio: phone-art-child-restored.png
+PASS missing river_carp preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing river_carp has decoded generated placeholder
+PASS missing river_carp retries successfully without reopening page
+PASS missing river_carp retains original text on retry
+PASS capacity never displays over-limit ratio: phone-art-river_carp-restored.png
+PASS missing silver_dace preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing silver_dace has decoded generated placeholder
+PASS missing silver_dace retries successfully without reopening page
+PASS missing silver_dace retains original text on retry
+PASS capacity never displays over-limit ratio: phone-art-silver_dace-restored.png
+PASS missing river_perch preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing river_perch has decoded generated placeholder
+PASS missing river_perch retries successfully without reopening page
+PASS missing river_perch retains original text on retry
+PASS capacity never displays over-limit ratio: phone-art-river_perch-restored.png
+PASS 320x568 .world-modal-close >=44px visible and hittable: [{"w":44,"h":44,"visible":true,"hit":true}]
+PASS 320x568 #sendNeighbor >=44px visible and hittable: [{"w":89.84375,"h":78,"visible":true,"hit":true}]
+PASS 320x568 #basketKitchen >=44px visible and hittable: [{"w":50.921875,"h":78,"visible":true,"hit":true}]
+PASS 320x568 #readNeighbor >=44px visible and hittable: [{"w":50.921875,"h":78,"visible":true,"hit":true}]
+PASS 320x568 #recallNeighbor >=44px visible and hittable: [{"w":58.3125,"h":78,"visible":true,"hit":true}]
+PASS 320x568 [data-neighbor] >=44px visible and hittable: [{"w":84.65625,"h":44,"visible":true,"hit":true},{"w":84.671875,"h":44,"visible":true,"hit":true},{"w":86.671875,"h":44,"visible":true,"hit":true}]
+PASS 320x568 [data-taste] >=44px visible and hittable: [{"w":64,"h":44,"visible":true,"hit":true},{"w":62,"h":44,"visible":true,"hit":true},{"w":62,"h":44,"visible":true,"hit":true},{"w":62,"h":44,"visible":true,"hit":true}]
+PASS 320 no keyboard instructions
+PASS capacity never displays over-limit ratio: phone-basket-320x568.png
+PASS 320 matched completion persists on reread
+PASS 430x932 .world-modal-close >=44px visible and hittable: [{"w":44,"h":44,"visible":true,"hit":true}]
+PASS 430x932 #sendNeighbor >=44px visible and hittable: [{"w":122.453125,"h":64,"visible":true,"hit":true}]
+PASS 430x932 #basketKitchen >=44px visible and hittable: [{"w":71.234375,"h":64,"visible":true,"hit":true}]
+PASS 430x932 #readNeighbor >=44px visible and hittable: [{"w":71.234375,"h":64,"visible":true,"hit":true}]
+PASS 430x932 #recallNeighbor >=44px visible and hittable: [{"w":81.078125,"h":64,"visible":true,"hit":true}]
+PASS 430x932 [data-neighbor] >=44px visible and hittable: [{"w":118.65625,"h":44,"visible":true,"hit":true},{"w":118.671875,"h":44,"visible":true,"hit":true},{"w":120.671875,"h":44,"visible":true,"hit":true}]
+PASS 430x932 [data-taste] >=44px visible and hittable: [{"w":89.5,"h":44,"visible":true,"hit":true},{"w":87.5,"h":44,"visible":true,"hit":true},{"w":87.5,"h":44,"visible":true,"hit":true},{"w":87.5,"h":44,"visible":true,"hit":true}]
+PASS 430 no keyboard instructions
+PASS capacity never displays over-limit ratio: phone-basket-430x932.png
+PASS 430 matched completion persists on reread
+PASS 844x390 .world-modal-close >=44px visible and hittable: [{"w":44,"h":44,"visible":true,"hit":true}]
+PASS 844x390 #sendNeighbor >=44px visible and hittable: [{"w":244.765625,"h":44,"visible":true,"hit":true}]
+PASS 844x390 #basketKitchen >=44px visible and hittable: [{"w":132.375,"h":44,"visible":true,"hit":true}]
+PASS 844x390 #readNeighbor >=44px visible and hittable: [{"w":132.390625,"h":44,"visible":true,"hit":true}]
+PASS 844x390 #recallNeighbor >=44px visible and hittable: [{"w":154.46875,"h":44,"visible":true,"hit":true}]
+PASS 844x390 [data-neighbor] >=44px visible and hittable: [{"w":224.65625,"h":44,"visible":true,"hit":true},{"w":224.671875,"h":44,"visible":true,"hit":true},{"w":226.671875,"h":44,"visible":true,"hit":true}]
+PASS 844x390 [data-taste] >=44px visible and hittable: [{"w":91.53125,"h":44,"visible":true,"hit":true},{"w":89.546875,"h":44,"visible":true,"hit":true},{"w":89.546875,"h":44,"visible":true,"hit":true},{"w":89.546875,"h":44,"visible":true,"hit":true}]
+PASS 844 no keyboard instructions
+PASS capacity never displays over-limit ratio: layout-basket-844x390.png
+PASS 844 matched completion persists on reread
+PASS 768x1024 .world-modal-close >=44px visible and hittable: [{"w":44,"h":44,"visible":true,"hit":true}]
+PASS 768x1024 #sendNeighbor >=44px visible and hittable: [{"w":212.453125,"h":76,"visible":true,"hit":true}]
+PASS 768x1024 #basketKitchen >=44px visible and hittable: [{"w":116.234375,"h":76,"visible":true,"hit":true}]
+PASS 768x1024 #readNeighbor >=44px visible and hittable: [{"w":116.234375,"h":76,"visible":true,"hit":true}]
+PASS 768x1024 #recallNeighbor >=44px visible and hittable: [{"w":135.078125,"h":76,"visible":true,"hit":true}]
+PASS 768x1024 [data-neighbor] >=44px visible and hittable: [{"w":196.65625,"h":47,"visible":true,"hit":true},{"w":196.671875,"h":47,"visible":true,"hit":true},{"w":198.671875,"h":47,"visible":true,"hit":true}]
+PASS 768x1024 [data-taste] >=44px visible and hittable: [{"w":148,"h":47,"visible":true,"hit":true},{"w":146,"h":47,"visible":true,"hit":true},{"w":146,"h":47,"visible":true,"hit":true},{"w":146,"h":47,"visible":true,"hit":true}]
+PASS 768 no keyboard instructions
+PASS capacity never displays over-limit ratio: phone-basket-768x1024.png
+PASS 768 matched completion persists on reread
+PASS 1366x600 .world-modal-close >=44px visible and hittable: [{"w":44,"h":44,"visible":true,"hit":true}]
+PASS 1366x600 #sendNeighbor >=44px visible and hittable: [{"w":244.765625,"h":44,"visible":true,"hit":true}]
+PASS 1366x600 #basketKitchen >=44px visible and hittable: [{"w":132.375,"h":44,"visible":true,"hit":true}]
+PASS 1366x600 #readNeighbor >=44px visible and hittable: [{"w":132.390625,"h":44,"visible":true,"hit":true}]
+PASS 1366x600 #recallNeighbor >=44px visible and hittable: [{"w":154.46875,"h":44,"visible":true,"hit":true}]
+PASS 1366x600 [data-neighbor] >=44px visible and hittable: [{"w":224.65625,"h":44,"visible":true,"hit":true},{"w":224.671875,"h":44,"visible":true,"hit":true},{"w":226.671875,"h":44,"visible":true,"hit":true}]
+PASS 1366x600 [data-taste] >=44px visible and hittable: [{"w":91.53125,"h":44,"visible":true,"hit":true},{"w":89.546875,"h":44,"visible":true,"hit":true},{"w":89.546875,"h":44,"visible":true,"hit":true},{"w":89.546875,"h":44,"visible":true,"hit":true}]
+PASS 1366 no keyboard instructions
+PASS capacity never displays over-limit ratio: layout-basket-1366x600.png
+PASS 1366 matched completion persists on reread
+PASS legacy overflow preserves all32 items
+PASS legacy overflow visibly explains two preserved extra items
+PASS 320 overflow capacity label fits viewport
+PASS capacity never displays over-limit ratio: phone-capacity-legacy-overflow-small.png
+PASS overflow reload never loses items
+PASS legacy overflow preserves all32 items
+PASS legacy overflow visibly explains two preserved extra items
+PASS 430 overflow capacity label fits viewport
+PASS capacity never displays over-limit ratio: phone-capacity-legacy-overflow.png
+PASS overflow reload never loses items
+PASS new fish notebook decodes after actual offline reload
+PASS capacity never displays over-limit ratio: phone-note-offline.png
+PASS merchant new R3 diorama decodes after offline reload
+PASS capacity never displays over-limit ratio: phone-story-merchant-offline.png
+PASS elder new R3 diorama decodes after offline reload
+PASS capacity never displays over-limit ratio: phone-story-elder-offline.png
+PASS child new R3 diorama decodes after offline reload
+PASS capacity never displays over-limit ratio: phone-story-child-offline.png
+PASS capacity never displays over-limit ratio: iphone-09-neighbor-memory.png
+PASS capacity never displays over-limit ratio: ipad-09-neighbor-memory.png
+PASS no page errors

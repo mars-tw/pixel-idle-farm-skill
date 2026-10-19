@@ -1,0 +1,179 @@
+{
+  "status": "VERIFIED",
+  "round": "R89 / art8",
+  "version": "0.1.23",
+  "appVersion": "r89-20261018-1",
+  "headless": true,
+  "nativeDevice": false,
+  "order": [
+    "01-welcome",
+    "02-sunlight",
+    "03-harvest",
+    "04-basket",
+    "05-note",
+    "06-daily"
+  ],
+  "screenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-01-welcome.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "93d7d7e6ba271135507a6e05701dc46d6feb289fb2c58cdd49ac809f2f1fa45a",
+      "bytes": 280760,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-02-sunlight.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "7c097e5af05e11f6f022741467c4dcaddb4a7e53d865089e6f63429f56ec9457",
+      "bytes": 2082710,
+      "fixture": true,
+      "capture": "Exact same-age visual QA fixture, real water frame3 without callback; no earned progress claimed"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-03-harvest.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "d61119dcbef5dbfb65fd6dda39a425dc3113b5f6f9f128b6f5d26283a2130577",
+      "bytes": 2074161,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-04-basket.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "4cdb3baa8b9acb8d9dfd4a3b1732ce40d6ee1a44ea5cc898587265703e2305e6",
+      "bytes": 472853,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-05-note.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "216e174f889fcb6a850f1998697add9d1bac4641e09a039a251dc1c3d228bc8c",
+      "bytes": 467831,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-06-daily.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "535f3d7266f778f3ebb1a0b8c48f01459165a703420bbe70c6b7069a1dd0c495",
+      "bytes": 256624,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-01-welcome.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "5ed3b3cd12b9fb8927794dd6320c42b92af2f17f36be8da1cfedf98581415c5a",
+      "bytes": 274847,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-02-sunlight.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "aca41214ff7b57f2bec3f9ad6616c69f07fa85f66f3f4559f9e94e5f6131bdb8",
+      "bytes": 3126869,
+      "fixture": true,
+      "capture": "Exact same-age visual QA fixture, real water frame3 without callback; no earned progress claimed"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-03-harvest.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "c2a3cd74b7e89c193ee932a515d97eda986112c8e0b2c89db4680b9bc503c262",
+      "bytes": 3154103,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-04-basket.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "a9c86ddf7779845becac85c57811699bbf1d0b15bc7928e508f0a8f485c28c6b",
+      "bytes": 422679,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-05-note.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "faf3a1a388bad2bfb7c1b22c33440d434b49f948f7f123fb97cf476659f1841a",
+      "bytes": 660852,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-06-daily.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "204f71953b16c07fe155d56e5b3d5c718d7e327f404f3651eb29bfd5582b39d1",
+      "bytes": 244758,
+      "fixture": false,
+      "capture": "Continuous real-clock input journey; no progress/clock injection"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-detail-porch.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "df472f55a7ed3be69fd4674aa002b41c623d3610acc39ae589da86bfc7c032c3",
+      "bytes": 2206642,
+      "fixture": false,
+      "supplementary": true,
+      "capture": "Same real journey after delivery; additional proof of full NPC silhouettes and contact shadows"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-detail-porch.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "29682895f4efe06a393326775a359f14d9337ab693f0ad24c16111f41ef9bb21",
+      "bytes": 3372475,
+      "fixture": false,
+      "supplementary": true,
+      "capture": "Same real journey after delivery; additional proof of full NPC silhouettes and contact shadows"
+    }
+  ],
+  "storyScreenshots": 12,
+  "supplementaryPorchScreenshots": 2,
+  "realPlayScreenshots": 12,
+  "visualFixtureScreenshots": 2,
+  "note": "Main six-image chronology per device; two supplemental existing-porch screenshots show unobstructed NPCs. Prior names and additional historical screenshots excluded; originals archived in compare/r89/before/store."
+}

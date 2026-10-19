@@ -1,0 +1,117 @@
+PASS actual tool named; undisclosed model slug not invented
+PASS eighteen generated masters retained
+PASS hash docs/art/masters/r83/walk.png
+PASS hash docs/art/masters/r83/actions.png
+PASS hash docs/art/masters/r83/crops.png
+PASS hash docs/art/masters/r83/world.png
+PASS hash docs/art/masters/r83/terrain.png
+PASS hash docs/art/masters/r83/portraits.png
+PASS hash docs/art/masters/r83/welcome.png
+PASS hash docs/art/masters/r83/basket.png
+PASS hash docs/art/masters/r83/table.png
+PASS hash docs/art/masters/r83/door.png
+PASS hash docs/art/masters/r83/tend.png
+PASS hash docs/art/masters/r83/panel.png
+PASS hash docs/art/masters/r83/icons.png
+PASS hash docs/art/masters/r83/logo.png
+PASS hash docs/art/masters/r83/app.png
+PASS hash docs/art/masters/r83/cropslate.png
+PASS hash docs/art/masters/r83/cropsseason.png
+PASS hash docs/art/masters/r83/npcs.png
+PASS hash assets/generated/r83/walk.png
+PASS hash assets/generated/r83/npcs.png
+PASS hash assets/generated/r83/actions.png
+PASS hash assets/generated/r83/tend.png
+PASS hash assets/generated/r83/farming-actions.png
+PASS hash assets/generated/r83/crops.png
+PASS hash assets/generated/r83/cropslate.png
+PASS hash assets/generated/r83/cropsseason.png
+PASS hash assets/generated/r83/world.png
+PASS hash assets/generated/r83/terrain.png
+PASS hash assets/generated/r83/portraits.png
+PASS hash assets/generated/r83/grey-0.png
+PASS hash assets/generated/r83/grey-1.png
+PASS hash assets/generated/r83/grey-2.png
+PASS hash assets/generated/r83/grandma-0.png
+PASS hash assets/generated/r83/grandma-1.png
+PASS hash assets/generated/r83/grandma-2.png
+PASS hash assets/generated/r83/farmer-face-64.png
+PASS hash assets/generated/r83/welcome-384.webp
+PASS hash assets/generated/r83/basket-384.webp
+PASS hash assets/generated/r83/door-r82.webp
+PASS hash assets/generated/r83/table-r82.webp
+PASS hash assets/generated/r83/panel-192.png
+PASS hash assets/generated/r83/paper-128.png
+PASS hash assets/generated/r83/icons.png
+PASS hash assets/generated/r83/basket-32.png
+PASS hash assets/generated/r83/note-32.png
+PASS hash assets/generated/r83/wheat-32.png
+PASS hash assets/generated/r83/stamp-32.png
+PASS hash assets/generated/r83/water-32.png
+PASS hash assets/generated/r83/seed-32.png
+PASS hash assets/generated/r83/sun-32.png
+PASS hash assets/generated/r83/tea-32.png
+PASS hash assets/generated/r83/logo-320.png
+PASS hash assets/generated/r83/app-icon-64.png
+PASS hash assets/generated/r83/app-icon-192.png
+PASS hash assets/generated/r83/app-icon-512.png
+PASS hash assets/heirloom/r83/table-r82.webp
+PASS hash assets/heirloom/r83/doorstep-r82.webp
+PASS brightness and saturation double gate Walk
+PASS brightness and saturation double gate Npcs
+PASS brightness and saturation double gate Actions
+PASS brightness and saturation double gate Tend
+PASS brightness and saturation double gate Crops
+PASS brightness and saturation double gate CropsLate
+PASS brightness and saturation double gate CropsSeason
+PASS brightness and saturation double gate World
+PASS brightness and saturation double gate Portraits
+PASS brightness and saturation double gate FarmerFace
+PASS brightness and saturation double gate Icons
+PASS generated image delivery payload below 1.4 MiB
+PASS Walk direction 0: six distinct poses with lower-body change
+PASS Walk direction 1: six distinct poses with lower-body change
+PASS Walk direction 2: six distinct poses with lower-body change
+PASS Walk direction 3: six distinct poses with lower-body change
+PASS Actions direction 0: six distinct poses with lower-body change
+PASS Actions direction 1: six distinct poses with lower-body change
+PASS Actions direction 2: six distinct poses with lower-body change
+PASS Actions direction 3: six distinct poses with lower-body change
+PASS Tend direction 0: six distinct poses with lower-body change
+PASS Tend direction 1: six distinct poses with lower-body change
+PASS Tend direction 2: six distinct poses with lower-body change
+PASS Tend direction 3: six distinct poses with lower-body change
+PASS new generated welcome 390x844
+PASS new straw-hat walk sprite >=40 CSS pixels 390x844
+PASS all crop atlases, ground and farm buildings use new generated assets 390x844
+PASS three direct task cards 390x844
+PASS task cards 44px and unobscured 390x844
+PASS basket and welcome have distinct art 390x844
+PASS two rendered generated leaf-light projections 390x844
+PASS light occupies the ground, no vertical pillar 390x844
+PASS new generated welcome 844x390
+PASS new straw-hat walk sprite >=40 CSS pixels 844x390
+PASS all crop atlases, ground and farm buildings use new generated assets 844x390
+PASS three direct task cards 844x390
+PASS task cards 44px and unobscured 844x390
+PASS basket and welcome have distinct art 844x390
+PASS two rendered generated leaf-light projections 844x390
+PASS light occupies the ground, no vertical pillar 844x390
+PASS new generated welcome 1032x1376
+PASS new straw-hat walk sprite >=40 CSS pixels 1032x1376
+PASS all crop atlases, ground and farm buildings use new generated assets 1032x1376
+PASS three direct task cards 1032x1376
+PASS task cards 44px and unobscured 1032x1376
+PASS basket and welcome have distinct art 1032x1376
+PASS two rendered generated leaf-light projections 1032x1376
+PASS light occupies the ground, no vertical pillar 1032x1376
+PASS new generated welcome 1366x600
+PASS new straw-hat walk sprite >=40 CSS pixels 1366x600
+PASS all crop atlases, ground and farm buildings use new generated assets 1366x600
+PASS three direct task cards 1366x600
+PASS task cards 44px and unobscured 1366x600
+PASS basket and welcome have distinct art 1366x600
+PASS two rendered generated leaf-light projections 1366x600
+PASS light occupies the ground, no vertical pillar 1366x600
+PASS no uncaught runtime errors or missing assets
+R83 VERIFIED 116 checks

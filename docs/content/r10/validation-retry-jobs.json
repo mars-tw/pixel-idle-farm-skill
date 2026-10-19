@@ -1,0 +1,14 @@
+[
+  {
+    "script": "scripts/run-content-r10-regression.js",
+    "args": [
+      "--only=test-content-r6-e2e.js,test-content-r7-e2e.js,test-content-r9-e2e.js"
+    ],
+    "exitCode": 0
+  },
+  {
+    "script": "scripts/measure-content-r10.js",
+    "args": [],
+    "exitCode": 0
+  }
+]

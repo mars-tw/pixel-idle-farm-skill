@@ -1,0 +1,53 @@
+{
+  "round": "content-r2",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "merchant",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14fc2-002b-7ee2-b64f-95832a3fd619/exec-d1dcf3c5-7ccf-4d1b-af65-6e244d8d12f5.png",
+      "master": "docs/art/masters/content-r2/merchant.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Production game illustration, WIDE2:1. At a quiet wooden produce stall, LORA, a smiling adult woman with short auburn hair, cream blouse, forest green apron and red gingham headscarf, sits on a wooden stool pulled OUTSIDE the stall. MIRI red twin braids, straw hat with red gingham band, cream shirt and green overalls, offers her a red-gingham wicker basket. TWO teacups on stool-side table and a few purple berries. Full faces visible, waist-up figures, orchard behind. Match the attached reference character identities and right-upper honey sunlight, but make the pixel density COARSER, a true native256x128 game scene enlarged with nearest-neighbor. Chunky readable square pixel clusters, simplified faces, no tiny illustrated texture, NO smooth painterly outlines, earthy exact limited colors, no text, no interface, no borders, no grid. Faces remain recognizable in a 280px-wide phone image, each person occupies one third image height. Crisp one-pixel dark-tea outlines. Full self-contained scene. Image1 is STYLE and identity reference, not edit target.",
+      "references": [
+        "assets/generated/content-r1/merchant.webp"
+      ]
+    },
+    {
+      "id": "elder",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14fc2-002b-7ee2-b64f-95832a3fd619/exec-5159edb3-afd9-45f7-8c88-8e3115be4bd7.png",
+      "master": "docs/art/masters/content-r2/elder.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Production game illustration, WIDE2:1. BAMBER an elderly white-bearded farmer with straw hat green band, cream shirt and brown work overalls, sits at his humble open shed stove and opens a red-gingham wicker basket from MIRI, red twin braids straw hat red band cream shirt green overalls. TWO plates and gently steaming bread between them, repaired fishing rod leaned on wall, resting brown hen lower right. Friendly faces visible, waist-up figures. Match the attached reference character identities and right-upper honey sunlight, but make the pixel density COARSER, a true native256x128 game scene enlarged with nearest-neighbor. Chunky readable square pixel clusters, simplified faces, no tiny illustrated texture, NO smooth painterly outlines, earthy exact limited colors, no text, no interface, no borders, no grid. Faces remain recognizable in a 280px-wide phone image, each person occupies one third image height. Crisp one-pixel dark-tea outlines. Full self-contained scene. Image1 is STYLE and identity reference, not edit target.",
+      "references": [
+        "assets/generated/content-r1/elder.webp"
+      ]
+    },
+    {
+      "id": "child",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14fc2-002b-7ee2-b64f-95832a3fd619/exec-a59abe1d-2f0b-4361-9cc5-edd2e5cf9adc.png",
+      "master": "docs/art/masters/content-r2/child.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Production game illustration, WIDE2:1. TUTU, tousled auburn-haired boy, cream shirt and green overalls, sits LEFT at low picnic table and opens a small notebook with a pressed yellow flower. MIRI, red twin braids straw hat red gingham band cream shirt green overalls, sits RIGHT sharing carrot bread. Large complete EMPTY spare wooden chair foreground center with THIRD plate of bread, red-gingham picnic cloth and wicker basket at right, garden fence, meadow. Both faces visible. Match the attached reference character identities and right-upper honey sunlight, but make the pixel density COARSER, a true native256x128 game scene enlarged with nearest-neighbor. Chunky readable square pixel clusters, simplified faces, no tiny illustrated texture, NO smooth painterly outlines, earthy exact limited colors, no text, no interface, no borders, no grid. Faces remain recognizable in a 280px-wide phone image, each person occupies one third image height. Crisp one-pixel dark-tea outlines. Full self-contained scene. Image1 is STYLE and identity reference, not edit target.",
+      "references": [
+        "assets/generated/content-r1/child.webp"
+      ]
+    },
+    {
+      "id": "river_carp",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14fc2-002b-7ee2-b64f-95832a3fd619/exec-20243036-6e18-4e11-bbe5-7bc05a535537.png",
+      "master": "docs/art/masters/content-r2/river_carp.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Single game river notebook illustration for golden river carp, rounded warm golden body, broad tail and two tiny barbels. Wide 2:1 composition, one whole fish facing left centered above shallow teal-green pond water, tail and fins fully visible, reeds and warm sun at UPPER RIGHT, small wooden dock edge and a red-cream bobber far right. NO humans, no words, no UI, no grid. TRUE coarse pixel art designed at NATIVE 256x128 then integer enlarged, flat discrete square pixels, readable grouped clusters like a 32px sprite game; limited 24-color earthy palette, no fine painterly detail, no smooth contours. The fish is large enough to identify in a 280px phone illustration. Keep style consistent across the three fish notebook images. Not a photoreal animal."
+    },
+    {
+      "id": "silver_dace",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14fc2-002b-7ee2-b64f-95832a3fd619/exec-d72b1ccd-7c11-4e1b-a953-39a8ddbb2f1a.png",
+      "master": "docs/art/masters/content-r2/silver_dace.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Single game river notebook illustration for slender SILVER crucian-like dace fish, cool blue-silver scales, cream belly and thin graceful fins. Wide 2:1 composition, one whole fish facing left centered above shallow teal-green pond water, tail and fins fully visible, reeds and warm sun at UPPER RIGHT, small wooden dock edge and a red-cream bobber far right. NO humans, no words, no UI, no grid. TRUE coarse pixel art designed at NATIVE 256x128 then integer enlarged, flat discrete square pixels, readable grouped clusters like a 32px sprite game; limited 24-color earthy palette, no fine painterly detail, no smooth contours. The fish is large enough to identify in a 280px phone illustration. Keep style consistent across the three fish notebook images. Not a photoreal animal."
+    },
+    {
+      "id": "river_perch",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a14fc2-002b-7ee2-b64f-95832a3fd619/exec-7a7f0d24-f6c9-4cb4-8a6c-982119af7d13.png",
+      "master": "docs/art/masters/content-r2/river_perch.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. Single game river notebook illustration for stream PERCH, olive green back, golden belly, dark vertical stripes and upright spiny dorsal fin. Wide 2:1 composition, one whole fish facing left centered above shallow teal-green pond water, tail and fins fully visible, reeds and warm sun at UPPER RIGHT, small wooden dock edge and a red-cream bobber far right. NO humans, no words, no UI, no grid. TRUE coarse pixel art designed at NATIVE 256x128 then integer enlarged, flat discrete square pixels, readable grouped clusters like a 32px sprite game; limited 24-color earthy palette, no fine painterly detail, no smooth contours. The fish is large enough to identify in a 280px phone illustration. Keep style consistent across the three fish notebook images. Not a photoreal animal."
+    }
+  ]
+}

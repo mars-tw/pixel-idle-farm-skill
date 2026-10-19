@@ -1,0 +1,14 @@
+from pathlib import Path
+R=Path(__file__).resolve().parents[1]
+s=(R/'scripts/audit-content-r12-evidence.js').read_text(encoding='utf-8').replace('docs/content/r12','docs/content/r13').replace('r12-audit-seeded','r13-audit-seeded')
+s=s.replace("const replacement=[];", "const replacement=[];for(const n of ['phone-basket-merchant-received.png','phone-basket-child-received.png']){const dest=path.join(OUT,n.replace('-received','-initial-progress'));if(!fs.existsSync(dest))fs.copyFileSync(path.join(OUT,n),dest);}")
+s=s.replace("await p.evaluate(id=>{window.MOVE_MS=35;ContentR1.openNeighbors(__farm.state(),id);},id);", """await p.evaluate(()=>{window.MOVE_MS=35;__farm.setTool('hand');__farm.clickTile('t7_1');});await p.waitForFunction(()=>__farm.playerTileId()==='t7_1'&&!__farm.moving());await p.evaluate(id=>{window.MOVE_MS=180;ContentR1.openNeighbors(__farm.state(),id);},id);""")
+s=s.replace("await p.locator('#sendNeighbor').click();\nfor(const[phase,name]", """await p.locator('#sendNeighbor').click();await p.locator('.basket-carrying[data-phase=walking]').waitFor();for(let i=1;i<=3;i++){await p.screenshot({path:path.join(OUT,`phone-basket-${id}-walking-${i}.png`)});await p.waitForTimeout(120);}
+for(const[phase,name]""")
+s=s.replace("seq.push(row);}", "seq.push(row);await p.screenshot({path:path.join(OUT,`phone-memory-${id}${taste==='sour'&&id==='child'?'-wrong':''}-${phase}.png`)});}")
+# Record every full real-clock fishing attempt, including late then correct outcome.
+s=s.replace("const c=await b.newContext({viewport:{width:430,height:932},isMobile:true,hasTouch:true,serviceWorkers:'block'});try{const p=await c.newPage(),s=JSON.parse(fs.readFileSync(path.join(OUT,'picnic-base-save.json')));await c.addInitScript", "const c=await b.newContext({viewport:{width:430,height:932},isMobile:true,hasTouch:true,serviceWorkers:'block',recordVideo:{dir:path.join(OUT,'videos'),size:{width:430,height:932}}});try{const p=await c.newPage(),s=JSON.parse(fs.readFileSync(path.join(OUT,'picnic-base-save.json')));await c.addInitScript")
+s=s.replace("},roll);if(id==='river_carp')", """},roll);await p.locator('#worldCatch').click();check(await p.evaluate(()=>Object.values(__farm.state().adventure.catch).every(n=>n===0)),id+': early attempt no reward');await p.locator('#worldCatch').click();if(id==='river_carp')""")
+s=s.replace("await p.screenshot({path:path.join(OUT,'phone-pond-'+id+'-note-reloaded.png')});", """await p.screenshot({path:path.join(OUT,'phone-pond-'+id+'-note-reloaded.png')});const video=p.video();const target=path.join(OUT,'videos',id+'-early-active-late-success.webm');await c.close();await video.saveAs(target);report.fish.at(-1).video=path.relative(ROOT,target).replaceAll('\\\\','/');""")
+(R/'scripts/audit-content-r13-evidence.js').write_text(s,encoding='utf-8')
+print('PREPARED R13 fixed-seat animation audit and real fishing videos')

@@ -1,0 +1,14 @@
+[
+  {
+    "script": "scripts/test-content-r10-e2e.js",
+    "args": [
+      "--continue-offline"
+    ],
+    "exitCode": 0
+  },
+  {
+    "script": "scripts/run-content-r10-regression.js",
+    "args": [],
+    "exitCode": 1
+  }
+]

@@ -1,0 +1,20 @@
+/* R89 native pixels, cream paper and warm highlights. */
+.pond-effects{object-fit:contain}.pond-stage .pond-bobber{visibility:hidden!important}
+.pond-catch{width:192px;max-height:150px;margin:auto;object-fit:contain}
+.catch-receipt{display:flex;gap:10px;align-items:center;border-top:1px solid #b38d61;padding-top:6px;color:#3e2f23}
+.catch-receipt img{width:90px;height:78px;image-rendering:pixelated;object-fit:contain}.catch-receipt p{font-size:14px;line-height:1.6;margin:0}
+#worldModal .keepsake-portrait{height:132px;max-height:132px;width:100%;object-fit:contain;image-rendering:pixelated;margin:4px auto}
+#worldModal:has(.taste-history) .memory-token{display:none}
+.taste-history{border-top:2px solid #b38d61;margin-top:10px}.taste-history h3{font-size:16px;margin:6px 0}.taste-history p{font-size:14px;margin:5px 0;line-height:1.5}
+.taste-history small{display:block;font-size:13px;line-height:1.5;color:#5a3e28;margin:3px 0}
+.memory-story{font-size:14px;margin:6px 0}.memory-story summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#5a3e28;text-decoration:underline}
+.farm-memory .memory-caption{opacity:0;pointer-events:auto}
+.farm-memory:hover .memory-caption,.farm-memory:focus-visible .memory-caption{opacity:1}
+.farm-memory img{filter:drop-shadow(1px 3px 1px #3e2f2344)}
+.farm-gathering::after{opacity:0}.farm-gathering:hover::after,.farm-gathering:focus-visible::after{opacity:1}
+.meal-person{transition:none!important;transform:none!important}
+.meal-layout{display:block;position:absolute;left:50%;top:50%;width:340px;height:285px;transform:translate(-50%,-50%) scale(var(--meal-scale,1));transform-origin:center;pointer-events:none}
+.gather-stage .meal-trace,.farm-gathering .meal-trace{width:76px!important;height:76px!important}
+.gather-stage .meal-trace-child,.farm-gathering .meal-trace-child{width:64px!important;height:64px!important;left:calc(50% + 104px);top:60%}
+@media(max-width:350px){#worldModal .keepsake-portrait{height:100px;max-height:100px}.catch-receipt img{width:64px;height:56px}.catch-receipt p,.taste-history p{font-size:12px}}
+@media(orientation:landscape) and (max-height:600px){#worldModal .keepsake-portrait{float:left;width:32%;height:120px}.taste-history{clear:both}.catch-receipt{clear:both}.pond-catch{float:right;width:35%;height:95px}}

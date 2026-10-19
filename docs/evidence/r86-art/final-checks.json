@@ -1,0 +1,72 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 5.61,
+      "log": "docs/evidence/r86-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 414.97,
+      "log": "docs/evidence/r86-art/logs/e2e.txt"
+    },
+    {
+      "name": "night",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 24.86,
+      "log": "docs/evidence/r86-art/logs/night.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.21,
+      "log": "docs/evidence/r86-art/logs/water-guide.txt"
+    },
+    {
+      "name": "compare",
+      "command": [
+        "node",
+        "scripts/capture-r86-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 7.71,
+      "log": "docs/evidence/r86-art/logs/compare.txt"
+    },
+    {
+      "name": "store",
+      "command": [
+        "node",
+        "scripts/capture-r86-store.js"
+      ],
+      "exitCode": 0,
+      "seconds": 51.54,
+      "log": "docs/evidence/r86-art/logs/store.txt"
+    }
+  ]
+}

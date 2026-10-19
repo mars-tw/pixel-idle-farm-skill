@@ -1,0 +1,43 @@
+/* Real-clock store captures. No inventory, clock, progress or sun-state injection. */
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
+const {chromium}=require('playwright'),{ROOT,serve}=require('./r85-browser-helper');
+const OUT=path.join(ROOT,'docs/evidence/r88-art'),STORE=path.join(ROOT,'docs/store/screenshots');
+const result={status:'EXECUTED',headless:true,clockAccelerated:false,progressInjected:false,cameraOnlyFocus:true,journeys:[],screenshots:[]};
+async function shot(page,name){const header=await page.locator('header').evaluate(e=>{const c=getComputedStyle(e);return{visible:c.display!=='none'&&c.visibility!=='hidden',chips:[...e.querySelectorAll('.res')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,right:r.right,bottom:r.bottom,inView:r.x>=0&&r.y>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1};})};});assert(!header.visible||header.chips.every(c=>c.inView),'resources must be fully shown or fully hidden');await page.locator('img').evaluateAll(es=>Promise.all(es.map(e=>e.decode())));await page.evaluate(()=>new Promise(r=>requestAnimationFrame(r)));const p=path.join(STORE,name+'.png');await page.screenshot({path:p});fs.mkdirSync(path.join(OUT,'store-real'),{recursive:true});fs.copyFileSync(p,path.join(OUT,'store-real',name+'.png'));const visual=await page.evaluate(()=>{const p=document.querySelector('#player').getBoundingClientRect(),b=document.querySelector('#dailyClose').getBoundingClientRect();return{rootHeight:p.height,rootWidth:p.width,portrait:innerHeight>innerWidth,story:document.querySelector('#dailyModal').dataset.story==='true',blankBelowReturn:innerHeight-b.bottom,selected:document.querySelector('.heirloom-choices [aria-pressed="true"]')?.id||null,delivered:FarmHeirloom.status(__farm.state()).delivered};});result.screenshots.push({header,visual,path:path.relative(ROOT,path.join(OUT,'store-real',name+'.png')).replaceAll('\\','/'),candidateStorePath:path.relative(ROOT,p).replaceAll('\\','/'),sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')});}
+async function dismiss(page){if(await page.locator('#worldDialogue').isVisible())await page.locator('#worldDialogue button').click();}
+async function rest(page){await page.waitForFunction(()=>!__farm.moving()&&__farm.playerAction()==='idle');await dismiss(page);}
+async function selectPlot(page,i){const id=await page.evaluate(i=>__farm.state().map.tiles.find(t=>t.plotIndex===i).id,i);await dismiss(page);await page.evaluate(id=>__farm.focusTile(id),id);await page.waitForTimeout(240);const crop=page.locator(`.ob[data-kind="crop"][data-tile-id="${id}"]`);await (await crop.count()?crop:page.locator(`.gtile[data-tile-id="${id}"]`)).tap();return id;}
+async function action(page,i,kind){console.log('STORE input',i,kind);await rest(page);await selectPlot(page,i);await page.locator(`#sceneActionBar button[data-action="${kind}"]`).tap();}
+async function journey(browser,origin,platform,viewport,scale,choice){
+ const context=await browser.newContext({viewport,deviceScaleFactor:scale,hasTouch:true,serviceWorkers:'block'}),began=Date.now(),errors=[];
+ try{
+  const page=await context.newPage();page.on('pageerror',e=>errors.push(String(e)));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
+  await page.goto(origin);await page.waitForFunction(()=>window.__farm&&!document.querySelector('#startupLoading'));await shot(page,platform+'-01-welcome');await page.locator('#worldSunBegin').tap();
+  await page.locator('#questDock [data-world-go]').tap();await page.waitForFunction(()=>__farm.state().plots[0].cropId==='wheat');await rest(page);
+  // Four real sowing inputs provide enough earned harvest for today's wheat seal.
+  for(const i of [1,2,3]){await action(page,i,'plant');await page.waitForFunction(i=>__farm.state().plots[i].cropId==='wheat',i);await rest(page);}
+  await page.waitForFunction(()=>document.querySelector('.sun-beam:not(.caught)'),null,{timeout:9000});await dismiss(page);
+  await page.waitForFunction(()=>{const s=__farm.state(),n=Date.now();return sunpatchStatus(s,n).plots.some(i=>{const a=getCropProgress(s,s.plots[i],n);return s.plots[i].cropId==='wheat'&&a.stage>=1&&!a.ready&&s.plots.slice(0,4).some((p,j)=>{const b=getCropProgress(s,p,n);return !isSunlit(s,j,n)&&p.cropId==='wheat'&&b.stage===a.stage&&(a.stage+1)/4-Math.max(a.ratio,b.ratio)>.1;});});},null,{timeout:12000});
+  const lit=await page.evaluate(()=>{const s=__farm.state(),n=Date.now();return sunpatchStatus(s,n).plots.find(i=>{const a=getCropProgress(s,s.plots[i],n);return s.plots[i].cropId==='wheat'&&a.stage>=1&&!a.ready&&s.plots.slice(0,4).some((p,j)=>{const b=getCropProgress(s,p,n);return !isSunlit(s,j,n)&&p.cropId==='wheat'&&b.stage===a.stage&&(a.stage+1)/4-Math.max(a.ratio,b.ratio)>.1;});});});assert.notEqual(lit,undefined,'same-stage wheat exists inside/outside real sunlight');
+  await action(page,lit,'water');await page.waitForFunction(()=>__farm.playerAction()==='water');await page.waitForTimeout(465);
+  const moment=await page.evaluate(()=>{const s=__farm.state(),n=Date.now();return{action:__farm.playerAction(),frame:getComputedStyle(document.querySelector('#playerSprite')).backgroundPosition,plants:s.plots.slice(0,4).map((p,i)=>({i,crop:p.cropId,ageMs:n-p.plantedAt,stage:getCropProgress(s,p,n).stage,sunlit:isSunlit(s,i,n),inSunlightField:s.sun.plots.includes(i),sunGrown:p.sunGrown===true}))};});assert.equal(moment.action,'water');assert(moment.plants.some(a=>a.inSunlightField&&a.sunGrown),'real light-tended wheat at impact frame');await shot(page,platform+'-02-sunlight');
+  await rest(page);
+  for(const i of [0,1,2,3]){
+   const needs=await page.evaluate(i=>!getCropProgress(__farm.state(),__farm.state().plots[i],Date.now()).wet&&!getCropProgress(__farm.state(),__farm.state().plots[i],Date.now()).ready,i);
+   if(needs){await action(page,i,'water');await rest(page);}
+  }
+  for(const i of [0,1,2,3]){await page.waitForFunction(i=>getCropProgress(__farm.state(),__farm.state().plots[i],Date.now()).ready,i,{timeout:25000});await action(page,i,'harvest');await page.waitForFunction(i=>!__farm.state().plots[i].cropId,i);await rest(page);}
+  const earned=await page.evaluate(()=>({h:FarmHeirloom.status(__farm.state()),daily:FarmDaily.status(__farm.state(),Date.now()),stats:__farm.state().stats}));assert(earned.h.ready&&earned.stats.harvested.wheat>=8&&earned.stats.sunCatches>0,'real earned basket and daily wheat');
+  await page.locator('#dailyOpen').tap();await page.locator('#dailyHeirloom').tap();await page.waitForTimeout(350);await page.locator(choice==='table'?'#heirloomTable':'#heirloomDoorstep').tap();await shot(page,platform+'-03-basket');await page.locator(choice==='table'?'#heirloomTable':'#heirloomDoorstep').tap();await page.waitForFunction(()=>FarmHeirloom.status(__farm.state()).delivered,null,{timeout:20000});await page.waitForSelector('#dailyModal.show');await page.waitForTimeout(400);await shot(page,platform+'-04-note');
+  await page.locator('#dailyClose').tap();
+  await page.evaluate(()=>{const s=__farm.state(),t=s.map.tiles.find(t=>t.npc==='mayor');s.camera.focusTileId=t.id;s.camera.focusUntil=Date.now()+60000;__farm.refresh();});
+  await page.waitForTimeout(3200);await shot(page,platform+'-06-porch');
+  await page.locator('#dailyOpen').tap();
+  for(const id of ['water','harvest','basket']){const b=page.locator(`[data-claim-task="${id}"]`);assert(await b.isVisible(),id+' reward was earned through real play');await b.tap();}
+  await page.waitForTimeout(400);assert.equal(await page.locator('.chore-stamp').count(),3);await shot(page,platform+'-05-daily');assert.equal(errors.length,0,errors.join('\n'));
+  const elapsedMs=Date.now()-began;assert(elapsedMs<180000,'store sequence stays inside first three real minutes');result.journeys.push({platform,viewport,deviceScaleFactor:scale,choice,elapsedMs,realInput:true,progressInjected:false,earned,moment,errors});
+ }finally{await context.close();}
+}
+async function run(){fs.mkdirSync(STORE,{recursive:true});const{server,origin}=await serve();let browser;try{browser=await chromium.launch({headless:true});await journey(browser,origin,'iphone',{width:430,height:932},3,'table');await journey(browser,origin,'ipad',{width:1032,height:1376},2,'doorstep');result.status='VERIFIED';}catch(e){result.status='BLOCKED';result.error=String(e);throw e;}finally{if(browser)await browser.close();await new Promise(r=>server.close(r));fs.writeFileSync(path.join(OUT,'store-journey.json'),JSON.stringify(result,null,2));}console.log('VERIFIED 12 real-input store captures including selected choice, porch and earned stamps');}
+run().catch(e=>{console.error(e);process.exitCode=1;});

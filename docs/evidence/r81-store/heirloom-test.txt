@@ -1,0 +1,18 @@
+PASS old saves do not invent sunlight or a delivered story
+PASS malformed story state is bounded
+PASS starting the route spends no coins and awards no produce
+PASS ordinary wheat cannot unlock the sunlight recipe
+PASS sunlit watering marks this crop; harvest records only at maturity
+PASS planting in sunlight counts; no stale marker on a new planting
+PASS a harvest in active sunlight counts
+PASS sunlit carrots cannot substitute for the wheat task
+PASS full warehouse with zero added produce does not advance recipe
+PASS delivery refuses shortage and consumes nothing
+PASS delivery refuses arbitrary choice and leaves wheat intact
+PASS table spends exactly two wheat once and persists its own note
+PASS doorstep spends exactly two wheat once and persists its own note
+PASS two choices have different remembered responses
+PASS clock rollback and daily rollover cannot replay delivery
+PASS a saved sunlight-touched crop preserves its provenance across reopening
+PASS reopening mid-walk or mid-action clears abandoned callbacks and preserves the physics tile
+R81 heirloom: 17 passed

@@ -1,0 +1,773 @@
+{
+  "status": "EXECUTED",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Tool does not expose a model slug; no API model inferred.",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/character-sheets/miri-r87.png",
+      "sha256": "72ef962a4cc4e6ea25e07711fdb19ae0a2fe242c3443b8faf29ed6c1ae71a1b6",
+      "bytes": 1964159
+    },
+    {
+      "path": "docs/art/masters/r87/walk.png",
+      "sha256": "10888dd6d214910f7fd5d5e409011e9c7ad66500de940a34bc21b7bce756d7e4",
+      "bytes": 2492559
+    },
+    {
+      "path": "docs/art/masters/r87/actions.png",
+      "sha256": "ea75cb7b47dc53d03f95009321603f973d164199dc7820d445762f77b9463259",
+      "bytes": 2393291
+    },
+    {
+      "path": "docs/art/masters/r87/leaf.png",
+      "sha256": "c21e4184635b4e9dc067db8bd21f71e612702cb48eb569874c5378da926802d1",
+      "bytes": 1932425
+    },
+    {
+      "path": "docs/art/masters/r87/terrain.png",
+      "sha256": "34793ba45d0f41af6de724c1af589edda013944a9b89cfdb594c4dac36aa0043",
+      "bytes": 1823243
+    },
+    {
+      "path": "docs/art/masters/r87/tree.png",
+      "sha256": "be8d7f9bd92e1d6cadeedfcd5e4315f4c490ad6bd087eda2421103a2924c83b4",
+      "bytes": 1331315
+    },
+    {
+      "path": "docs/art/masters/r87/panel.png",
+      "sha256": "8b1ecff51d1340af9e0c30af29bcf7dc53855a4a26b8b4903da09fbcaf7e84c8",
+      "bytes": 1614390
+    },
+    {
+      "path": "docs/art/masters/r87/icons.png",
+      "sha256": "02ac6411fbf424ff1e17c79fa70b49e908e3f3adc10c6e4240075e5b130fab49",
+      "bytes": 1848697
+    },
+    {
+      "path": "docs/art/masters/r87/logo.png",
+      "sha256": "6c78a76f66f6023d3cc7048a108691531c1e7b87ef30af14d81761536105feba",
+      "bytes": 1033260
+    },
+    {
+      "path": "docs/art/masters/r87/app.png",
+      "sha256": "b774c0083611a312c2b877d04d4155c05ec93bc6b200fda95734d7a98e56760a",
+      "bytes": 2150707
+    }
+  ],
+  "records": [
+    {
+      "path": "assets/generated/r87/walk.png",
+      "source": "walk",
+      "size": [
+        288,
+        256
+      ],
+      "bytes": 57685,
+      "sha256": "048040ebf202e150d3229212507debe5d03e59a6befad2fd6dd80a581d266950"
+    },
+    {
+      "path": "assets/generated/r87/actions.png",
+      "source": "actions",
+      "size": [
+        432,
+        512
+      ],
+      "bytes": 160456,
+      "sha256": "bd6cd4911520e1b13b5dd8d1d9b74ef97c4e1612fed96f5cfa888b11064ebb3c"
+    },
+    {
+      "path": "assets/generated/r87/farming-actions.png",
+      "source": "actions; 72x64 visual canvas keeps limb reach without shrinking body",
+      "size": [
+        432,
+        512
+      ],
+      "bytes": 160456,
+      "sha256": "bd6cd4911520e1b13b5dd8d1d9b74ef97c4e1612fed96f5cfa888b11064ebb3c"
+    },
+    {
+      "path": "assets/generated/r87/miri-0.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7556,
+      "sha256": "876b013a4e1bfd30a2427851bbf141e79db4b2b5dda7972eeb8ac404b9005e56"
+    },
+    {
+      "path": "assets/generated/r87/miri-1.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7874,
+      "sha256": "9d6ca66c92843e0040b9235c17fa3609bebd379025084d80d706c9591b83a3bb"
+    },
+    {
+      "path": "assets/generated/r87/miri-2.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7912,
+      "sha256": "fae45d80776953829823a73200bcd95cd67477e662bfdc29b1830a6191bec476"
+    },
+    {
+      "path": "assets/generated/r87/terrain.png",
+      "source": "terrain; retained soil/path/water R85",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 6982,
+      "sha256": "1796383ae744139d73819c0161a89de53aa8d1867497eab615dfc59757004de7"
+    },
+    {
+      "path": "assets/generated/r87/apple-tree.png",
+      "source": "tree",
+      "size": [
+        96,
+        112
+      ],
+      "bytes": 10718,
+      "sha256": "2fff5b5b8215576adc246af787a7fce243892308cc08e7e24a0d2dbb19820866"
+    },
+    {
+      "path": "assets/generated/r87/leaf-light.png",
+      "source": "leaf luminance",
+      "size": [
+        192,
+        128
+      ],
+      "bytes": 17457,
+      "sha256": "e8554473936f10aeaae18e8d66c324d2c5297a8534bd2de35f744138e681e9bf"
+    },
+    {
+      "path": "assets/generated/r87/canopy-shadow.png",
+      "source": "leaf inverse luminance",
+      "size": [
+        192,
+        128
+      ],
+      "bytes": 18615,
+      "sha256": "764a4a2096bb12527c2ec9c792de1e8a24d0c73f7b8b5bfe5ce607339fadc455"
+    },
+    {
+      "path": "assets/generated/r87/leaf-ground.png",
+      "source": "leaf combined masks",
+      "size": [
+        192,
+        128
+      ],
+      "bytes": 46042,
+      "sha256": "cda9058409019431cbdc3a989229a779e1581c0b21770430621827ad27ef94b1"
+    },
+    {
+      "path": "assets/generated/r87/paper-128.png",
+      "source": "panel",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 395,
+      "sha256": "ae565eee860c5a324608914f756e5dfc6bb7fea6485b29e9ce2bdacaed8e4984"
+    },
+    {
+      "path": "assets/generated/r87/binding-8.png",
+      "source": "panel woven strip",
+      "size": [
+        8,
+        128
+      ],
+      "bytes": 1270,
+      "sha256": "6ba996ac06e3f93c2173354314cabf1567cfba90628002dc14181dcd1df5a177"
+    },
+    {
+      "path": "assets/generated/r87/wheat-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1533,
+      "sha256": "26d5734625247c95ab07edd688d65a5ffa4018fa5e3c8589e6baa694cc242fa7"
+    },
+    {
+      "path": "assets/generated/r87/basket-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1312,
+      "sha256": "c13021efe3e8ed862f338521939e61c4d956b8f6a35896a050d3c242601de42a"
+    },
+    {
+      "path": "assets/generated/r87/water-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1049,
+      "sha256": "3546c2abbb3ba7895d9fe4b6b8a521489c173c04e8a12384e077df4f97967d60"
+    },
+    {
+      "path": "assets/generated/r87/note-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 944,
+      "sha256": "c43eb6c236b92d109dc95ab81a42571f353b5fcc9220f35175063c172b991ae2"
+    },
+    {
+      "path": "assets/generated/r87/hat-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1194,
+      "sha256": "3fa78acc6d98d1182adfb882c4e139093daf7aabbd691ef0c30c726c8aa22310"
+    },
+    {
+      "path": "assets/generated/r87/sprout-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 770,
+      "sha256": "2b7912cd37e1fb54441e94d149ec990368a856a313d39cab527767e87836c539"
+    },
+    {
+      "path": "assets/generated/r87/logo-320.png",
+      "source": "logo",
+      "size": [
+        320,
+        112
+      ],
+      "bytes": 19270,
+      "sha256": "c5a4b70f81e466d5d0c2f67bdc882ba777efc5ff59f2f725e3bb77515590f9ad"
+    },
+    {
+      "path": "assets/generated/r87/app-icon-64.png",
+      "source": "app",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 10565,
+      "sha256": "7161328cb3a11eb3d708c9e01551e7712140da0142909d576a8ef08e0f13a25e"
+    },
+    {
+      "path": "assets/generated/r87/app-icon-192.png",
+      "source": "app",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 10706,
+      "sha256": "87f8ecf084b519410e5715352e51c6b56088d0ef125be6e03aaee30bcb5e27a7"
+    },
+    {
+      "path": "assets/generated/r87/app-icon-512.png",
+      "source": "app",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 15549,
+      "sha256": "142eca7ceb00f34aa642e8df159bddfba01c8f7aed416bbc45a75e0ccf545aae"
+    }
+  ],
+  "frameReceipts": [
+    {
+      "sheet": "walk",
+      "row": 0,
+      "hashes": [
+        "af138f29ce4cb8dd5e9420e3ad41c8061900781a1394f78f891540e80848a444",
+        "1a7ba6066b7a3085febb7b08f0fd6e0f0ae12e8afa7fc34c853be3b17f00ab22",
+        "316e7457c8dc3f3cee4f1ae02da9003624d655099b1be1daec57c0522fc6d53c",
+        "bb8914cfc5ac886e4964f42aafa802d064b4bc4400659a077f338655628b0317",
+        "03550835125650b76d4a73c64595a22042226e58a2be1717ded810f951639871",
+        "af77d3488b4f55d66bed3f5f05192e4cd41befdd7810024a579ea97d8c9f58c9"
+      ],
+      "alphaDifferences": [
+        0.024739583333333332,
+        0.020833333333333332,
+        0.032877604166666664,
+        0.01953125,
+        0.023111979166666668
+      ],
+      "lowerBodyChangedFraction": 0.16389973958333334
+    },
+    {
+      "sheet": "walk",
+      "row": 1,
+      "hashes": [
+        "896b35971f9918f8b5239d6d18a2d9ca953a99b586dd0fca2aae4715c79315eb",
+        "61b84e6218552f6daeb31a27ac3ba0fbd97a8840b869d55d54f0edde897c0310",
+        "69ff00893338f8ab7d571b76960a81ae0274002a1b61ae8948b7ad0dd83e2240",
+        "bb95f3d4f09703ec8f2b83877c29a1f39d239b28938d44021d521cf8ff995cf2",
+        "9f2472a2519751a3a107b5d8ad3dbc127877c52d181a6c63c5c8065124694562",
+        "1d7e8da2c9811c5c9a867385b877a86d24099738cd67409762042a1c91da4db7"
+      ],
+      "alphaDifferences": [
+        0.07649739583333333,
+        0.095703125,
+        0.06705729166666667,
+        0.06673177083333333,
+        0.0751953125
+      ],
+      "lowerBodyChangedFraction": 0.2740885416666667
+    },
+    {
+      "sheet": "walk",
+      "row": 2,
+      "hashes": [
+        "0a6a7df86fa81900cedad99578f38c183c3c11ac30623a4bde16e8ac991c2b49",
+        "0de9b3c62af40b744052bc3d421fe1df5c8d32a1dd241c93b2d17ddbdb8c0356",
+        "03fc12f1ea96e793c67b7ff3522fd932e8c1bd902d6e9d76f0f635431e69d2b9",
+        "8012bf2eb0a37e4e7a75676cdc8671b2c1df7ff49e98812bcffde779ffcffede",
+        "e8d2301257f81959c5ba13602014ca3764be9b7cc2a5711cf2dd705dc1098fea",
+        "15516df161093bb7bf8c3494386789dce30288427fe8e873c01660ce46dd1b5b"
+      ],
+      "alphaDifferences": [
+        0.07682291666666667,
+        0.042317708333333336,
+        0.10416666666666667,
+        0.055989583333333336,
+        0.08984375
+      ],
+      "lowerBodyChangedFraction": 0.3089192708333333
+    },
+    {
+      "sheet": "walk",
+      "row": 3,
+      "hashes": [
+        "31a92803d318662ffc2d7e4572f775f0c141c4d5627ec02e4ad571d194b56e7b",
+        "ed7c5f98d6b93dc7a16d147ab740b82ea76352e3be96e89deec3e3c21161240f",
+        "dc200b2966168737b953a4eb2bd5d1f628a33a9d609dfa551c2acd57803df367",
+        "4a0a764310cc1f297aadfa4457237908897bd80a388cda925bd777277b222e3f",
+        "5a11dc6511401a7cd4cbb8b2f42cfe3fe6ad9794103f0bc435f05aa8869c30b6",
+        "852b3955a6b23fefe43fe781c25f6fda29c8c7f24c32f98f0cf45c722d44b1bd"
+      ],
+      "alphaDifferences": [
+        0.038736979166666664,
+        0.029622395833333332,
+        0.043294270833333336,
+        0.034505208333333336,
+        0.026692708333333332
+      ],
+      "lowerBodyChangedFraction": 0.17171223958333334
+    },
+    {
+      "sheet": "actions",
+      "row": 0,
+      "hashes": [
+        "194cb271ae14d9a14b40b80a6f8e7be36c9544814b85fd1466351c9dd85bc16b",
+        "ab57598fb7f2a60a92eab7bafde0059a7a878e2dd53ce0211bd43143c638c1b2",
+        "df42e9b8667e73740d77f0f3c44efc9cb8d355cbdd18a53880c11aa37e153222",
+        "3a675c2b247179c77db205e31f3d5a87f70ab4058c6750046a6ebaa2532ebcd8",
+        "74ebffe7728fdc4f974f893f85d9bf71e64ffa87d3f1f7b225ef54b206a78ece",
+        "3b1997499130f1837bed37e4ade07dc84bda4b77b4fe1e503892a22e0d587a54"
+      ],
+      "alphaDifferences": [
+        0.123046875,
+        0.10655381944444445,
+        0.12174479166666667,
+        0.19661458333333334,
+        0.042534722222222224
+      ],
+      "lowerBodyChangedFraction": 0.3568793402777778
+    },
+    {
+      "sheet": "actions",
+      "row": 1,
+      "hashes": [
+        "89b8dce9261fb12475e08c1940bdaa400a2dc56d8d227a971c0e18345b0c9534",
+        "1de4918a16c9e74a160f6221f5b31547485f2e902fe0305b93c1c6741fde0276",
+        "23d853709386f8b7dbe5287d1f18febb3dacc4483b37632a09738b15ae825a2d",
+        "d5a0c51d40da405d7984097c94c72ef1297c0a0a87c528f7f03e5f82247abdc9",
+        "8870b62505b0adcc0a1ed13f3334d9f62b76129e29fd29be041038d765880573",
+        "d2967645505356d9bf45c56e99333c12af4fbe1ca0247f90f3b64d284af559a1"
+      ],
+      "alphaDifferences": [
+        0.126953125,
+        0.13997395833333334,
+        0.14735243055555555,
+        0.1154513888888889,
+        0.07335069444444445
+      ],
+      "lowerBodyChangedFraction": 0.3879123263888889
+    },
+    {
+      "sheet": "actions",
+      "row": 2,
+      "hashes": [
+        "c6374b6e50d9092b05b7164db811c6b8681195a72747cf876b4d2b9e3044d2de",
+        "7b20bc77a1ee21bdbcde86fd561a08f737650f5deda167651a09dac031782748",
+        "31e6aa8f765267366368b856f914c3ff32dde9fc90d370570b748bfd1b49ecca",
+        "0d19fd7dc71bbef34cea846cb2dd4000b427d5378a1350e614fbf374cf3cf4a0",
+        "df228554011f63ac6dd37a215e91270e5eb7bf23a646498fbbabdf13ace34923",
+        "8d24532fc59558f74f673c6327d3dece407bf761b5982b44cefb75b82d9f7e28"
+      ],
+      "alphaDifferences": [
+        0.12760416666666666,
+        0.04861111111111111,
+        0.07074652777777778,
+        0.1310763888888889,
+        0.07747395833333333
+      ],
+      "lowerBodyChangedFraction": 0.4078776041666667
+    },
+    {
+      "sheet": "actions",
+      "row": 3,
+      "hashes": [
+        "bf31c4a7ae47e3fe89a6e77047e710c62bdf52433ff6977f9f042d9b5094897d",
+        "78f57f67fc6595a54d47cac2bb8c640328b0e6a97cd10497f0b287c4f93e485f",
+        "40581480746c2e00b7c3b596dccc6694305c998a60a75009d5259f8fa7791a12",
+        "c5d561c93fa78c2c9f1dc5e2692775cf2ea489bbd4e935520981352073804892",
+        "5743d7b3a480f130489a04372ba79878d16b650e9ec8b05a4984f2b70dddbded",
+        "51ca8fe380f60e49bbbf98e757d41e712e358d5f0baec0257bda44a5bd17b2bc"
+      ],
+      "alphaDifferences": [
+        0.1015625,
+        0.076171875,
+        0.1312934027777778,
+        0.0900607638888889,
+        0.031684027777777776
+      ],
+      "lowerBodyChangedFraction": 0.3013237847222222
+    },
+    {
+      "sheet": "actions",
+      "row": 4,
+      "hashes": [
+        "83f68f67f959a96cc78c00359b2e7707be19bc7d8160f815768a51c87b3d22c2",
+        "d3e26b55acfc89af014e3224eca17b939b31407f3f88cc4b5fbaa3fc08f8b563",
+        "e66fd6374a0cad60ad8c6b58b2ebd49f3e5e24bf620fb3055710ead2b1ed859d",
+        "244053e2fb2aad7dd25cf60d353e00490a0d96144274627ff38e9b1885431d27",
+        "e3528961c4de0685d275598ba6e107b0ff4d8789ef13576a14a5b99fb845edab",
+        "f5afbfce7efb5a597e733ad19d332ba99597ec883967239f4ccca8c66f2b74c9"
+      ],
+      "alphaDifferences": [
+        0.2055121527777778,
+        0.13411458333333334,
+        0.05360243055555555,
+        0.2144097222222222,
+        0.1306423611111111
+      ],
+      "lowerBodyChangedFraction": 0.4291449652777778
+    },
+    {
+      "sheet": "actions",
+      "row": 5,
+      "hashes": [
+        "1f1f47b371fb837c4e5424164d405ec07a47b536f3f6243589ee4eb4cc07cc37",
+        "efa2b6ff010533d18f6cbd057e77d2da91a93a7d13de047be6b36c042414d337",
+        "90d587811f643bbe208b32f33f7e1060fb790a6536d06d2a4e79a564410242a4",
+        "bdfc5cd14384a455f529670cf7a50e8d2b312dd46a88115caf582708bf74462a",
+        "46ec17599a3cc233609dc9047149f3b005582f4d6f6c2afb2494cfffb1b5c871",
+        "631439154eca70cc31430bab415264e9a079da8d7500b93adc4dd4245fb44047"
+      ],
+      "alphaDifferences": [
+        0.17513020833333334,
+        0.181640625,
+        0.05967881944444445,
+        0.2918836805555556,
+        0.1597222222222222
+      ],
+      "lowerBodyChangedFraction": 0.4290364583333333
+    },
+    {
+      "sheet": "actions",
+      "row": 6,
+      "hashes": [
+        "4d4dd05eec1a9e057177d1752dd8f51d4806179a8e47ef190022093caeb25fd1",
+        "d83df981475886ac23e766e5c459bcc313418c236c0c054224de8e6e2d9b3c3d",
+        "b9b67fedafd465fd59fc17f8e4103c24c9c436828b4e335d666c39cdc3cca594",
+        "03e4ff876cf1a2f7733cdd8ea6b538eb9a328d15493bce153321440b6f504c6f",
+        "bbb27cae6342399bfee2e61557a784caf25b301235003b9e24e2ef2d7968e5fb",
+        "7f51459652d09810fabf91d0711b4ffa0f71f91985d5d541f03cb19811f685f2"
+      ],
+      "alphaDifferences": [
+        0.1753472222222222,
+        0.1820746527777778,
+        0.060112847222222224,
+        0.2801649305555556,
+        0.1597222222222222
+      ],
+      "lowerBodyChangedFraction": 0.4292534722222222
+    },
+    {
+      "sheet": "actions",
+      "row": 7,
+      "hashes": [
+        "f25e8ccb37e12f52594bdbd83426c48f595089817d72e513bb014f57debe2bc7",
+        "d4493ec870a3bb5ff7d4ef1546fb686f5321ab343aeb768321b6f7a42a06ed83",
+        "b1632f2aca3bef4864a6cf26e76458bcb04ef0b80339b27f2042ebb60e494f1a",
+        "592f9845cbfb17b93ad922234c8bfc0f36cd921b25fb9106adb34b1ebe6ab52b",
+        "b374a6b51df8328872421bc2de85d33a9f884e0ca492c1195131f9c59003c3b5",
+        "f7f4cb8318e4c2322aa6d2e3db4569e74c5dfa0baac1895ae369575893a338e3"
+      ],
+      "alphaDifferences": [
+        0.14518229166666666,
+        0.072265625,
+        0.0740017361111111,
+        0.1773003472222222,
+        0.1032986111111111
+      ],
+      "lowerBodyChangedFraction": 0.3245442708333333
+    }
+  ],
+  "qualityMetrics": {
+    "assets/generated/r87/walk.png": {
+      "brightness": 0.42709364826596885,
+      "nearBlackFraction": 0,
+      "saturation": 0.5224436986606565,
+      "lowSaturationFraction": 0.02719797596457938,
+      "gatePass": true
+    },
+    "assets/generated/r87/actions.png": {
+      "brightness": 0.4071682154271302,
+      "nearBlackFraction": 0,
+      "saturation": 0.5395301296984997,
+      "lowSaturationFraction": 0.01998846819142802,
+      "gatePass": true
+    },
+    "assets/generated/r87/farming-actions.png": {
+      "brightness": 0.4071682154271302,
+      "nearBlackFraction": 0,
+      "saturation": 0.5395301296984997,
+      "lowSaturationFraction": 0.01998846819142802,
+      "gatePass": true
+    },
+    "assets/generated/r87/miri-0.png": {
+      "brightness": 0.4768111381220032,
+      "nearBlackFraction": 0,
+      "saturation": 0.5462070922237696,
+      "lowSaturationFraction": 0.03395630429060279,
+      "gatePass": true
+    },
+    "assets/generated/r87/miri-1.png": {
+      "brightness": 0.5078213847065057,
+      "nearBlackFraction": 0,
+      "saturation": 0.5391171326713936,
+      "lowSaturationFraction": 0.04689984101748808,
+      "gatePass": true
+    },
+    "assets/generated/r87/miri-2.png": {
+      "brightness": 0.4900232425629408,
+      "nearBlackFraction": 0,
+      "saturation": 0.5482736260139444,
+      "lowSaturationFraction": 0.0335341891537857,
+      "gatePass": true
+    },
+    "assets/generated/r87/terrain.png": {
+      "brightness": 0.49775278621824004,
+      "nearBlackFraction": 0,
+      "saturation": 0.5032598161508771,
+      "lowSaturationFraction": 0.0006276241180799031,
+      "gatePass": true
+    },
+    "assets/generated/r87/apple-tree.png": {
+      "brightness": 0.3912741643005668,
+      "nearBlackFraction": 0,
+      "saturation": 0.45517008204829823,
+      "lowSaturationFraction": 0,
+      "gatePass": true
+    },
+    "assets/generated/r87/leaf-light.png": {
+      "brightness": 0.9043733333333333,
+      "nearBlackFraction": 0,
+      "saturation": 0.3921568627450981,
+      "lowSaturationFraction": 0,
+      "gatePass": false
+    },
+    "assets/generated/r87/canopy-shadow.png": {
+      "brightness": 0.2146290196078431,
+      "nearBlackFraction": 0,
+      "saturation": 0.40983606557377045,
+      "lowSaturationFraction": 0,
+      "gatePass": false
+    },
+    "assets/generated/r87/leaf-ground.png": {
+      "brightness": 0.5325316176983882,
+      "nearBlackFraction": 0,
+      "saturation": 0.37384405080115823,
+      "lowSaturationFraction": 0,
+      "gatePass": true
+    },
+    "assets/generated/r87/paper-128.png": {
+      "brightness": 0.9580410546875,
+      "nearBlackFraction": 0,
+      "saturation": 0.15294774159663868,
+      "lowSaturationFraction": 1,
+      "gatePass": false
+    },
+    "assets/generated/r87/binding-8.png": {
+      "brightness": 0.6733733632046568,
+      "nearBlackFraction": 0,
+      "saturation": 0.4606168877739076,
+      "lowSaturationFraction": 0.2958984375,
+      "gatePass": false
+    },
+    "assets/generated/r87/wheat-32.png": {
+      "brightness": 0.46963285440857466,
+      "nearBlackFraction": 0,
+      "saturation": 0.5713176955455288,
+      "lowSaturationFraction": 0,
+      "gatePass": true
+    },
+    "assets/generated/r87/basket-32.png": {
+      "brightness": 0.391592047597665,
+      "nearBlackFraction": 0,
+      "saturation": 0.6057234323649723,
+      "lowSaturationFraction": 0.0019083969465648854,
+      "gatePass": true
+    },
+    "assets/generated/r87/water-32.png": {
+      "brightness": 0.3792156379414511,
+      "nearBlackFraction": 0,
+      "saturation": 0.5894050663834979,
+      "lowSaturationFraction": 0,
+      "gatePass": true
+    },
+    "assets/generated/r87/note-32.png": {
+      "brightness": 0.6958891911764705,
+      "nearBlackFraction": 0,
+      "saturation": 0.3581627123898925,
+      "lowSaturationFraction": 0.5066964285714286,
+      "gatePass": false
+    },
+    "assets/generated/r87/hat-32.png": {
+      "brightness": 0.5248539831932773,
+      "nearBlackFraction": 0,
+      "saturation": 0.6251049923944081,
+      "lowSaturationFraction": 0,
+      "gatePass": true
+    },
+    "assets/generated/r87/sprout-32.png": {
+      "brightness": 0.4500340204457852,
+      "nearBlackFraction": 0,
+      "saturation": 0.525280874504959,
+      "lowSaturationFraction": 0,
+      "gatePass": true
+    },
+    "assets/generated/r87/logo-320.png": {
+      "brightness": 0.5078358970210609,
+      "nearBlackFraction": 0,
+      "saturation": 0.5646974458591626,
+      "lowSaturationFraction": 0.009677213981027567,
+      "gatePass": true
+    },
+    "assets/generated/r87/app-icon-64.png": {
+      "brightness": 0.5370699578737745,
+      "nearBlackFraction": 0,
+      "saturation": 0.5502916419434596,
+      "lowSaturationFraction": 0.034423828125,
+      "gatePass": true
+    },
+    "assets/generated/r87/app-icon-192.png": {
+      "brightness": 0.5370699578737744,
+      "nearBlackFraction": 0,
+      "saturation": 0.5502916419434596,
+      "lowSaturationFraction": 0.034423828125,
+      "gatePass": true
+    },
+    "assets/generated/r87/app-icon-512.png": {
+      "brightness": 0.5370699578737745,
+      "nearBlackFraction": 0,
+      "saturation": 0.5502916419434596,
+      "lowSaturationFraction": 0.034423828125,
+      "gatePass": true
+    }
+  },
+  "runtimeBytes": 566310,
+  "pipeline": "Tool true alpha -> threshold and zero transparent RGB; connected exterior cream mask for portraits. Shared 74 colors, native48x64 walk and72x64 action, actual six limb poses, complete-row reordering/mirroring. Generated leaf luminance masks preserve penumbra. Original soil/path, axe/build and licenses retained."
+}

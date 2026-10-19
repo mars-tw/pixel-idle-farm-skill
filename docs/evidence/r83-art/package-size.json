@@ -1,0 +1,9 @@
+{
+  "generatedImageBytes": 902562,
+  "newRuntimeFilesBytes": 995555,
+  "modifiedRuntimeDeltaBytes": 7341,
+  "totalRuntimeIncreaseBytes": 1002896,
+  "masterBytes": 33656042,
+  "webScope": "Existing CI copies src/assets and runtime entry files; docs, masters and comparison captures are excluded.",
+  "nativePackage": "BLOCKED: no IPA/AAB rebuilt"
+}

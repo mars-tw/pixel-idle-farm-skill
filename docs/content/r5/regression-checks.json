@@ -1,0 +1,53 @@
+[
+  {
+    "name": "npm-test",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 8.83,
+    "cwd": ".audit-tmp/content-r5-validation",
+    "log": "docs/content/r5/logs/npm-test.txt"
+  },
+  {
+    "name": "browser-gates",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "run",
+      "test:e2e"
+    ],
+    "exitCode": 0,
+    "seconds": 1253.27,
+    "cwd": ".audit-tmp/content-r5-validation",
+    "log": "docs/content/r5/logs/browser-gates.txt"
+  },
+  {
+    "name": "water-guide",
+    "command": [
+      "node",
+      "scripts/test-water-quest-guide.js"
+    ],
+    "exitCode": 0,
+    "seconds": 12.65,
+    "cwd": ".audit-tmp/content-r5-validation",
+    "log": "docs/content/r5/logs/water-guide.txt"
+  },
+  {
+    "name": "night-gate",
+    "command": [
+      "node",
+      "scripts/test-r72-night-gate.js"
+    ],
+    "exitCode": 0,
+    "seconds": 26.14,
+    "cwd": ".audit-tmp/content-r5-validation",
+    "log": "docs/content/r5/logs/night-gate.txt"
+  }
+]

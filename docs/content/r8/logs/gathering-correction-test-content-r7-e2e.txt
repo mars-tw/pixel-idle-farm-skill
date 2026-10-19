@@ -1,0 +1,165 @@
+PASS cancelled basket preserves all bread and stops the real journey
+PASS cancel retains every ingredient exactly
+PASS cancel retains bread after actual reload
+PASS 430 merchant single strip, marker+arrow+cancel; usable world >=60% {"area":0.9127657450843397,"hidden":true,"cancel":true,"marker":true,"label":"蘿拉","arrow":true,"onlyRow":true}
+PASS merchant 430 taken/halfway show actual locomotion
+PASS merchant no resources spent before receiver impact 430
+PASS merchant contact shows one physical parcel, no floating basket marker
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant recall does not reveal taste
+PASS merchant no resources spent before receiver impact 430
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant wrong reaction leaves context instead of answer
+PASS merchant no resources spent before receiver impact 430
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant distinct success token
+PASS merchant world keepsake physically present
+PASS 430 elder single strip, marker+arrow+cancel; usable world >=60% {"area":0.9127657450843397,"hidden":true,"cancel":true,"marker":true,"label":"班伯","arrow":true,"onlyRow":true}
+PASS elder 430 taken/halfway show actual locomotion
+PASS elder no resources spent before receiver impact 430
+PASS elder contact shows one physical parcel, no floating basket marker
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 430
+PASS elder recall does not reveal taste
+PASS elder no resources spent before receiver impact 430
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 430
+PASS elder wrong reaction leaves context instead of answer
+PASS elder no resources spent before receiver impact 430
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 430
+PASS elder distinct success token
+PASS elder world keepsake physically present
+PASS 430 child single strip, marker+arrow+cancel; usable world >=60% {"area":0.9127657450843397,"hidden":true,"cancel":true,"marker":true,"label":"圖圖","arrow":true,"onlyRow":true}
+PASS child 430 taken/halfway show actual locomotion
+PASS child no resources spent before receiver impact 430
+PASS child contact shows one physical parcel, no floating basket marker
+PASS child parcel transferred to receiver image once
+PASS child receiver and player have separate readable visual positions 430
+PASS child exact bread/ingredient deduction at contact 430
+PASS child recall does not reveal taste
+PASS child no resources spent before receiver impact 430
+PASS child parcel transferred to receiver image once
+PASS child exact bread/ingredient deduction at contact 430
+PASS child wrong reaction leaves context instead of answer
+PASS child no resources spent before receiver impact 430
+PASS child parcel transferred to receiver image once
+PASS child exact bread/ingredient deduction at contact 430
+PASS child distinct success token
+PASS child world keepsake physically present
+PASS child and player remain separately readable after returning to farm
+PASS merchant personal title from clicked world keepsake
+PASS elder personal title from clicked world keepsake
+PASS child personal title from clicked world keepsake
+PASS nine actual gifts survive reload
+PASS 320 merchant bottom visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":268,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":268,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 320 merchant bottom no keyboard instructions
+PASS merchant selection remains at bottom
+PASS 320 merchant single strip, marker+arrow+cancel; usable world >=60% {"area":0.8415492957746479,"hidden":true,"cancel":true,"marker":true,"label":"蘿拉","arrow":true,"onlyRow":true}
+PASS merchant 320 taken/halfway show actual locomotion
+PASS merchant no resources spent before receiver impact 320
+PASS merchant contact shows one physical parcel, no floating basket marker
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 320
+PASS 320 elder bottom visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":268,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":268,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 320 elder bottom no keyboard instructions
+PASS elder selection remains at bottom
+PASS 320 elder single strip, marker+arrow+cancel; usable world >=60% {"area":0.8415492957746479,"hidden":true,"cancel":true,"marker":true,"label":"班伯","arrow":true,"onlyRow":true}
+PASS elder 320 taken/halfway show actual locomotion
+PASS elder no resources spent before receiver impact 320
+PASS elder contact shows one physical parcel, no floating basket marker
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 320
+PASS 320 child bottom visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":268,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":268,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 320 child bottom no keyboard instructions
+PASS child selection remains at bottom
+PASS 320 child single strip, marker+arrow+cancel; usable world >=60% {"area":0.8415492957746479,"hidden":true,"cancel":true,"marker":true,"label":"圖圖","arrow":true,"onlyRow":true}
+PASS child 320 taken/halfway show actual locomotion
+PASS child no resources spent before receiver impact 320
+PASS child contact shows one physical parcel, no floating basket marker
+PASS child parcel transferred to receiver image once
+PASS child receiver and player have separate readable visual positions 320
+PASS child exact bread/ingredient deduction at contact 320
+PASS 320 world keepsake targets >=44 screen pixels
+PASS plain unique generated ingredients
+PASS sweet unique generated ingredients
+PASS sour unique generated ingredients
+PASS hot unique generated ingredients
+PASS 430 merchant bottom visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":370,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":370,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 430 merchant bottom no keyboard instructions
+PASS merchant selection remains at bottom
+PASS 430 elder bottom visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":370,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":370,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 430 elder bottom no keyboard instructions
+PASS elder selection remains at bottom
+PASS 430 child bottom visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":370,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":370,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 430 child bottom no keyboard instructions
+PASS child selection remains at bottom
+PASS 430 world keepsake targets >=44 screen pixels
+PASS plain unique generated ingredients
+PASS sweet unique generated ingredients
+PASS sour unique generated ingredients
+PASS hot unique generated ingredients
+PASS 844 world keepsake targets >=44 screen pixels
+PASS 844x390 basket visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":688,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":225.328125,"h":48,"view":true,"hit":true,"overflow":false},{"id":"readNeighbor","w":225.34375,"h":48,"view":true,"hit":true,"overflow":false},{"id":"recallNeighbor","w":225.328125,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 844x390 basket no keyboard instructions
+PASS 768 world keepsake targets >=44 screen pixels
+PASS 768x1024 basket visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":604,"h":49,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":197.328125,"h":48,"view":true,"hit":true,"overflow":false},{"id":"readNeighbor","w":197.34375,"h":48,"view":true,"hit":true,"overflow":false},{"id":"recallNeighbor","w":197.328125,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 768x1024 basket no keyboard instructions
+PASS 1366 world keepsake targets >=44 screen pixels
+PASS 1366x600 basket visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"sendNeighbor","w":688,"h":48,"view":true,"hit":true,"overflow":false},{"id":"basketKitchen","w":225.328125,"h":48,"view":true,"hit":true,"overflow":false},{"id":"readNeighbor","w":225.34375,"h":48,"view":true,"hit":true,"overflow":false},{"id":"recallNeighbor","w":225.328125,"h":48,"view":true,"hit":true,"overflow":false}]
+PASS 1366x600 basket no keyboard instructions
+PASS 320 behind farmhouse keeps real depth order with faded roof
+PASS 320 actor root remains behind building
+PASS 430 behind farmhouse keeps real depth order with faded roof
+PASS 430 actor root remains behind building
+PASS merchant gathering basket actually packed once
+PASS merchant no duplicate packing
+PASS elder gathering basket actually packed once
+PASS elder no duplicate packing
+PASS child gathering basket actually packed once
+PASS child no duplicate packing
+PASS three separately saved baskets reopen ready
+PASS three distinct story pictures and flavor/detail summaries
+PASS three actual seated sprites in map
+PASS permanent gathering table survives reload
+PASS farm table reopens actual completed gathering
+PASS 320x568 gathering visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"packGathering","w":100,"h":58,"view":true,"hit":true,"overflow":false},{"id":"goGathering","w":100,"h":58,"view":true,"hit":true,"overflow":false},{"id":"gatherKitchen","w":56,"h":58,"view":true,"hit":true,"overflow":false}]
+PASS 320x568 gathering no keyboard instructions
+PASS 844x390 gathering visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"packGathering","w":264.796875,"h":44,"view":true,"hit":true,"overflow":false},{"id":"goGathering","w":264.796875,"h":44,"view":true,"hit":true,"overflow":false},{"id":"gatherKitchen","w":142.40625,"h":44,"view":true,"hit":true,"overflow":false}]
+PASS 844x390 gathering no keyboard instructions
+PASS 768x1024 gathering visible/hittable >=44px controls, no clipped labels [{"id":"","w":44,"h":44,"view":true,"hit":true,"overflow":false},{"id":"packGathering","w":231.203125,"h":49,"view":true,"hit":true,"overflow":false},{"id":"goGathering","w":231.203125,"h":49,"view":true,"hit":true,"overflow":false},{"id":"gatherKitchen","w":125.59375,"h":49,"view":true,"hit":true,"overflow":false}]
+PASS 768x1024 gathering no keyboard instructions
+PASS river_carp premature real click grants nothing
+PASS river_carp early/impact button color and label identical; decision comes from water
+PASS river_carp actual water timing catches one and earns note
+PASS river_carp catch/note saved
+PASS river_carp learned reload no fish name or rhythm answer
+PASS no live seconds to memorize
+PASS silver_dace premature real click grants nothing
+PASS silver_dace early/impact button color and label identical; decision comes from water
+PASS silver_dace actual water timing catches one and earns note
+PASS silver_dace catch/note saved
+PASS silver_dace learned reload no fish name or rhythm answer
+PASS no live seconds to memorize
+PASS river_perch premature real click grants nothing
+PASS river_perch early/impact button color and label identical; decision comes from water
+PASS river_perch actual water timing catches one and earns note
+PASS river_perch catch/note saved
+PASS river_perch learned reload no fish name or rhythm answer
+PASS no live seconds to memorize
+PASS PWA completion flag follows actual replacement page load
+PASS all fourteen R7 pose sprites precached
+PASS offline reload first opening gathering has all real game actors
+PASS quiet water decodes on first pond visit while fully offline
+PASS all three residents have actual moving taken/halfway evidence
+PASS delivery walks through distinct actual limb frames
+PASS river_carp pre-sink mask is same real phase
+PASS river_carp sinking mask is same real phase
+PASS silver_dace pre-sink mask is same real phase
+PASS silver_dace sinking mask is same real phase
+PASS river_perch pre-sink mask is same real phase
+PASS river_perch sinking mask is same real phase
+PASS no browser page errors

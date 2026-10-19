@@ -1,0 +1,242 @@
+{
+  "status": "VERIFIED",
+  "adultNativeHeightDelta": 0,
+  "elderBBox": [
+    2,
+    2,
+    45,
+    62
+  ],
+  "mayorBBox": [
+    6,
+    2,
+    41,
+    62
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r10/river_carp-0.png",
+      "bbox": [
+        0,
+        24,
+        60,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/river_carp-1.png",
+      "bbox": [
+        0,
+        25,
+        60,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/river_carp-2.png",
+      "bbox": [
+        0,
+        12,
+        60,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/silver_dace-0.png",
+      "bbox": [
+        10,
+        0,
+        50,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/silver_dace-1.png",
+      "bbox": [
+        14,
+        0,
+        45,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/silver_dace-2.png",
+      "bbox": [
+        11,
+        0,
+        48,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/river_perch-0.png",
+      "bbox": [
+        5,
+        0,
+        54,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/river_perch-1.png",
+      "bbox": [
+        6,
+        0,
+        53,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/river_perch-2.png",
+      "bbox": [
+        0,
+        25,
+        60,
+        52
+      ],
+      "nativeSize": [
+        60,
+        52
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/basket.png",
+      "bbox": [
+        0,
+        2,
+        32,
+        32
+      ],
+      "nativeSize": [
+        32,
+        32
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/table.png",
+      "bbox": [
+        7,
+        0,
+        120,
+        80
+      ],
+      "nativeSize": [
+        128,
+        80
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/cup.png",
+      "bbox": [
+        0,
+        6,
+        32,
+        32
+      ],
+      "nativeSize": [
+        32,
+        32
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/hot.png",
+      "bbox": [
+        2,
+        0,
+        45,
+        32
+      ],
+      "nativeSize": [
+        48,
+        32
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/sour.png",
+      "bbox": [
+        0,
+        3,
+        32,
+        32
+      ],
+      "nativeSize": [
+        32,
+        32
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/sweet.png",
+      "bbox": [
+        0,
+        8,
+        32,
+        32
+      ],
+      "nativeSize": [
+        32,
+        32
+      ],
+      "transparentRgbZero": true
+    },
+    {
+      "path": "assets/generated/content-r10/mayor.png",
+      "bbox": [
+        6,
+        2,
+        41,
+        62
+      ],
+      "nativeSize": [
+        48,
+        64
+      ],
+      "transparentRgbZero": true
+    }
+  ]
+}

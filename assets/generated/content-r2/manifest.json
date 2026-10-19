@@ -1,0 +1,191 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r2/merchant.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "22abccd8d6bcb9eeca11645c41e9ac0024f5f08e7a480c10715231f3da12f3aa"
+    },
+    {
+      "path": "docs/art/masters/content-r2/elder.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "2201d99aead87db8cb094f45fd7666275ad3e9c786d230c10f4ce00575aa9af2"
+    },
+    {
+      "path": "docs/art/masters/content-r2/child.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "5ee85b83a79682b5862886a4915436dd11f39c81873145c95d1e18cfb8f02921"
+    },
+    {
+      "path": "docs/art/masters/content-r2/river_carp.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "611177ebc08d52d8a706ed7e88ab9009ef4f39670a41d15e31cb294f27d40f1c"
+    },
+    {
+      "path": "docs/art/masters/content-r2/silver_dace.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "c6f422017812c35c9cec06b2eab941b2c5fcbaa676ddd4f97d5aaa216697c823"
+    },
+    {
+      "path": "docs/art/masters/content-r2/river_perch.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "fc5d21385462a37c3ebf9aa7ad4ca105941ded3defb5e542f1635819c9c6cc8e"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r2/merchant.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "7a253caefd1ace50f2c83e23ca559af76e061dae7ae5aff4d058d58753f3d7b4"
+    },
+    {
+      "path": "assets/generated/content-r2/elder.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "2f5b78c6e92e9bad3b28e02a738a67a018038a88049fd38764d1193033eeb27c"
+    },
+    {
+      "path": "assets/generated/content-r2/child.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "95030c4a55525fa461e9f7ee4b054b781ac9e63499e88055c605cf2fc2f99cc2"
+    },
+    {
+      "path": "assets/generated/content-r2/river_carp.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "5075ab28c25abef7ba1e4e7519f5995f47a44fe1d04e00b57e66cc0b797d72f6"
+    },
+    {
+      "path": "assets/generated/content-r2/silver_dace.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "525fb21306b5d54242fbc16bc3a133c3a30d0d5ea873c417e41245fd3e9fa00f"
+    },
+    {
+      "path": "assets/generated/content-r2/river_perch.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "1e3a7b772b3665f654ec8ed53862002d5a1bb0fe3a2f8d6bce0199ccd448adfa"
+    }
+  ],
+  "references": [
+    {
+      "path": "assets/generated/content-r1/merchant.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "47c36d843b53aa5f0eca48651dc35017f922d737f0ef7c1b668cd78bde9710e2"
+    },
+    {
+      "path": "assets/generated/content-r1/elder.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "f0ee82154a207497032c1a84c301c43b5699e241b56ba64cbc28f62acfb2468f"
+    },
+    {
+      "path": "assets/generated/content-r1/child.webp",
+      "width": 512,
+      "height": 256,
+      "sha256": "458c22c482af545bc20744b45ca943a9b139ea1cb29fec578a55dcd8f71f5b15"
+    }
+  ],
+  "prompts": "docs/art/PROMPTS_CONTENT_R2.json",
+  "processing": "256x128 grouped pixel sampling, nearest enlarged512x256; exact R89 palette; generated discrete pixels, no synthetic placeholders"
+}

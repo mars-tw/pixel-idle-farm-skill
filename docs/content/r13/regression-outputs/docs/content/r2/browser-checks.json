@@ -1,0 +1,5412 @@
+{
+  "status": "VERIFIED",
+  "fixture": "Mid-game chapter/dock and wheat20/carrot6/berries6 supplied; bread is cooked, all nine deliveries and six catches use UI; no clock advance, no granted catches or cooldown resets. Resize/read-only and offline sessions reuse saves earned in this run.",
+  "checks": [
+    "first basket has no unearned reread",
+    "cancel retains bread and never delivers later",
+    "walking delivery spends only once on arrival",
+    "merchant normal farm conversation remembers first",
+    "basket does not reveal remembered preference",
+    "merchant/sweet consumes one bread at the actual resident",
+    "merchant wrong reply differs from first clue",
+    "merchant normal farm conversation remembers wrong",
+    "merchant/sour consumes one bread at the actual resident",
+    "merchant matching taste completes distinct response",
+    "merchant normal farm conversation remembers matched",
+    "elder/plain consumes one bread at the actual resident",
+    "elder normal farm conversation remembers first",
+    "basket does not reveal remembered preference",
+    "elder/sweet consumes one bread at the actual resident",
+    "elder wrong reply differs from first clue",
+    "elder normal farm conversation remembers wrong",
+    "elder/hot consumes one bread at the actual resident",
+    "elder matching taste completes distinct response",
+    "elder normal farm conversation remembers matched",
+    "child/plain consumes one bread at the actual resident",
+    "child normal farm conversation remembers first",
+    "basket does not reveal remembered preference",
+    "child/sour consumes one bread at the actual resident",
+    "child wrong reply differs from first clue",
+    "child normal farm conversation remembers wrong",
+    "child/sweet consumes one bread at the actual resident",
+    "child matching taste completes distinct response",
+    "child normal farm conversation remembers matched",
+    "nine deliveries and all memories survive real reload",
+    "waiting reel visibly muted river_carp",
+    "river_carp early reel explains why and grants no fish",
+    "river_carp expired cast explains late reel without reward",
+    "river_carp visible submerged frame and enabled reel agree",
+    "river_carp success has no reel label",
+    "river_carp countdown follows actual elapsed seconds",
+    "river_carp catch and illustrated note survive reload",
+    "river_carp reload cannot bypass cooldown",
+    "river_carp full30s cooldown elapsed without time advance",
+    "river_carp second real catch gives exactly second fish and one note",
+    "waiting reel visibly muted silver_dace",
+    "silver_dace early reel explains why and grants no fish",
+    "silver_dace expired cast explains late reel without reward",
+    "silver_dace visible submerged frame and enabled reel agree",
+    "silver_dace success has no reel label",
+    "silver_dace countdown follows actual elapsed seconds",
+    "silver_dace catch and illustrated note survive reload",
+    "silver_dace reload cannot bypass cooldown",
+    "silver_dace full30s cooldown elapsed without time advance",
+    "silver_dace second real catch gives exactly second fish and one note",
+    "waiting reel visibly muted river_perch",
+    "river_perch early reel explains why and grants no fish",
+    "river_perch expired cast explains late reel without reward",
+    "river_perch visible submerged frame and enabled reel agree",
+    "river_perch success has no reel label",
+    "river_perch countdown follows actual elapsed seconds",
+    "river_perch catch and illustrated note survive reload",
+    "river_perch reload cannot bypass cooldown",
+    "river_perch full30s cooldown elapsed without time advance",
+    "river_perch second real catch gives exactly second fish and one note",
+    "320 merchant nonblank decoded story",
+    "320 elder nonblank decoded story",
+    "320 child nonblank decoded story",
+    "320 river_carp nonblank decoded note",
+    "320 silver_dace nonblank decoded note",
+    "320 river_perch nonblank decoded note",
+    "430 merchant nonblank decoded story",
+    "430 elder nonblank decoded story",
+    "430 child nonblank decoded story",
+    "430 river_carp nonblank decoded note",
+    "430 silver_dace nonblank decoded note",
+    "430 river_perch nonblank decoded note",
+    "missing merchant preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing merchant has decoded generated placeholder",
+    "missing merchant retries successfully without reopening page",
+    "missing elder preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing elder has decoded generated placeholder",
+    "missing elder retries successfully without reopening page",
+    "missing child preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing child has decoded generated placeholder",
+    "missing child retries successfully without reopening page",
+    "missing river_carp preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing river_carp has decoded generated placeholder",
+    "missing river_carp retries successfully without reopening page",
+    "missing silver_dace preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing silver_dace has decoded generated placeholder",
+    "missing silver_dace retries successfully without reopening page",
+    "missing river_perch preserves diagnostic guard while player sees readable fallback, without filename",
+    "missing river_perch has decoded generated placeholder",
+    "missing river_perch retries successfully without reopening page",
+    "new fish notebook decodes after actual offline reload",
+    "no page errors"
+  ],
+  "screenshots": [
+    "docs/content/r2/phone-basket-before.png",
+    "docs/content/r2/phone-delivery-cancel-before.png",
+    "docs/content/r2/phone-delivery-cancel-after.png",
+    "docs/content/r2/phone-delivery-walking-1.png",
+    "docs/content/r2/phone-delivery-walking-2.png",
+    "docs/content/r2/phone-delivery-walking-3.png",
+    "docs/content/r2/phone-story-merchant-first.png",
+    "docs/content/r2/phone-memory-merchant-first.png",
+    "docs/content/r2/phone-taste-merchant-sweet-packed.png",
+    "docs/content/r2/phone-taste-merchant-wrong.png",
+    "docs/content/r2/phone-memory-merchant-wrong.png",
+    "docs/content/r2/phone-taste-merchant-sour-packed.png",
+    "docs/content/r2/phone-taste-merchant-matched.png",
+    "docs/content/r2/phone-memory-merchant-matched.png",
+    "docs/content/r2/phone-taste-elder-plain-packed.png",
+    "docs/content/r2/phone-story-elder-first.png",
+    "docs/content/r2/phone-memory-elder-first.png",
+    "docs/content/r2/phone-taste-elder-sweet-packed.png",
+    "docs/content/r2/phone-taste-elder-wrong.png",
+    "docs/content/r2/phone-memory-elder-wrong.png",
+    "docs/content/r2/phone-taste-elder-hot-packed.png",
+    "docs/content/r2/phone-taste-elder-matched.png",
+    "docs/content/r2/phone-memory-elder-matched.png",
+    "docs/content/r2/phone-taste-child-plain-packed.png",
+    "docs/content/r2/phone-story-child-first.png",
+    "docs/content/r2/phone-memory-child-first.png",
+    "docs/content/r2/phone-taste-child-sour-packed.png",
+    "docs/content/r2/phone-taste-child-wrong.png",
+    "docs/content/r2/phone-memory-child-wrong.png",
+    "docs/content/r2/phone-taste-child-sweet-packed.png",
+    "docs/content/r2/phone-taste-child-matched.png",
+    "docs/content/r2/phone-memory-child-matched.png",
+    "docs/content/r2/phone-pond-river_carp-waiting.png",
+    "docs/content/r2/phone-pond-river_carp-early.png",
+    "docs/content/r2/phone-pond-river_carp-late.png",
+    "docs/content/r2/phone-rhythm-river_carp-1.png",
+    "docs/content/r2/phone-rhythm-river_carp-2.png",
+    "docs/content/r2/phone-rhythm-river_carp-3.png",
+    "docs/content/r2/phone-pond-river_carp-caught.png",
+    "docs/content/r2/phone-pond-river_carp-cooldown.png",
+    "docs/content/r2/phone-note-river_carp-first.png",
+    "docs/content/r2/phone-pond-river_carp-caught-again.png",
+    "docs/content/r2/phone-pond-silver_dace-waiting.png",
+    "docs/content/r2/phone-pond-silver_dace-early.png",
+    "docs/content/r2/phone-pond-silver_dace-late.png",
+    "docs/content/r2/phone-rhythm-silver_dace-1.png",
+    "docs/content/r2/phone-rhythm-silver_dace-2.png",
+    "docs/content/r2/phone-rhythm-silver_dace-3.png",
+    "docs/content/r2/phone-pond-silver_dace-caught.png",
+    "docs/content/r2/phone-pond-silver_dace-cooldown.png",
+    "docs/content/r2/phone-note-silver_dace-first.png",
+    "docs/content/r2/phone-pond-silver_dace-caught-again.png",
+    "docs/content/r2/phone-pond-river_perch-waiting.png",
+    "docs/content/r2/phone-pond-river_perch-early.png",
+    "docs/content/r2/phone-pond-river_perch-late.png",
+    "docs/content/r2/phone-rhythm-river_perch-1.png",
+    "docs/content/r2/phone-rhythm-river_perch-2.png",
+    "docs/content/r2/phone-rhythm-river_perch-3.png",
+    "docs/content/r2/phone-pond-river_perch-caught.png",
+    "docs/content/r2/phone-pond-river_perch-cooldown.png",
+    "docs/content/r2/phone-note-river_perch-first.png",
+    "docs/content/r2/phone-pond-river_perch-caught-again.png",
+    "docs/content/r2/phone-six-320-story-merchant.png",
+    "docs/content/r2/phone-six-320-story-elder.png",
+    "docs/content/r2/phone-six-320-story-child.png",
+    "docs/content/r2/phone-six-320-note-river_carp.png",
+    "docs/content/r2/phone-six-320-note-silver_dace.png",
+    "docs/content/r2/phone-six-320-note-river_perch.png",
+    "docs/content/r2/phone-six-430-story-merchant.png",
+    "docs/content/r2/phone-six-430-story-elder.png",
+    "docs/content/r2/phone-six-430-story-child.png",
+    "docs/content/r2/phone-six-430-note-river_carp.png",
+    "docs/content/r2/phone-six-430-note-silver_dace.png",
+    "docs/content/r2/phone-six-430-note-river_perch.png",
+    "docs/content/r2/phone-note-missing-art.png",
+    "docs/content/r2/phone-note-offline.png",
+    "docs/store/screenshots/iphone-08-neighbor-story.png",
+    "docs/store/screenshots/ipad-08-neighbor-story.png"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r2/phone-basket-before.png",
+      "at": 1792396792272,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_5",
+          "x": 7,
+          "y": 5,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-delivery-cancel-before.png",
+      "at": 1792396798489,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "left",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 4,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-delivery-cancel-after.png",
+      "at": 1792396801652,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 4,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-delivery-walking-1.png",
+      "at": 1792396801978,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t11_3",
+          "x": 11,
+          "y": 3,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 5,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-delivery-walking-2.png",
+      "at": 1792396802267,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t13_3",
+          "x": 13,
+          "y": 3,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "walk",
+        "sprite": 2,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-delivery-walking-3.png",
+      "at": 1792396802551,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 0,
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-story-merchant-first.png",
+      "at": 1792396808540,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396805592,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-merchant-first.png",
+      "at": 1792396808806,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396805592,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-merchant-sweet-packed.png",
+      "at": 1792396809100,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 9,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396805592,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-merchant-wrong.png",
+      "at": 1792396815200,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 8,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396812259,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-merchant-wrong.png",
+      "at": 1792396815471,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 8,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396812259,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-merchant-sour-packed.png",
+      "at": 1792396815760,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 8,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396812259,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-merchant-matched.png",
+      "at": 1792396821852,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 7,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-merchant-matched.png",
+      "at": 1792396822156,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 7,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-elder-plain-packed.png",
+      "at": 1792396822477,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 7,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-story-elder-first.png",
+      "at": 1792396830847,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396827912,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-elder-first.png",
+      "at": 1792396831083,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396827912,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-elder-sweet-packed.png",
+      "at": 1792396831359,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 6,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396827912,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-elder-wrong.png",
+      "at": 1792396837430,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 5,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396834493,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-elder-wrong.png",
+      "at": 1792396837713,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 5,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396834493,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-elder-hot-packed.png",
+      "at": 1792396837996,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 5,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396834493,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-elder-matched.png",
+      "at": 1792396844063,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 4,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-elder-matched.png",
+      "at": 1792396844301,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 4,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-child-plain-packed.png",
+      "at": 1792396844592,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 4,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-story-child-first.png",
+      "at": 1792396851014,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396848081,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-child-first.png",
+      "at": 1792396851247,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396848081,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-child-sour-packed.png",
+      "at": 1792396851527,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 3,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396848081,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-child-wrong.png",
+      "at": 1792396857614,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 2,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 2,
+            "lastTaste": "sour",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396854674,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-child-wrong.png",
+      "at": 1792396857856,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 2,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 2,
+            "lastTaste": "sour",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396854674,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-child-sweet-packed.png",
+      "at": 1792396858144,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 2,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 2,
+            "lastTaste": "sour",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792396854674,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-taste-child-matched.png",
+      "at": 1792396864228,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-memory-child-matched.png",
+      "at": 1792396864464,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_carp-waiting.png",
+      "at": 1792396866203,
+      "state": {
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792396866005,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_carp-early.png",
+      "at": 1792396866319,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_carp-late.png",
+      "at": 1792396869620,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-river_carp-1.png",
+      "at": 1792396870634,
+      "state": {
+        "pose": "tap",
+        "phase": "1",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792396869659,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-river_carp-2.png",
+      "at": 1792396871336,
+      "state": {
+        "pose": "tap",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792396869659,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-river_carp-3.png",
+      "at": 1792396871601,
+      "state": {
+        "pose": "strike",
+        "phase": "4",
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792396869659,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_carp-caught.png",
+      "at": 1792396871709,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_carp-cooldown.png",
+      "at": 1792396872873,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-note-river_carp-first.png",
+      "at": 1792396872977,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_carp-caught-again.png",
+      "at": 1792396903959,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-silver_dace-waiting.png",
+      "at": 1792396905249,
+      "state": {
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792396905069,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-silver_dace-early.png",
+      "at": 1792396905366,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-silver_dace-late.png",
+      "at": 1792396909083,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-silver_dace-1.png",
+      "at": 1792396909167,
+      "state": {
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792396909108,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-silver_dace-2.png",
+      "at": 1792396910248,
+      "state": {
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792396909108,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-silver_dace-3.png",
+      "at": 1792396911384,
+      "state": {
+        "pose": "strike",
+        "phase": "1",
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792396909108,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-silver_dace-caught.png",
+      "at": 1792396911489,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-silver_dace-cooldown.png",
+      "at": 1792396912654,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-note-silver_dace-first.png",
+      "at": 1792396912761,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 1,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-silver_dace-caught-again.png",
+      "at": 1792396944163,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_perch-waiting.png",
+      "at": 1792396945481,
+      "state": {
+        "pose": "still",
+        "phase": "0",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792396945291,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 3,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_perch-early.png",
+      "at": 1792396945584,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 4,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_perch-late.png",
+      "at": 1792396948800,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-river_perch-1.png",
+      "at": 1792396949549,
+      "state": {
+        "pose": "pull",
+        "phase": "1",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792396948825,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-river_perch-2.png",
+      "at": 1792396950148,
+      "state": {
+        "pose": "still",
+        "phase": "2",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792396948825,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-rhythm-river_perch-3.png",
+      "at": 1792396950902,
+      "state": {
+        "pose": "strike",
+        "phase": "3",
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792396948825,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_perch-caught.png",
+      "at": 1792396951007,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_perch-cooldown.png",
+      "at": 1792396952171,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-note-river_perch-first.png",
+      "at": 1792396952275,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 1
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-pond-river_perch-caught-again.png",
+      "at": 1792396983430,
+      "state": {
+        "pose": "still",
+        "phase": "ended",
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-320-story-merchant.png",
+      "at": 1792396984122,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-320-story-elder.png",
+      "at": 1792396984838,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-320-story-child.png",
+      "at": 1792396985554,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-320-note-river_carp.png",
+      "at": 1792396986854,
+      "state": {
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792396986371,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-320-note-silver_dace.png",
+      "at": 1792396988154,
+      "state": {
+        "cast": {
+          "fishId": "silver_dace",
+          "startedAt": 1792396987670,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-320-note-river_perch.png",
+      "at": 1792396989440,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-430-story-merchant.png",
+      "at": 1792396990114,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-430-story-elder.png",
+      "at": 1792396990798,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-430-story-child.png",
+      "at": 1792396991482,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-430-note-river_carp.png",
+      "at": 1792396992776,
+      "state": {
+        "cast": {
+          "fishId": "river_perch",
+          "startedAt": 1792396992280,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 2,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-430-note-silver_dace.png",
+      "at": 1792396994060,
+      "state": {
+        "cast": {
+          "fishId": "river_carp",
+          "startedAt": 1792396993562,
+          "observationVersion": 2
+        },
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 2,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-six-430-note-river_perch.png",
+      "at": 1792396995375,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/content/r2/phone-note-offline.png",
+      "at": 1792397003707,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "collect",
+        "sprite": 5,
+        "bread": 0,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 2
+        }
+      }
+    },
+    {
+      "path": "docs/store/screenshots/iphone-08-neighbor-story.png",
+      "at": 1792397004681,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/store/screenshots/ipad-08-neighbor-story.png",
+      "at": 1792397006021,
+      "state": {
+        "cast": null,
+        "player": {
+          "tileId": "t7_7",
+          "x": 7,
+          "y": 7,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "action": "idle",
+        "sprite": 0,
+        "bread": 1,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396818891,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396805592,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396812259,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792396818891,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396841123,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396827912,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792396834493,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792396841123,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 3,
+            "lastTaste": "sweet",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792396861275,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792396848081,
+                "reaction": "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。"
+              },
+              {
+                "taste": "sour",
+                "branch": "wrong",
+                "at": 1792396854674,
+                "reaction": "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』"
+              },
+              {
+                "taste": "sweet",
+                "branch": "matched",
+                "at": 1792396861275,
+                "reaction": "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。"
+              }
+            ]
+          }
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    }
+  ],
+  "errors": []
+}

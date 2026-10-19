@@ -1,0 +1,28 @@
+JOURNEY 0 {"ready":false,"kind":"plant","moving":false,"action":"idle","sun":false}
+JOURNEY 10 {"ready":false,"kind":"harvest","moving":false,"action":"idle","sun":false}
+PASS real touch journey grew and harvested sunlight wheat without fixtures {"h":{"started":true,"sunWheat":2,"delivered":false,"choice":null,"deliveredAt":0,"wheat":2,"ready":true,"note":null},"stats":{"harvested":{"wheat":2},"fulfilledOrders":0,"totalCoinsEarned":0,"plantCount":2,"cleared":0,"collected":{},"qualitySold":0,"npcRequestsCompleted":0,"festivalOrders":0,"seasonsReached":{"春":true},"sunCatches":2}}
+PASS earned basket choices reachable 44px controls [{"id":"heirloomDoorstep","w":154,"h":44,"inside":true,"hit":true},{"id":"heirloomTable","w":154,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":370,"h":44,"inside":true,"hit":true}]
+PASS earned basket choices no page overflow
+PASS cold start to first remembered note under three real minutes
+PASS actual walk-and-impact delivery consumes exactly two wheat
+PASS chosen table story is immediately readable
+PASS unlocked note navigation reachable 44px controls [{"id":"dailyToday","w":118,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":118,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":118,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":370,"h":44,"inside":true,"hit":true}]
+PASS unlocked note navigation no page overflow
+PASS completed opening returns to the larger farm story
+PASS resting in settings blocks farm input
+PASS movement is blocked while settings are open
+PASS return from rest restores farm input
+PASS browser freeze/resume and reload retain the remembered choice
+PASS new story modules are actually in offline cache
+PASS delivery written to persistent storage
+PASS review journey has no uncaught browser errors
+PASS review journey has no HTTP errors
+PASS all observed game requests stay on the current origin
+PASS real Chromium process restart loads earned progress with network disabled
+PASS reopened note offers no duplicate delivery
+PASS iPad earned note reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS iPad earned note no page overflow
+PASS iPad live landscape rotation reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS iPad live landscape rotation no page overflow
+PASS iPad live landscape farm reachable 44px controls [{"id":"","w":50.671875,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":53,"h":57,"inside":true,"hit":true},{"id":"settingsBtn","w":70,"h":44,"inside":true,"hit":true}]
+PASS iPad live landscape farm no page overflow

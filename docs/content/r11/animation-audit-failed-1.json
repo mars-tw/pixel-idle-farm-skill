@@ -1,0 +1,530 @@
+{
+  "status": "BLOCKED",
+  "trust": "Reuses earned UI picnic save; real clock, fixed species RNG only.",
+  "checks": [
+    "merchant: unique complete parcel arrived",
+    "merchant: no surrounding keepsake overlaps arrived",
+    "merchant: deduction only after contact arrived",
+    "merchant: unique complete parcel reach",
+    "merchant: no surrounding keepsake overlaps reach",
+    "merchant: deduction only after contact reach",
+    "merchant: unique complete parcel contact",
+    "merchant: no surrounding keepsake overlaps contact",
+    "merchant: deduction only after contact contact",
+    "merchant: one delivered basket stays one deduction",
+    "elder: unique complete parcel arrived",
+    "elder: no surrounding keepsake overlaps arrived",
+    "elder: deduction only after contact arrived",
+    "elder: unique complete parcel reach",
+    "elder: no surrounding keepsake overlaps reach",
+    "elder: deduction only after contact reach",
+    "elder: unique complete parcel contact",
+    "elder: no surrounding keepsake overlaps contact",
+    "elder: deduction only after contact contact",
+    "elder: empty-hand source prevents embedded second basket",
+    "elder: one delivered basket stays one deduction",
+    "child: unique complete parcel arrived",
+    "child: no surrounding keepsake overlaps arrived",
+    "child: deduction only after contact arrived",
+    "child: unique complete parcel reach",
+    "child: no surrounding keepsake overlaps reach",
+    "child: deduction only after contact reach",
+    "child: unique complete parcel contact",
+    "child: no surrounding keepsake overlaps contact",
+    "child: deduction only after contact contact",
+    "child: one delivered basket stays one deduction",
+    "merchant: only impact writes a serving",
+    "merchant: plate actually travels"
+  ],
+  "sequences": [],
+  "fish": [],
+  "replacementFrames": [
+    {
+      "path": "docs/content/r11/phone-basket-merchant-approach.png",
+      "at": 1792383735715,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 207,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 247,
+              "bottom": 386.59375,
+              "left": 207
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-merchant.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，蘿拉正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-merchant-contact.png",
+      "at": 1792383736903,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 231,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 271,
+              "bottom": 386.59375,
+              "left": 231
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-merchant.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "蘿拉伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-merchant-received.png",
+      "at": 1792383738632,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 267,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 307,
+              "bottom": 386.59375,
+              "left": 267
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-merchant.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份、東林野莓 6→5 份・蘿拉已接到酸味餐籃",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-elder-approach.png",
+      "at": 1792383742735,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 207,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 247,
+              "bottom": 386.59375,
+              "left": 207
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，班伯正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-elder-contact.png",
+      "at": 1792383743963,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 231,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 271,
+              "bottom": 386.59375,
+              "left": 231
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-elder.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "班伯伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-elder-received.png",
+      "at": 1792383745185,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 285,
+              "y": 358.59375,
+              "width": 40,
+              "height": 40,
+              "top": 358.59375,
+              "right": 325,
+              "bottom": 398.59375,
+              "left": 285
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份・班伯已接到熱味餐籃",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-child-approach.png",
+      "at": 1792383749443,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 207,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 247,
+              "bottom": 386.59375,
+              "left": 207
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-child.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，圖圖正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-child-contact.png",
+      "at": 1792383750153,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 231,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 271,
+              "bottom": 386.59375,
+              "left": 231
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-child.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "圖圖伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-child-received.png",
+      "at": 1792383751872,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:57642/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 273,
+              "y": 341.59375,
+              "width": 40,
+              "height": 40,
+              "top": 341.59375,
+              "right": 313,
+              "bottom": 381.59375,
+              "left": 273
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-child.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份、胡蘿蔔 5→4 份・圖圖已接到甜味餐籃",
+        "propsHidden": true
+      }
+    }
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: merchant: all four roots/feet fixed\n    at check (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\audit-content-r11-evidence.js:5:21)\n    at C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\audit-content-r11-evidence.js:16:198"
+}

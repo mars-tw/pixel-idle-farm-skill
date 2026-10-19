@@ -1,0 +1,82 @@
+[
+  {
+    "name": "npm-test",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 7.86,
+    "log": "docs/content/r4/logs/npm-test.txt"
+  },
+  {
+    "name": "browser-gates",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "run",
+      "test:e2e"
+    ],
+    "exitCode": 0,
+    "seconds": 1085.13,
+    "log": "docs/content/r4/logs/browser-gates.txt"
+  },
+  {
+    "name": "test-water-quest-guide",
+    "command": [
+      "node",
+      "scripts/test-water-quest-guide.js"
+    ],
+    "exitCode": 0,
+    "seconds": 13.41,
+    "log": "docs/content/r4/logs/test-water-quest-guide.txt"
+  },
+  {
+    "name": "test-r72-night-gate",
+    "command": [
+      "node",
+      "scripts/test-r72-night-gate.js"
+    ],
+    "exitCode": 0,
+    "seconds": 25.04,
+    "log": "docs/content/r4/logs/test-r72-night-gate.txt"
+  },
+  {
+    "name": "performance-reference",
+    "command": [
+      "node",
+      "scripts/measure-content-r4.js"
+    ],
+    "exitCode": 0,
+    "seconds": 103.88,
+    "log": "docs/content/r4/logs/performance-reference.txt"
+  },
+  {
+    "name": "new-art-fallback",
+    "command": [
+      "node",
+      "scripts/test-content-r4-assets.js"
+    ],
+    "exitCode": 0,
+    "seconds": 4.06,
+    "log": "docs/content/r4/logs/new-art-fallback.txt"
+  },
+  {
+    "name": "npm-test-final",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 9.06,
+    "log": "docs/content/r4/logs/npm-test-final.txt"
+  }
+]

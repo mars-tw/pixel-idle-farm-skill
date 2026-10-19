@@ -1,0 +1,24 @@
+{
+  "status": "VERIFIED",
+  "trust": "Historical R9 original images from HEAD, not a rerun of R9 code.",
+  "images": [
+    {
+      "sourceCommit": "6dd4569",
+      "source": "docs/content/r9/phone-basket-child-contact.png",
+      "path": "docs/content/r10/before/phone-basket-child-contact.png",
+      "sha256": "99edcd49d73bc2a425bbe85a98eaf4afa25d330529e7625ca1fa8d22a923829c"
+    },
+    {
+      "sourceCommit": "6dd4569",
+      "source": "docs/content/r9/phone-pond-river_perch-pre-sink.png",
+      "path": "docs/content/r10/before/phone-pond-river_perch-pre-sink.png",
+      "sha256": "9ce485e1cd73334962c505f2fa50df6c563002f1634831d583e77644609b3768"
+    },
+    {
+      "sourceCommit": "6dd4569",
+      "source": "docs/content/r9/phone-gathering-daily-reloaded.png",
+      "path": "docs/content/r10/before/phone-gathering-daily-reloaded.png",
+      "sha256": "8b6f9ca3b8a14d418a4dfc60c19d0b0e9f6fe9a800c2bb7d7483a8228bc33920"
+    }
+  ]
+}

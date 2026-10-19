@@ -1,0 +1,79 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "sequential": true,
+  "checks": [
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "run",
+        "test:ci"
+      ],
+      "label": "ci-final",
+      "exitCode": 0,
+      "elapsedSeconds": 476.876,
+      "log": "docs/evidence/r88-art/logs/ci-final.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "label": "water-guide-final",
+      "exitCode": 0,
+      "elapsedSeconds": 13.159,
+      "log": "docs/evidence/r88-art/logs/water-guide-final.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "label": "night-final",
+      "exitCode": 0,
+      "elapsedSeconds": 25.511,
+      "log": "docs/evidence/r88-art/logs/night-final.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r88-art.js"
+      ],
+      "label": "comparison-final",
+      "exitCode": 0,
+      "elapsedSeconds": 8.587,
+      "log": "docs/evidence/r88-art/logs/comparison-final.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/capture-r88-store.js"
+      ],
+      "label": "store-final",
+      "exitCode": 0,
+      "elapsedSeconds": 62.942,
+      "log": "docs/evidence/r88-art/logs/store-final.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-r88-art.js"
+      ],
+      "label": "art-final",
+      "exitCode": 0,
+      "elapsedSeconds": 20.211,
+      "log": "docs/evidence/r88-art/logs/art-final.txt"
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-version-chain.js"
+      ],
+      "label": "version-final",
+      "exitCode": 0,
+      "elapsedSeconds": 0.052,
+      "log": "docs/evidence/r88-art/logs/version-final.txt"
+    }
+  ]
+}

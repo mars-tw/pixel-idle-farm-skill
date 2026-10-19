@@ -1,0 +1,21 @@
+PASS cancelled basket preserves all bread and stops the real journey
+PASS merchant 430 taken/halfway show actual locomotion
+PASS merchant no resources spent before receiver impact 430
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant recall does not reveal taste
+PASS merchant no resources spent before receiver impact 430
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant wrong reaction leaves context instead of answer
+PASS merchant no resources spent before receiver impact 430
+PASS merchant exact bread/ingredient deduction at contact 430
+AssertionError [ERR_ASSERTION]: merchant distinct success token
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:10:21)
+    at neighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:48:753)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:85:117 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

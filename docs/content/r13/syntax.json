@@ -1,0 +1,534 @@
+{
+  "status": "VERIFIED",
+  "count": 132,
+  "files": [
+    {
+      "file": "src/adventure.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/art-r84.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/atlas.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/config.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/content-r1.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/content-r6.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/content-r8.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/daily-ui.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/daily.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/game.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/heirloom-ui.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/heirloom.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/state.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/ui.js",
+      "exitCode": 0
+    },
+    {
+      "file": "src/world-ui.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/audit-content-r11-evidence.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/audit-content-r12-evidence.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/audit-content-r13-evidence.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/audit-oc-r1.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-content-r2-rhythms.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-content-r4-receipts.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-promo-trio.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r79-playtest.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r82-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r83-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r84-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r85-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r85-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r86-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r86-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r87-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r87-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r88-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r88-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r89-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/capture-r89-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/content-r8-water-test-helper.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/farm-control-test-helper.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/finalize-content-r13-evidence.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/gen-art-v3.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/gen-art-v4.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/gen-v2-atlases.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/generate-crops3-atlas.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r10.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r11.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r12.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r13.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r2.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r3.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r4.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r5.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r7.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r8.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-content-r9.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/measure-r68-baseline.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/process-v3-atlas.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/process-v4-atlas.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/process-world-project-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/r85-browser-helper.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-browser-gates.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-content-r10-regression.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-content-r11-regression.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-content-r12-final.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-content-r12-regression.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-content-r13-regression.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/run-content-r9-regression.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-adventure.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r1-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r1.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r10-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r10.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r11-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r11.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r12-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r12.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r13-cache-offline.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r13-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r13.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r2-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r2.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r3-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r3.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r4-assets.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r4-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r4.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r5-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r5.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r6-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r6.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r7-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r7.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r8-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r8.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r9-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-content-r9.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-controls-reachability.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-economy.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-guards.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-npc-indicators.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r66-ui-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r68-browser.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r68-visuals.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r72-fixed-layers.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r72-night-gate.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r73-playtest.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r74-building-upgrades-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r74-building-upgrades.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r79-fun-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r79-sunpatch.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r80-daily.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r80-mobile.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r81-heirloom.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r81-review.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r82-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r83-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r84-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r85-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r86-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r87-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r88-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-r89-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-rpg-v4-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-rwd-matrix.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-systems.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-ui-smoke.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-version-chain.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-water-quest-guide.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-world-migration.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-world-project-art.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/test-world-rework-e2e.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/validate-v3-atlas.js",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/validate-v4-atlas.js",
+      "exitCode": 0
+    }
+  ]
+}

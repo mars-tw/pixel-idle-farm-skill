@@ -1,0 +1,6 @@
+PASS desktop dry: watering guide progresses without accidental harvest
+PASS desktop mature-and-empty: watering guide progresses without accidental harvest
+PASS desktop all-mature: watering guide progresses without accidental harvest
+PASS phone dry: watering guide progresses without accidental harvest
+PASS phone mature-and-empty: watering guide progresses without accidental harvest
+PASS phone all-mature: watering guide progresses without accidental harvest

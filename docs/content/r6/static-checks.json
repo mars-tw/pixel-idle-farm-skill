@@ -1,0 +1,9 @@
+{
+  "status": "VERIFIED",
+  "secretScanHits": [],
+  "javascriptCount": 98,
+  "javascriptFailures": [],
+  "version": "0.1.29",
+  "appVersion": "content-r6-20261019-1",
+  "finalReadback": "release-readback.json"
+}

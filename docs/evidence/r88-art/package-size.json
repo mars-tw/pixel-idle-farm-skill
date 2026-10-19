@@ -1,0 +1,9 @@
+{
+  "baseCommit": "6d476099a410f26f3bc4cdf518033ed60f5ce89a",
+  "beforeBytes": 106034496,
+  "afterBytes": 106681245,
+  "deltaBytes": 646749,
+  "newImageBytes": 539886,
+  "scope": "Existing web runtime allowlist; docs and original masters excluded",
+  "nativePackageMeasured": false
+}

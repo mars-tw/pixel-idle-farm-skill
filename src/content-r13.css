@@ -1,0 +1,36 @@
+/* R13: honest state, compact paper, one fish identity and an integrated riverbank. */
+.r13-creek{position:absolute;background:url('../assets/generated/content-r13/creek.png') center/100% 100% no-repeat;image-rendering:pixelated;pointer-events:none;z-index:1}
+.reserved-table{position:absolute;left:90px;top:200px;width:220px;padding:4px;background:#fff6e3;border:1px solid #8b5e34;font-size:13px;color:#3e2f23}
+#groundLayer .gtile.water[data-tile-id^='t16_']{background:none!important;box-shadow:none!important}
+.carry-memory{grid-column:1/-1;font-size:13px;color:#395847;font-weight:bold}
+.carry-memory:empty{display:none}
+.basket-carrying button{grid-row:1/3}
+.pond-fisher{position:absolute;left:0;bottom:0;width:104px;height:104px;object-fit:contain;image-rendering:pixelated;z-index:5;pointer-events:none}
+.pond-stage[data-rhythm='river_carp'][data-reel='active'] .pond-bobber{transform:translate(-12px,30px)!important}
+.pond-stage[data-rhythm='silver_dace'][data-reel='active'] .pond-bobber{transform:translate(0,38px)!important}
+.pond-stage[data-rhythm='river_perch'][data-reel='active'] .pond-bobber{transform:translate(66px,30px)!important}
+.fish-comparison img{width:76px;height:66px;object-fit:contain;image-rendering:pixelated;filter:none!important;opacity:1!important}
+.fish-comparison>div{display:flex;align-items:center;gap:8px;min-height:76px;padding:3px 0}
+.fish-comparison p{flex:1;margin:0;font-size:14px;line-height:1.4}
+.fish-comparison button,.note-replay button{min-height:44px;min-width:64px;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23;padding:4px 8px}
+#worldModal[data-content-view='note'] .content-illustration{display:block!important;width:128px!important;height:112px!important;max-height:112px!important;object-fit:contain;float:right;margin:0 4px 6px}
+.note-replay>p{font-size:13px;margin:4px 0}.note-replay .pond-stage{height:190px}
+#worldModal[data-content-view='note'] .catch-receipt img{width:96px;height:80px;object-fit:contain}
+#worldModal[data-content-view='gathering-complete']{align-items:flex-start;padding-top:40px;box-sizing:border-box}
+#worldModal[data-content-view='gathering-complete'] .modal-card{height:auto;max-height:calc(100dvh - 56px)}
+#worldModal[data-content-view='gathering-complete'] .modal-body{flex:0 1 auto;padding-bottom:4px}
+#worldModal[data-content-view='gathering-complete'] .gather-shared{height:auto!important;min-height:58px!important;max-height:110px;margin:4px 0;padding:6px 10px!important}
+.gather-status{display:flex;gap:4px;font-size:13px;margin:4px 0}
+.gather-status span{flex:1;padding:6px 3px;border:1px solid #b38d61;text-align:center;background:#f5e4bd}
+#worldModal[data-serving-phase='choose'] .gather-status{display:none}
+.gather-choices .neighbor-tabs button{min-height:60px}
+.serving-foods small{display:block;font-size:12px}
+.restock-foods button{display:block;width:100%;min-height:60px;padding:5px;margin:4px 0;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23;font-size:14px}
+.restock-foods small{display:block;font-size:12px}
+.gather-supply{font-size:12px;line-height:1.5;color:#395847;background:#f5e4bd}
+.gather-supply:empty{display:none}
+#worldModal[data-serving-phase='lift'] .gather-supply,#worldModal[data-serving-phase='carry'] .gather-supply,#worldModal[data-serving-phase='received'] .gather-supply{display:none}
+#gatherSkip{grid-column:1/-1;min-height:44px}
+#worldModal[data-serving-phase='lift'] .gather-stage,#worldModal[data-serving-phase='carry'] .gather-stage,#worldModal[data-serving-phase='received'] .gather-stage{overflow:visible}
+@media(max-width:350px){#worldModal[data-content-view='gathering-complete']{padding-top:8px}#worldModal[data-content-view='gathering-complete'] .modal-card{max-height:calc(100dvh - 16px)}#worldModal[data-content-view='gathering-complete'] .gather-shared{min-height:42px!important}.gather-status{font-size:12px}.fish-comparison img{width:56px;height:48px}.fish-comparison p{font-size:12px}.fish-comparison button{min-width:56px}}
+@media(orientation:landscape) and (max-height:600px){#worldModal[data-content-view='gathering-complete']{padding-top:8px}#worldModal[data-content-view='gathering-complete'] .modal-card{max-height:calc(100dvh - 16px)}#worldModal[data-content-view='gathering-complete'] .gather-stage{height:205px;min-height:205px}.gather-status{overflow:hidden}.note-replay .pond-stage{float:none;width:100%}}

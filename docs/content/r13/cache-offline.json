@@ -1,0 +1,70 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "cold first welcome hero and portrait decode offline with current version",
+    "daily journal portrait decodes offline with current version",
+    "elder middle slide has no premature serving",
+    "elder plate physically occupies a point between carry and received",
+    "all four elder-scene roots and feet stay fixed",
+    "elder contact commits exactly one portion"
+  ],
+  "images": [
+    {
+      "path": "docs/content/r13/phone-cache-welcome-offline.png",
+      "sha256": "0a8d51e7b75c98428caf69a35c1be11721c720ba5f54c846cf78d142ba91cc7f"
+    },
+    {
+      "path": "docs/content/r13/phone-cache-daily-offline.png",
+      "sha256": "7c62c509211c866b0916972443ed22e3bde36ed1b8d94c5be2af612ac948c827"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-elder-mid-slide.png",
+      "sha256": "bcb3e2c39c74b76959ad38b709712949f7b42c3449d0dc1848e446b7102fe843"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-elder-received-final.png",
+      "sha256": "2c89b970f2367beda02276836f1607c1ea7fc9ccc2ea4a05284e6854bef608a0"
+    }
+  ],
+  "sourceHashes": {
+    "src/world-ui.js": "6dd007bb4bb9cfeab0824c0f63f288c3a9ecf91c8565eb224136ddffb382e7e3",
+    "src/daily-ui.js": "31b6cc00ed4e250f89e07db37a502438d3049cd8639a2eff60b32e8437d5697d",
+    "src/content-r6.js": "02d05238f6005a32126af762a78f1f719e7d644366268609dfad22b59d48b9f6"
+  },
+  "welcome": [
+    {
+      "path": "/assets/generated/r88/welcome-512.webp",
+      "version": "content-r13-20261019-1",
+      "loaded": true
+    },
+    {
+      "path": "/assets/generated/r89/miri-0.png",
+      "version": "content-r13-20261019-1",
+      "loaded": true
+    }
+  ],
+  "daily": {
+    "src": "assets/generated/r89/miri-0.png?v=content-r13-20261019-1",
+    "loaded": true
+  },
+  "elder": {
+    "start": {
+      "x": 132,
+      "y": 297,
+      "width": 42,
+      "height": 34
+    },
+    "middle": {
+      "x": 222.6875,
+      "y": 228.453125,
+      "width": 42,
+      "height": 34
+    },
+    "end": {
+      "x": 263,
+      "y": 198,
+      "width": 42,
+      "height": 34
+    }
+  }
+}

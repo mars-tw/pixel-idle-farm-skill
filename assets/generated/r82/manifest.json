@@ -1,0 +1,351 @@
+{
+  "status": "EXECUTED",
+  "date": "2026-10-16",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Exact model slug is not exposed by the built-in tool; no claim of a specific gpt-image version.",
+  "paletteSource": "assets/generated/r68/manifest.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5"
+  ],
+  "pipeline": "Generated raster -> source alpha preserved -> bounding box with 2px gutters -> BOX native reduction -> shared 66-color palette without dither -> binary alpha -> nearest neighbor display. Backgrounds use lossless WebP; cutouts real RGBA PNG.",
+  "records": [
+    {
+      "path": "assets/generated/r82/welcome-384.webp",
+      "source": "docs/art/masters/welcome.png",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 32088,
+      "sha256": "575c98d2a8651575c834c666b7e691e901060e1e05ccbea8536cd2ba6dd3f1a8"
+    },
+    {
+      "path": "assets/heirloom/table-r82.webp",
+      "source": "docs/art/masters/table.png",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 29632,
+      "sha256": "53cca880036cd40531d966d7f80cafe1536c27648017a965bb6b8061c0ec7366"
+    },
+    {
+      "path": "assets/heirloom/doorstep-r82.webp",
+      "source": "docs/art/masters/door.png",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 25528,
+      "sha256": "aaa8598db33c209250e438e1b06255d6b95d51f2a9d5cc08fd94a91907fb4bd5"
+    },
+    {
+      "path": "assets/generated/r82/paper-192.png",
+      "source": "docs/art/masters/paper.png",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 1597,
+      "sha256": "f2aa3b9094c5c4aac7ed2bce59f452ee65e2d136265012c33c0ca63336a62b76"
+    },
+    {
+      "path": "assets/generated/r82/farmer-96.png",
+      "source": "docs/art/masters/farmer.png",
+      "size": [
+        96,
+        96
+      ],
+      "bytes": 10135,
+      "sha256": "990c41d1fd103ca9c58cd1dd687a08caa2a93cb60cacd22506c05967e83316cf"
+    },
+    {
+      "path": "docs/evidence/r82-art/farmer-64.png",
+      "source": "docs/art/masters/farmer.png",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 5142,
+      "sha256": "9bba093eaeb444cd78c19ab9fe6555356b6de8bb1bd63f900c94c64621111fae"
+    },
+    {
+      "path": "assets/generated/r82/farmer-face-64.png",
+      "source": "docs/art/masters/farmer.png",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 4535,
+      "sha256": "7c1b030453c536266116b99dce089e5df85aab6e5e3943f7af786f38688be58d"
+    },
+    {
+      "path": "assets/generated/r82/logo-320.png",
+      "source": "docs/art/masters/logo.png",
+      "size": [
+        320,
+        128
+      ],
+      "bytes": 18704,
+      "sha256": "c69d4d4deb03888b645daa89e870d27145219d46384ed62becf335ea348ca26a"
+    },
+    {
+      "path": "assets/generated/r82/basket-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1283,
+      "sha256": "73355aed97616d5e691f758213181697d00259ea994fdebe7a378337d5dae062"
+    },
+    {
+      "path": "assets/generated/r82/note-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1435,
+      "sha256": "a16ce78e16ee26a9ed01103ddd41111b1100355e213f1b79b839c06beb2bee9d"
+    },
+    {
+      "path": "assets/generated/r82/wheat-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1260,
+      "sha256": "73b1f9f436f201f237e3e739e10a627bd2e9d1ac305d3dd4d02e7c87df81ca28"
+    },
+    {
+      "path": "assets/generated/r82/stamp-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1365,
+      "sha256": "2959b5da8b5a1476d8f3c308d7e5502cc5c742a2a762a1d575254e6d8ea5ffa5"
+    },
+    {
+      "path": "assets/generated/r82/water-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 909,
+      "sha256": "b089f5cf5977bf8a0a481c5c7910974b599081c8675ac3911f6fe556bcea1955"
+    },
+    {
+      "path": "assets/generated/r82/seed-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1279,
+      "sha256": "cd79eda1172e5db8f0075b6cbff03dd371c660d799ff591122d73e3597ac1ab0"
+    },
+    {
+      "path": "assets/generated/r82/sun-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 969,
+      "sha256": "20faf073475399d30595a70c05b7d63e7ad9792975cee951a62b8a3a9d6dd048"
+    },
+    {
+      "path": "assets/generated/r82/tea-32.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1138,
+      "sha256": "b71d44b0e0abe32bcce3e262b19fb1be3f0aa5fa27af147f68e250c97fad9e7a"
+    },
+    {
+      "path": "assets/generated/r82/icons-128.png",
+      "source": "docs/art/masters/icons.png",
+      "size": [
+        128,
+        64
+      ],
+      "bytes": 8351,
+      "sha256": "8a8d759cc78689fc1c69ecb7d56ad74bea3cdd46558b9364fb30d03b5a9c635a"
+    },
+    {
+      "path": "assets/generated/r82/app-icon-48.png",
+      "source": "docs/art/masters/app.png",
+      "size": [
+        48,
+        48
+      ],
+      "bytes": 5621,
+      "sha256": "bc8edc0d3e77a349f418e409960df07085b8d083d17615afd8215e541b3434d1"
+    },
+    {
+      "path": "assets/generated/r82/app-icon-192.png",
+      "source": "docs/art/masters/app.png",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 27386,
+      "sha256": "47ea310f33ae589455f804de9b584cf3737feef29b156e01ed3ca9f31a0e9a1d"
+    },
+    {
+      "path": "assets/generated/r82/app-icon-512.png",
+      "source": "docs/art/masters/app.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 34408,
+      "sha256": "2cf5569874926ec64de78919073af850dbc69ae3413f3bec95b8584954eaceb4"
+    }
+  ],
+  "qualityMetrics": {
+    "Farmer": {
+      "brightness": 0.4783907358568292,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.580491808461451,
+      "lowSaturationFraction": 0.0023824994585228505,
+      "gatePass": true,
+      "alphaOccupancy": 0.5009765625,
+      "maskSha256": "161914ccbc015eb4991618a61f7cf6f02c3f34815e01953295165f5a7d06b3fc",
+      "cornersTransparent": true
+    },
+    "FarmerFace": {
+      "brightness": 0.46618977627088887,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5939982235321479,
+      "lowSaturationFraction": 0.004476776720761052,
+      "gatePass": true
+    },
+    "Logo": {
+      "brightness": 0.5652099246301293,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.49131902893088325,
+      "lowSaturationFraction": 0.060109798083186006,
+      "gatePass": true,
+      "alphaOccupancy": 0.524755859375,
+      "maskSha256": "5c86f3bfc7b36394362df93071ab111de647a597a8b11873bc1920ae59486aeb",
+      "cornersTransparent": true
+    }
+  },
+  "runtimeBytes": 207623,
+  "masters": [
+    {
+      "path": "docs/art/masters/welcome.png",
+      "sha256": "1eedd7da7a1d00dd052872676c3021b942c4267237ac4b6a68c355765095ae26",
+      "bytes": 2771181
+    },
+    {
+      "path": "docs/art/masters/farmer.png",
+      "sha256": "263bb7301ad9d0b8a6c6b92f6148c3f9be3cc15bd9a27c4cf55f93ca25ea46da",
+      "bytes": 1370573
+    },
+    {
+      "path": "docs/art/masters/table.png",
+      "sha256": "46f871182e26bd65103a4b32f7876895780807abc9e816441cc1281d085f8ac5",
+      "bytes": 2309368
+    },
+    {
+      "path": "docs/art/masters/door.png",
+      "sha256": "50e93904a72ce487083328a01ab2ac0ddd26f4c3d0769e1162d1775aaf296db3",
+      "bytes": 1990150
+    },
+    {
+      "path": "docs/art/masters/paper.png",
+      "sha256": "addd92550cb42654f7543e2ccd5c7ab484ceb4a8a22ddd947f6cba4c5cae5189",
+      "bytes": 1346335
+    },
+    {
+      "path": "docs/art/masters/icons.png",
+      "sha256": "90bef923a736bf4925b60fee3c9c734895293a2629e08bb0c2d03cdb92a90270",
+      "bytes": 1021303
+    },
+    {
+      "path": "docs/art/masters/logo.png",
+      "sha256": "96eb438763d32fea5452ba5ea7e515c6e4a5eb153808cd5f7461fcebe5365a76",
+      "bytes": 1066485
+    },
+    {
+      "path": "docs/art/masters/app.png",
+      "sha256": "532588ac9f05fdb47f010c7c8b488a2b750eca5e6c103996f35ff1a5a88d560e",
+      "bytes": 1705840
+    }
+  ]
+}

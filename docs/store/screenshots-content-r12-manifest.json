@@ -1,0 +1,19 @@
+{
+  "status": "VERIFIED",
+  "screenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-17-shared-afternoon-r12.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "147ce75e526226af1711e6df074a61ba4f7746fa5e4dd3c8569952fc384d4a57",
+      "source": "Real headless UI serving reply, DPR3 iPhone / DPR2 iPad, no resize or compositing"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-17-shared-afternoon-r12.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "13419ac748a77411b6c3a3356f8fb3d2a375378bbc13d6b6b68e49f26df3e492",
+      "source": "Real headless UI serving reply, DPR3 iPhone / DPR2 iPad, no resize or compositing"
+    }
+  ]
+}

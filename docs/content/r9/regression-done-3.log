@@ -1,0 +1,175 @@
+PASS cancelled basket preserves all bread and stops the real journey
+PASS cancel retains every ingredient exactly
+PASS cancel retains bread after actual reload
+PASS 430 merchant single strip, marker+arrow+cancel; usable world >=60% {"area":0.9127657450843397,"hidden":true,"cancel":true,"marker":true,"label":"蘿拉","arrow":true,"onlyRow":true}
+PASS merchant 430 taken/halfway show actual locomotion
+PASS merchant no resources spent before receiver impact 430
+PASS merchant contact shows one physical parcel, no floating basket marker
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant recall does not reveal taste
+PASS merchant no resources spent before receiver impact 430
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant wrong reaction leaves context instead of answer
+PASS merchant no resources spent before receiver impact 430
+PASS merchant parcel transferred to receiver image once
+PASS merchant exact bread/ingredient deduction at contact 430
+PASS merchant distinct success token
+PASS merchant world keepsake physically present
+PASS 430 elder single strip, marker+arrow+cancel; usable world >=60% {"area":0.9127657450843397,"hidden":true,"cancel":true,"marker":true,"label":"班伯","arrow":true,"onlyRow":true}
+PASS elder 430 taken/halfway show actual locomotion
+PASS elder no resources spent before receiver impact 430
+PASS elder contact shows one physical parcel, no floating basket marker
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 430
+PASS elder recall does not reveal taste
+PASS elder no resources spent before receiver impact 430
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 430
+PASS elder wrong reaction leaves context instead of answer
+PASS elder no resources spent before receiver impact 430
+PASS elder parcel transferred to receiver image once
+PASS elder exact bread/ingredient deduction at contact 430
+PASS elder distinct success token
+PASS elder world keepsake physically present
+PASS 430 child single strip, marker+arrow+cancel; usable world >=60% {"area":0.9127657450843397,"hidden":true,"cancel":true,"marker":true,"label":"圖圖","arrow":true,"onlyRow":true}
+PASS child 430 taken/halfway show actual locomotion
+PASS child no resources spent before receiver impact 430
+PASS child contact shows one physical parcel, no floating basket marker
+PASS child parcel transferred to receiver image once
+PASS child receiver and player have separate readable visual positions 430
+PASS child exact bread/ingredient deduction at contact 430
+PASS child recall does not reveal taste
+PASS child no resources spent before receiver impact 430
+PASS child parcel transferred to receiver image once
+PASS child exact bread/ingredient deduction at contact 430
+PASS child wrong reaction leaves context instead of answer
+PASS child no resources spent before receiver impact 430
+PASS child parcel transferred to receiver image once
+PASS child exact bread/ingredient deduction at contact 430
+PASS child distinct success token
+PASS child world keepsake physically present
+PASS child and player remain separately readable after returning to farm
+PASS merchant personal title from clicked world keepsake
+locator.click: Timeout 20000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-memory-token="elder"]').locator('.memory-caption')[22m
+[2m    - locator resolved to <span class="memory-caption">魚竿架・點一下</span>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    4 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  8 × retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m      - waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div class="dpad" aria-label="Move">…</div> from <div id="mobileControls" class="mobile-controls" data-audit="mobile-controls" aria-label="Mobile controls">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m      - waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m      - waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m      - waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+    at neighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r7-e2e.js:55:345)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r7-e2e.js:91:117 {
+  log: [
+    `  - waiting for locator('[data-memory-token="elder"]').locator('.memory-caption')`,
+    '    - locator resolved to <span class="memory-caption">魚竿架・點一下</span>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    4 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is not stable',
+    '  8 × retrying click action',
+    '      - waiting 500ms',
+    '      - waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div class="dpad" aria-label="Move">…</div> from <div id="mobileControls" class="mobile-controls" data-audit="mobile-controls" aria-label="Mobile controls">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 500ms',
+    '      - waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 500ms',
+    '      - waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 500ms',
+    '      - waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-object="bush" class="ob shadowed" data-audit="object" data-kind="obstacle" data-tile-id="t6_10" data-sheet="structures" data-frame="bush_big_spring"></div> intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}

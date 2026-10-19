@@ -1,0 +1,26 @@
+/* R12: action occupies the scene; explanation stays short and optional. */
+.handover-actor,.handover-player{image-rendering:pixelated;z-index:9934!important}
+.handover-parcel{z-index:9936!important;transition:left .32s linear,top .32s linear}
+body[data-handover] .ob[data-kind='npc']{visibility:hidden!important}
+.pond-help summary,.serving-history summary{border:1px solid #8b5e34;background:#f5e4bd;padding:6px 10px;min-height:44px;box-sizing:border-box;color:#3e2f23}
+.pond-help[open] summary::after{content:' ▾'}
+.pond-stage .pond-bobber{width:48px!important;height:72px!important;left:calc(50% - 24px)!important;top:20%!important;filter:drop-shadow(2px 1px 0 #3e2f23)!important;z-index:3}
+.pond-stage[data-reel='active'] .pond-bobber{transform:translateY(30px)!important;clip-path:inset(0 0 34% 0);opacity:1!important}
+.pond-stage[data-motion='bent-wake'] .pond-bobber{transform:translateX(28px)!important}
+.pond-stage[data-motion='straight-wake'] .pond-bobber{transform:translate(66px,30px)!important}
+#worldModal[data-fishing-state='caught'] .pond-stage{height:clamp(190px,28dvh,280px)!important;flex-shrink:0}
+.fish-comparison [data-unlocked='false'] img{opacity:.55}
+.fish-comparison [data-unlocked='true']{border-left:3px solid #6a994e;padding-left:4px}
+.gather-stage:has(.serving-plate) .meal-trace{opacity:1!important}
+.gather-stage .meal-trace-elder,.farm-gathering .meal-trace-elder{content:url('../assets/generated/content-r10/cup.png?v=content-r13-20261019-1');width:28px!important;height:28px!important;left:244px;top:136px}
+.gather-stage .meal-trace-child,.farm-gathering .meal-trace-child{width:24px!important;height:24px!important;left:261px;top:174px}
+.serving-plate{width:42px!important;height:34px!important;transition:left .65s linear,top .65s linear}
+.shared-dish-label{position:absolute;left:147px;top:168px;padding:2px 4px;background:#fff6e3;border:1px solid #8b5e34;font-size:12px;color:#3e2f23;z-index:8}
+#worldModal[data-content-view='gathering-complete'] .modal-card{height:min(850px,calc(100dvh - 24px))}
+#worldModal[data-content-view='gathering-complete'] .modal-body{flex:1;overflow:auto}
+#worldModal[data-content-view='gathering-complete'] .gather-stage{flex:none;height:285px;min-height:285px}
+#worldModal[data-content-view='gathering-complete'] .gather-shared{height:88px!important;min-height:88px!important;box-sizing:border-box;overflow:auto;font-size:14px!important;line-height:1.5;padding:6px 10px!important;margin:4px 0}
+#worldModal[data-serving-phase='reply'] .gather-shared{font-size:16px!important}
+.gather-progress{font-size:14px;margin:4px 0}
+@media(max-width:350px){#worldModal[data-content-view='gathering-complete'] .gather-stage{height:205px;min-height:205px}#worldModal[data-content-view='gathering-complete'] .gather-shared{font-size:12px!important;height:72px!important;min-height:72px!important}.gather-stage .meal-layout{--meal-scale:.72!important}.pond-stage .pond-bobber{width:40px!important;height:60px!important}}
+@media(orientation:landscape) and (max-height:600px){#worldModal[data-content-view='gathering-complete'] .gather-stage{width:45%;height:205px;min-height:205px;float:left}#worldModal[data-content-view='gathering-complete'] .gather-shared{height:90px!important}.gather-choices{overflow:visible}.pond-stage .pond-bobber{height:60px!important;width:40px!important}}

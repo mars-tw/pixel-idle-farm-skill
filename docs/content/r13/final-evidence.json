@@ -1,0 +1,157 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "river_carp fresh three locked rows",
+    "river_carp locked notes have no replay",
+    "river_carp locked names not exposed",
+    "river_carp only actual caught fish unlocked",
+    "river_carp only caught row replayable",
+    "river_carp one page and one fish after actual reload",
+    "river_carp replay never creates another fish",
+    "silver_dace fresh three locked rows",
+    "silver_dace locked notes have no replay",
+    "silver_dace locked names not exposed",
+    "silver_dace only actual caught fish unlocked",
+    "silver_dace only caught row replayable",
+    "silver_dace one page and one fish after actual reload",
+    "silver_dace replay never creates another fish",
+    "river_perch fresh three locked rows",
+    "river_perch locked notes have no replay",
+    "river_perch locked names not exposed",
+    "river_perch only actual caught fish unlocked",
+    "river_perch only caught row replayable",
+    "river_perch one page and one fish after actual reload",
+    "river_perch replay never creates another fish",
+    "same UI-earned save now shows all three colored fish",
+    "replaying complete notebook preserves three actually caught fish",
+    "no serving at lift",
+    "skip commits exactly one serving after old timers would have fired",
+    "skip leaves next choice unselected",
+    "skipped serving persists",
+    "shared sour remains spent before reload route",
+    "child middle slide does not commit early",
+    "elder middle slide does not commit early",
+    "four actual portions and paid refill survive reload",
+    "reloaded UI still four servings and three guests",
+    "reloaded journal has four actual food records plus one material receipt",
+    "saved farm table has exactly one shared and three personal plates",
+    "actual successive remembered progress 1",
+    "one remembered guest actually earned by cooking and gifts",
+    "normal map table refuses picnic before three memories",
+    "locked table names two actual missing guests",
+    "no premature party or go action",
+    "actual successive remembered progress 2",
+    "actual successive remembered progress 3",
+    "third actual memory exposes picnic preparation entry"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-locked.png",
+      "sha256": "5fdbd815cc98c79d40324f30f36195987700a9060d0fc16121c728fe58510959"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-sinking-final.png",
+      "sha256": "dab2ceae7703b5e6b6e1b15f161e1b3f5171dc8a8e8932d263176c9be584c61a"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-unlocked.png",
+      "sha256": "9a977c6f37f1b87570664181dc52f6ec42fb3aa341c5676f29d4be715790cab8"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-note-replay-final.png",
+      "sha256": "3b92471c248cf017a631631e14797443413b4d78dab2032d9f55be54627014c3"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-locked.png",
+      "sha256": "f3de19ea38490bea53f934c28fecd3d8e2f6d204a281fdca9f47decd1169ae7c"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-sinking-final.png",
+      "sha256": "b34283123e6b5504ecf5babcec298b51029bf658c76c7a7895afa65d582b1cd2"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-unlocked.png",
+      "sha256": "150b0e6bf33d5a49028c8b5f9893d52ccf7c3c5b292c972c3eb6add9ce00d035"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-note-replay-final.png",
+      "sha256": "2d47bf3d183a4a918260da1e5c53c8596e4fe55b85adf087179205089b9a35b1"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-locked.png",
+      "sha256": "f3de19ea38490bea53f934c28fecd3d8e2f6d204a281fdca9f47decd1169ae7c"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-sinking-final.png",
+      "sha256": "a94cdebc87f37850df339d5b559effcd3ecbf0340e44c3ee48f1b985d0b9e0ae"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-unlocked.png",
+      "sha256": "2bfbcfb73438980b586a28b9452bee4fbcfe2f435816a13eeaabb822734ab9f1"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-note-replay-final.png",
+      "sha256": "485796a381047e48e10f1464020155a0d4522bfe80cace5b002957f8a98a7017"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-learned-three-replay.png",
+      "sha256": "ae6304810342ebacc309af2f8a8d45d801bf376f7bc3f088693677c958555b87"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-skip-received.png",
+      "sha256": "4bdeeac080da805e17f42b2e5788fcd722a513be62380e8e90cc06033e3f744c"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-wrong-next-final.png",
+      "sha256": "8f4ec1042ae68493e21cd8a2121bdef414e0bdd4f0ee9714237a598073ab8518"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-refill-source-final.png",
+      "sha256": "e0d998ef181fba1821d4e96ba57d529fdde4c60abadfdb2428b024a1ad7790e6"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-child-mid-slide.png",
+      "sha256": "7a8aaa383cc5c33ecc987c3d8abd2454469d1e25eea8b02b8eee2975ce91e930"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-child-received-final.png",
+      "sha256": "3f8055822a03beb04dcfc7bdc7f3e48deecf8e084a83293d934064babb37cff7"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-elder-mid-slide.png",
+      "sha256": "3a09c7ad3d49fa575a41ef3154ae27e20eb0988c29c691c05b31be45785c7768"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-elder-received-final.png",
+      "sha256": "5c0103b1e9810fe678b9a34db60dbb64e4ea6c5695ea59fc7ee8660266308f4e"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-complete-reloaded.png",
+      "sha256": "0052740e7b30aa950e4eb851b2dd3bbcc844c2879dd71e19eccfd0899efae854"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-shared-journal-reloaded.png",
+      "sha256": "09c2380097fedc40133d37391241c3dccab559607ded7dce61fb9db74f1f125b"
+    },
+    {
+      "path": "docs/content/r13/phone-gathering-shared-table-reloaded.png",
+      "sha256": "6aa47a7a40696e2d6da44b3bbb5549d39d9810e600f06c27df17d2e8b5071d4a"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-memory-progress-1.png",
+      "sha256": "63e1463d34086e4a719f07d6179ef5281f5e9752f2ff91f0563d747ffefbc2b7"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-table-missing-neighbors.png",
+      "sha256": "f67677fedbcd976e128d3721de1d1a2464f513e21db89ae7cba62aada3f44e1c"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-memory-progress-2.png",
+      "sha256": "d07b4670019d0b3f77d2a5a80cb0a0b69c2400cc06c41211cc2a8fdeca79ddb6"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-memory-progress-3.png",
+      "sha256": "69e6db85bf9ddac8df0efe48f9d52865c4aa6a97df5552d2255e3bc4ea695d50"
+    }
+  ]
+}

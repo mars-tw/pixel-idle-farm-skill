@@ -1,0 +1,26 @@
+[
+  {
+    "status": "VERIFIED",
+    "originalReport": "docs/content/r8/regression-attempt1.json",
+    "originalLog": "docs/content/r8/logs/test-r81-review.txt",
+    "preservedLog": "docs/content/r8/logs/test-r81-review-attempt1.txt",
+    "sha256": "75321788c9c2c145c93f67ac0f2806398062f6981b59ac6866e254b8fe4f9804",
+    "finalRerun": "VERIFIED"
+  },
+  {
+    "status": "VERIFIED",
+    "originalReport": "docs/content/r8/regression-attempt2.json",
+    "originalLog": "docs/content/r8/logs/test-content-r7-e2e.txt",
+    "preservedLog": "docs/content/r8/logs/test-content-r7-e2e-attempt1.txt",
+    "sha256": "f1b1e077a990114b7fe885be61d1bb7e2726da16bdd2ac09c1a3239acdc97771",
+    "finalRerun": "VERIFIED"
+  },
+  {
+    "status": "VERIFIED",
+    "originalReport": "docs/content/r8/regression-attempt3.json",
+    "originalLog": "docs/content/r8/logs/test-content-r8-e2e.txt",
+    "preservedLog": "docs/content/r8/logs/test-content-r8-e2e-attempt1.txt",
+    "sha256": "48e18c39b5c32955a1764f18cb4236f847c01315df6aef9bf36b9070bf68be08",
+    "finalRerun": "VERIFIED"
+  }
+]

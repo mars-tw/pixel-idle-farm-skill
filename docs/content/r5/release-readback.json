@@ -1,0 +1,200 @@
+{
+  "status": "VERIFIED",
+  "scope": "Local functional release and artifact readback, no independent rating or physical-device claim.",
+  "version": "0.1.28",
+  "appVersion": "content-r5-20261019-1",
+  "baseCommit": "9965109",
+  "browserChecks": 126,
+  "browserGateScripts": 21,
+  "jsSyntaxFiles": 95,
+  "generatedArt": 2,
+  "reviewPortraits": 15,
+  "storeImages": 2,
+  "secretHits": 0,
+  "protectedFiles": 3972,
+  "validatedSnapshotMatchesRuntime": true,
+  "runtimeHashes": {
+    "src/adventure.js": "04867d0fc73183f044bf4ba33fec0f16ab1e06453f3f39e710385e7dcaa62166",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/atlas.js": "8a634d6883b822daf48a53c7a927dd54141d6054f252307b5770fe43960c0a22",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/content-r1.js": "11c4c0df960c77ffe28d748196b99abcb18126e80fd1285bebf764bc505e5f77",
+    "src/daily-ui.js": "d47eac1ea54b0c80c91f618a77062ff8a68823d5290234c950f7eeb9b8540164",
+    "src/daily.js": "4abcd251fa0f1c5385cf9deffce11641c801a4dc602e94d525ea7970aed9daa4",
+    "src/game.js": "8756bffb7e284ff503e691c2dc358a490ea05750789f506602d8be12a99bf77b",
+    "src/heirloom-ui.js": "f45fb552a0d429ded39f168863a1381d90c0bd4d21b298ba0c490a33afeff8d5",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "bfa0102e65696bd0aa506692d97e6162a3710eccd61b7612a440d8f558cb7619",
+    "src/ui.js": "8063a215779000fb8681d0afbb469a83799368237139aedef3a10804821989e6",
+    "src/world-ui.js": "b163d0697d4e4a13f8e4579cbe8478f8b6fd59820c0e01ffa469f02331627b22",
+    "src/art-r82.css": "4ade46c15e4af9d89f5ecf619ce6614c74a83f4a77a2c97e69c8b9b514143ea6",
+    "src/art-r83.css": "99ece115aace00ec5f756b16550beb124f25bfe07387be6934f8913a4e5086fe",
+    "src/art-r84.css": "2670e44906396a0eedb40330f376eb6c69c489f22e17cf00424fc0206a03a103",
+    "src/art-r85.css": "873f96e5e50fbc327d65d7ed8744340e60edf5407e0cbe2b40397a740ce1ed26",
+    "src/art-r86.css": "8f7826f87e849091010dc9ca7be718297c0391efa384fd19677e12bf453f4fad",
+    "src/art-r87.css": "7d8f3414d5836bc6a18e9b4578e801be95c4af78ae8881cac0fb945428ffd063",
+    "src/art-r88.css": "79ddbe8032d3a7245b5709bad1451355661b18e03fa44173834dbf3445837ed2",
+    "src/art-r89.css": "791a043d70fa203ac0d67fb7c7fd1cc9b6821ea703534b4ef2bdddb0e0a4603f",
+    "src/content-r1.css": "453ed3d58d20b9bf7de5f2360739c01eb022171366de210bc53d366de3fb3fc2",
+    "src/world.css": "63e43d96060fbd04bd1e5b40decfbdb405bea693a31d89b8b041d5e997fb850e",
+    "scripts/test-adventure.js": "36e811d7bc5d7278d597db904da3a4b77199b241471e92b11d2e19f8417a19d0",
+    "scripts/test-content-r1-e2e.js": "d7529215786e10163f1f8bb468f3985df630fd2afbb96a102fef6df15ecdb0fc",
+    "scripts/test-content-r1.js": "88f34b5b9265274e3c19c52ceb60f10f67ba26180ad8a1bb8a2f5baa48745e2d",
+    "scripts/test-content-r2-e2e.js": "391b010f6b9e280dba44919900f1616bb0f555cc9d3684ee051d1d393d71a84f",
+    "scripts/test-content-r2.js": "572248b27552b35b2f410211398e4f2b0ecc5e93d610e3f0bcf5ab9470361374",
+    "scripts/test-content-r3-e2e.js": "ded62780e4e26ca2d79829ca9fbfbfc1275e61abb38d6b4724a5165e7e058dee",
+    "scripts/test-content-r3.js": "23650ed0ed89f476b0be004a291506a61663b196ca96f99298ee7f67bd0d982c",
+    "scripts/test-content-r4-assets.js": "29afda3c3c29c8144d56eb62250b8ffb8de91ed95f4e67fadbaf44f4c3c0932c",
+    "scripts/test-content-r4-e2e.js": "e3a5cc18e59dc02001ecbc8b177bd29b4527e287ec9278ea0b56730e8aaf4408",
+    "scripts/test-content-r4.js": "4cfc10cac851f3d0489c6ed5a4c6b907ddaaac52fe24564b2cf2844d225a569e",
+    "scripts/test-content-r5-e2e.js": "833501a477ccc44b9f0fad0f7079fe973f455463fbc911cb621258cd07ee7273",
+    "scripts/test-content-r5.js": "cd1787c1e17d71734f0e20b3fa6f198db8c946f29ce5dfdfc37f8fc7dcf7934d",
+    "scripts/test-controls-reachability.js": "abf27aebe7b39dcd149ed7411384c07c7433f35e7e82019123ae5b7efa7dc6f8",
+    "scripts/test-economy.js": "6a17ff651a59d531a1962f9a0ac55067773d08fe7f1bae358147b33c196c41c7",
+    "scripts/test-guards.js": "5c7f69e7727a52d45058a8de8622af6a2176e1e250bef2b8b93eedfe5c98fd03",
+    "scripts/test-npc-indicators.js": "f0d23c0328e5c0d296a69561159fbfd24ac9f0ca66660bce338b31402fe9c66e",
+    "scripts/test-r66-ui-art.js": "586f9d48ce1bfa26c085f4789fca2dac4e18d7b6f046dee03ad80ddc0e091ee0",
+    "scripts/test-r68-browser.js": "9e99b85eab4599050af1ff459e4bab5c6b6df47a8a5d50e07a4b2cf63aea0778",
+    "scripts/test-r68-visuals.js": "096c3ad68436ec083f2613e5df9b28a7518456746eb3d2622dec94e5c3e8a788",
+    "scripts/test-r72-fixed-layers.js": "71a4561b0c9ffcf8bd7d1c21003ae873f7cafb4bf5a95933b8ac51c58d00c5fb",
+    "scripts/test-r72-night-gate.js": "c2f5cdb0ad0be6b25610f4cba59e3b393ac54486dc56bf1dd3cf02202ee32e76",
+    "scripts/test-r73-playtest.js": "4ae3f3585cdb9b8fba68d556ad6e6fd40a24dcc7b33d184abd0717af9470d26e",
+    "scripts/test-r74-building-upgrades-e2e.js": "e814b4e6e7fd50c8574810f2ae93c197821a0c8a41c82e6d4754713a9ae77468",
+    "scripts/test-r74-building-upgrades.js": "2461cfe4de9352474118ae165de220baeef83298e4f88ccd501186c845cdb256",
+    "scripts/test-r79-fun-e2e.js": "a2a86d3b4d819dba693e5fdc9787c886a8d0716c2c3ef0c682c98c6f3b57e791",
+    "scripts/test-r79-sunpatch.js": "4cc8e53ab09f6fd51b833db9d71ce818a557b180323680d5c2d42e87d57a12f9",
+    "scripts/test-r80-daily.js": "9614af15e19f0045750eba4b78361ac3834c296e7a18153fa33e034bfd5c0216",
+    "scripts/test-r80-mobile.js": "3f0e3b5bc0202c349c9604782f2fb420a67525db244ff3cba6446bf9955e9974",
+    "scripts/test-r81-heirloom.js": "af24462bb9c9a8e84ebd0bbbe611474b07c4aaeeebe8507abb1bcbb242fb1922",
+    "scripts/test-r81-review.js": "242fc1548ea52fbdfaa55d63a006d3e3c6527a627fb28966a42aa128d1a939df",
+    "scripts/test-r82-art.js": "e1600f257a91624c946a665b13849d07fe209d206572732e85933effddbf17e9",
+    "scripts/test-r83-art.js": "eac54fbb84d20a9d700f2730180806a5ef5acdd1d0c86ea6510ac5439788da59",
+    "scripts/test-r84-art.js": "ed6fb8ec4ee5455a5b5aa2491a8f96564b2f1f8268778007b2c6437923fc9f82",
+    "scripts/test-r85-art.js": "266fbe454da8f8fa64d879e66cb59728c31f2c5f2b5c32b208ce701fb21f16d8",
+    "scripts/test-r86-art.js": "1f52a471b9ad96af7e4f086d60bb699e7b8209e9d5556104d79fdaf90f2d3ce8",
+    "scripts/test-r87-art.js": "2c378bdfe8fee731bf9c6f2cb8645e0db919ca100d02191d1745b208702ef994",
+    "scripts/test-r88-art.js": "4cf3bf183304efa4fa633716055988aa56a3db1a6344b78fdf60238002703228",
+    "scripts/test-r89-art.js": "8b593990c3c3ac78958699698386d45a47f1324b923be748ec025b94f355dfdf",
+    "scripts/test-rpg-v4-e2e.js": "ce01e1c7ccef4a11ba781655fae1567f28f15bf37dc8d6845130df49d0d41bab",
+    "scripts/test-rwd-matrix.js": "6fe02da72c916c59060aee72506d40780c846ed095168edb2aa77827cb639cea",
+    "scripts/test-systems.js": "1bdbc7db264b54e5b942809182efb8cf1f6e3add6c1c1d5b64e18b6c52da5601",
+    "scripts/test-ui-smoke.js": "68af9c500f4dc86f72d995ba15e83f19658bbb9c40df08a2578bfa433f4d41bb",
+    "scripts/test-version-chain.js": "a1c03681abe3fba0da7db9f428170db7119487c6f2b20b01e8391445e32412d9",
+    "scripts/test-water-quest-guide.js": "ce9b293c9b2649f8e617aa5ba907379af72412c445de2623d07edb7b71d3a1b1",
+    "scripts/test-world-migration.js": "c459488b2bb765b4e6e3d80127d3c508d1a5b77f19cc4b721350091c3275aad4",
+    "scripts/test-world-project-art.js": "001156c3ccec8775f65ad37a1d24378eca332cd3d83350c19b07f4a4f7487dca",
+    "scripts/test-world-rework-e2e.js": "f25938280c005a7e9c226cc20d314578b6d984c62669b00744513a37a72ab20d",
+    "scripts/run-browser-gates.js": "a70138f0731b5c5fdc9aeb2b913847cff2bab42319d02901a5d180e30566c6d0",
+    "index.html": "9beddc20d1848be00f7bcb588c73fddee22581d5b2a5bba813f668c6bdcd23b7",
+    "sw.js": "16f568d75b8ea1a2dff9d55ae0b457df01aa6dd471f2d0213f126bc09f2c832b",
+    "manifest.webmanifest": "81483d3b4889891889dd257273f16aa9e64bd42ddeaeb91c6130deb98acf8b8e",
+    "package.json": "378b2a1cf26a60ccf8875894cc611d5e84f50c4b05a3d034a4b62af6dbff058b",
+    "package-lock.json": "7a52b673d095a225a66063edf2c5dd247c5eca5f8b79d31525a5dc5c136a9294",
+    "assets/generated/content-r5/elder.webp": "1ea8e40c33cb4cf9960c9d3211d3282a3649c57fecb6977b679fa0dddc976e72",
+    "assets/generated/content-r5/manifest.json": "f8cb05ddec662e0f58cb6470d4f787b792e7b6cf7d46be10cd5c1e139460eb9a",
+    "assets/generated/content-r5/merchant.webp": "87bd733db40ebadd31d60e477330d2c3a585a15f49bbcf7c92ad9db4bf9bd14f"
+  },
+  "performance": [
+    {
+      "scene": "sunpatch",
+      "viewport": "1366x768",
+      "p95Ms": [
+        16.8,
+        33.3,
+        33.3
+      ],
+      "medianMs": 33.3
+    },
+    {
+      "scene": "sunpatch",
+      "viewport": "390x844",
+      "p95Ms": [
+        16.8,
+        16.8,
+        16.7
+      ],
+      "medianMs": 16.8
+    },
+    {
+      "scene": "pond",
+      "viewport": "1366x768",
+      "p95Ms": [
+        16.7,
+        33.3,
+        16.8
+      ],
+      "medianMs": 16.8
+    },
+    {
+      "scene": "pond",
+      "viewport": "390x844",
+      "p95Ms": [
+        16.8,
+        16.7,
+        16.7
+      ],
+      "medianMs": 16.7
+    }
+  ],
+  "allReferenceRunsGate": "BLOCKED",
+  "medianReferenceGate": "BLOCKED",
+  "blocked": [
+    "physical phone/iPad",
+    "human/family playtest",
+    "clean dedicated-host performance",
+    "independent Muse score >=8"
+  ],
+  "tests": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 8.83,
+      "cwd": ".audit-tmp/content-r5-validation",
+      "log": "docs/content/r5/logs/npm-test.txt"
+    },
+    {
+      "name": "browser-gates",
+      "command": [
+        "cmd",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 1253.27,
+      "cwd": ".audit-tmp/content-r5-validation",
+      "log": "docs/content/r5/logs/browser-gates.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.65,
+      "cwd": ".audit-tmp/content-r5-validation",
+      "log": "docs/content/r5/logs/water-guide.txt"
+    },
+    {
+      "name": "night-gate",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 26.14,
+      "cwd": ".audit-tmp/content-r5-validation",
+      "log": "docs/content/r5/logs/night-gate.txt"
+    }
+  ]
+}

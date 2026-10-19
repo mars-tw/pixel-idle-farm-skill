@@ -1,0 +1,333 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "clockAccelerated": false,
+  "progressInjected": false,
+  "cameraOnlyFocus": true,
+  "journeys": [
+    {
+      "platform": "iphone",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "deviceScaleFactor": 3,
+      "choice": "table",
+      "elapsedMs": 24705,
+      "realInput": true,
+      "progressInjected": false,
+      "earned": {
+        "h": {
+          "started": true,
+          "sunWheat": 2,
+          "delivered": false,
+          "choice": null,
+          "deliveredAt": 0,
+          "wheat": 8,
+          "ready": true,
+          "note": null
+        },
+        "daily": {
+          "day": 20744,
+          "date": "2026-10-18",
+          "nextAt": 1792339200000,
+          "tasks": [
+            {
+              "id": "water",
+              "title": "替新芽添水",
+              "detail": "種下作物後，用澆水工具照顧它。每株只算一次。",
+              "have": 3,
+              "need": 2,
+              "coins": 4,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "harvest",
+              "title": "收一籃新鮮",
+              "detail": "成熟後點右下角收成鍵。作物進倉庫才算數。",
+              "have": 8,
+              "need": 8,
+              "coins": 6,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "basket",
+              "title": "小麥餐籃",
+              "detail": "留 2 份小麥給鄰居，交付後會從倉庫取走。種子袋裡可以選種。",
+              "have": 8,
+              "need": 2,
+              "coins": 6,
+              "cropId": "wheat",
+              "claimed": false,
+              "ready": true
+            }
+          ],
+          "stamps": 0,
+          "stamped": false,
+          "done": 0,
+          "keepsakes": [
+            {
+              "at": 3,
+              "id": "pressed_wheat",
+              "name": "祖母壓的小麥",
+              "text": "第一年收成不好，她還是留了一穗。她說，肯再種一次的人，總會等到下一季。",
+              "owned": false
+            },
+            {
+              "at": 7,
+              "id": "table_note",
+              "name": "餐桌下的紙條",
+              "text": "桌子修好那天，祖母在背面寫了每個人的名字。你的名字旁邊，空著一格給下一個回來的人。",
+              "owned": false
+            }
+          ]
+        },
+        "stats": {
+          "harvested": {
+            "wheat": 8
+          },
+          "fulfilledOrders": 0,
+          "totalCoinsEarned": 0,
+          "plantCount": 4,
+          "cleared": 0,
+          "collected": {},
+          "qualitySold": 0,
+          "npcRequestsCompleted": 0,
+          "festivalOrders": 0,
+          "seasonsReached": {
+            "春": true
+          },
+          "sunCatches": 2
+        }
+      },
+      "moment": {
+        "action": "water",
+        "frame": "-330px -294px",
+        "plants": [
+          {
+            "i": 0,
+            "crop": "wheat",
+            "ageMs": 10031,
+            "stage": 3,
+            "sunlit": false,
+            "inSunlightField": true,
+            "sunGrown": true
+          },
+          {
+            "i": 1,
+            "crop": "wheat",
+            "ageMs": 5210,
+            "stage": 1,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 2,
+            "crop": "wheat",
+            "ageMs": 3762,
+            "stage": 1,
+            "sunlit": true,
+            "inSunlightField": true,
+            "sunGrown": false
+          },
+          {
+            "i": 3,
+            "crop": "wheat",
+            "ageMs": 2342,
+            "stage": 0,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "platform": "ipad",
+      "viewport": {
+        "width": 1032,
+        "height": 1376
+      },
+      "deviceScaleFactor": 2,
+      "choice": "doorstep",
+      "elapsedMs": 26505,
+      "realInput": true,
+      "progressInjected": false,
+      "earned": {
+        "h": {
+          "started": true,
+          "sunWheat": 2,
+          "delivered": false,
+          "choice": null,
+          "deliveredAt": 0,
+          "wheat": 8,
+          "ready": true,
+          "note": null
+        },
+        "daily": {
+          "day": 20744,
+          "date": "2026-10-18",
+          "nextAt": 1792339200000,
+          "tasks": [
+            {
+              "id": "water",
+              "title": "替新芽添水",
+              "detail": "種下作物後，用澆水工具照顧它。每株只算一次。",
+              "have": 3,
+              "need": 2,
+              "coins": 4,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "harvest",
+              "title": "收一籃新鮮",
+              "detail": "成熟後點右下角收成鍵。作物進倉庫才算數。",
+              "have": 8,
+              "need": 8,
+              "coins": 6,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "basket",
+              "title": "小麥餐籃",
+              "detail": "留 2 份小麥給鄰居，交付後會從倉庫取走。種子袋裡可以選種。",
+              "have": 8,
+              "need": 2,
+              "coins": 6,
+              "cropId": "wheat",
+              "claimed": false,
+              "ready": true
+            }
+          ],
+          "stamps": 0,
+          "stamped": false,
+          "done": 0,
+          "keepsakes": [
+            {
+              "at": 3,
+              "id": "pressed_wheat",
+              "name": "祖母壓的小麥",
+              "text": "第一年收成不好，她還是留了一穗。她說，肯再種一次的人，總會等到下一季。",
+              "owned": false
+            },
+            {
+              "at": 7,
+              "id": "table_note",
+              "name": "餐桌下的紙條",
+              "text": "桌子修好那天，祖母在背面寫了每個人的名字。你的名字旁邊，空著一格給下一個回來的人。",
+              "owned": false
+            }
+          ]
+        },
+        "stats": {
+          "harvested": {
+            "wheat": 8
+          },
+          "fulfilledOrders": 0,
+          "totalCoinsEarned": 0,
+          "plantCount": 4,
+          "cleared": 0,
+          "collected": {},
+          "qualitySold": 0,
+          "npcRequestsCompleted": 0,
+          "festivalOrders": 0,
+          "seasonsReached": {
+            "春": true
+          },
+          "sunCatches": 2
+        }
+      },
+      "moment": {
+        "action": "water",
+        "frame": "-441px -392px",
+        "plants": [
+          {
+            "i": 0,
+            "crop": "wheat",
+            "ageMs": 6436,
+            "stage": 1,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 1,
+            "crop": "wheat",
+            "ageMs": 8379,
+            "stage": 2,
+            "sunlit": false,
+            "inSunlightField": true,
+            "sunGrown": true
+          },
+          {
+            "i": 2,
+            "crop": "wheat",
+            "ageMs": 3576,
+            "stage": 0,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 3,
+            "crop": "wheat",
+            "ageMs": 2152,
+            "stage": 0,
+            "sunlit": true,
+            "inSunlightField": true,
+            "sunGrown": false
+          }
+        ]
+      },
+      "errors": []
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-01-welcome.png",
+      "sha256": "ec7a1dcf14cf96cf302046865476df2a1ff4f7d3825c0b4522a7fb94beebef40"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-02-sunlight.png",
+      "sha256": "81ef79372a44bfa61484a9e2789711a725af1e2cb1db8e8661a7c1b77c52a05d"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-03-basket.png",
+      "sha256": "57ea069658e954a615970f13a27d485c0b66fc03a4a83eae870a38807c924e65"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-04-note.png",
+      "sha256": "c71efb2123ab96c2e3f1ca6750d5ba077bd863a5aa2eb8c95466a55459561ad1"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-05-daily.png",
+      "sha256": "800ba103e5bb51cf1764adcdd27ce2530927d9797c71f865525eb459712be0ef"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-01-welcome.png",
+      "sha256": "c693cb8a0af0beb84b86ada12c409c9200b04df2eb8dc5c009117a2b77b18f62"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-02-sunlight.png",
+      "sha256": "103376fc5d9c5137d945ed82b05953a1f3843881ec22b7ba88bdd370460771ae"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-03-basket.png",
+      "sha256": "66e805e3856406203260e6f5dcc1740bcb884dcad0a786c0162a4a7b8e0040d0"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-04-note.png",
+      "sha256": "e1a703c4264c794379bf902fd964ef8bf02553ecf44b96822bf4e45d0cd67b57"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-05-daily.png",
+      "sha256": "1870f53b02b3a8c90566c2a3ac8687b6d0127aac0453f22ae6f6c54224dfdb61"
+    }
+  ]
+}

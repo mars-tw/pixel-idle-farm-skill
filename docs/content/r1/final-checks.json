@@ -1,0 +1,118 @@
+[
+  {
+    "name": "npm-test",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm test"
+    ],
+    "exitCode": 0,
+    "seconds": 8.3,
+    "log": "docs/content/r1/logs/npm-test.txt"
+  },
+  {
+    "name": "browser-ci",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm run test:e2e"
+    ],
+    "exitCode": 1,
+    "seconds": 575.56,
+    "log": "docs/content/r1/logs/browser-ci.txt"
+  },
+  {
+    "name": "npm-test-final",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm test"
+    ],
+    "exitCode": 0,
+    "seconds": 7.19,
+    "log": "docs/content/r1/logs/npm-test-final.txt"
+  },
+  {
+    "name": "content-r1-final",
+    "command": [
+      "node",
+      "scripts/test-content-r1-e2e.js"
+    ],
+    "exitCode": 1,
+    "seconds": 105.84,
+    "log": "docs/content/r1/logs/content-r1-final.txt"
+  },
+  {
+    "name": "npm-test-final",
+    "attempt": 2,
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm test"
+    ],
+    "exitCode": 0,
+    "seconds": 7.02,
+    "log": "docs/content/r1/logs/npm-test-final-attempt2.txt"
+  },
+  {
+    "name": "content-r1-final",
+    "attempt": 2,
+    "command": [
+      "node",
+      "scripts/test-content-r1-e2e.js"
+    ],
+    "exitCode": 1,
+    "seconds": 74.86,
+    "log": "docs/content/r1/logs/content-r1-final-attempt2.txt"
+  },
+  {
+    "name": "npm-test-final",
+    "attempt": 3,
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm test"
+    ],
+    "exitCode": 0,
+    "seconds": 8.75,
+    "log": "docs/content/r1/logs/npm-test-final-attempt3.txt"
+  },
+  {
+    "name": "content-r1-final",
+    "attempt": 3,
+    "command": [
+      "node",
+      "scripts/test-content-r1-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 52.12,
+    "log": "docs/content/r1/logs/content-r1-final-attempt3.txt"
+  },
+  {
+    "name": "water-guide",
+    "attempt": 1,
+    "command": [
+      "node",
+      "scripts/test-water-quest-guide.js"
+    ],
+    "exitCode": 0,
+    "seconds": 12.81,
+    "log": "docs/content/r1/logs/water-guide.txt"
+  },
+  {
+    "name": "night-gate",
+    "attempt": 1,
+    "command": [
+      "node",
+      "scripts/test-r72-night-gate.js"
+    ],
+    "exitCode": 0,
+    "seconds": 25.34,
+    "log": "docs/content/r1/logs/night-gate.txt"
+  }
+]

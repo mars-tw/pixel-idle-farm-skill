@@ -1,0 +1,14 @@
+{
+  "status": "VERIFIED",
+  "candidateFilesAtFinalCheck": 1098,
+  "textFilesScanned": 112,
+  "binaryFiles": 986,
+  "secretHits": [],
+  "foreignStagedFiles": [],
+  "stagedPathsWithUnstagedChanges": [],
+  "newUntrackedFiles": [],
+  "baselineFiles": 5752,
+  "unrelatedBaselineChanges": [],
+  "preservedUserManifestSha256": "6a8d09bc78893c01a8ba91ced30ada89180095c45280459422fd346f072d1394",
+  "scope": "All staged text, UTF16 logs included; only round paths staged. Original baseline files and original untracked evidence preserved."
+}

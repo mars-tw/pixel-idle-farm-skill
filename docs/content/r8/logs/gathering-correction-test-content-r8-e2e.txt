@@ -1,0 +1,107 @@
+PASS cancel retains every meal and ingredient
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant wrong flavor does not match
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant correct flavor earns keepsake
+PASS merchant matched visible hit targets >=44px
+PASS merchant matched no keyboard instructions
+PASS merchant first/wrong/matched are actual recorded deliveries
+PASS merchant recorded wrong dialogue visible in journal
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder wrong flavor does not match
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder correct flavor earns keepsake
+PASS elder matched visible hit targets >=44px
+PASS elder matched no keyboard instructions
+PASS elder first/wrong/matched are actual recorded deliveries
+PASS elder recorded wrong dialogue visible in journal
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child wrong flavor does not match
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child correct flavor earns keepsake
+PASS child matched visible hit targets >=44px
+PASS child matched no keyboard instructions
+PASS child first/wrong/matched are actual recorded deliveries
+PASS child recorded wrong dialogue visible in journal
+PASS merchant no permanent text label
+PASS merchant full history and personal object survive reload
+PASS elder no permanent text label
+PASS elder full history and personal object survive reload
+PASS child no permanent text label
+PASS child full history and personal object survive reload
+PASS early river_carp grants no fish
+PASS river_carp actual impact reel earns fish and note
+PASS river_carp notebook delta from actual capture
+PASS river_carp catch and note survive reload
+PASS river_carp learned cast hides timing answers
+PASS river_carp learned real-clock second catch adds one fish, no duplicate note
+PASS early silver_dace grants no fish
+PASS silver_dace actual impact reel earns fish and note
+PASS silver_dace notebook delta from actual capture
+PASS silver_dace catch and note survive reload
+PASS silver_dace learned cast hides timing answers
+PASS silver_dace learned real-clock second catch adds one fish, no duplicate note
+PASS early river_perch grants no fish
+PASS river_perch actual impact reel earns fish and note
+PASS river_perch notebook delta from actual capture
+PASS river_perch catch and note survive reload
+PASS river_perch learned cast hides timing answers
+PASS river_perch learned real-clock second catch adds one fish, no duplicate note
+PASS merchant gathering basket packed exactly once
+PASS elder gathering basket packed exactly once
+PASS child gathering basket packed exactly once
+PASS three packed baskets survive real reload
+PASS completion and farm preserve all six actor/keepsake relationships to the table within one native pixel
+PASS three asynchronous upper-body poses, all seats occupied
+PASS pose source pixels actually change over real time
+PASS seats and sprite feet never translate between frames
+PASS table position unchanged after reload
+PASS reopened gathering keeps the identical actor/keepsake table layout
+PASS 320 memory visible hit targets >=44px
+PASS 320 memory no keyboard instructions
+PASS 320 gathering visible hit targets >=44px
+PASS 320 gathering no keyboard instructions
+PASS 320 pond visible hit targets >=44px
+PASS 320 pond no keyboard instructions
+PASS 844 memory visible hit targets >=44px
+PASS 844 memory no keyboard instructions
+PASS 844 gathering visible hit targets >=44px
+PASS 844 gathering no keyboard instructions
+PASS 844 pond visible hit targets >=44px
+PASS 844 pond no keyboard instructions
+PASS 768 memory visible hit targets >=44px
+PASS 768 memory no keyboard instructions
+PASS 768 gathering visible hit targets >=44px
+PASS 768 gathering no keyboard instructions
+PASS 768 pond visible hit targets >=44px
+PASS 768 pond no keyboard instructions
+PASS 1032 memory visible hit targets >=44px
+PASS 1032 memory no keyboard instructions
+PASS 1032 gathering visible hit targets >=44px
+PASS 1032 gathering no keyboard instructions
+PASS 1032 pond visible hit targets >=44px
+PASS 1032 pond no keyboard instructions
+PASS all 18 new runtime assets precached
+PASS new water loads on first offline pond visit
+PASS zero browser page errors

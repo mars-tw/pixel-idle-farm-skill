@@ -1,0 +1,689 @@
+{
+  "status": "EXECUTED",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool did not disclose model slug. Actual tool name recorded; no guessed API model.",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/character-sheets/miri-r86.png",
+      "sha256": "f868f15079a4d615cc1029259092ae522f7e00df9a850274828f9f4d41bf2c3a",
+      "bytes": 1926811
+    },
+    {
+      "path": "docs/art/masters/r86/leaf.png",
+      "sha256": "118b070ec837b324270326420f224886381fef4ff2aa147e361a427919998ef0",
+      "bytes": 1402318
+    },
+    {
+      "path": "docs/art/masters/r86/panel.png",
+      "sha256": "cbd7283cc1d32a35ad2958c1047753737301b84f7bb570466e5a279d1224e56a",
+      "bytes": 2497390
+    },
+    {
+      "path": "docs/art/masters/r86/stamps.png",
+      "sha256": "6238769f31a3ee73310c3fffd73714ed2920179ae352a68ce0913c76b5454ce6",
+      "bytes": 1343349
+    },
+    {
+      "path": "docs/art/masters/r86/walk.png",
+      "sha256": "23d73134f1d2dc15033e3c041cbb49b6a73944c61d50373b54bd044da46886f9",
+      "bytes": 1924145
+    },
+    {
+      "path": "docs/art/masters/r86/actions.png",
+      "sha256": "5cd8217361af532ccb87c25f1dacb72948c8e0235048676501d106bbdbb50037",
+      "bytes": 2494477
+    },
+    {
+      "path": "docs/art/masters/r86/logo.png",
+      "sha256": "1c52ba6f797533a7b4ca11be2e288acfe57b77e9b26be4cec6659d153fdfd657",
+      "bytes": 1206347
+    },
+    {
+      "path": "docs/art/masters/r86/app.png",
+      "sha256": "f98ec17dbae18242dfbfce30c78bb3820a0029f6e36a6dbd434237c809daeaa3",
+      "bytes": 2084339
+    }
+  ],
+  "records": [
+    {
+      "path": "assets/generated/r86/walk.png",
+      "source": "walk",
+      "size": [
+        288,
+        256
+      ],
+      "bytes": 58381,
+      "sha256": "1594c77ec8f18a6a3411a23f62336eb38fc46335350b61ef9370bde5c96da03e"
+    },
+    {
+      "path": "assets/generated/r86/actions.png",
+      "source": "actions",
+      "size": [
+        288,
+        512
+      ],
+      "bytes": 84953,
+      "sha256": "601d537600d8cbfc858682d3deeede2386b802d15876f62f592d9c8695cb9b2e"
+    },
+    {
+      "path": "assets/generated/r86/drop-16.png",
+      "source": "blue water cutout from generated action impact pose",
+      "size": [
+        16,
+        16
+      ],
+      "bytes": 94,
+      "sha256": "90c9c89cfd07bbba66d396cbbd39aab7c1dd90aa4792b193ad24bef51cdc3012"
+    },
+    {
+      "path": "assets/generated/r86/farming-actions.png",
+      "source": "actions + licensed retained axe/build poses",
+      "size": [
+        288,
+        1536
+      ],
+      "bytes": 231949,
+      "sha256": "87118cfa2694ed363d0c53ba11de20586e697c758d8b58c51c5c0a95a903917f"
+    },
+    {
+      "path": "assets/generated/r86/miri-0.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 6802,
+      "sha256": "9c2442b120719055748665364056b9c6a5ee553e733c25c31422baad7f8ebd56"
+    },
+    {
+      "path": "assets/generated/r86/miri-1.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7191,
+      "sha256": "c9c0bcefd47deb2df910cb197dd90f1e8c41978a82e858b1fa4a394d689155e2"
+    },
+    {
+      "path": "assets/generated/r86/miri-2.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 6781,
+      "sha256": "699d0e88bc6fa7c9baf120f09aa15af5ca0d8343868273e96669e547e8c41360"
+    },
+    {
+      "path": "assets/generated/r86/stamp-water-32.png",
+      "source": "stamps",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 312,
+      "sha256": "66468bd3eb67b89bdca04d9d7f733592e156e188d7c4a58414f9b546906e668b"
+    },
+    {
+      "path": "assets/generated/r86/stamp-harvest-32.png",
+      "source": "stamps",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 321,
+      "sha256": "37cd78c54fe42b8312b9fa0e402d04ed09ee3664671c0ee219f85a85aec58334"
+    },
+    {
+      "path": "assets/generated/r86/stamp-basket-32.png",
+      "source": "stamps",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 327,
+      "sha256": "e84fe9669029e04475be6476630c5ea366b4facd634399a01d1ab8447f531707"
+    },
+    {
+      "path": "assets/generated/r86/paper-128.png",
+      "source": "panel",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2562,
+      "sha256": "b3390e9b70e9dbdddcc0e0bf1d5c851a6ec76756fe8a4a9e42b19b3019784780"
+    },
+    {
+      "path": "assets/generated/r86/binding-8.png",
+      "source": "licensed R85 generated album binding, cropped inside frame",
+      "size": [
+        8,
+        128
+      ],
+      "bytes": 1217,
+      "sha256": "000fb065c40eb2519fb62d4ab8bcde73452f2cd9f0df50a43011564994b5d0d6"
+    },
+    {
+      "path": "assets/generated/r86/leaf-light-128.png",
+      "source": "leaf luminance mask",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 7948,
+      "sha256": "1a392fef004545ceffbfd7a42f6b3cda1f45093f05d0b54e01ee614f3c37ca83"
+    },
+    {
+      "path": "assets/generated/r86/canopy-shadow-128.png",
+      "source": "leaf inverse luminance mask",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 11525,
+      "sha256": "78806169e5b90253ef032afa661a1408a46428e837141614cb32204ef2dd3a02"
+    },
+    {
+      "path": "assets/generated/r86/leaf-ground-128.png",
+      "source": "leaf combined generated masks",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 22712,
+      "sha256": "ff1b180d2d3d22bde43cd1fb41e1ca3d3370fb11433b390141c732e51b5d44dd"
+    },
+    {
+      "path": "assets/generated/r86/logo-320.png",
+      "source": "logo",
+      "size": [
+        320,
+        112
+      ],
+      "bytes": 21713,
+      "sha256": "0812fbeb260be44184fd4d33b8b5db8f35ecf1de2ad4cc8b88453545b79e3e5c"
+    },
+    {
+      "path": "assets/generated/r86/app-icon-64.png",
+      "source": "app",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 10200,
+      "sha256": "15452b1e9d73237cdf11780640bdb1c5f64d49755e35010218c299339d940aa6"
+    },
+    {
+      "path": "assets/generated/r86/app-icon-192.png",
+      "source": "app",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 10778,
+      "sha256": "acdde06db7284adc8b6cfc346b0c96eda2c81d4c1bf1d059f894d3e695d98def"
+    },
+    {
+      "path": "assets/generated/r86/app-icon-512.png",
+      "source": "app",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 15393,
+      "sha256": "8cf7f947ce04f94115190b0f3d1af76506e2c48fa98d7425074973c879457cf8"
+    }
+  ],
+  "frameReceipts": [
+    {
+      "sheet": "walk",
+      "row": 0,
+      "hashes": [
+        "dc985b740a9899a70df5be14c24cc0514f18a4034faf4b06716861d99c158e79",
+        "cd0dab19236c9d2a6f481412288b3364a504eec8fcdce3c956e5354aa674f52a",
+        "4406d074cb1e365cb042bf3520a0f2528f23bc017f227a35bb07739ec339da9f",
+        "e7337c7eaf366c641b8d0687caff85c542d7b68261b71c68752ee1aeac85ee9e",
+        "871f3227c70f6097e28f0e8df32edfce8e5b2c8e6cb71c47a474160bb1644dbf",
+        "bd2f2f6e4d8f78336210b0a8cb36962aeb9683a0f150218edf0a9ade160a5d78"
+      ],
+      "alphaDifferences": [
+        0.028645833333333332,
+        0.029296875,
+        0.028971354166666668,
+        0.027018229166666668,
+        0.041341145833333336
+      ],
+      "lowerBodyChangedFraction": 0.16650390625
+    },
+    {
+      "sheet": "walk",
+      "row": 1,
+      "hashes": [
+        "2e25679d1fd711fdc66cf351019c79a6f7de2771871bb83db7737d9e523433ea",
+        "c5c5cd3397d7c124e948de20c6bad69c8176d1bb8f4a9a324169dedc398852e8",
+        "4644408925d0dad54fdc6074feeee95deb3e602ef41ee52002677c5bfc0bc617",
+        "0b62f18cf5c347caf5f2575b0e2473d9b56a0b4739330d04420e841ff115b2a7",
+        "eaa257bcc4126a3d9e91ea47db8c5cab5392b4379ca26d5640009b368c675aba",
+        "cb463d6bf1395308345c343e737297430d2a2aa05b9c5f878337ac1f0928d981"
+      ],
+      "alphaDifferences": [
+        0.056966145833333336,
+        0.038411458333333336,
+        0.048502604166666664,
+        0.053385416666666664,
+        0.056640625
+      ],
+      "lowerBodyChangedFraction": 0.24397786458333334
+    },
+    {
+      "sheet": "walk",
+      "row": 2,
+      "hashes": [
+        "a5b6f9a9bef357bc3ef213ebb995d7f0f94fadc5df624b11903e682aaf873800",
+        "9c39ef3c69844530d769468e4e6e3f358f0f067fa13a2f3ed1263cf77ac90ced",
+        "6b2a9d869c1d70900145eae10395361ba8da3ae6a78171805f6353fa7b544538",
+        "4ffe05d3e1d0487f3deca8cfb1b0c81fbedfd342766dfdb036216fc8ea240c23",
+        "dcb7d414e53d17f7ef041851a6c5f091267c681fef222b353262bc7c35c66f31",
+        "d58223f0e3a22912e4444d3445a01786d95e7207c6aa5755a39d3f941cdf53ba"
+      ],
+      "alphaDifferences": [
+        0.09342447916666667,
+        0.0751953125,
+        0.059244791666666664,
+        0.06510416666666667,
+        0.07259114583333333
+      ],
+      "lowerBodyChangedFraction": 0.3175455729166667
+    },
+    {
+      "sheet": "walk",
+      "row": 3,
+      "hashes": [
+        "8e90630808ae8a290ade89956810b16d1899fc3e9cf8d65f6c31d81971fa2311",
+        "4d64fa34cda829367817379ca60274b92ae14e50adb14a13e62645066300ae5d",
+        "9f77139ce8aa6b4cbb2aa59d28527bff81de269798d2352bd2a40a8bdf97728f",
+        "45166de247c01008727b5f1e4b84e0164f1e0bd753d6a68f65798bddbab2f283",
+        "88a543d21577a0e670f8978b69ce2c634294a3c7ca574adf2428123af763ca15",
+        "34cc6e66dbbc8aed6a7073471c3b8a3440eae4b0ae38594c1e71f112222d53b1"
+      ],
+      "alphaDifferences": [
+        0.0390625,
+        0.028971354166666668,
+        0.032552083333333336,
+        0.056966145833333336,
+        0.06966145833333333
+      ],
+      "lowerBodyChangedFraction": 0.23030598958333334
+    },
+    {
+      "sheet": "actions",
+      "row": 0,
+      "hashes": [
+        "c000dea6d4a3a84313a89051dca2b8243ba93af687e9543f30c16ea4ac182108",
+        "c7e8fc882baaba79fd9c8d18db28c9af38f1caba0be3a30a93254b0f7bfe1bee",
+        "1758ad3b318a0946fa776262e6cc5dbb0707b0eecd632b2d442fd9c7bff51134",
+        "65c7c57f662916727a91a56f3e20f28dd7088615a8db5de27420f6ea709685ee",
+        "ed4b3f13d3bda7e11e239e41ca90e21fd4cfbf36cb3784e7d1c25d46ddf4a01f",
+        "150079840115f91cbdfa3f2fca426aa06daa3a675961c622d4fca39c4d58c885"
+      ],
+      "alphaDifferences": [
+        0.0634765625,
+        0.07975260416666667,
+        0.06608072916666667,
+        0.0732421875,
+        0.091796875
+      ],
+      "lowerBodyChangedFraction": 0.3015950520833333
+    },
+    {
+      "sheet": "actions",
+      "row": 1,
+      "hashes": [
+        "e86a00813d832cab6f741800d7505041aa519fc73b8c936d38e111dfd538aaa4",
+        "537b357c1dbfb3a64a2acc428633e343e1a471149650a69b1c564b9e10ef5a4c",
+        "bbed52521259dbd7019e63f698de68485fe012784d3d623cfffb449e26bab58a",
+        "0679428b474682ff049c8f9abefc8d1df6603810c978c646d34c4398100a693f",
+        "224590dcd82416acaef10d1e02d479e2946dd5e786d2b09a493a483b9d50cda4",
+        "1f938e8ec9d1ffc962e3f23e99ed3368ad966befc96a028cfe368bb5b01430ea"
+      ],
+      "alphaDifferences": [
+        0.1015625,
+        0.14583333333333334,
+        0.1572265625,
+        0.22330729166666666,
+        0.1005859375
+      ],
+      "lowerBodyChangedFraction": 0.3629557291666667
+    },
+    {
+      "sheet": "actions",
+      "row": 2,
+      "hashes": [
+        "33206ed12cf380854e5a234732974dba4d5e1b4996d2f590f7d46683b8c0dd28",
+        "6575fba0f1be3a46811a2a71e01590240da50782c3317c26be3bbbfe11b28bb3",
+        "6caf3abcc586a2d5b2d808b410c4bd26b3081a31415e09a19abab98832bac791",
+        "f022a5c5d368efa6835ba50369baa21a9c5c549f0adf59cbbdbda0fb92e379f8",
+        "c183db71a7e24f7695d8ce54d2656381d6e5886350425a552d4c78c91ebcdac8",
+        "ffe9187f633287d543af20e38a1b3ba5d373d58c8612b74bea662fb517dbd194"
+      ],
+      "alphaDifferences": [
+        0.09733072916666667,
+        0.13736979166666666,
+        0.16243489583333334,
+        0.19954427083333334,
+        0.1083984375
+      ],
+      "lowerBodyChangedFraction": 0.3746744791666667
+    },
+    {
+      "sheet": "actions",
+      "row": 3,
+      "hashes": [
+        "ca1b7d9f8cd38e1df9aec8844fd6eade53bcaf3a5506285fa619406ed0f4459c",
+        "93f0520ecc8575ecbe4482227b3ce8f12a55f22e2c6c23be8875ed5bf671a88d",
+        "af98155ded0d4c3c7603cd6adaa43ec27de037c786a3b6c4539c49c7e8f9fab0",
+        "64ed1dddb26d490bf5350a4409f2e25aa0945dc1b10d9f4f41078a7b75f2a4ec",
+        "168241a489cf0508665cc619c7ad9d8824bfd26564a0280f45604aaafec32006",
+        "9b691e9831e083ae3e8f9c864021e4e9070dabe2788e9d16f20ab07a3cc130f7"
+      ],
+      "alphaDifferences": [
+        0.12141927083333333,
+        0.07389322916666667,
+        0.051106770833333336,
+        0.14615885416666666,
+        0.09375
+      ],
+      "lowerBodyChangedFraction": 0.3556315104166667
+    },
+    {
+      "sheet": "actions",
+      "row": 4,
+      "hashes": [
+        "12ae759a10d7fc353ac094230f5f2505d65071016011c3c49c529ca449a3b02b",
+        "1ed7dce95761d2e6517a52ed25115523fea1fb1af08b4378807dc7e6c1d374ce",
+        "b4c3a4e7f5f4b933b5b3aacc44bddf77ab28f143333ecf6af4908cc553543b58",
+        "2df85925bb95abb07372871cca77a02d72af088ca6e45850219d04fee01abbb3",
+        "1e90f38a0933f3afcfb95b6bf26f47012ad09b857b5a05dc4446543466b30b17",
+        "0dfa52aa56e017be08f03627994cb0135e95c14088c6c88429e623e8bd2998d2"
+      ],
+      "alphaDifferences": [
+        0.15299479166666666,
+        0.0693359375,
+        0.0458984375,
+        0.138671875,
+        0.046875
+      ],
+      "lowerBodyChangedFraction": 0.4104817708333333
+    },
+    {
+      "sheet": "actions",
+      "row": 5,
+      "hashes": [
+        "9c808c624aa0b0942265ec4774956a8c9ea01db02777c33cf332201103477774",
+        "1591a97370de189a248b60d5033fbe4f6304176f2d688b9c4ed02f1eb4561f24",
+        "7ae5d361f2ef47f797e802da093171d57e1b7b8556709f2233fb3bd33e7e1d38",
+        "b9ae50c6c71478c75fdff18a667ca2b72b0658d67670bb9d84d311717fae6e97",
+        "a3310e29352230fb428c4a8a9c12ddfa71a43eb9da3fb7aa69cd7c574b27ba80",
+        "b32a8a9ef0db856479f8b4d04775935c5fd8f00b59145f95255b80374746fbf8"
+      ],
+      "alphaDifferences": [
+        0.13541666666666666,
+        0.0634765625,
+        0.056315104166666664,
+        0.08723958333333333,
+        0.0888671875
+      ],
+      "lowerBodyChangedFraction": 0.3863932291666667
+    },
+    {
+      "sheet": "actions",
+      "row": 6,
+      "hashes": [
+        "74e826bddfe459557efa0ea89dafcef778b21f7b471535af4bdcfba5cd4c031f",
+        "ec4019e87e85c0c82bb0329442c7041bd057a1d9e89f33419f001e34b4937afa",
+        "839f8582fa5c9b966322cc5159140539d091b9f6e265ee204cdb65341d087a30",
+        "7b990d68d515d4cab57185e5730fa20cca93e5428b57e20011d45341dc717e17",
+        "b504ffd7058ae7bfa395301832bf2fbd1c00777b981e8a641b358e9a72eb9a38",
+        "8915b61947a914078bfa6c6c5c64f4cb5fa4b1dace242d03b49a5b25d08fcfd4"
+      ],
+      "alphaDifferences": [
+        0.109375,
+        0.061848958333333336,
+        0.058919270833333336,
+        0.07486979166666667,
+        0.0546875
+      ],
+      "lowerBodyChangedFraction": 0.3976236979166667
+    },
+    {
+      "sheet": "actions",
+      "row": 7,
+      "hashes": [
+        "904b8391c5d9e6c274ba29ae5211321871fd96038341c0aaba918e3cf5f2bc74",
+        "e6e81b56b175e400cab1c5051739d89f0de0c4afbfef59ddbea40d2bc9fa6347",
+        "dd3cf0e483d319b724baa14ca9ce700a2328ab1280d0bc56f50210dd475e6a44",
+        "bb8023dfcbf6ccb1b613e71debafaa89ca4052a21888a4eed5a6e6c0601d765b",
+        "fb44c9940512334364d47208868af1004044ff94d81d103c653026c63ee668e2",
+        "34f6f2dc108e448c29d883c8cf0069053a1e9301188be92e508af5684d440648"
+      ],
+      "alphaDifferences": [
+        0.09830729166666667,
+        0.06510416666666667,
+        0.061197916666666664,
+        0.09928385416666667,
+        0.041341145833333336
+      ],
+      "lowerBodyChangedFraction": 0.37451171875
+    }
+  ],
+  "qualityMetrics": {
+    "assets/generated/r86/walk.png": {
+      "brightness": 0.4191694983135886,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5221660258887686,
+      "lowSaturationFraction": 0.015580736543909348,
+      "gatePass": true
+    },
+    "assets/generated/r86/actions.png": {
+      "brightness": 0.41771979419699873,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.505903683508107,
+      "lowSaturationFraction": 0.04723233201151611,
+      "gatePass": true
+    },
+    "assets/generated/r86/drop-16.png": {
+      "brightness": 0.4196164705882353,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5021263983760523,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r86/farming-actions.png": {
+      "brightness": 0.37694931076163873,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4848165857761509,
+      "lowSaturationFraction": 0.02781949573298938,
+      "gatePass": true
+    },
+    "assets/generated/r86/miri-0.png": {
+      "brightness": 0.4615255820972846,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5454249672437251,
+      "lowSaturationFraction": 0.029006318207926478,
+      "gatePass": true
+    },
+    "assets/generated/r86/miri-1.png": {
+      "brightness": 0.49446656535021943,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5409216965574565,
+      "lowSaturationFraction": 0.03994334277620397,
+      "gatePass": true
+    },
+    "assets/generated/r86/miri-2.png": {
+      "brightness": 0.47661045820675685,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5483466784074164,
+      "lowSaturationFraction": 0.029636150234741785,
+      "gatePass": true
+    },
+    "assets/generated/r86/stamp-water-32.png": {
+      "brightness": 0.37401568627450976,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.6594594594594594,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r86/stamp-harvest-32.png": {
+      "brightness": 0.37401568627450976,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.6594594594594594,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r86/stamp-basket-32.png": {
+      "brightness": 0.37401568627450976,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.6594594594594594,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r86/paper-128.png": {
+      "brightness": 0.9529067637005973,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.1535052644104517,
+      "lowSaturationFraction": 0.99981689453125,
+      "gatePass": false
+    },
+    "assets/generated/r86/binding-8.png": {
+      "brightness": 0.5764202948835784,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.49660729524913116,
+      "lowSaturationFraction": 0.21484375,
+      "gatePass": false
+    },
+    "assets/generated/r86/leaf-light-128.png": {
+      "brightness": 0.9094431372549019,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.36078431372549025,
+      "lowSaturationFraction": 0.0,
+      "gatePass": false
+    },
+    "assets/generated/r86/canopy-shadow-128.png": {
+      "brightness": 0.23369098039215683,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4328358208955224,
+      "lowSaturationFraction": 0.0,
+      "gatePass": false
+    },
+    "assets/generated/r86/leaf-ground-128.png": {
+      "brightness": 0.36578655287343564,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.41000970561272765,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r86/logo-320.png": {
+      "brightness": 0.5006188381802411,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5285888860178061,
+      "lowSaturationFraction": 0.054033921613568646,
+      "gatePass": true
+    },
+    "assets/generated/r86/app-icon-64.png": {
+      "brightness": 0.5475570199525123,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5396943829004821,
+      "lowSaturationFraction": 0.0400390625,
+      "gatePass": true
+    },
+    "assets/generated/r86/app-icon-192.png": {
+      "brightness": 0.5475570199525123,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5396943829004821,
+      "lowSaturationFraction": 0.0400390625,
+      "gatePass": true
+    },
+    "assets/generated/r86/app-icon-512.png": {
+      "brightness": 0.5475570199525123,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5396943829004821,
+      "lowSaturationFraction": 0.0400390625,
+      "gatePass": true
+    }
+  },
+  "runtimeBytes": 501159,
+  "pipeline": "Generated masters. True alpha; connected exterior cream removal for sheet portraits. Shared 68-color palette, native48x64 poses, BOX then nearest. Directional light/shadow masks derived from generated luminance. Retained frames explicitly licensed; no synthetic bobbing."
+}

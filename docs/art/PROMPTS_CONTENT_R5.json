@@ -1,0 +1,26 @@
+{
+  "round": "content-r5",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "merchant",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: precise-object-edit. Reference/edit target is the attached farm story art. Make its MATCHED RETURN VISIT for merchant Lola, wide 2:1 game illustration, native256x128 coarse pixel density. Preserve exact two women identities, straw hats and red braids, the orchard market stall and red cream gingham awning, rustic table and wicker basket. Two instantly readable story changes: Lola has put the old brass weighing SCALE ON THE STALL behind her, no longer working; both wooden STOOLS have been pulled out together INTO THE SUNLIGHT at the front of the stall. Two big brass tea cups and shared bread on the table, an open cream farm NOTEBOOK with a LARGE RED GINGHAM BOOKMARK lying across it near Miri. Full sprite bodies and both stools visible, generous daylight from upper right. Same grouped pixel clusters, palette and outlining as reference, no smooth rendering, no additional people, no text or UI.",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a15042-5806-70e3-949a-406b0269f978/exec-bbd069ff-8635-4cf9-ab1a-69f032e44757.png",
+      "master": "docs/art/masters/content-r5/merchant.png",
+      "references": [
+        "assets/generated/content-r3/merchant.webp"
+      ]
+    },
+    {
+      "id": "elder",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: precise-object-edit. Edit target/reference is attached elder Benbo farm scene. Create MATCHED RETURN VISIT illustration, wide2:1, native256x128 coarse pixel sprite density. Preserve white-bearded older man straw hat left, Miri straw hat red braids green overalls right, the chicken coop left rear, warm brick stove right and golden kettle. Make two very visible story changes: his REPAIRED FISHING ROD leaning against the coop wall, long pole with line and red-white bobber; a SECOND CREAM PLATE set next to his own at the front right of the table NEAR THE STOVE, and a pulled-out wooden stool ready for Miri. Both look toward each other as they sit to share bread. A cream notebook with prominent RED GINGHAM BOOKMARK spread on front edge of table as friendship token. Right-upper sunlight and amber stove glow, crisp clustered pixels and dark one pixel outlines, keep same palette and full small sprite bodies. NO new people, no text, no UI, no smooth painting.",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a15042-5806-70e3-949a-406b0269f978/exec-0c2e8ae9-327b-484a-9482-f7fefdc6006b.png",
+      "master": "docs/art/masters/content-r5/elder.png",
+      "references": [
+        "assets/generated/content-r3/elder.webp"
+      ]
+    }
+  ]
+}

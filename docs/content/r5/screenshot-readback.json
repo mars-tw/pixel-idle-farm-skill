@@ -1,0 +1,157 @@
+{
+  "status": "VERIFIED",
+  "checks": 126,
+  "reviewSet": [
+    {
+      "content": "basket",
+      "source": "docs/content/r5/phone-basket-walking-1.png",
+      "path": "docs/content/r5/review-set/01-phone-basket-walking-1.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "73b26ebfa96cd5f31b64af739a3dcc35a8d1775bade646167e350b6e5807bdfd"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r5/phone-basket-walking-2.png",
+      "path": "docs/content/r5/review-set/02-phone-basket-walking-2.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "9bdc396f64fe2d09bd40f0505b0f276f16c5c47a0008afa90e829b308af321be"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r5/phone-story-child-first.png",
+      "path": "docs/content/r5/review-set/03-phone-story-child-first.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "a432567dfcae12a7164e5da66123497c1fd8468eabf9e159ddcddfda5da23a69"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r5/phone-basket-child-430-top.png",
+      "path": "docs/content/r5/review-set/04-phone-basket-child-430-top.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b5a1ca9d6f246a25a91ecb9ce6938e80d153672434c2ee207dfe905609fe9d76"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r5/phone-basket-merchant-320-bottom.png",
+      "path": "docs/content/r5/review-set/05-phone-basket-merchant-320-bottom.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "88067af8b72943921aa6667490f895bc913700713301f33fd108b28a0a5db567"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r5/phone-pond-river_carp-sinking-original.png",
+      "path": "docs/content/r5/review-set/06-phone-pond-river_carp-sinking-original.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "1524c5f319ce4543c8245f3cd796c8aa123cdd2cf34b9838afd5f4bcbe9a8066"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r5/phone-pond-silver_dace-pre-sink-original.png",
+      "path": "docs/content/r5/review-set/07-phone-pond-silver_dace-pre-sink-original.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "59c296f8e6be0d76321d785553ccdce21ba7625ddad76f0805c9f5ec8db887ca"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r5/phone-pond-silver_dace-sinking-original.png",
+      "path": "docs/content/r5/review-set/08-phone-pond-silver_dace-sinking-original.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "4b1124e3596d3cccde34ad2396df859ad70e765e35c86b1c6aef0087ab612729"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r5/phone-pond-river_perch-pre-sink-original.png",
+      "path": "docs/content/r5/review-set/09-phone-pond-river_perch-pre-sink-original.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "cef971ae1d9367d531c3878493cd258f99f133119edd3b1d2a591cebaf9024d0"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r5/phone-pond-river_perch-sinking-original.png",
+      "path": "docs/content/r5/review-set/10-phone-pond-river_perch-sinking-original.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "af5ba98479c5272e84e953fe7254a09e07832454623bed5abbbbf726e142ee1e"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r5/phone-memory-merchant-recall.png",
+      "path": "docs/content/r5/review-set/11-phone-memory-merchant-recall.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "872cd51812df6a261d31ca6cdbc536525b63d27d7d5dc3e5b546af6d8aad4918"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r5/phone-memory-merchant-matched.png",
+      "path": "docs/content/r5/review-set/12-phone-memory-merchant-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "9f6582c895b12cc6d7e32a3be82926b0aa269abd7d0415ee6e7db16a994652d7"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r5/phone-memory-elder-matched.png",
+      "path": "docs/content/r5/review-set/13-phone-memory-elder-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c575c11ec67be16f358fd7deddbcfc7513f4897d52c25a2e6b1187d597031fbf"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r5/phone-memory-child-choosing.png",
+      "path": "docs/content/r5/review-set/14-phone-memory-child-choosing.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "898295b3e6effa47489673ae759ce9983b0c5b85559bcf78c270f159564c4e8a"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r5/phone-memory-child-matched.png",
+      "path": "docs/content/r5/review-set/15-phone-memory-child-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "e0a04013d2b1db6de3f5092c82314b7324158636cc5a215337717556eb2c7d12"
+    }
+  ],
+  "store": [
+    {
+      "path": "docs/store/screenshots/iphone-11-stove-return.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "865fc9228f19d85963dffff3e27acb94708c72d2f858f7f25dc47b5920d7db7c"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-11-stove-return.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "77f89ab0f92175973011c06013bbce1bf215768f85afe958139aed8005506bd1"
+    }
+  ],
+  "before": [
+    {
+      "source": "docs/content/r4/phone-basket-320x568.png",
+      "path": "docs/content/r5/before-phone-basket-320x568.png",
+      "sha256": "8074a2cc6f6c13ad2754847fdb824886b6e45d20db886cb4371bc5e62a2318d6"
+    },
+    {
+      "source": "docs/content/r4/phone-water-silver_dace-submerging.png",
+      "path": "docs/content/r5/before-phone-water-silver_dace-submerging.png",
+      "sha256": "0053ca88fb934f19587764349ac310425116566aa7473e2a1fd2eda89b6736cb"
+    },
+    {
+      "source": "docs/content/r4/phone-taste-elder-matched.png",
+      "path": "docs/content/r5/before-phone-taste-elder-matched.png",
+      "sha256": "11062534ad1f2fb1f4234a059505315778054b70ef890226d5f942d90806ef5d"
+    }
+  ]
+}

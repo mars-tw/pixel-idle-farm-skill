@@ -1,0 +1,161 @@
+PASS cancel retains every meal and ingredient
+PASS cancel visible material receipt
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant evidence captures actual approach, reach and impact
+PASS merchant three real rendered delivery phases
+PASS merchant fixed sprite height and feet 0
+PASS merchant fixed sprite height and feet 1
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant wrong flavor does not match
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant correct flavor earns keepsake
+PASS merchant matched visible hit targets >=44px
+PASS merchant matched no keyboard instructions
+PASS merchant first/wrong/matched are actual recorded deliveries
+PASS merchant recorded wrong dialogue visible in journal
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder evidence captures actual approach, reach and impact
+PASS elder three real rendered delivery phases
+PASS elder fixed sprite height and feet 0
+PASS elder fixed sprite height and feet 1
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder wrong flavor does not match
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder correct flavor earns keepsake
+PASS elder matched visible hit targets >=44px
+PASS elder matched no keyboard instructions
+PASS elder first/wrong/matched are actual recorded deliveries
+PASS elder recorded wrong dialogue visible in journal
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child evidence captures actual approach, reach and impact
+PASS child three real rendered delivery phases
+PASS child fixed sprite height and feet 0
+PASS child fixed sprite height and feet 1
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child wrong flavor does not match
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child correct flavor earns keepsake
+PASS child matched visible hit targets >=44px
+PASS child matched no keyboard instructions
+PASS child first/wrong/matched are actual recorded deliveries
+PASS child recorded wrong dialogue visible in journal
+PASS merchant no permanent text label
+PASS merchant full history and personal object survive reload
+PASS elder no permanent text label
+PASS elder full history and personal object survive reload
+PASS child no permanent text label
+PASS child full history and personal object survive reload
+PASS three silhouettes and matching clues available before first catch
+PASS consulting notes never resets the active cast clock
+PASS early river_carp grants no fish
+PASS river_carp species-specific clue before bite
+PASS river_carp visible active reel signal
+PASS river_carp actual impact reel earns fish and note
+PASS river_carp notebook delta from actual capture
+PASS river_carp receipt names this species count
+PASS river_carp total basket UI adds exactly one independently of species count
+PASS river_carp catch and note survive reload
+PASS same saved basket visibly progresses 1 then 2 then 3 fish
+PASS early silver_dace grants no fish
+PASS silver_dace species-specific clue before bite
+PASS silver_dace visible active reel signal
+PASS silver_dace actual impact reel earns fish and note
+PASS silver_dace notebook delta from actual capture
+PASS silver_dace receipt names this species count
+PASS silver_dace total basket UI adds exactly one independently of species count
+PASS silver_dace catch and note survive reload
+PASS same saved basket visibly progresses 1 then 2 then 3 fish
+PASS early river_perch grants no fish
+PASS river_perch species-specific clue before bite
+PASS river_perch visible active reel signal
+PASS river_perch actual impact reel earns fish and note
+PASS river_perch notebook delta from actual capture
+PASS river_perch receipt names this species count
+PASS river_perch total basket UI adds exactly one independently of species count
+PASS river_perch catch and note survive reload
+PASS same saved basket visibly progresses 1 then 2 then 3 fish
+PASS river_carp learned cast hides timing answers
+PASS river_carp learned real-clock repeat adds one fish, no duplicate note
+PASS each repeated catch increments total basket exactly once
+PASS all three unique notebook pages survive repeat reload
+PASS silver_dace learned cast hides timing answers
+PASS silver_dace learned real-clock repeat adds one fish, no duplicate note
+PASS each repeated catch increments total basket exactly once
+PASS all three unique notebook pages survive repeat reload
+PASS river_perch learned cast hides timing answers
+PASS river_perch learned real-clock repeat adds one fish, no duplicate note
+PASS each repeated catch increments total basket exactly once
+PASS all three unique notebook pages survive repeat reload
+PASS merchant gathering basket packed exactly once
+PASS elder gathering basket packed exactly once
+PASS child gathering basket packed exactly once
+PASS three packed baskets survive real reload
+PASS three keepsakes all shorter than seated residents
+PASS empty chair feet on same ground as child, no tree placement
+PASS player shares food with resident 1
+PASS player shares food with resident 2
+PASS player shares food with resident 3
+PASS merchant three real screenshots show rest, sip and offer
+PASS merchant shared scene feet stable under changing dialogue
+PASS elder three real screenshots show rest, sip and offer
+PASS elder shared scene feet stable under changing dialogue
+PASS child three real screenshots show rest, sip and offer
+PASS child shared scene feet stable under changing dialogue
+PASS completion and farm preserve all six actor/keepsake relationships to the table within one native pixel
+PASS three asynchronous upper-body poses, all seats occupied
+PASS pose source pixels actually change over real time
+PASS seats and sprite feet never translate between frames
+PASS table position unchanged after reload
+PASS reopened gathering keeps the identical actor/keepsake table layout
+PASS leaving gathering restores real touch locomotion and visible physics actor
+PASS 320 memory visible hit targets >=44px
+PASS 320 memory no keyboard instructions
+PASS 320 gathering visible hit targets >=44px
+PASS 320 gathering no keyboard instructions
+PASS 320 pond visible hit targets >=44px
+PASS 320 pond no keyboard instructions
+PASS 844 memory visible hit targets >=44px
+PASS 844 memory no keyboard instructions
+PASS 844 gathering visible hit targets >=44px
+PASS 844 gathering no keyboard instructions
+PASS 844 pond visible hit targets >=44px
+PASS 844 pond no keyboard instructions
+PASS 768 memory visible hit targets >=44px
+PASS 768 memory no keyboard instructions
+PASS 768 gathering visible hit targets >=44px
+PASS 768 gathering no keyboard instructions
+PASS 768 pond visible hit targets >=44px
+PASS 768 pond no keyboard instructions
+PASS 1032 memory visible hit targets >=44px
+PASS 1032 memory no keyboard instructions
+PASS 1032 gathering visible hit targets >=44px
+PASS 1032 gathering no keyboard instructions
+PASS 1032 pond visible hit targets >=44px
+PASS 1032 pond no keyboard instructions
+PASS 1366 memory visible hit targets >=44px
+PASS 1366 memory no keyboard instructions
+PASS 1366 gathering visible hit targets >=44px
+PASS 1366 gathering no keyboard instructions
+PASS 1366 pond visible hit targets >=44px
+PASS 1366 pond no keyboard instructions
+PASS all 24 R9 sprites precached
+PASS new water loads on first offline pond visit
+PASS zero browser page errors

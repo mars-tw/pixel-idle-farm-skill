@@ -1,0 +1,126 @@
+PASS merchant complete recall has no taste or ingredient answer
+PASS merchant recall hides old farm speech
+PASS merchant sweet reaches resident and spends exactly one bread
+PASS merchant wrong match has distinct feedback
+PASS merchant sour reaches resident and spends exactly one bread
+PASS merchant correct match adds bookmark
+PASS merchant two recall objects return in story and matched response
+PASS elder plain reaches resident and spends exactly one bread
+PASS elder complete recall has no taste or ingredient answer
+PASS elder recall hides old farm speech
+PASS elder sweet reaches resident and spends exactly one bread
+PASS elder wrong match has distinct feedback
+PASS elder hot reaches resident and spends exactly one bread
+PASS elder correct match adds bookmark
+PASS elder two recall objects return in story and matched response
+PASS child plain reaches resident and spends exactly one bread
+PASS child complete recall has no taste or ingredient answer
+PASS child recall hides old farm speech
+PASS child sour reaches resident and spends exactly one bread
+PASS child wrong match has distinct feedback
+PASS child sweet reaches resident and spends exactly one bread
+PASS child correct match adds bookmark
+PASS child two recall objects return in story and matched response
+PASS all nine real gifts and matched memories survive reload
+PASS delivery uses distinct true sprite poses, not one translated picture
+PASS 320 merchant all four footer controls >=48px, visible, hittable, complete text
+PASS plain description retains complete rule text merchant
+PASS 320 merchant full description visible at scroll bottom
+PASS merchant plain reaches resident and spends exactly one bread
+PASS 320 merchant actual footer send completes
+PASS 320 elder all four footer controls >=48px, visible, hittable, complete text
+PASS plain description retains complete rule text elder
+PASS 320 elder full description visible at scroll bottom
+PASS elder plain reaches resident and spends exactly one bread
+PASS 320 elder actual footer send completes
+PASS 320 child all four footer controls >=48px, visible, hittable, complete text
+PASS plain description retains complete rule text child
+PASS 320 child full description visible at scroll bottom
+PASS child plain reaches resident and spends exactly one bread
+PASS 320 child actual footer send completes
+PASS 430 merchant all four footer controls >=48px, visible, hittable, complete text
+PASS plain description retains complete rule text merchant
+PASS 430 merchant full description visible at scroll bottom
+PASS merchant plain reaches resident and spends exactly one bread
+PASS 430 merchant actual footer send completes
+PASS 430 elder all four footer controls >=48px, visible, hittable, complete text
+PASS plain description retains complete rule text elder
+PASS 430 elder full description visible at scroll bottom
+PASS elder plain reaches resident and spends exactly one bread
+PASS 430 elder actual footer send completes
+PASS 430 child all four footer controls >=48px, visible, hittable, complete text
+PASS plain description retains complete rule text child
+PASS 430 child full description visible at scroll bottom
+PASS child plain reaches resident and spends exactly one bread
+PASS 430 child actual footer send completes
+PASS 844x390 all four footer controls >=48px, visible, hittable, complete text
+PASS no keyboard instructions 844
+PASS 768x1024 all four footer controls >=48px, visible, hittable, complete text
+PASS no keyboard instructions 768
+PASS 1366x600 all four footer controls >=48px, visible, hittable, complete text
+PASS no keyboard instructions 1366
+PASS river_carp waiting single current status, no duplicate state line
+PASS river_carp pre-sink single current status, no duplicate state line
+PASS river_carp ended single current status, no duplicate state line
+PASS river_carp actual catch/note survives reload
+PASS river_carp reload retains cooldown
+PASS river_carp full30s real cooldown
+PASS river_carp learned waiting single current status, no duplicate state line
+PASS river_carp learned waiting learned view hides fish and rhythm answers
+PASS river_carp pre-sink original/masked from same real phase
+PASS river_carp pre-sink independent water silhouette {"width":75,"height":27,"pixels":896}
+PASS river_carp learned pre-sink single current status, no duplicate state line
+PASS river_carp learned pre-sink learned view hides fish and rhythm answers
+PASS river_carp sinking original/masked from same real phase
+PASS river_carp sinking independent water silhouette {"width":75,"height":27,"pixels":896}
+PASS river_carp learned sinking single current status, no duplicate state line
+PASS river_carp learned sinking learned view hides fish and rhythm answers
+PASS river_carp second actual catch adds one fish
+PASS silver_dace waiting single current status, no duplicate state line
+PASS silver_dace pre-sink single current status, no duplicate state line
+PASS silver_dace ended single current status, no duplicate state line
+PASS silver_dace actual catch/note survives reload
+PASS silver_dace reload retains cooldown
+PASS silver_dace full30s real cooldown
+PASS silver_dace learned waiting single current status, no duplicate state line
+PASS silver_dace learned waiting learned view hides fish and rhythm answers
+PASS silver_dace pre-sink original/masked from same real phase
+PASS silver_dace pre-sink independent water silhouette {"width":11,"height":35,"pixels":78}
+PASS silver_dace learned pre-sink single current status, no duplicate state line
+PASS silver_dace learned pre-sink learned view hides fish and rhythm answers
+PASS silver_dace sinking original/masked from same real phase
+PASS silver_dace sinking independent water silhouette {"width":26,"height":43,"pixels":132}
+PASS silver_dace learned sinking single current status, no duplicate state line
+PASS silver_dace learned sinking learned view hides fish and rhythm answers
+PASS silver_dace second actual catch adds one fish
+PASS river_perch waiting single current status, no duplicate state line
+PASS river_perch pre-sink single current status, no duplicate state line
+PASS river_perch ended single current status, no duplicate state line
+PASS river_perch actual catch/note survives reload
+PASS river_perch reload retains cooldown
+PASS river_perch full30s real cooldown
+PASS river_perch learned waiting single current status, no duplicate state line
+PASS river_perch learned waiting learned view hides fish and rhythm answers
+PASS river_perch pre-sink original/masked from same real phase
+PASS river_perch pre-sink independent water silhouette {"width":80,"height":18,"pixels":291}
+PASS river_perch learned pre-sink single current status, no duplicate state line
+PASS river_perch learned pre-sink learned view hides fish and rhythm answers
+PASS river_perch sinking original/masked from same real phase
+PASS river_perch sinking independent water silhouette {"width":80,"height":18,"pixels":291}
+PASS river_perch learned sinking single current status, no duplicate state line
+PASS river_perch learned sinking learned view hides fish and rhythm answers
+PASS river_perch second actual catch adds one fish
+PASS all packing/first/matched illustrations precached before first open
+PASS merchant offline FIRST basket opening decodes real art
+PASS merchant offline matched art decodes
+PASS elder offline FIRST basket opening decodes real art
+PASS elder offline matched art decodes
+PASS child offline FIRST basket opening decodes real art
+PASS child offline matched art decodes
+PASS merchant same-page retry preserves resident, flavor, all text and ingredients
+PASS elder same-page retry preserves resident, flavor, all text and ingredients
+PASS child same-page retry preserves resident, flavor, all text and ingredients
+PASS merchant offline FIRST story opening decodes
+PASS elder offline FIRST story opening decodes
+PASS child offline FIRST story opening decodes
+PASS no browser page errors

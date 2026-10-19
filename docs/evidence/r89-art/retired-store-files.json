@@ -1,0 +1,15 @@
+{
+  "status": "VERIFIED",
+  "trackedOnly": true,
+  "originalsPreserved": true,
+  "paths": [
+    "docs/store/screenshots/iphone-03-basket.png",
+    "docs/store/screenshots/iphone-04-note.png",
+    "docs/store/screenshots/iphone-05-daily.png",
+    "docs/store/screenshots/iphone-06-porch.png",
+    "docs/store/screenshots/ipad-03-basket.png",
+    "docs/store/screenshots/ipad-04-note.png",
+    "docs/store/screenshots/ipad-05-daily.png",
+    "docs/store/screenshots/ipad-06-porch.png"
+  ]
+}

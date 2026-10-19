@@ -1,0 +1,62 @@
+{
+  "status": "VERIFIED",
+  "functionalChecks": 114,
+  "functionalScope": "functional play, persistence, offline and RWD; the unchanged strict performance assertion is a separate --perf-only gate",
+  "existingCIGates": {
+    "status": "VERIFIED",
+    "scripts": [
+      "scripts/test-npc-indicators.js",
+      "scripts/test-world-project-art.js",
+      "scripts/test-world-rework-e2e.js",
+      "scripts/test-r79-fun-e2e.js",
+      "scripts/test-r80-mobile.js",
+      "scripts/test-r81-review.js",
+      "scripts/test-rwd-matrix.js",
+      "scripts/test-controls-reachability.js",
+      "scripts/test-r82-art.js",
+      "scripts/test-r83-art.js",
+      "scripts/test-r84-art.js",
+      "scripts/test-r85-art.js",
+      "scripts/test-r86-art.js",
+      "scripts/test-r87-art.js",
+      "scripts/test-r88-art.js",
+      "scripts/test-r89-art.js"
+    ],
+    "evidence": "The sequential runner entered the next script only after exit 0; all 16 existing scripts passed. The initial new-script performance failure is retained and was followed by functional recovery."
+  },
+  "performanceGate": {
+    "status": "BLOCKED",
+    "limitMs": 18,
+    "evidence": "docs/content/r1/browser-checks-unstable-performance.json",
+    "note": "Same-source shared-host measurements vary from passing16.8ms to failing33.3/33.4ms; no stable <=18ms claim. Strict --perf-only assertion remains available."
+  },
+  "syntaxFiles": 80,
+  "staleRuntimeVersionRefs": 0,
+  "packageVersion": "0.1.24",
+  "storeScreenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-07-neighbor-memory.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "f0b69fff1fe472fdacce9321af6e57d0dbf9f951451d19950ae2f4626651235c"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-07-neighbor-memory.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "3eb093dfef0924ba6d855a4469faf76edb90aa5a022629f9bb297bbfb6da9ba1"
+    }
+  ],
+  "generatedRuntimeAssets": 6,
+  "secretScan": {
+    "files": 3786,
+    "matches": 0,
+    "paths": [],
+    "scope": "repo only; excludes .git/node_modules/.audit-tmp/cache/env; never accesses secret directory"
+  },
+  "scope": "Functional/integrity readback only. Stable performance and native-device release remain unverified."
+}

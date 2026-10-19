@@ -1,0 +1,112 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 5.68,
+      "log": "docs/evidence/r84-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 384.83,
+      "log": "docs/evidence/r84-art/logs/e2e.txt"
+    },
+    {
+      "name": "night",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 24.39,
+      "log": "docs/evidence/r84-art/logs/night.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.31,
+      "log": "docs/evidence/r84-art/logs/water-guide.txt"
+    },
+    {
+      "name": "world-final",
+      "command": [
+        "node",
+        "scripts/test-world-rework-e2e.js"
+      ],
+      "exitCode": 0,
+      "seconds": 161.89,
+      "log": "docs/evidence/r84-art/logs/world-final.txt"
+    },
+    {
+      "name": "store-final",
+      "command": [
+        "node",
+        "scripts/test-r81-review.js",
+        "--journey-only"
+      ],
+      "exitCode": 0,
+      "log": "docs/evidence/r84-art/logs/store-final.txt"
+    },
+    {
+      "name": "art-final",
+      "command": [
+        "node",
+        "scripts/test-r84-art.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/evidence/r84-art/logs/art-final.txt"
+    },
+    {
+      "name": "controls-final",
+      "command": [
+        "node",
+        "scripts/test-controls-reachability.js"
+      ],
+      "exitCode": 0,
+      "seconds": 14.69,
+      "log": "docs/evidence/r84-art/logs/controls-final.txt"
+    },
+    {
+      "name": "compare",
+      "command": [
+        "node",
+        "scripts/capture-r84-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 7.63,
+      "log": "docs/evidence/r84-art/logs/compare.txt"
+    },
+    {
+      "name": "readback",
+      "command": [
+        "python",
+        "-W",
+        "ignore::DeprecationWarning",
+        "scripts/verify-r84-art.py"
+      ],
+      "exitCode": 0,
+      "log": "docs/evidence/r84-art/logs/readback.txt"
+    }
+  ]
+}

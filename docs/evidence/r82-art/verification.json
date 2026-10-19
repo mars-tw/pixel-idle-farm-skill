@@ -1,0 +1,110 @@
+{
+  "status": "VERIFIED",
+  "version": "0.1.16",
+  "appVersion": "r82-20261016-1",
+  "syntaxChecked": [
+    "src/adventure.js",
+    "src/atlas.js",
+    "src/config.js",
+    "src/daily-ui.js",
+    "src/daily.js",
+    "src/game.js",
+    "src/heirloom-ui.js",
+    "src/heirloom.js",
+    "src/state.js",
+    "src/ui.js",
+    "src/world-ui.js",
+    "scripts/audit-oc-r1.js",
+    "scripts/capture-promo-trio.js",
+    "scripts/capture-r79-playtest.js",
+    "scripts/capture-r82-art.js",
+    "scripts/gen-art-v3.js",
+    "scripts/gen-art-v4.js",
+    "scripts/gen-v2-atlases.js",
+    "scripts/generate-crops3-atlas.js",
+    "scripts/measure-r68-baseline.js",
+    "scripts/process-v3-atlas.js",
+    "scripts/process-v4-atlas.js",
+    "scripts/process-world-project-art.js",
+    "scripts/run-browser-gates.js",
+    "scripts/test-adventure.js",
+    "scripts/test-controls-reachability.js",
+    "scripts/test-economy.js",
+    "scripts/test-guards.js",
+    "scripts/test-npc-indicators.js",
+    "scripts/test-r66-ui-art.js",
+    "scripts/test-r68-browser.js",
+    "scripts/test-r68-visuals.js",
+    "scripts/test-r72-fixed-layers.js",
+    "scripts/test-r72-night-gate.js",
+    "scripts/test-r73-playtest.js",
+    "scripts/test-r74-building-upgrades-e2e.js",
+    "scripts/test-r74-building-upgrades.js",
+    "scripts/test-r79-fun-e2e.js",
+    "scripts/test-r79-sunpatch.js",
+    "scripts/test-r80-daily.js",
+    "scripts/test-r80-mobile.js",
+    "scripts/test-r81-heirloom.js",
+    "scripts/test-r81-review.js",
+    "scripts/test-r82-art.js",
+    "scripts/test-rpg-v4-e2e.js",
+    "scripts/test-rwd-matrix.js",
+    "scripts/test-systems.js",
+    "scripts/test-ui-smoke.js",
+    "scripts/test-version-chain.js",
+    "scripts/test-water-quest-guide.js",
+    "scripts/test-world-migration.js",
+    "scripts/test-world-project-art.js",
+    "scripts/test-world-rework-e2e.js",
+    "scripts/validate-v3-atlas.js",
+    "scripts/validate-v4-atlas.js"
+  ],
+  "runtimeOldVersionHits": [],
+  "secretHits": [],
+  "logs": {
+    "npm-test.txt": {
+      "sha256": "8f7b4b87d04826665f75e54c8c26c7d60ed63dad716e9c0243978b4e200873d5",
+      "bytes": 51343,
+      "passLines": 840
+    },
+    "e2e.txt": {
+      "sha256": "2ff1c61f9673e29575eb02fef71f3a2593cc07c9d5780551611f19e006edcb19",
+      "bytes": 77721,
+      "passLines": 854
+    },
+    "review-capture.txt": {
+      "sha256": "e8d6a9efa8a1bd2703b68bdcc568de59c50004645c8a0b48c5003864c44ebba9",
+      "bytes": 13066,
+      "passLines": 91
+    },
+    "night-gate.txt": {
+      "sha256": "88556a2b1b1ab588ccaa3c5216d664098a9c74a7f16d81820780edc69e3683de",
+      "bytes": 1876,
+      "passLines": 36
+    },
+    "water-guide.txt": {
+      "sha256": "7e56cc64c41e592129f8b7a1308b1dd681f8084e054f5aef16e82628721a4dee",
+      "bytes": 466,
+      "passLines": 6
+    }
+  },
+  "artChecks": 74,
+  "journeys": [
+    {
+      "choice": "table",
+      "elapsedMs": 16128,
+      "realClock": true,
+      "errors": [],
+      "failures": [],
+      "lifecycle": "Chromium frozen/active; not an iOS background test"
+    },
+    {
+      "choice": "doorstep",
+      "elapsedMs": 16405,
+      "realClock": true,
+      "progressInjected": false
+    }
+  ],
+  "storeScreenshots": 10,
+  "qualification": "Chromium headless only. Performance under concurrent load is reference only; no real-device or Apple approval claim."
+}

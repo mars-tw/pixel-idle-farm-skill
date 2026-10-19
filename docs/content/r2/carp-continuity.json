@@ -1,0 +1,51 @@
+{
+  "status": "VERIFIED",
+  "clock": "real elapsed wall time; no freeze or time advance",
+  "frames": [
+    {
+      "file": "docs/content/r2/phone-rhythm-carp-tap-one.png",
+      "at": 1792341618062,
+      "phase": "1",
+      "pose": "tap",
+      "transform": "matrix(1, 0, 0, 1, 0, 17)",
+      "cast": {
+        "fishId": "river_carp",
+        "startedAt": 1792341617156
+      }
+    },
+    {
+      "file": "docs/content/r2/phone-rhythm-carp-returned.png",
+      "at": 1792341618346,
+      "phase": "2",
+      "pose": "still",
+      "transform": "none",
+      "cast": {
+        "fishId": "river_carp",
+        "startedAt": 1792341617156
+      }
+    },
+    {
+      "file": "docs/content/r2/phone-rhythm-carp-tap-two.png",
+      "at": 1792341618763,
+      "phase": "3",
+      "pose": "tap",
+      "transform": "matrix(1, 0, 0, 1, 0, 17)",
+      "cast": {
+        "fishId": "river_carp",
+        "startedAt": 1792341617156
+      }
+    },
+    {
+      "file": "docs/content/r2/phone-rhythm-carp-submerged.png",
+      "at": 1792341619048,
+      "phase": "4",
+      "pose": "strike",
+      "transform": "matrix(1, 0, 0, 1, 0, 54)",
+      "cast": {
+        "fishId": "river_carp",
+        "startedAt": 1792341617156
+      }
+    }
+  ],
+  "catch": 1
+}

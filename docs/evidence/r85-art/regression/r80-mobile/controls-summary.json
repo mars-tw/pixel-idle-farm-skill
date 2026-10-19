@@ -1,0 +1,10 @@
+{
+  "release": "R80",
+  "viewports": 9,
+  "reachableControls": 339,
+  "expectedReachableControls": 339,
+  "minimumTargetPx": 44,
+  "modalMutualExclusion": "PASS",
+  "nonModalOverlap": "PASS",
+  "pass": true
+}

@@ -1,0 +1,315 @@
+{
+  "status": "VERIFIED",
+  "checks": 93,
+  "headless": true,
+  "rows": [
+    {
+      "w": 390,
+      "h": 844,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 82,
+          "y": 316.90625,
+          "w": 82,
+          "h": 109.328125
+        },
+        "visual": {
+          "x": 51.76000213623047,
+          "y": 316.90625,
+          "w": 82.00000762939453,
+          "h": 109.328125
+        },
+        "stance": "-30.24px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.48), rgba(0, 0, 0, 0) 73%)",
+        "beam": {
+          "x": 35.15625,
+          "y": 327.59375,
+          "w": 158.390625,
+          "h": 129.59375
+        },
+        "spots": 10,
+        "motes": 3,
+        "canopy": "323.8,63.823999999999984",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.667) -2px -2px 0px)",
+            "box": {
+              "x": 84.70124816894531,
+              "y": 355.4024963378906,
+              "w": 76.83186340332031,
+              "h": 76.83187866210938
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 162,
+              "y": 366,
+              "w": 66.234375,
+              "h": 66.234375
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksBelow": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 317,
+          "y": 112.546875,
+          "w": 82,
+          "h": 109.328125
+        },
+        "visual": {
+          "x": 290.1199951171875,
+          "y": 112.546875,
+          "w": 82,
+          "h": 109.328125
+        },
+        "stance": "-26.88px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.48), rgba(0, 0, 0, 0) 73%)",
+        "beam": {
+          "x": 279.90625,
+          "y": 134.1875,
+          "w": 140.796875,
+          "h": 115.1875
+        },
+        "spots": 10,
+        "motes": 3,
+        "canopy": "287.6,57.288",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.667) -2px -2px 0px)",
+            "box": {
+              "x": 324.2900085449219,
+              "y": 158.5800018310547,
+              "w": 68.29498291015625,
+              "h": 68.29499816894531
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 393,
+              "y": 168,
+              "w": 58.875,
+              "h": 58.875
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksBelow": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    },
+    {
+      "w": 1032,
+      "h": 1376,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 314.5,
+          "y": 493.0625,
+          "w": 163,
+          "h": 217.328125
+        },
+        "visual": {
+          "x": 264.1000061035156,
+          "y": 493.0625,
+          "w": 163,
+          "h": 217.328125
+        },
+        "stance": "-50.4px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.48), rgba(0, 0, 0, 0) 73%)",
+        "beam": {
+          "x": 249.59375,
+          "y": 546,
+          "w": 264,
+          "h": 216
+        },
+        "spots": 10,
+        "motes": 3,
+        "canopy": "540,107.03999999999999",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.667) -2px -2px 0px)",
+            "box": {
+              "x": 332.16876220703125,
+              "y": 592.3375244140625,
+              "w": 128.0531005859375,
+              "h": 128.0531005859375
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 461,
+              "y": 610,
+              "w": 110.390625,
+              "h": 110.390625
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksBelow": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    },
+    {
+      "w": 1366,
+      "h": 600,
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "rootTile": "t2_1",
+        "physicsTile": "t2_1",
+        "root": {
+          "x": 459,
+          "y": 170.9375,
+          "w": 122,
+          "h": 162.65625
+        },
+        "visual": {
+          "x": 425.3999938964844,
+          "y": 170.9375,
+          "w": 122.00003051757812,
+          "h": 162.65625
+        },
+        "stance": "-33.6px",
+        "shadow": "radial-gradient(rgba(62, 47, 35, 0.48), rgba(0, 0, 0, 0) 73%)",
+        "beam": {
+          "x": 422.390625,
+          "y": 224,
+          "w": 176,
+          "h": 144
+        },
+        "spots": 10,
+        "motes": 3,
+        "canopy": "360,71.35999999999999",
+        "crops": [
+          {
+            "tile": "t2_1",
+            "lit": true,
+            "filter": "brightness(1.28) saturate(1.16) drop-shadow(rgba(255, 232, 163, 0.667) -2px -2px 0px)",
+            "box": {
+              "x": 477.11248779296875,
+              "y": 254.22500610351562,
+              "w": 85.3687744140625,
+              "h": 85.36874389648438
+            }
+          },
+          {
+            "tile": "t3_1",
+            "lit": false,
+            "filter": "none",
+            "box": {
+              "x": 563,
+              "y": 266,
+              "w": 73.59375,
+              "h": 73.59375
+            }
+          }
+        ]
+      },
+      "album": {
+        "dateInHeading": true,
+        "twoLinks": true,
+        "linksBelow": true,
+        "borders": [
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ],
+          [
+            "1px",
+            "rgb(179, 135, 75)"
+          ]
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Visual comparison fixtures are labeled. Timed human recognition and independent 8/10 rescore remain unperformed."
+  ]
+}

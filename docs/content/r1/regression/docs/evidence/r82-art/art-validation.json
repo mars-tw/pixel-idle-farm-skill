@@ -1,0 +1,484 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "fixtureNote": "Only choice/story screenshot checks use earned-state fixtures; actual earning is covered by the unchanged R81 review journey.",
+  "checks": [
+    "exact tool disclosure without invented model slug",
+    "eight independently generated source assets retained",
+    "asset hash assets/generated/r82/welcome-384.webp",
+    "asset hash assets/heirloom/table-r82.webp",
+    "asset hash assets/heirloom/doorstep-r82.webp",
+    "asset hash assets/generated/r82/paper-192.png",
+    "asset hash assets/generated/r82/farmer-96.png",
+    "asset hash docs/evidence/r82-art/farmer-64.png",
+    "asset hash assets/generated/r82/farmer-face-64.png",
+    "asset hash assets/generated/r82/logo-320.png",
+    "asset hash assets/generated/r82/basket-32.png",
+    "asset hash assets/generated/r82/note-32.png",
+    "asset hash assets/generated/r82/wheat-32.png",
+    "asset hash assets/generated/r82/stamp-32.png",
+    "asset hash assets/generated/r82/water-32.png",
+    "asset hash assets/generated/r82/seed-32.png",
+    "asset hash assets/generated/r82/sun-32.png",
+    "asset hash assets/generated/r82/tea-32.png",
+    "asset hash assets/generated/r82/icons-128.png",
+    "asset hash assets/generated/r82/app-icon-48.png",
+    "asset hash assets/generated/r82/app-icon-192.png",
+    "asset hash assets/generated/r82/app-icon-512.png",
+    "asset hash docs/art/masters/welcome.png",
+    "asset hash docs/art/masters/farmer.png",
+    "asset hash docs/art/masters/table.png",
+    "asset hash docs/art/masters/door.png",
+    "asset hash docs/art/masters/paper.png",
+    "asset hash docs/art/masters/icons.png",
+    "asset hash docs/art/masters/logo.png",
+    "asset hash docs/art/masters/app.png",
+    "new asset payload stays below 256KiB",
+    "farmer brightness and saturation double gate",
+    "decoded size, nonempty and common palette assets/generated/r82/welcome-384.webp",
+    "decoded size, nonempty and common palette assets/heirloom/table-r82.webp",
+    "decoded size, nonempty and common palette assets/heirloom/doorstep-r82.webp",
+    "decoded size, nonempty and common palette assets/generated/r82/paper-192.png",
+    "decoded size, nonempty and common palette assets/generated/r82/farmer-96.png",
+    "binary alpha and clean corners assets/generated/r82/farmer-96.png",
+    "decoded size, nonempty and common palette assets/generated/r82/farmer-face-64.png",
+    "binary alpha and clean corners assets/generated/r82/farmer-face-64.png",
+    "decoded size, nonempty and common palette assets/generated/r82/logo-320.png",
+    "binary alpha and clean corners assets/generated/r82/logo-320.png",
+    "decoded size, nonempty and common palette assets/generated/r82/basket-32.png",
+    "binary alpha and clean corners assets/generated/r82/basket-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/note-32.png",
+    "binary alpha and clean corners assets/generated/r82/note-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/wheat-32.png",
+    "binary alpha and clean corners assets/generated/r82/wheat-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/stamp-32.png",
+    "binary alpha and clean corners assets/generated/r82/stamp-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/water-32.png",
+    "binary alpha and clean corners assets/generated/r82/water-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/seed-32.png",
+    "binary alpha and clean corners assets/generated/r82/seed-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/sun-32.png",
+    "binary alpha and clean corners assets/generated/r82/sun-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/tea-32.png",
+    "binary alpha and clean corners assets/generated/r82/tea-32.png",
+    "decoded size, nonempty and common palette assets/generated/r82/icons-128.png",
+    "binary alpha and clean corners assets/generated/r82/icons-128.png",
+    "decoded size, nonempty and common palette assets/generated/r82/app-icon-48.png",
+    "decoded size, nonempty and common palette assets/generated/r82/app-icon-192.png",
+    "decoded size, nonempty and common palette assets/generated/r82/app-icon-512.png",
+    "welcome displays the generated farm-table background",
+    "generated Traditional Chinese logo loaded",
+    "actual farm control uses current R88 art water-32.png",
+    "actual farm control uses current R88 art note-32.png",
+    "actual farm control uses current R88 art wheat-32.png",
+    "daily task displays a native generated icon",
+    "basket page displays its real illustration",
+    "earned choice has distinct doorstep and table illustrations",
+    "doorstep story uses its own generated scene",
+    "table story uses its own generated scene",
+    "runtime has no uncaught errors or missing art"
+  ],
+  "decoded": [
+    {
+      "path": "assets/generated/r82/welcome-384.webp",
+      "size": [
+        384,
+        192
+      ],
+      "expected": [
+        384,
+        192
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 73728,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/heirloom/table-r82.webp",
+      "size": [
+        384,
+        192
+      ],
+      "expected": [
+        384,
+        192
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 73728,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/heirloom/doorstep-r82.webp",
+      "size": [
+        384,
+        192
+      ],
+      "expected": [
+        384,
+        192
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 73728,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r82/paper-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "expected": [
+        192,
+        192
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 36864,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r82/farmer-96.png",
+      "size": [
+        96,
+        96
+      ],
+      "expected": [
+        96,
+        96
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 4617,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/farmer-face-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "expected": [
+        64,
+        64
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 1787,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/logo-320.png",
+      "size": [
+        320,
+        128
+      ],
+      "expected": [
+        320,
+        128
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 21494,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/basket-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 430,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/note-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 499,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/wheat-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 358,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/stamp-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 616,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/water-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 364,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/seed-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 515,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/sun-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 336,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/tea-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "expected": [
+        32,
+        32
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 355,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/icons-128.png",
+      "size": [
+        128,
+        64
+      ],
+      "expected": [
+        128,
+        64
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 3473,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r82/app-icon-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "expected": [
+        48,
+        48
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 2304,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r82/app-icon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "expected": [
+        192,
+        192
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 36864,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r82/app-icon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "expected": [
+        512,
+        512
+      ],
+      "outside": 0,
+      "partial": 0,
+      "visible": 262144,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    }
+  ],
+  "errors": [],
+  "badResponses": []
+}

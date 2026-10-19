@@ -1,0 +1,62 @@
+{
+  "round": "R88",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool does not reveal exact model slug; no guessed model ID.",
+  "stylePrefix": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "garden",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Wide top-down three-quarter farm garden ground illustration, square composition. A sun-warmed grassy clearing with diverse tonal grass clusters, tiny white daisies, yellow buttercups, clover, stones and worn curved stepping-stone footpaths, short low weathered picket fence along upper and side margins, terracotta flower pots and galvanized watering bucket near lower right. Leave the CENTER 45 percent open grass for live game soil and characters. Dense charming foreground flowers along lower corners, orchard hedge upper edge; three layers, no characters, no buildings, no crops or dirt plots painted in. Pixel game environment backdrop, no UI. Strong sunlight from upper right, warm diagonal scattered light pools, cool shade lower left. No uniform empty green field.",
+      "master": "docs/art/masters/r88/garden.png",
+      "transparent": false
+    },
+    {
+      "id": "light",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent game lighting overlay: warm yellow leaf-gap light pools, irregular organic circles in varied sizes and density. Diagonal footprint running upper right to lower left, large bright open patch in left half and smaller scattered warm yellow islands around it. Color visible light #FFE093 and #FFCB5B. Genuine transparent gaps, no gray/green ground, no branches, no leaf drawings, no white glitter. Crisp pixel clusters with a narrow semitransparent penumbra. Top-down pool of actual sunlight.",
+      "master": "docs/art/masters/r88/light.png",
+      "transparent": true
+    },
+    {
+      "id": "character",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Character design sheet on warm cream: same young red-braided female farmer Miri, straw hat with unmistakable RED WHITE GINGHAM HATBAND, cream rolled-sleeve blouse, green overalls, brown boots. FRONT SIDE BACK full body row, 2.5 head proportions, identical body heights and outfit. On her back a rounded golden open WICKER BASKET with visible horizontal weaving and a large red-white checkered cloth corner hanging from rim; never a leather backpack. Bottom row three faces: thoughtful, delighted, concentrating. Warm upper-right rim on hat and shoulder, cool left shadow. No labels, no typography, clean regular three-column layout.",
+      "master": "docs/art/character-sheets/miri-r88.png",
+      "transparent": false
+    },
+    {
+      "id": "objects",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent sprite sheet, clean 3 columns 2 rows with wide empty gutters: row1 three single square raised garden soil beds: dry earth, watered dark damp earth, moist planted earth without plants. Brown loam raised sides with distinct 3D front thickness, furrow shadows, broken natural edge and crumbs, not flat squares. row2 separate galvanized water bucket with wooden handle, a low weathered two-post picket fence, clump of daisies and clover. Three-quarter top-down view, all objects self-contained, no floor/background, genuine transparent background.",
+      "master": "docs/art/masters/r88/objects.png",
+      "transparent": true
+    },
+    {
+      "id": "panel",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Square cozy farm UI texture: fine cream paper with delicate warm fibers, restrained square brown stitched frame, a red-white gingham vertical binding strip at left and small twine corners. Lots of QUIET clear center, no writing, no shadows outside, no controls. Crisp consistent pixel art, not flat white card.",
+      "master": "docs/art/masters/r88/panel.png",
+      "transparent": false
+    },
+    {
+      "id": "icons",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent 3 by 2 icon atlas with generous gutters: wheat sheaf, wicker picnic basket with red-white cloth, copper watering can pouring water, open grandmother notebook with red bookmark, straw hat with red gingham band, green wheat seedling. Chunky coherent readable 32px silhouettes, dark tea 1px outlines and upper-right golden highlights, no text, no labels, no background.",
+      "master": "docs/art/masters/r88/icons.png",
+      "transparent": true
+    },
+    {
+      "id": "logo",
+      "prompt": "Edit this logo image. REMOVE THE ENTIRE BACKGROUND and subtitle. Keep only the FOUR large Chinese title characters exactly 陽光農場, plus wheat sprig on left and wicker basket on right, isolated on genuine transparent alpha background. Delete ALL scenery, mountains, sky, buildings, grass, lake, and ALL smaller text 田園物語. No subtitle at all. Tight horizontal isolated logo silhouette. This is a transparent UI logo asset, not a painting. Keep existing golden pixel letters and brown outline.",
+      "master": "docs/art/masters/r88/logo.png",
+      "transparent": true,
+      "discardedInitialPrompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent horizontal game title logo, exact Traditional Chinese text ???? with small subtitle ?????. Warm wheat-gold chunky hand-lettered glyphs, dark tea pixel outline, small wheat sprig left and red-checkered wicker basket right, gentle upper-right sun glints. Compact readable original cozy pixel farm brand, no English, no extra symbols.",
+      "discardedReason": "Initial generation contained wrong subtitle and scenery, never integrated.",
+      "mode": "edit, num_last_images_to_include=1"
+    },
+    {
+      "id": "app",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Square edge-to-edge app icon proposal: smiling red-braided farmer Miri, straw hat with red-white gingham band, green overalls, holding a golden wicker basket draped in red-white checked cloth with wheat. Brilliant warm sunlight upper-right and cool foliage edge, cream-gold background, large recognizable head and basket; crisp pixel art silhouette still readable at48px. No text, no rounded app mask baked in.",
+      "master": "docs/art/masters/r88/app.png",
+      "transparent": false
+    }
+  ],
+  "generationCalls": 9,
+  "retainedMasters": 8
+}

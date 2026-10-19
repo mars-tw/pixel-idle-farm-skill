@@ -1,0 +1,18 @@
+{
+  "status": "VERIFIED",
+  "startedAt": "2026-10-19T02:09:50.116Z",
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-19T02:09:50.117Z",
+      "end": "2026-10-19T02:09:57.340Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-release-1.log",
+      "sha256": "bf94feb9a2164aa44ba7cba93d660f70866c8fe04b173f53f15276e314f3e602"
+    }
+  ],
+  "endedAt": "2026-10-19T02:09:57.343Z"
+}

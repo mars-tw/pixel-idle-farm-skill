@@ -1,0 +1,92 @@
+PASS first basket has no unearned reread
+PASS cancel retains bread and never delivers later
+PASS walking delivery spends only once on arrival
+PASS merchant normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS merchant/sweet consumes one bread at the actual resident
+PASS merchant wrong reply differs from first clue
+PASS merchant normal farm conversation remembers wrong
+PASS merchant/sour consumes one bread at the actual resident
+PASS merchant matching taste completes distinct response
+PASS merchant normal farm conversation remembers matched
+PASS elder/plain consumes one bread at the actual resident
+PASS elder normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS elder/sweet consumes one bread at the actual resident
+PASS elder wrong reply differs from first clue
+PASS elder normal farm conversation remembers wrong
+PASS elder/hot consumes one bread at the actual resident
+PASS elder matching taste completes distinct response
+PASS elder normal farm conversation remembers matched
+PASS child/plain consumes one bread at the actual resident
+PASS child normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS child/sour consumes one bread at the actual resident
+PASS child wrong reply differs from first clue
+PASS child normal farm conversation remembers wrong
+PASS child/sweet consumes one bread at the actual resident
+PASS child matching taste completes distinct response
+PASS child normal farm conversation remembers matched
+PASS nine deliveries and all memories survive real reload
+PASS waiting reel visibly muted river_carp
+PASS river_carp early reel explains why and grants no fish
+PASS river_carp expired cast explains late reel without reward
+PASS river_carp visible submerged frame and enabled reel agree
+PASS river_carp success has no reel label
+PASS river_carp countdown follows actual elapsed seconds
+PASS river_carp catch and illustrated note survive reload
+PASS river_carp reload cannot bypass cooldown
+PASS river_carp full30s cooldown elapsed without time advance
+PASS river_carp second real catch gives exactly second fish and one note
+PASS waiting reel visibly muted silver_dace
+PASS silver_dace early reel explains why and grants no fish
+PASS silver_dace expired cast explains late reel without reward
+PASS silver_dace visible submerged frame and enabled reel agree
+PASS silver_dace success has no reel label
+PASS silver_dace countdown follows actual elapsed seconds
+PASS silver_dace catch and illustrated note survive reload
+PASS silver_dace reload cannot bypass cooldown
+PASS silver_dace full30s cooldown elapsed without time advance
+PASS silver_dace second real catch gives exactly second fish and one note
+PASS waiting reel visibly muted river_perch
+PASS river_perch early reel explains why and grants no fish
+PASS river_perch expired cast explains late reel without reward
+PASS river_perch visible submerged frame and enabled reel agree
+PASS river_perch success has no reel label
+PASS river_perch countdown follows actual elapsed seconds
+PASS river_perch catch and illustrated note survive reload
+PASS river_perch reload cannot bypass cooldown
+PASS river_perch full30s cooldown elapsed without time advance
+PASS river_perch second real catch gives exactly second fish and one note
+PASS 320 merchant nonblank decoded story
+PASS 320 elder nonblank decoded story
+PASS 320 child nonblank decoded story
+PASS 320 river_carp nonblank decoded note
+PASS 320 silver_dace nonblank decoded note
+PASS 320 river_perch nonblank decoded note
+PASS 430 merchant nonblank decoded story
+PASS 430 elder nonblank decoded story
+PASS 430 child nonblank decoded story
+PASS 430 river_carp nonblank decoded note
+PASS 430 silver_dace nonblank decoded note
+PASS 430 river_perch nonblank decoded note
+PASS missing merchant preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing merchant has decoded generated placeholder
+PASS missing merchant retries successfully without reopening page
+PASS missing elder preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing elder has decoded generated placeholder
+PASS missing elder retries successfully without reopening page
+PASS missing child preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing child has decoded generated placeholder
+PASS missing child retries successfully without reopening page
+PASS missing river_carp preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing river_carp has decoded generated placeholder
+PASS missing river_carp retries successfully without reopening page
+PASS missing silver_dace preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing silver_dace has decoded generated placeholder
+PASS missing silver_dace retries successfully without reopening page
+PASS missing river_perch preserves diagnostic guard while player sees readable fallback, without filename
+PASS missing river_perch has decoded generated placeholder
+PASS missing river_perch retries successfully without reopening page
+PASS new fish notebook decodes after actual offline reload
+PASS no page errors

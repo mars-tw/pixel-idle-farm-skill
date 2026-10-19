@@ -1,0 +1,26 @@
+{
+  "round": 80,
+  "appVersion": "r80-20261015-1",
+  "baselineCommit": "a198a74",
+  "newRasterAssets": [],
+  "newAudioAssets": [],
+  "generationRequested": false,
+  "modelSlug": null,
+  "reason": "本輪新增每日農務、訂單與文字收藏，沿用既有像素素材，未產生新的 2D 圖片或音樂。",
+  "reusedAssets": [
+    "assets/generated/r66/native/tab_story-32.png",
+    "assets/generated/r66/native/tab_journal-32.png",
+    "既有六幀走路與收成動作圖集"
+  ],
+  "newPlayableContent": [
+    "台灣時間每日農務：澆水 2 或 3 格、收成入庫 4 或 6 或 8 份",
+    "每日 2 份作物餐籃：只挑當日已解鎖的小麥、胡蘿蔔或番茄，實際交付扣庫存",
+    "每日三項完成後可得印章與堆肥各 1 份",
+    "非連續累積 3 與 7 枚印章解鎖祖母的兩段手記"
+  ],
+  "missingArt": [
+    "祖母手記專用插畫（目前交付文字收藏）",
+    "前輪列出的持竿、捧收成專用逐幀動作"
+  ],
+  "execution": { "headlessOnly": true, "push": false, "deploy": false, "storeChanges": false }
+}

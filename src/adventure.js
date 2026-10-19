@@ -36,6 +36,53 @@
     { id: "silver_dace", name: "銀鯽" },
     { id: "river_perch", name: "溪鱸" },
   ];
+  // These are observations of people, never a new list of orders or daily goals.
+  const NEIGHBORS = [
+    { id: "merchant", name: "蘿拉", title: "攤子外的那張凳子", taste: "sour",
+      story: "市集收攤了，蘿拉還在數空籃。你把麥餅放到秤旁，她先擦乾雙手，才解開紅格布。原本藏在攤子底下的小凳子，被她拉到陽光裡。她替你也倒了一杯茶。",
+      reply: "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。",
+      recallContext: "那天收攤後，她把凳子拉到陽光裡，也替你挪出一個位子。她終於放下手裡的秤，舉起茶杯，笑說這一口很像走到溪邊時吹來的風。",
+      matchedStory: "這次蘿拉先把秤放回攤上，再把兩張凳子拉到陽光裡。她分好餅，替你倒茶，還在桌上的手記夾了一條紅格書籤。今天不用等收攤，你們就坐到了一起。",
+      matchedConversation: "秤先放著。凳子都拉出來了，這杯茶換我替你倒。",
+      hint: "今天這籃麥餅，我要配著茶吃。忙了一天，倒想添一點酸酸的野莓，嘴裡會清爽些。",
+      wrongReply: "你上回帶的麥餅我收好了。這一籃也分一半給你；只是收攤後，我還惦著那口酸酸的野莓。",
+      matchedReply: "你還記得那口酸！秤放回攤上，兩張凳子都拉到陽光裡了。野莓餅一人一半；紅格書籤留在你的手記，下回接著聊。" },
+    { id: "elder", name: "班伯", title: "灶火還留著", taste: "hot",
+      story: "班伯把雞舍的門帶上，才發現你站在灶邊。桌上只擺了一個盤子。他接過餐籃，從櫥裡再拿一個，把修了一半的魚竿挪到牆邊。今天那根竿子可以晚點再修。",
+      reply: "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。",
+      recallContext: "他剛關好雞舍，先把雙手靠向灶口。魚竿挪到牆邊，留給你的盤子擺在灶旁；他沒急著收拾，先拉開旁邊的凳子。",
+      matchedStory: "班伯把修好的魚竿靠回雞舍牆邊，灶旁已擺好兩個盤子。他替你拉開凳子，把紅格書籤放進桌上的手記。你護著餐籃走來，他就知道今天可以一起坐下。",
+      matchedConversation: "魚竿修好了，先靠在牆邊。你的盤子就在灶旁，坐下吃完再去看河。",
+      hint: "你今天送來的麥餅，讓我想多吃兩口。從雞舍回來手都涼了，還冒熱氣的餅，最合胃口。",
+      wrongReply: "今天這籃我留在灶旁了，等回烤再吃。從雞舍回來，手裡捧一塊熱餅才暖和。",
+      matchedReply: "還熱著呢，你一路護著帶來的吧？魚竿靠在牆邊，灶旁兩個盤子都擺好了。紅格書籤替你夾著，吃完再一起去看河。" },
+    { id: "child", name: "圖圖", title: "空椅子也有點心", taste: "sweet",
+      story: "圖圖把小花壓進本子裡，頁角卻一直翹起來。你拿餐籃壓住，他就空出雙手，把餅分成三塊。兩塊放在你們面前，剩下一塊，他端到旁邊的空椅子上。",
+      reply: "這塊先留著。等一下有人來，就不用看我們吃了。花乾了以後，也分你一朵。",
+      recallContext: "他數了數在座的人，還是把點心分成三份，替空椅子留了一份。那天說起最喜歡的滋味，他笑得瞇起眼睛，手裡仍護著那朵小花。",
+      matchedStory: "圖圖遠遠就看見你的餐籃。他把壓好的花擺在空椅子上，再把紅格書籤攤在桌上的手記裡。這次不用再問，他知道你記得那天說過的話。",
+      matchedConversation: "這次換我準備一份禮物。花和書籤都留給你，下次坐下來，還能接著聊。",
+      hint: "今天這籃麥餅，我留一塊給空椅子了。我想要像烤胡蘿蔔那樣甜甜的，下次也一起吃嗎？",
+      wrongReply: "這一籃我也分好囉。不過我還是想著烤胡蘿蔔甜甜的味道，酸的會讓我瞇眼睛。",
+      matchedReply: "是甜甜的胡蘿蔔！你記得耶。壓好的花先放在空椅子上，紅格書籤夾進你的手記裡；下次還留這張椅子給你。" },
+  ];
+  const FLAVORS = [
+    { id: "plain", name: "原味", description: "一份麥餅，不加配料。初次拜訪聽回話；之後送原味也會收下，但不會觸發口味配對。", ingredients: {} },
+    { id: "sweet", name: "甜", description: "夾一片烤胡蘿蔔，添一點甜。", ingredients: { carrot: 1 } },
+    { id: "sour", name: "酸", description: "配一把溪邊野莓，酸香清爽。", ingredients: { wild_berry: 1 } },
+    { id: "hot", name: "熱", description: "灶邊回烤，用布包好趁熱送。", ingredients: {} },
+  ];
+  // R6 presentation is separate from the retained R1–R5 narrative API contract.
+  const MEMORIES = {
+    merchant: { token: "陽光茶凳", heading: "蘿拉把茶杯留在陽光裡", detail: "秤放回攤上，兩張凳子拉到陽光裡。她把茶杯倒扣在你的位子，下次來就翻過來。", reply: "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。", wrong: "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』" },
+    elder: { token: "修好的魚竿", heading: "班伯掛起魚竿，留下兩只盤子", detail: "魚竿修好了，掛上雞舍外的木架。灶旁的兩個盤子不再收進櫥裡，班伯拍拍靠灶那張凳子。", reply: "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。", wrong: "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』" },
+    child: { token: "壓花空椅", heading: "圖圖替空椅子放了一朵花", detail: "壓好的花放上空椅子，圖圖把第三塊點心也留好。不是等誰來領獎，是想讓後到的人也能坐下吃。", reply: "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。", wrong: "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』" }
+  };
+  const RHYTHMS = {
+    river_carp: { clue: "寬尾攪起濁水，等浮標沉下", note: "河鯉慢慢擺尾，攪起一團濁水。碎水紋向浮標合攏，寬尾翻起、浮標沉下時再提竿。", phases: [[900,"still","水面很靜"],[280,"tap","輕點一下"],[420,"still","浮回來了"],[280,"tap","又輕點一下"],[1300,"strike","浮標沉下去了"]] },
+    silver_dace: { clue: "魚嘴啄水，短水花裡提竿", note: "銀鯽的小嘴朝上啄水，幾滴碎水花跳起來。水花還在時提竿才來得及，等水花散掉就晚了。", phases: [[2200,"still","停得比平常久"],[1400,"strike","忽然往下沉了"]] },
+    river_perch: { clue: "魚影轉身，等尾流展開", note: "溪鱸先彎身轉向，魚影拖出彎彎的水痕。浮標沉下去時還別急；等魚影衝向一側、V形尾流向兩側展開，再把竿子提起來。", phases: [[650,"still","水紋慢慢散開"],[600,"pull","浮標被橫拉了"],[750,"still","又停住了"],[1100,"strike","這次沉下去了"]] },
+  };
   const COLLECTIBLES = {
     pressed_flower: { id: "pressed_flower", name: "河畔壓花", description: "花園整理好後留下的第一朵小花。" },
     picnic_memory: { id: "picnic_memory", name: "收穫野餐合照", description: "麥餅、薄荷茶和鎮民一起入鏡的那個下午。" },
@@ -166,6 +213,24 @@
     a.byTarget.restore = cleanCounts(a.byTarget.restore, PROJECTS.map((p) => p.id));
     a.meals = cleanCounts(a.meals, RECIPES.map((r) => r.id), MEAL_CAP);
     a.catch = cleanCounts(a.catch, FISH.map((f) => f.id), CATCH_CAP);
+    const neighbors = object(a.neighbors) ? a.neighbors : {};
+    a.neighbors = Object.fromEntries(NEIGHBORS.map((n) => {
+      const old = object(neighbors[n.id]) ? neighbors[n.id] : {};
+      const deliveries = qty(old.deliveries);
+      return [n.id, { deliveries, lastTaste: deliveries && FLAVORS.some((f) => f.id === old.lastTaste) ? old.lastTaste : "plain",
+        matched: deliveries > 1 && old.matched === true, lastMatched: deliveries > 1 && old.lastMatched === true,
+        deliveredAt: deliveries ? qty(old.deliveredAt, Number.MAX_SAFE_INTEGER) : 0,
+        history: (Array.isArray(old.history)?old.history:[]).filter(h=>object(h)&&FLAVORS.some(f=>f.id===h.taste)&&['first','wrong','matched'].includes(h.branch)&&Number.isFinite(h.at)).slice(-12).map(h=>({taste:h.taste,branch:h.branch,at:qty(h.at,Number.MAX_SAFE_INTEGER),reaction:typeof h.reaction==='string'?h.reaction.slice(0,600):''})) }];
+    }));
+    const gathering = object(a.gathering) ? a.gathering : {};
+    a.gathering = { packed: Object.fromEntries(NEIGHBORS.filter(n => gathering.packed && gathering.packed[n.id] === n.taste && a.neighbors[n.id].matched).map(n => [n.id, n.taste])),
+      completed: gathering.completed === true && NEIGHBORS.every(n => a.neighbors[n.id].matched), completedAt: qty(gathering.completedAt, Number.MAX_SAFE_INTEGER),
+      refills: (Array.isArray(gathering.refills)?gathering.refills:[]).filter(h=>object(h)&&['sour','hot','sweet'].includes(h.taste)&&Number.isFinite(h.at)&&typeof h.receipt==='string').slice(-24).map(h=>({taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),receipt:h.receipt.slice(0,240)})),
+      servings: (gathering.completed === true && NEIGHBORS.every(n => a.neighbors[n.id].matched) && Array.isArray(gathering.servings) ? gathering.servings : []).filter(h => object(h) && NEIGHBORS.some(n => n.id === h.id) && ['sour','hot','sweet'].includes(h.taste) && Number.isFinite(h.at)).slice(-24).map(h => ({id:h.id,taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),matched:NEIGHBORS.find(n=>n.id===h.id).taste===h.taste,reply:servingReply(h.id,h.taste)})) };
+    a.fishNotes = Object.fromEntries(FISH.filter((f) => object(a.fishNotes) && a.fishNotes[f.id] === true).map((f) => [f.id, true]));
+    const cast = a.fishingCast;
+    a.fishingCast = object(cast) && Object.hasOwn(RHYTHMS, cast.fishId) && Number.isSafeInteger(cast.startedAt) && cast.startedAt >= 0
+      ? { fishId: cast.fishId, startedAt: cast.startedAt, ...(cast.observationVersion === 2 ? {observationVersion:2} : {}) } : null;
     let free = CATCH_CAP;
     for (const f of FISH) { a.catch[f.id] = Math.min(free, a.catch[f.id]); free -= a.catch[f.id]; }
     if (!object(a.collectibles)) a.collectibles = {};
@@ -330,8 +395,183 @@
     const quality = unit(qualityRoll) < 0.7 ? "normal" : unit(qualityRoll) < 0.95 ? "good" : "premium";
     a.catch[def.id]++;
     a.lastFishAt = now;
+    const firstCatch = !a.fishNotes[def.id];
+    a.fishNotes[def.id] = true;
     record(state, { type: "fish" }, now);
-    return ok("釣到了" + def.name + "。", { catch: { id: def.id, name: def.name, quality, qty: 1, caughtAt: now }, cooldownMs: FISH_COOLDOWN_MS, nextFishAt: now + FISH_COOLDOWN_MS });
+    return ok("釣到了" + def.name + "。", { catch: { id: def.id, name: def.name, quality, qty: 1, caughtAt: now }, firstCatch, note: RHYTHMS[def.id].note, cooldownMs: FISH_COOLDOWN_MS, nextFishAt: now + FISH_COOLDOWN_MS });
+  }
+  function neighbors(state, now) {
+    if (!ensure(state, now).ok) return [];
+    return NEIGHBORS.map((n) => {
+      const rec = state.adventure.neighbors[n.id];
+      return { id: n.id, name: n.name, title: n.title, unlocked: claimed(state.adventure, "c1_first_harvest"), ...copy(rec),
+        memory: rec.deliveries ? { ...copy(MEMORIES[n.id]), ...(n.id==='child'&&rec.lastTaste!=='sour'?{wrong:"圖圖把餅分成三塊，先留一塊給空椅子：『這次還少了那個讓我想舔手指的滋味。花也放好囉，下次再一起試。』"}:{}) } : null,
+        story: rec.deliveries ? (rec.lastMatched && n.matchedStory ? n.matchedStory : n.story) : null,
+        reply: rec.deliveries ? (rec.lastMatched && n.matchedConversation ? n.matchedConversation : n.reply) : null,
+        reaction: rec.deliveries ? (rec.lastMatched ? n.matchedReply : rec.deliveries > 1 ? n.wrongReply : n.hint) : null,
+        recallContext: rec.deliveries ? n.recallContext : null,
+        illustration: "assets/generated/content-r3/" + n.id + ".webp" };
+    });
+  }
+  function basketFlavors(state, now) {
+    if (!ensure(state, now).ok) return [];
+    return FLAVORS.map((f) => {
+      const rows = requirements(state, { rustic_bread: 1 }, "meals").concat(requirements(state, f.ingredients, "inventory"));
+      return { ...copy(f), requirements: rows, canSend: claimed(state.adventure, "c1_first_harvest") && rows.every((r) => r.complete) };
+    });
+  }
+  function deliverNeighbor(state, id, taste, now) {
+    if (!NEIGHBORS.some((n) => n.id === id) || !FLAVORS.some((f) => f.id === taste)) return fail("bad_basket", "找不到這份餐籃。");
+    const init = ensure(state, now); if (!init.ok) return init;
+    if (!claimed(state.adventure, "c1_first_harvest")) return fail("locked", "先跟班伯學做農家麥餅。");
+    const flavor = basketFlavors(state, now).find((f) => f.id === taste);
+    if (!flavor.canSend) return fail("missing_resources", "餐籃還沒裝齊。先做一份農家麥餅，再留好配料。", { requirements: flavor.requirements });
+    const n = NEIGHBORS.find((entry) => entry.id === id), rec = state.adventure.neighbors[id];
+    // First visit opens the story and the hint; only a later considered gift earns the reply.
+    const firstDelivery = rec.deliveries === 0, matched = !firstDelivery && n.taste === taste;
+    consume(state, flavor.requirements);
+    rec.deliveries = Math.min(COUNT_CAP, rec.deliveries + 1);
+    rec.lastTaste = taste; rec.deliveredAt = at(state, now); rec.lastMatched = matched; rec.matched = rec.matched || matched;
+    rec.history.push({taste,branch:firstDelivery?'first':matched?'matched':'wrong',at:rec.deliveredAt});
+    rec.history=rec.history.slice(-12);
+    const neighbor=neighbors(state,now).find(v=>v.id===id);
+    state.adventure.neighbors[id].history.at(-1).reaction=firstDelivery?neighbor.reply:matched?neighbor.memory.reply:neighbor.memory.wrong;
+    return ok("餐籃送到" + n.name + "手上了。", { firstDelivery, matched, neighbor });
+  }
+  function fishingObservation(state, now) {
+    if (!ensure(state, now).ok) return null;
+    return observeFishingCast(state.adventure.fishingCast, at(state, now));
+  }
+  // Read-only visual observation: no save normalization or quest scans per animation frame.
+  function observeFishingCast(cast, now) {
+    if (!cast || !RHYTHMS[cast.fishId] || !Number.isFinite(now)) return null;
+    let left = now - cast.startedAt;
+    if (left < 0) return { pose: "still", text: "等浮標落穩", index: -1 };
+    const phases = RHYTHMS[cast.fishId].phases;
+    for (let i = 0; i < phases.length; i++) {
+      if (left < phases[i][0]) {
+        const pose = phases[i][1], advanced = cast.observationVersion === 2;
+        const canReel = pose === 'strike' && (!advanced || cast.fishId !== 'silver_dace' || left < 850);
+        const motion = cast.fishId === 'river_carp' ? (i===3?'wide-swell':i===4?'closed-rings':'wide-rise') : cast.fishId==='silver_dace' ? (i===1?(canReel?'short-splash':'splash-gone'):'straight-probe') : (i===2?'bent-wake':i===3?'straight-wake':'side-drag');
+        return { pose, text: phases[i][2], index: i, canReel, motion };
+      }
+      left -= phases[i][0];
+    }
+    return { pose: "missed", text: "水紋散開了，這次沒有咬住", index: phases.length };
+  }
+  function startFishing(state, now, rng) {
+    const s = summary(state, now); if (!s.ok) return s;
+    if (!s.unlocks.fishing) return fail("locked", "先修好河畔釣台。");
+    if (s.fishing.remainingMs > 0) return fail("cooldown", "等魚群散開再拋竿。", { remainingMs: s.fishing.remainingMs });
+    if (s.fishing.used >= CATCH_CAP) return fail("catch_full", "魚簍滿了，先把魚交給鎮民。");
+    let roll; try { roll = (rng || Math.random)(); } catch (_) { return fail("bad_rng", "這次拋竿沒有成功。"); }
+    if (!Number.isFinite(roll)) return fail("bad_rng", "這次拋竿沒有成功。");
+    const fishId = FISH[Math.floor(Math.max(0, Math.min(1 - Number.EPSILON, roll)) * FISH.length)].id;
+    state.adventure.fishingCast = { fishId, startedAt: at(state, now) };
+    return ok("浮標落穩了，看看水面的動靜。");
+  }
+  function reelFishing(state, now) {
+    const init = ensure(state, now); if (!init.ok) return init;
+    const cast = state.adventure.fishingCast, phase = fishingObservation(state, now);
+    if (!cast || !phase) return fail("no_cast", "先拋竿，看看浮標。");
+    state.adventure.fishingCast = null;
+    if (phase.pose !== "strike" || phase.canReel === false) {
+      const late=phase.pose === 'missed' || phase.motion === 'splash-gone';
+      return fail(late?'too_late':'too_early',late?'魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。':{
+        river_carp:'提早了。寬尾還沒翻到浮標旁，等寬圈合起來。',
+        silver_dace:'提早了。小嘴還在水下，等那一下短水花。',
+        river_perch:'提早了。彎身還沒衝出去，等橫向尾流展開。'
+      }[cast.fishId]);
+    }
+    const index = FISH.findIndex((f) => f.id === cast.fishId);
+    let draws = 0;
+    return fish(state, now, () => draws++ === 0 ? (index + 0.5) / FISH.length : Math.random());
+  }
+  function fishNotes(state, now) {
+    if (!ensure(state, now).ok) return [];
+    return FISH.filter((f) => state.adventure.fishNotes[f.id]).map((f) => ({ ...f, clue: RHYTHMS[f.id].clue, note: RHYTHMS[f.id].note }));
+  }
+  function gathering(state, now) {
+    if (!ensure(state, now).ok) return { unlocked: false, packed: {}, completed: false };
+    const unlocked = NEIGHBORS.every(n => state.adventure.neighbors[n.id].matched);
+    return { ...copy(state.adventure.gathering), unlocked, ready: unlocked && NEIGHBORS.every(n => state.adventure.gathering.packed[n.id] === n.taste),
+      people: unlocked ? NEIGHBORS.map(n => ({ id:n.id, name:n.name, taste:n.taste, flavor:FLAVORS.find(f => f.id===n.taste).name, ...copy(MEMORIES[n.id]) })) : [] };
+  }
+  function packGathering(state, id, taste, now) {
+    const g = gathering(state, now), n = NEIGHBORS.find(n => n.id===id);
+    if (!g.unlocked || g.completed) return fail("locked", "先記住三位鄰居，再約大家坐下。聚餐完成後不用再備餐。");
+    if (!n || n.taste!==taste) return fail("wrong_basket", "照手記替這位鄰居準備他記得的那一籃。");
+    if (g.packed[id]) return fail("already_packed", "這一籃已放好，材料不會再取用。");
+    const f = basketFlavors(state, now).find(f=>f.id===taste);
+    if (!f.canSend) return fail("missing_resources", "食材還沒齊，先回灶台準備。", {requirements:f.requirements});
+    consume(state, f.requirements); state.adventure.gathering.packed[id]=taste;
+    return ok(n.name+"的餐籃已放好。", {gathering:gathering(state,now)});
+  }
+  function completeGathering(state, now) {
+    const g = gathering(state, now);
+    if (!g.ready || g.completed) return fail("not_ready", "三籃都備好，再一起走到陽光下。");
+    state.adventure.gathering.completed=true; state.adventure.gathering.completedAt=at(state,now);
+    return ok("三個位子，今天都有人坐了。", {gathering:gathering(state,now)});
+  }
+  function servingReply(id,taste) {
+    const n=NEIGHBORS.find(n=>n.id===id),flavor={sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[taste];
+    if(!n||!flavor)return '';
+    return n.taste===taste ? {
+      merchant:'蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」',
+      elder:'班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」',
+      child:'圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」'
+    }[id] : n.name+'接過'+flavor+'：「這份先放中間，大家一起吃。我還是想念'+{sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[n.taste]+'。」';
+  }
+  function serveGathering(state,id,taste,now) {
+    const g=gathering(state,now);
+    if(!g.completed)return fail('locked','三籃備齊、大家入座後，再分桌上的點心。');
+    if(!NEIGHBORS.some(n=>n.id===id)||!['sour','hot','sweet'].includes(taste))return fail('bad_serving','先選一位鄰居和桌上的一份點心。');
+    const h={id,taste,at:at(state,now),matched:NEIGHBORS.find(n=>n.id===id).taste===taste,reply:servingReply(id,taste)};
+    state.adventure.gathering.servings.push(h);state.adventure.gathering.servings=state.adventure.gathering.servings.slice(-24);
+    return ok(h.reply,{serving:copy(h)});
+  }
+  // The current picnic has three physical portions. Historical replay records remain readable.
+  function serveGatheringCourse(state,id,taste,now) {
+    const g=gathering(state,now),hs=g.servings||[];
+    if(hs.some(h=>h.id===id))return fail('already_served','這位已經接到一份，換還沒招待的鄰居。');
+    if(hs.some(h=>h.taste===taste))return fail('already_shared','這份已端出去了，選桌上剩下的點心。');
+    if(new Set(hs.map(h=>h.id)).size>=3)return fail('meal_finished','三位都接到了，把這個下午收進手記。');
+    return serveGathering(state,id,taste,now);
+  }
+  // R12: a shared wrong taste does not use the guest's own place setting.
+  // Keep serveGatheringCourse as the legacy three-portion API for old callers.
+  function serveGatheringTaste(state,id,taste,now) {
+    const g=gathering(state,now),hs=g.servings||[];
+    if(hs.some(h=>h.id===id&&h.matched))return fail('already_served','這位已收到合口味的點心，換還沒招待的鄰居。');
+    if(hs.some(h=>h.id===id&&h.taste===taste))return fail('already_shared','這個組合已經分過了，選另一份點心。');
+    if(hs.some(h=>h.taste===taste&&h.matched))return fail('already_shared','這份已在鄰居手邊，選桌上剩下的點心。');
+    if(new Set(hs.filter(h=>h.matched).map(h=>h.id)).size>=3)return fail('meal_finished','三位都接到了，把這個下午收進手記。');
+    return serveGathering(state,id,taste,now);
+  }
+  // R13 current UI: every physical dish has a paid source. Old replay APIs stay readable.
+  function gatheringPortions(state,now) {
+    const g=gathering(state,now),hs=g.servings||[];
+    return ['sour','hot','sweet'].map(taste=>{
+      const f=basketFlavors(state,now).find(f=>f.id===taste);
+      const remaining=Math.max(0,(g.ready?1:0)+(g.refills||[]).filter(h=>h.taste===taste).length-hs.filter(h=>h.taste===taste).length);
+      const finished=hs.some(h=>h.taste===taste&&h.matched);
+      return {taste,remaining,finished,requirements:f.requirements,canRefill:g.completed&&!finished&&remaining===0&&f.canSend};
+    });
+  }
+  function refillGathering(state,taste,now) {
+    const g=gathering(state,now),portion=gatheringPortions(state,now).find(p=>p.taste===taste);
+    if(!portion||!portion.canRefill)return fail('cannot_refill','這份還有剩、已招待完成，或材料不足；不會憑空多出點心。');
+    const before=portion.requirements;
+    consume(state,before);
+    const after=basketFlavors(state,now).find(f=>f.id===taste).requirements;
+    const receipt=before.map((r,i)=>r.name+' '+r.current+'→'+after[i].current+' 份').join('、');
+    state.adventure.gathering.refills.push({taste,at:at(state,now),receipt});
+    return ok('再備一份，已取用：'+receipt,{receipt});
+  }
+  function serveGatheringPortion(state,id,taste,now) {
+    const p=gatheringPortions(state,now).find(p=>p.taste===taste);
+    if(!p||p.remaining<1)return fail('no_portion','這份已端完；先備齊材料，再補一份。');
+    return serveGatheringTaste(state,id,taste,now);
   }
   function summary(state, now) {
     const init = ensure(state, now); if (!init.ok) return init;
@@ -390,7 +630,8 @@
     record(state, "order", now);
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
-  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, buyMaterial, commissions, deliverCommission };
+  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, buyMaterial, commissions, deliverCommission,
+    neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;
 })(typeof window !== "undefined" ? window : globalThis);

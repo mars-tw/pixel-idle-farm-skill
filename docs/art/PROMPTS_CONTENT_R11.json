@@ -1,0 +1,20 @@
+{
+  "round": "content-r11",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "props",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a15257-3385-7432-898e-60c13014a3bc/exec-9f874fc3-f3ec-48ff-9997-7203b8cffcf1.png",
+      "master": "docs/art/masters/content-r11/props.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: stylized-concept. Asset type: native pixel RPG prop sprite atlas, TRANSPARENT background. Exactly TWO equal columns, one row on a 1024x512 landscape canvas. LEFT cell: one complete golden wicker lunch basket with tall handle, brick red gingham cloth and dark tea thick one-native-pixel outline, bright cream top handle rim and dark bottom, strong silhouette readable at32px. RIGHT cell: one low broad picnic table, 3/4 top-down cozy RPG view, brick red gingham cloth over wooden tabletop, empty clear tabletop with only a few tiny bread crumbs; NO cups, NO plates, NO flowers, NO vase, NO chairs, NO people, NO basket on the table. Table native128x64, basket native32x32. Both full objects unclipped, large transparent margin and gap, no shadow puddle. Pixel density exactly matches reference props, no fine photoreal texture. Warm upper-right lighting, crisp grouped pixels. Reference1 table defines perspective only; remove ALL tall decorations so seated characters behind the table remain fully visible. Reference2 defines basket identity and weave; improve outline/highlight while preserving gingham red, golden wicker. No scenery, no words, actual RGBA transparency."
+    },
+    {
+      "id": "carp-strike",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a15257-3385-7432-898e-60c13014a3bc/exec-7fd9153f-e3a1-465a-94cb-ae70fd4deb0e.png",
+      "master": "docs/art/masters/content-r11/carp-strike.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: stylized-concept. Asset type: native60x52 transparent pixel game fish silhouette. Draw ONE fish side-profile only, uniformly solid deep slate #293D46, transparent outside. Match reference carp silhouette and all anatomical parts: pointed head LEFT, oval body, distinct triangular dorsal fin, two tiny bottom fins, very broad FAN SHAPED forked tail at RIGHT. This is the impact pose: lift the rear tail slightly UP, but keep the broad triangular fan 14 native pixels tall at its tip; the fan MUST remain recognizable as the SAME fish tail. Do NOT create an upright round head or seal shape. No neck no face no eyes no scales no internal details no water no environment. A small bent tail with broad forked fin tilted around 35 degrees upward, oval body remains mostly horizontal. Crisp native pixel clusters with simple silhouette edge. Center whole fish in transparent canvas, no crop, no shadows. Reference is anatomy and exact style. One single sprite, not atlas."
+    }
+  ]
+}

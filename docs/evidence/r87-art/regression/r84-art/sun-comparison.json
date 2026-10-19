@@ -1,0 +1,25 @@
+{
+  "fixture": "Same wheat and planting time; first plot illuminated, second outside light. No claimed player study.",
+  "samples": [
+    {
+      "tile": "t2_1",
+      "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+      "box": {
+        "x": 84.03890991210938,
+        "y": 354.07781982421875,
+        "width": 78.15655517578125,
+        "height": 78.15655517578125
+      }
+    },
+    {
+      "tile": "t3_1",
+      "filter": "none",
+      "box": {
+        "x": 162,
+        "y": 366,
+        "width": 66.234375,
+        "height": 66.234375
+      }
+    }
+  ]
+}

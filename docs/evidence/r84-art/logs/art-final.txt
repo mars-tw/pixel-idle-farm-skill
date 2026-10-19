@@ -1,0 +1,167 @@
+PASS 320x568 opaque character >=40px, no rectangle
+PASS 320x568 seven 44px controls in exactly one row
+PASS 320x568 no horizontal overflow
+PASS 320x568 world area >=60% (0.6156)
+PASS 320x568 no right-hand test toolbar in default view
+PASS 320x568 every drawer entry remains reachable
+PASS 320x568 three chores with no page arrows
+PASS 320x568 all three chores reachable without scrolling
+PASS 320x568 all ready rewards reachable on their cards
+PASS 320x568 three claimed chores visibly stamped
+PASS 320x568 two tangible wheat inventory slots
+PASS 320x568 recipe action reachable without scrolling
+PASS 320x568 dialogue hides every dock child and movement
+PASS 320x568 ten unequal feathered leaf-light spots
+PASS 320x568 actual tree shadows in world coordinates
+PASS 320x568 table result has no journal navigation
+PASS 320x568 table story shows its stamp and clears every background HUD control
+PASS 320x568 table title and reply text remain visible and uncovered
+PASS 320x568 table has distinct aftermath art
+PASS 320x568 doorstep result has no journal navigation
+PASS 320x568 doorstep story shows its stamp and clears every background HUD control
+PASS 320x568 doorstep title and reply text remain visible and uncovered
+PASS 320x568 doorstep has distinct aftermath art
+PASS 320x568 basket and two-chair porch are real world objects
+PASS 390x844 opaque character >=40px, no rectangle
+PASS 390x844 seven 44px controls in exactly one row
+PASS 390x844 no horizontal overflow
+PASS 390x844 world area >=60% (0.7477)
+PASS 390x844 no right-hand test toolbar in default view
+PASS 390x844 every drawer entry remains reachable
+PASS 390x844 three chores with no page arrows
+PASS 390x844 all three chores reachable without scrolling
+PASS 390x844 all ready rewards reachable on their cards
+PASS 390x844 three claimed chores visibly stamped
+PASS 390x844 two tangible wheat inventory slots
+PASS 390x844 recipe action reachable without scrolling
+PASS 390x844 dialogue hides every dock child and movement
+PASS 390x844 ten unequal feathered leaf-light spots
+PASS 390x844 actual tree shadows in world coordinates
+PASS 390x844 table result has no journal navigation
+PASS 390x844 table story shows its stamp and clears every background HUD control
+PASS 390x844 table title and reply text remain visible and uncovered
+PASS 390x844 table has distinct aftermath art
+PASS 390x844 doorstep result has no journal navigation
+PASS 390x844 doorstep story shows its stamp and clears every background HUD control
+PASS 390x844 doorstep title and reply text remain visible and uncovered
+PASS 390x844 doorstep has distinct aftermath art
+PASS 390x844 basket and two-chair porch are real world objects
+PASS 844x390 opaque character >=40px, no rectangle
+PASS 844x390 seven 44px controls in exactly one row
+PASS 844x390 no horizontal overflow
+PASS 844x390 no right-hand test toolbar in default view
+PASS 844x390 every drawer entry remains reachable
+PASS 844x390 three chores with no page arrows
+PASS 844x390 all three chores reachable without scrolling
+PASS 844x390 all ready rewards reachable on their cards
+PASS 844x390 three claimed chores visibly stamped
+PASS 844x390 two tangible wheat inventory slots
+PASS 844x390 recipe action reachable without scrolling
+PASS 844x390 dialogue hides every dock child and movement
+PASS 844x390 ten unequal feathered leaf-light spots
+PASS 844x390 actual tree shadows in world coordinates
+PASS 844x390 table result has no journal navigation
+PASS 844x390 table story shows its stamp and clears every background HUD control
+PASS 844x390 table title and reply text remain visible and uncovered
+PASS 844x390 table has distinct aftermath art
+PASS 844x390 doorstep result has no journal navigation
+PASS 844x390 doorstep story shows its stamp and clears every background HUD control
+PASS 844x390 doorstep title and reply text remain visible and uncovered
+PASS 844x390 doorstep has distinct aftermath art
+PASS 844x390 basket and two-chair porch are real world objects
+PASS 768x1024 opaque character >=40px, no rectangle
+PASS 768x1024 seven 44px controls in exactly one row
+PASS 768x1024 no horizontal overflow
+PASS 768x1024 world area >=60% (0.8667)
+PASS 768x1024 no right-hand test toolbar in default view
+PASS 768x1024 every drawer entry remains reachable
+PASS 768x1024 three chores with no page arrows
+PASS 768x1024 all three chores reachable without scrolling
+PASS 768x1024 all ready rewards reachable on their cards
+PASS 768x1024 three claimed chores visibly stamped
+PASS 768x1024 two tangible wheat inventory slots
+PASS 768x1024 recipe action reachable without scrolling
+PASS 768x1024 dialogue hides every dock child and movement
+PASS 768x1024 ten unequal feathered leaf-light spots
+PASS 768x1024 actual tree shadows in world coordinates
+PASS 768x1024 table result has no journal navigation
+PASS 768x1024 table story shows its stamp and clears every background HUD control
+PASS 768x1024 table title and reply text remain visible and uncovered
+PASS 768x1024 table has distinct aftermath art
+PASS 768x1024 doorstep result has no journal navigation
+PASS 768x1024 doorstep story shows its stamp and clears every background HUD control
+PASS 768x1024 doorstep title and reply text remain visible and uncovered
+PASS 768x1024 doorstep has distinct aftermath art
+PASS 768x1024 basket and two-chair porch are real world objects
+PASS 1024x768 opaque character >=40px, no rectangle
+PASS 1024x768 seven 44px controls in exactly one row
+PASS 1024x768 no horizontal overflow
+PASS 1024x768 no right-hand test toolbar in default view
+PASS 1024x768 every drawer entry remains reachable
+PASS 1024x768 three chores with no page arrows
+PASS 1024x768 all three chores reachable without scrolling
+PASS 1024x768 all ready rewards reachable on their cards
+PASS 1024x768 three claimed chores visibly stamped
+PASS 1024x768 two tangible wheat inventory slots
+PASS 1024x768 recipe action reachable without scrolling
+PASS 1024x768 dialogue hides every dock child and movement
+PASS 1024x768 ten unequal feathered leaf-light spots
+PASS 1024x768 actual tree shadows in world coordinates
+PASS 1024x768 table result has no journal navigation
+PASS 1024x768 table story shows its stamp and clears every background HUD control
+PASS 1024x768 table title and reply text remain visible and uncovered
+PASS 1024x768 table has distinct aftermath art
+PASS 1024x768 doorstep result has no journal navigation
+PASS 1024x768 doorstep story shows its stamp and clears every background HUD control
+PASS 1024x768 doorstep title and reply text remain visible and uncovered
+PASS 1024x768 doorstep has distinct aftermath art
+PASS 1024x768 basket and two-chair porch are real world objects
+PASS 1032x1376 opaque character >=40px, no rectangle
+PASS 1032x1376 seven 44px controls in exactly one row
+PASS 1032x1376 no horizontal overflow
+PASS 1032x1376 world area >=60% (0.8898)
+PASS 1032x1376 no right-hand test toolbar in default view
+PASS 1032x1376 every drawer entry remains reachable
+PASS 1032x1376 three chores with no page arrows
+PASS 1032x1376 all three chores reachable without scrolling
+PASS 1032x1376 all ready rewards reachable on their cards
+PASS 1032x1376 three claimed chores visibly stamped
+PASS 1032x1376 two tangible wheat inventory slots
+PASS 1032x1376 recipe action reachable without scrolling
+PASS 1032x1376 dialogue hides every dock child and movement
+PASS 1032x1376 ten unequal feathered leaf-light spots
+PASS 1032x1376 actual tree shadows in world coordinates
+PASS 1032x1376 table result has no journal navigation
+PASS 1032x1376 table story shows its stamp and clears every background HUD control
+PASS 1032x1376 table title and reply text remain visible and uncovered
+PASS 1032x1376 table has distinct aftermath art
+PASS 1032x1376 doorstep result has no journal navigation
+PASS 1032x1376 doorstep story shows its stamp and clears every background HUD control
+PASS 1032x1376 doorstep title and reply text remain visible and uncovered
+PASS 1032x1376 doorstep has distinct aftermath art
+PASS 1032x1376 basket and two-chair porch are real world objects
+PASS 1366x600 opaque character >=40px, no rectangle
+PASS 1366x600 seven 44px controls in exactly one row
+PASS 1366x600 no horizontal overflow
+PASS 1366x600 no right-hand test toolbar in default view
+PASS 1366x600 every drawer entry remains reachable
+PASS 1366x600 three chores with no page arrows
+PASS 1366x600 all three chores reachable without scrolling
+PASS 1366x600 all ready rewards reachable on their cards
+PASS 1366x600 three claimed chores visibly stamped
+PASS 1366x600 two tangible wheat inventory slots
+PASS 1366x600 recipe action reachable without scrolling
+PASS 1366x600 dialogue hides every dock child and movement
+PASS 1366x600 ten unequal feathered leaf-light spots
+PASS 1366x600 actual tree shadows in world coordinates
+PASS 1366x600 table result has no journal navigation
+PASS 1366x600 table story shows its stamp and clears every background HUD control
+PASS 1366x600 table title and reply text remain visible and uncovered
+PASS 1366x600 table has distinct aftermath art
+PASS 1366x600 doorstep result has no journal navigation
+PASS 1366x600 doorstep story shows its stamp and clears every background HUD control
+PASS 1366x600 doorstep title and reply text remain visible and uncovered
+PASS 1366x600 doorstep has distinct aftermath art
+PASS 1366x600 basket and two-chair porch are real world objects
+PASS no page errors or missing assets
+VERIFIED R84 166 checks

@@ -1,0 +1,54 @@
+{
+  "status": "VERIFIED",
+  "operation": "Only eight new R81 regression outputs moved; no initial store image touched",
+  "files": [
+    {
+      "originalGeneratedPath": "docs/store/screenshots/ipad-03-basket.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/ipad-03-basket.png",
+      "sha256": "c84dbf5d4f627c9ca9370727cc1325cfe0be2e6e7c8516599bca7efc2895f71a",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/ipad-04-note.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/ipad-04-note.png",
+      "sha256": "6765d805f179d206aa31ba732bf3aba7b15b4cf78c962198f26a1be8ab833edf",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/ipad-05-daily.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/ipad-05-daily.png",
+      "sha256": "91977938f36ee0e47febf9e2aff8987a043f56d110bc8875e5f77397a5e8fa47",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/ipad-06-same-age.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/ipad-06-same-age.png",
+      "sha256": "1b94273bcb0eda4d8e92dc5b9a99d8ca14147557bc06043dfd60bbcdd3b4d61b",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/iphone-03-basket.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/iphone-03-basket.png",
+      "sha256": "1fbf198170e0732a103801c2c23b06f1d8a727d47a2094bc5ce94f9259df7927",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/iphone-04-note.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/iphone-04-note.png",
+      "sha256": "216e174f889fcb6a850f1998697add9d1bac4641e09a039a251dc1c3d228bc8c",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/iphone-05-daily.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/iphone-05-daily.png",
+      "sha256": "1d655e7c09fd02c0dd00b47d5d51ced990a496fbae9bfe040f488672407db766",
+      "absentFromInitialInventory": true
+    },
+    {
+      "originalGeneratedPath": "docs/store/screenshots/iphone-06-same-age.png",
+      "archived": "docs/content/r13/regression-outputs/docs/store/screenshots/iphone-06-same-age.png",
+      "sha256": "32badf209f37ab5467b0813eb69f98d8bb143e7b525169960686b8a1b0907566",
+      "absentFromInitialInventory": true
+    }
+  ]
+}

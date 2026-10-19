@@ -1,0 +1,973 @@
+{
+  "status": "VERIFIED",
+  "screenshots": [
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-taken.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "48bf797391e72617d28fff68e177dc7dd59c233459eea4cc777411d094904005",
+      "at": 1792354427024
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-halfway.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "343422ce94acfc295971988bc0f6894567e227230eeae31a8c4304ea94be0eb7",
+      "at": 1792354427287
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-resident.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "d73d08108fd4bb3701cee0ac8970221656d5f3e99ab6caf61ad9bf5cba61f23b",
+      "at": 1792354428717
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-handover.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "6832f454bb339de4f2ec7697986114e69bff32b8756c60f2ab2364f562ccea74",
+      "at": 1792354429633
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-reply.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "936de763d8d93cf10e5ddb3a60dbde027ecb9d5e03ed06d70a2511697f131561",
+      "at": 1792354430751
+    },
+    {
+      "path": "docs/content/r6/phone-story-merchant-first.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "6aa8992cb1a8aa30aeb050af9fbe376fe7a488f54165e0e4650695687b37395d",
+      "at": 1792354432154
+    },
+    {
+      "path": "docs/content/r6/phone-memory-merchant-recall.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b23200d20c1d57e260de45990d934094d04a52d1267c24e0b374d32f30a03fea",
+      "at": 1792354432294
+    },
+    {
+      "path": "docs/content/r6/phone-memory-merchant-wrong.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8d2894bad65fd8e476a2b4b4d3f9f3c661a6920fc8d7bc97c2f7108651628038",
+      "at": 1792354435985
+    },
+    {
+      "path": "docs/content/r6/phone-memory-merchant-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "172b7bd788969e80b5671ef7b8d9b8e537050f584df6cbb8dddd2a2ff13fe5f5",
+      "at": 1792354440206
+    },
+    {
+      "path": "docs/content/r6/phone-memory-merchant-farm.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "7ca940b95e4b0ec817b2c1a21f5a5461da57f4e2f9be195811b2d6b9de92cb9e",
+      "at": 1792354440420
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-taken.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c7f05ed7eeb4e5fd96889a08597c1374d76a7051eb2a31800c0985fa3421d50d",
+      "at": 1792354441381
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-halfway.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "7b795ae0aa332f9a93a37feb73c8f1d3971c8e6a441a51fdd79051ae5b29faf4",
+      "at": 1792354441711
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-resident.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "d26d7aeb30cb0c76eaba2000e2b36281fa80d4a68c55820b7846caceb8e791d5",
+      "at": 1792354443148
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-handover.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "0ce552886babf7e20fbf28686bff67ee502df44003eef73f62b1f71803c9afe9",
+      "at": 1792354444080
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-reply.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "f646743123b834abd8254891fd0af5bff48ed541a376e3d68f24ba76ff0bc929",
+      "at": 1792354444484
+    },
+    {
+      "path": "docs/content/r6/phone-story-elder-first.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "f5030248a87c89a7aae242bff79ff7ed04be1a85d158ff1150c50e0b741169b1",
+      "at": 1792354445902
+    },
+    {
+      "path": "docs/content/r6/phone-memory-elder-recall.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "2e7c06f8437b651f9f6e6981e6dc0bfa3213f9d3db07fbab7826aa60a3701174",
+      "at": 1792354446093
+    },
+    {
+      "path": "docs/content/r6/phone-memory-elder-wrong.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "9d652ab7180f1083a3d25a3720638e5b72defe3665333de2b89164a88fe29cbf",
+      "at": 1792354449802
+    },
+    {
+      "path": "docs/content/r6/phone-memory-elder-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c7b8ecd32dabdb09703024f4a3da718e4b3fe2bf824531d7ddca2d755074c5ca",
+      "at": 1792354453610
+    },
+    {
+      "path": "docs/content/r6/phone-memory-elder-farm.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "1de1d6a5b455cf14813f2f2be6f5a8bfde1b342a54e2aaaed6f5de2c168b136d",
+      "at": 1792354453786
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-taken.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "f05a0c02f2b4c5ad974bbebc06d8bb35c06a938304940673d6902080eea15851",
+      "at": 1792354454577
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-halfway.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "f0ff641e74cf420ec56e41e91a6e64c114252e6f85df1a17029968077d42c245",
+      "at": 1792354454852
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-resident.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "fb5561ce6e6bfe054a1703b23e7ec2c60215806a1053b0d29cfeaff482946307",
+      "at": 1792354455754
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-handover.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "fc5d4a591bc1ed5c53115f1f4e1eb01b07d6e9b9a6da30f7e82bd13a1e5af808",
+      "at": 1792354456670
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-reply.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "ee6753651cc814a3b093504cae6fdeed88684414c7278953500acf48229602d3",
+      "at": 1792354457598
+    },
+    {
+      "path": "docs/content/r6/phone-story-child-first.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "1dca782a48ffdd3f60470a3009cc23c1a0d2d798034e7965b6a9c4eebbfb16a7",
+      "at": 1792354459026
+    },
+    {
+      "path": "docs/content/r6/phone-memory-child-recall.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8d6c9ff9755a6c456d451a047ac26e613a3b7c60d9cad52edfaf4841f21de1ea",
+      "at": 1792354459197
+    },
+    {
+      "path": "docs/content/r6/phone-memory-child-wrong.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "5d4d06eb4e832d213b48dd7a408d79cc6eeff9832bd39b5d24ea01d6a71f3bc8",
+      "at": 1792354462963
+    },
+    {
+      "path": "docs/content/r6/phone-memory-child-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "daca319512507f246053be307b3167caf3cc782feca57e93c969a39e1d0a9409",
+      "at": 1792354466654
+    },
+    {
+      "path": "docs/content/r6/phone-memory-child-farm.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "099e62a552da59612518ccc421061ea41736402e0c397b226d7f49cc879b0acd",
+      "at": 1792354466842
+    },
+    {
+      "path": "docs/content/r6/phone-memory-merchant-farm-response.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "7165c02d7842d1ba4d5550a6aaceed6fd87b69e5bd3a08d04eae6f8e0bb82cfa",
+      "at": 1792354467832
+    },
+    {
+      "path": "docs/content/r6/phone-memory-elder-farm-response.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c3b995fc8e14806a88d2cd7f01a1c963763a414f4d9818528a5735057c2e4299",
+      "at": 1792354468464
+    },
+    {
+      "path": "docs/content/r6/phone-memory-child-farm-response.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "470b3c0089cd0684e0d8a09e38899bdf4b6bd89217c8728c9fff7c8b919941a9",
+      "at": 1792354468691
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-plain.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "e086b23dba5bcef058577135354ee1195c8ffb062cd85145551d08c61462e777",
+      "at": 1792354469407
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-bottom.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "86632e28be4f65a4dff22b9b05dffdf66f216b4f4461982e2013d9923c0d6fcf",
+      "at": 1792354469470
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-taken.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "520f785c6ec0f0c2acdbdae22a555dcdd0ee0ee205019ee63eb2648949b14a55",
+      "at": 1792354470041
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-halfway.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "607c13af972bb08b1c41c46e51698621ee676d1059ee038d3d125a9244b9021e",
+      "at": 1792354470282
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-resident.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "b28b065f49072c22f78928c26c2c6cddf0f535d6558303d9308121d419c6c10e",
+      "at": 1792354471688
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-handover.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "c3bfd5eecb070e519ae60e429e3360284db5bfbcabd5f1353d1dc5c078b93050",
+      "at": 1792354472567
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-320-reply.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "e4b9af0811ad936c892a55d95441416dbe5a109f924134d7ac22838cd6f1e80e",
+      "at": 1792354473471
+    },
+    {
+      "path": "docs/content/r6/phone-story-merchant-320-first.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "d52a10f47dffbd6c2250375ba4298afefabb0919ad049849a08a12ed69dc41d3",
+      "at": 1792354474856
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-plain.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "455327f5698ec18107058ba329ea7eb5dfd05f7f57a255cd797df43fa5494da8",
+      "at": 1792354475596
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-bottom.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "4cfd0223386a78ef7357bab1ddc5606149ef8f7631be7386b4d693779326f84e",
+      "at": 1792354475651
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-taken.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "0368160ff41ba9bdd8afdc5c350010a887a4f25fba6bb9c667e278555a9633b2",
+      "at": 1792354476256
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-halfway.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "dca0beb6b93e5f34cec50c0ec850938b099e2196fc9c1f693d29141b7be96516",
+      "at": 1792354476500
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-resident.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "28cc0a4e506dc830313fb0383c78732c0ebbb6cb457e44fc2c43ac1e8f7b9249",
+      "at": 1792354477914
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-handover.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "f25681402bf9f933d87a17988d9573deffe11869be86e64c82412674c354177b",
+      "at": 1792354478815
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-320-reply.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "5583a041aaa9bde01c3a0993aac8c48d80e769e518b3495fd79428120f819469",
+      "at": 1792354479696
+    },
+    {
+      "path": "docs/content/r6/phone-story-elder-320-first.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "0781b986efeba69366d9af0b95df04a04dc0a5b2452dae91cdbdd3c825a37e54",
+      "at": 1792354481074
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-plain.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "b6d422212e1d95f639832584c52e96f2d1114852fdc925b8cea0afc6d1227c25",
+      "at": 1792354481774
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-bottom.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "7fac9f570b4ace2ef7887a479f8f2a8a9a1fd4faea8bd40a4b86e574e51b7f88",
+      "at": 1792354481852
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-taken.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "ffe3b97271f8c1aa988d62eb8520f00c0f194ac12cb994b187acb29130b067cc",
+      "at": 1792354482451
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-halfway.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "c35087426f96ee4b9a6afa0304d1d6257f3c2c54a3bb623b5c33bbbac9770bca",
+      "at": 1792354482700
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-resident.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "6178df68cae1e4dfd1411f7f101624837d50b174fe7d18ef64471ad96e5c8d9f",
+      "at": 1792354483597
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-handover.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "0eb9cd18bba98cf1731de6f9c8b835208f72e838ab973ab178d81260daf916a9",
+      "at": 1792354484481
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-320-reply.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "e4a3169bfd61117a8f9aed9d0fca0fd8d154e46227b75c9d3b14713914b0b8ac",
+      "at": 1792354485364
+    },
+    {
+      "path": "docs/content/r6/phone-story-child-320-first.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "e00de2bdd3da7e8b1ae49962f3f82c5c2fa446f64c6e22780ecafcab69d0a17a",
+      "at": 1792354486736
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-plain-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "39cc46b984d574aa86c29b5a9568b859123306f864eb447a30045c77a6a9ead9",
+      "at": 1792354487435
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-sweet-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "ab22fe1d3f7e59c62ca3efff7a253f17b96ccdcc4f422f62a5ba6f52ef6006eb",
+      "at": 1792354487527
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-sour-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "9538cb76a6abbcc33a56a084c6da537d87073888d069c531061e6b47d54ef30c",
+      "at": 1792354487601
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-hot-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "ef49dc59b4bc20c2c332716448c78649b15b352704179d0ecfcd26fa05200af4",
+      "at": 1792354487689
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-plain.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "951de743a076238d412b3718b02659aba0b60830ea5fbcc9f7b6e9424e85f2d3",
+      "at": 1792354488310
+    },
+    {
+      "path": "docs/content/r6/phone-basket-merchant-430-bottom.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "a5bf6d0d493cd3137c70e19310b8d546a000e5681f3661dbfde6fefdd17cb2ff",
+      "at": 1792354488384
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-plain.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "e39c9632132f51c4543142112e1a6a4342194793d8aa2efe2e7a8d81967a5dc2",
+      "at": 1792354489034
+    },
+    {
+      "path": "docs/content/r6/phone-basket-elder-430-bottom.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "64beb1df8af32c5f1f1a3f63e3438b3c72e1631dc91d5aee50a7e5ac9e2cb5fa",
+      "at": 1792354489146
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-plain.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "fb6e3f545dd5a1e2206e6c9c1b7c54454d7826ecb7d107e53530777f5f87b001",
+      "at": 1792354489873
+    },
+    {
+      "path": "docs/content/r6/phone-basket-child-430-bottom.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "4f8dfcc58a0ee54c212e46398a643cf4415afae083a5e8147d7671f2e7296e86",
+      "at": 1792354489952
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-plain-430.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "f8edaf2f19b908483e732145e03cb487a046c026083aacd4da4adecd71a22f49",
+      "at": 1792354490656
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-sweet-430.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c659bd636bdf003a969b9e13d13e03b8ef7f2e30a2cbd91af628cf479d82306c",
+      "at": 1792354490755
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-sour-430.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "debdbf6ee02ab8cbfbba862ad5fa313abccaaa53702a5463abf5bfdc24b3ad1a",
+      "at": 1792354490857
+    },
+    {
+      "path": "docs/content/r6/phone-basket-flavor-hot-430.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "d882b57e382a6da700319c654f4058eab795a1f6a3e65a4726a08aab5832796f",
+      "at": 1792354490960
+    },
+    {
+      "path": "docs/content/r6/layout-basket-844x390.png",
+      "width": 844,
+      "height": 390,
+      "sha256": "38bc8e60e59c12236918fff66a29d0cba205ab1bdced9f86457b3118985683db",
+      "at": 1792354491686
+    },
+    {
+      "path": "docs/content/r6/layout-basket-768x1024.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "f242f598dc47f39318c27b255b2cc2fd0246e8ac817f8c598185a6c15eb55b43",
+      "at": 1792354492384
+    },
+    {
+      "path": "docs/content/r6/layout-basket-1366x600.png",
+      "width": 1366,
+      "height": 600,
+      "sha256": "3c0c69dedacf45c10f2896fadbe6e26deb18cf2e70cf9a03642e92c1850df314",
+      "at": 1792354493065
+    },
+    {
+      "path": "docs/content/r6/phone-basket-roof-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "d743aa051b6bd262034de42ebc3b3f22e4a10f70553a0134ae83f039acc3272d",
+      "at": 1792354493701
+    },
+    {
+      "path": "docs/content/r6/phone-basket-roof-430.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "67d2d84d88c10a45e1906ae4adad2251d11212329df485aaf2d7484f3080466e",
+      "at": 1792354494249
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-merchant-decision.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "eb23fcf7f48526d7256eb2eec24d6e0abede2429dbbd1f4a3111ed373319cadb",
+      "at": 1792354495212
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-elder-decision.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8c36e1e37ebdb088ed8b31c3406f18226e33ef1e4c39738999c16817f48c254f",
+      "at": 1792354496148
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-child-decision.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b6e5af41f0f75d6d1a864634919b68dc2bf1db243a0ae7bbf43ce943fd326282",
+      "at": 1792354497029
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-complete.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "a91061d1c87ff09acf4d7986882b28e741cb562585f202177f8c0ab395a29dfb",
+      "at": 1792354498850
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-review-merchant.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "ee9f6aa827866ea713ffac242c9e7ff566e376d8b4eac81debb6c1aed4a84a01",
+      "at": 1792354499082
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-review-elder.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "9ae8d437640586dda5db7bc977b9f54189f02bd2862e11bba54eb9cefa21ef73",
+      "at": 1792354499135
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-review-child.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "da15e9091f4a925d718aa733edeb5ff68239ab47b28c32f654987a56a16ad3c1",
+      "at": 1792354499182
+    },
+    {
+      "path": "docs/content/r6/phone-gathering-farm-after.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "73419563e57aefdc0f7340b03928794f500f2df19d617f0148d92c6ac8de119d",
+      "at": 1792354499559
+    },
+    {
+      "path": "docs/content/r6/layout-gathering-320x568.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "a83d610b3145dde2d2f4ce04e33d29ca269a3f7f973c670aafbaa860311316e7",
+      "at": 1792354500288
+    },
+    {
+      "path": "docs/content/r6/layout-gathering-844x390.png",
+      "width": 844,
+      "height": 390,
+      "sha256": "fa3679b54d3863d9f88c87d9d163692ea04f471f639c8f1b172860fffdcee6ad",
+      "at": 1792354501035
+    },
+    {
+      "path": "docs/content/r6/layout-gathering-768x1024.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "2acb33e79130ce309653720d3a048b2b3d7215ca0afdc8e242eb8db68f41681f",
+      "at": 1792354501924
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-waiting.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "598ed6f346313b429dfbd80344c029b91a750b9e66074d3749bb256c937d058b",
+      "at": 1792354503215
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-pre-sink.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8236070427da22f5a53841d02ea1e1b2c5a36dbbddaa337079185da4f2aa0bc7",
+      "at": 1792354504542
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-pre-sink-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "21bc665645c59d9162cfa82e7eade543053440243b5f879e8fb0037c14f79ead",
+      "at": 1792354504625
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-sinking.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "a54d834909d93a1e58245d9fe74a2a477bcc547ebfdbfbe750dfa10ac79b541a",
+      "at": 1792354505226
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-sinking-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "e630213840dde8a8747398c1399b3483cfe8e86ef8c1eaff0fc36210e03ea3db",
+      "at": 1792354505305
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-caught.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "118606ad3f64db0295c5a3c32db62651a8ad4698905f3d0490be71044955579d",
+      "at": 1792354505396
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-note.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "d4171f92d3a194b2b32cca83b98193fd7052597040c53e0888f797be4f7d4e32",
+      "at": 1792354505513
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-learned-reload.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "a07f1bdad169f14eebc7a313765c041ed7bf9a835a73b1dbce0afb314e245f69",
+      "at": 1792354535596
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-waiting.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "3f9e52b563e9f613b522bd1adf2e21faa696d3bb12a933c0134ab07705c00d55",
+      "at": 1792354536861
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-pre-sink.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "96784b46547ab4299a413fc8a2e5fcdd62089b3c4efdc36ca905c89c2a3c7043",
+      "at": 1792354536999
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-pre-sink-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "e13f25e916ef8dbb02395f64ba23596c80821aa930f84a643ba08ff3b82abb32",
+      "at": 1792354537065
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-sinking.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "2e6ede12c11c309e7a907107b7f82fb501971038939b36d780e994e7987925a4",
+      "at": 1792354539208
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-sinking-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "fbccb5c50fe44b04c1f5b8456b9f14e03aa7c7b4ec1a8aecdac8704781c5008d",
+      "at": 1792354539278
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-caught.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "0948a8f52adbfa440a6f5384ded5cd23bcac3cc386d3d7fa73cfb0acca99a329",
+      "at": 1792354539359
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-note.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8a66d638d8559316d28881ed90c155d2f5248d72de9cb3808f3e1c1e12e9793e",
+      "at": 1792354539461
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-learned-reload.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "07b35574fdfab0e3aa409f19b82fbf7803aa01cdf4e0f72818d6880967265724",
+      "at": 1792354569569
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-waiting.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "2fea68f76b17071e3faf46a2632a1ee2a02cdb5ab78fcf847b6053bcbb0bd3ee",
+      "at": 1792354570859
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-pre-sink.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "69113514e3add294fda25767b849cefd0ac4805b2b3d2b5effb7d1c75adcb2ff",
+      "at": 1792354572376
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-pre-sink-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "4d8a0a4498704759786eeb06c3041bd8ac85ba9dfb08a057a3b0e10d3be03816",
+      "at": 1792354572442
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-sinking.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "f044b7efabe5bb07384199c4793c18c736d02e05f4292518d2001a4b3167ca5c",
+      "at": 1792354573032
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-sinking-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "7700974498bb5aa87f7ff3f00ffd7bc9f8f637d6aa795180b9565964a00219e9",
+      "at": 1792354573110
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-caught.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "87eb0a7ec396f77be2039a8db41ca8008d37bb234cc0ac7869f87b23ead5c256",
+      "at": 1792354573229
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-note.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "4d91752d3246b6229ec7802cc8d3a241b2b162f255e8315649e874e82b2ad235",
+      "at": 1792354573348
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-learned-reload.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "38b8e55be860426cd247daeae4f4a310866e840817914f9c3db423b7a4d7672e",
+      "at": 1792354603586
+    },
+    {
+      "path": "docs/content/r6/phone-offline-basket-plain.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "ba63da849b3b9e2505aa863c2f6e7e5fa08a68a9323d27580214e0697256db1f",
+      "at": 1792354605572
+    },
+    {
+      "path": "docs/content/r6/phone-offline-basket-sweet.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "725a80ae2f9d38fd7428080462b82742d246500ed1fe6b1c40101d1b506ca650",
+      "at": 1792354605673
+    },
+    {
+      "path": "docs/content/r6/phone-offline-basket-sour.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "63655d29c80e4740b87303d11a400f99d586f9b4c9813589a99d1b015d84ac11",
+      "at": 1792354605788
+    },
+    {
+      "path": "docs/content/r6/phone-offline-basket-hot.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "cacd4a372fc863825ab6bdac7daf6d80b88d077bf85a0671d104aa695e920797",
+      "at": 1792354605893
+    },
+    {
+      "path": "docs/content/r6/phone-offline-gathering.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "35f22a4c5fe8cfd10b66e87ef32e6d16769c42405fc95f6b515ea17f2c9bc3c0",
+      "at": 1792354606184
+    },
+    {
+      "path": "docs/store/screenshots/iphone-12-shared-afternoon.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "361cd1fc4d4dc88964b8bcaea996de7ffea9581f8f1006e7943ceca0e2d7cab2",
+      "at": 1792354607369
+    },
+    {
+      "path": "docs/store/screenshots/ipad-12-shared-afternoon.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "b5d8cf70386417132d60e73d1cef4d8538c29bbef0eb1bb140e64bd0a4728b79",
+      "at": 1792354609048
+    }
+  ],
+  "reviewSet": [
+    {
+      "content": "basket",
+      "source": "docs/content/r6/phone-basket-merchant-430-halfway.png",
+      "path": "docs/content/r6/review-set/01-phone-basket-merchant-430-halfway.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "343422ce94acfc295971988bc0f6894567e227230eeae31a8c4304ea94be0eb7"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r6/phone-basket-merchant-430-resident.png",
+      "path": "docs/content/r6/review-set/02-phone-basket-merchant-430-resident.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "d73d08108fd4bb3701cee0ac8970221656d5f3e99ab6caf61ad9bf5cba61f23b"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r6/phone-basket-merchant-430-handover.png",
+      "path": "docs/content/r6/review-set/03-phone-basket-merchant-430-handover.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "6832f454bb339de4f2ec7697986114e69bff32b8756c60f2ab2364f562ccea74"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r6/phone-basket-flavor-sour-320.png",
+      "path": "docs/content/r6/review-set/04-phone-basket-flavor-sour-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "9538cb76a6abbcc33a56a084c6da537d87073888d069c531061e6b47d54ef30c"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r6/phone-pond-river_carp-pre-sink-masked.png",
+      "path": "docs/content/r6/review-set/05-phone-pond-river_carp-pre-sink-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "21bc665645c59d9162cfa82e7eade543053440243b5f879e8fb0037c14f79ead"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r6/phone-pond-river_carp-sinking-masked.png",
+      "path": "docs/content/r6/review-set/06-phone-pond-river_carp-sinking-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "e630213840dde8a8747398c1399b3483cfe8e86ef8c1eaff0fc36210e03ea3db"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r6/phone-pond-silver_dace-pre-sink-masked.png",
+      "path": "docs/content/r6/review-set/07-phone-pond-silver_dace-pre-sink-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "e13f25e916ef8dbb02395f64ba23596c80821aa930f84a643ba08ff3b82abb32"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r6/phone-pond-silver_dace-sinking-masked.png",
+      "path": "docs/content/r6/review-set/08-phone-pond-silver_dace-sinking-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "fbccb5c50fe44b04c1f5b8456b9f14e03aa7c7b4ec1a8aecdac8704781c5008d"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r6/phone-pond-river_perch-pre-sink-masked.png",
+      "path": "docs/content/r6/review-set/09-phone-pond-river_perch-pre-sink-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "4d8a0a4498704759786eeb06c3041bd8ac85ba9dfb08a057a3b0e10d3be03816"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r6/phone-pond-river_perch-sinking-masked.png",
+      "path": "docs/content/r6/review-set/10-phone-pond-river_perch-sinking-masked.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "7700974498bb5aa87f7ff3f00ffd7bc9f8f637d6aa795180b9565964a00219e9"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r6/phone-memory-elder-wrong.png",
+      "path": "docs/content/r6/review-set/11-phone-memory-elder-wrong.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "9d652ab7180f1083a3d25a3720638e5b72defe3665333de2b89164a88fe29cbf"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r6/phone-memory-merchant-matched.png",
+      "path": "docs/content/r6/review-set/12-phone-memory-merchant-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "172b7bd788969e80b5671ef7b8d9b8e537050f584df6cbb8dddd2a2ff13fe5f5"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r6/phone-memory-child-matched.png",
+      "path": "docs/content/r6/review-set/13-phone-memory-child-matched.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "daca319512507f246053be307b3167caf3cc782feca57e93c969a39e1d0a9409"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r6/phone-gathering-child-decision.png",
+      "path": "docs/content/r6/review-set/14-phone-gathering-child-decision.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b6e5af41f0f75d6d1a864634919b68dc2bf1db243a0ae7bbf43ce943fd326282"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r6/phone-gathering-complete.png",
+      "path": "docs/content/r6/review-set/15-phone-gathering-complete.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "a91061d1c87ff09acf4d7986882b28e741cb562585f202177f8c0ab395a29dfb"
+    }
+  ],
+  "before": [
+    {
+      "path": "docs/content/r6/before-r5-basket.png",
+      "source": "docs/content/r5/phone-basket-walking-1.png",
+      "sha256": "73b26ebfa96cd5f31b64af739a3dcc35a8d1775bade646167e350b6e5807bdfd",
+      "note": "Copied historical R5 original, not recaptured this round"
+    },
+    {
+      "path": "docs/content/r6/before-r5-pond.png",
+      "source": "docs/content/r5/phone-pond-silver_dace-sinking-original.png",
+      "sha256": "4b1124e3596d3cccde34ad2396df859ad70e765e35c86b1c6aef0087ab612729",
+      "note": "Copied historical R5 original, not recaptured this round"
+    },
+    {
+      "path": "docs/content/r6/before-r5-memory.png",
+      "source": "docs/content/r5/phone-memory-merchant-matched.png",
+      "sha256": "9f6582c895b12cc6d7e32a3be82926b0aa269abd7d0415ee6e7db16a994652d7",
+      "note": "Copied historical R5 original, not recaptured this round"
+    }
+  ]
+}

@@ -1,0 +1,315 @@
+{
+  "status": "VERIFIED",
+  "masters": 10,
+  "runtimeImages": 23,
+  "alpha": [
+    {
+      "path": "assets/generated/r87/walk.png",
+      "occupancy": 0.385986328125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/actions.png",
+      "occupancy": 0.3998978226273148,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/farming-actions.png",
+      "occupancy": 0.3998978226273148,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/miri-0.png",
+      "occupancy": 0.59359375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/miri-1.png",
+      "occupancy": 0.5896875,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/miri-2.png",
+      "occupancy": 0.59640625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/terrain.png",
+      "occupancy": 0.17626190185546875,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/apple-tree.png",
+      "occupancy": 0.5183221726190477,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/leaf-light.png",
+      "occupancy": 0.53759765625,
+      "partial": 13212,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/canopy-shadow.png",
+      "occupancy": 0.5634765625,
+      "partial": 13848,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/leaf-ground.png",
+      "occupancy": 0.5828857421875,
+      "partial": 14325,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/paper-128.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/binding-8.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/wheat-32.png",
+      "occupancy": 0.4501953125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/basket-32.png",
+      "occupancy": 0.51171875,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/water-32.png",
+      "occupancy": 0.3486328125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/note-32.png",
+      "occupancy": 0.4375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/hat-32.png",
+      "occupancy": 0.41015625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/sprout-32.png",
+      "occupancy": 0.228515625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/logo-320.png",
+      "occupancy": 0.4382533482142857,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r87/app-icon-64.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/app-icon-192.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r87/app-icon-512.png",
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    }
+  ],
+  "characterDoubleGates": {
+    "assets/generated/r87/walk.png": true,
+    "assets/generated/r87/actions.png": true,
+    "assets/generated/r87/farming-actions.png": true,
+    "assets/generated/r87/miri-0.png": true,
+    "assets/generated/r87/miri-1.png": true,
+    "assets/generated/r87/miri-2.png": true
+  },
+  "storeCount": 12,
+  "secretScan": {
+    "matches": 0,
+    "files": 2646,
+    "scope": "repo only, no secrets directory access"
+  },
+  "runtimeOldVersionMatches": 0,
+  "javascriptSyntax": true,
+  "package": {
+    "status": "VERIFIED",
+    "method": "Existing GitHub workflow runtime allowlist: root runtime + src + assets; compare starting commit with current on-disk bytes",
+    "baseCommit": "565bb46",
+    "beforeBytes": 105383419,
+    "afterBytes": 106039644,
+    "deltaBytes": 656225,
+    "newImageBytes": 566310,
+    "nativePackageMeasured": false,
+    "docsExcluded": true
+  },
+  "limitations": [
+    "No independent score; 8/10 target awaits rescore",
+    "No human 3-second or 5-second recognition test",
+    "No native iOS/Android device validation"
+  ]
+}

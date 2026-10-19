@@ -1,0 +1,86 @@
+{
+  "status": "VERIFIED",
+  "command": [
+    "node",
+    "scripts/test-content-r8-e2e.js",
+    "--review-only"
+  ],
+  "trust": "Only recopy original screenshots. Gameplay frames/checks unchanged; selects adjacent different upper-body poses.",
+  "reviewSet": [
+    {
+      "content": "basket",
+      "source": "docs/content/r8/phone-basket-merchant-approach.png",
+      "path": "docs/content/r8/review-set/01-phone-basket-merchant-approach.png"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r8/phone-basket-merchant-contact.png",
+      "path": "docs/content/r8/review-set/02-phone-basket-merchant-contact.png"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r8/phone-basket-merchant-received.png",
+      "path": "docs/content/r8/review-set/03-phone-basket-merchant-received.png"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r8/phone-basket-cancel-before.png",
+      "path": "docs/content/r8/review-set/04-phone-basket-cancel-before.png"
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r8/phone-basket-cancel-after.png",
+      "path": "docs/content/r8/review-set/05-phone-basket-cancel-after.png"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r8/phone-pond-river_carp-learned-sinking.png",
+      "path": "docs/content/r8/review-set/06-phone-pond-river_carp-learned-sinking.png"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r8/phone-pond-silver_dace-learned-sinking.png",
+      "path": "docs/content/r8/review-set/07-phone-pond-silver_dace-learned-sinking.png"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r8/phone-pond-river_perch-learned-pre-sink.png",
+      "path": "docs/content/r8/review-set/08-phone-pond-river_perch-learned-pre-sink.png"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r8/phone-pond-river_perch-learned-sinking.png",
+      "path": "docs/content/r8/review-set/09-phone-pond-river_perch-learned-sinking.png"
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r8/phone-pond-river_perch-caught.png",
+      "path": "docs/content/r8/review-set/10-phone-pond-river_perch-caught.png"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r8/phone-memory-merchant-saved-flow.png",
+      "path": "docs/content/r8/review-set/11-phone-memory-merchant-saved-flow.png"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r8/phone-memory-elder-saved-flow.png",
+      "path": "docs/content/r8/review-set/12-phone-memory-elder-saved-flow.png"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r8/phone-memory-child-saved-flow.png",
+      "path": "docs/content/r8/review-set/13-phone-memory-child-saved-flow.png"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r8/phone-gathering-living-2.png",
+      "path": "docs/content/r8/review-set/14-phone-gathering-living-2.png"
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r8/phone-gathering-living-3.png",
+      "path": "docs/content/r8/review-set/15-phone-gathering-living-3.png"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "desktop": {
+    "runsP95Ms": [
+      16.8,
+      16.8,
+      16.8
+    ],
+    "medianP95Ms": 16.8,
+    "limitMs": 18,
+    "trust": "concurrent-load (other agents share this machine)"
+  },
+  "mobile": {
+    "runsP95Ms": [
+      16.8,
+      16.8,
+      16.8
+    ],
+    "medianP95Ms": 16.8,
+    "limitMs": 18,
+    "trust": "concurrent-load (other agents share this machine)"
+  }
+}

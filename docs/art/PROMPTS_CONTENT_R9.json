@@ -1,0 +1,14 @@
+{
+  "round": "content-r9",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "poses",
+      "master": "docs/art/masters/content-r9/poses.png",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a151a6-ac69-7f82-b576-0c2b8da1ea5d/exec-26783249-c6d6-424f-8480-abcfdab63ee0.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Asset type: transparent game animation SPRITE ATLAS, exactly SIX equal columns and FOUR equal rows, no text or grid. References 1-3 define exact neighbor identity, reference4 defines protagonist. Each sprite must read at native 48x64 resolution, crisp chunky pixel art. ROW1 merchant Lola: red gingham HEADSCARF tied over short brown hair, cream blouse, green long apron/skirt, NO HAT in ANY column. ROW2 elderly Bamber: straw hat, white bushy beard, brown vest, green shirt. ROW3 child Tutu: bare head tousled red hair, green shirt and brown shorts, no hat. ROW4 Miri protagonist: wide straw hat with red ribbon, red braids, cream blouse, green dungarees and brown boots. Each row same person, same head/face/clothes/scale throughout. Columns1-3 STANDING in three-quarter view, same planted feet baseline and exact head height, no walking: 1 hands resting at waist, 2 BOTH ARMS CLEARLY REACH FORWARD to receive parcel at chest level, 3 arms bent holding small gingham basket at chest. Basket SMALLER than torso. Columns4-6 SEATED on SAME small low wooden stool, EXACTLY fixed legs, feet and seat across the row: 4 resting hands on knees, 5 right forearm raised all the way to MOUTH with cream tea CUP, left arm reaches across tabletop, 6 right arm EXTENDED SIDEWAYS picking up a round biscuit at shoulder height, left hand in lap. Make cups/biscuits and hand movement very clear, displacement at least one head width, two dramatically different upper-body actions. No giant chairs, no table, no scenery. Every cell sprite fills 80 percent height, centered with empty transparent padding, same native density, same orthographic RPG view. Grid six columns, four rows. Maintain red headscarf distinct from Miri straw hat."
+    }
+  ]
+}

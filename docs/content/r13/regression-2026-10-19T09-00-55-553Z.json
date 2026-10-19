@@ -1,0 +1,74 @@
+{
+  "status": "VERIFIED",
+  "startedAt": "2026-10-19T09:00:55.549Z",
+  "sourceHashes": {
+    "index.html": "7ff253c081c74604dadbe246146102e7ee097e675da932caa6ac3325986002df",
+    "sw.js": "c3aaa617119606ebb79c8993f85b6f4fa3c5815fceb0febc7994cc451e995953",
+    "manifest.webmanifest": "a620b1f6dfcb6a79308844407141823e56eb5ee25459a5c532e35402137db115",
+    "package.json": "d5b9dae13fbc8993440000cafcc06913d3c72edcaa900e664f24c9e39e2b7214",
+    "package-lock.json": "35fe47c27398bc0b1ba54b75fda35179d1f73f74d254f8fb52f692668ce41424",
+    "src/adventure.js": "2868129ed51e27a187c3b0ecaac36a5a740dc2d3ffa0be58905d1a9b5b015d59",
+    "src/art-r82.css": "febeae2f60ec227f17a2949f681b30f1a4b66df82074ab1bdecf032aac9c8932",
+    "src/art-r83.css": "00d22332f6287cefcb8b1e55d647f5259ed808fedb3288376b02494e7d303663",
+    "src/art-r84.css": "2e684d65036e1ba0c74e4625d32ea57ba3e2551260ca56be6199f26dc13cc0d7",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/art-r85.css": "41bef2cef2c8735f29d6911e0a93e117aaa880d5b0515f6f88036b0848df2e81",
+    "src/art-r86.css": "ca548f4bd0cbddf8d987a82e39ab8f187ae828305c38906b00f7cc31177a089c",
+    "src/art-r87.css": "7d8f3414d5836bc6a18e9b4578e801be95c4af78ae8881cac0fb945428ffd063",
+    "src/art-r88.css": "79ddbe8032d3a7245b5709bad1451355661b18e03fa44173834dbf3445837ed2",
+    "src/art-r89.css": "791a043d70fa203ac0d67fb7c7fd1cc9b6821ea703534b4ef2bdddb0e0a4603f",
+    "src/atlas.js": "8a634d6883b822daf48a53c7a927dd54141d6054f252307b5770fe43960c0a22",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/content-r1.css": "f5a655eb56bdb595719624e6f65d08cdff5d663e6912b11db9e4554e7029704f",
+    "src/content-r1.js": "e2611fb02cde6d1d26bc1c890a74443f598bc52709bd69f1ffa39375e4c2387c",
+    "src/content-r10.css": "7d239395c70b71a38e32d6b05b1724c638b198776e831f2456f8c9d0b35c599c",
+    "src/content-r11.css": "c59fc79af969e4372423349005f97bc8065f0da9253fc88cb8a44c824684fc42",
+    "src/content-r12.css": "0e062f80c0d7df39e55ae1dc3387aa558f25c08e6740efafc98f04a03ad01819",
+    "src/content-r13.css": "9ff3f5ba71958ecd481c96b5b5a555f81964aef8e3136bfd4f6790654ed44efa",
+    "src/content-r6.css": "0bf1a648ca4552fd424ae5e4dfedd093e724e19acce53d8e499f1a9ce947d4ad",
+    "src/content-r6.js": "f285f3da290df5c85fe222cf7065eb703c5b3410033f7bddee350c05af2a8733",
+    "src/content-r8.css": "482f2ad440a3ac21c71d118bae60e5f6b83fb04464c9a53ac86c0826eab41bf0",
+    "src/content-r8.js": "1ca5068d302780233a1e2718f15bfe0eb7bcebb447b11419be09bc922af4c505",
+    "src/content-r9.css": "3c6a332855184bf46cc5f1ec6acade92bd0eef5a4c9d359b01b72cf83b0b1bd1",
+    "src/daily-ui.js": "31b6cc00ed4e250f89e07db37a502438d3049cd8639a2eff60b32e8437d5697d",
+    "src/daily.js": "4abcd251fa0f1c5385cf9deffce11641c801a4dc602e94d525ea7970aed9daa4",
+    "src/game.js": "8756bffb7e284ff503e691c2dc358a490ea05750789f506602d8be12a99bf77b",
+    "src/heirloom-ui.js": "f45fb552a0d429ded39f168863a1381d90c0bd4d21b298ba0c490a33afeff8d5",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "bfa0102e65696bd0aa506692d97e6162a3710eccd61b7612a440d8f558cb7619",
+    "src/ui.js": "061b548f52ada70453460dec539751f5bdb748afcb43ace573f24de6c0069aee",
+    "src/world-ui.js": "6dd007bb4bb9cfeab0824c0f63f288c3a9ecf91c8565eb224136ddffb382e7e3",
+    "src/world.css": "63e43d96060fbd04bd1e5b40decfbdb405bea693a31d89b8b041d5e997fb850e"
+  },
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r13/logs/2026-10-19T09-00-55-553Z/test.log",
+      "sha256": "bc060fc9adf5c4f9b1b00e34f9b5965f968969318a480fad74d891dce6099145"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r80-mobile.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r13/logs/2026-10-19T09-00-55-553Z/test-r80-mobile.js.log",
+      "sha256": "8ef6bfaea9501f16a89a2fa6f63e14b4d4e12146be21b6e1d618af66c288ef03"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r81-review.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r13/logs/2026-10-19T09-00-55-553Z/test-r81-review.js.log",
+      "sha256": "717c9fd16907622144becd3945ca42b51234e357778f5dbacadf8e0643ba5634"
+    }
+  ],
+  "sourcesUnchanged": true,
+  "endedAt": "2026-10-19T09:02:28.854Z"
+}

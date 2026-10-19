@@ -1,0 +1,729 @@
+{
+  "status": "EXECUTED",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool did not expose a model slug; actual tool recorded without guessing.",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/character-sheets/miri-r85.png",
+      "bytes": 1886086,
+      "sha256": "dc286bd87cefa013753b725790e19aa45095eafbb449a7e5033fb29c531fa65f"
+    },
+    {
+      "path": "docs/art/masters/r85/walk.png",
+      "bytes": 2534236,
+      "sha256": "f6e0d1a642f89c48d6098b3497fd071838399b165e45755b40f5e410c8e321df"
+    },
+    {
+      "path": "docs/art/masters/r85/actions.png",
+      "bytes": 2417152,
+      "sha256": "c2e273ea5556c9d0fce783d1d0fd2304b5d2505b2f4e66dbaa46bc4facd700bd"
+    },
+    {
+      "path": "docs/art/masters/r85/story.png",
+      "bytes": 2507657,
+      "sha256": "9e6fb8fed185d474f137c0d808f295abb9c9055864da0ecf9c87997d7f687f36"
+    },
+    {
+      "path": "docs/art/masters/r85/terrain.png",
+      "bytes": 1296745,
+      "sha256": "9eb1bd75a6d1b1f1a379921a8b14ca6eb78f805a9efd35797eb84687efb1803b"
+    },
+    {
+      "path": "docs/art/masters/r85/panel.png",
+      "bytes": 1294849,
+      "sha256": "abd54f17a2ce884d6689b0c171f7ac9c067db92f26dbb4ac6ecbcc68170cb19c"
+    },
+    {
+      "path": "docs/art/masters/r85/icons.png",
+      "bytes": 1195015,
+      "sha256": "892ee97516f2b495091f9b8d25ce9060d7ef04cf2450e47fcda411f8d860aefb"
+    },
+    {
+      "path": "docs/art/masters/r85/logo.png",
+      "bytes": 1095879,
+      "sha256": "4a0574eadca95b2391b40170e9ff9f20d34edb1a645b704f7a046fc41fed23f2"
+    },
+    {
+      "path": "docs/art/masters/r85/app.png",
+      "bytes": 1411737,
+      "sha256": "dd64c16aef5e369f41235f7a90cf733a81f0a003e4039f0ffb7f2cb30600dc0d"
+    }
+  ],
+  "records": [
+    {
+      "path": "assets/generated/r85/miri-0.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7676,
+      "sha256": "4f4145deab1b041fbc033e3c4e6a26e3eaaeeb516da2447cb4f0d4100cc0f5f3"
+    },
+    {
+      "path": "assets/generated/r85/miri-1.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7058,
+      "sha256": "04ece36a4407ce22d39ed34b2dd5846bef17e1bebbde313e706533a23567d257"
+    },
+    {
+      "path": "assets/generated/r85/miri-2.png",
+      "source": "sheet",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7530,
+      "sha256": "11ffaed5f9b6e859825b85bc827b272ad550be19b2b879e0818180ef20b1c3e5"
+    },
+    {
+      "path": "assets/generated/r85/walk.png",
+      "source": "walk",
+      "size": [
+        288,
+        256
+      ],
+      "bytes": 60395,
+      "sha256": "c4b59ca37d3da91c2629eb12a074324605fdd1c108996ad634bc712e575a0341"
+    },
+    {
+      "path": "assets/generated/r85/actions.png",
+      "source": "actions",
+      "size": [
+        288,
+        512
+      ],
+      "bytes": 115567,
+      "sha256": "8abd4db0b4369c440c756fe0627be3eb1831b66210e93f68d9c3a155f50d3251"
+    },
+    {
+      "path": "assets/generated/r85/farming-actions.png",
+      "source": "actions + retained v4 axe/build",
+      "size": [
+        288,
+        1536
+      ],
+      "bytes": 290598,
+      "sha256": "592b6cf48b7f4ea16a96b8fca0c3a8828ea5a5fbdd34ae9db033532d186c5267"
+    },
+    {
+      "path": "assets/generated/r85/welcome-384.webp",
+      "source": "story",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 5700,
+      "sha256": "41a0c77162d0296c061efc4c1e3c8d4a867efda99478690d3377ba67155d33ff"
+    },
+    {
+      "path": "assets/generated/r85/basket-384.webp",
+      "source": "story",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 6338,
+      "sha256": "f974e15a3bff7155f5f5b41d1ba244b914474a5e250dc6f238e3a16e6a1a85a2"
+    },
+    {
+      "path": "assets/generated/r85/table-result-384.webp",
+      "source": "story",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 6308,
+      "sha256": "c209d7f11baf06f951b37ff5d685bddfb58fdbc5b399aef7b1616717c862c66d"
+    },
+    {
+      "path": "assets/generated/r85/doorstep-result-384.webp",
+      "source": "story",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 6176,
+      "sha256": "5c89e7f42039d497d912c200d28b96e20dd4f78afb06489fee1091b67f0be0c8"
+    },
+    {
+      "path": "assets/generated/r85/album-128.png",
+      "source": "panel",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4487,
+      "sha256": "7faafb9bebe6a46f7b35735511e84b9183acdbdc394d7135ab161994ce910ff4"
+    },
+    {
+      "path": "assets/generated/r85/paper-128.png",
+      "source": "panel",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 562,
+      "sha256": "5fa2229866f445e517d4d92d63458b1d8985faa15cd512a5877933b4d69d9ef6"
+    },
+    {
+      "path": "assets/generated/r85/stamp-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1362,
+      "sha256": "05b40c9f22f49b90f5755a415684d29df6afcd2054618c5385916a975d9f3593"
+    },
+    {
+      "path": "assets/generated/r85/wheat-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1318,
+      "sha256": "1e5ab97dde7dc1049fae0f68abd840d856278becc15e7d94d5e4984bee5c7245"
+    },
+    {
+      "path": "assets/generated/r85/basket-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1270,
+      "sha256": "076515a152ae92d67585c1a39e7d297e4a2a7f2d0f9df0bcb52f56c1edb3e73c"
+    },
+    {
+      "path": "assets/generated/r85/water-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1085,
+      "sha256": "928706464ca4ac99788a34a4cc9bcfec25a092916e9b891f0b6ffec7014e3781"
+    },
+    {
+      "path": "assets/generated/r85/sun-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 947,
+      "sha256": "4dff431b1cae19148337b80f307558663a28e00b6cc0f151035bddae9d251664"
+    },
+    {
+      "path": "assets/generated/r85/note-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1320,
+      "sha256": "16e2504f5e67e45e964881162e9f1c8304857e30b3f3c6be408d9e6d1daa1a82"
+    },
+    {
+      "path": "assets/generated/r85/bow-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1244,
+      "sha256": "e38845a39734c98690e716a4adad828d38802d2cd5afb44ab4cf823a7c50a66a"
+    },
+    {
+      "path": "assets/generated/r85/cups-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1139,
+      "sha256": "b84861962b969456cb222b749f4117d95cf69c404ad813cf39b6a2d706bc090c"
+    },
+    {
+      "path": "assets/generated/r85/logo-320.png",
+      "source": "logo",
+      "size": [
+        320,
+        112
+      ],
+      "bytes": 18157,
+      "sha256": "15a358c9bf5edd41566ef3fe18eafa54ed5a5c67e88c44afb5aea06e097c38dc"
+    },
+    {
+      "path": "assets/generated/r85/app-icon-64.png",
+      "source": "app",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 5485,
+      "sha256": "31b22729db179be871a1cf56c8d0db9564f01c7bdb28e52100e78d2d60b3612e"
+    },
+    {
+      "path": "assets/generated/r85/app-icon-192.png",
+      "source": "app",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 6623,
+      "sha256": "26d7a424e64d1ecc5e6cde7c6115af9a9128031d64cb768fc7222e95b0e047e8"
+    },
+    {
+      "path": "assets/generated/r85/app-icon-512.png",
+      "source": "app",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 10048,
+      "sha256": "475dd30d7d8e123dd7a89af7cce59bb5d5650a50c98473cb4c8f73d9f423432b"
+    },
+    {
+      "path": "assets/generated/r85/terrain.png",
+      "source": "terrain",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 6092,
+      "sha256": "d027a39ebfc79d79ee7cb32dbe6899f16c1eae916d6e2b50d078a8db4a1ddc5c"
+    },
+    {
+      "path": "assets/generated/r85/keepsakes.png",
+      "source": "icons + retained R84 porch/shadows",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 24340,
+      "sha256": "fd167b632a51b4573ef266da971ef6591330e5ed1cb391fac327cadeca439d05"
+    }
+  ],
+  "frameReceipts": [
+    {
+      "sheet": "walk",
+      "row": 0,
+      "lowerBodyChangedFraction": 0.2897135416666667,
+      "hashes": [
+        "8dbb958bb01f9502f812cd679bd99e776fb9e771e543dce9408349a1306d363e",
+        "a654fa79cd6183d22dacc90a9e4301c06c4ca0bbc12d01665b3acb5ca890cc8e",
+        "4c2ef385b6a10be86be7f36d4f9fb77f2ec26cfc0db63edd8ace508c6b4e1eef",
+        "425ccc6340a06f228293095a8ebbbef2a439f87f21d2db31bb5d5fbd04d3e7aa",
+        "21a585be458b1041b2cd876ae08164358b30d85f7e68b5d20f0c83aa3e153da4",
+        "2475fdc0a8fd49e65fd20640911b8590779b10217500b77e662df5707c0068c3"
+      ]
+    },
+    {
+      "sheet": "walk",
+      "row": 1,
+      "lowerBodyChangedFraction": 0.3411458333333333,
+      "hashes": [
+        "505989f19edd93c6cc03ccf06c8fb57e37d4466b4594b1e9e6dc80b374200ab8",
+        "eaae0931ce6bb04849ce60458f6f6fe6c2b08829ed9592a55824075648e899fa",
+        "7587aa0008bfd1ea070ed9e56350cc54755dc06733b3539cfeedc3f18b9191d2",
+        "a55c3a74f1fd019406e871b63f02f7362930a08d830a949521654f5deb3f041b",
+        "446735da444af8370c140f5a1102a7a2be8381b23d9f3112478e65c9f3f5906c",
+        "586fc7766e5864c922d603109a6bfd87d02ce353f58c0b841fa64b4a7e17cd6e"
+      ]
+    },
+    {
+      "sheet": "walk",
+      "row": 2,
+      "lowerBodyChangedFraction": 0.3203125,
+      "hashes": [
+        "57ea5c2d50cf4b251fb945056b3caa3e9d60f6184d06625af9564b3428a76beb",
+        "1623c86a86e35d62b00b4851348f7aa2ac9ab7f0c3add3eb56ecfc6b3f96d6a0",
+        "eb85f708f15cf87072fcf0d1ff590db1c468273f661b818a72403ff66e291ee0",
+        "2bae8d5aebff7a5e056394ca07e0fc512f9813d5e71f7484b8d66a52d29041fc",
+        "b0e207c25b4bd839460bb703f26859e045e707cba3509bc0d8b3e913e54a407c",
+        "6d1a396dbc1a34b1e40295a535aad2b1a7022aa873bef5a61c1bac8977ce077b"
+      ]
+    },
+    {
+      "sheet": "walk",
+      "row": 3,
+      "lowerBodyChangedFraction": 0.3216145833333333,
+      "hashes": [
+        "33f14792b038227b661afc04412f942ae16ee502ca8298410de8ae3aada44b0f",
+        "eebb8b0032c916a3e6eda463842af8bee9d378b1188785d2d8f13d0a6c9aaca4",
+        "fc1412702264c7e1b462f8d3a082ec9b129767a0707ffce45ecb6d31b62a4391",
+        "bd785e5f9575913aeb8a048d025957a99ac20d834602db23649ad937d1236009",
+        "578622344b7863464473842b47ef03faaa3b05a1d7486844613744ce76ad1c70",
+        "860321e9ca1f1e2647d43c469bac8b652e80ec6d36240f91838a044f54dca403"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 0,
+      "lowerBodyChangedFraction": 0.4778645833333333,
+      "hashes": [
+        "543ce4709411206124873531225533b14e3f50e0ead796e2507a09c75732afbd",
+        "2b62340f5faf70611331f7bdf4d00c5db04eaae119c6aa4b06f3308ef7d1e6cb",
+        "9d953ac4cbcf0fde56ba5d911ceb8117f3bb7eefc222cf17fd4fcff5f4c9b544",
+        "e2de26b4f90577b9bb8faeed38515d70858bdc1660ce43da0d94b80dfdad7c59",
+        "28bfcf7e4af4658917583b475cc30d79a2378f53df866b97a85050080ac99893",
+        "4ba887b45cfd049d67c81675e731986ecbb7975a76ee4dcef4d17b6955e99d10"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 1,
+      "lowerBodyChangedFraction": 0.4055989583333333,
+      "hashes": [
+        "26bd6632612e17491092dffd91601a836bfe09a6ff284eba593838b55347c970",
+        "1899785569cb6f0698e1f45bb3a6f51214fa4f2d4ed7782743c22681e741e9df",
+        "2d2998401fc4dd69eb9d91c5dffa7dba170dd723db806f45ad604b13870cc745",
+        "554da7ee535700e2ea85db11592fd7e2c87f21fd12fbdd146f158892f3e6872a",
+        "8b1095b1e084a73daa50027ae3e3fdc8626a2c68c6f7ae5067e6b612eec3eb87",
+        "db69f2978e237819f280a862cee91c9982279f9e5e7e9c3d1d5a6c64d08b66e6"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 2,
+      "lowerBodyChangedFraction": 0.40625,
+      "hashes": [
+        "1298242fee9ce8ac888017494e862084108821b3442735f23f61958abece9866",
+        "14891011e71f1cc3e047b3569b88575492176555a0749857c407a1a430f78723",
+        "7f02867c69f936a4137cb54dedd9db5ea2b8e34cde7b56036e6b60582a80934f",
+        "212d367e68b8b8ff7b3ab0633fab89fe2a9c77218e5f12af1182913b89a611f6",
+        "d6e57f6e9cec9e52e47d9d56b686eb7576808c6f84086e891f099d537ad8b194",
+        "1c44da147b71fd0d592b2a88dc91fd7146b50adb353a413b659c48a5d893b59f"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 3,
+      "lowerBodyChangedFraction": 0.4772135416666667,
+      "hashes": [
+        "548c03cc58c381efff05ad71c88516a7c8f2312f4bcdd8181bd0f3c6af014069",
+        "60e6aa174a5a8b4e07a3cdfe6aa5b6aa3cc549424b0baa5497e1e8fcb51f55ac",
+        "9198c46f44482c3da96242f6611b10e1c3255270581025093730538e06827e60",
+        "b9ac1efc8f53112b21529411fe6df97a828ec51028f42d76272663f99da45e38",
+        "af08499eeb977c18d8bf23bf2b8f38b4ee1b359303fee627e237f79830d46255",
+        "8990f4db404f0baf0a47501173a67e19b8324cb27fde5d20ac1f83215e453719"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 4,
+      "lowerBodyChangedFraction": 0.5794270833333334,
+      "hashes": [
+        "50bb93ba599ee072ac3954199f93a7463b5c48d311d1fba94b0ef2ae5e8c594f",
+        "0c4d6921d55bfe1dd936896aa5bfe65110b799f8814f0e5a4be924a848d4fedf",
+        "d8c9bf6744afbd40b2899ce3f46b4b271363954c52da801f99c3b884c8c247fb",
+        "bccabd5ab4e2f7fb124e9ea9afc41ee744fadbf6b07f774382c746170e3e7f4e",
+        "59514469874871973323daf8cac4eb0c414fd8f45facd0a57ace376a1418e7ac",
+        "1f39b475842a56e2dc830d72296d525d06eaf4c3569ccc4e09e4c6a3da6f16a9"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 5,
+      "lowerBodyChangedFraction": 0.5397135416666666,
+      "hashes": [
+        "cb081d912d4235da64b31a230d0e3db12ee9dc6d80fa7c28480a005f2d022737",
+        "1866c7fff9953362cd03364cbfc7d3c9ddad2aab09290d84e90d53b68a7550e7",
+        "6219691299ddcb802c68a7e72b831f08128c7bfbee5c4741442140ac765c107b",
+        "785f8c34f3d35ebb6f68536ac298ac4a7ada983b5da3be50688925f61ac8b4dc",
+        "d8a4eb4df02195991da41494dc9ace659e02351e3c262b6393f813af058518f8",
+        "a03ec031fa71d26aa47a0f1164c9f7400e3618461d5e24dae968aa9f638e3f95"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 6,
+      "lowerBodyChangedFraction": 0.5247395833333334,
+      "hashes": [
+        "fd2f015241998908003a7f2fd1ef86581816a62b803f4237498dca254dbfa5fb",
+        "85a88ad1d2090d66f6ae8fe4f7142b849819c39949c76b8f22be790edfa4ed64",
+        "12555c713872db1f94cd6e97f289a5e3dd08404323ada9a65da60dc90d8b77f9",
+        "d4d64a07498c6e281b5afec429f93a51ecbe680cfad46a98cfa6f97dfe6e200a",
+        "3676bab7d75979bb4b1e60e8ff71037c3059eb79e91d8c9d35b893a6915bcb46",
+        "09b9ea40a45a213b440e0064eacc4c8a5624cf88aef6b365070305beeb348902"
+      ]
+    },
+    {
+      "sheet": "actions",
+      "row": 7,
+      "lowerBodyChangedFraction": 0.53125,
+      "hashes": [
+        "6d96c97ef4fff659cdda17b45a889f0e05e5955b04bccec791c0d767341ae8dc",
+        "e21d2576dd03dba14dab1a557a889ecc3ceeeb6317c3a1dea6947974b4f1ba3f",
+        "2e136882e911930de34289d65956282b549b9109befad975ae1d38788462edf8",
+        "ee6e90459c076ec1883ee36f9691cf4a6686196c8dfd8ff099d34b4b8d011b50",
+        "8a09cb266d9f9d25e5e07c45145fb6d51e1e55079aafd12ef0c433d7713d3dc3",
+        "dfdca2518c486862ccdaf2889d515a42ce4c5b0932ddedd6997d15af887d2e43"
+      ]
+    }
+  ],
+  "qualityMetrics": {
+    "assets/generated/r85/miri-0.png": {
+      "brightness": 0.4846323614319846,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5673994980644125,
+      "lowSaturationFraction": 0.01863041289023162,
+      "gatePass": true
+    },
+    "assets/generated/r85/miri-1.png": {
+      "brightness": 0.5044611016070903,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5639188874734111,
+      "lowSaturationFraction": 0.017354719957927953,
+      "gatePass": true
+    },
+    "assets/generated/r85/miri-2.png": {
+      "brightness": 0.4980768668088997,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5714231425818087,
+      "lowSaturationFraction": 0.013471502590673576,
+      "gatePass": true
+    },
+    "assets/generated/r85/walk.png": {
+      "brightness": 0.39788153784642677,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5385309277155781,
+      "lowSaturationFraction": 0.006746784735399536,
+      "gatePass": true
+    },
+    "assets/generated/r85/actions.png": {
+      "brightness": 0.4374411762002657,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5374372683760409,
+      "lowSaturationFraction": 0.005669676707796236,
+      "gatePass": true
+    },
+    "assets/generated/r85/farming-actions.png": {
+      "brightness": 0.40471980339287633,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.513844857581446,
+      "lowSaturationFraction": 0.010752758202967266,
+      "gatePass": true
+    },
+    "assets/generated/r85/welcome-384.webp": {
+      "brightness": 0.5713326840150121,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5165416000042268,
+      "lowSaturationFraction": 0.1004638671875,
+      "gatePass": true
+    },
+    "assets/generated/r85/basket-384.webp": {
+      "brightness": 0.5256649555759804,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5581585321328313,
+      "lowSaturationFraction": 0.036376953125,
+      "gatePass": true
+    },
+    "assets/generated/r85/table-result-384.webp": {
+      "brightness": 0.5335041616881128,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.540120024834803,
+      "lowSaturationFraction": 0.072509765625,
+      "gatePass": true
+    },
+    "assets/generated/r85/doorstep-result-384.webp": {
+      "brightness": 0.5366899060776654,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5114999997954732,
+      "lowSaturationFraction": 0.078369140625,
+      "gatePass": true
+    },
+    "assets/generated/r85/album-128.png": {
+      "brightness": 0.8863640328201593,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.2080374900533183,
+      "lowSaturationFraction": 0.85968017578125,
+      "gatePass": false
+    },
+    "assets/generated/r85/paper-128.png": {
+      "brightness": 0.9577256209788603,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.15335539489233194,
+      "lowSaturationFraction": 0.9981689453125,
+      "gatePass": false
+    },
+    "assets/generated/r85/stamp-32.png": {
+      "brightness": 0.6239960431813174,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4744430132040923,
+      "lowSaturationFraction": 0.18619582664526485,
+      "gatePass": true
+    },
+    "assets/generated/r85/wheat-32.png": {
+      "brightness": 0.42626531526336026,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.550744921226932,
+      "lowSaturationFraction": 0.007352941176470588,
+      "gatePass": true
+    },
+    "assets/generated/r85/basket-32.png": {
+      "brightness": 0.3878043746825155,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5418447082339142,
+      "lowSaturationFraction": 0.007772020725388601,
+      "gatePass": true
+    },
+    "assets/generated/r85/water-32.png": {
+      "brightness": 0.38522950226244346,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.44988323411632664,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r85/sun-32.png": {
+      "brightness": 0.5251413325529216,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5786971398492593,
+      "lowSaturationFraction": 0.004975124378109453,
+      "gatePass": true
+    },
+    "assets/generated/r85/note-32.png": {
+      "brightness": 0.5432203792992607,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.39029641878455706,
+      "lowSaturationFraction": 0.3559718969555035,
+      "gatePass": false
+    },
+    "assets/generated/r85/bow-32.png": {
+      "brightness": 0.42587800516284946,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5688029712422145,
+      "lowSaturationFraction": 0.01680672268907563,
+      "gatePass": true
+    },
+    "assets/generated/r85/cups-32.png": {
+      "brightness": 0.5559448404744614,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.43245142104787826,
+      "lowSaturationFraction": 0.16296296296296298,
+      "gatePass": true
+    },
+    "assets/generated/r85/logo-320.png": {
+      "brightness": 0.5006649556264585,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5376601802448219,
+      "lowSaturationFraction": 0.03402785641490205,
+      "gatePass": true
+    },
+    "assets/generated/r85/app-icon-64.png": {
+      "brightness": 0.6558662762331495,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5314253638670554,
+      "lowSaturationFraction": 0.012451171875,
+      "gatePass": true
+    },
+    "assets/generated/r85/app-icon-192.png": {
+      "brightness": 0.6558662762331494,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5314253638670554,
+      "lowSaturationFraction": 0.012451171875,
+      "gatePass": true
+    },
+    "assets/generated/r85/app-icon-512.png": {
+      "brightness": 0.6558662762331495,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5314253638670554,
+      "lowSaturationFraction": 0.012451171875,
+      "gatePass": true
+    },
+    "assets/generated/r85/terrain.png": {
+      "brightness": 0.5020763161901561,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5174171289636554,
+      "lowSaturationFraction": 0.0006276241180799031,
+      "gatePass": true
+    },
+    "assets/generated/r85/keepsakes.png": {
+      "brightness": 0.3977663548035906,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4721819176894795,
+      "lowSaturationFraction": 0.015888720754277733,
+      "gatePass": true
+    }
+  },
+  "runtimeBytes": 598825,
+  "pipeline": "True alpha preserved, binary alpha at native size, clear transparent RGB, shared 68-color palette; BOX native reduction + nearest-neighbor; lossless WebP scenes. Atlas crop/mirror only; no synthesized character motion."
+}

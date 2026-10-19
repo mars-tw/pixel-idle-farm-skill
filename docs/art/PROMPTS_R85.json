@@ -1,0 +1,71 @@
+{
+  "status": "EXECUTED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool did not expose a model slug; actual tool recorded without guessing.",
+  "stylePrefix": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34.",
+  "jobs": [
+    {
+      "id": "sheet",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: a polished CHARACTER DESIGN SHEET for Miri, same young adult auburn-haired farm girl in front, right side and back, full body, three evenly spaced large views on cream paper, plus three small expressive face portraits in a bottom row (gentle smile, concentrating, joyful). Short two braids; golden straw hat with prominent RED CHECKERED hatband, red checked neck scarf, ochre shirt, green dungarees, brown boots. A WOVEN WICKER HARVEST BASKET strapped to her back, visible basket ribs and flared opening, NO leather backpack, with LARGE triangular RED AND CREAM GINGHAM CLOTH sticking out visibly even in side view. Charming compact proportions, head about 1/3 body, readable limbs, same scale all views, clear face. All three identity props must be obvious in side view at 64px wide. Clean design reference, no labels, no text, no UI, no watermark, no painterly gradients.",
+      "master": "docs/art/character-sheets/miri-r85.png",
+      "transparent": false
+    },
+    {
+      "id": "walk",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: production WALK SPRITE ATLAS. Reference image is identity/design reference ONLY. Create exactly SIX columns by FOUR rows, 24 separate full-body game sprites, each in equal rectangular cell with generous transparent gutters. Row1 facing DOWN/front, row2 facing LEFT, row3 facing RIGHT, row4 facing UP/back. Each row is SIX different genuine walking poses: left foot forward contact, passing, right foot forward contact, passing, left push-off, right push-off. Legs and arms must visibly alternate poses, not whole-character translation. Same compact proportions/head 1/3 body and baseline in every frame. Miri from reference: auburn braids, golden straw hat with very prominent red-cream CHECKED hatband, RED CHECKED neck scarf, ochre shirt, green overalls, brown boots. Her back container is unmistakably a flared WOVEN WICKER BASKET, no leather backpack, large triangular red gingham cloth poking over basket rim in ALL side/back frames, visible next to torso on front view. Pixel art intended 48x64 native PER frame, coarse readable clusters, no tiny rendering noise. Transparent background only, no cast ground shadows, no grid, no labels, no letters, no scenery, no extra poses. Canvas landscape 3:2, cells aligned exactly.",
+      "sourceFile": "exec-41360142-3d9a-4e01-b163-e660d42607b9.png",
+      "master": "docs/art/masters/r85/walk.png",
+      "transparent": true
+    },
+    {
+      "id": "actions",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: production FARM ACTION SPRITE ATLAS, exactly SIX columns by EIGHT rows (48 sprites), equally aligned cells, portrait canvas. Reference is Miri identity only. Fixed 48x64 native full body per frame, straw hat RED CHECKER band, red neckerchief, green dungarees, ochre shirt, auburn braids, woven WICKER BASKET strapped to back with large red gingham triangle. Rows1-4 WATER action facing down, left, right, up respectively: six phases lifting apple-green watering can, anticipating tilt, pouring, stream hits soil, lifting upright, recovery. Rows5-8 HARVEST/TEND action facing down, left, right, up respectively: six phases stand, bend knees reach forward, hands grasp wheat, pull up with both hands, wheat raised joyfully, recover. Every row six truly different limb poses; no whole-sprite bobbing. Identical character scale and feet baseline, generous blank gutters, transparent background, no ground, no labels, no numbers, no grid, no scene. Coarse crisp native pixel art, no miniature detailed painting. Bodies never cropped.",
+      "sourceFile": "exec-286e7236-e766-4b7d-a12a-6bb12db1d233.png",
+      "master": "docs/art/masters/r85/actions.png",
+      "transparent": true
+    },
+    {
+      "id": "story",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: FOUR NARRATIVE BACKGROUND ILLUSTRATIONS in a precise 2 columns by 2 rows atlas, no gaps or grid. Each scene a WIDE 2:1 crop; overall wide 2:1 canvas. Render like actual low-resolution 128x64 pixel game backgrounds, large simple pixel clusters, simplified shapes, NO dense detail, no dithering noise. Reference is character identity Miri. Upper-left scene: welcome, foreground wicker picnic basket lined with red gingham on porch table, a LARGE folded cream grandmother note resting visibly against basket, just two wheat stalks and cup; sunny small farm beyond, no animal in basket, note/basket clear focal point. Upper-right scene: preparation, close view two hands in ochre sleeves tying red gingham cloth around TWO bundles of golden wheat in wicker basket, one cream note tucked clearly at rim, honey porch behind, no face. Lower-left scene: AFTER SHARE, cheerful elder white beard orange ochre jacket and Miri sit at two chairs at small table, Miri handing elder a cup, empty open wicker basket prominent foreground, red gingham cloth, two cups, sunlit cottage porch and distant garden, simple warm composition distinct from empty chair choice image. Lower-right scene: AFTER DELIVERY, elder just opening cottage door bending toward wicker basket with red cloth and note, Miri waving while walking away at left, golden leaf-dappled doorstep. Bright warm cream gold green, no dark vignette, no text, no symbols, no UI. Four complete compositions, strong readable objects at 128px wide.",
+      "sourceFile": "exec-2f73ec11-b0ef-4358-b006-d89eb30f64ee.png",
+      "master": "docs/art/masters/r85/story.png",
+      "transparent": false
+    },
+    {
+      "id": "terrain",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: SIX seamless ground MATERIAL swatches for actual farm terrain in a precise 3 columns x 2 rows equal square grid, NO dividers, no borders. Top row left to right: quiet apple green short grass, pale ochre dirt footpath, warm neutral brown cultivated soil with subtle horizontal furrows. Bottom row: sunlit grass matching top grass hue but modestly warmer, darker damp brown furrow soil, calm blue green pond water. Native each tile 16x16 pixels, very coarse low contrast large color clusters, ground must be quiet behind characters. Grass flat base plus only 3 short simple blades per 16x16 tile, NO regular checkerboard, no polka dots, no dithering, no noisy texture. Path and soil 3-4 shades, soft contrast. No objects, no flowers, no people, no grid, no text, no UI, no shadows, flat top-down, opaque image.",
+      "sourceFile": "exec-b07ec1d7-9e96-4bdb-a4d0-0daecbd1b523.png",
+      "master": "docs/art/masters/r85/terrain.png",
+      "transparent": false
+    },
+    {
+      "id": "panel",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: square UI material background for a farm STAMP ALBUM, opaque. Nearly flat warm CREAM handmade paper center occupies 90%, restrained few golden fibers, thin stitched terracotta-red gingham cloth binding only along LEFT edge, simple 2px cocoa outline at outer edge, little golden wheat embroidered into top left corner. Visible coarse 16-bit pixel clusters at native 128x128. Absolutely no panels inside, no buttons, no lines, no stamps, no letters, no symbols, no shadows or gradients across center. Paper must stay very light so cocoa text reads cleanly. No blue/teal, no rounded modern card, no fake UI.",
+      "sourceFile": "exec-5769dfa8-6992-4488-88b3-45c71cb95005.png",
+      "master": "docs/art/masters/r85/panel.png",
+      "transparent": false
+    },
+    {
+      "id": "icons",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: eight separate readable farm game ICONS in exact 4 columns x 2 rows grid, each object centered equal square cell, generous transparent gutters, true alpha background. Native32x32 coarse pixels, bold cocoa outline. Top row left to right: circular TERRACOTTA INK WHEAT STAMP, flat solid red-orange silhouette of three wheat ears inside double circle with tiny leaf bottom, no letters, no distress; THREE GOLDEN WHEAT STALKS tied with red gingham knot; wicker lunch BASKET with prominent red checked cloth; green WATERING CAN pouring 3 blue drops. Bottom row left to right: golden SUN disc with 8 rays; folded cream NOTE with red ribbon; red gingham cloth bow; two cream TEACUPS on little wood tray. First stamp must read clearly as wheat inside circle at32px; do not make it gray or dirty. No text, no numbers, no UI panels, no ground shadows, no grid, no background.",
+      "sourceFile": "exec-eee9deef-e1f3-495b-9f8b-dd318c78f61b.png",
+      "master": "docs/art/masters/r85/icons.png",
+      "transparent": true
+    },
+    {
+      "id": "logo",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: polished title LOGO for game, actual text in Traditional Chinese EXACTLY:「陽光農場」. Four bold chunky handlettered golden wheat pixel characters, crisp cocoa outline and very thin cream highlight. At RIGHT a tiny distinctive wicker basket with red gingham cloth and wheat; at LEFT a golden sun peeking over first character. ONE horizontal compact logo, readable at160x48, plenty blank transparent outer margin. Coarse large pixel clusters, cheerful countryside, no backdrop, no other text, no English, no rounded panel, no watermark. Transparent background.",
+      "sourceFile": "exec-99b86e40-f67d-44c4-b601-94b6cb24e133.png",
+      "master": "docs/art/masters/r85/logo.png",
+      "transparent": true
+    },
+    {
+      "id": "app",
+      "prompt": "SUNBASKET R85: cohesive coarse 16-bit pixel art at 64px character native, large clean square pixel clusters, NO fine stippling, selective 1px cocoa outline #3E2F23, warm upper-left sunlight, apple-green #6A994E shadows, wheat gold #FFB627, tomato-red gingham #D95737, cream #FFF6E3, wood #8B5E34. Asset: square mobile APP ICON PROPOSAL for Sunlight Farm, a single large WICKER PICNIC BASKET with a very clear triangular red cream gingham cloth and two golden wheat ears, large golden sun behind basket at upper left, two apple green leaves. Warm pale butter background filled edge to edge, no corners baked in. Actual game icon style coarse 64x64 pixels, bold silhouette, 3-4 tonal shades per material, extremely simple composition, no microdetail, no text, no letters, no watermark, no border. Basket occupies70% canvas. Matches title basket and farmer identity, looks cheerful and premium at64px.",
+      "sourceFile": "exec-797e962f-f4ef-48ef-b043-0848f95a95ad.png",
+      "master": "docs/art/masters/r85/app.png",
+      "transparent": false
+    }
+  ]
+}

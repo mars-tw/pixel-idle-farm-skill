@@ -1,0 +1,9 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "injectedProgress": false,
+  "clockAccelerated": false,
+  "checks": [],
+  "journeys": [],
+  "requests": []
+}

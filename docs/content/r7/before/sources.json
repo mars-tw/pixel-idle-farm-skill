@@ -1,0 +1,42 @@
+[
+  {
+    "source": "docs/content/r6/phone-basket-merchant-430-halfway.png",
+    "copy": "docs/content/r7/before/phone-basket-merchant-430-halfway.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/phone-pond-river_perch-pre-sink-masked.png",
+    "copy": "docs/content/r7/before/phone-pond-river_perch-pre-sink-masked.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/phone-pond-river_perch-sinking-masked.png",
+    "copy": "docs/content/r7/before/phone-pond-river_perch-sinking-masked.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/phone-memory-merchant-matched.png",
+    "copy": "docs/content/r7/before/phone-memory-merchant-matched.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/phone-gathering-complete.png",
+    "copy": "docs/content/r7/before/phone-gathering-complete.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/phone-gathering-farm-after.png",
+    "copy": "docs/content/r7/before/phone-gathering-farm-after.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/layout-basket-768x1024.png",
+    "copy": "docs/content/r7/before/layout-basket-768x1024.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  },
+  {
+    "source": "docs/content/r6/layout-basket-844x390.png",
+    "copy": "docs/content/r7/before/layout-basket-844x390.png",
+    "provenance": "Existing R6 original before this round; not a new baseline run."
+  }
+]

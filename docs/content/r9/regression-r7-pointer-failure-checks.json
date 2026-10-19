@@ -1,0 +1,40 @@
+{
+  "status": "BLOCKED",
+  "startedAt": "2026-10-19T01:36:15.036Z",
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-19T01:36:15.037Z",
+      "end": "2026-10-19T01:36:25.471Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-done-1.log",
+      "sha256": "8f38267b083c8d54323fb6aa67c47e5b46578b8f117de56ea9c67474f5cb32dd"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r6-e2e.js"
+      ],
+      "start": "2026-10-19T01:36:25.474Z",
+      "end": "2026-10-19T01:40:13.643Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-done-2.log",
+      "sha256": "2f70555812617b51fde790eb3c34e1bc1e6d2471e31ad45d9b2421b6b2393fbe"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r7-e2e.js"
+      ],
+      "start": "2026-10-19T01:40:13.646Z",
+      "end": "2026-10-19T01:41:46.217Z",
+      "exitCode": 1,
+      "log": "docs/content/r9/regression-done-3.log",
+      "sha256": "28f8698aff9d50c1b365c114e5d7aebf07311f6cc0bb87a7ac00b6141fc6397c"
+    }
+  ],
+  "endedAt": "2026-10-19T01:41:46.218Z"
+}

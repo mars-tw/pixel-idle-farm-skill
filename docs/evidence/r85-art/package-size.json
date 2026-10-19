@@ -1,0 +1,8 @@
+{
+  "scope": "Web runtime only; docs and native IPA/AAB excluded",
+  "baselineCommit": "6145ae3",
+  "beforeBytes": 104133334,
+  "afterBytes": 104819302,
+  "deltaBytes": 685968,
+  "newImageBytes": 598825
+}

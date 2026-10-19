@@ -1,0 +1,45 @@
+PASS copy: no English combo/Level up strings in runtime UI
+PASS copy: Chinese 連收 ×N and 升級！ present
+PASS sun: player planted through the real quest button
+PASS sun: first sunpatch appears on its own within ~4s of planting
+PASS sun: first sunpatch is explained once by the mayor
+PASS sun: quest dock shows sunpatch countdown
+PASS sun: harvest inside sunlight stores wheat yield 2 + 1
+PASS sun: sun catch counted once
+PASS sun: catch shows golden float text and toast
+PASS feedback: storage chip is addressable for harvest fly-to
+PASS sun: no page errors
+PASS redirect desktop: player was mid-walk when pressing 前往
+PASS redirect desktop: no 'wait until walk ends' rejection
+PASS redirect desktop: redirected walk reaches the quest NPC and talks
+PASS redirect desktop: no page errors
+PASS redirect phone: player was mid-walk when pressing 前往
+PASS redirect phone: no 'wait until walk ends' rejection
+PASS redirect phone: redirected walk reaches the quest NPC and talks
+PASS redirect phone: no page errors
+PASS hint: waiting for harvest shows soonest ripening countdown
+PASS hint: taller quest dock never covers the seed bar (phone)
+PASS hud phone Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud phone Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv7: resource chips stay clear of system buttons and inside viewport
+PASS toast desktop: identical message within 2.5s shows once
+PASS toast desktop: at most 3 toasts at once
+PASS toast desktop: toasts move above the NPC dialogue
+PASS toast landscape: identical message within 2.5s shows once
+PASS toast landscape: at most 3 toasts at once
+PASS toast landscape: toasts move above the NPC dialogue
+PASS toast phone: identical message within 2.5s shows once
+PASS toast phone: at most 3 toasts at once
+PASS toast phone: toasts move above the NPC dialogue
+PASS music: plays after first user gesture when sound+music are on
+PASS music: loop source is the R79 track
+PASS music: settings has a 背景音樂 toggle
+PASS music: toggle off pauses the music
+PASS perf desktop: rAF p95 median of 3 runs 16.8ms <= 18ms (sunpatch + ambient light on)
+PASS perf mobile: rAF p95 median of 3 runs 16.7ms <= 18ms (sunpatch + ambient light on)
+R79 SUMMARY {"passed":44,"failed":0}

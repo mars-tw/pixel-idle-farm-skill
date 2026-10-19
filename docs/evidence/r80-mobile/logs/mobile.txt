@@ -1,0 +1,63 @@
+PASS 390x844 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":59.671875,"height":46,"inside":true,"hit":true},{"id":"settingsBtn","width":44,"height":44,"inside":true,"hit":true}]
+PASS 390x844 no page overflow
+PASS 390x844 daily controls 44px visible hit targets [{"id":"dailyToday","width":161,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":161,"height":44,"inside":true,"hit":true},{"id":"dailyNext","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":330,"height":44,"inside":true,"hit":true}]
+PASS 390x844 daily blocks background controls
+PASS 390x844 opens reachable first task
+PASS 390x844 basket reachable in two pages
+PASS 390x844 basket return controls 44px visible hit targets [{"id":"dailyPrev","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":330,"height":44,"inside":true,"hit":true}]
+PASS 390x844 collection explains nonconsecutive visits
+PASS 390x844 return restores controls
+PASS first minute: real tutorial planting and watering progress the daily goal
+PASS first daily reward 44px visible hit targets [{"id":"dailyClaim","width":83.578125,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":330,"height":44,"inside":true,"hit":true}]
+PASS first minute: claim real watering reward
+PASS 390x844 repeated touch does not reward before impact
+PASS 390x844 impact stores crop while recovery remains protected
+PASS 390x844 repeated touch settles one crop exactly once
+PASS 390x844 quick harvest advances actual daily produce goal
+PASS 390x844 basket consumes exactly two actual crops
+PASS 390x844 claim keeps focus inside the dialog
+PASS daily loop: three earned rewards give first stamp
+PASS daily stamp persists after real save and reload
+PASS live portrait-to-landscape rotation 44px visible hit targets [{"id":"dailyToday","width":190,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":190,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":388,"height":44,"inside":true,"hit":true}]
+PASS 390x844 full storage leaves ripe crop intact
+PASS 390x844 seventh-stamp story is readable
+PASS 390x844 no page errors
+PASS 844x390 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":44,"height":44,"inside":true,"hit":true},{"id":"settingsBtn","width":44,"height":44,"inside":true,"hit":true}]
+PASS 844x390 no page overflow
+PASS 844x390 daily controls 44px visible hit targets [{"id":"dailyToday","width":190,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":190,"height":44,"inside":true,"hit":true},{"id":"dailyNext","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":388,"height":44,"inside":true,"hit":true}]
+PASS 844x390 daily blocks background controls
+PASS 844x390 opens reachable first task
+PASS 844x390 basket reachable in two pages
+PASS 844x390 basket return controls 44px visible hit targets [{"id":"dailyPrev","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":388,"height":44,"inside":true,"hit":true}]
+PASS 844x390 collection explains nonconsecutive visits
+PASS 844x390 return restores controls
+PASS 844x390 repeated touch does not reward before impact
+PASS 844x390 impact stores crop while recovery remains protected
+PASS 844x390 repeated touch settles one crop exactly once
+PASS 844x390 quick harvest advances actual daily produce goal
+PASS 844x390 basket consumes exactly two actual crops
+PASS 844x390 claim keeps focus inside the dialog
+PASS 844x390 full storage leaves ripe crop intact
+PASS 844x390 seventh-stamp story is readable
+PASS 844x390 no page errors
+PASS 1366x600 farm controls 44px visible hit targets [{"id":"dailyOpen","width":53,"height":57,"inside":true,"hit":true},{"id":"settingsBtn","width":70,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 no page overflow
+PASS 1366x600 daily controls 44px visible hit targets [{"id":"dailyToday","width":188,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":188,"height":44,"inside":true,"hit":true},{"id":"dailyNext","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":384,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 daily blocks background controls
+PASS 1366x600 opens reachable first task
+PASS 1366x600 basket reachable in two pages
+PASS 1366x600 basket return controls 44px visible hit targets [{"id":"dailyPrev","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":384,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 collection explains nonconsecutive visits
+PASS 1366x600 return restores controls
+PASS 1366x600 no page errors
+PASS 1280x640 farm controls 44px visible hit targets [{"id":"dailyOpen","width":53,"height":57,"inside":true,"hit":true},{"id":"settingsBtn","width":70,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 no page overflow
+PASS 1280x640 daily controls 44px visible hit targets [{"id":"dailyToday","width":188,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":188,"height":44,"inside":true,"hit":true},{"id":"dailyNext","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":384,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 daily blocks background controls
+PASS 1280x640 opens reachable first task
+PASS 1280x640 basket reachable in two pages
+PASS 1280x640 basket return controls 44px visible hit targets [{"id":"dailyPrev","width":44,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":384,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 collection explains nonconsecutive visits
+PASS 1280x640 return restores controls
+PASS 1280x640 no page errors
+R80 after: 62 passed

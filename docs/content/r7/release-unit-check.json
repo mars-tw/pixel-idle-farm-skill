@@ -1,0 +1,8 @@
+{
+  "status": "VERIFIED",
+  "command": "npm test",
+  "exitCode": 0,
+  "log": "docs/content/r7/logs/npm-test-release.txt",
+  "sha256": "792a3a6723947cfd0008bcd27d4a57d114038a728ec631193e210a0e856af1f2",
+  "restoredHistoricalFiles": []
+}

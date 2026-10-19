@@ -1,0 +1,485 @@
+{
+  "status": "VERIFIED",
+  "masters": 9,
+  "images": 30,
+  "sourceDerivatives": 12,
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "alpha": [
+    {
+      "path": "assets/generated/r89/miri-0.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.5921875,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/miri-1.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.586875,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/miri-2.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.6015625,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/garden-1536.webp",
+      "size": [
+        1536,
+        1024
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/wheat-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.435546875,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/basket-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.4541015625,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/water-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.427734375,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/note-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.4033203125,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/hat-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.373046875,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/sprout-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.2412109375,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/creel-0.png",
+      "size": [
+        24,
+        24
+      ],
+      "occupancy": 0.5277777777777778,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/creel-1.png",
+      "size": [
+        24,
+        24
+      ],
+      "occupancy": 0.3871527777777778,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/creel-2.png",
+      "size": [
+        24,
+        24
+      ],
+      "occupancy": 0.4947916666666667,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/wheat-sprout-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "occupancy": 0.08159722222222222,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/wheat-grow-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "occupancy": 0.16145833333333334,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/wheat-ripe-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "occupancy": 0.3133680555555556,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/paper-128.png",
+      "size": [
+        128,
+        128
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/binding-8.png",
+      "size": [
+        8,
+        128
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/logo-320.png",
+      "size": [
+        320,
+        112
+      ],
+      "occupancy": 0.461328125,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/app-icon-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/app-icon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/app-icon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/table-result-512.webp",
+      "size": [
+        512,
+        256
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/chair-detail-256.webp",
+      "size": [
+        256,
+        280
+      ],
+      "occupancy": 1.0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/sunshaft-384.png",
+      "size": [
+        384,
+        256
+      ],
+      "occupancy": 0.537872314453125,
+      "corners": [
+        0,
+        251,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/leaf-light.png",
+      "size": [
+        192,
+        96
+      ],
+      "occupancy": 0.8057725694444444,
+      "corners": [
+        0,
+        141,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/canopy-shadow.png",
+      "size": [
+        192,
+        128
+      ],
+      "occupancy": 0.8194986979166666,
+      "corners": [
+        0,
+        130,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r89/grey-2.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.5209375,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/walk.png",
+      "size": [
+        288,
+        256
+      ],
+      "occupancy": 0.385986328125,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r89/farming-actions.png",
+      "size": [
+        432,
+        512
+      ],
+      "occupancy": 0.3998978226273148,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    }
+  ],
+  "storeCount": 14,
+  "storyStoreCount": 12,
+  "secretScan": {
+    "status": "VERIFIED",
+    "files": 3464,
+    "matches": 0,
+    "scope": "workspace except git/dependencies/local backups; no secrets directory accessed"
+  },
+  "runtimeOldVersionMatches": 0,
+  "javascriptSyntax": true,
+  "package": {
+    "baseCommit": "8b1193eda8d7035542e8161af8657dca15fa9b9b",
+    "beforeBytes": 106674929,
+    "afterBytes": 107690714,
+    "deltaBytes": 1015785,
+    "newImageBytes": 929927,
+    "scope": "Existing web runtime allowlist; original masters/evidence excluded",
+    "nativePackageMeasured": false
+  },
+  "limitations": [
+    "Independent Muse8/10 rescore unperformed",
+    "Human timed recognition unperformed",
+    "Native iOS/Android hardware QA unperformed"
+  ],
+  "archiveTextNormalization": "UTF-8 LF; original output SHA and portable archive SHA both retained"
+}

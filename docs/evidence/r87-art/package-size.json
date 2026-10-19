@@ -1,0 +1,11 @@
+{
+  "status": "VERIFIED",
+  "method": "Existing GitHub workflow runtime allowlist: root runtime + src + assets; compare starting commit with current on-disk bytes",
+  "baseCommit": "565bb46",
+  "beforeBytes": 105383419,
+  "afterBytes": 106039644,
+  "deltaBytes": 656225,
+  "newImageBytes": 566310,
+  "nativePackageMeasured": false,
+  "docsExcluded": true
+}

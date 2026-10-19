@@ -1,0 +1,107 @@
+/* R85: leaf-dappled play space, woven-basket silhouette and a stamped farm album. */
+:root{--sun-texture:url('../assets/generated/r85/paper-128.png?v=content-r13-20261019-1')}
+.sab-ic img{display:block;width:28px;height:28px;image-rendering:pixelated}
+.sun-beam{animation:r85LightIn .45s ease-out both!important;transform:none;z-index:2!important}
+.sun-beam .sun-pool{inset:-8%!important;height:auto!important;opacity:1;background:radial-gradient(ellipse,#fff1ad9c 0%,#ffdc7266 38%,#ffd56f32 58%,transparent 74%)!important}
+.sun-beam .leaf-light{width:24%!important;height:21%!important;background:radial-gradient(ellipse,#fff8cbe6 8%,#ffe8a3aa 36%,#ffdc7040 55%,transparent 74%)!important}
+.sun-beam .leaf-1{width:30%!important}.sun-beam .leaf-3{width:32%!important}.sun-beam .leaf-5{width:16%!important}.sun-beam .leaf-7{width:28%!important}.sun-beam .leaf-9{width:13%!important}
+.sun-beam .sun-mote{bottom:26%;width:3px;height:3px;opacity:.85;box-shadow:0 0 6px #fff6c4}
+.sunlit-crop{filter:brightness(1.28) saturate(1.16) drop-shadow(-2px -2px 0 #ffe8a3aa);transform:scale(1.16);transform-origin:center bottom}
+.canopy-shadow{transform:scaleY(.45) rotate(-25deg);transform-origin:center bottom;opacity:.32;z-index:1!important}
+.ob[data-frame^='oak']::after,.ob[data-frame^='fruit_tree']::after{content:'';position:absolute;bottom:2%;left:35%;width:36%;height:7%;background:#3e2f2366;border-radius:50%;filter:blur(2px);pointer-events:none}
+.player{transform:translate(-50%,-100%);filter:none}
+.player .p-sprite{translate:var(--stance-x,0px) 0px;position:relative;z-index:1}
+.player::before{content:'';position:absolute;left:50%;bottom:0;width:48%;height:7%;translate:calc(-50% + var(--stance-x,0px)) 0;background:radial-gradient(ellipse,#3e2f237a,transparent 73%);pointer-events:none}
+@keyframes r85LightIn{from{opacity:0}to{opacity:1}}
+.daily-modal-card{background:#fff6e3 url('../assets/generated/r85/album-128.png?v=content-r13-20261019-1') left top/100% 100% no-repeat;padding:16px 18px 14px 24px;border:2px solid #8b5e34;border-top:2px solid #8b5e34;image-rendering:pixelated}
+.daily-heading{border-bottom:1px solid #c7a56a;padding-bottom:7px}
+.daily-heading>div{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.daily-heading .sun-portrait{width:56px;height:56px;flex-shrink:0}
+.daily-heading #dailyDate{display:none}
+#dailyToday{min-width:44px;min-height:44px;border:0;background:transparent;color:#8b5e34;font-size:12px;padding:4px 0;text-decoration:underline;text-underline-offset:4px}
+.daily-tabs.journal-links{display:flex;gap:8px;border:0;background:transparent;flex-shrink:0}
+.journal-links button{min-height:44px;border:0;border-top:1px solid #c7a56a;background:transparent;color:#8b5e34;font-size:13px;padding:4px 8px}
+.journal-links button[aria-pressed='true']{background:#eed8a5;color:#684323}
+.daily-task-strip{gap:12px}
+.daily-chore,.daily-chore.selected{border:1px solid #b3874b;border-left:1px solid #b3874b;padding:10px 12px;background:#fff9ec;box-shadow:none}
+.daily-task-thumb,.daily-task-thumb[aria-pressed='true']{border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important;padding:0;color:#684323}
+.daily-task-thumb small{color:#8b5e34}
+.daily-task-thumb .chore-stamp{position:absolute;right:9px;top:8px;width:44px;height:44px;margin:0;opacity:1!important;filter:none!important}
+.daily-chore:has(.chore-stamp) .daily-task-thumb{padding-right:44px}
+.chore-progress{height:5px;background:#ead6ac}
+.chore-progress i{background:#6a994e}
+#dailyFooter{font-size:12px;line-height:1.5;margin:0}
+#basketBanner{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 10px;background:#ead6ac;color:#684323;border-bottom:4px solid #d95737;font-size:19px;font-family:KaiTi,DFKai-SB,serif}
+#basketBanner[hidden]{display:none}
+#basketBanner img{width:48px;height:48px;image-rendering:pixelated}
+#basketBanner small{display:block;font:12px/1.5 'Microsoft JhengHei',sans-serif;margin-top:2px}
+#dailyModal[data-art-page='heirloom'][data-story='false'] .daily-heading{display:none}
+#dailyModal[data-art-page='heirloom'][data-story='false'] #dailyToday{display:block}
+/* Keep the album-return control reachable on the basket page, outside its banner. */
+#dailyModal[data-art-page='heirloom'][data-story='false'] .daily-heading{display:flex;padding:0;border:0}
+#dailyModal[data-art-page='heirloom'][data-story='false'] .daily-heading :is(.sun-portrait,h2){display:none}
+#dailyModal[data-art-page='heirloom'][data-story='false'] .daily-heading>div{justify-content:flex-end}
+.wheat-progress{flex-direction:row;justify-content:space-between;align-items:center;gap:10px;padding:8px 0}
+.wheat-progress>span{display:flex;flex-direction:row;align-items:center;gap:12px}
+.wheat-slot{width:92px;height:58px;border:1px solid #b3874b;border-bottom:3px solid #8b5e34;gap:6px}
+.wheat-slot strong{font-size:23px;line-height:1;color:#684323}
+.wheat-slot.empty img{opacity:.6;filter:none}
+.wheat-progress>small{font-size:12px;line-height:1.6}
+/* Story paper occupies the entire background; no dark-green upper void or farm below. */
+#dailyModal[data-story='true']{background:#fff6e3 var(--sun-texture);padding:0}
+#dailyModal[data-story='true'] .daily-modal-card{width:min(920px,100vw);max-width:100vw;max-height:100dvh;padding:0;border:0;border-radius:0;box-shadow:none;background:#fff6e3;gap:0}
+#dailyModal[data-story='true'] #dailyBody{overflow:auto}
+#dailyModal[data-story='true'] .heirloom-paper{background:#fff6e3}
+#dailyModal[data-story='true'] .heirloom-illustration{max-height:min(360px,30dvh);object-fit:contain;background:#fff6e3}
+#dailyModal[data-story='true'] .memory-stamp{animation:r85Stamp .28s ease-out both}
+@keyframes r85Stamp{from{transform:scale(1.5) rotate(-12deg)}to{transform:scale(1) rotate(-8deg)}}
+#dailyModal[data-story='true'] .heirloom-paper::before{content:'籃底的手記';display:block;padding:18px 24px;font:22px/1.4 KaiTi,DFKai-SB,serif;letter-spacing:3px;color:#8b5e34;border-bottom:4px solid #d95737}
+#dailyModal[data-story='true'] .heirloom-paper h3{margin:20px 24px 12px;font-size:26px}
+#dailyModal[data-story='true'] .heirloom-paper>p{margin:12px 24px;line-height:1.8}
+#dailyModal[data-story='true'] .heirloom-reply{padding:14px 70px 14px 12px;min-height:86px}
+#dailyModal[data-story='true'] .memory-stamp{width:48px;height:48px;right:34px;bottom:28px;filter:none;opacity:1}
+#dailyModal[data-story='true'] #dailyClose{margin:12px 24px 22px;width:calc(100% - 48px);min-height:48px}
+body:has(#worldModal.show #worldSunBegin) #questDock{visibility:hidden}
+@media(min-width:600px) and (min-height:701px){
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:20px}
+ #dailyModal[data-story='true'] .heirloom-paper h3{font-size:32px}
+ #dailyModal[data-story='true'] .heirloom-paper::before{padding:24px 32px;font-size:28px}
+ #dailyModal[data-story='true'] .heirloom-reply{min-height:100px}
+}
+@media(max-width:599px){
+ .daily-modal-card{padding:12px 12px 10px 18px;gap:6px}
+ .daily-heading h2{font-size:22px}.daily-heading .sun-portrait{width:48px;height:48px}
+ .daily-chore,.daily-chore.selected{padding:8px 10px}
+ .daily-task-strip{gap:10px;margin:8px 0}
+ .daily-task-thumb{font-size:16px}
+ .daily-task-thumb .chore-stamp{width:40px;height:40px}
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:15px}
+ .wheat-slot{width:86px;min-width:86px}
+}
+@media(max-height:750px) and (max-width:599px){
+ .daily-heading{padding-bottom:2px}.daily-heading h2{font-size:19px}.daily-heading .sun-portrait{width:44px;height:44px}
+ .daily-task-strip{gap:6px;margin:5px 0}.daily-chore,.daily-chore.selected{padding:5px 8px}.daily-task-thumb{font-size:13px}
+ #basketBanner{display:none}#basketBanner small{display:none}#basketBanner img{width:36px;height:36px}
+ #dailyModal[data-art-page='heirloom'][data-story='false'] #dailyFooter{display:none}
+ .wheat-slot{height:48px}.wheat-slot img{width:32px;height:36px}
+ #dailyModal[data-story='true'] .heirloom-paper::before{padding:10px 18px;font-size:18px}
+ #dailyModal[data-story='true'] .heirloom-paper h3{font-size:22px;margin:12px 18px 8px}
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:13px;margin:8px 18px;line-height:1.5}
+}
+@media(max-height:520px){
+ .daily-modal-card{padding:8px 12px 8px 18px;gap:4px}.daily-heading{padding:0}.daily-heading>div{flex-wrap:nowrap}.daily-heading h2{font-size:20px}
+ .daily-task-strip{gap:8px;margin:4px 0}.daily-chore,.daily-chore.selected{padding:5px 8px}.daily-task-thumb{font-size:12px}.daily-task-thumb img{width:32px;height:32px}
+ .daily-task-thumb .chore-stamp{width:28px;height:28px;top:5px;right:5px}.daily-chore:has(.chore-stamp) .daily-task-thumb{padding-right:24px}
+ .journal-links button{min-height:44px}.daily-chore [data-claim-task]{min-width:88px}
+ #basketBanner{display:none}.wheat-slot{height:44px}
+ #dailyModal[data-story='true']{display:flex;align-items:center}
+ #dailyModal[data-story='true'] .daily-modal-card{width:740px;max-width:calc(100vw - 16px);padding:10px;display:block}
+ #dailyModal[data-story='true'] .heirloom-paper::before{display:none}
+ #dailyModal[data-story='true'] .heirloom-illustration{width:46%;height:244px;float:left;margin:0 18px 0 0;object-fit:contain}
+ #dailyModal[data-story='true'] .heirloom-paper h3{font-size:22px;margin:6px 0}
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:13px;line-height:1.5;margin:8px 0}
+ #dailyModal[data-story='true'] .heirloom-reply{padding:8px 56px 8px 8px;min-height:76px}
+ #dailyModal[data-story='true'] .memory-stamp{right:14px;bottom:6px;width:40px;height:40px}
+ #dailyModal[data-story='true'] #dailyClose{margin:8px 0 0;min-height:44px;width:48%;float:right}
+}
+@media(prefers-reduced-motion:reduce){.sun-beam{animation:none!important}}

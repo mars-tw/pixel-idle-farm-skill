@@ -1,0 +1,162 @@
+{
+  "ownFiles": 332,
+  "apps": [
+    {
+      "app": "Crackveil Vanguard",
+      "folder": "rift-survivors",
+      "files": 239,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "9f4c13d53c12e17526b0bbccdb7bd1178949cfee32f1882b07de7d73e08f6adc"
+    },
+    {
+      "app": "暴風啟示錄",
+      "folder": "storm-apocalypse",
+      "files": 79,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "de2d51da852eb0e851ce7c6693fa9632df50d0a612c2035a75f8c74b64c9c9fd"
+    },
+    {
+      "app": "灰燼護航",
+      "folder": "doomsday-shooter",
+      "files": 109,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "51c605e271478203f3c3a3d9d5229adb2ed101db0a72c346791eed05a6a26c45"
+    },
+    {
+      "app": "無盡塔防",
+      "folder": "tower-defense",
+      "files": 188,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "78a44be1a0abeb0534515e2071534dd9fddb91574390fe71121e452c72932d52"
+    },
+    {
+      "app": "裂潮卡牌",
+      "folder": "skill",
+      "files": 133,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "d0d2d2d7c8e38c0b4b44e0888b8e9bdac151c4d03f1321a2fe1e437c06d2dc04"
+    },
+    {
+      "app": "村莊攻防",
+      "folder": "village-siege",
+      "files": 262,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "554461ef7eb326f2c3623506adad05d017c4e0f8bd951e6a3c95cf4500a89480"
+    },
+    {
+      "app": "七期：斷鏈行動",
+      "folder": "seven-district-reckoning",
+      "files": 494,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "adfa9fe75427bf6343dd1e30a9c925009d9941fd86a6f8f1dc6b40880dfe6d14"
+    },
+    {
+      "app": "Rift Forge 3D",
+      "folder": "rift-forge-3d",
+      "files": 7,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "8156eef1f8f71e002ba57e47ce072aca4cf36d1be8210bb6bebd8977ce951d66"
+    },
+    {
+      "app": "島嶼交通學院",
+      "folder": "taiwan-island-drive",
+      "files": 166,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "e3b1fd7df5539cbe0f033ce59a90d6b958bb1a7b38776a9bb66dc06abb9cc3fa"
+    },
+    {
+      "app": "小小列車長",
+      "folder": "taiwan-train-math",
+      "files": 179,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "7c11f08d5ca3ca729de36ba17319f801a602d8f2b09d49fcc431ec85364675b6"
+    },
+    {
+      "app": "夜行列車",
+      "folder": "廣告遊戲專案",
+      "files": 319,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "110cc35684120d93c9d82b9ecea33ca4d1a9b55da07af2e0bce37db29cbe9f4a"
+    },
+    {
+      "app": "島嶼飛行學校",
+      "folder": "island-flight-school",
+      "files": 19,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "55f9436395418ef973ac1bb75663867b5cdfb59cda516744240bef902d483bba"
+    },
+    {
+      "app": "島嶼鐵道學校",
+      "folder": "taiwan-train-school",
+      "files": 15,
+      "status": "VERIFIED: tracked candidate runtime/source/assets; not a signed-binary audit",
+      "inventorySHA256": "e507471376e99f78c9258a2b3fd325c801cf13844b2851ccb429bac3adb2609f"
+    }
+  ],
+  "exactDuplicates": 0,
+  "cssDuplicates": 0,
+  "native": {
+    "privacyPath": "game-store-publisher\\native-kit\\apps\\pixel-idle-farm-skill\\ios\\App\\App\\PrivacyInfo.xcprivacy",
+    "privacySHA256": "6452295a6ad29254c92c668038f2c6a2cfd440c07cda81f814e996ac215b8415",
+    "privacy": {
+      "NSPrivacyTracking": false,
+      "NSPrivacyCollectedDataTypes": [],
+      "NSPrivacyAccessedAPITypes": [
+        {
+          "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+          "NSPrivacyAccessedAPITypeReasons": [
+            "CA92.1"
+          ]
+        }
+      ]
+    },
+    "capacitor": {
+      "appId": "tw.mars.pixelidlefarm",
+      "appName": "阿軒割割陽光農場開源遊戲世界",
+      "webDir": "web",
+      "server": {
+        "hostname": "localhost",
+        "androidScheme": "https"
+      },
+      "android": {
+        "allowMixedContent": false,
+        "webContentsDebuggingEnabled": false,
+        "backgroundColor": "#ffffff"
+      },
+      "ios": {
+        "contentInset": "automatic",
+        "backgroundColor": "#ffffff"
+      },
+      "packageClassList": [
+        "AppPlugin",
+        "PreferencesPlugin"
+      ]
+    },
+    "dependencies": {
+      "@capacitor/android": "8.5.2",
+      "@capacitor/app": "8.1.2",
+      "@capacitor/core": "8.5.2",
+      "@capacitor/ios": "8.5.2",
+      "@capacitor/preferences": "8.0.1"
+    },
+    "snapshotExists": true,
+    "snapshotSHA256": "84ca3912cb7aa8b64e031c3a64d13ca576c0f4674965a6fc1c652ad4050243ea",
+    "snapshotHasR81": false,
+    "androidManifestSHA256": "a91441960aad37b4887a4493f02acc5c2a085d1e7a1e144db260a66c8fcfeb73",
+    "androidSourcePermissions": [],
+    "sharedCustomHost": {
+      "file": "native-host.js",
+      "sha256": "62b5d205324d95578a79dbead4b0f60cf15415e0929f9e81edbf3cffb0fd8e25",
+      "identicalApps": [
+        "ashes-convoy",
+        "island-flight-school",
+        "night-train-watch-protocol",
+        "storm-apocalypse",
+        "taiwan-train-school",
+        "tower-defense-skill",
+        "village-siege",
+        "web-card-game-skill"
+      ]
+    }
+  }
+}

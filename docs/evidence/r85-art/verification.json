@@ -1,0 +1,379 @@
+{
+  "status": "VERIFIED",
+  "version": "0.1.19",
+  "appVersion": "r85-20261017-1",
+  "headless": true,
+  "localOnly": true,
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 7.11,
+      "log": "docs/evidence/r85-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 405.81,
+      "log": "docs/evidence/r85-art/logs/e2e.txt"
+    },
+    {
+      "name": "night",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 24.93,
+      "log": "docs/evidence/r85-art/logs/night.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.51,
+      "log": "docs/evidence/r85-art/logs/water-guide.txt"
+    },
+    {
+      "name": "compare",
+      "command": [
+        "node",
+        "scripts/capture-r85-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 8.93,
+      "log": "docs/evidence/r85-art/logs/compare.txt"
+    }
+  ],
+  "assetRows": [
+    {
+      "path": "assets/generated/r85/miri-0.png",
+      "sha256": "4f4145deab1b041fbc033e3c4e6a26e3eaaeeb516da2447cb4f0d4100cc0f5f3",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/miri-1.png",
+      "sha256": "04ece36a4407ce22d39ed34b2dd5846bef17e1bebbde313e706533a23567d257",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/miri-2.png",
+      "sha256": "11ffaed5f9b6e859825b85bc827b272ad550be19b2b879e0818180ef20b1c3e5",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/walk.png",
+      "sha256": "c4b59ca37d3da91c2629eb12a074324605fdd1c108996ad634bc712e575a0341",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/actions.png",
+      "sha256": "8abd4db0b4369c440c756fe0627be3eb1831b66210e93f68d9c3a155f50d3251",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/farming-actions.png",
+      "sha256": "592b6cf48b7f4ea16a96b8fca0c3a8828ea5a5fbdd34ae9db033532d186c5267",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/welcome-384.webp",
+      "sha256": "41a0c77162d0296c061efc4c1e3c8d4a867efda99478690d3377ba67155d33ff",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/basket-384.webp",
+      "sha256": "f974e15a3bff7155f5f5b41d1ba244b914474a5e250dc6f238e3a16e6a1a85a2",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/table-result-384.webp",
+      "sha256": "c209d7f11baf06f951b37ff5d685bddfb58fdbc5b399aef7b1616717c862c66d",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/doorstep-result-384.webp",
+      "sha256": "5c89e7f42039d497d912c200d28b96e20dd4f78afb06489fee1091b67f0be0c8",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/album-128.png",
+      "sha256": "7faafb9bebe6a46f7b35735511e84b9183acdbdc394d7135ab161994ce910ff4",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/paper-128.png",
+      "sha256": "5fa2229866f445e517d4d92d63458b1d8985faa15cd512a5877933b4d69d9ef6",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/stamp-32.png",
+      "sha256": "05b40c9f22f49b90f5755a415684d29df6afcd2054618c5385916a975d9f3593",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/wheat-32.png",
+      "sha256": "1e5ab97dde7dc1049fae0f68abd840d856278becc15e7d94d5e4984bee5c7245",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/basket-32.png",
+      "sha256": "076515a152ae92d67585c1a39e7d297e4a2a7f2d0f9df0bcb52f56c1edb3e73c",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/water-32.png",
+      "sha256": "928706464ca4ac99788a34a4cc9bcfec25a092916e9b891f0b6ffec7014e3781",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/sun-32.png",
+      "sha256": "4dff431b1cae19148337b80f307558663a28e00b6cc0f151035bddae9d251664",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/note-32.png",
+      "sha256": "16e2504f5e67e45e964881162e9f1c8304857e30b3f3c6be408d9e6d1daa1a82",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/bow-32.png",
+      "sha256": "e38845a39734c98690e716a4adad828d38802d2cd5afb44ab4cf823a7c50a66a",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/cups-32.png",
+      "sha256": "b84861962b969456cb222b749f4117d95cf69c404ad813cf39b6a2d706bc090c",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/logo-320.png",
+      "sha256": "15a358c9bf5edd41566ef3fe18eafa54ed5a5c67e88c44afb5aea06e097c38dc",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/app-icon-64.png",
+      "sha256": "31b22729db179be871a1cf56c8d0db9564f01c7bdb28e52100e78d2d60b3612e",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/app-icon-192.png",
+      "sha256": "26d7a424e64d1ecc5e6cde7c6115af9a9128031d64cb768fc7222e95b0e047e8",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/app-icon-512.png",
+      "sha256": "475dd30d7d8e123dd7a89af7cce59bb5d5650a50c98473cb4c8f73d9f423432b",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/terrain.png",
+      "sha256": "d027a39ebfc79d79ee7cb32dbe6899f16c1eae916d6e2b50d078a8db4a1ddc5c",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    },
+    {
+      "path": "assets/generated/r85/keepsakes.png",
+      "sha256": "fd167b632a51b4573ef266da971ef6591330e5ed1cb391fac327cadeca439d05",
+      "binaryAlpha": true,
+      "palette": true,
+      "clearTransparentRGB": true
+    }
+  ],
+  "pixels": {
+    "scope": "Same live scene, broad light bounds; on/off actual rendered screenshots, character remains opaque.",
+    "changedLuminanceFraction": 0.6906144170295113,
+    "meanLuminanceIncrease255": 25.432627653604257,
+    "humanRecognitionPassed": false
+  },
+  "storeScreenshots": [
+    {
+      "file": "iphone-01-welcome.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "f0cab88bcbb06749403b98c1caddfcfbe7af7190aa2c48599930efe3bc915633",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "iphone-02-sunlight.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "689dee366c6f66207dde2e42a72b041f263536997e31a7e8d99d203a9831e1ab",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "iphone-03-basket.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "1b4e84c658c98e5738f8857cbe3c274959db43842b5a4edf09420b1e6f493eaf",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "iphone-04-note.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "6b5a20fa08afcac05c1c1f98714cd7c0d8a934f2f51640a747c687ecb16a87c3",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "iphone-05-daily.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "66549635e73e3f5f26ed36b43a931eefb3e836e313b5fe971a3ece4276378c70",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "ipad-01-welcome.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "0bb53655433e8d8f42c8ab664033c67eaaebc380af61aa6f83138f13ab3e62ce",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "ipad-02-sunlight.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "e5fac1da27bfe120aa3336c48294898af6b1326800c697a73d801e3bbd2cbcb3",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "ipad-03-basket.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "6909d1fb8db6d2329a5b3b4b4212e39d2e404da9e99eab220ded83e27829270c",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "ipad-04-note.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "41e0bb478325fbd408d8a6571995b067452fb468cb5ad3754c59de5079be20d1",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    },
+    {
+      "file": "ipad-05-daily.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "760fb8346d59b4624076bb4f1cc197209157123b6a06d2bba68102b722761e38",
+      "status": "VERIFIED",
+      "capture": "R85 actual headless Chromium UI, real clock and inputs; no progress/clock/sun injection. 02 captures watering; 05 earned wheat seals."
+    }
+  ],
+  "syntaxFiles": 65,
+  "secretScanMatches": 0,
+  "oldRuntimeVersionMatches": 0,
+  "package": {
+    "scope": "Web runtime only; docs and native IPA/AAB excluded",
+    "baselineCommit": "6145ae3",
+    "beforeBytes": 104133334,
+    "afterBytes": 104819302,
+    "deltaBytes": 685968,
+    "newImageBytes": 598825
+  },
+  "characterDoubleGates": 6,
+  "qualityExceptions": {
+    "assets/generated/r85/album-128.png": {
+      "brightness": 0.8863640328201593,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.2080374900533183,
+      "lowSaturationFraction": 0.85968017578125,
+      "gatePass": false
+    },
+    "assets/generated/r85/paper-128.png": {
+      "brightness": 0.9577256209788603,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.15335539489233194,
+      "lowSaturationFraction": 0.9981689453125,
+      "gatePass": false
+    },
+    "assets/generated/r85/note-32.png": {
+      "brightness": 0.5432203792992607,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.39029641878455706,
+      "lowSaturationFraction": 0.3559718969555035,
+      "gatePass": false
+    }
+  },
+  "qualityExceptionReason": "Album/paper and cream note are non-character surfaces; raw failing values retained.",
+  "limitations": [
+    "No timed human recognition study or independent 8/10 rescore.",
+    "No native iOS/Android/Safari device proof.",
+    "Concurrent-load rAF performance is reference only."
+  ]
+}

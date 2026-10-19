@@ -1,0 +1,611 @@
+{
+  "status": "VERIFIED",
+  "checks": 133,
+  "rows": [
+    {
+      "w": 320,
+      "h": 568,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.2199999896330944,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 64
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 91.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 91.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 91.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 138,
+          "h": 125,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 138,
+          "h": 125,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 284,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 284,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 12,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 269,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.2200000184300543,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 64
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 112.65625,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 112.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 112.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 170,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 170,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 348,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 348,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 14,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 339,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.2199999896330944,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 64
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 255.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 236.5625,
+          "h": 66.390625,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 236.5625,
+          "h": 66.390625,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 776,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 776,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 12,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 469.203125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    },
+    {
+      "w": 768,
+      "h": 1024,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.2200000603165413,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 72
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 238.65625,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 238.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 238.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 359,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 359,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 726,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 726,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 14,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 717,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    },
+    {
+      "w": 1366,
+      "h": 600,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.220000041467622,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 72
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 255.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 236.5625,
+          "h": 70,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 236.5625,
+          "h": 70,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 776,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 776,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 14,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 1326,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    },
+    {
+      "w": 430,
+      "h": 932,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.2199998341295117,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 72
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 126,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 126,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 126,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 190,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 190,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 388,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 388,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 14,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 379,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    },
+    {
+      "w": 1032,
+      "h": 1376,
+      "light": {
+        "sameAge": true,
+        "sameFrame": true,
+        "ratio": 1.2200001105803255,
+        "ground": "url(\"http://127.0.0.1:50550/assets/generated/r89/garden-1536.webp\")",
+        "repeat": "no-repeat",
+        "fringe": "none",
+        "ray": "url(\"http://127.0.0.1:50550/assets/generated/r89/sunshaft-384.png\")",
+        "physics": true,
+        "width": 104
+      },
+      "controls": [
+        {
+          "id": "dailyToday",
+          "w": 326.65625,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 326.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 326.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 491,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 491,
+          "h": 175,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomConfirm",
+          "w": 990,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 990,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "rules": {
+        "size": 14,
+        "color": "rgb(90, 62, 40)"
+      },
+      "welcome": [
+        {
+          "id": "",
+          "w": 44,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "worldSunBegin",
+          "w": 981,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "fixtureNote": "Store02 explicitly uses identical plantedAt preview and a real water pose without a game-effect callback; all other current store frames from continuous real-input journey.",
+  "independentRescore": false
+}

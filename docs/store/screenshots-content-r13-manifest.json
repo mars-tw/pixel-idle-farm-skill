@@ -1,0 +1,23 @@
+{
+  "status": "VERIFIED",
+  "tool": "playwright chromium headless",
+  "assets": [
+    {
+      "path": "docs/store/screenshots/iphone-18-shared-afternoon-r13.png",
+      "width": 1290,
+      "height": 2796,
+      "deviceScaleFactor": 3,
+      "sha256": "e825602fb0da102bdd4be99fced0607b7d0da4aa2d014ec66a4c065716ef8345",
+      "source": "Actual earned R13 picnic, merchant sour reaction, headless browser native capture"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-18-shared-afternoon-r13.png",
+      "width": 2064,
+      "height": 2752,
+      "deviceScaleFactor": 2,
+      "sha256": "531951e1cb56ccd497d763342c82f98f2c6565106ea0e7e70578d99f1036b7f8",
+      "source": "Actual earned R13 picnic, merchant sour reaction, headless browser native capture"
+    }
+  ],
+  "existingScreenshots": "Preserved byte for byte by protected historical readback"
+}

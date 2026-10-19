@@ -13,7 +13,7 @@
   const BASE = "assets/generated/v4/";
   const VERSION_QUERY = root.FARM_VERSION_QUERY || "";
   const versioned = (url) => url + VERSION_QUERY;
-  const state = { ready: false, sheets: {}, maps: {}, error: null };
+  const state = { ready: false, sheets: {}, maps: {}, overrides: {}, error: null };
   let readyResolve; const readyPromise = new Promise((r) => (readyResolve = r));
 
   async function load() {
@@ -27,6 +27,33 @@
         state.maps[key] = map;          // { image, meta, frames:{id:{x,y,w,h,anchor}} }
         state.sheets[key] = versioned(s.image);    // 圖片路徑
       }));
+      const art = await fetch(versioned('assets/generated/r83/atlas.json')).then(r => { if (!r.ok) throw Error('R83 atlas unavailable'); return r.json(); });
+      state.overrides = art.overrides;
+      const polish = await fetch(versioned('assets/generated/r84/atlas.json')).then(r => { if(!r.ok)throw Error('R84 atlas unavailable');return r.json(); });
+      Object.assign(state.overrides, polish.overrides);
+      const fourth = await fetch(versioned('assets/generated/r85/atlas.json')).then(r => { if(!r.ok)throw Error('R85 atlas unavailable');return r.json(); });
+      Object.assign(state.overrides, fourth.overrides);
+      const fifth = await fetch(versioned('assets/generated/r86/atlas.json')).then(r => { if(!r.ok)throw Error('R86 atlas unavailable');return r.json(); });
+      Object.assign(state.overrides, fifth.overrides);
+      const sixth = await fetch(versioned('assets/generated/r87/atlas.json')).then(r => { if(!r.ok)throw Error('R87 atlas unavailable');return r.json(); });
+      // Partial sheets keep the original seasonal/structure frames and their licenses.
+      for (const [key, value] of Object.entries(sixth.overrides)) {
+        const previous = state.overrides[key] || {};
+        const inherited=Object.fromEntries(Object.entries(previous.frames||{}).map(([id,f])=>[id,{...f,image:f.image||previous.image,meta:f.meta||previous.meta}]));
+        state.overrides[key] = {...previous, ...value, frames:{...inherited, ...value.frames}};
+      }
+      const seventh=await fetch(versioned('assets/generated/r88/atlas.json')).then(r=>{if(!r.ok)throw Error('R88 atlas unavailable');return r.json();});
+      for(const [key,value] of Object.entries(seventh.overrides)){
+        const previous=state.overrides[key]||{};
+        const inherited=Object.fromEntries(Object.entries(previous.frames||{}).map(([id,f])=>[id,{...f,image:f.image||previous.image,meta:f.meta||previous.meta}]));
+        state.overrides[key]={...previous,...value,frames:{...inherited,...value.frames}};
+      }
+      const eighth=await fetch(versioned('assets/generated/r89/atlas.json')).then(r=>{if(!r.ok)throw Error('R89 atlas unavailable');return r.json();});
+      for(const [key,value] of Object.entries(eighth.overrides)){
+        const previous=state.overrides[key]||{};
+        const inherited=Object.fromEntries(Object.entries(previous.frames||{}).map(([id,f])=>[id,{...f,image:f.image||previous.image,meta:f.meta||previous.meta}]));
+        state.overrides[key]={...previous,...value,frames:{...inherited,...value.frames}};
+      }
       state.ready = true;
     } catch (e) {
       state.error = e; console.warn("atlas 載入失敗（將用 fallback）：", e);
@@ -35,6 +62,8 @@
   }
 
   function getFrame(sheetKey, frameId) {
+    const replacement = state.overrides[sheetKey];
+    if (replacement && replacement.frames[frameId]) { const f=replacement.frames[frameId]; return { ...f, image:versioned(f.image || replacement.image), meta:f.meta || replacement.meta }; }
     const map = state.maps[sheetKey];
     if (!map || !map.frames[frameId]) return null;
     return { image: state.sheets[sheetKey], meta: map.meta, ...map.frames[frameId] };

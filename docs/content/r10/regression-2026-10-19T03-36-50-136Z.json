@@ -1,0 +1,77 @@
+{
+  "status": "VERIFIED",
+  "startedAt": "2026-10-19T03:36:50.129Z",
+  "sourceHashes": {
+    "index.html": "d08e7b52d01c7f8f91775560a8c213194f96072047504e9850643f5924518d6a",
+    "sw.js": "39a7219f48b7a81b7a9307576c7eccce15efebb7034cd1d351b856f39792a484",
+    "manifest.webmanifest": "a939c140ab1c01ca26867e72259a2ae939716c67f300c1d0243bbbb3407acfb7",
+    "package.json": "168c44f5cde3eb510ba6237fc32aeb0931cbecde9334bccbd5f832ff9f3354fc",
+    "package-lock.json": "34ca87d30d175cedad74449715c549abc13619dabc0f7d0f65dff56733f1fcdd",
+    "src/adventure.js": "afded72227962a08fc011685bac3648998f69cfc6cdc55e0be0617489ff37e1f",
+    "src/art-r82.css": "a54c2c8ff5aab8f9005b7b4b59c4f0da4ed703fff4ba8c332e4cca2dda688e03",
+    "src/art-r83.css": "3ec14b3c0d3e5b867ef58074907fdf65291754a5fbe997e08196adb3d95b53f7",
+    "src/art-r84.css": "12ab63b89f41756636702e1aeba3edff9ad9153846dff6b61bae1cc04d26b8ab",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/art-r85.css": "51590e47d01e7c318539764b15a2b772f91ba17cb282a548ac24ae69d2dbc0e4",
+    "src/art-r86.css": "5bcc5700e8a538e574ac6a0055532f69dd947a7fdaef2c6191f4a4bcede36fcc",
+    "src/art-r87.css": "7d8f3414d5836bc6a18e9b4578e801be95c4af78ae8881cac0fb945428ffd063",
+    "src/art-r88.css": "79ddbe8032d3a7245b5709bad1451355661b18e03fa44173834dbf3445837ed2",
+    "src/art-r89.css": "791a043d70fa203ac0d67fb7c7fd1cc9b6821ea703534b4ef2bdddb0e0a4603f",
+    "src/atlas.js": "8a634d6883b822daf48a53c7a927dd54141d6054f252307b5770fe43960c0a22",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/content-r1.css": "68ce6a5fcaba2835eca4789553b1fc4e1eaaa9bc7c84a54c2205ff8d8cc21680",
+    "src/content-r1.js": "8a99c3b9fad27af145b76e6010480cd351d58aba8a636110b9ea7b512b5766ef",
+    "src/content-r10.css": "b63f146dda134b9ea0d78674c738a84f002abb46c94043f86f54f25eb2989965",
+    "src/content-r6.css": "3a3df66b393a986882d147781bdc91327e581aa3bc6c7ba9bf89ddfe1f3936f4",
+    "src/content-r6.js": "a4964d8e9a52a059829ba6e160bce63b8ebd737e25490f5559b69ec79951e06c",
+    "src/content-r8.css": "482f2ad440a3ac21c71d118bae60e5f6b83fb04464c9a53ac86c0826eab41bf0",
+    "src/content-r8.js": "b2f74255ecec2af3393f47fd467f95c1a6fb9dba06be7812dbcdc9763db2e8b5",
+    "src/content-r9.css": "3c6a332855184bf46cc5f1ec6acade92bd0eef5a4c9d359b01b72cf83b0b1bd1",
+    "src/daily-ui.js": "2d4ca9cae8f6244e4ff139d1d35d5473be9dc303b808bedf8c000988d49633d6",
+    "src/daily.js": "4abcd251fa0f1c5385cf9deffce11641c801a4dc602e94d525ea7970aed9daa4",
+    "src/game.js": "8756bffb7e284ff503e691c2dc358a490ea05750789f506602d8be12a99bf77b",
+    "src/heirloom-ui.js": "f45fb552a0d429ded39f168863a1381d90c0bd4d21b298ba0c490a33afeff8d5",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "bfa0102e65696bd0aa506692d97e6162a3710eccd61b7612a440d8f558cb7619",
+    "src/ui.js": "368c5ab4898e6f843ebd9b767c890e3c79b27a8c1a08c0270adbe715b986e87c",
+    "src/world-ui.js": "105f7e4bd94e1c2fab438206770519485f8899cff177471138b814009ae541ef",
+    "src/world.css": "63e43d96060fbd04bd1e5b40decfbdb405bea693a31d89b8b041d5e997fb850e"
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r6-e2e.js"
+      ],
+      "start": "2026-10-19T03:36:50.136Z",
+      "end": "2026-10-19T03:40:55.044Z",
+      "exitCode": 0,
+      "log": "docs/content/r10/logs/2026-10-19T03-36-50-136Z/test-content-r6-e2e.js.log",
+      "sha256": "082e80daafb4860e966141ce331426af83ef86d9fd3ecc44de5ae23d85c5fb2d"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r7-e2e.js"
+      ],
+      "start": "2026-10-19T03:40:55.047Z",
+      "end": "2026-10-19T03:45:02.239Z",
+      "exitCode": 0,
+      "log": "docs/content/r10/logs/2026-10-19T03-36-50-136Z/test-content-r7-e2e.js.log",
+      "sha256": "ffdcc30216b9c3a1bf06cda8b21383aae64d6c83f624591a87857f3efbe2f072"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r9-e2e.js"
+      ],
+      "start": "2026-10-19T03:45:02.242Z",
+      "end": "2026-10-19T03:49:30.840Z",
+      "exitCode": 0,
+      "log": "docs/content/r10/logs/2026-10-19T03-36-50-136Z/test-content-r9-e2e.js.log",
+      "sha256": "0941bc4a21e49a93f736a506f6a4b942ef4c66df73ba20b8951811940f3ebe3b"
+    }
+  ],
+  "sourcesUnchanged": true,
+  "endedAt": "2026-10-19T03:49:30.848Z"
+}

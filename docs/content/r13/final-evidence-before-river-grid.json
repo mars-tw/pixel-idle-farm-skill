@@ -1,0 +1,140 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "river_carp fresh three locked rows",
+    "river_carp locked notes have no replay",
+    "river_carp locked names not exposed",
+    "river_carp only actual caught fish unlocked",
+    "river_carp only caught row replayable",
+    "river_carp one page and one fish after actual reload",
+    "river_carp replay never creates another fish",
+    "silver_dace fresh three locked rows",
+    "silver_dace locked notes have no replay",
+    "silver_dace locked names not exposed",
+    "silver_dace only actual caught fish unlocked",
+    "silver_dace only caught row replayable",
+    "silver_dace one page and one fish after actual reload",
+    "silver_dace replay never creates another fish",
+    "river_perch fresh three locked rows",
+    "river_perch locked notes have no replay",
+    "river_perch locked names not exposed",
+    "river_perch only actual caught fish unlocked",
+    "river_perch only caught row replayable",
+    "river_perch one page and one fish after actual reload",
+    "river_perch replay never creates another fish",
+    "same UI-earned save now shows all three colored fish",
+    "replaying complete notebook preserves three actually caught fish",
+    "no serving at lift",
+    "skip commits exactly one serving after old timers would have fired",
+    "skip leaves next choice unselected",
+    "skipped serving persists",
+    "shared sour remains spent before reload route",
+    "middle slide has not committed the second serving",
+    "four actual portions and paid refill survive reload",
+    "reloaded UI still four servings and three guests",
+    "reloaded journal has four actual food records plus one material receipt",
+    "saved farm table has exactly one shared and three personal plates",
+    "actual successive remembered progress 1",
+    "one remembered guest actually earned by cooking and gifts",
+    "normal map table refuses picnic before three memories",
+    "locked table names two actual missing guests",
+    "no premature party or go action",
+    "actual successive remembered progress 2",
+    "actual successive remembered progress 3",
+    "third actual memory exposes picnic preparation entry"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-locked.png",
+      "sha256": "f3de19ea38490bea53f934c28fecd3d8e2f6d204a281fdca9f47decd1169ae7c"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-sinking-final.png",
+      "sha256": "dab2ceae7703b5e6b6e1b15f161e1b3f5171dc8a8e8932d263176c9be584c61a"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-unlocked.png",
+      "sha256": "d85fc92026f5f769b74bb3f71f07c339ddf8e848d5a0d550cf4380043644ad0d"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_carp-note-replay-final.png",
+      "sha256": "3b92471c248cf017a631631e14797443413b4d78dab2032d9f55be54627014c3"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-locked.png",
+      "sha256": "f3de19ea38490bea53f934c28fecd3d8e2f6d204a281fdca9f47decd1169ae7c"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-sinking-final.png",
+      "sha256": "b34283123e6b5504ecf5babcec298b51029bf658c76c7a7895afa65d582b1cd2"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-unlocked.png",
+      "sha256": "9ca2b5495e69893a1496a28e4911effa7b710bad06fb91bd7c646350539574b2"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-silver_dace-note-replay-final.png",
+      "sha256": "32f79808f7b83f9d6fe98c611f42cb854c6751e438774367ffe3f943722646fc"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-locked.png",
+      "sha256": "f3de19ea38490bea53f934c28fecd3d8e2f6d204a281fdca9f47decd1169ae7c"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-sinking-final.png",
+      "sha256": "a94cdebc87f37850df339d5b559effcd3ecbf0340e44c3ee48f1b985d0b9e0ae"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-unlocked.png",
+      "sha256": "11ad500c9b56730dc42f01bed83a8ac2460c8d1ef985a9beeeb03d8b01f53581"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-river_perch-note-replay-final.png",
+      "sha256": "485796a381047e48e10f1464020155a0d4522bfe80cace5b002957f8a98a7017"
+    },
+    {
+      "path": "docs/content/r13/phone-pond-learned-three-replay.png",
+      "sha256": "f9447a641222ca5215dbb575b7cc23fc96951b7e35098a171f0ec8d45683e0f0"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-skip-received.png",
+      "sha256": "ecc2d63ad14892ce33b96bc5c72cd52ab081dceba297146f1263f2020ac3aeef"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-child-mid-slide.png",
+      "sha256": "863952f674d7de93539776ed9ebbc77b7ba5bb2d27e485677ea90ea58409062e"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-child-received-final.png",
+      "sha256": "0fd016e181ba927fec5757eea311f9ef67ebe5e48941c5203ae819161beae776"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-corrected-complete-reloaded.png",
+      "sha256": "5c25e49e821f27854cfdec16c6398510670c13f6e87ba4b8d95364ede24bc17a"
+    },
+    {
+      "path": "docs/content/r13/phone-memory-shared-journal-reloaded.png",
+      "sha256": "30c12787fd19ed5644d28218979f9143b727c1e02dc52d0e7d941a6272f3bb48"
+    },
+    {
+      "path": "docs/content/r13/phone-gathering-shared-table-reloaded.png",
+      "sha256": "e4e718eed7f59d4067c0f7cf053fbbb21c41093320b25a828c88a2d36d6af8c5"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-memory-progress-1.png",
+      "sha256": "ba7ca3939234447ce499afcee7a1adc38939cbe0bc3231a436f89690994b02b9"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-table-missing-neighbors.png",
+      "sha256": "f95467f11fd3f7cc00a832ae860c3fcf106c8fc730507b07f6299295a695b898"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-memory-progress-2.png",
+      "sha256": "d96a1a0d413e4cd85414614f5fa23cf1f21608b4f3929b0d57d11cca43466793"
+    },
+    {
+      "path": "docs/content/r13/phone-basket-memory-progress-3.png",
+      "sha256": "755e2139114e0bdc68501ee6ca5b4f90345e2624146c7d2acf48be46d3fe45d4"
+    }
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "prompts": "docs/art/PROMPTS_CONTENT_R10.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r10/fish-shadows.png",
+      "sha256": "57a4396d1576512a773bb5cb621d197ade0851605994597e4a5c0e99ee300376",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "docs/art/masters/content-r10/props.png",
+      "sha256": "ccac5d6da154ac342ec17eb8b15ff19e61208a4f095aa9cb71ed8da5cb796f3c",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "docs/art/masters/content-r10/mayor.png",
+      "sha256": "ffa287e6f51dfb4e6577453a287da32ded2bdeaaedcf79f1688f6147b5744257",
+      "width": 1086,
+      "height": 1448
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r10/river_carp-0.png",
+      "sha256": "355bbc9ac504b5ac8a9b207a17a3a0ee1c6f5e41df098a98c242fcc0beea554b",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        0,
+        0,
+        512,
+        341
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/river_carp-1.png",
+      "sha256": "ec98374694456eb3eaff2c162a023937a2f12c68cb182f92a56684d4216089e9",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        512,
+        0,
+        1024,
+        341
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/river_carp-2.png",
+      "sha256": "f0ef071e5eba2568f5f8ddb3a3cd7e02e5f63d92baff612ded25abe8baaad762",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        1024,
+        0,
+        1536,
+        341
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/silver_dace-0.png",
+      "sha256": "2737a007a301b5afef24554c3501fa45b84caa4f5629b2cae84679179817f834",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        0,
+        341,
+        512,
+        682
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/silver_dace-1.png",
+      "sha256": "6bb8211ce0698ddd6ea9008f66dd467aed8e9bfb5df14355517a9df82909d72f",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        512,
+        341,
+        1024,
+        682
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/silver_dace-2.png",
+      "sha256": "4cee08bbfb5117020802251e6bad0741725add198d2caecae2e2a4bd3830c055",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        1024,
+        341,
+        1536,
+        682
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/river_perch-0.png",
+      "sha256": "4ddaa699e0acaec2a4c4c0c7c54d8716707575abd8cf2e27773c9530d17f58b1",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        0,
+        682,
+        512,
+        1023
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/river_perch-1.png",
+      "sha256": "c6a9de7d073401ae9ad9190ddb29a423afa73b448c147596bb9a79feeaf532f2",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        512,
+        682,
+        1024,
+        1023
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/river_perch-2.png",
+      "sha256": "1f5395a44058edf69c13b7171b7f847e589e7a066c75389c4e0f6d977f605a9c",
+      "width": 60,
+      "height": 52,
+      "sourceMaster": "docs/art/masters/content-r10/fish-shadows.png",
+      "crop": [
+        1024,
+        682,
+        1536,
+        1023
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/basket.png",
+      "sha256": "0b0c5d5d5a1cb9e0d9212dbc49ec5e22b7c6d3b543e5c3b90fa7499a8c92a3e6",
+      "width": 32,
+      "height": 32,
+      "sourceMaster": "docs/art/masters/content-r10/props.png",
+      "crop": [
+        8,
+        70,
+        490,
+        530
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/table.png",
+      "sha256": "a439aaff075960642718d79ddeffd2df8067ba78caf1d41a97171193d00188ac",
+      "width": 128,
+      "height": 80,
+      "sourceMaster": "docs/art/masters/content-r10/props.png",
+      "crop": [
+        490,
+        95,
+        1080,
+        530
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/cup.png",
+      "sha256": "0c85d9aa3b4f1dc22eb944824e4590f4fc2fdb39e668f0e4069971ed0b96c5d1",
+      "width": 32,
+      "height": 32,
+      "sourceMaster": "docs/art/masters/content-r10/props.png",
+      "crop": [
+        1110,
+        180,
+        1536,
+        525
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/hot.png",
+      "sha256": "e9c84d1638ca65ac2f08dceee5c1baa1418fa121bc3740745fc393768bf3bc06",
+      "width": 48,
+      "height": 32,
+      "sourceMaster": "docs/art/masters/content-r10/props.png",
+      "crop": [
+        20,
+        585,
+        540,
+        1008
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/sour.png",
+      "sha256": "65f5af5b5f9dfab4e2b785baf0eb05b2272b52851c5e66e835a05207d486187c",
+      "width": 32,
+      "height": 32,
+      "sourceMaster": "docs/art/masters/content-r10/props.png",
+      "crop": [
+        590,
+        595,
+        960,
+        980
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/sweet.png",
+      "sha256": "1fa589b80442afabcbc09015460d34d511ead3331af7c922a113c709edf7023d",
+      "width": 32,
+      "height": 32,
+      "sourceMaster": "docs/art/masters/content-r10/props.png",
+      "crop": [
+        1090,
+        615,
+        1525,
+        980
+      ]
+    },
+    {
+      "path": "assets/generated/content-r10/mayor.png",
+      "sha256": "e39b3609bd1dd51b33a04d592564a82db77f8b6324af83fae8afab6ed8120f3f",
+      "width": 48,
+      "height": 64,
+      "sourceMaster": "docs/art/masters/content-r10/mayor.png",
+      "crop": [
+        0,
+        0,
+        1086,
+        1448
+      ]
+    }
+  ]
+}

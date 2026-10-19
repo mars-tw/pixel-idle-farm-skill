@@ -1,0 +1,13 @@
+PASS cancelled basket preserves all bread and stops the real journey
+AssertionError [ERR_ASSERTION]: merchant 430 taken/halfway show actual locomotion
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:10:21)
+    at send (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:31:153)
+    at async neighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:48:32)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r6-e2e.js:85:117 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

@@ -1,0 +1,7 @@
+{
+  "status": "VERIFIED",
+  "sunOnMeanBrightness": 0.5464138341536888,
+  "sunOffMeanBrightness": 0.34323814949299336,
+  "relativeIncrease": 0.5919379444295803,
+  "method": "Same actual headless scene and central 76 percent of illuminated tile; off capture hides only leaf light overlay and crop light filter. Labeled visual fixture."
+}

@@ -1,0 +1,142 @@
+/* Sunbasket: red gingham, stitched paper and honey-colored wooden labels. */
+:root {
+  --world-ink:#3e2f23; --world-paper:#fff6e3; --world-line:#b3874b; --world-accent:#a7492e;
+  --sun-gold:#ffb627; --sun-red:#d95737; --sun-paper:#fff6e3; --sun-wood:#8b5e34;
+  --sun-texture:url('../assets/generated/r82/paper-192.png?v=content-r13-20261019-1');
+}
+body { color:var(--world-ink); }
+.title { width:154px; max-width:24vw; color:#fff6e3; text-shadow:0 2px #58371d; }
+.farm-logo { display:block; width:100%; height:48px; max-height:48px; object-fit:contain; object-position:left; }
+.title small { margin-top:0; color:#fff6e3; text-shadow:0 1px 2px #3e2f23; }
+.res, .toolbar, .tool-bar, .side-tabs, #mapScene .seed, .map-fit-toggle,
+.scene-action-bar, #globalActions, .world-panel-open .side-body, .world-dialogue {
+  background-color:var(--sun-paper); background-image:var(--sun-texture);
+  border-color:var(--sun-wood); border-radius:3px; color:var(--world-ink);
+  box-shadow:0 3px 0 #70452466;
+}
+.tool-bar, .side-tabs { border-top:4px solid #d95737; }
+.tool-bar .tool, .side-tab, .daily-open { color:#5a3a21; border-radius:1px; }
+.tool-bar .tool.sel, .side-tab.sel { background:#f7d481; border-color:#8b5e34; }
+.toolbar .btn, .map-fit-toggle { color:#5a3a21; }
+#questDock, #questDock[data-quest='first_sun_basket'] {
+  color:#3e2f23; background-color:#fff6e3; background-image:var(--sun-texture);
+  border:2px solid #8b5e34; border-left:5px solid #d95737; border-radius:2px;
+  box-shadow:2px 3px 0 #5c3c2855;
+}
+#questDock .world-chapter, #questDock .world-objective-detail, #questDock .world-objective-bottom { color:#654b2c; }
+#questDock button, #questDock[data-quest='first_sun_basket'] button,
+.modal .btn.buy, #worldSunBegin, #dailyClose, #dailyClaim:not(:disabled), .heirloom-choices button {
+  background:#ffcf64; color:#4b2e19; border:1px solid #9d602d; border-bottom:3px solid #9d602d; border-radius:3px;
+}
+.modal { background:rgba(89,56,29,.48); }
+.modal-card, .world-modal .modal-card, .daily-modal-card {
+  background-color:var(--sun-paper); background-image:var(--sun-texture);
+  color:#3e2f23; border:2px solid #8b5e34; border-radius:3px;
+  box-shadow:0 5px 0 #68432680, 0 12px 40px #50301644;
+}
+.modal-card h2, .world-modal h2, .daily-modal-card h2, #dailyBody h3 {
+  color:#653c20; font-family:KaiTi,DFKai-SB,'Microsoft JhengHei',serif;
+  font-weight:900; letter-spacing:.02em;
+}
+.world-modal .modal-card { padding:18px; }
+.world-modal .modal-body { margin:8px 0 0; }
+.modal .project-desc, .modal .project-cost, .daily-kicker, #dailyDate, #dailyFooter { color:#735536; }
+.world-modal-close, .world-close { background:#f1dab0; color:#674020; border:1px solid #a37340; border-radius:50%; }
+:focus-visible { outline-color:#b55a2b; }
+.modal button:focus-visible { outline:3px solid #b55a2b; outline-offset:2px; }
+.world-modal .world-modal-close { z-index:2; }
+.sun-welcome { position:relative; margin:-18px -18px 12px; overflow:hidden; border-bottom:4px solid #d95737; }
+.sun-welcome-scene { display:block; width:100%; aspect-ratio:2/1; object-fit:cover; }
+.sun-portrait { width:64px; height:64px; object-fit:contain; image-rendering:pixelated; flex-shrink:0; }
+.sun-welcome .sun-portrait { position:absolute; bottom:6px; left:12px; width:80px; height:80px; background:#fff6e3; border:2px solid #8b5e34; border-radius:50%; }
+.world-modal:has(.sun-welcome) .modal-card { width:540px; }
+.world-modal:has(.sun-welcome) h2 { padding-right:40px; font-size:23px; margin-bottom:6px; }
+.world-modal:has(.sun-welcome) .modal-body { overflow:visible; }
+.world-modal:has(.sun-welcome) .project-desc { font-size:14px; }
+#worldBegin { background:#fff6e3; border:1px solid #b3874b; color:#76502e; border-radius:3px; }
+.daily-modal-card { width:560px; gap:8px; padding:14px; border-top:6px solid #d95737; }
+.daily-heading { display:flex; align-items:center; gap:10px; }
+.daily-heading .sun-portrait { width:52px; height:52px; }
+.daily-heading h2 { font-size:24px; }
+.daily-tabs { gap:4px; padding:0 4px; border-bottom:2px solid #b3874b; }
+.daily-tabs button { border-radius:4px 4px 0 0; border-color:#b3874b; background:#f4dfb4; color:#73502d; }
+.daily-tabs button[aria-pressed='true'] { background:#d95737; color:#fff8e8; border-color:#9c452c; }
+#dailyBody { border:0; border-radius:0; background:#fffaf0; padding:10px; }
+.heirloom-paper { border:0; padding:0; color:#593b24; }
+.heirloom-paper h3 { color:#653c20; }
+.heirloom-illustration { display:block; width:100%; height:auto; max-height:190px; object-fit:cover; margin:0 0 10px; border:1px solid #b3874b; }
+.heirloom-reply { background:#f5dfb1; border-left:3px solid #d95737; border-radius:0; }
+.heirloom-choices { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.heirloom-choices:has(#heirloomGuide) { grid-template-columns:1fr; }
+.heirloom-choice-image { display:block; width:100%; aspect-ratio:2/1; object-fit:cover; margin-bottom:5px; }
+.heirloom-choices button:has(img) { padding:4px 4px 8px; background:#f9e1ab; font-weight:700; }
+.sun-task { display:flex; gap:12px; align-items:center; }
+.sun-task-icon { width:64px; height:64px; flex-shrink:0; image-rendering:pixelated; }
+.sun-icon { display:inline-block; width:32px; height:32px; background-image:url('../assets/generated/r82/icons-128.png?v=content-r13-20261019-1'); background-size:128px 64px; image-rendering:pixelated; vertical-align:middle; }
+.sun-icon-basket { background-position:0 0; }
+.sun-icon-note { background-position:-32px 0; }
+.sun-icon-wheat { background-position:-64px 0; }
+.sun-icon-stamp { background-position:-96px 0; }
+.sun-icon-water { background-position:0 -32px; }
+.sun-icon-seed { background-position:-32px -32px; }
+.sun-icon-sun { background-position:-64px -32px; }
+.sun-icon-tea { background-position:-96px -32px; }
+.daily-open .ui-icon, .side-tabs .i-tab-journal { background-image:url('../assets/generated/r82/note-32.png?v=content-r13-20261019-1'); }
+.tool-bar .i-tool-water { background-image:url('../assets/generated/r82/water-32.png?v=content-r13-20261019-1'); }
+.seed-hud .i-crop-wheat { background-image:url('../assets/generated/r82/wheat-32.png?v=content-r13-20261019-1'); }
+.action-a, .action-a[data-harvest='ready'] { color:#58391f; background:#ffd675; border:2px solid #9b6a36; border-bottom:4px solid #9b6a36; border-radius:14px; }
+.dpad .dpad-btn { background:#fff1cde8; color:#8b5e34; border:1px solid #986536; box-shadow:0 2px 0 #6c4c3380; }
+.dpad .dpad-center { background:transparent; border:0; box-shadow:none; }
+.sun-ray { opacity:0 !important; }
+.sun-pool { background:radial-gradient(ellipse at 45% 55%,#fff8beaa 0%,#ffe37366 36%,#ffd2582b 58%,transparent 74%) !important; clip-path:none !important; border-radius:50%; box-shadow:0 0 15px #ffde7844; }
+.sun-beam::before { content:''; position:absolute; inset:-20% -25%; background:radial-gradient(ellipse at 22% 30%,#fff3ad77 0 8%,transparent 15%),radial-gradient(ellipse at 74% 65%,#ffef9e88 0 12%,transparent 21%); pointer-events:none; }
+@media (max-width:859px) {
+  .title { width:120px; max-width:36vw; }
+  .farm-logo { height:32px; max-height:32px; }
+  .title small { font-size:10px; }
+}
+@media (max-width:440px) {
+  .daily-heading h2 { font-size:21px; }
+  .daily-heading .sun-portrait { width:44px; height:44px; }
+  .daily-modal-card { padding:10px; gap:7px; }
+  .heirloom-illustration { max-height:140px; }
+  .world-modal:has(.sun-welcome) h2 { font-size:21px; }
+  .sun-welcome { margin:-18px -18px 10px; }
+}
+@media (max-height:700px) and (max-width:599px) {
+  .sun-welcome-scene { max-height:145px; }
+  .sun-welcome .sun-portrait { width:64px; height:64px; }
+  .world-modal:has(.sun-welcome) .project-desc { font-size:12px; margin:5px 0; }
+}
+@media (max-height:500px) and (min-width:600px) {
+  .title { width:115px; }
+  .world-modal:has(.sun-welcome) .modal-card { width:740px; display:grid; grid-template-columns:40% 1fr; column-gap:18px; padding:14px; }
+  .sun-welcome { grid-row:1/3; margin:-14px 0 -14px -14px; border-bottom:0; border-right:4px solid #d95737; min-height:210px; }
+  .sun-welcome-scene { height:100%; aspect-ratio:auto; }
+  .world-modal:has(.sun-welcome) h2 { font-size:21px; align-self:end; }
+  .world-modal:has(.sun-welcome) .modal-body { max-height:none; margin:2px 0 0; }
+  .world-modal:has(.sun-welcome) .project-desc { font-size:12px; margin:3px 0; }
+  #worldSunBegin, #worldBegin { margin-top:6px; }
+  .daily-modal-card { width:680px; gap:5px; padding:8px 12px; }
+  .daily-heading .sun-portrait { width:44px; height:44px; }
+  .daily-heading h2 { font-size:21px; }
+  .daily-tabs { position:static; }
+  #dailyBody:has(.heirloom-paper) { display:block; }
+  .heirloom-paper { display:block; position:relative; padding-left:38%; min-height:150px; }
+  .heirloom-paper > .heirloom-illustration { position:absolute; left:0; top:0; width:35%; height:100%; max-height:170px; object-fit:cover; }
+  .heirloom-paper h3 { margin:2px 0; }
+  #dailyBody .heirloom-paper p { font-size:12px; line-height:1.45; margin:3px 0; }
+  .heirloom-choices:has(img) { display:flex; }
+  .heirloom-choice-image { display:none; }
+  .sun-task-icon { width:48px; height:48px; }
+}
+@media (prefers-reduced-motion:reduce) { .sun-beam::before { animation:none; } }
+/* Short desktops also need the illustration beside the recipe, keeping its action exposed. */
+@media (min-width:600px) and (max-height:700px) {
+  .daily-modal-card { width:680px; max-width:calc(100vw - 24px); }
+  #dailyBody:has(.heirloom-paper) { display:block; }
+  .heirloom-paper { display:block; position:relative; padding-left:38%; min-height:150px; }
+  .heirloom-paper > .heirloom-illustration { position:absolute; left:0; top:0; width:35%; height:100%; max-height:190px; object-fit:cover; }
+  .heirloom-choices:has(img) { display:flex; }
+  .heirloom-choice-image { display:none; }
+}

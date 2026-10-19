@@ -12,9 +12,9 @@
   const el = (id) => document.getElementById(id);
   const farm = () => window.__farm;
   let current = null, lastPanels = "", lastObjective = "", lastSites = "", lastFringe = "", lastTick = 0;
-  let fishingRaf = 0, fishingPosition = 0, dialogueTimer = 0;
+  let dialogueTimer = 0;
   const notify = (text) => { if (farm()) farm().toast(text); };
-  const refresh = (s) => { current = s || current; if (!current) return; reconcile(current); renderObjective(current); renderPanels(); };
+  const refresh = (s) => { current = s || current; if (!current) return; reconcile(current); syncHeaderVars(); renderObjective(current); renderPanels(); if (window.DailyUI) window.DailyUI.refresh(current); };
   const costText = (rows) => (rows || []).map((r) => `${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}`).join("・");
   const npcTile = (id) => current.map.tiles.find((t) => t.npc === id);
   const stationTile = (id) => current.map.tiles.find((t) => t.station === id);
@@ -93,18 +93,31 @@
       const cropId = row.consume && window.CROPS[row.id] ? row.id : "wheat";
       const active = window.activePlotCount(current);
       const plotTiles = current.map.tiles.filter((t) => t.plotIndex != null && t.plotIndex < active);
+      const sunlit = (t) => window.isSunlit && window.isSunlit(current, t.plotIndex, Date.now());
       if (row.type === "water") {
-        const dryCrop = plotTiles.find((t) => window.canWaterPlot(current, t.plotIndex, Date.now()).ok);
+        const sunDry = plotTiles.find((t) => {
+          const p = current.plots[t.plotIndex];
+          const progress = p.cropId && window.getCropProgress(current, p, Date.now());
+          return sunlit(t) && progress && !progress.ready && !progress.wet;
+        });
+        if (sunDry) return sunDry;
+        const dryCrop = plotTiles.find((t) => {
+          const p = current.plots[t.plotIndex];
+          const progress = p.cropId && window.getCropProgress(current, p, Date.now());
+          return progress && !progress.ready && !progress.wet;
+        });
         return dryCrop || plotTiles.find((t) => !current.plots[t.plotIndex].cropId)
           || plotTiles.find((t) => current.plots[t.plotIndex].cropId && window.getCropProgress(current, current.plots[t.plotIndex], Date.now()).ready)
           || null;
       }
-      const tile = plotTiles.find((t) => {
+      const fits = (t) => {
         if (t.plotIndex == null || t.plotIndex >= active) return false;
         const p = current.plots[t.plotIndex];
         if (row.type === "plant") return !p.cropId;
         return p.cropId === cropId && window.getCropProgress(current, p, Date.now()).ready;
-      }) || plotTiles.find((t) => !current.plots[t.plotIndex].cropId) || plotTiles[0];
+      };
+      const tile = plotTiles.find((t) => fits(t) && sunlit(t)) || plotTiles.find(fits)
+        || plotTiles.find((t) => !current.plots[t.plotIndex].cropId) || plotTiles[0];
       return tile;
     }
     return npcTile(q.npcId);
@@ -112,13 +125,21 @@
   function renderObjective(s) {
     current = s;
     const box = el("questDock"); if (!box || !s) return false;
+    if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { lastObjective = ""; syncSeedHudTop(); return true; }
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
-    const sig = JSON.stringify([q, summary.claimed]);
-    if (sig === lastObjective) return true;
+    const hint = objectiveHint(s, unfinished);
+    // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
+    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind]);
+    if (sig === lastObjective) {
+      syncSeedHudTop();
+      const hintEl = box.querySelector(".world-objective-hint");
+      if (hintEl && hint && hintEl.textContent !== hint.text) hintEl.textContent = hint.text;
+      return true;
+    }
     lastObjective = sig;
     const step = q ? (unfinished ? `${unfinished.name} ${Math.min(unfinished.current, unfinished.required)}/${unfinished.required}` : "物品備齊，交給鎮民") : "村民留下了野餐合照。繼續經營你的農場。";
     const target = targetFor(q);
@@ -127,10 +148,32 @@
     box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${summary.claimed}/${summary.total}</span></div>
       <div class="world-objective-title">${q ? esc(q.name) : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(q.description) : "你留下的每一份收穫，都有了去處。"}</div>
-      <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q && q.canClaim ? "交付" : "前往"}</button></div>
+      ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
+      <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q && q.canClaim ? "交付" : unfinished ? esc(unfinished.name) : "前往"}</button></div>
       <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
     box.querySelector("[data-world-go]").onclick = () => q ? goQuest(q) : openKitchen();
+    syncSeedHudTop();
     return true;
+  }
+  // R79：等待時告訴玩家還要多久、現在能做什麼；光斑出現時引導去光裡。
+  function objectiveHint(s, row) {
+    const now = Date.now();
+    const active = window.activePlotCount ? window.activePlotCount(s) : 6;
+    const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
+    if (sun && sun.active && sun.plots.length) {
+      const useful = sun.plots.some((i) => i < active && s.plots[i]);
+      if (useful) return { kind: "sun", text: `☀ 陽光 ${Math.ceil(sun.remainingMs / 1000)} 秒・光裡種澆收有加成` };
+    }
+    if (!row || !(row.type === "harvest" || (row.consume && window.CROPS[row.id]))) return null;
+    let soonest = Infinity, anyReady = false;
+    for (let i = 0; i < Math.min(active, s.plots.length); i++) {
+      const p = s.plots[i]; if (!p.cropId) continue;
+      const prog = window.getCropProgress(s, p, now);
+      if (prog.ready) anyReady = true; else soonest = Math.min(soonest, prog.remainingMs);
+    }
+    if (anyReady || !Number.isFinite(soonest)) return null;
+    const secs = Math.ceil(soonest / 1000);
+    return { kind: "wait", text: secs <= 90 ? `⏳ 最快 ${secs} 秒成熟・澆水更快` : `⏳ 最快 ${Math.ceil(secs / 60)} 分鐘成熟` };
   }
   function openPanel(tab) {
     if (!farm()) return;
@@ -148,15 +191,17 @@
     const list = A.quests(current, Date.now());
     const projects = A.projects(current);
     const commissions = A.commissions(current, Date.now());
-    const sig = JSON.stringify([list, projects, commissions]);
+    const sig = JSON.stringify([list, projects, commissions, current.adventure.neighbors, current.adventure.gathering]);
     if (sig !== lastPanels) {
       lastPanels = sig;
-      panel.innerHTML = `<div class="adventure-quests">${list.map((q) => `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
+      panel.innerHTML = `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div><div class="adventure-quests">${list.map((q) => `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
         <div class="world-chapter">第 ${q.chapter} 章・${esc(q.chapterName)} <span>${{ locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]}</span></div>
         <h3>${esc(q.name)}</h3><p>${esc(q.description)}</p>
         <div class="adventure-meta">${rowsOf(q).map((r) => `<span>${r.complete ? "✓" : "·"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}</div>
         ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "帶去交付" : "前往目標"}</button>` : ""}</article>`).join("")}</div>
         <h3 class="pane-head">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}`;
+      panel.querySelector("#worldNeighborButton").onclick = () => window.ContentR1.openNeighbors(current);
+      if(window.ContentR6 && A.gathering(current,Date.now()).unlocked){const b=document.createElement('button');b.id='worldGatheringButton';b.textContent=current.adventure.gathering.completed?'翻共同聚餐手記':'三個位子，一起吃';b.onclick=()=>window.ContentR6.openGathering(current);panel.querySelector('.neighbor-entry').appendChild(b);}
       panel.querySelectorAll("[data-quest-go]").forEach((b) => { b.onclick = () => goQuest(list.find((q) => q.id === b.dataset.questGo)); });
       panel.querySelectorAll("[data-commission]").forEach((b) => { b.onclick = () => {
         closePanels();
@@ -175,7 +220,7 @@
   }
   function goQuest(q) {
     closePanels();
-    if (!farm() || farm().moving()) { notify("先走完這段路，再接著做。"); return; }
+    if (!farm()) return; // R79：走路途中按「前往」直接改道，不再擋下
     if (q.canClaim) { claimQuest(q); return; }
     const row = rowsOf(q).find((r) => !r.complete);
     if (row && row.type === "restore") { visitSite(row.id); return; }
@@ -187,7 +232,7 @@
     if (row && row.type === "water") {
       const plot = current.plots[target.plotIndex];
       const ready = plot.cropId && window.getCropProgress(current, plot, Date.now()).ready;
-      if (!window.canWaterPlot(current, target.plotIndex, Date.now()).ok) {
+      if (!plot.cropId || ready) {
         farm().setTool("hand");
         if (!plot.cropId && farm().selectSeed) farm().selectSeed("wheat");
         notify(ready ? "這株已成熟，先收成，再種一格來澆水。" : "先種下小麥，下一步再替它澆水。");
@@ -217,7 +262,7 @@
       c1_homecoming: "門口終於有新苗了。這些木料你先收著，等河邊的釣台修好，咱們再坐下來聊。",
       c1_first_harvest: "別只顧著把作物賣掉，留點小麥做自己的晚餐。農舍的灶台還能用。",
       c1_first_meal: "這塊餅有你祖母的味道。魚竿和剩下的木料拿去吧，河邊一直在等人。",
-      c2_fishing_dock: "踏板踩起來穩了。河裡的魚怕急，等浮標靠近綠色那段再提竿。",
+      c2_fishing_dock: "踏板踩起來穩了。輕點和橫拉都先別急，等浮標沉下去再提竿。多看幾次，你就認得牠們了。",
       c2_river_basket: "魚很新鮮，薄荷也香。我把木料備好了，河邊再多放張桌子，就能招待大家。",
       c2_picnic_table: "座位我來安排。你去看看動物，接兩張訂單，野餐的事慢慢準備。",
       c3_good_neighbors: "雞吃飽了，客人的貨也交了。桌邊缺點顏色，這些木料留給小花園。",
@@ -230,8 +275,12 @@
     clearTimeout(dialogueTimer);
     let box = el("worldDialogue");
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
-    box.innerHTML = `<button aria-label="關閉對話" title="關閉對話">×</button><b>${esc(name)}</b><p>${esc(text)}</p>`;
+    const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
+    box.innerHTML = `<button aria-label="關閉對話" title="關閉對話">×</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p>`;
     box.hidden = false; box.querySelector("button").onclick = () => { box.hidden = true; };
+    // R79：toast 移到對話框上方（CSS 依此變數讓位）
+    const top = box.getBoundingClientRect().top;
+    if (top > 0) document.documentElement.style.setProperty("--world-dialogue-top-gap", Math.round(window.innerHeight - top + 8) + "px");
     dialogueTimer = setTimeout(() => { box.hidden = true; }, 10000);
   }
   function modal(title, body) {
@@ -239,7 +288,16 @@
     stopFishing();
     let box = el("worldModal");
     if (!box) { box = document.createElement("div"); box.id = "worldModal"; box.className = "modal world-modal"; box.setAttribute("aria-labelledby", "worldModalTitle"); document.body.appendChild(box); }
+    box.classList.remove("content-r1");
     box.innerHTML = `<div class="modal-card"><button class="world-modal-close" aria-label="關閉" title="關閉">×</button><h2 id="worldModalTitle">${esc(title)}</h2><div class="modal-body">${body}</div></div>`;
+    if (title === "籃底有祖母留下的便箋") {
+      const hero = document.createElement("div"); hero.className = "sun-welcome";
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r13-20261019-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r89/miri-0.png?v=content-r13-20261019-1" alt="戴草帽、紅格巾與小藤簍的農夫" width="96" height="96">';
+      box.querySelector(".modal-card").prepend(hero);
+      const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
+      const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');
+      heading.before(titlebar);titlebar.append(heading,close);
+    }
     box.querySelector(".world-modal-close").onclick = () => { stopFishing(); farm().closeModal("worldModal"); };
     farm().openModal("worldModal", ".world-modal-close");
     return box;
@@ -283,7 +341,8 @@
   }
   function openKitchen() {
     const recipes = A.recipes(current);
-    const box = modal("農舍灶台", `<p class="project-desc">班伯的食譜放在灶邊。料理留在餐籃裡，交給鎮民時才會取用。</p>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3>${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><div class="project-cost">${costText(r.requirements)}</div><button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "等班伯教你"}</button></div>`).join(""));
+    const box = modal("農舍灶台", `<p class="project-desc">班伯的食譜放在灶邊。料理留在餐籃裡，交給鎮民時才會取用。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3>${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><div class="project-cost">${costText(r.requirements)}</div><button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "等班伯教你"}</button></div>`).join(""));
+    box.querySelector("#kitchenNeighbors").onclick = () => window.ContentR1.openNeighbors(current);
     box.querySelectorAll("[data-cook]").forEach((b) => { b.onclick = () => {
       farm().closeModal("worldModal");
       const target = homeTile();
@@ -323,7 +382,7 @@
     const box = modal("種子袋", `<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${crops.map((crop) => `<button class="btn ghost" data-world-seed="${crop.id}" ${window.isCropUnlocked(current, crop.id) ? "" : "disabled"} style="min-height:80px;padding:6px;white-space:normal"><span class="ui-icon i-crop-${crop.id.replace(/_/g, "-")}" aria-hidden="true"></span><br>${esc(crop.name)}<br><small>${window.isCropUnlocked(current, crop.id) ? `${crop.seedCost} 金` : `Lv ${crop.unlockLevel}`}</small></button>`).join("")}</div>`);
     box.querySelectorAll("[data-world-seed]").forEach((b) => { b.onclick = () => { farm().selectSeed(b.dataset.worldSeed); farm().closeModal("worldModal"); }; });
   }
-  function stopFishing() { if (fishingRaf) cancelAnimationFrame(fishingRaf); fishingRaf = 0; }
+  function stopFishing() { if (window.ContentR1) window.ContentR1.stopFishing(); }
   function arrangePicnic(s) {
     if (!s.adventure.claimed.c3_harvest_picnic) return;
     window.configureWorld(s);
@@ -338,27 +397,7 @@
     box.querySelector("#worldNoteSave").onclick = () => { current.adventure.note = box.querySelector("#worldNote").value.trim().slice(0, 100); farm().safeSaveNow(); farm().closeModal("worldModal"); notify("留言留在花園裡了。"); };
   }
   function openFishing() {
-    const s = A.summary(current, Date.now());
-    const wait = s.fishing.remainingMs;
-    const box = modal("河畔釣台", `<p class="project-desc">河面平靜，浮標正在漂。等它進到綠色水域，再提竿。</p><div class="world-fishing-meter"><div class="world-fishing-zone"></div><div class="world-fishing-needle"></div></div><div class="world-fishing-result" role="status">${wait > 0 ? `魚群還在散開，${Math.ceil(wait / 1000)} 秒後再來。` : "有魚靠近了。"}</div><button class="btn buy" id="worldCatch" ${wait > 0 ? "disabled" : ""}>提竿</button><p class="project-cost">魚簍 ${s.fishing.used}/${s.fishing.capacity}</p>`);
-    if (wait > 0) return;
-    const start = performance.now();
-    function animate(t) {
-      if (!box.classList.contains("show")) { stopFishing(); return; }
-      fishingPosition = (Math.sin((t - start) / 440 - Math.PI / 2) + 1) / 2;
-      const needle = box.querySelector(".world-fishing-needle");
-      if (!needle) { stopFishing(); return; }
-      needle.style.left = `calc(${fishingPosition * 100}% - 2px)`;
-      fishingRaf = requestAnimationFrame(animate);
-    }
-    fishingRaf = requestAnimationFrame(animate);
-    box.querySelector("#worldCatch").onclick = () => {
-      const resultBox = box.querySelector(".world-fishing-result");
-      if (fishingPosition < .36 || fishingPosition > .64) { resultBox.textContent = "魚溜走了。沉住氣，再等下一次靠近。"; return; }
-      const r = A.fish(current, Date.now(), Math.random);
-      resultBox.textContent = r.message;
-      if (r.ok) { stopFishing(); box.querySelector("#worldCatch").disabled = true; resultBox.textContent += " 放進魚簍，留給蘿拉或野餐。"; notify(r.message); refresh(current); farm().safeSaveNow(); }
-    };
+    window.ContentR1.openFishing(current);
   }
   function paintWorld(s, tileSize, t) {
     current = s;
@@ -387,6 +426,8 @@
       });
     }
     paintMinimap(s, tileSize);
+    if(window.ContentR6)window.ContentR6.paintWorld(s,tileSize);
+    syncWorldHitTargets();
     const location = s.player.x >= 17 ? "東林・溪畔採集地" : s.player.y >= 9 ? "河畔・復興計畫" : "陽光農場・祖母的田";
     if (el("worldLocation").textContent !== location) el("worldLocation").textContent = location;
   }
@@ -406,6 +447,19 @@
       layer.appendChild(node);
     }
   }
+  // Camera-clipped scenery remains visible but cannot receive focus or taps.
+  // The project menu / quest route remains available to walk into view.
+  function syncWorldHitTargets() {
+    const modalOpen=!!document.querySelector('.modal.show');
+    const overlays = [...document.querySelectorAll("#farmDock, #farmMenu, .tool-bar, .side-tabs, .world-minimap, #questDock, .toolbar, .seed-hud, .scene-action-bar, .world-dialogue, .world-panel-open .side-body, #mobileControls button")]
+      .filter((node) => !node.hidden && getComputedStyle(node).display !== "none" && getComputedStyle(node).visibility !== "hidden")
+      .map((node) => node.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0);
+    document.querySelectorAll(".world-site").forEach((button) => {
+      const r = button.getBoundingClientRect();
+      button.disabled = modalOpen || r.left < 0 || r.top < 0 || r.right > innerWidth || r.bottom > innerHeight
+        || overlays.some((o) => Math.min(r.right, o.right) > Math.max(r.left, o.left) && Math.min(r.bottom, o.bottom) > Math.max(r.top, o.top));
+    });
+  }
   function paintMinimap(s, size) {
     const button = el("worldMinimap"); if (!button) return;
     const canvas = button.querySelector("canvas"), ctx = canvas.getContext("2d"); if (!ctx) return;
@@ -422,22 +476,40 @@
   function tick(s, t) {
     if (t - lastTick < 750) return;
     lastTick = t; current = s;
+    syncWorldHitTargets();
+    if (window.DailyUI) window.DailyUI.refresh(s);
     reconcile(s);
     arrangePicnic(s);
-    const header = document.querySelector("header");
-    const portrait = window.innerWidth <= 859 && window.innerHeight > 500;
-    if (portrait && header) document.documentElement.style.setProperty("--world-quest-top", Math.max(112, Math.ceil(header.getBoundingClientRect().bottom) + 12) + "px");
-    if (window.innerWidth > 859 && header) document.documentElement.style.setProperty("--world-system-top", Math.max(78, Math.ceil(header.getBoundingClientRect().bottom) + 12) + "px");
+    syncHeaderVars();
     renderObjective(s);
+    syncSeedHudTop();
     if (document.querySelector(".world-panel-open")) renderPanels();
-    if (fishingRaf && !document.querySelector("#worldModal.show")) stopFishing();
+  }
+  // 資源列換行時，任務列（直式）與系統鈕（桌機）跟著往下。R79：資源變動當下就同步，不等下一個 tick。
+  function syncHeaderVars() {
+    const header = document.querySelector("header");
+    if (!header) return;
+    const bottom = Math.ceil(header.getBoundingClientRect().bottom);
+    const portrait = window.innerWidth <= 859 && window.innerHeight > 500;
+    if (portrait) document.documentElement.style.setProperty("--world-quest-top", Math.max(112, bottom + 12) + "px");
+    if (window.innerWidth > 859) document.documentElement.style.setProperty("--world-system-top", Math.max(78, bottom + 12) + "px");
+  }
+  // R79：任務列多一行提示時，種子列跟著往下，不被任務列蓋住。
+  function syncSeedHudTop() {
+    const dock = el("questDock");
+    if (!dock) return;
+    const r = dock.getBoundingClientRect();
+    if (!r.height) return;
+    const top = Math.ceil(r.bottom + 10) + "px";
+    if (document.documentElement.style.getPropertyValue("--world-seed-top") !== top) document.documentElement.style.setProperty("--world-seed-top", top);
   }
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("祖母把鑰匙留給了你", '<p class="project-desc">「田荒了可以再種，河邊的老桌子倒了可以再修。只要有人願意回來，這裡就還是一座農場。」</p><p class="project-desc">葛瑞在屋前等你。先跟他打聲招呼，再替田裡種下第一批小麥。</p><button class="btn buy" id="worldBegin">把農場接回來</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「收成先留一籃，別全拿去賣。門邊總有人，還沒吃飯。」</p><p class="project-desc">跟著田裡的光種小麥，收成後給葛瑞送一籃。你怎麼送，他就怎麼回應。</p><button class="btn buy" id="worldSunBegin">做第一份陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民認識農場</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
+      box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };
       box.querySelector(".world-modal-close").onclick = finish;
     } else if (offline && offline.offlineMs >= 300000 && s.settings.offlineSummary !== false) {
       notify(`你離開時，農場仍在生長。離線收益 ${offline.coins || 0} 金，成熟作物等你回來。`);
@@ -451,7 +523,7 @@
     let dismissMapClick = false;
     document.addEventListener("pointerdown", (event) => {
       if (!document.querySelector(".world-panel-open") || document.querySelector(".modal.show")) return;
-      if (!event.target.closest("#mapScene") || event.target.closest(".seed-hud, .mobile-controls, .scene-action-bar, #mapFitToggle, #worldMinimap")) return;
+      if (!event.target.closest("#mapScene") || event.target.closest(".seed-hud, .mobile-controls, .scene-action-bar, #objectBubble, #buildWheel, #mapFitToggle, #worldMinimap")) return;
       closePanels(); dismissMapClick = true; event.preventDefault(); event.stopImmediatePropagation();
     }, true);
     document.addEventListener("click", (event) => {
@@ -472,6 +544,10 @@
     return tile ? tile.id : null;
   }
   function dialogue(npcId, fallback) {
+    const basket = window.FarmHeirloom && window.FarmHeirloom.status(current);
+    if (npcId === "mayor" && basket && basket.delivered) return basket.note.reply;
+    const neighbor = A.neighbors(current, Date.now()).find((n) => n.id === npcId && n.deliveries);
+    if (neighbor) return neighbor.lastMatched ? neighbor.memory.reply : neighbor.deliveries>1 ? neighbor.memory.wrong : neighbor.reaction;
     const q = A.summary(current, Date.now()).currentQuest;
     if (q && q.npcId === npcId) return q.canClaim ? "東西都備好了？我在這裡等你，帶來一起看看吧。" : q.description;
     if (npcId === "child") return current.adventure.claimed.c3_harvest_picnic ? "我把野餐合照收好了。下次再帶你新種的東西來！" : "河邊要是有桌子，我想帶小花和點心來。你也會來嗎？";
@@ -479,5 +555,5 @@
     if (npcId === "elder") return "下田時別忘了雞舍。添水、梳毛、餵食，牠們都記得你。";
     return fallback;
   }
-  window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue };
+  window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal };
 })();

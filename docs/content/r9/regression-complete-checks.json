@@ -1,0 +1,73 @@
+{
+  "status": "VERIFIED",
+  "startedAt": "2026-10-19T01:53:35.128Z",
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-19T01:53:35.129Z",
+      "end": "2026-10-19T01:53:42.384Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-1.log",
+      "sha256": "8f38267b083c8d54323fb6aa67c47e5b46578b8f117de56ea9c67474f5cb32dd"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r7-e2e.js"
+      ],
+      "start": "2026-10-19T01:53:42.387Z",
+      "end": "2026-10-19T01:57:33.907Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-2.log",
+      "sha256": "1ef9834368cb0b54e834d730c9d9096d266c57546775526893cbc35b21ac9ed4"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r8-e2e.js"
+      ],
+      "start": "2026-10-19T01:57:33.909Z",
+      "end": "2026-10-19T02:00:38.501Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-3.log",
+      "sha256": "95845969da3b955c33fb9415ab98da27272b902ef396c8365d5df303a5087b56"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r9-e2e.js"
+      ],
+      "start": "2026-10-19T02:00:38.502Z",
+      "end": "2026-10-19T02:04:52.708Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-4.log",
+      "sha256": "0941bc4a21e49a93f736a506f6a4b942ef4c66df73ba20b8951811940f3ebe3b"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "start": "2026-10-19T02:04:52.711Z",
+      "end": "2026-10-19T02:05:05.297Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-5.log",
+      "sha256": "738b4fd134b25b30bbccc219169cbae15cf6aa2231a9a50b509a0733d3c7105c"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "start": "2026-10-19T02:05:05.299Z",
+      "end": "2026-10-19T02:05:30.241Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-complete-6.log",
+      "sha256": "4a6feacfef4dcd30bfe4fd53312e57f00e58abaeb97e0043a3bc8f3b958cce9d"
+    }
+  ],
+  "endedAt": "2026-10-19T02:05:30.243Z"
+}

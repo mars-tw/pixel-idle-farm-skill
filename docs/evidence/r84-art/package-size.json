@@ -1,0 +1,7 @@
+{
+  "scope": "Web runtime src/assets + index/sw/manifest/package; excludes docs and native packaging",
+  "beforeBytes": 103834094,
+  "afterBytes": 104144351,
+  "deltaBytes": 310257,
+  "newImageBytes": 246184
+}

@@ -1,0 +1,181 @@
+{
+  "status": "VERIFIED",
+  "initialFilesExcluded": 8876,
+  "files": [
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-pre-sink-attempt-1-masked.png",
+      "sha256": "5d0b6d2f548ddc892c553a3f5648b2e17a7e5ce120829b36e5ce80f53207b2ab",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r6/phone-pond-river_carp-pre-sink-attempt-1-masked.png"
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_carp-pre-sink-attempt-1.png",
+      "sha256": "df48057a52fdc09163baa56caa7f84d0ffae8f0097d45d024b3b1fccfbddd278",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r6/phone-pond-river_carp-pre-sink-attempt-1.png"
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-pre-sink-attempt-1-masked.png",
+      "sha256": "0feff6aabb53f718407beadbaf83dc4bd0f33ceb69fc8c63258e53cfb43e098b",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r6/phone-pond-river_perch-pre-sink-attempt-1-masked.png"
+    },
+    {
+      "path": "docs/content/r6/phone-pond-river_perch-pre-sink-attempt-1.png",
+      "sha256": "a9a3bb2f9cfa09f1c55642f26c6b2205e88758c416c39d956e47a82ac4117328",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r6/phone-pond-river_perch-pre-sink-attempt-1.png"
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-pre-sink-attempt-1-masked.png",
+      "sha256": "17e7f2e713cd2af235ae08d2c438a9905ff07c1d1fdf101c1118194554aefe3b",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r6/phone-pond-silver_dace-pre-sink-attempt-1-masked.png"
+    },
+    {
+      "path": "docs/content/r6/phone-pond-silver_dace-pre-sink-attempt-1.png",
+      "sha256": "feda2ef98a0050bc29c141cdf53bcbd650c48e0b382dc5b58c5ed0508b019ee7",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r6/phone-pond-silver_dace-pre-sink-attempt-1.png"
+    },
+    {
+      "path": "docs/content/r7/phone-pond-river_carp-pre-sink-attempt-1-masked.png",
+      "sha256": "5d0b6d2f548ddc892c553a3f5648b2e17a7e5ce120829b36e5ce80f53207b2ab",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r7/phone-pond-river_carp-pre-sink-attempt-1-masked.png"
+    },
+    {
+      "path": "docs/content/r7/phone-pond-river_carp-pre-sink-attempt-1.png",
+      "sha256": "df48057a52fdc09163baa56caa7f84d0ffae8f0097d45d024b3b1fccfbddd278",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r7/phone-pond-river_carp-pre-sink-attempt-1.png"
+    },
+    {
+      "path": "docs/content/r7/phone-pond-river_perch-pre-sink-attempt-1-masked.png",
+      "sha256": "9286d9c4abc1e8689aa689f6de0b6cbc44ed8c838ff9fbf779383ae061b77993",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r7/phone-pond-river_perch-pre-sink-attempt-1-masked.png"
+    },
+    {
+      "path": "docs/content/r7/phone-pond-river_perch-pre-sink-attempt-1.png",
+      "sha256": "a9a3bb2f9cfa09f1c55642f26c6b2205e88758c416c39d956e47a82ac4117328",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r7/phone-pond-river_perch-pre-sink-attempt-1.png"
+    },
+    {
+      "path": "docs/content/r7/phone-pond-silver_dace-pre-sink-attempt-1-masked.png",
+      "sha256": "17e7f2e713cd2af235ae08d2c438a9905ff07c1d1fdf101c1118194554aefe3b",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r7/phone-pond-silver_dace-pre-sink-attempt-1-masked.png"
+    },
+    {
+      "path": "docs/content/r7/phone-pond-silver_dace-pre-sink-attempt-1.png",
+      "sha256": "feda2ef98a0050bc29c141cdf53bcbd650c48e0b382dc5b58c5ed0508b019ee7",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r7/phone-pond-silver_dace-pre-sink-attempt-1.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/01-phone-basket-merchant-approach.png",
+      "sha256": "1b55efca1a3b913ad7ea57ffa32c753a5792caa728f3aacea4a2240dcad53b67",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/01-phone-basket-merchant-approach.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/02-phone-basket-merchant-contact.png",
+      "sha256": "f3869812c1e65fce035a192f4881cb1c9ca0f5099b1ca197f116721d4e439ad0",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/02-phone-basket-merchant-contact.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/03-phone-basket-merchant-received.png",
+      "sha256": "4fa725943e99b78a69319020c305754d16af30d1ddcf165cf02c84b44318a8f8",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/03-phone-basket-merchant-received.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/04-phone-basket-cancel-before.png",
+      "sha256": "2e4d49df5cb898246903a313e44bc4140261912d6a9952becbee90ae07b3fd75",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/04-phone-basket-cancel-before.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/05-phone-basket-cancel-after.png",
+      "sha256": "63a97873ecc5b2f4703e7b25451b86dbcb524852b0059619062636657d3bdb08",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/05-phone-basket-cancel-after.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/06-phone-pond-river_carp-learned-sinking.png",
+      "sha256": "178b14621861c71208efe818bd38328aa2c4ee57e32d44e331cdd97505c365e9",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/06-phone-pond-river_carp-learned-sinking.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/07-phone-pond-silver_dace-learned-sinking.png",
+      "sha256": "cae39ff6ebc406c1cc4a75796433178bf9016725751267663d19894cb046b22a",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/07-phone-pond-silver_dace-learned-sinking.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/08-phone-pond-river_perch-learned-pre-sink.png",
+      "sha256": "13cf156a3c5d2cd816b03c265b758dc1608a2e44119ee86b456821540d5a2701",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/08-phone-pond-river_perch-learned-pre-sink.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/09-phone-pond-river_perch-learned-sinking.png",
+      "sha256": "eab81a16f0cbe3cce1ce12de2afe9e4513c5bf8d0b947ad07fa06def3708c873",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/09-phone-pond-river_perch-learned-sinking.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/10-phone-pond-river_perch-caught.png",
+      "sha256": "1987eb635a8c1df38f295273e18aba714fd0ca987c7fbd99c32e620eba865395",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/10-phone-pond-river_perch-caught.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/11-phone-memory-merchant-saved-flow.png",
+      "sha256": "a125828779cd277c4bf8c1fcb16b3086319af29ec21a65180c40e2575e64b295",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/11-phone-memory-merchant-saved-flow.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/12-phone-memory-elder-saved-flow.png",
+      "sha256": "0c88e7864dfff77285e49511be6be4afbfc679f30fcaa17df2fbe1a041933d68",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/12-phone-memory-elder-saved-flow.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/13-phone-memory-child-saved-flow.png",
+      "sha256": "1c02893308e700c7ef48387447b8cd45aa3131781df1b56120809c1f9112240d",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/13-phone-memory-child-saved-flow.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/14-phone-gathering-living-2.png",
+      "sha256": "4ae0f7df28529e9ccbd81b14ca2a4c5056ab393579e3ddb87c9cdfb5c2788774",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/14-phone-gathering-living-2.png"
+    },
+    {
+      "path": "docs/content/r8/review-attempts/1792391768367/15-phone-gathering-living-3.png",
+      "sha256": "8704ed658c5446ad78c3482befd1364f4d0fa0e6f31eed7dfa546e7c1e5d91cc",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/content/r8/review-attempts/1792391768367/15-phone-gathering-living-3.png"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-03-basket.png",
+      "sha256": "c84dbf5d4f627c9ca9370727cc1325cfe0be2e6e7c8516599bca7efc2895f71a",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/ipad-03-basket.png"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-04-note.png",
+      "sha256": "6765d805f179d206aa31ba732bf3aba7b15b4cf78c962198f26a1be8ab833edf",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/ipad-04-note.png"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-05-daily.png",
+      "sha256": "91977938f36ee0e47febf9e2aff8987a043f56d110bc8875e5f77397a5e8fa47",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/ipad-05-daily.png"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-06-same-age.png",
+      "sha256": "55c30cb886ce8ea652db6fbc0fa0db30bd17042644729561bdebea16194913bf",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/ipad-06-same-age.png"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-03-basket.png",
+      "sha256": "1fbf198170e0732a103801c2c23b06f1d8a727d47a2094bc5ce94f9259df7927",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/iphone-03-basket.png"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-04-note.png",
+      "sha256": "216e174f889fcb6a850f1998697add9d1bac4641e09a039a251dc1c3d228bc8c",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/iphone-04-note.png"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-05-daily.png",
+      "sha256": "1d655e7c09fd02c0dd00b47d5d51ced990a496fbae9bfe040f488672407db766",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/iphone-05-daily.png"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-06-same-age.png",
+      "sha256": "83431e52e7401e7791d471ea11e06e812bbb10bc92a9bf9890c16f45b0a56448",
+      "archive": ".audit-tmp/r12-new-test-outputs/20261019T150232222108/docs/store/screenshots/iphone-06-same-age.png"
+    }
+  ]
+}

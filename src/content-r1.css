@@ -1,0 +1,60 @@
+/* R89 cream paper, right-upper warmth and the same native story pixel density. */
+.neighbor-entry{padding:12px 0;border-bottom:1px solid #b38d61;margin-bottom:12px}
+.basket-carrying{position:fixed;inset:0;z-index:9950;display:flex;align-items:flex-start;justify-content:center;padding:20dvh 12px 0;background:#3e2f2318;color:#3e2f23}
+.basket-carrying>div{padding:16px;background:#fff6e3;border:2px solid #8b5e34;box-shadow:0 4px 16px #3e2f2333;font:16px 'Microsoft JhengHei',sans-serif}
+.basket-carrying small{display:block;margin-top:8px;font-size:14px;line-height:1.5}
+.basket-carrying button{display:block;margin-top:12px;min-height:44px;padding:8px 16px;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23;font:inherit}
+.neighbor-entry button,#kitchenNeighbors{min-height:48px;padding:8px 12px;background:#ffce63;border:2px solid #8b5e34;color:#3e2f23;border-radius:1px}
+#worldModal.content-r1 .modal-card{display:flex;flex-direction:column;width:640px;max-height:calc(100dvh - 24px);padding:16px;background:#fff6e3 url('../assets/generated/r89/paper-128.png?v=content-r13-20261019-1') center/100% 100%;border:2px solid #8b5e34;border-radius:1px;box-sizing:border-box;overflow:hidden;color:#3e2f23}
+#worldModal.content-r1 h2{flex:none;margin:0 48px 10px 0;padding:0;color:#3e2f23;font:700 25px KaiTi,DFKai-SB,serif}
+#worldModal.content-r1 .world-modal-close{top:8px;right:8px;min-width:44px;min-height:44px;border:1px solid #8b5e34;background:#f5e4bd;color:#3e2f23;border-radius:1px}
+#worldModal.content-r1 .modal-body{flex:1 1 auto;min-height:0;max-height:none;margin:0;overflow:auto;overscroll-behavior:contain;font:16px/1.6 'Microsoft JhengHei',sans-serif}
+#worldModal.content-r1 .modal-body{padding-bottom:12px;scroll-padding-block:12px;touch-action:pan-y;scrollbar-color:#8b5e34 #f5e4bd}
+.content-scroll-hint{flex:none;margin:4px 0 0;padding:4px 0;color:#5a3e28;font:13px/1.4 'Microsoft JhengHei',sans-serif;text-align:center;border-top:1px dashed #b38d61}
+.content-scroll-hint[hidden]{display:none}
+.content-illustration{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:contain;image-rendering:pixelated;margin:10px 0}
+.content-illustration[hidden]{display:none}.art-load-status{padding:14px;border:2px solid #a53d2b;background:#fff6e3;color:#5a3e28}.art-load-status[role='alert']{min-height:80px}
+.art-load-status[hidden]{display:none}.art-load-status{text-align:center}.art-placeholder{image-rendering:pixelated;display:block;margin:0 auto}.art-load-status p{margin:6px 0}.retry-art{padding:8px 16px;background:#ffce63;color:#3e2f23;border:2px solid #8b5e34;font-size:16px}
+.story-occasion{display:flex;gap:8px;align-items:center;padding:7px 10px;border-bottom:2px solid #b38d61;font-size:14px;color:#5a3e28}.story-occasion img,.recall-page img{image-rendering:pixelated}.story-occasion.matched{border:3px solid #a53d2b;border-left:14px solid #d95737;background:repeating-linear-gradient(90deg,#fff6e3 0 14px,#f5e4bd 14px 28px);font-weight:700;color:#6d2c21}.basket-cancelled{padding:10px;border:2px solid #395847;background:#edf0d8;color:#395847;font-weight:700}.recall-page{padding:18px 8px}.recall-context{padding:16px;border-left:4px solid #d95737;background:#f5e4bd}
+#worldModal.content-r1 #recallNeighbor{font-weight:700;color:#395847}
+body:has(#worldModal.content-r1.show) .npc-bubble,body:has(#worldModal.content-r1.show) #worldDialogue{visibility:hidden}
+body>.basket-cancelled{position:fixed;top:20dvh;left:12px;right:12px;max-width:580px;margin:0 auto;z-index:9950;pointer-events:none;font:700 16px/1.5 'Microsoft JhengHei',sans-serif;box-shadow:0 3px 10px #3e2f2322}
+.neighbor-tabs,.taste-options{display:flex;gap:6px;flex-wrap:nowrap;margin:4px 0}
+#worldModal.content-r1 button{font-family:inherit;min-width:44px;min-height:44px;box-sizing:border-box;touch-action:manipulation;cursor:pointer;white-space:normal;border-radius:1px}
+.neighbor-tabs button,.taste-options button{flex:1 1 0;padding:8px 2px;border:1px solid #b38d61;background:#f8edcf;color:#5a3e28;font-size:16px}
+.neighbor-tabs [aria-pressed='true'],.taste-options [aria-pressed='true']{border:2px solid #a53d2b;background:#ffe8a3;box-shadow:inset 0 -3px #d95737;font-weight:700}
+.neighbor-hint,.neighbor-reaction{padding:10px 12px;background:#f5e4bd;border-left:4px solid #d95737;margin:10px 0;color:#3e2f23}
+.neighbor-story p{margin:10px 0}.neighbor-story blockquote{margin:12px 0;padding:0 12px;border-left:3px solid #b38d61}
+#basketDescription,#basketCost,.content-saved,.pond-capacity{font-size:14px;margin:6px 0;color:#5a3e28}
+#basketDescription{overflow:visible;white-space:normal;overflow-wrap:anywhere;line-height:1.6}
+.content-footer{flex:none;display:flex;gap:8px;padding-top:12px;border-top:1px solid #b38d61;margin-top:10px}
+.content-primary{flex:2;background:#ffce63;color:#3e2f23;font-weight:700;border:2px solid #8b5e34;border-bottom-width:4px;padding:8px 10px;font-size:16px}
+.content-secondary{flex:1;background:#f6ead0;color:#5a3e28;border:1px solid #b38d61;padding:8px 10px;font-size:14px}
+/* A full-width action and three readable secondary actions at every phone width. */
+#worldModal.content-r1 .basket-footer{display:flex;flex-wrap:wrap;gap:6px}
+#worldModal.content-r1 .basket-footer #sendNeighbor{flex:0 0 100%;min-height:48px}
+#worldModal.content-r1 .basket-footer .content-secondary{flex:1 1 0;min-width:0;min-height:48px;padding:6px 2px;font-size:13px;white-space:nowrap}
+#worldModal.content-r1 button:disabled{cursor:default;background:#e6d5b7;color:#725434;box-shadow:none}
+#worldModal.content-r1 button:focus-visible{outline:3px solid #8b5e34;outline-offset:2px}
+#worldModal.content-r1 button:focus:not(:focus-visible){outline:none}
+.pond-guide{margin:4px 0 12px}.pond-stage{height:180px;position:relative;overflow:hidden;background:#536979 url('../assets/generated/content-r1/water.webp?v=content-r13-20261019-1') center/cover;image-rendering:pixelated;border:2px solid #8b5e34}
+.pond-bobber{position:absolute;left:calc(50% - 24px);top:calc(45% - 36px);width:48px;height:72px;object-fit:contain;image-rendering:pixelated;transition:none;will-change:transform,opacity}
+.pond-stage[data-pose='missed'] .pond-bobber{opacity:.5}
+/* Rasterized water effects retain the same native pixel density as the pond. */
+.pond-effects{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none}
+.pond-stage[data-pose='tap'] .pond-bobber{transform:translateY(17px)}
+.pond-stage[data-pose='pull'] .pond-bobber,.pond-stage[data-rhythm='river_perch'][data-phase='2'] .pond-bobber{transform:translateX(74px) rotate(16deg)}
+.pond-stage[data-pose='strike'] .pond-bobber{transform:translateY(54px);opacity:0}
+.pond-stage[data-rhythm='river_perch'][data-pose='strike'] .pond-bobber{transform:translate(74px,54px)}
+.pond-state{font-weight:700;color:#395847;border-bottom:1px solid #b38d61;padding:8px 0;margin:0}
+.pond-elapsed{font-size:14px;color:#5a3e28;margin:4px 0;font-variant-numeric:tabular-nums;min-height:22px}
+#worldModal.content-r1 #worldCatch[data-ready='false']{background:#e6d5b7;color:#725434;border-color:#b38d61;font-weight:400;box-shadow:none}
+#worldModal[data-fishing-state='caught'] .pond-stage{opacity:.75}
+#worldModal.content-r1 .world-fishing-result{color:#3e2f23;font-size:16px;line-height:1.5;min-height:48px;margin:12px 0}
+.fish-note{border-bottom:1px solid #b38d61;padding:8px 0}.fish-note h3{font-size:17px}.fish-note p{margin:8px 0}
+@media(max-width:420px){#worldModal.content-r1 .modal-card{padding:12px}#worldModal.content-r1 h2{font-size:23px}#worldModal.content-r1 .modal-body{font-size:14px}.content-footer{gap:6px}.content-primary{font-size:15px;padding:6px}.content-secondary{padding:6px;font-size:13px}.pond-stage{height:150px}}
+@media(max-width:350px){#worldModal.content-r1 .basket-footer .content-secondary{font-size:12px}}
+@media(orientation:landscape) and (max-height:600px){#worldModal.content-r1 .modal-card{width:720px;padding:10px 14px}#worldModal.content-r1 h2{font-size:22px;margin-bottom:6px}#worldModal.content-r1 .modal-body{font-size:14px}.content-illustration{float:left;width:43%;margin:0 14px 8px 0}.neighbor-tabs{margin:0 0 8px}.neighbor-hint{margin:4px 0;padding:6px}.content-footer{padding-top:6px;margin-top:6px}.pond-stage{float:left;width:48%;height:125px;margin:0 14px 4px 0}.pond-guide{margin:0 0 6px}}
+@media(min-width:768px) and (min-height:700px){#worldModal.content-r1 .modal-body{font-size:20px}.neighbor-tabs button,.taste-options button{font-size:20px}.content-primary{font-size:20px}.content-secondary{font-size:17px}.pond-stage{height:230px}}
+@media(min-width:768px) and (min-height:700px){#worldModal.content-r1 .basket-footer .content-secondary{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.pond-bobber{transition:none}}

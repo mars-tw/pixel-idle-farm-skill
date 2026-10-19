@@ -1,0 +1,32 @@
+{
+  "status": "BLOCKED",
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 5.49,
+      "log": "docs/evidence/r86-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 1,
+      "seconds": 250.19,
+      "log": "docs/evidence/r86-art/logs/e2e.txt"
+    }
+  ]
+}

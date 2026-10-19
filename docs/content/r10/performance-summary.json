@@ -1,0 +1,37 @@
+{
+  "status": "VERIFIED",
+  "trust": "Shared concurrent host, reference only. All three runs retained, first five frames of each run excluded as in measurement script; slow run not deleted.",
+  "source": "docs/content/r10/performance-reference.json",
+  "sourceSha256": "abb3c45c86535e0519df424186a40020e41ec4f5b80cbc8f6ddb5b4f9666c353",
+  "summary": {
+    "1366x768": {
+      "runsP95Ms": [
+        16.8,
+        16.8,
+        33.2
+      ],
+      "medianP95Ms": 16.8,
+      "pooledP95Ms": 16.8,
+      "allMeasuredFramesAfterPerRunWarmup": 693,
+      "framesOver18Ms": 12
+    },
+    "390x844": {
+      "runsP95Ms": [
+        16.7,
+        16.7,
+        16.7
+      ],
+      "medianP95Ms": 16.7,
+      "pooledP95Ms": 16.7,
+      "allMeasuredFramesAfterPerRunWarmup": 708,
+      "framesOver18Ms": 0
+    }
+  },
+  "individualRunsOver18Ms": [
+    {
+      "viewport": "1366x768",
+      "run": 3,
+      "p95Ms": 33.2
+    }
+  ]
+}

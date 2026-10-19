@@ -1,0 +1,272 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "prompts": "docs/art/PROMPTS_CONTENT_R12.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r12/water.png",
+      "sha256": "95eaa39a3b73c6e7b2508b712e4dc619fe8b37d385d7be41a53018c07ade6102",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "docs/art/masters/content-r12/actor.png",
+      "sha256": "895d0c9b1f301d0af6d78e5adb8a6d1151f1d1ca50ccca9e95012b62bb831658",
+      "width": 1881,
+      "height": 836
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r12/wide-0.png",
+      "sha256": "df78fdaa8d4ede6986323bfe1d7f6a75346ce931d45500242d9e21817e909f3f",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        0,
+        0,
+        512,
+        341
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/wide-1.png",
+      "sha256": "33c4b6b2fbbb50c82678fbc465e65ebfeb9527364b210272e500902c5f3d2d2a",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        512,
+        0,
+        1024,
+        341
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/wide-2.png",
+      "sha256": "84e2893382eac290e927c4b861a9988cc34b90cd2f9f95f18d3e31c1e3da5eff",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        1024,
+        0,
+        1536,
+        341
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/peck-0.png",
+      "sha256": "3488891720880f9bda664ad7b10d483bf77acba4f82f5b1de76e613ba0f5d10b",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        0,
+        341,
+        512,
+        682
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/peck-1.png",
+      "sha256": "509f4dfa0be419250327dcd93ade958631586ea28a768d2a5d20733290b04e33",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        512,
+        341,
+        1024,
+        682
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/peck-2.png",
+      "sha256": "a92e1136dde80bcc85c3f925c00bf301e9419a3c9b9a3a0bfd546d72cbaa2f14",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        1024,
+        341,
+        1536,
+        682
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/wake-0.png",
+      "sha256": "498793c2be9bdfa94fe8f774462fdbeecbce7a1c9532e383acefc47ad1ec71c9",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        0,
+        682,
+        512,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/wake-1.png",
+      "sha256": "96921d6693684677a1b107fa137a7b5a9fef7da50cf41893c327fc51e26b4015",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        512,
+        682,
+        1024,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/wake-2.png",
+      "sha256": "122c698396254b47a617425c6667ba56be0fc76c561d922b96d4078cc16bab81",
+      "width": 64,
+      "height": 44,
+      "sourceMaster": "docs/art/masters/content-r12/water.png",
+      "crop": [
+        1024,
+        682,
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "assets/generated/content-r12/serve-lift.png",
+      "sha256": "9f48d2f652ea69a659b51dc2342e7bb5a8767a8bc69e8d94c7e9fa854e46bbb4",
+      "width": 48,
+      "height": 64,
+      "sourceMaster": "docs/art/masters/content-r12/actor.png",
+      "crop": [
+        0,
+        0,
+        627,
+        836
+      ],
+      "fixedLowerRows": 18,
+      "lowerSource": "assets/generated/content-r9/sit-player.png"
+    },
+    {
+      "path": "assets/generated/content-r12/serve-push.png",
+      "sha256": "ea5251ad073fd7082d7f54642620a8f2049b039ba69fb0a7fa99db70a6b9798f",
+      "width": 48,
+      "height": 64,
+      "sourceMaster": "docs/art/masters/content-r12/actor.png",
+      "crop": [
+        627,
+        0,
+        1254,
+        836
+      ],
+      "fixedLowerRows": 18,
+      "lowerSource": "assets/generated/content-r9/sit-player.png"
+    },
+    {
+      "path": "assets/generated/content-r12/serve-rest.png",
+      "sha256": "d74a28b001062ca9454731a00a2a05981a2bec4a289566e7d4ad690a6a621d51",
+      "width": 48,
+      "height": 64,
+      "sourceMaster": "docs/art/masters/content-r12/actor.png",
+      "crop": [
+        1254,
+        0,
+        1881,
+        836
+      ],
+      "fixedLowerRows": 18,
+      "lowerSource": "assets/generated/content-r9/sit-player.png"
+    }
+  ]
+}

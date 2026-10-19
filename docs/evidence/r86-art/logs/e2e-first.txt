@@ -1,0 +1,164 @@
+
+> pixel-idle-farm@0.1.20 test:e2e
+> node scripts/run-browser-gates.js
+
+[memory] scripts/test-npc-indicators.js attempt 1: 13458MiB free
+PASS desktop: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS mobile: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS small: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS landscape: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS 32 transparent UI icons at 20/24/28/32px: individual image, clear corners, no atlas clipping.
+[memory] scripts/test-world-project-art.js attempt 1: 13440MiB free
+PASS R76 art: 4 exact frames, real alpha, shared palette, 6px padding, matching scale/feet, provenance hashes and SW cache.
+[memory] scripts/test-world-rework-e2e.js attempt 1: 13443MiB free
+R75 real-browser review http://127.0.0.1:55094/index.html
+DEVICE desktop 1440x900
+CHAPTER_ONE_UI desktop 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE mobile 390x844
+CHAPTER_ONE_UI mobile 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE landscape 844x390
+CHAPTER_ONE_UI landscape 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE small 320x568
+CHAPTER_ONE_UI small 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+FIXTURE CHAPTER_ONE_EARNED_DOCK: Unmodified genuinely earned chapter-one save; dock still broken, exact earned materials.
+FIXTURE UI_RESTORED_DOCK_FISHING: Dock restored by the preceding real UI fixture; relocated by a real journey, no fish/cooldown injection.
+WAIT UI_RESTORED_DOCK_FISHING real cooldown 28624ms; lastFishAt is not backdated
+FIXTURE LATE_RECIPES_INGREDIENTS_PICNIC_FIXTURE: Earned chapter-one claims retained; explicitly supplies wheat8/carrot4/mint2 and restored picnic table for recipe tests. NOT chapter-two completion.
+FIXTURE MISSING_WHEAT_COOK_GUARD: only inventory wheat is removed for negative UI/API guard
+FIXTURE EARNED_EMPTY_PLOT_IMPACT_CANCEL: Earned chapter-one save with empty harvested plots; only MOVE_MS is shortened. No crop/inventory/event injection.
+FIXTURE EARNED_MARKET_MATERIALS_UI: Unmodified earned chapter-one coins/materials; market purchase uses real buttons and nontrivial travel.
+R75 SUMMARY {"passed":370,"failed":0}
+[memory] scripts/test-r79-fun-e2e.js attempt 1: 22053MiB free
+PASS copy: no English combo/Level up strings in runtime UI
+PASS copy: Chinese 連收 ×N and 升級！ present
+PASS sun: player planted through the real quest button
+PASS sun: first sunpatch appears on its own within ~4s of planting
+PASS sun: first sunpatch is explained once by the mayor
+PASS sun: quest dock shows sunpatch countdown
+PASS sun: harvest inside sunlight stores wheat yield 2 + 1
+PASS sun: sun catch counted once
+PASS sun: catch shows golden float text and toast
+PASS feedback: storage chip is addressable for harvest fly-to
+PASS sun: no page errors
+PASS redirect desktop: player was mid-walk when pressing 前往
+PASS redirect desktop: no 'wait until walk ends' rejection
+PASS redirect desktop: redirected walk reaches the quest NPC and talks
+PASS redirect desktop: no page errors
+PASS redirect phone: player was mid-walk when pressing 前往
+PASS redirect phone: no 'wait until walk ends' rejection
+PASS redirect phone: redirected walk reaches the quest NPC and talks
+PASS redirect phone: no page errors
+PASS hint: waiting for harvest shows soonest ripening countdown
+PASS hint: taller quest dock never covers the seed bar (phone)
+PASS hud phone Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud phone Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv7: resource chips stay clear of system buttons and inside viewport
+PASS toast desktop: identical message within 2.5s shows once
+PASS toast desktop: at most 3 toasts at once
+PASS toast desktop: toasts move above the NPC dialogue
+PASS toast landscape: identical message within 2.5s shows once
+PASS toast landscape: at most 3 toasts at once
+PASS toast landscape: toasts move above the NPC dialogue
+PASS toast phone: identical message within 2.5s shows once
+PASS toast phone: at most 3 toasts at once
+PASS toast phone: toasts move above the NPC dialogue
+PASS music: plays after first user gesture when sound+music are on
+PASS music: loop source is the R79 track
+PASS music: settings has a 背景音樂 toggle
+PASS music: toggle off pauses the music
+PASS perf desktop: rAF p95 median of 3 runs 16.8ms <= 18ms (sunpatch + ambient light on)
+PASS perf mobile: rAF p95 median of 3 runs 16.8ms <= 18ms (sunpatch + ambient light on)
+R79 SUMMARY {"passed":44,"failed":0}
+[memory] scripts/test-r80-mobile.js attempt 1: 12748MiB free
+PASS 390x844 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":54,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":54,"height":54.296875,"inside":true,"hit":true}]
+PASS 390x844 no page overflow
+PASS 390x844 daily controls 44px visible hit targets [{"id":"dailyToday","width":88.71875,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":157,"height":44,"inside":true,"hit":true},{"id":"","width":294,"height":60,"inside":true,"hit":true},{"id":"","width":294,"height":60,"inside":true,"hit":true},{"id":"","width":294,"height":60,"inside":true,"hit":true},{"id":"dailyClose","width":322,"height":48,"inside":true,"hit":true}]
+PASS 390x844 daily blocks background controls
+PASS 390x844 opens reachable first task
+PASS 390x844 basket reachable in two pages
+PASS 390x844 basket return controls 44px visible hit targets [{"id":"","width":294,"height":60,"inside":true,"hit":true},{"id":"","width":294,"height":60,"inside":true,"hit":true},{"id":"","width":294,"height":60,"inside":true,"hit":true},{"id":"dailyClose","width":322,"height":48,"inside":true,"hit":true}]
+PASS 390x844 collection explains nonconsecutive visits
+PASS 390x844 return restores controls
+PASS first minute: real tutorial planting and watering progress the daily goal
+PASS first daily reward 44px visible hit targets [{"id":"dailyClaim","width":100,"height":60,"inside":true,"hit":true},{"id":"dailyClose","width":322,"height":48,"inside":true,"hit":true}]
+PASS first minute: claim real watering reward
+PASS 390x844 repeated touch does not reward before impact
+PASS 390x844 impact stores crop while recovery remains protected
+PASS 390x844 repeated touch settles one crop exactly once
+PASS 390x844 quick harvest advances actual daily produce goal
+PASS 390x844 basket consumes exactly two actual crops
+PASS 390x844 claim keeps focus inside the dialog
+PASS daily loop: three earned rewards give first stamp
+PASS daily stamp persists after real save and reload
+PASS live portrait-to-landscape rotation 44px visible hit targets [{"id":"dailyToday","width":88.71875,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":385,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 390x844 full storage leaves ripe crop intact
+PASS 390x844 seventh-stamp story is readable
+PASS 390x844 no page errors
+PASS 844x390 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":51.421875,"height":45.078125,"inside":true,"hit":true},{"id":"farmMore","width":51.421875,"height":45.078125,"inside":true,"hit":true}]
+PASS 844x390 no page overflow
+PASS 844x390 daily controls 44px visible hit targets [{"id":"dailyToday","width":88.71875,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":385,"height":44,"inside":true,"hit":true},{"id":"","width":234.65625,"height":44,"inside":true,"hit":true},{"id":"","width":234.671875,"height":46.375,"inside":true,"hit":true},{"id":"","width":234.671875,"height":46.375,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 844x390 daily blocks background controls
+PASS 844x390 opens reachable first task
+PASS 844x390 basket reachable in two pages
+PASS 844x390 basket return controls 44px visible hit targets [{"id":"","width":234.65625,"height":46.375,"inside":true,"hit":true},{"id":"","width":234.671875,"height":46.375,"inside":true,"hit":true},{"id":"","width":234.671875,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 844x390 collection explains nonconsecutive visits
+PASS 844x390 return restores controls
+PASS 844x390 repeated touch does not reward before impact
+PASS 844x390 impact stores crop while recovery remains protected
+PASS 844x390 repeated touch settles one crop exactly once
+PASS 844x390 quick harvest advances actual daily produce goal
+PASS 844x390 basket consumes exactly two actual crops
+PASS 844x390 claim keeps focus inside the dialog
+PASS 844x390 full storage leaves ripe crop intact
+PASS 844x390 seventh-stamp story is readable
+PASS 844x390 no page errors
+PASS 1366x600 farm controls 44px visible hit targets [{"id":"dailyOpen","width":77.140625,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":77.15625,"height":54.296875,"inside":true,"hit":true}]
+PASS 1366x600 no page overflow
+PASS 1366x600 daily controls 44px visible hit targets [{"id":"dailyToday","width":88.71875,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":385,"height":44,"inside":true,"hit":true},{"id":"","width":220.65625,"height":50.65625,"inside":true,"hit":true},{"id":"","width":220.671875,"height":56,"inside":true,"hit":true},{"id":"","width":220.671875,"height":56,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 daily blocks background controls
+PASS 1366x600 opens reachable first task
+PASS 1366x600 basket reachable in two pages
+PASS 1366x600 basket return controls 44px visible hit targets [{"id":"","width":220.65625,"height":56,"inside":true,"hit":true},{"id":"","width":220.671875,"height":56,"inside":true,"hit":true},{"id":"","width":220.671875,"height":50.65625,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 collection explains nonconsecutive visits
+PASS 1366x600 return restores controls
+PASS 1366x600 no page errors
+PASS 1280x640 farm controls 44px visible hit targets [{"id":"dailyOpen","width":77.140625,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":77.15625,"height":54.296875,"inside":true,"hit":true}]
+PASS 1280x640 no page overflow
+PASS 1280x640 daily controls 44px visible hit targets [{"id":"dailyToday","width":88.71875,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":385,"height":44,"inside":true,"hit":true},{"id":"","width":220.65625,"height":50.65625,"inside":true,"hit":true},{"id":"","width":220.671875,"height":56,"inside":true,"hit":true},{"id":"","width":220.671875,"height":56,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 daily blocks background controls
+PASS 1280x640 opens reachable first task
+PASS 1280x640 basket reachable in two pages
+PASS 1280x640 basket return controls 44px visible hit targets [{"id":"","width":220.65625,"height":56,"inside":true,"hit":true},{"id":"","width":220.671875,"height":56,"inside":true,"hit":true},{"id":"","width":220.671875,"height":50.65625,"inside":true,"hit":true},{"id":"dailyClose","width":778,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 collection explains nonconsecutive visits
+PASS 1280x640 return restores controls
+PASS 1280x640 no page errors
+R80 after: 62 passed
+[memory] scripts/test-r81-review.js attempt 1: 13203MiB free
+PASS 375x667 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":311,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":311,"h":44,"inside":true,"hit":true}]
+PASS 375x667 welcome no page overflow
+PASS 375x667 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.859375,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":51.859375,"h":54.296875,"inside":true,"hit":true}]
+PASS 375x667 farm no page overflow
+PASS 375x667 recipe reachable 44px controls [{"id":"dailyToday","w":60,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":155.5,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":155.5,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":319,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":319,"h":48,"inside":true,"hit":true}]
+PASS 375x667 recipe no page overflow
+PASS 390x844 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":326,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":326,"h":44,"inside":true,"hit":true}]
+PASS 390x844 welcome no page overflow
+PASS 390x844 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":54,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":54,"h":54.296875,"inside":true,"hit":true}]
+PASS 390x844 farm no page overflow
+PASS 390x844 recipe reachable 44px controls [{"id":"dailyToday","w":60,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":157,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":157,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":322,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":322,"h":48,"inside":true,"hit":true}]
+PASS 390x844 recipe no page overflow
+AssertionError [ERR_ASSERTION]: 844x390 welcome reachable 44px controls [{"id":"","w":44,"h":91.296875,"inside":true,"hit":true},{"id":"worldSunBegin","w":283.1875,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":283.1875,"h":44,"inside":false,"hit":false}]
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r81-review.js:10:35)
+    at targets (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r81-review.js:25:3)
+    at async run (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r81-review.js:48:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

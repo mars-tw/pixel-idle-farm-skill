@@ -1,0 +1,314 @@
+[
+  {
+    "name": "npm-test",
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 7.53,
+    "log": "docs/content/r3/logs/npm-test.txt"
+  },
+  {
+    "name": "test-npc-indicators",
+    "command": [
+      "node",
+      "scripts/test-npc-indicators.js"
+    ],
+    "exitCode": 0,
+    "seconds": 5.27,
+    "log": "docs/content/r3/logs/test-npc-indicators.txt"
+  },
+  {
+    "name": "test-world-project-art",
+    "command": [
+      "node",
+      "scripts/test-world-project-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 0.43,
+    "log": "docs/content/r3/logs/test-world-project-art.txt"
+  },
+  {
+    "name": "test-world-rework-e2e",
+    "command": [
+      "node",
+      "scripts/test-world-rework-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 166.31,
+    "log": "docs/content/r3/logs/test-world-rework-e2e.txt"
+  },
+  {
+    "name": "test-r79-fun-e2e",
+    "command": [
+      "node",
+      "scripts/test-r79-fun-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 53.85,
+    "log": "docs/content/r3/logs/test-r79-fun-e2e.txt"
+  },
+  {
+    "name": "test-r80-mobile",
+    "command": [
+      "node",
+      "scripts/test-r80-mobile.js"
+    ],
+    "exitCode": 0,
+    "seconds": 32.02,
+    "log": "docs/content/r3/logs/test-r80-mobile.txt"
+  },
+  {
+    "name": "test-r81-review",
+    "command": [
+      "node",
+      "scripts/test-r81-review.js"
+    ],
+    "exitCode": 0,
+    "seconds": 48.36,
+    "log": "docs/content/r3/logs/test-r81-review.txt"
+  },
+  {
+    "name": "test-rwd-matrix",
+    "command": [
+      "node",
+      "scripts/test-rwd-matrix.js"
+    ],
+    "exitCode": 0,
+    "seconds": 47.75,
+    "log": "docs/content/r3/logs/test-rwd-matrix.txt"
+  },
+  {
+    "name": "test-controls-reachability",
+    "command": [
+      "node",
+      "scripts/test-controls-reachability.js"
+    ],
+    "exitCode": 0,
+    "seconds": 18.45,
+    "log": "docs/content/r3/logs/test-controls-reachability.txt"
+  },
+  {
+    "name": "test-r82-art",
+    "command": [
+      "node",
+      "scripts/test-r82-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 2.55,
+    "log": "docs/content/r3/logs/test-r82-art.txt"
+  },
+  {
+    "name": "test-r83-art",
+    "command": [
+      "node",
+      "scripts/test-r83-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 4.6,
+    "log": "docs/content/r3/logs/test-r83-art.txt"
+  },
+  {
+    "name": "test-r84-art",
+    "command": [
+      "node",
+      "scripts/test-r84-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 26.02,
+    "log": "docs/content/r3/logs/test-r84-art.txt"
+  },
+  {
+    "name": "test-r85-art",
+    "command": [
+      "node",
+      "scripts/test-r85-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 14.22,
+    "log": "docs/content/r3/logs/test-r85-art.txt"
+  },
+  {
+    "name": "test-r86-art",
+    "command": [
+      "node",
+      "scripts/test-r86-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 14.97,
+    "log": "docs/content/r3/logs/test-r86-art.txt"
+  },
+  {
+    "name": "test-r87-art",
+    "command": [
+      "node",
+      "scripts/test-r87-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 19.99,
+    "log": "docs/content/r3/logs/test-r87-art.txt"
+  },
+  {
+    "name": "test-r88-art",
+    "command": [
+      "node",
+      "scripts/test-r88-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 20.56,
+    "log": "docs/content/r3/logs/test-r88-art.txt"
+  },
+  {
+    "name": "test-r89-art",
+    "command": [
+      "node",
+      "scripts/test-r89-art.js"
+    ],
+    "exitCode": 0,
+    "seconds": 35.54,
+    "log": "docs/content/r3/logs/test-r89-art.txt"
+  },
+  {
+    "name": "test-content-r1-e2e",
+    "command": [
+      "node",
+      "scripts/test-content-r1-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 49.77,
+    "log": "docs/content/r3/logs/test-content-r1-e2e-final-synchronized.txt",
+    "attempts": [
+      {
+        "name": "test-content-r1-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r1-e2e.js"
+        ],
+        "exitCode": 1,
+        "seconds": 46.07,
+        "log": "docs/content/r3/logs/test-content-r1-e2e-initial-failed.txt"
+      },
+      {
+        "name": "test-content-r1-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r1-e2e.js"
+        ],
+        "exitCode": 1,
+        "seconds": 46.5,
+        "log": "docs/content/r3/logs/test-content-r1-e2e-retry.txt"
+      },
+      {
+        "name": "test-content-r1-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r1-e2e.js"
+        ],
+        "exitCode": 0,
+        "seconds": 49.77,
+        "log": "docs/content/r3/logs/test-content-r1-e2e-final-synchronized.txt"
+      }
+    ],
+    "note": "All original assertions retained. Added real SW automatic-reload completion barrier. R3 also verifies no stale speech behind paper."
+  },
+  {
+    "name": "test-content-r2-e2e",
+    "command": [
+      "node",
+      "scripts/test-content-r2-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 168.84,
+    "log": "docs/content/r3/logs/test-content-r2-e2e-final-synchronized.txt",
+    "attempts": [
+      {
+        "name": "test-content-r2-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r2-e2e.js"
+        ],
+        "exitCode": 0,
+        "seconds": 169.73,
+        "log": "docs/content/r3/logs/test-content-r2-e2e.txt"
+      },
+      {
+        "name": "test-content-r2-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r2-e2e.js"
+        ],
+        "exitCode": 0,
+        "seconds": 168.84,
+        "log": "docs/content/r3/logs/test-content-r2-e2e-final-synchronized.txt"
+      }
+    ],
+    "note": "All original assertions retained. Added real SW automatic-reload completion barrier. R3 also verifies no stale speech behind paper."
+  },
+  {
+    "name": "test-content-r3-e2e",
+    "command": [
+      "node",
+      "scripts/test-content-r3-e2e.js"
+    ],
+    "exitCode": 0,
+    "seconds": 178.82,
+    "log": "docs/content/r3/logs/test-content-r3-e2e-final-synchronized.txt",
+    "attempts": [
+      {
+        "name": "test-content-r3-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r3-e2e.js"
+        ],
+        "exitCode": 0,
+        "seconds": 177.86,
+        "log": "docs/content/r3/logs/test-content-r3-e2e.txt"
+      },
+      {
+        "name": "test-content-r3-e2e",
+        "command": [
+          "node",
+          "scripts/test-content-r3-e2e.js"
+        ],
+        "exitCode": 0,
+        "seconds": 178.82,
+        "log": "docs/content/r3/logs/test-content-r3-e2e-final-synchronized.txt"
+      }
+    ],
+    "note": "All original assertions retained. Added real SW automatic-reload completion barrier. R3 also verifies no stale speech behind paper."
+  },
+  {
+    "name": "test-water-quest-guide",
+    "command": [
+      "node",
+      "scripts/test-water-quest-guide.js"
+    ],
+    "exitCode": 0,
+    "seconds": 12.87,
+    "log": "docs/content/r3/logs/test-water-quest-guide.txt"
+  },
+  {
+    "name": "test-r72-night-gate",
+    "command": [
+      "node",
+      "scripts/test-r72-night-gate.js"
+    ],
+    "exitCode": 0,
+    "seconds": 25.62,
+    "log": "docs/content/r3/logs/test-r72-night-gate.txt"
+  },
+  {
+    "name": "performance-reference",
+    "command": [
+      "node",
+      "scripts/measure-content-r3.js"
+    ],
+    "exitCode": 0,
+    "seconds": 104.85,
+    "log": "docs/content/r3/logs/performance-reference.txt"
+  }
+]

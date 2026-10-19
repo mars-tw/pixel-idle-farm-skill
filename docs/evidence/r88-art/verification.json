@@ -1,0 +1,558 @@
+{
+  "status": "VERIFIED",
+  "masters": 8,
+  "images": 33,
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "alpha": [
+    {
+      "path": "assets/generated/r88/garden-384.webp",
+      "size": [
+        384,
+        384
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/grass-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/path-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/soil-dry-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 0.556640625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/soil-wet-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 0.558349609375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/soil-moist-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 0.5751953125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/bucket-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 0.63525390625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/fence-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 0.4228515625,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/flowers-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 0.49755859375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/wheat-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.3818359375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/basket-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.39453125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/water-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.2919921875,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/note-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.43359375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/hat-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.30078125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/sprout-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "occupancy": 0.2568359375,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/miri-0.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.5875,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/miri-1.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.5853125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/miri-2.png",
+      "size": [
+        80,
+        80
+      ],
+      "occupancy": 0.59875,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/paper-128.png",
+      "size": [
+        128,
+        128
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/album-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/binding-8.png",
+      "size": [
+        8,
+        128
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/logo-320.png",
+      "size": [
+        320,
+        112
+      ],
+      "occupancy": 0.5219029017857143,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/app-icon-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/app-icon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/app-icon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/leaf-light.png",
+      "size": [
+        192,
+        128
+      ],
+      "occupancy": 0.3670247395833333,
+      "partial": 9020,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/canopy-shadow.png",
+      "size": [
+        192,
+        128
+      ],
+      "occupancy": 0.8194986979166666,
+      "partial": 20140,
+      "corners": [
+        0,
+        130,
+        0,
+        0
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/walk.png",
+      "size": [
+        288,
+        256
+      ],
+      "occupancy": 0.385986328125,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/farming-actions.png",
+      "size": [
+        432,
+        512
+      ],
+      "occupancy": 0.3998978226273148,
+      "partial": 0,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cutout": true
+    },
+    {
+      "path": "assets/generated/r88/welcome-512.webp",
+      "size": [
+        512,
+        256
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/basket-512.webp",
+      "size": [
+        512,
+        256
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/table-result-512.webp",
+      "size": [
+        512,
+        256
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    },
+    {
+      "path": "assets/generated/r88/doorstep-result-512.webp",
+      "size": [
+        512,
+        256
+      ],
+      "occupancy": 1.0,
+      "partial": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "cutout": false
+    }
+  ],
+  "storeCount": 12,
+  "secretScan": {
+    "matches": 0,
+    "files": 3047
+  },
+  "runtimeOldVersionMatches": 0,
+  "javascriptSyntax": true,
+  "package": {
+    "baseCommit": "6d476099a410f26f3bc4cdf518033ed60f5ce89a",
+    "beforeBytes": 106034496,
+    "afterBytes": 106681245,
+    "deltaBytes": 646749,
+    "newImageBytes": 539886,
+    "scope": "Existing web runtime allowlist; docs and original masters excluded",
+    "nativePackageMeasured": false
+  },
+  "limitations": [
+    "Independent Muse8/10 rescore not performed",
+    "Human timed recognition not performed",
+    "Native iOS/Android device QA not performed"
+  ]
+}

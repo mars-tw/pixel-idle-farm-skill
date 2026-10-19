@@ -1,0 +1,10 @@
+page.waitForFunction: TypeError: Cannot read properties of null (reading 'dataset')
+    at eval (eval at predicate (eval at evaluate (:303:30)), <anonymous>:1:41)
+    at predicate (eval at evaluate (:303:30), <anonymous>:7:27)
+    at next (eval at evaluate (:303:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:303:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:305:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\capture-content-r2-rhythms.js:9:14 {
+  log: []
+}

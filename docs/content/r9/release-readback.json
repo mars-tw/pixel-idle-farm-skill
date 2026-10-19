@@ -1,0 +1,309 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "all initial user changes, untracked files and historical store screenshots byte-identical",
+    "24 native runtime poses and retained generated master exact source hashes",
+    "release version 0.1.32 and cache chain",
+    "no stale R8 runtime query version",
+    "final real-input browser journey passes without page errors",
+    "25 browser scripts and npm test have successful actual receipts, initial interrupted run preserved",
+    "runtime source unchanged after the final regression receipt",
+    "shared-host desktop and phone p95 three-run medians <=18ms, reference only",
+    "review contains 10 to 15 raw portrait screenshots",
+    "review folder has only the selected 15 portraits, no stale alternate frames",
+    "original portrait direct-copy 01-phone-basket-elder-approach.png",
+    "original portrait direct-copy 02-phone-basket-elder-contact.png",
+    "original portrait direct-copy 03-phone-basket-elder-received.png",
+    "original portrait direct-copy 04-phone-basket-child-approach.png",
+    "original portrait direct-copy 05-phone-basket-child-contact.png",
+    "original portrait direct-copy 06-phone-basket-child-received.png",
+    "original portrait direct-copy 07-phone-pond-river_carp-caught.png",
+    "original portrait direct-copy 08-phone-pond-silver_dace-caught.png",
+    "original portrait direct-copy 09-phone-pond-river_perch-pre-sink.png",
+    "original portrait direct-copy 10-phone-pond-river_perch-sinking.png",
+    "original portrait direct-copy 11-phone-pond-river_perch-caught.png",
+    "original portrait direct-copy 12-phone-memory-shared-1.png",
+    "original portrait direct-copy 13-phone-memory-shared-2.png",
+    "original portrait direct-copy 14-phone-memory-shared-3.png",
+    "original portrait direct-copy 15-phone-gathering-daily-reloaded.png",
+    "all three contents represented with active play and sequence frames",
+    "three actual delivery phase captures merchant",
+    "three actual delivery phase captures elder",
+    "three actual delivery phase captures child",
+    "R8 historical before screenshot exact original phone-basket-merchant-contact.png",
+    "R8 historical before screenshot exact original phone-pond-river_carp-sinking.png",
+    "R8 historical before screenshot exact original phone-gathering-living-1.png",
+    "new original store dimensions iphone-15-shared-afternoon-r9.png",
+    "new original store dimensions ipad-15-shared-afternoon-r9.png",
+    "secret scan zero hits across 1291 project text files (excluded .git, node_modules, .audit-tmp)",
+    "all 110 JS sources parse"
+  ],
+  "reviewSet": [
+    {
+      "content": "basket",
+      "source": "docs/content/r9/phone-basket-elder-approach.png",
+      "path": "docs/content/r9/review-set/01-phone-basket-elder-approach.png",
+      "sha256": "be595de8247c8f6390795ae91b1eebd357eb17481b492dd8f46c5f9125db656f",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r9/phone-basket-elder-contact.png",
+      "path": "docs/content/r9/review-set/02-phone-basket-elder-contact.png",
+      "sha256": "9655fadfa267cb8acf4cde7ccf6f9b01d9a7f9403f3fb0b10dd86124e8747098",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r9/phone-basket-elder-received.png",
+      "path": "docs/content/r9/review-set/03-phone-basket-elder-received.png",
+      "sha256": "3ee8066addbecf37db4e77653d9bbbe43e42c174259197ce2c58caf0c722bde5",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r9/phone-basket-child-approach.png",
+      "path": "docs/content/r9/review-set/04-phone-basket-child-approach.png",
+      "sha256": "70813969d098ba72cd36e5da7eb69876d4e79360821bd3daabf7b8c3702180f7",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r9/phone-basket-child-contact.png",
+      "path": "docs/content/r9/review-set/05-phone-basket-child-contact.png",
+      "sha256": "99edcd49d73bc2a425bbe85a98eaf4afa25d330529e7625ca1fa8d22a923829c",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "basket",
+      "source": "docs/content/r9/phone-basket-child-received.png",
+      "path": "docs/content/r9/review-set/06-phone-basket-child-received.png",
+      "sha256": "a439185bf3bbce8b8a5f44d9fbcbf8b3b5e47075ed287ac9250886851fe9b563",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r9/phone-pond-river_carp-caught.png",
+      "path": "docs/content/r9/review-set/07-phone-pond-river_carp-caught.png",
+      "sha256": "87029c7583f5cd2ad888b7d258459cb60cb366333b73adee8fd693b4f4f58655",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r9/phone-pond-silver_dace-caught.png",
+      "path": "docs/content/r9/review-set/08-phone-pond-silver_dace-caught.png",
+      "sha256": "6307bb6b7317c64092d8cecff0c4e5ebb34925a5243b3082c900eb672da5bb8b",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r9/phone-pond-river_perch-pre-sink.png",
+      "path": "docs/content/r9/review-set/09-phone-pond-river_perch-pre-sink.png",
+      "sha256": "9ce485e1cd73334962c505f2fa50df6c563002f1634831d583e77644609b3768",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r9/phone-pond-river_perch-sinking.png",
+      "path": "docs/content/r9/review-set/10-phone-pond-river_perch-sinking.png",
+      "sha256": "0e392a4e9910919b0aca9275d545b2aa614a635133d81649889e4ed2f404e611",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "pond",
+      "source": "docs/content/r9/phone-pond-river_perch-caught.png",
+      "path": "docs/content/r9/review-set/11-phone-pond-river_perch-caught.png",
+      "sha256": "c2ce9638d095f1ae9cd2919a0a29c560b31907ae17fd031ab38bc2e56775334f",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r9/phone-memory-shared-1.png",
+      "path": "docs/content/r9/review-set/12-phone-memory-shared-1.png",
+      "sha256": "95762277e62cc3b35a2e169dbed0f9a0df825a26bf9a693c54f86ef2c75ae242",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r9/phone-memory-shared-2.png",
+      "path": "docs/content/r9/review-set/13-phone-memory-shared-2.png",
+      "sha256": "3de4f9602c1312efb5a130407302498ae29da4c06b68f61a36101ab30dcae679",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r9/phone-memory-shared-3.png",
+      "path": "docs/content/r9/review-set/14-phone-memory-shared-3.png",
+      "sha256": "627ddf00ef478b80f0c1bdaf9e4b903043021d3242b840e813b5366b3221aeb9",
+      "size": [
+        430,
+        932
+      ]
+    },
+    {
+      "content": "memory",
+      "source": "docs/content/r9/phone-gathering-daily-reloaded.png",
+      "path": "docs/content/r9/review-set/15-phone-gathering-daily-reloaded.png",
+      "sha256": "8b6f9ca3b8a14d418a4dfc60c19d0b0e9f6fe9a800c2bb7d7483a8228bc33920",
+      "size": [
+        430,
+        932
+      ]
+    }
+  ],
+  "secretScan": {
+    "files": 1291,
+    "hits": []
+  },
+  "jsSyntaxFiles": [
+    "src/adventure.js",
+    "src/art-r84.js",
+    "src/atlas.js",
+    "src/config.js",
+    "src/content-r1.js",
+    "src/content-r6.js",
+    "src/content-r8.js",
+    "src/daily-ui.js",
+    "src/daily.js",
+    "src/game.js",
+    "src/heirloom-ui.js",
+    "src/heirloom.js",
+    "src/state.js",
+    "src/ui.js",
+    "src/world-ui.js",
+    "scripts/audit-oc-r1.js",
+    "scripts/capture-content-r2-rhythms.js",
+    "scripts/capture-content-r4-receipts.js",
+    "scripts/capture-promo-trio.js",
+    "scripts/capture-r79-playtest.js",
+    "scripts/capture-r82-art.js",
+    "scripts/capture-r83-art.js",
+    "scripts/capture-r84-art.js",
+    "scripts/capture-r85-art.js",
+    "scripts/capture-r85-store.js",
+    "scripts/capture-r86-art.js",
+    "scripts/capture-r86-store.js",
+    "scripts/capture-r87-art.js",
+    "scripts/capture-r87-store.js",
+    "scripts/capture-r88-art.js",
+    "scripts/capture-r88-store.js",
+    "scripts/capture-r89-art.js",
+    "scripts/capture-r89-store.js",
+    "scripts/content-r8-water-test-helper.js",
+    "scripts/farm-control-test-helper.js",
+    "scripts/gen-art-v3.js",
+    "scripts/gen-art-v4.js",
+    "scripts/gen-v2-atlases.js",
+    "scripts/generate-crops3-atlas.js",
+    "scripts/measure-content-r2.js",
+    "scripts/measure-content-r3.js",
+    "scripts/measure-content-r4.js",
+    "scripts/measure-content-r5.js",
+    "scripts/measure-content-r7.js",
+    "scripts/measure-content-r8.js",
+    "scripts/measure-content-r9.js",
+    "scripts/measure-r68-baseline.js",
+    "scripts/process-v3-atlas.js",
+    "scripts/process-v4-atlas.js",
+    "scripts/process-world-project-art.js",
+    "scripts/r85-browser-helper.js",
+    "scripts/run-browser-gates.js",
+    "scripts/run-content-r9-regression.js",
+    "scripts/test-adventure.js",
+    "scripts/test-content-r1-e2e.js",
+    "scripts/test-content-r1.js",
+    "scripts/test-content-r2-e2e.js",
+    "scripts/test-content-r2.js",
+    "scripts/test-content-r3-e2e.js",
+    "scripts/test-content-r3.js",
+    "scripts/test-content-r4-assets.js",
+    "scripts/test-content-r4-e2e.js",
+    "scripts/test-content-r4.js",
+    "scripts/test-content-r5-e2e.js",
+    "scripts/test-content-r5.js",
+    "scripts/test-content-r6-e2e.js",
+    "scripts/test-content-r6.js",
+    "scripts/test-content-r7-e2e.js",
+    "scripts/test-content-r7.js",
+    "scripts/test-content-r8-e2e.js",
+    "scripts/test-content-r8.js",
+    "scripts/test-content-r9-e2e.js",
+    "scripts/test-content-r9.js",
+    "scripts/test-controls-reachability.js",
+    "scripts/test-economy.js",
+    "scripts/test-guards.js",
+    "scripts/test-npc-indicators.js",
+    "scripts/test-r66-ui-art.js",
+    "scripts/test-r68-browser.js",
+    "scripts/test-r68-visuals.js",
+    "scripts/test-r72-fixed-layers.js",
+    "scripts/test-r72-night-gate.js",
+    "scripts/test-r73-playtest.js",
+    "scripts/test-r74-building-upgrades-e2e.js",
+    "scripts/test-r74-building-upgrades.js",
+    "scripts/test-r79-fun-e2e.js",
+    "scripts/test-r79-sunpatch.js",
+    "scripts/test-r80-daily.js",
+    "scripts/test-r80-mobile.js",
+    "scripts/test-r81-heirloom.js",
+    "scripts/test-r81-review.js",
+    "scripts/test-r82-art.js",
+    "scripts/test-r83-art.js",
+    "scripts/test-r84-art.js",
+    "scripts/test-r85-art.js",
+    "scripts/test-r86-art.js",
+    "scripts/test-r87-art.js",
+    "scripts/test-r88-art.js",
+    "scripts/test-r89-art.js",
+    "scripts/test-rpg-v4-e2e.js",
+    "scripts/test-rwd-matrix.js",
+    "scripts/test-systems.js",
+    "scripts/test-ui-smoke.js",
+    "scripts/test-version-chain.js",
+    "scripts/test-water-quest-guide.js",
+    "scripts/test-world-migration.js",
+    "scripts/test-world-project-art.js",
+    "scripts/test-world-rework-e2e.js",
+    "scripts/validate-v3-atlas.js",
+    "scripts/validate-v4-atlas.js"
+  ]
+}

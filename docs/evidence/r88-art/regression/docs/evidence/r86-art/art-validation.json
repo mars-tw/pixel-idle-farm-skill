@@ -1,0 +1,1657 @@
+{
+  "status": "VERIFIED",
+  "checks": 104,
+  "rows": [
+    {
+      "w": 390,
+      "h": 844,
+      "scale": 1,
+      "platform": "phone",
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "lit": true,
+            "frame": "wheat_sprout",
+            "filter": "brightness(1.38) saturate(1.2) drop-shadow(rgb(255, 232, 163) 1px -1px 0px)",
+            "transform": "matrix(1.12, 0, 0, 1.12, 0, 0)"
+          },
+          {
+            "lit": false,
+            "frame": "wheat_sprout",
+            "filter": "brightness(0.88) saturate(0.86) drop-shadow(rgba(83, 105, 121, 0.333) -1px 0px 0px)",
+            "transform": "none"
+          }
+        ],
+        "heroLit": true,
+        "physicsUnchanged": true,
+        "heroSize": [
+          64,
+          85.328125
+        ],
+        "beam": {
+          "x": 35.15625,
+          "y": 327.59375,
+          "w": 158.390625,
+          "h": 129.59375,
+          "bg": "url(\"http://127.0.0.1:50110/assets/generated/r88/leaf-light.png\")",
+          "opacity": "1"
+        },
+        "shadow": "url(\"http://127.0.0.1:50110/assets/generated/r88/canopy-shadow.png\")",
+        "sprite": "url(\"http://127.0.0.1:50110/assets/generated/r88/walk.png?v=r88-20261018-1\")"
+      },
+      "album": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844,
+          "b": 844,
+          "r": 390
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 26,
+            "y": 14,
+            "w": 348,
+            "h": 57,
+            "b": 71,
+            "r": 374
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 81,
+            "w": 348,
+            "h": 44,
+            "b": 125,
+            "r": 374
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 135,
+            "w": 348,
+            "h": 597.8125,
+            "b": 732.8125,
+            "r": 374
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 742.8125,
+            "w": 348,
+            "h": 19.1875,
+            "b": 762,
+            "r": 374
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 772,
+            "w": 348,
+            "h": 48,
+            "b": 820,
+            "r": 374
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 112.65625,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 112.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 112.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "0",
+            "w": 316,
+            "h": 113.796875,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "1",
+            "w": 316,
+            "h": 113.796875,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "2",
+            "w": 316,
+            "h": 93.65625,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 348,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "三項都領完，得印章與堆肥各 1。每日 00:00 更新。"
+      },
+      "basket": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844,
+          "b": 844,
+          "r": 390
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "b": 0,
+            "r": 0
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 92,
+            "w": 348,
+            "h": 44,
+            "b": 136,
+            "r": 374
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 146,
+            "w": 348,
+            "h": 586.8125,
+            "b": 732.8125,
+            "r": 374
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 742.8125,
+            "w": 348,
+            "h": 19.1875,
+            "b": 762,
+            "r": 374
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 772,
+            "w": 348,
+            "h": 48,
+            "b": 820,
+            "r": 374
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 112.65625,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 112.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 112.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "heirloomGuide",
+            "w": 348,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 348,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。"
+      },
+      "seals": [
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-water-32.png?v=r88-20261018-1",
+          "alt": "已蓋澆水壺章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-harvest-32.png?v=r88-20261018-1",
+          "alt": "已蓋麥穗章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-basket-32.png?v=r88-20261018-1",
+          "alt": "已蓋餐籃章",
+          "filter": "none",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "scale": 1,
+      "platform": "small",
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "lit": true,
+            "frame": "wheat_sprout",
+            "filter": "brightness(1.38) saturate(1.2) drop-shadow(rgb(255, 232, 163) 1px -1px 0px)",
+            "transform": "matrix(1.12, 0, 0, 1.12, 0, 0)"
+          },
+          {
+            "lit": false,
+            "frame": "wheat_sprout",
+            "filter": "brightness(0.88) saturate(0.86) drop-shadow(rgba(83, 105, 121, 0.333) -1px 0px 0px)",
+            "transform": "none"
+          }
+        ],
+        "heroLit": true,
+        "physicsUnchanged": true,
+        "heroSize": [
+          64,
+          85.328125
+        ],
+        "beam": {
+          "x": 17.90625,
+          "y": 223.1875,
+          "w": 140.796875,
+          "h": 115.1875,
+          "bg": "url(\"http://127.0.0.1:50110/assets/generated/r88/leaf-light.png\")",
+          "opacity": "1"
+        },
+        "shadow": "url(\"http://127.0.0.1:50110/assets/generated/r88/canopy-shadow.png\")",
+        "sprite": "url(\"http://127.0.0.1:50110/assets/generated/r88/walk.png?v=r88-20261018-1\")"
+      },
+      "album": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 320,
+          "h": 568,
+          "b": 568,
+          "r": 320
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 26,
+            "y": 10,
+            "w": 284,
+            "h": 49,
+            "b": 59,
+            "r": 310
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 64,
+            "w": 284,
+            "h": 44,
+            "b": 108,
+            "r": 310
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 113,
+            "w": 284,
+            "h": 360.5,
+            "b": 473.5,
+            "r": 310
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 478.5,
+            "w": 284,
+            "h": 16.5,
+            "b": 495,
+            "r": 310
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 500,
+            "w": 284,
+            "h": 48,
+            "b": 548,
+            "r": 310
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 91.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 91.34375,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 91.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "0",
+            "w": 261,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "1",
+            "w": 261,
+            "h": 49.078125,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "2",
+            "w": 261,
+            "h": 49.078125,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 284,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "三項都領完，得印章與堆肥各 1。每日 00:00 更新。"
+      },
+      "basket": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 320,
+          "h": 568,
+          "b": 568,
+          "r": 320
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "b": 0,
+            "r": 0
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 10,
+            "w": 284,
+            "h": 44,
+            "b": 54,
+            "r": 310
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 59,
+            "w": 284,
+            "h": 398,
+            "b": 457,
+            "r": 310
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 462,
+            "w": 284,
+            "h": 33,
+            "b": 495,
+            "r": 310
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 500,
+            "w": 284,
+            "h": 48,
+            "b": 548,
+            "r": 310
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 91.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 91.34375,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 91.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "heirloomGuide",
+            "w": 284,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 284,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。"
+      },
+      "seals": [
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-water-32.png?v=r88-20261018-1",
+          "alt": "已蓋澆水壺章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-harvest-32.png?v=r88-20261018-1",
+          "alt": "已蓋麥穗章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-basket-32.png?v=r88-20261018-1",
+          "alt": "已蓋餐籃章",
+          "filter": "none",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "scale": 1,
+      "platform": "landscape",
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "lit": true,
+            "frame": "wheat_sprout",
+            "filter": "brightness(1.38) saturate(1.2) drop-shadow(rgb(255, 232, 163) 1px -1px 0px)",
+            "transform": "matrix(1.12, 0, 0, 1.12, 0, 0)"
+          },
+          {
+            "lit": false,
+            "frame": "wheat_sprout",
+            "filter": "brightness(0.88) saturate(0.86) drop-shadow(rgba(83, 105, 121, 0.333) -1px 0px 0px)",
+            "transform": "none"
+          }
+        ],
+        "heroLit": true,
+        "physicsUnchanged": true,
+        "heroSize": [
+          64,
+          85.328125
+        ],
+        "beam": {
+          "x": 279.90625,
+          "y": 134.1875,
+          "w": 140.796875,
+          "h": 115.1875,
+          "bg": "url(\"http://127.0.0.1:50110/assets/generated/r88/leaf-light.png\")",
+          "opacity": "1"
+        },
+        "shadow": "url(\"http://127.0.0.1:50110/assets/generated/r88/canopy-shadow.png\")",
+        "sprite": "url(\"http://127.0.0.1:50110/assets/generated/r88/walk.png?v=r88-20261018-1\")"
+      },
+      "album": {
+        "card": {
+          "x": 12,
+          "y": 54.8125,
+          "w": 820,
+          "h": 280.375,
+          "b": 335.1875,
+          "r": 832
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 40,
+            "y": 64.8125,
+            "w": 776,
+            "h": 45,
+            "b": 109.8125,
+            "r": 816
+          },
+          {
+            "id": ".journal-links",
+            "x": 40,
+            "y": 113.8125,
+            "w": 776,
+            "h": 44,
+            "b": 157.8125,
+            "r": 816
+          },
+          {
+            "id": "#dailyBody",
+            "x": 40,
+            "y": 161.8125,
+            "w": 776,
+            "h": 95.375,
+            "b": 257.1875,
+            "r": 816
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 40,
+            "y": 261.1875,
+            "w": 776,
+            "h": 16,
+            "b": 277.1875,
+            "r": 816
+          },
+          {
+            "id": "#dailyClose",
+            "x": 40,
+            "y": 281.1875,
+            "w": 776,
+            "h": 44,
+            "b": 325.1875,
+            "r": 816
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 255.34375,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "0",
+            "w": 234,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "1",
+            "w": 234,
+            "h": 46.375,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "2",
+            "w": 234,
+            "h": 46.375,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 776,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "三項都領完，得印章與堆肥各 1。每日 00:00 更新。"
+      },
+      "basket": {
+        "card": {
+          "x": 12,
+          "y": 47.90625,
+          "w": 820,
+          "h": 294.1875,
+          "b": 342.09375,
+          "r": 832
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "b": 0,
+            "r": 0
+          },
+          {
+            "id": ".journal-links",
+            "x": 40,
+            "y": 57.90625,
+            "w": 776,
+            "h": 44,
+            "b": 101.90625,
+            "r": 816
+          },
+          {
+            "id": "#dailyBody",
+            "x": 40,
+            "y": 105.90625,
+            "w": 776,
+            "h": 158.1875,
+            "b": 264.09375,
+            "r": 816
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 40,
+            "y": 268.09375,
+            "w": 776,
+            "h": 16,
+            "b": 284.09375,
+            "r": 816
+          },
+          {
+            "id": "#dailyClose",
+            "x": 40,
+            "y": 288.09375,
+            "w": 776,
+            "h": 44,
+            "b": 332.09375,
+            "r": 816
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 255.34375,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "heirloomGuide",
+            "w": 481.125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 776,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。"
+      },
+      "seals": [
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-water-32.png?v=r88-20261018-1",
+          "alt": "已蓋澆水壺章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-harvest-32.png?v=r88-20261018-1",
+          "alt": "已蓋麥穗章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-basket-32.png?v=r88-20261018-1",
+          "alt": "已蓋餐籃章",
+          "filter": "none",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "w": 1032,
+      "h": 1376,
+      "scale": 2,
+      "platform": "ipad",
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "lit": true,
+            "frame": "wheat_sprout",
+            "filter": "brightness(1.38) saturate(1.2) drop-shadow(rgb(255, 232, 163) 1px -1px 0px)",
+            "transform": "matrix(1.12, 0, 0, 1.12, 0, 0)"
+          },
+          {
+            "lit": false,
+            "frame": "wheat_sprout",
+            "filter": "brightness(0.88) saturate(0.86) drop-shadow(rgba(83, 105, 121, 0.333) -1px 0px 0px)",
+            "transform": "none"
+          }
+        ],
+        "heroLit": true,
+        "physicsUnchanged": true,
+        "heroSize": [
+          104,
+          138.65625
+        ],
+        "beam": {
+          "x": 249.59375,
+          "y": 546,
+          "w": 264,
+          "h": 216,
+          "bg": "url(\"http://127.0.0.1:50110/assets/generated/r88/leaf-light.png\")",
+          "opacity": "1"
+        },
+        "shadow": "url(\"http://127.0.0.1:50110/assets/generated/r88/canopy-shadow.png\")",
+        "sprite": "url(\"http://127.0.0.1:50110/assets/generated/r88/walk.png?v=r88-20261018-1\")"
+      },
+      "album": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 1032,
+          "h": 1376,
+          "b": 1376,
+          "r": 1032
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 26,
+            "y": 14,
+            "w": 990,
+            "h": 65,
+            "b": 79,
+            "r": 1016
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 89,
+            "w": 990,
+            "h": 44,
+            "b": 133,
+            "r": 1016
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 143,
+            "w": 990,
+            "h": 1121.8125,
+            "b": 1264.8125,
+            "r": 1016
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 1274.8125,
+            "w": 990,
+            "h": 19.1875,
+            "b": 1294,
+            "r": 1016
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 1304,
+            "w": 990,
+            "h": 48,
+            "b": 1352,
+            "r": 1016
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 326.65625,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 326.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 326.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "0",
+            "w": 958,
+            "h": 283.875,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "1",
+            "w": 958,
+            "h": 283.875,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "2",
+            "w": 958,
+            "h": 283.890625,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 990,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "三項都領完，得印章與堆肥各 1。每日 00:00 更新。"
+      },
+      "basket": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 1032,
+          "h": 1376,
+          "b": 1376,
+          "r": 1032
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "b": 0,
+            "r": 0
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 92,
+            "w": 990,
+            "h": 44,
+            "b": 136,
+            "r": 1016
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 146,
+            "w": 990,
+            "h": 1118.8125,
+            "b": 1264.8125,
+            "r": 1016
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 1274.8125,
+            "w": 990,
+            "h": 19.1875,
+            "b": 1294,
+            "r": 1016
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 1304,
+            "w": 990,
+            "h": 48,
+            "b": 1352,
+            "r": 1016
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 326.65625,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 326.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 326.671875,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "heirloomGuide",
+            "w": 990,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 990,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。"
+      },
+      "seals": [
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-water-32.png?v=r88-20261018-1",
+          "alt": "已蓋澆水壺章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-harvest-32.png?v=r88-20261018-1",
+          "alt": "已蓋麥穗章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-basket-32.png?v=r88-20261018-1",
+          "alt": "已蓋餐籃章",
+          "filter": "none",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "w": 1366,
+      "h": 600,
+      "scale": 1,
+      "platform": "laptop",
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "lit": true,
+            "frame": "wheat_sprout",
+            "filter": "brightness(1.38) saturate(1.2) drop-shadow(rgb(255, 232, 163) 1px -1px 0px)",
+            "transform": "matrix(1.12, 0, 0, 1.12, 0, 0)"
+          },
+          {
+            "lit": false,
+            "frame": "wheat_sprout",
+            "filter": "brightness(0.88) saturate(0.86) drop-shadow(rgba(83, 105, 121, 0.333) -1px 0px 0px)",
+            "transform": "none"
+          }
+        ],
+        "heroLit": true,
+        "physicsUnchanged": true,
+        "heroSize": [
+          72,
+          96
+        ],
+        "beam": {
+          "x": 422.390625,
+          "y": 224,
+          "w": 176,
+          "h": 144,
+          "bg": "url(\"http://127.0.0.1:50110/assets/generated/r88/leaf-light.png\")",
+          "opacity": "1"
+        },
+        "shadow": "url(\"http://127.0.0.1:50110/assets/generated/r88/canopy-shadow.png\")",
+        "sprite": "url(\"http://127.0.0.1:50110/assets/generated/r88/walk.png?v=r88-20261018-1\")"
+      },
+      "album": {
+        "card": {
+          "x": 273,
+          "y": 114.40625,
+          "w": 820,
+          "h": 371.1875,
+          "b": 485.59375,
+          "r": 1093
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 301,
+            "y": 126.40625,
+            "w": 776,
+            "h": 61,
+            "b": 187.40625,
+            "r": 1077
+          },
+          {
+            "id": ".journal-links",
+            "x": 301,
+            "y": 192.40625,
+            "w": 776,
+            "h": 44,
+            "b": 236.40625,
+            "r": 1077
+          },
+          {
+            "id": "#dailyBody",
+            "x": 301,
+            "y": 241.40625,
+            "w": 776,
+            "h": 160.59375,
+            "b": 402,
+            "r": 1077
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 301,
+            "y": 407,
+            "w": 776,
+            "h": 17.59375,
+            "b": 424.59375,
+            "r": 1077
+          },
+          {
+            "id": "#dailyClose",
+            "x": 301,
+            "y": 429.59375,
+            "w": 776,
+            "h": 44,
+            "b": 473.59375,
+            "r": 1077
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 255.34375,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "0",
+            "w": 220,
+            "h": 50.65625,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "1",
+            "w": 220,
+            "h": 56,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "2",
+            "w": 220,
+            "h": 56,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 776,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "三項都領完，得印章與堆肥各 1。每日 00:00 更新。"
+      },
+      "basket": {
+        "card": {
+          "x": 273,
+          "y": 97.953125,
+          "w": 820,
+          "h": 404.078125,
+          "b": 502.03125,
+          "r": 1093
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "b": 0,
+            "r": 0
+          },
+          {
+            "id": ".journal-links",
+            "x": 301,
+            "y": 182.953125,
+            "w": 776,
+            "h": 44,
+            "b": 226.953125,
+            "r": 1077
+          },
+          {
+            "id": "#dailyBody",
+            "x": 301,
+            "y": 231.953125,
+            "w": 776,
+            "h": 186.484375,
+            "b": 418.4375,
+            "r": 1077
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 301,
+            "y": 423.4375,
+            "w": 776,
+            "h": 17.59375,
+            "b": 441.03125,
+            "r": 1077
+          },
+          {
+            "id": "#dailyClose",
+            "x": 301,
+            "y": 446.03125,
+            "w": 776,
+            "h": 44,
+            "b": 490.03125,
+            "r": 1077
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 255.34375,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 255.328125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "heirloomGuide",
+            "w": 481.125,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 776,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。"
+      },
+      "seals": [
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-water-32.png?v=r88-20261018-1",
+          "alt": "已蓋澆水壺章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-harvest-32.png?v=r88-20261018-1",
+          "alt": "已蓋麥穗章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-basket-32.png?v=r88-20261018-1",
+          "alt": "已蓋餐籃章",
+          "filter": "none",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "w": 430,
+      "h": 932,
+      "scale": 3,
+      "platform": "iphone",
+      "fixture": true,
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "lit": true,
+            "frame": "wheat_sprout",
+            "filter": "brightness(1.38) saturate(1.2) drop-shadow(rgb(255, 232, 163) 1px -1px 0px)",
+            "transform": "matrix(1.12, 0, 0, 1.12, 0, 0)"
+          },
+          {
+            "lit": false,
+            "frame": "wheat_sprout",
+            "filter": "brightness(0.88) saturate(0.86) drop-shadow(rgba(83, 105, 121, 0.333) -1px 0px 0px)",
+            "transform": "none"
+          }
+        ],
+        "heroLit": true,
+        "physicsUnchanged": true,
+        "heroSize": [
+          72,
+          96
+        ],
+        "beam": {
+          "x": 37.390625,
+          "y": 364,
+          "w": 176,
+          "h": 144,
+          "bg": "url(\"http://127.0.0.1:50110/assets/generated/r88/leaf-light.png\")",
+          "opacity": "1"
+        },
+        "shadow": "url(\"http://127.0.0.1:50110/assets/generated/r88/canopy-shadow.png\")",
+        "sprite": "url(\"http://127.0.0.1:50110/assets/generated/r88/walk.png?v=r88-20261018-1\")"
+      },
+      "album": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 430,
+          "h": 932,
+          "b": 932,
+          "r": 430
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 26,
+            "y": 14,
+            "w": 388,
+            "h": 57,
+            "b": 71,
+            "r": 414
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 81,
+            "w": 388,
+            "h": 44,
+            "b": 125,
+            "r": 414
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 135,
+            "w": 388,
+            "h": 685.8125,
+            "b": 820.8125,
+            "r": 414
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 830.8125,
+            "w": 388,
+            "h": 19.1875,
+            "b": 850,
+            "r": 414
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 860,
+            "w": 388,
+            "h": 48,
+            "b": 908,
+            "r": 414
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 126,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 126,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 126,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "0",
+            "w": 356,
+            "h": 143.125,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "1",
+            "w": 356,
+            "h": 143.125,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "2",
+            "w": 356,
+            "h": 122.984375,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 388,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "三項都領完，得印章與堆肥各 1。每日 00:00 更新。"
+      },
+      "basket": {
+        "card": {
+          "x": 0,
+          "y": 0,
+          "w": 430,
+          "h": 932,
+          "b": 932,
+          "r": 430
+        },
+        "parts": [
+          {
+            "id": ".daily-heading",
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "b": 0,
+            "r": 0
+          },
+          {
+            "id": ".journal-links",
+            "x": 26,
+            "y": 92,
+            "w": 388,
+            "h": 44,
+            "b": 136,
+            "r": 414
+          },
+          {
+            "id": "#dailyBody",
+            "x": 26,
+            "y": 146,
+            "w": 388,
+            "h": 674.8125,
+            "b": 820.8125,
+            "r": 414
+          },
+          {
+            "id": "#dailyFooter",
+            "x": 26,
+            "y": 830.8125,
+            "w": 388,
+            "h": 19.1875,
+            "b": 850,
+            "r": 414
+          },
+          {
+            "id": "#dailyClose",
+            "x": 26,
+            "y": 860,
+            "w": 388,
+            "h": 48,
+            "b": 908,
+            "r": 414
+          }
+        ],
+        "overflow": 0,
+        "controls": [
+          {
+            "id": "dailyToday",
+            "w": 126,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyCollection",
+            "w": 126,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyHeirloom",
+            "w": 126,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "heirloomGuide",
+            "w": 388,
+            "h": 44,
+            "hit": true,
+            "inView": true
+          },
+          {
+            "id": "dailyClose",
+            "w": 388,
+            "h": 48,
+            "hit": true,
+            "inView": true
+          }
+        ],
+        "binding": "8px",
+        "questHidden": true,
+        "footer": "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。"
+      },
+      "seals": [
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-water-32.png?v=r88-20261018-1",
+          "alt": "已蓋澆水壺章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-harvest-32.png?v=r88-20261018-1",
+          "alt": "已蓋麥穗章",
+          "filter": "none",
+          "opacity": "1"
+        },
+        {
+          "src": "http://127.0.0.1:50110/assets/generated/r86/stamp-basket-32.png?v=r88-20261018-1",
+          "alt": "已蓋餐籃章",
+          "filter": "none",
+          "opacity": "1"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "fixtureNote": "Exact planting-time comparison is explicitly a visual QA fixture, not earned play. Store main journey is separate real input.",
+  "unperformed": [
+    "independent Muse rescore",
+    "human timed recognition",
+    "native device"
+  ]
+}

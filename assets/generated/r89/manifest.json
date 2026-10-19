@@ -1,0 +1,564 @@
+{
+  "status": "EXECUTED",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/r89/garden.png",
+      "sha256": "2ab0067c84128f008af81c120d89ab0f4244ee6d3b9cb1a16db9b2fdf74bf611",
+      "bytes": 3055118
+    },
+    {
+      "path": "docs/art/character-sheets/miri-r89.png",
+      "sha256": "5d52cfcd05d66a0fac10bf0a358770299ebe0409383e68e10eccbe2d38d59ea5",
+      "bytes": 1996756
+    },
+    {
+      "path": "docs/art/masters/r89/light.png",
+      "sha256": "6872d19f5ee1889f2b81f4fe1cb72a5e20b106b268ea1e9d3ceae95b51adb5fc",
+      "bytes": 1730366
+    },
+    {
+      "path": "docs/art/masters/r89/story.png",
+      "sha256": "0276fae61e32d43af8240f1f354d7ad30abbd438113cc5cd843ef6b1eb589645",
+      "bytes": 2783337
+    },
+    {
+      "path": "docs/art/masters/r89/objects.png",
+      "sha256": "f0823a3cdcbdcfd139ffef3245edd87c167bdbb1a672e91a8462254e2ea643ac",
+      "bytes": 1807688
+    },
+    {
+      "path": "docs/art/masters/r89/panel.png",
+      "sha256": "2465bf61f9b69900efdcc614d03c0f918bca4b201f66ef5127e261482bde95d1",
+      "bytes": 1724924
+    },
+    {
+      "path": "docs/art/masters/r89/icons.png",
+      "sha256": "c45f8b04878458377dcf2f91e30bad0712558109e4992c6fd9a0b5c149154b33",
+      "bytes": 1834322
+    },
+    {
+      "path": "docs/art/masters/r89/logo.png",
+      "sha256": "a5e12d6f855dd1b52366b5d09085c899bead14456ddf4fd131e44f5015c61233",
+      "bytes": 1064121
+    },
+    {
+      "path": "docs/art/masters/r89/app.png",
+      "sha256": "0b4f1c8b98a884c4751020e42f9040b5bc9bf8dfff25be40c4a0bdfd9816d5ac",
+      "bytes": 1988010
+    }
+  ],
+  "records": [
+    {
+      "path": "assets/generated/r89/miri-0.png",
+      "source": "character expression0",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7725,
+      "sha256": "fdb6820f11dce6f74f8261c39f1911ed6564f06284c0f6e6bb1956346edf41da"
+    },
+    {
+      "path": "assets/generated/r89/miri-1.png",
+      "source": "character expression1",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7323,
+      "sha256": "4f1cc1ffb28924dba4ba90c38150005236c6832c3f60bf05fa225aab3d25cdc5"
+    },
+    {
+      "path": "assets/generated/r89/miri-2.png",
+      "source": "character expression2",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7762,
+      "sha256": "0988defc0156eee70c3e832b8cb93062b918dabf72b009feb191e746b507b95b"
+    },
+    {
+      "path": "assets/generated/r89/garden-1536.webp",
+      "source": "garden; one continuous painting, native density matched to48px actors, no tiled crops",
+      "size": [
+        1536,
+        1024
+      ],
+      "bytes": 393592,
+      "sha256": "20c61750afa45dcab3d959680f622f250c21dc61aa03787c24d49036305f2360"
+    },
+    {
+      "path": "assets/generated/r89/wheat-32.png",
+      "source": "icons cell0",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1540,
+      "sha256": "0f85eddfd0d1baab8beabbaa5d768089fac1d149c583518c298f41f353642005"
+    },
+    {
+      "path": "assets/generated/r89/basket-32.png",
+      "source": "icons cell1",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1636,
+      "sha256": "3f259e983dc2332f40a674376a2806ceae45f826f13e138c98790b4b51ec19f9"
+    },
+    {
+      "path": "assets/generated/r89/water-32.png",
+      "source": "icons cell2",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1389,
+      "sha256": "c93fb19dfe5b5369f7358d2162567f7068455afbe178bf6ad841fb3523bc5439"
+    },
+    {
+      "path": "assets/generated/r89/note-32.png",
+      "source": "icons cell3",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1312,
+      "sha256": "f8d5acea58df3f73c06f6f50e31f8b5b0b8f8aaa4bc4f97c642b4512388b3a3f"
+    },
+    {
+      "path": "assets/generated/r89/hat-32.png",
+      "source": "icons cell4",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1256,
+      "sha256": "a25a32f6cb5e056f1dfdbf89508f11d1866bee252fdb81e8a6390a48cb0a8620"
+    },
+    {
+      "path": "assets/generated/r89/sprout-32.png",
+      "source": "icons cell5",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 828,
+      "sha256": "c9b30766b4285401cd7fe91d4c7dd212ba9a044fde916c2e2ad539bbca24979d"
+    },
+    {
+      "path": "assets/generated/r89/creel-0.png",
+      "source": "objects basket 0",
+      "size": [
+        24,
+        24
+      ],
+      "bytes": 914,
+      "sha256": "995c900b38af2e800f95c8049eae344a695d8cb552a805565856f794508ca958"
+    },
+    {
+      "path": "assets/generated/r89/creel-1.png",
+      "source": "objects basket 1",
+      "size": [
+        24,
+        24
+      ],
+      "bytes": 877,
+      "sha256": "89842c2b7bf02b13e6bba1f6d178f8921d4c7c26b4b52a84c43247cf6fdf7738"
+    },
+    {
+      "path": "assets/generated/r89/creel-2.png",
+      "source": "objects basket 2",
+      "size": [
+        24,
+        24
+      ],
+      "bytes": 903,
+      "sha256": "e76a034442f79d7f6c153a3ae796b95db5de0a368c6e75ef4e01b49bff01151c"
+    },
+    {
+      "path": "assets/generated/r89/wheat-sprout-48.png",
+      "source": "objects growth 0",
+      "size": [
+        48,
+        48
+      ],
+      "bytes": 762,
+      "sha256": "e69617edcb1ee4f98a9b53affe3e5db6b4e24876bd97f50f5bdf3e0920cd4890"
+    },
+    {
+      "path": "assets/generated/r89/wheat-grow-48.png",
+      "source": "objects growth 1",
+      "size": [
+        48,
+        48
+      ],
+      "bytes": 1267,
+      "sha256": "69677d62787237d44ce6825f1b103de63638f1ac9868b888ea10d8919825d572"
+    },
+    {
+      "path": "assets/generated/r89/wheat-ripe-48.png",
+      "source": "objects growth 2",
+      "size": [
+        48,
+        48
+      ],
+      "bytes": 2342,
+      "sha256": "ca5c966610b19e1aabb9eb4234e1f8fc794e3c8cd60178a3533b296a5714a0d8"
+    },
+    {
+      "path": "assets/generated/r89/paper-128.png",
+      "source": "panel quiet center",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 8308,
+      "sha256": "4601a257ca39c279b9ab36b0531bea99d062eb9d4e5a24c1bd7399814bb3e0f3"
+    },
+    {
+      "path": "assets/generated/r89/binding-8.png",
+      "source": "panel cloth spine",
+      "size": [
+        8,
+        128
+      ],
+      "bytes": 1365,
+      "sha256": "7d042af845e9148ceff16805fa6ca0ab7da1ac0c61079280e63bb2312ef415e4"
+    },
+    {
+      "path": "assets/generated/r89/logo-320.png",
+      "source": "logo exactly four characters",
+      "size": [
+        320,
+        112
+      ],
+      "bytes": 18155,
+      "sha256": "70cb4246354d283083bf1697be23410a81457a538acc73d25d63309943d19ba8"
+    },
+    {
+      "path": "assets/generated/r89/app-icon-64.png",
+      "source": "app",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 10113,
+      "sha256": "fc4aa3594d5ce46347444f64d5efbafe2a096dfe0bac6786a66bf49723039d66"
+    },
+    {
+      "path": "assets/generated/r89/app-icon-192.png",
+      "source": "app",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 10598,
+      "sha256": "3691eb870ec467d7d41ad516050a56fc1ca01bd4c99316f08b390eec183dbfdd"
+    },
+    {
+      "path": "assets/generated/r89/app-icon-512.png",
+      "source": "app",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 15013,
+      "sha256": "c88c33e83cd56496fc05240b3721a53195109bc21c70bf0b96f2f779e76b012d"
+    },
+    {
+      "path": "assets/generated/r89/table-result-512.webp",
+      "source": "story; three real chairs, small basket",
+      "size": [
+        512,
+        256
+      ],
+      "bytes": 54446,
+      "sha256": "6ef8e501f2868fc29ff6e647a915d1a5a329f25ddb2f4959cd6efb2a4474efa5"
+    },
+    {
+      "path": "assets/generated/r89/chair-detail-256.webp",
+      "source": "story; exact existing third-chair crop, no new illustration",
+      "size": [
+        256,
+        280
+      ],
+      "bytes": 24536,
+      "sha256": "07b9e34048d2182baadabed765d9164d9366d9648a60dc3c625b297fe7359f45"
+    },
+    {
+      "path": "assets/generated/r89/sunshaft-384.png",
+      "source": "light; true RGBA upper-right rays",
+      "size": [
+        384,
+        256
+      ],
+      "bytes": 100113,
+      "sha256": "ba2033afb9e4052a6e301fbd936797b0f2e258437ea54f6e0d191d32a3e6a23e"
+    },
+    {
+      "path": "assets/generated/r89/leaf-light.png",
+      "source": "light ground pool crop; no generated dots",
+      "size": [
+        192,
+        96
+      ],
+      "bytes": 29195,
+      "sha256": "56cc2c31ceff64c80fb11f13348e57e60343fe92f72f11140eea0dbe361ff980"
+    },
+    {
+      "path": "assets/generated/r89/canopy-shadow.png",
+      "source": "retained R88 actual leaf mask",
+      "size": [
+        192,
+        128
+      ],
+      "bytes": 7495,
+      "sha256": "63c751c8ce8f167fc15e80fd3c3bcf2429d964ed27f54cee442c7814001785b6"
+    },
+    {
+      "path": "assets/generated/r89/grey-2.png",
+      "source": "retained R84 portrait; only disconnected alpha scraps removed",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 5933,
+      "sha256": "6a593965fc8d26dfe606c4b34ffce632da522343ce18a6d8788a826b476727c8"
+    },
+    {
+      "path": "assets/generated/r89/walk.png",
+      "source": "R88 true poses + generated R89 creel pixels only",
+      "size": [
+        288,
+        256
+      ],
+      "bytes": 54823,
+      "sha256": "1552217b0f21436d42b0ef2fc2156852ad4fd99ce166115515fedb92a4a6fd5a"
+    },
+    {
+      "path": "assets/generated/r89/farming-actions.png",
+      "source": "R88 true poses + generated R89 creel pixels only",
+      "size": [
+        432,
+        512
+      ],
+      "bytes": 158406,
+      "sha256": "025a6f5e683f5bdb98ed20e61d231cc6806d653b1855478fc7cba7fbebe71684"
+    }
+  ],
+  "actorReceipts": [
+    {
+      "sheet": "walk",
+      "frames": 24,
+      "identicalAlphaToR88": true,
+      "lowerLegsUnchanged": true
+    },
+    {
+      "sheet": "farming-actions",
+      "frames": 48,
+      "identicalAlphaToR88": true,
+      "lowerLegsUnchanged": true
+    }
+  ],
+  "qualityMetrics": {
+    "assets/generated/r89/miri-0.png": {
+      "brightness": 0.5003695934606032,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5302910351276555,
+      "lowSaturationFraction": 0.031926121372031664,
+      "gatePass": true
+    },
+    "assets/generated/r89/miri-1.png": {
+      "brightness": 0.48050954582471966,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5263494672201601,
+      "lowSaturationFraction": 0.036741214057507986,
+      "gatePass": true
+    },
+    "assets/generated/r89/miri-2.png": {
+      "brightness": 0.5102307279857398,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5161120581741043,
+      "lowSaturationFraction": 0.043116883116883116,
+      "gatePass": true
+    },
+    "assets/generated/r89/walk.png": {
+      "brightness": 0.42775643252732953,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5120248175396571,
+      "lowSaturationFraction": 0.029833438751844823,
+      "gatePass": true
+    },
+    "assets/generated/r89/farming-actions.png": {
+      "brightness": 0.40709369073516055,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5330532668213682,
+      "lowSaturationFraction": 0.022464415325999704,
+      "gatePass": true
+    }
+  },
+  "runtimeBytes": 929927,
+  "postprocessing": "RGBA alpha retained; invisible RGB zero; native pixel palette pass; no limb or impact changes; old licenses retained",
+  "inputReferences": [
+    {
+      "path": "docs/art/character-sheets/miri-r88.png",
+      "sha256": "45565226a7632990e15cdc327b265b4a10abf905b52d0df210872577011be573",
+      "role": "character identity reference used for the R89 edit call"
+    }
+  ],
+  "postprocessArtifacts": [
+    {
+      "path": "docs/art/masters/r89/postprocess/light-alpha-mask.png",
+      "sha256": "c590d38b740b0b405442c8bb59aa82fd581e879bc8e35af4b6d502dedd65363e",
+      "bytes": 242732
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/light-rgba-master.png",
+      "sha256": "10637c37c90a195194d2b5d9e29605f3f222de40dd079d3980951d2ab69ca9e4",
+      "bytes": 1221248
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/light-opaque-master.webp",
+      "sha256": "0a2c3312594e5ff84b24eb14a06532fa22d32fd752ced1e06108315492791676",
+      "bytes": 671330
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/objects-alpha-mask.png",
+      "sha256": "f596c8e234bfe9515ee91546f183f7a010fe281a87105f76e4891790689f2bdc",
+      "bytes": 156793
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/objects-rgba-master.png",
+      "sha256": "4119a583e822d3742303a70d60d51b74f4dc0d3aa7e85e48d3ccd9a8d7b1e705",
+      "bytes": 1244335
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/objects-opaque-master.webp",
+      "sha256": "daf1358c5c7d8cda22a52f523f561e42117e9d4f45d9e5d1692e0174b185fd58",
+      "bytes": 782772
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/icons-alpha-mask.png",
+      "sha256": "aa6aa0f1715de4685057638a1c4066779af4e9b8a693f488b968f85b5c9e27e5",
+      "bytes": 145056
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/icons-rgba-master.png",
+      "sha256": "17472c1cfb6652f8c40902db54fff0ff5564da0adfa79d388be2adf00aa82f15",
+      "bytes": 1207180
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/icons-opaque-master.webp",
+      "sha256": "a279042eee26b774270c4242466db433606fd3ea7cc3c482c0587b9a83fd06fa",
+      "bytes": 780322
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/logo-alpha-mask.png",
+      "sha256": "68b1153744ac4121042c683aacb1558c0ba2d1a886f6b73d7b95fe828e2d7073",
+      "bytes": 103534
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/logo-rgba-master.png",
+      "sha256": "dfb2ae884f3c03329c0282664d402e58191b1e27a0c93f72cc707a3243520ab1",
+      "bytes": 990114
+    },
+    {
+      "path": "docs/art/masters/r89/postprocess/logo-opaque-master.webp",
+      "sha256": "92e7a9c75c71785a955fe3d905482bcf80bd00cbb65af34c26a09676ca6bdbf5",
+      "bytes": 709564
+    }
+  ]
+}

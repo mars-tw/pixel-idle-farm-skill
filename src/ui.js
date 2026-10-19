@@ -35,6 +35,7 @@
   let lastTouchMapAt = 0;
   let lastMapPointer = null;
   let moveTimer = null;
+  let quickHarvestTarget = null;
   let atlasReady = false;
   let journalDetailSelection = null;
   let perfMonitorStarted = false;
@@ -74,7 +75,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "r79-20261013-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r13-20261019-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -119,10 +120,26 @@
       return "已記錄";
     }
   }
+  // R79：同一句 2.5 秒內不重複；最多同時 3 則（最舊的先收）。
+  const TOAST_DEDUPE_MS = 2500, TOAST_MAX = 3;
+  const recentToasts = new Map();
   function toast(msg) {
+    const zone = $("toast-zone"); if (!zone) return;
+    const key = String(msg), at = Date.now();
+    const last = recentToasts.get(key);
+    if (last && at - last < TOAST_DEDUPE_MS) return;
+    recentToasts.set(key, at);
+    if (recentToasts.size > 24) for (const [k, v] of recentToasts) if (at - v >= TOAST_DEDUPE_MS) recentToasts.delete(k);
+    while (zone.children && zone.children.length >= TOAST_MAX) {
+      const first = zone.firstElementChild || zone.children[0];
+      if (!first || typeof first.remove !== "function") break;
+      const before = zone.children.length;
+      first.remove();
+      if (zone.children.length === before) break;
+    }
     const t = document.createElement("div");
     t.className = "toast"; t.textContent = msg;
-    $("toast-zone").appendChild(t);
+    zone.appendChild(t);
     setTimeout(() => t.remove(), 2100);
   }
   function floatText(x, y, text, color) {
@@ -238,16 +255,50 @@
       removeFxNode(c, 900);
     }
   }
+  // R79：收成進倉庫——作物飛向倉庫數字，抵達時倉庫格跳一下（不是金幣，收成本身不給錢）。
+  function popHud(selector) {
+    if (!shouldUseJuiceFx()) return;
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.classList.remove("coin-pop");
+    void el.offsetWidth;
+    el.classList.add("coin-pop");
+    setTimeout(() => el.classList.remove("coin-pop"), 360);
+  }
+  function flyItemsToStorage(x, y, glyph, count) {
+    if (!shouldUseJuiceFx()) return;
+    const target = document.querySelector(".res.storage");
+    const layer = rootFxLayer();
+    if (!target || !layer) return;
+    const end = elementCenter(target);
+    const n = Math.min(count || 3, 6);
+    trimFxLayer(layer, n);
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement("div");
+      c.className = "juice-coin juice-item";
+      c.textContent = glyph || "\ud83c\udf3e";
+      const sx = x + (Math.random() * 28 - 14);
+      const sy = y + (Math.random() * 18 - 9);
+      c.style.left = sx + "px";
+      c.style.top = sy + "px";
+      c.style.setProperty("--tx", (end.x - sx) + "px");
+      c.style.setProperty("--ty", (end.y - sy) + "px");
+      c.style.animationDelay = (i * 55) + "ms";
+      layer.appendChild(c);
+      removeFxNode(c, 980);
+    }
+    setTimeout(() => popHud(".res.storage"), 640);
+  }
   function harvestComboText(x, y) {
     if (!shouldUseJuiceFx()) return;
     harvestCombo++;
     if (harvestComboTimer) clearTimeout(harvestComboTimer);
-    harvestComboTimer = setTimeout(() => { harvestCombo = 0; harvestComboTimer = null; }, 1400);
+    harvestComboTimer = setTimeout(() => { harvestCombo = 0; harvestComboTimer = null; }, 2400);
     if (harvestCombo <= 1) return;
     const layer = rootFxLayer(); if (!layer) return;
     const el = document.createElement("div");
-    el.className = "combo-float";
-    el.textContent = "combo x" + harvestCombo;
+    el.className = "combo-float" + (harvestCombo >= 5 ? " combo-hot" : harvestCombo >= 3 ? " combo-warm" : "");
+    el.textContent = "連收 ×" + harvestCombo;
     el.style.left = x + "px";
     el.style.top = (y - 28) + "px";
     trimFxLayer(layer, 1);
@@ -261,9 +312,67 @@
   }
   function cropHarvestFx(tileId, crop, added) {
     const c = tileCenter(tileId);
-    screenBurst(c.x, c.y, [crop && crop.emoji ? crop.emoji : "\ud83c\udf3e"], { count: Math.min(12, 5 + (added || 1)), distance: 62 });
-    flyCoinsToHud(c.x, c.y, 4);
+    const glyph = crop && crop.emoji ? crop.emoji : "\ud83c\udf3e";
+    screenBurst(c.x, c.y, [glyph], { count: Math.min(12, 5 + (added || 1)), distance: 62 });
+    flyItemsToStorage(c.x, c.y, glyph, Math.max(2, added || 2));
     harvestComboText(c.x, c.y);
+  }
+  // ---------- R79 陽光光斑 ----------
+  let sunSig = "";
+  function sunCatchFx(tileId, sun) {
+    if (!sun) return;
+    const c = tileCenter(tileId);
+    screenBurst(c.x, c.y, ["\u2728", "\u2600\ufe0f", "\u2728"], { count: 6, distance: 42, className: "sun-particle" });
+    floatText(c.x, c.y - 116, sun.kind === "harvest" ? "陽光豐收 +" + (sun.bonus || 1) : "陽光催芽", "#ffe680");
+    playSound("sun");
+    const beam = worldEl && worldEl.querySelector('.sun-beam[data-tile-id="' + tileId + '"]');
+    if (beam) { beam.classList.add("caught"); }
+    sunSig = "";
+  }
+  function syncSunBeams(t) {
+    if (!worldEl || !G.sunpatchStatus || !state.map) return;
+    const st = G.sunpatchStatus(state, t);
+    const scene = $("mapScene");
+    if (scene && scene.dataset.sun !== (st.active ? "on" : "off")) scene.dataset.sun = st.active ? "on" : "off";
+    const playerTile=G.getTileById(state,state.player.tileId);
+    const playerNode=$('player');
+    if(playerNode)playerNode.classList.toggle('sunlit-player',!!(st.active && playerTile && playerTile.plotIndex!=null && G.isSunlit(state,playerTile.plotIndex,t)));
+    const sig = st.active ? TILE + "|" + state.sun.startsAt + "|" + st.plots.join(",") : "";
+    if (sig === sunSig && (!sig || worldEl.querySelector(".sun-beam:not(.caught)"))) return;
+    sunSig = sig;
+    worldEl.querySelectorAll(".sun-beam").forEach((n) => {
+      if (n.classList.contains("caught") && !n.dataset.leaving) { n.dataset.leaving = "1"; setTimeout(() => n.remove(), 520); }
+      else if (!n.classList.contains("caught")) n.remove();
+    });
+    if (!st.active) return;
+    for (const i of st.plots) {
+      const tile = state.map.tiles.find((x) => x.plotIndex === i); if (!tile) continue;
+      const b = document.createElement("div");
+      b.className = "sun-beam"; b.dataset.audit = "sun-beam"; b.dataset.plotIndex = String(i); b.dataset.tileId = tile.id;
+      b.setAttribute("aria-hidden", "true");
+      b.style.left = pxv((tile.x - .72) * TILE); b.style.top = pxv((tile.y - .45) * TILE);
+      b.style.width = pxv(TILE * 2.2); b.style.height = pxv(TILE * 1.8);
+      b.style.zIndex = String(Math.round((tile.y + 1) * TILE + 1));
+      b.style.setProperty("--sun-left", (st.remainingMs / 1000).toFixed(2) + "s");
+      b.style.setProperty("--sun-total", (st.durationMs / 1000).toFixed(2) + "s");
+      b.style.setProperty("--sun-progress", (1 - st.remainingMs / st.durationMs).toFixed(3));
+      b.innerHTML = '<i class="sun-ray"></i><i class="sun-pool"></i><i class="sun-mote m1"></i><i class="sun-mote m2"></i><i class="sun-mote m3"></i><b class="sun-timer"><i></i></b>';
+      worldEl.appendChild(b);
+    }
+  }
+  function updateSunpatchTick(t) {
+    if (!G.updateSunpatch || !state) return;
+    const r = G.updateSunpatch(state, t);
+    if (r.spawned) {
+      playSound("sunrise");
+      if (r.first) {
+        const line = "看，陽光照到田上了！趁光還在，在光裡種下、澆水或收成，作物會長得更快，收成也多一份。";
+        if (window.FarmWorld && window.FarmWorld.speak) window.FarmWorld.speak("鎮長 葛瑞", line); else toast("☀ " + line);
+      }
+      scheduleSave();
+    }
+    syncSunBeams(t);
+    if (r.spawned || r.expired) renderSceneActionsForSelection();
   }
   function waterSplashFx(tileId) {
     const c = tileCenter(tileId);
@@ -303,7 +412,7 @@
     const layer = rootFxLayer(); if (!layer) return;
     const fan = document.createElement("div");
     fan.className = "level-fanfare";
-    fan.textContent = "Level up";
+    fan.textContent = "升級！";
     fan.style.left = c.x + "px";
     fan.style.top = (c.y + 8) + "px";
     trimFxLayer(layer, 1);
@@ -342,7 +451,7 @@
   function unlockAudio(forceResume) {
     if (!state) return;
     const settings = ensureSettings();
-    if (settings.soundEnabled === false) return;
+    if (settings.soundEnabled === false) { syncMusic(); return; }
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
     try {
@@ -350,6 +459,36 @@
       if (audioCtx.resume && (!audioUnlocked || forceResume || audioCtx.state === "suspended")) audioCtx.resume().catch(() => {});
       audioUnlocked = true;
     } catch (e) {}
+    syncMusic();
+  }
+  // R79：背景音樂（本機 ACE-Step 生成的田園循環曲，見 CREDITS）。第一次互動後才播放；
+  // 關掉音效、關掉音樂、音量 0 或切到背景時暫停。檔案不存在或無法解碼時安靜略過。
+  const BGM_SOURCES = [
+    ["assets/audio/r79-sunny-farm-loop.ogg", 'audio/ogg; codecs="vorbis"'],
+    ["assets/audio/r79-sunny-farm-loop.m4a", 'audio/mp4; codecs="mp4a.40.2"'],
+  ];
+  const BGM_GAIN = 0.42;
+  let bgm = null, bgmFailed = false;
+  function musicWanted() {
+    if (!state || !audioUnlocked || bgmFailed) return false;
+    const settings = ensureSettings();
+    return settings.soundEnabled !== false && settings.musicEnabled !== false && soundVolume() > 0 && !document.hidden;
+  }
+  function syncMusic() {
+    if (typeof Audio !== "function") return;
+    const want = musicWanted();
+    if (!want) { if (bgm && !bgm.paused) bgm.pause(); return; }
+    if (!bgm) {
+      const probe = new Audio();
+      const pick = BGM_SOURCES.find(([, type]) => probe.canPlayType && probe.canPlayType(type));
+      if (!pick) { bgmFailed = true; return; }
+      bgm = probe;
+      bgm.loop = true; bgm.preload = "auto";
+      bgm.src = pick[0] + (window.FARM_VERSION_QUERY || "");
+      bgm.addEventListener("error", () => { bgmFailed = true; }, { once: true });
+    }
+    bgm.volume = Math.max(0, Math.min(1, soundVolume() * BGM_GAIN));
+    if (bgm.paused) { const r = bgm.play(); if (r && r.catch) r.catch(() => {}); }
   }
   function setupAudioUnlock() {
     const opts = { once: true, passive: true };
@@ -359,6 +498,7 @@
     try {
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden && audioUnlocked) unlockAudio(true);
+        else syncMusic();
       });
     } catch (e) {}
     try {
@@ -385,6 +525,8 @@
       order: [[520, .06, "square", .75], [780, .06, "square", .85], [1040, .08, "square", .9]],
       mail: [[740, .06, "triangle", .75], [620, .06, "triangle", .65]],
       level: [[440, .06, "triangle", .85], [660, .08, "triangle", .95], [990, .10, "square", 1]],
+      sun: [[784, .07, "sine", .8], [988, .07, "sine", .85], [1319, .12, "triangle", .9]],
+      sunrise: [[523, .09, "sine", .45], [659, .09, "sine", .5], [784, .14, "sine", .55]],
       ui: [[620, .025, "triangle", .38]],
     };
     const seq = patterns[kind] || patterns.coin;
@@ -441,6 +583,7 @@
     }
     modal.classList.add("show");
     setModalBackgroundInert(true);
+    if (window.FarmWorld && window.FarmWorld.syncWorldHitTargets) window.FarmWorld.syncWorldHitTargets();
     focusFirstInModal(modal, preferredSelector);
   }
   function closeModal(id) {
@@ -448,6 +591,7 @@
     modal.classList.remove("show");
     if (typeof document.querySelector !== "function" || !document.querySelector(".modal.show")) {
       setModalBackgroundInert(false);
+      if (window.FarmWorld && window.FarmWorld.syncWorldHitTargets) window.FarmWorld.syncWorldHitTargets();
     }
     if (lastModalFocus && typeof lastModalFocus.focus === "function") {
       setTimeout(() => lastModalFocus.focus(), 0);
@@ -480,7 +624,7 @@
         <div><div>Lv ${state.level}</div><div class="xp-track"><div class="xp-fill" style="width:${xpPct}%"></div></div></div>
         <span class="sub">${nextXp != null ? xpInLv + "/" + xpNeed : "MAX"}</span>
       </div>
-      <div class="res">${uiIcon("system_storage")} ${used}<span class="sub">/${cap}</span></div>
+      <div class="res storage" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")} ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
       ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
       ${matChips()}`;
@@ -1368,6 +1512,7 @@
     if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = true;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
     if (state.settings.soundEnabled == null) state.settings.soundEnabled = true;
+    if (state.settings.musicEnabled == null) state.settings.musicEnabled = true;
     state.settings.soundVolume = clamp01(state.settings.soundVolume, 0.55);
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
     if (!["small", "medium", "large"].includes(state.settings.textSize)) state.settings.textSize = "medium";
@@ -1489,14 +1634,12 @@
     </div>`;
   }
   function settingsSeriesLinksHtml() {
-    return `<section class="settings-series" data-audit="settings-series" aria-labelledby="settingsSeriesTitle">
-      <div class="settings-series-title" id="settingsSeriesTitle">🪧 其他遊戲</div>
-      <div class="settings-series-copy">離開農場前，也可以逛逛阿軒的小遊戲系列。</div>
-      <div class="settings-series-links" id="settingsSeriesLinks">
-        <a href="https://mars-tw.github.io/web-card-game-skill/templates/card-battle/" target="_blank" rel="noopener">卡牌對戰</a>
-        <a href="https://mars-tw.github.io/tower-defense-skill/" target="_blank" rel="noopener">無盡塔防</a>
-        <a href="https://mars-tw.github.io/ashes-convoy/" target="_blank" rel="noopener">灰燼護航</a>
-      </div>
+    return `<section class="farm-privacy" aria-labelledby="farmPrivacyTitle">
+      <div class="settings-series-title" id="farmPrivacyTitle">農場與你的資料</div>
+      <nav class="settings-series-links" id="settingsSeriesLinks" aria-label="資料說明"><a href="#farmPrivacyStorage">本機存檔</a><a href="#farmPrivacyCollection">資料用途</a><a href="#farmPrivacyOffline">離線遊玩</a></nav>
+      <p class="settings-series-copy" id="farmPrivacyStorage">本機存檔：進度和設定保存在這台裝置。匯出的存檔由你自行保管；清除網站資料會刪除本機進度。</p>
+      <p class="settings-series-copy" id="farmPrivacyCollection">資料用途：遊戲不要求帳號，不傳送個人資料，沒有廣告或追蹤。</p>
+      <p class="settings-series-copy" id="farmPrivacyOffline">離線遊玩：網頁首次載入會向目前網站取得遊戲檔案，快取完成後可離線遊玩。</p>
     </section>`;
   }
   function setSaveStatus(msg, ok) {
@@ -1711,8 +1854,9 @@
   function shouldAutoReloadOnControllerChange(loadAt) {
     if (now() - loadAt > PWA_AUTO_RELOAD_WINDOW_MS) return false;
     try {
-      if (sessionStorage.getItem(PWA_AUTO_RELOAD_SESSION_KEY)) return false;
-      sessionStorage.setItem(PWA_AUTO_RELOAD_SESSION_KEY, "1");
+      if (sessionStorage.getItem(PWA_AUTO_RELOAD_SESSION_KEY) || sessionStorage.getItem(PWA_AUTO_RELOAD_SESSION_KEY + "Pending")) return false;
+      sessionStorage.setItem(PWA_AUTO_RELOAD_SESSION_KEY + "Pending", PWA_CACHE_VERSION);
+      window.__farmPwaReloading = true;
       return true;
     } catch (e) {
       return false;
@@ -1735,7 +1879,7 @@
     const loadAt = now();
     let refreshing = false;
     navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (refreshing) return;
+      if (refreshing || window.__farmPwaReloading) return;
       if (shouldAutoReloadOnControllerChange(loadAt)) {
         refreshing = true;
         window.location.reload();
@@ -1816,6 +1960,7 @@
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
       settingRowHtml("soundEnabled", "音效", "首次點擊或按鍵後，主要操作會播放短促 WebAudio 回饋。", settings.soundEnabled !== false),
+      settingRowHtml("musicEnabled", "背景音樂", "田園循環配樂，音量跟著下方滑桿；關掉音效時也會一起停。", settings.musicEnabled !== false),
       soundVolumeHtml(settings.soundVolume, settings.soundEnabled !== false),
       textSizeHtml(settings.textSize || "medium"),
       performanceModeHtml(settings.performanceMode || "auto"),
@@ -1835,6 +1980,7 @@
         if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = true;
         if (key === "soundEnabled" && state.settings.soundEnabled !== false) { unlockAudio(true); playSound("ui"); }
         else playSound("ui");
+        syncMusic();
         renderSettingsPanel();
         renderSmartAssistant(true);
         scheduleSave();
@@ -1847,6 +1993,7 @@
         const out = $("soundVolumeValue");
         if (out) out.textContent = Math.round(state.settings.soundVolume * 100) + "%";
         if (preview && state.settings.soundEnabled !== false) { unlockAudio(true); playSound("ui"); }
+        syncMusic();
         scheduleSave();
       };
       slider.oninput = () => update(false);
@@ -1979,7 +2126,7 @@
     const kicker = doneCount === 0 ? "序章" : ch5AllDone ? "第五章" : ch4AllDone ? "第五章" : ch3AllDone ? "第四章" : ch2AllDone ? "第三章" : ch1Done ? "第二章" : "第一章";
     const title = cur ? cur.title : "陽光農場的新篇章";
     const copy = cur ? cur.desc
-      : "阿軒割割陽光農場開源遊戲世界重新熱鬧了起來。東林已通，繼續開墾田地、迎接更多動物與市集訂單，讓這座農場成為玩家共創的 RPG 世界。";
+      : "農場重新熱鬧了起來。東林已通，繼續照顧田地與動物，把收穫留進鄰居的餐籃。";
     const quests = compactRowsHtml("story-main", QUEST_ORDER.map((id) => questRow(id, completed, cur)), 4);
     // 第二章：序章 6/6 後才顯示，獨立完成度（不影響主面板 0/6 讀值）
     const ch2Html = ch1Done ? `
@@ -2189,6 +2336,8 @@
   let TILE = BASE_TILE;
   let worldEl = null, groundEl = null;
   const obStatic = [], obDyn = [];   // 物件層 sprite（靜態：建築/障礙/站點；動態：作物/動物/狀態）
+  const canopyDecor = [];
+  let canopySignature = '';
   const pxv = (n) => n + "px";
 
   function mapViewMode() {
@@ -2261,12 +2410,19 @@
     scene.style.setProperty("--map-world-height", pxv(H));
     worldEl.style.width = pxv(W); worldEl.style.height = pxv(H);
     groundEl.style.width = pxv(W); groundEl.style.height = pxv(H);
+    scene.style.setProperty("--tile-size",pxv(TILE));
     groundEl.innerHTML = ""; tileEls.length = 0;
+    for(const [gx,gy] of [[-1.8,-2.8],[5.3,.4]]){
+      const garden=document.createElement('div');garden.className='farm-garden';garden.ariaHidden='true';
+      Object.assign(garden.style,{left:pxv(gx*TILE),top:pxv(gy*TILE),width:pxv(9.5*TILE),height:pxv(9.5*TILE)});
+      groundEl.appendChild(garden);
+    }
     for (const tile of state.map.tiles) {
       const el = document.createElement("div");
       el.className = "gtile " + tile.terrain + (tile.plotIndex != null ? " farm-plot" : "");
       el.dataset.tileId = tile.id;
       el.dataset.audit = "ground-tile"; el.dataset.terrain = tile.terrain;
+      el.dataset.garden=String(tile.x<8 && tile.y<7);
       el.style.left = pxv(tile.x * TILE); el.style.top = pxv(tile.y * TILE);
       el.style.width = pxv(TILE); el.style.height = pxv(TILE);
       el.addEventListener("pointerdown", (ev) => {
@@ -2406,6 +2562,9 @@
       const el = addObjectPx(obStatic, "props", frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.9, "shadowed", 0, "forage");
       if (el) { el.dataset.forage = tile.forage; el.dataset.item = node ? node.itemId : ""; el.dataset.tileId = tile.id; }
     }
+    addObjectPx(obStatic,'keepsakes','garden_bucket',4.85*TILE,3.35*TILE,TILE*.6,'garden-prop',0,'garden-bucket');
+    addObjectPx(obStatic,'keepsakes','garden_fence',3.2*TILE,.05*TILE,TILE*1.6,'garden-prop',0,'garden-fence');
+    addObjectPx(obStatic,'keepsakes','garden_flowers',1.5*TILE,2.8*TILE,TILE*.6,'garden-prop',0,'garden-flowers');
   }
   // ---- 地形 autotile：依鄰格選 center/edge/corner，破除方塊感 ----
   // 鎖定（未解鎖）的農土視為荒草未開墾區，而非耕土 → 不再是整塊深棕方格
@@ -2487,6 +2646,24 @@
     paintGround();
     for (const e of obDyn) e.remove(); obDyn.length = 0;
     if (atlasReady && worldEl) {
+      // Decorative story props use the world coordinate system; no collision or save mutation.
+      const shared = !!(state.heirloom && state.heirloom.delivered);
+      const gift=addObjectPx(obDyn,'keepsakes',shared?'basket_empty':'basket_full',9.0*TILE,5.9*TILE,TILE*1.2,'world-keepsake',0,'sunbasket');
+      if(gift)gift.dataset.delivered=String(shared);
+      addObjectPx(obDyn,'keepsakes','porch',12.5*TILE,6.2*TILE,TILE*2.1,'world-keepsake',0,'tea-porch');
+      // Shadows sit on the ground, below crops and character visual roots.
+      const trees=[...worldEl.querySelectorAll('.ob[data-frame^="fruit_tree"],.ob[data-frame="oak"],.ob[data-frame="oak_spring"]')];
+      const nextCanopy=trees.map(t=>[t.style.left,t.style.top,t.style.width,t.style.height].join(',')).join('|');
+      if(nextCanopy!==canopySignature || canopyDecor.some(n=>n.parentNode!==worldEl)){
+       canopySignature=nextCanopy;
+       for(const n of canopyDecor)n.remove();canopyDecor.length=0;
+       for(const tree of trees) {
+        const x=parseFloat(tree.style.left)+parseFloat(tree.style.width)*.5;
+        const y=parseFloat(tree.style.top)+parseFloat(tree.style.height)*.94;
+        const shadow=addObjectPx(canopyDecor,'keepsakes','canopy',x+TILE*.9,y+TILE*.92,TILE*2.2,'canopy-shadow',0,'canopy-shadow');
+        if(shadow){shadow.dataset.treeBase=`${x},${y}`;shadow.dataset.lightDirection='upper-right';shadow.style.left=pxv(x-TILE*3.1);shadow.style.top=pxv(y-TILE*.12);shadow.style.width=pxv(TILE*3.1);shadow.style.height=pxv(TILE*2.0);}
+      }
+      }
       const active = G.activePlotCount(state);
       // 作物（在 soil 磚，略低於角色 z）
       for (const tile of state.map.tiles) {
@@ -2501,7 +2678,7 @@
         const el = hasFrame
           ? addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop")
           : addEmojiObjectPx(obDyn, prog.stage <= 1 ? "🌱" : crop.emoji, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * (prog.ready ? 0.8 : 0.68), "crop", -2, "crop");
-        if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; }
+        if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; el.classList.toggle('sun-grown',plot.sunGrown===true); el.classList.toggle('sunlit-crop',!!(G.isSunlit && G.isSunlit(state,tile.plotIndex,t))); }
         if (prog.ready) {
           cropMatureCue("map:" + tile.plotIndex, tile.id, el);
           addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
@@ -2611,9 +2788,15 @@
       const talking = activeTalk && activeTalk.npcId === tile.npc && t < activeTalk.until;
       const col = Math.floor(t / 420) % 2 === 0 ? "a" : "b";
       const frame = tile.npc + (talking ? "_talk_" : "_idle_") + col;
-      const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE;
+      // Visual staging only: keep the child above the movement pad; physics/click target ID stays on its original tile.
+      const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1 - (tile.npc==='child' ? 1.1 : 0)) * TILE;
       const el = addObjectPx(obDyn, "npcs", frame, cx, baselineY, TILE * 1.0, "shadowed", 0, "npc");
-      if (el) { el.dataset.npc = tile.npc; el.dataset.tileId = tile.id; }
+      if (el) {
+        el.dataset.npc = tile.npc; el.dataset.tileId = tile.id;
+        if(tile.npc==='mayor'){el.style.width='64px';el.style.height='86px';el.style.left=pxv(cx-32);el.style.top=pxv(baselineY-86);el.style.backgroundImage='url(assets/generated/content-r10/mayor.png'+(window.FARM_VERSION_QUERY||'')+')';el.style.backgroundSize='64px 86px';el.style.backgroundPosition='0 0';}
+        // Staging offset must not put the foreground child behind the orchard canopy.
+        if(tile.npc==='child')el.style.zIndex=Math.round(baselineY);
+      }
       // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
       const req = state.npcRequests && state.npcRequests[tile.npc];
       const sq = G.npcSideQuestStatus ? G.npcSideQuestStatus(state, tile.npc) : null;
@@ -2686,7 +2869,7 @@
     state.camera.followPlayer = false;
     spawnRing(tileId, true);
     updateCamera(true);
-    toast("📍 鏡頭移到任務目標");
+    // No residual camera toast over the crops.
     scheduleSave();
     return true;
   }
@@ -2694,13 +2877,26 @@
     const pl = $("player"); if (!pl) return;
     const tile = G.getTileById(state, state.player.tileId); if (!tile) return;
     if (pl.dataset.audit !== "player") { pl.dataset.audit = "player"; }
+    pl.classList.toggle('sunlit-player', !!(G.isSunlit && tile.plotIndex!=null && G.isSunlit(state,tile.plotIndex,now())));
     pl.dataset.tileId = tile.id; pl.dataset.facing = state.player.facing || "down";
-    const w = TILE * 1.18, h = w * (64 / 48);            // v3/v4 frame 比例 3:4
+    // One visual height for Miri across idle/walk/actions and camera modes.
+    // Physics stays on the original tile; the extra action canvas is visual only.
+    const w = state.gender === 'm' ? TILE*1.18 : Math.max(64,Math.round(TILE*.85/8)*8), h = w * (64 / 48);
+    // Visual stance only: the physics tile and interaction/impact target never move.
+    const northOfChild=state.map.tiles.some(t=>t.npc==='child'&&t.x===tile.x&&t.y===tile.y+1);
+    pl.style.setProperty('--stance-x',northOfChild ? pxv(-TILE*.8) : tile.plotIndex!=null ? pxv(-TILE*.66) : '0px');
     pl.style.width = pxv(w); pl.style.height = pxv(h);
     if (!animate) pl.style.transition = "none"; else pl.style.transition = "";
     const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE - TILE * 0.08;
     pl.style.left = pxv(cx); pl.style.top = pxv(baselineY);
     pl.style.zIndex = Math.round(baselineY);             // y-sort：與物件/建築互相遮擋
+    // A roof keeps its depth order. Only its occluding pixels fade while someone is
+    // behind it, so the entire actor silhouette remains readable instead of a head in a roof.
+    const actorBounds={left:cx-w/2,right:cx+w/2,top:baselineY-h,bottom:baselineY};
+    document.querySelectorAll('.ob[data-kind="structure"][data-structure-id]').forEach(el=>{
+      const left=parseFloat(el.style.left),top=parseFloat(el.style.top),ew=parseFloat(el.style.width),eh=parseFloat(el.style.height);
+      el.classList.toggle('actor-behind',+el.style.zIndex>baselineY&&actorBounds.right>left&&actorBounds.left<left+ew&&actorBounds.bottom>top&&actorBounds.top<top+eh);
+    });
     if (!animate) { void pl.offsetWidth; pl.style.transition = ""; }
     updateCamera(animate);
   }
@@ -2884,6 +3080,26 @@
       el.style.maxHeight = Math.floor(res.avail) + "px";
       clampBox();
     }
+    // Fixed quest / thumb HUD can cover an otherwise viewport-clamped bubble.
+    if (window.FarmWorld && el.id === "objectBubble") {
+      const r = el.getBoundingClientRect();
+      const blocks = [...document.querySelectorAll("#farmDock, #farmMenu, #questDock, .seed-hud, header, .toolbar, .tool-bar, .side-tabs, #worldMinimap, #mobileControls button")]
+        .filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden")
+        .map((n) => n.getBoundingClientRect()).filter((b) => b.width && b.height);
+      const xs = [r.left, 8, window.innerWidth - r.width - 8, ...blocks.flatMap((b) => [b.right + 8, b.left - r.width - 8])];
+      const ys = [r.top, 8, window.innerHeight - r.height - 8, ...blocks.flatMap((b) => [b.bottom + 8, b.top - r.height - 8])];
+      let best = null, distance = Infinity;
+      for (const left of xs) for (const top of ys) {
+        if (left < 6 || top < 6 || left + r.width > window.innerWidth - 6 || top + r.height > window.innerHeight - 6) continue;
+        if (blocks.some((b) => left < b.right && left + r.width > b.left && top < b.bottom && top + r.height > b.top)) continue;
+        const delta = (left - r.left) ** 2 + (top - r.top) ** 2;
+        if (delta < distance) { distance = delta; best = { left, top }; }
+      }
+      if (best) {
+        el.style.left = ((parseFloat(el.style.left) || 0) + best.left - r.left) + "px";
+        el.style.top = ((parseFloat(el.style.top) || 0) + best.top - r.top) + "px";
+      }
+    }
   }
   function buildCostText(def) {
     return Object.entries(def.cost || {}).map(([k, v]) => k === "coins" ? "C" + v : v + ((window.MATERIALS[k] && window.MATERIALS[k].emoji) || k)).join(" ");
@@ -2957,12 +3173,7 @@
       if (!plot || !plot.cropId) add("plant");
       else {
         const prog = G.getCropProgress(state, plot, now());
-        if (prog.ready) {
-          const lessonWater = G.canWaterPlot(state, tile.plotIndex, now()).ok;
-          if (lessonWater && currentTool() === "water") add("water");
-          add("harvest");
-          if (lessonWater && currentTool() !== "water") add("water");
-        }
+        if (prog.ready) add("harvest");
         else if (!prog.wet) add("water");
       }
     }
@@ -2993,7 +3204,8 @@
       b.disabled = entry.enabled === false;
       b.title = meta[1];
       b.setAttribute("aria-label", meta[1]);
-      b.innerHTML = `<span class="sab-ic">${meta[0]}</span><span class="sab-t">${meta[1]}</span>`;
+      const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png'}[entry.action];
+      b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${meta[1]}</span>`;
       b.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); runSceneAction(entry.action, tile.id); };
       bar.appendChild(b);
     });
@@ -3058,6 +3270,8 @@
   function showBuildingBubble(buildingId, anchorEl) {
     const bld = state.buildings.find((x) => x.id === buildingId); if (!bld) return;
     const def = window.BUILDINGS[bld.type], box = $("objectBubble"); if (!def || !box) return;
+    const side = document.querySelector(".side-panel");
+    if (window.FarmWorld && side) side.classList.remove("world-panel-open");
     hideBuildWheel(); hideSceneActions();
     box.innerHTML = "";
     const add = (action, icon, label, enabled) => {
@@ -3078,7 +3292,7 @@
             selectedTileId = tile.id;
             state.interaction.selectedTileId = tile.id;
             const panel = document.querySelector(".side-panel");
-            if (panel) panel.classList.remove("panes-collapsed");
+            if (panel) { panel.classList.remove("panes-collapsed"); if (window.FarmWorld) panel.classList.add("world-panel-open"); }
             switchTab("tile");
             renderTileContext();
           }
@@ -3393,6 +3607,7 @@
       if (!state.story.dialogueSeen) state.story.dialogueSeen = {};
       state.story.dialogueSeen[tile.npc] = true;
       showDialogueBubble(tile, d);
+      if (window.FarmWorld && window.AdventureAPI && window.AdventureAPI.neighbors(state, now()).some((n) => n.id === tile.npc && n.deliveries)) window.FarmWorld.speak(d.name, d.line);
       pushDialogueLog(d);
       playAction("use", state.player.facing);
       if (tile.npc === "elder") G.advanceStory(state, "npc_elder", now()); // Stage 7：跟老農對話開啟第三章
@@ -3505,10 +3720,10 @@
     }
     if (tool === "water") {
       if (tile.plotIndex != null && tile.plotIndex < active && state.plots[tile.plotIndex].cropId) {
-        const eligibility = G.canWaterPlot(state, tile.plotIndex, now());
-        if (eligibility.ok) return { action: "water" };
-        if (eligibility.reason === "ready") return { invalid: "已成熟，不需澆水" };
-        if (eligibility.reason === "already_wet") return { invalid: "💧 已是濕土" };
+        const prog = G.getCropProgress(state, state.plots[tile.plotIndex], now());
+        if (prog.ready) return { invalid: "已成熟，不需澆水" };
+        if (prog.wet) return { invalid: "💧 已是濕土" };
+        return { action: "water" };
       }
       return { invalid: "💧 只能澆種了作物的農土" };
     }
@@ -3549,16 +3764,21 @@
     const face = state.player.facing;
     if (action === "plant") {
       const r = G.plant(state, tile.plotIndex, selectedSeed, t);
-      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); afterChange(true); }
+      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) sunCatchFx(tileId, r.sun); afterChange(true); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
+      if (quickHarvestTarget === tileId) {
+        const crop = window.CROPS[state.plots[tile.plotIndex].cropId];
+        const need = crop ? crop.yield + (G.isSunlit(state, tile.plotIndex, t) ? G.SUNPATCH.harvestBonus : 0) : 0;
+        if (G.storageCapacity(state) - G.storageUsed(state) < need) { quickHarvestTarget = null; toast("倉庫空間不足，先交付餐籃或賣出一些作物。"); return; }
+      }
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
-        cropHarvestFx(tileId, crop, r.added); playSound("harvest"); playSound("coin");
-        toast("🧺 收成 " + r.added + " " + crop.name); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } afterChange(true); }
+        cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
+        toast("🧺 收成 " + r.added + " " + crop.name + (r.sun ? "（陽光 +" + r.sun.bonus + "）" : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
-      if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); toast("💧 澆水變濕土加速"); afterChange(false); }
+      if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧☀ 在陽光裡澆水，長得更快" : "💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
       if (r.ok) { if (!animationStarted) playAction("hoe", face); playSound("ui"); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
@@ -3902,7 +4122,10 @@
   function paintPlayer(sheet, rowName, frame, flip) {
     const sp = $("playerSprite"); if (!sp) return;
     sheet = pSheet(sheet);
-    const pe = $("player"); const ew = pe.offsetWidth || 48, eh = pe.offsetHeight || 64;
+    const pe = $("player"); const rootWidth = pe.offsetWidth || 48, eh = pe.offsetHeight || 64;
+    const native = atlasReady && window.Atlas.getFrame(sheet, rowName + "_" + pad2(frame));
+    const ew = native ? eh * native.w / native.h : rootWidth;
+    sp.style.width=pxv(ew);sp.style.height=pxv(eh);sp.style.marginLeft=pxv((rootWidth-ew)/2);
     if (atlasReady) {
       const stl = window.Atlas.frameStyleFor(sheet, rowName + "_" + pad2(frame), ew, eh);
       if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; }
@@ -3979,7 +4202,7 @@
       const r = el.getBoundingClientRect();
       return r && r.height > 0 ? r : null;
     };
-    const tabsRect = fixedRect(query(".side-tabs"));
+    const tabsRect = fixedRect(query("#farmDock")) || fixedRect(query(".side-tabs"));
     const toolbarRect = fixedRect(query(".toolbar"));
     const tabsInset = tabsRect ? Math.max(0, Math.round(viewH - tabsRect.top)) : 0;
     let inset = tabsInset;
@@ -4059,6 +4282,30 @@
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
     else toast(blockedReason(tile));
   }
+  function updateQuickHarvest() {
+    const action = $("actionA");
+    if (!action || !G.quickHarvestStatus) return;
+    if (quickHarvestTarget && !moveTimer && state.player.action === "idle") quickHarvestTarget = null;
+    const st = G.quickHarvestStatus(state, now());
+    const busy = !!quickHarvestTarget;
+    action.textContent = busy ? "收成中" : st.count ? `收成 ${st.count}` : "互動";
+    action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
+    if (typeof action.setAttribute === "function") {
+      action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count ? `${st.count} 格成熟，點一下走近並收成一格` : "與前方目標互動");
+      action.setAttribute("aria-disabled", String(busy));
+    }
+  }
+  function activateThumbAction() {
+    if (hasOpenModal() || quickHarvestTarget) return;
+    const st = G.quickHarvestStatus ? G.quickHarvestStatus(state, now()) : { count: 0 };
+    if (!st.count) { activateFacingTile(); return; }
+    if (!st.tileId) { toast(st.noRoom ? "倉庫空間不足，先交付餐籃或賣出一些作物。" : "成熟的田地暫時走不到，先清開路。"); return; }
+    quickHarvestTarget = st.tileId;
+    selectedTileId = null; state.interaction.selectedTileId = null;
+    hideSceneActions(); hideBuildWheel(); hideObjectBubble();
+    moveAndAct(st.tileId, "harvest");
+    updateQuickHarvest();
+  }
   function stopDpadRepeat() {
     if (dpadRepeatTimer) clearInterval(dpadRepeatTimer);
     dpadRepeatTimer = null;
@@ -4088,7 +4335,7 @@
       });
     });
     const action = $("actionA");
-    if (action) action.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); activateFacingTile(); });
+    if (action) action.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); activateThumbAction(); });
     const fitToggle = $("mapFitToggle");
     if (fitToggle) fitToggle.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); toggleMapViewMode(); });
     const world = $("mapWorld");
@@ -4240,6 +4487,7 @@
       }
     }
     checkNewLetters(t, true);
+    updateSunpatchTick(t);
     const helped = G.runHelperOnline(state, t);
     // 訂單過期補單
     G.refreshOrders(state, t);
@@ -4270,9 +4518,11 @@
     }
     if (typeof window.requestAnimationFrame !== "function") tickPlayer(t);
     if (window.FarmWorld) window.FarmWorld.tick(state, t);
+    updateQuickHarvest();
   }
 
   function setupVisibilityLifecycle() {
+    window.addEventListener("pagehide", () => { state.lastSeenAt = now(); window.save(state); });
     document.addEventListener("visibilitychange", () => {
       perfNeedsBaseline = true;
       if (document.hidden) {
@@ -4443,12 +4693,16 @@
       setTool: (t) => setTool(t),
       selectSeed: (id) => { if (G.isCropUnlocked(state, id)) chooseSeed(id); },
       moving: () => !!moveTimer,
+      cancelJourney: () => { walkPath([]); positionPlayer(false); scheduleSave(); },
       vfxSpawns: () => vfxSpawnCount,
+      sunTick: () => updateSunpatchTick(now()),
+      musicInfo: () => ({ wanted: musicWanted(), src: bgm ? bgm.src : null, paused: bgm ? bgm.paused : true, volume: bgm ? bgm.volume : 0, failed: bgmFailed }),
       activeTab: () => { const b = document.querySelector(".side-tab.sel"); return b ? b.dataset.tab : null; },
       stationTile: (type) => stationTileOf(type),
       applyPromoScene,
       travelAndDo: (tileId, action, effect) => {
-        if (hasOpenModal() || moveTimer) return false;
+        // R79：走路途中直接改道（walkPath 會取消舊路線與尚未結算的動作），不再要玩家等。
+        if (hasOpenModal()) return false;
         const tile = G.getTileById(state, tileId);
         if (!tile) return false;
         const plan = G.pathToAdjacent(state, state.player.tileId, tileId);

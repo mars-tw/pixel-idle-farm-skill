@@ -1,0 +1,67 @@
+/* R88: an inhabited garden, readable warm light and explicit basket selection. */
+:root{--sun-texture:url('../assets/generated/r88/paper-128.png')}
+#groundLayer{z-index:1;background:url('../assets/generated/r88/grass-32.png') repeat;background-size:72px 72px}
+#groundLayer .farm-garden{position:absolute;pointer-events:none;background:url('../assets/generated/r88/garden-384.webp') center/100% 100% no-repeat;image-rendering:pixelated;mask-image:radial-gradient(ellipse,black 55%,transparent 72%)}
+.gtile.grass{background-image:none!important;background-color:transparent!important}
+.gtile{z-index:2}
+.gtile.farm-plot.locked{background-image:none!important;background-color:transparent!important}
+#groundLayer::before{opacity:.05}
+.farm-plot{filter:drop-shadow(0 3px 1px #3e2f2344)}
+.sun-beam::before{background-image:url('../assets/generated/r88/leaf-light.png');opacity:.6;mix-blend-mode:screen}
+.sun-beam::after{background-image:url('../assets/generated/r88/leaf-light.png');opacity:.95;mix-blend-mode:screen}
+.sun-beam .sun-mote{display:none}
+.canopy-shadow{background-image:url('../assets/generated/r88/canopy-shadow.png')!important;opacity:.85!important;mix-blend-mode:multiply}
+.sunlit-crop{filter:brightness(1.38) saturate(1.2) drop-shadow(1px -1px 0 #ffe8a3);transform:scale(1.12)}
+.ob.crop:not(.sunlit-crop){filter:brightness(.88) saturate(.86) drop-shadow(-1px 0 0 #53697955)}
+.ob.crop{margin-top:calc(var(--tile-size,72px) * -.22)}
+.sunlit-player .p-sprite{filter:brightness(1.08) drop-shadow(1px -1px 0 #ffe8a3)}
+.player::before{bottom:-1%;width:72%;height:12%;background:radial-gradient(ellipse,#3e2f23a6 0%,#45596b65 38%,transparent 72%)}
+.ob[data-kind='sunbasket']::after,.ob[data-kind='tea-porch']::after,.ob[data-kind='building']::after{content:'';position:absolute;left:14%;right:9%;bottom:0;height:10%;background:radial-gradient(ellipse,#3e2f2380,transparent 70%);pointer-events:none}
+.garden-prop{pointer-events:none}
+.garden-prop::after{content:'';position:absolute;left:12%;right:8%;bottom:-1%;height:12%;background:radial-gradient(ellipse,#45596b80,transparent 72%);pointer-events:none}
+.tool-bar .i-tool-water{background-image:url('../assets/generated/r88/water-32.png')}
+.daily-open .ui-icon,.side-tabs .i-tab-journal{background-image:url('../assets/generated/r88/note-32.png')}
+.seed-hud .i-crop-wheat{background-image:url('../assets/generated/r88/wheat-32.png')}
+#toast-zone .toast:has(.camera-hint){display:none}
+#dailyModal .daily-modal-card{background-image:var(--sun-texture)}
+#dailyModal .daily-modal-card::before{background-image:url('../assets/generated/r88/binding-8.png')}
+#dailyModal .heirloom-choices button{border:2px solid #8b5e34;box-shadow:0 3px 0 #8b5e34;outline-offset:2px;background:#fff3d3;color:#3e2f23}
+#dailyModal .heirloom-choices button[aria-pressed='true']{border-color:#d95737;outline:2px solid #d95737;background:#ffe3a0;box-shadow:0 3px 0 #a44930}
+#dailyModal .choice-confirmation{display:block;min-height:18px;font-size:12px;font-weight:700;color:#a44930;line-height:1.4}
+#dailyModal .heirloom-choices button:not([aria-pressed='true']) .choice-confirmation{color:#735536}
+.story-detail{display:none}
+@media(orientation:portrait){
+ #dailyModal{padding:0;align-items:stretch}
+ #dailyModal .daily-modal-card{width:100vw;max-width:none;max-height:100dvh;min-height:100dvh;border:0;border-radius:0;margin:0}
+ #dailyModal #dailyBody{flex:1}
+ #dailyModal #dailyClose{margin-top:auto;margin-bottom:10px;flex-shrink:0}
+ #dailyModal[data-story='true'] #dailyBody{flex:1 1 auto}
+ #dailyModal[data-story='true'] #dailyClose{margin-top:auto}
+ #dailyModal[data-story='true'] .daily-modal-card{min-height:100dvh}
+ #dailyModal[data-story='true'] .heirloom-illustration{height:47dvh;max-height:47dvh;aspect-ratio:auto;object-fit:cover;object-position:40% center}
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:16px;line-height:1.8}
+}
+@media(orientation:portrait) and (min-width:700px){
+ #dailyModal[data-story='true'] .heirloom-illustration{height:51dvh;max-height:51dvh}
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:23px;line-height:1.8}
+}
+@media(orientation:portrait) and (min-width:700px) and (min-height:1000px){
+ #dailyModal[data-story='true'] .story-detail{display:flex;align-items:center;gap:22px;height:clamp(120px,14dvh,190px);box-sizing:border-box;margin:18px 28px 0;padding:10px 18px;border-top:1px solid #d3b37c;background:#f5e4bd}
+ .story-detail img{width:48%;height:100%;object-fit:contain;image-rendering:pixelated}
+ .story-detail figcaption{font:23px/1.7 KaiTi,DFKai-SB,serif;color:#735536}
+}
+@media(max-height:750px){
+ #dailyModal .choice-confirmation{font-size:10px;min-height:14px}
+ #dailyModal[data-story='true'] .heirloom-paper>p{font-size:14px;line-height:1.55}
+}
+@media(orientation:portrait) and (max-height:750px){
+ #dailyModal[data-story='true'] .heirloom-illustration{height:32dvh;max-height:32dvh}
+}
+@media(orientation:portrait) and (min-height:751px){
+ #dailyModal[data-art-page='today'] #dailyBody{display:flex;flex-direction:column}
+ #dailyModal[data-art-page='today'] .daily-task-strip{flex:1;min-height:0;grid-template-rows:repeat(3,minmax(110px,1fr));align-content:stretch}
+ #dailyModal[data-art-page='today'] .daily-chore{grid-template-rows:minmax(64px,1fr) auto;align-items:center;padding:12px}
+ #dailyModal[data-art-page='today'] .daily-task-thumb{height:100%;min-height:64px;align-items:center}
+ #dailyModal[data-art-page='today'] .daily-task-thumb img:not(.chore-stamp){width:clamp(52px,7dvh,84px);height:clamp(52px,7dvh,84px)}
+ #dailyModal[data-art-page='today'] .daily-task-thumb .chore-stamp{width:clamp(40px,5dvh,64px);height:clamp(40px,5dvh,64px)}
+}

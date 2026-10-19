@@ -1,0 +1,536 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "prompts": "docs/art/PROMPTS_CONTENT_R9.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/content-r9/poses.png",
+      "sha256": "ee5f6083fcc9cd72d4bf9d1b8ff0b6d11d51b595e5ead680f9bef16ad9f427ff",
+      "width": 1536,
+      "height": 1024
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/generated/content-r9/idle-merchant.png",
+      "sha256": "54e8a772213f6aff4a5d861bd99f44f515db92a0c1434d0f4b484df264e56539",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 0,
+      "column": 0,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/reach-merchant.png",
+      "sha256": "2d8b04dc6994e22dbb3b56fd8ae234ba606d6029b58c546782a328022543f8ae",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 0,
+      "column": 1,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/hold-merchant.png",
+      "sha256": "1021868ec032ebeb350ee1a25275dbb33f4d85616db2268744a6f994c88855f2",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 0,
+      "column": 2,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sit-merchant.png",
+      "sha256": "24f9af192b2dd92b7fdb490418f77d78ee470a1c549aba50e071bcafa853c7f0",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 0,
+      "column": 3,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sip-merchant.png",
+      "sha256": "3668145864a0806903583bb6dc8a9797f6600b6888170558559563facadb058d",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 0,
+      "column": 4,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/offer-merchant.png",
+      "sha256": "a6cc12f84ed42670fe3f6b593bd22c3159bf30a97f15e4cc77b5769363a6bb30",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 0,
+      "column": 5,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/idle-elder.png",
+      "sha256": "4b6a4be393d19a82b72a0de6e33916f76373557e1c81e24fd747ec8f4469f99a",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 1,
+      "column": 0,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/reach-elder.png",
+      "sha256": "9c354daccb0282991f2501aea84ef10a5138da1a20e62dfbdca4aa51310ccc55",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 1,
+      "column": 1,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/hold-elder.png",
+      "sha256": "5d6a38601aec7f62bdb3e29f6a2db11748762d24ad71c0b0baa863d2b3664849",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 1,
+      "column": 2,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sit-elder.png",
+      "sha256": "a3c14f590484e075729d28bff4a95a5ff8940e4a32bd4267a63faa6ed07b6441",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 1,
+      "column": 3,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sip-elder.png",
+      "sha256": "c48baf35e04aff0994dd120d0a4e96bf174135425f26df188f83883f49d4c6c6",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 1,
+      "column": 4,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/offer-elder.png",
+      "sha256": "f1bf625ea85c9a583d8c22ffe1faafd65cf94cdd5d097f050207de322b83483e",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 1,
+      "column": 5,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/idle-child.png",
+      "sha256": "14fb6568bb2167b9fc574061d9603003bb0e68e950f7d3c333898cf425ecfb3f",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 2,
+      "column": 0,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/reach-child.png",
+      "sha256": "f294db95423f0098363814773560529cd390d509638bfe7170f001713039cd39",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 2,
+      "column": 1,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/hold-child.png",
+      "sha256": "e1ece5087221d69cff5a18343c2230c470bb9c5c3c9b90326e4990428a7367b9",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 2,
+      "column": 2,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sit-child.png",
+      "sha256": "85af82d97888484d991718e9f6a7c89e3ed57d2269fe58081c45fc7d2a1a6b5d",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 2,
+      "column": 3,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sip-child.png",
+      "sha256": "7d85e657e8c1a9d1d0f026060b3175bf1c3d6eca11659a059baf7e2c1455f5b8",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 2,
+      "column": 4,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/offer-child.png",
+      "sha256": "482c149de98b9558070d73168dd5082b74dacf95f3df49e8e3b79ea438331c53",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 2,
+      "column": 5,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/idle-player.png",
+      "sha256": "8a35d7226a1a72ee3fe3e928d23a6ae8eaf2021f1044030d982cf0f0b27d1acf",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 3,
+      "column": 0,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/reach-player.png",
+      "sha256": "67c3107cf131e86162ec075eaf6430b6d5c00bce3c9c5b90de48eb0eb830e029",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 3,
+      "column": 1,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/hold-player.png",
+      "sha256": "c47cd5f859b14a1dc3371e5f60d05030e4daee80b90adf6dd7c0fa1e6ff872b4",
+      "width": 48,
+      "height": 64,
+      "kind": "standing",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 3,
+      "column": 2,
+      "fixedRows": [
+        [
+          0,
+          28
+        ],
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sit-player.png",
+      "sha256": "2896dfd60b2578d01b9f20b8d708b04750f476b22386c00ca5f89ddcc1b0f720",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 3,
+      "column": 3,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/sip-player.png",
+      "sha256": "aa916573a4f22e4de4352e8dabb9e16cee0aae7fb72c4762fdfdeb535bf24627",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 3,
+      "column": 4,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "assets/generated/content-r9/offer-player.png",
+      "sha256": "f0d23015855681fc4eeedcfbdabfe7b9d7a9d193f9ead11062dd9548dc5c5101",
+      "width": 48,
+      "height": 64,
+      "kind": "seated",
+      "sourceMaster": "docs/art/masters/content-r9/poses.png",
+      "row": 3,
+      "column": 5,
+      "fixedRows": [
+        [
+          46,
+          64
+        ]
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+const { revealFarmControl } = require("./farm-control-test-helper");
 "use strict";
 
 // node scripts/test-world-rework-e2e.js
@@ -22,6 +23,7 @@ const MIME = {
   ".json": "application/json", ".webmanifest": "application/manifest+json",
   ".png": "image/png", ".svg": "image/svg+xml", ".webp": "image/webp",
   ".mp3": "audio/mpeg", ".wav": "audio/wav",
+  ".ogg": "audio/ogg", ".m4a": "audio/mp4",
 };
 let passed = 0;
 const failures = [];
@@ -46,7 +48,7 @@ function startServer() {
       if (rel.startsWith("..") || path.isAbsolute(rel) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
         res.writeHead(404); res.end(); return;
       }
-      res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream" });
+      res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream", "Content-Length": fs.statSync(file).size });
       fs.createReadStream(file).pipe(res);
     });
     server.on("error", reject);
@@ -106,6 +108,7 @@ function checkErrors(session) {
   if (session.messages.console.length) console.log("CONSOLE " + session.tag + " " + JSON.stringify(session.messages.console));
 }
 async function activate(page, locator) {
+  await revealFarmControl(page, locator);
   // Touch devices use genuine taps, including pointerType=touch scene behavior.
   if (touchPages.get(page)) await locator.tap();
   else await locator.click();
@@ -472,15 +475,11 @@ async function fishingFixture(browser, base, restored) {
     const arrived = await readState(page);
     check(before.player.tileId !== arrived.player.tileId && Math.abs(arrived.player.x - 2) + Math.abs(arrived.player.y - 9) === 1, tag + " fishing starts adjacent after nontrivial journey", arrived.player);
     await checkModal(page, tag, "#worldModal.show");
+    // Content R1 replaces the uniform green-zone meter with species-specific bobber phases.
     const positions = new Set();
-    for (let i = 0; i < 5; i++) { positions.add(await page.locator(".world-fishing-needle").evaluate((e) => e.style.left)); await page.waitForTimeout(70); }
-    check(positions.size > 1, tag + " fishing needle changes animation frames", [...positions]);
-    const needle = () => page.waitForFunction(() => {
-      const m = document.querySelector(".world-fishing-meter").getBoundingClientRect();
-      const n = document.querySelector(".world-fishing-needle").getBoundingClientRect();
-      const x = (n.x - m.x) / m.width;
-      return x > .4 && x < .48;
-    }, null, { polling: "raf" });
+    for (let i = 0; i < 35; i++) { positions.add(await page.locator(".pond-stage").getAttribute("data-pose")); if (positions.has("strike")) break; await page.waitForTimeout(80); }
+    check(positions.size > 1 && positions.has("strike"), tag + " fishing bobber visibly changes pose before the real bite", [...positions]);
+    const needle = () => page.waitForFunction(() => document.querySelector(".pond-stage").dataset.pose === "strike", null, { polling: "raf" });
     for (let attempt = 0; attempt < 8 && (await readState(page)).adventure.counts.fish === before.adventure.counts.fish; attempt++) {
       await needle(); await activate(page, page.locator("#worldCatch"));
     }

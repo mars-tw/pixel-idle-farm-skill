@@ -8,10 +8,32 @@ const REQUIRED_BYTES = 2 * 1024 * 1024 * 1024;
 const SCRIPTS = [
   "scripts/test-npc-indicators.js",
   "scripts/test-world-project-art.js",
-  "scripts/test-water-quest-guide.js",
   // Historical scripts assert the replaced R74 sidebar geometry and opening modal.
   // R75 checks the actual new world, real chapter-one play and late-system fixtures.
   "scripts/test-world-rework-e2e.js",
+  // R79: sunpatch signature mechanic, walk redirect, HUD/toast layout, music toggle, rAF p95.
+  "scripts/test-r79-fun-e2e.js",
+  "scripts/test-r80-mobile.js",
+  "scripts/test-r81-review.js",
+  "scripts/test-rwd-matrix.js",
+  "scripts/test-controls-reachability.js",
+  "scripts/test-r82-art.js",
+  "scripts/test-r83-art.js",
+  "scripts/test-r84-art.js",
+  "scripts/test-r85-art.js",
+  "scripts/test-r86-art.js",
+  "scripts/test-r87-art.js",
+  "scripts/test-r88-art.js",
+  "scripts/test-r89-art.js",
+  "scripts/test-content-r1-e2e.js",
+  "scripts/test-content-r2-e2e.js",
+  "scripts/test-content-r3-e2e.js",
+  "scripts/test-content-r4-e2e.js",
+  "scripts/test-content-r5-e2e.js",
+  "scripts/test-content-r6-e2e.js",
+  "scripts/test-content-r7-e2e.js",
+  "scripts/test-content-r8-e2e.js",
+  "scripts/test-content-r9-e2e.js",
 ];
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "22"
+      - name: 安裝原生像素驗證依賴（僅測試環境）
+        run: python -m pip install Pillow
       - name: 程式守門測試（安全操作 / PWA / 互動契約）
         run: node scripts/test-guards.js
       - name: 經濟與進度模擬測試
@@ -34,6 +36,24 @@ jobs:
         run: node scripts/test-adventure.js
       - name: R76 世界場址與野餐居民存檔回歸
         run: node scripts/test-world-migration.js
+      - name: R79 陽光光斑規則（加成、天氣、離線、舊存檔）
+        run: node scripts/test-r79-sunpatch.js
+      - name: R80 每日餐籃、印章收藏與拇指收成規則
+        run: node scripts/test-r80-daily.js
+      - name: R81 陽光餐籃、敘事選擇與舊存檔
+        run: node scripts/test-r81-heirloom.js
+      - name: 新內容第一輪：鄰居短篇、口味記憶與浮標節奏
+        run: node scripts/test-content-r1.js
+      - name: 新內容第五輪：三人記憶分支、生成圖來源與離線清單
+        run: node scripts/test-content-r5.js
+      - name: 新內容第六輪：接籃作用幀、咬法、共同聚餐與存檔
+        run: node scripts/test-content-r6.js
+      - name: 新內容第七輪：三咬法、個別記憶、聚餐角色與存檔
+        run: node scripts/test-content-r7.js
+      - name: 新內容第八輪：原生水面、真實餐籃歷程與素材來源
+        run: node scripts/test-content-r8.js
+      - name: 新內容第九輪：固定角色、動作像素與完整存檔
+        run: node scripts/test-content-r9.js
       - name: 檢查執行時與快取版本一致
         run: node scripts/test-version-chain.js
       - name: UI 煙霧測試（mock DOM）

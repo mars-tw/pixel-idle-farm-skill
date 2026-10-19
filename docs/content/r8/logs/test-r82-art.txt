@@ -1,0 +1,74 @@
+PASS exact tool disclosure without invented model slug
+PASS eight independently generated source assets retained
+PASS asset hash assets/generated/r82/welcome-384.webp
+PASS asset hash assets/heirloom/table-r82.webp
+PASS asset hash assets/heirloom/doorstep-r82.webp
+PASS asset hash assets/generated/r82/paper-192.png
+PASS asset hash assets/generated/r82/farmer-96.png
+PASS asset hash docs/evidence/r82-art/farmer-64.png
+PASS asset hash assets/generated/r82/farmer-face-64.png
+PASS asset hash assets/generated/r82/logo-320.png
+PASS asset hash assets/generated/r82/basket-32.png
+PASS asset hash assets/generated/r82/note-32.png
+PASS asset hash assets/generated/r82/wheat-32.png
+PASS asset hash assets/generated/r82/stamp-32.png
+PASS asset hash assets/generated/r82/water-32.png
+PASS asset hash assets/generated/r82/seed-32.png
+PASS asset hash assets/generated/r82/sun-32.png
+PASS asset hash assets/generated/r82/tea-32.png
+PASS asset hash assets/generated/r82/icons-128.png
+PASS asset hash assets/generated/r82/app-icon-48.png
+PASS asset hash assets/generated/r82/app-icon-192.png
+PASS asset hash assets/generated/r82/app-icon-512.png
+PASS asset hash docs/art/masters/welcome.png
+PASS asset hash docs/art/masters/farmer.png
+PASS asset hash docs/art/masters/table.png
+PASS asset hash docs/art/masters/door.png
+PASS asset hash docs/art/masters/paper.png
+PASS asset hash docs/art/masters/icons.png
+PASS asset hash docs/art/masters/logo.png
+PASS asset hash docs/art/masters/app.png
+PASS new asset payload stays below 256KiB
+PASS farmer brightness and saturation double gate
+PASS decoded size, nonempty and common palette assets/generated/r82/welcome-384.webp
+PASS decoded size, nonempty and common palette assets/heirloom/table-r82.webp
+PASS decoded size, nonempty and common palette assets/heirloom/doorstep-r82.webp
+PASS decoded size, nonempty and common palette assets/generated/r82/paper-192.png
+PASS decoded size, nonempty and common palette assets/generated/r82/farmer-96.png
+PASS binary alpha and clean corners assets/generated/r82/farmer-96.png
+PASS decoded size, nonempty and common palette assets/generated/r82/farmer-face-64.png
+PASS binary alpha and clean corners assets/generated/r82/farmer-face-64.png
+PASS decoded size, nonempty and common palette assets/generated/r82/logo-320.png
+PASS binary alpha and clean corners assets/generated/r82/logo-320.png
+PASS decoded size, nonempty and common palette assets/generated/r82/basket-32.png
+PASS binary alpha and clean corners assets/generated/r82/basket-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/note-32.png
+PASS binary alpha and clean corners assets/generated/r82/note-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/wheat-32.png
+PASS binary alpha and clean corners assets/generated/r82/wheat-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/stamp-32.png
+PASS binary alpha and clean corners assets/generated/r82/stamp-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/water-32.png
+PASS binary alpha and clean corners assets/generated/r82/water-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/seed-32.png
+PASS binary alpha and clean corners assets/generated/r82/seed-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/sun-32.png
+PASS binary alpha and clean corners assets/generated/r82/sun-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/tea-32.png
+PASS binary alpha and clean corners assets/generated/r82/tea-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/icons-128.png
+PASS binary alpha and clean corners assets/generated/r82/icons-128.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-48.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-192.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-512.png
+PASS welcome displays the generated farm-table background
+PASS generated Traditional Chinese logo loaded
+PASS actual farm control uses current R88 art water-32.png
+PASS actual farm control uses current R88 art note-32.png
+PASS actual farm control uses current R88 art wheat-32.png
+PASS daily task displays a native generated icon
+PASS basket page displays its real illustration
+PASS earned choice has distinct doorstep and table illustrations
+PASS doorstep story uses its own generated scene
+PASS table story uses its own generated scene
+PASS runtime has no uncaught errors or missing art

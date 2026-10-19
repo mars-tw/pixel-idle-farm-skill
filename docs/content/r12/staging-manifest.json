@@ -1,0 +1,870 @@
+{
+  "status": "VERIFIED",
+  "files": [
+    {
+      "path": "assets/generated/content-r12/manifest.json",
+      "sha256": "e4e8058de6564454e0dc3cb161440e924858de7a93b440e06f29630268360748"
+    },
+    {
+      "path": "assets/generated/content-r12/peck-0.png",
+      "sha256": "3488891720880f9bda664ad7b10d483bf77acba4f82f5b1de76e613ba0f5d10b"
+    },
+    {
+      "path": "assets/generated/content-r12/peck-1.png",
+      "sha256": "509f4dfa0be419250327dcd93ade958631586ea28a768d2a5d20733290b04e33"
+    },
+    {
+      "path": "assets/generated/content-r12/peck-2.png",
+      "sha256": "a92e1136dde80bcc85c3f925c00bf301e9419a3c9b9a3a0bfd546d72cbaa2f14"
+    },
+    {
+      "path": "assets/generated/content-r12/serve-lift.png",
+      "sha256": "9f48d2f652ea69a659b51dc2342e7bb5a8767a8bc69e8d94c7e9fa854e46bbb4"
+    },
+    {
+      "path": "assets/generated/content-r12/serve-push.png",
+      "sha256": "ea5251ad073fd7082d7f54642620a8f2049b039ba69fb0a7fa99db70a6b9798f"
+    },
+    {
+      "path": "assets/generated/content-r12/serve-rest.png",
+      "sha256": "d74a28b001062ca9454731a00a2a05981a2bec4a289566e7d4ad690a6a621d51"
+    },
+    {
+      "path": "assets/generated/content-r12/wake-0.png",
+      "sha256": "498793c2be9bdfa94fe8f774462fdbeecbce7a1c9532e383acefc47ad1ec71c9"
+    },
+    {
+      "path": "assets/generated/content-r12/wake-1.png",
+      "sha256": "96921d6693684677a1b107fa137a7b5a9fef7da50cf41893c327fc51e26b4015"
+    },
+    {
+      "path": "assets/generated/content-r12/wake-2.png",
+      "sha256": "122c698396254b47a617425c6667ba56be0fc76c561d922b96d4078cc16bab81"
+    },
+    {
+      "path": "assets/generated/content-r12/wide-0.png",
+      "sha256": "df78fdaa8d4ede6986323bfe1d7f6a75346ce931d45500242d9e21817e909f3f"
+    },
+    {
+      "path": "assets/generated/content-r12/wide-1.png",
+      "sha256": "33c4b6b2fbbb50c82678fbc465e65ebfeb9527364b210272e500902c5f3d2d2a"
+    },
+    {
+      "path": "assets/generated/content-r12/wide-2.png",
+      "sha256": "84e2893382eac290e927c4b861a9988cc34b90cd2f9f95f18d3e31c1e3da5eff"
+    },
+    {
+      "path": "docs/CODEX_RESPONSE_CONTENT_R12.md",
+      "sha256": "34949fedfb2f29a17aabee90603d5546c6bec1556c2a68bd196bf69d9d7ee2ea"
+    },
+    {
+      "path": "docs/OPTIM_PLAN_CONTENT_R12.md",
+      "sha256": "d9b49d3c778bd607a9bf84f9bc5095555842831e5cafb6db3b017dd7e9f97da9"
+    },
+    {
+      "path": "docs/art/PROMPTS_CONTENT_R12.json",
+      "sha256": "1e75f776af576455b0860177f440f6084d21c3dc9eaa4e0ad484e05a113e619b"
+    },
+    {
+      "path": "docs/art/masters/content-r12/actor.png",
+      "sha256": "895d0c9b1f301d0af6d78e5adb8a6d1151f1d1ca50ccca9e95012b62bb831658"
+    },
+    {
+      "path": "docs/art/masters/content-r12/water.png",
+      "sha256": "95eaa39a3b73c6e7b2508b712e4dc619fe8b37d385d7be41a53018c07ade6102"
+    },
+    {
+      "path": "docs/content/r12/animation-audit-failed-1.json",
+      "sha256": "c8435204cfa01a7f0dc79ec757bf660fb7b3ca2995f165e47fa84dc97c7f2591"
+    },
+    {
+      "path": "docs/content/r12/animation-audit.json",
+      "sha256": "9379cb56371a7004dd4d8f3e33e4342500aee0ea0490efd268224a927fedccac"
+    },
+    {
+      "path": "docs/content/r12/browser-before-basket-recapture.json",
+      "sha256": "cbd05c239d875b0c0d5e6bb0eefdcae65f6d035c3a7a0168c60b7f963411f50c"
+    },
+    {
+      "path": "docs/content/r12/browser-before-gather-continuation-1792389368907.json",
+      "sha256": "2fdb8924e6237ad657dd6958737b8fe5756a13c1a35d795d5caad4086b6a7850"
+    },
+    {
+      "path": "docs/content/r12/browser-before-gather-continuation-1792389669860.json",
+      "sha256": "4377892b29a60824ad6f9f8edd3b5634a8c23d0c782bb4e7ada78c1019bfc931"
+    },
+    {
+      "path": "docs/content/r12/browser-checks-failed-1792389230792.json",
+      "sha256": "501ca8dd6cfc83afc071f596a617068fee06aaa79750d53bd45e1b32f8be4ce8"
+    },
+    {
+      "path": "docs/content/r12/browser-checks.json",
+      "sha256": "27b2fc921056ce3a28457cb267e57e1381e5b0d0e288db6038d10e92cd2f46db"
+    },
+    {
+      "path": "docs/content/r12/completed-save.json",
+      "sha256": "b06979b94b2f775c25c2ab0e1b3899c33324dd21d8e4718e296e8da97400a534"
+    },
+    {
+      "path": "docs/content/r12/earned-save.json",
+      "sha256": "7feffc75c52c5d15d47ec5f482d0103041c1b97a52ef70db57e4fc2ad9aefeec"
+    },
+    {
+      "path": "docs/content/r12/fish-earned-save.json",
+      "sha256": "7930090fa4b24a55eacff01e695a013b61e3b9eb14538f3f864687a24fb45e0b"
+    },
+    {
+      "path": "docs/content/r12/fish-three-save.json",
+      "sha256": "269ff2618b160ad01e6edcb2574cbaea71c7f7e1bd51ec8e93718ba28ada87e8"
+    },
+    {
+      "path": "docs/content/r12/generated-output-archive.json",
+      "sha256": "cbf4c81514f297582328b68fdb76f178f4c08debba013f2d9250a4fa49b43e6f"
+    },
+    {
+      "path": "docs/content/r12/layout-gathering-1032x1376.png",
+      "sha256": "2640dc8f35ac362a0268a2f38f114cb9116b652fbf5f537b3874e8238c14fdd4"
+    },
+    {
+      "path": "docs/content/r12/layout-gathering-1366x600.png",
+      "sha256": "7fa404890cb57602dbb5a9417c1da3414fbcd7d812894df1d3d4d02c8cc9eccb"
+    },
+    {
+      "path": "docs/content/r12/layout-gathering-320x568.png",
+      "sha256": "fad0c97c90b91cd0b95f639ffb6d2588650230f4b8763c7d43c9ee1269410620"
+    },
+    {
+      "path": "docs/content/r12/layout-gathering-768x1024.png",
+      "sha256": "d02fe625cb32440996c74bc68253a9bd3c0d0a61e7225bd285a38134b158e20a"
+    },
+    {
+      "path": "docs/content/r12/layout-gathering-844x390.png",
+      "sha256": "30349a7996644136f07320ffe515f6f0592b52b7bf04b42a7eeb339c7c5766dc"
+    },
+    {
+      "path": "docs/content/r12/layout-memory-1032x1376.png",
+      "sha256": "a72d9683f618fe8b04cf51281367a0289786cfb0da92266a235014d6083f45d5"
+    },
+    {
+      "path": "docs/content/r12/layout-memory-1366x600.png",
+      "sha256": "025ca4047e0153c699222eb378c3015513d74b98967a0258f80bd7c58b4e1f4d"
+    },
+    {
+      "path": "docs/content/r12/layout-memory-320x568.png",
+      "sha256": "70ef16573694418722535cee9f744ab6c64019721727c7a79c9a5741ad113634"
+    },
+    {
+      "path": "docs/content/r12/layout-memory-768x1024.png",
+      "sha256": "ad10665e32892efc38e6945d32080e742eb8b6f89c15123f86b76604b4722f5d"
+    },
+    {
+      "path": "docs/content/r12/layout-memory-844x390.png",
+      "sha256": "feeac62dc57c498ecdeeac4480f71b0b6a2e946c417ac5bd631a9379816862d0"
+    },
+    {
+      "path": "docs/content/r12/layout-pond-1032x1376.png",
+      "sha256": "81238aa6fa666798e1770cd82e86d9eb23f2922541a153a6b617322c7cbe1d41"
+    },
+    {
+      "path": "docs/content/r12/layout-pond-1366x600.png",
+      "sha256": "57a331d6d6d983fd83b15ef31df330cb5c03e2d99425b9efbf8e07f45ca95d0a"
+    },
+    {
+      "path": "docs/content/r12/layout-pond-320x568.png",
+      "sha256": "b39f75876ba1ad5b8eece73e46c4853c134f4fc2dfe5426643a941f87005bff9"
+    },
+    {
+      "path": "docs/content/r12/layout-pond-768x1024.png",
+      "sha256": "39e0d5db8cb7a31990ee96f7fe99d017fb0f2a81cf383c211f660e60b2c6ced0"
+    },
+    {
+      "path": "docs/content/r12/layout-pond-844x390.png",
+      "sha256": "87583427fd96ddc5da681665ea774eb0b72c265f4d0fc955bac5c7056dfef647"
+    },
+    {
+      "path": "docs/content/r12/performance-reference.json",
+      "sha256": "f6710ef57caa8bc9124c52375b2b583da6890be8c05bde081c0d04307275cb5f"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-cancel-after.png",
+      "sha256": "7f17751635fb7728453f79d4a8fa0ac0f03459309f71ee69792fe4b6cbb1c4d1"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-cancel-before.png",
+      "sha256": "92544329adb9c29df46f6c40c807c166dbb258d5d85cfff0b06c4114be3fcdb5"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-cancel.png",
+      "sha256": "8f0eb9c00096d4a4e92aaa636957225aeccf2459566c60e7f12d61c130284df4"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-approach.png",
+      "sha256": "e578c8a3d8e8d176fb11965c3a38b3e3fb008e9f0c72a3ee67e32e299213c1e7"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-contact.png",
+      "sha256": "196dfa7932619a08967c829923f8600020463ec3b687c4d1392d9abb006be970"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-received.png",
+      "sha256": "dfafe67110b0b65841cc6f0d04b1f5108a90851f1ef265be0f2fa3abf5d31080"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-walking-1.png",
+      "sha256": "26534e5da0a3e4b742cfbdf7d321a3e0bbb357e67c6051376e412551028ee3c4"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-walking-2.png",
+      "sha256": "4b8f42b17a15504693c3295c5adcda7ea0cce9c8471cc188c50350dc0db48004"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-walking-3.png",
+      "sha256": "35d7215186f648cd1714bc25754ca6e4aea842b53a868ab3869946cec3ff81b3"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-approach.png",
+      "sha256": "5362934b0d537a1482a10325510205e89f9df1de0386213e9abf4348f7085bc9"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-contact.png",
+      "sha256": "74f0d86166825088725a5f43cd98b966bfe18300d04b610164b83f4cce70daa9"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-received.png",
+      "sha256": "c3bebe9c424fef202832dc37082e53ba1117a3133f570358ad0b6332c5046d6b"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-walking-1.png",
+      "sha256": "0017dbcef54d035bd04daab2cf2175e4e3fd4cc08d7d220c580a4fc945a24a34"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-walking-2.png",
+      "sha256": "dda88fec1ea979643053f336d0bfa642e95b7a6541f2335fd552eef1a8104828"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-walking-3.png",
+      "sha256": "1a9954711183a39a18b620f9d89a3340d02d9ca7c85b766bf593ee31715ebb5f"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-approach.png",
+      "sha256": "c1e77bdb7fa0ca787512b14961b55a9c28b178a5762adc667e7f433c9aca9178"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-contact.png",
+      "sha256": "f245bffacb9c181244cf4f17e8b4719a5a7700879b769d31fc4ee2ce135e2e2b"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-received.png",
+      "sha256": "0debb9efb0af3e30198270011f92822b6cccc82f3d05b9ae739fbd68977df7a5"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-walking-1.png",
+      "sha256": "9e7bdbd6c30ee134973f8654ee075911879675abe0dd1a2abf0d5bb2079f21f7"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-walking-2.png",
+      "sha256": "5eb4034d9167822365dd8cc8364200e07c6639d8f37b66e97b7efd2e2e2a8fd3"
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-walking-3.png",
+      "sha256": "8208c18aebba43b5230eafb54658cc17aa2af284d4c07ebb817d5c63088f319a"
+    },
+    {
+      "path": "docs/content/r12/phone-gathering-daily-reloaded.png",
+      "sha256": "dda67fe55a95a4d1231bb033406481f452f573ac910fd241ac9ccdd27cd842cc"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-carry.png",
+      "sha256": "4c2ab35771b4177c22fd2599a295d48515c91cdd37dbdfd1f0bdaf04da41757b"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-farm-object.png",
+      "sha256": "d8852c7a3c15ac25394eb81e4d262c34c19f020f05b64d4d1b2a3dc1dfcee348"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-first.png",
+      "sha256": "e7885e0bf787cd4de32a15cba45023ad68408f66351d6062e91af282b6beaa52"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-lift.png",
+      "sha256": "3ce17d905e4a4d0c3317d71400e783fe46a1ee0d2536d3488ee4d02a18078a07"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-matched.png",
+      "sha256": "9fa703c73845d92c58302bb46463d936e1e8e021ae6f7be178c54dcc653e5582"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-recall.png",
+      "sha256": "02610411e6ce73d5ae5a67c6b367884fb5682a1a9cad81927a0e914c3d103b13"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-received.png",
+      "sha256": "20a2fb0be91a010df63881d59bbd75027114c863fecf86feaa739dd7dc201586"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-reply.png",
+      "sha256": "c269fdf430f40272fa7b30574c68eabb4d4d9e8e7f5af79e9720e9607dafd945"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-saved-flow.png",
+      "sha256": "5e83c145a2594b13d9d34432e807f2c473f374a9e105ba09a6e624c8f6f70f51"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-child-wrong.png",
+      "sha256": "bdefbb00724aba28b2e9e26ebc6360ea7d38c70bc4e3531b1c89df6524425a04"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-choose.png",
+      "sha256": "818cb83dd87fb17f3481a2a82c86cf69181a74655e9167a18183ad336d7b153c"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-complete-reloaded.png",
+      "sha256": "8b6db19c2816efe36dbb2885a8f9de043650bb028641645f8078fb8285d076ed"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-complete.png",
+      "sha256": "b5d499e7853236a5f4d54a8fc1a3a130a06fc5acb7fc0641b527901bb387ffb0"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-corrected-child-carry.png",
+      "sha256": "e5ff6fca254af9d26b82593c54a79b30d09189c7a8620ec516d1c7c60212297a"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-corrected-child-lift.png",
+      "sha256": "e3070f80ed28cb278bca17db237dd45c87cf7253b96d57282534954656e04e40"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-corrected-child-received.png",
+      "sha256": "6a2bc578d4c4bb871580cf7e5cf51f646b4e9c05508bb77ae680967baa695961"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-corrected-child-reply.png",
+      "sha256": "39b6b96fed73a10b331a10c4504c5d9c71ef97ea758e33b2ccf73512434e74eb"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-corrected-complete.png",
+      "sha256": "8db072a0c7f813d064eaed25f7cb0cebab37791aff0df8afaef02a710aed20b3"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-carry.png",
+      "sha256": "28ba02ff9d81637709b81abc9b0ac5d3bd88f53cf29dec751aff165d50752575"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-farm-object.png",
+      "sha256": "b28c436cd3cfe7ca4c9eb55fcc91a5c3e0b689b3e84fb1b6ddcc1483e503f047"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-first.png",
+      "sha256": "a0b9fcc99ab5227283684e5f00027a993993158577b1c9e15175381fc04937a9"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-lift.png",
+      "sha256": "08085ab6e08f2f0b869ce7d9efbd7fb826144aadebb25d165cd9a6dcd87f188f"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-matched.png",
+      "sha256": "934496761485b3e34aa7506eedc4e2471857e01a35bdbab2a7118cb161bc2fe5"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-recall.png",
+      "sha256": "bb3bd1f7f2ef15da8a968d9dcc0a1d70f2f80f59825b9cec8796dec7cf5aab13"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-received.png",
+      "sha256": "3d86ddf994b30d7ea387a5589d689dab085ea821abfdf12edddfe61f8306c853"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-reply.png",
+      "sha256": "effa2e7a2ed5b5853c565202948e9a97296ce5e4ae75f0691bdef161fd48864c"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-saved-flow.png",
+      "sha256": "e07373e772461fb809d2357243f12b333202d9c089125efad35f72cc99b0d83d"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-wrong.png",
+      "sha256": "0baefb792b0510f3e6a2dac8d47c75d770a0f6c247b2af171536b36dab1d055a"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-history-open.png",
+      "sha256": "b191414f8e73f6c2cdb3f211a890a01a1aadf53e5a0b84d1dcbbc09248a8d802"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-journal-reloaded.png",
+      "sha256": "c6ea8e89c67da72dcaec87fee483e29aaad0feb06a046ce5a03c79f5a73401fe"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-carry.png",
+      "sha256": "770d5b7f5610a6993393771c2ae67d7686a12d97e90bfbbbbd0716d3db04e260"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-farm-object.png",
+      "sha256": "b8d1afdd1c41045b445cc6c89af945355c76e2aeb509b22ec796f3045262a00a"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-first.png",
+      "sha256": "e2868869033c6ac6f43f3a52ad400c88c3fe991c1d1b55f015c5ae45d5549498"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-lift.png",
+      "sha256": "03f83f1f7cf7894ea4fd0643a5f4a45b43f0e9d5e49bddf7e34d07daeee91dea"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-matched.png",
+      "sha256": "bb2e847480a0e8ac6941c17144a5a19ded360fef92df5ee2b43fc3fea0c0235f"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-recall.png",
+      "sha256": "c364cd63cfc57949f5424cce32cc4ef63e6c3c8f42308a48af31a5001474e994"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-received.png",
+      "sha256": "4f801f6f080a4d97698dcc5bb124105a2df58ad9dffd1bea7fdcee863297f1ff"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-reply.png",
+      "sha256": "4dc4602b397a5e6e086d74e3e4849e1679198f30b36a9f161a2cb34749d541fa"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-saved-flow.png",
+      "sha256": "3a944c79cf6d8cac237665d341ea074b3d9237366d98e0e99026da584fd2ef6e"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-wrong.png",
+      "sha256": "2293ec3afa175b0f2873c3c4e5443925253a4be13166ad3bff9c9783ab940147"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-next-1.png",
+      "sha256": "bc12119f8165700a61314b68041cdba923a5d9504e03b55bf26b22a7305456fd"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-next-2.png",
+      "sha256": "2e7c19aac5498238a5d753a72ec3f6a76867ba69a9a9c0beb3b8e2778443a244"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-next-3.png",
+      "sha256": "41e1169f2ee5d9a8b49be6c81d453212d43bffe244a454c543de30e81465c528"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-order-a-journal.png",
+      "sha256": "bdbc91477186304b806a7a63bbc48d62a80d3128c8f1b0c6d6b3037f3841b4a4"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-order-b-journal.png",
+      "sha256": "cd8acda66612026ce5e0115405db99e1993ba68645760ef4e1c3cc1214869dee"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-wrong-child-carry.png",
+      "sha256": "1681f7bdebba9638d2ba3deeda76730d8ada8256fa344ef951f695c7dc464df5"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-wrong-child-lift.png",
+      "sha256": "6f3ee9b7720b7b48a00d656de4a9355ddf235f61e738481bd3d60efd236c7c40"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-wrong-child-received.png",
+      "sha256": "db1505d235d8910d46d92879228b770a88f6327573dbd3aaf97de97c8793d871"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-wrong-child-reply.png",
+      "sha256": "f6c3d2838f728c3e5b61d325f6ee3f6b8af929a7026a08f8bdd88d895a80b132"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-wrong-counts.png",
+      "sha256": "f6c3d2838f728c3e5b61d325f6ee3f6b8af929a7026a08f8bdd88d895a80b132"
+    },
+    {
+      "path": "docs/content/r12/phone-memory-wrong-next.png",
+      "sha256": "b3722c9654c3ed202797bd16a194a62870e0e4cb2effd158e52eccfef56cdb07"
+    },
+    {
+      "path": "docs/content/r12/phone-offline-gathering.png",
+      "sha256": "bcae4d5362148fcd39e2bc1a11c93d222fd6d30a2a70a46402d1ead9084c9248"
+    },
+    {
+      "path": "docs/content/r12/phone-offline-memory.png",
+      "sha256": "4035b63053b60d0931f6481fec077b0c4469e2a07578b630002f0770a934193e"
+    },
+    {
+      "path": "docs/content/r12/phone-offline-pond.png",
+      "sha256": "647147a260913df65377236550e0dd9548308c660f5d9d9b88716f9f40d4fc63"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-comparison.png",
+      "sha256": "69ab3a26976f4f7572a6e0ac5d5a2532c92758de748684cb248489dab269be48"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-help-open.png",
+      "sha256": "d614a0b24429f88651e220ccbcf4a78b213c0bf723340409c005967d1c981246"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-caught.png",
+      "sha256": "065bc3b1fe46e4f388aadb83258dcc1cd70e589e5540e2aedb1f025390145095"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-early-failure.png",
+      "sha256": "52b8180d391b36452928164f3371772db74f38ab9dd35e1e67d0c548b612772b"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-late-failure.png",
+      "sha256": "cf932ec25ac74bfdda0714fdad0dfec8a7d20ba75de1608d14ab46a370ae4f16"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-learned-pre-sink.png",
+      "sha256": "f4fac7357e836a20253d8ef74690c8ef0d3b28fa64f342e61edd70091a7ce22f"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-learned-sinking.png",
+      "sha256": "0852f7e1d1fb273e120b77d42bcfc1eca188b451c4e5c7d50ea0cba3a1979a91"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-note-reloaded.png",
+      "sha256": "06f21a9dcabc3f69a121813c2d2f439846509629032e11bc305f8a3ab67e1a75"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-note.png",
+      "sha256": "33ce8fef5016c691ffd2a79e95358b6d4a47d818917e5dd6a73c6b3bd34893a0"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-pre-sink.png",
+      "sha256": "e37e4cd56c856c214507f08cbb0c52bea1bf866af091bfe54efd6923389188fe"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_carp-sinking.png",
+      "sha256": "7c5b64c5aae7740617a2f48868fc0eefebcb139f2d6a7117fd42d7c1e5808906"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-caught.png",
+      "sha256": "8eb365889635d852b8538f43ed2bf4eac895257dc0a408e28ebaa28afcb42163"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-early-failure.png",
+      "sha256": "8c03f3d2508e23c1f0c957a8ad3526be76993c0ea061dd45b398b974bbb130a6"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-late-failure.png",
+      "sha256": "d51baa094f997991d6cd5795e8a7f825c37a45183ab9c6c73d779a521003871c"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-learned-pre-sink.png",
+      "sha256": "26e9480fde6c33327209510edb61b61243d9dbe193cf94a181f80443993e06db"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-learned-sinking.png",
+      "sha256": "f0baaca7c4458d32f5a673e59d63b89bba6bc22c89101d53595d7054e5a17971"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-note-reloaded.png",
+      "sha256": "cc68b8aa524826b37d4e3bacbc071a531baa9c1d207546eeba980ea02523009f"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-note.png",
+      "sha256": "fd2ac021c3763c28760b6059d5f00654861b3237c8c2b32ce119faf1232c88c8"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-pre-sink.png",
+      "sha256": "c170e9908fe47eec9e41e278ba0c1ba32d4ea1d43e86f83af8a831ecc27dadd5"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-river_perch-sinking.png",
+      "sha256": "c23eeca5de9f293e0d1bc54b26ca69fa67961eb910b476cf42946ce8eac08c9b"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-caught.png",
+      "sha256": "46e73b76914c3cd27834c8d1d73c39aee987c1b487c4a99dbc8d4779d34ebba1"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-early-failure.png",
+      "sha256": "3ab352526f36aa5eda7608199df94add777d5a769be22f015761c9b345e60aa3"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-late-failure.png",
+      "sha256": "e228ce9944070ba9c8c3b855c9293c03896492b770e17fdc8c5c49e158e363aa"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-learned-pre-sink.png",
+      "sha256": "38862d5bd0fb11ff3c94466d04260be701cba39d55cdcef3f4be3ac3057ca85a"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-learned-sinking.png",
+      "sha256": "86cbc8ec72f3d2f3237b221eb5bba2076312f10bf003404d18c4c8c8f8506e1d"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-note-reloaded.png",
+      "sha256": "70ef3c5549123f973025d86b22cbecd7bf0c7b544f0a9dca7f7d12cff40655a7"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-note.png",
+      "sha256": "3e02914b7ff94ac5a73569984f9249809cc496e123a9ec16be61dc5fbda115ec"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-pre-sink.png",
+      "sha256": "d85a130285588b71ae5fcf13bfc7779ac8d83a71a60e084d9e7c9ea8d5dab86f"
+    },
+    {
+      "path": "docs/content/r12/phone-pond-silver_dace-sinking.png",
+      "sha256": "19bc5553876b6e5529d936c1910f3f858ee88cfe666798f0a3db691b99c21e2a"
+    },
+    {
+      "path": "docs/content/r12/picnic-base-save.json",
+      "sha256": "17f97a461db68d9dc2a350259b418cab5c689709197ae404869b42562cd2cbaf"
+    },
+    {
+      "path": "docs/content/r12/protected-readback.json",
+      "sha256": "04df076826bf30f71958da626802839aa11666efb9b46a010af8b55ce13a971b"
+    },
+    {
+      "path": "docs/content/r12/protected-start.json",
+      "sha256": "f15387fbd15d55c11466e2ff300f82f523c856dc5cd678c11edd9a07dcd77df8"
+    },
+    {
+      "path": "docs/content/r12/regression-2026-10-19T06-02-06-051Z.json",
+      "sha256": "40a94f66bc54a49e37a8319a5dcbfc30139658533c932a2d6b064f830d1b9037"
+    },
+    {
+      "path": "docs/content/r12/regression-2026-10-19T06-51-07-844Z.json",
+      "sha256": "8ad3a50c3fead5d4ec8855f2c9471ac52b76d02d6dfd5b9824465d8f2686bb3d"
+    },
+    {
+      "path": "docs/content/r12/regression-reconciled.json",
+      "sha256": "c82f1b7dc46ecf0641510ab7502f4586755b25b7f68e4ee0e5f089e36f02ca6b"
+    },
+    {
+      "path": "docs/content/r12/release-readback.json",
+      "sha256": "5e9a1173a721e9c41e448bf976683853a515f9c85805917aa5d8d3697b42e74e"
+    },
+    {
+      "path": "docs/content/r12/review-set/01-phone-basket-merchant-approach.png",
+      "sha256": "c1e77bdb7fa0ca787512b14961b55a9c28b178a5762adc667e7f433c9aca9178"
+    },
+    {
+      "path": "docs/content/r12/review-set/02-phone-basket-merchant-contact.png",
+      "sha256": "f245bffacb9c181244cf4f17e8b4719a5a7700879b769d31fc4ee2ce135e2e2b"
+    },
+    {
+      "path": "docs/content/r12/review-set/03-phone-basket-merchant-received.png",
+      "sha256": "0debb9efb0af3e30198270011f92822b6cccc82f3d05b9ae739fbd68977df7a5"
+    },
+    {
+      "path": "docs/content/r12/review-set/04-phone-basket-child-received.png",
+      "sha256": "dfafe67110b0b65841cc6f0d04b1f5108a90851f1ef265be0f2fa3abf5d31080"
+    },
+    {
+      "path": "docs/content/r12/review-set/05-phone-pond-comparison.png",
+      "sha256": "69ab3a26976f4f7572a6e0ac5d5a2532c92758de748684cb248489dab269be48"
+    },
+    {
+      "path": "docs/content/r12/review-set/06-phone-pond-river_carp-sinking.png",
+      "sha256": "7c5b64c5aae7740617a2f48868fc0eefebcb139f2d6a7117fd42d7c1e5808906"
+    },
+    {
+      "path": "docs/content/r12/review-set/07-phone-pond-river_carp-note.png",
+      "sha256": "33ce8fef5016c691ffd2a79e95358b6d4a47d818917e5dd6a73c6b3bd34893a0"
+    },
+    {
+      "path": "docs/content/r12/review-set/08-phone-pond-silver_dace-sinking.png",
+      "sha256": "19bc5553876b6e5529d936c1910f3f858ee88cfe666798f0a3db691b99c21e2a"
+    },
+    {
+      "path": "docs/content/r12/review-set/09-phone-pond-river_perch-pre-sink.png",
+      "sha256": "c170e9908fe47eec9e41e278ba0c1ba32d4ea1d43e86f83af8a831ecc27dadd5"
+    },
+    {
+      "path": "docs/content/r12/review-set/10-phone-pond-river_perch-sinking.png",
+      "sha256": "c23eeca5de9f293e0d1bc54b26ca69fa67961eb910b476cf42946ce8eac08c9b"
+    },
+    {
+      "path": "docs/content/r12/review-set/11-phone-memory-merchant-lift.png",
+      "sha256": "03f83f1f7cf7894ea4fd0643a5f4a45b43f0e9d5e49bddf7e34d07daeee91dea"
+    },
+    {
+      "path": "docs/content/r12/review-set/12-phone-memory-merchant-carry.png",
+      "sha256": "770d5b7f5610a6993393771c2ae67d7686a12d97e90bfbbbbd0716d3db04e260"
+    },
+    {
+      "path": "docs/content/r12/review-set/13-phone-memory-merchant-received.png",
+      "sha256": "4f801f6f080a4d97698dcc5bb124105a2df58ad9dffd1bea7fdcee863297f1ff"
+    },
+    {
+      "path": "docs/content/r12/review-set/14-phone-memory-wrong-next.png",
+      "sha256": "b3722c9654c3ed202797bd16a194a62870e0e4cb2effd158e52eccfef56cdb07"
+    },
+    {
+      "path": "docs/content/r12/review-set/15-phone-memory-complete.png",
+      "sha256": "b5d499e7853236a5f4d54a8fc1a3a130a06fc5acb7fc0641b527901bb387ffb0"
+    },
+    {
+      "path": "docs/store/screenshots-content-r12-manifest.json",
+      "sha256": "3bfabea8b1dc53958a8d16790d4b03dc2f50b3fff345d7b9bc5f0c3b42b3bc31"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-17-shared-afternoon-r12.png",
+      "sha256": "13419ac748a77411b6c3a3356f8fb3d2a375378bbc13d6b6b68e49f26df3e492"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-17-shared-afternoon-r12.png",
+      "sha256": "147ce75e526226af1711e6df074a61ba4f7746fa5e4dd3c8569952fc384d4a57"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5fbab82dff458dcc7f534e72204dc810bb3e750ce54579955f534464bd91a266"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "sha256": "4101969bdc84a49aa4cdb2a6d15ab60e9442ff8ddd3fd622b0acd29896140de8"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "8a9be731cb3f9e97713b652678cfa002dac472a6c61e196b281f324d19552ba5"
+    },
+    {
+      "path": "package.json",
+      "sha256": "45c204a9541ff25a911a362ede18fe14d9fec9d90d7dd9af8fb2cd09e2bf3c8a"
+    },
+    {
+      "path": "scripts/audit-content-r12-evidence.js",
+      "sha256": "05daa5b7c55da8d539b84ae035a334590810c157a2fe64e4c45acda07d4cadd1"
+    },
+    {
+      "path": "scripts/content-r8-water-test-helper.js",
+      "sha256": "27a5b0e5eec3bc80217474edcb9e9f4944776da2266d01a0d701f58a3bc4a1a8"
+    },
+    {
+      "path": "scripts/measure-content-r12.js",
+      "sha256": "3aa0adf708bde8e1957f80d28c0966587d275d3a57b6aa8bc7dc450fc72a4fef"
+    },
+    {
+      "path": "scripts/run-content-r12-final.js",
+      "sha256": "75e167f655c32bd2ba6b9f8d6a00d9a0256526ae4ff871c4e2abe88e6bc9b06d"
+    },
+    {
+      "path": "scripts/run-content-r12-regression.js",
+      "sha256": "cafc0d1d0607fb975d579302226e122647d1b1d5eed355f77bbb2087eeacccd8"
+    },
+    {
+      "path": "scripts/test-content-r10-e2e.js",
+      "sha256": "8060ff6df21dc279aabed6d795b6408c382c05d6b77e5946971563227a5d51da"
+    },
+    {
+      "path": "scripts/test-content-r11-e2e.js",
+      "sha256": "6594f8fc8969950a925b89731413196f4676721087d98f26f8876dcaef1eef35"
+    },
+    {
+      "path": "scripts/test-content-r12-e2e.js",
+      "sha256": "d77ca5b6907f0fc5c473cd0ee4aff42512484b33dd3a9bcf66ffb7afd927da1b"
+    },
+    {
+      "path": "scripts/test-content-r12.js",
+      "sha256": "4862fee787b8292acf48f5c44388b38f51c197a1cf4b05e736d0ed70464f5404"
+    },
+    {
+      "path": "scripts/test-content-r7-e2e.js",
+      "sha256": "5459f625623d164727247bdc90679096a5f6a4c5f6a25397f557b51fef636409"
+    },
+    {
+      "path": "src/adventure.js",
+      "sha256": "095f6c239b1fb18c7a88ea70b65261ed89266bfcf4d4658693bc63078e6ac803"
+    },
+    {
+      "path": "src/art-r82.css",
+      "sha256": "62b656e20ea32388be2a9aed18d65fa0799ac7e7b1e3635aec645648ff8896c3"
+    },
+    {
+      "path": "src/art-r83.css",
+      "sha256": "cf32062679d43a4a615ebafb6de3e4bd47118e7f5a4cc2782500bd180b2bf356"
+    },
+    {
+      "path": "src/art-r84.css",
+      "sha256": "7840b80557e870787684a3802c6ae5f4653ebe84100d9d56d4063d3adba35d24"
+    },
+    {
+      "path": "src/art-r85.css",
+      "sha256": "b2f3b5f0b02377c8a56eb9b655dd4be87346eacb1a0a1caf7ed1946a0a789e5a"
+    },
+    {
+      "path": "src/art-r86.css",
+      "sha256": "c0d67a1e4e42f52527271dc999b8fc1753b1eaa58be0255b35604c529ceb32fe"
+    },
+    {
+      "path": "src/content-r1.css",
+      "sha256": "0235d596ab1f315caba7d23351532ecf306289c3e2f8aa51d666fe2a4c52a160"
+    },
+    {
+      "path": "src/content-r1.js",
+      "sha256": "365c0ee9d5370249df03025b6a7fe5ec12eac6972ea8136afd7a59c0db745080"
+    },
+    {
+      "path": "src/content-r10.css",
+      "sha256": "f173da03895c1fa50867424fdb1c1074ea47781c7a13ce0d5ac8ea76056faa05"
+    },
+    {
+      "path": "src/content-r11.css",
+      "sha256": "051286979474c8b48229551c8e6a3663145dc15189d4dd0c8f0957de89c91b1a"
+    },
+    {
+      "path": "src/content-r12.css",
+      "sha256": "d017e3770506ca99648efc85ae13aabc3e04b766276f9500c5e2af6f898cfe1e"
+    },
+    {
+      "path": "src/content-r6.css",
+      "sha256": "9d7d9a8cbc7e5d5f3f95e6110c965907085b5ca9fc9b41b8c45fe2ca3e788c8f"
+    },
+    {
+      "path": "src/content-r6.js",
+      "sha256": "0d44ee9076b8f18422e102360576bd103a16b679bf4c10140fe81ee4ac5d007b"
+    },
+    {
+      "path": "src/content-r8.js",
+      "sha256": "5d0960e4aba2776bd38c386b3a8596e12f45fa949f7bfedffb4662ecca5fcde6"
+    },
+    {
+      "path": "src/daily-ui.js",
+      "sha256": "6095a3a2107234e02858d75dd41305030e9aab8c37e705d6ce9530cf0753aa75"
+    },
+    {
+      "path": "src/ui.js",
+      "sha256": "20927893f88600a7df3a5c2f8dd441ee6941089bc2a48aeacefc827c074eeae6"
+    },
+    {
+      "path": "src/world-ui.js",
+      "sha256": "80e2c2a8531e5edcbec699ab70bb3f6d2cfae3e291f167dacccfa52e7a2b7887"
+    },
+    {
+      "path": "sw.js",
+      "sha256": "c87d58c4658295c635f44f9e26fb6841c637a17550d9584f66f1fe45aac949d9"
+    },
+    {
+      "path": "tools/archive-content-r12-test-outputs.py",
+      "sha256": "61f58c861095b65b38debba6f96112e6ab12e1954d184e7760777d708518a84b"
+    },
+    {
+      "path": "tools/process-content-r12.py",
+      "sha256": "4be80c5001f2c2a04050f1f5abfdffb9a06969f70a07b691fafc7603a3081beb"
+    },
+    {
+      "path": "tools/protect-content-r12.py",
+      "sha256": "11ffb0d87406154531cfb28d70d0a6c7ec961e863a45ff0474972126e8f88067"
+    },
+    {
+      "path": "tools/reconcile-content-r12-regression.py",
+      "sha256": "d8b3c5c9077017d0fac20fc7cefbda8734d0e92a76c4cab91a9cc50d5fac6764"
+    },
+    {
+      "path": "tools/restore-content-r12-history.py",
+      "sha256": "74b4304387aa7b7379c9e711b7ef5db06d7617a70f866d5e8a068b4ccf857ed0"
+    },
+    {
+      "path": "tools/stage-content-r12.py",
+      "sha256": "37f06cb1d843cd393fc14966c6af986cde735bd4bbe1514a9abe936b0f7be039"
+    },
+    {
+      "path": "tools/verify-content-r12-release.py",
+      "sha256": "3f0513e25c71257cdb5f957a967cf0082a347d2f32bf2ed8100bdf4264808622"
+    },
+    {
+      "path": "tools/write-content-r12-report.py",
+      "sha256": "e2ee1ca18d1419903d98e6d44cb7ed7330996198ddccb51da442118d67f36c7a"
+    }
+  ],
+  "preservedOriginalFiles": 323
+}

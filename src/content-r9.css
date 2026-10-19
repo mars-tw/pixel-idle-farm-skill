@@ -1,0 +1,37 @@
+/* Fixed native roots; generated upper-body animation, R89 garden remains intact. */
+.handover-actor[data-pose]{transform:scaleX(-1)!important}
+.basket-carrying:not([data-phase='walking']) .carry-direction{display:none}
+.handover-player,.handover-actor{object-fit:fill}
+.pond-stage .pond-bobber{visibility:visible!important;left:calc(50% - 12px);top:28%;width:24px;height:36px;z-index:2}
+.pond-stage[data-reel='active']{outline:3px solid #ffb627;outline-offset:-5px}
+.pond-stage[data-reel='active']::after{content:'咬穩了・提竿';position:absolute;right:10px;bottom:10px;padding:5px 10px;background:#fff6e3;border:2px solid #d95737;color:#3e2f23;font-weight:700;font-size:16px;z-index:3}
+.pond-stage[data-reel='active'] .pond-bobber{visibility:visible!important;opacity:1!important;transform:translateY(24px)!important;filter:drop-shadow(0 0 3px #ffb627)}
+.pond-guide{padding:8px;border-left:4px solid #6a994e;background:#f5e4bd;font-weight:700}
+.fish-comparison h3{margin:0;font-size:18px}.fish-comparison>div{display:flex;align-items:center;gap:10px;border-bottom:1px solid #b38d61}
+.fish-comparison img{width:72px;height:63px;object-fit:contain;image-rendering:pixelated;filter:brightness(.55) saturate(.65)}
+.fish-comparison p{font-size:14px;line-height:1.5;margin:8px 0}
+.memory-story summary,.memory-history summary{padding:5px 10px;border:1px solid #b38d61;background:#f5e4bd;text-decoration:none;box-sizing:border-box;min-height:44px;display:flex;align-items:center;cursor:pointer}
+#worldModal.content-r1 h2{text-wrap:balance;overflow-wrap:break-word}
+.gather-stage .meal-table,.farm-gathering .meal-table{scale:.75}
+.gather-stage .meal-person,.farm-gathering .meal-person,.meal-player{width:64px!important;height:86px!important;position:absolute!important;object-fit:contain;image-rendering:pixelated;bottom:auto}
+.meal-person-merchant{left:80px;top:45px;z-index:2}.meal-person-elder{left:178px;top:43px;z-index:2}.meal-person-child{left:204px;top:158px;z-index:5}
+.meal-person-elder,.meal-person-child{transform:scaleX(-1)!important}
+.meal-player{left:79px;top:158px;z-index:5;pointer-events:none}
+.farm-gathering .meal-player{display:none}
+body[data-reunion] .farm-gathering .meal-player{display:block}
+.gather-stage .meal-trace,.farm-gathering .meal-trace{width:48px!important;height:48px!important}
+.gather-stage .meal-trace-merchant,.farm-gathering .meal-trace-merchant{left:99px;top:119px;z-index:4}
+.gather-stage .meal-trace-elder,.farm-gathering .meal-trace-elder{left:207px;top:109px;z-index:4}
+.gather-stage .meal-trace-child,.farm-gathering .meal-trace-child{left:280px;top:198px;z-index:4}
+.farm-memory img{max-width:64px;max-height:64px}
+.farm-memory{z-index:5000!important}
+.farm-memory .memory-caption{top:auto;bottom:0;max-width:100%;box-sizing:border-box}
+body[data-reunion] .farm-memory{visibility:hidden}
+body[data-reunion] .world-site-label,body[data-reunion] .world-location,body[data-reunion] .world-region-label,body[data-reunion] .npc-label,body[data-reunion] .npc-bubble,body[data-reunion] #player{visibility:hidden!important}
+body:has(#worldModal.content-r1.show) .world-site-label,body:has(#worldModal.content-r1.show) .world-region-label{visibility:hidden}
+.gather-shared{padding:8px 10px;border-left:4px solid #d95737;background:#f5e4bd;font-size:14px;min-height:48px;margin:4px 0}
+.gather-shared:empty{display:none}
+#worldModal[data-content-view='gathering-complete'] .content-footer{flex-wrap:wrap}
+#gatherSip{flex-basis:100%;min-height:48px}
+@media(max-width:350px){.fish-comparison img{width:56px;height:49px}.gather-stage{height:230px;min-height:230px}.gather-stage .meal-person,.farm-gathering .meal-person{width:64px!important;height:86px!important}.gather-shared{font-size:12px;min-height:58px}}
+@media(orientation:landscape) and (max-height:600px){#worldModal[data-content-view='gathering-complete'] .content-footer{flex-wrap:nowrap}#gatherSip{flex-basis:auto}}

@@ -1,0 +1,137 @@
+{
+  "status": "VERIFIED",
+  "isolation": ".audit-tmp/r6-regression",
+  "steps": [
+    {
+      "name": "npm-test",
+      "exitCode": 0,
+      "seconds": 8.784,
+      "log": "docs/content/r6/logs/npm-test.txt"
+    },
+    {
+      "name": "browser-gates",
+      "exitCode": 1,
+      "seconds": 534.553,
+      "log": "docs/content/r6/logs/browser-gates.txt"
+    }
+  ],
+  "initialFailure": "R1 double click fell through the closed modal to the map and cancelled carrying. Fixed in ContentR6 event handling; all six content browser scripts rerun without changing any existing assertion.",
+  "earlierBrowserScripts": [
+    "scripts/test-npc-indicators.js",
+    "scripts/test-world-project-art.js",
+    "scripts/test-world-rework-e2e.js",
+    "scripts/test-r79-fun-e2e.js",
+    "scripts/test-r80-mobile.js",
+    "scripts/test-r81-review.js",
+    "scripts/test-rwd-matrix.js",
+    "scripts/test-controls-reachability.js",
+    "scripts/test-r82-art.js",
+    "scripts/test-r83-art.js",
+    "scripts/test-r84-art.js",
+    "scripts/test-r85-art.js",
+    "scripts/test-r86-art.js",
+    "scripts/test-r87-art.js",
+    "scripts/test-r88-art.js",
+    "scripts/test-r89-art.js"
+  ],
+  "earlierBrowserEvidence": "docs/content/r6/logs/browser-gates-initial.txt",
+  "finalSteps": [
+    {
+      "name": "content-r6",
+      "exitCode": 0,
+      "seconds": 197.151,
+      "log": "docs/content/r6/logs/content-r6.txt"
+    },
+    {
+      "name": "content-r1-final",
+      "exitCode": 0,
+      "seconds": 77.279,
+      "log": "docs/content/r6/logs/content-r1-final.txt"
+    },
+    {
+      "name": "npm-test-final",
+      "exitCode": 0,
+      "seconds": 9.345,
+      "log": "docs/content/r6/logs/npm-test-final.txt"
+    },
+    {
+      "name": "water-guide",
+      "exitCode": 0,
+      "seconds": 13.076,
+      "log": "docs/content/r6/logs/water-guide.txt"
+    },
+    {
+      "name": "night-gate",
+      "exitCode": 0,
+      "seconds": 25.933,
+      "log": "docs/content/r6/logs/night-gate.txt"
+    },
+    {
+      "name": "content-r6-visual-final",
+      "exitCode": 0,
+      "seconds": 194.502,
+      "log": "docs/content/r6/logs/content-r6-visual-final.txt"
+    },
+    {
+      "name": "npm-test-release",
+      "exitCode": 0,
+      "seconds": 9.117,
+      "log": "docs/content/r6/logs/npm-test-release.txt"
+    }
+  ],
+  "previousContentSteps": [
+    {
+      "name": "content-r1",
+      "exitCode": 0,
+      "seconds": 76.882,
+      "log": "docs/content/r6/logs/content-r1.txt"
+    },
+    {
+      "name": "content-r2",
+      "exitCode": 0,
+      "seconds": 197.155,
+      "log": "docs/content/r6/logs/content-r2.txt"
+    },
+    {
+      "name": "content-r3",
+      "exitCode": 0,
+      "seconds": 207.908,
+      "log": "docs/content/r6/logs/content-r3.txt"
+    },
+    {
+      "name": "content-r4",
+      "exitCode": 0,
+      "seconds": 227.156,
+      "log": "docs/content/r6/logs/content-r4.txt"
+    },
+    {
+      "name": "content-r5",
+      "exitCode": 1,
+      "seconds": 200.58,
+      "log": "docs/content/r6/logs/content-r5.txt"
+    }
+  ],
+  "pwaFix": "Completion marker moved from before navigation to the replacement page load; pending flag prevents duplicate controllerchange reload. Existing tests unchanged.",
+  "rechecks": [
+    {
+      "name": "content-r5",
+      "exitCode": 1,
+      "seconds": 218.775,
+      "log": "docs/content/r6/logs/content-r5.txt"
+    },
+    {
+      "name": "content-r5",
+      "exitCode": 0,
+      "seconds": 212.924,
+      "log": "docs/content/r6/logs/content-r5.txt"
+    },
+    {
+      "name": "content-r6",
+      "exitCode": 1,
+      "seconds": 12.296,
+      "log": "docs/content/r6/logs/content-r6.txt"
+    }
+  ],
+  "totalBrowserScripts": 22,
+  "finalVisualReadback": "Repeated full R6 journeys after child stance correction, including normal farm conversation separation; captures copied byte-for-byte from tested isolation."
+}

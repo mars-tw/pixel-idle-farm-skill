@@ -1,0 +1,2720 @@
+{
+  "overrides": {
+    "walk": {
+      "image": "assets/generated/r89/walk.png",
+      "meta": {
+        "w": 288,
+        "h": 256
+      },
+      "frames": {
+        "walk_down_00": {
+          "x": 0,
+          "y": 0,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_down_01": {
+          "x": 48,
+          "y": 0,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_down_02": {
+          "x": 96,
+          "y": 0,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_down_03": {
+          "x": 144,
+          "y": 0,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_down_04": {
+          "x": 192,
+          "y": 0,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_down_05": {
+          "x": 240,
+          "y": 0,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_left_00": {
+          "x": 0,
+          "y": 64,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_left_01": {
+          "x": 48,
+          "y": 64,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_left_02": {
+          "x": 96,
+          "y": 64,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_left_03": {
+          "x": 144,
+          "y": 64,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_left_04": {
+          "x": 192,
+          "y": 64,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_left_05": {
+          "x": 240,
+          "y": 64,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_right_00": {
+          "x": 0,
+          "y": 128,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_right_01": {
+          "x": 48,
+          "y": 128,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_right_02": {
+          "x": 96,
+          "y": 128,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_right_03": {
+          "x": 144,
+          "y": 128,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_right_04": {
+          "x": 192,
+          "y": 128,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_right_05": {
+          "x": 240,
+          "y": 128,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_up_00": {
+          "x": 0,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_up_01": {
+          "x": 48,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_up_02": {
+          "x": 96,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_up_03": {
+          "x": 144,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_up_04": {
+          "x": 192,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        },
+        "walk_up_05": {
+          "x": 240,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/walk.png"
+        }
+      }
+    },
+    "actions": {
+      "image": "assets/generated/r89/farming-actions.png",
+      "meta": {
+        "w": 288,
+        "h": 1536,
+        "frameW": 48,
+        "frameH": 64,
+        "cols": 6,
+        "rows": 24
+      },
+      "frames": {
+        "water_down_00": {
+          "x": 0,
+          "y": 0,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_down_01": {
+          "x": 72,
+          "y": 0,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_down_02": {
+          "x": 144,
+          "y": 0,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_down_03": {
+          "x": 216,
+          "y": 0,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_down_04": {
+          "x": 288,
+          "y": 0,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_down_05": {
+          "x": 360,
+          "y": 0,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_up_00": {
+          "x": 0,
+          "y": 192,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_up_01": {
+          "x": 72,
+          "y": 192,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_up_02": {
+          "x": 144,
+          "y": 192,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_up_03": {
+          "x": 216,
+          "y": 192,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_up_04": {
+          "x": 288,
+          "y": 192,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_up_05": {
+          "x": 360,
+          "y": 192,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_side_00": {
+          "x": 0,
+          "y": 128,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_side_01": {
+          "x": 72,
+          "y": 128,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_side_02": {
+          "x": 144,
+          "y": 128,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_side_03": {
+          "x": 216,
+          "y": 128,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_side_04": {
+          "x": 288,
+          "y": 128,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "water_side_05": {
+          "x": 360,
+          "y": 128,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "hoe_down_00": {
+          "x": 0,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_down_01": {
+          "x": 48,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_down_02": {
+          "x": 96,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_down_03": {
+          "x": 144,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_down_04": {
+          "x": 192,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_down_05": {
+          "x": 240,
+          "y": 192,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_up_00": {
+          "x": 0,
+          "y": 256,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_up_01": {
+          "x": 48,
+          "y": 256,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_up_02": {
+          "x": 96,
+          "y": 256,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_up_03": {
+          "x": 144,
+          "y": 256,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_up_04": {
+          "x": 192,
+          "y": 256,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_up_05": {
+          "x": 240,
+          "y": 256,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_side_00": {
+          "x": 0,
+          "y": 320,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_side_01": {
+          "x": 48,
+          "y": 320,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_side_02": {
+          "x": 96,
+          "y": 320,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_side_03": {
+          "x": 144,
+          "y": 320,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_side_04": {
+          "x": 192,
+          "y": 320,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "hoe_side_05": {
+          "x": 240,
+          "y": 320,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "sow_down_00": {
+          "x": 0,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_down_01": {
+          "x": 72,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_down_02": {
+          "x": 144,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_down_03": {
+          "x": 216,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_down_04": {
+          "x": 288,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_down_05": {
+          "x": 360,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_up_00": {
+          "x": 0,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_up_01": {
+          "x": 72,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_up_02": {
+          "x": 144,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_up_03": {
+          "x": 216,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_up_04": {
+          "x": 288,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_up_05": {
+          "x": 360,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_side_00": {
+          "x": 0,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_side_01": {
+          "x": 72,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_side_02": {
+          "x": 144,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_side_03": {
+          "x": 216,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_side_04": {
+          "x": 288,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "sow_side_05": {
+          "x": 360,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_down_00": {
+          "x": 0,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_down_01": {
+          "x": 72,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_down_02": {
+          "x": 144,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_down_03": {
+          "x": 216,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_down_04": {
+          "x": 288,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_down_05": {
+          "x": 360,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_up_00": {
+          "x": 0,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_up_01": {
+          "x": 72,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_up_02": {
+          "x": 144,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_up_03": {
+          "x": 216,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_up_04": {
+          "x": 288,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_up_05": {
+          "x": 360,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_side_00": {
+          "x": 0,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_side_01": {
+          "x": 72,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_side_02": {
+          "x": 144,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_side_03": {
+          "x": 216,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_side_04": {
+          "x": 288,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "harvest_side_05": {
+          "x": 360,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "idle_down_00": {
+          "x": 0,
+          "y": 768,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_down_01": {
+          "x": 48,
+          "y": 768,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_down_02": {
+          "x": 96,
+          "y": 768,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_down_03": {
+          "x": 144,
+          "y": 768,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_down_04": {
+          "x": 192,
+          "y": 768,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_down_05": {
+          "x": 240,
+          "y": 768,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_up_00": {
+          "x": 0,
+          "y": 832,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_up_01": {
+          "x": 48,
+          "y": 832,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_up_02": {
+          "x": 96,
+          "y": 832,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_up_03": {
+          "x": 144,
+          "y": 832,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_up_04": {
+          "x": 192,
+          "y": 832,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_up_05": {
+          "x": 240,
+          "y": 832,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_side_00": {
+          "x": 0,
+          "y": 896,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_side_01": {
+          "x": 48,
+          "y": 896,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_side_02": {
+          "x": 96,
+          "y": 896,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_side_03": {
+          "x": 144,
+          "y": 896,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_side_04": {
+          "x": 192,
+          "y": 896,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "idle_side_05": {
+          "x": 240,
+          "y": 896,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "collect_down_00": {
+          "x": 0,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_down_01": {
+          "x": 72,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_down_02": {
+          "x": 144,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_down_03": {
+          "x": 216,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_down_04": {
+          "x": 288,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_down_05": {
+          "x": 360,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_up_00": {
+          "x": 0,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_up_01": {
+          "x": 72,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_up_02": {
+          "x": 144,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_up_03": {
+          "x": 216,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_up_04": {
+          "x": 288,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_up_05": {
+          "x": 360,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_side_00": {
+          "x": 0,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_side_01": {
+          "x": 72,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_side_02": {
+          "x": 144,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_side_03": {
+          "x": 216,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_side_04": {
+          "x": 288,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "collect_side_05": {
+          "x": 360,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "build_down_00": {
+          "x": 0,
+          "y": 1152,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_down_01": {
+          "x": 48,
+          "y": 1152,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_down_02": {
+          "x": 96,
+          "y": 1152,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_down_03": {
+          "x": 144,
+          "y": 1152,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_down_04": {
+          "x": 192,
+          "y": 1152,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_down_05": {
+          "x": 240,
+          "y": 1152,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_up_00": {
+          "x": 0,
+          "y": 1216,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_up_01": {
+          "x": 48,
+          "y": 1216,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_up_02": {
+          "x": 96,
+          "y": 1216,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_up_03": {
+          "x": 144,
+          "y": 1216,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_up_04": {
+          "x": 192,
+          "y": 1216,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_up_05": {
+          "x": 240,
+          "y": 1216,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_side_00": {
+          "x": 0,
+          "y": 1280,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_side_01": {
+          "x": 48,
+          "y": 1280,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_side_02": {
+          "x": 96,
+          "y": 1280,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_side_03": {
+          "x": 144,
+          "y": 1280,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_side_04": {
+          "x": 192,
+          "y": 1280,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "build_side_05": {
+          "x": 240,
+          "y": 1280,
+          "w": 48,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.86
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 288,
+            "h": 1536,
+            "frameW": 48,
+            "frameH": 64,
+            "cols": 6,
+            "rows": 24
+          }
+        },
+        "use_down_00": {
+          "x": 0,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_down_01": {
+          "x": 72,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_down_02": {
+          "x": 144,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_down_03": {
+          "x": 216,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_down_04": {
+          "x": 288,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_down_05": {
+          "x": 360,
+          "y": 256,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_up_00": {
+          "x": 0,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_up_01": {
+          "x": 72,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_up_02": {
+          "x": 144,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_up_03": {
+          "x": 216,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_up_04": {
+          "x": 288,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_up_05": {
+          "x": 360,
+          "y": 448,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_side_00": {
+          "x": 0,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_side_01": {
+          "x": 72,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_side_02": {
+          "x": 144,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_side_03": {
+          "x": 216,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_side_04": {
+          "x": 288,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        },
+        "use_side_05": {
+          "x": 360,
+          "y": 384,
+          "w": 72,
+          "h": 64,
+          "anchor": [
+            0.5,
+            0.97
+          ],
+          "image": "assets/generated/r89/farming-actions.png",
+          "meta": {
+            "w": 432,
+            "h": 512
+          }
+        }
+      }
+    },
+    "crops": {
+      "image": "assets/generated/r83/crops.png",
+      "meta": {
+        "w": 240,
+        "h": 288
+      },
+      "frames": {
+        "wheat_sprout": {
+          "x": 0,
+          "y": 0,
+          "w": 48,
+          "h": 48,
+          "anchor": [
+            0.5,
+            1
+          ],
+          "image": "assets/generated/r89/wheat-sprout-48.png",
+          "meta": {
+            "w": 48,
+            "h": 48
+          }
+        },
+        "wheat_young": {
+          "x": 0,
+          "y": 0,
+          "w": 48,
+          "h": 48,
+          "anchor": [
+            0.5,
+            1
+          ],
+          "image": "assets/generated/r89/wheat-grow-48.png",
+          "meta": {
+            "w": 48,
+            "h": 48
+          }
+        },
+        "wheat_ready": {
+          "x": 0,
+          "y": 0,
+          "w": 48,
+          "h": 48,
+          "anchor": [
+            0.5,
+            1
+          ],
+          "image": "assets/generated/r89/wheat-ripe-48.png",
+          "meta": {
+            "w": 48,
+            "h": 48
+          }
+        }
+      }
+    }
+  }
+}

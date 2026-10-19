@@ -1,0 +1,977 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "clockAccelerated": false,
+  "progressInjected": false,
+  "cameraOnlyFocus": true,
+  "journeys": [
+    {
+      "platform": "iphone",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "deviceScaleFactor": 3,
+      "choice": "table",
+      "elapsedMs": 28733,
+      "realInput": true,
+      "progressInjected": false,
+      "earned": {
+        "h": {
+          "started": true,
+          "sunWheat": 2,
+          "delivered": false,
+          "choice": null,
+          "deliveredAt": 0,
+          "wheat": 8,
+          "ready": true,
+          "note": null
+        },
+        "daily": {
+          "day": 20744,
+          "date": "2026-10-18",
+          "nextAt": 1792339200000,
+          "tasks": [
+            {
+              "id": "water",
+              "title": "替新芽添水",
+              "detail": "種下作物後，用澆水工具照顧它。每株只算一次。",
+              "have": 3,
+              "need": 2,
+              "coins": 4,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "harvest",
+              "title": "收一籃新鮮",
+              "detail": "成熟後點右下角收成鍵。作物進倉庫才算數。",
+              "have": 8,
+              "need": 8,
+              "coins": 6,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "basket",
+              "title": "小麥餐籃",
+              "detail": "留 2 份小麥給鄰居，交付後會從倉庫取走。",
+              "have": 8,
+              "need": 2,
+              "coins": 6,
+              "cropId": "wheat",
+              "claimed": false,
+              "ready": true
+            }
+          ],
+          "stamps": 0,
+          "stamped": false,
+          "done": 0,
+          "keepsakes": [
+            {
+              "at": 3,
+              "id": "pressed_wheat",
+              "name": "祖母壓的小麥",
+              "text": "第一年收成不好，她還是留了一穗。她說，肯再種一次的人，總會等到下一季。",
+              "owned": false
+            },
+            {
+              "at": 7,
+              "id": "table_note",
+              "name": "餐桌下的紙條",
+              "text": "桌子修好那天，祖母在背面寫了每個人的名字。你的名字旁邊，空著一格給下一個回來的人。",
+              "owned": false
+            }
+          ]
+        },
+        "stats": {
+          "harvested": {
+            "wheat": 8
+          },
+          "fulfilledOrders": 0,
+          "totalCoinsEarned": 0,
+          "plantCount": 4,
+          "cleared": 0,
+          "collected": {},
+          "qualitySold": 0,
+          "npcRequestsCompleted": 0,
+          "festivalOrders": 0,
+          "seasonsReached": {
+            "春": true
+          },
+          "sunCatches": 2
+        }
+      },
+      "moment": {
+        "action": "water",
+        "frame": "-324px -192px",
+        "plants": [
+          {
+            "i": 0,
+            "crop": "wheat",
+            "ageMs": 10018,
+            "stage": 3,
+            "sunlit": false,
+            "inSunlightField": true,
+            "sunGrown": true
+          },
+          {
+            "i": 1,
+            "crop": "wheat",
+            "ageMs": 5211,
+            "stage": 1,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 2,
+            "crop": "wheat",
+            "ageMs": 3792,
+            "stage": 1,
+            "sunlit": true,
+            "inSunlightField": true,
+            "sunGrown": false
+          },
+          {
+            "i": 3,
+            "crop": "wheat",
+            "ageMs": 2376,
+            "stage": 0,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "platform": "ipad",
+      "viewport": {
+        "width": 1032,
+        "height": 1376
+      },
+      "deviceScaleFactor": 2,
+      "choice": "table",
+      "elapsedMs": 29322,
+      "realInput": true,
+      "progressInjected": false,
+      "earned": {
+        "h": {
+          "started": true,
+          "sunWheat": 2,
+          "delivered": false,
+          "choice": null,
+          "deliveredAt": 0,
+          "wheat": 8,
+          "ready": true,
+          "note": null
+        },
+        "daily": {
+          "day": 20744,
+          "date": "2026-10-18",
+          "nextAt": 1792339200000,
+          "tasks": [
+            {
+              "id": "water",
+              "title": "替新芽添水",
+              "detail": "種下作物後，用澆水工具照顧它。每株只算一次。",
+              "have": 3,
+              "need": 2,
+              "coins": 4,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "harvest",
+              "title": "收一籃新鮮",
+              "detail": "成熟後點右下角收成鍵。作物進倉庫才算數。",
+              "have": 8,
+              "need": 8,
+              "coins": 6,
+              "claimed": false,
+              "ready": true
+            },
+            {
+              "id": "basket",
+              "title": "小麥餐籃",
+              "detail": "留 2 份小麥給鄰居，交付後會從倉庫取走。",
+              "have": 8,
+              "need": 2,
+              "coins": 6,
+              "cropId": "wheat",
+              "claimed": false,
+              "ready": true
+            }
+          ],
+          "stamps": 0,
+          "stamped": false,
+          "done": 0,
+          "keepsakes": [
+            {
+              "at": 3,
+              "id": "pressed_wheat",
+              "name": "祖母壓的小麥",
+              "text": "第一年收成不好，她還是留了一穗。她說，肯再種一次的人，總會等到下一季。",
+              "owned": false
+            },
+            {
+              "at": 7,
+              "id": "table_note",
+              "name": "餐桌下的紙條",
+              "text": "桌子修好那天，祖母在背面寫了每個人的名字。你的名字旁邊，空著一格給下一個回來的人。",
+              "owned": false
+            }
+          ]
+        },
+        "stats": {
+          "harvested": {
+            "wheat": 8
+          },
+          "fulfilledOrders": 0,
+          "totalCoinsEarned": 0,
+          "plantCount": 4,
+          "cleared": 0,
+          "collected": {},
+          "qualitySold": 0,
+          "npcRequestsCompleted": 0,
+          "festivalOrders": 0,
+          "seasonsReached": {
+            "春": true
+          },
+          "sunCatches": 2
+        }
+      },
+      "moment": {
+        "action": "water",
+        "frame": "-469.125px -278px",
+        "plants": [
+          {
+            "i": 0,
+            "crop": "wheat",
+            "ageMs": 6435,
+            "stage": 1,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          },
+          {
+            "i": 1,
+            "crop": "wheat",
+            "ageMs": 8376,
+            "stage": 2,
+            "sunlit": false,
+            "inSunlightField": true,
+            "sunGrown": true
+          },
+          {
+            "i": 2,
+            "crop": "wheat",
+            "ageMs": 3579,
+            "stage": 0,
+            "sunlit": true,
+            "inSunlightField": true,
+            "sunGrown": false
+          },
+          {
+            "i": 3,
+            "crop": "wheat",
+            "ageMs": 2138,
+            "stage": 0,
+            "sunlit": false,
+            "inSunlightField": false,
+            "sunGrown": false
+          }
+        ]
+      },
+      "errors": []
+    }
+  ],
+  "screenshots": [
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.875,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 16,
+        "storage": {},
+        "sunWheat": 0,
+        "harvested": {},
+        "chapterQuest": "c1_homecoming",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 932,
+        "selected": null,
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-01-welcome.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-01-welcome.png",
+      "sha256": "93d7d7e6ba271135507a6e05701dc46d6feb289fb2c58cdd49ac809f2f1fa45a"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.875,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {},
+        "sunWheat": 0,
+        "harvested": {},
+        "chapterQuest": "first_sun_basket",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 932,
+        "selected": null,
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-02-sunlight.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-02-sunlight.png",
+      "sha256": "832c382013a537312f15b738bff5d25cbb7d95da377899d5a1ff55793cb26990"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.875,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 2
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 2
+        },
+        "chapterQuest": "first_sun_basket",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 932,
+        "selected": null,
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-03-harvest.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-03-harvest.png",
+      "sha256": "d61119dcbef5dbfb65fd6dda39a425dc3113b5f6f9f128b6f5d26283a2130577"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.797607421875,
+            "y": 17.16277503967285,
+            "right": 422.077392578125,
+            "bottom": 49.634103775024414,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 8
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 24,
+        "selected": "heirloomTable",
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-04-basket.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-04-basket.png",
+      "sha256": "4cdb3baa8b9acb8d9dfd4a3b1732ce40d6ee1a44ea5cc898587265703e2305e6"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 6
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket_delivered",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": true,
+        "blankBelowReturn": 20,
+        "selected": null,
+        "delivered": true
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-05-note.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-05-note.png",
+      "sha256": "216e174f889fcb6a850f1998697add9d1bac4641e09a039a251dc1c3d228bc8c"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 227.953125,
+            "y": 17.203125,
+            "right": 274.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 277.875,
+            "y": 17.203125,
+            "right": 356.875,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 359.875,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 6
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket_delivered",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": true,
+        "blankBelowReturn": 932,
+        "selected": null,
+        "delivered": true
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-detail-porch.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-detail-porch.png",
+      "sha256": "df472f55a7ed3be69fd4674aa002b41c623d3610acc39ae589da86bfc7c032c3"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 178.40625,
+            "y": 17.203125,
+            "right": 226.59375,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 229.59375,
+            "y": 17.203125,
+            "right": 308.59375,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 311.59375,
+            "y": 17.203125,
+            "right": 373.953125,
+            "bottom": 49.59375,
+            "inView": true
+          },
+          {
+            "x": 376.953125,
+            "y": 17.203125,
+            "right": 422,
+            "bottom": 49.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 28,
+        "storage": {
+          "wheat": 4
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket_delivered",
+        "rootHeight": 96,
+        "rootWidth": 72,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 24,
+        "selected": null,
+        "delivered": true
+      },
+      "path": "docs/evidence/r89-art/store-real/iphone-06-daily.png",
+      "candidateStorePath": "docs/store/screenshots/iphone-06-daily.png",
+      "sha256": "535f3d7266f778f3ebb1a0b8c48f01459165a703420bbe70c6b7069a1dd0c495"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.078125,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 16,
+        "storage": {},
+        "sunWheat": 0,
+        "harvested": {},
+        "chapterQuest": "c1_homecoming",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 1376,
+        "selected": null,
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-01-welcome.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-01-welcome.png",
+      "sha256": "5ed3b3cd12b9fb8927794dd6320c42b92af2f17f36be8da1cfedf98581415c5a"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.078125,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {},
+        "sunWheat": 0,
+        "harvested": {},
+        "chapterQuest": "first_sun_basket",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 1376,
+        "selected": null,
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-02-sunlight.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-02-sunlight.png",
+      "sha256": "5bff031fd94e267029193e625af7d133128e7ac971a2700f06e584dc9f14b56d"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.078125,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 2
+        },
+        "sunWheat": 0,
+        "harvested": {
+          "wheat": 2
+        },
+        "chapterQuest": "first_sun_basket",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 1376,
+        "selected": null,
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-03-harvest.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-03-harvest.png",
+      "sha256": "c2a3cd74b7e89c193ee932a515d97eda986112c8e0b2c89db4680b9bc503c262"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.0681762695312,
+            "y": 17.9957332611084,
+            "right": 1012.0099487304688,
+            "bottom": 56.598012924194336,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 8
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 24,
+        "selected": "heirloomTable",
+        "delivered": false
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-04-basket.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-04-basket.png",
+      "sha256": "a9c86ddf7779845becac85c57811699bbf1d0b15bc7928e508f0a8f485c28c6b"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "right": 0,
+            "bottom": 0,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 6
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket_delivered",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": true,
+        "blankBelowReturn": 20,
+        "selected": null,
+        "delivered": true
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-05-note.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-05-note.png",
+      "sha256": "faf3a1a388bad2bfb7c1b22c33440d434b49f948f7f123fb97cf476659f1841a"
+    },
+    {
+      "header": {
+        "visible": true,
+        "chips": [
+          {
+            "x": 691.390625,
+            "y": 18,
+            "right": 764.546875,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 770.546875,
+            "y": 18,
+            "right": 916.078125,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 922.078125,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 12,
+        "storage": {
+          "wheat": 6
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket_delivered",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": true,
+        "blankBelowReturn": 1376,
+        "selected": null,
+        "delivered": true
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-detail-porch.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-detail-porch.png",
+      "sha256": "29682895f4efe06a393326775a359f14d9337ab693f0ad24c16111f41ef9bb21"
+    },
+    {
+      "header": {
+        "visible": false,
+        "chips": [
+          {
+            "x": 625.953125,
+            "y": 18,
+            "right": 700.734375,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 706.734375,
+            "y": 18,
+            "right": 852.265625,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 858.265625,
+            "y": 18,
+            "right": 948.5,
+            "bottom": 56.59375,
+            "inView": true
+          },
+          {
+            "x": 954.5,
+            "y": 18,
+            "right": 1012,
+            "bottom": 56.59375,
+            "inView": true
+          }
+        ]
+      },
+      "visual": {
+        "coins": 28,
+        "storage": {
+          "wheat": 4
+        },
+        "sunWheat": 2,
+        "harvested": {
+          "wheat": 8
+        },
+        "chapterQuest": "first_sun_basket_delivered",
+        "rootHeight": 138.65625,
+        "rootWidth": 104,
+        "portrait": true,
+        "story": false,
+        "blankBelowReturn": 24,
+        "selected": null,
+        "delivered": true
+      },
+      "path": "docs/evidence/r89-art/store-real/ipad-06-daily.png",
+      "candidateStorePath": "docs/store/screenshots/ipad-06-daily.png",
+      "sha256": "204f71953b16c07fe155d56e5b3d5c718d7e327f404f3651eb29bfd5582b39d1"
+    }
+  ]
+}

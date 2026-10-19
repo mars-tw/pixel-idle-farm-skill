@@ -1,0 +1,724 @@
+{
+  "status": "EXECUTED",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool does not reveal exact model slug; no guessed model ID.",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/r88/garden.png",
+      "sha256": "99b114b8db004e44edce697991065f0db0dcce4bd49c89d18f25ede134f15e50",
+      "bytes": 3670970
+    },
+    {
+      "path": "docs/art/masters/r88/light.png",
+      "sha256": "100e48b7485375dbefcfa5479954ed10fa52157965108a2868615331ce491fc4",
+      "bytes": 1660459
+    },
+    {
+      "path": "docs/art/character-sheets/miri-r88.png",
+      "sha256": "45565226a7632990e15cdc327b265b4a10abf905b52d0df210872577011be573",
+      "bytes": 1940538
+    },
+    {
+      "path": "docs/art/masters/r88/objects.png",
+      "sha256": "9aefa4bf8e31ecfa3deb486dd1735030d68fbfd45426308489c47fbca665dc19",
+      "bytes": 2528458
+    },
+    {
+      "path": "docs/art/masters/r88/panel.png",
+      "sha256": "4176d53336cb14aa73c99155f991bb4d53e0752576ee0965cf89132a27cacbe2",
+      "bytes": 2629732
+    },
+    {
+      "path": "docs/art/masters/r88/icons.png",
+      "sha256": "52221722ddf23e4e99137239bac7bf7f906096e9b6e3d28af8ad9ff33e6c38c7",
+      "bytes": 1714289
+    },
+    {
+      "path": "docs/art/masters/r88/logo.png",
+      "sha256": "058e0d17656b6a49d77066514f63afcb288040706be1bc24cc913c7b6d519ccb",
+      "bytes": 1059766
+    },
+    {
+      "path": "docs/art/masters/r88/app.png",
+      "sha256": "17ac359e7e7fb54ac501e7f881ee3b4b898edd3a60dbe99e8ffb44bfed506f80",
+      "bytes": 2107370
+    }
+  ],
+  "records": [
+    {
+      "path": "assets/generated/r88/garden-384.webp",
+      "source": "garden; shared palette native384",
+      "size": [
+        384,
+        384
+      ],
+      "bytes": 64120,
+      "sha256": "f14c3b0fbadb9df43594f47731c23285f10601ba1019f2ed8d455461339cf10b"
+    },
+    {
+      "path": "assets/generated/r88/grass-32.png",
+      "source": "garden central grass crop",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 742,
+      "sha256": "59ce399448cae9b8a62a511314f1ae50caf450f83521d2ae37e11013a9ab5ea1"
+    },
+    {
+      "path": "assets/generated/r88/path-32.png",
+      "source": "garden stepping-stone path crop",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1458,
+      "sha256": "bdd13adbec71ca82e5d0192daac41c4ea92dbddcb372b28e2c86f990893e6c2b"
+    },
+    {
+      "path": "assets/generated/r88/soil-dry-64.png",
+      "source": "objects; generated 3x2 cell 0",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 4768,
+      "sha256": "dbf8c9bda254ba5f5d06ea4b0a4eeb9a888f79be2dc9a08dede23071bf4e5b8d"
+    },
+    {
+      "path": "assets/generated/r88/soil-wet-64.png",
+      "source": "objects; generated 3x2 cell 1",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 4011,
+      "sha256": "25bc9b1f35438530861e4bd660296b376c94539196516d1a0a242b5816e6e368"
+    },
+    {
+      "path": "assets/generated/r88/soil-moist-64.png",
+      "source": "objects; generated 3x2 cell 2",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 4389,
+      "sha256": "ace2c3531debd3e834ee97e6bd6d3925d4ef05b480d5eed84ffe6e49374b5c2a"
+    },
+    {
+      "path": "assets/generated/r88/bucket-64.png",
+      "source": "objects; generated 3x2 cell 3",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 5451,
+      "sha256": "3eec9ec606cb6e1363dcf092914654989ea3b1885ced418da0c4fa554e578cad"
+    },
+    {
+      "path": "assets/generated/r88/fence-64.png",
+      "source": "objects; generated 3x2 cell 4",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 3783,
+      "sha256": "fb323593363157f5178d2cd0b4c113e5d7d395a0f58ef5b86d7abb4b1739ed18"
+    },
+    {
+      "path": "assets/generated/r88/flowers-64.png",
+      "source": "objects; generated 3x2 cell 5",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 5118,
+      "sha256": "e3b232d84cd0d607fcbb9a17bf8173a63356464a8aef0e77d41a1371dbb72705"
+    },
+    {
+      "path": "assets/generated/r88/wheat-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1370,
+      "sha256": "27e98d239d3f3a23d5c8f4580d2b8de22b62877f6f9de714ad8004d7548fc78f"
+    },
+    {
+      "path": "assets/generated/r88/basket-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1320,
+      "sha256": "f09da03ef1624c348122ad2a93dd87755414d6ae34c9b987af6c7a965e1293d4"
+    },
+    {
+      "path": "assets/generated/r88/water-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1082,
+      "sha256": "9d4a167f03cb983a58d7004ccaa1e679e321acaf71e3e77bc7eb6e66707be489"
+    },
+    {
+      "path": "assets/generated/r88/note-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1115,
+      "sha256": "d0a3cd4eaa0c82a061dc229e79596953b584f1e372512318db613462ae910cbc"
+    },
+    {
+      "path": "assets/generated/r88/hat-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1012,
+      "sha256": "607c6934b4baa5713d7cfc3ec3b5abd281daea9754086365bae9ba0a8a22b7b3"
+    },
+    {
+      "path": "assets/generated/r88/sprout-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 914,
+      "sha256": "67419029b4feacbe8f80cace1fb6de7e27fad3b0b0cd22af44f982b935f4aa65"
+    },
+    {
+      "path": "assets/generated/r88/miri-0.png",
+      "source": "character expression 0",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7629,
+      "sha256": "a71a4442e4daa75dbe61ec920be6bb5d2a9e96e52f5633fedb0e9a495c10c5b1"
+    },
+    {
+      "path": "assets/generated/r88/miri-1.png",
+      "source": "character expression 1",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7496,
+      "sha256": "78d48d876d4786773198628d06c4277f5efd49561cef5e62bffebfec7a176d8c"
+    },
+    {
+      "path": "assets/generated/r88/miri-2.png",
+      "source": "character expression 2",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7779,
+      "sha256": "4b6e4b4f5944500d96bd51953eb401043359392fa0cee96c1d89acc3e0d777d4"
+    },
+    {
+      "path": "assets/generated/r88/paper-128.png",
+      "source": "panel quiet center,90percent cream grade; material keeps subtle tonal range",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 7727,
+      "sha256": "8728e7050450997814c3a716b90fac130a77d4a295dc9892a47e08daf9a49a21"
+    },
+    {
+      "path": "assets/generated/r88/album-256.png",
+      "source": "panel complete frame",
+      "size": [
+        256,
+        256
+      ],
+      "bytes": 56928,
+      "sha256": "20b3ad665847a484ad732523b50445c6d32910bd7b062446a813b6fc566ae09f"
+    },
+    {
+      "path": "assets/generated/r88/binding-8.png",
+      "source": "panel binding",
+      "size": [
+        8,
+        128
+      ],
+      "bytes": 1542,
+      "sha256": "711e763d61e4c90ed05205e12f1adc7eb86e8bed4667c07b2fbb2464d96eaab6"
+    },
+    {
+      "path": "assets/generated/r88/logo-320.png",
+      "source": "logo corrected transparent revision; no wrong subtitle",
+      "size": [
+        320,
+        112
+      ],
+      "bytes": 17034,
+      "sha256": "eb9b024f3d63a8e55265c8f8dc7ac7bc0c9c6f38659539d764805711fe5249c6"
+    },
+    {
+      "path": "assets/generated/r88/app-icon-64.png",
+      "source": "app",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 10417,
+      "sha256": "3f1ac4a441321f21702d0cfb7f4db45a7a69216f1aa92d96691bc609bb122bc2"
+    },
+    {
+      "path": "assets/generated/r88/app-icon-192.png",
+      "source": "app",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 11285,
+      "sha256": "b335e2ffd1663190a0fa8c8f14196a28383b6e2fcea4181d071dae5c6d3ff278"
+    },
+    {
+      "path": "assets/generated/r88/app-icon-512.png",
+      "source": "app",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 15699,
+      "sha256": "28fdf332ffa01469f2edd14d7f2b0d6bfcfc38b349e514a09a21a17f784ba4f9"
+    },
+    {
+      "path": "assets/generated/r88/leaf-light.png",
+      "source": "light; source luminance and alpha, no procedural light dots",
+      "size": [
+        192,
+        128
+      ],
+      "bytes": 11530,
+      "sha256": "6e64d82c8800162079ba3e21dceb9e8edb025ec9cf3d4ad27da4e6bdad43658c"
+    },
+    {
+      "path": "assets/generated/r88/canopy-shadow.png",
+      "source": "R87 generated canopy, expanded leaf clusters and cool hue",
+      "size": [
+        192,
+        128
+      ],
+      "bytes": 7495,
+      "sha256": "63c751c8ce8f167fc15e80fd3c3bcf2429d964ed27f54cee442c7814001785b6"
+    },
+    {
+      "path": "assets/generated/r88/walk.png",
+      "source": "R87 generated true limb poses; R88 character sheet wicker/cloth pixels mapped inside original basket color mask only",
+      "size": [
+        288,
+        256
+      ],
+      "bytes": 54391,
+      "sha256": "7410735e804df75d0dae041fb00752a548725036daac54d7de21cc9c021fa1a3"
+    },
+    {
+      "path": "assets/generated/r88/farming-actions.png",
+      "source": "R87 generated true limb poses; R88 character sheet wicker/cloth pixels mapped inside original basket color mask only",
+      "size": [
+        432,
+        512
+      ],
+      "bytes": 157635,
+      "sha256": "3e1070d87234297370eb9258b964aae8a4a3a08276e2f850b57985f8e9d85fc8"
+    },
+    {
+      "path": "assets/generated/r88/welcome-512.webp",
+      "source": "R85 original generated story; native256 rather than128",
+      "size": [
+        512,
+        256
+      ],
+      "bytes": 15022,
+      "sha256": "e0a12932b0c2b2cca35d87bf08a519a5a1c2f56c256d0798c1084ab6165fefb4"
+    },
+    {
+      "path": "assets/generated/r88/basket-512.webp",
+      "source": "R85 original generated story; native256 rather than128",
+      "size": [
+        512,
+        256
+      ],
+      "bytes": 16552,
+      "sha256": "cfc98985b958342f4a906139e0b7d1c3d4c11f18f18ac1f2af0739d42260f38a"
+    },
+    {
+      "path": "assets/generated/r88/table-result-512.webp",
+      "source": "R85 original generated story; native256 rather than128",
+      "size": [
+        512,
+        256
+      ],
+      "bytes": 17006,
+      "sha256": "6b25a92f5f3f029ebf8cee25c2f4939c4a5d2a897364848176c0b77a425da4fe"
+    },
+    {
+      "path": "assets/generated/r88/doorstep-result-512.webp",
+      "source": "R85 original generated story; native256 rather than128",
+      "size": [
+        512,
+        256
+      ],
+      "bytes": 16066,
+      "sha256": "083ee358263100a528e9fd9d1594175e0d3ae85d456706bfc3ba9eb684f76ca7"
+    }
+  ],
+  "qualityMetrics": {
+    "assets/generated/r88/garden-384.webp": {
+      "brightness": 0.5108337796160131,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4944490717721177,
+      "lowSaturationFraction": 0.03864881727430555,
+      "gatePass": true
+    },
+    "assets/generated/r88/grass-32.png": {
+      "brightness": 0.6266356265318628,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.6245094826537589,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/path-32.png": {
+      "brightness": 0.7140132199754902,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5886909764796113,
+      "lowSaturationFraction": 0.001953125,
+      "gatePass": true
+    },
+    "assets/generated/r88/soil-dry-64.png": {
+      "brightness": 0.37008135190918473,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5018725786905364,
+      "lowSaturationFraction": 0.0004385964912280702,
+      "gatePass": true
+    },
+    "assets/generated/r88/soil-wet-64.png": {
+      "brightness": 0.2908428447233725,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.447242429377425,
+      "lowSaturationFraction": 0.012243113248797552,
+      "gatePass": false
+    },
+    "assets/generated/r88/soil-moist-64.png": {
+      "brightness": 0.3073565737874097,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.46643729130404915,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/bucket-64.png": {
+      "brightness": 0.42375403174029025,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.2968782691741984,
+      "lowSaturationFraction": 0.398923904688701,
+      "gatePass": false
+    },
+    "assets/generated/r88/fence-64.png": {
+      "brightness": 0.40607581397455056,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.39675157983648507,
+      "lowSaturationFraction": 0.16628175519630484,
+      "gatePass": true
+    },
+    "assets/generated/r88/flowers-64.png": {
+      "brightness": 0.4140449083107237,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.3986683446044691,
+      "lowSaturationFraction": 0.1197252208047105,
+      "gatePass": true
+    },
+    "assets/generated/r88/wheat-32.png": {
+      "brightness": 0.45081564816207814,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.567247412004152,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/basket-32.png": {
+      "brightness": 0.39211391380314503,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.578177683136254,
+      "lowSaturationFraction": 0.009900990099009901,
+      "gatePass": true
+    },
+    "assets/generated/r88/water-32.png": {
+      "brightness": 0.4146214466522395,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.582454538978138,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/note-32.png": {
+      "brightness": 0.6461577548136371,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4515251138554922,
+      "lowSaturationFraction": 0.03153153153153153,
+      "gatePass": true
+    },
+    "assets/generated/r88/hat-32.png": {
+      "brightness": 0.5370794652406417,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.6255793538983018,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/sprout-32.png": {
+      "brightness": 0.330670817863267,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4921273046065648,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/miri-0.png": {
+      "brightness": 0.4990853475177305,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5211001780326923,
+      "lowSaturationFraction": 0.036702127659574466,
+      "gatePass": true
+    },
+    "assets/generated/r88/miri-1.png": {
+      "brightness": 0.4807140133789768,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5184783460093219,
+      "lowSaturationFraction": 0.037907100907634814,
+      "gatePass": true
+    },
+    "assets/generated/r88/miri-2.png": {
+      "brightness": 0.507535384788571,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5109272560348213,
+      "lowSaturationFraction": 0.04149269311064718,
+      "gatePass": true
+    },
+    "assets/generated/r88/paper-128.png": {
+      "brightness": 0.960312534419041,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.11875867797659644,
+      "lowSaturationFraction": 1.0,
+      "gatePass": false
+    },
+    "assets/generated/r88/album-256.png": {
+      "brightness": 0.793803653121649,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.2612541141822739,
+      "lowSaturationFraction": 0.6768035888671875,
+      "gatePass": false
+    },
+    "assets/generated/r88/binding-8.png": {
+      "brightness": 0.5591089820772058,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5758896968695268,
+      "lowSaturationFraction": 0.0341796875,
+      "gatePass": true
+    },
+    "assets/generated/r88/logo-320.png": {
+      "brightness": 0.48962136570383297,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5712878966736481,
+      "lowSaturationFraction": 0.005720395616145416,
+      "gatePass": true
+    },
+    "assets/generated/r88/app-icon-64.png": {
+      "brightness": 0.5486882680376838,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4971815987701269,
+      "lowSaturationFraction": 0.083251953125,
+      "gatePass": true
+    },
+    "assets/generated/r88/app-icon-192.png": {
+      "brightness": 0.5486882680376838,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4971815987701269,
+      "lowSaturationFraction": 0.083251953125,
+      "gatePass": true
+    },
+    "assets/generated/r88/app-icon-512.png": {
+      "brightness": 0.5486882680376838,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4971815987701269,
+      "lowSaturationFraction": 0.083251953125,
+      "gatePass": true
+    },
+    "assets/generated/r88/leaf-light.png": {
+      "brightness": 0.8557372549019607,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5607843137254902,
+      "lowSaturationFraction": 0.0,
+      "gatePass": false
+    },
+    "assets/generated/r88/canopy-shadow.png": {
+      "brightness": 0.3044392156862745,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4827586206896552,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r88/walk.png": {
+      "brightness": 0.4268899781583868,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5158948658470167,
+      "lowSaturationFraction": 0.029833438751844823,
+      "gatePass": true
+    },
+    "assets/generated/r88/farming-actions.png": {
+      "brightness": 0.40587036243175295,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5357102561392564,
+      "lowSaturationFraction": 0.022464415325999704,
+      "gatePass": true
+    },
+    "assets/generated/r88/welcome-512.webp": {
+      "brightness": 0.5741936523676854,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5101443189620083,
+      "lowSaturationFraction": 0.085174560546875,
+      "gatePass": true
+    },
+    "assets/generated/r88/basket-512.webp": {
+      "brightness": 0.5271606515921798,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.551159997031314,
+      "lowSaturationFraction": 0.037689208984375,
+      "gatePass": true
+    },
+    "assets/generated/r88/table-result-512.webp": {
+      "brightness": 0.5350669785682828,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.528133543666078,
+      "lowSaturationFraction": 0.072418212890625,
+      "gatePass": true
+    },
+    "assets/generated/r88/doorstep-result-512.webp": {
+      "brightness": 0.5382610744820389,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5060703029821905,
+      "lowSaturationFraction": 0.074615478515625,
+      "gatePass": true
+    }
+  },
+  "actorReceipts": [
+    {
+      "sheet": "walk",
+      "identicalAlphaToR87": true,
+      "frames": 24,
+      "gate": {
+        "brightness": 0.4268899781583868,
+        "nearBlackFraction": 0.0,
+        "saturation": 0.5158948658470167,
+        "lowSaturationFraction": 0.029833438751844823,
+        "gatePass": true
+      }
+    },
+    {
+      "sheet": "farming-actions",
+      "identicalAlphaToR87": true,
+      "frames": 48,
+      "gate": {
+        "brightness": 0.40587036243175295,
+        "nearBlackFraction": 0.0,
+        "saturation": 0.5357102561392564,
+        "lowSaturationFraction": 0.022464415325999704,
+        "gatePass": true
+      }
+    }
+  ],
+  "runtimeBytes": 539886,
+  "retainedAnimation": "R87 real four-direction six-pose walk and farming actions; unchanged physics, limb poses, alpha and impact timing",
+  "pipeline": "Native nearest-neighbor output; palette on bitmap sprites; real tool alpha threshold with zero transparent RGB; continuous alpha only lighting. Garden lossless WebP384. All old licenses retained."
+}

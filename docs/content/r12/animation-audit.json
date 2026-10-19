@@ -1,0 +1,1501 @@
+{
+  "status": "VERIFIED",
+  "trust": "Reuses earned UI picnic save; real clock, fixed species RNG only.",
+  "checks": [
+    "closing before impact and opening another page cannot commit a stale serving",
+    "no detached-page timer errors after leaving serving scene",
+    "merchant: unique complete parcel arrived",
+    "merchant: no surrounding keepsake overlaps arrived",
+    "merchant: deduction only after contact arrived",
+    "merchant: unique complete parcel reach",
+    "merchant: no surrounding keepsake overlaps reach",
+    "merchant: deduction only after contact reach",
+    "merchant: unique complete parcel contact",
+    "merchant: no surrounding keepsake overlaps contact",
+    "merchant: deduction only after contact contact",
+    "merchant: one delivered basket stays one deduction",
+    "elder: unique complete parcel arrived",
+    "elder: no surrounding keepsake overlaps arrived",
+    "elder: deduction only after contact arrived",
+    "elder: unique complete parcel reach",
+    "elder: no surrounding keepsake overlaps reach",
+    "elder: deduction only after contact reach",
+    "elder: unique complete parcel contact",
+    "elder: no surrounding keepsake overlaps contact",
+    "elder: deduction only after contact contact",
+    "elder: empty-hand source prevents embedded second basket",
+    "elder: one delivered basket stays one deduction",
+    "child: unique complete parcel arrived",
+    "child: no surrounding keepsake overlaps arrived",
+    "child: deduction only after contact arrived",
+    "child: unique complete parcel reach",
+    "child: no surrounding keepsake overlaps reach",
+    "child: deduction only after contact reach",
+    "child: unique complete parcel contact",
+    "child: no surrounding keepsake overlaps contact",
+    "child: deduction only after contact contact",
+    "child: one delivered basket stays one deduction",
+    "merchant: lift, movement and received captions are different",
+    "merchant: plate horizontally advances toward receiving guest",
+    "merchant: only impact writes a serving",
+    "merchant: plate actually travels",
+    "merchant: all four roots/feet fixed",
+    "merchant: complete plate visible throughout",
+    "merchant: actual upper-body sprite sources change",
+    "merchant: received plate never overlaps any of four head regions",
+    "merchant: reply and future selection separated",
+    "outlined serving history opens independently of choices",
+    "elder: lift, movement and received captions are different",
+    "elder: plate horizontally advances toward receiving guest",
+    "elder: only impact writes a serving",
+    "elder: plate actually travels",
+    "elder: all four roots/feet fixed",
+    "elder: complete plate visible throughout",
+    "elder: actual upper-body sprite sources change",
+    "elder: received plate never overlaps any of four head regions",
+    "elder: reply and future selection separated",
+    "child: lift, movement and received captions are different",
+    "child: plate horizontally advances toward receiving guest",
+    "child: only impact writes a serving",
+    "child: plate actually travels",
+    "child: all four roots/feet fixed",
+    "child: complete plate visible throughout",
+    "child: actual upper-body sprite sources change",
+    "child: received plate never overlaps any of four head regions",
+    "child: reply and future selection separated",
+    "child: lift, movement and received captions are different",
+    "child: only impact writes a serving",
+    "child: plate actually travels",
+    "child: all four roots/feet fixed",
+    "child: complete plate visible throughout",
+    "child: actual upper-body sprite sources change",
+    "child: received plate never overlaps any of four head regions",
+    "child: reply and future selection separated",
+    "outlined 44px water clue control opens",
+    "river_carp: identical fish source and native scale before and during bite",
+    "river_carp: visible 48px float physically half-submerges",
+    "river_carp: real-clock missed window gives late feedback",
+    "river_carp: late window grants zero fish",
+    "river_carp: exactly one page after first catch",
+    "river_carp: first caught page remains only unlocked page after reload",
+    "silver_dace: identical fish source and native scale before and during bite",
+    "silver_dace: visible 48px float physically half-submerges",
+    "silver_dace: real-clock missed window gives late feedback",
+    "silver_dace: late window grants zero fish",
+    "silver_dace: exactly one page after first catch",
+    "silver_dace: first caught page remains only unlocked page after reload",
+    "river_perch: identical fish source and native scale before and during bite",
+    "river_perch: visible 48px float physically half-submerges",
+    "river_perch: real-clock missed window gives late feedback",
+    "river_perch: late window grants zero fish",
+    "river_perch: exactly one page after first catch",
+    "river_perch: first caught page remains only unlocked page after reload"
+  ],
+  "sequences": [
+    {
+      "id": "merchant",
+      "taste": "sour",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 132,
+            "y": 298,
+            "width": 42,
+            "height": 34,
+            "top": 298,
+            "right": 174,
+            "bottom": 332,
+            "left": 132
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-lift.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "米莉端起酸味野莓。",
+          "localPlate": {
+            "x": 87,
+            "y": 199
+          }
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 141.796875,
+            "y": 255.765625,
+            "width": 42,
+            "height": 34,
+            "top": 255.765625,
+            "right": 183.796875,
+            "bottom": 289.765625,
+            "left": 141.796875
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-push.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "沿著桌面，推向蘿拉手邊。",
+          "localPlate": {
+            "x": 98.96,
+            "y": 147.52
+          }
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 155,
+            "y": 199,
+            "width": 42,
+            "height": 34,
+            "top": 199,
+            "right": 197,
+            "bottom": 233,
+            "left": 155
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-rest.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1,
+          "caption": "蘿拉接到手邊，嚐了一口。",
+          "localPlate": {
+            "x": 110,
+            "y": 100
+          }
+        }
+      ]
+    },
+    {
+      "id": "elder",
+      "taste": "hot",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 132,
+            "y": 298,
+            "width": 42,
+            "height": 34,
+            "top": 298,
+            "right": 174,
+            "bottom": 332,
+            "left": 132
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-lift.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "米莉端起熱味麥餅。",
+          "localPlate": {
+            "x": 87,
+            "y": 199
+          }
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 187.875,
+            "y": 255.75,
+            "width": 42,
+            "height": 34,
+            "top": 255.75,
+            "right": 229.875,
+            "bottom": 289.75,
+            "left": 187.875
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-push.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "沿著桌面，推向班伯手邊。",
+          "localPlate": {
+            "x": 155.12,
+            "y": 147.52
+          }
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 263,
+            "y": 199,
+            "width": 42,
+            "height": 34,
+            "top": 199,
+            "right": 305,
+            "bottom": 233,
+            "left": 263
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-rest.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1,
+          "caption": "班伯接到手邊，嚐了一口。",
+          "localPlate": {
+            "x": 218,
+            "y": 100
+          }
+        }
+      ]
+    },
+    {
+      "id": "child",
+      "taste": "sweet",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 132,
+            "y": 298,
+            "width": 42,
+            "height": 34,
+            "top": 298,
+            "right": 174,
+            "bottom": 332,
+            "left": 132
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-lift.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "米莉端起甜味胡蘿蔔點心。",
+          "localPlate": {
+            "x": 87,
+            "y": 199
+          }
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 176.640625,
+            "y": 292.203125,
+            "width": 42,
+            "height": 34,
+            "top": 292.203125,
+            "right": 218.640625,
+            "bottom": 326.203125,
+            "left": 176.640625
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-push.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "沿著桌面，推向圖圖手邊。",
+          "localPlate": {
+            "x": 143.16,
+            "y": 191.72
+          }
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 240,
+            "y": 284,
+            "width": 42,
+            "height": 34,
+            "top": 284,
+            "right": 282,
+            "bottom": 318,
+            "left": 240
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-rest.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1,
+          "caption": "圖圖接到手邊，嚐了一口。",
+          "localPlate": {
+            "x": 195,
+            "y": 185
+          }
+        }
+      ]
+    },
+    {
+      "id": "child",
+      "taste": "sour",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 132,
+            "y": 298,
+            "width": 42,
+            "height": 34,
+            "top": 298,
+            "right": 174,
+            "bottom": 332,
+            "left": 132
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-lift.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "米莉端起酸味野莓。",
+          "localPlate": {
+            "x": 87,
+            "y": 199
+          }
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 178.078125,
+            "y": 292.015625,
+            "width": 42,
+            "height": 34,
+            "top": 292.015625,
+            "right": 220.078125,
+            "bottom": 326.015625,
+            "left": 178.078125
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-push.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0,
+          "caption": "沿著桌面，推向圖圖手邊。",
+          "localPlate": {
+            "x": 143.16,
+            "y": 191.72
+          }
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 214.375,
+            "y": 253.53125,
+            "width": 42,
+            "height": 34,
+            "top": 253.53125,
+            "right": 256.375,
+            "bottom": 287.53125,
+            "left": 214.375
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r12/serve-rest.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 174,
+                "bottom": 358,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 186,
+                "bottom": 222,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-elder.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 136,
+                "width": 64,
+                "height": 86,
+                "top": 136,
+                "right": 316,
+                "bottom": 222,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r12-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 272,
+                "width": 64,
+                "height": 86,
+                "top": 272,
+                "right": 335,
+                "bottom": 358,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1,
+          "caption": "圖圖把這份放到桌中央，留給大家一起吃。",
+          "localPlate": {
+            "x": 158,
+            "y": 141
+          }
+        }
+      ]
+    }
+  ],
+  "fish": [
+    {
+      "id": "river_carp",
+      "message": "魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。",
+      "path": "docs/content/r12/phone-pond-river_carp-late-failure.png"
+    },
+    {
+      "id": "silver_dace",
+      "message": "魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。",
+      "path": "docs/content/r12/phone-pond-silver_dace-late-failure.png"
+    },
+    {
+      "id": "river_perch",
+      "message": "魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。",
+      "path": "docs/content/r12/phone-pond-river_perch-late-failure.png"
+    }
+  ],
+  "replacementFrames": [
+    {
+      "path": "docs/content/r12/phone-basket-merchant-approach.png",
+      "at": 1792389561725,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 168.03125,
+              "y": 353.546875,
+              "width": 66,
+              "height": 66,
+              "top": 353.546875,
+              "right": 234.03125,
+              "bottom": 419.546875,
+              "left": 168.03125
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-merchant.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，蘿拉正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-contact.png",
+      "at": 1792389562940,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 202.296875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 268.296875,
+              "bottom": 408.140625,
+              "left": 202.296875
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-merchant.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "蘿拉伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-received.png",
+      "at": 1792389564658,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 261.6875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 327.6875,
+              "bottom": 408.140625,
+              "left": 261.6875
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-merchant.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份、東林野莓 6→5 份・蘿拉已接到酸味餐籃",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-approach.png",
+      "at": 1792389568358,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 162.6875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 228.6875,
+              "bottom": 408.140625,
+              "left": 162.6875
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，班伯正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-contact.png",
+      "at": 1792389569570,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 202.296875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 268.296875,
+              "bottom": 408.140625,
+              "left": 202.296875
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-elder.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "班伯伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-received.png",
+      "at": 1792389570755,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 291.390625,
+              "y": 361.9375,
+              "width": 66,
+              "height": 66,
+              "top": 361.9375,
+              "right": 357.390625,
+              "bottom": 427.9375,
+              "left": 291.390625
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份・班伯已接到熱味餐籃",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-approach.png",
+      "at": 1792389574825,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 162.6875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 228.6875,
+              "bottom": 408.140625,
+              "left": 162.6875
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-child.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，圖圖正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-contact.png",
+      "at": 1792389576029,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 202.296875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 268.296875,
+              "bottom": 408.140625,
+              "left": 202.296875
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-child.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "圖圖伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-child-received.png",
+      "at": 1792389577228,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59466/assets/generated/content-r11/basket.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 271.59375,
+              "y": 333.890625,
+              "width": 66,
+              "height": 66,
+              "top": 333.890625,
+              "right": 337.59375,
+              "bottom": 399.890625,
+              "left": 271.59375
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-child.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r12-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 222.09375,
+              "bottom": 429.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份、胡蘿蔔 5→4 份・圖圖已接到甜味餐籃",
+        "propsHidden": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+PASS empty meal basket visibly directs player to the existing kitchen
+PASS ten real kitchen actions consume twenty wheat
+PASS cancel during carrying spends nothing and never completes the story later
+PASS merchant/plain: double tap spends one actual bread only at resident action frame
+PASS merchant: first story and taste clue are earned
+PASS merchant/sweet: double tap spends one actual bread only at resident action frame
+PASS merchant: wrong taste never opens remembered-taste reply
+PASS merchant/sour: double tap spends one actual bread only at resident action frame
+PASS merchant: matching remembered preference opens a unique reply
+AssertionError [ERR_ASSERTION]: merchant: clear completion feedback
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r1-e2e.js:14:37)
+    at playNeighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r1-e2e.js:87:7)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r1-e2e.js:208:20 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

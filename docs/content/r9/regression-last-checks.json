@@ -1,0 +1,29 @@
+{
+  "status": "BLOCKED",
+  "startedAt": "2026-10-19T01:34:41.143Z",
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-19T01:34:41.144Z",
+      "end": "2026-10-19T01:34:52.002Z",
+      "exitCode": 0,
+      "log": "docs/content/r9/regression-last-1.log",
+      "sha256": "8f38267b083c8d54323fb6aa67c47e5b46578b8f117de56ea9c67474f5cb32dd"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r6-e2e.js"
+      ],
+      "start": "2026-10-19T01:34:52.005Z",
+      "end": "2026-10-19T01:35:24.457Z",
+      "exitCode": 1,
+      "log": "docs/content/r9/regression-last-2.log",
+      "sha256": "05e4bd197debb5d5f408a0488f1ae4252ab5e69a944cba09ea36748bcdd9f68f"
+    }
+  ],
+  "endedAt": "2026-10-19T01:35:24.458Z"
+}

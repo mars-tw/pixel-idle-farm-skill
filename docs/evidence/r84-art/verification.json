@@ -1,0 +1,321 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "localOnly": true,
+  "version": "0.1.18",
+  "appVersion": "r84-20261016-1",
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 5.68,
+      "log": "docs/evidence/r84-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 384.83,
+      "log": "docs/evidence/r84-art/logs/e2e.txt"
+    },
+    {
+      "name": "night",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 24.39,
+      "log": "docs/evidence/r84-art/logs/night.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.31,
+      "log": "docs/evidence/r84-art/logs/water-guide.txt"
+    },
+    {
+      "name": "world-final",
+      "command": [
+        "node",
+        "scripts/test-world-rework-e2e.js"
+      ],
+      "exitCode": 0,
+      "seconds": 161.89,
+      "log": "docs/evidence/r84-art/logs/world-final.txt"
+    },
+    {
+      "name": "store-final",
+      "command": [
+        "node",
+        "scripts/test-r81-review.js",
+        "--journey-only"
+      ],
+      "exitCode": 0,
+      "log": "docs/evidence/r84-art/logs/store-final.txt"
+    },
+    {
+      "name": "art-final",
+      "command": [
+        "node",
+        "scripts/test-r84-art.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/evidence/r84-art/logs/art-final.txt"
+    },
+    {
+      "name": "controls-final",
+      "command": [
+        "node",
+        "scripts/test-controls-reachability.js"
+      ],
+      "exitCode": 0,
+      "seconds": 14.69,
+      "log": "docs/evidence/r84-art/logs/controls-final.txt"
+    },
+    {
+      "name": "compare",
+      "command": [
+        "node",
+        "scripts/capture-r84-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 7.63,
+      "log": "docs/evidence/r84-art/logs/compare.txt"
+    },
+    {
+      "name": "readback",
+      "command": [
+        "python",
+        "-W",
+        "ignore::DeprecationWarning",
+        "scripts/verify-r84-art.py"
+      ],
+      "exitCode": 0,
+      "log": "docs/evidence/r84-art/logs/readback.txt"
+    }
+  ],
+  "syntax": [
+    "src/adventure.js",
+    "src/art-r84.js",
+    "src/atlas.js",
+    "src/config.js",
+    "src/daily-ui.js",
+    "src/daily.js",
+    "src/game.js",
+    "src/heirloom-ui.js",
+    "src/heirloom.js",
+    "src/state.js",
+    "src/ui.js",
+    "src/world-ui.js",
+    "scripts/audit-oc-r1.js",
+    "scripts/capture-promo-trio.js",
+    "scripts/capture-r79-playtest.js",
+    "scripts/capture-r82-art.js",
+    "scripts/capture-r83-art.js",
+    "scripts/capture-r84-art.js",
+    "scripts/farm-control-test-helper.js",
+    "scripts/gen-art-v3.js",
+    "scripts/gen-art-v4.js",
+    "scripts/gen-v2-atlases.js",
+    "scripts/generate-crops3-atlas.js",
+    "scripts/measure-r68-baseline.js",
+    "scripts/process-v3-atlas.js",
+    "scripts/process-v4-atlas.js",
+    "scripts/process-world-project-art.js",
+    "scripts/run-browser-gates.js",
+    "scripts/test-adventure.js",
+    "scripts/test-controls-reachability.js",
+    "scripts/test-economy.js",
+    "scripts/test-guards.js",
+    "scripts/test-npc-indicators.js",
+    "scripts/test-r66-ui-art.js",
+    "scripts/test-r68-browser.js",
+    "scripts/test-r68-visuals.js",
+    "scripts/test-r72-fixed-layers.js",
+    "scripts/test-r72-night-gate.js",
+    "scripts/test-r73-playtest.js",
+    "scripts/test-r74-building-upgrades-e2e.js",
+    "scripts/test-r74-building-upgrades.js",
+    "scripts/test-r79-fun-e2e.js",
+    "scripts/test-r79-sunpatch.js",
+    "scripts/test-r80-daily.js",
+    "scripts/test-r80-mobile.js",
+    "scripts/test-r81-heirloom.js",
+    "scripts/test-r81-review.js",
+    "scripts/test-r82-art.js",
+    "scripts/test-r83-art.js",
+    "scripts/test-r84-art.js",
+    "scripts/test-rpg-v4-e2e.js",
+    "scripts/test-rwd-matrix.js",
+    "scripts/test-systems.js",
+    "scripts/test-ui-smoke.js",
+    "scripts/test-version-chain.js",
+    "scripts/test-water-quest-guide.js",
+    "scripts/test-world-migration.js",
+    "scripts/test-world-project-art.js",
+    "scripts/test-world-rework-e2e.js",
+    "scripts/validate-v3-atlas.js",
+    "scripts/validate-v4-atlas.js"
+  ],
+  "secretScan": {
+    "matches": 0,
+    "scope": "repo text; excludes .git/node_modules/.audit-tmp/.secrets; no external credentials read"
+  },
+  "oldRuntimeVersionMatches": 0,
+  "storeScreenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-01-welcome.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "d4904a9b016f34f6dd027794de97a1cb1ced7b8f10d74bb2e1fb983570472703"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-02-sunlight.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "9883de8aa62b8cea891dd28525392d420754ed8e0e286462c1539cdeae1fe23f"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-03-basket.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "2ff907f2f3e56b555fa8b9ce184ed9d5a4b1c64376c346427ce60d03fa633cb8"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-04-note.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "8ca4ac719fee48d6b085daf9e9e232db269e186171981ca1e948c3e2cb51ecdf"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-05-daily.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "578ae7f5a49ca08f36cb202176236f4b5512c6f03431e045e42dd5d6e065de4f"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-01-welcome.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "2d8b3329b28a1395f3dd04a325023bafefa66772ded9c503a93c3ac46ca726c8"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-02-sunlight.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "1ce3e9be06e141666b0660b3e210b1c0f14e02a1755115d77c8823e9d623f381"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-03-basket.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "0cc7b1a394bb05c6eb7dd97e25a8f92d512f67f8667c6d6a4b6d77c580546a9a"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-04-note.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "7b1f3c3f9d0ba5e0f300d4ceec9333320da01e3ed73762a55b2d57f7e04b183d"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-05-daily.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "892f124ab3ffb9ba106c3389e74a5f5e574dc4c2a814a22343c8b92ba17e65aa"
+    }
+  ],
+  "limitations": [
+    "Concurrent load performance is reference only.",
+    "No native build/device or independent 8/10 rescore."
+  ],
+  "runtimeSourceHashes": {
+    "index.html": "cc56fdb708bc006231de953bf87cc70e4782c1bdf817f342e1956b2246944a25",
+    "sw.js": "065554213e301e52394f686729a70808aebac8d97f5a679ab744fd4b67f68c59",
+    "manifest.webmanifest": "d6af6abbe9efde4e5453a759773e67b53384a987750b3179bfd973062822b689",
+    "package.json": "e67cd90f7a2e28fe3f7d788906c8b366fa92e684703a4087aab78acb36d3504b",
+    "src/adventure.js": "e8f74711b690555fa7f92e0ea5c9fef7bef9030e19b0b9bcb3e5937b507e3063",
+    "src/art-r82.css": "be1862ef533af939db0a234c61feaed995926d706c27bee278c55c54df44fd60",
+    "src/art-r83.css": "f55b46f03145b4739fcc7a9b9470856291a480d1b57c5b96f4757cac682f28c1",
+    "src/art-r84.css": "43c3844e6f2b2f3706756978910de173cfeb9cc2f93d2bfdaed95f8439b87c07",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/atlas.js": "1470c32a558a372367df407d785ea1a7d42ca716a47f64a4afc5e65d37a88880",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/daily-ui.js": "a20133796e55eedcdec7f5083c7665f6074966b67f0e115ad3bbeffe67888b6a",
+    "src/daily.js": "c71fb76ff8e9f6f0a5277f6d76e8517c0fcf5482885e3d220e5313c02bda564a",
+    "src/game.js": "0719cdc2f3447846ab79ec7b38fa06f0c1cf91c66cc1225ff5db793e3ec6c734",
+    "src/heirloom-ui.js": "7006a114bc61286cd8726e4f3bb564cd3630a98bf2bfcaf31d9ba30a9c7fdfd6",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "4fd9ca1a4a8789e5a059234c7cd812718d00273ddc4bdd83f8f2ce05edb80b0f",
+    "src/ui.js": "61fee4963b72eef80ea451436e8e0627b282f4769358f8ed97b59df059df0b76",
+    "src/world-ui.js": "775a3fc89abb328ec9812c15b4db61687de86260c886bf21808edb0cef64653f",
+    "src/world.css": "5422def85158f1b3ea27acd9537c78ce14687f153d2dd606a02615078868d51c"
+  },
+  "artChecks": 166,
+  "controlTargets": 339,
+  "historicalEvidenceRestored": 71,
+  "performance": {
+    "desktop": {
+      "runsP95Ms": [
+        16.8,
+        16.7,
+        16.7
+      ],
+      "medianP95Ms": 16.7,
+      "limitMs": 18,
+      "trust": "concurrent-load (other agents share this machine)"
+    },
+    "mobile": {
+      "runsP95Ms": [
+        16.8,
+        16.7,
+        16.8
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "trust": "concurrent-load (other agents share this machine)"
+    }
+  },
+  "artValidationSha256": "b416e96549e06fdf6338f075db933dc6875915dfdb602736b72dd2f8f66700d8",
+  "finalPresentationNote": "After full CI pass, final world/store/art/control checks reran for compact task labels, actual dock-child hiding and landscape story text visibility. Art final: 166 checks. Store images were re-earned, not composited.",
+  "runtimeJsonLF": true,
+  "packageDeltaBytes": 310257
+}

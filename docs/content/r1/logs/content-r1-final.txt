@@ -1,0 +1,119 @@
+PASS empty meal basket visibly directs player to the existing kitchen
+PASS ten real kitchen actions consume twenty wheat
+PASS cancel during carrying spends nothing and never completes the story later
+PASS merchant/plain: double tap spends one actual bread only at resident action frame
+PASS merchant: first story and taste clue are earned
+PASS merchant/sweet: double tap spends one actual bread only at resident action frame
+PASS merchant: wrong taste never opens remembered-taste reply
+PASS merchant/sour: double tap spends one actual bread only at resident action frame
+PASS merchant: matching remembered preference opens a unique reply
+PASS merchant: clear completion feedback
+PASS elder/plain: double tap spends one actual bread only at resident action frame
+PASS elder: first story and taste clue are earned
+PASS elder/sweet: double tap spends one actual bread only at resident action frame
+PASS elder: wrong taste never opens remembered-taste reply
+PASS elder/hot: double tap spends one actual bread only at resident action frame
+PASS elder: matching remembered preference opens a unique reply
+PASS elder: clear completion feedback
+PASS child/plain: double tap spends one actual bread only at resident action frame
+PASS child: first story and taste clue are earned
+PASS child/sour: double tap spends one actual bread only at resident action frame
+PASS child: wrong taste never opens remembered-taste reply
+PASS child/sweet: double tap spends one actual bread only at resident action frame
+PASS child: matching remembered preference opens a unique reply
+PASS child: clear completion feedback
+PASS all three stories, delivery counts and matched replies persist through actual reload
+PASS earned taste conversation can be reread after reload
+PASS river_carp: early UI reel has no catch
+PASS river_carp: correct visible bite phase catches its species and enters cooldown
+PASS river_carp: first catch writes a specific river observation
+PASS river_carp: real reload preserves catch and note
+PASS river_carp: reopening the pond cannot bypass cooldown
+PASS silver_dace: early UI reel has no catch
+PASS silver_dace: correct visible bite phase catches its species and enters cooldown
+PASS silver_dace: first catch writes a specific river observation
+PASS silver_dace: real reload preserves catch and note
+PASS silver_dace: reopening the pond cannot bypass cooldown
+PASS river_perch: early UI reel has no catch
+PASS river_perch: correct visible bite phase catches its species and enters cooldown
+PASS river_perch: first catch writes a specific river observation
+PASS river_perch: real reload preserves catch and note
+PASS river_perch: reopening the pond cannot bypass cooldown
+PASS 320x568 .world-modal-close: >=44px, onscreen and center hittable
+PASS 320x568 #sendNeighbor: >=44px, onscreen and center hittable
+PASS 320x568 #basketKitchen: >=44px, onscreen and center hittable
+PASS 320x568 #readNeighbor: >=44px, onscreen and center hittable
+PASS 320x568 [data-neighbor]: >=44px, onscreen and center hittable
+PASS 320x568 [data-taste]: >=44px, onscreen and center hittable
+PASS 320 actual taste tab selects without spending
+PASS 320 no keyboard instruction on mobile content
+PASS 320 close returns to playable farm
+PASS 320 pond action stays reachable
+PASS 320 river notes stay reachable beside the action
+PASS 844x390 .world-modal-close: >=44px, onscreen and center hittable
+PASS 844x390 #sendNeighbor: >=44px, onscreen and center hittable
+PASS 844x390 #basketKitchen: >=44px, onscreen and center hittable
+PASS 844x390 #readNeighbor: >=44px, onscreen and center hittable
+PASS 844x390 [data-neighbor]: >=44px, onscreen and center hittable
+PASS 844x390 [data-taste]: >=44px, onscreen and center hittable
+PASS 844 actual taste tab selects without spending
+PASS 844 no keyboard instruction on mobile content
+PASS 844 close returns to playable farm
+PASS 844 pond action stays reachable
+PASS 844 river notes stay reachable beside the action
+PASS 768x1024 .world-modal-close: >=44px, onscreen and center hittable
+PASS 768x1024 #sendNeighbor: >=44px, onscreen and center hittable
+PASS 768x1024 #basketKitchen: >=44px, onscreen and center hittable
+PASS 768x1024 #readNeighbor: >=44px, onscreen and center hittable
+PASS 768x1024 [data-neighbor]: >=44px, onscreen and center hittable
+PASS 768x1024 [data-taste]: >=44px, onscreen and center hittable
+PASS 768 actual taste tab selects without spending
+PASS 768 no keyboard instruction on mobile content
+PASS 768 close returns to playable farm
+PASS 768 pond action stays reachable
+PASS 768 river notes stay reachable beside the action
+PASS 1366x600 .world-modal-close: >=44px, onscreen and center hittable
+PASS 1366x600 #sendNeighbor: >=44px, onscreen and center hittable
+PASS 1366x600 #basketKitchen: >=44px, onscreen and center hittable
+PASS 1366x600 #readNeighbor: >=44px, onscreen and center hittable
+PASS 1366x600 [data-neighbor]: >=44px, onscreen and center hittable
+PASS 1366x600 [data-taste]: >=44px, onscreen and center hittable
+PASS 1366 actual taste tab selects without spending
+PASS 1366 close returns to playable farm
+PASS 1366 pond action stays reachable
+PASS 1366 river notes stay reachable beside the action
+PASS 430x932 .world-modal-close: >=44px, onscreen and center hittable
+PASS 430x932 #sendNeighbor: >=44px, onscreen and center hittable
+PASS 430x932 #basketKitchen: >=44px, onscreen and center hittable
+PASS 430x932 #readNeighbor: >=44px, onscreen and center hittable
+PASS 430x932 [data-neighbor]: >=44px, onscreen and center hittable
+PASS 430x932 [data-taste]: >=44px, onscreen and center hittable
+PASS 430 actual taste tab selects without spending
+PASS 430 no keyboard instruction on mobile content
+PASS 430 close returns to playable farm
+PASS 430 pond action stays reachable
+PASS 430 river notes stay reachable beside the action
+PASS 1032x1376 .world-modal-close: >=44px, onscreen and center hittable
+PASS 1032x1376 #sendNeighbor: >=44px, onscreen and center hittable
+PASS 1032x1376 #basketKitchen: >=44px, onscreen and center hittable
+PASS 1032x1376 #readNeighbor: >=44px, onscreen and center hittable
+PASS 1032x1376 [data-neighbor]: >=44px, onscreen and center hittable
+PASS 1032x1376 [data-taste]: >=44px, onscreen and center hittable
+PASS 1032 actual taste tab selects without spending
+PASS 1032 no keyboard instruction on mobile content
+PASS 1032 close returns to playable farm
+PASS 1032 pond action stays reachable
+PASS 1032 river notes stay reachable beside the action
+PASS 1366 new-content rAF p95 median of three 16.8ms <=18ms
+PASS 390 new-content rAF p95 median of three 16.7ms <=18ms
+AssertionError [ERR_ASSERTION]: service worker controls the local game
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r1-e2e.js:13:37)
+    at offline (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r1-e2e.js:154:5)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r1-e2e.js:204:109 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

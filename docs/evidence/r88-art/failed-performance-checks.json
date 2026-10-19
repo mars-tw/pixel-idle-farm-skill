@@ -1,0 +1,19 @@
+{
+  "status": "BLOCKED",
+  "headless": true,
+  "sequential": true,
+  "checks": [
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "run",
+        "test:ci"
+      ],
+      "label": "ci-final",
+      "exitCode": 1,
+      "elapsedSeconds": 227.699,
+      "log": "docs/evidence/r88-art/logs/ci-final.txt"
+    }
+  ]
+}

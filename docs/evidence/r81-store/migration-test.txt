@@ -1,0 +1,4 @@
+PASS actual CONFIG: picnic relocation preserves a new coop and its animal across repeated reloads.
+PASS actual CONFIG: occupied garden site relocates, retains building/animal, and keeps its interaction target after reload.
+PASS R74 shoreline/road fixture: existing building wins over new landscape and picnic site.
+PASS corrupt map and invalid adventure fixture: world bindings rebuild without overlapping entities or new construction on NPCs/stations.

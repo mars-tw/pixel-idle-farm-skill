@@ -1,0 +1,76 @@
+{
+  "status": "VERIFIED",
+  "attempts": [
+    {
+      "name": "first UI journey",
+      "status": "VERIFIED",
+      "receipt": "docs/content/r9/first-ui-checks.json",
+      "log": "docs/content/r9/first-ui.log",
+      "trust": "Initial working version only. Later palette, poses, note-history controls and final curation supersede these screenshots. Final proof is browser-checks.json, not this first receipt.",
+      "metadataCorrection": "The initial fixture description said 60 capacity; actual storageLevel1 capacity is 70, visible in the initial screenshots. Final fixture description corrected to 70. No overflow existed."
+    },
+    {
+      "name": "strict native palette audit",
+      "status": "BLOCKED",
+      "command": "python tools/verify-content-r9-pixels.py",
+      "observedFailure": "AssertionError at all(p in palette for p in pixels)",
+      "cause": "Pillow palette padding used pure black entries; 24 sprites contained opaque RGB(0,0,0) outside the R89 palette.",
+      "standaloneFailureLog": null,
+      "evidence": "Observed command output in this session. A separate stderr artifact was not retained.",
+      "correction": "Fill every palette entry by repeating existing R89 colors, regenerate 24 outputs and manifest hashes. Keep the strict assertion.",
+      "correctedCommand": "node scripts/test-content-r9.js",
+      "correctedStatus": "VERIFIED",
+      "correctedEvidence": [
+        "docs/content/r9/native-pixel-checks.json",
+        "docs/content/r9/character-palette-checks.json"
+      ]
+    },
+    {
+      "name": "R4 learned-status contract",
+      "status": "BLOCKED",
+      "command": "node scripts/test-content-r4-e2e.js",
+      "observedFailure": "river_carp learned guidance leaves the reel decision to visible water",
+      "receipt": "docs/content/r9/regression-first-checks.json",
+      "log": "docs/content/r9/regression-2.log",
+      "correction": "Preserve the existing learned-status sentence. Species-specific teaching remains in the new pond-guide and the active reel signal remains visible. Keep the original exact assertion unchanged.",
+      "continuation": "docs/content/r9/regression-middle-checks.json"
+    },
+    {
+      "name": "R6 short walking capture fixture",
+      "status": "BLOCKED",
+      "observedFailure": "merchant 430 taken/halfway show actual locomotion",
+      "receipt": "docs/content/r9/regression-middle-checks.json",
+      "log": "docs/content/r9/regression-resume-4.log",
+      "correction": "Match the existing R7 evidence fixture: start at t7_1 and use MOVE_MS=600 for capture-only walking. Preserve both actual-walking assertions, real character frames and all fish clocks. Runtime movement speed unchanged.",
+      "continuation": "docs/content/r9/regression-last-checks.json"
+    },
+    {
+      "name": "R6 personal object label",
+      "status": "BLOCKED",
+      "observedFailure": "merchant distinct success token",
+      "receipt": "docs/content/r9/regression-r6-token-failure-checks.json",
+      "log": "docs/content/r9/regression-last-2.log",
+      "correction": "The renamed occasion used the internal tea-stool title and omitted the visible teacup. Use literal personal object labels: upside-down teacup, rod with two plates, pressed-flower chair. Keep original text assertions unchanged.",
+      "correctedReceipt": "docs/content/r9/regression-done-checks.json"
+    },
+    {
+      "name": "R7 keepsake pointer occlusion",
+      "status": "BLOCKED",
+      "observedFailure": "Elder memory caption click intercepted by bush at t6_10",
+      "receipt": "docs/content/r9/regression-r7-pointer-failure-checks.json",
+      "log": "docs/content/r9/regression-done-3.log",
+      "correction": "Keep the original real pointer click. Put the caption inside the object hit area and give keepsakes a foreground interaction layer, preserving ordinary game controls above them.",
+      "continuation": "docs/content/r9/regression-resolved-checks.json"
+    },
+    {
+      "name": "R7 masked pair sampling window",
+      "status": "BLOCKED",
+      "observedFailure": "river_carp pre-sink mask is same real phase",
+      "receipt": "docs/content/r9/regression-r7-phase-failure-checks.json",
+      "log": "docs/content/r9/regression-resolved-2.log",
+      "correction": "Retain both original same-phase assertions. Keep every photographic attempt and allow at most three ordinary real-time casts; select a pair only when both captures share the exact phase and cast.startedAt. Unused casts must expire normally and grant no fish or note. Original PNGs are copied without manipulation.",
+      "correctedReceipt": "docs/content/r9/regression-complete-checks.json"
+    }
+  ],
+  "meaning": "Historical failures retained; successful script coverage reconciled in regression-final.json."
+}

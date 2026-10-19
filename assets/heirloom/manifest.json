@@ -1,0 +1,46 @@
+{
+  "release": "r82-20261016-1",
+  "status": "EXECUTED",
+  "requestedModelSlug": null,
+  "actualModelSlug": null,
+  "newRasterFiles": [
+    "assets/heirloom/doorstep-r82.webp",
+    "assets/heirloom/table-r82.webp"
+  ],
+  "reason": "R82 ??????????????????????????????? slug???? API ??????",
+  "illustrations": {
+    "doorstep": {
+      "file": "assets/heirloom/doorstep-r82.webp",
+      "status": "EXECUTED",
+      "brief": "既有像素農場色盤，門邊的小麥餐籃與空椅子，無文字，不加未知角色。",
+      "sha256": "aaa8598db33c209250e438e1b06255d6b95d51f2a9d5cc08fd94a91907fb4bd5"
+    },
+    "table": {
+      "file": "assets/heirloom/table-r82.webp",
+      "status": "EXECUTED",
+      "brief": "既有像素農場色盤，河畔木桌、兩個杯子與小麥餐籃，無文字，不加未知角色。",
+      "sha256": "53cca880036cd40531d966d7f80cafe1536c27648017a965bb6b8061c0ec7366"
+    }
+  },
+  "replaceIllustrations": "?? src/heirloom.js?????????????SW?????????? assets/generated/r82/manifest.json?",
+  "animationMissing": [
+    "carry_basket_down/side/up",
+    "give_basket_down/side/up",
+    "hold_fishing_rod_down/side/up"
+  ],
+  "animationPipeline": {
+    "existing": "src/atlas.js + assets/generated/v4/*-walk-48x64.json + *-actions-48x64.json + src/ui.js pSheet/paintPlayer/playAction/tickPlayer",
+    "contract": "物理 root/collider 不改；每方向六個真姿勢幀，48x64 與一致腳底錨點；遞籃需預備、交付、收招，在交付作用幀才消耗兩份小麥；先讓 atlas/像素/完整 UI 閘通過再接動畫列。",
+    "currentDelivery": "沿用既有 use 六幀互動與 430ms 作用幀，不宣稱已完成專用持籃或遞籃動畫。"
+  },
+  "generator": "image_gen.imagegen",
+  "round83": {
+    "release": "r83-20261016-1",
+    "manifest": "assets/generated/r83/manifest.json",
+    "illustrations": {
+      "doorstep": "assets/heirloom/r83/doorstep-r82.webp",
+      "table": "assets/heirloom/r83/table-r82.webp"
+    },
+    "note": "R82 files retained as historical sources. R83 runtime uses separately generated pixel scenes."
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "status": "EXECUTED",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool did not disclose model slug. Actual tool name recorded; no guessed API model.",
+  "stylePrefix": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. ",
+  "jobs": [
+    {
+      "id": "sheet",
+      "prompt": "Use case: stylized-concept. Production character model sheet for Sunshine Farm pixel game. SHARED STYLE: warm storybook 16-bit pixel art; native 48x64 character density; crisp pixel clusters, 1px dark tea outline #3e2f23; 3-tone hue shifted shading; upper-left golden sunlight, green shadows; palette straw #e4ad48, cream #fff6e3, moss #6a994e, tomato #d95737, wicker #b3874b; no blue UI, no smooth painting. Miri is a young adult woman farmer, auburn braid, expressive dark eyes, green overalls and cream shirt, brown work boots. WIDE HAT with a very clear RED-AND-CREAM CHECKERED band (not a plain orange band); small round open WOVEN WICKER BASKET on her back with visible cross-hatched weave and a LARGE red-and-cream gingham cloth corner hanging over its rim (not a leather backpack), red checked neckerchief. Cute appealing proportions but not huge head, hat shoulder warm highlight. Create clean cream-background reference sheet: top row full-body FRONT, RIGHT SIDE showing the wicker basket, BACK showing basket and cloth; lower row 3 face portraits neutral, concentrating, smiling. Equal columns, full feet visible, no labels, no text, no watermark. Same costume and identity every view. Do not put extra figures.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-e058889e-5241-43de-87e3-af260d10b690.png",
+      "master": "docs/art/character-sheets/miri-r86.png",
+      "transparent": false
+    },
+    {
+      "id": "leaf",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. Transparent RGBA ground lighting sprite for existing overhead pixel farm, square canvas. Draw a large coherent diagonal apple-tree canopy SHADOW projected toward LOWER RIGHT from an off-canvas tree at UPPER LEFT, with an elongated trunk/branch shadow extending diagonally through center, broad organic clumps of translucent cool green shade, soft pixel stepped penumbra, irregular open LEAF GAPS letting honey-yellow sunlight patches through. 5 or 6 unequal LARGE connected lit patches and tiny scatter near edge, natural asymmetry, no repeating dots, no stars, no particles. Left/top shaded, right/bottom warm sunlight; occupy 80% canvas with feathered transparent exterior. This is only a ground light/shadow overlay: NO tree itself, NO grass texture, NO dirt, NO objects, NO character. Clear directional shadow, understated native 128x128 pixels, generous clear edge.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-7d91633d-0739-4c7d-9e7f-d999a025b1c2.png",
+      "master": "docs/art/masters/r86/leaf.png",
+      "transparent": true
+    },
+    {
+      "id": "panel",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. A square tileable cream paper texture for a farm notebook UI. Faint warm fibers and a very sparse gold fleck, pale enough for dark text, no frame, no torn edge, no border, no corner motif, NO gingham anywhere in texture, no illustrated objects. The UI will add its own thin border and red-check cloth binding. Uniform cream paper throughout, low contrast, flat scan straight on.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-4c0be608-13bb-4575-93e8-2f2ec0b9c6d7.png",
+      "master": "docs/art/masters/r86/panel.png",
+      "transparent": false
+    },
+    {
+      "id": "stamps",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. Transparent sprite atlas with exactly 3 icons, in ONE ROW of 3 EQUAL CELLS, wide 3:1 composition. Each cell contains an evenly sized circular rubber stamp in the SAME tomato-red ink, rough pixel ink edges and double circular outer border, cream transparent negative holes. LEFT stamp shows unmistakable watering can with spout and falling droplets; CENTER stamp shows 3 wheat ears with stems; RIGHT stamp shows wicker picnic basket with high arch handle and cloth corner. Icons read distinctly at 40px. No words/numbers. Sparse stamped ink silhouette, generous transparent separation, consistent 32px native pixel density. Do not show realistic tools or colored objects; red monochrome stamp silhouettes only.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-29f20467-1dcc-42fb-bb29-c2afb0a010e7.png",
+      "master": "docs/art/masters/r86/stamps.png",
+      "transparent": true
+    },
+    {
+      "id": "walk",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. REFERENCE is identity and costume model sheet. Create genuine WALK ANIMATION SPRITES, same Miri farmer. Transparent RGBA atlas exactly 6 columns by 4 rows, wide canvas; all full-body sprites equally sized with empty gutters, fixed foot baseline, no overlapping. ROW1 facing DOWN/front; ROW2 LEFT/profile; ROW3 RIGHT/profile; ROW4 UP/back. SIX DISTINCT POSES PER ROW with visibly alternating bent arms and legs and stepping boots, clean six-frame complete walk cycle. Preserve wide straw hat RED-CREAM CHECKERED band and neckerchief, auburn braid, green overalls, cream sleeves, BOOTS, unmistakable round open WOVEN WICKER BASKET ON BACK with large triangular red-white gingham fabric over rim. BASKET NOT A BACKPACK. Profile row must clearly show basket on back, every profile facing direction exactly as specified. Native 48x64 frame density with chunky readable red checks and wicker ribs. Head 1/3 height; no shadows, no grid, no labels.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-67c680a5-65e6-4ab1-82c1-6217760e9a55.png",
+      "master": "docs/art/masters/r86/walk.png",
+      "transparent": true,
+      "references": [
+        "docs/art/character-sheets/miri-r86.png"
+      ]
+    },
+    {
+      "id": "actions",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. REFERENCE is character identity/costume sheet. Transparent RGBA production ACTION ATLAS exactly SIX COLUMNS by EIGHT ROWS, clean equal cells full-body with fixed foot baseline. Rows1-4 WATERING facing respectively DOWN, LEFT, RIGHT, UP. Rows5-8 TENDING/HARVEST facing respectively DOWN, LEFT, RIGHT, UP. Each row six DISTINCT genuine limb poses: 1 ready,2 anticipation lifting can or reaching,3 lean with arms bent,4 active impact pour visible blue water stream from can or hands gathering,5 return,6 recovered standing. Water LEFT points can left and RIGHT points can right. Real articulated elbow wrist knee changes, not same pose shifting. Full hats, tools, boots never clipped, generous transparent gutters, identical body scale. Retain huge straw hat red-white checker band, red-white neckcloth, auburn braid, cream shirt green overalls, open woven WICKER BASKET strapped behind with big red-white check triangle over rim. No leather backpack. Pixel native48x64 cells, same cartoon proportions in all rows, no text/grid/shadows. All 48 frames separate.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-2c2f21b7-e343-497e-8e5a-31e925fe7ac2.png",
+      "master": "docs/art/masters/r86/actions.png",
+      "transparent": true,
+      "references": [
+        "docs/art/character-sheets/miri-r86.png"
+      ]
+    },
+    {
+      "id": "logo",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. Create a polished horizontal game title Logo using exact traditional Chinese text \"陽光農場\". Four large legible hand-lettered chunky pixel glyphs in straw gold with deep tea outline and cream top-left highlight. Small wheat sprig left, small red-white gingham bow and wicker basket on right. Pixel native160x56 density, generous transparent exterior, no other text, not glossy, no UI screenshot. Must remain recognizable at160 CSS px. Transparent RGBA.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-d90cd21e-6b15-4429-85c2-9b00d2d91290.png",
+      "master": "docs/art/masters/r86/logo.png",
+      "transparent": true,
+      "references": []
+    },
+    {
+      "id": "app",
+      "prompt": "Sunshine Farm warm 16-bit pixel art, crisp clusters, 1px dark tea #3e2f23 outline, hue-shifted 3-tone shading, upper-left golden sunlight, moss #6a994e, straw #e4ad48, cream #fff6e3, tomato red #d95737, wicker #b3874b. No text, no watermark, no smooth painterly rendering. Square full-bleed App icon proposal for same Sunshine Farm: closeup cheerful red-haired woman in wide straw hat with clearly red-white checked hatband and green overalls on left, open woven wicker picnic basket with red-check cloth and 2 wheat ears on right; sunlight and leaf shadows falling across them. Simple bold readable silhouette at64px; large warm gold sunlit shapes, moss green lower corners, no letters, no border or rounded corners, no UI. Same identity as reference.",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14d1f-5ba1-7f11-a21d-4a839658dad2\\exec-65701052-f569-4f47-ad2c-82026d8bfd6f.png",
+      "master": "docs/art/masters/r86/app.png",
+      "transparent": false,
+      "references": [
+        "docs/art/character-sheets/miri-r86.png"
+      ]
+    }
+  ]
+}

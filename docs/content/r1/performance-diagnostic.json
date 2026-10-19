@@ -1,0 +1,37 @@
+{
+  "status": "VERIFIED",
+  "fixture": "Explicit mid-game ingredient fixture: earned farming progression is covered separately by the existing world E2E. This test supplies chapter-one unlocks, restored dock, wheat20/carrot5/berries5, and performs actual cooking, delivery, timed reels and localStorage reload via UI.",
+  "checks": [
+    "1366 new-content rAF p95 median of three 16.8ms <=18ms",
+    "390 new-content rAF p95 median of three 16.7ms <=18ms",
+    "no page errors or missing local assets"
+  ],
+  "errors": [],
+  "screenshots": [],
+  "performance": {
+    "1366x768": {
+      "runsP95Ms": [
+        16.8,
+        16.8,
+        33.4
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "trust": "concurrent shared host; reference only",
+      "warmup": "first full 4.2s cast, then a new real cast and 4s sample; fresh browser per run",
+      "scene": "live R1 pond bobber modal over farm"
+    },
+    "390x844": {
+      "runsP95Ms": [
+        16.7,
+        16.7,
+        16.7
+      ],
+      "medianP95Ms": 16.7,
+      "limitMs": 18,
+      "trust": "concurrent shared host; reference only",
+      "warmup": "first full 4.2s cast, then a new real cast and 4s sample; fresh browser per run",
+      "scene": "live R1 pond bobber modal over farm"
+    }
+  }
+}

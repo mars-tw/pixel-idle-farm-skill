@@ -1,0 +1,77 @@
+PASS 375x667 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":290,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":290,"h":44,"inside":true,"hit":true}]
+PASS 375x667 welcome no page overflow
+PASS 375x667 farm reachable 44px controls [{"id":"","w":97.9375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":57.171875,"h":46,"inside":true,"hit":true},{"id":"settingsBtn","w":44,"h":44,"inside":true,"hit":true}]
+PASS 375x667 farm no page overflow
+PASS 375x667 recipe reachable 44px controls [{"id":"dailyToday","w":99.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":99.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":99.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":261,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":315,"h":44,"inside":true,"hit":true}]
+PASS 375x667 recipe no page overflow
+PASS 390x844 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":305,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":305,"h":44,"inside":true,"hit":true}]
+PASS 390x844 welcome no page overflow
+PASS 390x844 farm reachable 44px controls [{"id":"","w":97.9375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":59.671875,"h":46,"inside":true,"hit":true},{"id":"settingsBtn","w":44,"h":44,"inside":true,"hit":true}]
+PASS 390x844 farm no page overflow
+PASS 390x844 recipe reachable 44px controls [{"id":"dailyToday","w":104.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":104.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":104.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":276,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":330,"h":44,"inside":true,"hit":true}]
+PASS 390x844 recipe no page overflow
+PASS 844x390 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 844x390 welcome no page overflow
+PASS 844x390 farm reachable 44px controls [{"id":"","w":95.53125,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":44,"h":44,"inside":true,"hit":true},{"id":"settingsBtn","w":44,"h":44,"inside":true,"hit":true}]
+PASS 844x390 farm no page overflow
+PASS 844x390 recipe reachable 44px controls [{"id":"dailyToday","w":124,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":124,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":124,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":161,"h":44.375,"inside":true,"hit":true},{"id":"dailyClose","w":388,"h":44,"inside":true,"hit":true}]
+PASS 844x390 recipe no page overflow
+PASS 430x932 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":345,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":345,"h":44,"inside":true,"hit":true}]
+PASS 430x932 welcome no page overflow
+PASS 430x932 farm reachable 44px controls [{"id":"","w":97.9375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":66.328125,"h":46,"inside":true,"hit":true},{"id":"settingsBtn","w":44,"h":44,"inside":true,"hit":true}]
+PASS 430x932 farm no page overflow
+PASS 430x932 recipe reachable 44px controls [{"id":"dailyToday","w":118,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":118,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":118,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":316,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":370,"h":44,"inside":true,"hit":true}]
+PASS 430x932 recipe no page overflow
+PASS 768x1024 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 768x1024 welcome no page overflow
+PASS 768x1024 farm reachable 44px controls [{"id":"","w":97.9375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":122.671875,"h":46,"inside":true,"hit":true},{"id":"settingsBtn","w":44,"h":44,"inside":true,"hit":true}]
+PASS 768x1024 farm no page overflow
+PASS 768x1024 recipe reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":330,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS 768x1024 recipe no page overflow
+PASS 1024x768 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 1024x768 welcome no page overflow
+PASS 1024x768 farm reachable 44px controls [{"id":"","w":103.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":53,"h":57,"inside":true,"hit":true},{"id":"settingsBtn","w":70,"h":44,"inside":true,"hit":true}]
+PASS 1024x768 farm no page overflow
+PASS 1024x768 recipe reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":330,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS 1024x768 recipe no page overflow
+PASS 1032x1376 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 1032x1376 welcome no page overflow
+PASS 1032x1376 farm reachable 44px controls [{"id":"","w":103.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":53,"h":57,"inside":true,"hit":true},{"id":"settingsBtn","w":70,"h":44,"inside":true,"hit":true}]
+PASS 1032x1376 farm no page overflow
+PASS 1032x1376 recipe reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":330,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS 1032x1376 recipe no page overflow
+PASS 1376x1032 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 1376x1032 welcome no page overflow
+PASS 1376x1032 farm reachable 44px controls [{"id":"","w":103.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":53,"h":57,"inside":true,"hit":true},{"id":"settingsBtn","w":70,"h":44,"inside":true,"hit":true}]
+PASS 1376x1032 farm no page overflow
+PASS 1376x1032 recipe reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":330,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS 1376x1032 recipe no page overflow
+PASS 1366x600 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 welcome no page overflow
+PASS 1366x600 farm reachable 44px controls [{"id":"","w":103.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":53,"h":57,"inside":true,"hit":true},{"id":"settingsBtn","w":70,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 farm no page overflow
+PASS 1366x600 recipe reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":330,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 recipe no page overflow
+PASS 1280x640 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":439,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":439,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 welcome no page overflow
+PASS 1280x640 farm reachable 44px controls [{"id":"","w":103.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":53,"h":57,"inside":true,"hit":true},{"id":"settingsBtn","w":70,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 farm no page overflow
+PASS 1280x640 recipe reachable 44px controls [{"id":"dailyToday","w":122.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":122.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":330,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":384,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 recipe no page overflow
+node : AssertionError [ERR_ASSERTION]: real touch journey grew and harvested sunlight wheat without fixtures
+位於 線路:2 字元:1
++ node scripts/test-r81-review.js > docs/evidence/r81-store/review-log. ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (AssertionError ...ithout fixtures:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r81-review.js:9:35)
+    at journey (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r81-review.js:84:5)
+    at async run (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r81-review.js:51:18) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

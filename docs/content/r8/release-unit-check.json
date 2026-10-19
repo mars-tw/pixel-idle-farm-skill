@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm.cmd",
+    "test"
+  ],
+  "exitCode": 0,
+  "seconds": 7.36,
+  "log": "docs/content/r8/logs/gathering-correction-npm-test.txt",
+  "sha256": "fabaaa53f2d9a2921079d488795c7f2e8d92ca3564bf9d8681826780065ff70f",
+  "status": "VERIFIED",
+  "sourceReceipt": "docs/content/r8/gathering-correction-checks.json; first actually executed command"
+}

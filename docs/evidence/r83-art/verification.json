@@ -1,0 +1,228 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "localOnly": true,
+  "version": "0.1.17",
+  "appVersion": "r83-20261016-1",
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 6.33,
+      "log": "docs/evidence/r83-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 356.62,
+      "log": "docs/evidence/r83-art/logs/e2e.txt"
+    },
+    {
+      "name": "night",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 24.67,
+      "log": "docs/evidence/r83-art/logs/night.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.23,
+      "log": "docs/evidence/r83-art/logs/water-guide.txt"
+    },
+    {
+      "name": "compare",
+      "command": [
+        "node",
+        "scripts/capture-r83-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 7.88,
+      "log": "docs/evidence/r83-art/logs/compare.txt"
+    },
+    {
+      "name": "readback",
+      "command": [
+        "python",
+        "-W",
+        "ignore::DeprecationWarning",
+        "scripts/verify-r83-art.py"
+      ],
+      "exitCode": 0,
+      "seconds": 1.6,
+      "log": "docs/evidence/r83-art/logs/readback.txt"
+    }
+  ],
+  "syntax": [
+    "src/adventure.js",
+    "src/atlas.js",
+    "src/config.js",
+    "src/daily-ui.js",
+    "src/daily.js",
+    "src/game.js",
+    "src/heirloom-ui.js",
+    "src/heirloom.js",
+    "src/state.js",
+    "src/ui.js",
+    "src/world-ui.js",
+    "scripts/audit-oc-r1.js",
+    "scripts/capture-promo-trio.js",
+    "scripts/capture-r79-playtest.js",
+    "scripts/capture-r82-art.js",
+    "scripts/capture-r83-art.js",
+    "scripts/gen-art-v3.js",
+    "scripts/gen-art-v4.js",
+    "scripts/gen-v2-atlases.js",
+    "scripts/generate-crops3-atlas.js",
+    "scripts/measure-r68-baseline.js",
+    "scripts/process-v3-atlas.js",
+    "scripts/process-v4-atlas.js",
+    "scripts/process-world-project-art.js",
+    "scripts/run-browser-gates.js",
+    "scripts/test-adventure.js",
+    "scripts/test-controls-reachability.js",
+    "scripts/test-economy.js",
+    "scripts/test-guards.js",
+    "scripts/test-npc-indicators.js",
+    "scripts/test-r66-ui-art.js",
+    "scripts/test-r68-browser.js",
+    "scripts/test-r68-visuals.js",
+    "scripts/test-r72-fixed-layers.js",
+    "scripts/test-r72-night-gate.js",
+    "scripts/test-r73-playtest.js",
+    "scripts/test-r74-building-upgrades-e2e.js",
+    "scripts/test-r74-building-upgrades.js",
+    "scripts/test-r79-fun-e2e.js",
+    "scripts/test-r79-sunpatch.js",
+    "scripts/test-r80-daily.js",
+    "scripts/test-r80-mobile.js",
+    "scripts/test-r81-heirloom.js",
+    "scripts/test-r81-review.js",
+    "scripts/test-r82-art.js",
+    "scripts/test-r83-art.js",
+    "scripts/test-rpg-v4-e2e.js",
+    "scripts/test-rwd-matrix.js",
+    "scripts/test-systems.js",
+    "scripts/test-ui-smoke.js",
+    "scripts/test-version-chain.js",
+    "scripts/test-water-quest-guide.js",
+    "scripts/test-world-migration.js",
+    "scripts/test-world-project-art.js",
+    "scripts/test-world-rework-e2e.js",
+    "scripts/validate-v3-atlas.js",
+    "scripts/validate-v4-atlas.js"
+  ],
+  "secretScan": {
+    "matches": 0,
+    "scope": "repo text; excludes .git/node_modules/.audit-tmp/.secrets; no external credentials read"
+  },
+  "oldRuntimeVersionMatches": 0,
+  "storeScreenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-01-welcome.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "91a38e085f63f1f282f80ed96f083228ed795c847c123239c89754b1359c9579"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-02-sunlight.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "d0a354d104e769629fae169bd84290e845e7d09b5d7f14f1622fac64354a2e26"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-03-basket.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "134ddbb212140ad7a86ce3b2605ce9f5629a4b777a60199b80b38ef47b9d75ea"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-04-note.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "c2fcc8188bff040fe6cb862ba0ecb017b162b7333ce4e4b7e95b77c77c8ee0c8"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-05-daily.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "698819adc79fe596a5eeb3b445b84878b0bff537c343ec1f62c857e38a2e28a7"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-01-welcome.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "d6b67f4145c8bf87c11e8f26f3665b70f85ea3f40d1c18fc4a58d679150bb2ca"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-02-sunlight.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "8a877257144398352a343916754ea4154e9208d9cd26d4662f45c4548ea57bfe"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-03-basket.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "658290ddae2251e36ff2e288e48a2bf19ac803f0e1a53251bf0de6931b16d2c9"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-04-note.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "6e3b9054eb598cc9ee9466cfc7ba8713fa2c0245dad7a116219c6f3003b6be2e"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-05-daily.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "e456a59b58a9766d845fd66ead659c0cef3dfc5b75fe68b83c8b29c738bea684"
+    }
+  ],
+  "limitations": [
+    "Concurrent load performance is reference only.",
+    "No native build/device or independent 8/10 rescore."
+  ]
+}

@@ -9,6 +9,8 @@
   const C = (typeof module !== "undefined" && module.exports)
     ? require("./config.js")
     : root;
+  const Daily = (typeof module !== "undefined" && module.exports) ? require("./daily.js") : root.FarmDaily;
+  const Heirloom = (typeof module !== "undefined" && module.exports) ? require("./heirloom.js") : root.FarmHeirloom;
   const {
     GAME, CROPS, UPGRADES, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
     SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL, SEASON_ORDER_BIAS, SEASON_EVENTS,
@@ -140,27 +142,124 @@
     const stage = ready ? 4 : Math.min(3, Math.floor(ratio * 4));
     return { ready, ratio, remainingMs: Math.max(0, growMs - elapsed), stage, wet: isWet(plot) };
   }
-  // 第一章的澆水教學不能因 15 秒小麥先成熟而失去可操作目標。
-  function wateringLessonActive(state) {
-    const a = state.adventure;
-    return !!(a && !(a.claimed && a.claimed.c1_homecoming)
-      && a.counts && a.counts.plant >= 3 && a.counts.water < 3
-      && a.byTarget && a.byTarget.talk && a.byTarget.talk.mayor >= 1);
-  }
-  function canWaterPlot(state, plotIndex, now) {
+  // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
+  function waterPlot(state, plotIndex, now) {
     const plot = state.plots[plotIndex];
     if (!plot || !plot.cropId) return { ok: false, reason: "empty" };
-    if (getCropProgress(state, plot, now).ready && !wateringLessonActive(state)) return { ok: false, reason: "ready" };
+    if (getCropProgress(state, plot, now).ready) return { ok: false, reason: "ready" };
     if (isWet(plot)) return { ok: false, reason: "already_wet" };
-    return { ok: true };
-  }
-  // 澆水：一輪一次；教學期間允許替來不及澆的成熟乾作物補水。
-  function waterPlot(state, plotIndex, now) {
-    const eligibility = canWaterPlot(state, plotIndex, now);
-    if (!eligibility.ok) return eligibility;
-    const plot = state.plots[plotIndex];
     plot.wateredAt = now;
-    return { ok: true };
+    if (Daily) Daily.record(state, "water", 1, now);
+    const sun = sunBoostGrowth(state, plotIndex, now);
+    return sun ? { ok: true, sun } : { ok: true };
+  }
+
+  // ---------- R79 招牌玩法：陽光光斑 ----------
+  // 光斑只在主動遊玩時出現（離線不累積），落在 1–2 格田上；在光裡種、澆、收各有加成，每格每道光只算一次。
+  const SUNPATCH = {
+    firstDelayMs: 4000,      // 種下第一株後多久出現第一道光
+    intervalMs: 40000,       // 兩道光之間
+    sunnyIntervalMs: 28000,  // 晴朗天氣更常出現
+    durationMs: 16000,       // 每道光停留時間
+    maxPlots: 2,
+    growthBoost: 0.3,        // 種／澆：立刻推進成長時間 30%
+    growthBoostCapMs: 180000,
+    harvestBonus: 1,         // 收成多 1 份
+    xpBonus: 2,
+    blockedWeather: { rain: true, storm: true, snow: true, fog: true },
+  };
+  function ensureSunState(state) {
+    const s = state.sun;
+    if (!s || typeof s !== "object" || Array.isArray(s)) state.sun = { plots: [], startsAt: 0, endsAt: 0, nextAt: 0, used: [], introduced: false };
+    const sun = state.sun;
+    const num = (v) => (Number.isFinite(v) && v > 0 ? v : 0);
+    sun.startsAt = num(sun.startsAt); sun.endsAt = num(sun.endsAt); sun.nextAt = num(sun.nextAt);
+    const okIndex = (i) => Number.isInteger(i) && i >= 0 && i < (state.plots || []).length;
+    sun.plots = Array.isArray(sun.plots) ? sun.plots.filter(okIndex).slice(0, SUNPATCH.maxPlots) : [];
+    sun.used = Array.isArray(sun.used) ? sun.used.filter(okIndex) : [];
+    sun.introduced = !!sun.introduced;
+    if (!state.stats) state.stats = {};
+    if (!Number.isFinite(state.stats.sunCatches) || state.stats.sunCatches < 0) state.stats.sunCatches = 0;
+    return sun;
+  }
+  function sunpatchActive(state, now) {
+    const sun = state && state.sun;
+    return !!(sun && Array.isArray(sun.plots) && sun.plots.length && now >= (sun.startsAt || 0) && now < (sun.endsAt || 0));
+  }
+  function isSunlit(state, plotIndex, now) {
+    if (!sunpatchActive(state, now)) return false;
+    return state.sun.plots.includes(plotIndex) && !(state.sun.used || []).includes(plotIndex);
+  }
+  function sunpatchStatus(state, now) {
+    const active = sunpatchActive(state, now);
+    const sun = state.sun || {};
+    return {
+      active,
+      plots: active ? sun.plots.filter((i) => !(sun.used || []).includes(i)) : [],
+      remainingMs: active ? Math.max(0, sun.endsAt - now) : 0,
+      durationMs: SUNPATCH.durationMs,
+      nextInMs: !active && sun.nextAt ? Math.max(0, sun.nextAt - now) : 0,
+      catches: (state.stats && state.stats.sunCatches) || 0,
+    };
+  }
+  // 挑選光斑落點：可收成 > 生長中且未澆 > 已澆生長中 > 空地；同分隨機。
+  function pickSunPlots(state, now, rng) {
+    const active = activePlotCount(state);
+    const scored = [];
+    for (let i = 0; i < Math.min(active, state.plots.length); i++) {
+      const p = state.plots[i];
+      let score = 1;
+      if (p.cropId) {
+        const prog = getCropProgress(state, p, now);
+        score = prog.ready ? 4 : prog.wet ? 2 : 3;
+      }
+      scored.push({ i, score: score + rng() * 0.9 });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, SUNPATCH.maxPlots).map((x) => x.i).sort((a, b) => a - b);
+  }
+  // 每個畫面 tick 呼叫。回傳 { spawned, expired, first }，UI 依此播放提示。
+  function updateSunpatch(state, now, rng) {
+    const sun = ensureSunState(state);
+    const random = typeof rng === "function" ? rng : Math.random;
+    const out = { spawned: false, expired: false, first: false };
+    if (sun.plots.length && sun.endsAt && now >= sun.endsAt) { sun.plots = []; sun.used = []; out.expired = true; }
+    if (sunpatchActive(state, now)) return out;
+    const planted = (state.plots || []).some((p) => p && p.cropId) || ((state.stats && state.stats.plantCount) || 0) > 0;
+    if (!planted) return out;
+    if (!sun.nextAt) { sun.nextAt = now + SUNPATCH.firstDelayMs; return out; }
+    // 離線回來：nextAt 遠在過去也只補一道光，不會連續觸發。
+    if (now < sun.nextAt) return out;
+    const weather = currentWeather(state, now);
+    const interval = weather === "sunny" ? SUNPATCH.sunnyIntervalMs : SUNPATCH.intervalMs;
+    if (SUNPATCH.blockedWeather[weather]) { sun.nextAt = now + Math.round(interval / 2); return out; }
+    const plots = pickSunPlots(state, now, random);
+    if (!plots.length) { sun.nextAt = now + interval; return out; }
+    sun.plots = plots; sun.used = []; sun.startsAt = now; sun.endsAt = now + SUNPATCH.durationMs;
+    sun.nextAt = now + SUNPATCH.durationMs + interval;
+    out.spawned = true;
+    if (!sun.introduced) { sun.introduced = true; out.first = true; }
+    return out;
+  }
+  function markSunUsed(state, plotIndex) {
+    state.sun.used.push(plotIndex);
+    state.stats.sunCatches = (state.stats.sunCatches || 0) + 1;
+  }
+  // 種／澆在光裡：把種植時間往前推，等同立刻長快一段。
+  function sunBoostGrowth(state, plotIndex, now) {
+    ensureSunState(state);
+    if (!isSunlit(state, plotIndex, now)) return null;
+    const plot = state.plots[plotIndex];
+    if (!plot || !plot.cropId) return null;
+    let growMs = effectiveGrowMs(state, plot.cropId, now);
+    if (isWet(plot)) growMs = Math.max(1000, Math.floor(growMs * MOISTURE_MUL));
+    const boostMs = Math.min(SUNPATCH.growthBoostCapMs, Math.round(growMs * SUNPATCH.growthBoost));
+    const wet = isWet(plot);
+    plot.plantedAt -= boostMs;
+    if (wet && (plot.wateredAt || 0) < plot.plantedAt) plot.wateredAt = plot.plantedAt;
+    markSunUsed(state, plotIndex);
+    plot.sunGrown = true;
+    return { kind: "growth", boostMs };
   }
 
   // ---------- 倉庫 ----------
@@ -482,8 +581,10 @@
     plot.cropId = cropId;
     plot.plantedAt = now;
     delete plot.wateredAt;
+    delete plot.sunGrown;
     state.stats.plantCount++;
-    return { ok: true };
+    const sun = sunBoostGrowth(state, plotIndex, now);
+    return sun ? { ok: true, sun } : { ok: true };
   }
   function harvest(state, plotIndex, now) {
     const plot = state.plots[plotIndex];
@@ -491,13 +592,22 @@
     const prog = getCropProgress(state, plot, now);
     if (!prog.ready) return { ok: false, reason: "not_ready" };
     const crop = CROPS[plot.cropId];
-    const { added, lost } = addToStorage(state, crop.id, crop.yield);
+    ensureSunState(state);
+    const sunlit = isSunlit(state, plotIndex, now);
+    const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0);
+    const xp = crop.xp + (sunlit ? SUNPATCH.xpBonus : 0);
+    const { added, lost } = addToStorage(state, crop.id, qty);
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
+    if (Daily && added > 0) Daily.record(state, "harvest", added, now);
+    if (Heirloom) Heirloom.recordHarvest(state, crop.id, added, sunlit || plot.sunGrown === true);
     if (added > 0) recordDiscovery(state, crop.id, now);
-    const leveled = addXp(state, crop.xp);
-    plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt;
+    const leveled = addXp(state, xp);
+    plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown;
+    if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
-    return { ok: true, cropId: crop.id, added, lost, xp: crop.xp, leveled };
+    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
+    if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
+    return out;
   }
   function harvestAll(state, now) {
     let totalAdded = 0, totalLost = 0, totalXp = 0; const perCrop = {};
@@ -506,6 +616,18 @@
       if (r.ok) { totalAdded += r.added; totalLost += r.lost; totalXp += r.xp; perCrop[r.cropId] = (perCrop[r.cropId] || 0) + r.added; }
     }
     return { totalAdded, totalLost, totalXp, perCrop };
+  }
+
+  // Thumb action: a reachable, fully storable harvest; sunlight first, then distance.
+  function quickHarvestStatus(state, now) {
+    const room = storageCapacity(state) - storageUsed(state);
+    const ready = state.map.tiles.filter((t) => t.plotIndex != null && t.plotIndex < activePlotCount(state)
+      && state.plots[t.plotIndex].cropId && getCropProgress(state, state.plots[t.plotIndex], now).ready);
+    const candidates = ready.filter((t) => room >= CROPS[state.plots[t.plotIndex].cropId].yield + (isSunlit(state, t.plotIndex, now) ? SUNPATCH.harvestBonus : 0));
+    candidates.sort((a, b) => Number(isSunlit(state, b.plotIndex, now)) - Number(isSunlit(state, a.plotIndex, now))
+      || (Math.abs(a.x - state.player.x) + Math.abs(a.y - state.player.y)) - (Math.abs(b.x - state.player.x) + Math.abs(b.y - state.player.y)));
+    const tile = candidates.find((t) => planMoveTo(state, t.id));
+    return { count: ready.length, tileId: tile ? tile.id : null, noRoom: ready.length > 0 && candidates.length === 0 };
   }
 
   // ---------- 賣出 ----------
@@ -2290,9 +2412,10 @@
   }
 
   const GameAPI = {
+    quickHarvestStatus,
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, buildingMaxLevel, buildingLevel, buildingLevelData, buildingEffect,
-    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, isWet, canWaterPlot, waterPlot,
+    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
@@ -2330,6 +2453,8 @@
     // Stage 7：動物照護（親密度 / 品質分級）
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,
+    // R79：陽光光斑
+    SUNPATCH, ensureSunState, sunpatchActive, isSunlit, sunpatchStatus, updateSunpatch,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

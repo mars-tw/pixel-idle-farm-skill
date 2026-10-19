@@ -1,0 +1,26 @@
+{
+  "round": "content-r4",
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "child",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: precise-object-edit. Edit the attached game illustration as the MATCHED GIFT version, wide 2:1 landscape 512x256 output intent, native256x128 pixel density. Keep Tutu boy left, Miri red braids and straw hat center, red gingham picnic table, wicker basket, third complete wooden chair at right, orchard and upper-right warm sunlight exactly consistent. Make two very clear story changes: put a LARGE pressed yellow flower with green stem on the EMPTY CHAIR SEAT, replacing the plate there. Put an OPEN CREAM NOTEBOOK with a very visible red-and-cream gingham ribbon bookmark across it on the front edge of the TABLE. The yellow flower on chair and red ribbon bookmark on table must be large and instantly recognizable at phone scale. Keep full small sprite bodies, grouped pixel clusters, same palette and composition, no close portraits, no new characters, no text or UI. Show friendship and the remembered gift through these two objects. Avoid tiny painted noise.",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a1501c-69c5-70b1-b1cb-3560fdb6512b/exec-f79b41e8-d73f-4483-b45c-62985e51c74c.png",
+      "master": "docs/art/masters/content-r4/child.png",
+      "references": [
+        "assets/generated/content-r3/child.webp"
+      ]
+    },
+    {
+      "id": "basket",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Use case: illustration-story. New wide 2:1 game illustration at native256x128 pixel sprite density for the basket PACKING screen. Reference game art palette, upper-right light, crisp coarse pixel clusters. Close view down onto a rustic WOODEN KITCHEN WORKTABLE with a large OPEN GOLDEN WICKER BASKET lined in RED CREAM GINGHAM cloth, neatly packed three round farm bread pieces. A folded cloth at left, a closed plain cream notebook at back left, brown stove edge and little brass kettle at back right, a sunlit patch across wood. Cozy quiet composition, no people, no chairs, NO pressed flower, NO ribbon bookmark. This is preparing a basket BEFORE visiting a neighbor, distinct from a picnic. Limited R89 colors, one pixel dark outline, hue-shift shadow, no photo, no smooth vector, no detailed painterly texture, no text, no UI.",
+      "source": "C:/Users/digimkt/.codex/generated_images/01a1501c-69c5-70b1-b1cb-3560fdb6512b/exec-75775fc5-e68f-48a5-a878-1d60cbc6f6de.png",
+      "master": "docs/art/masters/content-r4/basket.png",
+      "references": [
+        "assets/generated/content-r3/child.webp"
+      ]
+    }
+  ]
+}

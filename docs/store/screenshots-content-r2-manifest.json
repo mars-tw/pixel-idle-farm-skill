@@ -1,0 +1,24 @@
+{
+  "status": "VERIFIED",
+  "round": "content-r2",
+  "version": "0.1.25",
+  "appVersion": "content-r2-20261019-1",
+  "headless": true,
+  "nativeDevice": false,
+  "screenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-08-neighbor-story.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "32d569a2f4d405334306d74de9594c8a5b938b4ad8ae2a508116509cdd4d9b35",
+      "capture": "DPR3 iphone / DPR2 ipad, native browser screenshot of earned R2 neighbor story; explicit initial chapter/ingredient fixture as documented; actual UI cooking and nine deliveries; no image resizing"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-08-neighbor-story.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "88ebadfddea1ccf2045b62acf0d938d1d425d2c58fd5748df292132c71047a8b",
+      "capture": "DPR3 iphone / DPR2 ipad, native browser screenshot of earned R2 neighbor story; explicit initial chapter/ingredient fixture as documented; actual UI cooking and nine deliveries; no image resizing"
+    }
+  ]
+}

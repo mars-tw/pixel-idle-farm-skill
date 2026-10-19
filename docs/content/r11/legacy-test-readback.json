@@ -1,0 +1,30 @@
+{
+  "status": "VERIFIED",
+  "trust": "Call-count check only. Semantic changes and scene coordinate frame are documented in R11 report and git diff; material, timing and pixel tolerances are retained.",
+  "files": [
+    {
+      "path": "scripts/test-content-r4-e2e.js",
+      "beforeCheckCalls": 55,
+      "afterCheckCalls": 55,
+      "sha256": "aa2c8abf8caa4599f4a8c444968d211fe97c7c52b3bcbd052991672b967f1162"
+    },
+    {
+      "path": "scripts/test-content-r9-e2e.js",
+      "beforeCheckCalls": 49,
+      "afterCheckCalls": 52,
+      "sha256": "e9b7678f8afe188fff52d7cbc620e4a48f9ef088cdbd345dfa6f11934c0b5cb4"
+    },
+    {
+      "path": "scripts/test-content-r10-e2e.js",
+      "beforeCheckCalls": 50,
+      "afterCheckCalls": 53,
+      "sha256": "315c3f10cf88501d9636460f1b5753970436af25db38fd8481db292555b061a7"
+    },
+    {
+      "path": "scripts/content-r8-water-test-helper.js",
+      "beforeCheckCalls": 0,
+      "afterCheckCalls": 0,
+      "sha256": "6f115df7e419e293c4ba399aea5b603fa7bfdf62569e58bed289d0a59714bc20"
+    }
+  ]
+}

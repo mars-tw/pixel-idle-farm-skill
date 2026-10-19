@@ -1,0 +1,835 @@
+{
+  "status": "VERIFIED",
+  "checks": 127,
+  "rows": [
+    {
+      "w": 320,
+      "h": 568,
+      "scale": 1,
+      "platform": "small",
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "frame": "wheat_sprout",
+            "lit": true,
+            "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+            "x": 61.70124816894531,
+            "y": 246.40249633789062,
+            "w": 69.47248840332031,
+            "h": 69.47250366210938,
+            "right": 131.17373657226562,
+            "bottom": 315.875
+          },
+          {
+            "frame": "wheat_sprout",
+            "lit": false,
+            "filter": "none",
+            "x": 131,
+            "y": 257,
+            "w": 58.875,
+            "h": 58.875,
+            "right": 189.875,
+            "bottom": 315.875
+          }
+        ],
+        "root": {
+          "x": 64,
+          "y": 225.546875,
+          "w": 64,
+          "h": 85.328125,
+          "right": 128,
+          "bottom": 310.875
+        },
+        "physics": true,
+        "tree": {
+          "x": 166,
+          "y": 118,
+          "w": 115.1875,
+          "h": 134.390625,
+          "right": 281.1875,
+          "bottom": 252.390625
+        },
+        "shadow": {
+          "x": 25.1875,
+          "y": 236.640625,
+          "w": 198.390625,
+          "h": 128,
+          "right": 223.578125,
+          "bottom": 364.640625,
+          "base": "287.6,56.336",
+          "direction": "upper-right",
+          "image": "url(\"http://127.0.0.1:65388/assets/generated/r87/canopy-shadow.png\")"
+        },
+        "leaf": "url(\"http://127.0.0.1:65388/assets/generated/r87/leaf-ground.png\")"
+      },
+      "story": {
+        "top": 0,
+        "height": 568,
+        "closeBottom": 515.59375,
+        "reply": "葛瑞：「先坐。田裡的事，吃完再說。」"
+      },
+      "hits": [
+        {
+          "id": "dailyToday",
+          "w": 82,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 82,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 82,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 124,
+          "h": 169,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 124,
+          "h": 169,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 256,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "storyHits": [
+        {
+          "id": "dailyClose",
+          "w": 280,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "fixture": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "scale": 1,
+      "platform": "phone",
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "frame": "wheat_sprout",
+            "lit": true,
+            "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+            "x": 84.03890991210938,
+            "y": 354.07781982421875,
+            "w": 78.15655517578125,
+            "h": 78.15655517578125,
+            "right": 162.19546508789062,
+            "bottom": 432.234375
+          },
+          {
+            "frame": "wheat_sprout",
+            "lit": false,
+            "filter": "none",
+            "x": 162,
+            "y": 366,
+            "w": 66.234375,
+            "h": 66.234375,
+            "right": 228.234375,
+            "bottom": 432.234375
+          }
+        ],
+        "root": {
+          "x": 91,
+          "y": 340.90625,
+          "w": 64,
+          "h": 85.328125,
+          "right": 155,
+          "bottom": 426.234375
+        },
+        "physics": true,
+        "tree": {
+          "x": 202,
+          "y": 209,
+          "w": 129.59375,
+          "h": 151.1875,
+          "right": 331.59375,
+          "bottom": 360.1875
+        },
+        "shadow": {
+          "x": 43.59375,
+          "y": 342.484375,
+          "w": 223.1875,
+          "h": 144,
+          "right": 266.78125,
+          "bottom": 486.484375,
+          "base": "323.8,63.127999999999986",
+          "direction": "upper-right",
+          "image": "url(\"http://127.0.0.1:65388/assets/generated/r87/canopy-shadow.png\")"
+        },
+        "leaf": "url(\"http://127.0.0.1:65388/assets/generated/r87/leaf-ground.png\")"
+      },
+      "story": {
+        "top": 0,
+        "height": 844,
+        "closeBottom": 673.0625,
+        "reply": "葛瑞：「先坐。田裡的事，吃完再說。」"
+      },
+      "hits": [
+        {
+          "id": "dailyToday",
+          "w": 103.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 103.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 103.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 156,
+          "h": 155.5,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 156,
+          "h": 155.5,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 320,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "storyHits": [
+        {
+          "id": "dailyClose",
+          "w": 350,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "fixture": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "scale": 1,
+      "platform": "landscape",
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "frame": "wheat_sprout",
+            "lit": true,
+            "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+            "x": 323.70123291015625,
+            "y": 157.40249633789062,
+            "w": 69.47250366210938,
+            "h": 69.47250366210938,
+            "right": 393.1737365722656,
+            "bottom": 226.875
+          },
+          {
+            "frame": "wheat_sprout",
+            "lit": false,
+            "filter": "none",
+            "x": 393,
+            "y": 168,
+            "w": 58.875,
+            "h": 58.875,
+            "right": 451.875,
+            "bottom": 226.875
+          }
+        ],
+        "root": {
+          "x": 326,
+          "y": 136.546875,
+          "w": 64,
+          "h": 85.328125,
+          "right": 390,
+          "bottom": 221.875
+        },
+        "physics": true,
+        "tree": {
+          "x": 428,
+          "y": 29,
+          "w": 115.1875,
+          "h": 134.390625,
+          "right": 543.1875,
+          "bottom": 163.390625
+        },
+        "shadow": {
+          "x": 287.1875,
+          "y": 147.640625,
+          "w": 198.390625,
+          "h": 128,
+          "right": 485.578125,
+          "bottom": 275.640625,
+          "base": "287.6,56.336",
+          "direction": "upper-right",
+          "image": "url(\"http://127.0.0.1:65388/assets/generated/r87/canopy-shadow.png\")"
+        },
+        "leaf": "url(\"http://127.0.0.1:65388/assets/generated/r87/leaf-ground.png\")"
+      },
+      "story": {
+        "top": 43,
+        "height": 390,
+        "closeBottom": 341,
+        "reply": "葛瑞：「先坐。田裡的事，吃完再說。」"
+      },
+      "hits": [
+        {
+          "id": "dailyToday",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 255.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 236.5625,
+          "h": 50,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 236.5625,
+          "h": 50,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 776,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "storyHits": [
+        {
+          "id": "dailyClose",
+          "w": 387.828125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "fixture": true
+    },
+    {
+      "w": 1366,
+      "h": 600,
+      "scale": 1,
+      "platform": "laptop",
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "frame": "wheat_sprout",
+            "lit": true,
+            "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+            "x": 476.3765563964844,
+            "y": 252.7531280517578,
+            "w": 86.84060668945312,
+            "h": 86.84062194824219,
+            "right": 563.2171630859375,
+            "bottom": 339.59375
+          },
+          {
+            "frame": "wheat_sprout",
+            "lit": false,
+            "filter": "none",
+            "x": 563,
+            "y": 266,
+            "w": 73.59375,
+            "h": 73.59375,
+            "right": 636.59375,
+            "bottom": 339.59375
+          }
+        ],
+        "root": {
+          "x": 484,
+          "y": 237.59375,
+          "w": 72,
+          "h": 96,
+          "right": 556,
+          "bottom": 333.59375
+        },
+        "physics": true,
+        "tree": {
+          "x": 608,
+          "y": 92,
+          "w": 144,
+          "h": 168,
+          "right": 752,
+          "bottom": 260
+        },
+        "shadow": {
+          "x": 432,
+          "y": 240.3125,
+          "w": 248,
+          "h": 160,
+          "right": 680,
+          "bottom": 400.3125,
+          "base": "360,69.91999999999999",
+          "direction": "upper-right",
+          "image": "url(\"http://127.0.0.1:65388/assets/generated/r87/canopy-shadow.png\")"
+        },
+        "leaf": "url(\"http://127.0.0.1:65388/assets/generated/r87/leaf-ground.png\")"
+      },
+      "story": {
+        "top": 0,
+        "height": 600,
+        "closeBottom": 461.640625,
+        "reply": "葛瑞：「先坐。田裡的事，吃完再說。」"
+      },
+      "hits": [
+        {
+          "id": "dailyToday",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 255.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 255.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 236.5625,
+          "h": 53,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 236.5625,
+          "h": 53,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 776,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "storyHits": [
+        {
+          "id": "dailyClose",
+          "w": 820,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "fixture": true
+    },
+    {
+      "w": 430,
+      "h": 932,
+      "scale": 3,
+      "platform": "iphone",
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "frame": "wheat_sprout",
+            "lit": true,
+            "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+            "x": 91.37655639648438,
+            "y": 392.75311279296875,
+            "w": 86.84062194824219,
+            "h": 86.84063720703125,
+            "right": 178.21717834472656,
+            "bottom": 479.59375
+          },
+          {
+            "frame": "wheat_sprout",
+            "lit": false,
+            "filter": "none",
+            "x": 178,
+            "y": 406,
+            "w": 73.59375,
+            "h": 73.59375,
+            "right": 251.59375,
+            "bottom": 479.59375
+          }
+        ],
+        "root": {
+          "x": 99,
+          "y": 377.59375,
+          "w": 72,
+          "h": 96,
+          "right": 171,
+          "bottom": 473.59375
+        },
+        "physics": true,
+        "tree": {
+          "x": 223,
+          "y": 232,
+          "w": 144,
+          "h": 168,
+          "right": 367,
+          "bottom": 400
+        },
+        "shadow": {
+          "x": 47,
+          "y": 380.3125,
+          "w": 248,
+          "h": 160,
+          "right": 295,
+          "bottom": 540.3125,
+          "base": "360,69.91999999999999",
+          "direction": "upper-right",
+          "image": "url(\"http://127.0.0.1:65388/assets/generated/r87/canopy-shadow.png\")"
+        },
+        "leaf": "url(\"http://127.0.0.1:65388/assets/generated/r87/leaf-ground.png\")"
+      },
+      "story": {
+        "top": 0,
+        "height": 932,
+        "closeBottom": 702.703125,
+        "reply": "葛瑞：「先坐。田裡的事，吃完再說。」"
+      },
+      "hits": [
+        {
+          "id": "dailyToday",
+          "w": 116.65625,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 116.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 116.671875,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 176,
+          "h": 155.5,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 176,
+          "h": 155.5,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 360,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "storyHits": [
+        {
+          "id": "dailyClose",
+          "w": 390,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "fixture": true
+    },
+    {
+      "w": 1032,
+      "h": 1376,
+      "scale": 2,
+      "platform": "ipad",
+      "scene": {
+        "sameAge": true,
+        "stages": [
+          1,
+          1
+        ],
+        "crops": [
+          {
+            "frame": "wheat_sprout",
+            "lit": true,
+            "filter": "brightness(1.2) saturate(1.12) drop-shadow(rgba(255, 232, 163, 0.79) 1px -1px 0px)",
+            "x": 331.0648498535156,
+            "y": 590.1296997070312,
+            "w": 130.26092529296875,
+            "h": 130.26092529296875,
+            "right": 461.3257751464844,
+            "bottom": 720.390625
+          },
+          {
+            "frame": "wheat_sprout",
+            "lit": false,
+            "filter": "none",
+            "x": 461,
+            "y": 610,
+            "w": 110.390625,
+            "h": 110.390625,
+            "right": 571.390625,
+            "bottom": 720.390625
+          }
+        ],
+        "root": {
+          "x": 344,
+          "y": 571.734375,
+          "w": 104,
+          "h": 138.65625,
+          "right": 448,
+          "bottom": 710.390625
+        },
+        "physics": true,
+        "tree": {
+          "x": 528,
+          "y": 348,
+          "w": 216,
+          "h": 252,
+          "right": 744,
+          "bottom": 600
+        },
+        "shadow": {
+          "x": 264,
+          "y": 570.46875,
+          "w": 372,
+          "h": 240,
+          "right": 636,
+          "bottom": 810.46875,
+          "base": "540,104.88",
+          "direction": "upper-right",
+          "image": "url(\"http://127.0.0.1:65388/assets/generated/r87/canopy-shadow.png\")"
+        },
+        "leaf": "url(\"http://127.0.0.1:65388/assets/generated/r87/leaf-ground.png\")"
+      },
+      "story": {
+        "top": 0,
+        "height": 1376,
+        "closeBottom": 1051.90625,
+        "reply": "葛瑞：「先坐。田裡的事，吃完再說。」"
+      },
+      "hits": [
+        {
+          "id": "dailyToday",
+          "w": 181.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyCollection",
+          "w": 181.34375,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyHeirloom",
+          "w": 181.328125,
+          "h": 44,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomDoorstep",
+          "w": 273,
+          "h": 155.5,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "heirloomTable",
+          "w": 273,
+          "h": 155.5,
+          "hit": true,
+          "inView": true
+        },
+        {
+          "id": "dailyClose",
+          "w": 554,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "storyHits": [
+        {
+          "id": "dailyClose",
+          "w": 820,
+          "h": 48,
+          "hit": true,
+          "inView": true
+        }
+      ],
+      "fixture": true
+    }
+  ],
+  "errors": [],
+  "storeShots": [
+    {
+      "path": "docs/store/screenshots/iphone-02-sunlight.png",
+      "fixture": true,
+      "audit": {
+        "pose": "water",
+        "frame": 3,
+        "samePlantingTime": true,
+        "stages": [
+          1,
+          1
+        ],
+        "headerVisible": true,
+        "visualRootHeight": 96
+      },
+      "sha256": "f8d0f69cabc588fe9bee818038d314de3055d05545e33c7fc7588907bbf32005"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-06-same-age.png",
+      "fixture": true,
+      "audit": {
+        "pose": "walk",
+        "frame": 1,
+        "samePlantingTime": true,
+        "stages": [
+          2,
+          2
+        ],
+        "headerVisible": true,
+        "visualRootHeight": 96
+      },
+      "sha256": "9cfb1e30d1e85d98fd9087b5c01ee5b68a71dbc1449bb4cb2391f006010d30a1"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-02-sunlight.png",
+      "fixture": true,
+      "audit": {
+        "pose": "water",
+        "frame": 3,
+        "samePlantingTime": true,
+        "stages": [
+          2,
+          2
+        ],
+        "headerVisible": true,
+        "visualRootHeight": 138.65625
+      },
+      "sha256": "48ef003765f6c6a7d445e732d86ee86a022daa448d560c3aa47106ea2ae17367"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-06-same-age.png",
+      "fixture": true,
+      "audit": {
+        "pose": "walk",
+        "frame": 3,
+        "samePlantingTime": true,
+        "stages": [
+          2,
+          2
+        ],
+        "headerVisible": true,
+        "visualRootHeight": 138.65625
+      },
+      "sha256": "53774e32f72b55610b743f2b359bff1c48a47a4727f2825e03e752f90b1ef594"
+    }
+  ],
+  "fixtureNote": "Store02 and06 are explicit same-time planting and animation visual QA fixtures rendered by game, no compositing or earned progression claimed. Other store images use real-input journey.",
+  "unperformed": [
+    "Independent Muse8/10 rescore",
+    "human timed recognition",
+    "native devices"
+  ]
+}

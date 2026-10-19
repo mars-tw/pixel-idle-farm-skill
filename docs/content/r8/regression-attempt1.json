@@ -1,0 +1,132 @@
+{
+  "status": "BLOCKED",
+  "startedAt": "2026-10-18T21:40:08.804070+00:00",
+  "protocol": "serial; each script owns one headless browser/server; restore original docs after archiving regenerated outputs",
+  "commands": [
+    {
+      "command": [
+        "npm.cmd",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 7.81,
+      "log": "docs/content/r8/logs/npm-test.txt",
+      "sha256": "beb23a65e24688bc69e25e8840d40adb26ef1bd2a960005bd4711dbd8b442f8a"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-npc-indicators.js"
+      ],
+      "exitCode": 0,
+      "seconds": 5.05,
+      "log": "docs/content/r8/logs/test-npc-indicators.txt",
+      "sha256": "a2963ed2c0f07785bccf99417154cb2f537c34f37f7bcdb2a5280e928c79f9d0"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-world-project-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 0.5,
+      "log": "docs/content/r8/logs/test-world-project-art.txt",
+      "sha256": "043702fb61ecc31a60f2240e375a27cbc8e30b88b8dce5516e6522df38aaf96e"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-world-rework-e2e.js"
+      ],
+      "exitCode": 0,
+      "seconds": 164.16,
+      "log": "docs/content/r8/logs/test-world-rework-e2e.txt",
+      "sha256": "d71008a3f04486353d67cff8677c8089b37628e61cb4461f9419782547eba312"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r79-fun-e2e.js"
+      ],
+      "exitCode": 0,
+      "seconds": 50.27,
+      "log": "docs/content/r8/logs/test-r79-fun-e2e.txt",
+      "sha256": "ea1c60c78e70db20ad2d9b283d4737986b71d5222a8f1de852c91ce4ec37bee9"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r80-mobile.js"
+      ],
+      "exitCode": 0,
+      "seconds": 31.75,
+      "log": "docs/content/r8/logs/test-r80-mobile.txt",
+      "sha256": "8ef6bfaea9501f16a89a2fa6f63e14b4d4e12146be21b6e1d618af66c288ef03"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-r81-review.js"
+      ],
+      "exitCode": 1,
+      "seconds": 14.09,
+      "log": "docs/content/r8/logs/test-r81-review.txt",
+      "sha256": "75321788c9c2c145c93f67ac0f2806398062f6981b59ac6866e254b8fe4f9804"
+    }
+  ],
+  "restoredHistoricalFiles": [
+    "docs/evidence/r79/r79-fun-e2e.json",
+    "docs/evidence/r81-store/review-results.json",
+    "docs/evidence/r79/after/desktop-1366x768-settings-music.png",
+    "docs/evidence/r79/after/desktop-1366x768-sun-catch.png",
+    "docs/evidence/r79/after/desktop-1366x768-sunpatch.png",
+    "docs/evidence/r79/after/landscape-844x390-hud-lv7.png",
+    "docs/evidence/r79/after/landscape-844x390-toast-dialogue.png",
+    "docs/evidence/r79/after/laptop-1366x600-hud-lv7.png",
+    "docs/evidence/r79/after/phone-390x844-hud-lv7.png",
+    "docs/evidence/r79/after/phone-390x844-toast-dialogue.png",
+    "docs/evidence/r79/after/phone-390x844-wait-hint.png",
+    "docs/evidence/r79/after/small-320x568-hud-lv7.png",
+    "docs/evidence/r80-mobile/after/1280x640-collection-locked.png",
+    "docs/evidence/r80-mobile/after/1280x640-daily.png",
+    "docs/evidence/r80-mobile/after/1280x640-farm.png",
+    "docs/evidence/r80-mobile/after/1366x600-collection-locked.png",
+    "docs/evidence/r80-mobile/after/1366x600-daily.png",
+    "docs/evidence/r80-mobile/after/1366x600-farm.png",
+    "docs/evidence/r80-mobile/after/390x844-collection-locked.png",
+    "docs/evidence/r80-mobile/after/390x844-collection-unlocked.png",
+    "docs/evidence/r80-mobile/after/390x844-daily.png",
+    "docs/evidence/r80-mobile/after/390x844-farm.png",
+    "docs/evidence/r80-mobile/after/390x844-first-stamp.png",
+    "docs/evidence/r80-mobile/after/390x844-harvest-ready.png",
+    "docs/evidence/r80-mobile/after/390x844-harvest-result.png",
+    "docs/evidence/r80-mobile/after/844x390-collection-locked.png",
+    "docs/evidence/r80-mobile/after/844x390-collection-unlocked.png",
+    "docs/evidence/r80-mobile/after/844x390-daily.png",
+    "docs/evidence/r80-mobile/after/844x390-farm.png",
+    "docs/evidence/r80-mobile/after/844x390-harvest-ready.png",
+    "docs/evidence/r80-mobile/after/844x390-harvest-result.png",
+    "docs/evidence/r80-mobile/after/rotation-844x390-daily.png",
+    "docs/evidence/r81-store/after/1024x768-recipe.png",
+    "docs/evidence/r81-store/after/1024x768-welcome.png",
+    "docs/evidence/r81-store/after/1032x1376-recipe.png",
+    "docs/evidence/r81-store/after/1032x1376-welcome.png",
+    "docs/evidence/r81-store/after/1280x640-recipe.png",
+    "docs/evidence/r81-store/after/1280x640-welcome.png",
+    "docs/evidence/r81-store/after/1366x600-recipe.png",
+    "docs/evidence/r81-store/after/1366x600-welcome.png",
+    "docs/evidence/r81-store/after/1376x1032-recipe.png",
+    "docs/evidence/r81-store/after/1376x1032-welcome.png",
+    "docs/evidence/r81-store/after/375x667-recipe.png",
+    "docs/evidence/r81-store/after/375x667-welcome.png",
+    "docs/evidence/r81-store/after/390x844-recipe.png",
+    "docs/evidence/r81-store/after/390x844-welcome.png",
+    "docs/evidence/r81-store/after/430x932-recipe.png",
+    "docs/evidence/r81-store/after/430x932-welcome.png",
+    "docs/evidence/r81-store/after/768x1024-recipe.png",
+    "docs/evidence/r81-store/after/768x1024-welcome.png",
+    "docs/evidence/r81-store/after/844x390-recipe.png",
+    "docs/evidence/r81-store/after/844x390-welcome.png"
+  ],
+  "finishedAt": "2026-10-18T21:44:45.228684+00:00"
+}

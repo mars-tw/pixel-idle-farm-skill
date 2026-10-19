@@ -1,0 +1,9 @@
+[
+  {
+    "script": "scripts/test-content-r10-e2e.js",
+    "args": [
+      "--continue-ui"
+    ],
+    "exitCode": 1
+  }
+]

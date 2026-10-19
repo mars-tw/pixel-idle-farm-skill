@@ -1,0 +1,28 @@
+{
+  "status": "VERIFIED",
+  "kind": "literal cache version query only",
+  "from": "content-r12-20261019-1",
+  "to": "content-r13-20261019-1",
+  "files": [
+    {
+      "path": "src/world-ui.js",
+      "beforeSha256": "80e2c2a8531e5edcbec699ab70bb3f6d2cfae3e291f167dacccfa52e7a2b7887",
+      "afterSha256": "6dd007bb4bb9cfeab0824c0f63f288c3a9ecf91c8565eb224136ddffb382e7e3",
+      "replacements": 2,
+      "beforeSnapshot": "docs/content/r13/source-snapshots/cache-query-before/src/world-ui.js"
+    },
+    {
+      "path": "src/daily-ui.js",
+      "beforeSha256": "6095a3a2107234e02858d75dd41305030e9aab8c37e705d6ce9530cf0753aa75",
+      "afterSha256": "31b6cc00ed4e250f89e07db37a502438d3049cd8639a2eff60b32e8437d5697d",
+      "replacements": 1,
+      "beforeSnapshot": "docs/content/r13/source-snapshots/cache-query-before/src/daily-ui.js"
+    }
+  ],
+  "affectedTests": [
+    "npm test",
+    "node scripts/test-r80-mobile.js",
+    "node scripts/test-r81-review.js",
+    "node scripts/test-content-r13-cache-offline.js"
+  ]
+}

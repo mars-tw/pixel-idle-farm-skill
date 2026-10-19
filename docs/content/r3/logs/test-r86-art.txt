@@ -1,0 +1,105 @@
+PASS 8 generated masters, 19 runtime images; actual tool recorded
+PASS source and output hash docs/art/character-sheets/miri-r86.png
+PASS source and output hash docs/art/masters/r86/leaf.png
+PASS source and output hash docs/art/masters/r86/panel.png
+PASS source and output hash docs/art/masters/r86/stamps.png
+PASS source and output hash docs/art/masters/r86/walk.png
+PASS source and output hash docs/art/masters/r86/actions.png
+PASS source and output hash docs/art/masters/r86/logo.png
+PASS source and output hash docs/art/masters/r86/app.png
+PASS source and output hash assets/generated/r86/walk.png
+PASS source and output hash assets/generated/r86/actions.png
+PASS source and output hash assets/generated/r86/drop-16.png
+PASS source and output hash assets/generated/r86/farming-actions.png
+PASS source and output hash assets/generated/r86/miri-0.png
+PASS source and output hash assets/generated/r86/miri-1.png
+PASS source and output hash assets/generated/r86/miri-2.png
+PASS source and output hash assets/generated/r86/stamp-water-32.png
+PASS source and output hash assets/generated/r86/stamp-harvest-32.png
+PASS source and output hash assets/generated/r86/stamp-basket-32.png
+PASS source and output hash assets/generated/r86/paper-128.png
+PASS source and output hash assets/generated/r86/binding-8.png
+PASS source and output hash assets/generated/r86/leaf-light-128.png
+PASS source and output hash assets/generated/r86/canopy-shadow-128.png
+PASS source and output hash assets/generated/r86/leaf-ground-128.png
+PASS source and output hash assets/generated/r86/logo-320.png
+PASS source and output hash assets/generated/r86/app-icon-64.png
+PASS source and output hash assets/generated/r86/app-icon-192.png
+PASS source and output hash assets/generated/r86/app-icon-512.png
+PASS character double gate walk.png
+PASS character double gate actions.png
+PASS character double gate farming-actions.png
+PASS character double gate miri-0.png
+PASS character double gate miri-1.png
+PASS character double gate miri-2.png
+PASS walk row 0 six genuine changing poses
+PASS walk row 1 six genuine changing poses
+PASS walk row 2 six genuine changing poses
+PASS walk row 3 six genuine changing poses
+PASS actions row 0 six genuine changing poses
+PASS actions row 1 six genuine changing poses
+PASS actions row 2 six genuine changing poses
+PASS actions row 3 six genuine changing poses
+PASS actions row 4 six genuine changing poses
+PASS actions row 5 six genuine changing poses
+PASS actions row 6 six genuine changing poses
+PASS actions row 7 six genuine changing poses
+PASS 390x844 exact same-age wheat fixture, lit/unlit same stage
+PASS 390x844 generated directional lighting and matching sunlit hero
+PASS 390x844 readable visual and separate physics
+PASS 390x844 album controls at least44px and hit reachable
+PASS 390x844 separate rows, binding clipped, background chapter hidden
+PASS 390x844 whole portrait album requires no scroll
+PASS 390x844 three distinct red-ink stamps after claim
+PASS 390x844 only one daily completion count, today3/3
+PASS 390x844 basket controls reachable
+PASS 390x844 basket note and footer not overlapped
+PASS 320x568 exact same-age wheat fixture, lit/unlit same stage
+PASS 320x568 generated directional lighting and matching sunlit hero
+PASS 320x568 readable visual and separate physics
+PASS 320x568 album controls at least44px and hit reachable
+PASS 320x568 separate rows, binding clipped, background chapter hidden
+PASS 320x568 three distinct red-ink stamps after claim
+PASS 320x568 only one daily completion count, today3/3
+PASS 320x568 basket controls reachable
+PASS 320x568 basket note and footer not overlapped
+PASS 844x390 exact same-age wheat fixture, lit/unlit same stage
+PASS 844x390 generated directional lighting and matching sunlit hero
+PASS 844x390 readable visual and separate physics
+PASS 844x390 album controls at least44px and hit reachable
+PASS 844x390 separate rows, binding clipped, background chapter hidden
+PASS 844x390 three distinct red-ink stamps after claim
+PASS 844x390 only one daily completion count, today3/3
+PASS 844x390 basket controls reachable
+PASS 844x390 basket note and footer not overlapped
+PASS 1032x1376 exact same-age wheat fixture, lit/unlit same stage
+PASS 1032x1376 generated directional lighting and matching sunlit hero
+PASS 1032x1376 readable visual and separate physics
+PASS 1032x1376 album controls at least44px and hit reachable
+PASS 1032x1376 separate rows, binding clipped, background chapter hidden
+PASS 1032x1376 whole portrait album requires no scroll
+PASS 1032x1376 three distinct red-ink stamps after claim
+PASS 1032x1376 only one daily completion count, today3/3
+PASS 1032x1376 basket controls reachable
+PASS 1032x1376 basket note and footer not overlapped
+PASS 1366x600 exact same-age wheat fixture, lit/unlit same stage
+PASS 1366x600 generated directional lighting and matching sunlit hero
+PASS 1366x600 readable visual and separate physics
+PASS 1366x600 album controls at least44px and hit reachable
+PASS 1366x600 separate rows, binding clipped, background chapter hidden
+PASS 1366x600 three distinct red-ink stamps after claim
+PASS 1366x600 only one daily completion count, today3/3
+PASS 1366x600 basket controls reachable
+PASS 1366x600 basket note and footer not overlapped
+PASS 430x932 exact same-age wheat fixture, lit/unlit same stage
+PASS 430x932 generated directional lighting and matching sunlit hero
+PASS 430x932 readable visual and separate physics
+PASS 430x932 album controls at least44px and hit reachable
+PASS 430x932 separate rows, binding clipped, background chapter hidden
+PASS 430x932 whole portrait album requires no scroll
+PASS 430x932 three distinct red-ink stamps after claim
+PASS 430x932 only one daily completion count, today3/3
+PASS 430x932 basket controls reachable
+PASS 430x932 basket note and footer not overlapped
+PASS no browser errors or missing artwork
+VERIFIED R86 104 checks, browser closed

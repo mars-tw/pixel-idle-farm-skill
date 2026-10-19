@@ -1,0 +1,494 @@
+{
+  "status": "VERIFIED",
+  "headless": true,
+  "checks": 166,
+  "views": [
+    {
+      "w": 320,
+      "h": 568,
+      "geometry": {
+        "player": [
+          73,
+          97.328125
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          },
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          },
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          },
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          },
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          },
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          },
+          {
+            "w": 44,
+            "h": 54.296875,
+            "y": 501.703125,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.6156,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "geometry": {
+        "player": [
+          73,
+          97.328125
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          },
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          },
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          },
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          },
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          },
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          },
+          {
+            "w": 54,
+            "h": 54.296875,
+            "y": 777.703125,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.7477,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "geometry": {
+        "player": [
+          73,
+          97.328125
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 51.421875,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          },
+          {
+            "w": 51.421875,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          },
+          {
+            "w": 51.4375,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          },
+          {
+            "w": 51.421875,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          },
+          {
+            "w": 51.4375,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          },
+          {
+            "w": 51.421875,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          },
+          {
+            "w": 51.421875,
+            "h": 45.078125,
+            "y": 334.921875,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.7147,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "w": 768,
+      "h": 1024,
+      "geometry": {
+        "player": [
+          110,
+          146.65625
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          },
+          {
+            "w": 77.15625,
+            "h": 54.296875,
+            "y": 957.703125,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.8667,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "w": 1024,
+      "h": 768,
+      "geometry": {
+        "player": [
+          73,
+          97.328125
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          },
+          {
+            "w": 77.15625,
+            "h": 54.296875,
+            "y": 701.703125,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.7996,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "w": 1032,
+      "h": 1376,
+      "geometry": {
+        "player": [
+          147,
+          196
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          },
+          {
+            "w": 77.15625,
+            "h": 54.296875,
+            "y": 1309.703125,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.8898,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "w": 1366,
+      "h": 600,
+      "geometry": {
+        "player": [
+          110,
+          146.65625
+        ],
+        "opacity": "1",
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "buttons": [
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          },
+          {
+            "w": 77.140625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          },
+          {
+            "w": 77.15625,
+            "h": 54.296875,
+            "y": 533.703125,
+            "hit": true
+          }
+        ],
+        "worldFraction": 0.7852,
+        "overflow": false
+      },
+      "objects": [
+        {
+          "kind": "sunbasket",
+          "visible": true
+        },
+        {
+          "kind": "tea-porch",
+          "visible": true
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Three-second recognition needs a human blind test; no independent rescore."
+  ]
+}

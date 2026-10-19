@@ -1,0 +1,19 @@
+{
+  "status": "VERIFIED",
+  "version": "content-r4-20261019-1",
+  "source": "Actual earned nine-delivery save, real browser capture at DPR3/DPR2. No crop, resize, overlay or composite. Midgame prerequisites and starting ingredients are disclosed in browser-checks.json.",
+  "screenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-10-remembered-gift.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "4e5312170045aef864b6c73afe351df3c5487d9acbbadd7ad360bc9be977e8e8"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-10-remembered-gift.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "80b79a2751b879b8cd62b9991ee144abd2f5c58d7bb2255d87418702cf325858"
+    }
+  ]
+}

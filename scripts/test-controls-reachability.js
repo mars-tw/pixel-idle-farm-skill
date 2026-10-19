@@ -1,17 +1,18 @@
-/* farm R68 control reachability gate: 164 controls + modal mutual exclusion + viewport hit testing. */
+const { revealFarmControl } = require("./farm-control-test-helper");
+/* R80 control gate: current world CSS, 305 targets, modal and hit testing. */
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const EVIDENCE = path.join(ROOT, "docs", "evidence", "R68", "controls");
+const EVIDENCE = path.join(ROOT, "docs", "evidence", "r80-mobile", "controls");
 const MIME = {
   ".html": "text/html", ".js": "application/javascript", ".json": "application/json",
-  ".webmanifest": "application/manifest+json", ".png": "image/png",
+  ".webmanifest": "application/manifest+json", ".png": "image/png", ".css": "text/css",
 };
 let failed = 0;
 let reachableControlsChecked = 0;
-const EXPECTED_REACHABLE_CONTROLS = 272; // R74：9 視口各新增 2 張建物卡＋泡泡入口＋磚資訊升級鈕（236+36）
+const EXPECTED_REACHABLE_CONTROLS = 339; // R84 replaces paginated tasks with direct cards and keeps every original function in the drawer; exact count remains enforced.
 
 function assert(condition, message) {
   if (condition) console.log("  ✓ " + message);
@@ -50,7 +51,7 @@ const VIEWPORTS = [
 
 async function closeInitialModal(page) {
   await page.waitForFunction(() => !document.getElementById("startupLoading"));
-  const close = page.locator("#howToOk");
+  const close = page.locator(".modal.show #worldBegin, .modal.show #howToOk").first();
   if (await close.isVisible()) await close.click();
   await page.waitForFunction(() => !document.querySelector(".modal.show"));
 }
@@ -88,6 +89,7 @@ function assertReachable(tag, metrics) {
 }
 
 async function assertModal(page, tag, options = {}) {
+  await revealFarmControl(page, page.locator("#howToBtn"));
   if (options.programmaticOpen) await page.evaluate(() => document.getElementById("howToBtn").click());
   else await page.click("#howToBtn");
   await page.waitForFunction(() => document.getElementById("howToModal").classList.contains("show"));
@@ -98,15 +100,12 @@ async function assertModal(page, tag, options = {}) {
     const appShell = document.querySelector(".wrap");
     const backgroundControls = [
       "#genderToggle", "#settingsBtn", "#spriteToggle", "#howToBtn", "#resetBtn",
-      "#mobileControls .dpad-btn", "#actionA",
-    ].flatMap((selector) => [...document.querySelectorAll(selector)]).filter((el) => {
-      const rect = el.getBoundingClientRect();
-      const style = getComputedStyle(el);
-      return rect.width > 0 && rect.height > 0 && style.display !== "none" && style.visibility !== "hidden";
-    });
+      "#mobileControls .dpad-btn", "#actionA", "#farmDock button",
+    ].flatMap((selector) => [...document.querySelectorAll(selector)]);
     const visibleBackgroundControls = backgroundControls.filter((el) => {
       const rect = el.getBoundingClientRect();
-      return rect.right > 0 && rect.bottom > 0 && rect.left < innerWidth && rect.top < innerHeight;
+      const style=getComputedStyle(el);
+      return style.display!=="none" && style.visibility!=="hidden" && rect.width>0 && rect.height>0 && rect.right > 0 && rect.bottom > 0 && rect.left < innerWidth && rect.top < innerHeight;
     });
     const r = close.getBoundingClientRect();
     const br = background.getBoundingClientRect();
@@ -167,7 +166,7 @@ async function assertModal(page, tag, options = {}) {
 }
 
 async function assertSettingsSeriesLinks(page, tag) {
-  await page.locator("#settingsBtn").click();
+  await (await revealFarmControl(page, page.locator("#settingsBtn"))).click();
   await page.waitForFunction(() => document.getElementById("settingsModal").classList.contains("show"));
   const links = page.locator("#settingsSeriesLinks a");
   assert(await links.count() === 3, `${tag} 設定內載入 3 條系列連結`);
@@ -186,7 +185,7 @@ async function assertBuildingUpgradeControls(page, tag) {
     state.materials = { wood: 100, stone: 100, compost: 100 };
     window.__farm.refresh();
   });
-  await page.locator('.side-tab[data-tab="upgrades"]').click();
+  await (await revealFarmControl(page, page.locator('.side-tab[data-tab="upgrades"]'))).click();
   for (const id of ["b_coop", "b_barn"]) {
     const selector = `#buildingUpgrades .building-upgrade-btn[data-building-id="${id}"]`;
     const button = page.locator(selector);
@@ -209,6 +208,17 @@ async function assertBuildingUpgradeControls(page, tag) {
   const contextSelector = '#tileContext .building-upgrade-btn[data-building-id="b_coop"]';
   await page.locator(contextSelector).scrollIntoViewIfNeeded();
   assertReachable(`${tag} 磚資訊建物升級鈕`, await controlMetrics(page, contextSelector));
+}
+
+async function assertDailyControls(page, tag) {
+  await page.locator("#dailyOpen").click();
+  assertReachable(`${tag} 日誌三張農務牌`, await controlMetrics(page, "#dailyToday, #dailyCollection, .daily-task-thumb, #dailyClose"));
+  for (let i=0;i<3;i++) {
+    await page.locator('.daily-task-thumb').nth(i).click();
+    assertReachable(`${tag} 農務牌 ${i+1}`,await controlMetrics(page,'.daily-task-thumb'));
+  }
+  assert(await page.locator('#dailyPrev').isHidden() && await page.locator('#dailyNext').isHidden(), `${tag} 今日農務沒有翻頁`);
+  await page.locator("#dailyClose").click();
 }
 
 async function assertNonModalNoOverlap(page, tag) {
@@ -359,7 +369,7 @@ async function assertFitMapVisible(page, tag) {
       tileH: tr ? tr.height : 0,
     };
   });
-  assert(result.mode === "fit", `${tag} 預設整圖模式（mode=${result.mode}）`);
+  assert(result.mode === "fit", `${tag} 切換後整圖模式（mode=${result.mode}）`);
   assert(result.scrollH <= result.clientH + 2 && result.scrollW <= result.clientW + 2,
     `${tag} 世界完整可見且 #mapScene 零內捲（scroll ${result.scrollW}×${result.scrollH}, client ${result.clientW}×${result.clientH}）`);
   assert(result.worldW <= result.sceneW + 2 && result.worldH <= result.sceneH + 2,
@@ -383,6 +393,9 @@ async function runViewport(browser, base, config) {
     await page.goto(base + "?r68-controls=1", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForFunction(() => window.__farm && window.__farm.state, null, { timeout: 45000 });
     await closeInitialModal(page);
+    // R75 defaults to the moving camera. Exercise the actual fit toggle before
+    // retaining the original full-map visibility assertions.
+    if (await page.locator("#mapScene").getAttribute("data-map-mode") !== "fit") await (await revealFarmControl(page, page.locator("#mapFitToggle"))).click();
 
     const device = await page.evaluate(() => ({
       primaryCoarse: matchMedia("(pointer: coarse)").matches,
@@ -412,10 +425,13 @@ async function runViewport(browser, base, config) {
       await page.screenshot({ path: path.join(EVIDENCE, config.evidence), fullPage: false });
     }
 
+    await revealFarmControl(page, page.locator(".side-tab").first());
     await page.locator(".side-tabs").scrollIntoViewIfNeeded();
     assertReachable(`${config.name} 側欄 tabs`, await controlMetrics(page, ".side-tabs button"));
     await assertNonModalNoOverlap(page, `${config.name} 側欄分頁`);
+    await assertDailyControls(page, config.name);
     if (expectsMobileControls) {
+      await revealFarmControl(page, page.locator("#settingsBtn"));
       await page.locator(".toolbar").scrollIntoViewIfNeeded();
       assertReachable(`${config.name} 底部工具列`, await controlMetrics(page, ".toolbar button"));
       await assertNonModalNoOverlap(page, `${config.name} 底部工具列`);
@@ -442,7 +458,7 @@ async function run() {
   catch (error) { console.error("需要 devDependency: playwright"); process.exit(2); }
   const server = await startServer();
   const base = `http://127.0.0.1:${server.address().port}/index.html`;
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ headless: true });
   try {
     console.log("== farm R68 控制與選單守門 ==");
     const viewportFilter = String(process.env.CONTROLS_VIEWPORT || "").trim();
@@ -452,9 +468,9 @@ async function run() {
     if (!viewportFilter) {
       assert(reachableControlsChecked === EXPECTED_REACHABLE_CONTROLS,
         `控制可達性精確覆蓋 ${EXPECTED_REACHABLE_CONTROLS} 項（實測 ${reachableControlsChecked}）`);
-      fs.mkdirSync(path.join(ROOT, "docs", "evidence", "R68"), { recursive: true });
-      fs.writeFileSync(path.join(ROOT, "docs", "evidence", "R68", "controls-summary.json"), JSON.stringify({
-        release: "R68",
+      fs.mkdirSync(path.join(ROOT, "docs", "evidence", "r80-mobile"), { recursive: true });
+      fs.writeFileSync(path.join(ROOT, "docs", "evidence", "r80-mobile", "controls-summary.json"), JSON.stringify({
+        release: "R80",
         viewports: VIEWPORTS.length,
         reachableControls: reachableControlsChecked,
         expectedReachableControls: EXPECTED_REACHABLE_CONTROLS,

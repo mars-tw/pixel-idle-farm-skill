@@ -1,0 +1,11 @@
+{
+  "status": "VERIFIED",
+  "checkedAt": "2026-10-19",
+  "method": "web.run official page open and find",
+  "source": "https://developer.apple.com/app-store/review/guidelines/#spam",
+  "sections": [
+    "4.3(a)",
+    "4.3(b)"
+  ],
+  "paraphrase": "Avoid multiple Bundle IDs of the same app and apps indistinguishable from widely available apps. Risk rating is a local content assessment, not Apple approval."
+}

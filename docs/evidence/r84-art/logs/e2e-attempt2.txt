@@ -1,0 +1,31 @@
+
+> pixel-idle-farm@0.1.18 test:e2e
+> node scripts/run-browser-gates.js
+
+[memory] scripts/test-npc-indicators.js attempt 1: 39003MiB free
+PASS desktop: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS mobile: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS small: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS landscape: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS 32 transparent UI icons at 20/24/28/32px: individual image, clear corners, no atlas clipping.
+[memory] scripts/test-world-project-art.js attempt 1: 38997MiB free
+PASS R76 art: 4 exact frames, real alpha, shared palette, 6px padding, matching scale/feet, provenance hashes and SW cache.
+[memory] scripts/test-world-rework-e2e.js attempt 1: 38983MiB free
+R75 real-browser review http://127.0.0.1:50112/index.html
+DEVICE desktop 1440x900
+CHAPTER_ONE_UI desktop 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE mobile 390x844
+CHAPTER_ONE_UI mobile 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE landscape 844x390
+CHAPTER_ONE_UI landscape 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE small 320x568
+CHAPTER_ONE_UI small 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+FAIL small UI flow interrupted {"error":{"message":"No actual exposed walkable map point for menu dismissal test","at":["    at menus (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-world-rework-e2e.js:246:21)","    at async runDevice (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-world-rework-e2e.js:424:5)","    at async run (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-world-rework-e2e.js:617:22)"]},"state":{"player":{"tileId":"t5_7","x":5,"y":7,"facing":"down","action":"idle","actionTargetTileId":null,"actionEndsAt":0},"coins":61,"xp":15,"items":{"wheat":2},"materials":{"wood":16,"stone":6,"compost":0},"counts":{"plant":3,"water":3,"harvest":6,"talk":2,"forage":0,"fish":0,"cook":1,"restore":0,"order":0,"care":0},"claimed":{"c1_homecoming":true,"c1_first_harvest":true,"c1_first_meal":true}}}
+FIXTURE CHAPTER_ONE_EARNED_DOCK: Unmodified genuinely earned chapter-one save; dock still broken, exact earned materials.
+FIXTURE UI_RESTORED_DOCK_FISHING: Dock restored by the preceding real UI fixture; relocated by a real journey, no fish/cooldown injection.
+WAIT UI_RESTORED_DOCK_FISHING real cooldown 28696ms; lastFishAt is not backdated
+FIXTURE LATE_RECIPES_INGREDIENTS_PICNIC_FIXTURE: Earned chapter-one claims retained; explicitly supplies wheat8/carrot4/mint2 and restored picnic table for recipe tests. NOT chapter-two completion.
+FIXTURE MISSING_WHEAT_COOK_GUARD: only inventory wheat is removed for negative UI/API guard
+FIXTURE EARNED_EMPTY_PLOT_IMPACT_CANCEL: Earned chapter-one save with empty harvested plots; only MOVE_MS is shortened. No crop/inventory/event injection.
+FIXTURE EARNED_MARKET_MATERIALS_UI: Unmodified earned chapter-one coins/materials; market purchase uses real buttons and nontrivial travel.
+R75 SUMMARY {"passed":368,"failed":1}

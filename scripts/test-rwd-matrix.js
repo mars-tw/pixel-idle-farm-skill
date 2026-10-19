@@ -122,7 +122,7 @@ async function auditViewport(browser, base, vp, closeOverlays) {
       // 前置：關閉教學/導覽 overlay（首次遊玩「怎麼玩」引導、離線摘要等 modal）
       await page.evaluate(() => {
         const modal = document.querySelector(".modal.show");
-        const close = modal && modal.querySelector("#howToOk, #offlineOk, #settingsOk, #lettersClose");
+        const close = modal && modal.querySelector("#worldBegin, #howToOk, #offlineOk, #settingsOk, #lettersClose");
         if (close) close.click();
       });
       await page.waitForFunction(() => !document.querySelector(".modal.show"));
@@ -146,7 +146,7 @@ async function run() {
 
   const server = await startServer();
   const base = "http://127.0.0.1:" + server.address().port + "/index.html";
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ headless: true });
   try {
     console.log("== R47 RWD 9 視口矩陣守門（overlay 先關閉） ==");
     for (const vp of VIEWPORTS) await auditViewport(browser, base, vp, true);

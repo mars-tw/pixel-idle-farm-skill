@@ -1,0 +1,6 @@
+{
+  "status": "VERIFIED",
+  "file": "scripts/test-content-r5-e2e.js",
+  "sha256": "1d5963e04f2d7f82001edc44dc22d92a3b5350b8bde125c14ad93657bbc3a0ef",
+  "evidence": "Preserved source is byte-identical to source archived after its successful gate; restored after baseline output restoration."
+}

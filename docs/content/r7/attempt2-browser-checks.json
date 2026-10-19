@@ -1,0 +1,1576 @@
+{
+  "status": "BLOCKED",
+  "fixture": "Chapter1/dock unlocked; wheat36/carrot8/berries8 only. Sixteen breads cooked, nine gifts and three gathering baskets actually delivered/reserved through UI. Real clocks, no granted matches/catches. Later viewport/offline sessions reuse this run earned saves.",
+  "checks": [
+    "cancelled basket preserves all bread and stops the real journey",
+    "cancel retains every ingredient exactly",
+    "cancel retains bread after actual reload",
+    "430 merchant single strip, marker+arrow+cancel; usable world >=60% {\"area\":0.9127657450843397,\"hidden\":true,\"cancel\":true,\"marker\":true,\"label\":\"蘿拉\",\"arrow\":true,\"onlyRow\":true}",
+    "merchant 430 taken/halfway show actual locomotion",
+    "merchant no resources spent before receiver impact 430",
+    "merchant contact shows one physical parcel, no floating basket marker",
+    "merchant parcel transferred to receiver image once",
+    "merchant exact bread/ingredient deduction at contact 430",
+    "merchant recall does not reveal taste",
+    "merchant no resources spent before receiver impact 430",
+    "merchant parcel transferred to receiver image once",
+    "merchant exact bread/ingredient deduction at contact 430",
+    "merchant wrong reaction leaves context instead of answer",
+    "merchant no resources spent before receiver impact 430",
+    "merchant parcel transferred to receiver image once",
+    "merchant exact bread/ingredient deduction at contact 430",
+    "merchant distinct success token",
+    "merchant world keepsake physically present",
+    "430 elder single strip, marker+arrow+cancel; usable world >=60% {\"area\":0.9127657450843397,\"hidden\":true,\"cancel\":true,\"marker\":true,\"label\":\"班伯\",\"arrow\":true,\"onlyRow\":true}",
+    "elder 430 taken/halfway show actual locomotion",
+    "elder no resources spent before receiver impact 430",
+    "elder contact shows one physical parcel, no floating basket marker",
+    "elder parcel transferred to receiver image once",
+    "elder exact bread/ingredient deduction at contact 430",
+    "elder recall does not reveal taste",
+    "elder no resources spent before receiver impact 430",
+    "elder parcel transferred to receiver image once",
+    "elder exact bread/ingredient deduction at contact 430",
+    "elder wrong reaction leaves context instead of answer",
+    "elder no resources spent before receiver impact 430",
+    "elder parcel transferred to receiver image once",
+    "elder exact bread/ingredient deduction at contact 430",
+    "elder distinct success token",
+    "elder world keepsake physically present"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r7/phone-basket-cancel-before.png",
+      "at": 1792355900522,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 0,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 16,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-cancel-after.png",
+      "at": 1792355900670,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 0,
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 16,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-merchant-430-taken.png",
+      "at": 1792355901816,
+      "state": {
+        "player": {
+          "tileId": "t8_3",
+          "x": 8,
+          "y": 3,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 3,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 16,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-merchant-430-halfway.png",
+      "at": 1792355902121,
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 16,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-merchant-430-before-reach.png",
+      "at": 1792355903565,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 3,
+        "carrying": "arrived",
+        "receiver": "waiting",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 16,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-merchant-430-resident.png",
+      "at": 1792355904500,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "reach",
+        "receiver": "reach",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 16,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-merchant-430-handover.png",
+      "at": 1792355904929,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "contact",
+        "receiver": "receive",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 15,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355904741
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-merchant-430-reply.png",
+      "at": 1792355905905,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "reply",
+        "receiver": "reply",
+        "view": "basket",
+        "resident": "merchant",
+        "bread": 15,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355904741
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-story-merchant-first.png",
+      "at": 1792355907300,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "merchant",
+        "bread": 15,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355904741
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-merchant-recall.png",
+      "at": 1792355907505,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "recall",
+        "resident": "merchant",
+        "bread": 15,
+        "items": {
+          "wheat": 4,
+          "carrot": 8,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355904741
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-merchant-wrong.png",
+      "at": 1792355912250,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "merchant",
+        "bread": 14,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 8
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355909490
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-merchant-matched.png",
+      "at": 1792355917005,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "merchant",
+        "bread": 13,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-merchant-farm.png",
+      "at": 1792355917171,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "merchant",
+        "bread": 13,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-elder-430-taken.png",
+      "at": 1792355918058,
+      "state": {
+        "player": {
+          "tileId": "t7_4",
+          "x": 7,
+          "y": 4,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 2,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "elder",
+        "bread": 13,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-elder-430-halfway.png",
+      "at": 1792355918357,
+      "state": {
+        "player": {
+          "tileId": "t7_6",
+          "x": 7,
+          "y": 6,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 4,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "elder",
+        "bread": 13,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-elder-430-before-reach.png",
+      "at": 1792355919889,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "arrived",
+        "receiver": "waiting",
+        "view": "basket",
+        "resident": "elder",
+        "bread": 13,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-elder-430-resident.png",
+      "at": 1792355920204,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "reach",
+        "receiver": "reach",
+        "view": "basket",
+        "resident": "elder",
+        "bread": 13,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-elder-430-handover.png",
+      "at": 1792355921132,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "contact",
+        "receiver": "receive",
+        "view": "basket",
+        "resident": "elder",
+        "bread": 12,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355920835
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-elder-430-reply.png",
+      "at": 1792355922078,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "carrying": "reply",
+        "receiver": "reply",
+        "view": "basket",
+        "resident": "elder",
+        "bread": 12,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355920835
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-story-elder-first.png",
+      "at": 1792355923516,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "elder",
+        "bread": 12,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355920835
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-elder-recall.png",
+      "at": 1792355923707,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "recall",
+        "resident": "elder",
+        "bread": 12,
+        "items": {
+          "wheat": 4,
+          "carrot": 7,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355920835
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-elder-wrong.png",
+      "at": 1792355928453,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "elder",
+        "bread": 11,
+        "items": {
+          "wheat": 4,
+          "carrot": 6,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792355925711
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-elder-matched.png",
+      "at": 1792355933234,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "elder",
+        "bread": 10,
+        "items": {
+          "wheat": 4,
+          "carrot": 6,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355930462
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-memory-elder-farm.png",
+      "at": 1792355933377,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 5,
+        "view": "response",
+        "resident": "elder",
+        "bread": 10,
+        "items": {
+          "wheat": 4,
+          "carrot": 6,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355930462
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-child-430-taken.png",
+      "at": 1792355934155,
+      "state": {
+        "player": {
+          "tileId": "t7_4",
+          "x": 7,
+          "y": 4,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 1,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "child",
+        "bread": 10,
+        "items": {
+          "wheat": 4,
+          "carrot": 6,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355930462
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    },
+    {
+      "path": "docs/content/r7/phone-basket-child-430-halfway.png",
+      "at": 1792355934494,
+      "state": {
+        "player": {
+          "tileId": "t7_6",
+          "x": 7,
+          "y": 6,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "sprite": 4,
+        "carrying": "walking",
+        "view": "basket",
+        "resident": "child",
+        "bread": 10,
+        "items": {
+          "wheat": 4,
+          "carrot": 6,
+          "wild_berry": 7
+        },
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355914252
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792355930462
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0
+        },
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "failure": "AssertionError [ERR_ASSERTION]: 430 child single strip, marker+arrow+cancel; usable world >=60% {\"area\":0.9127657450843397,\"hidden\":true,\"cancel\":true,\"marker\":false,\"label\":\"圖圖\",\"arrow\":true,\"onlyRow\":true}\n    at check (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r7-e2e.js:10:21)\n    at deliveryLayout (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r7-e2e.js:43:2)\n    at async send (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r7-e2e.js:31:153)\n    at async neighbors (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r7-e2e.js:53:32)\n    at async C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r7-e2e.js:91:117"
+}

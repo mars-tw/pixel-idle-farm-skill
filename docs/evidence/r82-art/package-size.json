@@ -1,0 +1,195 @@
+{
+  "scope": "R82 changed files included by the existing runtime deployment allowlist; excludes docs, masters, tests, package metadata and any pre-existing ignored files. Not a native IPA/AAB measurement.",
+  "baseline": "e1445a8",
+  "deltaBytes": 238108,
+  "deltaKiB": 232.53,
+  "masterBytes": 13581235,
+  "rows": [
+    {
+      "path": "index.html",
+      "beforeBytes": 109163,
+      "afterBytes": 110769,
+      "deltaBytes": 1606
+    },
+    {
+      "path": "manifest.webmanifest",
+      "beforeBytes": 671,
+      "afterBytes": 720,
+      "deltaBytes": 49
+    },
+    {
+      "path": "sw.js",
+      "beforeBytes": 8742,
+      "afterBytes": 9425,
+      "deltaBytes": 683
+    },
+    {
+      "path": "CREDITS.md",
+      "beforeBytes": 5801,
+      "afterBytes": 6978,
+      "deltaBytes": 1177
+    },
+    {
+      "path": "src/ui.js",
+      "beforeBytes": 257361,
+      "afterBytes": 262113,
+      "deltaBytes": 4752
+    },
+    {
+      "path": "src/world-ui.js",
+      "beforeBytes": 40938,
+      "afterBytes": 42053,
+      "deltaBytes": 1115
+    },
+    {
+      "path": "src/daily-ui.js",
+      "beforeBytes": 4948,
+      "afterBytes": 5876,
+      "deltaBytes": 928
+    },
+    {
+      "path": "src/heirloom.js",
+      "beforeBytes": 2828,
+      "afterBytes": 2885,
+      "deltaBytes": 57
+    },
+    {
+      "path": "src/heirloom-ui.js",
+      "beforeBytes": 6464,
+      "afterBytes": 7420,
+      "deltaBytes": 956
+    },
+    {
+      "path": "src/art-r82.css",
+      "beforeBytes": 0,
+      "afterBytes": 9869,
+      "deltaBytes": 9869
+    },
+    {
+      "path": "assets/heirloom/manifest.json",
+      "beforeBytes": 1679,
+      "afterBytes": 1784,
+      "deltaBytes": 105
+    },
+    {
+      "path": "assets/heirloom/doorstep-r82.webp",
+      "beforeBytes": 0,
+      "afterBytes": 25528,
+      "deltaBytes": 25528
+    },
+    {
+      "path": "assets/heirloom/table-r82.webp",
+      "beforeBytes": 0,
+      "afterBytes": 29632,
+      "deltaBytes": 29632
+    },
+    {
+      "path": "assets/generated/r82/app-icon-192.png",
+      "beforeBytes": 0,
+      "afterBytes": 27386,
+      "deltaBytes": 27386
+    },
+    {
+      "path": "assets/generated/r82/app-icon-48.png",
+      "beforeBytes": 0,
+      "afterBytes": 5621,
+      "deltaBytes": 5621
+    },
+    {
+      "path": "assets/generated/r82/app-icon-512.png",
+      "beforeBytes": 0,
+      "afterBytes": 34408,
+      "deltaBytes": 34408
+    },
+    {
+      "path": "assets/generated/r82/basket-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 1283,
+      "deltaBytes": 1283
+    },
+    {
+      "path": "assets/generated/r82/farmer-96.png",
+      "beforeBytes": 0,
+      "afterBytes": 10135,
+      "deltaBytes": 10135
+    },
+    {
+      "path": "assets/generated/r82/farmer-face-64.png",
+      "beforeBytes": 0,
+      "afterBytes": 4535,
+      "deltaBytes": 4535
+    },
+    {
+      "path": "assets/generated/r82/icons-128.png",
+      "beforeBytes": 0,
+      "afterBytes": 8351,
+      "deltaBytes": 8351
+    },
+    {
+      "path": "assets/generated/r82/logo-320.png",
+      "beforeBytes": 0,
+      "afterBytes": 18704,
+      "deltaBytes": 18704
+    },
+    {
+      "path": "assets/generated/r82/manifest.json",
+      "beforeBytes": 0,
+      "afterBytes": 9188,
+      "deltaBytes": 9188
+    },
+    {
+      "path": "assets/generated/r82/note-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 1435,
+      "deltaBytes": 1435
+    },
+    {
+      "path": "assets/generated/r82/paper-192.png",
+      "beforeBytes": 0,
+      "afterBytes": 1597,
+      "deltaBytes": 1597
+    },
+    {
+      "path": "assets/generated/r82/seed-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 1279,
+      "deltaBytes": 1279
+    },
+    {
+      "path": "assets/generated/r82/stamp-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 1365,
+      "deltaBytes": 1365
+    },
+    {
+      "path": "assets/generated/r82/sun-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 969,
+      "deltaBytes": 969
+    },
+    {
+      "path": "assets/generated/r82/tea-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 1138,
+      "deltaBytes": 1138
+    },
+    {
+      "path": "assets/generated/r82/water-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 909,
+      "deltaBytes": 909
+    },
+    {
+      "path": "assets/generated/r82/welcome-384.webp",
+      "beforeBytes": 0,
+      "afterBytes": 32088,
+      "deltaBytes": 32088
+    },
+    {
+      "path": "assets/generated/r82/wheat-32.png",
+      "beforeBytes": 0,
+      "afterBytes": 1260,
+      "deltaBytes": 1260
+    }
+  ]
+}

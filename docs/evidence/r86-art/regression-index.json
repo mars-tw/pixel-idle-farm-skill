@@ -1,0 +1,877 @@
+{
+  "status": "VERIFIED",
+  "records": [
+    {
+      "original": "docs/evidence/r72/night-gate.json",
+      "archived": "docs/evidence/r86-art/regression/r72/night-gate.json",
+      "currentRunSha256": "7ab86af627f100556c972760834235265cb18be3c8c2bd15e2b61213c5517735",
+      "restoredStartingSha256": "8a5f86cc3b4256c5d97102e15dc449f1444ab1d5ff8f6f64aaf9fb7252ef1da6"
+    },
+    {
+      "original": "docs/evidence/r79/r79-fun-e2e.json",
+      "archived": "docs/evidence/r86-art/regression/r79/r79-fun-e2e.json",
+      "currentRunSha256": "1709b08896b5554b3232eb59d800fb7a78c1a7316f2d4a8a7c08c07245d91c45",
+      "restoredStartingSha256": "3599c3f2c36fefb5d8a875d9b53aa28259c7796323e1915506fda9629a94d3f6"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/controls-summary.json",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/controls-summary.json",
+      "currentRunSha256": "27344281b3877d331afd6b003b5e48ee65fec381862b6217803b9605ef4cf4ec",
+      "restoredStartingSha256": "54393b56518e2e91eba675a288b6ce292103bf9ed1bf2ceb71d4937596b92ffe"
+    },
+    {
+      "original": "docs/evidence/r81-store/review-results.json",
+      "archived": "docs/evidence/r86-art/regression/r81-store/review-results.json",
+      "currentRunSha256": "620e9c97bba66b95f1eb1a86c542c4879f0eebe2b7bcc4564dd5644aaaba1fd2",
+      "restoredStartingSha256": "83c0b06fb82f2fee8108ffcdb020542a1abc102784f3c3b40ba74fe0dec2144f"
+    },
+    {
+      "original": "docs/evidence/r82-art/art-validation.json",
+      "archived": "docs/evidence/r86-art/regression/r82-art/art-validation.json",
+      "currentRunSha256": "eadc149fbba88cfa1a12687a0d44d5a3f53862e3dca43f19057c1ee810ea8b04",
+      "restoredStartingSha256": "001ee79a8ffa58b188d118704af55d05744d9ed08245e23591f243ea375167d4"
+    },
+    {
+      "original": "docs/evidence/r82-art/fixture-doorstep.png",
+      "archived": "docs/evidence/r86-art/regression/r82-art/fixture-doorstep.png",
+      "currentRunSha256": "2741e61bd988a8814f13941b1a24d1f2e8d8e33bc345bb73482afdadce3fe642",
+      "restoredStartingSha256": "332c30e81896168f99757c946cc81c9a71c27a60ddb3926d929656445a5494f3"
+    },
+    {
+      "original": "docs/evidence/r82-art/fixture-table.png",
+      "archived": "docs/evidence/r86-art/regression/r82-art/fixture-table.png",
+      "currentRunSha256": "f7de0e7f9b75e73bc9ea2e428e6bf61827088242f0a3dba68bc037266168ec3e",
+      "restoredStartingSha256": "98f03abf47c4f6c84d0a014464a9db0ce4a6734996a99471683a13f241461e04"
+    },
+    {
+      "original": "docs/evidence/r83-art/art-validation.json",
+      "archived": "docs/evidence/r86-art/regression/r83-art/art-validation.json",
+      "currentRunSha256": "4c9487945b79e265879c76c8d8267822652c07de5035708a5a3d50e41cce47b9",
+      "restoredStartingSha256": "ee672ccf1a6b3030e1b6d01767ce9cc2b2d0aff921c5c4da3c81918310584f18"
+    },
+    {
+      "original": "docs/evidence/r83-art/sun-off.png",
+      "archived": "docs/evidence/r86-art/regression/r83-art/sun-off.png",
+      "currentRunSha256": "87b63ca73779206100f1b35fb826e50123c7ea317acc693ae7eeccbebef40a04",
+      "restoredStartingSha256": "a74c62ae6112cec78f3991f0184582acd62416971d465ccb7d12a2c80e718f00"
+    },
+    {
+      "original": "docs/evidence/r83-art/sun-on.png",
+      "archived": "docs/evidence/r86-art/regression/r83-art/sun-on.png",
+      "currentRunSha256": "86eb868109f770343cff8e1672e333abca14acdcec248a0dc5a8b809fa623357",
+      "restoredStartingSha256": "ffbddbee9197a6daa43ec655ef8eeea5d6d79f1f2f7154e3cc65fa76f65e42d5"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-daily-stamped.png",
+      "currentRunSha256": "f49eb092728bd486ab581b71384047371dc2f6feb3e764ceecfa83bd594788f1",
+      "restoredStartingSha256": "9472b361f97251b2c5fdc1d9b2eb9df23bd798af29a5354152b94baafd38cbf3"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-daily.png",
+      "currentRunSha256": "52f59f15a5c4d3069cb922b2bf3b507a37be1500c2c9a45d4e2bbe5dd7329b7e",
+      "restoredStartingSha256": "aacade4e98e81e1d2af21f9c7be992e9d991d0fe5c41b89d9c97b395a2e1d243"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-dialogue.png",
+      "currentRunSha256": "ca19505f9145fe4964826105d25c101770e19e1efeea4441b92d30314378fc45",
+      "restoredStartingSha256": "cd072a6ffc73923c3e5f62b28d4db319680b1e53b63ed71428f355de824b71f9"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-doorstep-result.png",
+      "currentRunSha256": "753b3efdcc410915e9552046e7b82f06484e4593ba49c5e3a078ec027cf46600",
+      "restoredStartingSha256": "cc219340346a46d6cb9f0bc4b514ebbc03aec40ca91701691129940bdb1b5ce7"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-farm.png",
+      "currentRunSha256": "3c123f6ac422e1aa429b6889ba65a87c67d3c1869d14212706b8f28c304e5ed9",
+      "restoredStartingSha256": "514033d54e1aaa81b6d40cb994dc0c0a6b73e633288b7a360fcd610cd5203302"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-table-result.png",
+      "currentRunSha256": "6a35a2ca4ba95e8cc32443873ba9b0f3327be5ee9fa1c87ffab0e15126d696a5",
+      "restoredStartingSha256": "84f17bbcc52492033015674c24c173e49d34a00d59d09439e66a6272b1ee4dac"
+    },
+    {
+      "original": "docs/evidence/r84-art/1024x768-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1024x768-world-keepsakes.png",
+      "currentRunSha256": "2c0e62c13f22f2d136a6fc3ced9044a6acbde99b913e27fc83df1dea42339237",
+      "restoredStartingSha256": "cecbb9ebc40a7aa72fb5ec9dba69f3c37451d9871380048f1fea76d1dd5feb99"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-daily-stamped.png",
+      "currentRunSha256": "4c4cad239df8a13aec6582c7590e8cc3ebbec279172dca74b73715419575a1fb",
+      "restoredStartingSha256": "cca0ffdea91469a8abeddb687270e3c125f95f15b2201e70f52bce83194f47ec"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-daily.png",
+      "currentRunSha256": "05c6dd377e8ee891453f1cd23a3664b9aa8e4bff1225e2fc60f7c2e8eabb878f",
+      "restoredStartingSha256": "2a965d028f00edc053de9f248c65a4d5529895fd11b084cd222015f2573696a1"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-dialogue.png",
+      "currentRunSha256": "61d665947b86df7cfa3af93f08b90d9acb1602c86593384544ea71ba36a58ec3",
+      "restoredStartingSha256": "ad2fcb5e59da722df2c4df194e0ab90f54588839f3fe8c19fd7f0e946cdb3c8d"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-doorstep-result.png",
+      "currentRunSha256": "9aaf4da06551d75e3062a412fa7b6e165e482383330a6d17335072ab52fa5880",
+      "restoredStartingSha256": "edee362428e97dde370a11c4746e1ba1f74e31ecd36a00f9bba0080c3ce5aeb6"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-farm.png",
+      "currentRunSha256": "9e0990eed0e74d225342a6bc9fb84d1fa5aec3991016b14ab12508db0149f488",
+      "restoredStartingSha256": "9f2b8013d57fa3449c46edf8c35a96c2aad34f06769005ac62c9a742a0717bb0"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-table-result.png",
+      "currentRunSha256": "0a9a85206f3d1cbdc730fcb70eb115a4349ae199128394c89c6d7b7f80f59be1",
+      "restoredStartingSha256": "8341e3b798050a1e11813e409c940e3a32647b077340249210f0d5b29896bdbb"
+    },
+    {
+      "original": "docs/evidence/r84-art/1032x1376-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1032x1376-world-keepsakes.png",
+      "currentRunSha256": "f7c472f71b45c17caa42dbaa34b7729a99a23ccdf2db6b19014e705f5ae9917b",
+      "restoredStartingSha256": "bad8875466226975f2e7b038ef06aafa0aa672892c4830be776e2143e8d11430"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-daily-stamped.png",
+      "currentRunSha256": "37fc01708c003332f5112facedacdb58274c14d6f8363eac8d00a37d0d5231c7",
+      "restoredStartingSha256": "c36c890c587c605040cb8e440454f1bb4edbdc4c94823fd73b2dba28d3ecd1fb"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-daily.png",
+      "currentRunSha256": "33dbb4b1ce3f999e9b1ff1788185f97be0abcd08f2440c2554bf88c75a8b60b5",
+      "restoredStartingSha256": "93147d41c51bfa3b5578876089b01dd1e916289252fd49e485bdd025512c32d1"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-dialogue.png",
+      "currentRunSha256": "c1d91f5d7fe2ed97bfc38cc6f9146913140547ef6cd70b1a1f426d2748af2e5d",
+      "restoredStartingSha256": "07b776ef92222e8fcf13b38753f4a3bdcb7b2cf5fa1a8da992183505b00c7ad5"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-doorstep-result.png",
+      "currentRunSha256": "038f475d5b65b95c4aba785c6c5af7fa4c61013c2cdd6c5d1100404381388b12",
+      "restoredStartingSha256": "7b44f1c4c28234e45c899dc46d2e3c822ba0bac9180aa15e1b6c2ac4a495f8e5"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-farm.png",
+      "currentRunSha256": "a108c9b1ab68b3e052e6fa035c17fed8996d77f704e9459f7e4c866516de060f",
+      "restoredStartingSha256": "9cd7ef3dd37a85176642773f5afa66942cf039594d14b2fd78c25a02dbf65c84"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-table-result.png",
+      "currentRunSha256": "b6cd18e19533d3f0e3d6423a023e31addd09220683597daa0d85cc37963e45ca",
+      "restoredStartingSha256": "144f806d84e1987c0b38ee48e97a470294d4e1c13929abe7a76e718d5f895d2c"
+    },
+    {
+      "original": "docs/evidence/r84-art/1366x600-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/1366x600-world-keepsakes.png",
+      "currentRunSha256": "66ac4085ba1274b43251a17cbbf068e31915e365a0afd903b5b50aeaeec5292c",
+      "restoredStartingSha256": "eccbc48885fc7d7e227c9d03444aae364e90916f2c502a548da813242b053fe1"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-daily-stamped.png",
+      "currentRunSha256": "04e9c6029f51207ac6f44d5c4153de783d83e5981ed12b711ec85a25866e3aab",
+      "restoredStartingSha256": "775f11dc576d4052e89ce43751f3e6f27668618d08d78c11585d2e3dc0d6c15a"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-daily.png",
+      "currentRunSha256": "1e671a1c8f1a200994478009cefbcc151b864aa6c8324b35c90e24781694a15e",
+      "restoredStartingSha256": "303206ba021aae95602d9423084f2aa7b93a2130cf0fbb86a005b1b80298b18e"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-dialogue.png",
+      "currentRunSha256": "fb206dbb0acde2bed6c967a6666832af16540a70c236eddf7881ad83d1aeb6fa",
+      "restoredStartingSha256": "8e08e2efbdc643178a19263c22c2f18a23e6b84c1662ea99e0a664325398d182"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-doorstep-result.png",
+      "currentRunSha256": "c17e166d0af6802e81c754ab17533edfa37a049c888f9da3b853bf7a3c153715",
+      "restoredStartingSha256": "242226ab113d2ee9b4903c9d83225b71600bec5eed4496cf99b362fcc92a7d87"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-farm.png",
+      "currentRunSha256": "6889317860d5d784ff44b85cb2de74bfa376cb0a123f646627c01a57d1814882",
+      "restoredStartingSha256": "1aca291ec328e0619d3ed7c799970832b1b529e7c55aaf24d31ad65bac1b4fbb"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-table-result.png",
+      "currentRunSha256": "21a5627be0e6d6af8a78ce37dd39c6a9b2da4aafa6996b166bfb65844fd0d490",
+      "restoredStartingSha256": "df9ea41befc192546299f4550408c299a89e778cb35c4b76304e2f8bca39b357"
+    },
+    {
+      "original": "docs/evidence/r84-art/320x568-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/320x568-world-keepsakes.png",
+      "currentRunSha256": "6a6da1df4ff49e1dae233c0cc1040b4df9a02174cf38f5af5b33cc9caf5939ce",
+      "restoredStartingSha256": "e8a28d31d917d13fd8e2f813cd886a87f1b3ac9e24ebdc695a6d31c2f0d533c3"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-daily-stamped.png",
+      "currentRunSha256": "32de2d147042b1822d72a4a1ecc1299c7559d11fdaef19db686b7ef1b66e1895",
+      "restoredStartingSha256": "5c2fc3909e9acbfab6dd7fc369c4c41fd75517f4dd9c0d6370d06fab88e26da0"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-daily.png",
+      "currentRunSha256": "5e3952caccce2ad647e067317f7190baa3f41d91a73fb210632227bdb4322164",
+      "restoredStartingSha256": "790e52be83dcc8f03ab6f2005028ccd01360e2f976c0d00863e732be09780765"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-dialogue.png",
+      "currentRunSha256": "c15455534f3810c6413c9ad118c4774d08f286d750e2452f8522595b602b929e",
+      "restoredStartingSha256": "fbefa92344875e3dc16126356bbcf9edd34de26abf8b26d68c84005682d80632"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-doorstep-result.png",
+      "currentRunSha256": "823afd22771bba50e28bba02a6e59792cbd421d9f02206b902ad91b7e0044267",
+      "restoredStartingSha256": "6c5d2b5fd3acf0ac564f21c295da2939c59bbafd984b27cbe009d55c617d375d"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-farm.png",
+      "currentRunSha256": "f2dbc81b0292cede323ed8a49b49d533a7f905f97467bb5b1fb78916e0b25c13",
+      "restoredStartingSha256": "3e4ca481e6ed3cfbd0cc6365326cc6b75837d549bc0e71cf9201b0700ab80774"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-sunlight-no-text.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-sunlight-no-text.png",
+      "currentRunSha256": "175d4ca73fbc117ec484fe96849a26effe570302038b133c5d30b6a590aaab68",
+      "restoredStartingSha256": "010abfa26d6bd1302c9f777989e91e1c01e970e76ce1508cd05db236a064a49a"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-sunlight.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-sunlight.png",
+      "currentRunSha256": "71da5b38927f5d2987a9499754c017a60879c512aebddcebccf4512a694b6ee8",
+      "restoredStartingSha256": "fbb97a7a0ad6a9861553a4b0632bb0a1e9ff19683494eb8224d6289ca32b1250"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-table-result.png",
+      "currentRunSha256": "015613d04cbebcaa4dbdaaa98b44a01a86626e769f5795574a6ade1d5a66ef84",
+      "restoredStartingSha256": "f9be3d1deed3c977d7df2d2b371da1e67c391e7585a97a8552f9780be82356b0"
+    },
+    {
+      "original": "docs/evidence/r84-art/390x844-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/390x844-world-keepsakes.png",
+      "currentRunSha256": "3b27d367d23f2d87fbb71bdf21fa8a4da696b5d70b892474348096b633d1a638",
+      "restoredStartingSha256": "081cd5a64ed8cb976c2372777aa750991ac9a741d891ff8cbc427d8d7a57fea3"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-daily-stamped.png",
+      "currentRunSha256": "97775c55fda3a337006cde38f1fcb87423bffb803adfd9c12e5969552141a1fa",
+      "restoredStartingSha256": "4d841a120c428ae894a3238f6279a4a2a60948c70e5e70cb2cc5491a7c4d95f4"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-daily.png",
+      "currentRunSha256": "00d9212126499a088203358ef67c7978aa9313a2d6a6c0bd181ce4cb979020db",
+      "restoredStartingSha256": "4a43ab244af9b0facdf53d758f08dc758b3dc674ef9c8b33739dbc6a27f43d0f"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-dialogue.png",
+      "currentRunSha256": "af072eca58355f882ccd4ea49b99f79e204a20a709c45b497c862f5cc27bac73",
+      "restoredStartingSha256": "26c7779c2b226fb004b8de8b37980fc605e5931b1ebf9976ae0f19e2061d4944"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-doorstep-result.png",
+      "currentRunSha256": "785ee483c8d8a89b26651f4cea0869913f40efe9ad104edc901848daaad79342",
+      "restoredStartingSha256": "43f5086a5de2f200928dd41781230fbe9e7d6120e90d6000204574b14a8e25c6"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-farm.png",
+      "currentRunSha256": "cf0c2a2bcb20942301f3ebc33267354f24f76570219833cf966f687b009bc684",
+      "restoredStartingSha256": "fc1d668f9cacc1fd47a2bb82e44949722ed1be0b8763ec395deda610c1cd19c3"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-table-result.png",
+      "currentRunSha256": "c75ecfa9ee31733e3e997029b0b2c2871c7093afae1f97908a246b3a1d88f4da",
+      "restoredStartingSha256": "3735caec2eda806dbebfc9371ff32e7b9cd1697e9fd27e7330f64edba3091092"
+    },
+    {
+      "original": "docs/evidence/r84-art/768x1024-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/768x1024-world-keepsakes.png",
+      "currentRunSha256": "0862d7d2cdbd64939fe87c95f61c62cf0a3d1b33c75ecd7e07fe507517f94634",
+      "restoredStartingSha256": "8bafe63b0103a3e4e93ad836b56ed2b8ea96c2c3db10e08aff31652698e25d57"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-daily-stamped.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-daily-stamped.png",
+      "currentRunSha256": "328a8e185db38757ad1a5ad534493b2d95376fec5d1d707ec973a6ee23ac3178",
+      "restoredStartingSha256": "5290bbea4cf1bb0a0f956e8629127bd2ec94dc4e68ac8a449775a659c11f3da7"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-daily.png",
+      "currentRunSha256": "97c0d7d6654a7b84807264632a938963ac6b9d85d4f92cef926524d6bae51d5d",
+      "restoredStartingSha256": "13c103ebbe5d7aa2c4f40dc0f23ae24810617a89f5de027379d1abbbbfeb6bb1"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-dialogue.png",
+      "currentRunSha256": "286106b03197ecb83a9be1f8f015245f0812f6831847fce61553062283b066a8",
+      "restoredStartingSha256": "cfb03e65797f8fc30ebba5e307a4fbc05cb14edae9e1502268c09ceef6491f18"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-doorstep-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-doorstep-result.png",
+      "currentRunSha256": "eb477502d11a2756779384ca95a0fb3a313aae4cbb41f54cd0b11bc0ce3196c4",
+      "restoredStartingSha256": "9e57d20feb2a1ee94a56fd2ba9362953729e2c8731c0018d47a27d7a37bfb8e2"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-farm.png",
+      "currentRunSha256": "8dfb99cecbe16afe2d1d83ce82210a292c99bb885466aabe523a739ee9f1ef72",
+      "restoredStartingSha256": "e3d7b39d7731c5a9e51c71e73a424c0da80be85ad07292f16142dedcef695f29"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-table-result.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-table-result.png",
+      "currentRunSha256": "65a44f09c00c9752a5fddbc29240f9ef80d94777ae3528e09cbfb626ca3d868d",
+      "restoredStartingSha256": "328015031d2a913e675afcce7b8b1b1b0142727c5e7ab4e658c26d29c3fccdd7"
+    },
+    {
+      "original": "docs/evidence/r84-art/844x390-world-keepsakes.png",
+      "archived": "docs/evidence/r86-art/regression/r84-art/844x390-world-keepsakes.png",
+      "currentRunSha256": "ad9a0c44cdc0851547dfb127481ce8539ce18e28710cb377bd7f4a73c0bf8275",
+      "restoredStartingSha256": "b58e8ce7ff7081edbfb516f1bba6236ee19fab1e26a7010adecf23a4e94fe51f"
+    },
+    {
+      "original": "docs/evidence/r84-art/art-validation.json",
+      "archived": "docs/evidence/r86-art/regression/r84-art/art-validation.json",
+      "currentRunSha256": "82ed7522c775e35468ca99ef64444238b50dff3212779b05c6de9f8ca9c61940",
+      "restoredStartingSha256": "b416e96549e06fdf6338f075db933dc6875915dfdb602736b72dd2f8f66700d8"
+    },
+    {
+      "original": "docs/evidence/r84-art/last-geometry.json",
+      "archived": "docs/evidence/r86-art/regression/r84-art/last-geometry.json",
+      "currentRunSha256": "9094e0d41af533bd15ad3123a8376cfbb102d77ef614d658d420b60e20a0c352",
+      "restoredStartingSha256": "2b18f280b298c7c2bd133b59fc8746a4d124429d534a180b31ba57b8a08dac29"
+    },
+    {
+      "original": "docs/evidence/r84-art/sun-comparison.json",
+      "archived": "docs/evidence/r86-art/regression/r84-art/sun-comparison.json",
+      "currentRunSha256": "8d8e42c10d36732ec4dc3ae578a4ec69c14fb5ade5f127401a5d26414ba3acce",
+      "restoredStartingSha256": "1b7344db0f5ff85ef04a028a7bfb131604395ce7dd617a505b45871255fa7339"
+    },
+    {
+      "original": "docs/evidence/r85-art/1032x1376-basket.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1032x1376-basket.png",
+      "currentRunSha256": "59ebbefee0b1403b3f7aa87a6c9589d37358d37e9521a36f27f31cddf0cf014e",
+      "restoredStartingSha256": "e48e44c2c38e56477afb3f2dd2da46fd9054db18f45aaa5087e6aa13e2e18c4e"
+    },
+    {
+      "original": "docs/evidence/r85-art/1032x1376-stamps.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1032x1376-stamps.png",
+      "currentRunSha256": "482629cfb0e35fcc0c7025e2a2a28aa3daddc16c75d158330f8a245f72c9e3d6",
+      "restoredStartingSha256": "6f9f0ff1c79c2a77dce11fa1bbd404c1b1f639e20fb330a3e24c123462e5d6db"
+    },
+    {
+      "original": "docs/evidence/r85-art/1032x1376-story.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1032x1376-story.png",
+      "currentRunSha256": "319221c3a497a136d8e84ea42349d344d990bb0923b6ca7ed22034687c629467",
+      "restoredStartingSha256": "cedec508721f53738c8b61384898539a9dd0b481ddd24d1ae098371b286e69a3"
+    },
+    {
+      "original": "docs/evidence/r85-art/1032x1376-sunlight.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1032x1376-sunlight.png",
+      "currentRunSha256": "1ce6920a0edb449bb0d08ea1a8a8197f030b784942aa9ecd14b6516d3ca25f88",
+      "restoredStartingSha256": "21ae82f61beb9b54d61a428267d9c2ca107c034b548afd194aefc89c78b05af1"
+    },
+    {
+      "original": "docs/evidence/r85-art/1366x600-basket.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1366x600-basket.png",
+      "currentRunSha256": "9613f374cf01daa3b915d753c81131dd971b34b61452d11698f547d405f97f63",
+      "restoredStartingSha256": "77c93b40dbea5f77521ec70aab03569fc47fb17ad86569e1e06450e0a79c19e7"
+    },
+    {
+      "original": "docs/evidence/r85-art/1366x600-stamps.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1366x600-stamps.png",
+      "currentRunSha256": "cb63cadecfee70fc06fddce046be5a29a7b20d01845303621efed035b10589be",
+      "restoredStartingSha256": "3591a60d7a12dbb799659a72c2f053c8b49ec07a5be90bd114e4e3001ab18a32"
+    },
+    {
+      "original": "docs/evidence/r85-art/1366x600-story.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1366x600-story.png",
+      "currentRunSha256": "39999dd3d9faee996c4f33e96986d4895d39f52debf952450c5b20d6bfd5a555",
+      "restoredStartingSha256": "2d9ca553c676187f6998a4b56d9a5c3ac93ab02235af26a1f1901380209869f5"
+    },
+    {
+      "original": "docs/evidence/r85-art/1366x600-sunlight.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/1366x600-sunlight.png",
+      "currentRunSha256": "91148f4b5ea023e2a4ef31c380da4734bde0befb60fe938c57aceb35b1292eef",
+      "restoredStartingSha256": "76a6001ac9704479a59626e3e0b7459571e43daffe21563ad8e1b07ff5c6422d"
+    },
+    {
+      "original": "docs/evidence/r85-art/390x844-basket.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/390x844-basket.png",
+      "currentRunSha256": "881860846232880c058801919781e443614f53a394a15c03a1165bfd1b290aa5",
+      "restoredStartingSha256": "f7d74c2d81276055250cb5b40fe46e6c2ba4188bcf66c7f9e05d5ed9610914ec"
+    },
+    {
+      "original": "docs/evidence/r85-art/390x844-stamps.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/390x844-stamps.png",
+      "currentRunSha256": "b19f0c9bd95390b95c1c8c30fa40ae174e82f3e7710bf909a2b3dbacf57912af",
+      "restoredStartingSha256": "ba6dcc432dd2bc8e6ea005a72e29c2e0a22b3b4ea2e4b030c566cf52e8ac8121"
+    },
+    {
+      "original": "docs/evidence/r85-art/390x844-story.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/390x844-story.png",
+      "currentRunSha256": "87aa13c6ae17901dc9264530a6fef5d698ae4c5016e758bf07b2611342b8bd80",
+      "restoredStartingSha256": "78f7e974fb006d55b3e2d8cb273f167ea0f2814aee39df4672c32cdf238e424b"
+    },
+    {
+      "original": "docs/evidence/r85-art/390x844-sunlight-no-text.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/390x844-sunlight-no-text.png",
+      "currentRunSha256": "571b2b39e062232bb81390a719c16ed35bbd9565d114ea4cbbe7684d4821f5dd",
+      "restoredStartingSha256": "670f32ba014ce007407bac650e998bcf96960c603059a0985cf98bcd6461a8d6"
+    },
+    {
+      "original": "docs/evidence/r85-art/390x844-sunlight.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/390x844-sunlight.png",
+      "currentRunSha256": "a07c81ab8d447f0bdddedfc02232075258664be8eca99679d954db59747cc066",
+      "restoredStartingSha256": "d07d8c76cb0c3836c43bfc42b9c69f637ba253f77dc7720d403470efe67d7708"
+    },
+    {
+      "original": "docs/evidence/r85-art/844x390-basket.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/844x390-basket.png",
+      "currentRunSha256": "49d758ea9c256de4940114bdd4dd816063c9b81ea8abf650e48751efb75c50c9",
+      "restoredStartingSha256": "8ff91c04706d6d9d23acae18a33fc373b6ba2deb9384bdf46154ddfc0dafb04a"
+    },
+    {
+      "original": "docs/evidence/r85-art/844x390-stamps.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/844x390-stamps.png",
+      "currentRunSha256": "e42a7b77d58e06a059be85319c43e293dd7ee0b0a20c80ebed4a1f7919568e65",
+      "restoredStartingSha256": "3e36f72106cc26a2908a49b76712d9efac299c855c511f7f14fa5575ba2c4495"
+    },
+    {
+      "original": "docs/evidence/r85-art/844x390-story.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/844x390-story.png",
+      "currentRunSha256": "f1203d53d01c95e19bf970cdb55be18b915832dbced9f96ff572cfc46311b3b4",
+      "restoredStartingSha256": "74b08ce7a153ddd033c1606c5a218b89e5ec323fb397543ab29f81065b95b8b3"
+    },
+    {
+      "original": "docs/evidence/r85-art/844x390-sunlight.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/844x390-sunlight.png",
+      "currentRunSha256": "674168e4e1fbb4316ef55d0a14f9042776d2fd15de9232ca05289f64a126b5a0",
+      "restoredStartingSha256": "fe2f7aadc1c7dcd65ae8c4577308006a8ffb0ec3094e40af5481e1fdbc5d8780"
+    },
+    {
+      "original": "docs/evidence/r85-art/art-validation.json",
+      "archived": "docs/evidence/r86-art/regression/r85-art/art-validation.json",
+      "currentRunSha256": "b7bcc982eae161c2d2ea6595bd3aba92f15cd6bc52820882b1123dca8c71e813",
+      "restoredStartingSha256": "2dba9ed9e25319b575b8772b3896f4df1da67403650f19bd37d757407be12d52"
+    },
+    {
+      "original": "docs/evidence/r85-art/light-off.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/light-off.png",
+      "currentRunSha256": "44d547bc65d4a0973fda2a7a9de50a613a8229a720b9df6f530a936b748ecaee",
+      "restoredStartingSha256": "9e7d35ffe81f006af11474c8f2407a9f6d82bd745c37fa70c6c4246d655bcd2d"
+    },
+    {
+      "original": "docs/evidence/r85-art/light-on.png",
+      "archived": "docs/evidence/r86-art/regression/r85-art/light-on.png",
+      "currentRunSha256": "1201e66b3ced0feba35ec6f957729caeab3451a3ef18b036228e7f73cca2b002",
+      "restoredStartingSha256": "5a3df5913a3bc846b4f02578797c1ef73e483ac17376b2a879fa562095657a32"
+    },
+    {
+      "original": "docs/evidence/r72/night/\u51ac-snow.png",
+      "archived": "docs/evidence/r86-art/regression/r72/night/\u51ac-snow.png",
+      "currentRunSha256": "80a8e12a2a18046f297f4aad39702a80780a6463edb250624c02a2cb25083cae",
+      "restoredStartingSha256": "842003d22aedc355de63b2544de7b0ac72ffde1bda626b8b4618ae9a25ad43ee"
+    },
+    {
+      "original": "docs/evidence/r72/night/\u51ac-storm.png",
+      "archived": "docs/evidence/r86-art/regression/r72/night/\u51ac-storm.png",
+      "currentRunSha256": "bc469dbf9e16bfc74de876493b56e704be304e53202cdda41c00c1c459708eb0",
+      "restoredStartingSha256": "ab43ab1820d61c196b44aca382e7174834d3fcd7357dfbb86c2319992511f89f"
+    },
+    {
+      "original": "docs/evidence/r72/night/\u590f-storm.png",
+      "archived": "docs/evidence/r86-art/regression/r72/night/\u590f-storm.png",
+      "currentRunSha256": "32d8acae3fcca8b502fdf4c00d89dff91314a835d69e592a4efb405a31620780",
+      "restoredStartingSha256": "3f251f6add2bf53593831dda43d1d741cf11cd7c3c9ea0bdcb405f38d0f613b5"
+    },
+    {
+      "original": "docs/evidence/r72/night/\u6625-storm.png",
+      "archived": "docs/evidence/r86-art/regression/r72/night/\u6625-storm.png",
+      "currentRunSha256": "4d06521975dce42ce8d4b047f5d06567b06125c916e731dbd603fbe6b366628c",
+      "restoredStartingSha256": "f3f57e5d86f67b7ce794d08a65eae8e58134c74d7173dc2544d621d781df2eb1"
+    },
+    {
+      "original": "docs/evidence/r72/night/\u79cb-storm.png",
+      "archived": "docs/evidence/r86-art/regression/r72/night/\u79cb-storm.png",
+      "currentRunSha256": "4147bb80b59a2b002a3592180466d5a40fad44adab88c9fbf3f8bed14f50e16f",
+      "restoredStartingSha256": "ec0e1b1b04c679cb191588d070c21269e22ba87cfa240f155a0df0f9b1188c1e"
+    },
+    {
+      "original": "docs/evidence/r79/after/desktop-1366x768-settings-music.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/desktop-1366x768-settings-music.png",
+      "currentRunSha256": "caf518a5f8828b79431eb2a6f8f852ab26beda2c2463a2a1f823ab4bf5a5c0c0",
+      "restoredStartingSha256": "f903935555757fa90d2c3bfe3e37728097bd438c8f3612dd62067d5b84b0a4a6"
+    },
+    {
+      "original": "docs/evidence/r79/after/desktop-1366x768-sun-catch.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/desktop-1366x768-sun-catch.png",
+      "currentRunSha256": "da79f29b19020aa1ff89af6eb10be9051e474c3152c6274ba83b0bb1daf066a8",
+      "restoredStartingSha256": "db2d43cf5414f5904e43850440975017b456ca5d6d9b6863350b9069828d4813"
+    },
+    {
+      "original": "docs/evidence/r79/after/desktop-1366x768-sunpatch.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/desktop-1366x768-sunpatch.png",
+      "currentRunSha256": "e7be6c86568067f3cdb2d5297a9b7bbe27e425f8776e554b957002431629f42a",
+      "restoredStartingSha256": "ababa21acedc787c9c8e743c6c86f2a409faf23da80afaee71553ca740aa1f49"
+    },
+    {
+      "original": "docs/evidence/r79/after/landscape-844x390-hud-lv7.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/landscape-844x390-hud-lv7.png",
+      "currentRunSha256": "20784502238d7c1c4d3c93a81b6d4c6e2932dcb96dd1a057cd6f37c4801f00e7",
+      "restoredStartingSha256": "75a9b2c30f4b4e13450b6d2ba1c113481731d7a48b46dcbc35395ab30700e155"
+    },
+    {
+      "original": "docs/evidence/r79/after/landscape-844x390-toast-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/landscape-844x390-toast-dialogue.png",
+      "currentRunSha256": "8b4f1e66c1c2fd1963612b2aa0f330c7922d22793778f7d318d53c62a5b6ee02",
+      "restoredStartingSha256": "445ad6f3f7a7fb69418220728211e6d16b99e823367ee1d60f3d5632a7ed7fe7"
+    },
+    {
+      "original": "docs/evidence/r79/after/laptop-1366x600-hud-lv7.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/laptop-1366x600-hud-lv7.png",
+      "currentRunSha256": "3124f5eabcab48555017c1de7e7b8d189215ba96f9bfdddfe22995befc14196e",
+      "restoredStartingSha256": "ae41e850f467d2f99bdc9092e7487bd33f6971287834984a20f6e0b008f766a8"
+    },
+    {
+      "original": "docs/evidence/r79/after/phone-390x844-hud-lv7.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/phone-390x844-hud-lv7.png",
+      "currentRunSha256": "37d4a9535264d524ed68e158e49265ca5ea7cb55da573e58d42cdc7276123da8",
+      "restoredStartingSha256": "086d7a69c1d41df18ad3016703837a156b8b2a894522e037b1669027b5625453"
+    },
+    {
+      "original": "docs/evidence/r79/after/phone-390x844-toast-dialogue.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/phone-390x844-toast-dialogue.png",
+      "currentRunSha256": "af1d6a5c4e0b2120537bf74e451cc1d740bb1881479d69c261bc52accb390811",
+      "restoredStartingSha256": "91143c79270cd650cd66b959d3e194cf8561006a744393b899433d182d6b370b"
+    },
+    {
+      "original": "docs/evidence/r79/after/phone-390x844-wait-hint.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/phone-390x844-wait-hint.png",
+      "currentRunSha256": "1d8eb8d269a69320d969ce57116bbfe389136573ea3f189ba46d388698aaab55",
+      "restoredStartingSha256": "10e13cf6c87070cdf837935de361a5f1561e09ae2db92d3eaa455ab2b8b6e0e0"
+    },
+    {
+      "original": "docs/evidence/r79/after/small-320x568-hud-lv7.png",
+      "archived": "docs/evidence/r86-art/regression/r79/after/small-320x568-hud-lv7.png",
+      "currentRunSha256": "5c8e7a35ef5fb20ef8753d661862fd0e33f26df80192f024bb7572cb8a45d328",
+      "restoredStartingSha256": "f28dbad7c3e6a81b07785a88fcf69e69dec808ac79ca33167b1f40d1ab03310e"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/1280x640-collection-locked.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/1280x640-collection-locked.png",
+      "currentRunSha256": "e02e056241652a1097d368ffce46d3e994f86e0fff0cf6d32c069596b97469d1",
+      "restoredStartingSha256": "46add4b15f5d175c71277c3986942dae274d373b60c392a1788902e0e9ed9515"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/1280x640-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/1280x640-daily.png",
+      "currentRunSha256": "7a3b122beed632dd3059ffee8865f9968f5ba7d3075138e10847c273cc42c870",
+      "restoredStartingSha256": "fe1ccf71d023d6f78235e8d181f2dc9d2f11b2390e49bd0668808285c7bc1917"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/1280x640-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/1280x640-farm.png",
+      "currentRunSha256": "ae91bae2bd709e6b135c251db8273776c0ecfe3f3f3d804464617bb1f4b69f9d",
+      "restoredStartingSha256": "471285a1b051be2c37a23d27ae8472f5a233ae852737be6573353a7aa3f0d59b"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/1366x600-collection-locked.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/1366x600-collection-locked.png",
+      "currentRunSha256": "545c36f32807288f67f4031971f8b443a7d7b3119f4f637a9911d64f64963f09",
+      "restoredStartingSha256": "b88c2520584433c0154a723c8f78eaffc33e61dbdeac9253061844615315f78d"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/1366x600-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/1366x600-daily.png",
+      "currentRunSha256": "829caa5c6fa08a8337887679d835e21016354065e8017779fbc64554363eed14",
+      "restoredStartingSha256": "56034382cfc7108a3fa61375bc9652741e0f4ad61dcdcacddf98ba481bf7c3e2"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/1366x600-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/1366x600-farm.png",
+      "currentRunSha256": "62d5e8533b681eaad698d830e93b30823a803e45cebe7af703a16f3e15c14d6c",
+      "restoredStartingSha256": "1cb72a4d60405bb4e955b677a31a7e269acd52f10389f409d9b8404e09035996"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-collection-locked.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-collection-locked.png",
+      "currentRunSha256": "d017a77d857bbff47016ee089a7cb50a6a616669465ba3f3c0afd6e9fac2b419",
+      "restoredStartingSha256": "5267222e2bf44b444bf65b8a19fa5d8ee1971f8447e3d4824d32ee075574282d"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-collection-unlocked.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-collection-unlocked.png",
+      "currentRunSha256": "3b5ef90afbbc95a7c0bd66cfc3f4009afe473a2c796cabb854e8ec5527af49b2",
+      "restoredStartingSha256": "c439e3abc0fc6ac95f1066d2a55aa761d8ec8f7c43ebc4f381df1eccd4ba8269"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-daily.png",
+      "currentRunSha256": "1ab2142b5294eef09b59b19bea92da7ac871f9210be239829c9120f49bcfc0dd",
+      "restoredStartingSha256": "dea8586a47612704876e6ec7fdc70bc17b2e669ab42493568714e08e594112f7"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-farm.png",
+      "currentRunSha256": "88fc2b93b96435feed658083e7bf1fee5ed7d81d53aa59434777675009f67fb9",
+      "restoredStartingSha256": "67f4b5c0fa67c1d02152d08c9447d80e2998ad63ed3efe022b4cb1c73f3df051"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-first-stamp.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-first-stamp.png",
+      "currentRunSha256": "5e9b6c0f2433ac04f966dcd6c8df809949b535cea21404c50b938030dc3185a0",
+      "restoredStartingSha256": "94336d761d71e48e49eef399f8093044b3cc5019ce9e02c89fb7e0573a1e9fbd"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-harvest-ready.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-harvest-ready.png",
+      "currentRunSha256": "417ad3fc091ed48cd524ba22a2ff17055c3cccf907e488a8b6072802ec0d07d6",
+      "restoredStartingSha256": "462d5d8db7ad8429b0926e11ebe7eb4bc95c9926b12a19506fa65de4016388dd"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/390x844-harvest-result.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/390x844-harvest-result.png",
+      "currentRunSha256": "6521be9a6b63ba473a11cd3de56fdd520927821907eac628f608a872a929a429",
+      "restoredStartingSha256": "74b7f1f610c040d2a5a5ff4a64e34fcdd34839ea65ca9c6c38ecaa752e6f6e33"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/844x390-collection-locked.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/844x390-collection-locked.png",
+      "currentRunSha256": "1d9a85dc6ed9beecb760e159e4bd8754359f30a4b197556daf6c1de4c31240f0",
+      "restoredStartingSha256": "6f58e4c8c55b96347467eb08ed7eb6f2e16a2e08b8c5513995b2b41fed18683e"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/844x390-collection-unlocked.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/844x390-collection-unlocked.png",
+      "currentRunSha256": "32497838733e9b5cd1c2675727637c46a1d930fbdc03f6e87378c578c9cf7b59",
+      "restoredStartingSha256": "f233153f7366d43d976c11b935bee22933fdb420495921d999f09b7901b21740"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/844x390-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/844x390-daily.png",
+      "currentRunSha256": "ed9fdc52e4f362269d9d60b9443802e324599afe9698a411c8100aa48cd91a23",
+      "restoredStartingSha256": "fb17f1c2f87501cccd375ae83514457b102a1d32d59c747799f6fadb5f854ec1"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/844x390-farm.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/844x390-farm.png",
+      "currentRunSha256": "5bd147d385514b8ab03de531ed62bae445bcdea51362e17cb21e5800f123f572",
+      "restoredStartingSha256": "46dbd7abfd86c5ac648ddddb0d6f4419bad9cb9bc66bcb1799fd07a692c6a2cf"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/844x390-harvest-ready.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/844x390-harvest-ready.png",
+      "currentRunSha256": "8c53378d7c97876b2072cf452a8bd85fa35e5b4ae89c3b0c4894733af5d68dd0",
+      "restoredStartingSha256": "d4f53ed475b14869c038304781828bd9b09268cd2ff5584a8a12b2d85e2a8957"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/844x390-harvest-result.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/844x390-harvest-result.png",
+      "currentRunSha256": "60085fbe26cdd271749bc669e69bcb763e01f956da23df4cb03e3743313af5f7",
+      "restoredStartingSha256": "134eeca428b7ab8d7d2e436cc9117698287ec8f11515d20d30229d0835ca4c58"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/after/rotation-844x390-daily.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/after/rotation-844x390-daily.png",
+      "currentRunSha256": "e71940a6d6b0fcbb0a8302d008afc58603cc1e0fde4604712fb711e0dd7237e0",
+      "restoredStartingSha256": "b2c39f8214941e26dd9a43ea55666e3d67a61809c48bdc2c64caf7633fbca23e"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/controls/desktop-1366x600.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/controls/desktop-1366x600.png",
+      "currentRunSha256": "1b69715d454ca214d59395016cd537775d7bb703749367124df41090111aad94",
+      "restoredStartingSha256": "52c861f2e4abeb12159c998e9f69eaf572337045b3d3d176ac3bcf252103d686"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/controls/desktop-1440x780.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/controls/desktop-1440x780.png",
+      "currentRunSha256": "256742d2a031b1cf78c288cf52649620c00e2f492c6e27938d2239cbba0f0316",
+      "restoredStartingSha256": "4b6be79d51dbc32691d66f3c84542fe908ad0854ee687d5c9bd72c95e4d55e42"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/controls/mobile-390x844.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/controls/mobile-390x844.png",
+      "currentRunSha256": "25254b342210c6c93553e236ab4e539c54e09d58c78069625a34d9f254d7105a",
+      "restoredStartingSha256": "27141c6ce8f1ccc4bf782f8312ea2c36c211d86259fde2d9c62abb657afda5f8"
+    },
+    {
+      "original": "docs/evidence/r80-mobile/controls/mobile-menu-390x844.png",
+      "archived": "docs/evidence/r86-art/regression/r80-mobile/controls/mobile-menu-390x844.png",
+      "currentRunSha256": "8e1279a2f97cf533a884a1e33222309b0ca50be22f412092acd87130410e8514",
+      "restoredStartingSha256": "921389e5a50cced3cab0e761fbe86dac8af7f36e9b40ed3e5020b35cadd7b97d"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1024x768-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1024x768-recipe.png",
+      "currentRunSha256": "ee6c4ce3ca8033197ac51f34ddb0663fe9edca9de20bfe450ef318f20667dbd0",
+      "restoredStartingSha256": "664bbaed4a9900f71f87880d4395839ddb383d6629a7c34ecd3a7d404c4def18"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1024x768-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1024x768-welcome.png",
+      "currentRunSha256": "f5ea71ad754f0d6300044ca682333f6452f5d6f41028d47e3a9d20fee5a7c9f0",
+      "restoredStartingSha256": "1ae48482732b1f6aecbd5d7dad72af3032c06740561de699d0cde56b55c21bd7"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1032x1376-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1032x1376-recipe.png",
+      "currentRunSha256": "38e9457aeb144e41bec51667548e9d535ad222c420364bcd4252c1245decc31d",
+      "restoredStartingSha256": "7eb96a34d5591a29fdd20f88e943dca7ee690d561752a6e3f9a358b2618c3968"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1032x1376-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1032x1376-welcome.png",
+      "currentRunSha256": "b3ef3a0309205cd7a8a78f981a1970d66df026f52e6eba8712c115e9d17d6fb1",
+      "restoredStartingSha256": "88257e81e88b9ea78c89f7a00313c945ea1118e1a57631e9e8358e6465a621e2"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1280x640-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1280x640-recipe.png",
+      "currentRunSha256": "f05b42ab4ef73404955a08c624a215ff072da64d3452a5302ea757ed58bab4b9",
+      "restoredStartingSha256": "dd03c49020abd13cab56964bebde63f97477af3012a8d135daee1b8b3cecd82e"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1280x640-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1280x640-welcome.png",
+      "currentRunSha256": "cdd5c6595c4cb38afac62e1e48b839bc4d7ac7b690c24531c068b6f2d48fa7ca",
+      "restoredStartingSha256": "559b7a2ab371c3210a1910807a1e02f5531f0d015c57cbd69077a9f31ea2df2a"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1366x600-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1366x600-recipe.png",
+      "currentRunSha256": "e264ab20d5abd149e8e38f247ddbccfc00851a977b30d80adf11ad508fae4c39",
+      "restoredStartingSha256": "46ee1a43bfa955cb99fc32943dd703e589ea18e28f5d74c87f92323ce940457b"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1366x600-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1366x600-welcome.png",
+      "currentRunSha256": "57eca011a977832084cb060c521dbca2f3885ff52def5fb169454d2715f72789",
+      "restoredStartingSha256": "2f664fa492e8bf3d4676a77767324f3d6a2866bc9d9d859810c775b3396fb83f"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1376x1032-earned-note.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1376x1032-earned-note.png",
+      "currentRunSha256": "34c6ec5661107f00242c31654a2890e7160eb77a97070d2d28985ada2b9b8168",
+      "restoredStartingSha256": "811bac5d21735ad627f76b7744278423a215f3906ce114b1a77b645158041b1f"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1376x1032-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1376x1032-recipe.png",
+      "currentRunSha256": "bea20c3e563a5a93818e7798850554395ae8bcbf6d627703b89d4bc9c4b1d0a8",
+      "restoredStartingSha256": "24c4a39de6bb27a80b31728d532639ca3e8a021bba25a6406465d8afe1e5dcfd"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/1376x1032-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/1376x1032-welcome.png",
+      "currentRunSha256": "73fdcf99a7403982a41afe8c06e6c2fb054aad4403993638470be1a3f26385b0",
+      "restoredStartingSha256": "90eb867c28ae91a455ec341e8bb59c95862fc31b2353dceded76f3f74f6d1b7b"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/375x667-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/375x667-recipe.png",
+      "currentRunSha256": "0505f692c785ac717f1f9f009e6327d46cc9ae63ec928606ff2b9f7ff18bd352",
+      "restoredStartingSha256": "310aabed067144e239e80163ce3f9f582ab35a44e35cbd2f1eec86b532ebb772"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/375x667-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/375x667-welcome.png",
+      "currentRunSha256": "83e2c62688398962b191350b44ed3833efca461f7f21d48381430f7d3f72048a",
+      "restoredStartingSha256": "4fa9e4912309ea0bba8d6680ce2cd91d7f63931bf27bf2a473a15e736a490818"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/390x844-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/390x844-recipe.png",
+      "currentRunSha256": "3727981b2861f8197bd6730b755e2b538aa4e7e5d93ae503e0cc503761cb08f1",
+      "restoredStartingSha256": "63635f710ea574edb8a4e0247d66da43cf0f65623fdc3146e61fdfefd08b1722"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/390x844-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/390x844-welcome.png",
+      "currentRunSha256": "77707c14af2256a5c1ef32bf0767e4b523ef6bb6b4d5928544cce5bf60d9ff38",
+      "restoredStartingSha256": "a15bbc4a00b7eadc3e2fd3cd407f983ee660393bc7e8a0716be97db3216dd8fa"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/430x932-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/430x932-recipe.png",
+      "currentRunSha256": "5340df0c68fdb0c4bab360d78e8e63e3cbc4c11622b007c9ef241216ea795c07",
+      "restoredStartingSha256": "973a8ce5f4aa58724887bead8a019fd4cc12b1db965cf63fa9f7b99a82baed26"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/430x932-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/430x932-welcome.png",
+      "currentRunSha256": "def425f7d16b10379711ecbab894af6043f5112c09eea28a64c834f137b4b858",
+      "restoredStartingSha256": "3e1c67aad0ce45bd3a8563d5619a85a86bec90e9f719788f5c0a5b25f2474a65"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/768x1024-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/768x1024-recipe.png",
+      "currentRunSha256": "4f380341f3e08147e7e681efba95560085c2f8c632a0b74e47fc41cf3dd33348",
+      "restoredStartingSha256": "a99e837e819064e30754e83aa4e41b95eaf7e532c72fd34cece00f68fcc927f5"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/768x1024-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/768x1024-welcome.png",
+      "currentRunSha256": "3f4f9ae7d3c7d34c88297ff931793675df51f402b96af4830d1cfd9c8432f7e9",
+      "restoredStartingSha256": "8ce6152cd9aad04e300e0b6b7b1fdf092a20c627bcd85816b57f6f4cacac14b5"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/844x390-recipe.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/844x390-recipe.png",
+      "currentRunSha256": "528ddae78222f052fdc622db50586d4343b2d5f700c2f9ed3f8db601a9d3c3d1",
+      "restoredStartingSha256": "c3062c09685cf72e6a65efaa7320572f52192695bfee927eff025e1e9cc2f072"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/844x390-welcome.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/844x390-welcome.png",
+      "currentRunSha256": "728d682121a463284b0807dbc1beea8fd1ea1c37e54da88d1ec4b9e508e9894e",
+      "restoredStartingSha256": "d403d2015d5e0d7fc69eba3cfba65b646ffc87fa043939fd9aa27d8a2d01ebdf"
+    },
+    {
+      "original": "docs/evidence/r81-store/after/offline-reopened-note.png",
+      "archived": "docs/evidence/r86-art/regression/r81-store/after/offline-reopened-note.png",
+      "currentRunSha256": "80ab2a6af93cd5f1db2f6dd20b8f761c6ed825870a4f010409985e58d76b9e4e",
+      "restoredStartingSha256": "1987b2a36996b55491a844778402fcb7c06e06d9a0b9ddfb26c76b61cdb6305f"
+    }
+  ],
+  "noUntrackedFilesDeleted": true,
+  "startingUserChangesPreserved": true
+}

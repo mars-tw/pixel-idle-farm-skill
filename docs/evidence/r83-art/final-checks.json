@@ -1,0 +1,74 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    {
+      "name": "npm-test",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 6.33,
+      "log": "docs/evidence/r83-art/logs/npm-test.txt"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 0,
+      "seconds": 356.62,
+      "log": "docs/evidence/r83-art/logs/e2e.txt"
+    },
+    {
+      "name": "night",
+      "command": [
+        "node",
+        "scripts/test-r72-night-gate.js"
+      ],
+      "exitCode": 0,
+      "seconds": 24.67,
+      "log": "docs/evidence/r83-art/logs/night.txt"
+    },
+    {
+      "name": "water-guide",
+      "command": [
+        "node",
+        "scripts/test-water-quest-guide.js"
+      ],
+      "exitCode": 0,
+      "seconds": 12.23,
+      "log": "docs/evidence/r83-art/logs/water-guide.txt"
+    },
+    {
+      "name": "compare",
+      "command": [
+        "node",
+        "scripts/capture-r83-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 7.88,
+      "log": "docs/evidence/r83-art/logs/compare.txt"
+    },
+    {
+      "name": "readback",
+      "command": [
+        "python",
+        "-W",
+        "ignore::DeprecationWarning",
+        "scripts/verify-r83-art.py"
+      ],
+      "exitCode": 0,
+      "seconds": 1.6,
+      "log": "docs/evidence/r83-art/logs/readback.txt"
+    }
+  ]
+}

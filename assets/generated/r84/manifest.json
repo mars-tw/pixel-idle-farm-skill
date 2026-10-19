@@ -1,0 +1,1117 @@
+{
+  "status": "EXECUTED",
+  "generator": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Built-in tool does not expose a model slug; no inferred GPT model ID.",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143"
+  ],
+  "masters": [
+    {
+      "path": "docs/art/masters/r84/app.png",
+      "sha256": "bf46fb725ca99d939ccdbba6f79f5a091f22353388d21c88f1e44974bbffec14",
+      "bytes": 1576170
+    },
+    {
+      "path": "docs/art/masters/r84/doorstep.png",
+      "sha256": "e187f32e5abfff46152e125ec557d54663814da7dcddaca18d1d8ba52a15ea06",
+      "bytes": 2460110
+    },
+    {
+      "path": "docs/art/masters/r84/icons.png",
+      "sha256": "61e02a10a727f3842d25edac7fc21333823563417ed853e809cc65342ee95a33",
+      "bytes": 1088728
+    },
+    {
+      "path": "docs/art/masters/r84/logo.png",
+      "sha256": "2cc807ae94e93a7fd38e2f13fe9e9afb1820bb5fe927f28c5fbc78aabac5b0ec",
+      "bytes": 1078387
+    },
+    {
+      "path": "docs/art/masters/r84/panel.png",
+      "sha256": "92afef1f5724909b8322477d149510a61cdb3df9ebfc68c0b6f1f9af0594258e",
+      "bytes": 1635376
+    },
+    {
+      "path": "docs/art/masters/r84/portraits.png",
+      "sha256": "0b0db7671e715de6a7b4d4039ea12cb1d9967f34da09bc8a796eee2b69721026",
+      "bytes": 2165430
+    },
+    {
+      "path": "docs/art/masters/r84/props.png",
+      "sha256": "1fe78f7632874f09501666222e60f254458d8517bd52f9c6455e74db7b743b92",
+      "bytes": 1606932
+    },
+    {
+      "path": "docs/art/masters/r84/result.png",
+      "sha256": "2f195861e57f84833e9a18df56bd613dd4c2316a11164a96186d2a269b7e7eaa",
+      "bytes": 2494221
+    },
+    {
+      "path": "docs/art/masters/r84/terrain.png",
+      "sha256": "6f0ec2685baef4bd92ccd9cb21b03b0033736c77782cf6aa38ae6bbd43e9df4d",
+      "bytes": 1705068
+    }
+  ],
+  "records": [
+    {
+      "path": "assets/generated/r84/keepsakes.png",
+      "source": "props",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 33246,
+      "sha256": "f768fc669dc85948076facedea70156b9e4d55b97a5fcfef5dc2ae6563cb93c2"
+    },
+    {
+      "path": "assets/generated/r84/miri-0.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7620,
+      "sha256": "7a239bd700456a92fc0f51a67019eec63993c5c9b61f8ad9cbe5f9ee3410356c"
+    },
+    {
+      "path": "assets/generated/r84/miri-1.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7442,
+      "sha256": "06466cc90073272335d3d7106d0b593c4fd33c74102f9bcda64348b0dcccb320"
+    },
+    {
+      "path": "assets/generated/r84/miri-2.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 7873,
+      "sha256": "f6402a4ee6908cf575c9aab7cf4eb2202bcb624535841914ea1056c52dc7c1e7"
+    },
+    {
+      "path": "assets/generated/r84/grey-0.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 5992,
+      "sha256": "2834f8dd2c60f0f36ad47712bb0a866992b49a14755f31a60e0aa67ef29630a2"
+    },
+    {
+      "path": "assets/generated/r84/grey-1.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 6244,
+      "sha256": "5a86a68494b210e25250e9ce08c8f83469a42207c7a8b36cc7a067b18066bf9e"
+    },
+    {
+      "path": "assets/generated/r84/grey-2.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 6062,
+      "sha256": "29b1da33d6fff38a0bc36b14db3d76791fbccc9cfc587939f5de2a1e9dd02a4d"
+    },
+    {
+      "path": "assets/generated/r84/grandma-0.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 8301,
+      "sha256": "b4923c1c4821fa312c5ef4c2233be7f97655d2eb9de5353aef0d05fcfdf406a6"
+    },
+    {
+      "path": "assets/generated/r84/grandma-1.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 8346,
+      "sha256": "17440d6f0f9f67b47fdbe637f14906c9bb31398aa8bc87b616410c5de307c3d0"
+    },
+    {
+      "path": "assets/generated/r84/grandma-2.png",
+      "source": "portraits",
+      "size": [
+        80,
+        80
+      ],
+      "bytes": 8231,
+      "sha256": "9956fd61c31a333ee822f20b140523d90ff5e83492d19a3c762730ee696ffea8"
+    },
+    {
+      "path": "assets/generated/r84/table-result.webp",
+      "source": "result",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 11018,
+      "sha256": "49b73cb7728ca686f2405400a0996dad959398d19994405b338c3d69656d598a"
+    },
+    {
+      "path": "assets/generated/r84/doorstep-result.webp",
+      "source": "doorstep",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 10814,
+      "sha256": "fea8dbb4d3f6ed3638c58c285ff9ad8e3b8b7030ca49bd61a6a18b7721f8f37c"
+    },
+    {
+      "path": "assets/heirloom/r84/table-result.webp",
+      "source": "table-result",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 11018,
+      "sha256": "49b73cb7728ca686f2405400a0996dad959398d19994405b338c3d69656d598a"
+    },
+    {
+      "path": "assets/heirloom/r84/doorstep-result.webp",
+      "source": "doorstep-result",
+      "size": [
+        384,
+        192
+      ],
+      "bytes": 10814,
+      "sha256": "fea8dbb4d3f6ed3638c58c285ff9ad8e3b8b7030ca49bd61a6a18b7721f8f37c"
+    },
+    {
+      "path": "assets/generated/r84/panel-192.png",
+      "source": "panel",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 6585,
+      "sha256": "7ab0e229cedb62ca5ea2c7b2fcbc0d55f2621ec9c618430c80bb8b133af1dbb3"
+    },
+    {
+      "path": "assets/generated/r84/paper-128.png",
+      "source": "panel",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 778,
+      "sha256": "5f06349843f65a7a0279f116c6c1c67e34cb09abb5af456d2bcd3fca7df66f49"
+    },
+    {
+      "path": "assets/generated/r84/menu-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1359,
+      "sha256": "c4d098c01e52ddbcbc6a0a90a1d8eb3b92d0a98a6351b0e836a0e8251a1869e6"
+    },
+    {
+      "path": "assets/generated/r84/face-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1606,
+      "sha256": "8265b877e75110b0ec374a489bd8bd0a1aa447d20fb8ae9e5e4cb0eb1cf07217"
+    },
+    {
+      "path": "assets/generated/r84/cups-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 787,
+      "sha256": "fbb060000cbaceb7a8eb5e368434d440da136fd01cd58cf8e624b39d017cc94a"
+    },
+    {
+      "path": "assets/generated/r84/wheat-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1098,
+      "sha256": "4a747c7c6d63ff355ede2f84e62da0603ca9c55073f8d4b11ef05da902155b5f"
+    },
+    {
+      "path": "assets/generated/r84/basket-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1442,
+      "sha256": "7c87546c3a743ff2843dffde155cc7666011b2b38ca7e061326ad255477d1d01"
+    },
+    {
+      "path": "assets/generated/r84/water-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 1014,
+      "sha256": "4860e90b82c6fdb27beeaa298ef2393008b021b0ff79647de4188e4d209aa50c"
+    },
+    {
+      "path": "assets/generated/r84/note-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 911,
+      "sha256": "dfe81c0fb781f72293a1dd86e58809529406edca267b2a461fc7e98b4c83e23e"
+    },
+    {
+      "path": "assets/generated/r84/sun-32.png",
+      "source": "icons",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 486,
+      "sha256": "07e28cf222df753a40bbadf2a3939dc9b8f4da6e2b7afa6de6895b958ee98be5"
+    },
+    {
+      "path": "assets/generated/r84/logo-320.png",
+      "source": "logo",
+      "size": [
+        320,
+        112
+      ],
+      "bytes": 16500,
+      "sha256": "3540541b64c144ff8358e0585201781bbc8668eb1d19421cd4ace46d98caf2ca"
+    },
+    {
+      "path": "assets/generated/r84/app-icon-64.png",
+      "source": "app",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 9224,
+      "sha256": "98eea325f7a548ed769b427275edb689be3c47777608ad11fd31c900837d7ff7"
+    },
+    {
+      "path": "assets/generated/r84/app-icon-192.png",
+      "source": "app",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 24487,
+      "sha256": "b24ce87f1192330a0ea64b0d0d4e1409edc1dac2a219955d680d1460fe80b13d"
+    },
+    {
+      "path": "assets/generated/r84/app-icon-512.png",
+      "source": "app",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 30805,
+      "sha256": "e183375126b6a2d19c5865d260ae47a024b144d646f0ef8aa0082b145b8db2f9"
+    },
+    {
+      "path": "assets/generated/r84/terrain.png",
+      "source": "terrain",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 6081,
+      "sha256": "84ca69429c7eaceaa8fd0676c4c502c5a5a1c8eac2c226678fa730183b214961"
+    }
+  ],
+  "qualityMetrics": {
+    "assets/generated/r84/keepsakes.png": {
+      "brightness": 0.40357568125884646,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.466332036318811,
+      "lowSaturationFraction": 0.019076522870149576,
+      "gatePass": true
+    },
+    "assets/generated/r84/miri-0.png": {
+      "brightness": 0.43910710211293524,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5394930404238355,
+      "lowSaturationFraction": 0.021777221526908634,
+      "gatePass": true
+    },
+    "assets/generated/r84/miri-1.png": {
+      "brightness": 0.4396954427733581,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5410802982134569,
+      "lowSaturationFraction": 0.020236920039486673,
+      "gatePass": true
+    },
+    "assets/generated/r84/miri-2.png": {
+      "brightness": 0.4545744476246078,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.546673145536402,
+      "lowSaturationFraction": 0.019123698862260955,
+      "gatePass": true
+    },
+    "assets/generated/r84/grey-0.png": {
+      "brightness": 0.5667080934082175,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.47932558684825094,
+      "lowSaturationFraction": 0.16848950635530593,
+      "gatePass": true
+    },
+    "assets/generated/r84/grey-1.png": {
+      "brightness": 0.5709752227952792,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4769681488497689,
+      "lowSaturationFraction": 0.17239336492890994,
+      "gatePass": true
+    },
+    "assets/generated/r84/grey-2.png": {
+      "brightness": 0.5664917957724029,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.48175033702475856,
+      "lowSaturationFraction": 0.16730712385456695,
+      "gatePass": true
+    },
+    "assets/generated/r84/grandma-0.png": {
+      "brightness": 0.510110136820071,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.46969856462824444,
+      "lowSaturationFraction": 0.10856111397627644,
+      "gatePass": true
+    },
+    "assets/generated/r84/grandma-1.png": {
+      "brightness": 0.5275921840702896,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.46196635094989813,
+      "lowSaturationFraction": 0.13771517996870108,
+      "gatePass": true
+    },
+    "assets/generated/r84/grandma-2.png": {
+      "brightness": 0.5317231306950381,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.4749733054763816,
+      "lowSaturationFraction": 0.12362780972294825,
+      "gatePass": true
+    },
+    "assets/generated/r84/table-result.webp": {
+      "brightness": 0.41827349685968135,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.46864532437973455,
+      "lowSaturationFraction": 0.08805338541666667,
+      "gatePass": true
+    },
+    "assets/generated/r84/doorstep-result.webp": {
+      "brightness": 0.45934144569546564,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.48206016694856324,
+      "lowSaturationFraction": 0.039116753472222224,
+      "gatePass": true
+    },
+    "assets/heirloom/r84/table-result.webp": {
+      "brightness": 0.41827349685968135,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.46864532437973455,
+      "lowSaturationFraction": 0.08805338541666667,
+      "gatePass": true
+    },
+    "assets/heirloom/r84/doorstep-result.webp": {
+      "brightness": 0.45934144569546564,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.48206016694856324,
+      "lowSaturationFraction": 0.039116753472222224,
+      "gatePass": true
+    },
+    "assets/generated/r84/panel-192.png": {
+      "brightness": 0.8810418832124864,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.20557255833359536,
+      "lowSaturationFraction": 0.8462185329861112,
+      "gatePass": false
+    },
+    "assets/generated/r84/paper-128.png": {
+      "brightness": 0.9574471863511029,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.15317692689868917,
+      "lowSaturationFraction": 0.99853515625,
+      "gatePass": false
+    },
+    "assets/generated/r84/menu-32.png": {
+      "brightness": 0.45527499808600225,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5645590702772976,
+      "lowSaturationFraction": 0.049891540130151846,
+      "gatePass": true
+    },
+    "assets/generated/r84/face-32.png": {
+      "brightness": 0.44425949159401096,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5193122029314526,
+      "lowSaturationFraction": 0.0450281425891182,
+      "gatePass": true
+    },
+    "assets/generated/r84/cups-32.png": {
+      "brightness": 0.6425841794460975,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.3820823068550731,
+      "lowSaturationFraction": 0.2801556420233463,
+      "gatePass": false
+    },
+    "assets/generated/r84/wheat-32.png": {
+      "brightness": 0.3556325613515846,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5410429180725855,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r84/basket-32.png": {
+      "brightness": 0.39272964830376594,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5450367372840201,
+      "lowSaturationFraction": 0.0022675736961451248,
+      "gatePass": true
+    },
+    "assets/generated/r84/water-32.png": {
+      "brightness": 0.3520491166363453,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.42714322089477014,
+      "lowSaturationFraction": 0.01804123711340206,
+      "gatePass": true
+    },
+    "assets/generated/r84/note-32.png": {
+      "brightness": 0.6331234423655044,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.3488308675949608,
+      "lowSaturationFraction": 0.41647597254004576,
+      "gatePass": false
+    },
+    "assets/generated/r84/sun-32.png": {
+      "brightness": 0.7201095780720664,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.6205063918475375,
+      "lowSaturationFraction": 0.0,
+      "gatePass": true
+    },
+    "assets/generated/r84/logo-320.png": {
+      "brightness": 0.5467378695470971,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.52113654102974,
+      "lowSaturationFraction": 0.06697863223769521,
+      "gatePass": true
+    },
+    "assets/generated/r84/app-icon-64.png": {
+      "brightness": 0.5370330459175857,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.544121406672654,
+      "lowSaturationFraction": 0.013916015625,
+      "gatePass": true
+    },
+    "assets/generated/r84/app-icon-192.png": {
+      "brightness": 0.5367573126659518,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.545076768887514,
+      "lowSaturationFraction": 0.012966579861111112,
+      "gatePass": true
+    },
+    "assets/generated/r84/app-icon-512.png": {
+      "brightness": 0.5376638941387102,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5453151009399895,
+      "lowSaturationFraction": 0.0125732421875,
+      "gatePass": true
+    },
+    "assets/generated/r84/terrain.png": {
+      "brightness": 0.5165469484737149,
+      "nearBlackFraction": 0.0,
+      "saturation": 0.5119586839114112,
+      "lowSaturationFraction": 0.009847205990563997,
+      "gatePass": true
+    }
+  },
+  "alpha": [
+    {
+      "path": "assets/generated/r84/keepsakes.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        13,
+        190,
+        190
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/miri-0.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        4,
+        2,
+        76,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/miri-1.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        4,
+        2,
+        76,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/miri-2.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        3,
+        2,
+        76,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/grey-0.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        3,
+        2,
+        76,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/grey-1.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        5,
+        2,
+        78,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/grey-2.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        4,
+        2,
+        76,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/grandma-0.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        5,
+        2,
+        75,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/grandma-1.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        5,
+        2,
+        74,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/grandma-2.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        6,
+        2,
+        74,
+        78
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/table-result.webp",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        384,
+        192
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/doorstep-result.webp",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        384,
+        192
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/heirloom/r84/table-result.webp",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        384,
+        192
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/heirloom/r84/doorstep-result.webp",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        384,
+        192
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/panel-192.png",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        192,
+        192
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/paper-128.png",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/menu-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        7,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/face-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        4,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/cups-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        18,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/wheat-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        3,
+        2,
+        28,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/basket-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        6,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/water-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        4,
+        6,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/note-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        10,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/sun-32.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        6,
+        14,
+        30,
+        30
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/logo-320.png",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        2,
+        13,
+        318,
+        110
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/app-icon-64.png",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/app-icon-192.png",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        192,
+        192
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/app-icon-512.png",
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "outsidePalette": 0
+    },
+    {
+      "path": "assets/generated/r84/terrain.png",
+      "corners": [
+        255,
+        255,
+        0,
+        0
+      ],
+      "partial": 0,
+      "bbox": [
+        0,
+        0,
+        512,
+        96
+      ],
+      "outsidePalette": 0
+    }
+  ],
+  "runtimeBytes": 246184,
+  "pipeline": "Generated art; preserve true alpha, threshold at native size, shared 68-color palette (retaining the prior 66 colors), clear transparent RGB, BOX native resize, nearest-neighbor; opaque backgrounds lossless WebP. No programmatic substitute artwork."
+}

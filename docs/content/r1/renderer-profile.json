@@ -1,0 +1,262 @@
+[
+  {
+    "tag": "base-farm",
+    "p95": 33.299999999999955,
+    "median": 16.699999999999818,
+    "frames": 222,
+    "calls": {
+      "summary": {
+        "count": 46,
+        "ms": 5.799998760223389
+      },
+      "ensure": {
+        "count": 6,
+        "ms": 0.09999990463256836
+      }
+    },
+    "info": {
+      "mode": "auto",
+      "avgFps": 59.45804969819972,
+      "autoLow": false,
+      "tier": "high",
+      "lastDowngradeReason": "尚未降級",
+      "history": []
+    },
+    "metrics": {
+      "Timestamp": 4.016710999887437,
+      "AudioHandlers": 0,
+      "AudioWorkletProcessors": 0,
+      "Documents": 0,
+      "Frames": 0,
+      "JSEventListeners": 16,
+      "LayoutObjects": 400,
+      "MediaKeySessions": 0,
+      "MediaKeys": 0,
+      "Nodes": 468,
+      "Resources": 0,
+      "ContextLifecycleStateObservers": 0,
+      "V8PerContextDatas": 0,
+      "WorkerGlobalScopes": 0,
+      "UACSSResources": 0,
+      "RTCPeerConnections": 0,
+      "ResourceFetchers": 0,
+      "AdSubframes": 0,
+      "DetachedScriptStates": 0,
+      "ArrayBufferContents": 0,
+      "LayoutCount": 16,
+      "RecalcStyleCount": 242,
+      "LayoutDuration": 0.002214,
+      "RecalcStyleDuration": 0.038748,
+      "DevToolsCommandDuration": 0.000324,
+      "ScriptDuration": 0.064596,
+      "V8CompileDuration": 0,
+      "TaskDuration": 0.166626,
+      "TaskOtherDuration": 0.06074399999999999,
+      "ThreadTime": 0.153642,
+      "ProcessTime": 0.3165990000000001,
+      "JSHeapUsedSize": 418636,
+      "JSHeapTotalSize": 1048576,
+      "FirstMeaningfulPaint": 0,
+      "DomContentLoaded": 0,
+      "NavigationStart": 0
+    }
+  },
+  {
+    "tag": "active-pond",
+    "p95": 33.29999999999927,
+    "median": 16.69999999999891,
+    "frames": 229,
+    "calls": {
+      "summary": {
+        "count": 163,
+        "ms": 25.39999794960022
+      },
+      "ensure": {
+        "count": 13,
+        "ms": 0.20000004768371582
+      },
+      "fishingObservation": {
+        "count": 62,
+        "ms": 1.299999713897705
+      }
+    },
+    "info": {
+      "mode": "auto",
+      "avgFps": 54.42321016891061,
+      "autoLow": false,
+      "tier": "high",
+      "lastDowngradeReason": "尚未降級",
+      "history": []
+    },
+    "metrics": {
+      "Timestamp": 4.004364000167698,
+      "AudioHandlers": 0,
+      "AudioWorkletProcessors": 0,
+      "Documents": -2,
+      "Frames": 0,
+      "JSEventListeners": -866,
+      "LayoutObjects": -707,
+      "MediaKeySessions": 0,
+      "MediaKeys": 0,
+      "Nodes": -2302,
+      "Resources": -32,
+      "ContextLifecycleStateObservers": -2,
+      "V8PerContextDatas": -2,
+      "WorkerGlobalScopes": 0,
+      "UACSSResources": 0,
+      "RTCPeerConnections": 0,
+      "ResourceFetchers": -2,
+      "AdSubframes": 0,
+      "DetachedScriptStates": 0,
+      "ArrayBufferContents": 0,
+      "LayoutCount": 66,
+      "RecalcStyleCount": 297,
+      "LayoutDuration": 0.009656000000000001,
+      "RecalcStyleDuration": 0.074813,
+      "DevToolsCommandDuration": 0.00037699999999999886,
+      "ScriptDuration": 0.10419800000000001,
+      "V8CompileDuration": 0,
+      "TaskDuration": 0.295702,
+      "TaskOtherDuration": 0.106658,
+      "ThreadTime": 0.22453900000000004,
+      "ProcessTime": 0.4424060000000001,
+      "JSHeapUsedSize": -548696,
+      "JSHeapTotalSize": -913408,
+      "FirstMeaningfulPaint": 0,
+      "DomContentLoaded": 0,
+      "NavigationStart": 0
+    }
+  },
+  {
+    "tag": "stopped-pond-loop",
+    "p95": 16.80000000000109,
+    "median": 16.69999999999891,
+    "frames": 232,
+    "calls": {
+      "summary": {
+        "count": 209,
+        "ms": 30.799997806549072
+      },
+      "ensure": {
+        "count": 19,
+        "ms": 0.40000009536743164
+      },
+      "fishingObservation": {
+        "count": 62,
+        "ms": 1.299999713897705
+      }
+    },
+    "info": {
+      "mode": "auto",
+      "avgFps": 59.98602668149091,
+      "autoLow": false,
+      "tier": "high",
+      "lastDowngradeReason": "尚未降級",
+      "history": []
+    },
+    "metrics": {
+      "Timestamp": 4.007668999955058,
+      "AudioHandlers": 0,
+      "AudioWorkletProcessors": 0,
+      "Documents": 0,
+      "Frames": 0,
+      "JSEventListeners": 16,
+      "LayoutObjects": 400,
+      "MediaKeySessions": 0,
+      "MediaKeys": 0,
+      "Nodes": 468,
+      "Resources": 0,
+      "ContextLifecycleStateObservers": 0,
+      "V8PerContextDatas": 0,
+      "WorkerGlobalScopes": 0,
+      "UACSSResources": 0,
+      "RTCPeerConnections": 0,
+      "ResourceFetchers": 0,
+      "AdSubframes": 0,
+      "DetachedScriptStates": 0,
+      "ArrayBufferContents": 0,
+      "LayoutCount": 16,
+      "RecalcStyleCount": 252,
+      "LayoutDuration": 0.002075999999999998,
+      "RecalcStyleDuration": 0.04782399999999998,
+      "DevToolsCommandDuration": 0.0007689999999999989,
+      "ScriptDuration": 0.06711,
+      "V8CompileDuration": 0,
+      "TaskDuration": 0.19601800000000003,
+      "TaskOtherDuration": 0.078239,
+      "ThreadTime": 0.17634500000000009,
+      "ProcessTime": 0.36574399999999985,
+      "JSHeapUsedSize": 47976,
+      "JSHeapTotalSize": -2883584,
+      "FirstMeaningfulPaint": 0,
+      "DomContentLoaded": 0,
+      "NavigationStart": 0
+    }
+  },
+  {
+    "tag": "river-after-close",
+    "p95": 16.799999999999272,
+    "median": 16.700000000000728,
+    "frames": 233,
+    "calls": {
+      "summary": {
+        "count": 253,
+        "ms": 35.99999713897705
+      },
+      "ensure": {
+        "count": 25,
+        "ms": 0.40000009536743164
+      },
+      "fishingObservation": {
+        "count": 62,
+        "ms": 1.299999713897705
+      }
+    },
+    "info": {
+      "mode": "auto",
+      "avgFps": 59.004257192053444,
+      "autoLow": false,
+      "tier": "high",
+      "lastDowngradeReason": "尚未降級",
+      "history": []
+    },
+    "metrics": {
+      "Timestamp": 4.005242000101134,
+      "AudioHandlers": 0,
+      "AudioWorkletProcessors": 0,
+      "Documents": 0,
+      "Frames": 0,
+      "JSEventListeners": -24,
+      "LayoutObjects": -671,
+      "MediaKeySessions": 0,
+      "MediaKeys": 0,
+      "Nodes": -828,
+      "Resources": -2,
+      "ContextLifecycleStateObservers": 0,
+      "V8PerContextDatas": 0,
+      "WorkerGlobalScopes": 0,
+      "UACSSResources": 0,
+      "RTCPeerConnections": 0,
+      "ResourceFetchers": 0,
+      "AdSubframes": 0,
+      "DetachedScriptStates": -2,
+      "ArrayBufferContents": 0,
+      "LayoutCount": 16,
+      "RecalcStyleCount": 254,
+      "LayoutDuration": 0.001799999999999996,
+      "RecalcStyleDuration": 0.04477300000000001,
+      "DevToolsCommandDuration": 0.0003829999999999979,
+      "ScriptDuration": 0.06474399999999997,
+      "V8CompileDuration": 0,
+      "TaskDuration": 0.190739,
+      "TaskOtherDuration": 0.07903899999999997,
+      "ThreadTime": 0.16759999999999997,
+      "ProcessTime": 0.3696360000000003,
+      "JSHeapUsedSize": 7248,
+      "JSHeapTotalSize": 0,
+      "FirstMeaningfulPaint": 0,
+      "DomContentLoaded": 0,
+      "NavigationStart": 0
+    }
+  }
+]

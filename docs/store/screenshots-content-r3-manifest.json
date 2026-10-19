@@ -1,0 +1,19 @@
+{
+  "status": "VERIFIED",
+  "version": "content-r3-20261019-1",
+  "source": "Real browser screenshots, earned nine-delivery state; chapter/dock and starting ingredients fixture disclosed in browser-checks.json. No resizing, crop, overlay or composite.",
+  "screenshots": [
+    {
+      "path": "docs/store/screenshots/iphone-09-neighbor-memory.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "fcd019ff0cbe82dc794b940b68e8bed2981845f774d2381571fc6f5f58b8635a"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-09-neighbor-memory.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "b835bc1f7a8978e8029ff59dc86518eb504212c1bfa31893f73002f5dd5ecb82"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+✓ 版本鏈一致（CACHE_VERSION=content-r2-20261019-1）

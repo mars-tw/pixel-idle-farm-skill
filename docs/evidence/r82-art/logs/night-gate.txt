@@ -1,0 +1,38 @@
+== R72 夜間/暴風亮度閘 ==
+  ✓ 春-clear mean luminance 129.5 ≥ 72
+  ✓ 春-sunny mean luminance 130.4 ≥ 72
+  ✓ 春-rain mean luminance 125.8 ≥ 72
+  ✓ 春-storm mean luminance 124 ≥ 56
+  ✓ 春-snow mean luminance 134 ≥ 72
+  ✓ 春-fog mean luminance 135.5 ≥ 72
+  ✓ 春-windy mean luminance 130.9 ≥ 72
+  ✓ 夏-clear mean luminance 129.1 ≥ 72
+  ✓ 夏-sunny mean luminance 130 ≥ 72
+  ✓ 夏-rain mean luminance 125.6 ≥ 72
+  ✓ 夏-storm mean luminance 123.8 ≥ 56
+  ✓ 夏-snow mean luminance 133.8 ≥ 72
+  ✓ 夏-fog mean luminance 135.3 ≥ 72
+  ✓ 夏-windy mean luminance 130.5 ≥ 72
+  ✓ 秋-clear mean luminance 128.9 ≥ 72
+  ✓ 秋-sunny mean luminance 129.8 ≥ 72
+  ✓ 秋-rain mean luminance 125.5 ≥ 72
+  ✓ 秋-storm mean luminance 123.7 ≥ 56
+  ✓ 秋-snow mean luminance 133.6 ≥ 72
+  ✓ 秋-fog mean luminance 135.2 ≥ 72
+  ✓ 秋-windy mean luminance 130.2 ≥ 72
+  ✓ 冬-clear mean luminance 128.9 ≥ 72
+  ✓ 冬-sunny mean luminance 129.8 ≥ 72
+  ✓ 冬-rain mean luminance 125.5 ≥ 72
+  ✓ 冬-storm mean luminance 123.7 ≥ 56
+  ✓ 冬-snow mean luminance 133.6 ≥ 72
+  ✓ 冬-fog mean luminance 135.2 ≥ 72
+  ✓ 冬-windy mean luminance 130.3 ≥ 72
+  ✓ clear 跨季亮度落差 0.5% ≤ 35%（129.5/129.1/128.9/128.9）
+  ✓ sunny 跨季亮度落差 0.5% ≤ 35%（130.4/130/129.8/129.8）
+  ✓ rain 跨季亮度落差 0.2% ≤ 35%（125.8/125.6/125.5/125.5）
+  ✓ storm 跨季亮度落差 0.2% ≤ 35%（124/123.8/123.7/123.7）
+  ✓ snow 跨季亮度落差 0.3% ≤ 35%（134/133.8/133.6/133.6）
+  ✓ fog 跨季亮度落差 0.2% ≤ 35%（135.5/135.3/135.2/135.2）
+  ✓ windy 跨季亮度落差 0.5% ≤ 35%（130.9/130.5/130.2/130.3）
+
+✅ R72 夜間亮度閘通過（4 季 × 7 天氣，詳 docs/evidence/r72/night-gate.json）

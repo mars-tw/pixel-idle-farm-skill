@@ -1,0 +1,66 @@
+{
+  "status": "VERIFIED",
+  "appVersion": "r80-20261015-1",
+  "packageVersion": "0.1.14",
+  "headlessOnly": true,
+  "tests": {
+    "npm test": {
+      "exitCode": 0,
+      "passingAssertionLines": 768,
+      "newDailyRuleChecks": 20
+    },
+    "npm run test:e2e": {
+      "exitCode": 0,
+      "chapterChecks": 370,
+      "sunpatchChecks": 44,
+      "mobileChecks": 62,
+      "rwdViewportStates": 24,
+      "controlTargets": 305
+    },
+    "waterGuide": {
+      "exitCode": 0,
+      "checks": 6
+    },
+    "nightGate": {
+      "exitCode": 0,
+      "checks": 35
+    },
+    "finalMobile": {
+      "exitCode": 0,
+      "checks": 62
+    }
+  },
+  "secretScan": {
+    "engine": "grep -rniE",
+    "excludeDirectories": [
+      ".git",
+      "node_modules"
+    ],
+    "matches": 0,
+    "exitCode": 1
+  },
+  "versionChain": "VERIFIED",
+  "oldRuntimeVersionMatches": 0,
+  "javascriptSyntaxFailures": 0,
+  "preexistingModifiedFilePreserved": {
+    "path": "docs/evidence/R68/source-manifest.json",
+    "sha256": "6a8d09bc78893c01a8ba91ced30ada89180095c45280459422fd346f072d1394"
+  },
+  "performance": "REFERENCE_ONLY_CONCURRENT_LOAD",
+  "realDeviceOrRetentionValidation": "BLOCKED",
+  "runtimeAndTestSha256": {
+    "index.html": "cac665d74db840dd4c0869b9698fde6ae3070713a6d347f6b6a40ee084ab58f2",
+    "src/daily.js": "c71fb76ff8e9f6f0a5277f6d76e8517c0fcf5482885e3d220e5313c02bda564a",
+    "src/daily-ui.js": "68ea212a7f2a477e51911f2a3658667ce7fc494ff6ef30ec51ec8a49f6e4f0fb",
+    "src/game.js": "e9b8c7e3ad51baa0557357861936dbf79f74aac53b0633fa2ed47c9440a881fc",
+    "src/state.js": "20ddd2f76a634c4672f09fd10206d1b1b9dcc409e5609d7eef5bacae06d91cf2",
+    "src/ui.js": "1dfdab3a8a2de64d3393d936e49be25963656af6fc53ae958cc7fcb496c05fa7",
+    "src/world-ui.js": "5e61bd01c1158528cf38069af7b827f6e5589a1f9d341c85a47ebbd1681d9f71",
+    "src/world.css": "e53873c9bd0f6d2b6a8dd5e560a2d11197110311b539333188eea3c8c30e5f1f",
+    "sw.js": "05192ac00dea49e9692971cd84e51768ededb0e7e5faa29c7e4d58eeebdf96f0",
+    "scripts/test-r80-daily.js": "9614af15e19f0045750eba4b78361ac3834c296e7a18153fa33e034bfd5c0216",
+    "scripts/test-r80-mobile.js": "38e4cc01818f9d65c73aadf5d7a3ff8d9573289fcbccaaddf9d78f0c2cf88983",
+    "scripts/test-controls-reachability.js": "2a1117ab13db3c7c8c21206c908c029fe436ef13e75cada5459a15f887e1209d",
+    "scripts/test-rwd-matrix.js": "6fe02da72c916c59060aee72506d40780c846ed095168edb2aa77827cb639cea"
+  }
+}

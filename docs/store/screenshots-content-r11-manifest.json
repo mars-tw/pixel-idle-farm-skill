@@ -1,0 +1,19 @@
+{
+  "status": "VERIFIED",
+  "tool": "playwright.chromium (headless)",
+  "source": "actual earned picnic-base-save, user serving choice, reply phase",
+  "images": [
+    {
+      "path": "docs/store/screenshots/ipad-16-shared-afternoon-r11.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "b346070cca20c6b89557d66841f4e45fdb1ee5dcfe35d6aba94627eb752296de"
+    },
+    {
+      "path": "docs/store/screenshots/iphone-16-shared-afternoon-r11.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "427450d91a0d599a420aa6ea013d3bbac0447f631c6873dc0c1200a088469253"
+    }
+  ]
+}

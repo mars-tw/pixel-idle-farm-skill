@@ -1,0 +1,198 @@
+{
+  "tool": "image_gen.imagegen",
+  "actualModelSlug": null,
+  "modelNote": "Tool does not expose a model slug; no API model inferred.",
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "jobs": [
+    {
+      "id": "sheet",
+      "prompt": "Use case: stylized-concept. Asset type: production pixel game character turnaround sheet, 1536x1024. SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Reference image is the exact Miri character identity: youthful auburn-braided woman, straw hat with wide red-white gingham band and a bow, cream rolled sleeve shirt, green overalls, brown boots. Preserve her face, clothes, hairstyle. Redesign ONLY her backpack as unmistakable OPEN WOVEN BASKET: round flared rim, horizontal wicker weave, two thin straps, huge triangular red-white gingham cloth folded OUT over rim, no zipped leather bag. Show FRONT, RIGHT-FACING SIDE, BACK as three fullbody figures in top 70%, same height, comfortable separated. Bottom 30% show three closeup expressions, neutral, concentrating watering, delighted eyes. The side basket must project from her back with wide rim clearly open, basket body light golden straw, red cloth cannot cover all weave. Hat brim and right shoulder carry warm rim light. Cream plain background. This sheet will be downsampled into 48x64 poses: simplify major forms, keep large shape separation. No labels or typography, no new characters, no decorative frame.",
+      "master": "docs/art/character-sheets/miri-r87.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "walk",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: transparent sprite animation atlas, wide landscape canvas. Miri from the reference sheet, exact costume, auburn braid, straw hat with red-white gingham bow, cream sleeves, green overalls, brown boots and large OPEN golden woven basket with broad rim and hanging red gingham triangle. EXACTLY 4 ROWS and 6 COLUMNS =24 figures. Each figure fully separated by transparent gutters and aligned to one equal baseline per row, full body, same scale and height. ROW1 faces camera DOWN walking six distinct alternating leg and arm stride phases. ROW2 walks LEFT side profile all six. ROW3 walks RIGHT side profile all six. ROW4 walks AWAY back view all six. Feet alternate heel plant, passing, toe-off, opposite heel, passing, toe-off. Broad basket weave clearly reads at 48x64, no leather backpack. Basket visible side/back; front basket sides peek out. Hat warm top-right rim. Keep same anatomy and height all directions, simple clean native pixel clusters suitable downsampling. No captions/grid/border. True transparent alpha outside figures, no floor or drop shadows baked. This is a real limb-pose animation atlas, not repeated translated standing figures.",
+      "master": "docs/art/masters/r87/walk.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "actions",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: transparent pixel sprite farming ACTION animation atlas, wide landscape canvas. Miri exact reference character with OPEN golden WICKER BASKET, broad rim and red gingham triangle over basket rim, straw hat red-white band, green overalls. EXACTLY 8 rows by 6 columns =48 fullbody figures, each row separated with clear transparent gutters, all equal scale and head/foot baseline. ROWS1-4 WATER using copper watering can with blue water visible only active phase. Row1 faces DOWN; Row2 faces LEFT; Row3 faces RIGHT; Row4 faces AWAY. All 6 phases distinct: relaxed arms holding can; lift/anticipation; lean and tilt; full pouring water impact; can lowered; return relaxed. ROWS5-8 TENDING/harvesting crouch then stand with wheat: Row5 DOWN, Row6 LEFT, Row7 RIGHT, Row8 AWAY. Six phases: anticipate, reach, crouch, hands at ground, rise with wheat, recovery stand. Hands and arms visibly change every frame, legs bend to kneel in harvest. No attack weapons. Basket hangs correctly behind torso with visible horizontal weave, cannot look like brown leather bag. Same character height across water and walk, no pose cropped. True alpha transparent background, no shadows or ground, no labels/no grid. All figures separate for cutting into 48x64 native cells.",
+      "master": "docs/art/masters/r87/actions.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "leaf",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: TRANSPARENT tree canopy ground projection sprite, top-down almost horizontal. Shape is a broad diagonal apple tree SHADOW starting at a narrow tree-root attachment in the UPPER RIGHT corner and widening down toward LOWER LEFT. Light rays come from UPPER RIGHT toward LOWER LEFT. Organic interlocking leaf silhouettes and a few branching twig shadows in translucent muted olive #304B35, broad irregular warm sunshine openings of very different sizes between leaves, feathered penumbra edges. Put the largest open bright gap in LEFT-MIDDLE, the rightmost half densely shadowed with fine irregular openings. No dots, no sparkles, no star field, no tree, no terrain, no border, no white backdrop. At 192x128 native it must read as recognizable leafy branch shadow with a coherent diagonal direction and separated light and shade. True transparent background. Ground will show through both openings and shadow: broad translucent dark leaf masses, only subtle translucent honey light at the largest gaps. Aspect ratio 3:2 landscape.",
+      "master": "docs/art/masters/r87/leaf.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "terrain",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: seamless GAME GROUND material background sheet, four equal SQUARE swatches in a 2x2 grid edge to edge with NO gutters. All four are the SAME quiet warm apple-olive short meadow grass ground, small different natural sparse blade clusters, occasional tiny clover, subtle handplaced hue variation. No circular tufts or big objects; no square confetti/no checker noise/no flowers/no stones/no dirt. Read as a continuous soft mossy field when tiled; seamless outer edges, equal average green color each tile. Muted midtone #789647 blended #6A994E and golden #98A85B. Details use tiny 2-4pixel clusters, calm center, slightly richer than flat solid. No shadows baked, no overhead trees, no horizon. NOT a landscape painting, exactly four repeatable top-down RPG grass tiles. Square image, opaque.",
+      "master": "docs/art/masters/r87/terrain.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "tree",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: a single key object apple tree sprite for 3/4 topdown pixel farm RPG. Full silhouette centered with broad round irregular crown, coral red apples, visible thick tea-brown gnarled trunk, small exposed roots and subtle leaf clumps, one fallen apple, no other objects. Warm sunlight catches upper RIGHT crown edges, cooler olive shaded LOWER LEFT leaves. Balanced midtone saturated apple greens matching #6A994E, avoid dark dense black leaves. Croppable within native96x112; large crisp readable clusters, NOT smooth painterly. Root baseline near bottom. True alpha transparent background and generous gutter. NO cast shadow baked because cast shadow rendered separately in game. Preserve same story tree species as current farm.",
+      "master": "docs/art/masters/r87/tree.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "panel",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: pixel UI material, square clean handmade cream notebook page. Large near-flat cream #FFF6E3 paper center with extremely subtle fibers, avoid noisy speckles; narrow woven red-white GINGHAM cloth binding strip located 12 pixels IN from LEFT edge and no other decorations. Delicate honey brown stitched horizontal top and bottom edge, crisp stepped pixel corners. Center blank for long text. No typography, no badges or seals, no page fold, no dark border. Opaque full square texture. Must stay quiet behind 14px dark brown text. Very low contrast paper texture, gingham strip crisp, left margin cream outside cloth.",
+      "master": "docs/art/masters/r87/panel.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "icons",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: transparent UI icon sheet, THREE columns and TWO rows, exactly six isolated large icons with equal gutters: TOP row golden wheat sheaf tied red gingham; open golden wicker lunch basket red-white cloth; copper watering can with turquoise drops. BOTTOM row open cream handwritten notebook with red ribbon no text; straw hat red gingham bow; two fresh green wheat seedling leaves. Every icon chunky clear silhouette at32px, high contrast 1px deep brown outline and 3-4 value steps. Warm upper-right highlight. No circles, no stamp seals, no frames, no text, no floor. True transparent alpha.",
+      "master": "docs/art/masters/r87/icons.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "logo",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: transparent TITLE LOGO for actual pixel farm game. Exact Traditional Chinese text only: 「陽光農場」, four large readable golden hand-shaped pixel characters in ONE horizontal line, deep brown 1px outline and subtle warm orange inner shade. Small pair of golden wheat ears on left, a SMALL open wicker basket red gingham cloth on right, a single tiny leaf above last character. No English, no subtitle, no enclosing badge, no banner panel, no scene, NO second line. Wide 3:1 overall silhouette, art fills central80%, transparent background. Every character must be correct 陽 光 農 場. Suitable displayed160x48px.",
+      "master": "docs/art/masters/r87/logo.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "app",
+      "prompt": "SUNBASKET R87 STYLE: warm countryside pixel art, controlled apple-green #6A994E, straw gold #FFB627, gingham red #D95737, cream #FFF6E3, tea-brown #3E2F23, honey wicker #B98240; warm light from UPPER RIGHT, olive shadow shifted brown, crisp clustered pixels, 1 native pixel selective dark outline, no vector or painted soft gradients, no text. Asset type: final square APP ICON proposal for Sunny Farm. Exact Miri identity from reference: auburn braid, cheerful expressive brown eyes, golden straw hat with broad red-white gingham ribbon. Waist-up center at right2/3, in front-left she holds OPEN GOLDEN WICKER BASKET with enormous visible rim and red-white cloth triangle and two golden wheat ears. Background warm leafy apple-green orchard and bright upper-right yellow sun wedge filtering through recognizable leaf silhouettes. No UI, no text, no border, no rounded corners, fill full square. Simple strong pixel clusters, native64px readability, clear face+hat+basket all readable, saturated midtones, light golden edge from upper-right. Avoid generic beige icon or dark teal, avoid shiny anime rendering. Pixel art premium farm RPG.",
+      "master": "docs/art/masters/r87/app.png",
+      "tool": "image_gen.imagegen"
+    },
+    {
+      "id": "r89/garden",
+      "master": "docs/art/masters/r89/garden.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-4b43ff02-13f9-4efe-8256-3674ab94daf4.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Create ONE continuous landscape ground painting for an overhead three-quarter orthographic farm map, wide 3:2 canvas, no sky or horizon. It is an UNINTERRUPTED grassy meadow and garden floor, NOT a tile atlas, NOT repeated blocks, NOT a collage. Fine rich emerald and apple-green short grass, only sparse daisy and clover clusters near edges, broad quiet central space for movable characters and six existing raised soil beds; no beds, trees, buildings, buckets or characters baked into this ground. A subtle pale ochre worn-earth garden trail curves through lower right and outer perimeter, soft irregular grass-edge blending. Cool blue-green leaf shadows at lower left, broad amber sunlit area reaching diagonally from upper right toward center left, visible soft diagonal streaks and irregular leaf openings. Keep center detailed enough to feel painted but calm, NO tiny dense speckling, NO obvious square texture patches. Render a beautiful inhabited garden FLOOR only. Aim 1536x1024."
+    },
+    {
+      "id": "r89/character",
+      "master": "docs/art/character-sheets/miri-r89.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-de636a1e-2bdd-41a8-bc83-3111607d6d10.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Character identity reference sheet for the SAME farm girl as attached reference, keep her face, chestnut red twin braids, straw hat with red gingham ribbon, cream shirt, green overalls and brown boots unchanged. MAIN correction: replace closed brown backpack with an unmistakable wide OPEN wicker harvest creel, flared rim, empty visible black/brown interior opening, two curved carrying straps, five large horizontal golden straw weave bands, RED AND CREAM gingham corner draped OUTSIDE the rim. Basket must remain readable in a 48x64 runtime silhouette. TOP ROW front full body, right-facing full body, back full body, evenly spaced 3 columns. BOTTOM ROW three large head-and-shoulder expressions: curious, smiling, focused. Same scale in all three top figures; pure cream outside, no ground shadows, no letters. This is a design sheet, not a motion sequence. Warm rim on upper-right hat and shoulder.",
+      "references": [
+        {
+          "path": "docs/art/character-sheets/miri-r88.png",
+          "sha256": "45565226a7632990e15cdc327b265b4a10abf905b52d0df210872577011be573",
+          "role": "character identity reference used for the R89 edit call"
+        }
+      ]
+    },
+    {
+      "id": "r89/light",
+      "master": "docs/art/masters/r89/light.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-748f69b9-fcad-4215-a303-dd5342b5a80b.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Transparent VFX overlay for an overhead pixel farm, ONE integrated directional shaft of sunlight. Rays enter narrow at the UPPER RIGHT CORNER, widen diagonally toward LOWER LEFT into a broad irregular rounded warm amber ground pool centered at x40% y70%. Three visibly diagonal parallel pale golden light shafts, very soft transparent edges, open leaf-shaped gaps and scalloped penumbra along the pool rim. PURE LIGHT ONLY, no objects, no grass, no scene, no foliage, no opaque background. The pool must be very legible on dark brown soil. Fixed upper-right light source, no circular magic symbols, no sparkles or stars, no blur painting grain. Ground pool occupies bottom 40% of frame and rays occupy top 60%. Wide 3:2 RGBA image; bright warm cream center with honey-gold edge; genuinely transparent outside. This will be shown over a single highlighted soil bed."
+    },
+    {
+      "id": "r89/story",
+      "master": "docs/art/masters/r89/story.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-91a755cc-96eb-4356-8649-9912d8bc1715.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. One horizontal 2:1 narrative pixel illustration, usable at native512x256. Same Miri farm girl red braids straw hat red gingham band cream shirt green overalls, same kind elderly Grey with bald head side white hair and full white beard ochre cardigan. They sit on opposite sides of a modest weathered wooden tea table in an apple orchard porch. MUST SHOW THREE COMPLETE CHAIRS: Miri seated LEFT, Grey seated RIGHT, a THIRD EMPTY CHAIR with backrest and all legs clearly visible at FRONT CENTER LEFT, inviting the next person. The empty chair is the main story prop, prominently lit. Two cream teacups on red gingham tablecloth. A SMALL wicker harvest basket on ground to far right, no giant basket in foreground. A folded seating sketch with three little chairs on table. Warm diagonal afternoon light enters UPPER RIGHT, cool leaf shadows lower left. Faces kind and readable, grounded shoes, charming grouped pixel clusters, no visible text. Balanced wide composition; keep empty third chair in central 70% so portrait crop proves title 'one more chair'."
+    },
+    {
+      "id": "r89/objects",
+      "master": "docs/art/masters/r89/objects.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-c229968f-08bf-48e2-92e9-9de6f6bc19c1.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Production sprite OBJECT ATLAS on true transparent background, 3 columns x 2 rows, six isolated items, equal cell sizes, 20% clear margins. TOP row: (1) wheat seedling two broad pointed leaves, (2) slightly developed wheat tuft four leaves, (3) ripe golden wheat three heavy drooping seed heads tied at roots. BOTTOM row: (4) empty wide open golden wicker creel, flared dark open rim and red cream gingham cloth corner hanging OUTSIDE on RIGHT, front view; (5) same creel right-side view; (6) same creel back view. Item cells only, no labels. Three-quarter orthographic, 1px dark tea outline after native48 cleanup, grouped readable pixel clusters, no dirt bed, no cast shadow; stems rooted at same baseline. Basket weave must be LARGE clearly separate horizontal golden bands and dark gaps visible at native20px. All objects fully visible."
+    },
+    {
+      "id": "r89/panel",
+      "master": "docs/art/masters/r89/panel.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-2a48fbba-48a4-451c-9253-0352257dc2ed.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Single square cream handmade-paper journal UI frame texture, quiet blank center 85% area, slightly irregular SQUARE paper corners, thin tea-brown edge double rule, a narrow red and cream gingham cloth binding strip down LEFT edge only, stitched ochre thread, small warm sunbeam in upper right corner. Flat front view suitable for actual 9-slice game UI. No rounded card, no writing, no icons, no extra props, no ornate illustration, subtle fibers only. Exactly same palette as honey-lit rural pixel farm, all visual texture crisp grouped pixel marks. Opaque RGB 1024 square."
+    },
+    {
+      "id": "r89/icons",
+      "master": "docs/art/masters/r89/icons.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-4f395499-1274-4299-bb23-5a30c4b19048.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Actual game UI ICON ATLAS, 3 columns x2 rows, SIX isolated readable icons, true transparent background, no labels or frames. Top row wheat sheaf, red gingham wicker picnic basket, copper watering can with three blue drops. Bottom row grandmother's open handwritten journal (no legible letters), straw hat with red gingham ribbon, young green two-leaf sprout. All each occupy central70% of equal square cell with generous fully transparent gutters. 32px native scale silhouettes; no extra objects or glitter. Same consistent right-upper gold highlights and dark tea outline, rich three-shade pixel clusters."
+    },
+    {
+      "id": "r89/logo",
+      "master": "docs/art/masters/r89/logo.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-a8e16217-52f5-4bba-abe5-faf5969ae1e5.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Wide horizontal game TITLE LOGO on true transparent background. EXACTLY FOUR Traditional Chinese characters in a single line, spelled exactly 「陽光農場」. No other text, no subtitle, no Latin words. Handcrafted plump pixel-brush calligraphy with honey gold face, cream upper-right light, thin tea-brown outline, tiny wheat sprig to left and small red gingham wicker basket to right. Compact silhouette, no background landscape, no signboard, no separate object below, suitable at160px wide in top game header. Strong readable four-character spacing. Aspect 3:1."
+    },
+    {
+      "id": "r89/app",
+      "master": "docs/art/masters/r89/app.png",
+      "source": "C:\\Users\\digimkt\\.codex\\generated_images\\01a14dd0-70d0-76e2-8981-7634afa5d26e\\exec-05a4ba54-cf2e-4850-ab85-fea64ac87ad9.png",
+      "prompt": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested. Square App icon proposal for Sunlight Farm, actual game imagery, no text, no rounded exterior border. Close-up SAME smiling red braided farm girl in straw hat with red gingham ribbon, green overalls, holding an OPEN small golden wicker basket with red gingham cloth and two golden wheat stalks. Broad warm light shaft from upper right, cool apple-green orchard behind; face and basket fill central80%, readable at64px. Crisp pixel art, honey/cream bright face and red cloth focal accent, three shading levels, calm grouped pixels, friendly and inviting. Opaque 1024 square edge to edge."
+    }
+  ],
+  "currentRound": "R88",
+  "historicalPromptFiles": [
+    "PROMPTS_R83.json",
+    "PROMPTS_R84.json",
+    "PROMPTS_R85.json",
+    "PROMPTS_R86.json"
+  ],
+  "currentPrompts": "docs/art/PROMPTS_R88.json",
+  "currentStylePrefix": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested.",
+  "currentTool": "image_gen.imagegen",
+  "currentActualModelSlug": null,
+  "currentModelNote": "Built-in tool does not reveal exact model slug; no guessed model ID.",
+  "currentGenerationCalls": 9,
+  "currentJobs": [
+    {
+      "id": "garden",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Wide top-down three-quarter farm garden ground illustration, square composition. A sun-warmed grassy clearing with diverse tonal grass clusters, tiny white daisies, yellow buttercups, clover, stones and worn curved stepping-stone footpaths, short low weathered picket fence along upper and side margins, terracotta flower pots and galvanized watering bucket near lower right. Leave the CENTER 45 percent open grass for live game soil and characters. Dense charming foreground flowers along lower corners, orchard hedge upper edge; three layers, no characters, no buildings, no crops or dirt plots painted in. Pixel game environment backdrop, no UI. Strong sunlight from upper right, warm diagonal scattered light pools, cool shade lower left. No uniform empty green field.",
+      "master": "docs/art/masters/r88/garden.png",
+      "transparent": false
+    },
+    {
+      "id": "light",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent game lighting overlay: warm yellow leaf-gap light pools, irregular organic circles in varied sizes and density. Diagonal footprint running upper right to lower left, large bright open patch in left half and smaller scattered warm yellow islands around it. Color visible light #FFE093 and #FFCB5B. Genuine transparent gaps, no gray/green ground, no branches, no leaf drawings, no white glitter. Crisp pixel clusters with a narrow semitransparent penumbra. Top-down pool of actual sunlight.",
+      "master": "docs/art/masters/r88/light.png",
+      "transparent": true
+    },
+    {
+      "id": "character",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Character design sheet on warm cream: same young red-braided female farmer Miri, straw hat with unmistakable RED WHITE GINGHAM HATBAND, cream rolled-sleeve blouse, green overalls, brown boots. FRONT SIDE BACK full body row, 2.5 head proportions, identical body heights and outfit. On her back a rounded golden open WICKER BASKET with visible horizontal weaving and a large red-white checkered cloth corner hanging from rim; never a leather backpack. Bottom row three faces: thoughtful, delighted, concentrating. Warm upper-right rim on hat and shoulder, cool left shadow. No labels, no typography, clean regular three-column layout.",
+      "master": "docs/art/character-sheets/miri-r88.png",
+      "transparent": false
+    },
+    {
+      "id": "objects",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent sprite sheet, clean 3 columns 2 rows with wide empty gutters: row1 three single square raised garden soil beds: dry earth, watered dark damp earth, moist planted earth without plants. Brown loam raised sides with distinct 3D front thickness, furrow shadows, broken natural edge and crumbs, not flat squares. row2 separate galvanized water bucket with wooden handle, a low weathered two-post picket fence, clump of daisies and clover. Three-quarter top-down view, all objects self-contained, no floor/background, genuine transparent background.",
+      "master": "docs/art/masters/r88/objects.png",
+      "transparent": true
+    },
+    {
+      "id": "panel",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Square cozy farm UI texture: fine cream paper with delicate warm fibers, restrained square brown stitched frame, a red-white gingham vertical binding strip at left and small twine corners. Lots of QUIET clear center, no writing, no shadows outside, no controls. Crisp consistent pixel art, not flat white card.",
+      "master": "docs/art/masters/r88/panel.png",
+      "transparent": false
+    },
+    {
+      "id": "icons",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent 3 by 2 icon atlas with generous gutters: wheat sheaf, wicker picnic basket with red-white cloth, copper watering can pouring water, open grandmother notebook with red bookmark, straw hat with red gingham band, green wheat seedling. Chunky coherent readable 32px silhouettes, dark tea 1px outlines and upper-right golden highlights, no text, no labels, no background.",
+      "master": "docs/art/masters/r88/icons.png",
+      "transparent": true
+    },
+    {
+      "id": "logo",
+      "prompt": "Edit this logo image. REMOVE THE ENTIRE BACKGROUND and subtitle. Keep only the FOUR large Chinese title characters exactly 陽光農場, plus wheat sprig on left and wicker basket on right, isolated on genuine transparent alpha background. Delete ALL scenery, mountains, sky, buildings, grass, lake, and ALL smaller text 田園物語. No subtitle at all. Tight horizontal isolated logo silhouette. This is a transparent UI logo asset, not a painting. Keep existing golden pixel letters and brown outline.",
+      "master": "docs/art/masters/r88/logo.png",
+      "transparent": true,
+      "discardedInitialPrompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Transparent horizontal game title logo, exact Traditional Chinese text ???? with small subtitle ?????. Warm wheat-gold chunky hand-lettered glyphs, dark tea pixel outline, small wheat sprig left and red-checkered wicker basket right, gentle upper-right sun glints. Compact readable original cozy pixel farm brand, no English, no extra symbols.",
+      "discardedReason": "Initial generation contained wrong subtitle and scenery, never integrated.",
+      "mode": "edit, num_last_images_to_include=1"
+    },
+    {
+      "id": "app",
+      "prompt": "Sunlight Farm unified handcrafted pixel art, 16-bit storybook farm, crisp deliberate pixel clusters, no vector gradients, warm upper-right sunlight, cool blue-violet shade, cream #FFF6E3, wheat gold #FFB627, tomato red #D95737, leaf green #6A994E, earth #8B5E34, dark tea outlines #3E2F23. Same coherent pixel density, no text except explicitly requested. Square edge-to-edge app icon proposal: smiling red-braided farmer Miri, straw hat with red-white gingham band, green overalls, holding a golden wicker basket draped in red-white checked cloth with wheat. Brilliant warm sunlight upper-right and cool foliage edge, cream-gold background, large recognizable head and basket; crisp pixel art silhouette still readable at48px. No text, no rounded app mask baked in.",
+      "master": "docs/art/masters/r88/app.png",
+      "transparent": false
+    }
+  ],
+  "legacyJobsRound": "R82 jobs retained for the historical R82 processing script; currentJobs/currentPrompts are the R88 source of truth",
+  "latestRound": "R89",
+  "latestRoundPrompts": "docs/art/PROMPTS_R89.json"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "VERIFIED",
+  "fixture": "Unmodified nine-delivery save earned by test-content-r4-e2e.js; no new progress granted.",
+  "checks": [
+    "new packing art decodes after controlled offline reload",
+    "offline normal basket entry uses the new packing image",
+    "new pressed-flower scene decodes offline",
+    "offline matched story uses the new illustration",
+    "packing fallback retains diagnostics without exposing filenames",
+    "packing illustration recovers in the same page",
+    "missing and retried art never spends food or changes memories"
+  ],
+  "screenshots": [
+    "docs/content/r4/phone-basket-offline.png",
+    "docs/content/r4/phone-art-basket-missing.png",
+    "docs/content/r4/phone-art-basket-restored.png"
+  ]
+}

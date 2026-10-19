@@ -1,0 +1,30 @@
+{
+  "diagnosticOnly": true,
+  "shippingGateUnchanged": true,
+  "rows": [
+    {
+      "name": "baseline",
+      "p95": 16.800000000000182,
+      "visibility": "visible",
+      "frames": 236
+    },
+    {
+      "name": "normal-blend",
+      "p95": 16.700000000000728,
+      "visibility": "visible",
+      "frames": 235
+    },
+    {
+      "name": "no-live-mask",
+      "p95": 16.80000000000109,
+      "visibility": "visible",
+      "frames": 225
+    },
+    {
+      "name": "baseline-again",
+      "p95": 16.700000000000728,
+      "visibility": "visible",
+      "frames": 236
+    }
+  ]
+}

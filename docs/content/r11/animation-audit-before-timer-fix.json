@@ -1,0 +1,1418 @@
+{
+  "status": "VERIFIED",
+  "trust": "Reuses earned UI picnic save; real clock, fixed species RNG only.",
+  "checks": [
+    "merchant: unique complete parcel arrived",
+    "merchant: no surrounding keepsake overlaps arrived",
+    "merchant: deduction only after contact arrived",
+    "merchant: unique complete parcel reach",
+    "merchant: no surrounding keepsake overlaps reach",
+    "merchant: deduction only after contact reach",
+    "merchant: unique complete parcel contact",
+    "merchant: no surrounding keepsake overlaps contact",
+    "merchant: deduction only after contact contact",
+    "merchant: one delivered basket stays one deduction",
+    "elder: unique complete parcel arrived",
+    "elder: no surrounding keepsake overlaps arrived",
+    "elder: deduction only after contact arrived",
+    "elder: unique complete parcel reach",
+    "elder: no surrounding keepsake overlaps reach",
+    "elder: deduction only after contact reach",
+    "elder: unique complete parcel contact",
+    "elder: no surrounding keepsake overlaps contact",
+    "elder: deduction only after contact contact",
+    "elder: empty-hand source prevents embedded second basket",
+    "elder: one delivered basket stays one deduction",
+    "child: unique complete parcel arrived",
+    "child: no surrounding keepsake overlaps arrived",
+    "child: deduction only after contact arrived",
+    "child: unique complete parcel reach",
+    "child: no surrounding keepsake overlaps reach",
+    "child: deduction only after contact reach",
+    "child: unique complete parcel contact",
+    "child: no surrounding keepsake overlaps contact",
+    "child: deduction only after contact contact",
+    "child: one delivered basket stays one deduction",
+    "merchant: only impact writes a serving",
+    "merchant: plate actually travels",
+    "merchant: all four roots/feet fixed",
+    "merchant: complete plate visible throughout",
+    "merchant: actual upper-body sprite sources change",
+    "merchant: received plate never overlaps any of four head regions",
+    "merchant: reply and future selection separated",
+    "elder: only impact writes a serving",
+    "elder: plate actually travels",
+    "elder: all four roots/feet fixed",
+    "elder: complete plate visible throughout",
+    "elder: actual upper-body sprite sources change",
+    "elder: received plate never overlaps any of four head regions",
+    "elder: reply and future selection separated",
+    "child: only impact writes a serving",
+    "child: plate actually travels",
+    "child: all four roots/feet fixed",
+    "child: complete plate visible throughout",
+    "child: actual upper-body sprite sources change",
+    "child: received plate never overlaps any of four head regions",
+    "child: reply and future selection separated",
+    "child: only impact writes a serving",
+    "child: plate actually travels",
+    "child: all four roots/feet fixed",
+    "child: complete plate visible throughout",
+    "child: actual upper-body sprite sources change",
+    "child: received plate never overlaps any of four head regions",
+    "child: reply and future selection separated",
+    "river_carp: real-clock missed window gives late feedback",
+    "river_carp: late window grants zero fish",
+    "silver_dace: real-clock missed window gives late feedback",
+    "silver_dace: late window grants zero fish",
+    "river_perch: real-clock missed window gives late feedback",
+    "river_perch: late window grants zero fish"
+  ],
+  "sequences": [
+    {
+      "id": "merchant",
+      "taste": "sour",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 155,
+            "y": 434.796875,
+            "width": 46,
+            "height": 36,
+            "top": 434.796875,
+            "right": 201,
+            "bottom": 470.796875,
+            "left": 155
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 147.296875,
+            "y": 392.484375,
+            "width": 46,
+            "height": 36,
+            "top": 392.484375,
+            "right": 193.296875,
+            "bottom": 428.484375,
+            "left": 147.296875
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 145,
+            "y": 379.796875,
+            "width": 46,
+            "height": 36,
+            "top": 379.796875,
+            "right": 191,
+            "bottom": 415.796875,
+            "left": 145
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/sit-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1
+        }
+      ]
+    },
+    {
+      "id": "elder",
+      "taste": "hot",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 155,
+            "y": 434.796875,
+            "width": 46,
+            "height": 36,
+            "top": 434.796875,
+            "right": 201,
+            "bottom": 470.796875,
+            "left": 155
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 239.03125,
+            "y": 382.734375,
+            "width": 46,
+            "height": 36,
+            "top": 382.734375,
+            "right": 285.03125,
+            "bottom": 418.734375,
+            "left": 239.03125
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 268,
+            "y": 364.796875,
+            "width": 46,
+            "height": 36,
+            "top": 364.796875,
+            "right": 314,
+            "bottom": 400.796875,
+            "left": 268
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/sit-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sip-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1
+        }
+      ]
+    },
+    {
+      "id": "child",
+      "taste": "sweet",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 155,
+            "y": 434.796875,
+            "width": 46,
+            "height": 36,
+            "top": 434.796875,
+            "right": 201,
+            "bottom": 470.796875,
+            "left": 155
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 221.90625,
+            "y": 414.71875,
+            "width": 46,
+            "height": 36,
+            "top": 414.71875,
+            "right": 267.90625,
+            "bottom": 450.71875,
+            "left": 221.90625
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 245,
+            "y": 407.796875,
+            "width": 46,
+            "height": 36,
+            "top": 407.796875,
+            "right": 291,
+            "bottom": 443.796875,
+            "left": 245
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/sit-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1
+        }
+      ]
+    },
+    {
+      "id": "child",
+      "taste": "sour",
+      "seq": [
+        {
+          "phase": "lift",
+          "plate": {
+            "x": 155,
+            "y": 434.796875,
+            "width": 46,
+            "height": 36,
+            "top": 434.796875,
+            "right": 201,
+            "bottom": 470.796875,
+            "left": 155
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "carry",
+          "plate": {
+            "x": 217.296875,
+            "y": 416.09375,
+            "width": 46,
+            "height": 36,
+            "top": 416.09375,
+            "right": 263.296875,
+            "bottom": 452.09375,
+            "left": 217.296875
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/offer-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 0
+        },
+        {
+          "phase": "received",
+          "plate": {
+            "x": 228.96875,
+            "y": 407.796875,
+            "width": 46,
+            "height": 36,
+            "top": 407.796875,
+            "right": 274.96875,
+            "bottom": 443.796875,
+            "left": 228.96875
+          },
+          "roots": [
+            {
+              "src": "assets/generated/content-r9/sit-player.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 110,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 174,
+                "bottom": 513.796875,
+                "left": 110
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/offer-merchant.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 122,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 186,
+                "bottom": 377.796875,
+                "left": 122
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-elder.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 252,
+                "y": 291.796875,
+                "width": 64,
+                "height": 86,
+                "top": 291.796875,
+                "right": 316,
+                "bottom": 377.796875,
+                "left": 252
+              }
+            },
+            {
+              "src": "assets/generated/content-r9/sit-child.png?v=content-r11-20261019-1",
+              "rect": {
+                "x": 271,
+                "y": 427.796875,
+                "width": 64,
+                "height": 86,
+                "top": 427.796875,
+                "right": 335,
+                "bottom": 513.796875,
+                "left": 271
+              }
+            }
+          ],
+          "n": 1
+        }
+      ]
+    }
+  ],
+  "fish": [
+    {
+      "id": "river_carp",
+      "message": "魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。",
+      "path": "docs/content/r11/phone-pond-river_carp-late-failure.png"
+    },
+    {
+      "id": "silver_dace",
+      "message": "魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。",
+      "path": "docs/content/r11/phone-pond-silver_dace-late-failure.png"
+    },
+    {
+      "id": "river_perch",
+      "message": "魚溜走了。水花已散，這一竿晚了，再看看牠怎麼咬。",
+      "path": "docs/content/r11/phone-pond-river_perch-late-failure.png"
+    }
+  ],
+  "replacementFrames": [
+    {
+      "path": "docs/content/r11/phone-basket-merchant-approach.png",
+      "at": 1792383864494,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 207,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 247,
+              "bottom": 386.59375,
+              "left": 207
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-merchant.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，蘿拉正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-merchant-contact.png",
+      "at": 1792383865818,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 231,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 271,
+              "bottom": 386.59375,
+              "left": 231
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-merchant.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "蘿拉伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-merchant-received.png",
+      "at": 1792383867537,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 267,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 307,
+              "bottom": 386.59375,
+              "left": 267
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-merchant.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份、東林野莓 6→5 份・蘿拉已接到酸味餐籃",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-elder-approach.png",
+      "at": 1792383871049,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 207,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 247,
+              "bottom": 386.59375,
+              "left": 207
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，班伯正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-elder-contact.png",
+      "at": 1792383872235,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 231,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 271,
+              "bottom": 386.59375,
+              "left": 231
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-elder.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "班伯伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-elder-received.png",
+      "at": 1792383873461,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 285,
+              "y": 358.59375,
+              "width": 40,
+              "height": 40,
+              "top": 358.59375,
+              "right": 325,
+              "bottom": 398.59375,
+              "left": 285
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份・班伯已接到熱味餐籃",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-child-approach.png",
+      "at": 1792383877526,
+      "state": {
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 207,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 247,
+              "bottom": 386.59375,
+              "left": 207
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-child.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/hold-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "你把餐籃捧好，圖圖正要伸手。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-child-contact.png",
+      "at": 1792383878740,
+      "state": {
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 231,
+              "y": 346.59375,
+              "width": 40,
+              "height": 40,
+              "top": 346.59375,
+              "right": 271,
+              "bottom": 386.59375,
+              "left": 231
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-child.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/reach-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 7,
+        "receipt": "圖圖伸出雙手，碰到餐籃。",
+        "propsHidden": true
+      }
+    },
+    {
+      "path": "docs/content/r11/phone-basket-child-received.png",
+      "at": 1792383879925,
+      "state": {
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:59690/assets/generated/content-r11/basket.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 273,
+              "y": 341.59375,
+              "width": 40,
+              "height": 40,
+              "top": 341.59375,
+              "right": 313,
+              "bottom": 381.59375,
+              "left": 273
+            },
+            "visible": "visible"
+          }
+        ],
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-child.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 263,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 327,
+              "bottom": 399.59375,
+              "left": 263
+            }
+          },
+          {
+            "src": "assets/generated/content-r9/idle-player.png?v=content-r11-20261019-1",
+            "rect": {
+              "x": 179,
+              "y": 313.59375,
+              "width": 64,
+              "height": 86,
+              "top": 313.59375,
+              "right": 243,
+              "bottom": 399.59375,
+              "left": 179
+            }
+          }
+        ],
+        "bread": 6,
+        "receipt": "農家麥餅 7→6 份、胡蘿蔔 5→4 份・圖圖已接到甜味餐籃",
+        "propsHidden": true
+      }
+    }
+  ]
+}

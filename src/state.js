@@ -284,7 +284,11 @@
     player.x = tile.x;
     player.y = tile.y;
     if (["up", "down", "left", "right"].indexOf(player.facing) === -1) player.facing = defPlayer.facing;
-    if (!player.action) player.action = defPlayer.action;
+    // Timers and action callbacks do not survive a process/reload. Resume from the
+    // last reached physics tile, never from a stranded walk/action pose.
+    player.action = "idle";
+    player.actionTargetTileId = null;
+    player.actionEndsAt = 0;
     return player;
   }
   function rebuildMapPreservingEntities(state, now) {
@@ -428,6 +432,8 @@
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0, seasonsReached: {} },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
+      daily: { day: null, stamps: 0 },
+      heirloom: { started: false, sunWheat: 0, delivered: false, choice: null, deliveredAt: 0 },
       settings: { smartAssistant: true, smartAssistantCollapsed: true, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium", mapViewMode: "fit" },
       lastOfflineSummary: null,
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
@@ -531,8 +537,13 @@
       if (qty > 0 && !merged.discoveries.items[id]) merged.discoveries.items[id] = discoveredAtFallback;
     }
     merged.collections = Object.assign({}, state.collections);
+    const dailyAPI = (typeof module !== "undefined" && module.exports) ? require("./daily.js") : root.FarmDaily;
+    merged.daily = dailyAPI ? dailyAPI.normalize(state.daily) : { day: null, stamps: 0 };
+    const heirloomAPI = (typeof module !== "undefined" && module.exports) ? require("./heirloom.js") : root.FarmHeirloom;
+    merged.heirloom = heirloomAPI ? heirloomAPI.normalize(state.heirloom) : def.heirloom;
     merged.gender = state.gender === "m" ? "m" : "f"; // Stage 6：主角性別
     merged.interaction = Object.assign({ tool: "hand", buildType: null, selectedTileId: null, pendingPath: [], lastInvalidReason: null }, state.interaction);
+    merged.interaction.pendingPath = [];
     configureWorld(merged);
     merged.player = sanitizePlayer(def.player, merged.player, merged.map, merged.flags);
     merged.version = C.GAME.version;

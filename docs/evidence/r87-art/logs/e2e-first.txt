@@ -1,0 +1,1169 @@
+
+> pixel-idle-farm@0.1.21 test:e2e
+> node scripts/run-browser-gates.js
+
+[memory] scripts/test-npc-indicators.js attempt 1: 11489MiB free
+PASS desktop: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS mobile: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS small: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS landscape: unread/ready/quest/talking NPC markers stay clear of sprites, at natural and fit zoom.
+PASS 32 transparent UI icons at 20/24/28/32px: individual image, clear corners, no atlas clipping.
+[memory] scripts/test-world-project-art.js attempt 1: 11633MiB free
+PASS R76 art: 4 exact frames, real alpha, shared palette, 6px padding, matching scale/feet, provenance hashes and SW cache.
+[memory] scripts/test-world-rework-e2e.js attempt 1: 11773MiB free
+R75 real-browser review http://127.0.0.1:49401/index.html
+DEVICE desktop 1440x900
+CHAPTER_ONE_UI desktop 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE mobile 390x844
+CHAPTER_ONE_UI mobile 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE landscape 844x390
+CHAPTER_ONE_UI landscape 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+DEVICE small 320x568
+CHAPTER_ONE_UI small 3 quests earned; plant3/water3/harvest6/cook1; reload checked
+FIXTURE CHAPTER_ONE_EARNED_DOCK: Unmodified genuinely earned chapter-one save; dock still broken, exact earned materials.
+FIXTURE UI_RESTORED_DOCK_FISHING: Dock restored by the preceding real UI fixture; relocated by a real journey, no fish/cooldown injection.
+WAIT UI_RESTORED_DOCK_FISHING real cooldown 28640ms; lastFishAt is not backdated
+FIXTURE LATE_RECIPES_INGREDIENTS_PICNIC_FIXTURE: Earned chapter-one claims retained; explicitly supplies wheat8/carrot4/mint2 and restored picnic table for recipe tests. NOT chapter-two completion.
+FIXTURE MISSING_WHEAT_COOK_GUARD: only inventory wheat is removed for negative UI/API guard
+FIXTURE EARNED_EMPTY_PLOT_IMPACT_CANCEL: Earned chapter-one save with empty harvested plots; only MOVE_MS is shortened. No crop/inventory/event injection.
+FIXTURE EARNED_MARKET_MATERIALS_UI: Unmodified earned chapter-one coins/materials; market purchase uses real buttons and nontrivial travel.
+R75 SUMMARY {"passed":370,"failed":0}
+[memory] scripts/test-r79-fun-e2e.js attempt 1: 21219MiB free
+PASS copy: no English combo/Level up strings in runtime UI
+PASS copy: Chinese 連收 ×N and 升級！ present
+PASS sun: player planted through the real quest button
+PASS sun: first sunpatch appears on its own within ~4s of planting
+PASS sun: first sunpatch is explained once by the mayor
+PASS sun: quest dock shows sunpatch countdown
+PASS sun: harvest inside sunlight stores wheat yield 2 + 1
+PASS sun: sun catch counted once
+PASS sun: catch shows golden float text and toast
+PASS feedback: storage chip is addressable for harvest fly-to
+PASS sun: no page errors
+PASS redirect desktop: player was mid-walk when pressing 前往
+PASS redirect desktop: no 'wait until walk ends' rejection
+PASS redirect desktop: redirected walk reaches the quest NPC and talks
+PASS redirect desktop: no page errors
+PASS redirect phone: player was mid-walk when pressing 前往
+PASS redirect phone: no 'wait until walk ends' rejection
+PASS redirect phone: redirected walk reaches the quest NPC and talks
+PASS redirect phone: no page errors
+PASS hint: waiting for harvest shows soonest ripening countdown
+PASS hint: taller quest dock never covers the seed bar (phone)
+PASS hud phone Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud phone Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud small Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud landscape Lv7: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv1: resource chips stay clear of system buttons and inside viewport
+PASS hud laptop Lv7: resource chips stay clear of system buttons and inside viewport
+PASS toast desktop: identical message within 2.5s shows once
+PASS toast desktop: at most 3 toasts at once
+PASS toast desktop: toasts move above the NPC dialogue
+PASS toast landscape: identical message within 2.5s shows once
+PASS toast landscape: at most 3 toasts at once
+PASS toast landscape: toasts move above the NPC dialogue
+PASS toast phone: identical message within 2.5s shows once
+PASS toast phone: at most 3 toasts at once
+PASS toast phone: toasts move above the NPC dialogue
+PASS music: plays after first user gesture when sound+music are on
+PASS music: loop source is the R79 track
+PASS music: settings has a 背景音樂 toggle
+PASS music: toggle off pauses the music
+PASS perf desktop: rAF p95 median of 3 runs 16.7ms <= 18ms (sunpatch + ambient light on)
+PASS perf mobile: rAF p95 median of 3 runs 16.8ms <= 18ms (sunpatch + ambient light on)
+R79 SUMMARY {"passed":44,"failed":0}
+[memory] scripts/test-r80-mobile.js attempt 1: 12124MiB free
+PASS 390x844 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":54,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":54,"height":54.296875,"inside":true,"hit":true}]
+PASS 390x844 no page overflow
+PASS 390x844 daily controls 44px visible hit targets [{"id":"dailyToday","width":103.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":103.34375,"height":44,"inside":true,"hit":true},{"id":"","width":292,"height":60,"inside":true,"hit":true},{"id":"","width":292,"height":60,"inside":true,"hit":true},{"id":"","width":292,"height":60,"inside":true,"hit":true},{"id":"dailyClose","width":320,"height":48,"inside":true,"hit":true}]
+PASS 390x844 daily blocks background controls
+PASS 390x844 opens reachable first task
+PASS 390x844 basket reachable in two pages
+PASS 390x844 basket return controls 44px visible hit targets [{"id":"","width":292,"height":60,"inside":true,"hit":true},{"id":"","width":292,"height":60,"inside":true,"hit":true},{"id":"","width":292,"height":60,"inside":true,"hit":true},{"id":"dailyClose","width":320,"height":48,"inside":true,"hit":true}]
+PASS 390x844 collection explains nonconsecutive visits
+PASS 390x844 return restores controls
+PASS first minute: real tutorial planting and watering progress the daily goal
+PASS first daily reward 44px visible hit targets [{"id":"dailyClaim","width":100,"height":60,"inside":true,"hit":true},{"id":"dailyClose","width":320,"height":48,"inside":true,"hit":true}]
+PASS first minute: claim real watering reward
+PASS 390x844 repeated touch does not reward before impact
+PASS 390x844 impact stores crop while recovery remains protected
+PASS 390x844 repeated touch settles one crop exactly once
+PASS 390x844 quick harvest advances actual daily produce goal
+PASS 390x844 basket consumes exactly two actual crops
+PASS 390x844 claim keeps focus inside the dialog
+PASS daily loop: three earned rewards give first stamp
+PASS daily stamp persists after real save and reload
+PASS live portrait-to-landscape rotation 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 390x844 full storage leaves ripe crop intact
+PASS 390x844 seventh-stamp story is readable
+PASS 390x844 no page errors
+PASS 844x390 farm controls 44px visible hit targets [{"id":"actionA","width":72,"height":56,"inside":true,"hit":true},{"id":"dailyOpen","width":51.421875,"height":45.078125,"inside":true,"hit":true},{"id":"farmMore","width":51.421875,"height":45.078125,"inside":true,"hit":true}]
+PASS 844x390 no page overflow
+PASS 844x390 daily controls 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"","width":234,"height":44,"inside":true,"hit":true},{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 844x390 daily blocks background controls
+PASS 844x390 opens reachable first task
+PASS 844x390 basket reachable in two pages
+PASS 844x390 basket return controls 44px visible hit targets [{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"","width":234,"height":46.375,"inside":true,"hit":true},{"id":"","width":234,"height":44,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 844x390 collection explains nonconsecutive visits
+PASS 844x390 return restores controls
+PASS 844x390 repeated touch does not reward before impact
+PASS 844x390 impact stores crop while recovery remains protected
+PASS 844x390 repeated touch settles one crop exactly once
+PASS 844x390 quick harvest advances actual daily produce goal
+PASS 844x390 basket consumes exactly two actual crops
+PASS 844x390 claim keeps focus inside the dialog
+PASS 844x390 full storage leaves ripe crop intact
+PASS 844x390 seventh-stamp story is readable
+PASS 844x390 no page errors
+PASS 1366x600 farm controls 44px visible hit targets [{"id":"dailyOpen","width":77.140625,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":77.15625,"height":54.296875,"inside":true,"hit":true}]
+PASS 1366x600 no page overflow
+PASS 1366x600 daily controls 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 daily blocks background controls
+PASS 1366x600 opens reachable first task
+PASS 1366x600 basket reachable in two pages
+PASS 1366x600 basket return controls 44px visible hit targets [{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1366x600 collection explains nonconsecutive visits
+PASS 1366x600 return restores controls
+PASS 1366x600 no page errors
+PASS 1280x640 farm controls 44px visible hit targets [{"id":"dailyOpen","width":77.140625,"height":54.296875,"inside":true,"hit":true},{"id":"farmMore","width":77.15625,"height":54.296875,"inside":true,"hit":true}]
+PASS 1280x640 no page overflow
+PASS 1280x640 daily controls 44px visible hit targets [{"id":"dailyToday","width":255.328125,"height":44,"inside":true,"hit":true},{"id":"dailyCollection","width":255.34375,"height":44,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 daily blocks background controls
+PASS 1280x640 opens reachable first task
+PASS 1280x640 basket reachable in two pages
+PASS 1280x640 basket return controls 44px visible hit targets [{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":56,"inside":true,"hit":true},{"id":"","width":220,"height":50.65625,"inside":true,"hit":true},{"id":"dailyClose","width":776,"height":44,"inside":true,"hit":true}]
+PASS 1280x640 collection explains nonconsecutive visits
+PASS 1280x640 return restores controls
+PASS 1280x640 no page errors
+R80 after: 62 passed
+[memory] scripts/test-r81-review.js attempt 1: 12158MiB free
+PASS 375x667 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":311,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":311,"h":44,"inside":true,"hit":true}]
+PASS 375x667 welcome no page overflow
+PASS 375x667 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.859375,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":51.859375,"h":54.296875,"inside":true,"hit":true}]
+PASS 375x667 farm no page overflow
+PASS 375x667 recipe reachable 44px controls [{"id":"dailyToday","w":100.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":100.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":100.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":311,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":311,"h":48,"inside":true,"hit":true}]
+PASS 375x667 recipe no page overflow
+PASS 390x844 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":326,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":326,"h":44,"inside":true,"hit":true}]
+PASS 390x844 welcome no page overflow
+PASS 390x844 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":54,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":54,"h":54.296875,"inside":true,"hit":true}]
+PASS 390x844 farm no page overflow
+PASS 390x844 recipe reachable 44px controls [{"id":"dailyToday","w":103.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":103.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":103.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":320,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":320,"h":48,"inside":true,"hit":true}]
+PASS 390x844 recipe no page overflow
+PASS 844x390 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":406.8125,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":406.8125,"h":44,"inside":true,"hit":true}]
+PASS 844x390 welcome no page overflow
+PASS 844x390 farm reachable 44px controls [{"id":"","w":94.71875,"h":46,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.421875,"h":45.078125,"inside":true,"hit":true},{"id":"farmMore","w":51.421875,"h":45.078125,"inside":true,"hit":true}]
+PASS 844x390 farm no page overflow
+PASS 844x390 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 844x390 recipe no page overflow
+PASS 430x932 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":366,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":366,"h":44,"inside":true,"hit":true}]
+PASS 430x932 welcome no page overflow
+PASS 430x932 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":59.71875,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":59.71875,"h":54.296875,"inside":true,"hit":true}]
+PASS 430x932 farm no page overflow
+PASS 430x932 recipe reachable 44px controls [{"id":"dailyToday","w":116.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":116.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":116.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":360,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":360,"h":48,"inside":true,"hit":true}]
+PASS 430x932 recipe no page overflow
+PASS 768x1024 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 768x1024 welcome no page overflow
+PASS 768x1024 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 768x1024 farm no page overflow
+PASS 768x1024 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 768x1024 recipe no page overflow
+PASS 1024x768 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1024x768 welcome no page overflow
+PASS 1024x768 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1024x768 farm no page overflow
+PASS 1024x768 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1024x768 recipe no page overflow
+PASS 1032x1376 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1032x1376 welcome no page overflow
+PASS 1032x1376 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1032x1376 farm no page overflow
+PASS 1032x1376 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1032x1376 recipe no page overflow
+PASS 1376x1032 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1376x1032 welcome no page overflow
+PASS 1376x1032 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1376x1032 farm no page overflow
+PASS 1376x1032 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1376x1032 recipe no page overflow
+PASS 1366x600 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 welcome no page overflow
+PASS 1366x600 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1366x600 farm no page overflow
+PASS 1366x600 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 recipe no page overflow
+PASS 1280x640 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":500,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":500,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 welcome no page overflow
+PASS 1280x640 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1280x640 farm no page overflow
+PASS 1280x640 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 recipe no page overflow
+JOURNEY 0 {"ready":false,"kind":"plant","moving":false,"action":"idle","sun":false}
+JOURNEY 10 {"ready":false,"kind":"harvest","moving":false,"action":"idle","sun":false}
+PASS real touch journey grew and harvested sunlight wheat without fixtures {"h":{"started":true,"sunWheat":2,"delivered":false,"choice":null,"deliveredAt":0,"wheat":2,"ready":true,"note":null},"stats":{"harvested":{"wheat":2},"fulfilledOrders":0,"totalCoinsEarned":0,"plantCount":2,"cleared":0,"collected":{},"qualitySold":0,"npcRequestsCompleted":0,"festivalOrders":0,"seasonsReached":{"春":true},"sunCatches":2}}
+PASS earned basket choices reachable 44px controls [{"id":"heirloomDoorstep","w":176,"h":155.5,"inside":true,"hit":true},{"id":"heirloomTable","w":176,"h":155.5,"inside":true,"hit":true},{"id":"dailyClose","w":360,"h":48,"inside":true,"hit":true}]
+PASS earned basket choices no page overflow
+PASS cold start to first remembered note under three real minutes
+PASS actual walk-and-impact delivery consumes exactly two wheat
+PASS chosen table story is immediately readable
+PASS unlocked note return reachable 44px controls [{"id":"dailyClose","w":390,"h":48,"inside":true,"hit":true}]
+PASS unlocked note return no page overflow
+PASS completed opening returns to the larger farm story
+PASS resting in settings blocks farm input
+PASS movement is blocked while settings are open
+PASS return from rest restores farm input
+PASS browser freeze/resume and reload retain the remembered choice
+PASS new story modules are actually in offline cache
+PASS delivery written to persistent storage
+PASS review journey has no uncaught browser errors
+PASS review journey has no HTTP errors
+PASS all observed game requests stay on the current origin
+PASS real Chromium process restart loads earned progress with network disabled
+PASS reopened note offers no duplicate delivery
+PASS iPad independently earns the basket with real input and growth
+PASS iPad delivery choices reachable 44px controls [{"id":"heirloomDoorstep","w":273,"h":155.5,"inside":true,"hit":true},{"id":"heirloomTable","w":273,"h":155.5,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS iPad delivery choices no page overflow
+PASS iPad doorstep choice earns its different note through real delivery
+PASS iPad first note under three real minutes
+PASS iPad earned note reachable 44px controls [{"id":"dailyClose","w":820,"h":48,"inside":true,"hit":true}]
+PASS iPad earned note no page overflow
+PASS iPad live landscape rotation reachable 44px controls [{"id":"dailyClose","w":820,"h":48,"inside":true,"hit":true}]
+PASS iPad live landscape rotation no page overflow
+PASS iPad live landscape farm reachable 44px controls [{"id":"","w":92.65625,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS iPad live landscape farm no page overflow
+[memory] scripts/test-rwd-matrix.js attempt 1: 12829MiB free
+== R47 RWD 9 視口矩陣守門（overlay 先關閉） ==
+  ✓ 1920x1080(desktop) 可互動元素已載入（103 個）
+  ✓ 1920x1080(desktop) 互動元素零出界（違規 0）
+  ✓ 1920x1080(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1920x1080(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1440x780(desktop) 可互動元素已載入（103 個）
+  ✓ 1440x780(desktop) 互動元素零出界（違規 0）
+  ✓ 1440x780(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1440x780(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x600(desktop) 可互動元素已載入（103 個）
+  ✓ 1366x600(desktop) 互動元素零出界（違規 0）
+  ✓ 1366x600(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x600(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x640(desktop) 可互動元素已載入（103 個）
+  ✓ 1280x640(desktop) 互動元素零出界（違規 0）
+  ✓ 1280x640(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x640(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x700(desktop) 可互動元素已載入（103 個）
+  ✓ 1366x700(desktop) 互動元素零出界（違規 0）
+  ✓ 1366x700(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x700(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x720(desktop) 可互動元素已載入（103 個）
+  ✓ 1280x720(desktop) 互動元素零出界（違規 0）
+  ✓ 1280x720(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x720(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1024x768(desktop) 可互動元素已載入（103 個）
+  ✓ 1024x768(desktop) 互動元素零出界（違規 0）
+  ✓ 1024x768(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1024x768(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 820x1180(tablet) 可互動元素已載入（103 個）
+  ✓ 820x1180(tablet) 互動元素零出界（違規 0）
+  ✓ 820x1180(tablet) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 820x1180(tablet) 水平溢出 <= 2px（實測 0）
+  ✓ 768x1024(tablet) 可互動元素已載入（103 個）
+  ✓ 768x1024(tablet) 互動元素零出界（違規 0）
+  ✓ 768x1024(tablet) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 768x1024(tablet) 水平溢出 <= 2px（實測 0）
+  ✓ 390x844(mobile) 可互動元素已載入（103 個）
+  ✓ 390x844(mobile) 互動元素零出界（違規 0）
+  ✓ 390x844(mobile) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 390x844(mobile) 水平溢出 <= 2px（實測 0）
+  ✓ 360x640(mobile) 可互動元素已載入（103 個）
+  ✓ 360x640(mobile) 互動元素零出界（違規 0）
+  ✓ 360x640(mobile) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 360x640(mobile) 水平溢出 <= 2px（實測 0）
+  ✓ 844x390(landscape) 可互動元素已載入（103 個）
+  ✓ 844x390(landscape) 互動元素零出界（違規 0）
+  ✓ 844x390(landscape) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 844x390(landscape) 水平溢出 <= 2px（實測 0）
+
+== R47 RWD 9 視口矩陣守門（overlay 開啟狀態） ==
+  ✓ 1920x1080(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1920x1080(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1920x1080(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1920x1080(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1440x780(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1440x780(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1440x780(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1440x780(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x600(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1366x600(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1366x600(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x600(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x640(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1280x640(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1280x640(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x640(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x700(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1366x700(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1366x700(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x700(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x720(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1280x720(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1280x720(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x720(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1024x768(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1024x768(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1024x768(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1024x768(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 820x1180(tablet, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 820x1180(tablet, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 820x1180(tablet, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 820x1180(tablet, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 768x1024(tablet, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 768x1024(tablet, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 768x1024(tablet, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 768x1024(tablet, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 390x844(mobile, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 390x844(mobile, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 390x844(mobile, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 390x844(mobile, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 360x640(mobile, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 360x640(mobile, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 360x640(mobile, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 360x640(mobile, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 844x390(landscape, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 844x390(landscape, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 844x390(landscape, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 844x390(landscape, overlay 未關) 水平溢出 <= 2px（實測 0）
+
+✅ R47 RWD 矩陣守門通過（9 視口 × overlay 開/關 全零違規）
+[memory] scripts/test-controls-reachability.js attempt 1: 11034MiB free
+== farm R68 控制與選單守門 ==
+  ✓ desktop-1920x1080 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1920x1080 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1920x1080 切換後整圖模式（mode=fit）
+  ✓ desktop-1920x1080 世界完整可見且 #mapScene 零內捲（scroll 1920×1080, client 1920×1080）
+  ✓ desktop-1920x1080 地圖視覺框完整落在場景內（world 1584×864, scene 1920×1080）
+  ✓ desktop-1920x1080 整圖模式 tile 仍可辨識或可切原尺寸（tile 72×72）
+  ✓ desktop-1920x1080 有載入關鍵控制
+  ✓ desktop-1920x1080 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 主場景 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1920x1080 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1920x1080 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1920x1080 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1920x1080 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1920x1080 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1920x1080 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1920x1080 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1920x1080 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1920x1080 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 農務牌 1 有載入關鍵控制
+  ✓ desktop-1920x1080 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 農務牌 2 有載入關鍵控制
+  ✓ desktop-1920x1080 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 農務牌 3 有載入關鍵控制
+  ✓ desktop-1920x1080 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 今日農務沒有翻頁
+  ✓ desktop-1920x1080 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1920x1080 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1920x1080 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1920x1080 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1920x1080 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1920x1080 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1920x1080 無 pageerror
+  ✓ desktop-1440x780 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1440x780 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1440x780 切換後整圖模式（mode=fit）
+  ✓ desktop-1440x780 世界完整可見且 #mapScene 零內捲（scroll 1440×780, client 1440×780）
+  ✓ desktop-1440x780 地圖視覺框完整落在場景內（world 1386×756, scene 1440×780）
+  ✓ desktop-1440x780 整圖模式 tile 仍可辨識或可切原尺寸（tile 63×63）
+  ✓ desktop-1440x780 有載入關鍵控制
+  ✓ desktop-1440x780 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1440x780 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1440x780 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1440x780 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1440x780 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1440x780 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1440x780 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1440x780 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1440x780 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1440x780 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 農務牌 1 有載入關鍵控制
+  ✓ desktop-1440x780 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 農務牌 2 有載入關鍵控制
+  ✓ desktop-1440x780 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 農務牌 3 有載入關鍵控制
+  ✓ desktop-1440x780 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 今日農務沒有翻頁
+  ✓ desktop-1440x780 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1440x780 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1440x780 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1440x780 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1440x780 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1440x780 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1440x780 無 pageerror
+  ✓ desktop-1366x600 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1366x600 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1366x600 切換後整圖模式（mode=fit）
+  ✓ desktop-1366x600 世界完整可見且 #mapScene 零內捲（scroll 1366×600, client 1366×600）
+  ✓ desktop-1366x600 地圖視覺框完整落在場景內（world 1056×576, scene 1366×600）
+  ✓ desktop-1366x600 整圖模式 tile 仍可辨識或可切原尺寸（tile 48×48）
+  ✓ desktop-1366x600 有載入關鍵控制
+  ✓ desktop-1366x600 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 主場景 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1366x600 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1366x600 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1366x600 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1366x600 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1366x600 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1366x600 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1366x600 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ desktop-1366x600 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1366x600 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 農務牌 1 有載入關鍵控制
+  ✓ desktop-1366x600 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 農務牌 2 有載入關鍵控制
+  ✓ desktop-1366x600 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 農務牌 3 有載入關鍵控制
+  ✓ desktop-1366x600 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 今日農務沒有翻頁
+  ✓ desktop-1366x600 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1366x600 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1366x600 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1366x600 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1366x600 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1366x600 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1366x600 無 pageerror
+  ✓ desktop-1280x640 D-pad 分流正確（primaryCoarse=false, enabled=false）
+  ✓ desktop-1280x640 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ desktop-1280x640 切換後整圖模式（mode=fit）
+  ✓ desktop-1280x640 世界完整可見且 #mapScene 零內捲（scroll 1280×640, client 1280×640）
+  ✓ desktop-1280x640 地圖視覺框完整落在場景內（world 1122×612, scene 1280×640）
+  ✓ desktop-1280x640 整圖模式 tile 仍可辨識或可切原尺寸（tile 51×51）
+  ✓ desktop-1280x640 有載入關鍵控制
+  ✓ desktop-1280x640 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1280x640 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ desktop-1280x640 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ desktop-1280x640 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ desktop-1280x640 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ desktop-1280x640 主場景 modal 關閉後解除背景 inert
+  ✓ desktop-1280x640 側欄 tabs 有載入關鍵控制
+  ✓ desktop-1280x640 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ desktop-1280x640 日誌三張農務牌 有載入關鍵控制
+  ✓ desktop-1280x640 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 農務牌 1 有載入關鍵控制
+  ✓ desktop-1280x640 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 農務牌 2 有載入關鍵控制
+  ✓ desktop-1280x640 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 農務牌 3 有載入關鍵控制
+  ✓ desktop-1280x640 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 今日農務沒有翻頁
+  ✓ desktop-1280x640 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1280x640 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ desktop-1280x640 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 建物泡泡升級入口 有載入關鍵控制
+  ✓ desktop-1280x640 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ desktop-1280x640 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ desktop-1280x640 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ desktop-1280x640 無 pageerror
+  ✓ touch-laptop-1366x640 D-pad 分流正確（primaryCoarse=true, enabled=false）
+  ✓ touch-laptop-1366x640 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ touch-laptop-1366x640 切換後整圖模式（mode=fit）
+  ✓ touch-laptop-1366x640 世界完整可見且 #mapScene 零內捲（scroll 1366×640, client 1366×640）
+  ✓ touch-laptop-1366x640 地圖視覺框完整落在場景內（world 1122×612, scene 1366×640）
+  ✓ touch-laptop-1366x640 整圖模式 tile 仍可辨識或可切原尺寸（tile 51×51）
+  ✓ touch-laptop-1366x640 有載入關鍵控制
+  ✓ touch-laptop-1366x640 11 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 11 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 主場景 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ touch-laptop-1366x640 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ touch-laptop-1366x640 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ touch-laptop-1366x640 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ touch-laptop-1366x640 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ touch-laptop-1366x640 主場景 modal 關閉後解除背景 inert
+  ✓ touch-laptop-1366x640 側欄 tabs 有載入關鍵控制
+  ✓ touch-laptop-1366x640 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 20 顆）
+  ✓ touch-laptop-1366x640 日誌三張農務牌 有載入關鍵控制
+  ✓ touch-laptop-1366x640 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 農務牌 1 有載入關鍵控制
+  ✓ touch-laptop-1366x640 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 農務牌 2 有載入關鍵控制
+  ✓ touch-laptop-1366x640 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 農務牌 3 有載入關鍵控制
+  ✓ touch-laptop-1366x640 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 今日農務沒有翻頁
+  ✓ touch-laptop-1366x640 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ touch-laptop-1366x640 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ touch-laptop-1366x640 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 建物泡泡升級入口 有載入關鍵控制
+  ✓ touch-laptop-1366x640 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ touch-laptop-1366x640 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ touch-laptop-1366x640 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ touch-laptop-1366x640 無 pageerror
+  ✓ phone-390x844 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ phone-390x844 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ phone-390x844 切換後整圖模式（mode=fit）
+  ✓ phone-390x844 世界完整可見且 #mapScene 零內捲（scroll 390×844, client 390×844）
+  ✓ phone-390x844 地圖視覺框完整落在場景內（world 352×192, scene 390×844）
+  ✓ phone-390x844 整圖模式 tile 仍可辨識或可切原尺寸（tile 16×16）
+  ✓ phone-390x844 有載入關鍵控制
+  ✓ phone-390x844 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ phone-390x844 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-390x844 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-390x844 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-390x844 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-390x844 主場景 modal 關閉後解除背景 inert
+  ✓ phone-390x844 側欄 tabs 有載入關鍵控制
+  ✓ phone-390x844 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ phone-390x844 日誌三張農務牌 有載入關鍵控制
+  ✓ phone-390x844 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 農務牌 1 有載入關鍵控制
+  ✓ phone-390x844 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 農務牌 2 有載入關鍵控制
+  ✓ phone-390x844 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 農務牌 3 有載入關鍵控制
+  ✓ phone-390x844 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 今日農務沒有翻頁
+  ✓ phone-390x844 底部工具列 有載入關鍵控制
+  ✓ phone-390x844 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ phone-390x844 設定內載入 3 條系列連結
+  ✓ phone-390x844 系列連結 1 有載入關鍵控制
+  ✓ phone-390x844 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 系列連結 2 有載入關鍵控制
+  ✓ phone-390x844 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 系列連結 3 有載入關鍵控制
+  ✓ phone-390x844 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-390x844 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-390x844 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-390x844 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-390x844 底部工具列 modal 關閉後解除背景 inert
+  ✓ phone-390x844 可由觸控農地開啟 action dock
+  ✓ phone-390x844 可建立 plant action-dock 情境
+  ✓ phone-390x844 可建立 harvest action-dock 情境
+  ✓ phone-390x844 可建立 water action-dock 情境
+  ✓ phone-390x844 可建立 clear action-dock 情境
+  ✓ phone-390x844 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ phone-390x844 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ phone-390x844 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ phone-390x844 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-390x844 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-390x844 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 建物泡泡升級入口 有載入關鍵控制
+  ✓ phone-390x844 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ phone-390x844 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-390x844 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-390x844 無 pageerror
+  ✓ tablet-820x1180 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ tablet-820x1180 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ tablet-820x1180 切換後整圖模式（mode=fit）
+  ✓ tablet-820x1180 世界完整可見且 #mapScene 零內捲（scroll 820×1180, client 820×1180）
+  ✓ tablet-820x1180 地圖視覺框完整落在場景內（world 792×432, scene 820×1180）
+  ✓ tablet-820x1180 整圖模式 tile 仍可辨識或可切原尺寸（tile 36×36）
+  ✓ tablet-820x1180 有載入關鍵控制
+  ✓ tablet-820x1180 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 主場景 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ tablet-820x1180 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ tablet-820x1180 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ tablet-820x1180 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ tablet-820x1180 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ tablet-820x1180 主場景 modal 關閉後解除背景 inert
+  ✓ tablet-820x1180 側欄 tabs 有載入關鍵控制
+  ✓ tablet-820x1180 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ tablet-820x1180 日誌三張農務牌 有載入關鍵控制
+  ✓ tablet-820x1180 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 農務牌 1 有載入關鍵控制
+  ✓ tablet-820x1180 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 農務牌 2 有載入關鍵控制
+  ✓ tablet-820x1180 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 農務牌 3 有載入關鍵控制
+  ✓ tablet-820x1180 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 今日農務沒有翻頁
+  ✓ tablet-820x1180 底部工具列 有載入關鍵控制
+  ✓ tablet-820x1180 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 19 顆）
+  ✓ tablet-820x1180 設定內載入 3 條系列連結
+  ✓ tablet-820x1180 系列連結 1 有載入關鍵控制
+  ✓ tablet-820x1180 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 系列連結 2 有載入關鍵控制
+  ✓ tablet-820x1180 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 系列連結 3 有載入關鍵控制
+  ✓ tablet-820x1180 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ tablet-820x1180 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ tablet-820x1180 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ tablet-820x1180 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ tablet-820x1180 底部工具列 modal 關閉後解除背景 inert
+  ✓ tablet-820x1180 可由觸控農地開啟 action dock
+  ✓ tablet-820x1180 可建立 plant action-dock 情境
+  ✓ tablet-820x1180 可建立 harvest action-dock 情境
+  ✓ tablet-820x1180 可建立 water action-dock 情境
+  ✓ tablet-820x1180 可建立 clear action-dock 情境
+  ✓ tablet-820x1180 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ tablet-820x1180 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ tablet-820x1180 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ tablet-820x1180 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ tablet-820x1180 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ tablet-820x1180 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 建物泡泡升級入口 有載入關鍵控制
+  ✓ tablet-820x1180 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ tablet-820x1180 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ tablet-820x1180 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ tablet-820x1180 無 pageerror
+  ✓ phone-landscape-844x390 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ phone-landscape-844x390 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ phone-landscape-844x390 切換後整圖模式（mode=fit）
+  ✓ phone-landscape-844x390 世界完整可見且 #mapScene 零內捲（scroll 844×390, client 844×390）
+  ✓ phone-landscape-844x390 地圖視覺框完整落在場景內（world 660×360, scene 844×390）
+  ✓ phone-landscape-844x390 整圖模式 tile 仍可辨識或可切原尺寸（tile 30×30）
+  ✓ phone-landscape-844x390 有載入關鍵控制
+  ✓ phone-landscape-844x390 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 主場景 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-844x390 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-844x390 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-844x390 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-844x390 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-844x390 主場景 modal 關閉後解除背景 inert
+  ✓ phone-landscape-844x390 側欄 tabs 有載入關鍵控制
+  ✓ phone-landscape-844x390 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-844x390 日誌三張農務牌 有載入關鍵控制
+  ✓ phone-landscape-844x390 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 農務牌 1 有載入關鍵控制
+  ✓ phone-landscape-844x390 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 農務牌 2 有載入關鍵控制
+  ✓ phone-landscape-844x390 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 農務牌 3 有載入關鍵控制
+  ✓ phone-landscape-844x390 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 今日農務沒有翻頁
+  ✓ phone-landscape-844x390 底部工具列 有載入關鍵控制
+  ✓ phone-landscape-844x390 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-844x390 設定內載入 3 條系列連結
+  ✓ phone-landscape-844x390 系列連結 1 有載入關鍵控制
+  ✓ phone-landscape-844x390 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 系列連結 2 有載入關鍵控制
+  ✓ phone-landscape-844x390 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 系列連結 3 有載入關鍵控制
+  ✓ phone-landscape-844x390 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-844x390 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-844x390 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-844x390 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-844x390 底部工具列 modal 關閉後解除背景 inert
+  ✓ phone-landscape-844x390 可由觸控農地開啟 action dock
+  ✓ phone-landscape-844x390 可建立 plant action-dock 情境
+  ✓ phone-landscape-844x390 可建立 harvest action-dock 情境
+  ✓ phone-landscape-844x390 可建立 water action-dock 情境
+  ✓ phone-landscape-844x390 可建立 clear action-dock 情境
+  ✓ phone-landscape-844x390 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ phone-landscape-844x390 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ phone-landscape-844x390 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ phone-landscape-844x390 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-844x390 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-844x390 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 建物泡泡升級入口 有載入關鍵控制
+  ✓ phone-landscape-844x390 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ phone-landscape-844x390 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-844x390 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-844x390 無 pageerror
+  ✓ phone-landscape-932x430 D-pad 分流正確（primaryCoarse=true, enabled=true）
+  ✓ phone-landscape-932x430 無頁級捲動／水平溢出（y=0, x=0）
+  ✓ phone-landscape-932x430 切換後整圖模式（mode=fit）
+  ✓ phone-landscape-932x430 世界完整可見且 #mapScene 零內捲（scroll 932×430, client 932×430）
+  ✓ phone-landscape-932x430 地圖視覺框完整落在場景內（world 726×396, scene 932×430）
+  ✓ phone-landscape-932x430 整圖模式 tile 仍可辨識或可切原尺寸（tile 33×33）
+  ✓ phone-landscape-932x430 有載入關鍵控制
+  ✓ phone-landscape-932x430 8 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 8 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 主場景 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-932x430 主場景「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-932x430 主場景 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-932x430 主場景 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-932x430 主場景 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-932x430 主場景 modal 關閉後解除背景 inert
+  ✓ phone-landscape-932x430 側欄 tabs 有載入關鍵控制
+  ✓ phone-landscape-932x430 側欄 tabs 5 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 側欄 tabs 5 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 側欄分頁 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-932x430 日誌三張農務牌 有載入關鍵控制
+  ✓ phone-landscape-932x430 日誌三張農務牌 6 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 日誌三張農務牌 6 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 農務牌 1 有載入關鍵控制
+  ✓ phone-landscape-932x430 農務牌 1 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 農務牌 1 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 農務牌 2 有載入關鍵控制
+  ✓ phone-landscape-932x430 農務牌 2 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 農務牌 2 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 農務牌 3 有載入關鍵控制
+  ✓ phone-landscape-932x430 農務牌 3 3 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 農務牌 3 3 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 今日農務沒有翻頁
+  ✓ phone-landscape-932x430 底部工具列 有載入關鍵控制
+  ✓ phone-landscape-932x430 底部工具列 2 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 底部工具列 2 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 底部工具列 非 modal 互動元素兩兩不相交（排除父子，共 18 顆）
+  ✓ phone-landscape-932x430 設定內載入 3 條系列連結
+  ✓ phone-landscape-932x430 系列連結 1 有載入關鍵控制
+  ✓ phone-landscape-932x430 系列連結 1 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 系列連結 1 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 系列連結 2 有載入關鍵控制
+  ✓ phone-landscape-932x430 系列連結 2 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 系列連結 2 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 系列連結 3 有載入關鍵控制
+  ✓ phone-landscape-932x430 系列連結 3 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 系列連結 3 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 底部工具列「怎麼玩」關閉鈕固定在視口內且可點
+  ✓ phone-landscape-932x430 底部工具列 modal 高於遊戲控制並攔截背景點擊（hit=howToModal, z=20000）
+  ✓ phone-landscape-932x430 底部工具列 modal 開啟時背景 17 顆控制全數 inert、可見 0 顆由 modal 攔截，焦點留在 modal
+  ✓ phone-landscape-932x430 底部工具列 modal 開啟時鍵盤、D-pad 與 A 鍵事件不改變玩家狀態
+  ✓ phone-landscape-932x430 底部工具列 modal 關閉後解除背景 inert
+  ✓ phone-landscape-932x430 可由觸控農地開啟 action dock
+  ✓ phone-landscape-932x430 可建立 plant action-dock 情境
+  ✓ phone-landscape-932x430 可建立 harvest action-dock 情境
+  ✓ phone-landscape-932x430 可建立 water action-dock 情境
+  ✓ phone-landscape-932x430 可建立 clear action-dock 情境
+  ✓ phone-landscape-932x430 種植／收成／澆水／清除 4 顆既有情境控制皆 ≥44px 且中心可命中
+  ✓ phone-landscape-932x430 action dock／D-pad 每顆按鈕 ≥44px 且中心可命中：[]
+  ✓ phone-landscape-932x430 action dock 與 D-pad 不重疊，動作選擇時暫收助手
+  ✓ phone-landscape-932x430 b_coop 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-932x430 b_coop 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 b_coop 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 b_barn 建物卡升級鈕 有載入關鍵控制
+  ✓ phone-landscape-932x430 b_barn 建物卡升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 b_barn 建物卡升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 建物泡泡升級入口 有載入關鍵控制
+  ✓ phone-landscape-932x430 建物泡泡升級入口 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 建物泡泡升級入口 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 磚資訊建物升級鈕 有載入關鍵控制
+  ✓ phone-landscape-932x430 磚資訊建物升級鈕 1 顆關鍵控制命中目標全數 ≥44px
+  ✓ phone-landscape-932x430 磚資訊建物升級鈕 1 顆關鍵控制中心皆在視口內且命中自身
+  ✓ phone-landscape-932x430 無 pageerror
+  ✓ 控制可達性精確覆蓋 339 項（實測 339）
+
+✅ R68 控制與選單守門通過（339 項／7 種裝置／視口）
+[memory] scripts/test-r82-art.js attempt 1: 11735MiB free
+PASS exact tool disclosure without invented model slug
+PASS eight independently generated source assets retained
+PASS asset hash assets/generated/r82/welcome-384.webp
+PASS asset hash assets/heirloom/table-r82.webp
+PASS asset hash assets/heirloom/doorstep-r82.webp
+PASS asset hash assets/generated/r82/paper-192.png
+PASS asset hash assets/generated/r82/farmer-96.png
+PASS asset hash docs/evidence/r82-art/farmer-64.png
+PASS asset hash assets/generated/r82/farmer-face-64.png
+PASS asset hash assets/generated/r82/logo-320.png
+PASS asset hash assets/generated/r82/basket-32.png
+PASS asset hash assets/generated/r82/note-32.png
+PASS asset hash assets/generated/r82/wheat-32.png
+PASS asset hash assets/generated/r82/stamp-32.png
+PASS asset hash assets/generated/r82/water-32.png
+PASS asset hash assets/generated/r82/seed-32.png
+PASS asset hash assets/generated/r82/sun-32.png
+PASS asset hash assets/generated/r82/tea-32.png
+PASS asset hash assets/generated/r82/icons-128.png
+PASS asset hash assets/generated/r82/app-icon-48.png
+PASS asset hash assets/generated/r82/app-icon-192.png
+PASS asset hash assets/generated/r82/app-icon-512.png
+PASS asset hash docs/art/masters/welcome.png
+PASS asset hash docs/art/masters/farmer.png
+PASS asset hash docs/art/masters/table.png
+PASS asset hash docs/art/masters/door.png
+PASS asset hash docs/art/masters/paper.png
+PASS asset hash docs/art/masters/icons.png
+PASS asset hash docs/art/masters/logo.png
+PASS asset hash docs/art/masters/app.png
+PASS new asset payload stays below 256KiB
+PASS farmer brightness and saturation double gate
+PASS decoded size, nonempty and common palette assets/generated/r82/welcome-384.webp
+PASS decoded size, nonempty and common palette assets/heirloom/table-r82.webp
+PASS decoded size, nonempty and common palette assets/heirloom/doorstep-r82.webp
+PASS decoded size, nonempty and common palette assets/generated/r82/paper-192.png
+PASS decoded size, nonempty and common palette assets/generated/r82/farmer-96.png
+PASS binary alpha and clean corners assets/generated/r82/farmer-96.png
+PASS decoded size, nonempty and common palette assets/generated/r82/farmer-face-64.png
+PASS binary alpha and clean corners assets/generated/r82/farmer-face-64.png
+PASS decoded size, nonempty and common palette assets/generated/r82/logo-320.png
+PASS binary alpha and clean corners assets/generated/r82/logo-320.png
+PASS decoded size, nonempty and common palette assets/generated/r82/basket-32.png
+PASS binary alpha and clean corners assets/generated/r82/basket-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/note-32.png
+PASS binary alpha and clean corners assets/generated/r82/note-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/wheat-32.png
+PASS binary alpha and clean corners assets/generated/r82/wheat-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/stamp-32.png
+PASS binary alpha and clean corners assets/generated/r82/stamp-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/water-32.png
+PASS binary alpha and clean corners assets/generated/r82/water-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/seed-32.png
+PASS binary alpha and clean corners assets/generated/r82/seed-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/sun-32.png
+PASS binary alpha and clean corners assets/generated/r82/sun-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/tea-32.png
+PASS binary alpha and clean corners assets/generated/r82/tea-32.png
+PASS decoded size, nonempty and common palette assets/generated/r82/icons-128.png
+PASS binary alpha and clean corners assets/generated/r82/icons-128.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-48.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-192.png
+PASS decoded size, nonempty and common palette assets/generated/r82/app-icon-512.png
+PASS welcome displays the generated farm-table background
+PASS generated Traditional Chinese logo loaded
+PASS actual farm control uses current R83 art water-32.png
+PASS actual farm control uses current R83 art note-32.png
+PASS actual farm control uses current R83 art wheat-32.png
+PASS daily task displays a native generated icon
+PASS basket page displays its real illustration
+PASS earned choice has distinct doorstep and table illustrations
+PASS doorstep story uses its own generated scene
+PASS table story uses its own generated scene
+PASS runtime has no uncaught errors or missing art
+[memory] scripts/test-r83-art.js attempt 1: 11538MiB free
+PASS actual tool named; undisclosed model slug not invented
+PASS eighteen generated masters retained
+PASS hash docs/art/masters/r83/walk.png
+PASS hash docs/art/masters/r83/actions.png
+PASS hash docs/art/masters/r83/crops.png
+PASS hash docs/art/masters/r83/world.png
+PASS hash docs/art/masters/r83/terrain.png
+PASS hash docs/art/masters/r83/portraits.png
+PASS hash docs/art/masters/r83/welcome.png
+PASS hash docs/art/masters/r83/basket.png
+PASS hash docs/art/masters/r83/table.png
+PASS hash docs/art/masters/r83/door.png
+PASS hash docs/art/masters/r83/tend.png
+PASS hash docs/art/masters/r83/panel.png
+PASS hash docs/art/masters/r83/icons.png
+PASS hash docs/art/masters/r83/logo.png
+PASS hash docs/art/masters/r83/app.png
+PASS hash docs/art/masters/r83/cropslate.png
+PASS hash docs/art/masters/r83/cropsseason.png
+PASS hash docs/art/masters/r83/npcs.png
+PASS hash assets/generated/r83/walk.png
+PASS hash assets/generated/r83/npcs.png
+PASS hash assets/generated/r83/actions.png
+PASS hash assets/generated/r83/tend.png
+PASS hash assets/generated/r83/farming-actions.png
+PASS hash assets/generated/r83/crops.png
+PASS hash assets/generated/r83/cropslate.png
+PASS hash assets/generated/r83/cropsseason.png
+PASS hash assets/generated/r83/world.png
+PASS hash assets/generated/r83/terrain.png
+PASS hash assets/generated/r83/portraits.png
+PASS hash assets/generated/r83/grey-0.png
+PASS hash assets/generated/r83/grey-1.png
+PASS hash assets/generated/r83/grey-2.png
+PASS hash assets/generated/r83/grandma-0.png
+PASS hash assets/generated/r83/grandma-1.png
+PASS hash assets/generated/r83/grandma-2.png
+PASS hash assets/generated/r83/farmer-face-64.png
+PASS hash assets/generated/r83/welcome-384.webp
+PASS hash assets/generated/r83/basket-384.webp
+PASS hash assets/generated/r83/door-r82.webp
+PASS hash assets/generated/r83/table-r82.webp
+PASS hash assets/generated/r83/panel-192.png
+PASS hash assets/generated/r83/paper-128.png
+PASS hash assets/generated/r83/icons.png
+PASS hash assets/generated/r83/basket-32.png
+PASS hash assets/generated/r83/note-32.png
+PASS hash assets/generated/r83/wheat-32.png
+PASS hash assets/generated/r83/stamp-32.png
+PASS hash assets/generated/r83/water-32.png
+PASS hash assets/generated/r83/seed-32.png
+PASS hash assets/generated/r83/sun-32.png
+PASS hash assets/generated/r83/tea-32.png
+PASS hash assets/generated/r83/logo-320.png
+PASS hash assets/generated/r83/app-icon-64.png
+PASS hash assets/generated/r83/app-icon-192.png
+PASS hash assets/generated/r83/app-icon-512.png
+PASS hash assets/heirloom/r83/table-r82.webp
+PASS hash assets/heirloom/r83/doorstep-r82.webp
+PASS brightness and saturation double gate Walk
+PASS brightness and saturation double gate Npcs
+PASS brightness and saturation double gate Actions
+PASS brightness and saturation double gate Tend
+PASS brightness and saturation double gate Crops
+PASS brightness and saturation double gate CropsLate
+PASS brightness and saturation double gate CropsSeason
+PASS brightness and saturation double gate World
+PASS brightness and saturation double gate Portraits
+PASS brightness and saturation double gate FarmerFace
+PASS brightness and saturation double gate Icons
+PASS generated image delivery payload below 1.4 MiB
+PASS Walk direction 0: six distinct poses with lower-body change
+PASS Walk direction 1: six distinct poses with lower-body change
+PASS Walk direction 2: six distinct poses with lower-body change
+PASS Walk direction 3: six distinct poses with lower-body change
+PASS Actions direction 0: six distinct poses with lower-body change
+PASS Actions direction 1: six distinct poses with lower-body change
+PASS Actions direction 2: six distinct poses with lower-body change
+PASS Actions direction 3: six distinct poses with lower-body change
+PASS Tend direction 0: six distinct poses with lower-body change
+PASS Tend direction 1: six distinct poses with lower-body change
+PASS Tend direction 2: six distinct poses with lower-body change
+PASS Tend direction 3: six distinct poses with lower-body change
+PASS new generated welcome 390x844
+PASS new straw-hat walk sprite >=40 CSS pixels 390x844
+PASS all crop atlases, ground and farm buildings use new generated assets 390x844
+PASS three direct task cards 390x844
+PASS task cards 44px and unobscured 390x844
+PASS basket and welcome have distinct art 390x844
+PASS two rendered generated leaf-light projections 390x844
+PASS light occupies the ground, no vertical pillar 390x844
+PASS new generated welcome 844x390
+PASS new straw-hat walk sprite >=40 CSS pixels 844x390
+PASS all crop atlases, ground and farm buildings use new generated assets 844x390
+PASS three direct task cards 844x390
+PASS task cards 44px and unobscured 844x390
+PASS basket and welcome have distinct art 844x390
+PASS two rendered generated leaf-light projections 844x390
+PASS light occupies the ground, no vertical pillar 844x390
+PASS new generated welcome 1032x1376
+PASS new straw-hat walk sprite >=40 CSS pixels 1032x1376
+PASS all crop atlases, ground and farm buildings use new generated assets 1032x1376
+PASS three direct task cards 1032x1376
+PASS task cards 44px and unobscured 1032x1376
+PASS basket and welcome have distinct art 1032x1376
+PASS two rendered generated leaf-light projections 1032x1376
+PASS light occupies the ground, no vertical pillar 1032x1376
+PASS new generated welcome 1366x600
+PASS new straw-hat walk sprite >=40 CSS pixels 1366x600
+PASS all crop atlases, ground and farm buildings use new generated assets 1366x600
+PASS three direct task cards 1366x600
+PASS task cards 44px and unobscured 1366x600
+PASS basket and welcome have distinct art 1366x600
+PASS two rendered generated leaf-light projections 1366x600
+PASS light occupies the ground, no vertical pillar 1366x600
+PASS no uncaught runtime errors or missing assets
+R83 VERIFIED 116 checks
+[memory] scripts/test-r84-art.js attempt 1: 10729MiB free
+PASS 320x568 opaque character >=40px, no rectangle
+PASS 320x568 seven 44px controls in exactly one row
+PASS 320x568 no horizontal overflow
+PASS 320x568 world area >=60% (0.6156)
+PASS 320x568 no right-hand test toolbar in default view
+PASS 320x568 every drawer entry remains reachable
+PASS 320x568 three chores with no page arrows
+PASS 320x568 all three chores reachable without scrolling
+PASS 320x568 all ready rewards reachable on their cards
+PASS 320x568 three claimed chores visibly stamped
+PASS 320x568 one unambiguous wheat quantity slot
+PASS 320x568 recipe action reachable without scrolling
+PASS 320x568 dialogue hides every dock child and movement
+PASS 320x568 rendered generated nonuniform leaf-light projection
+PASS 320x568 actual tree shadows in world coordinates
+PASS 320x568 table result has no journal navigation
+PASS 320x568 table story has a pure spoken reply and clears every background HUD control
+PASS 320x568 table title and reply text remain visible and uncovered
+PASS 320x568 table has distinct aftermath art
+PASS 320x568 doorstep result has no journal navigation
+PASS 320x568 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 320x568 doorstep title and reply text remain visible and uncovered
+PASS 320x568 doorstep has distinct aftermath art
+PASS 320x568 basket and two-chair porch are real world objects
+PASS 390x844 opaque character >=40px, no rectangle
+PASS 390x844 seven 44px controls in exactly one row
+PASS 390x844 no horizontal overflow
+PASS 390x844 world area >=60% (0.7477)
+PASS 390x844 no right-hand test toolbar in default view
+PASS 390x844 every drawer entry remains reachable
+PASS 390x844 three chores with no page arrows
+PASS 390x844 all three chores reachable without scrolling
+PASS 390x844 all ready rewards reachable on their cards
+PASS 390x844 three claimed chores visibly stamped
+PASS 390x844 one unambiguous wheat quantity slot
+PASS 390x844 recipe action reachable without scrolling
+PASS 390x844 dialogue hides every dock child and movement
+PASS 390x844 rendered generated nonuniform leaf-light projection
+PASS 390x844 actual tree shadows in world coordinates
+PASS 390x844 table result has no journal navigation
+PASS 390x844 table story has a pure spoken reply and clears every background HUD control
+PASS 390x844 table title and reply text remain visible and uncovered
+PASS 390x844 table has distinct aftermath art
+PASS 390x844 doorstep result has no journal navigation
+PASS 390x844 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 390x844 doorstep title and reply text remain visible and uncovered
+PASS 390x844 doorstep has distinct aftermath art
+PASS 390x844 basket and two-chair porch are real world objects
+PASS 844x390 opaque character >=40px, no rectangle
+PASS 844x390 seven 44px controls in exactly one row
+PASS 844x390 no horizontal overflow
+PASS 844x390 no right-hand test toolbar in default view
+PASS 844x390 every drawer entry remains reachable
+PASS 844x390 three chores with no page arrows
+PASS 844x390 all three chores reachable without scrolling
+PASS 844x390 all ready rewards reachable on their cards
+PASS 844x390 three claimed chores visibly stamped
+PASS 844x390 one unambiguous wheat quantity slot
+PASS 844x390 recipe action reachable without scrolling
+PASS 844x390 dialogue hides every dock child and movement
+PASS 844x390 rendered generated nonuniform leaf-light projection
+PASS 844x390 actual tree shadows in world coordinates
+PASS 844x390 table result has no journal navigation
+PASS 844x390 table story has a pure spoken reply and clears every background HUD control
+PASS 844x390 table title and reply text remain visible and uncovered
+PASS 844x390 table has distinct aftermath art
+PASS 844x390 doorstep result has no journal navigation
+PASS 844x390 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 844x390 doorstep title and reply text remain visible and uncovered
+PASS 844x390 doorstep has distinct aftermath art
+PASS 844x390 basket and two-chair porch are real world objects
+PASS 768x1024 opaque character >=40px, no rectangle
+PASS 768x1024 seven 44px controls in exactly one row
+PASS 768x1024 no horizontal overflow
+PASS 768x1024 world area >=60% (0.8667)
+PASS 768x1024 no right-hand test toolbar in default view
+PASS 768x1024 every drawer entry remains reachable
+PASS 768x1024 three chores with no page arrows
+PASS 768x1024 all three chores reachable without scrolling
+PASS 768x1024 all ready rewards reachable on their cards
+PASS 768x1024 three claimed chores visibly stamped
+PASS 768x1024 one unambiguous wheat quantity slot
+PASS 768x1024 recipe action reachable without scrolling
+PASS 768x1024 dialogue hides every dock child and movement
+PASS 768x1024 rendered generated nonuniform leaf-light projection
+PASS 768x1024 actual tree shadows in world coordinates
+PASS 768x1024 table result has no journal navigation
+PASS 768x1024 table story has a pure spoken reply and clears every background HUD control
+PASS 768x1024 table title and reply text remain visible and uncovered
+PASS 768x1024 table has distinct aftermath art
+PASS 768x1024 doorstep result has no journal navigation
+PASS 768x1024 doorstep story has a pure spoken reply and clears every background HUD control
+PASS 768x1024 doorstep title and reply text remain visible and uncovered
+PASS 768x1024 doorstep has distinct aftermath art
+PASS 768x1024 basket and two-chair porch are real world objects
+PASS 1024x768 opaque character >=40px, no rectangle
+PASS 1024x768 seven 44px controls in exactly one row
+PASS 1024x768 no horizontal overflow
+PASS 1024x768 no right-hand test toolbar in default view
+PASS 1024x768 every drawer entry remains reachable
+PASS 1024x768 three chores with no page arrows
+PASS 1024x768 all three chores reachable without scrolling
+PASS 1024x768 all ready rewards reachable on their cards
+PASS 1024x768 three claimed chores visibly stamped
+PASS 1024x768 one unambiguous wheat quantity slot
+PASS 1024x768 recipe action reachable without scrolling
+PASS 1024x768 dialogue hides every dock child and movement
+PASS 1024x768 rendered generated nonuniform leaf-light projection
+PASS 1024x768 actual tree shadows in world coordinates
+PASS 1024x768 table result has no journal navigation
+PASS 1024x768 table story has a pure spoken reply and clears every background HUD control
+AssertionError [ERR_ASSERTION]: 1024x768 table title and reply text remain visible and uncovered
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r84-art.js:9:32)
+    at run (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-r84-art.js:77:11) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

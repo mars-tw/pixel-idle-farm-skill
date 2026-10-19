@@ -1,0 +1,202 @@
+PASS R88 eight actual generated masters, undisclosed model slug is not guessed
+PASS R88 artwork hash docs/art/masters/r88/garden.png
+PASS R88 artwork hash docs/art/masters/r88/light.png
+PASS R88 artwork hash docs/art/character-sheets/miri-r88.png
+PASS R88 artwork hash docs/art/masters/r88/objects.png
+PASS R88 artwork hash docs/art/masters/r88/panel.png
+PASS R88 artwork hash docs/art/masters/r88/icons.png
+PASS R88 artwork hash docs/art/masters/r88/logo.png
+PASS R88 artwork hash docs/art/masters/r88/app.png
+PASS R88 artwork hash assets/generated/r88/garden-384.webp
+PASS R88 artwork hash assets/generated/r88/grass-32.png
+PASS R88 artwork hash assets/generated/r88/path-32.png
+PASS R88 artwork hash assets/generated/r88/soil-dry-64.png
+PASS R88 artwork hash assets/generated/r88/soil-wet-64.png
+PASS R88 artwork hash assets/generated/r88/soil-moist-64.png
+PASS R88 artwork hash assets/generated/r88/bucket-64.png
+PASS R88 artwork hash assets/generated/r88/fence-64.png
+PASS R88 artwork hash assets/generated/r88/flowers-64.png
+PASS R88 artwork hash assets/generated/r88/wheat-32.png
+PASS R88 artwork hash assets/generated/r88/basket-32.png
+PASS R88 artwork hash assets/generated/r88/water-32.png
+PASS R88 artwork hash assets/generated/r88/note-32.png
+PASS R88 artwork hash assets/generated/r88/hat-32.png
+PASS R88 artwork hash assets/generated/r88/sprout-32.png
+PASS R88 artwork hash assets/generated/r88/miri-0.png
+PASS R88 artwork hash assets/generated/r88/miri-1.png
+PASS R88 artwork hash assets/generated/r88/miri-2.png
+PASS R88 artwork hash assets/generated/r88/paper-128.png
+PASS R88 artwork hash assets/generated/r88/album-256.png
+PASS R88 artwork hash assets/generated/r88/binding-8.png
+PASS R88 artwork hash assets/generated/r88/logo-320.png
+PASS R88 artwork hash assets/generated/r88/app-icon-64.png
+PASS R88 artwork hash assets/generated/r88/app-icon-192.png
+PASS R88 artwork hash assets/generated/r88/app-icon-512.png
+PASS R88 artwork hash assets/generated/r88/leaf-light.png
+PASS R88 artwork hash assets/generated/r88/canopy-shadow.png
+PASS R88 artwork hash assets/generated/r88/walk.png
+PASS R88 artwork hash assets/generated/r88/farming-actions.png
+PASS R88 artwork hash assets/generated/r88/welcome-512.webp
+PASS R88 artwork hash assets/generated/r88/basket-512.webp
+PASS R88 artwork hash assets/generated/r88/table-result-512.webp
+PASS R88 artwork hash assets/generated/r88/doorstep-result-512.webp
+PASS R88 brightness and saturation gate assets/generated/r88/miri-0.png
+PASS R88 brightness and saturation gate assets/generated/r88/miri-1.png
+PASS R88 brightness and saturation gate assets/generated/r88/miri-2.png
+PASS R88 brightness and saturation gate assets/generated/r88/walk.png
+PASS R88 brightness and saturation gate assets/generated/r88/farming-actions.png
+PASS every retained limb pose keeps its original silhouette; basket-only color correction
+PASS retained R87: 10 generated masters, real tool and undisclosed model recorded
+PASS source/output hash docs/art/character-sheets/miri-r87.png
+PASS source/output hash docs/art/masters/r87/walk.png
+PASS source/output hash docs/art/masters/r87/actions.png
+PASS source/output hash docs/art/masters/r87/leaf.png
+PASS source/output hash docs/art/masters/r87/terrain.png
+PASS source/output hash docs/art/masters/r87/tree.png
+PASS source/output hash docs/art/masters/r87/panel.png
+PASS source/output hash docs/art/masters/r87/icons.png
+PASS source/output hash docs/art/masters/r87/logo.png
+PASS source/output hash docs/art/masters/r87/app.png
+PASS source/output hash assets/generated/r87/walk.png
+PASS source/output hash assets/generated/r87/actions.png
+PASS source/output hash assets/generated/r87/farming-actions.png
+PASS source/output hash assets/generated/r87/miri-0.png
+PASS source/output hash assets/generated/r87/miri-1.png
+PASS source/output hash assets/generated/r87/miri-2.png
+PASS source/output hash assets/generated/r87/terrain.png
+PASS source/output hash assets/generated/r87/apple-tree.png
+PASS source/output hash assets/generated/r87/leaf-light.png
+PASS source/output hash assets/generated/r87/canopy-shadow.png
+PASS source/output hash assets/generated/r87/leaf-ground.png
+PASS source/output hash assets/generated/r87/paper-128.png
+PASS source/output hash assets/generated/r87/binding-8.png
+PASS source/output hash assets/generated/r87/wheat-32.png
+PASS source/output hash assets/generated/r87/basket-32.png
+PASS source/output hash assets/generated/r87/water-32.png
+PASS source/output hash assets/generated/r87/note-32.png
+PASS source/output hash assets/generated/r87/hat-32.png
+PASS source/output hash assets/generated/r87/sprout-32.png
+PASS source/output hash assets/generated/r87/logo-320.png
+PASS source/output hash assets/generated/r87/app-icon-64.png
+PASS source/output hash assets/generated/r87/app-icon-192.png
+PASS source/output hash assets/generated/r87/app-icon-512.png
+PASS character brightness/saturation double gate walk.png
+PASS character brightness/saturation double gate actions.png
+PASS character brightness/saturation double gate farming-actions.png
+PASS character brightness/saturation double gate miri-0.png
+PASS character brightness/saturation double gate miri-1.png
+PASS character brightness/saturation double gate miri-2.png
+PASS walk 0: six actual poses with limb changes
+PASS walk 1: six actual poses with limb changes
+PASS walk 2: six actual poses with limb changes
+PASS walk 3: six actual poses with limb changes
+PASS actions 0: six actual poses with limb changes
+PASS actions 1: six actual poses with limb changes
+PASS actions 2: six actual poses with limb changes
+PASS actions 3: six actual poses with limb changes
+PASS actions 4: six actual poses with limb changes
+PASS actions 5: six actual poses with limb changes
+PASS actions 6: six actual poses with limb changes
+PASS actions 7: six actual poses with limb changes
+PASS 320x568 same-age same-stage wheat in SAME ROW, one inside light
+PASS 320x568 tree-anchored shadow casts left/down onto mission soil
+PASS 320x568 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 320x568 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 320x568 readable character, physics separate
+PASS 320x568 generated bucket, low fence and flowers are real nonblocking world art
+PASS 320x568 all album controls 44px and reachable
+PASS 320x568 resource bar FULLY hidden and one three-page navigation
+PASS 320x568 basket choice/return controls reachable
+PASS 320x568 selection visibly marked, no wheat spent before second confirmation
+PASS 320x568 explicit choice consequences and binding inset3px
+PASS 320x568 pure spoken reply, no completion seal on dialogue
+PASS 320x568 story return stays44px, inside viewport and uncovered
+PASS 320x568 story empty top is below1/8 viewport
+PASS 320x568 story blank below return is at most one eighth
+PASS 390x844 same-age same-stage wheat in SAME ROW, one inside light
+PASS 390x844 tree-anchored shadow casts left/down onto mission soil
+PASS 390x844 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 390x844 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 390x844 readable character, physics separate
+PASS 390x844 generated bucket, low fence and flowers are real nonblocking world art
+PASS 390x844 all album controls 44px and reachable
+PASS 390x844 three existing chore cards fill the page without a large paper void
+PASS 390x844 resource bar FULLY hidden and one three-page navigation
+PASS 390x844 basket choice/return controls reachable
+PASS 390x844 selection visibly marked, no wheat spent before second confirmation
+PASS 390x844 explicit choice consequences and binding inset3px
+PASS 390x844 pure spoken reply, no completion seal on dialogue
+PASS 390x844 story return stays44px, inside viewport and uncovered
+PASS 390x844 story empty top is below1/8 viewport
+PASS 390x844 story blank below return is at most one eighth
+PASS 390x844 portrait story uses at least70percent of height
+PASS 844x390 same-age same-stage wheat in SAME ROW, one inside light
+PASS 844x390 tree-anchored shadow casts left/down onto mission soil
+PASS 844x390 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 844x390 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 844x390 readable character, physics separate
+PASS 844x390 generated bucket, low fence and flowers are real nonblocking world art
+PASS 844x390 all album controls 44px and reachable
+PASS 844x390 resource bar FULLY hidden and one three-page navigation
+PASS 844x390 basket choice/return controls reachable
+PASS 844x390 selection visibly marked, no wheat spent before second confirmation
+PASS 844x390 explicit choice consequences and binding inset3px
+PASS 844x390 pure spoken reply, no completion seal on dialogue
+PASS 844x390 story return stays44px, inside viewport and uncovered
+PASS 1366x600 same-age same-stage wheat in SAME ROW, one inside light
+PASS 1366x600 tree-anchored shadow casts left/down onto mission soil
+PASS 1366x600 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 1366x600 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 1366x600 readable character, physics separate
+PASS 1366x600 generated bucket, low fence and flowers are real nonblocking world art
+PASS 1366x600 all album controls 44px and reachable
+PASS 1366x600 resource bar FULLY hidden and one three-page navigation
+PASS 1366x600 basket choice/return controls reachable
+PASS 1366x600 selection visibly marked, no wheat spent before second confirmation
+PASS 1366x600 explicit choice consequences and binding inset3px
+PASS 1366x600 pure spoken reply, no completion seal on dialogue
+PASS 1366x600 story return stays44px, inside viewport and uncovered
+PASS 1366x600 story empty top is below1/8 viewport
+PASS 430x932 same-age same-stage wheat in SAME ROW, one inside light
+PASS 430x932 tree-anchored shadow casts left/down onto mission soil
+PASS 430x932 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 430x932 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 430x932 readable character, physics separate
+PASS 430x932 generated bucket, low fence and flowers are real nonblocking world art
+PASS iphone shared store camera keeps the entire apple-tree silhouette visible
+PASS iphone store02 actual water animation with unchanged same-age comparison {"action":"water","sameAge":true,"rootHeight":96,"frame":3,"image":"url(\"http://127.0.0.1:60484/assets/generated/r89/farming-actions.png?v=r89-20261018-1\")"}
+PASS iphone store02/store06 identical visual root height
+PASS 430x932 all album controls 44px and reachable
+PASS 430x932 three existing chore cards fill the page without a large paper void
+PASS 430x932 resource bar FULLY hidden and one three-page navigation
+PASS 430x932 basket choice/return controls reachable
+PASS 430x932 selection visibly marked, no wheat spent before second confirmation
+PASS 430x932 explicit choice consequences and binding inset3px
+PASS 430x932 pure spoken reply, no completion seal on dialogue
+PASS 430x932 story return stays44px, inside viewport and uncovered
+PASS 430x932 story empty top is below1/8 viewport
+PASS 430x932 story blank below return is at most one eighth
+PASS 430x932 portrait story uses at least70percent of height
+PASS 1032x1376 same-age same-stage wheat in SAME ROW, one inside light
+PASS 1032x1376 tree-anchored shadow casts left/down onto mission soil
+PASS 1032x1376 actual nearest tree projection intersects BOTH same-row mission seedlings
+PASS 1032x1376 moist seed bed is visibly darker than the comparison pair and dry beds
+PASS 1032x1376 readable character, physics separate
+PASS 1032x1376 generated bucket, low fence and flowers are real nonblocking world art
+PASS ipad shared store camera keeps the entire apple-tree silhouette visible
+PASS ipad store02 actual water animation with unchanged same-age comparison {"action":"water","sameAge":true,"rootHeight":138.65625,"frame":3,"image":"url(\"http://127.0.0.1:60484/assets/generated/r89/farming-actions.png?v=r89-20261018-1\")"}
+PASS ipad store02/store06 identical visual root height
+PASS 1032x1376 all album controls 44px and reachable
+PASS 1032x1376 three existing chore cards fill the page without a large paper void
+PASS 1032x1376 resource bar FULLY hidden and one three-page navigation
+PASS 1032x1376 basket choice/return controls reachable
+PASS 1032x1376 selection visibly marked, no wheat spent before second confirmation
+PASS 1032x1376 explicit choice consequences and binding inset3px
+PASS 1032x1376 pure spoken reply, no completion seal on dialogue
+PASS 1032x1376 story return stays44px, inside viewport and uncovered
+PASS 1032x1376 story empty top is below1/8 viewport
+PASS 1032x1376 story blank below return is at most one eighth
+PASS 1032x1376 existing seating illustration fills tablet story void
+PASS 1032x1376 portrait story uses at least70percent of height
+PASS no page errors or missing artwork
+VERIFIED R88 201 checks, browser/server closed

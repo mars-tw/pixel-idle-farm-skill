@@ -1,0 +1,6 @@
+JOURNEY 0 {"ready":false,"kind":"plant","moving":false,"action":"idle","sun":false}
+JOURNEY 10 {"ready":false,"kind":"plant","moving":false,"action":"walk","sun":false}
+JOURNEY 20 {"ready":false,"kind":"plant","moving":false,"action":"walk","sun":false}
+JOURNEY 30 {"ready":false,"kind":"plant","moving":false,"action":"walk","sun":false}
+JOURNEY 40 {"ready":false,"kind":"plant","moving":false,"action":"walk","sun":false}
+JOURNEY 50 {"ready":false,"kind":"plant","moving":false,"action":"walk","sun":false}
