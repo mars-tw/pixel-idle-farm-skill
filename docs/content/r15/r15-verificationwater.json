@@ -1,0 +1,1276 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "river_carp pre answer hidden until reveal",
+    "river_carp pre title hides answer",
+    "river_carp practice pre line to opaque bobber top <=3px (actual 0.919)",
+    "river_carp active answer hidden until reveal",
+    "river_carp active title hides answer",
+    "river_carp practice active line to opaque bobber top <=3px (actual 0.461)",
+    "river_carp missed answer hidden until reveal",
+    "river_carp missed title hides answer",
+    "river_carp practice missed line to opaque bobber top <=3px (actual 0.919)",
+    "river_carp hidden replay changes no fish, cumulative, notes or ingredients",
+    "river_carp early failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_carp active line to opaque bobber top <=3px (actual 0.000)",
+    "river_carp late failure grants zero",
+    "river_carp late failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_carp normal replay line to opaque bobber top <=3px (actual 0.461)",
+    "silver_dace pre answer hidden until reveal",
+    "silver_dace pre title hides answer",
+    "silver_dace practice pre line to opaque bobber top <=3px (actual 0.919)",
+    "silver_dace active answer hidden until reveal",
+    "silver_dace active title hides answer",
+    "silver_dace practice active line to opaque bobber top <=3px (actual 0.259)",
+    "silver_dace missed answer hidden until reveal",
+    "silver_dace missed title hides answer",
+    "silver_dace practice missed line to opaque bobber top <=3px (actual 0.919)",
+    "silver_dace hidden replay changes no fish, cumulative, notes or ingredients",
+    "silver_dace early failure line to opaque bobber top <=3px (actual 0.000)",
+    "silver_dace active line to opaque bobber top <=3px (actual 0.000)",
+    "silver_dace late failure grants zero",
+    "silver_dace late failure line to opaque bobber top <=3px (actual 0.000)",
+    "silver_dace normal replay line to opaque bobber top <=3px (actual 0.259)",
+    "river_perch pre answer hidden until reveal",
+    "river_perch pre title hides answer",
+    "river_perch practice pre line to opaque bobber top <=3px (actual 0.919)",
+    "river_perch active answer hidden until reveal",
+    "river_perch active title hides answer",
+    "river_perch practice active line to opaque bobber top <=3px (actual 1.190)",
+    "river_perch missed answer hidden until reveal",
+    "river_perch missed title hides answer",
+    "river_perch practice missed line to opaque bobber top <=3px (actual 0.919)",
+    "river_perch hidden replay changes no fish, cumulative, notes or ingredients",
+    "river_perch early failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_perch active line to opaque bobber top <=3px (actual 0.000)",
+    "river_perch late failure grants zero",
+    "river_perch late failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_perch normal replay line to opaque bobber top <=3px (actual 1.190)",
+    "no uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-pre.png",
+      "sha256": "7c3b90c4bfbb067174eb20227b41e72fb50493f8845d2d6cc55c8dde43188bc9",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "0",
+        "motion": "wide-rise",
+        "line": "M105.45833333333333,170.04166666666666 Q144.47916666666666,179.04166666666666 183.5,62.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-active.png",
+      "sha256": "492569d712643b06b7c36e0231b399534c5eafa9c13c2901b69602284377dabf",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "closed-rings",
+        "line": "M105.45833333333333,170.04166666666666 Q138.47916666666666,179.04166666666666 171.5,92.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-missed.png",
+      "sha256": "43d7f58428bbbbc7f3c4e0585ab1075c8853dcb5ec9ca65a971e783fc7de159b",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "5",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-reveal.png",
+      "sha256": "5bef4ab2e7b2fc341a9b0c951aee2429667273e5d2ed1870df70d4b1bb76a2b0",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "5",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "河鯉・寬尾攪起濁水，等浮標沉下 河鯉慢慢擺尾，攪起一團濁水。碎水紋向浮標合攏，寬尾翻起、浮標沉下時再提竿。 魚簍、累計釣獲與筆記頁數都不變。",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-early-regression.png",
+      "sha256": "c3283ceeff273cbe5c3b7390d15ade078d93d8585a97b66e4ff125bb58895520",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "wide-rise",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-active-regression.png",
+      "sha256": "e363a612be26cb4715c6c5f638a500917c0693f60321ff8dfc38e6cf88f5008e",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "closed-rings",
+        "line": "M103.45833333333333,172.04166666666666 Q137.47916666666666,181.04166666666666 171.5,91",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "提竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-late-regression.png",
+      "sha256": "ea0582e70dab0df7fc552e1add46a224f7adc5a5e0824566cd35e859462eb4b4",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "undefined",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-replay-regression.png",
+      "sha256": "b903012fa129fa52bd0be11ccc92a9e2e3a118e5f10af65c95f34ff1389e6f64",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "motion": "closed-rings",
+        "line": "M105.45833333333333,170.04166666666666 Q138.47916666666666,179.04166666666666 171.5,92.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "pondPractice",
+            "text": "遮字練習，只看水面",
+            "disabled": false
+          },
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-pre.png",
+      "sha256": "d7281a2aed6f8934e282fddbcf18f9b72352e7df663ee59decfe5606ebd5a409",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "0",
+        "motion": "straight-probe",
+        "line": "M105.45833333333333,170.04166666666666 Q144.47916666666666,179.04166666666666 183.5,62.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-active.png",
+      "sha256": "b9a936c0f9037670bff72725ac7719f7b565f7a5043f396c4cdf3daba78d5a38",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "1",
+        "motion": "short-splash",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,100.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-missed.png",
+      "sha256": "24472eb1e3d2c59171646bbc4637d2c6e472dff049e31dba7af0ae752a2cbc69",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "2",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-reveal.png",
+      "sha256": "b2ecf9941a1fffcc2031ea701d341b83c610e7d96a71e3e5c35d890d249b80e9",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "2",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "銀鯽・魚嘴啄水，短水花裡提竿 銀鯽的小嘴朝上啄水，幾滴碎水花跳起來。水花還在時提竿才來得及，等水花散掉就晚了。 魚簍、累計釣獲與筆記頁數都不變。",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-early-regression.png",
+      "sha256": "39ae1dc325fa27944a97e4f796df930e0c1d2c2ef0805b2388fdc44cda4e2011",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "straight-probe",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-active-regression.png",
+      "sha256": "1f5db49416d6f6e6fc64872862e8b18a0f73e208f1c5ec5416e921900496e568",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "1",
+        "motion": "short-splash",
+        "line": "M103.45833333333333,152.54166666666666 Q143.47916666666666,161.54166666666666 183.5,99",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "提竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-late-regression.png",
+      "sha256": "b1c34306cafde1128fabea69c88c7c5f0fad52e1dc1816e026c86d306087b8d6",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "undefined",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-replay-regression.png",
+      "sha256": "73936a54cd29be1ffad4a2ad4a1946f267baced32444c1215855b10973130519",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "motion": "short-splash",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,100.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "pondPractice",
+            "text": "遮字練習，只看水面",
+            "disabled": false
+          },
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-pre.png",
+      "sha256": "4894154c38d941dec75e904c3ee8dc7aa9e51ea0a99559503722cb639aaa9f33",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "0",
+        "motion": "side-drag",
+        "line": "M105.45833333333333,170.04166666666666 Q144.47916666666666,179.04166666666666 183.5,62.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-active.png",
+      "sha256": "c4ac6b90cb3ac96addf283da77765cbf28c96f14d00817ba2fac3391586c3443",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "3",
+        "motion": "straight-wake",
+        "line": "M94.625,133.20833333333334 Q172.0625,142.20833333333334 249.5,92.1875",
+        "fisher": "2",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-missed.png",
+      "sha256": "3c7c1d0b770fc8782d6307767ebe6d729ab01764e339170747ce6a5fa0a074ff",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-reveal.png",
+      "sha256": "b22a41bca45bcd30fe379cf14bde7db5170f64c9fa170686b73eac593d73c786",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "溪鱸・魚影轉身，等尾流展開 溪鱸先彎身轉向，魚影拖出彎彎的水痕。浮標沉下去時還別急；等魚影衝向一側、V形尾流向兩側展開，再把竿子提起來。 魚簍、累計釣獲與筆記頁數都不變。",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-early-regression.png",
+      "sha256": "b3bf7d6b6aad7a7f5ed75dda3232b3d1e523c458cb4678756226ff1e5438d545",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "side-drag",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-active-regression.png",
+      "sha256": "dcca653eb1e6567d9a16ccad7badcf79f5b1c5fc1d338b2dbbe5a0479d949af9",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "3",
+        "motion": "straight-wake",
+        "line": "M92.625,135.20833333333334 Q171.0625,144.20833333333334 249.5,91",
+        "fisher": "2",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "提竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-late-regression.png",
+      "sha256": "dcd6968f0b3a51221fb3835d182330401fc514ee7d746336dcf3cc84cba1f8c3",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "undefined",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-replay-regression.png",
+      "sha256": "f1a2b5be039a0a53ef91a7aa90a40978b06f8d96101c8576ab729f158212cbaa",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "motion": "straight-wake",
+        "line": "M94.625,133.20833333333334 Q172.0625,142.20833333333334 249.5,92.1875",
+        "fisher": "2",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "pondPractice",
+            "text": "遮字練習，只看水面",
+            "disabled": false
+          },
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Chapter/dock access and ingredients only. Picnic and earned-note fixtures are produced by this round real UI journey."
+}

@@ -1,0 +1,59 @@
+{
+  "status": "VERIFIED",
+  "verifiedAt": "2026-10-19T15:00:26.069579+00:00",
+  "version": "0.1.38",
+  "appVersion": "content-r15-20261019-1",
+  "branch": "main",
+  "fullRegression": "docs/content/r15/regression-reconciled.json",
+  "commands": 38,
+  "allExitCodesZero": true,
+  "finalSourceAndAssetHashesVerified": true,
+  "jsSyntaxFiles": 142,
+  "reviewImages": 15,
+  "protectedFiles": 334,
+  "originalStoresUnchanged": 44,
+  "deletedOldMedia": 1826,
+  "freedOriginalBytes": 662940682,
+  "retainedValidationMedia": 2402,
+  "performance": {
+    "pond/1366x768": {
+      "runsP95Ms": [
+        16.7,
+        16.8,
+        16.7
+      ],
+      "medianP95Ms": 16.7
+    },
+    "pond/390x844": {
+      "runsP95Ms": [
+        16.7,
+        16.7,
+        16.7
+      ],
+      "medianP95Ms": 16.7
+    },
+    "serving/1366x768": {
+      "runsP95Ms": [
+        16.7,
+        16.8,
+        16.7
+      ],
+      "medianP95Ms": 16.7
+    },
+    "serving/390x844": {
+      "runsP95Ms": [
+        16.7,
+        16.8,
+        16.8
+      ],
+      "medianP95Ms": 16.8
+    }
+  },
+  "trust": "Headless local execution on concurrent host. No physical-device, human-test, clean-machine, Apple or independent Muse score claimed.",
+  "blocked": [
+    "physical iPhone/iPad and airplane-mode touch",
+    "human/parent-child usability and blind recognition",
+    "clean-host performance",
+    "independent Muse score >=8"
+  ]
+}

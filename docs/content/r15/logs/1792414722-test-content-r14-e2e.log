@@ -1,0 +1,275 @@
+PASS cancel retains every meal and ingredient
+PASS cancel visible material receipt
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant wrong flavor does not match
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant one complete same-size basket in all three frames
+PASS merchant identical basket pixels from giver to receiver
+PASS merchant evidence captures actual approach, reach and impact
+PASS merchant three real rendered delivery phases
+PASS merchant fixed sprite height and feet 0
+PASS merchant fixed sprite height and feet 1
+PASS merchant correct flavor earns keepsake
+PASS merchant matched visible hit targets >=44px
+PASS merchant matched no keyboard instructions
+PASS merchant first/wrong/matched are actual recorded deliveries
+PASS merchant recorded wrong dialogue visible in journal
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder wrong flavor does not match
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder one complete same-size basket in all three frames
+PASS elder identical basket pixels from giver to receiver
+PASS elder evidence captures actual approach, reach and impact
+PASS elder three real rendered delivery phases
+PASS elder fixed sprite height and feet 0
+PASS elder fixed sprite height and feet 1
+PASS elder correct flavor earns keepsake
+PASS elder matched visible hit targets >=44px
+PASS elder matched no keyboard instructions
+PASS elder first/wrong/matched are actual recorded deliveries
+PASS elder recorded wrong dialogue visible in journal
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child wrong flavor does not match
+PASS child no consumption before contact
+PASS child one meal consumed at impact
+PASS child reached actual resident
+PASS child one complete same-size basket in all three frames
+PASS child identical basket pixels from giver to receiver
+PASS child evidence captures actual approach, reach and impact
+PASS child three real rendered delivery phases
+PASS child fixed sprite height and feet 0
+PASS child fixed sprite height and feet 1
+PASS child correct flavor earns keepsake
+PASS child matched visible hit targets >=44px
+PASS child matched no keyboard instructions
+PASS child first/wrong/matched are actual recorded deliveries
+PASS child recorded wrong dialogue visible in journal
+PASS merchant no permanent text label
+PASS merchant full history and personal object survive reload
+PASS elder no permanent text label
+PASS elder full history and personal object survive reload
+PASS child no permanent text label
+PASS child full history and personal object survive reload
+PASS three unknown silhouettes before first catch
+PASS locked notebook reveals no observation or name
+PASS consulting notes never resets the active cast clock
+PASS same continuous fishing save starts with three locked notes
+PASS opening initial notebook preserves this actual cast clock
+PASS early river_carp grants no fish
+PASS river_carp species-specific clue before bite
+PASS river_carp visible active reel signal
+PASS river_carp optional clues closed; no timing answer
+PASS river_carp visible Miri holding fishing rod
+PASS river_carp actual impact reel earns fish and note
+PASS river_carp notebook delta from actual capture
+PASS river_carp receipt names this species count
+PASS river_carp total basket UI adds exactly one independently of species count
+PASS only earned observations unlocked
+PASS unlocked river_carp shows same colored fish
+PASS river_carp catch and note survive reload
+PASS same first-catch save reloads exactly one readable observation
+PASS same saved basket visibly progresses 1 then 2 then 3 fish
+PASS early silver_dace grants no fish
+PASS silver_dace species-specific clue before bite
+PASS silver_dace visible active reel signal
+PASS silver_dace optional clues closed; no timing answer
+PASS silver_dace visible Miri holding fishing rod
+PASS silver_dace actual impact reel earns fish and note
+PASS silver_dace notebook delta from actual capture
+PASS silver_dace receipt names this species count
+PASS silver_dace total basket UI adds exactly one independently of species count
+PASS only earned observations unlocked
+PASS unlocked silver_dace shows same colored fish
+PASS silver_dace catch and note survive reload
+PASS same saved basket visibly progresses 1 then 2 then 3 fish
+PASS early river_perch grants no fish
+PASS river_perch species-specific clue before bite
+PASS river_perch visible active reel signal
+PASS river_perch optional clues closed; no timing answer
+PASS river_perch visible Miri holding fishing rod
+PASS river_perch actual impact reel earns fish and note
+PASS river_perch notebook delta from actual capture
+PASS river_perch receipt names this species count
+PASS river_perch total basket UI adds exactly one independently of species count
+PASS only earned observations unlocked
+PASS unlocked river_perch shows same colored fish
+PASS river_perch catch and note survive reload
+PASS same saved basket visibly progresses 1 then 2 then 3 fish
+PASS river_carp learned cast hides timing answers
+PASS river_carp learned real-clock repeat adds one fish, no duplicate note
+PASS each repeated catch increments total basket exactly once
+PASS all three unique notebook pages survive repeat reload
+PASS silver_dace learned cast hides timing answers
+PASS silver_dace learned real-clock repeat adds one fish, no duplicate note
+PASS each repeated catch increments total basket exactly once
+PASS all three unique notebook pages survive repeat reload
+PASS river_perch learned cast hides timing answers
+PASS river_perch learned real-clock repeat adds one fish, no duplicate note
+PASS each repeated catch increments total basket exactly once
+PASS all three unique notebook pages survive repeat reload
+PASS late river_carp earns no fish or note
+PASS late silver_dace earns no fish or note
+PASS late river_perch earns no fish or note
+PASS merchant one packed basket
+PASS elder one packed basket
+PASS child one packed basket
+PASS three packed baskets survive reload
+PASS first choice not preselected
+PASS cannot send before choosing
+PASS child exact selected recipient on action
+PASS lifting does not write a serving
+PASS phone-memory-wrong-child-lift.png subtitle to controls blank gap <=60px
+PASS phone-memory-wrong-child-lift.png active skip control
+PASS phone-memory-wrong-child-carry.png subtitle to controls blank gap <=60px
+PASS phone-memory-wrong-child-carry.png active skip control
+PASS phone-memory-wrong-child-received.png subtitle to controls blank gap <=60px
+PASS phone-memory-wrong-child-received.png active skip control
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS wrong flavor yields own response
+PASS wrong portion visibly placed at table center
+PASS wrong plate not counted as guest served
+PASS correct dish still available after wrong
+PASS wrong physical sour portion now empty
+PASS all three unserved guests stay waiting
+PASS fourth physical portion pays bread and berry exactly once
+PASS visible fourth portion material readback
+PASS child exact selected recipient on action
+PASS lifting does not write a serving
+PASS phone-memory-corrected-child-lift.png subtitle to controls blank gap <=60px
+PASS phone-memory-corrected-child-lift.png active skip control
+PASS phone-memory-corrected-child-carry.png subtitle to controls blank gap <=60px
+PASS phone-memory-corrected-child-carry.png active skip control
+PASS phone-memory-corrected-child-received.png subtitle to controls blank gap <=60px
+PASS phone-memory-corrected-child-received.png active skip control
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS merchant exact selected recipient on action
+PASS lifting does not write a serving
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS elder exact selected recipient on action
+PASS lifting does not write a serving
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS wrong then corrected route completes all three
+PASS history accurately named and counts all four actual servings
+PASS merchant exact selected recipient on action
+PASS lifting does not write a serving
+PASS phone-memory-merchant-lift.png subtitle to controls blank gap <=60px
+PASS phone-memory-merchant-lift.png active skip control
+PASS phone-memory-merchant-carry.png subtitle to controls blank gap <=60px
+PASS phone-memory-merchant-carry.png active skip control
+PASS phone-memory-merchant-received.png subtitle to controls blank gap <=60px
+PASS phone-memory-merchant-received.png active skip control
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS merchant taste recalls earned gift
+PASS no automatic next answer after merchant
+PASS elder exact selected recipient on action
+PASS lifting does not write a serving
+PASS phone-memory-elder-lift.png subtitle to controls blank gap <=60px
+PASS phone-memory-elder-lift.png active skip control
+PASS phone-memory-elder-carry.png subtitle to controls blank gap <=60px
+PASS phone-memory-elder-carry.png active skip control
+PASS phone-memory-elder-received.png subtitle to controls blank gap <=60px
+PASS phone-memory-elder-received.png active skip control
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS elder taste recalls earned gift
+PASS no automatic next answer after elder
+PASS child exact selected recipient on action
+PASS lifting does not write a serving
+PASS phone-memory-child-lift.png subtitle to controls blank gap <=60px
+PASS phone-memory-child-lift.png active skip control
+PASS phone-memory-child-carry.png subtitle to controls blank gap <=60px
+PASS phone-memory-child-carry.png active skip control
+PASS phone-memory-child-received.png subtitle to controls blank gap <=60px
+PASS phone-memory-child-received.png active skip control
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS child taste recalls earned gift
+PASS no automatic next answer after child
+PASS finished picnic cannot serve again
+PASS clear recorded completion action
+PASS all residents marked served
+PASS all portions used once
+PASS no shared label when all dishes individually served
+PASS same base two choices change stored reply
+PASS exactly three actual choices in journal
+PASS actual three servings survive reload
+PASS reopening saved table cannot resend
+PASS 320 memory visible hit targets >=44px
+PASS 320 memory no keyboard instructions
+PASS 320 gathering visible hit targets >=44px
+PASS 320 gathering no keyboard instructions
+PASS 320 pond visible hit targets >=44px
+PASS 320 pond no keyboard instructions
+PASS 844 memory visible hit targets >=44px
+PASS 844 memory no keyboard instructions
+PASS 844 gathering visible hit targets >=44px
+PASS 844 gathering no keyboard instructions
+PASS 844 pond visible hit targets >=44px
+PASS 844 pond no keyboard instructions
+PASS 768 memory visible hit targets >=44px
+PASS 768 memory no keyboard instructions
+PASS 768 gathering visible hit targets >=44px
+PASS 768 gathering no keyboard instructions
+PASS 768 pond visible hit targets >=44px
+PASS 768 pond no keyboard instructions
+PASS 1032 memory visible hit targets >=44px
+PASS 1032 memory no keyboard instructions
+PASS 1032 gathering visible hit targets >=44px
+PASS 1032 gathering no keyboard instructions
+PASS 1032 pond visible hit targets >=44px
+PASS 1032 pond no keyboard instructions
+PASS 1366 memory visible hit targets >=44px
+PASS 1366 memory no keyboard instructions
+PASS 1366 gathering visible hit targets >=44px
+PASS 1366 gathering no keyboard instructions
+PASS 1366 pond visible hit targets >=44px
+PASS 1366 pond no keyboard instructions
+PASS all thirteen versioned R13 runtime assets actually precached
+PASS all twelve R12 generated assets precached
+PASS all three R11 generated sprites precached
+PASS all 16 R10 generated assets precached
+PASS all 24 R9 sprites precached
+PASS new water loads on first offline pond visit
+PASS actual CSS riverbank decodes its matching native grid while offline
+PASS merchant exact selected recipient on action
+PASS lifting does not write a serving
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS merchant exact selected recipient on action
+PASS lifting does not write a serving
+PASS every unserved guest has an actual waiting pose after impact
+PASS reply screen hides all future choices
+PASS impact commits one serving
+PASS zero browser page errors

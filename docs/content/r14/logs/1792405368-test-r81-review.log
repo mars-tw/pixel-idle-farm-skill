@@ -1,0 +1,95 @@
+PASS 375x667 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":324,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":324,"h":44,"inside":true,"hit":true}]
+PASS 375x667 welcome no page overflow
+PASS 375x667 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.859375,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":51.859375,"h":54.296875,"inside":true,"hit":true}]
+PASS 375x667 farm no page overflow
+PASS 375x667 recipe reachable 44px controls [{"id":"dailyToday","w":109.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":109.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":109.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":339,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":339,"h":48,"inside":true,"hit":true}]
+PASS 375x667 recipe no page overflow
+PASS 390x844 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":339,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":339,"h":44,"inside":true,"hit":true}]
+PASS 390x844 welcome no page overflow
+PASS 390x844 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":54,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":54,"h":54.296875,"inside":true,"hit":true}]
+PASS 390x844 farm no page overflow
+PASS 390x844 recipe reachable 44px controls [{"id":"dailyToday","w":112.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":112.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":112.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":348,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":348,"h":48,"inside":true,"hit":true}]
+PASS 390x844 recipe no page overflow
+PASS 844x390 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":469.203125,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":469.203125,"h":44,"inside":true,"hit":true}]
+PASS 844x390 welcome no page overflow
+PASS 844x390 farm reachable 44px controls [{"id":"","w":94.71875,"h":46,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":51.421875,"h":45.078125,"inside":true,"hit":true},{"id":"farmMore","w":51.421875,"h":45.078125,"inside":true,"hit":true}]
+PASS 844x390 farm no page overflow
+PASS 844x390 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 844x390 recipe no page overflow
+PASS 430x932 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":379,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":379,"h":44,"inside":true,"hit":true}]
+PASS 430x932 welcome no page overflow
+PASS 430x932 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":59.71875,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":59.71875,"h":54.296875,"inside":true,"hit":true}]
+PASS 430x932 farm no page overflow
+PASS 430x932 recipe reachable 44px controls [{"id":"dailyToday","w":126,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":126,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":126,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":388,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":388,"h":48,"inside":true,"hit":true}]
+PASS 430x932 recipe no page overflow
+PASS 768x1024 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":717,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":717,"h":44,"inside":true,"hit":true}]
+PASS 768x1024 welcome no page overflow
+PASS 768x1024 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"actionA","w":72,"h":56,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 768x1024 farm no page overflow
+PASS 768x1024 recipe reachable 44px controls [{"id":"dailyToday","w":238.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":238.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":238.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":726,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":726,"h":48,"inside":true,"hit":true}]
+PASS 768x1024 recipe no page overflow
+PASS 1024x768 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":984,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":984,"h":44,"inside":true,"hit":true}]
+PASS 1024x768 welcome no page overflow
+PASS 1024x768 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1024x768 farm no page overflow
+PASS 1024x768 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1024x768 recipe no page overflow
+PASS 1032x1376 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":981,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":981,"h":44,"inside":true,"hit":true}]
+PASS 1032x1376 welcome no page overflow
+PASS 1032x1376 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1032x1376 farm no page overflow
+PASS 1032x1376 recipe reachable 44px controls [{"id":"dailyToday","w":326.65625,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":326.671875,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":326.671875,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":990,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":990,"h":48,"inside":true,"hit":true}]
+PASS 1032x1376 recipe no page overflow
+PASS 1376x1032 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":1336,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":1336,"h":44,"inside":true,"hit":true}]
+PASS 1376x1032 welcome no page overflow
+PASS 1376x1032 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1376x1032 farm no page overflow
+PASS 1376x1032 recipe reachable 44px controls [{"id":"dailyToday","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":181.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":181.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":554,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":554,"h":48,"inside":true,"hit":true}]
+PASS 1376x1032 recipe no page overflow
+PASS 1366x600 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":1326,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":1326,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 welcome no page overflow
+PASS 1366x600 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1366x600 farm no page overflow
+PASS 1366x600 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 1366x600 recipe no page overflow
+PASS 1280x640 welcome reachable 44px controls [{"id":"","w":44,"h":44,"inside":true,"hit":true},{"id":"worldSunBegin","w":1240,"h":44,"inside":true,"hit":true},{"id":"worldBegin","w":1240,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 welcome no page overflow
+PASS 1280x640 farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS 1280x640 farm no page overflow
+PASS 1280x640 recipe reachable 44px controls [{"id":"dailyToday","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"dailyCollection","w":255.34375,"h":44,"inside":true,"hit":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"inside":true,"hit":true},{"id":"heirloomGuide","w":481.125,"h":44,"inside":true,"hit":true},{"id":"dailyClose","w":776,"h":44,"inside":true,"hit":true}]
+PASS 1280x640 recipe no page overflow
+JOURNEY 0 {"ready":false,"kind":"plant","moving":false,"action":"idle","sun":false}
+JOURNEY 10 {"ready":false,"kind":"harvest","moving":false,"action":"idle","sun":false}
+PASS real touch journey grew and harvested sunlight wheat without fixtures {"h":{"started":true,"sunWheat":2,"delivered":false,"choice":null,"deliveredAt":0,"wheat":2,"ready":true,"note":null},"stats":{"harvested":{"wheat":2},"fulfilledOrders":0,"totalCoinsEarned":0,"plantCount":2,"cleared":0,"collected":{},"qualitySold":0,"npcRequestsCompleted":0,"festivalOrders":0,"seasonsReached":{"春":true},"sunCatches":2}}
+PASS earned basket choices reachable 44px controls [{"id":"heirloomDoorstep","w":190,"h":175,"inside":true,"hit":true},{"id":"heirloomTable","w":190,"h":175,"inside":true,"hit":true},{"id":"dailyClose","w":388,"h":48,"inside":true,"hit":true}]
+PASS earned basket choices no page overflow
+PASS selection is visible and does not deliver before confirmation
+PASS cold start to first remembered note under three real minutes
+PASS actual walk-and-impact delivery consumes exactly two wheat
+PASS chosen table story is immediately readable
+PASS unlocked note return reachable 44px controls [{"id":"dailyClose","w":390,"h":48,"inside":true,"hit":true}]
+PASS unlocked note return no page overflow
+PASS completed opening returns to the larger farm story
+PASS resting in settings blocks farm input
+PASS movement is blocked while settings are open
+PASS return from rest restores farm input
+PASS browser freeze/resume and reload retain the remembered choice
+PASS new story modules are actually in offline cache
+PASS delivery written to persistent storage
+PASS review journey has no uncaught browser errors
+PASS review journey has no HTTP errors
+PASS all observed game requests stay on the current origin
+PASS real Chromium process restart loads earned progress with network disabled
+PASS reopened note offers no duplicate delivery
+PASS iPad independently earns the basket with real input and growth
+PASS iPad delivery choices reachable 44px controls [{"id":"heirloomDoorstep","w":491,"h":175,"inside":true,"hit":true},{"id":"heirloomTable","w":491,"h":175,"inside":true,"hit":true},{"id":"dailyClose","w":990,"h":48,"inside":true,"hit":true}]
+PASS iPad delivery choices no page overflow
+PASS selection is visible and does not deliver before confirmation
+PASS iPad doorstep choice earns its different note through real delivery
+PASS iPad first note under three real minutes
+PASS iPad earned note reachable 44px controls [{"id":"dailyClose","w":820,"h":48,"inside":true,"hit":true}]
+PASS iPad earned note no page overflow
+PASS iPad live landscape rotation reachable 44px controls [{"id":"dailyClose","w":820,"h":48,"inside":true,"hit":true}]
+PASS iPad live landscape rotation no page overflow
+PASS iPad live landscape farm reachable 44px controls [{"id":"","w":105.984375,"h":44,"inside":true,"hit":true},{"id":"dailyOpen","w":77.140625,"h":54.296875,"inside":true,"hit":true},{"id":"farmMore","w":77.15625,"h":54.296875,"inside":true,"hit":true}]
+PASS iPad live landscape farm no page overflow

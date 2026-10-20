@@ -1,0 +1,193 @@
+{
+  "status": "VERIFIED",
+  "at": "2026-10-19T13:29:20.741627+00:00",
+  "path": "src/content-r6.js",
+  "beforeSha256": "9146c9ca7c4c042faa2835fbcd4c2f15e6b9ce64f93bec1a8e483751100b3f14",
+  "afterSha256": "d52f0e4288d4ed807ff4e7183bdd75ba5022626be12822c85490635814abe09d",
+  "exactOld": "・已端",
+  "exactNew": "・已吃到",
+  "replacements": 2,
+  "backup": ".audit-tmp/r15-before-status.js",
+  "requiredRetests": [
+    [
+      "node",
+      "scripts/test-content-r6-e2e.js"
+    ],
+    [
+      "node",
+      "scripts/test-content-r7-e2e.js"
+    ],
+    [
+      "node",
+      "scripts/test-content-r4-e2e.js"
+    ],
+    [
+      "node",
+      "scripts/test-content-r5-e2e.js"
+    ],
+    [
+      "node",
+      "scripts/test-content-r12-e2e.js"
+    ],
+    [
+      "node",
+      "scripts/test-content-r15-e2e.js",
+      "--quick"
+    ],
+    [
+      "node",
+      "scripts/verify-content-r15.js"
+    ],
+    [
+      "node",
+      "scripts/measure-content-r15.js"
+    ],
+    [
+      "node",
+      "scripts/test-content-r13-cache-offline.js"
+    ]
+  ],
+  "scope": "Two served-status words, fish-shadow draw Y from 40 to 52, and replay background matching live quiet water. No physics, reward, timing or save-rule changes. Native pixel comparison remains zero-tolerance.",
+  "additionalChanges": [
+    {
+      "path": "src/content-r8.js",
+      "beforeSha256": "83bf2201d74df1abd997dbec8fb172ccb746c76eae4a35ddf210135a4c0733a5",
+      "afterSha256": "dbbfff641a25c0dc35a7f2894542fa2603cfe34099eb0ca7f825f01ff6698079",
+      "backup": ".audit-tmp/r15-before-shadow.js",
+      "exactOld": "ctx.drawImage(img,46,40,35,31)",
+      "exactNew": "ctx.drawImage(img,46,52,35,31)",
+      "replacements": 1
+    },
+    {
+      "path": "src/content-r15.css",
+      "beforeSha256": "3a19422351aaa9371ceade70d120d11532feaf8d19f6d706c04f8702015be852",
+      "afterSha256": "6568947393053af68a4e5a1ef87c88305d05a3187449f20c401533944c49a522",
+      "backup": ".audit-tmp/r15-before-replay.css",
+      "appendUtf8": ".note-replay .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r15-20261019-1');background-position:center;background-size:cover}\n"
+    }
+  ],
+  "visualCorrectionAt": "2026-10-19T14:24:19.642379+00:00",
+  "retests": [
+    {
+      "command": [
+        "npm.cmd",
+        "test"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-npm-test.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-npm-test.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r4-e2e.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r4-e2e.log",
+      "previousExitCode": 1,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r4-e2e.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r5-e2e.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r5-e2e.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r5-e2e.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r6-e2e.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r6-e2e.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r6-e2e.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r7-e2e.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r7-e2e.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r7-e2e.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r12-e2e.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r12-e2e.log",
+      "previousExitCode": 1,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r12-e2e.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r13-cache-offline.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r13-cache-offline.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r13-cache-offline.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r15-e2e.js",
+        "--quick"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-test-content-r15-e2e.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-test-content-r15-e2e.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify-content-r15.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-verify-content-r15.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-verify-content-r15.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/measure-content-r15.js"
+      ],
+      "previousReceipt": "docs/content/r15/regression-1792414722.json",
+      "previousLog": "docs/content/r15/logs/1792414722-measure-content-r15.log",
+      "previousExitCode": 0,
+      "reason": "bounded final status and pond-renderer corrections",
+      "passedReceipt": "docs/content/r15/regression-1792420120.json",
+      "passedLog": "docs/content/r15/logs/1792420120-measure-content-r15.log"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 /* Headless real-clock UI journeys. Only chapter access, ingredients and fish RNG are fixtures. */
 'use strict';
+const {pickServingPerson,pickServingTaste,refillServing,exactServingProgress}=require('./content-r14-test-helper');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright'),{ROOT,serve}=require('./r85-browser-helper'),{revealFarmControl}=require('./farm-control-test-helper');
 const S=require('../src/state'),A=require('../src/adventure'),OUT=path.join(ROOT,'docs/content/r8');fs.mkdirSync(OUT,{recursive:true});
@@ -63,7 +64,7 @@ async function gather(){const{ctx,p}=await session(undefined,earned);try{
  await p.reload();await ready(p);await baskets(p);await p.locator('#readNeighbor').click();await p.locator('#gatheringEntry').click();check(await p.locator('#goGathering').isEnabled(),'three packed baskets survive real reload');await p.locator('#goGathering').click();await p.locator('#gatherReview').waitFor();
  // R13 requires an actual dish before a seated guest may eat. Preserve all
  // three-frame animation/feet assertions below after three real UI servings.
- for(const[id,taste]of people){await p.locator(`[data-serve-person="${id}"]`).click();await p.locator(`[data-serve-taste="${taste}"]`).click();await p.locator('#gatherSip').click();await p.locator('[data-serving-phase=reply]').waitFor();await p.locator('#gatherContinue').click();}
+ for(const[id,taste]of people){await pickServingPerson(p,p.locator(`[data-serve-person="${id}"]`));await pickServingTaste(p,p.locator(`[data-serve-taste="${taste}"]`));await p.locator('#gatherSip').click();await p.locator('[data-serving-phase=reply]').waitFor();await p.locator('#gatherContinue').click();}
  check(await p.evaluate(()=>__farm.state().adventure.gathering.servings.filter(h=>h.matched).length===3),'all three guests actually served before eating animation coverage');await snap(p,'phone-gathering-complete.png');const completionLayout=await sceneRelations(p,'.gather-stage');completed=await saved(p);fs.writeFileSync(path.join(OUT,'completed-save.json'),JSON.stringify(completed,null,2));await p.locator('#gatherBack').click();await p.waitForTimeout(200);const farmLayout=await sceneRelations(p,'.farm-gathering');check(sameScene(completionLayout,farmLayout),'completion and farm preserve all six actor/keepsake relationships to the table within one native pixel');report.sceneRelations={completion:completionLayout,farm:farmLayout};
  for(let i=1;i<=3;i++){await snap(p,`phone-gathering-living-${i}.png`);if(i<3)await p.waitForTimeout(730);}
  const frames=report.frames.slice(-3).map(f=>f.state.gestures);check(frames.every(f=>f.length===3&&new Set(f.map(x=>x.gesture)).size===2),'three asynchronous upper-body poses, all seats occupied');check(new Set(frames.map(f=>f.map(x=>x.src).join('|'))).size>=2,'pose source pixels actually change over real time');

@@ -1,5 +1,6 @@
 /* R5 actual UI journeys. No granted deliveries/catches, no clock changes. */
 'use strict';
+const {captureNative}=require('./native-evidence-capture');
 const {verifyWaterPixels}=require('./content-r8-water-test-helper');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright'),{ROOT,serve}=require('./r85-browser-helper');
@@ -21,7 +22,7 @@ async function session(view={w:430,h:932},state=fixture(),sw='block'){
 async function snap(page,name,store=false){
  if(await page.locator('#worldModal.show img.content-illustration').count())await page.evaluate(()=>ContentR1.verifyArtwork());
  const rel=(store?'docs/store/screenshots/':'docs/content/r5/')+name;
- await page.screenshot({path:path.join(ROOT,rel),fullPage:false});report.screenshots.push(rel);
+ await captureNative(page,path.join(ROOT,rel));report.screenshots.push(rel);
  report.frames.push({path:rel,at:Date.now(),state:await page.evaluate(()=>({resident:document.querySelector('#worldModal')?.dataset.resident,view:document.querySelector('#worldModal')?.dataset.contentView,phase:document.querySelector('.pond-stage')?.dataset.phase,pose:document.querySelector('.pond-stage')?.dataset.pose,cast:__farm.state().adventure.fishingCast,player:__farm.state().player,action:__farm.playerAction(),sprite:__farm.player().frame,bread:__farm.state().adventure.meals.rustic_bread,neighbors:__farm.state().adventure.neighbors,catch:__farm.state().adventure.catch}))});
 }
 async function baskets(page){const t=page.locator('[data-tab="story"]');await revealFarmControl(page,t);await t.click();await page.locator('#worldNeighborButton').click();await page.locator('#sendNeighbor').waitFor();}

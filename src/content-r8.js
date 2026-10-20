@@ -4,21 +4,32 @@
  const art=n=>'assets/generated/content-r8/'+n+(window.FARM_VERSION_QUERY||'');
  const images={};
  for(const id of ['river_carp','silver_dace','river_perch']){const img=new Image();img.src='assets/generated/content-r13/'+id+'-shadow.png'+(window.FARM_VERSION_QUERY||'');images[id]=img;}
- const ripples={};for(const kind of ['wide','peck','wake'])for(let i=0;i<3;i++){const img=new Image();img.src='assets/generated/content-r12/'+kind+'-'+i+'.png'+(window.FARM_VERSION_QUERY||'');ripples[kind+'-'+i]=img;}
+ const ripples={};for(const kind of ['wide','peck','wake'])for(let i=0;i<3;i++){const img=new Image();img.src='assets/generated/'+(kind==='wide'&&i===1?'content-r15':'content-r12')+'/'+kind+'-'+i+'.png'+(window.FARM_VERSION_QUERY||'');ripples[kind+'-'+i]=img;}
  function drawWater(stage,phase){
   const canvas=stage.querySelector('canvas'),id=stage.dataset.rhythm||'river_carp';
   const frame=phase?.pose==='strike'?2:phase&&phase.index>0?1:0,key=id+'-'+frame,img=images[id];
+  drawLine(stage,Number(stage.querySelector('.pond-fisher')?.dataset.pose||0));
   if(!img?.complete||!img.naturalWidth||canvas.dataset.frame===key&&canvas.dataset.ripplePhase===(phase?.motion||'ended'))return;
-  canvas.width=128;canvas.height=112;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,128,112);ctx.drawImage(img,25,31,78,68);const pixels=ctx.getImageData(0,0,128,112);for(let i=0;i<pixels.data.length;i+=4){if(pixels.data[i+3]){pixels.data[i]=41;pixels.data[i+1]=61;pixels.data[i+2]=70;pixels.data[i+3]=Math.round(pixels.data[i+3]*.95);}}ctx.putImageData(pixels,0,0);canvas.dataset.silhouette='true';
+  canvas.width=128;canvas.height=112;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,128,112);ctx.drawImage(img,46,52,35,31);const pixels=ctx.getImageData(0,0,128,112);for(let i=0;i<pixels.data.length;i+=4){if(pixels.data[i+3]){pixels.data[i]=41;pixels.data[i+1]=61;pixels.data[i+2]=70;pixels.data[i+3]=Math.round(pixels.data[i+3]*.65);}}ctx.putImageData(pixels,0,0);canvas.dataset.silhouette='true';
   // Generated connected water clusters. Never substitute a row of square markers.
   const motion=phase?.motion||'ended',kind={river_carp:'wide',silver_dace:'peck',river_perch:'wake'}[id],waterFrame=phase?.canReel?1:phase?.pose==='missed'||motion==='splash-gone'?2:0,water=ripples[kind+'-'+waterFrame];
   if(water?.complete&&water.naturalWidth){
-    const xy={wide:[18,12,92,31],peck:[47,1,35,66],wake:[12,15,105,35]}[kind];
+    const xy={wide:[18,8,92,48],peck:[47,1,35,66],wake:[12,15,105,35]}[kind];
     ctx.globalAlpha=.82;ctx.drawImage(water,...xy);ctx.globalAlpha=1;
   }
-  const fisher=stage.querySelector('.pond-fisher');if(fisher)fisher.src='assets/generated/content-r13/fishing-'+(phase?.canReel?2:phase&&phase.index>0?1:0)+'.png'+(window.FARM_VERSION_QUERY||'');
+  // Three accepted, separately drawn upper-body poses. Each species keeps its
+  // own active pose; neither the physics root nor the whole sprite is bobbed.
+  const pose=phase?.canReel?{river_carp:0,silver_dace:1,river_perch:2}[id]:phase&&phase.index>0?1:0;
+  const fisher=stage.querySelector('.pond-fisher');if(fisher){fisher.src='assets/generated/content-r13/fishing-'+pose+'.png'+(window.FARM_VERSION_QUERY||'');fisher.dataset.pose=String(pose);}
+  drawLine(stage,pose);
   canvas.dataset.waterFrame=kind+'-'+waterFrame;canvas.dataset.sourceFrame=id+'-1';
   canvas.dataset.frame=key;canvas.dataset.ripplePhase=motion;stage.dataset.artFrame=String(frame);
+ }
+ function drawLine(stage,pose){
+  const fisher=stage.querySelector('.pond-fisher'),bobber=stage.querySelector('.pond-bobber');if(!fisher||!bobber)return;
+  let line=stage.querySelector('.pond-line');if(!line){line=document.createElementNS('http://www.w3.org/2000/svg','svg');line.classList.add('pond-line');line.setAttribute('aria-hidden','true');line.innerHTML='<path fill="none" stroke="#fff6e3" stroke-width="1.5"/>';stage.appendChild(line);}
+  const r=stage.getBoundingClientRect(),f=fisher.getBoundingClientRect(),b=bobber.getBoundingClientRect(),tip=[[95.5,42.5],[95.5,24.5],[85.5,8.5]][pose],x=f.left-r.left+tip[0]*f.width/96,y=f.top-r.top+tip[1]*f.height/96,bx=b.left-r.left+b.width*(15/32),by=b.top-r.top+b.height*(10/48);
+  line.setAttribute('viewBox',`0 0 ${r.width} ${r.height}`);line.querySelector('path').setAttribute('d',`M${x},${y} Q${(x+bx)/2},${Math.max(y,by)+9} ${bx},${by}`);
  }
  function catchReceipt(box,s,id,first){
   let e=box.querySelector('.catch-receipt');if(!e){e=document.createElement('div');e.className='catch-receipt';box.querySelector('.pond-catch').after(e);}
@@ -50,5 +61,5 @@
    if(e.getAttribute('src')!==src)e.src=src;e.dataset.gesture=pose==='wait'||pose==='sit'?'rest':'sip-or-bite';e.dataset.upperPose=pose;
   });
  },100);
- window.ContentR8={drawWater,catchReceipt,memory,art};
+ window.ContentR8={drawWater,drawLine,catchReceipt,memory,art};
 })();

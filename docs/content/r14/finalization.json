@@ -1,0 +1,80 @@
+{
+  "status": "VERIFIED",
+  "protocol": "serial; each owned browser/server closes before the next command",
+  "commands": [
+    {
+      "command": [
+        "python",
+        "scripts/run-content-r14-regression.py",
+        "--only=npm,test-npc-indicators,test-world-project-art,test-world-rework-e2e,test-content-r2-e2e,test-content-r3-e2e"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-run-content-r14-regression.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r14-visuals.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-test-content-r14-visuals.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/measure-content-r14.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-measure-content-r14.log"
+    },
+    {
+      "command": [
+        "python",
+        "tools/protect-content-r14.py",
+        "restore"
+      ],
+      "exitCode": 1,
+      "log": "docs/content/r14/logs/final-protect-content-r14.log",
+      "supersededBy": 5
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r14-visuals.js",
+        "--store-only"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-store-native-size.log",
+      "attempt": "verified recovery"
+    },
+    {
+      "command": [
+        "python",
+        "tools/protect-content-r14.py",
+        "restore"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-protect-content-r14-retry.log",
+      "attempt": "verified recovery"
+    },
+    {
+      "command": [
+        "python",
+        "tools/finalize-content-r14.py"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-finalize-content-r14.log",
+      "attempt": "verified recovery"
+    },
+    {
+      "command": [
+        "python",
+        "tools/verify-content-r14-release.py"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-verify-content-r14-release.log",
+      "attempt": "verified recovery"
+    }
+  ],
+  "recovery": "Exact Git checkout-filter bytes restored; regenerated R80 outputs archived under R14 while cleanup remains applied; high-DPR store images recaptured through device-scale native output and checked at required sizes. All final release checks passed."
+}

@@ -1,0 +1,133 @@
+PASS capacity never displays over-limit ratio: phone-basket-before.png
+PASS first basket has no unearned reread
+PASS capacity never displays over-limit ratio: phone-delivery-cancel-before.png
+PASS cancel retains bread and never delivers later
+PASS cancel visibly confirms the same bread count
+PASS capacity never displays over-limit ratio: phone-delivery-cancel-after.png
+PASS capacity never displays over-limit ratio: phone-delivery-walking-1.png
+PASS capacity never displays over-limit ratio: phone-delivery-walking-2.png
+PASS capacity never displays over-limit ratio: phone-delivery-walking-3.png
+PASS walking delivery spends only once on arrival
+PASS capacity never displays over-limit ratio: phone-story-merchant-first.png
+PASS merchant first delivery speaks about today, not an earlier unseen gift
+PASS merchant normal farm conversation remembers first
+PASS capacity never displays over-limit ratio: phone-memory-merchant-first.png
+PASS basket does not reveal remembered preference
+PASS merchant recall is attached to this resident
+PASS recall page gives situation without flavor or ingredient names
+PASS merchant recall hides stale farm speech behind paper
+PASS capacity never displays over-limit ratio: phone-recall-merchant-context.png
+PASS merchant recall gives context without taste answer
+PASS merchant recall return retains selection without spending
+PASS capacity never displays over-limit ratio: phone-recall-merchant-entry.png
+PASS capacity never displays over-limit ratio: phone-taste-merchant-sweet-packed.png
+PASS merchant/sweet consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-taste-merchant-wrong.png
+PASS merchant wrong reply differs from first clue
+PASS merchant normal farm conversation remembers wrong
+PASS capacity never displays over-limit ratio: phone-memory-merchant-wrong.png
+PASS capacity never displays over-limit ratio: phone-taste-merchant-sour-packed.png
+PASS merchant/sour consumes one bread at the actual resident
+PASS merchant matching taste completes distinct response
+PASS capacity never displays over-limit ratio: phone-taste-merchant-matched.png
+PASS merchant matched page has distinct red-gingham bookmark
+PASS merchant normal farm conversation remembers matched
+PASS capacity never displays over-limit ratio: phone-memory-merchant-matched.png
+PASS capacity never displays over-limit ratio: phone-taste-elder-plain-packed.png
+PASS elder/plain consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-story-elder-first.png
+PASS elder first delivery speaks about today, not an earlier unseen gift
+PASS elder normal farm conversation remembers first
+PASS capacity never displays over-limit ratio: phone-memory-elder-first.png
+PASS basket does not reveal remembered preference
+PASS elder recall is attached to this resident
+PASS recall page gives situation without flavor or ingredient names
+PASS elder recall hides stale farm speech behind paper
+PASS capacity never displays over-limit ratio: phone-recall-elder-context.png
+PASS elder recall gives context without taste answer
+PASS elder recall return retains selection without spending
+PASS capacity never displays over-limit ratio: phone-recall-elder-entry.png
+PASS capacity never displays over-limit ratio: phone-taste-elder-sweet-packed.png
+PASS elder/sweet consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-taste-elder-wrong.png
+PASS elder wrong reply differs from first clue
+PASS elder normal farm conversation remembers wrong
+PASS capacity never displays over-limit ratio: phone-memory-elder-wrong.png
+PASS capacity never displays over-limit ratio: phone-taste-elder-hot-packed.png
+PASS elder/hot consumes one bread at the actual resident
+PASS elder matching taste completes distinct response
+PASS capacity never displays over-limit ratio: phone-taste-elder-matched.png
+PASS elder matched page has distinct red-gingham bookmark
+PASS elder normal farm conversation remembers matched
+PASS capacity never displays over-limit ratio: phone-memory-elder-matched.png
+PASS capacity never displays over-limit ratio: phone-taste-child-plain-packed.png
+PASS child/plain consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-story-child-first.png
+PASS child first delivery speaks about today, not an earlier unseen gift
+PASS child normal farm conversation remembers first
+PASS capacity never displays over-limit ratio: phone-memory-child-first.png
+PASS basket does not reveal remembered preference
+PASS child recall is attached to this resident
+PASS recall page gives situation without flavor or ingredient names
+PASS child recall hides stale farm speech behind paper
+PASS capacity never displays over-limit ratio: phone-recall-child-context.png
+PASS child recall gives context without taste answer
+PASS child recall return retains selection without spending
+PASS capacity never displays over-limit ratio: phone-recall-child-entry.png
+PASS capacity never displays over-limit ratio: phone-taste-child-sour-packed.png
+PASS child/sour consumes one bread at the actual resident
+PASS capacity never displays over-limit ratio: phone-taste-child-wrong.png
+PASS child wrong reply differs from first clue
+PASS child normal farm conversation remembers wrong
+PASS capacity never displays over-limit ratio: phone-memory-child-wrong.png
+PASS capacity never displays over-limit ratio: phone-taste-child-sweet-packed.png
+PASS child/sweet consumes one bread at the actual resident
+PASS child matching taste completes distinct response
+PASS capacity never displays over-limit ratio: phone-taste-child-matched.png
+PASS child matched page has distinct red-gingham bookmark
+PASS child normal farm conversation remembers matched
+PASS capacity never displays over-limit ratio: phone-memory-child-matched.png
+PASS nine deliveries and all memories survive real reload
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-waiting.png
+PASS waiting reel visibly muted river_carp
+PASS river_carp early reel explains why and grants no fish
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-early.png
+PASS river_carp expired cast explains late reel without reward
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-late.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-1.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-2.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-3.png
+PASS capacity never displays over-limit ratio: phone-rhythm-river_carp-4.png
+PASS river_carp visible submerged frame and enabled reel agree
+PASS river_carp success has no reel label
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-caught.png
+PASS river_carp countdown follows actual elapsed seconds
+PASS capacity never displays over-limit ratio: phone-pond-river_carp-cooldown.png
+PASS capacity never displays over-limit ratio: phone-note-river_carp-first.png
+PASS river_carp catch and illustrated note survive reload
+PASS river_carp reload cannot bypass cooldown
+PASS river_carp full30s cooldown elapsed without time advance
+PASS capacity never displays over-limit ratio: phone-cooldown-river_carp-ready.png
+PASS river_carp learned from earned and reloaded notebook
+PASS river_carp earned cast has no rhythm or fish answer
+PASS capacity never displays over-limit ratio: phone-learned-river_carp-1-tap-49.png
+PASS river_carp earned cast has no rhythm or fish answer
+PASS capacity never displays over-limit ratio: phone-learned-river_carp-2-still-50.png
+PASS river_carp earned cast has no rhythm or fish answer
+PASS capacity never displays over-limit ratio: phone-learned-river_carp-3-tap-51.png
+PASS capacity never displays over-limit ratio: phone-water-river_carp-pre-sink-masked.png
+PASS river_carp exact R8 generated water pixels, 128x112 native, no smoothing
+PASS capacity never displays over-limit ratio: phone-water-river_carp-submerging.png
+PASS capacity never displays over-limit ratio: phone-water-river_carp-masked.png
+PASS river_carp impact window still active after evidence frames
+AssertionError [ERR_ASSERTION]: river_carp learned guidance leaves the reel decision to visible water
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r4-e2e.js:11:21)
+    at fish (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r4-e2e.js:78:119)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r4-e2e.js:122:150 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

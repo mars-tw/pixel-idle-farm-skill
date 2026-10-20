@@ -1,0 +1,337 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "farmhouse 0 real walkable physics root",
+    "farmhouse leaving restores normal occlusion",
+    "farmhouse 1 real walkable physics root",
+    "farmhouse behind has full current articulated locator and feet",
+    "farmhouse roof fully opaque",
+    "farmhouse 2 real walkable physics root",
+    "farmhouse leaving restores normal occlusion",
+    "shop 0 real walkable physics root",
+    "shop leaving restores normal occlusion",
+    "shop 1 real walkable physics root",
+    "shop behind has full current articulated locator and feet",
+    "shop roof fully opaque",
+    "shop 2 real walkable physics root",
+    "shop leaving restores normal occlusion",
+    "barn 0 real walkable physics root",
+    "barn leaving restores normal occlusion",
+    "barn 1 real walkable physics root",
+    "barn behind has full current articulated locator and feet",
+    "barn roof fully opaque",
+    "barn 2 real walkable physics root",
+    "barn leaving restores normal occlusion",
+    "no uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r15/phone-basket-farmhouse-front.png",
+      "sha256": "625f7db7203812ec98005a4e55cff4c27c043e09646877894d60cfdf3e0ecc40",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-farmhouse-behind.png",
+      "sha256": "330baae35bf88597df1b77cef837b2b117953d6ab76e4af21da1cce085fea2ed",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-farmhouse-leave.png",
+      "sha256": "d830e4e5a4a0bd7bf4abba7f1daaa81fe3f4a23f29596291b495e87d3a0ce9e1",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-shop-front.png",
+      "sha256": "64e71b36145eba3d444611d51c1cd8f3dcead264daacfa27058530e82f9339c1",
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-shop-behind.png",
+      "sha256": "f9d32b86f23ed93471b5e08a54074c47268789911cadd087bdf9951d678b594d",
+      "state": {
+        "player": {
+          "tileId": "t12_0",
+          "x": 12,
+          "y": 0,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-shop-leave.png",
+      "sha256": "b73dad024c3fcd13262084ea2edeb8a67b1f8163070d306e688c1a0dfff6a342",
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-barn-front.png",
+      "sha256": "1aece3cbd9050d69ed1dc41843641466b39402fc821bfa19cf9678b90eb36244",
+      "state": {
+        "player": {
+          "tileId": "t14_8",
+          "x": 14,
+          "y": 8,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-barn-behind.png",
+      "sha256": "c4f6c41effe7abd94abca63458435ee7206284d931f8f44c642f7672cf4bf0a0",
+      "state": {
+        "player": {
+          "tileId": "t14_6",
+          "x": 14,
+          "y": 6,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-barn-leave.png",
+      "sha256": "3ce8a7624400ae7eed30f36779224e6042035e7ad67fce29c647fc2a2ab7b745",
+      "state": {
+        "player": {
+          "tileId": "t14_8",
+          "x": 14,
+          "y": 8,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Chapter/dock access and ingredients only. Picnic and earned-note fixtures are produced by this round real UI journey."
+}

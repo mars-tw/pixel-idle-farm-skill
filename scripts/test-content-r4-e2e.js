@@ -1,5 +1,7 @@
 /* Actual offline UI actions, real-time fish cooldowns, and native phone evidence. */
 'use strict';
+const {captureNative}=require('./native-evidence-capture');
+const {pickServingPerson,pickServingTaste,refillServing,exactServingProgress}=require('./content-r14-test-helper');
 const {verifyWaterPixels}=require('./content-r8-water-test-helper');
 const fs=require('fs'),path=require('path'),assert=require('assert/strict');
 const {chromium}=require('playwright'),{ROOT,serve}=require('./r85-browser-helper'),{revealFarmControl}=require('./farm-control-test-helper');
@@ -15,7 +17,7 @@ async function session(view={w:430,h:932},state=fixture(),sw='block'){
 }
 async function snap(page,name,store=false){
  if(await page.locator('#worldModal.show img.content-illustration').count())await page.evaluate(()=>ContentR1.verifyArtwork());
- check(await page.locator('#resBar .res.storage').evaluate(e=>{const m=e.textContent.match(/(\d+)\s*\/\s*(\d+)/);return !m||Number(m[1])<=Number(m[2]);}),'capacity never displays over-limit ratio: '+name);const rel=(store?'docs/store/screenshots/':'docs/content/r4/')+name;await page.screenshot({path:path.join(ROOT,rel),fullPage:false});report.screenshots.push(rel);
+ check(await page.locator('#resBar .res.storage').evaluate(e=>{const m=e.textContent.match(/(\d+)\s*\/\s*(\d+)/);return !m||Number(m[1])<=Number(m[2]);}),'capacity never displays over-limit ratio: '+name);const rel=(store?'docs/store/screenshots/':'docs/content/r4/')+name;await captureNative(page,path.join(ROOT,rel));report.screenshots.push(rel);
  report.frames.push({path:rel,at:Date.now(),state:await page.evaluate(()=>({resident:document.querySelector('#worldModal')?.dataset.resident,view:document.querySelector('#worldModal')?.dataset.contentView,elapsed:document.querySelector('.pond-elapsed')?.textContent,pose:document.querySelector('.pond-stage')?.dataset.pose,phase:document.querySelector('.pond-stage')?.dataset.phase,cast:__farm.state().adventure.fishingCast,player:__farm.state().player,action:__farm.playerAction(),sprite:__farm.player().frame,bread:__farm.state().adventure.meals.rustic_bread,neighbors:__farm.state().adventure.neighbors,catch:__farm.state().adventure.catch}))});
 }
 async function baskets(page){const tab=page.locator('[data-tab="story"]');await revealFarmControl(page,tab);await tab.click();await page.locator('#worldNeighborButton').click();await page.locator('#sendNeighbor').waitFor({state:'visible'});}
@@ -73,7 +75,7 @@ async function fish(){for(const [id,roll]of [['river_carp',0],['silver_dace',.5]
  await snap(page,`phone-water-${id}-submerging.png`);
  const mask=await page.addStyleTag({content:'body *{color:transparent!important;text-shadow:none!important}.farm-logo{visibility:hidden!important}'});
  await snap(page,`phone-water-${id}-masked.png`);await mask.evaluate(e=>e.remove());
- check(await page.locator('#worldCatch').textContent()==='提竿',id+' impact window still active after evidence frames');check((await page.locator('.world-fishing-result').textContent())==='認認水面的變化，再決定要不要提竿。',id+' learned guidance leaves the reel decision to visible water');
+ check(await page.locator('#worldCatch').textContent()==='提竿',id+' impact window still active after evidence frames');check((await page.locator('.world-fishing-result').textContent())==='看水面，再決定什麼時候提竿。'&&await page.locator('.pond-help').getAttribute('open')===null,id+' exact neutral guidance and closed clues leave reel decision to visible water');
  await page.locator('#worldCatch').click();check(await page.evaluate(id=>__farm.state().adventure.catch[id]===2&&AdventureAPI.fishNotes(__farm.state(),Date.now()).length===1,id),id+' second real catch gives exactly second fish and one note');await snap(page,`phone-pond-${id}-caught-again.png`);fishSaves[id]=await page.evaluate(()=>JSON.parse(JSON.stringify(__farm.state())));
  }finally{await ctx.close();}}}
 async function sixPages(){for(const view of [{w:320,h:568},{w:430,h:932}]){

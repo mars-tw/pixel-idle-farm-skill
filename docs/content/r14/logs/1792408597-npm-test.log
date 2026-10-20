@@ -1,0 +1,1054 @@
+
+> pixel-idle-farm@0.1.37 test
+> node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-adventure.js && node scripts/test-world-migration.js && node scripts/test-r74-building-upgrades.js && node scripts/test-r79-sunpatch.js && node scripts/test-r80-daily.js && node scripts/test-r81-heirloom.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js && node scripts/test-content-r1.js && node scripts/test-content-r2.js && node scripts/test-content-r3.js && node scripts/test-content-r4.js && node scripts/test-content-r5.js && node scripts/test-content-r6.js && node scripts/test-content-r7.js && node scripts/test-content-r8.js && node scripts/test-content-r9.js && node scripts/test-content-r10.js && node scripts/test-content-r11.js && node scripts/test-content-r12.js && node scripts/test-content-r13.js && node scripts/test-content-r14.js
+
+✓ 版本鏈一致（CACHE_VERSION=content-r14-20261019-1）
+== R39 SW 快取完整性守門 ==
+  ✓ index.html 本地 script/link 皆帶 ?v=content-r14-20261019-1
+  ✓ index/manifest/runtime 關鍵本地資產皆以可驗證版本 URL 列入 SW cache
+  ✓ SW cache 清單皆帶精確版本（R68 生成圖為 SHA-256 前 8 碼，其餘為 content-r14-20261019-1）
+  ✓ SW cache 清單內檔案皆實際存在
+
+== R39 文案品質守門 ==
+  ✓ index.html 與 src/*.js 可見字串無 U+FFFD/連續問號/mojibake
+
+== R61 手機地圖內 UX 守門 ==
+  ✓ touch 農土改由地圖內 action dock 承接，不再要求二次確認
+  ✓ 手機有 D-pad 與 A 鍵，且重用逐格移動/面向目標動作
+  ✓ 建造工具以地圖內輪盤直接呼叫 buildBuilding
+  ✓ 建築/動物照護改為地圖內小氣泡並重用 care/collect 函式
+  ✓ 桌面／程式化地圖操作維持單擊直達路徑
+  ✓ PointerEvent 優先，350ms 時窗只保留給無 PointerEvent 的舊瀏覽器
+  ✓ 地圖內 action dock、作物 quickbar 與手機控制盤樣式存在
+  ✓ R64 手機控制盤只依主指標 coarse + 窄寬度分流，不再把觸控能力當手機
+
+✅ R39 自動化守門測試通過
+== 1. 成長與收成 ==
+  ✓ 可種小麥
+  ✓ 種小麥扣 1 金
+  ✓ 7.5s 時約半熟、未成熟
+  ✓ 15s 後成熟、階段 4
+  ✓ 收成得 2 小麥
+  ✓ 倉庫有 2 小麥
+  ✓ 收成得 1 XP
+
+== 2. 賣出與經濟為正 ==
+  ✓ 賣 2 小麥得 2 金
+  ✓ 賣出加 2 金
+  ✓ 一輪小麥淨 +1 金
+
+== 3. 理想玩法進度節奏（首收 <20s / 升級 <3min / 新作物 <8min）==
+    首次收成: 15s, 第2次升級: 166s, 解鎖胡蘿蔔(lv2): 30s, 等級: 5, 金幣: 20
+  ✓ 首次收成 < 20s（實際 15s）
+  ✓ 第 2 次升級 < 3min（實際 166s）
+  ✓ 新作物(胡蘿蔔)解鎖 < 8min（實際 30s）
+  ✓ 10 分鐘內至少 lv2
+
+== 4. 倉庫容量與溢出 ==
+  ✓ 初始容量 30
+  ✓ 倉滿時新增全溢出
+  ✓ 擴倉後容量提高
+
+== 5. 訂單：生成 / 完成優於直售 / 連單 ==
+  ✓ 生成 3 筆訂單
+  ✓ 訂單要求至少一種作物
+  ✓ 訂單獎金(28) > 直售(21)
+  ✓ 完成訂單得金幣
+  ✓ 連單 +1
+  ✓ 完成後自動補單
+  ✓ 丟單後連單歸零
+
+== 6. 升級扣費與數值變動 ==
+  ✓ 開墾升級每級都有實際增益（6→8→10→12）
+  ✓ 開墾 Lv1 實際增加農地（6→8）
+  ✓ 開墾 Lv2 實際增加農地（8→10）
+  ✓ 開墾 Lv3 實際增加農地（10→12）
+  ✓ 開墾滿級等於地圖 soil 上限
+  ✓ plots 陣列已補足
+  ✓ 肥沃土壤後成長倍率下降（更快）
+  ✓ 市集人脈後番茄售價提高
+
+== 7. 離線進度：無幫手成熟 / 幫手自動收 / 自動補種多輪 / 上限 ==
+  ✓ 無幫手：成熟格數記為 1
+  ✓ 無幫手：未自動入庫
+  ✓ 幫手 lv1：自動收成 2 小麥
+  ✓ 幫手 lv1：收成後格子清空（不自動補種）
+  ✓ 幫手 lv2：60s 自動補種多輪收成（實際 8）
+  ✓ 幫手 lv2：補種多次（實際 3）
+  ✓ 幫手 lv2：結束時仍有作物在長
+  ✓ 幫手 lv2：沒錢時只收已種的一輪
+  ✓ 幫手 lv2：沒錢時不補種
+  ✓ 幫手 lv2：沒錢補種後格子清空
+  ✓ 離線時間被截到 8h 上限
+  ✓ 有記錄超出上限的原始時間
+
+== 8. 等級曲線與作物解鎖 ==
+  ✓ lv1 只解鎖小麥
+  ✓ 達門檻升 lv2 解鎖胡蘿蔔
+  ✓ lv4 解鎖 R15 新作物玉米
+  ✓ 玉米期望淨利 8.0 金/分鐘，低於番茄後段爆發線
+  ✓ lv5 解鎖 unlockLevel≤5 的 8 種作物
+  ✓ lv8 解鎖全部 15 種作物
+  ✓ 甜椒 使用 crops2 且經濟為正（9.7 金/分鐘）
+  ✓ 馬鈴薯 使用 crops2 且經濟為正（8.1 金/分鐘）
+  ✓ 葡萄 使用 crops2 且經濟為正（12.3 金/分鐘）
+  ✓ 溫室甜瓜 使用 crops2 且經濟為正（12.9 金/分鐘）
+  ✓ 豌豆 使用 crops3 且經濟為正（9.6 金/分鐘）
+  ✓ 地瓜 使用 crops3 且經濟為正（11.3 金/分鐘）
+  ✓ 冬羽甘藍 使用 crops3 且經濟為正（13.2 金/分鐘）
+  ✓ P0 radish 櫻桃蘿蔔為 Lv5 春季 90s crops4 像素作物
+  ✓ radish 淨利 6.7 金/分鐘，低於 strawberry 16.0
+  ✓ P0 sunflower 向日葵為 Lv6 夏季 crops4 像素作物，訂單 XP 偏高
+  ✓ sunflower 單次直售期望與金/分鐘皆不超 strawberry
+  ✓ 春 至少有 1 種作物
+  ✓ 夏 至少有 1 種作物
+  ✓ 秋 至少有 1 種作物
+  ✓ 冬 至少有 1 種作物
+
+== 9. 天氣（lv5 解鎖）==
+  ✓ lv1 永遠晴朗（天氣未解鎖）
+  ✓ lv5 後天氣會變化
+  ✓ 降雨時成長更快
+  ✓ 過期天氣不會繼續生效
+  ✓ 豔陽時售價更高
+  ✓ 微風同時小幅加速成長並提高售價
+  ✓ 晨霧成長稍慢但售價提高
+  ✓ 降雪成長放慢但售價提高
+  ✓ 暴風雨加速成長但售價不加成
+  ✓ 天氣機率可抽到降雪
+  ✓ 天氣機率可抽到暴風雨
+  ✓ 訂單契約價不受天氣影響（既定設計）
+
+== 10. R47 季節與豐年祭訂單 ==
+  ✓ 目前季節讀 state.season
+  ✓ 季節到期後輪替到下一季
+  ✓ 長時間未更新時 currentSeason 會推算多季後的正確季節
+  ✓ 離線結算依時長 catch-up 多個季節並記錄 seasonsReached
+  ✓ 離線跨季後可解鎖對應季節信件
+  ✓ 首 tick 已過期的出發季會寫入 seasonsReached 並解鎖出發季信件
+  ✓ Lv6+ 當季作物直售 ×1.15
+  ✓ 可生成豐年祭稀有度訂單
+  ✓ 豐年祭訂單要求 2~3 種品項（實際 3）
+  ✓ P0 季節訂單偏壓：春季豌豆芽市強制帶入 pea
+  ✓ 季節訂單偏壓不改 pea base sellValue
+  ✓ P0 NPC 委託也吃春季偏壓（radish）
+  ✓ R3 偏壓邊界：Lv6 秋季偏好中的 Lv7 作物與未發現採集物不進偏壓池
+  ✓ R3 偏壓邊界：未解鎖作物／未發現採集物不會出現在季節偏壓訂單
+
+== 11. 存檔遷移（向後相容）==
+  ✓ 舊存檔欄位補齊不崩
+  ✓ 舊存檔補齊季節預設
+  ✓ 版本號更新
+  ✓ 舊存檔無效開墾 Lv4 會夾到現行滿級且仍維持最大農地
+
+✅ 全部經濟測試通過
+== 1. manifest 資源路徑有效 ==
+  ✓ manifest 全部 9 個素材檔存在
+
+== 2. 地圖磚效果改變作物成長（堆肥場 growthAura）==
+  ✓ 可蓋堆肥場
+  ✓ 堆肥場讓小麥成長更快（15000→13500ms）
+  ✓ 成長光環 = 0.90
+  ✓ 同類成長光環建築達 maxCount 後不可再蓋
+  ✓ 舊存檔重複堆肥場只計入 1 座效果
+  ✓ 全部 growthAura 建築各只計 1 座，總倍率封頂 0.7286
+
+== 3. 清障礙改變磚狀態並給建材 ==
+  ✓ 地圖有樹樁障礙
+  ✓ 可清除樹樁
+  ✓ 清除後磚變草地（object=null）
+  ✓ 清樹樁得 2 木材
+  ✓ 清障計數 +1
+  ✓ 清除後該磚可興建
+
+== 4. 建築解鎖：倉儲行為（筒倉）==
+  ✓ 可蓋筒倉
+  ✓ 筒倉倉容 +90（30→120）
+  ✓ 舊存檔重複筒倉不再無限增加倉容
+
+== 5. 建築解鎖動物 + 容量限制 ==
+  ✓ 等級不足無法蓋雞舍
+  ✓ lv3 可蓋雞舍
+  ✓ 蓋雞舍自動入住 1 隻雞
+  ✓ 雞已解鎖
+  ✓ 可買到容量上限 3 隻
+  ✓ 超過容量被擋
+
+== 5a. R50：動物產能建築 maxCount 封頂 ==
+  ✓ 雞舍含地圖常駐 1 座，全場 maxCount=2
+  ✓ 雞舍可在常駐 1 座外再建 1 座
+  ✓ 第 3 座雞舍被 maxCount 擋下
+  ✓ 畜舍含地圖常駐 1 座，全場 maxCount=2
+  ✓ 畜舍可在常駐 1 座外再建 1 座
+  ✓ 第 3 座畜舍被 maxCount 擋下
+  ✓ 鴨舍無常駐建築，全場 maxCount=1
+  ✓ 鴨舍可建第 1 座
+  ✓ 第 2 座鴨舍被 maxCount 擋下
+
+== 5b. Stage 6.5：畜舍地圖常駐不代表動物解鎖，仍需等級（修正 Stage 4 迴歸）==
+  ✓ 畜舍從地圖常駐建築就已存在（Stage 4 設計，不需玩家另外建造）
+  ✓ Lv1 畜舍雖已存在，牛尚未解鎖（ANIMALS.cow.unlockLevel=5）
+  ✓ Lv1 即使金幣足夠也買不到牛
+  ✓ 起始雞不受此檢查影響（seedStructures 直接塞入，非經 buyAnimal）
+  ✓ Lv1 仍可收集起始雞的蛋
+  ✓ Lv5 牛解鎖
+  ✓ Lv5 可以買牛
+
+== 5c. Stage 7.1：同一建築有多種 unlockAnimal 時都能買（原本 UI 只賣 [0]，羊永遠買不到）==
+  ✓ 畜舍設定同時解鎖牛與羊
+  ✓ 牛與羊在 Lv5 都判定為已解鎖
+  ✓ 可以買牛
+  ✓ 可以買羊（Stage 7.1 前 UI 邏輯永遠買不到）
+
+== 6. 動物產品計時（online）+ 收集 ==
+  ✓ 未到週期不產出
+  ✓ 到週期後成熟
+  ✓ 收集得 1 顆蛋
+  ✓ 蛋進倉庫
+
+== 7. 動物產品（offline）多輪 + 上限 ==
+  ✓ 離線自動產 5 顆蛋（實際 5）
+  ✓ 離線蛋入倉
+
+== 8. 餵食立即產出（花作物）==
+  ✓ 餵食立即產蛋
+  ✓ 餵食扣 2 小麥
+  ✓ 餵食得 1 蛋
+
+== 9. 動物產品可滿足訂單（Stage 6.5：須先收集過才進訂單池）==
+  ✓ 蓋雞舍但還沒收過蛋，訂單池不含雞蛋（避免 Lv1 隨機訂單一開局就要蛋）
+  ✓ 收集一次蛋
+  ✓ 收過蛋後訂單池才含雞蛋
+  ✓ 用雞蛋完成訂單得金幣
+  ✓ 完成訂單扣 3 蛋
+  ✓ 金幣增加
+
+== 10. 賣出動物產品（價格用產品定義）==
+  ✓ 賣 3 牛奶得 54 金
+
+== 11. 濕土澆水：比乾土更快成長 ==
+  ✓ 可對種植中的乾土澆水
+  ✓ 澆水後變濕土
+  ✓ 濕土剩餘時間更短（乾 45000 > 濕 33750）
+  ✓ 同輪不可重複澆水
+  ✓ 空地不可澆水
+  ✓ 收成重種後恢復乾土
+
+== 11b. Stage 6.5：離線收益也要吃到濕土加速（修正 applyOffline 沒套用 MOISTURE_MUL）==
+  ✓ 乾土在濕土成熟時間點離線結束時還沒熟
+  ✓ 濕土離線也吃到加速，同時間已自動收成一輪（yield 3，實際 {"carrot":3}）
+  ✓ 離線自動收成會記錄作物首次發現時間
+
+== 12. 工具模式 state.interaction ==
+  ✓ 預設工具為 hand
+  ✓ 工具集含 water/clear 等 5 種
+
+== 13. 故事任務完成度同步（作物先完成也會補進度）==
+  ✓ 未讀告示前種植不會跳過序章
+  ✓ 讀告示後補認已種小麥，完成度從序章推到澆水
+  ✓ 下一任務是澆水（first_water）
+  ✓ 已澆水的小麥會補進 first_water 完成度
+  ✓ 收成小麥後 first_harvest 完成度增加
+  ✓ 首收後生成 2 小麥新手保底訂單
+  ✓ 新手保底訂單報酬維持 45 金 / 3 XP，不跳過早期升級節奏
+  ✓ 首收後新手保底訂單立即可交付
+  ✓ 交付訂單後 first_delivery 完成度增加
+  ✓ 清掉樹樁完成序章最後一關
+  ✓ 序章 6 關全部完成
+  ✓ 序章後接第二章「修橋」（repair_bridge）
+
+== 13b. Stage 5/12：修橋解鎖東林 + 採集鏈 + 商人回報 ==
+  ✓ 地圖有斷橋（水上、bridge=true）
+  ✓ 地圖有東林事件點（region=east）
+  ✓ 修橋前：斷橋與東林封鎖區不可走
+  ✓ 修橋前：BFS 無法抵達東林
+  ✓ 序章未完成不能修橋
+  ✓ 建材不足不能修橋（需真資源）
+  ✓ 修橋材料清單顯示木6石4缺口
+  ✓ 清樹樁後材料清單更新為木材 2/6
+  ✓ 木材不足時任務目標轉向大樹
+  ✓ 清大樹後木材備齊，仍缺石頭 4
+  ✓ 石頭不足時第 1 個任務目標轉向巨石
+  ✓ 石頭不足時第 2 個任務目標轉向巨石
+  ✓ 依材料導引清障後湊齊木6石4
+  ✓ 序章完成 + 木6石4 → 修橋成功
+  ✓ 修橋消耗木材 6、石頭 4
+  ✓ 修橋推進到「探索新區」（explore_new_area）
+  ✓ 修橋後：橋可走、東林解鎖
+  ✓ 修橋後：BFS 可抵達東林事件點
+  ✓ 首次抵達東林古樹給一次性獎勵
+  ✓ 事件獎勵 +120 金
+  ✓ 探索新區後接東林採集鏈（discover_east_forage）
+  ✓ 事件獎勵僅一次
+  ✓ 東林採集鏈 marker 指向採集點
+  ✓ 回報前東林採集物不進訂單/委託池
+  ✓ 辨認採集點後推進到收集樣品
+  ✓ 東林有 4 個限定採集點（R15 新增野莓/薄荷）
+  ✓ 可依 UI 採集東林藥草與螢光菇各 1 份
+  ✓ R15 新增東林野莓與溪畔薄荷可採集並入庫
+  ✓ 東林限定材料進入倉庫
+  ✓ 收集完成後接商人回報（report_east_forage）
+  ✓ 回報任務建立商人特殊委託
+  ✓ 材料齊全時商人回報委託可交付
+  ✓ 商人回報獎勵 +18 金，使用 NPC 委託結算
+  ✓ 商人回報消耗東林樣品
+  ✓ 回報後完成第二章，接上第三章「跟老農學動物照護」
+  ✓ 回報後已採集的東林採集物進入訂單/委託池
+
+== 13b2. R19：東林深處（成本門檻 + 稀有採集 + 收藏品）==
+  ✓ 地圖有東林深處入口（east_deep）
+  ✓ 東林深處有 2 個稀有採集點且位於子區域
+  ✓ 未解鎖前深處採集點 BFS 不可達
+  ✓ 未解鎖前不可採深處稀有物
+  ✓ 東林深處顯示明確成本缺口
+  ✓ 補齊 90 金/木4/石2 後可解鎖東林深處
+  ✓ 解鎖深處後寫入旗標與非通膨收藏品
+  ✓ 東林深處解鎖消耗 90 金、木4、石2
+  ✓ 解鎖後深處採集點 BFS 可達
+  ✓ 可採集月帽菇孢與古樹琥珀脂並入庫
+  ✓ 深處稀有採集點有低頻冷卻
+  ✓ 收藏品完成度記錄東林年輪拓印
+  ✓ 深處稀有採集期望值 1.4 金/分鐘，低頻高價但不壓過作物曲線
+
+== 13c. Stage 7：動物照護（親密度/品質分級/冷卻/衰減）==
+  ✓ 初始親密度 0
+  ✓ 0 親密度 = normal 品質
+  ✓ 第 1 次餵食：normal 品質，item id 為 egg
+  ✓ 冷卻中重複餵食被擋（Stage 7.1 新增，防止免成本狂點衝品質）
+  ✓ 冷卻後第 2 次餵食（親密度 44）：good 品質，item id 為 egg_good
+  ✓ 澆水成功（跟餵食是不同動作類型，不受餵食冷卻影響）
+  ✓ 冷卻中重複澆水被擋
+  ✓ 冷卻結束後可再次澆水
+  ✓ 梳理後達到開心門檻（94 >= 70）
+  ✓ 開心門檻以上狀態為 happy
+  ✓ 24 小時沒照護，親密度衰減回 0
+  ✓ 衰減後品質回到 normal
+  ✓ 高親密度時收集得 premium 品質
+  ✓ 餵食前自動收集 3 輪已累積的待收產物
+  ✓ 倉庫拿到 3（自動收集）+1（餵食獎勵）= 4 顆蛋，沒有被吞掉
+  ✓ 離線收成依高親密度給 premium 品質（實際 {"egg_premium":2}）
+  ✓ 離線動物產物會記錄首次發現時間
+  ✓ 養到開心任務看 bestAffinity，不因現值衰減而卡關
+
+== 13d. Stage 7：第三章任務鏈（老農對話 → 照護 → 開心 → 優質品 → 賣出）==
+  ✓ 地圖有老農 NPC
+  ✓ 任務標記指向老農
+  ✓ 跟老農對話推進到「餵食/澆水/梳理」任務
+  ✓ 任務標記指向雞舍（structure marker kind）
+  ✓ 照護動物後推進到「養到開心」任務
+  ✓ 親密度衝高並已收集優質品後，一次連跳兩關（不需分開觸發）
+  ✓ 接下來是「賣出優質品」任務
+  ✓ 倉庫已有優質/頂級品項
+  ✓ 賣出優質品後 qualitySold 計數增加
+  ✓ R47 routes completed chapter 3 into chapter 4
+
+== 13e. Stage 10.0：NPC 對話階段補上 ch3done（第三章動物照護全完成後）==
+  ✓ 初始階段 start
+  ✓ 序章完成後進 ch1done
+  ✓ 修橋後進 bridge
+  ✓ 只探索東林古樹但尚未回報採集前仍維持 bridge
+  ✓ 第二章任務鏈全部完成後 chapter2Done() 為 true
+  ✓ 採集並回報東林後進 ch2done
+  ✓ 第三章任務鏈尚未完成前 chapter3Done() 為 false
+  ✓ 第三章任務鏈全部完成後 chapter3Done() 為 true
+  ✓ 第三章動物照護全完成後進 ch3done（優先於 ch2done）
+  ✓ mayor 有 ch3done 台詞（作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。）
+  ✓ merchant 有 ch3done 台詞（聽說你連優質蛋奶都能收成，這可以當晨光鎮的招牌貨！）
+  ✓ elder 有 ch3done 台詞（照護的手藝算是出師了，不過動物要天天顧，可別鬆懈。）
+  ✓ child 有 ch3done 台詞（我也想幫忙跑腿！可以幫我準備一盒野餐點心嗎？）
+  ✓ 不存在的 NPC id 回傳 null
+
+== 14. 存檔遷移補齊 MVP2 欄位 ==
+  ✓ 舊存檔補齊 materials/map/buildings/animals
+  ✓ 舊存檔補齊 interaction.tool
+  ✓ 地圖磚數正確
+  ✓ R19 舊存檔地圖補上東林深處入口事件點
+  ✓ R19 舊存檔地圖補上東林深處稀有採集點
+  ✓ 舊存檔補齊 eastDeepUnlocked/discoveries/collections
+  ✓ 舊存檔用既有收成/收集紀錄回填首次發現時間
+
+== 14b. Stage 7：舊存檔的動物物件補齊照護欄位 ==
+  ✓ 舊動物補齊 affinity（預設 0）
+  ✓ 舊動物補齊 lastCaredAt
+  ✓ 舊動物補齊 lastFedAt/lastWateredAt/lastGroomedAt
+  ✓ 舊存檔補齊 stats.qualitySold
+
+== 14c. R49：髒 map 不再因維度相符而被信任 ==
+  ✓ 空 tiles 髒地圖會重建為完整新版地圖
+  ✓ 重建地圖含站點、常駐結構與事件點
+  ✓ 髒 map 重建不倒退金幣、倉庫與故事進度
+  ✓ 髒 map 重建會保留可對應座標的合法建築，只移除無法落點的個別建築
+  ✓ 髒 map 重建會保留可對應家園的合法動物，只移除無家園動物
+  ✓ 髒 map 重建保留合法玩家位置並重算座標
+
+== 14d. R64：半壞健康 map 會補齊必要站點、結構、NPC 與橋梁 ==
+  ✓ 缺水井站點會補回
+  ✓ 缺信箱站點會補回
+  ✓ 缺訂單看板站點會補回
+  ✓ 缺單一 NPC 時仍補齊所有必要 NPC
+  ✓ 缺雞舍 footprint structureId 會補齊
+  ✓ 缺斷橋旗標/地形會補回
+  ✓ 預置雞舍 building 記錄與 footprint buildingId 會重新接回
+
+== 15. Stage 10.1：NPC 重複委託（core logic）==
+  ✓ 不存在的 NPC id 回傳 reason=no_npc（實際 no_npc）
+  ✓ 第三章未完成前，NPC 不會開委託（reason=story）
+  ✓ 測試前置：第三章已標記完成
+  ✓ 玩家尚未發現任何可委託品項時不生成委託（實際 reason=no_pool）
+  ✓ no_pool 時 generateNpcRequest 回傳 null（不強行生成）
+  ✓ 已發現 elder 委託池內至少一項品項後，canRequestFrom 為 true
+  ✓ generateNpcRequest 產生委託物件
+  ✓ 委託只要求已發現的品項（egg），數量>0
+  ✓ 委託有正報酬
+  ✓ 委託存進 state.npcRequests[npcId]
+  ✓ 庫存不足時 canFulfillNpcRequest 為 false
+  ✓ 補足庫存後 canFulfillNpcRequest 為 true
+  ✓ fulfillNpcRequest 成功
+  ✓ coins 正確入帳
+  ✓ 委託扣除庫存正確（egg 用完後歸零/移除）
+  ✓ 交付後委託從 state.npcRequests 移除
+  ✓ npcRequestLog 完成次數遞增為 1
+  ✓ npcRequestLog 記錄最後交付時間
+  ✓ stats.npcRequestsCompleted 遞增
+  ✓ 交付後立刻詢問應在冷卻中（實際 reason=cooldown）
+  ✓ 冷卻時間過後可再接新委託（時間戳現算，不用計數器）
+  ✓ 沒有進行中委託時 fulfillNpcRequest 回傳 reason=none（實際 none）
+
+== 15b. Stage 10.1：舊存檔補齊 NPC 委託欄位 ==
+  ✓ 舊存檔補齊空的 npcRequests
+  ✓ 舊存檔補齊空的 npcRequestLog
+  ✓ 舊存檔補齊空的 npcSideQuests
+  ✓ 舊存檔補齊 stats.npcRequestsCompleted
+
+== 15c. Stage 10 審核修正：品質委託計數、放棄委託、報酬吃 sellBonus ==
+  ✓ elder 委託池含品質分級品項時可正常生成
+  ✓ 交付含品質品項的委託成功
+  ✓ 交付品質分級品項後 qualitySold 增加（實際 1）
+  ✓ 冷卻已過後可再生成新委託（放棄測試前置）
+  ✓ declineNpcRequest 成功
+  ✓ 放棄後委託從 state.npcRequests 移除
+  ✓ 放棄後立即詢問應在冷卻中（實際 reason=cooldown）
+  ✓ 沒有進行中委託時 declineNpcRequest 回傳 ok=false
+  ✓ 兩邊都能成功生成委託（比較報酬前置）
+  ✓ sellBonus 升級後委託報酬跟著提升（32 → 37），報酬基準吃當下 sellUnitValue
+
+== 15d. R19：鎮民三段連鎖支線（固定報酬 + 背景文本）==
+  ✓ 第三章完成後鎮長支線可接
+  ✓ mayor 支線設定為 3 段
+  ✓ mayor 生成第 1/3 段支線委託
+  ✓ mayor 第 1/3 段交付固定報酬
+  ✓ mayor 完成步數更新為 1/3
+  ✓ mayor 第 1/3 段完成後狀態正確
+  ✓ mayor 生成第 2/3 段支線委託
+  ✓ mayor 第 2/3 段交付固定報酬
+  ✓ mayor 完成步數更新為 2/3
+  ✓ mayor 第 2/3 段完成後狀態正確
+  ✓ mayor 生成第 3/3 段支線委託
+  ✓ mayor 第 3/3 段交付固定報酬
+  ✓ mayor 完成步數更新為 3/3
+  ✓ mayor 第 3/3 段完成後狀態正確
+  ✓ mayor 完成三段後解鎖小鎮背景文本
+  ✓ mayor 三段完成後不重複生成
+  ✓ merchant 支線設定為 3 段
+  ✓ merchant 生成第 1/3 段支線委託
+  ✓ merchant 第 1/3 段交付固定報酬
+  ✓ merchant 完成步數更新為 1/3
+  ✓ merchant 第 1/3 段完成後狀態正確
+  ✓ merchant 生成第 2/3 段支線委託
+  ✓ merchant 第 2/3 段交付固定報酬
+  ✓ merchant 完成步數更新為 2/3
+  ✓ merchant 第 2/3 段完成後狀態正確
+  ✓ merchant 生成第 3/3 段支線委託
+  ✓ merchant 第 3/3 段交付固定報酬
+  ✓ merchant 完成步數更新為 3/3
+  ✓ merchant 第 3/3 段完成後狀態正確
+  ✓ merchant 完成三段後解鎖小鎮背景文本
+  ✓ merchant 三段完成後不重複生成
+  ✓ elder 支線設定為 3 段
+  ✓ elder 生成第 1/3 段支線委託
+  ✓ elder 第 1/3 段交付固定報酬
+  ✓ elder 完成步數更新為 1/3
+  ✓ elder 第 1/3 段完成後狀態正確
+  ✓ elder 生成第 2/3 段支線委託
+  ✓ elder 第 2/3 段交付固定報酬
+  ✓ elder 完成步數更新為 2/3
+  ✓ elder 第 2/3 段完成後狀態正確
+  ✓ elder 生成第 3/3 段支線委託
+  ✓ elder 第 3/3 段交付固定報酬
+  ✓ elder 完成步數更新為 3/3
+  ✓ elder 第 3/3 段完成後狀態正確
+  ✓ elder 完成三段後解鎖小鎮背景文本
+  ✓ elder 三段完成後不重複生成
+  ✓ child 支線設定為 3 段
+  ✓ child 生成第 1/3 段支線委託
+  ✓ child 第 1/3 段交付固定報酬
+  ✓ child 完成步數更新為 1/3
+  ✓ child 第 1/3 段完成後狀態正確
+  ✓ child 生成第 2/3 段支線委託
+  ✓ child 第 2/3 段交付固定報酬
+  ✓ child 完成步數更新為 2/3
+  ✓ child 第 2/3 段完成後狀態正確
+  ✓ child 生成第 3/3 段支線委託
+  ✓ child 第 3/3 段交付固定報酬
+  ✓ child 完成步數更新為 3/3
+  ✓ child 第 3/3 段完成後狀態正確
+  ✓ child 完成三段後解鎖小鎮背景文本
+  ✓ child 三段完成後不重複生成
+  ✓ 圖鑑支線完成度統計全部完成
+  ✓ R19 四條三段支線總增發 133 金 / 36 XP（固定值可審）
+  ✓ R15 舊支線 done 紀錄在 R19 視為第一段完成，可續接第二章
+
+== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層）==
+  ✓ Lv1 小麥已解鎖但尚未發現（沒收成過）
+  ✓ Lv1 南瓜（unlockLevel 5）尚未解鎖
+  ✓ Lv1 時胡蘿蔔（unlockLevel 2）尚未解鎖
+  ✓ Lv2 時胡蘿蔔剛好解鎖（邊界值）
+  ✓ 成就總數與 ACHIEVEMENTS 設定一致
+  ✓ 全新存檔沒有任何成就解鎖
+  ✓ 解鎖後的成就 unlocked 正確反映（實際讀 state.achievements）
+  ✓ 只有解鎖的那一項是 true，其餘成就仍是 false（不會互相污染）
+  ✓ 收成小麥後作物圖鑑該項目變已發現
+  ✓ 沒收成過的作物仍是未發現（不會被連帶洩漏）
+  ✓ 收集 egg 後產物圖鑑該項目變已發現
+  ✓ egg_good 不因為 egg 已發現而連帶曝光
+  ✓ egg_premium 不因為 egg 已發現而連帶曝光
+  ✓ 東林採集圖鑑總數與 FORAGE_ITEMS 對得上
+  ✓ 未採集前東林採集完成度 0%
+  ✓ 採集東林野莓後該圖鑑項目揭露
+  ✓ 未採集的溪畔薄荷仍維持隱藏
+  ✓ 東林採集完成度可回報 1/8
+  ✓ 作物圖鑑完成度 total 會隨 R15 新作物玉米更新
+  ✓ 收藏冊詳情資料含首次發現時間、來源與用途
+  ✓ 未發現的深處採集物只提供來源提示，不提供首次發現時間
+  ✓ 作物收成會寫入首次發現時間，詳情用途含市集訂單
+  ✓ NPC 名錄總數與 NPCS 設定一致
+  ✓ 已互動過的老農 met=true
+  ✓ 只有互動過的那位 NPC met=true，其餘仍未遇見
+  ✓ 尚未完成過委託時，NPC 名錄的完成次數為 0
+  ✓ NPC 名錄的完成次數讀 npcRequestLog[npcId].fulfilledCount（不是隨便一個計數器）
+  ✓ 沒交過委託的其他 NPC 完成次數仍是 0（不會互相污染）
+  ✓ bestAffinity 曾達開心門檻，即使現值已衰減仍算數
+  ✓ bestAffinity 不隨時間衰減
+  ✓ 曾達開心門檻的動物，同時也滿足較低的 everGood 門檻
+  ✓ currentTier 讀現值（已大幅衰減至 0），跟 bestAffinity 的歷史高水位是兩回事
+  ✓ 剛照護完、尚未衰減時，currentTier 反映當下親密度（premium，門檻 70，現值 80）
+  ✓ bestAffinity 40 只達 good 門檻，未達 happy
+  ✓ 第一章一開始就看得到
+  ✓ 序章尚未全部完成前，第二章維持未解鎖
+  ✓ 第一章完成度算法跟 PROLOGUE_QUESTS 對得上
+  ✓ 序章全部完成後，第二章解鎖
+  ✓ 第二章剛解鎖，完成度 0
+  ✓ 第二章尚未完成前，第三章維持未解鎖
+  ✓ 第二章全部完成後，完成度對得上 CHAPTER2_QUESTS 長度
+  ✓ 第二章全部完成後，第三章解鎖（chapter2→chapter3 的正向轉換，不只測過 false）
+  ✓ 第三章剛解鎖，完成度 0
+  ✓ 世界旗標讀取正確（東橋）
+  ✓ 世界旗標讀取正確（東林空地，明確欄位而非事件清單長度）
+  ✓ 世界旗標與收藏品讀取東林深處解鎖/拓印紀錄
+  ✓ journalSummary 頂層 npcRequestsCompleted 讀 stats.npcRequestsCompleted（實際 7）
+  ✓ journalSummary 不會 mutate state（純讀取彙總）
+
+== 16b. Stage 11.1：舊存檔動物物件補齊 bestAffinity ==
+  ✓ 舊動物沒有 bestAffinity 時，用舊 affinity 值當合理預設（實際 42）
+
+== 17. R23：智慧助手 / 離線摘要 / 安全存檔 ==
+  ✓ 智慧助手排序優先成熟作物收成
+  ✓ 智慧助手 valueScore 可直接轉成收成量化理由
+  ✓ 智慧助手列出可交付市集委託
+  ✓ 智慧助手委託建議顯示量化獎勵理由
+  ✓ farmActionSuggestions 為純讀取，不 mutate state
+  ✓ 舊存檔設定遷移保留助手偏好並補離線摘要/音效/效能模式/文字大小預設
+  ✓ 空 tiles 髒存檔會重建成完整地圖與正確農土數
+  ✓ 遷移後地圖 tile id 完整且不重複
+  ✓ 舊存檔非法效能/文字設定會回復預設
+  ✓ 舊存檔音量設定會夾在 0-1 範圍
+  ✓ 舊存檔遷移補 lastOfflineSummary 空值
+  ✓ 離線摘要計入 6 分鐘離開時間
+  ✓ 離開期間採集點冷卻完成會進入摘要
+  ✓ safeSave 可寫入正常存檔
+  ✓ safeSave 遇到不可序列化資料不覆蓋既有存檔
+  ✓ safeSave 遇到壞 state 不覆蓋既有存檔
+
+== 18. R47: four-season crops, ducks, festival story ==
+  ✓ R47 crops route to crops2 sheet
+  ✓ crop config includes 15 crops after R51 P0
+  ✓ duck uses animals_duck for base and care frames
+  ✓ duck egg quality products route to product_quality_duck
+  ✓ duckPen can be built at level 8
+  ✓ duckPen auto-adds one duck
+  ✓ duck care chain reaches premium duck egg
+  ✓ duck premium egg can fulfill quality order
+  ✓ duckKeeper achievement unlocks after duck egg collection
+  ✓ festival generated order requests 2-3 item kinds
+  ✓ chapter 4 advances after harvesting all four seasons
+  ✓ chapter 4 advances after collecting duck egg
+  ✓ festival order completes chapter 4
+  ✓ npc phase reaches ch4done
+  ✓ festival order grants festival lantern collectible
+  ✓ seasonalTable and festivalDeal achievements unlock
+  ✓ journal achievement count follows config
+  ✓ journal collectible count includes unlocked festival lantern
+  ✓ journal chapter 4 completion is tracked
+
+== 19. R48: grandma letters, crops3, festival stall ==
+  ✓ R48 crops route to crops3 sheet
+  ✓ festival_stall building has seasonal sell bonus
+  ✓ R48 collectibles and achievements are registered
+  ✓ letters include eight grandma letters, four townsfolk notes, and one memory garden note
+  ✓ letters stay locked before unlock conditions
+  ✓ first delivery unlocks first letter
+  ✓ bridge repair unlocks bridge letter
+  ✓ happy animal unlocks animal letter
+  ✓ spring reached unlocks spring letter
+  ✓ summer reached unlocks summer letter
+  ✓ autumn reached unlocks autumn letter
+  ✓ winter reached unlocks winter letter
+  ✓ festival order unlocks festival letter
+  ✓ reading animal letter unlocks grandma_hat
+  ✓ reading all letters unlocks letterKeeper
+  ✓ replyLetter requires all read and unlocks seed_pouch
+  ✓ fullPantry and stallOwner achievements unlock
+  ✓ legacy duplicate festival_stall is capped to one +0.15 seasonal bonus
+  ✓ festival stall bonus applies to in-season crop sell value
+  ✓ old saves migrate mail, seasonsReached, and seasonEventsClaimed safely
+  ✓ journal chapter 5 completion tracks letters and reply
+  ✓ chapter5Done drives NPC phase postscript
+  ✓ R3 ch5done：八封已讀但未回信時 NPC phase 可達 ch5done
+  ✓ R3 ch5done：mayor 會播放 ch5done 台詞而非直接跳 postscript
+  ✓ R3 ch5done：merchant 會播放 ch5done 台詞而非直接跳 postscript
+  ✓ R3 ch5done：elder 會播放 ch5done 台詞而非直接跳 postscript
+  ✓ R3 ch5done：child 會播放 ch5done 台詞而非直接跳 postscript
+
+== 20. R51 P0: content quick wins ==
+  ✓ P0-1 四季訂單偏壓具名內容已註冊
+  ✓ P0-2 side_quest_done unlocks all four townsfolk notes
+  ✓ P0-2 reading four townsfolk notes unlocks 四鄰來信 without changing letterKeeper semantics
+  ✓ P0-2 四鄰來信 is noBonus and does not increase permanent sell multiplier
+  ✓ P0-4 memory_garden can be built once at Lv4
+  ✓ P0-4 memory_garden maxCount:1 enforced
+  ✓ P0-4 memory_garden has no growthAura or seasonal sell bonus
+  ✓ P0-4 memory_garden only boosts order XP, not order coins
+  ✓ P0-4 owning memory_garden unlocks its flavor letter
+  ✓ P0-5 spring_seed_swap consumes wheat once and grants sticker + XP
+  ✓ P0-5 same seasonCycleId cannot be claimed twice
+  ✓ P0-5 offline season catch-up exposes the new current season event once
+  ✓ R3 季節事件：離線跨兩季時中間夏季事件關閉為 skipped，不補發
+  ✓ R3 季節事件：落地當前秋季事件仍可領，沒有被 skipped 誤去重
+  ✓ R3 季節事件：離線跳過的中間季不提供補領入口
+  ✓ R3 季節事件：當前季可正常領取且領後以 cycleId 去重
+  ✓ P0-5 autumn_share_basket grants only a small one-time coin reward and collectible
+  ✓ P0-5 winter_hearth_soup grants no sellMul/coins, only XP + note
+  ✓ P0-6 mayor uses postscript after ch5done
+  ✓ P0-6 merchant uses postscript after ch5done
+  ✓ P0-6 elder uses postscript after ch5done
+  ✓ P0-6 child uses postscript after ch5done
+
+✅ 全部 MVP2 系統測試通過
+PASS new state is additive, deterministic, and has nine causally ordered quests
+PASS old save migration uses harvested quantities, not map key counts
+PASS minimal legacy saves and care lower bounds migrate without resetting the save
+PASS pre-accumulated actions are visible while locked and survive quest activation
+PASS repeated claims and save reloads grant rewards only once
+PASS ready state persists, but missing delivery items cannot be claimed
+PASS all project resource checks are atomic and restoration is one-time
+PASS cooking checks all ingredients, consumes once, and never pollutes crop storage
+PASS fish requires a real restored dock, respects 30s cooldown, and pays no coins
+PASS eight-hour absence does not bank casts; catch capacity bounds every quantity
+PASS injected RNG is bounded and invalid RNG does not add a catch or start cooldown
+PASS unknown IDs, invalid counts, failed actions, and NaN time cannot grant rewards
+PASS mixed meal/catch delivery does not consume any resource when one is missing
+PASS extreme legacy balances cannot overflow into non-finite or unsafe reward quantities
+PASS corrupt adventure quantities are finite and bounded; NaN resources are not spendable
+PASS ready and claimed partial adventure saves retain their status and cooldown
+PASS query descriptors are detached and project sites match the new world
+PASS CommonJS and browser window.AdventureAPI have the same pure API
+PASS full three-chapter run uses real crops, care, orders and forage; no material injection
+PASS renewable material purchases are atomic, bounded and never free
+PASS river commissions consume meals and fish once per cycle and survive reload
+
+Adventure tests: 21 passed, 0 failed.
+PASS actual CONFIG: picnic relocation preserves a new coop and its animal across repeated reloads.
+PASS actual CONFIG: occupied garden site relocates, retains building/animal, and keeps its interaction target after reload.
+PASS R74 shoreline/road fixture: existing building wins over new landscape and picnic site.
+PASS corrupt map and invalid adventure fixture: world bindings rebuild without overlapping entities or new construction on NPCs/stations.
+== R74-1. 建物逐級資料與有限成本曲線 ==
+  ✓ 堆肥場 有 Lv1～Lv3 成本、效果與說明
+  ✓ 堆肥場 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 堆肥場 金幣成本逐級上升（60→160→480）
+  ✓ 筒倉 有 Lv1～Lv3 成本、效果與說明
+  ✓ 筒倉 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 筒倉 金幣成本逐級上升（180→360→980）
+  ✓ 雞舍 有 Lv1～Lv3 成本、效果與說明
+  ✓ 雞舍 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 雞舍 金幣成本逐級上升（140→320→820）
+  ✓ 畜舍 有 Lv1～Lv3 成本、效果與說明
+  ✓ 畜舍 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 畜舍 金幣成本逐級上升（420→760→1800）
+  ✓ 祖母花圃 有 Lv1～Lv3 成本、效果與說明
+  ✓ 祖母花圃 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 祖母花圃 金幣成本逐級上升（0→240→720）
+  ✓ 蜂箱 有 Lv1～Lv3 成本、效果與說明
+  ✓ 蜂箱 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 蜂箱 金幣成本逐級上升（320→680→1540）
+  ✓ 鴨舍 有 Lv1～Lv3 成本、效果與說明
+  ✓ 鴨舍 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 鴨舍 金幣成本逐級上升（380→720→1580）
+  ✓ 豐年祭小攤 有 Lv1～Lv3 成本、效果與說明
+  ✓ 豐年祭小攤 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 豐年祭小攤 金幣成本逐級上升（620→1300→3000）
+  ✓ 溫室 有 Lv1～Lv3 成本、效果與說明
+  ✓ 溫室 建造成本/基礎效果由 levels[0] 單一來源衍生
+  ✓ 溫室 金幣成本逐級上升（760→1500→3400）
+
+== R74-2. 堆肥場升級扣資源、改效果且三級封頂 ==
+  ✓ 新建堆肥場是 Lv1，成長倍率 ×0.90
+  ✓ Lv1 明確指向 Lv2 與下一級 ×0.84 效果
+  ✓ 升級只扣該級金幣與堆肥成本
+  ✓ 堆肥場 Lv2 即時套用成長倍率 ×0.84
+  ✓ 堆肥場可升到 Lv3，倍率 ×0.78
+  ✓ Lv3 封頂，不會出現無限升級
+
+== R74-3. 不足時 fail-closed；筒倉與動物舍有真實逐棟增益 ==
+  ✓ 資源不足不扣款、不升級
+  ✓ 筒倉逐級提高總倉容（120→200→330）
+  ✓ 預置畜舍 Lv1 容量 4
+  ✓ 只升這棟畜舍後容量成為 5
+
+== R74-4. R73 舊存檔缺 level 安全遷移 ==
+  ✓ 缺 level 的舊存檔保留全部 4 棟建物（含 b_compostHeap_3、b_silo_4）
+  ✓ 舊存檔遷移保留每棟建物與原地圖 footprint/磚綁定
+  ✓ 舊建物缺 level 時一致安全預設 Lv1
+  ✓ 遷移後 Lv1 堆肥與筒倉效果可正常計算
+
+== R74-5. 已有等級保留，髒等級夾回合法範圍 ==
+  ✓ 合法 Lv2 在遷移後保留
+  ✓ 超過上限的髒 level 夾回 Lv3
+
+✅ R74 單棟建物成長線與舊存檔遷移測試通過
+R79 陽光光斑
+  ✓ 沒有種過作物時不會出現光斑
+  ✓ 種下第一株後約 4 秒出現第一道光，且只第一次標記 first
+  ✓ 光斑 16 秒後消失，間隔後再出現，第二次不再標記 first
+  ✓ 在光裡收成多 1 份、多 2 經驗，統計 +1，同一格不能重複領
+  ✓ 光外收成維持原本產量
+  ✓ 在光裡澆水：立刻推進 30% 成長時間，且仍是濕土
+  ✓ 在光裡種下：作物一開始就長了 30%
+  ✓ 長週期作物的加速有 3 分鐘上限
+  ✓ 雨天、雪天、霧、暴風雨不出光斑，會延後重試
+  ✓ 晴朗天氣間隔較短
+  ✓ 離線很久回來只補一道光，不會連續觸發
+  ✓ 優先照在可收成的田
+  ✓ 壞掉的存檔欄位會被修正，不會丟例外
+  ✓ 離線結算不會吃到過期光斑的加成
+
+✅ R79 sunpatch PASS (14 checks)
+PASS new farmer gets reachable wheat basket and no free rewards
+PASS basket uses only crops unlocked at the start of the day
+PASS successful watering counts once; invalid and repeated watering do not count
+PASS harvest counts stored produce only and never unripe input
+PASS lost harvest in full storage gives no daily progress
+PASS basket cannot be delivered without enough stock and pays only once
+PASS all three real tasks grant exactly one stamp and compost
+PASS Taiwan midnight resets progress and preserves earned stamps
+PASS a stale previous-day claim cannot consume produce or give coins
+PASS clock rollback cannot replay a stamped day
+PASS missing several days grants no free stamps and no streak penalty
+PASS three nonconsecutive visits unlock the first story memento
+PASS seven days unlock both text collectibles and persist through migration
+PASS old saves have no fabricated daily progress; malformed fields are repaired
+PASS quick harvest ignores locked and unripe plots
+PASS quick harvest chooses sunshine over distance and yields no immediate mutation
+PASS quick harvest never selects produce that cannot entirely fit
+PASS offline return never creates stamps or claims rewards automatically
+PASS unknown daily actions and invalid quantities never grant progress
+PASS higher-level farmers receive a rotating crop basket over several days
+R80 daily: 20 passed
+PASS old saves do not invent sunlight or a delivered story
+PASS malformed story state is bounded
+PASS starting the route spends no coins and awards no produce
+PASS ordinary wheat cannot unlock the sunlight recipe
+PASS sunlit watering marks this crop; harvest records only at maturity
+PASS planting in sunlight counts; no stale marker on a new planting
+PASS a harvest in active sunlight counts
+PASS sunlit carrots cannot substitute for the wheat task
+PASS full warehouse with zero added produce does not advance recipe
+PASS delivery refuses shortage and consumes nothing
+PASS delivery refuses arbitrary choice and leaves wheat intact
+PASS table spends exactly two wheat once and persists its own note
+PASS doorstep spends exactly two wheat once and persists its own note
+PASS two choices have different remembered responses
+PASS clock rollback and daily rollover cannot replay delivery
+PASS a saved sunlight-touched crop preserves its provenance across reopening
+PASS reopening mid-walk or mid-action clears abandoned callbacks and preserves the physics tile
+R81 heirloom: 17 passed
+== UI 煙霧測試（mock DOM）==
+  ✓ 四個腳本載入 + init() 執行無例外
+  ✓ 地圖場景磚已建立（266 磚）
+  ✓ 點地圖磚無例外
+  ✓ 工具列 5 個工具
+  ✓ 賣出/收成/澆水/收產物按鈕無例外
+  ✓ 設定/引導/離線 modal 開關按鈕無例外
+
+✅ UI 煙霧測試通過
+  ✓ walk: 24 frames, 288x256
+  ✓ actions: 72 frames, 288x768
+  ✓ vfx: 48 frames, 192x256
+  ✓ crops: 30 frames, 160x192
+  ✓ terrain: 49 frames, 512x512
+  ✓ props: 16 frames, 512x512
+
+✅ v3 atlas 驗證通過
+  ✓ walk: 24 frames, 288x256
+  ✓ actions: 144 frames, 288x1536
+  ✓ walk_m: 24 frames, 288x256
+  ✓ actions_m: 144 frames, 288x1536
+  ✓ npcs: 16 frames, 192x256
+  ✓ crops: 30 frames, 240x288
+  ✓ crops2: 20 frames, 240x192
+  ✓ crops3: 15 frames, 240x144
+  ✓ crops4: 10 frames, 240x96
+  ✓ animals: 16 frames, 192x192
+  ✓ animals_duck: 8 frames, 192x96
+  ✓ buildings: 4 frames, 512x512
+  ✓ structures: 16 frames, 1024x784
+  ✓ terrain: 49 frames, 512x512
+  ✓ props: 16 frames, 512x512
+  ✓ vfx: 48 frames, 192x256
+  ✓ care_props: 16 frames, 256x256
+  ✓ product_quality: 12 frames, 96x128
+  ✓ product_quality_duck: 3 frames, 96x32
+  ✓ care_vfx: 36 frames, 192x192
+  ✓ animal_status: 16 frames, 128x128
+  ✓ animals_care: 16 frames, 192x192
+
+✅ v4 atlas 驗證通過
+{"release": "R66", "counts": {"crops": 15, "tools": 6, "tabs": 5, "systems": 6, "icons": 32, "assistant_skins": 3}, "alpha_gate": {"status": "PASS", "passed": 35, "total": 35}}
+  ✅ manifest records R66 and actual gpt-image-2 provenance
+  ✅ manifest count contract is 15/6/5/6 + 3 skins
+  ✅ manifest alpha gate is 35/35 PASS
+  ✅ 8x4 atlas frame map contains the exact 32 formal icons
+  ✅ runtime atlas SHA-256 matches manifest
+  ✅ crop_wheat has slug/prompt/native hash and matching file
+  ✅ crop_carrot has slug/prompt/native hash and matching file
+  ✅ crop_tomato has slug/prompt/native hash and matching file
+  ✅ crop_strawberry has slug/prompt/native hash and matching file
+  ✅ crop_corn has slug/prompt/native hash and matching file
+  ✅ crop_pumpkin has slug/prompt/native hash and matching file
+  ✅ crop_radish has slug/prompt/native hash and matching file
+  ✅ crop_bell_pepper has slug/prompt/native hash and matching file
+  ✅ crop_potato has slug/prompt/native hash and matching file
+  ✅ crop_sunflower has slug/prompt/native hash and matching file
+  ✅ crop_grapes has slug/prompt/native hash and matching file
+  ✅ crop_melon has slug/prompt/native hash and matching file
+  ✅ crop_pea has slug/prompt/native hash and matching file
+  ✅ crop_sweet_potato has slug/prompt/native hash and matching file
+  ✅ crop_winter_kale has slug/prompt/native hash and matching file
+  ✅ tool_plant has slug/prompt/native hash and matching file
+  ✅ tool_harvest has slug/prompt/native hash and matching file
+  ✅ tool_water has slug/prompt/native hash and matching file
+  ✅ tool_clear has slug/prompt/native hash and matching file
+  ✅ tool_build has slug/prompt/native hash and matching file
+  ✅ tool_inspect has slug/prompt/native hash and matching file
+  ✅ tab_tile has slug/prompt/native hash and matching file
+  ✅ tab_orders has slug/prompt/native hash and matching file
+  ✅ tab_upgrades has slug/prompt/native hash and matching file
+  ✅ tab_story has slug/prompt/native hash and matching file
+  ✅ tab_journal has slug/prompt/native hash and matching file
+  ✅ system_coin has slug/prompt/native hash and matching file
+  ✅ system_xp has slug/prompt/native hash and matching file
+  ✅ system_storage has slug/prompt/native hash and matching file
+  ✅ system_settings has slug/prompt/native hash and matching file
+  ✅ system_help has slug/prompt/native hash and matching file
+  ✅ system_reset has slug/prompt/native hash and matching file
+  ✅ assistant_idle has slug/prompt/native hash and matching file
+  ✅ assistant_tip has slug/prompt/native hash and matching file
+  ✅ assistant_alert has slug/prompt/native hash and matching file
+  ✅ index CSS maps all 32 individual transparent native icons
+  ✅ responsive icons scale the whole image without atlas clipping
+  ✅ crop and tool renderers use the formal transparent icons
+  ✅ tabs and system controls are wired to formal icons
+  ✅ three smart-assistant skins are wired to idle/tip/alert state selection
+  ✅ first-session smart assistant remains collapsed
+
+R66 UI art contract PASS
+{"c2paPass": true, "decodedMiB": 9.07, "budgetPass": true}
+== R68 seasonal visual static gates ==
+  ✓ manifest release/version/model are exact
+  ✓ runtime manifest uses its exact content hash in the SW offline list
+  ✓ shared palette has exactly 66 unique colours
+  ✓ Python C2PA verification is PASS for 5/5 masters
+  ✓ source manifest records model, four reference hashes, and five prompt-bound masters
+  ✓ loading-spring master is evidence-only
+  ✓ loading-spring master SHA-256 matches
+  ✓ loading-spring embedded softwareAgent is gpt-image 2.0
+  ✓ loading-spring/low runtime SHA-256 matches
+  ✓ loading-spring/low content hash query is SHA prefix
+  ✓ loading-spring/low palette, multi-value, and outline gates pass
+  ✓ loading-spring/low runtime references use exact content hash in UI and SW
+  ✓ loading-spring/med runtime SHA-256 matches
+  ✓ loading-spring/med content hash query is SHA prefix
+  ✓ loading-spring/med palette, multi-value, and outline gates pass
+  ✓ loading-spring/med runtime references use exact content hash in UI and SW
+  ✓ loading-spring/high runtime SHA-256 matches
+  ✓ loading-spring/high content hash query is SHA prefix
+  ✓ loading-spring/high palette, multi-value, and outline gates pass
+  ✓ loading-spring/high runtime references use exact content hash in UI and SW
+  ✓ loading-spring low/med/high tiers are three real distinct assets
+  ✓ loading-summer master is evidence-only
+  ✓ loading-summer master SHA-256 matches
+  ✓ loading-summer embedded softwareAgent is gpt-image 2.0
+  ✓ loading-summer/low runtime SHA-256 matches
+  ✓ loading-summer/low content hash query is SHA prefix
+  ✓ loading-summer/low palette, multi-value, and outline gates pass
+  ✓ loading-summer/low runtime references use exact content hash in UI and SW
+  ✓ loading-summer/med runtime SHA-256 matches
+  ✓ loading-summer/med content hash query is SHA prefix
+  ✓ loading-summer/med palette, multi-value, and outline gates pass
+  ✓ loading-summer/med runtime references use exact content hash in UI and SW
+  ✓ loading-summer/high runtime SHA-256 matches
+  ✓ loading-summer/high content hash query is SHA prefix
+  ✓ loading-summer/high palette, multi-value, and outline gates pass
+  ✓ loading-summer/high runtime references use exact content hash in UI and SW
+  ✓ loading-summer low/med/high tiers are three real distinct assets
+  ✓ loading-autumn master is evidence-only
+  ✓ loading-autumn master SHA-256 matches
+  ✓ loading-autumn embedded softwareAgent is gpt-image 2.0
+  ✓ loading-autumn/low runtime SHA-256 matches
+  ✓ loading-autumn/low content hash query is SHA prefix
+  ✓ loading-autumn/low palette, multi-value, and outline gates pass
+  ✓ loading-autumn/low runtime references use exact content hash in UI and SW
+  ✓ loading-autumn/med runtime SHA-256 matches
+  ✓ loading-autumn/med content hash query is SHA prefix
+  ✓ loading-autumn/med palette, multi-value, and outline gates pass
+  ✓ loading-autumn/med runtime references use exact content hash in UI and SW
+  ✓ loading-autumn/high runtime SHA-256 matches
+  ✓ loading-autumn/high content hash query is SHA prefix
+  ✓ loading-autumn/high palette, multi-value, and outline gates pass
+  ✓ loading-autumn/high runtime references use exact content hash in UI and SW
+  ✓ loading-autumn low/med/high tiers are three real distinct assets
+  ✓ loading-winter master is evidence-only
+  ✓ loading-winter master SHA-256 matches
+  ✓ loading-winter embedded softwareAgent is gpt-image 2.0
+  ✓ loading-winter/low runtime SHA-256 matches
+  ✓ loading-winter/low content hash query is SHA prefix
+  ✓ loading-winter/low palette, multi-value, and outline gates pass
+  ✓ loading-winter/low runtime references use exact content hash in UI and SW
+  ✓ loading-winter/med runtime SHA-256 matches
+  ✓ loading-winter/med content hash query is SHA prefix
+  ✓ loading-winter/med palette, multi-value, and outline gates pass
+  ✓ loading-winter/med runtime references use exact content hash in UI and SW
+  ✓ loading-winter/high runtime SHA-256 matches
+  ✓ loading-winter/high content hash query is SHA prefix
+  ✓ loading-winter/high palette, multi-value, and outline gates pass
+  ✓ loading-winter/high runtime references use exact content hash in UI and SW
+  ✓ loading-winter low/med/high tiers are three real distinct assets
+  ✓ activity-panel master is evidence-only
+  ✓ activity-panel master SHA-256 matches
+  ✓ activity-panel embedded softwareAgent is gpt-image 2.0
+  ✓ activity-panel/low runtime SHA-256 matches
+  ✓ activity-panel/low content hash query is SHA prefix
+  ✓ activity-panel/low palette, multi-value, and outline gates pass
+  ✓ activity-panel/low runtime references use exact content hash in UI and SW
+  ✓ activity-panel/med runtime SHA-256 matches
+  ✓ activity-panel/med content hash query is SHA prefix
+  ✓ activity-panel/med palette, multi-value, and outline gates pass
+  ✓ activity-panel/med runtime references use exact content hash in UI and SW
+  ✓ activity-panel/high runtime SHA-256 matches
+  ✓ activity-panel/high content hash query is SHA prefix
+  ✓ activity-panel/high palette, multi-value, and outline gates pass
+  ✓ activity-panel/high runtime references use exact content hash in UI and SW
+  ✓ activity-panel low/med/high tiers are three real distinct assets
+  ✓ all tiers decoded texture total 9.07MiB <= mobile 32MiB and desktop 64MiB
+  ✓ activity-panel title/body/meta minimum contrast is >=4.5:1 in every tier
+  ✓ activity-panel text-zone local luminance noise stays <=0.12 in every tier
+  ✓ loading title/body contrast is >=4.5:1 over every seasonal tier
+  ✓ loading focal bbox and 8% viewport safe area are commandized
+  ✓ loading screen uses cover framing and emits performance focus mark
+  ✓ generated panel is bound only to the existing season-event card
+  ✓ runtime old version reference count is zero
+  ✓ style board and low/med/high same-scene evidence exist
+
+✅ R68 static visual gates PASS (94 assertions)
+PASS merchant first basket opens a distinct story and a clue; matching first visit does not skip listening
+PASS merchant wrong taste keeps a clue; remembered taste alone opens personal response and survives real save/load
+PASS elder first basket opens a distinct story and a clue; matching first visit does not skip listening
+PASS elder wrong taste keeps a clue; remembered taste alone opens personal response and survives real save/load
+PASS child first basket opens a distinct story and a clue; matching first visit does not skip listening
+PASS child wrong taste keeps a clue; remembered taste alone opens personal response and survives real save/load
+PASS three stories and replies differ; no preference answer is exposed before receiving a basket
+PASS missing bread, missing flavor, invalid resident/taste/time and locked chapter never spend ingredients
+PASS each flavor consumes exactly the shown meal and ingredient, without money or XP rewards
+PASS old and malformed saves normalize without inventing stories, catches or matched preferences
+PASS river_carp has observable distinct phases; premature and late reels grant nothing
+PASS river_carp proper impact window catches the observed species once and saves its first river note
+PASS silver_dace has observable distinct phases; premature and late reels grant nothing
+PASS silver_dace proper impact window catches the observed species once and saves its first river note
+PASS river_perch has observable distinct phases; premature and late reels grant nothing
+PASS river_perch proper impact window catches the observed species once and saves its first river note
+PASS fishing guard covers restored dock, full basket, invalid RNG/time, and reload during a cast
+PASS all six actual generated runtime assets match manifest sizes/hashes and are cached offline
+VERIFIED 18 content R1 rule groups
+PASS three residents have distinct first, wrong, matched replies and persist exact latest taste
+PASS read-only animation observation agrees with reel eligibility on every phase boundary without mutating saves
+PASS three new notebook images have exact palette, source hashes and offline cache entries
+VERIFIED content R2 3 rule groups
+PASS context recollections are earned, personal and do not reveal flavor answers
+PASS legacy inventory overflow is preserved and normal harvest still respects real capacity
+PASS three generated dioramas have source hashes, exact R89 palette and offline entries
+VERIFIED content R3 3 rule groups
+PASS three earned recollections avoid flavor and ingredient names, matches remain unique after migration
+PASS all fish require the actual impact window and persist unlocked notes with real cooldown
+PASS two generated images retain sources, exact R89 palette contract and offline cache entries
+VERIFIED content R4 3 rule groups
+PASS all three earned memories preserve first, wrong and matched branches across save migration
+PASS new return-visit art retains built-in provenance, exact palette, matching prompts and precache
+VERIFIED content R5 2 rule groups
+PASS three earned keepsakes and wrong reactions are personal, no shared bookmark or wrong-answer spoilers
+PASS shared meal unlocks only after all three real matches, packing is atomic, one-time and survives every reload
+PASS malformed legacy gathering cannot invent completion or unearned reserved baskets
+PASS observed fish require circular closure, a short vertical splash or straight wake; late and premature reels grant nothing
+PASS earned notebook teaching names the actual three distinct reel decisions
+PASS R6 generated atlas and runtime sprites have actual tool provenance, hashes and offline precache
+VERIFIED content R6 6 rule groups
+PASS each real delivery branches into a different kept place; all three survive reload
+PASS observed motions and saved reel gates agree on early, impact and late frames
+PASS all generated and reused poses have exact hashes, sizes and explicit offline entries
+VERIFIED content R7 3 groups
+PASS three actual gift histories preserve first/wrong/matched reactions and resources across migration
+PASS generated atlas, native dimensions, original prompts and offline precache match exact hashes
+PASS all impact windows and saved fish counts remain authoritative
+VERIFIED R8 3 groups
+C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\tools\verify-content-r9-pixels.py:9: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  im=Image.open(R/a['path']).convert('RGBA');pixels=[(r,g,b) for r,g,b,v in im.getdata() if v]
+VERIFIED four fixed heads/feet; distinct hand poses, seated lower bodies byte-identical
+PASS new generated poses have complete source hashes, exact R89 palette and offline URLs
+PASS three gifts consume only once, all branches migrate and three baskets unlock permanent gathering
+PASS three real hitboxes keep early/late failures and first/repeat notebook counts authoritative
+VERIFIED R9 3 groups
+PASS choice result and sequence differ, earned tastes persist, no extra meals consumed
+PASS locked and invalid choices cannot write; migration rebuilds replies, bounds history
+PASS actual generated source hashes, style and native palette are complete
+VERIFIED R10 3 groups
+PASS three actual portions; duplicate residents and foods rejected with no writes
+PASS all six orders complete; matching and wrong replies reflect actual food
+PASS three distinct early clues; late is distinct; no fish from either failure
+PASS new generated props have complete provenance and offline cache entries
+VERIFIED R11 4 groups
+PASS wrong shared plate retains guest and correct taste; reload then all six orders finish
+PASS early reel grants no note; successful reel unlocks exactly one unique note
+PASS generated water and three actual upper poses have exact provenance and offline entries
+VERIFIED R12 3 groups
+PASS wrong dish consumes its physical portion; cannot conjure a fourth; refill pays exact ingredients once
+PASS missing refill materials leave resources, portions and history unchanged
+PASS every species has early/valid/late actual reel outcomes and unique reloadable note
+PASS repeated deliveries charge once per call and retain earned recipient memories
+VERIFIED zero alpha error; exact complete waiting sprites
+PASS generated assets and source alpha are hash-bound; waiting lower bodies keep accepted seat anchors
+PASS creek uses the same square pixel grid as the R89 continuous ground
+VERIFIED R13 6 groups
+PASS one fresh save: three successful species give exactly 1/1, 2/2, 3/3 and survive migration
+PASS early/late/no cast never grant a fish, note or cumulative success
+PASS repeat success adds fish once and retains only one species note; read-only replay mutates nothing
+PASS legacy catches already delivered stay in the cumulative count, without spawning current fish
+PASS wrong then corrected table preserves exact material cost, 4 actual plates, 3 guests and 3 distinct replies
+VERIFIED R14 5 groups

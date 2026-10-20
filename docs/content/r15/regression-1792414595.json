@@ -1,0 +1,78 @@
+{
+  "status": "EXECUTED",
+  "startedAt": "2026-10-19T12:56:35.320589+00:00",
+  "afterCleanup": true,
+  "sources": {
+    "index.html": "3bd27a2f1fb13efa866385184e2d9863252740a262438bb4d5e6b0ada691b939",
+    "sw.js": "b8a29e327a1839f15ae0e3e97dcc163d93d328fd855140781a0cf4d90da5dae3",
+    "manifest.webmanifest": "c038079e721087a46b0aa0c7782b396d29023c70c953e0626cd60e507d1f4054",
+    "package.json": "0732ffa0ec5d6f6ffe2230d206b7e94ff474aa8b7ba90870ade5628337434210",
+    "package-lock.json": "7b042a164f6116d82ad62fa3059506d8d25df55e50f58ee001c2304e0ee810d0",
+    "src/adventure.js": "79be063ccb0271d3dd8a73e2d2730a43da7868b6b993addaae0db1a9ad899c56",
+    "src/art-r82.css": "d77f6116c312efae312f439806ea7537b7ce3762c8847f317c0cf44c22be4065",
+    "src/art-r83.css": "3e1538098d63d229b3e7b190f4008b4432f39bafef4385eb347eb87130ef3489",
+    "src/art-r84.css": "2eba7d4183d292f09d7e960e2f8ec3f7ba09e1a37b89e8bf19813868bbfaccc9",
+    "src/art-r84.js": "996b5af14bbb1903d7f4a5ac6e8e86f0eba0cf3d2b94f54c11fb267dba918516",
+    "src/art-r85.css": "77ca969a45a279805864915a3797d5c645b152f9df90f7d0f6b24bdced7518a5",
+    "src/art-r86.css": "91c8e8f358de2536d94e5a1c77c522e45ae69e6da2c2ef1cd156da0aeeaa27b7",
+    "src/art-r87.css": "7d8f3414d5836bc6a18e9b4578e801be95c4af78ae8881cac0fb945428ffd063",
+    "src/art-r88.css": "79ddbe8032d3a7245b5709bad1451355661b18e03fa44173834dbf3445837ed2",
+    "src/art-r89.css": "791a043d70fa203ac0d67fb7c7fd1cc9b6821ea703534b4ef2bdddb0e0a4603f",
+    "src/atlas.js": "8a634d6883b822daf48a53c7a927dd54141d6054f252307b5770fe43960c0a22",
+    "src/config.js": "591601db2cc228a1ec4ba84edcba5fca4745e06c33d84e8352ec5f7a9a38d6dd",
+    "src/content-r1.css": "008a9d228aa0af368d2fb1cf023873fdd19ad52c0ee3e55fd32a3f2e24ce9b57",
+    "src/content-r1.js": "45f53aa41601ba344fc6d676a25cac5b39eaf22e47717d7a918504295893cd8c",
+    "src/content-r10.css": "66033bd211a173528b905567fc0be7ee01e11efbdabc7dd112bbb48de4945626",
+    "src/content-r11.css": "6053ce6b05b30d1e57e115647dc6dabd70eca509a7f9d3e29d8ab9649ff35874",
+    "src/content-r12.css": "62fa8a830269531a1d7c457734957c597310cafc1f36f96388b535b891a854a4",
+    "src/content-r13.css": "9ff3f5ba71958ecd481c96b5b5a555f81964aef8e3136bfd4f6790654ed44efa",
+    "src/content-r14.css": "38e2bb20b1f3c898e48489836a27084408408c3b9c2533b46dcb56ce247869a3",
+    "src/content-r15.css": "03ba5aab7fecf0f8ce0c02d25102fd31e066d84c5e518f39caec549d460b1ce3",
+    "src/content-r6.css": "3af3571413df912e171315d6812f55c77f4f0d9fe5e1d798e6c128840f597f87",
+    "src/content-r6.js": "9146c9ca7c4c042faa2835fbcd4c2f15e6b9ce64f93bec1a8e483751100b3f14",
+    "src/content-r8.css": "482f2ad440a3ac21c71d118bae60e5f6b83fb04464c9a53ac86c0826eab41bf0",
+    "src/content-r8.js": "83bf2201d74df1abd997dbec8fb172ccb746c76eae4a35ddf210135a4c0733a5",
+    "src/content-r9.css": "3c6a332855184bf46cc5f1ec6acade92bd0eef5a4c9d359b01b72cf83b0b1bd1",
+    "src/daily-ui.js": "3c31cd5ef7fa141270a8a757952500215477c759c5677c0d81fcdb0dd3422aff",
+    "src/daily.js": "4abcd251fa0f1c5385cf9deffce11641c801a4dc602e94d525ea7970aed9daa4",
+    "src/game.js": "8756bffb7e284ff503e691c2dc358a490ea05750789f506602d8be12a99bf77b",
+    "src/heirloom-ui.js": "f45fb552a0d429ded39f168863a1381d90c0bd4d21b298ba0c490a33afeff8d5",
+    "src/heirloom.js": "b0fe2adda053158ec054e2a163068bb0ec646e0e6bd7297dd47bbe4b0b328838",
+    "src/state.js": "bfa0102e65696bd0aa506692d97e6162a3710eccd61b7612a440d8f558cb7619",
+    "src/ui.js": "16a301f894f6d95ea528bccb34f95f835e44ae7ac039abc27b9c8effca697de3",
+    "src/world-ui.js": "b2f7fb1d951e754dd04c8fe89d8e4ab2fab7d2d102ceb339a9a8f37f4fb7ff83",
+    "src/world.css": "63e43d96060fbd04bd1e5b40decfbdb405bea693a31d89b8b041d5e997fb850e"
+  },
+  "commands": [
+    {
+      "command": [
+        "npm.cmd",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 7.88,
+      "log": "docs/content/r15/logs/1792414595-npm-test.log",
+      "sha256": "b4fbb25fa3633f16c65599774ca0e65a4545d00004da5c526d6f48b3934f25e7"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-npc-indicators.js"
+      ],
+      "exitCode": 0,
+      "seconds": 4.98,
+      "log": "docs/content/r15/logs/1792414595-test-npc-indicators.log",
+      "sha256": "a2963ed2c0f07785bccf99417154cb2f537c34f37f7bcdb2a5280e928c79f9d0"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-world-project-art.js"
+      ],
+      "exitCode": 0,
+      "seconds": 0.78,
+      "log": "docs/content/r15/logs/1792414595-test-world-project-art.log",
+      "sha256": "043702fb61ecc31a60f2240e375a27cbc8e30b88b8dce5516e6522df38aaf96e"
+    }
+  ]
+}

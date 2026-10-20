@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\tools\protect-content-r14.py", line 38, in <module>
+    assert sha(original)==rows[p]['sha256'], p
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: docs/content/r13/browser-checks.json

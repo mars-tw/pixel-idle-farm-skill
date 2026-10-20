@@ -1,0 +1,25 @@
+/* Existing R89 art; explicit close-up frame, live route and quiet plate lift. */
+.player-locator{position:absolute;z-index:9700;transform:translate(-50%,-86%);pointer-events:none;opacity:.66;image-rendering:pixelated}
+.player-locator>div{filter:drop-shadow(1px 0 #fff6e3) drop-shadow(-1px 0 #fff6e3) drop-shadow(0 -1px #fff6e3)}
+.player-locator>span{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;font:12px/1.4 'Microsoft JhengHei',sans-serif;background:#fff6e3;color:#3e2f23;padding:1px 4px;border-bottom:2px solid #d95737}
+.player-locator[hidden],.delivery-dots[hidden],.handover-frame[hidden]{display:none}
+.delivery-dots{position:absolute;inset:0;z-index:9600;pointer-events:none}
+.delivery-dots i{position:absolute;transform:translate(-50%,-50%);width:20px;height:14px;line-height:14px;border:1px solid #8b5e34;border-radius:50%;background:#fff6e3bc;color:#5a3e28;font:11px/14px sans-serif;text-align:center}
+.handover-frame{position:fixed;box-sizing:border-box;z-index:9931;background:#fff6e3ed;border:3px double #8b5e34;box-shadow:0 4px 12px #3e2f2344;pointer-events:none}
+.handover-frame>span{display:block;text-align:center;font:14px/24px 'Microsoft JhengHei',sans-serif;color:#3e2f23;border-bottom:1px solid #b38d61}
+body[data-delivering] .farm-memory{visibility:hidden!important}
+body[data-delivering] .world-location{visibility:hidden}
+.carry-memory:empty{display:none}
+#worldModal[data-gather-step='person'] #gatherSip{display:none}
+.gather-recall summary{min-height:44px;display:flex;align-items:center;cursor:pointer;text-decoration:underline}
+.gather-recall p{font-size:14px;margin:0}
+.gather-choices:has(.other-foods[open]) .serving-foods{display:none}
+#worldModal[data-gather-step='food'] .gather-shared:has(.gather-recall){padding:0 4px!important;min-height:44px!important}
+.gather-stage .serving-plate.in-transit{filter:drop-shadow(1px 0 #fff6e3) drop-shadow(-1px 0 #ffe8a3) drop-shadow(0 5px 1px #3e2f23);z-index:9}
+#worldModal[data-serving-phase='lift'] .shared-dish-label,#worldModal[data-serving-phase='carry'] .shared-dish-label{display:none}
+#worldModal[data-practice='true'] .modal-body>*:not(.blind-practice){display:none!important}
+.blind-practice button{min-height:44px;min-width:80px;margin:4px;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23;font-size:14px}
+.blind-practice .practice-reveal{font-size:14px;line-height:1.5}
+.pond-bobber{rotate:0deg!important}
+@media(max-width:350px){.gather-recall p{font-size:12px}.handover-frame>span{font-size:12px}#worldModal[data-content-view='gathering-complete'][data-gather-step='food'] .gather-stage{height:140px;min-height:140px}#worldModal[data-gather-step='food'] .gather-stage .meal-layout{--meal-scale:.49!important}}
+.note-replay .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r15-20261019-1');background-position:center;background-size:cover}

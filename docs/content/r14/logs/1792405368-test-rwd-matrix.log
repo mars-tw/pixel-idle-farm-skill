@@ -1,0 +1,101 @@
+== R47 RWD 9 視口矩陣守門（overlay 先關閉） ==
+  ✓ 1920x1080(desktop) 可互動元素已載入（103 個）
+  ✓ 1920x1080(desktop) 互動元素零出界（違規 0）
+  ✓ 1920x1080(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1920x1080(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1440x780(desktop) 可互動元素已載入（103 個）
+  ✓ 1440x780(desktop) 互動元素零出界（違規 0）
+  ✓ 1440x780(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1440x780(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x600(desktop) 可互動元素已載入（103 個）
+  ✓ 1366x600(desktop) 互動元素零出界（違規 0）
+  ✓ 1366x600(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x600(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x640(desktop) 可互動元素已載入（103 個）
+  ✓ 1280x640(desktop) 互動元素零出界（違規 0）
+  ✓ 1280x640(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x640(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x700(desktop) 可互動元素已載入（103 個）
+  ✓ 1366x700(desktop) 互動元素零出界（違規 0）
+  ✓ 1366x700(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x700(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x720(desktop) 可互動元素已載入（103 個）
+  ✓ 1280x720(desktop) 互動元素零出界（違規 0）
+  ✓ 1280x720(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x720(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 1024x768(desktop) 可互動元素已載入（103 個）
+  ✓ 1024x768(desktop) 互動元素零出界（違規 0）
+  ✓ 1024x768(desktop) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1024x768(desktop) 水平溢出 <= 2px（實測 0）
+  ✓ 820x1180(tablet) 可互動元素已載入（103 個）
+  ✓ 820x1180(tablet) 互動元素零出界（違規 0）
+  ✓ 820x1180(tablet) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 820x1180(tablet) 水平溢出 <= 2px（實測 0）
+  ✓ 768x1024(tablet) 可互動元素已載入（103 個）
+  ✓ 768x1024(tablet) 互動元素零出界（違規 0）
+  ✓ 768x1024(tablet) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 768x1024(tablet) 水平溢出 <= 2px（實測 0）
+  ✓ 390x844(mobile) 可互動元素已載入（103 個）
+  ✓ 390x844(mobile) 互動元素零出界（違規 0）
+  ✓ 390x844(mobile) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 390x844(mobile) 水平溢出 <= 2px（實測 0）
+  ✓ 360x640(mobile) 可互動元素已載入（103 個）
+  ✓ 360x640(mobile) 互動元素零出界（違規 0）
+  ✓ 360x640(mobile) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 360x640(mobile) 水平溢出 <= 2px（實測 0）
+  ✓ 844x390(landscape) 可互動元素已載入（103 個）
+  ✓ 844x390(landscape) 互動元素零出界（違規 0）
+  ✓ 844x390(landscape) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 844x390(landscape) 水平溢出 <= 2px（實測 0）
+
+== R47 RWD 9 視口矩陣守門（overlay 開啟狀態） ==
+  ✓ 1920x1080(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1920x1080(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1920x1080(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1920x1080(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1440x780(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1440x780(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1440x780(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1440x780(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x600(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1366x600(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1366x600(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x600(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x640(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1280x640(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1280x640(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x640(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1366x700(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1366x700(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1366x700(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1366x700(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1280x720(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1280x720(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1280x720(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1280x720(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 1024x768(desktop, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 1024x768(desktop, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 1024x768(desktop, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 1024x768(desktop, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 820x1180(tablet, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 820x1180(tablet, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 820x1180(tablet, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 820x1180(tablet, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 768x1024(tablet, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 768x1024(tablet, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 768x1024(tablet, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 768x1024(tablet, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 390x844(mobile, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 390x844(mobile, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 390x844(mobile, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 390x844(mobile, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 360x640(mobile, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 360x640(mobile, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 360x640(mobile, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 360x640(mobile, overlay 未關) 水平溢出 <= 2px（實測 0）
+  ✓ 844x390(landscape, overlay 未關) 可互動元素已載入（103 個）
+  ✓ 844x390(landscape, overlay 未關) 互動元素零出界（違規 0）
+  ✓ 844x390(landscape, overlay 未關) 頁級捲動歸零（scrollHeight - innerHeight = 0 <= 8）
+  ✓ 844x390(landscape, overlay 未關) 水平溢出 <= 2px（實測 0）
+
+✅ R47 RWD 矩陣守門通過（9 視口 × overlay 開/關 全零違規）

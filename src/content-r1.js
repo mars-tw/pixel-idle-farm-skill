@@ -38,6 +38,7 @@
   }
 
   function page(title, body, footer) {
+    const previous=document.querySelector('#worldModal');if(previous)delete previous.dataset.practice;
     if (paperResize) paperResize.disconnect();
     const box = window.FarmWorld.contentModal(title, body);
     box.classList.add("content-r1");
@@ -60,6 +61,7 @@
   }
   function save(s) {
     window.FarmWorld.refresh(s);
+    farm().refreshResources?.();
     const result = farm().safeSaveNow();
     if (result && result.ok === false) farm().toast("這次還沒存好。請先留在農場，確認裝置有儲存空間。");
   }
@@ -155,7 +157,7 @@
     guide.innerHTML='<h3>自己的水邊觀察</h3>'+[['river_carp','河鯉','寬尾攪水，寬圈合起時提竿。'],['silver_dace','銀鯽','小嘴啄水，短水花還在時提竿。'],['river_perch','溪鱸','彎身橫移，尾流展開時提竿。']].map(([id,name,clue])=>{const known=notes.some(f=>f.id===id);return `<div data-fish-note="${id}" data-unlocked="${known}"><img src="assets/generated/content-r13/${id}-${known?'color':'shadow'}.png${window.FARM_VERSION_QUERY||''}" alt="${known?name:'還沒觀察到的魚'}${known?'':'的剪影'}"><p>${known?name+'・'+clue:'還沒觀察到'}</p>${known?'<button data-replay="'+id+'">重看水紋</button>':''}</div>`;}).join('');
     if(!n){box.querySelector('.content-illustration')?.remove();box.querySelector('.modal-body>p')?.remove();}
     box.querySelector('.modal-body').prepend(guide);
-    if(n){const proof=document.createElement('div');proof.className='catch-receipt';proof.innerHTML=`<img src="assets/generated/content-r13/${n.id}-color.png${window.FARM_VERSION_QUERY||''}" alt="${esc(n.name)}的魚體"><p>魚簍累計 ${s.adventure.catch[n.id]} 尾<br>已記下 ${notes.length} 頁河畔筆記</p>`;box.querySelector('.fish-note').before(proof);}
+    {const proof=document.createElement('div');proof.className='catch-receipt';proof.innerHTML=`<p>累計釣獲 ${s.adventure.totalCaught} 尾・河畔筆記 ${notes.length} 頁<br>目前魚簍 ${Object.values(s.adventure.catch).reduce((a,b)=>a+b,0)} 尾；交給鄰居的魚仍保留筆記。</p>`;guide.after(proof);}
     box.querySelectorAll('[data-replay]').forEach(b=>b.onclick=()=>{
       box.querySelector('.note-replay')?.remove();const id=b.dataset.replay;
       const pane=document.createElement('section');pane.className='note-replay';pane.innerHTML='<p>重看已學會的水紋・不會投餌，也不會得到魚</p><div class="pond-stage" data-rhythm="'+id+'"><canvas class="pond-effects"></canvas><img class="pond-bobber" src="'+art('bobber.png')+'" alt="紅白浮標"><img class="pond-fisher" src="assets/generated/content-r13/fishing-0.png'+(window.FARM_VERSION_QUERY||'')+'" alt="米莉坐在釣台持竿"></div><button class="stop-note-replay">收起重播</button>';
@@ -163,6 +165,17 @@
       function replay(t){if(!pane.isConnected||box.dataset.contentView!=='note')return;const stage=pane.querySelector('.pond-stage'),phase=A.observeFishingCast({fishId:id,startedAt:Date.now()-((t-start)%5000),observationVersion:2},Date.now());stage.dataset.reel=phase.canReel?'active':'wait';stage.dataset.motion=phase.motion;stage.dataset.pose=phase.pose;window.ContentR8.drawWater(stage,phase);requestAnimationFrame(replay);}requestAnimationFrame(replay);
     });
     box.querySelectorAll('[data-note]').forEach(b => { b.onclick = () => openFishNotes(s, b.dataset.note); });
+    if(n){const practice=document.createElement('button');practice.id='pondPractice';practice.className='content-secondary';practice.textContent='遮字練習，只看水面';box.querySelector('.content-footer').prepend(practice);practice.onclick=()=>{
+      const id=n.id,cast={fishId:id,startedAt:Date.now(),observationVersion:2};
+      const pane=document.createElement('section');pane.className='note-replay blind-practice';
+      pane.innerHTML='<p>先看水面，結束後再揭曉。不投餌、不計魚獲。</p><div class="pond-stage" data-rhythm="'+id+'"><canvas class="pond-effects"></canvas><img class="pond-bobber" src="'+art('bobber.png')+'" alt="紅白浮標"><img class="pond-fisher" src="assets/generated/content-r13/fishing-0.png'+(window.FARM_VERSION_QUERY||'')+'" alt="米莉持竿觀察水面"></div><p class="practice-reveal" role="status"></p><button class="practice-reel">試著提竿</button><button class="stop-note-replay">回筆記</button>';
+      box.querySelector('.modal-body').prepend(pane);box.dataset.practice='true';box.querySelector('h2').textContent='只看水面，認認這一竿';practice.hidden=true;
+      pane.querySelector('.stop-note-replay').onclick=()=>openFishNotes(s,id);let attempted=false;
+      pane.querySelector('.practice-reel').onclick=()=>{if(attempted)return;attempted=true;const phase=A.observeFishingCast(cast,Date.now());pane.querySelector('.practice-reveal').textContent=phase.canReel?'這下咬穩了。等一會，看看是哪一種水形。':'這一下還沒咬穩，接著看水面。';};
+      function replay(){if(!pane.isConnected||box.dataset.contentView!=='note')return;const elapsed=Date.now()-cast.startedAt,stage=pane.querySelector('.pond-stage'),phase=A.observeFishingCast(cast,cast.startedAt+Math.min(4800,elapsed));stage.dataset.reel=phase.canReel?'active':'wait';stage.dataset.motion=phase.motion;stage.dataset.pose=phase.pose;stage.dataset.phase=phase.index;window.ContentR8.drawWater(stage,phase);
+        if(elapsed>=5000){pane.querySelector('.practice-reveal').textContent=n.name+'・'+n.clue+' '+n.note+' 魚簍、累計釣獲與筆記頁數都不變。';pane.querySelector('.practice-reel').hidden=true;return;}requestAnimationFrame(replay);
+      }requestAnimationFrame(replay);
+    };}
     box.querySelector("#backToPond").onclick = () => openFishing(s);
   }
   function openFishing(s) {
@@ -219,7 +232,7 @@
         if (button.dataset.ready !== ready) button.dataset.ready = ready;
         const actionLabel = full ? "魚簍滿了" : waiting ? `再等 ${Math.ceil(view.fishing.remainingMs / 1000)} 秒` : casting ? "提竿" : "重新拋竿";
         if (button.textContent !== actionLabel) button.textContent = actionLabel;
-        const text = waiting ? caughtText || "上一尾已入簍。魚群散開中，等倒數結束再拋。" : full ? "魚簍滿了，先帶一籃河魚給鄰居吧。" : casting && phase ? (!assisted ? "認認水面的變化，再決定要不要提竿。" : ({'closed-rings':'寬尾翻起、浮標沉下了，現在提竿。','short-splash':'短水花冒起了，趁水花還在提竿。','splash-gone':'短水花散了，這一竿晚了。','straight-wake':'魚影衝向一側，尾流展開了，現在提竿。','wide-swell':'濁水慢慢散開，浮標稍微下探；等寬尾翻近浮標。','bent-wake':'魚影轉身，浮標往側邊拉；先等尾流展開。'}[phase.motion]||phase.text)) : caughtText || "再拋一竿，試著認認這個節奏。";
+        const text = waiting ? caughtText || "上一尾已入簍。魚群散開中，等倒數結束再拋。" : full ? "魚簍滿了，先帶一籃河魚給鄰居吧。" : casting && phase ? (!assisted ? '看水面，再決定什麼時候提竿。' : ({'closed-rings':'寬尾翻起、浮標沉下了，現在提竿。','short-splash':'短水花冒起了，趁水花還在提竿。','splash-gone':'短水花散了，這一竿晚了。','straight-wake':'魚影衝向一側，尾流展開了，現在提竿。','wide-swell':'濁水慢慢散開，浮標稍微下探；等寬尾翻近浮標。','bent-wake':'魚影轉身，浮標往側邊拉；先等尾流展開。'}[phase.motion]||phase.text)) : caughtText || "再拋一竿，試著認認這個節奏。";
         if (text !== lastText) { resultBox.textContent = text; lastText = text; }
         const fishingState = waiting || landed ? 'caught' : casting ? pose === 'strike' ? 'bite' : 'waiting' : 'missed';
         if (box.dataset.fishingState !== fishingState) box.dataset.fishingState = fishingState;

@@ -1,0 +1,1618 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    {
+      "viewport": {
+        "w": 320,
+        "h": 568
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 254,
+            "y": 18,
+            "width": 44,
+            "height": 44,
+            "top": 18,
+            "right": 298,
+            "bottom": 62,
+            "left": 254
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 280,
+            "width": 268,
+            "height": 74,
+            "top": 280,
+            "right": 294,
+            "bottom": 354,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 354,
+            "width": 268,
+            "height": 44,
+            "top": 354,
+            "right": 294,
+            "bottom": 398,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 415,
+            "width": 268,
+            "height": 48,
+            "top": 415,
+            "right": 294,
+            "bottom": 463,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 88.5,
+            "bottom": 517,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 94.5,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 157,
+            "bottom": 517,
+            "left": 94.5
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 163,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 225.5,
+            "bottom": 517,
+            "left": 163
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 231.5,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 294,
+            "bottom": 517,
+            "left": 231.5
+          },
+          "hit": true
+        }
+      ]
+    },
+    "320x568 controls in viewport and actual hit targets >=44px",
+    "320 no keyboard hints",
+    "320 expanded alternate tastes are visible and hittable",
+    "320 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 324,
+            "y": 50,
+            "width": 44,
+            "height": 44,
+            "top": 50,
+            "right": 368,
+            "bottom": 94,
+            "left": 324
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 461.5,
+            "width": 338,
+            "height": 75,
+            "top": 461.5,
+            "right": 364,
+            "bottom": 536.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 536.5,
+            "width": 338,
+            "height": 44,
+            "top": 536.5,
+            "right": 364,
+            "bottom": 580.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 597.5,
+            "width": 338,
+            "height": 48,
+            "top": 597.5,
+            "right": 364,
+            "bottom": 645.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 106,
+            "bottom": 695.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 112,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 192,
+            "bottom": 695.5,
+            "left": 112
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 198,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 278,
+            "bottom": 695.5,
+            "left": 198
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 284,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 364,
+            "bottom": 695.5,
+            "left": 284
+          },
+          "hit": true
+        }
+      ]
+    },
+    "390x844 controls in viewport and actual hit targets >=44px",
+    "390 no keyboard hints",
+    "390 expanded alternate tastes are visible and hittable",
+    "390 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 430,
+        "h": 932
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 364,
+            "y": 50,
+            "width": 44,
+            "height": 44,
+            "top": 50,
+            "right": 408,
+            "bottom": 94,
+            "left": 364
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 467.5,
+            "width": 370,
+            "height": 75,
+            "top": 467.5,
+            "right": 400,
+            "bottom": 542.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 542.5,
+            "width": 370,
+            "height": 44,
+            "top": 542.5,
+            "right": 400,
+            "bottom": 586.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 603.5,
+            "width": 370,
+            "height": 48,
+            "top": 603.5,
+            "right": 400,
+            "bottom": 651.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 118,
+            "bottom": 713.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 124,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 212,
+            "bottom": 713.5,
+            "left": 124
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 218,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 306,
+            "bottom": 713.5,
+            "left": 218
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 312,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 400,
+            "bottom": 713.5,
+            "left": 312
+          },
+          "hit": true
+        }
+      ]
+    },
+    "430x932 controls in viewport and actual hit targets >=44px",
+    "430 no keyboard hints",
+    "430 expanded alternate tastes are visible and hittable",
+    "430 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 844,
+        "h": 390
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 728,
+            "y": 18,
+            "width": 44,
+            "height": 44,
+            "top": 18,
+            "right": 772,
+            "bottom": 62,
+            "left": 728
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 386.109375,
+            "y": 130.5,
+            "width": 364.890625,
+            "height": 75,
+            "top": 130.5,
+            "right": 751,
+            "bottom": 205.5,
+            "left": 386.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 386.109375,
+            "y": 205.5,
+            "width": 364.890625,
+            "height": 44,
+            "top": 205.5,
+            "right": 751,
+            "bottom": 249.5,
+            "left": 386.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 78,
+            "y": 274,
+            "width": 288,
+            "height": 48,
+            "top": 274,
+            "right": 366,
+            "bottom": 322,
+            "left": 78
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 372,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 466,
+            "bottom": 322,
+            "left": 372
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 472,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 566,
+            "bottom": 322,
+            "left": 472
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 572,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 666,
+            "bottom": 322,
+            "left": 572
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 672,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 766,
+            "bottom": 322,
+            "left": 672
+          },
+          "hit": true
+        }
+      ]
+    },
+    "844x390 controls in viewport and actual hit targets >=44px",
+    "844 no keyboard hints",
+    "844 expanded alternate tastes are visible and hittable",
+    "844 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 1032,
+        "h": 1376
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 782,
+            "y": 50,
+            "width": 44,
+            "height": 44,
+            "top": 50,
+            "right": 826,
+            "bottom": 94,
+            "left": 782
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 467.5,
+            "width": 589,
+            "height": 75,
+            "top": 467.5,
+            "right": 803,
+            "bottom": 542.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 542.5,
+            "width": 589,
+            "height": 44,
+            "top": 542.5,
+            "right": 803,
+            "bottom": 586.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 603.5,
+            "width": 604,
+            "height": 49,
+            "top": 603.5,
+            "right": 818,
+            "bottom": 652.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 360.5,
+            "bottom": 702.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 366.5,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 513,
+            "bottom": 702.5,
+            "left": 366.5
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 519,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 665.5,
+            "bottom": 702.5,
+            "left": 519
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 671.5,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 818,
+            "bottom": 702.5,
+            "left": 671.5
+          },
+          "hit": true
+        }
+      ]
+    },
+    "1032x1376 controls in viewport and actual hit targets >=44px",
+    "1032 no keyboard hints",
+    "1032 expanded alternate tastes are visible and hittable",
+    "1032 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 1366,
+        "h": 600
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 989,
+            "y": 18,
+            "width": 44,
+            "height": 44,
+            "top": 18,
+            "right": 1033,
+            "bottom": 62,
+            "left": 989
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 647.109375,
+            "y": 130.5,
+            "width": 364.890625,
+            "height": 75,
+            "top": 130.5,
+            "right": 1012,
+            "bottom": 205.5,
+            "left": 647.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 647.109375,
+            "y": 205.5,
+            "width": 364.890625,
+            "height": 44,
+            "top": 205.5,
+            "right": 1012,
+            "bottom": 249.5,
+            "left": 647.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 339,
+            "y": 274,
+            "width": 288,
+            "height": 48,
+            "top": 274,
+            "right": 627,
+            "bottom": 322,
+            "left": 339
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 633,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 727,
+            "bottom": 322,
+            "left": 633
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 733,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 827,
+            "bottom": 322,
+            "left": 733
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 833,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 927,
+            "bottom": 322,
+            "left": 833
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 933,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 1027,
+            "bottom": 322,
+            "left": 933
+          },
+          "hit": true
+        }
+      ]
+    },
+    "1366x600 controls in viewport and actual hit targets >=44px",
+    "1366 no keyboard hints",
+    "1366 expanded alternate tastes are visible and hittable",
+    "1366 actual playable skip contact",
+    "no uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r15/phone-memory-320x568.png",
+      "sha256": "62006c5f1857b2a028dd502b9f24807dafe24376d9e4d9651a8b3eddfbd4f4a4",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-320x568.png",
+      "sha256": "00f6cbd74df0c598e9a7da499c23730b98b0fc1701a4cff1b8984b683c9a36f4",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-390x844.png",
+      "sha256": "e1ed78111a3ebc8d652712475cc30115becfe62ab04e62ed45b6a583716daaf5",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-390x844.png",
+      "sha256": "70b8fed718e7503ccb5633ea50df919577a83b7af01db85575156e3afcdc3904",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-430x932.png",
+      "sha256": "1b4a749f5442b36ba30aa6c22b7b3d2716a0a20deef3cd70735c238108b40178",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-430x932.png",
+      "sha256": "8f4230d7ec1daee722a870d1efab65ca6f6f73e9b567e0a5d64cf3c42299f7e8",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-844x390.png",
+      "sha256": "06ca2766574aa649904f29198cc24ae21c788db171bff478cf8469608b93b1e8",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-other-844x390.png",
+      "sha256": "b751c2273b8740a02f893fffb37bba1f420c8c00882fae1cef5c30addb1143f2",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-1032x1376.png",
+      "sha256": "f15a18a6b5babf075e44153ce69fa38daf9c858445b913a3eae5f8a21ff50ec8",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-other-1032x1376.png",
+      "sha256": "0f11091bb02766188fd5e939e698492148a3fade13a0d2b113eee6e71d1cb8b8",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-1366x600.png",
+      "sha256": "bf43bed6636fb9d09253da59299f9cc8bb9ab310f52033d440e219ddd2ed31b5",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-other-1366x600.png",
+      "sha256": "8776eb764def30a0c67303170f69c53431d21484f20f368f0d1f735cd6f82c50",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/store/screenshots/iphone-20-hand-served-r15.png",
+      "sha256": "6dcaf5e9241599999b5214c082e1e2590479963d507c6bff6bfcf1c6fab32359",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向蘿拉手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 156.609375,
+              "y": 227.609375,
+              "width": 42,
+              "height": 34,
+              "top": 227.609375,
+              "right": 198.609375,
+              "bottom": 261.609375,
+              "left": 156.609375
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/store/screenshots/ipad-20-hand-served-r15.png",
+      "sha256": "7fffcc2441e3d895e229c79fe0eb96da36d45ba4b312d118fa2e2d4de06dc1e9",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向蘿拉手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 450.265625,
+              "y": 230.4375,
+              "width": 42,
+              "height": 34,
+              "top": 230.4375,
+              "right": 492.265625,
+              "bottom": 264.4375,
+              "left": 450.265625
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Chapter/dock access and ingredients only. Picnic and earned-note fixtures are produced by this round real UI journey."
+}

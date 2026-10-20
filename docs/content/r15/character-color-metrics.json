@@ -1,0 +1,20 @@
+{
+  "hold-player.png": {
+    "brightness": 0.393,
+    "meanSaturation": 0.496,
+    "nearBlack": 0.0,
+    "lowSaturation": 0.032
+  },
+  "idle-player.png": {
+    "brightness": 0.393,
+    "meanSaturation": 0.496,
+    "nearBlack": 0.0,
+    "lowSaturation": 0.03
+  },
+  "reach-player.png": {
+    "brightness": 0.391,
+    "meanSaturation": 0.495,
+    "nearBlack": 0.0,
+    "lowSaturation": 0.028
+  }
+}

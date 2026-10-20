@@ -1,0 +1,19 @@
+EXECUTED npm-test
+VERIFIED npm-test
+EXECUTED test-npc-indicators
+VERIFIED test-npc-indicators
+EXECUTED test-world-project-art
+VERIFIED test-world-project-art
+EXECUTED test-world-rework-e2e
+VERIFIED test-world-rework-e2e
+EXECUTED test-content-r2-e2e
+VERIFIED test-content-r2-e2e
+EXECUTED test-content-r3-e2e
+VERIFIED test-content-r3-e2e
+EXECUTED test-content-r4-e2e
+VERIFIED test-content-r4-e2e
+EXECUTED test-content-r5-e2e
+VERIFIED test-content-r5-e2e
+EXECUTED test-content-r13-e2e
+VERIFIED test-content-r13-e2e
+VERIFIED 9 commands

@@ -1,0 +1,36 @@
+{
+  "status": "VERIFIED",
+  "purpose": "Preserve original failed receipts and triggering native images before exact-gate retries. These are not passing review frames.",
+  "files": [
+    {
+      "source": "docs/content/r4/browser-checks.json",
+      "path": "docs/content/r15/failed-receipts/r4/browser-checks.json",
+      "sha256": "d89a54677d8c16fd4a059124ee052a255067bd3104231fdc71cebdf98b917f1c"
+    },
+    {
+      "source": "docs/content/r4/phone-water-river_carp-submerging.png",
+      "path": "docs/content/r15/failed-receipts/r4/phone-water-river_carp-submerging.png",
+      "sha256": "40e15463d48e2d41d0c852e6373df00e7901366b2bbb6331c04f8dc23b782e0d"
+    },
+    {
+      "source": "docs/content/r12/browser-checks-failed-1792417793981.json",
+      "path": "docs/content/r15/failed-receipts/r12/browser-checks-failed-1792417793981.json",
+      "sha256": "3b7c80f802173b511d46dea85aeb74b7b65dbaaf7a22b7f9a581a54e43605dd2"
+    },
+    {
+      "source": "docs/content/r12/phone-basket-elder-approach.png",
+      "path": "docs/content/r15/failed-receipts/r12/phone-basket-elder-approach.png",
+      "sha256": "e40ef3d683434d3eba8c406a0864fc6a7494930f037f63dcaa431268638f50f1"
+    },
+    {
+      "source": "docs/content/r12/phone-basket-elder-contact.png",
+      "path": "docs/content/r15/failed-receipts/r12/phone-basket-elder-contact.png",
+      "sha256": "20c9e328bbb2f632510234ac95e4ee0b82d2e9178e9d68bf2e185438f44fd35e"
+    },
+    {
+      "source": "docs/content/r12/phone-basket-elder-received.png",
+      "path": "docs/content/r15/failed-receipts/r12/phone-basket-elder-received.png",
+      "sha256": "540d8fa8f4dac5a8a5c8f8ad7c108411229f1d07ce7e8308bd6f83e19a267104"
+    }
+  ]
+}

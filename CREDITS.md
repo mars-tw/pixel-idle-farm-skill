@@ -122,3 +122,6 @@
 實際工具 `image_gen.imagegen` 生成一張四人姿勢母圖；模型 slug 未揭露，manifest 記 null。身份參考為既有 R7 三居民站姿與 R89 米莉真行走圖，蘿拉固定紅頭巾、綠裙，米莉固定草帽、紅辮與綠吊帶褲。母圖與完整 R89 前綴提示在 `docs/art/masters/content-r9/poses.png`、`docs/art/PROMPTS_CONTENT_R9.json`。
 
 24 張原生 48×64 執行姿勢由 nearest-neighbor 取樣、R89 色盤及透明 alpha 處理而來。每人站姿的頭部 0–27 列與下身 46–63 列固定；坐姿下身 46–63 列固定，手臂、杯與點心換真姿勢像素。行走、碰撞及作用時機保留。來源、取框、尺寸與 SHA-256 在 `assets/generated/content-r9/manifest.json`。新增程式與素材沿用本專案 MIT；既有素材與第三方授權完整保留。
+# 新內容第15輪美術
+
+米莉捧籃、伸手、收手三格與河鯉閉合水環，由 `image_gen.imagegen` 生成；工具未揭露模型識別。參考本專案第八輪米莉造型與既有水紋，沒有使用外部角色或第三方素材。原圖、提示詞、原生像素處理及 SHA-256 見 `docs/art/PROMPTS_CONTENT_R15.json` 與 `assets/generated/content-r15/manifest.json`，沿用本專案 MIT 授權。

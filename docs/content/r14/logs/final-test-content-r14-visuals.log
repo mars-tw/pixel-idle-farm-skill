@@ -1,0 +1,105 @@
+PASS farmhouse route point is a real walkable tile t10_3
+PASS farmhouse character collider never enters furniture footprint
+PASS farmhouse only local roof window; no faded full building
+PASS farmhouse route point is a real walkable tile t12_3
+PASS farmhouse character collider never enters furniture footprint
+PASS farmhouse only local roof window; no faded full building
+PASS farmhouse route point is a real walkable tile t10_6
+PASS farmhouse character collider never enters furniture footprint
+PASS farmhouse only local roof window; no faded full building
+PASS shop route point is a real walkable tile t10_0
+PASS shop character collider never enters furniture footprint
+PASS shop only local roof window; no faded full building
+PASS shop route point is a real walkable tile t12_0
+PASS shop character collider never enters furniture footprint
+PASS shop only local roof window; no faded full building
+PASS shop route point is a real walkable tile t10_3
+PASS shop character collider never enters furniture footprint
+PASS shop only local roof window; no faded full building
+PASS barn route point is a real walkable tile t11_6
+PASS barn character collider never enters furniture footprint
+PASS barn only local roof window; no faded full building
+PASS barn route point is a real walkable tile t14_6
+PASS barn character collider never enters furniture footprint
+PASS barn only local roof window; no faded full building
+PASS barn route point is a real walkable tile t14_8
+PASS barn character collider never enters furniture footprint
+PASS barn only local roof window; no faded full building
+PASS house and porch share occlusion and opacity
+PASS 320 table label is complete inside viewport
+PASS 320 no duplicate table caption
+PASS 390 table label is complete inside viewport
+PASS 390 no duplicate table caption
+PASS 430 table label is complete inside viewport
+PASS 430 no duplicate table caption
+PASS merchant distance is exact remaining BFS path
+PASS merchant distant recipient is in the same unzoomed phone frame
+PASS merchant recipient and taste visible together
+PASS elder distance is exact remaining BFS path
+PASS elder distant recipient is in the same unzoomed phone frame
+PASS elder recipient and taste visible together
+PASS child distance is exact remaining BFS path
+PASS child distant recipient is in the same unzoomed phone frame
+PASS child recipient and taste visible together
+PASS same fresh save early reel grants no fish or note
+PASS river_carp visible continuous rod-tip to bobber line
+PASS river_carp line starts on actual opaque rod-tip pixels, not transparent sprite padding
+PASS river_carp different actual active limb-pose asset
+PASS river_carp fish shadow width is 0.5 to 0.7 of visible fisher height
+PASS river_carp fresh-save catch + note + cumulative count all increase together
+PASS river_carp replay really grants no fish, notes or resource use
+PASS silver_dace visible continuous rod-tip to bobber line
+PASS silver_dace line starts on actual opaque rod-tip pixels, not transparent sprite padding
+PASS silver_dace different actual active limb-pose asset
+PASS silver_dace fish shadow width is 0.5 to 0.7 of visible fisher height
+PASS silver_dace fresh-save catch + note + cumulative count all increase together
+PASS silver_dace replay really grants no fish, notes or resource use
+PASS river_perch visible continuous rod-tip to bobber line
+PASS river_perch line starts on actual opaque rod-tip pixels, not transparent sprite padding
+PASS river_perch different actual active limb-pose asset
+PASS river_perch fish shadow width is 0.5 to 0.7 of visible fisher height
+PASS river_perch fresh-save catch + note + cumulative count all increase together
+PASS river_perch replay really grants no fish, notes or resource use
+PASS refill immediately redraws exact resource HUD before any reload
+PASS merchant only one remembered dish in primary choice
+PASS merchant wrong tastes are secondary
+PASS merchant mid-table motion is before settlement
+PASS merchant full moving plate is above shared label
+PASS merchant all four feet and seats stay fixed
+PASS merchant received frame has a usable next-step button
+PASS merchant mid is visibly separated from hand destination
+PASS elder only one remembered dish in primary choice
+PASS elder wrong tastes are secondary
+PASS elder mid-table motion is before settlement
+PASS elder full moving plate is above shared label
+PASS elder all four feet and seats stay fixed
+PASS elder received frame has a usable next-step button
+PASS elder mid is visibly separated from hand destination
+PASS child only one remembered dish in primary choice
+PASS child wrong tastes are secondary
+PASS child mid-table motion is before settlement
+PASS child full moving plate is above shared label
+PASS child all four feet and seats stay fixed
+PASS child received frame has a usable next-step button
+PASS child mid is visibly separated from hand destination
+PASS shared + three actual guest servings survive reload
+PASS skip and immediately continue settle exactly once and cancel stale reply timers
+PASS 320x568 active food-selection controls all >=44px and hittable without scrolling
+PASS 320x568 actual touch flow completes one serving
+PASS 320x568 next action visible at impact
+PASS 390x844 active food-selection controls all >=44px and hittable without scrolling
+PASS 390x844 actual touch flow completes one serving
+PASS 390x844 next action visible at impact
+PASS 844x390 active food-selection controls all >=44px and hittable without scrolling
+PASS 844x390 actual touch flow completes one serving
+PASS 844x390 next action visible at impact
+PASS 768x1024 active food-selection controls all >=44px and hittable without scrolling
+PASS 768x1024 actual touch flow completes one serving
+PASS 768x1024 next action visible at impact
+PASS 1032x1376 active food-selection controls all >=44px and hittable without scrolling
+PASS 1032x1376 actual touch flow completes one serving
+PASS 1032x1376 next action visible at impact
+PASS 1366x600 active food-selection controls all >=44px and hittable without scrolling
+PASS 1366x600 actual touch flow completes one serving
+PASS 1366x600 next action visible at impact
+PASS zero uncaught browser errors

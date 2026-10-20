@@ -1,0 +1,30 @@
+{
+  "perf": {
+    "desktop": {
+      "runsP95Ms": [
+        16.8,
+        16.7,
+        50
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "browserIsolation": "fresh headless process per sample; identical scene and assertions",
+      "trust": "concurrent-load (other agents share this machine)"
+    },
+    "mobile": {
+      "runsP95Ms": [
+        16.8,
+        16.8,
+        16.7
+      ],
+      "medianP95Ms": 16.8,
+      "limitMs": 18,
+      "browserIsolation": "fresh headless process per sample; identical scene and assertions",
+      "trust": "concurrent-load (other agents share this machine)"
+    }
+  },
+  "summary": {
+    "passed": 44,
+    "failed": 0
+  }
+}

@@ -1,0 +1,2441 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "no large placeholder action",
+    "merchant one clear remembered dish and alternate taste entry",
+    "elder one clear remembered dish and alternate taste entry",
+    "child one clear remembered dish and alternate taste entry",
+    "wrong taste explains shared destination, child still waiting",
+    "merchant mid plate no early settlement",
+    "merchant received adds one",
+    "elder mid plate no early settlement",
+    "elder received adds one",
+    "child mid plate no early settlement",
+    "child received adds one",
+    "single record action persisted",
+    "recorded footer identical after reload",
+    "no uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r15/phone-memory-person.png",
+      "sha256": "4108183f5c7fc1604d467877280c72f5bd7defc7c33b95a615f82beaf5b0b1ed",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "選一位鄰居，再選一份點心。",
+        "controls": [
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-select.png",
+      "sha256": "29f6ed44e99ae8947f30af9f6b08d2338ea914f2d77adea2c0e9596c39f8784d",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味蘿拉喜歡酸味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為蘿拉選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-select.png",
+      "sha256": "21bc2d14e3b5225c3ba3ee541ba354c5f17a6625bf14bd663766087070b749db",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味班伯喜歡熱味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為班伯選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-select.png",
+      "sha256": "93582ea434e25c19a68dafafb865db1c4305f4d8723013d883c0f3c089b9575a",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為圖圖選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-taste.png",
+      "sha256": "3cde610e19adc37e6ab72d284110e075540ce49a27e17e1a2aeaf22d51d6929d",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為圖圖選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-wrong.png",
+      "sha256": "276a4c4eddc2cae17e77e2ac45436586108dc607c24561ace2110a8dc1fbd4fd",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」 這份大家分食，不算圖圖的那一份。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-refill.png",
+      "sha256": "572fee65172c0919a0288da27bc5c9571a9847e29c164502b44b4708491675e8",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "quote": "這份大家分食，不算圖圖的那一份。",
+        "controls": [
+          {
+            "id": "gatherReturn",
+            "text": "回餐桌選點心",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-lift.png",
+      "sha256": "2906d450be18642403c535687777ef596b9e9f7f1574baedd6324b8ccc26ef91",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "lift",
+        "quote": "米莉端起酸味野莓。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-mid.png",
+      "sha256": "c09dfef5704c1a09a8b9aac8ff3062f32da261f800290ec278c7ade68082049b",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向蘿拉手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 183.453125,
+              "y": 218,
+              "width": 42,
+              "height": 34,
+              "top": 218,
+              "right": 225.453125,
+              "bottom": 252,
+              "left": 183.453125
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-received.png",
+      "sha256": "c3d7741c5cffa806d9ada75c538126b450f9ce0b2e9daace7cb4f30b1f705ef7",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "received",
+        "quote": "蘿拉接到手邊，嚐了一口。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-reply.png",
+      "sha256": "8f82c44e0f309fcbd970ce341e5bb93740eff9c95bb284c525143fc8f10d8d45",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-lift.png",
+      "sha256": "727dcc065acc6fcd4f2b3e3ce37d72b77b965ded8c28fdfc29eb911fcf11f59b",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "lift",
+        "quote": "米莉端起熱味麥餅。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-mid.png",
+      "sha256": "3063ccf06e8affffca32cd840f23b21cd58f4acc0d3e2d4c25190a47ca8555cb",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向班伯手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 197.453125,
+              "y": 222,
+              "width": 42,
+              "height": 34,
+              "top": 222,
+              "right": 239.453125,
+              "bottom": 256,
+              "left": 197.453125
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-received.png",
+      "sha256": "831627f4357181caedc5cdb1bdf61e64545993f822c80e1f0936991b1fec4e56",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "received",
+        "quote": "班伯接到手邊，嚐了一口。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-reply.png",
+      "sha256": "f9ca5b66f49db8ea84ed2445cd67292868d942921bddd775c96913145ef8bb5a",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-lift.png",
+      "sha256": "65a0c68b3ce668370471728a8cd7928e48914aa2d62c2ab656d4a88a8222dbe5",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "lift",
+        "quote": "米莉端起甜味胡蘿蔔點心。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-mid.png",
+      "sha256": "b98af09b068ee7301dcd14eb2a1b4cf64486579395e05430edc58e8eb4ecf347",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向圖圖手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 196.6875,
+              "y": 227.765625,
+              "width": 42,
+              "height": 34,
+              "top": 227.765625,
+              "right": 238.6875,
+              "bottom": 261.765625,
+              "left": 196.6875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-received.png",
+      "sha256": "1c075888f0c7b4e8d3304c36be86f5b88e82370b5a5a0c5883aaa3c37434dfdf",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792413799955,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "received",
+        "quote": "圖圖接到手邊，嚐了一口。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "收進手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-reply.png",
+      "sha256": "4067d2dd2f7f001d999fad0292af6f072292c70d76aa5b2de8c8504d3370ce5a",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792413799955,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "收進手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-complete-before-record.png",
+      "sha256": "eaaa9f5e2b62a2243e3729515ed609a59d199617191e2efeb65445cf523adb47",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792413799955,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "收進手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-recorded.png",
+      "sha256": "6bea03ddd3c38d5bfc0d56ea6edf1ecddba3a0535e3663463d3c325c1ce7228c",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": true,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792413799955,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "quote": "三位都接到了。桌中央還留著大家分食的那份。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "已收進手記",
+            "disabled": true
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-recorded-reloaded.png",
+      "sha256": "a472d884bbc7228cd1a7939700c6ef47219a95a248745fd963528fba152ff199",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": true,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792413799955,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "quote": "三位都接到了。桌中央還留著大家分食的那份。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "已收進手記",
+            "disabled": true
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-journal-shared.png",
+      "sha256": "bc0350b52da507a79b180f4dadadb2028e82e119899add9cb7576f777f546c40",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792413441224,
+          "recorded": true,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792413789009,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792413787366,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792413791660,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792413795819,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792413799955,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "controls": [
+          {
+            "id": "gatherAgain",
+            "text": "重看共同聚餐",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 211,
+              "width": 42,
+              "height": 34,
+              "top": 211,
+              "right": 245,
+              "bottom": 245,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 170,
+              "width": 42,
+              "height": 34,
+              "top": 170,
+              "right": 197,
+              "bottom": 204,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 170,
+              "width": 42,
+              "height": 34,
+              "top": 170,
+              "right": 305,
+              "bottom": 204,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 245,
+              "width": 42,
+              "height": 34,
+              "top": 245,
+              "right": 295,
+              "bottom": 279,
+              "left": 253
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Chapter/dock access and ingredients only. Picnic and earned-note fixtures are produced by this round real UI journey."
+}

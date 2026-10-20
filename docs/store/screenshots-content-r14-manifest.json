@@ -1,0 +1,19 @@
+{
+  "status": "VERIFIED",
+  "images": [
+    {
+      "path": "docs/store/screenshots/iphone-19-shared-afternoon-r14.png",
+      "width": 1290,
+      "height": 2796,
+      "sha256": "42d7f67484deabb68696e36ad2b468e3c81ade61ed5023ccedf952375ef18711",
+      "capture": "actual serving reply; iPhone DPR3 or iPad DPR2; no resize or composite"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-19-shared-afternoon-r14.png",
+      "width": 2064,
+      "height": 2752,
+      "sha256": "19c4b8c87ca3421678922188203fe2e97c983b339632c5aebb034352c3888ca9",
+      "capture": "actual serving reply; iPhone DPR3 or iPad DPR2; no resize or composite"
+    }
+  ]
+}

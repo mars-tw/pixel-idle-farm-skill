@@ -288,11 +288,12 @@
     stopFishing();
     let box = el("worldModal");
     if (!box) { box = document.createElement("div"); box.id = "worldModal"; box.className = "modal world-modal"; box.setAttribute("aria-labelledby", "worldModalTitle"); document.body.appendChild(box); }
+    delete box.dataset.practice;
     box.classList.remove("content-r1");
     box.innerHTML = `<div class="modal-card"><button class="world-modal-close" aria-label="關閉" title="關閉">×</button><h2 id="worldModalTitle">${esc(title)}</h2><div class="modal-body">${body}</div></div>`;
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r13-20261019-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r89/miri-0.png?v=content-r13-20261019-1" alt="戴草帽、紅格巾與小藤簍的農夫" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r15-20261019-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r89/miri-0.png?v=content-r15-20261019-1" alt="戴草帽、紅格巾與小藤簍的農夫" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

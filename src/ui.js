@@ -75,7 +75,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r13-20261019-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r15-20261019-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -2505,7 +2505,9 @@
     const cx = (s.x + s.w / 2) * TILE;
     const baselineY = (s.y + s.h) * TILE;
     const frame = s.sheet === "structures" ? seasonalStructureFrame(s.frame) : s.frame;
-    const el = addObjectPx(obStatic, s.sheet, frame, cx, baselineY, s.w * TILE, "shadowed", 0, "structure");
+    // Roof/eave overhang extends beyond the blocked footprint; feet stay anchored.
+    const eave=(s.id==='shop'||s.id==='barn')?.25:0;
+    const el = addObjectPx(obStatic, s.sheet, frame, cx, baselineY, (s.w+eave) * TILE, "shadowed", 0, "structure");
     if (el) {
       el.dataset.structureId = s.id;
       // R73 FARM-R1-02：大型結構圖像也必須指向 footprint 代表磚，否則 touch click 會沿用上次選取。
@@ -2890,13 +2892,24 @@
     const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE - TILE * 0.08;
     pl.style.left = pxv(cx); pl.style.top = pxv(baselineY);
     pl.style.zIndex = Math.round(baselineY);             // y-sort：與物件/建築互相遮擋
-    // A roof keeps its depth order. Only its occluding pixels fade while someone is
-    // behind it, so the entire actor silhouette remains readable instead of a head in a roof.
+    // Keep foot-depth order. Open only a local sight window in the roof and its
+    // attached porch; never fade an entire building behind an opaque second image.
     const actorBounds={left:cx-w/2,right:cx+w/2,top:baselineY-h,bottom:baselineY};
+    let homeBehind=false,actorBehind=false;
+    const occlude=(el,behind)=>{
+      el.classList.toggle('actor-behind',behind);
+      if(behind)actorBehind=true;
+      el.style.maskImage='';
+    };
     document.querySelectorAll('.ob[data-kind="structure"][data-structure-id]').forEach(el=>{
       const left=parseFloat(el.style.left),top=parseFloat(el.style.top),ew=parseFloat(el.style.width),eh=parseFloat(el.style.height);
-      el.classList.toggle('actor-behind',+el.style.zIndex>baselineY&&actorBounds.right>left&&actorBounds.left<left+ew&&actorBounds.bottom>top&&actorBounds.top<top+eh);
+      const behind=+el.style.zIndex>baselineY&&actorBounds.right>left&&actorBounds.left<left+ew&&actorBounds.bottom>top&&actorBounds.top<top+eh;
+      if(el.dataset.structureId==='farmhouse')homeBehind=behind;
+      occlude(el,behind);
     });
+    document.querySelectorAll('.ob[data-kind="tea-porch"]').forEach(el=>occlude(el,homeBehind));
+    // A duplicate of the current articulated frame is a locator, never a faded roof.
+    pl.dataset.occluded=String(actorBehind);
     if (!animate) { void pl.offsetWidth; pl.style.transition = ""; }
     updateCamera(animate);
   }
@@ -2940,6 +2953,7 @@
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
     if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
+    window.ContentR6?.fitMapLabels();
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
@@ -4131,6 +4145,12 @@
       if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; }
     }
     sp.style.transform = flip ? "scaleX(-1)" : "";
+    let locator=$("playerLocator");
+    if(pe.dataset.occluded==='true'){
+      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span>米莉・腳下</span>';worldEl.appendChild(locator);}
+      locator.hidden=false;locator.style.cssText=`left:${pe.style.left};top:${pe.style.top};width:${rootWidth}px;height:${eh}px`;
+      locator.firstChild.style.cssText=sp.style.cssText;
+    }else if(locator)locator.hidden=true;
   }
   function setPlayerIdle() { state.player.action = "idle"; }
   function paintIdlePlayer() {
@@ -4668,6 +4688,7 @@
       player: () => player,
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
+      refreshResources: () => renderResBar(),
       refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); updateMailBadges(); },
       openLetters: () => openLettersModal(),
       clickTile: (id) => handleMapClick(id),
@@ -4694,6 +4715,14 @@
       selectSeed: (id) => { if (G.isCropUnlocked(state, id)) chooseSeed(id); },
       moving: () => !!moveTimer,
       cancelJourney: () => { walkPath([]); positionPlayer(false); scheduleSave(); },
+      deliveryDistance: (tileId) => G.pathToAdjacent(state,state.player.tileId,tileId)?.path.length ?? null,
+      deliveryRoute: (tileId) => {
+        const root=$('player'),world=$('mapWorld'),r=root.getBoundingClientRect(),wr=world.getBoundingClientRect(),scale=wr.width/world.offsetWidth;
+        const x=Math.round((r.left+r.width/2-wr.left)/scale/TILE-.5),y=Math.round((r.top+r.height*.86-wr.top)/scale/TILE-1+.08);
+        const visual=G.getTileXY(state,x,y),from=visual&&G.isWalkable(state,visual)?visual.id:state.player.tileId;
+        const plan=G.pathToAdjacent(state,from,tileId);
+        return plan?{from,path:plan.path,size:TILE}:null;
+      },
       vfxSpawns: () => vfxSpawnCount,
       sunTick: () => updateSunpatchTick(now()),
       musicInfo: () => ({ wanted: musicWanted(), src: bgm ? bgm.src : null, paused: bgm ? bgm.paused : true, volume: bgm ? bgm.volume : 0, failed: bgmFailed }),

@@ -1,0 +1,137 @@
+{
+  "status": "VERIFIED",
+  "frames": [
+    {
+      "source": "docs/content/r15/phone-pond-comparison.png",
+      "path": "docs/content/r15/journey-frames/dd9fc4c656252c1c-phone-pond-comparison.png",
+      "sha256": "dd9fc4c656252c1cc4e0175cca90a8e6238a9cb698a290c66ec9dd5dc46a963c",
+      "operation": "native earlier journey frame preserved before same-path recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-merchant-approach.png",
+      "path": "docs/content/r15/journey-frames/de98f9c04c0a8328-phone-basket-merchant-approach.png",
+      "sha256": "de98f9c04c0a83285d01bef5389193dd182e0d2f6ad440f27d884fc67254926f",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-merchant-contact.png",
+      "path": "docs/content/r15/journey-frames/fdfd1144759ab7b4-phone-basket-merchant-contact.png",
+      "sha256": "fdfd1144759ab7b40171bc778a7155b6f6df3150b3d96d8fa20854611e46d23e",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-merchant-received.png",
+      "path": "docs/content/r15/journey-frames/9b429b5add09f74d-phone-basket-merchant-received.png",
+      "sha256": "9b429b5add09f74d7ccaa470087ff0fe9f6dd54f64092fcb211a195b777ad967",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-elder-approach.png",
+      "path": "docs/content/r15/journey-frames/235e2bf49027acdc-phone-basket-elder-approach.png",
+      "sha256": "235e2bf49027acdcd53c19d12dfc2a296feafd4dd2fbe623fb084ba46d64a8fe",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-elder-contact.png",
+      "path": "docs/content/r15/journey-frames/fd07f3cb4a0003ae-phone-basket-elder-contact.png",
+      "sha256": "fd07f3cb4a0003ae1813940b7cdac4dd2cb3a3788d1dfdd4215730af331209ca",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-elder-received.png",
+      "path": "docs/content/r15/journey-frames/564dc8a3bf663625-phone-basket-elder-received.png",
+      "sha256": "564dc8a3bf6636250c04572645477a48b50fc0ea4ae0359d73ae7cba1f2b6998",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-child-approach.png",
+      "path": "docs/content/r15/journey-frames/9b44b08b347b317b-phone-basket-child-approach.png",
+      "sha256": "9b44b08b347b317bfb06c758ba0736846129213bffd029e395f871cb6339428a",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-child-contact.png",
+      "path": "docs/content/r15/journey-frames/90449c1963c65637-phone-basket-child-contact.png",
+      "sha256": "90449c1963c65637a12bd5dcc4906a67f7c19f2aebd00e7afce050c669be3aab",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-basket-child-received.png",
+      "path": "docs/content/r15/journey-frames/95543864dbb9c55a-phone-basket-child-received.png",
+      "sha256": "95543864dbb9c55a34e26c19adfc68b89f7c5c497963dfe1b8e5492bc4c4eb48",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-merchant-lift.png",
+      "path": "docs/content/r15/journey-frames/fdaaff804e8a2fa8-phone-memory-merchant-lift.png",
+      "sha256": "fdaaff804e8a2fa89f04d8845d77a58dc247cabddb673c41aeaf1424f5ed92c2",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-merchant-received.png",
+      "path": "docs/content/r15/journey-frames/d5d00fe2c1db44e1-phone-memory-merchant-received.png",
+      "sha256": "d5d00fe2c1db44e170cd437cf05686836e3e00272032090495667fd1d622c971",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-merchant-reply.png",
+      "path": "docs/content/r15/journey-frames/cd34b81215a6146b-phone-memory-merchant-reply.png",
+      "sha256": "cd34b81215a6146b51277f3fd15ad953b764fcb036dbe728c89c59eaae1499b9",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-elder-lift.png",
+      "path": "docs/content/r15/journey-frames/c8e5b6f7fadbebbb-phone-memory-elder-lift.png",
+      "sha256": "c8e5b6f7fadbebbbdc7b52fd040a41ff60aa9b97ed98af3627f06c56c7cb7ee4",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-elder-received.png",
+      "path": "docs/content/r15/journey-frames/6254b80a00c92ad5-phone-memory-elder-received.png",
+      "sha256": "6254b80a00c92ad5ff2e641689ecfe1ac36a14cecc5b809857fafa50ed1bfb3b",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-elder-reply.png",
+      "path": "docs/content/r15/journey-frames/14487be19c499f28-phone-memory-elder-reply.png",
+      "sha256": "14487be19c499f28eb0b0ee12680bc52978cb466c8068ba3a56af215d9c3e020",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-child-lift.png",
+      "path": "docs/content/r15/journey-frames/103ed0c4c6137e2d-phone-memory-child-lift.png",
+      "sha256": "103ed0c4c6137e2d1a51174059514024cbd64887f8eb91cd97ed9bf6ea306dee",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-child-received.png",
+      "path": "docs/content/r15/journey-frames/3c05a2fb67c119e2-phone-memory-child-received.png",
+      "sha256": "3c05a2fb67c119e274282b1c538adfc5967e2d014cc58258d5d593e800ec0733",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/phone-memory-child-reply.png",
+      "path": "docs/content/r15/journey-frames/21a60a5c6eb2ccd8-phone-memory-child-reply.png",
+      "sha256": "21a60a5c6eb2ccd86471edf4925a3cd88a056b44ed8911496bd2256faaa109c6",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/layout-memory-844x390.png",
+      "path": "docs/content/r15/journey-frames/44fa0d2ea80aa614-layout-memory-844x390.png",
+      "sha256": "44fa0d2ea80aa614ee031b17f7cba1b6a8c0f0f11e1420e8af6fded713de530c",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/layout-memory-1032x1376.png",
+      "path": "docs/content/r15/journey-frames/fc67c56c793a1fcf-layout-memory-1032x1376.png",
+      "sha256": "fc67c56c793a1fcf16e33e481b014fa6ca02f3cb96284e54d96084babb0e2598",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    },
+    {
+      "source": "docs/content/r15/layout-memory-1366x600.png",
+      "path": "docs/content/r15/journey-frames/c1bb6b476ba2e839-layout-memory-1366x600.png",
+      "sha256": "c1bb6b476ba2e839188b097501ef14152abe048898108a6b60be9081fb971de6",
+      "operation": "native main-journey bytes preserved before supplemental recapture"
+    }
+  ]
+}

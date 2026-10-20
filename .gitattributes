@@ -3,3 +3,6 @@ assets/generated/content-r8/manifest.json whitespace=cr-at-eol
 assets/generated/content-r9/manifest.json whitespace=cr-at-eol
 docs/content/r8/** -text whitespace=cr-at-eol
 docs/content/r9/** -text whitespace=cr-at-eol
+docs/content/r14/** -text whitespace=cr-at-eol
+assets/generated/content-r15/manifest.json whitespace=cr-at-eol
+docs/content/r15/** -text whitespace=cr-at-eol

@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED",
+  "generationToolUsedThisRound": "image_gen.imagegen",
+  "modelSlug": null,
+  "newGeneratedMasters": 2,
+  "newGeneratedRuntimeAssets": 4,
+  "reference": "assets/generated/r89/walk.png",
+  "prompts": "docs/art/PROMPTS_CONTENT_R15.json",
+  "derived": [
+    {
+      "path": "assets/generated/content-r15/hold-player.png",
+      "source": "docs/art/masters/content-r15-handover.png",
+      "frame": 0,
+      "sourceSha256": "f028bd334c9d50145af78e2b069d5b8f2f829fb921d21955c22644c596e42186",
+      "sha256": "b1b2aa9f7ca246c1d4de8467385bed215a30d9962e9c12efad3ed5e5bd9839cc",
+      "operation": "nearest native sprite reduction, R89 exact palette, fixed foot registration and shared lower 22 rows"
+    },
+    {
+      "path": "assets/generated/content-r15/reach-player.png",
+      "source": "docs/art/masters/content-r15-handover.png",
+      "frame": 1,
+      "sourceSha256": "f028bd334c9d50145af78e2b069d5b8f2f829fb921d21955c22644c596e42186",
+      "sha256": "dd0cb53bdde55a7fd8dc0702316fdfe0a93835ccc48cd85e7dbabf07f16cc0ba",
+      "operation": "nearest native sprite reduction, R89 exact palette, fixed foot registration and shared lower 22 rows"
+    },
+    {
+      "path": "assets/generated/content-r15/idle-player.png",
+      "source": "docs/art/masters/content-r15-handover.png",
+      "frame": 2,
+      "sourceSha256": "f028bd334c9d50145af78e2b069d5b8f2f829fb921d21955c22644c596e42186",
+      "sha256": "42cca2afc77dd1a4461f02663579f65d5efcb605c6d3b3be1c08431da86cb544",
+      "operation": "nearest native sprite reduction, R89 exact palette, fixed foot registration and shared lower 22 rows"
+    },
+    {
+      "path": "assets/generated/content-r15/wide-1.png",
+      "source": "docs/art/masters/content-r15-ring.png",
+      "sourceSha256": "61538481e2a62d5a9f589e112e80c08f0c9a8f64dbc44e498d52c9836c254c8f",
+      "sha256": "baeb0b3c56c9cf829d0b04ffdfc9774fab3af52220626177d533fae75221459a",
+      "operation": "native 64x44 alpha crop and nearest reduction"
+    }
+  ]
+}

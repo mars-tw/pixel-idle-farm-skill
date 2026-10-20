@@ -1,0 +1,30 @@
+{
+  "status": "VERIFIED",
+  "files": [
+    {
+      "path": "src/ui.js",
+      "beforeSnapshot": "docs/content/r14/source-snapshots/ui-before-hud.js",
+      "beforeSha256": "88735782cad244e7b22229fe818cadda804835cecc657fe220ba60eb6efbdf25",
+      "afterSha256": "ee45202efb0734b5dbbb7bb30cc01c77678c232ecac411a75c7b69a1b72967a7"
+    },
+    {
+      "path": "src/content-r1.js",
+      "beforeSnapshot": "docs/content/r14/source-snapshots/content-r1-before-hud.js",
+      "beforeSha256": "a76c9e4b0485339bb76410c5d6073e3bcdf2a2f009a4a7d2977d4359e8653d2c",
+      "afterSha256": "fc037f1cb45f11c12d13d406078840871a02d8d6efde0cd3e21ea74ab27324a0"
+    },
+    {
+      "path": "src/content-r14.css",
+      "beforeSnapshot": "docs/content/r14/source-snapshots/content-r14-before-note.css",
+      "beforeSha256": "1b30bcb0fa4ffbbb18a40c4eea06ccfbe93e95f55bf645847fa9a39f76fc384d",
+      "afterSha256": "38e2bb20b1f3c898e48489836a27084408408c3b9c2533b46dcb56ce247869a3"
+    },
+    {
+      "path": "src/content-r8.js",
+      "beforeSnapshot": "docs/content/r14/source-snapshots/content-r8-before-visibility.js",
+      "beforeSha256": "9940b90e092febb62eb0b3b9b387c2cb8783c2a62739e24c6ebe59f748257efb",
+      "afterSha256": "f29d73f87c6d829d3fa06067919a69bee4425793e5c6d11c2bc81589b3374e35"
+    }
+  ],
+  "scope": "Presentation changes: resource-HUD redraw hook/call; real104px note illustration; contextual table-caption hiding; native35x31 fish shadow above the unchanged >400-pixel gate; rod tips measured at opaque source pixels; fixed160px/.56 table illustration at <=350px. Economy, resource mutation, physics roots, collision and hit timing unchanged."
+}

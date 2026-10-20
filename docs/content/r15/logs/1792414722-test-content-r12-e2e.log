@@ -1,0 +1,47 @@
+PASS cancel retains every meal and ingredient
+PASS cancel visible material receipt
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant wrong flavor does not match
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant one complete same-size basket in all three frames
+PASS merchant identical basket pixels from giver to receiver
+PASS merchant evidence captures actual approach, reach and impact
+PASS merchant three real rendered delivery phases
+PASS merchant fixed sprite height and feet 0
+PASS merchant fixed sprite height and feet 1
+PASS merchant correct flavor earns keepsake
+PASS merchant matched visible hit targets >=44px
+PASS merchant matched no keyboard instructions
+PASS merchant first/wrong/matched are actual recorded deliveries
+PASS merchant recorded wrong dialogue visible in journal
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder wrong flavor does not match
+PASS elder no consumption before contact
+PASS elder one meal consumed at impact
+PASS elder reached actual resident
+PASS elder one complete same-size basket in all three frames
+PASS elder identical basket pixels from giver to receiver
+AssertionError [ERR_ASSERTION]: elder evidence captures actual approach, reach and impact
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r12-e2e.js:11:21)
+    at verifyDelivery (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r12-e2e.js:44:152)
+    at neighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r12-e2e.js:53:37)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r12-e2e.js:126:7 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

@@ -1,11 +1,11 @@
 {
   "name": "pixel-idle-farm",
-  "version": "0.1.36",
-  "appVersion": "content-r13-20261019-1",
-  "description": "??????????????????????????????",
+  "version": "0.1.38",
+  "appVersion": "content-r15-20261019-1",
+  "description": "陽光農場：離線種田、親手送餐與鄰居共餐。",
   "type": "commonjs",
   "scripts": {
-    "test": "node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-adventure.js && node scripts/test-world-migration.js && node scripts/test-r74-building-upgrades.js && node scripts/test-r79-sunpatch.js && node scripts/test-r80-daily.js && node scripts/test-r81-heirloom.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js && node scripts/test-content-r1.js && node scripts/test-content-r2.js && node scripts/test-content-r3.js && node scripts/test-content-r4.js && node scripts/test-content-r5.js && node scripts/test-content-r6.js && node scripts/test-content-r7.js && node scripts/test-content-r8.js && node scripts/test-content-r9.js && node scripts/test-content-r10.js && node scripts/test-content-r11.js && node scripts/test-content-r12.js && node scripts/test-content-r13.js",
+    "test": "node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-adventure.js && node scripts/test-world-migration.js && node scripts/test-r74-building-upgrades.js && node scripts/test-r79-sunpatch.js && node scripts/test-r80-daily.js && node scripts/test-r81-heirloom.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js && node scripts/test-content-r1.js && node scripts/test-content-r2.js && node scripts/test-content-r3.js && node scripts/test-content-r4.js && node scripts/test-content-r5.js && node scripts/test-content-r6.js && node scripts/test-content-r7.js && node scripts/test-content-r8.js && node scripts/test-content-r9.js && node scripts/test-content-r10.js && node scripts/test-content-r11.js && node scripts/test-content-r12.js && node scripts/test-content-r13.js && node scripts/test-content-r14.js && node scripts/test-content-r15.js && python tools/check-content-r15-art.py",
     "test:world": "node scripts/test-adventure.js && node scripts/test-world-rework-e2e.js",
     "test:water-guide": "node scripts/test-water-quest-guide.js",
     "test:r79": "node scripts/test-r79-sunpatch.js && node scripts/test-r79-fun-e2e.js",
@@ -55,7 +55,9 @@
     "test:content:r10": "node scripts/test-content-r10.js && node scripts/test-content-r10-e2e.js",
     "test:content:r11": "node scripts/test-content-r11.js && node scripts/test-content-r11-e2e.js",
     "test:content:r12": "node scripts/test-content-r12.js && node scripts/test-content-r12-e2e.js",
-    "test:content:r13": "node scripts/test-content-r13.js && node scripts/test-content-r13-e2e.js"
+    "test:content:r13": "node scripts/test-content-r13.js && node scripts/test-content-r13-e2e.js",
+    "test:content:r14": "node scripts/test-content-r14.js && node scripts/test-content-r14-e2e.js",
+    "test:content:r15": "node scripts/test-content-r15.js && node scripts/test-content-r15-e2e.js"
   },
   "keywords": [
     "idle-game",

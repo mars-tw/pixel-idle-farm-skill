@@ -1,0 +1,40 @@
+{
+  "status": "BLOCKED",
+  "protocol": "serial; each owned browser/server closes before the next command",
+  "commands": [
+    {
+      "command": [
+        "python",
+        "scripts/run-content-r14-regression.py",
+        "--only=npm,test-npc-indicators,test-world-project-art,test-world-rework-e2e,test-content-r2-e2e,test-content-r3-e2e"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-run-content-r14-regression.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-content-r14-visuals.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-test-content-r14-visuals.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/measure-content-r14.js"
+      ],
+      "exitCode": 0,
+      "log": "docs/content/r14/logs/final-measure-content-r14.log"
+    },
+    {
+      "command": [
+        "python",
+        "tools/protect-content-r14.py",
+        "restore"
+      ],
+      "exitCode": 1,
+      "log": "docs/content/r14/logs/final-protect-content-r14.log"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "content-r13-20261019-1";
+const CACHE_VERSION = "content-r15-20261019-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -6,6 +6,12 @@ const VERSION_QUERY = "?v=" + CACHE_VERSION;
 const OFFLINE_URL = versioned("./offline.html");
 const CORE_ASSETS = [
   versioned("./src/content-r13.css"),
+  versioned("./src/content-r14.css"),
+  versioned("./src/content-r15.css"),
+  versioned("./assets/generated/content-r15/hold-player.png"),
+  versioned("./assets/generated/content-r15/reach-player.png"),
+  versioned("./assets/generated/content-r15/idle-player.png"),
+  versioned("./assets/generated/content-r15/wide-1.png"),
   ...["creek",...['merchant','elder','child'].map(id=>'wait-'+id),...['river_carp','silver_dace','river_perch'].flatMap(id=>[id+'-color',id+'-shadow']),...['0','1','2'].map(i=>'fishing-'+i)].map(id=>versioned('./assets/generated/content-r13/'+id+'.png')),
   versioned("./src/content-r12.css"),
   ...["wide","peck","wake"].flatMap(k=>[0,1,2].map(i=>versioned("./assets/generated/content-r12/"+k+"-"+i+".png"))),

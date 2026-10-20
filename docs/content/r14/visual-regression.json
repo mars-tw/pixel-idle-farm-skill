@@ -1,0 +1,5239 @@
+{
+  "status": "VERIFIED",
+  "fixture": "Earned R14 UI saves reused. Walking starts are reached with normal map movement. Only dock/chapter access, ingredients and fish RNG are fixtures; no catches or servings granted.",
+  "checks": [
+    "farmhouse route point is a real walkable tile t10_3",
+    "farmhouse character collider never enters furniture footprint",
+    "farmhouse only local roof window; no faded full building",
+    "farmhouse route point is a real walkable tile t12_3",
+    "farmhouse character collider never enters furniture footprint",
+    "farmhouse only local roof window; no faded full building",
+    "farmhouse route point is a real walkable tile t10_6",
+    "farmhouse character collider never enters furniture footprint",
+    "farmhouse only local roof window; no faded full building",
+    "shop route point is a real walkable tile t10_0",
+    "shop character collider never enters furniture footprint",
+    "shop only local roof window; no faded full building",
+    "shop route point is a real walkable tile t12_0",
+    "shop character collider never enters furniture footprint",
+    "shop only local roof window; no faded full building",
+    "shop route point is a real walkable tile t10_3",
+    "shop character collider never enters furniture footprint",
+    "shop only local roof window; no faded full building",
+    "barn route point is a real walkable tile t11_6",
+    "barn character collider never enters furniture footprint",
+    "barn only local roof window; no faded full building",
+    "barn route point is a real walkable tile t14_6",
+    "barn character collider never enters furniture footprint",
+    "barn only local roof window; no faded full building",
+    "barn route point is a real walkable tile t14_8",
+    "barn character collider never enters furniture footprint",
+    "barn only local roof window; no faded full building",
+    "house and porch share occlusion and opacity",
+    "320 table label is complete inside viewport",
+    "320 no duplicate table caption",
+    "390 table label is complete inside viewport",
+    "390 no duplicate table caption",
+    "430 table label is complete inside viewport",
+    "430 no duplicate table caption",
+    "merchant distance is exact remaining BFS path",
+    "merchant distant recipient is in the same unzoomed phone frame",
+    "merchant recipient and taste visible together",
+    "elder distance is exact remaining BFS path",
+    "elder distant recipient is in the same unzoomed phone frame",
+    "elder recipient and taste visible together",
+    "child distance is exact remaining BFS path",
+    "child distant recipient is in the same unzoomed phone frame",
+    "child recipient and taste visible together",
+    "same fresh save early reel grants no fish or note",
+    "river_carp visible continuous rod-tip to bobber line",
+    "river_carp line starts on actual opaque rod-tip pixels, not transparent sprite padding",
+    "river_carp different actual active limb-pose asset",
+    "river_carp fish shadow width is 0.5 to 0.7 of visible fisher height",
+    "river_carp fresh-save catch + note + cumulative count all increase together",
+    "river_carp replay really grants no fish, notes or resource use",
+    "silver_dace visible continuous rod-tip to bobber line",
+    "silver_dace line starts on actual opaque rod-tip pixels, not transparent sprite padding",
+    "silver_dace different actual active limb-pose asset",
+    "silver_dace fish shadow width is 0.5 to 0.7 of visible fisher height",
+    "silver_dace fresh-save catch + note + cumulative count all increase together",
+    "silver_dace replay really grants no fish, notes or resource use",
+    "river_perch visible continuous rod-tip to bobber line",
+    "river_perch line starts on actual opaque rod-tip pixels, not transparent sprite padding",
+    "river_perch different actual active limb-pose asset",
+    "river_perch fish shadow width is 0.5 to 0.7 of visible fisher height",
+    "river_perch fresh-save catch + note + cumulative count all increase together",
+    "river_perch replay really grants no fish, notes or resource use",
+    "refill immediately redraws exact resource HUD before any reload",
+    "merchant only one remembered dish in primary choice",
+    "merchant wrong tastes are secondary",
+    "merchant mid-table motion is before settlement",
+    "merchant full moving plate is above shared label",
+    "merchant all four feet and seats stay fixed",
+    "merchant received frame has a usable next-step button",
+    "merchant mid is visibly separated from hand destination",
+    "elder only one remembered dish in primary choice",
+    "elder wrong tastes are secondary",
+    "elder mid-table motion is before settlement",
+    "elder full moving plate is above shared label",
+    "elder all four feet and seats stay fixed",
+    "elder received frame has a usable next-step button",
+    "elder mid is visibly separated from hand destination",
+    "child only one remembered dish in primary choice",
+    "child wrong tastes are secondary",
+    "child mid-table motion is before settlement",
+    "child full moving plate is above shared label",
+    "child all four feet and seats stay fixed",
+    "child received frame has a usable next-step button",
+    "child mid is visibly separated from hand destination",
+    "shared + three actual guest servings survive reload",
+    "skip and immediately continue settle exactly once and cancel stale reply timers",
+    {
+      "viewport": {
+        "w": 320,
+        "h": 568
+      },
+      "playingControls": [
+        {
+          "text": "×",
+          "w": 44,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "甜味胡蘿蔔點心剩 1 份",
+          "w": 268,
+          "h": 74,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一種味道",
+          "w": 268,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "把甜味胡蘿蔔點心端給圖圖",
+          "w": 268,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一位鄰居",
+          "w": 62.5,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "補備與紀錄",
+          "w": 62.5,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "翻聚餐手記",
+          "w": 62.5,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "回農場",
+          "w": 62.5,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        }
+      ]
+    },
+    "320x568 active food-selection controls all >=44px and hittable without scrolling",
+    "320x568 actual touch flow completes one serving",
+    "320x568 next action visible at impact",
+    {
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "playingControls": [
+        {
+          "text": "×",
+          "w": 44,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "甜味胡蘿蔔點心剩 1 份",
+          "w": 338,
+          "h": 75,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一種味道",
+          "w": 338,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "把甜味胡蘿蔔點心端給圖圖",
+          "w": 338,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一位鄰居",
+          "w": 80,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "補備與紀錄",
+          "w": 80,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "翻聚餐手記",
+          "w": 80,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "回農場",
+          "w": 80,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        }
+      ]
+    },
+    "390x844 active food-selection controls all >=44px and hittable without scrolling",
+    "390x844 actual touch flow completes one serving",
+    "390x844 next action visible at impact",
+    {
+      "viewport": {
+        "w": 844,
+        "h": 390
+      },
+      "playingControls": [
+        {
+          "text": "×",
+          "w": 44,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "甜味胡蘿蔔點心剩 1 份",
+          "w": 364.890625,
+          "h": 75,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一種味道",
+          "w": 364.890625,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "把甜味胡蘿蔔點心端給圖圖",
+          "w": 288,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一位鄰居",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "補備與紀錄",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "翻聚餐手記",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "回農場",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        }
+      ]
+    },
+    "844x390 active food-selection controls all >=44px and hittable without scrolling",
+    "844x390 actual touch flow completes one serving",
+    "844x390 next action visible at impact",
+    {
+      "viewport": {
+        "w": 768,
+        "h": 1024
+      },
+      "playingControls": [
+        {
+          "text": "×",
+          "w": 44,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "甜味胡蘿蔔點心剩 1 份",
+          "w": 589,
+          "h": 75,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一種味道",
+          "w": 589,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "把甜味胡蘿蔔點心端給圖圖",
+          "w": 604,
+          "h": 49,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一位鄰居",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "補備與紀錄",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "翻聚餐手記",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "回農場",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        }
+      ]
+    },
+    "768x1024 active food-selection controls all >=44px and hittable without scrolling",
+    "768x1024 actual touch flow completes one serving",
+    "768x1024 next action visible at impact",
+    {
+      "viewport": {
+        "w": 1032,
+        "h": 1376
+      },
+      "playingControls": [
+        {
+          "text": "×",
+          "w": 44,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "甜味胡蘿蔔點心剩 1 份",
+          "w": 589,
+          "h": 75,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一種味道",
+          "w": 589,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "把甜味胡蘿蔔點心端給圖圖",
+          "w": 604,
+          "h": 49,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一位鄰居",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "補備與紀錄",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "翻聚餐手記",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "回農場",
+          "w": 146.5,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        }
+      ]
+    },
+    "1032x1376 active food-selection controls all >=44px and hittable without scrolling",
+    "1032x1376 actual touch flow completes one serving",
+    "1032x1376 next action visible at impact",
+    {
+      "viewport": {
+        "w": 1366,
+        "h": 600
+      },
+      "playingControls": [
+        {
+          "text": "×",
+          "w": 44,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "甜味胡蘿蔔點心剩 1 份",
+          "w": 364.890625,
+          "h": 75,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一種味道",
+          "w": 364.890625,
+          "h": 44,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "把甜味胡蘿蔔點心端給圖圖",
+          "w": 288,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "換一位鄰居",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "補備與紀錄",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "翻聚餐手記",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "text": "回農場",
+          "w": 94,
+          "h": 48,
+          "inside": true,
+          "hit": true
+        }
+      ]
+    },
+    "1366x600 active food-selection controls all >=44px and hittable without scrolling",
+    "1366x600 actual touch flow completes one serving",
+    "1366x600 next action visible at impact",
+    "zero uncaught browser errors",
+    "zero uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r14/phone-basket-route-farmhouse-1.png",
+      "sha256": "8fe280eb078c9fb7a7eed45dae4552f2db88e8cd93b396e81cdc26b6be29966d",
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-farmhouse-2.png",
+      "sha256": "aab4cc9c4eaefcf810f8b41d709e3b4f0151e5ffd3cdcb73de44ab9bc45b2695",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "radial-gradient(circle at 120px -5.12px, rgba(0, 0, 0, 0.267) 0px, rgba(0, 0, 0, 0.267) 24.48px, rgb(0, 0, 0) 38.48px)",
+            "behind": true,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "radial-gradient(circle at 84px -93.12px, rgba(0, 0, 0, 0.267) 0px, rgba(0, 0, 0, 0.267) 24.48px, rgb(0, 0, 0) 38.48px)",
+            "behind": true,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-farmhouse-3.png",
+      "sha256": "5b99ba82f02c7be4ab2531aac6cbaeef2140bd889625cb11a0432fe642202399",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-shop-1.png",
+      "sha256": "eb5ba5af563e06193ad8fd2e24184be0577e38d051370e153c65ae5a8243731b",
+      "state": {
+        "player": {
+          "tileId": "t10_0",
+          "x": 10,
+          "y": 0,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-shop-2.png",
+      "sha256": "f83e4dd8f55a6cdd9e254b06b8fde3d6fe3a90f9d6fbdb9195a81ac79cd7f640",
+      "state": {
+        "player": {
+          "tileId": "t12_0",
+          "x": 12,
+          "y": 0,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-shop-3.png",
+      "sha256": "679b0b99f634cd85415e52027df8256eaf982a6b7d9a7db8b9f51d6b41402134",
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-barn-1.png",
+      "sha256": "7b4d6624a9ea08377909be36ac16e900f9a82a81af3e7280e50759859496c2ae",
+      "state": {
+        "player": {
+          "tileId": "t11_6",
+          "x": 11,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-barn-2.png",
+      "sha256": "65c3099915653269326c91a6ccd3bdf9e24d131bc0f0c69125861d95b9fca201",
+      "state": {
+        "player": {
+          "tileId": "t14_6",
+          "x": 14,
+          "y": 6,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-route-barn-3.png",
+      "sha256": "5815b70f7bac9356a117a1b053ca7943352d962976e1ec1471d711d353568335",
+      "state": {
+        "player": {
+          "tileId": "t14_8",
+          "x": 14,
+          "y": 8,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-house-behind.png",
+      "sha256": "5ea7fa9222c04eda9f187327a4d22d6a724cb3201d20e0dc71deb87a5a92aa46",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "radial-gradient(circle at 120px -5.12px, rgba(0, 0, 0, 0.267) 0px, rgba(0, 0, 0, 0.267) 24.48px, rgb(0, 0, 0) 38.48px)",
+            "behind": true,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "radial-gradient(circle at 84px -93.12px, rgba(0, 0, 0, 0.267) 0px, rgba(0, 0, 0, 0.267) 24.48px, rgb(0, 0, 0) 38.48px)",
+            "behind": true,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-house-front.png",
+      "sha256": "58210b2a24e0c470ffcd6c4bd2e34fdef5477bf656b96de9200ff0f763dfa43f",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-label-320.png",
+      "sha256": "87f45ca8b04d3dbe80c0de426b658e2757343e1dbf7b0daa88e96752d2b0f84e",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "384"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "576"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "512"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "192"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "397"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-label-390.png",
+      "sha256": "e9fb8fcfb7945215acfc96bd6c1a1b3feea9a4b2005d96d2edbb31a689d363ad",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-label-430.png",
+      "sha256": "81af9b70b4c0be477840c899002a589fabc6f60682f4a100b3b838d095ebca92",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-merchant-far.png",
+      "sha256": "b2571f09a749798b35ad4d40740bc745abcaac2378200dff027b053f903d23fe",
+      "state": {
+        "player": {
+          "tileId": "t14_4",
+          "x": 14,
+          "y": 4,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-elder-far.png",
+      "sha256": "e2852bc81c11f475ffa4b28719ed018379a01740af9acc9eeba884dc304e53b1",
+      "state": {
+        "player": {
+          "tileId": "t7_9",
+          "x": 7,
+          "y": 9,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-basket-child-far.png",
+      "sha256": "08e79376aed6b486df6f6d674171e23a0ada65b421bc16fb5608a197348ad1b5",
+      "state": {
+        "player": {
+          "tileId": "t8_9",
+          "x": 8,
+          "y": 9,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-river_carp-early-final.png",
+      "sha256": "8480c36864d3cd87b4ee7b741eab69371bcfa2e72e3faecc263e7e3af7f6398d",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M103.45833333333333,172.04166666666666 Q144.22916666666666,181.04166666666666 185,54.64",
+        "fisher": "0",
+        "subtitle": "提早了。寬尾還沒翻到浮標旁，等寬圈合起來。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-river_carp-active-final.png",
+      "sha256": "7b0e1057c29ec661f6b8cf7b17793b47a0ff7fa9d2a47dea3526e955b8ebf1e4",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M103.45833333333333,172.04166666666666 Q138.22916666666666,181.04166666666666 173,84.64",
+        "fisher": "0",
+        "subtitle": "看寬圈如何聚攏，再看浮標。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-count-1.png",
+      "sha256": "37f343221a65a1914888a03f79430da47ee1067d5e0e31a2770b9865646b47e9",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 1,
+        "notes": {
+          "river_carp": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-river_carp-replay-final.png",
+      "sha256": "d706262caf819a1f6abf41ab92011045f860ffa053edd45cb28a5e7a126e9718",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 1,
+        "notes": {
+          "river_carp": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M105.45833333333333,200.99479166666666 Q139.22916666666666,209.99479166666666 173,92.030625",
+        "fisher": "0"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-silver_dace-active-final.png",
+      "sha256": "00f6a09f1c0398671a66d0f235937a8e4e32b63481766a16aad7e67a9b4800eb",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 1,
+        "notes": {
+          "river_carp": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M103.45833333333333,152.54166666666666 Q144.22916666666666,161.54166666666666 185,92.64",
+        "fisher": "1",
+        "subtitle": "留意浮標下那一下短水花。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-count-2.png",
+      "sha256": "bf3b78639eca90980b5aee90d0eb024fc1e1ce211da112de3f1cae610e616c13",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 0
+        },
+        "totalCaught": 2,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-silver_dace-replay-final.png",
+      "sha256": "30b93b72cbab4bcdaaee44eb8e890a6865a54d3f1e1f18338474b11dc8222836",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 0
+        },
+        "totalCaught": 2,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M105.45833333333333,200.99479166666666 Q145.22916666666666,209.99479166666666 185,62.030625",
+        "fisher": "0"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-river_perch-active-final.png",
+      "sha256": "1f9a7e04ebde4c9542b2338ef35969be422f16ffe94b112203bfc2a84b91b954",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 0
+        },
+        "totalCaught": 2,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M92.625,135.20833333333334 Q171.8125,144.20833333333334 251,84.64",
+        "fisher": "2",
+        "subtitle": "沿著一側尾流，看浮標的去向。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-count-3.png",
+      "sha256": "33682649653dc93b2a1a876b0908f3049f152ee6caa33a138ece16bef647923c",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "totalCaught": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-pond-river_perch-replay-final.png",
+      "sha256": "a90624de39dba1860f5ecd125dda4bb34937c659e90c7e7e6d2a8071e8b19c57",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "totalCaught": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "refills": [],
+          "servings": []
+        },
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "line": "M94.625,164.16145833333334 Q172.8125,173.16145833333334 251,92.030625",
+        "fisher": "2"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-wrong-simple.png",
+      "sha256": "0fe7a9471a2883b35a2cc9865800647e40da14334585e2db28a00bbee2702430",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "phase": "choose",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "這份大家分食，不算圖圖的那一份。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-materials-secondary.png",
+      "sha256": "7e277faeede5ca6e4f4d0426c97b3f9c5ed3044d646678232b9b5668d2693d23",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "phase": "choose",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "這份大家分食，不算圖圖的那一份。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-merchant-lift.png",
+      "sha256": "e9224952e94866c14ab94393d6e0c8523c8a5a59798ef55baa395c289be19cbd",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "phase": "lift",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "米莉端起酸味野莓。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-merchant-mid.png",
+      "sha256": "efc3547dd918b6ff862cd878493598052896f18648e28ff0de65f65553c9d474",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "phase": "carry",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 192,
+              "y": 224,
+              "width": 42,
+              "height": 34,
+              "top": 224,
+              "right": 234,
+              "bottom": 258,
+              "left": 192
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "沿著桌面，推向蘿拉手邊。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-merchant-received.png",
+      "sha256": "38b13ab82c6aa3a905bc74db98739cdec5b466e39f5c2d1cfbc591eef4c58f27",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            }
+          ]
+        },
+        "phase": "received",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "蘿拉接到手邊，嚐了一口。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-merchant-reply.png",
+      "sha256": "becf4c26fcf51f52b3127a373fe5ef54296c7d2d54f488f08ec4732cbf68c1c2",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            }
+          ]
+        },
+        "phase": "reply",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-elder-lift.png",
+      "sha256": "3fc669fa3bce7399f3c5aac014c27a202dbd13c67100e09058840bd69bfbfcbb",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            }
+          ]
+        },
+        "phase": "lift",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "米莉端起熱味麥餅。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-elder-mid.png",
+      "sha256": "a60320af034dd5467c67b952e26c0d73a2c3ff0168bec0f27c757811311b3f00",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            }
+          ]
+        },
+        "phase": "carry",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 192,
+              "y": 224,
+              "width": 42,
+              "height": 34,
+              "top": 224,
+              "right": 234,
+              "bottom": 258,
+              "left": 192
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "沿著桌面，推向班伯手邊。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-elder-received.png",
+      "sha256": "6d58cf8df1ebc46ef058b7691fde50465959bb86d28f83f74ebd0a482981aa16",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            }
+          ]
+        },
+        "phase": "received",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "班伯接到手邊，嚐了一口。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-elder-reply.png",
+      "sha256": "9318e735f1e0cee268e84228208135dd0bc4e9522878e4ba6e4f05251225bbad",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            }
+          ]
+        },
+        "phase": "reply",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-child-lift.png",
+      "sha256": "45ff96f8cdac35bb7595e90ceb92db0b0142dabf015cf326f061b2f8899c9735",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            }
+          ]
+        },
+        "phase": "lift",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "米莉端起甜味胡蘿蔔點心。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-child-mid.png",
+      "sha256": "2054fe61aa0ae937a8f17cfcf1a87f930fc1d0279da44911142e2fcb8147b4eb",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            }
+          ]
+        },
+        "phase": "carry",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 192,
+              "y": 224,
+              "width": 42,
+              "height": 34,
+              "top": 224,
+              "right": 234,
+              "bottom": 258,
+              "left": 192
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "沿著桌面，推向圖圖手邊。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-child-received.png",
+      "sha256": "ffd23c5c46ef29535fc9066154111a3987c17e82315d1cfe1617418deed5c920",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792410172110,
+              "matched": true,
+              "reply": "圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」"
+            }
+          ]
+        },
+        "phase": "received",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "圖圖接到手邊，嚐了一口。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-child-reply.png",
+      "sha256": "022c2fd2e0c89117c28a0da90d06d894975e56f7ec237bf7c6ddb5bdefe3eba7",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792410172110,
+              "matched": true,
+              "reply": "圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」"
+            }
+          ]
+        },
+        "phase": "reply",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-shared-complete-reloaded.png",
+      "sha256": "3744c736de4971a797083b062c7abcbd46440df2439d359bdf748bb8cb904c42",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792410172110,
+              "matched": true,
+              "reply": "圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」"
+            }
+          ]
+        },
+        "phase": "choose",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "三位都接到了。桌中央還留著大家分食的那份。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-journal-shared-reloaded.png",
+      "sha256": "904f15c4d8a53d3c8cf4a8b215eef5548901a74e41d403539a018412c1aa38c4",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792410161580,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792410159984,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410164276,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792410168291,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792410172110,
+              "matched": true,
+              "reply": "圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」"
+            }
+          ]
+        },
+        "phase": "choose",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 211,
+              "width": 42,
+              "height": 34,
+              "top": 211,
+              "right": 245,
+              "bottom": 245,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 170,
+              "width": 42,
+              "height": 34,
+              "top": 170,
+              "right": 197,
+              "bottom": 204,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 170,
+              "width": 42,
+              "height": 34,
+              "top": 170,
+              "right": 305,
+              "bottom": 204,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 245,
+              "width": 42,
+              "height": 34,
+              "top": 245,
+              "right": 295,
+              "bottom": 279,
+              "left": 253
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-skip-once.png",
+      "sha256": "24652029ec374492b620885420a469d82e9fcb872026024198ac307d9e256418",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792410174414,
+              "matched": true,
+              "reply": "圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」"
+            }
+          ]
+        },
+        "phase": "choose",
+        "plate": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "選一位鄰居，再選一份點心。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-playing-320x568.png",
+      "sha256": "38590a6211a1774d9ec2b10b730afddd6b99192b94f54a3ae96b483cb4385e3d",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": []
+        },
+        "phase": "choose",
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "384"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "576"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "512"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "192"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "397"
+          }
+        ],
+        "subtitle": "圖圖記得上回的甜味餐籃。"
+      }
+    },
+    {
+      "path": "docs/content/r14/phone-memory-playing-390x844.png",
+      "sha256": "66af5ba2957fbc5523985ab33979b3c5784b3def57cf6dff96507d36d9b80a37",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": []
+        },
+        "phase": "choose",
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "432"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "648"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "576"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "216"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "446"
+          }
+        ],
+        "subtitle": "圖圖記得上回的甜味餐籃。"
+      }
+    },
+    {
+      "path": "docs/content/r14/layout-memory-playing-844x390.png",
+      "sha256": "917b1ca166ada0d01c1915f5b3e70b16633057bfb57647da13b5f1cceb6f5e3d",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": []
+        },
+        "phase": "choose",
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "384"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "576"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "512"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "192"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "397"
+          }
+        ],
+        "subtitle": "圖圖記得上回的甜味餐籃。"
+      }
+    },
+    {
+      "path": "docs/content/r14/layout-memory-playing-768x1024.png",
+      "sha256": "a4d5b206b4b6533bc88ec92a65b269cd424f74adb31b69b60591b3a69992045b",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": []
+        },
+        "phase": "choose",
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "528"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "792"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "704"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "264"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "546"
+          }
+        ],
+        "subtitle": "圖圖記得上回的甜味餐籃。"
+      }
+    },
+    {
+      "path": "docs/content/r14/layout-memory-playing-1032x1376.png",
+      "sha256": "372cb735fe62413a9ca185cab56a4d9f75ad22d46e2c24c26aa424738282d5a6",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": []
+        },
+        "phase": "choose",
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "1080"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "960"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "360"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "744"
+          }
+        ],
+        "subtitle": "圖圖記得上回的甜味餐籃。"
+      }
+    },
+    {
+      "path": "docs/content/r14/layout-memory-playing-1366x600.png",
+      "sha256": "eb36ad8450c2206ded47423deb7564c38066fe0d8930ebe4ea367f3d6629408e",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": []
+        },
+        "phase": "choose",
+        "plate": [],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "圖圖記得上回的甜味餐籃。"
+      }
+    },
+    {
+      "path": "docs/store/screenshots/iphone-19-shared-afternoon-r14.png",
+      "sha256": "42d7f67484deabb68696e36ad2b468e3c81ade61ed5023ccedf952375ef18711",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": [
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410811864,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            }
+          ]
+        },
+        "phase": "reply",
+        "plate": [
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "480"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "640"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "240"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "496"
+          }
+        ],
+        "subtitle": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+      }
+    },
+    {
+      "path": "docs/store/screenshots/ipad-19-shared-afternoon-r14.png",
+      "sha256": "19c4b8c87ca3421678922188203fe2e97c983b339632c5aebb034352c3888ca9",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "totalCaught": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792405157143,
+          "refills": [],
+          "servings": [
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792410816849,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+            }
+          ]
+        },
+        "phase": "reply",
+        "plate": [
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 448.5,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 490.5,
+              "bottom": 232,
+              "left": 448.5
+            }
+          }
+        ],
+        "roof": [
+          {
+            "id": "farmhouse",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "720"
+          },
+          {
+            "id": "coop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "1080"
+          },
+          {
+            "id": "barn",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "960"
+          },
+          {
+            "id": "shop",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "360"
+          },
+          {
+            "id": "porch",
+            "opacity": "1",
+            "mask": "",
+            "behind": false,
+            "z": "744"
+          }
+        ],
+        "subtitle": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」"
+      }
+    }
+  ],
+  "errors": []
+}

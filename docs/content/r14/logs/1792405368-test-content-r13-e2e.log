@@ -1,0 +1,26 @@
+PASS cancel retains every meal and ingredient
+PASS cancel visible material receipt
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant wrong flavor does not match
+PASS merchant no consumption before contact
+PASS merchant one meal consumed at impact
+PASS merchant reached actual resident
+PASS merchant one complete same-size basket in all three frames
+PASS merchant identical basket pixels from giver to receiver
+AssertionError [ERR_ASSERTION]: merchant evidence captures actual approach, reach and impact
+    at check (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r13-e2e.js:10:21)
+    at verifyDelivery (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r13-e2e.js:48:152)
+    at neighbors (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r13-e2e.js:57:37)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r13-e2e.js:139:7 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

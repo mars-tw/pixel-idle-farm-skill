@@ -1,0 +1,34 @@
+/* R14 repairs: coherent occlusion, water first, one task per paper page. */
+.ob.actor-behind{opacity:1;filter:none}
+.farm-gathering::after,.reserved-table{display:none!important}
+.gather-map-label{position:fixed;z-index:1000;pointer-events:none;max-width:calc(100vw - 20px);box-sizing:border-box;white-space:nowrap;padding:4px 7px;font:14px/1.5 'Microsoft JhengHei',sans-serif;color:#3e2f23;background:#fff6e3;border:1px solid #8b5e34}
+.gather-map-label[hidden],#worldModal.content-r1 [hidden]{display:none!important}
+.carry-label{font-size:14px;font-weight:700;max-width:100px}
+.carry-target{background:#fff6e3;border:1px solid #8b5e34}
+body[data-delivering] #seedHud,body[data-delivering] #seedHud *,body[data-delivering] .toolbar{visibility:hidden!important;pointer-events:none!important}
+body[data-delivering] .gather-map-label{display:none!important}
+.pond-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+.pond-stage,.note-replay .pond-stage{height:230px!important;min-height:230px;float:none;width:100%;margin:0;flex-shrink:0}
+#worldModal[data-content-view='note'] .content-illustration{width:104px!important;height:91px!important;max-height:91px!important;float:right}
+#worldModal[data-content-view='note'] .fish-note{font-size:14px;line-height:1.5}
+#worldModal[data-content-view='note'] .fish-note h3{font-size:16px;margin:8px 0 4px}
+.fish-comparison>div:last-child{border-bottom:0}
+.fish-comparison img{width:58px;height:51px}.fish-comparison>div{min-height:60px}
+.fish-comparison p{font-size:14px}.catch-receipt{padding:6px 0}.catch-receipt p{font-size:14px}
+.gather-extras h3{font-size:18px;margin:4px 0}.gather-supply{font-size:14px;line-height:1.6;padding:6px}
+.other-foods summary{min-height:44px;display:flex;align-items:center;padding:0 8px;color:#5a3e28;cursor:pointer}
+.other-foods>div{display:flex;gap:6px}.other-foods button{flex:1}
+#worldModal[data-gather-step='person'] .serving-foods,#worldModal[data-gather-step='person'] .other-foods{display:none}
+#worldModal[data-gather-step='food'] .gather-choices>.neighbor-tabs{display:none}
+#worldModal[data-serving-phase='choose'] .gather-status{display:none}
+#worldModal[data-serving-phase='lift'] .shared-dish-label,#worldModal[data-serving-phase='carry'] .shared-dish-label{visibility:hidden}
+.serving-plate{z-index:9}
+#worldModal[data-serving-phase='choose'] .gather-shared{min-height:44px!important}
+#worldModal[data-content-view='gathering-complete'] .gather-progress{font-size:15px;line-height:1.5;margin:4px 0}
+#worldModal[data-content-view='gathering-complete'] .gather-shared{max-height:none;overflow:visible}
+#worldModal[data-content-view='gathering-complete'] .content-footer{display:flex;gap:6px;flex-wrap:wrap;padding-top:6px;margin-top:6px}
+#worldModal[data-content-view='gathering-complete'] .content-footer button{flex:1;min-height:44px}
+#worldModal[data-content-view='gathering-complete'] #gatherSip,#worldModal[data-content-view='gathering-complete'] #gatherContinue,#worldModal[data-content-view='gathering-complete'] #gatherReturn{flex-basis:100%;min-height:48px}
+@media(max-width:350px){.pond-stage,.note-replay .pond-stage{height:200px!important;min-height:200px}.fish-comparison p,.catch-receipt p{font-size:12px}.gather-map-label{font-size:12px}#worldModal[data-content-view='gathering-complete'] .gather-progress{font-size:12px}}
+@media(orientation:landscape) and (max-height:600px){.pond-stage,.note-replay .pond-stage{float:left;width:46%;height:180px!important;min-height:180px;margin-right:10px}#worldModal[data-content-view='gathering-complete'] .gather-stage{float:left;width:44%;height:205px;min-height:205px}#worldModal[data-content-view='gathering-complete'] .content-footer{clear:both;flex-wrap:nowrap}#worldModal[data-content-view='gathering-complete'] #gatherSip,#worldModal[data-content-view='gathering-complete'] #gatherContinue{flex-basis:auto}.gather-status{display:none!important}}
+@media(max-width:350px){#worldModal[data-content-view='gathering-complete'] .gather-stage{height:160px;min-height:160px}#worldModal[data-content-view='gathering-complete'] .gather-stage .meal-layout{--meal-scale:.56!important}}

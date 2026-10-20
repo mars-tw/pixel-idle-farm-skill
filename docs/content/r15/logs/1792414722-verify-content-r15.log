@@ -1,0 +1,142 @@
+PASS farmhouse 0 real walkable physics root
+PASS farmhouse leaving restores normal occlusion
+PASS farmhouse 1 real walkable physics root
+PASS farmhouse behind has full current articulated locator and feet
+PASS farmhouse roof fully opaque
+PASS farmhouse 2 real walkable physics root
+PASS farmhouse leaving restores normal occlusion
+PASS shop 0 real walkable physics root
+PASS shop leaving restores normal occlusion
+PASS shop 1 real walkable physics root
+PASS shop behind has full current articulated locator and feet
+PASS shop roof fully opaque
+PASS shop 2 real walkable physics root
+PASS shop leaving restores normal occlusion
+PASS barn 0 real walkable physics root
+PASS barn leaving restores normal occlusion
+PASS barn 1 real walkable physics root
+PASS barn behind has full current articulated locator and feet
+PASS barn roof fully opaque
+PASS barn 2 real walkable physics root
+PASS barn leaving restores normal occlusion
+PASS delivery behind roof shows full current character and foot locator
+PASS cancel behind house retains all materials
+PASS merchant same-frame target fully visible, no zoom
+PASS merchant name and taste visible with hand-held basket
+PASS elder same-frame target fully visible, no zoom
+PASS elder name and taste visible with hand-held basket
+PASS child same-frame target fully visible, no zoom
+PASS child name and taste visible with hand-held basket
+PASS 320 narrow house locator visible
+PASS 320 narrow cancellation reachable
+PASS 390 narrow target and taste visible
+PASS 390 narrow cancellation reachable
+PASS 430 narrow target and taste visible
+PASS 430 narrow cancellation reachable
+PASS merchant far distance equals visible walkable path points
+PASS merchant walking distance equals visible walkable path points
+PASS merchant near distance equals visible walkable path points
+PASS merchant contact anticipation does not consume
+PASS merchant same R89 outfit source
+PASS merchant enlarged actors clearly inside labelled close-up
+PASS merchant impact consumes exactly one
+PASS merchant route and close-up removed at arrival
+PASS elder far distance equals visible walkable path points
+PASS elder walking distance equals visible walkable path points
+PASS elder near distance equals visible walkable path points
+PASS elder contact anticipation does not consume
+PASS elder same R89 outfit source
+PASS elder enlarged actors clearly inside labelled close-up
+PASS elder impact consumes exactly one
+PASS elder route and close-up removed at arrival
+PASS child far distance equals visible walkable path points
+PASS child walking distance equals visible walkable path points
+PASS child near distance equals visible walkable path points
+PASS child contact anticipation does not consume
+PASS child same R89 outfit source
+PASS child enlarged actors clearly inside labelled close-up
+PASS child impact consumes exactly one
+PASS child route and close-up removed at arrival
+PASS river_carp pre answer hidden until reveal
+PASS river_carp pre title hides answer
+PASS river_carp practice pre line to opaque bobber top <=3px (actual 0.919)
+PASS river_carp active answer hidden until reveal
+PASS river_carp active title hides answer
+PASS river_carp practice active line to opaque bobber top <=3px (actual 0.461)
+PASS river_carp missed answer hidden until reveal
+PASS river_carp missed title hides answer
+PASS river_carp practice missed line to opaque bobber top <=3px (actual 0.919)
+PASS river_carp hidden replay changes no fish, cumulative, notes or ingredients
+PASS river_carp early failure line to opaque bobber top <=3px (actual 0.000)
+PASS river_carp active line to opaque bobber top <=3px (actual 0.000)
+PASS river_carp late failure grants zero
+PASS river_carp late failure line to opaque bobber top <=3px (actual 0.000)
+PASS river_carp normal replay line to opaque bobber top <=3px (actual 0.461)
+PASS silver_dace pre answer hidden until reveal
+PASS silver_dace pre title hides answer
+PASS silver_dace practice pre line to opaque bobber top <=3px (actual 0.919)
+PASS silver_dace active answer hidden until reveal
+PASS silver_dace active title hides answer
+PASS silver_dace practice active line to opaque bobber top <=3px (actual 0.259)
+PASS silver_dace missed answer hidden until reveal
+PASS silver_dace missed title hides answer
+PASS silver_dace practice missed line to opaque bobber top <=3px (actual 0.919)
+PASS silver_dace hidden replay changes no fish, cumulative, notes or ingredients
+PASS silver_dace early failure line to opaque bobber top <=3px (actual 0.000)
+PASS silver_dace active line to opaque bobber top <=3px (actual 0.000)
+PASS silver_dace late failure grants zero
+PASS silver_dace late failure line to opaque bobber top <=3px (actual 0.000)
+PASS silver_dace normal replay line to opaque bobber top <=3px (actual 0.259)
+PASS river_perch pre answer hidden until reveal
+PASS river_perch pre title hides answer
+PASS river_perch practice pre line to opaque bobber top <=3px (actual 0.919)
+PASS river_perch active answer hidden until reveal
+PASS river_perch active title hides answer
+PASS river_perch practice active line to opaque bobber top <=3px (actual 1.190)
+PASS river_perch missed answer hidden until reveal
+PASS river_perch missed title hides answer
+PASS river_perch practice missed line to opaque bobber top <=3px (actual 0.919)
+PASS river_perch hidden replay changes no fish, cumulative, notes or ingredients
+PASS river_perch early failure line to opaque bobber top <=3px (actual 0.000)
+PASS river_perch active line to opaque bobber top <=3px (actual 0.000)
+PASS river_perch late failure grants zero
+PASS river_perch late failure line to opaque bobber top <=3px (actual 0.000)
+PASS river_perch normal replay line to opaque bobber top <=3px (actual 1.190)
+PASS no large placeholder action
+PASS merchant one clear remembered dish and alternate taste entry
+PASS elder one clear remembered dish and alternate taste entry
+PASS child one clear remembered dish and alternate taste entry
+PASS wrong taste explains shared destination, child still waiting
+PASS merchant mid plate no early settlement
+PASS merchant received adds one
+PASS elder mid plate no early settlement
+PASS elder received adds one
+PASS child mid plate no early settlement
+PASS child received adds one
+PASS single record action persisted
+PASS recorded footer identical after reload
+PASS 320x568 controls in viewport and actual hit targets >=44px
+PASS 320 no keyboard hints
+PASS 320 expanded alternate tastes are visible and hittable
+PASS 320 actual playable skip contact
+PASS 390x844 controls in viewport and actual hit targets >=44px
+PASS 390 no keyboard hints
+PASS 390 expanded alternate tastes are visible and hittable
+PASS 390 actual playable skip contact
+PASS 430x932 controls in viewport and actual hit targets >=44px
+PASS 430 no keyboard hints
+PASS 430 expanded alternate tastes are visible and hittable
+PASS 430 actual playable skip contact
+PASS 844x390 controls in viewport and actual hit targets >=44px
+PASS 844 no keyboard hints
+PASS 844 expanded alternate tastes are visible and hittable
+PASS 844 actual playable skip contact
+PASS 1032x1376 controls in viewport and actual hit targets >=44px
+PASS 1032 no keyboard hints
+PASS 1032 expanded alternate tastes are visible and hittable
+PASS 1032 actual playable skip contact
+PASS 1366x600 controls in viewport and actual hit targets >=44px
+PASS 1366 no keyboard hints
+PASS 1366 expanded alternate tastes are visible and hittable
+PASS 1366 actual playable skip contact
+PASS no uncaught browser errors

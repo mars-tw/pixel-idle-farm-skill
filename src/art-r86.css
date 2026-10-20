@@ -1,5 +1,5 @@
 /* R86: paper navigation has its own row; directional leaf light is generated art. */
-:root{--sun-texture:url('../assets/generated/r86/paper-128.png?v=content-r13-20261019-1')}
+:root{--sun-texture:url('../assets/generated/r86/paper-128.png?v=content-r15-20261019-1')}
 body.modal-open #questDock,body.modal-open #seedHud,body.modal-open .world-location{visibility:hidden;pointer-events:none}
 #dailyModal{padding:12px;background:#68432370}
 #dailyModal .daily-modal-card{position:relative;isolation:isolate;box-sizing:border-box;overflow:hidden;width:min(600px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:14px 16px 14px 24px;gap:10px;background:#fff6e3 var(--sun-texture);background-size:128px 128px;border:2px solid #8b5e34;border-radius:2px;box-shadow:3px 5px 0 #68432350}

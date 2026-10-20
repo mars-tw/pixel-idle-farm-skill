@@ -1,0 +1,44 @@
+PASS first basket has no unearned reread
+PASS cancel retains bread and never delivers later
+PASS walking delivery spends only once on arrival
+PASS merchant normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS merchant/sweet consumes one bread at the actual resident
+PASS merchant wrong reply differs from first clue
+PASS merchant normal farm conversation remembers wrong
+PASS merchant/sour consumes one bread at the actual resident
+PASS merchant matching taste completes distinct response
+PASS merchant normal farm conversation remembers matched
+PASS elder/plain consumes one bread at the actual resident
+PASS elder normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS elder/sweet consumes one bread at the actual resident
+PASS elder wrong reply differs from first clue
+PASS elder normal farm conversation remembers wrong
+PASS elder/hot consumes one bread at the actual resident
+PASS elder matching taste completes distinct response
+PASS elder normal farm conversation remembers matched
+PASS child/plain consumes one bread at the actual resident
+PASS child normal farm conversation remembers first
+PASS basket does not reveal remembered preference
+PASS child/sour consumes one bread at the actual resident
+PASS child wrong reply differs from first clue
+PASS child normal farm conversation remembers wrong
+PASS child/sweet consumes one bread at the actual resident
+PASS child matching taste completes distinct response
+PASS child normal farm conversation remembers matched
+PASS nine deliveries and all memories survive real reload
+PASS waiting reel visibly muted river_carp
+PASS river_carp early reel explains why and grants no fish
+PASS river_carp expired cast explains late reel without reward
+PASS river_carp visible submerged frame and enabled reel agree
+PASS river_carp success has no reel label
+PASS river_carp countdown follows actual elapsed seconds
+page.evaluate: Error: 插圖空白：assets/generated/content-r8/river_carp-3.png?v=content-r14-20261019-1
+    at Object.verifyArtwork (http://127.0.0.1:53502/src/content-r1.js?v=content-r14-20261019-1:34:119)
+    at async <anonymous>:329:30
+    at snap (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r2-e2e.js:16:88)
+    at async fish (C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r2-e2e.js:56:48)
+    at async C:\Users\digimkt\Desktop\遊戲\pixel-idle-farm-skill\scripts\test-content-r2-e2e.js:70:150 {
+  log: []
+}

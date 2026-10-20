@@ -1,5 +1,5 @@
 /* R83: generated pixels in the playable world, daylight and the family journal. */
-:root { --sun-texture:url('../assets/generated/r83/paper-128.png?v=content-r13-20261019-1'); }
+:root { --sun-texture:url('../assets/generated/r83/paper-128.png?v=content-r15-20261019-1'); }
 #mapScene { background-color:#86a554; }
 #mapScene::before, #mapScene::after, #groundLayer::before { opacity:.05; }
 .gtile.locked-area { filter:saturate(.95) brightness(.98); }
@@ -35,9 +35,9 @@
 #dailyModal[data-story='true'] .daily-heading{display:none}
 #dailyModal[data-story='true'] .heirloom-illustration{max-height:240px;margin-bottom:10px}
 body.modal-open .tool-bar,body.modal-open .side-tabs,body.modal-open .mobile-controls{visibility:hidden;opacity:0}
-.daily-open .ui-icon,.side-tabs .i-tab-journal{background-image:url('../assets/generated/r83/note-32.png?v=content-r13-20261019-1');background-size:contain;background-position:center;background-repeat:no-repeat}
-.tool-bar .i-tool-water{background-image:url('../assets/generated/r83/water-32.png?v=content-r13-20261019-1');background-size:contain;background-position:center;background-repeat:no-repeat}
-.seed-hud .i-crop-wheat{background-image:url('../assets/generated/r83/wheat-32.png?v=content-r13-20261019-1');background-size:contain;background-position:center;background-repeat:no-repeat}
+.daily-open .ui-icon,.side-tabs .i-tab-journal{background-image:url('../assets/generated/r83/note-32.png?v=content-r15-20261019-1');background-size:contain;background-position:center;background-repeat:no-repeat}
+.tool-bar .i-tool-water{background-image:url('../assets/generated/r83/water-32.png?v=content-r15-20261019-1');background-size:contain;background-position:center;background-repeat:no-repeat}
+.seed-hud .i-crop-wheat{background-image:url('../assets/generated/r83/wheat-32.png?v=content-r15-20261019-1');background-size:contain;background-position:center;background-repeat:no-repeat}
 @media(max-width:440px){.daily-task-thumb{font-size:11px;min-height:90px}.daily-task-thumb img{width:34px;height:34px}.wheat-progress{gap:8px}.wheat-progress>span{gap:2px}.wheat-slots img{width:26px;height:32px}.dialogue-portrait{width:56px;height:56px;min-width:56px;min-height:56px}.daily-modal-card{padding:10px}.heirloom-paper p{font-size:13px;line-height:1.5}}
 @media(max-height:520px) and (orientation:landscape){.daily-task-strip{gap:4px;margin-bottom:6px}.daily-task-thumb{flex-direction:row;min-height:44px;padding:2px;font-size:11px;gap:3px}.daily-task-thumb img{width:28px;height:28px}.daily-task-thumb small{display:none}.sun-task-icon{width:44px;height:44px}.grandma-note{width:56px;height:56px}#dailyModal[data-story='true'] .heirloom-illustration{max-height:180px}.memory-stamp{display:none}}
 @media(prefers-reduced-motion:reduce){.leaf-light,.memory-stamp{animation:none!important}}

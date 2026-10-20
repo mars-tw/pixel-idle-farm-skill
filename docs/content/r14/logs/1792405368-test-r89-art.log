@@ -1,0 +1,134 @@
+PASS 9 actual masters, precise tool recorded without invented model slug
+PASS asset hash docs/art/masters/r89/garden.png
+PASS asset hash docs/art/character-sheets/miri-r89.png
+PASS asset hash docs/art/masters/r89/light.png
+PASS asset hash docs/art/masters/r89/story.png
+PASS asset hash docs/art/masters/r89/objects.png
+PASS asset hash docs/art/masters/r89/panel.png
+PASS asset hash docs/art/masters/r89/icons.png
+PASS asset hash docs/art/masters/r89/logo.png
+PASS asset hash docs/art/masters/r89/app.png
+PASS asset hash assets/generated/r89/miri-0.png
+PASS asset hash assets/generated/r89/miri-1.png
+PASS asset hash assets/generated/r89/miri-2.png
+PASS asset hash assets/generated/r89/garden-1536.webp
+PASS asset hash assets/generated/r89/wheat-32.png
+PASS asset hash assets/generated/r89/basket-32.png
+PASS asset hash assets/generated/r89/water-32.png
+PASS asset hash assets/generated/r89/note-32.png
+PASS asset hash assets/generated/r89/hat-32.png
+PASS asset hash assets/generated/r89/sprout-32.png
+PASS asset hash assets/generated/r89/creel-0.png
+PASS asset hash assets/generated/r89/creel-1.png
+PASS asset hash assets/generated/r89/creel-2.png
+PASS asset hash assets/generated/r89/wheat-sprout-48.png
+PASS asset hash assets/generated/r89/wheat-grow-48.png
+PASS asset hash assets/generated/r89/wheat-ripe-48.png
+PASS asset hash assets/generated/r89/paper-128.png
+PASS asset hash assets/generated/r89/binding-8.png
+PASS asset hash assets/generated/r89/logo-320.png
+PASS asset hash assets/generated/r89/app-icon-64.png
+PASS asset hash assets/generated/r89/app-icon-192.png
+PASS asset hash assets/generated/r89/app-icon-512.png
+PASS asset hash assets/generated/r89/table-result-512.webp
+PASS asset hash assets/generated/r89/chair-detail-256.webp
+PASS asset hash assets/generated/r89/sunshaft-384.png
+PASS asset hash assets/generated/r89/leaf-light.png
+PASS asset hash assets/generated/r89/canopy-shadow.png
+PASS asset hash assets/generated/r89/grey-2.png
+PASS asset hash assets/generated/r89/walk.png
+PASS asset hash assets/generated/r89/farming-actions.png
+PASS character double gate and original articulated poses retained
+PASS 320 welcome targets44
+PASS 320 same-age wheat clearly larger in light
+PASS 320 one painted ground without repeat seams; actual upper-right ray asset
+PASS 320 character40 and separate physics root
+PASS 320 confirmation disabled until selection
+PASS 320 repeated selection never spends wheat
+PASS 320 selection and explicit cost visible
+PASS 320 every enabled paper control44 and reachable [{"id":"dailyToday","w":91.328125,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":91.34375,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":91.328125,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":138,"h":125,"hit":true,"inView":true},{"id":"heirloomTable","w":138,"h":125,"hit":true,"inView":true},{"id":"heirloomConfirm","w":284,"h":44,"hit":true,"inView":true},{"id":"dailyClose","w":284,"h":48,"hit":true,"inView":true}]
+PASS 320 rules readable dark tea
+PASS 320 only delivery impact spends exact2
+PASS 320 actual three-chair narrative art
+PASS 320 delivered objective cannot display0/9 reset
+PASS 320 no seed-bag noise in chore cards
+PASS 390 welcome targets44
+PASS 390 same-age wheat clearly larger in light
+PASS 390 one painted ground without repeat seams; actual upper-right ray asset
+PASS 390 character40 and separate physics root
+PASS 390 confirmation disabled until selection
+PASS 390 repeated selection never spends wheat
+PASS 390 selection and explicit cost visible
+PASS 390 every enabled paper control44 and reachable [{"id":"dailyToday","w":112.65625,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":112.671875,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":112.671875,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":170,"h":175,"hit":true,"inView":true},{"id":"heirloomTable","w":170,"h":175,"hit":true,"inView":true},{"id":"heirloomConfirm","w":348,"h":48,"hit":true,"inView":true},{"id":"dailyClose","w":348,"h":48,"hit":true,"inView":true}]
+PASS 390 rules readable dark tea
+PASS 390 only delivery impact spends exact2
+PASS 390 actual three-chair narrative art
+PASS 390 delivered objective cannot display0/9 reset
+PASS 390 no seed-bag noise in chore cards
+PASS 844 welcome targets44
+PASS 844 same-age wheat clearly larger in light
+PASS 844 one painted ground without repeat seams; actual upper-right ray asset
+PASS 844 character40 and separate physics root
+PASS 844 confirmation disabled until selection
+PASS 844 repeated selection never spends wheat
+PASS 844 selection and explicit cost visible
+PASS 844 every enabled paper control44 and reachable [{"id":"dailyToday","w":255.328125,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":255.34375,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":236.5625,"h":66.390625,"hit":true,"inView":true},{"id":"heirloomTable","w":236.5625,"h":66.390625,"hit":true,"inView":true},{"id":"heirloomConfirm","w":776,"h":44,"hit":true,"inView":true},{"id":"dailyClose","w":776,"h":44,"hit":true,"inView":true}]
+PASS 844 rules readable dark tea
+PASS 844 only delivery impact spends exact2
+PASS 844 actual three-chair narrative art
+PASS 844 delivered objective cannot display0/9 reset
+PASS 844 no seed-bag noise in chore cards
+PASS 768 welcome targets44
+PASS 768 same-age wheat clearly larger in light
+PASS 768 one painted ground without repeat seams; actual upper-right ray asset
+PASS 768 character40 and separate physics root
+PASS 768 confirmation disabled until selection
+PASS 768 repeated selection never spends wheat
+PASS 768 selection and explicit cost visible
+PASS 768 every enabled paper control44 and reachable [{"id":"dailyToday","w":238.65625,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":238.671875,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":238.671875,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":359,"h":175,"hit":true,"inView":true},{"id":"heirloomTable","w":359,"h":175,"hit":true,"inView":true},{"id":"heirloomConfirm","w":726,"h":48,"hit":true,"inView":true},{"id":"dailyClose","w":726,"h":48,"hit":true,"inView":true}]
+PASS 768 rules readable dark tea
+PASS 768 only delivery impact spends exact2
+PASS 768 actual three-chair narrative art
+PASS 768 delivered objective cannot display0/9 reset
+PASS 768 no seed-bag noise in chore cards
+PASS 1366 welcome targets44
+PASS 1366 same-age wheat clearly larger in light
+PASS 1366 one painted ground without repeat seams; actual upper-right ray asset
+PASS 1366 character40 and separate physics root
+PASS 1366 confirmation disabled until selection
+PASS 1366 repeated selection never spends wheat
+PASS 1366 selection and explicit cost visible
+PASS 1366 every enabled paper control44 and reachable [{"id":"dailyToday","w":255.328125,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":255.34375,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":255.328125,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":236.5625,"h":70,"hit":true,"inView":true},{"id":"heirloomTable","w":236.5625,"h":70,"hit":true,"inView":true},{"id":"heirloomConfirm","w":776,"h":48,"hit":true,"inView":true},{"id":"dailyClose","w":776,"h":44,"hit":true,"inView":true}]
+PASS 1366 rules readable dark tea
+PASS 1366 only delivery impact spends exact2
+PASS 1366 actual three-chair narrative art
+PASS 1366 delivered objective cannot display0/9 reset
+PASS 1366 no seed-bag noise in chore cards
+PASS 430 welcome targets44
+PASS 430 same-age wheat clearly larger in light
+PASS 430 one painted ground without repeat seams; actual upper-right ray asset
+PASS 430 character40 and separate physics root
+PASS 430 confirmation disabled until selection
+PASS 430 repeated selection never spends wheat
+PASS 430 selection and explicit cost visible
+PASS 430 every enabled paper control44 and reachable [{"id":"dailyToday","w":126,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":126,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":126,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":190,"h":175,"hit":true,"inView":true},{"id":"heirloomTable","w":190,"h":175,"hit":true,"inView":true},{"id":"heirloomConfirm","w":388,"h":48,"hit":true,"inView":true},{"id":"dailyClose","w":388,"h":48,"hit":true,"inView":true}]
+PASS 430 rules readable dark tea
+PASS 430 only delivery impact spends exact2
+PASS 430 actual three-chair narrative art
+PASS 430 delivered objective cannot display0/9 reset
+PASS 430 no seed-bag noise in chore cards
+PASS 1032 welcome targets44
+PASS 1032 same-age wheat clearly larger in light
+PASS 1032 one painted ground without repeat seams; actual upper-right ray asset
+PASS 1032 character40 and separate physics root
+PASS 1032 confirmation disabled until selection
+PASS 1032 repeated selection never spends wheat
+PASS 1032 selection and explicit cost visible
+PASS 1032 every enabled paper control44 and reachable [{"id":"dailyToday","w":326.65625,"h":44,"hit":true,"inView":true},{"id":"dailyCollection","w":326.671875,"h":44,"hit":true,"inView":true},{"id":"dailyHeirloom","w":326.671875,"h":44,"hit":true,"inView":true},{"id":"heirloomDoorstep","w":491,"h":175,"hit":true,"inView":true},{"id":"heirloomTable","w":491,"h":175,"hit":true,"inView":true},{"id":"heirloomConfirm","w":990,"h":48,"hit":true,"inView":true},{"id":"dailyClose","w":990,"h":48,"hit":true,"inView":true}]
+PASS 1032 rules readable dark tea
+PASS 1032 only delivery impact spends exact2
+PASS 1032 actual three-chair narrative art
+PASS 1032 delivered objective cannot display0/9 reset
+PASS 1032 no seed-bag noise in chore cards
+PASS no browser errors or missing assets
+VERIFIED R89 133 checks; browser/server closed

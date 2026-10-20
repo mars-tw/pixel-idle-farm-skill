@@ -225,9 +225,13 @@
     const gathering = object(a.gathering) ? a.gathering : {};
     a.gathering = { packed: Object.fromEntries(NEIGHBORS.filter(n => gathering.packed && gathering.packed[n.id] === n.taste && a.neighbors[n.id].matched).map(n => [n.id, n.taste])),
       completed: gathering.completed === true && NEIGHBORS.every(n => a.neighbors[n.id].matched), completedAt: qty(gathering.completedAt, Number.MAX_SAFE_INTEGER),
+      recorded: gathering.recorded===true,
       refills: (Array.isArray(gathering.refills)?gathering.refills:[]).filter(h=>object(h)&&['sour','hot','sweet'].includes(h.taste)&&Number.isFinite(h.at)&&typeof h.receipt==='string').slice(-24).map(h=>({taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),receipt:h.receipt.slice(0,240)})),
-      servings: (gathering.completed === true && NEIGHBORS.every(n => a.neighbors[n.id].matched) && Array.isArray(gathering.servings) ? gathering.servings : []).filter(h => object(h) && NEIGHBORS.some(n => n.id === h.id) && ['sour','hot','sweet'].includes(h.taste) && Number.isFinite(h.at)).slice(-24).map(h => ({id:h.id,taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),matched:NEIGHBORS.find(n=>n.id===h.id).taste===h.taste,reply:servingReply(h.id,h.taste)})) };
+      servings: (gathering.completed === true && NEIGHBORS.every(n => a.neighbors[n.id].matched) && Array.isArray(gathering.servings) ? gathering.servings : []).filter(h => object(h) && NEIGHBORS.some(n => n.id === h.id) && ['sour','hot','sweet'].includes(h.taste) && Number.isFinite(h.at)).slice(-24).map((h,i,hs) => ({id:h.id,taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),matched:NEIGHBORS.find(n=>n.id===h.id).taste===h.taste,reply:servingReply(h.id,h.taste,hs.slice(0,i).some(x=>NEIGHBORS.find(n=>n.id===x.id).taste!==x.taste))})) };
     a.fishNotes = Object.fromEntries(FISH.filter((f) => object(a.fishNotes) && a.fishNotes[f.id] === true).map((f) => [f.id, true]));
+    // Old saves retain their real notes and remaining fish. Historical catch
+    // events also include fish already delivered; never invent current fish.
+    a.totalCaught = Math.max(qty(a.totalCaught), qty(a.counts.fish), sum(a.catch), Object.keys(a.fishNotes).length);
     const cast = a.fishingCast;
     a.fishingCast = object(cast) && Object.hasOwn(RHYTHMS, cast.fishId) && Number.isSafeInteger(cast.startedAt) && cast.startedAt >= 0
       ? { fishId: cast.fishId, startedAt: cast.startedAt, ...(cast.observationVersion === 2 ? {observationVersion:2} : {}) } : null;
@@ -394,6 +398,7 @@
     const def = FISH[Math.floor(unit(pick) * FISH.length)];
     const quality = unit(qualityRoll) < 0.7 ? "normal" : unit(qualityRoll) < 0.95 ? "good" : "premium";
     a.catch[def.id]++;
+    a.totalCaught++;
     a.lastFishAt = now;
     const firstCatch = !a.fishNotes[def.id];
     a.fishNotes[def.id] = true;
@@ -513,20 +518,20 @@
     state.adventure.gathering.completed=true; state.adventure.gathering.completedAt=at(state,now);
     return ok("三個位子，今天都有人坐了。", {gathering:gathering(state,now)});
   }
-  function servingReply(id,taste) {
+  function servingReply(id,taste,shared=false) {
     const n=NEIGHBORS.find(n=>n.id===id),flavor={sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[taste];
     if(!n||!flavor)return '';
     return n.taste===taste ? {
       merchant:'蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」',
       elder:'班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」',
-      child:'圖圖舉起點心：「甜味胡蘿蔔點心！你記得我的甜味餐籃，花椅旁也留一份給朋友。」'
-    }[id] : n.name+'接過'+flavor+'：「這份先放中間，大家一起吃。我還是想念'+{sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[n.taste]+'。」';
+      child:'圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」'
+    }[id]+(shared?{merchant:' 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」',elder:' 他看了看中央那盤：「剛才大家分的，也別放涼了。」',child:' 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」'}[id]:'') : n.name+'接過'+flavor+'：「這份先放中間，大家一起吃。我還是想念'+{sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[n.taste]+'。」';
   }
   function serveGathering(state,id,taste,now) {
     const g=gathering(state,now);
     if(!g.completed)return fail('locked','三籃備齊、大家入座後，再分桌上的點心。');
     if(!NEIGHBORS.some(n=>n.id===id)||!['sour','hot','sweet'].includes(taste))return fail('bad_serving','先選一位鄰居和桌上的一份點心。');
-    const h={id,taste,at:at(state,now),matched:NEIGHBORS.find(n=>n.id===id).taste===taste,reply:servingReply(id,taste)};
+    const h={id,taste,at:at(state,now),matched:NEIGHBORS.find(n=>n.id===id).taste===taste,reply:servingReply(id,taste,(g.servings||[]).some(h=>!h.matched))};
     state.adventure.gathering.servings.push(h);state.adventure.gathering.servings=state.adventure.gathering.servings.slice(-24);
     return ok(h.reply,{serving:copy(h)});
   }

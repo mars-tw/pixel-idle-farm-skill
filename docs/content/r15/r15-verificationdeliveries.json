@@ -1,0 +1,726 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "merchant far distance equals visible walkable path points",
+    "merchant walking distance equals visible walkable path points",
+    "merchant near distance equals visible walkable path points",
+    "merchant contact anticipation does not consume",
+    "merchant same R89 outfit source",
+    "merchant enlarged actors clearly inside labelled close-up",
+    "merchant impact consumes exactly one",
+    "merchant route and close-up removed at arrival",
+    "elder far distance equals visible walkable path points",
+    "elder walking distance equals visible walkable path points",
+    "elder near distance equals visible walkable path points",
+    "elder contact anticipation does not consume",
+    "elder same R89 outfit source",
+    "elder enlarged actors clearly inside labelled close-up",
+    "elder impact consumes exactly one",
+    "elder route and close-up removed at arrival",
+    "child far distance equals visible walkable path points",
+    "child walking distance equals visible walkable path points",
+    "child near distance equals visible walkable path points",
+    "child contact anticipation does not consume",
+    "child same R89 outfit source",
+    "child enlarged actors clearly inside labelled close-up",
+    "child impact consumes exactly one",
+    "child route and close-up removed at arrival",
+    "no uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r15/phone-basket-merchant-far.png",
+      "sha256": "4c4549b38dcee49476713f3a6c9d8fe40c9f1b0a94af0fc009172e3a29347935",
+      "state": {
+        "player": {
+          "tileId": "t14_7",
+          "x": 14,
+          "y": 7,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_6",
+          "t14_5",
+          "t14_4",
+          "t14_3"
+        ],
+        "distance": "約 4 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-walking.png",
+      "sha256": "16123da5e48b4ecae6bc4843e015efa910d9d84dbe73f6fac0817ac9aa571008",
+      "state": {
+        "player": {
+          "tileId": "t14_6",
+          "x": 14,
+          "y": 6,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_5",
+          "t14_4",
+          "t14_3"
+        ],
+        "distance": "約 3 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-near.png",
+      "sha256": "816a683119ca48f6849689a83e40aca6cea126cead00f3a30eba01d98a336691",
+      "state": {
+        "player": {
+          "tileId": "t14_5",
+          "x": 14,
+          "y": 5,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_4",
+          "t14_3"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-approach.png",
+      "sha256": "93eac456fa9f177ed9dce81554fe240dd2ee12e4f8538a0a9b2e539d1bfe9261",
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "arrived",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-contact.png",
+      "sha256": "36575e405311ce434ae7decbe6910c9239668da8c8ba77399348e69b89efdd5b",
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "reach",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-received.png",
+      "sha256": "504631c189c4481fe5a0fbf427651463a028c9e4c27acdd706240df2bb94c55c",
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "已接到手上",
+        "delivery": "contact",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-far.png",
+      "sha256": "bf5bac3d1f28ded77b6e2bed7e48ac1d8ed9681b474dd15eb573a7fdcbad5b47",
+      "state": {
+        "player": {
+          "tileId": "t5_1",
+          "x": 5,
+          "y": 1,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t5_2",
+          "t5_3",
+          "t5_4",
+          "t5_5",
+          "t5_6",
+          "t5_7"
+        ],
+        "distance": "約 6 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-walking.png",
+      "sha256": "6551036c48cd131f8b33505195472325b2f70bd75819188771ac1b9d8be25fa7",
+      "state": {
+        "player": {
+          "tileId": "t5_2",
+          "x": 5,
+          "y": 2,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t5_3",
+          "t5_4",
+          "t5_5",
+          "t5_6",
+          "t5_7"
+        ],
+        "distance": "約 5 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-near.png",
+      "sha256": "b7a7c760f69ef9342b931c5f87693276983ee6cada2407611897badf44429927",
+      "state": {
+        "player": {
+          "tileId": "t5_5",
+          "x": 5,
+          "y": 5,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t5_6",
+          "t5_7"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-approach.png",
+      "sha256": "daf0d6a9f83c79ba6c75fb1fa6c2894c3704e7f961b6a45b416b0cf67c531664",
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "arrived",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-contact.png",
+      "sha256": "5a0e54116f2bd4a41e44ada4eb2e362de7803408f605f62072783a54a5a5432d",
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "reach",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-received.png",
+      "sha256": "587f666bf10fbf87a32c5cfa595512b25b50d834b31b09fdd79b723fd0a5af79",
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "已接到手上",
+        "delivery": "contact",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-far.png",
+      "sha256": "aa2eb0d89663be16c5e74e0bac45a58dfacd4c0667b66874b1377f39dd9ca6f5",
+      "state": {
+        "player": {
+          "tileId": "t8_2",
+          "x": 8,
+          "y": 2,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t8_3",
+          "t8_4",
+          "t7_4",
+          "t7_5",
+          "t7_6",
+          "t8_6"
+        ],
+        "distance": "約 6 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-walking.png",
+      "sha256": "412cbcde660870f17ef530ee59b0dde3a31f1c8296f14679829f36915c43c388",
+      "state": {
+        "player": {
+          "tileId": "t8_3",
+          "x": 8,
+          "y": 3,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t8_4",
+          "t7_4",
+          "t7_5",
+          "t7_6",
+          "t8_6"
+        ],
+        "distance": "約 5 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-near.png",
+      "sha256": "3f73e9ee2ab94e4d4f342d0aa0d90564a287874cc190cc5c6b0508cbe0ac8860",
+      "state": {
+        "player": {
+          "tileId": "t7_5",
+          "x": 7,
+          "y": 5,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t7_6",
+          "t8_6"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-approach.png",
+      "sha256": "3ee387f6b653f7f78b50ad0dd80db785046ba17e2eafcbf0e0cecfad050420a1",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "arrived",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-contact.png",
+      "sha256": "eab46196e1573ee23f014a1be34a8ba41881f1dda1bc41d1f621b2b5a9955aff",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "reach",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-received.png",
+      "sha256": "a62d1bac4cdad7822171ee46dbe3a7720c25e2a3f5ffaefa22438351e8520dba",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "已接到手上",
+        "delivery": "contact",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Chapter/dock access and ingredients only. Picnic and earned-note fixtures are produced by this round real UI journey."
+}

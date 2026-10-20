@@ -1,0 +1,8 @@
+{
+  "status": "VERIFIED",
+  "file": "src/content-r6.js",
+  "beforeSnapshot": "docs/content/r14/source-snapshots/content-r6-before-path.js",
+  "beforeSha256": "3aa3b3184f083621c7f0c7d051eba0c3a95e67da3ed3f9db236b38bf72e2d55d",
+  "afterSha256": "57b3cc2995e3153e4deab8c5b39b4740d452ef807ee48c72e33f83fb561764cc",
+  "scope": "Exactly three serving visual statements: child hand destination in saved and live table, one intermediate tabletop waypoint. All other bytes, physics, resources, hit timing and state unchanged. Initial generic gates rerun on exact final source; later content gates use this repaired path."
+}

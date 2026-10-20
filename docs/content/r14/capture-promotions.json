@@ -1,0 +1,21 @@
+{
+  "status": "VERIFIED",
+  "images": {
+    "phone-basket-elder-contact.png": {
+      "originalSource": "docs/content/r14/regression-outputs/docs/content/r13/phone-basket-elder-contact.png",
+      "executionReceipt": "docs/content/r14/regression-1792408597.json",
+      "appVersion": "content-r14-20261019-1",
+      "sha256": "c39eb9b74c43e56f103c1afed3875fe720fe2113195c452c59bc71399a74bb5e",
+      "phase": "reach",
+      "initialCapturePreserved": "docs/content/r14/initial-captures/phone-basket-elder-contact.png"
+    },
+    "phone-basket-elder-received.png": {
+      "originalSource": "docs/content/r14/regression-outputs/docs/content/r13/phone-basket-elder-received.png",
+      "executionReceipt": "docs/content/r14/regression-1792408597.json",
+      "appVersion": "content-r14-20261019-1",
+      "sha256": "067ae331fa9b3f5854c8ac341179bc2cab6768e39379f62906a21239d979204b",
+      "phase": "contact",
+      "initialCapturePreserved": "docs/content/r14/initial-captures/phone-basket-elder-received.png"
+    }
+  }
+}

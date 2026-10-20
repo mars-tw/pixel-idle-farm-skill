@@ -1,0 +1,2165 @@
+{
+  "status": "BLOCKED",
+  "fixture": "Chapter1/dock access and storageLevel1 (70 capacity, 52 ingredients, no overflow); wheat36/carrot8/berries8. Sixteen breads cooked, nine gifts and three gathering baskets via actual UI. Fish RNG fixed, real clocks and hit windows. No earned matches/catches granted.",
+  "checks": [
+    "cancel retains every meal and ingredient",
+    "cancel visible material receipt",
+    "merchant no consumption before contact",
+    "merchant one meal consumed at impact",
+    "merchant reached actual resident",
+    "merchant no consumption before contact",
+    "merchant one meal consumed at impact",
+    "merchant reached actual resident",
+    "merchant wrong flavor does not match",
+    "merchant no consumption before contact",
+    "merchant one meal consumed at impact",
+    "merchant reached actual resident",
+    "merchant one complete same-size basket in all three frames",
+    "merchant identical basket pixels from giver to receiver",
+    "merchant evidence captures actual approach, reach and impact",
+    "merchant three real rendered delivery phases",
+    "merchant fixed sprite height and feet 0",
+    "merchant fixed sprite height and feet 1",
+    "merchant correct flavor earns keepsake",
+    "merchant matched visible hit targets >=44px",
+    "merchant matched no keyboard instructions",
+    "merchant first/wrong/matched are actual recorded deliveries",
+    "merchant recorded wrong dialogue visible in journal",
+    "elder no consumption before contact",
+    "elder one meal consumed at impact",
+    "elder reached actual resident",
+    "elder no consumption before contact",
+    "elder one meal consumed at impact",
+    "elder reached actual resident",
+    "elder wrong flavor does not match",
+    "elder no consumption before contact",
+    "elder one meal consumed at impact",
+    "elder reached actual resident",
+    "elder one complete same-size basket in all three frames",
+    "elder identical basket pixels from giver to receiver"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r12/phone-basket-cancel-before.png",
+      "sha256": "c671b18dcc492d988ef26b8524d78778b0918e8796d81b2b49473a54802d875d",
+      "at": 1792417748131,
+      "state": {
+        "player": {
+          "tileId": "t11_3",
+          "x": 11,
+          "y": 3,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 16,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-cancel.png",
+      "sha256": "d3f915df781dbee1e72fef206d89c2fe137f79e96c358dbfa703dc3186f246af",
+      "at": 1792417748351,
+      "state": {
+        "player": {
+          "tileId": "t13_3",
+          "x": 13,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 16,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-cancel-after.png",
+      "sha256": "c0bf4fdf6e7117a61390964bbf8b2100bdfd3e1b19640f6f091702e7d6b9e53b",
+      "at": 1792417749028,
+      "state": {
+        "player": {
+          "tileId": "t13_3",
+          "x": 13,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 16,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-first.png",
+      "sha256": "d993bd16db877eb703958be02e90bf01f519eef0bfba0885cdad56da9ee9ee36",
+      "at": 1792417755437,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 15,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417752220,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-recall.png",
+      "sha256": "94625835d42cf33f324ad6741ec7b159f40dd806069008ac63235e0960665b36",
+      "at": 1792417755566,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 15,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417752220,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-wrong.png",
+      "sha256": "73154cde17c457c1b3db4e76d111ce863c4aa281e573f11a6795dc96496abee0",
+      "at": 1792417761796,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 14,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417758744,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-walking-1.png",
+      "sha256": "c3c0249f466146cdb8e6d7c80e4c57db152d32003309754d2be3b20e53ed3024",
+      "at": 1792417762868,
+      "state": {
+        "player": {
+          "tileId": "t7_3",
+          "x": 7,
+          "y": 3,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 14,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417758744,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "walking",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 213.546875,
+              "y": 425.6875,
+              "width": 32,
+              "height": 32,
+              "top": 425.6875,
+              "right": 245.546875,
+              "bottom": 457.6875,
+              "left": 213.546875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 14份、東林野莓 8份，送到才取用",
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-walking-2.png",
+      "sha256": "0a1c860063b13c788c48abda464aca60df8294b17b2d9706a457b8abe3dfce57",
+      "at": 1792417763056,
+      "state": {
+        "player": {
+          "tileId": "t8_3",
+          "x": 8,
+          "y": 3,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 14,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417758744,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "walking",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 210,
+              "y": 433.015625,
+              "width": 32,
+              "height": 32,
+              "top": 433.015625,
+              "right": 242,
+              "bottom": 465.015625,
+              "left": 210
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 14份、東林野莓 8份，送到才取用",
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-walking-3.png",
+      "sha256": "1cd64e7ee5bae1031f61a527f5c928c06791722c88196728f59b79fc98152e13",
+      "at": 1792417763241,
+      "state": {
+        "player": {
+          "tileId": "t9_3",
+          "x": 9,
+          "y": 3,
+          "facing": "right",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 14,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417758744,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "walking",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 206.09375,
+              "y": 437.75,
+              "width": 32,
+              "height": 32,
+              "top": 437.75,
+              "right": 238.09375,
+              "bottom": 469.75,
+              "left": 206.09375
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 14份、東林野莓 8份，送到才取用",
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-approach.png",
+      "sha256": "6a7edcb9ce0a09b193158feec1c8117da07ea57122e52a8efa993d0860418251",
+      "at": 1792417764736,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 14,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417758744,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 195.015625,
+              "y": 405.578125,
+              "width": 66,
+              "height": 66,
+              "top": 405.578125,
+              "right": 261.015625,
+              "bottom": 471.578125,
+              "left": 195.015625
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "你把餐籃捧好，蘿拉正要伸手。",
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-merchant.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r15/hold-player.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 295.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 295.6875,
+              "right": 222.09375,
+              "bottom": 437.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-contact.png",
+      "sha256": "0a23f8cf2f320c9c00f2cd79c91c9c24241d58db9b1d36280bb86a5786de79f6",
+      "at": 1792417766402,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 14,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417758744,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 202.296875,
+              "y": 330.59375,
+              "width": 66,
+              "height": 66,
+              "top": 330.59375,
+              "right": 268.296875,
+              "bottom": 396.59375,
+              "left": 202.296875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "蘿拉伸出雙手，碰到餐籃。",
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-merchant.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r15/reach-player.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 295.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 295.6875,
+              "right": 222.09375,
+              "bottom": 437.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-merchant-received.png",
+      "sha256": "ea27c721048d7273cf8e5b364cb452e4a83c370b8cfea22012649f480b110a61",
+      "at": 1792417767571,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 13,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "contact",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 261.6875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 327.6875,
+              "bottom": 408.140625,
+              "left": 261.6875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 14→13 份、東林野莓 8→7 份・蘿拉已接到酸味餐籃",
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/hold-merchant.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r15/idle-player.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 295.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 295.6875,
+              "right": 222.09375,
+              "bottom": 437.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-merchant-matched.png",
+      "sha256": "3aa5ed26dea0c1a09d64d9c2199ffdc6f761268041861bcf0e86b15155afb4ce",
+      "at": 1792417770028,
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 13,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-first.png",
+      "sha256": "24939df51b51915395b5b57bcbf473ba4ae381d96f42fa33b69c035607e1a464",
+      "at": 1792417778461,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 12,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417775732,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-recall.png",
+      "sha256": "ca944a12cfd859765053ab65f8cd0c68c3f8658e4851010a642fd4c28f05ed50",
+      "at": 1792417778603,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 12,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 1,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417775732,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-memory-elder-wrong.png",
+      "sha256": "734906e6c946f2673ace4fbc909e1cf501ddb5837b156bf0ced517c09610613d",
+      "at": 1792417784844,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 11,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417781781,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "parcel": [],
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-walking-1.png",
+      "sha256": "ce70fd0fc9f55689851c186fa7b319caa34baf250988a330807d89363453d7a4",
+      "at": 1792417786770,
+      "state": {
+        "player": {
+          "tileId": "t7_2",
+          "x": 7,
+          "y": 2,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 11,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417781781,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "walking",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 213.546875,
+              "y": 416.484375,
+              "width": 32,
+              "height": 32,
+              "top": 416.484375,
+              "right": 245.546875,
+              "bottom": 448.484375,
+              "left": 213.546875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 11份，送到才取用",
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-walking-2.png",
+      "sha256": "7679b7c8973302ed7144bc1c59b75263d8fbe0c0d2a3f8efe08fbab479f38caf",
+      "at": 1792417786943,
+      "state": {
+        "player": {
+          "tileId": "t7_3",
+          "x": 7,
+          "y": 3,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 11,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417781781,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "walking",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 213.546875,
+              "y": 420.796875,
+              "width": 32,
+              "height": 32,
+              "top": 420.796875,
+              "right": 245.546875,
+              "bottom": 452.796875,
+              "left": 213.546875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 11份，送到才取用",
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-walking-3.png",
+      "sha256": "2778df59d892c39ae3b6dba667d582847381f8088647c4058a9c657b6e40fd79",
+      "at": 1792417787144,
+      "state": {
+        "player": {
+          "tileId": "t7_4",
+          "x": 7,
+          "y": 4,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 11,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417781781,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "walking",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 213.546875,
+              "y": 423.28125,
+              "width": 32,
+              "height": 32,
+              "top": 423.28125,
+              "right": 245.546875,
+              "bottom": 455.28125,
+              "left": 213.546875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "農家麥餅 11份，送到才取用",
+        "delivery": [],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-approach.png",
+      "sha256": "e40ef3d683434d3eba8c406a0864fc6a7494930f037f63dcaa431268638f50f1",
+      "at": 1792417789169,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 11,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417781781,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "arrived",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 162.6875,
+              "y": 342.140625,
+              "width": 66,
+              "height": 66,
+              "top": 342.140625,
+              "right": 228.6875,
+              "bottom": 408.140625,
+              "left": 162.6875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "你把餐籃捧好，班伯正要伸手。",
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r15/hold-player.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 295.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 295.6875,
+              "right": 222.09375,
+              "bottom": 437.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-contact.png",
+      "sha256": "20c9e328bbb2f632510234ac95e4ee0b82d2e9178e9d68bf2e185438f44fd35e",
+      "at": 1792417790338,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 11,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 2,
+            "lastTaste": "sweet",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 1792417781781,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "reach",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 202.296875,
+              "y": 330.59375,
+              "width": 66,
+              "height": 66,
+              "top": 330.59375,
+              "right": 268.296875,
+              "bottom": 396.59375,
+              "left": 202.296875
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "班伯伸出雙手，碰到餐籃。",
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/reach-elder.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r15/reach-player.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 295.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 295.6875,
+              "right": 222.09375,
+              "bottom": 437.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    },
+    {
+      "path": "docs/content/r12/phone-basket-elder-received.png",
+      "sha256": "540d8fa8f4dac5a8a5c8f8ad7c108411229f1d07ce7e8308bd6f83e19a267104",
+      "at": 1792417792497,
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "bread": 10,
+        "neighbors": {
+          "merchant": {
+            "deliveries": 3,
+            "lastTaste": "sour",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417767215,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417752220,
+                "reaction": "整天站在攤子後面，都快忘了外面有張凳子。明天收攤，再一起坐一下。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417758744,
+                "reaction": "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』"
+              },
+              {
+                "taste": "sour",
+                "branch": "matched",
+                "at": 1792417767215,
+                "reaction": "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。"
+              }
+            ]
+          },
+          "elder": {
+            "deliveries": 3,
+            "lastTaste": "hot",
+            "matched": true,
+            "lastMatched": true,
+            "deliveredAt": 1792417791198,
+            "history": [
+              {
+                "taste": "plain",
+                "branch": "first",
+                "at": 1792417775732,
+                "reaction": "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。"
+              },
+              {
+                "taste": "sweet",
+                "branch": "wrong",
+                "at": 1792417781781,
+                "reaction": "班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』"
+              },
+              {
+                "taste": "hot",
+                "branch": "matched",
+                "at": 1792417791198,
+                "reaction": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。"
+              }
+            ]
+          },
+          "child": {
+            "deliveries": 0,
+            "lastTaste": "plain",
+            "matched": false,
+            "lastMatched": false,
+            "deliveredAt": 0,
+            "history": []
+          }
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "deliveryPhase": "reply",
+        "parcel": [
+          {
+            "src": "http://127.0.0.1:49458/assets/generated/content-r11/basket.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 291.390625,
+              "y": 361.9375,
+              "width": 66,
+              "height": 66,
+              "top": 361.9375,
+              "right": 357.390625,
+              "bottom": 427.9375,
+              "left": 291.390625
+            },
+            "visible": "visible"
+          }
+        ],
+        "receipt": "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。",
+        "delivery": [
+          {
+            "src": "assets/generated/content-r9/idle-elder.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 255.09375,
+              "y": 287.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 287.6875,
+              "right": 360.6875,
+              "bottom": 429.578125,
+              "left": 255.09375
+            }
+          },
+          {
+            "src": "assets/generated/content-r15/idle-player.png?v=content-r15-20261019-1",
+            "rect": {
+              "x": 116.5,
+              "y": 295.6875,
+              "width": 105.59375,
+              "height": 141.890625,
+              "top": 295.6875,
+              "right": 222.09375,
+              "bottom": 437.578125,
+              "left": 116.5
+            }
+          }
+        ],
+        "cast": null,
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "sharedGestures": [],
+        "gestures": []
+      }
+    }
+  ],
+  "errors": [],
+  "failure": "AssertionError [ERR_ASSERTION]: elder evidence captures actual approach, reach and impact\n    at check (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r12-e2e.js:11:21)\n    at verifyDelivery (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r12-e2e.js:44:152)\n    at neighbors (C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r12-e2e.js:53:37)\n    at async C:\\Users\\digimkt\\Desktop\\遊戲\\pixel-idle-farm-skill\\scripts\\test-content-r12-e2e.js:126:7"
+}

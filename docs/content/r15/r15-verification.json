@@ -1,0 +1,6695 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    "farmhouse 0 real walkable physics root",
+    "farmhouse leaving restores normal occlusion",
+    "farmhouse 1 real walkable physics root",
+    "farmhouse behind has full current articulated locator and feet",
+    "farmhouse roof fully opaque",
+    "farmhouse 2 real walkable physics root",
+    "farmhouse leaving restores normal occlusion",
+    "shop 0 real walkable physics root",
+    "shop leaving restores normal occlusion",
+    "shop 1 real walkable physics root",
+    "shop behind has full current articulated locator and feet",
+    "shop roof fully opaque",
+    "shop 2 real walkable physics root",
+    "shop leaving restores normal occlusion",
+    "barn 0 real walkable physics root",
+    "barn leaving restores normal occlusion",
+    "barn 1 real walkable physics root",
+    "barn behind has full current articulated locator and feet",
+    "barn roof fully opaque",
+    "barn 2 real walkable physics root",
+    "barn leaving restores normal occlusion",
+    "delivery behind roof shows full current character and foot locator",
+    "cancel behind house retains all materials",
+    "merchant same-frame target fully visible, no zoom",
+    "merchant name and taste visible with hand-held basket",
+    "elder same-frame target fully visible, no zoom",
+    "elder name and taste visible with hand-held basket",
+    "child same-frame target fully visible, no zoom",
+    "child name and taste visible with hand-held basket",
+    "320 narrow house locator visible",
+    "320 narrow cancellation reachable",
+    "390 narrow target and taste visible",
+    "390 narrow cancellation reachable",
+    "430 narrow target and taste visible",
+    "430 narrow cancellation reachable",
+    "merchant far distance equals visible walkable path points",
+    "merchant walking distance equals visible walkable path points",
+    "merchant near distance equals visible walkable path points",
+    "merchant contact anticipation does not consume",
+    "merchant same R89 outfit source",
+    "merchant enlarged actors clearly inside labelled close-up",
+    "merchant impact consumes exactly one",
+    "merchant route and close-up removed at arrival",
+    "elder far distance equals visible walkable path points",
+    "elder walking distance equals visible walkable path points",
+    "elder near distance equals visible walkable path points",
+    "elder contact anticipation does not consume",
+    "elder same R89 outfit source",
+    "elder enlarged actors clearly inside labelled close-up",
+    "elder impact consumes exactly one",
+    "elder route and close-up removed at arrival",
+    "child far distance equals visible walkable path points",
+    "child walking distance equals visible walkable path points",
+    "child near distance equals visible walkable path points",
+    "child contact anticipation does not consume",
+    "child same R89 outfit source",
+    "child enlarged actors clearly inside labelled close-up",
+    "child impact consumes exactly one",
+    "child route and close-up removed at arrival",
+    "river_carp pre answer hidden until reveal",
+    "river_carp pre title hides answer",
+    "river_carp practice pre line to opaque bobber top <=3px (actual 0.919)",
+    "river_carp active answer hidden until reveal",
+    "river_carp active title hides answer",
+    "river_carp practice active line to opaque bobber top <=3px (actual 0.461)",
+    "river_carp missed answer hidden until reveal",
+    "river_carp missed title hides answer",
+    "river_carp practice missed line to opaque bobber top <=3px (actual 0.919)",
+    "river_carp hidden replay changes no fish, cumulative, notes or ingredients",
+    "river_carp early failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_carp active line to opaque bobber top <=3px (actual 0.000)",
+    "river_carp late failure grants zero",
+    "river_carp late failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_carp normal replay line to opaque bobber top <=3px (actual 0.461)",
+    "silver_dace pre answer hidden until reveal",
+    "silver_dace pre title hides answer",
+    "silver_dace practice pre line to opaque bobber top <=3px (actual 0.919)",
+    "silver_dace active answer hidden until reveal",
+    "silver_dace active title hides answer",
+    "silver_dace practice active line to opaque bobber top <=3px (actual 0.259)",
+    "silver_dace missed answer hidden until reveal",
+    "silver_dace missed title hides answer",
+    "silver_dace practice missed line to opaque bobber top <=3px (actual 0.919)",
+    "silver_dace hidden replay changes no fish, cumulative, notes or ingredients",
+    "silver_dace early failure line to opaque bobber top <=3px (actual 0.000)",
+    "silver_dace active line to opaque bobber top <=3px (actual 0.000)",
+    "silver_dace late failure grants zero",
+    "silver_dace late failure line to opaque bobber top <=3px (actual 0.000)",
+    "silver_dace normal replay line to opaque bobber top <=3px (actual 0.259)",
+    "river_perch pre answer hidden until reveal",
+    "river_perch pre title hides answer",
+    "river_perch practice pre line to opaque bobber top <=3px (actual 0.919)",
+    "river_perch active answer hidden until reveal",
+    "river_perch active title hides answer",
+    "river_perch practice active line to opaque bobber top <=3px (actual 1.190)",
+    "river_perch missed answer hidden until reveal",
+    "river_perch missed title hides answer",
+    "river_perch practice missed line to opaque bobber top <=3px (actual 0.919)",
+    "river_perch hidden replay changes no fish, cumulative, notes or ingredients",
+    "river_perch early failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_perch active line to opaque bobber top <=3px (actual 0.000)",
+    "river_perch late failure grants zero",
+    "river_perch late failure line to opaque bobber top <=3px (actual 0.000)",
+    "river_perch normal replay line to opaque bobber top <=3px (actual 1.190)",
+    "no large placeholder action",
+    "merchant one clear remembered dish and alternate taste entry",
+    "elder one clear remembered dish and alternate taste entry",
+    "child one clear remembered dish and alternate taste entry",
+    "wrong taste explains shared destination, child still waiting",
+    "merchant mid plate no early settlement",
+    "merchant received adds one",
+    "elder mid plate no early settlement",
+    "elder received adds one",
+    "child mid plate no early settlement",
+    "child received adds one",
+    "single record action persisted",
+    "recorded footer identical after reload",
+    {
+      "viewport": {
+        "w": 320,
+        "h": 568
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 254,
+            "y": 18,
+            "width": 44,
+            "height": 44,
+            "top": 18,
+            "right": 298,
+            "bottom": 62,
+            "left": 254
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 280,
+            "width": 268,
+            "height": 74,
+            "top": 280,
+            "right": 294,
+            "bottom": 354,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 354,
+            "width": 268,
+            "height": 44,
+            "top": 354,
+            "right": 294,
+            "bottom": 398,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 415,
+            "width": 268,
+            "height": 48,
+            "top": 415,
+            "right": 294,
+            "bottom": 463,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 88.5,
+            "bottom": 517,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 94.5,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 157,
+            "bottom": 517,
+            "left": 94.5
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 163,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 225.5,
+            "bottom": 517,
+            "left": 163
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 231.5,
+            "y": 469,
+            "width": 62.5,
+            "height": 48,
+            "top": 469,
+            "right": 294,
+            "bottom": 517,
+            "left": 231.5
+          },
+          "hit": true
+        }
+      ]
+    },
+    "320x568 controls in viewport and actual hit targets >=44px",
+    "320 no keyboard hints",
+    "320 expanded alternate tastes are visible and hittable",
+    "320 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 324,
+            "y": 50,
+            "width": 44,
+            "height": 44,
+            "top": 50,
+            "right": 368,
+            "bottom": 94,
+            "left": 324
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 461.5,
+            "width": 338,
+            "height": 75,
+            "top": 461.5,
+            "right": 364,
+            "bottom": 536.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 536.5,
+            "width": 338,
+            "height": 44,
+            "top": 536.5,
+            "right": 364,
+            "bottom": 580.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 597.5,
+            "width": 338,
+            "height": 48,
+            "top": 597.5,
+            "right": 364,
+            "bottom": 645.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 26,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 106,
+            "bottom": 695.5,
+            "left": 26
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 112,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 192,
+            "bottom": 695.5,
+            "left": 112
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 198,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 278,
+            "bottom": 695.5,
+            "left": 198
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 284,
+            "y": 651.5,
+            "width": 80,
+            "height": 44,
+            "top": 651.5,
+            "right": 364,
+            "bottom": 695.5,
+            "left": 284
+          },
+          "hit": true
+        }
+      ]
+    },
+    "390x844 controls in viewport and actual hit targets >=44px",
+    "390 no keyboard hints",
+    "390 expanded alternate tastes are visible and hittable",
+    "390 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 430,
+        "h": 932
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 364,
+            "y": 50,
+            "width": 44,
+            "height": 44,
+            "top": 50,
+            "right": 408,
+            "bottom": 94,
+            "left": 364
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 467.5,
+            "width": 370,
+            "height": 75,
+            "top": 467.5,
+            "right": 400,
+            "bottom": 542.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 542.5,
+            "width": 370,
+            "height": 44,
+            "top": 542.5,
+            "right": 400,
+            "bottom": 586.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 603.5,
+            "width": 370,
+            "height": 48,
+            "top": 603.5,
+            "right": 400,
+            "bottom": 651.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 30,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 118,
+            "bottom": 713.5,
+            "left": 30
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 124,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 212,
+            "bottom": 713.5,
+            "left": 124
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 218,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 306,
+            "bottom": 713.5,
+            "left": 218
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 312,
+            "y": 657.5,
+            "width": 88,
+            "height": 56,
+            "top": 657.5,
+            "right": 400,
+            "bottom": 713.5,
+            "left": 312
+          },
+          "hit": true
+        }
+      ]
+    },
+    "430x932 controls in viewport and actual hit targets >=44px",
+    "430 no keyboard hints",
+    "430 expanded alternate tastes are visible and hittable",
+    "430 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 844,
+        "h": 390
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 728,
+            "y": 18,
+            "width": 44,
+            "height": 44,
+            "top": 18,
+            "right": 772,
+            "bottom": 62,
+            "left": 728
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 386.109375,
+            "y": 130.5,
+            "width": 364.890625,
+            "height": 75,
+            "top": 130.5,
+            "right": 751,
+            "bottom": 205.5,
+            "left": 386.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 386.109375,
+            "y": 205.5,
+            "width": 364.890625,
+            "height": 44,
+            "top": 205.5,
+            "right": 751,
+            "bottom": 249.5,
+            "left": 386.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 78,
+            "y": 274,
+            "width": 288,
+            "height": 48,
+            "top": 274,
+            "right": 366,
+            "bottom": 322,
+            "left": 78
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 372,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 466,
+            "bottom": 322,
+            "left": 372
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 472,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 566,
+            "bottom": 322,
+            "left": 472
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 572,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 666,
+            "bottom": 322,
+            "left": 572
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 672,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 766,
+            "bottom": 322,
+            "left": 672
+          },
+          "hit": true
+        }
+      ]
+    },
+    "844x390 controls in viewport and actual hit targets >=44px",
+    "844 no keyboard hints",
+    "844 expanded alternate tastes are visible and hittable",
+    "844 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 1032,
+        "h": 1376
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 782,
+            "y": 50,
+            "width": 44,
+            "height": 44,
+            "top": 50,
+            "right": 826,
+            "bottom": 94,
+            "left": 782
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 467.5,
+            "width": 589,
+            "height": 75,
+            "top": 467.5,
+            "right": 803,
+            "bottom": 542.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 542.5,
+            "width": 589,
+            "height": 44,
+            "top": 542.5,
+            "right": 803,
+            "bottom": 586.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 603.5,
+            "width": 604,
+            "height": 49,
+            "top": 603.5,
+            "right": 818,
+            "bottom": 652.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 214,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 360.5,
+            "bottom": 702.5,
+            "left": 214
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 366.5,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 513,
+            "bottom": 702.5,
+            "left": 366.5
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 519,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 665.5,
+            "bottom": 702.5,
+            "left": 519
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 671.5,
+            "y": 658.5,
+            "width": 146.5,
+            "height": 44,
+            "top": 658.5,
+            "right": 818,
+            "bottom": 702.5,
+            "left": 671.5
+          },
+          "hit": true
+        }
+      ]
+    },
+    "1032x1376 controls in viewport and actual hit targets >=44px",
+    "1032 no keyboard hints",
+    "1032 expanded alternate tastes are visible and hittable",
+    "1032 actual playable skip contact",
+    {
+      "viewport": {
+        "w": 1366,
+        "h": 600
+      },
+      "controls": [
+        {
+          "r": {
+            "x": 989,
+            "y": 18,
+            "width": 44,
+            "height": 44,
+            "top": 18,
+            "right": 1033,
+            "bottom": 62,
+            "left": 989
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 647.109375,
+            "y": 130.5,
+            "width": 364.890625,
+            "height": 75,
+            "top": 130.5,
+            "right": 1012,
+            "bottom": 205.5,
+            "left": 647.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 647.109375,
+            "y": 205.5,
+            "width": 364.890625,
+            "height": 44,
+            "top": 205.5,
+            "right": 1012,
+            "bottom": 249.5,
+            "left": 647.109375
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 339,
+            "y": 274,
+            "width": 288,
+            "height": 48,
+            "top": 274,
+            "right": 627,
+            "bottom": 322,
+            "left": 339
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 633,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 727,
+            "bottom": 322,
+            "left": 633
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 733,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 827,
+            "bottom": 322,
+            "left": 733
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 833,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 927,
+            "bottom": 322,
+            "left": 833
+          },
+          "hit": true
+        },
+        {
+          "r": {
+            "x": 933,
+            "y": 274,
+            "width": 94,
+            "height": 48,
+            "top": 274,
+            "right": 1027,
+            "bottom": 322,
+            "left": 933
+          },
+          "hit": true
+        }
+      ]
+    },
+    "1366x600 controls in viewport and actual hit targets >=44px",
+    "1366 no keyboard hints",
+    "1366 expanded alternate tastes are visible and hittable",
+    "1366 actual playable skip contact",
+    "no uncaught browser errors"
+  ],
+  "frames": [
+    {
+      "path": "docs/content/r15/phone-basket-farmhouse-front.png",
+      "sha256": "ec317909fe0963a7d4ffa8972d3994ba8b6d17cb223da5c87e4a89fe132438cb",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-farmhouse-behind.png",
+      "sha256": "c059bdb2359b5bd8e5e899d71cb8f66c64aa97909813ad997627ff13c362a142",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-farmhouse-leave.png",
+      "sha256": "573362dc82c3982adb2c28e14b6984a5917333a2d568e3318ce08e400eb1c900",
+      "state": {
+        "player": {
+          "tileId": "t10_6",
+          "x": 10,
+          "y": 6,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-shop-front.png",
+      "sha256": "0eca0a3a14fe8a837ca9b092b4e6f220677268db70047cdbfa49e045abbd101d",
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-shop-behind.png",
+      "sha256": "910ec7efa93ecaa9f21bd5d35834e97b9afb8aea9a2f158638f85ebf68097fcf",
+      "state": {
+        "player": {
+          "tileId": "t12_0",
+          "x": 12,
+          "y": 0,
+          "facing": "right",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-shop-leave.png",
+      "sha256": "46489aaf95e7a0bbb5c017f377064693804488c73aac85e817168ebe70208e4d",
+      "state": {
+        "player": {
+          "tileId": "t10_3",
+          "x": 10,
+          "y": 3,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-barn-front.png",
+      "sha256": "1e79a5c263ae70c4b3220f60dc6aa82e8730bff7ba6a2f36d3c7695a8cd9b737",
+      "state": {
+        "player": {
+          "tileId": "t14_8",
+          "x": 14,
+          "y": 8,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-barn-behind.png",
+      "sha256": "00573851b6c85ae6464a797b5213cec3a94c4c77633ffe5d2c799d92f24a90d4",
+      "state": {
+        "player": {
+          "tileId": "t14_6",
+          "x": 14,
+          "y": 6,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-barn-leave.png",
+      "sha256": "9ec0660fc888d658e256d11abdd674cd5a664ce2e91742f583393f9e79e58977",
+      "state": {
+        "player": {
+          "tileId": "t14_8",
+          "x": 14,
+          "y": 8,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-house-delivery-behind.png",
+      "sha256": "43767ebe1987635bfe0dc3b8aa489c60da84476421e22a69e9b251fa71ec82aa",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "left",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t11_3",
+          "t10_3",
+          "t9_3",
+          "t9_4",
+          "t9_5",
+          "t9_6",
+          "t8_6",
+          "t7_6",
+          "t7_7",
+          "t6_7",
+          "t5_7"
+        ],
+        "distance": "約 11 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-house-delivery-cancelled.png",
+      "sha256": "8705c159d3d16c8939975a7f06e1254c341bc64257d89621684579a62ecea54e",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-same-frame.png",
+      "sha256": "6c1b44153e306c2c25a5c3cea5890454c629ccdc9ac3615a7ca159cf600f4ff0",
+      "state": {
+        "player": {
+          "tileId": "t14_4",
+          "x": 14,
+          "y": 4,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_3"
+        ],
+        "distance": "約 1 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-same-frame.png",
+      "sha256": "0501ce3520418815136ca3b41e3107949785a8cc280aac4637f25e8ba83e4ac9",
+      "state": {
+        "player": {
+          "tileId": "t7_9",
+          "x": 7,
+          "y": 9,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t6_9",
+          "t5_9"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-same-frame.png",
+      "sha256": "8d2bdf6ab31b4704e9ac6c0e8d3333d8e5fc9a5d793a4d760d5988a4b054b644",
+      "state": {
+        "player": {
+          "tileId": "t8_9",
+          "x": 8,
+          "y": 9,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t7_9",
+          "t7_8",
+          "t7_7"
+        ],
+        "distance": "約 3 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-layout-320-behind.png",
+      "sha256": "5149941a55d66a05b5d643306f0d820542fcd41b8564bf5849676f81cd80fabf",
+      "state": {
+        "player": {
+          "tileId": "t12_3",
+          "x": 12,
+          "y": 3,
+          "facing": "left",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t11_3",
+          "t10_3",
+          "t9_3",
+          "t9_4",
+          "t9_5",
+          "t9_6",
+          "t8_6",
+          "t7_6",
+          "t7_7",
+          "t6_7",
+          "t5_7"
+        ],
+        "distance": "約 11 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-layout-390-far.png",
+      "sha256": "15eb41903f7a6eca0d99fb52ad5f041a7d5b0ca39cb9fc187ff37b17dd5978be",
+      "state": {
+        "player": {
+          "tileId": "t14_4",
+          "x": 14,
+          "y": 4,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_3"
+        ],
+        "distance": "約 1 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-layout-430-near.png",
+      "sha256": "45b4f1d0520d1f6930e1d193890ca02dfce27f9e9013cb283b4b54385a4c61a2",
+      "state": {
+        "player": {
+          "tileId": "t14_4",
+          "x": 14,
+          "y": 4,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_3"
+        ],
+        "distance": "約 1 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-far.png",
+      "sha256": "116b0d53875be9b3c2270f96d0598b107c16f19dbfa9058fb587a794aaca4931",
+      "state": {
+        "player": {
+          "tileId": "t14_7",
+          "x": 14,
+          "y": 7,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_6",
+          "t14_5",
+          "t14_4",
+          "t14_3"
+        ],
+        "distance": "約 4 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-walking.png",
+      "sha256": "b25650238148ea39ef1029355bf38edfc06e76d258156cdec43b4bf29f19acc4",
+      "state": {
+        "player": {
+          "tileId": "t14_6",
+          "x": 14,
+          "y": 6,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_5",
+          "t14_4",
+          "t14_3"
+        ],
+        "distance": "約 3 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-near.png",
+      "sha256": "d9c5f00850cdfd7a2462e1b2e12ff23328639b52ef3aa2dd7773bf96f6f4800d",
+      "state": {
+        "player": {
+          "tileId": "t14_5",
+          "x": 14,
+          "y": 5,
+          "facing": "up",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t14_4",
+          "t14_3"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "true",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-approach.png",
+      "sha256": "ec4a98ce2e7eb7c82e32d0da1127496e3d555e3a37c35a83d6a42b9700a2a728",
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "arrived",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-contact.png",
+      "sha256": "ef0740ae17ac997817f125f38f259465b47e3bff31948be103113e4752947463",
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "reach",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-merchant-received.png",
+      "sha256": "2edae27bb82f6fc5dfaff4e8cce96e1d89363f1204c3af2da43dbc8356d2fef9",
+      "state": {
+        "player": {
+          "tileId": "t14_3",
+          "x": 14,
+          "y": 3,
+          "facing": "up",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "已接到手上",
+        "delivery": "contact",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-far.png",
+      "sha256": "6e8f63b71a6aadd9162ce678c5242fa285e9b3929f3f4a2f6a097da53045df62",
+      "state": {
+        "player": {
+          "tileId": "t5_1",
+          "x": 5,
+          "y": 1,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t5_2",
+          "t5_3",
+          "t5_4",
+          "t5_5",
+          "t5_6",
+          "t5_7"
+        ],
+        "distance": "約 6 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-walking.png",
+      "sha256": "73fef4b4ac7bf70033b913cf20b48caaabf43f5298815f50518f948fba3619c1",
+      "state": {
+        "player": {
+          "tileId": "t5_2",
+          "x": 5,
+          "y": 2,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t5_3",
+          "t5_4",
+          "t5_5",
+          "t5_6",
+          "t5_7"
+        ],
+        "distance": "約 5 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-near.png",
+      "sha256": "a9d7c8b3bd9b8e3cc51d752da72d6a18e9f21e741734a08372b7949fc8110488",
+      "state": {
+        "player": {
+          "tileId": "t5_5",
+          "x": 5,
+          "y": 5,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t5_6",
+          "t5_7"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-approach.png",
+      "sha256": "8940f2d694b16d5113d2601b055b9f14e02d3ddb0a2a22b70fa5ef3eee142979",
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "arrived",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-contact.png",
+      "sha256": "fa9617e43182415bc204b163746c602d980a8732ebfd2dc19fcdcaa60c726cdf",
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "reach",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-elder-received.png",
+      "sha256": "c3e279dc92af323daef30b9d0357034eeb990c7b809318c9e7fddb56ba802cf9",
+      "state": {
+        "player": {
+          "tileId": "t5_7",
+          "x": 5,
+          "y": 7,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "已接到手上",
+        "delivery": "contact",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-far.png",
+      "sha256": "7093a09165d1ec1b6556398e76a178fb61b9a313c650bd1130cc057249b64bed",
+      "state": {
+        "player": {
+          "tileId": "t8_2",
+          "x": 8,
+          "y": 2,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t8_3",
+          "t8_4",
+          "t7_4",
+          "t7_5",
+          "t7_6",
+          "t8_6"
+        ],
+        "distance": "約 6 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-walking.png",
+      "sha256": "81854043ce919b4a8f9fc24dd891d689f773ba81b5ab3dd28e45b4e0008df448",
+      "state": {
+        "player": {
+          "tileId": "t8_3",
+          "x": 8,
+          "y": 3,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t8_4",
+          "t7_4",
+          "t7_5",
+          "t7_6",
+          "t8_6"
+        ],
+        "distance": "約 5 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-near.png",
+      "sha256": "a06f5400cbd01283db5e213316e81b7aaf18ca2cbd38accf245e8651e0d146eb",
+      "state": {
+        "player": {
+          "tileId": "t7_5",
+          "x": 7,
+          "y": 5,
+          "facing": "down",
+          "action": "walk",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [
+          "t7_6",
+          "t8_6"
+        ],
+        "distance": "約 2 步",
+        "delivery": "walking",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-approach.png",
+      "sha256": "94b04593a370d761b79666f3ad65bf7408c192b952c5be211356e33a69c4473e",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "collect",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "arrived",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-contact.png",
+      "sha256": "673bf87d70f41042f4134193f8fb293625daee19caf4c8cd6e4f366cc07adc8a",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "就在眼前",
+        "delivery": "reach",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-basket-child-received.png",
+      "sha256": "23f48c59949e81fa0cc9243b1abce69455ed99a5c60633b9c0f78ac08d61bdc0",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "distance": "已接到手上",
+        "delivery": "contact",
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-pre.png",
+      "sha256": "b72838d2a12cab21ef9c40e16b8705183b7a1a48ed52ea37d98cbf015d7b23fa",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "0",
+        "motion": "wide-rise",
+        "line": "M105.45833333333333,170.04166666666666 Q144.47916666666666,179.04166666666666 183.5,62.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-active.png",
+      "sha256": "171b4d4926fad3033538a83d825bd68c35589e241f9814e12a65e5d8955a86ea",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "closed-rings",
+        "line": "M105.45833333333333,170.04166666666666 Q138.47916666666666,179.04166666666666 171.5,92.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-missed.png",
+      "sha256": "16333bbf83d56ebdc40f19facf83fbea9a664fde55a4fe46da7a4e004317f0f7",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "5",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-practice-reveal.png",
+      "sha256": "db354ee49edc5f9c7b974ddf8d539cc90afe346b9de4e8fca98f19a25f8fc287",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "5",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "河鯉・寬尾攪起濁水，等浮標沉下 河鯉慢慢擺尾，攪起一團濁水。碎水紋向浮標合攏，寬尾翻起、浮標沉下時再提竿。 魚簍、累計釣獲與筆記頁數都不變。",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-early-regression.png",
+      "sha256": "313a79352d0f5f3f4a6c56f75d9b621061156f90dc93e7e1eb8d31ac6f7d4ac4",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "wide-rise",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-active-regression.png",
+      "sha256": "149be852bf49232fa70eb0399030ffc19752b2ad465848711a8e58d1096b317c",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "closed-rings",
+        "line": "M103.45833333333333,172.04166666666666 Q137.47916666666666,181.04166666666666 171.5,91",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "提竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-late-regression.png",
+      "sha256": "7487f8f5be2a867414ecfe65a30a3a0149a88134ea8f70c8555eae9a6145a4b8",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "undefined",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_carp-replay-regression.png",
+      "sha256": "b903012fa129fa52bd0be11ccc92a9e2e3a118e5f10af65c95f34ff1389e6f64",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "motion": "closed-rings",
+        "line": "M105.45833333333333,170.04166666666666 Q138.47916666666666,179.04166666666666 171.5,92.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "pondPractice",
+            "text": "遮字練習，只看水面",
+            "disabled": false
+          },
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-pre.png",
+      "sha256": "08e9708be341cbe1ffcbd9807e2db8330a4f8152fbd7eb35c786b685345f1107",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "0",
+        "motion": "straight-probe",
+        "line": "M105.45833333333333,170.04166666666666 Q144.47916666666666,179.04166666666666 183.5,62.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-active.png",
+      "sha256": "b367b33b1fd49434e4267a7aa1512ca6bcbb7a8c60a231023714a46eb815b8c1",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "1",
+        "motion": "short-splash",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,100.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-missed.png",
+      "sha256": "8890ef3a276fdd7a534dbbeedc51e8544b2c9989cc0557d024c6ba2d2ec45828",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "2",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-practice-reveal.png",
+      "sha256": "5c251365032f606d5ddeb5db983d1f0b63f7ebb6ebfadf8419cc19c28305d1ac",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "2",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "銀鯽・魚嘴啄水，短水花裡提竿 銀鯽的小嘴朝上啄水，幾滴碎水花跳起來。水花還在時提竿才來得及，等水花散掉就晚了。 魚簍、累計釣獲與筆記頁數都不變。",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-early-regression.png",
+      "sha256": "37299e736f29ec61638955a5245ccd3a3f5e71f113e06a41e73c46ce016052ef",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "straight-probe",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-active-regression.png",
+      "sha256": "678e16fed89aea2d2df0988d71e731560be0a81eadc8e7f37711c209864ce5e7",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "1",
+        "motion": "short-splash",
+        "line": "M103.45833333333333,152.54166666666666 Q143.47916666666666,161.54166666666666 183.5,99",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "提竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-late-regression.png",
+      "sha256": "70625fa76e5ba06f57e983ad7139b4a6599a2ee300ea6feeda8140cac42f64e2",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "undefined",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-silver_dace-replay-regression.png",
+      "sha256": "73936a54cd29be1ffad4a2ad4a1946f267baced32444c1215855b10973130519",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "motion": "short-splash",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,100.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "pondPractice",
+            "text": "遮字練習，只看水面",
+            "disabled": false
+          },
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-pre.png",
+      "sha256": "c04056c7136459f76227b0c9997a7c140120679ef858e9c08dbbf0b531f9a664",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "0",
+        "motion": "side-drag",
+        "line": "M105.45833333333333,170.04166666666666 Q144.47916666666666,179.04166666666666 183.5,62.1875",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-active.png",
+      "sha256": "b7b24f9b4aa464c4bccc211a25c73e1306f8a5c6541212432324c487bf4e1b69",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "3",
+        "motion": "straight-wake",
+        "line": "M94.625,133.20833333333334 Q172.0625,142.20833333333334 249.5,92.1875",
+        "fisher": "2",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-missed.png",
+      "sha256": "4c177d9f1d90682c046656b63290e834948fa04520c33130370c6da4b0706866",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-practice-reveal.png",
+      "sha256": "840c4573967841cbf739c239813fea70a9672e556cb3c28351c49e8d56b29cf4",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "4",
+        "motion": "undefined",
+        "line": "M105.45833333333333,150.54166666666666 Q144.47916666666666,159.54166666666666 183.5,62.1875",
+        "fisher": "1",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "quote": "溪鱸・魚影轉身，等尾流展開 溪鱸先彎身轉向，魚影拖出彎彎的水痕。浮標沉下去時還別急；等魚影衝向一側、V形尾流向兩側展開，再把竿子提起來。 魚簍、累計釣獲與筆記頁數都不變。",
+        "controls": [
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-early-regression.png",
+      "sha256": "f734d45631ef907d32da1b7b91183b912767a71b70d1a3d85e97709971df95b9",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "side-drag",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-active-regression.png",
+      "sha256": "b80fc1ed01576660128b7570f610bf302a83ddaba05b3335949793e35bc6cc94",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "3",
+        "motion": "straight-wake",
+        "line": "M92.625,135.20833333333334 Q171.0625,144.20833333333334 249.5,91",
+        "fisher": "2",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "提竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-late-regression.png",
+      "sha256": "9b3f249513499754ef5ccaf0a0f85d6fbe7faf13d59ac38f86d18bfce85986b8",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "phase": "ended",
+        "motion": "undefined",
+        "line": "M103.45833333333333,172.04166666666666 Q143.47916666666666,181.04166666666666 183.5,61",
+        "fisher": "0",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "worldCatch",
+            "text": "重新拋竿",
+            "disabled": false
+          },
+          {
+            "id": "worldFishNotes",
+            "text": "河畔筆記（3）",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-pond-river_perch-replay-regression.png",
+      "sha256": "f1a2b5be039a0a53ef91a7aa90a40978b06f8d96101c8576ab729f158212cbaa",
+      "state": {
+        "player": {
+          "tileId": "t3_9",
+          "x": 3,
+          "y": 9,
+          "facing": "left",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "motion": "straight-wake",
+        "line": "M94.625,133.20833333333334 Q172.0625,142.20833333333334 249.5,92.1875",
+        "fisher": "2",
+        "catch": {
+          "river_carp": 1,
+          "silver_dace": 1,
+          "river_perch": 1
+        },
+        "total": 3,
+        "notes": {
+          "river_carp": true,
+          "silver_dace": true,
+          "river_perch": true
+        },
+        "gathering": {
+          "packed": {},
+          "completed": false,
+          "completedAt": 0,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "controls": [
+          {
+            "id": "pondPractice",
+            "text": "遮字練習，只看水面",
+            "disabled": false
+          },
+          {
+            "id": "backToPond",
+            "text": "回釣台看浮標",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-person.png",
+      "sha256": "aa444b052a29af461e3501df0dc96bf166064e4231515d40a8e5c83ebf7b217f",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "選一位鄰居，再選一份點心。",
+        "controls": [
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-select.png",
+      "sha256": "67911dd6b08261e413ae7ada152453ca52b2f8c1b41732f6133b7428afe9e6e6",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味蘿拉喜歡酸味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為蘿拉選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-select.png",
+      "sha256": "07d07d93b20442efb63789c51d55dbfbd0f1ac25ff28ea4327181d36b9a4fb90",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味班伯喜歡熱味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為班伯選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-select.png",
+      "sha256": "612d6d08d00b914447a78f328dd13ad6a49d6f8e6f82a3c817a1740c973d8435",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為圖圖選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-taste.png",
+      "sha256": "d60ca62a637544c361d308aa19c2dd7a109a189df6e2e7f018649052611208c0",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "為圖圖選一份點心",
+            "disabled": true
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-wrong.png",
+      "sha256": "8f57b3e896ab6b4041ff17a384fcdf949763047ef2a544b3705834cb5950dee1",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」 這份大家分食，不算圖圖的那一份。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-refill.png",
+      "sha256": "b0ed5a42c0d5a1a66a0e8bf5c84360b10c3856d2a2a7e7349b2e1c1865bf5683",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "quote": "這份大家分食，不算圖圖的那一份。",
+        "controls": [
+          {
+            "id": "gatherReturn",
+            "text": "回餐桌選點心",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-lift.png",
+      "sha256": "e4e785b009e6029647c6e3b1d75fd6918fe6d5977cf4808bc140fd04bd4aa00d",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "lift",
+        "quote": "米莉端起酸味野莓。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-mid.png",
+      "sha256": "b38b48122694bfdf50480126f10a58e5d4259f625d397a5beba7f1389733a6b4",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            }
+          ]
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向蘿拉手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 157.765625,
+              "y": 248.765625,
+              "width": 42,
+              "height": 34,
+              "top": 248.765625,
+              "right": 199.765625,
+              "bottom": 282.765625,
+              "left": 157.765625
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-received.png",
+      "sha256": "0f8040e41704d2c4237d34ff39e3b106704dcdc0e2d12cec97a4c76de242ba66",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "received",
+        "quote": "蘿拉接到手邊，嚐了一口。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-merchant-reply.png",
+      "sha256": "b32a4287cc8901a5f11ac9051b16bf0261ae069d1477b88eda717f1c04fc2087",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-lift.png",
+      "sha256": "da05222b572e60401cf4022fab41471daec7aec6545bd82fee6c1a0270d5b08b",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "lift",
+        "quote": "米莉端起熱味麥餅。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-mid.png",
+      "sha256": "7eb3383c0ef6916d197e23d75b15c056bad35a19068dee4dfe2d16b5ee964d69",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            }
+          ]
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向班伯手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 168.765625,
+              "y": 247.34375,
+              "width": 42,
+              "height": 34,
+              "top": 247.34375,
+              "right": 210.765625,
+              "bottom": 281.34375,
+              "left": 168.765625
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-received.png",
+      "sha256": "41a00fa034fd7fe04a337149d2032cb40796463c65402414d1a45472538c3236",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "received",
+        "quote": "班伯接到手邊，嚐了一口。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-elder-reply.png",
+      "sha256": "a248f2aaa74cf12d786caf5c8906a61a536f24c0f1237f15577b051a6548d24e",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "繼續，選下一份",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-lift.png",
+      "sha256": "dad8da74da9bc95d410b11cf53e735160da1994fc9471dcfdab6477886bb8dca",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "lift",
+        "quote": "米莉端起甜味胡蘿蔔點心。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 132,
+              "y": 297,
+              "width": 42,
+              "height": 34,
+              "top": 297,
+              "right": 174,
+              "bottom": 331,
+              "left": 132
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-mid.png",
+      "sha256": "0f7d1f73af1a7b628a5369d8d6948ca7db1643e06cc701d76274622c02218d77",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            }
+          ]
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向圖圖手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 167.71875,
+              "y": 255.046875,
+              "width": 42,
+              "height": 34,
+              "top": 255.046875,
+              "right": 209.71875,
+              "bottom": 289.046875,
+              "left": 167.71875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-received.png",
+      "sha256": "a72123ade82363d45608b6dcd5c9077ec9799cad6db8ecc3d78e4dc25630eb92",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792421781761,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "received",
+        "quote": "圖圖接到手邊，嚐了一口。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "收進手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-child-reply.png",
+      "sha256": "6c767088eb2235590c7260174a19c6634e289f5a86b7a63da9ded8bf23cb657a",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792421781761,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "收進手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-complete-before-record.png",
+      "sha256": "8eaeb52051c91b2193144fdbb13f6dae48f1cd802ebb3dbc9a6fcd2f11ed0edb",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792421781761,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "reply",
+        "quote": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "收進手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-recorded.png",
+      "sha256": "9a0c760108e97967c49f4e032f2c9d60345c1f04e4b6d7b341989d3ecac95d78",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": true,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792421781761,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "quote": "三位都接到了。桌中央還留著大家分食的那份。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "已收進手記",
+            "disabled": true
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-recorded-reloaded.png",
+      "sha256": "fcbddcad4082f0f13736b81a2f26ea8458066d084a3dc6690fa92a2f34769953",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": true,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792421781761,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "quote": "三位都接到了。桌中央還留著大家分食的那份。",
+        "controls": [
+          {
+            "id": "gatherContinue",
+            "text": "已收進手記",
+            "disabled": true
+          },
+          {
+            "id": "gatherReview",
+            "text": "重讀回話",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 239,
+              "width": 42,
+              "height": 34,
+              "top": 239,
+              "right": 245,
+              "bottom": 273,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 197,
+              "bottom": 232,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 198,
+              "width": 42,
+              "height": 34,
+              "top": 198,
+              "right": 305,
+              "bottom": 232,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 273,
+              "width": 42,
+              "height": 34,
+              "top": 273,
+              "right": 295,
+              "bottom": 307,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-journal-shared.png",
+      "sha256": "1c12e4d44ff881a329dc95dafdcde0c957dea6976e21a3a2fccae194e3315ec3",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": true,
+          "refills": [
+            {
+              "taste": "sour",
+              "at": 1792421770977,
+              "receipt": "農家麥餅 4→3 份、東林野莓 5→4 份"
+            }
+          ],
+          "servings": [
+            {
+              "id": "child",
+              "taste": "sour",
+              "at": 1792421769391,
+              "matched": false,
+              "reply": "圖圖接過酸味野莓：「這份先放中間，大家一起吃。我還是想念甜味胡蘿蔔點心。」"
+            },
+            {
+              "id": "merchant",
+              "taste": "sour",
+              "at": 1792421773628,
+              "matched": true,
+              "reply": "蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」"
+            },
+            {
+              "id": "elder",
+              "taste": "hot",
+              "at": 1792421777687,
+              "matched": true,
+              "reply": "班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」 他看了看中央那盤：「剛才大家分的，也別放涼了。」"
+            },
+            {
+              "id": "child",
+              "taste": "sweet",
+              "at": 1792421781761,
+              "matched": true,
+              "reply": "圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」"
+            }
+          ]
+        },
+        "serving": "choose",
+        "controls": [
+          {
+            "id": "gatherAgain",
+            "text": "重看共同聚餐",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "child",
+            "rect": {
+              "x": 203,
+              "y": 211,
+              "width": 42,
+              "height": 34,
+              "top": 211,
+              "right": 245,
+              "bottom": 245,
+              "left": 203
+            }
+          },
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 155,
+              "y": 170,
+              "width": 42,
+              "height": 34,
+              "top": 170,
+              "right": 197,
+              "bottom": 204,
+              "left": 155
+            }
+          },
+          {
+            "for": "elder",
+            "rect": {
+              "x": 263,
+              "y": 170,
+              "width": 42,
+              "height": 34,
+              "top": 170,
+              "right": 305,
+              "bottom": 204,
+              "left": 263
+            }
+          },
+          {
+            "for": "child",
+            "rect": {
+              "x": 253,
+              "y": 245,
+              "width": 42,
+              "height": 34,
+              "top": 245,
+              "right": 295,
+              "bottom": 279,
+              "left": 253
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-320x568.png",
+      "sha256": "c559a9a71e560594390066a337dd32a556158034143b8a30c5bc266230fb648a",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-320x568.png",
+      "sha256": "2199fe14fc54d47a3eb2103ebf26280478b20ab257ee1a9a7966020c619be533",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-390x844.png",
+      "sha256": "c84f84a7a81b0a6a780c049da07066e1fbe94a9e81254c9522a318cde5cb573e",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-390x844.png",
+      "sha256": "894c3397ca9afc026dd398719af3e6849b6730f3104606a4925721ddf93918b6",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-430x932.png",
+      "sha256": "9d7b7f8dacf7f3b874406370368b0e97fdb0cbc0c7b31a4f684ed42fdeffe1c4",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/phone-memory-other-430x932.png",
+      "sha256": "94b4ee5e0a5b115bbe44987d518040fa2ceb55d551dd933369d76603f18cba5b",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-844x390.png",
+      "sha256": "8b1220313b325da4f1e8179f45a45042003e9d443463ae64b85d86506f53f6a1",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-other-844x390.png",
+      "sha256": "0a00ca287786fd0eed284ad0e0e9e04e26ebd1642c7b41f48d3474f49e534cd6",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-1032x1376.png",
+      "sha256": "4dbaec5368cf19b60588b27754cbaa4cc746ac32652c161dbe0b4225686c237e",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-other-1032x1376.png",
+      "sha256": "76bc672f382c9f6ef34f43f271904c46516a4bdd7c6bc099c0cdaadbad1d95df",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-1366x600.png",
+      "sha256": "a520063c04e84f32f8c852c9b258560782367c9ae0b2a4121db69a261ba34fc8",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/content/r15/layout-memory-other-1366x600.png",
+      "sha256": "b76a08469f634c6c14b91663202c7e8568539d4e82c52e3d52b0a93400cc1f8e",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "choose",
+        "quote": "看看記過的口味圖圖喜歡甜味，上回送餐籃時記下來的。",
+        "controls": [
+          {
+            "id": "gatherSip",
+            "text": "把甜味胡蘿蔔點心端給圖圖",
+            "disabled": false
+          },
+          {
+            "id": "gatherChoosePerson",
+            "text": "換一位鄰居",
+            "disabled": false
+          },
+          {
+            "id": "gatherSupplies",
+            "text": "補備與紀錄",
+            "disabled": false
+          },
+          {
+            "id": "gatherReview",
+            "text": "翻聚餐手記",
+            "disabled": false
+          },
+          {
+            "id": "gatherBack",
+            "text": "回農場",
+            "disabled": false
+          }
+        ],
+        "plates": []
+      }
+    },
+    {
+      "path": "docs/store/screenshots/iphone-20-hand-served-r15.png",
+      "sha256": "aab13d6630cbb327ac52c7a5022637ab9d897cd51326869ead3a41e4fdda2735",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向蘿拉手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 157.21875,
+              "y": 238.890625,
+              "width": 42,
+              "height": 34,
+              "top": 238.890625,
+              "right": 199.21875,
+              "bottom": 272.890625,
+              "left": 157.21875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/store/screenshots/ipad-20-hand-served-r15.png",
+      "sha256": "29a0ccced7fb1ac417be3f246e78136272f309d2178deecb0a1f9fa30237ce24",
+      "state": {
+        "player": {
+          "tileId": "t8_6",
+          "x": 8,
+          "y": 6,
+          "facing": "down",
+          "action": "idle",
+          "actionTargetTileId": null,
+          "actionEndsAt": 0
+        },
+        "route": [],
+        "occluded": "false",
+        "catch": {
+          "river_carp": 0,
+          "silver_dace": 0,
+          "river_perch": 0
+        },
+        "total": 0,
+        "notes": {},
+        "gathering": {
+          "packed": {
+            "merchant": "sour",
+            "elder": "hot",
+            "child": "sweet"
+          },
+          "completed": true,
+          "completedAt": 1792421625451,
+          "recorded": false,
+          "refills": [],
+          "servings": []
+        },
+        "serving": "carry",
+        "quote": "沿著桌面，推向蘿拉手邊。",
+        "controls": [
+          {
+            "id": "gatherSkip",
+            "text": "略過這次端送",
+            "disabled": false
+          }
+        ],
+        "plates": [
+          {
+            "for": "merchant",
+            "rect": {
+              "x": 450.34375,
+              "y": 231.84375,
+              "width": 42,
+              "height": 34,
+              "top": 231.84375,
+              "right": 492.34375,
+              "bottom": 265.84375,
+              "left": 450.34375
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Chapter/dock access and ingredients only. Picnic and earned-note fixtures are produced by this round real UI journey."
+}

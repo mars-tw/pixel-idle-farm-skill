@@ -1,0 +1,147 @@
+{
+  "status": "VERIFIED",
+  "count": 15,
+  "perContent": {
+    "basket": 5,
+    "pond": 5,
+    "memory": 5
+  },
+  "frames": [
+    {
+      "group": "basket",
+      "source": "docs/content/r15/phone-basket-house-delivery-behind.png",
+      "path": "docs/content/r15/review-set/01-phone-basket-house-delivery-behind.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "43767ebe1987635bfe0dc3b8aa489c60da84476421e22a69e9b251fa71ec82aa",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "basket",
+      "source": "docs/content/r15/phone-basket-merchant-distance-2.png",
+      "path": "docs/content/r15/review-set/02-phone-basket-merchant-distance-2.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "d9c5f00850cdfd7a2462e1b2e12ff23328639b52ef3aa2dd7773bf96f6f4800d",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "basket",
+      "source": "docs/content/r15/phone-basket-merchant-distance-1.png",
+      "path": "docs/content/r15/review-set/03-phone-basket-merchant-distance-1.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "6c1b44153e306c2c25a5c3cea5890454c629ccdc9ac3615a7ca159cf600f4ff0",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "basket",
+      "source": "docs/content/r15/phone-basket-elder-contact.png",
+      "path": "docs/content/r15/review-set/04-phone-basket-elder-contact.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "fa9617e43182415bc204b163746c602d980a8732ebfd2dc19fcdcaa60c726cdf",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "basket",
+      "source": "docs/content/r15/phone-basket-elder-received.png",
+      "path": "docs/content/r15/review-set/05-phone-basket-elder-received.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c3e279dc92af323daef30b9d0357034eeb990c7b809318c9e7fddb56ba802cf9",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "pond",
+      "source": "docs/content/r15/phone-pond-river_carp-practice-pre.png",
+      "path": "docs/content/r15/review-set/06-phone-pond-river_carp-practice-pre.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b72838d2a12cab21ef9c40e16b8705183b7a1a48ed52ea37d98cbf015d7b23fa",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "pond",
+      "source": "docs/content/r15/phone-pond-river_carp-practice-active.png",
+      "path": "docs/content/r15/review-set/07-phone-pond-river_carp-practice-active.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "171b4d4926fad3033538a83d825bd68c35589e241f9814e12a65e5d8955a86ea",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "pond",
+      "source": "docs/content/r15/phone-pond-river_carp-practice-missed.png",
+      "path": "docs/content/r15/review-set/08-phone-pond-river_carp-practice-missed.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "16333bbf83d56ebdc40f19facf83fbea9a664fde55a4fe46da7a4e004317f0f7",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "pond",
+      "source": "docs/content/r15/phone-pond-silver_dace-practice-active.png",
+      "path": "docs/content/r15/review-set/09-phone-pond-silver_dace-practice-active.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b367b33b1fd49434e4267a7aa1512ca6bcbb7a8c60a231023714a46eb815b8c1",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "pond",
+      "source": "docs/content/r15/phone-pond-river_perch-practice-active.png",
+      "path": "docs/content/r15/review-set/10-phone-pond-river_perch-practice-active.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b7b24f9b4aa464c4bccc211a25c73e1306f8a5c6541212432324c487bf4e1b69",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "memory",
+      "source": "docs/content/r15/phone-memory-child-select.png",
+      "path": "docs/content/r15/review-set/11-phone-memory-child-select.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "612d6d08d00b914447a78f328dd13ad6a49d6f8e6f82a3c817a1740c973d8435",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "memory",
+      "source": "docs/content/r15/phone-memory-wrong.png",
+      "path": "docs/content/r15/review-set/12-phone-memory-wrong.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8f57b3e896ab6b4041ff17a384fcdf949763047ef2a544b3705834cb5950dee1",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "memory",
+      "source": "docs/content/r15/phone-memory-child-lift.png",
+      "path": "docs/content/r15/review-set/13-phone-memory-child-lift.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "dad8da74da9bc95d410b11cf53e735160da1994fc9471dcfdab6477886bb8dca",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "memory",
+      "source": "docs/content/r15/phone-memory-child-mid.png",
+      "path": "docs/content/r15/review-set/14-phone-memory-child-mid.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "0f7d1f73af1a7b628a5369d8d6948ca7db1643e06cc701d76274622c02218d77",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    },
+    {
+      "group": "memory",
+      "source": "docs/content/r15/phone-memory-child-reply.png",
+      "path": "docs/content/r15/review-set/15-phone-memory-child-reply.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "6c767088eb2235590c7260174a19c6634e289f5a86b7a63da9ded8bf23cb657a",
+      "operation": "byte-identical copy, no cropping/compositing/resizing"
+    }
+  ],
+  "scope": "The selected 15 prove core interactions. Complete per-person and per-species sequences are in the parent directory; no claim that every requested frame fits into 15."
+}

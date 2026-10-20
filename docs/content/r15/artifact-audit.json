@@ -1,0 +1,27 @@
+{
+  "status": "VERIFIED",
+  "phoneReviewImages": 15,
+  "stores": [
+    {
+      "path": "docs/store/screenshots/iphone-20-hand-served-r15.png",
+      "size": [
+        1290,
+        2796
+      ],
+      "sha256": "aab13d6630cbb327ac52c7a5022637ab9d897cd51326869ead3a41e4fdda2735"
+    },
+    {
+      "path": "docs/store/screenshots/ipad-20-hand-served-r15.png",
+      "size": [
+        2064,
+        2752
+      ],
+      "sha256": "29a0ccced7fb1ac417be3f246e78136272f309d2178deecb0a1f9fa30237ce24"
+    }
+  ],
+  "secretScan": {
+    "files": 1719,
+    "matches": 0,
+    "pattern": "user-specified OpenAI credential patterns; no values logged"
+  }
+}

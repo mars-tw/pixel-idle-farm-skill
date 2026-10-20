@@ -1,0 +1,158 @@
+{
+  "status": "VERIFIED",
+  "count": 15,
+  "perContent": 5,
+  "images": [
+    {
+      "content": "basket",
+      "path": "docs/content/r14/review-set/01-phone-basket-house-behind.png",
+      "source": "docs/content/r14/phone-basket-house-behind.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "5ea7fa9222c04eda9f187327a4d22d6a724cb3201d20e0dc71deb87a5a92aa46",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "basket",
+      "path": "docs/content/r14/review-set/02-phone-basket-label-320.png",
+      "source": "docs/content/r14/phone-basket-label-320.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "87f45ca8b04d3dbe80c0de426b658e2757343e1dbf7b0daa88e96752d2b0f84e",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "basket",
+      "path": "docs/content/r14/review-set/03-phone-basket-merchant-far.png",
+      "source": "docs/content/r14/phone-basket-merchant-far.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "b2571f09a749798b35ad4d40740bc745abcaac2378200dff027b053f903d23fe",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "basket",
+      "path": "docs/content/r14/review-set/04-phone-basket-elder-contact.png",
+      "source": "docs/content/r14/phone-basket-elder-contact.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "c39eb9b74c43e56f103c1afed3875fe720fe2113195c452c59bc71399a74bb5e",
+      "capture": "original viewport screenshot; no resize, crop or composite",
+      "captureProvenance": {
+        "originalSource": "docs/content/r14/regression-outputs/docs/content/r13/phone-basket-elder-contact.png",
+        "executionReceipt": "docs/content/r14/regression-1792408597.json",
+        "appVersion": "content-r14-20261019-1",
+        "sha256": "c39eb9b74c43e56f103c1afed3875fe720fe2113195c452c59bc71399a74bb5e",
+        "phase": "reach",
+        "initialCapturePreserved": "docs/content/r14/initial-captures/phone-basket-elder-contact.png"
+      }
+    },
+    {
+      "content": "basket",
+      "path": "docs/content/r14/review-set/05-phone-basket-elder-received.png",
+      "source": "docs/content/r14/phone-basket-elder-received.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "067ae331fa9b3f5854c8ac341179bc2cab6768e39379f62906a21239d979204b",
+      "capture": "original viewport screenshot; no resize, crop or composite",
+      "captureProvenance": {
+        "originalSource": "docs/content/r14/regression-outputs/docs/content/r13/phone-basket-elder-received.png",
+        "executionReceipt": "docs/content/r14/regression-1792408597.json",
+        "appVersion": "content-r14-20261019-1",
+        "sha256": "067ae331fa9b3f5854c8ac341179bc2cab6768e39379f62906a21239d979204b",
+        "phase": "contact",
+        "initialCapturePreserved": "docs/content/r14/initial-captures/phone-basket-elder-received.png"
+      }
+    },
+    {
+      "content": "pond",
+      "path": "docs/content/r14/review-set/06-phone-pond-river_carp-early-final.png",
+      "source": "docs/content/r14/phone-pond-river_carp-early-final.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "8480c36864d3cd87b4ee7b741eab69371bcfa2e72e3faecc263e7e3af7f6398d",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "pond",
+      "path": "docs/content/r14/review-set/07-phone-pond-river_carp-active-final.png",
+      "source": "docs/content/r14/phone-pond-river_carp-active-final.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "7b0e1057c29ec661f6b8cf7b17793b47a0ff7fa9d2a47dea3526e955b8ebf1e4",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "pond",
+      "path": "docs/content/r14/review-set/08-phone-pond-silver_dace-active-final.png",
+      "source": "docs/content/r14/phone-pond-silver_dace-active-final.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "00f6a09f1c0398671a66d0f235937a8e4e32b63481766a16aad7e67a9b4800eb",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "pond",
+      "path": "docs/content/r14/review-set/09-phone-pond-river_perch-active-final.png",
+      "source": "docs/content/r14/phone-pond-river_perch-active-final.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "1f9a7e04ebde4c9542b2338ef35969be422f16ffe94b112203bfc2a84b91b954",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "pond",
+      "path": "docs/content/r14/review-set/10-phone-pond-count-3.png",
+      "source": "docs/content/r14/phone-pond-count-3.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "33682649653dc93b2a1a876b0908f3049f152ee6caa33a138ece16bef647923c",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "memory",
+      "path": "docs/content/r14/review-set/11-phone-memory-wrong-simple.png",
+      "source": "docs/content/r14/phone-memory-wrong-simple.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "0fe7a9471a2883b35a2cc9865800647e40da14334585e2db28a00bbee2702430",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "memory",
+      "path": "docs/content/r14/review-set/12-phone-memory-child-lift.png",
+      "source": "docs/content/r14/phone-memory-child-lift.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "45ff96f8cdac35bb7595e90ceb92db0b0142dabf015cf326f061b2f8899c9735",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "memory",
+      "path": "docs/content/r14/review-set/13-phone-memory-child-mid.png",
+      "source": "docs/content/r14/phone-memory-child-mid.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "2054fe61aa0ae937a8f17cfcf1a87f930fc1d0279da44911142e2fcb8147b4eb",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "memory",
+      "path": "docs/content/r14/review-set/14-phone-memory-child-reply.png",
+      "source": "docs/content/r14/phone-memory-child-reply.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "022c2fd2e0c89117c28a0da90d06d894975e56f7ec237bf7c6ddb5bdefe3eba7",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    },
+    {
+      "content": "memory",
+      "path": "docs/content/r14/review-set/15-phone-memory-shared-complete-reloaded.png",
+      "source": "docs/content/r14/phone-memory-shared-complete-reloaded.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "3744c736de4971a797083b062c7abcbd46440df2439d359bdf748bb8cb904c42",
+      "capture": "original viewport screenshot; no resize, crop or composite"
+    }
+  ]
+}

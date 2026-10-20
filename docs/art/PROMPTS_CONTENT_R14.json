@@ -1,0 +1,23 @@
+{
+  "status": "VERIFIED",
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "newGeneratedMasters": 0,
+  "newGeneratedRuntimeAssets": 0,
+  "generationToolUsedThisRound": null,
+  "jobs": [],
+  "reusedGeneratedAssets": [
+    "assets/generated/content-r13/fishing-0.png",
+    "assets/generated/content-r13/fishing-1.png",
+    "assets/generated/content-r13/fishing-2.png",
+    "assets/generated/content-r13/*-shadow.png",
+    "assets/generated/content-r12/wide-*.png",
+    "assets/generated/content-r12/peck-*.png",
+    "assets/generated/content-r12/wake-*.png",
+    "assets/generated/content-r12/serve-*.png",
+    "assets/generated/content-r9/*-merchant.png",
+    "assets/generated/content-r9/*-elder.png",
+    "assets/generated/content-r9/*-child.png"
+  ],
+  "originalGenerationTool": "image_gen.imagegen (existing source manifests)",
+  "note": "R14 repairs existing content using accepted native sprites. Fishing line is a runtime SVG stroke; no placeholder bitmap or newly generated artwork claimed."
+}

@@ -1,0 +1,26 @@
+
+> pixel-idle-farm@0.1.38 test
+> node scripts/test-version-chain.js && node scripts/test-guards.js && node scripts/test-economy.js && node scripts/test-systems.js && node scripts/test-adventure.js && node scripts/test-world-migration.js && node scripts/test-r74-building-upgrades.js && node scripts/test-r79-sunpatch.js && node scripts/test-r80-daily.js && node scripts/test-r81-heirloom.js && node scripts/test-ui-smoke.js && node scripts/validate-v3-atlas.js && node scripts/validate-v4-atlas.js && python tools/generate-r66-ui.py --check && node scripts/test-r66-ui-art.js && python tools/process-r68-visuals.py && node scripts/test-r68-visuals.js && node scripts/test-content-r1.js && node scripts/test-content-r2.js && node scripts/test-content-r3.js && node scripts/test-content-r4.js && node scripts/test-content-r5.js && node scripts/test-content-r6.js && node scripts/test-content-r7.js && node scripts/test-content-r8.js && node scripts/test-content-r9.js && node scripts/test-content-r10.js && node scripts/test-content-r11.js && node scripts/test-content-r12.js && node scripts/test-content-r13.js && node scripts/test-content-r14.js && node scripts/test-content-r15.js
+
+✓ 版本鏈一致（CACHE_VERSION=content-r15-20261019-1）
+== R39 SW 快取完整性守門 ==
+  ✓ index.html 本地 script/link 皆帶 ?v=content-r15-20261019-1
+  ✗ index/manifest/runtime 關鍵本地資產皆以可驗證版本 URL 列入 SW cache：
+    src/content-r15.css?v=content-r15-20261019-1
+  ✓ SW cache 清單皆帶精確版本（R68 生成圖為 SHA-256 前 8 碼，其餘為 content-r15-20261019-1）
+  ✓ SW cache 清單內檔案皆實際存在
+
+== R39 文案品質守門 ==
+  ✓ index.html 與 src/*.js 可見字串無 U+FFFD/連續問號/mojibake
+
+== R61 手機地圖內 UX 守門 ==
+  ✓ touch 農土改由地圖內 action dock 承接，不再要求二次確認
+  ✓ 手機有 D-pad 與 A 鍵，且重用逐格移動/面向目標動作
+  ✓ 建造工具以地圖內輪盤直接呼叫 buildBuilding
+  ✓ 建築/動物照護改為地圖內小氣泡並重用 care/collect 函式
+  ✓ 桌面／程式化地圖操作維持單擊直達路徑
+  ✓ PointerEvent 優先，350ms 時窗只保留給無 PointerEvent 的舊瀏覽器
+  ✓ 地圖內 action dock、作物 quickbar 與手機控制盤樣式存在
+  ✓ R64 手機控制盤只依主指標 coarse + 窄寬度分流，不再把觸控能力當手機
+
+❌ 1 項守門失敗
