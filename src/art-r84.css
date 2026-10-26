@@ -1,5 +1,5 @@
 /* R84: quiet ground, leaf-light, and a single gingham-edged tool shelf. */
-:root { --sun-texture:url('../assets/generated/r84/paper-128.png?v=content-r15-20261019-1'); --world-bottom:86px; }
+:root { --sun-texture:url('../assets/generated/r84/paper-128.png?v=content-r24-20261026-2'); --world-bottom:86px; }
 .player,.player .p-sprite { opacity:1; border:0;outline:0;background-color:transparent;box-shadow:none;mix-blend-mode:normal; }
 .gtile.sel,.gtile.touch-pending{box-shadow:none}
 .sun-beam { z-index:2!important; }
@@ -9,7 +9,7 @@
 .sun-beam .sun-mote{width:3px;height:3px;opacity:.7;box-shadow:0 0 5px #fff0b5}
 .sun-beam .sun-timer{display:none}
 .sunlit-crop { filter:brightness(1.40) saturate(1.15) drop-shadow(-2px -2px 0 #ffe8a380);transform:scale(1.08);transform-origin:center bottom; }
-.sun-particle{font-size:0!important;width:24px;height:24px;background:url('../assets/generated/r84/sun-32.png?v=content-r15-20261019-1') center/contain no-repeat;image-rendering:pixelated}
+.sun-particle{font-size:0!important;width:24px;height:24px;background:url('../assets/generated/r84/sun-32.png?v=content-r24-20261026-2') center/contain no-repeat;image-rendering:pixelated}
 .sun-grown::after { display:none; }
 .world-keepsake { pointer-events:none; image-rendering:pixelated; filter:drop-shadow(3px 5px 0 #3e2f2338); }
 .canopy-shadow { pointer-events:none;mix-blend-mode:multiply;opacity:.23;filter:none;z-index:1!important;transform:translate(-18%, -35%); }

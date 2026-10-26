@@ -7,10 +7,12 @@ evidence boards, hashes, contrast measurements, and manifests.
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import math
 import re
 import statistics
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, __version__ as PILLOW_VERSION
@@ -410,5 +412,37 @@ def main() -> None:
     print(json.dumps({"c2paPass": c2pa["pass"], "decodedMiB": runtime_manifest["decodedTextureMiBAllTiers"], "budgetPass": runtime_manifest["budgetPass"]}, ensure_ascii=False))
 
 
+def check() -> None:
+    """Validate generated pixels and provenance without rewriting history.
+
+    The generation command deliberately refreshes reference snapshots. Calling
+    that command from npm test used to change source-manifest after later art
+    rounds replaced a reference. Validation must read the historical snapshot.
+    """
+    manifest = json.loads((OUT / "manifest.json").read_text(encoding="utf-8"))
+    source = json.loads((EVIDENCE / "source-manifest.json").read_text(encoding="utf-8"))
+    for asset_id, spec in MASTER_SPECS.items():
+        master_path = MASTERS / spec["file"]
+        verify_c2pa(master_path)
+        assert sha256(master_path) == source["assets"][asset_id]["masterSha256"], asset_id
+        master = Image.open(master_path).convert("RGB")
+        tiers = LOADING_TIERS if spec["kind"] == "loading" else PANEL_TIERS
+        for tier, size in tiers.items():
+            image = shadow_tint(resize_source(master, spec["kind"], size), spec["shadow"])
+            if spec["kind"] == "panel":
+                image = normalize_panel_text_zone(image)
+            image = fixed_palette_pixelize(image, spec["kind"])
+            data = io.BytesIO()
+            image.save(data, format="PNG", optimize=True, compress_level=9)
+            expected = manifest["assets"][asset_id][tier]
+            assert hashlib.sha256(data.getvalue()).hexdigest() == expected["sha256"], (asset_id, tier)
+            assert sha256(ROOT / expected["file"]) == expected["sha256"], (asset_id, tier)
+            metrics = runtime_metrics(ROOT / expected["file"], spec["kind"])
+            assert metrics["outOfPalettePixels"] == 0 and metrics["luminanceSteps"] >= 6 and metrics["outlinePixels"] >= 16
+            if spec["kind"] == "panel":
+                assert metrics["textZone"]["pass45"] and metrics["textZone"]["readabilityNoisePass"]
+    print("VERIFIED R68 --check: 5 masters / 15 exact runtime images; no filesystem writes")
+
+
 if __name__ == "__main__":
-    main()
+    main() if "--generate" in sys.argv else check()

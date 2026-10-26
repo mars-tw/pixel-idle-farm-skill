@@ -34,6 +34,7 @@ const SCRIPTS = [
   "scripts/test-content-r7-e2e.js",
   "scripts/test-content-r8-e2e.js",
   "scripts/test-content-r9-e2e.js",
+  "scripts/test-content-r23-matrix.js",
 ];
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -50,7 +51,7 @@ async function waitForMemory(tag) {
 async function run() {
   for (const script of SCRIPTS) {
     await waitForMemory(script);
-    const result = spawnSync(process.execPath, [script], { cwd: ROOT, stdio: "inherit", env: process.env });
+    const result = spawnSync(process.execPath, [script], { cwd: ROOT, stdio: "inherit", env: process.env, windowsHide: true });
     if (result.status !== 0) process.exit(result.status || 1);
   }
   console.log("\n✅ Browser gates ran sequentially; every browser process closed by its owning script.");

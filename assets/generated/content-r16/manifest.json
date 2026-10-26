@@ -1,0 +1,22 @@
+{
+  "status": "VERIFIED",
+  "generationToolUsedThisRound": "image_gen.imagegen",
+  "modelSlug": null,
+  "newGeneratedMasters": 1,
+  "newGeneratedRuntimeAssets": 1,
+  "reference": "assets/generated/content-r10/hot.png",
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "master": "docs/art/masters/content-r16-sharing.png",
+  "masterSha256": "039fae6ea0ddca37dd2a9680d84d2284b6c795c1120adbef80356ab935ba7471",
+  "assets": [
+    {
+      "path": "assets/generated/content-r16/sharing-bowl.png",
+      "sha256": "162a8bb08c283e6b734bc63326bd9142985d5488202c8a049db2230c8b90553d",
+      "size": [
+        64,
+        48
+      ],
+      "processing": "native nearest-neighbor, existing hot plate 32-color palette, preserve alpha"
+    }
+  ]
+}

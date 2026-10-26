@@ -1,0 +1,358 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "model": null,
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "masters": {
+    "docs/art/masters/content-r19/carp-rings.png": "a55c03219ea21525ed1680eea295badd5d23e6175c7f14a9976ced8a79916b6b",
+    "docs/art/masters/content-r19/empty-actors.png": "c467e4f297ca3e62f3cfe67948ff93cbbd86504b1453be4032b66249cc4316a2",
+    "docs/art/masters/content-r19/empty-child.png": "fdeff596c14353dc2327f0760ae37c7633a38aef3eaff5693bf2c42066fd3482"
+  },
+  "processing": "Cell extraction, generated alpha threshold, nearest-neighbor native grid, established palette; no painted character or water replacement. Unused fourth character row excluded because its costume differed.",
+  "frames": [
+    {
+      "file": "assets/generated/content-r19/idle-player.png",
+      "sha256": "da38462202d156ae694613ab2f96cfd0c7ca9aa7684a9ae8849dda836faf0cdd",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        0,
+        0,
+        362,
+        390
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-player.png",
+      "sha256": "d02c1cfbbb4d0370f7e3ea80bf62eff9ec5d9f4d00c1eb0353204ff99a040f7b",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        362,
+        0,
+        724,
+        390
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-player.png",
+      "sha256": "68fa089830244b81770f5ce00753fc94bec762158d022ae5fe0338dc8114ab07",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        724,
+        0,
+        1086,
+        390
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-merchant.png",
+      "sha256": "8bec1ee1756ab4b29e355cc536947491fe26a0b02c0957193bba2fe7f16ec2b3",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        0,
+        395,
+        362,
+        745
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-merchant.png",
+      "sha256": "92791ece22bfeac5be601bff9804270cbb5305b17d7b0a33272e808107b5567a",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        362,
+        395,
+        724,
+        745
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-merchant.png",
+      "sha256": "6e1d26e128c1fb8212c99b7918ac331ef399094c9808ded624d8903582ac2e96",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        724,
+        395,
+        1086,
+        745
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-elder.png",
+      "sha256": "8c0e7bc51dc573557c76d5e03ab3879428535e9c68f5562479984c290706c572",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        0,
+        747,
+        362,
+        1085
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-elder.png",
+      "sha256": "2a39b13d6f9f082b8324c086b4e0af76836b7925a17f2fe2e0c6a5d3c1b2f121",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        362,
+        747,
+        724,
+        1085
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-elder.png",
+      "sha256": "a8b56adc3e81b18af06cf995ce76d79e6eb0e4f78beaa729ef639564a2da7a3d",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-actors.png",
+      "sourceBox": [
+        724,
+        747,
+        1086,
+        1085
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-child.png",
+      "sha256": "96e71f236b82023a1bd7bc1e6a4c9df2842adec28564ce08da08a9895e52eba1",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-child.png",
+      "sourceBox": [
+        0,
+        0,
+        627,
+        836
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-child.png",
+      "sha256": "51bc22a25a574eb558dd3a9f6d5014073ade4d9a4908d91135b737ce0a29d391",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-child.png",
+      "sourceBox": [
+        627,
+        0,
+        1254,
+        836
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-child.png",
+      "sha256": "3c6db18c57e01e266695d55d26b39482a33f7b9be934f7da2b6d1cfdd665653a",
+      "size": [
+        48,
+        64
+      ],
+      "master": "docs/art/masters/content-r19/empty-child.png",
+      "sourceBox": [
+        1254,
+        0,
+        1881,
+        836
+      ],
+      "kind": "empty-body"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-0.png",
+      "sha256": "75770b09e4aa7b6375bf8a9734e4ffc857bdf900c7e7392b3a4f5ad234ea13cb",
+      "size": [
+        96,
+        72
+      ],
+      "master": "docs/art/masters/content-r19/carp-rings.png",
+      "sourceBox": [
+        32,
+        210,
+        340,
+        550
+      ],
+      "kind": "expanding-water"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-1.png",
+      "sha256": "943e8a32cdd8f22ac749c60dc11e56d54c547b1eda7a74f9078b6f072b700615",
+      "size": [
+        96,
+        72
+      ],
+      "master": "docs/art/masters/content-r19/carp-rings.png",
+      "sourceBox": [
+        390,
+        180,
+        835,
+        590
+      ],
+      "kind": "expanding-water"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-2.png",
+      "sha256": "9172c82181a8ccd38dd257b0cc988bdbe701d0339e2db12e773c733ba551744a",
+      "size": [
+        96,
+        72
+      ],
+      "master": "docs/art/masters/content-r19/carp-rings.png",
+      "sourceBox": [
+        860,
+        125,
+        1395,
+        665
+      ],
+      "kind": "expanding-water"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-3.png",
+      "sha256": "9370f5643b94b4fcfc1c34140b9df12f0945f5cb54940d58805fa4f2048990ce",
+      "size": [
+        96,
+        72
+      ],
+      "master": "docs/art/masters/content-r19/carp-rings.png",
+      "sourceBox": [
+        1400,
+        60,
+        2048,
+        720
+      ],
+      "kind": "expanding-water"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+/* World-anchored exchanges; original articulated sprite poses are retained. */
+.delivery-dots i{width:12px;height:8px;font-size:0;background:#ffce63aa;border:1px solid #8b5e34;box-shadow:0 0 0 1px #fff6e3}
+.delivery-dots i[hidden]{display:none}
+.delivery-goal{position:absolute;width:44px;height:21px;transform:translate(-50%,-50%);border:3px double #d95737;border-radius:50%;background:#fff6e344;box-sizing:border-box}
+.delivery-goal::after{content:'站這裡交籃';position:absolute;left:50%;top:24px;transform:translateX(-50%);white-space:nowrap;background:#fff6e3;color:#3e2f23;font:12px/18px 'Microsoft JhengHei',sans-serif;padding:0 3px}
+body[data-handover] #playerLocator{display:none!important}
+.handover-frame{display:none!important}
+#mapWorld .handover-actor,#mapWorld .handover-player,#mapWorld .handover-parcel{position:absolute;transform:none!important;object-fit:contain}
+#mapWorld .handover-actor,#mapWorld .handover-player{transform:scaleX(var(--face,1))!important}
+#mapWorld .handover-actor,#mapWorld .handover-player{z-index:var(--depth,9701)!important}
+#mapWorld .handover-parcel{z-index:9703!important}
+body[data-delivering] #player[data-delivery-visible='true'] #playerSprite{visibility:visible!important}
+body[data-handover][data-delivering] #player[data-delivery-visible='true'] #playerSprite{visibility:hidden!important}
+body[data-handover] #player::before,body[data-handover] #player::after{display:none!important}
+body[data-delivering] #player[data-delivery-visible='true']~.player-locator{display:none!important}
+body[data-handover] .ob[data-kind='npc']{visibility:visible!important}
+body[data-handover][data-delivering='merchant'] .ob[data-npc='merchant'],body[data-handover][data-delivering='elder'] .ob[data-npc='elder'],body[data-handover][data-delivering='child'] .ob[data-npc='child']{visibility:hidden!important}
+/* A roof window cuts alpha only: retain the very same attached porch artwork. */
+body[data-handover] .ob[data-kind='tea-porch']{visibility:visible!important}
+.carry-target{max-width:24px;max-height:32px;background:#fff6e3;object-fit:contain}
+.carry-label{max-width:135px;box-sizing:border-box}
+.practice-outcome{display:block;font-weight:700;margin:4px 0;color:#395847}
+.blind-practice .practice-reveal{padding:6px 8px;background:#fff0c3;border-left:3px solid #8b5e34}
+.blind-practice[data-result]:not([data-revealed]) .practice-reveal{display:none}
+.practice-result-labels{display:flex;gap:5px;flex-wrap:wrap;font-size:14px;margin:4px 0}
+.practice-result-labels span{background:#fff6e3;padding:3px 5px;border-bottom:2px solid #8b5e34}
+.pond-stage[data-blind='true'][data-result='late']::after{display:none}
+.gather-stage .serving-plate,.farm-gathering .serving-plate{width:63px!important;height:51px!important;z-index:11;pointer-events:none}
+.gather-stage .serving-plate.in-transit{z-index:11}
+.gather-stage .meal-player,.farm-gathering .meal-player{left:35px}
+.gather-stage .meal-person-child,.farm-gathering .meal-person-child{left:256px}
+.gather-stage .shared-dish-label{top:92px;left:153px;width:54px;font-size:12px;line-height:16px;background:#fff6e3ee;z-index:15}
+.plate-landing{position:absolute;width:52px;height:25px;border:2px dashed #d95737;border-radius:50%;transform:translate(-5px,8px);box-sizing:border-box;z-index:8;pointer-events:none}
+.plate-trail{display:none}
+.gather-status{gap:8px;border-bottom:1px solid #b38d61;padding-bottom:4px}
+.gather-status span{border:0;background:transparent;padding:2px 0;text-align:left;font-size:12px}
+.gather-status img{width:20px;height:27px;object-fit:contain;vertical-align:middle;image-rendering:pixelated;margin-right:3px}
+.invite-choices button{min-width:0;box-sizing:border-box}
+.invite-choices button[aria-pressed='true']{outline-offset:-3px}
+#inviteConfirm:disabled[data-complete='true']{background:#e3edcb;border-color:#6a994e;color:#395847}
+.invitation-journal{border-left:3px solid #6a994e;padding:6px 10px;margin:6px 0;line-height:1.6}
+.invitation-journal img{width:48px;height:38px;object-fit:contain;image-rendering:pixelated;float:right}
+@media(max-width:350px){.practice-result-labels{font-size:12px}.gather-status img{width:16px;height:22px}.gather-status span{font-size:12px}}
+/* R18: contrast on real ground, hand-bound props and complete paper pages. */
+.delivery-dots i{background:#ffe8a3;border:2px solid #3e2f23;box-shadow:0 0 0 2px #fff6e3;width:13px;height:9px;opacity:1}
+.delivery-dots i:first-child{width:19px;height:13px;background:#ffb627}
+.delivery-goal{border:3px solid #d95737;box-shadow:0 0 0 2px #fff6e3,0 0 0 4px #3e2f23;background:#fff6e355}
+.delivery-goal[hidden]{display:none!important}
+.carry-label[data-anchor='edge']{width:140px;max-width:140px}
+.carry-label[data-anchor='edge']::after{content:'◯ 落腳點';display:block;white-space:nowrap;font-size:12px;border-bottom:2px solid #d95737}
+.gather-stage .meal-player,.farm-gathering .meal-player{overflow:visible;z-index:10}
+.meal-server{position:absolute;left:0;top:0;width:64px;height:86px;image-rendering:pixelated;pointer-events:none;transform-origin:center}
+.gather-stage .serving-plate[data-matched='true'],.farm-gathering .serving-plate[data-matched='true'],.gather-stage .serving-plate.in-transit{width:32px!important;height:26px!important;transform:none}
+.gather-stage .serving-plate.in-transit{transition:none!important;filter:drop-shadow(0 1px #3e2f23)}
+.practice-fish{position:absolute;right:14px;bottom:12px;width:76px;height:66px;object-fit:contain;image-rendering:pixelated;z-index:6;background:#fff6e3d9;border-bottom:3px solid #6a994e}
+.blind-practice[data-success='true'] .practice-cue{color:#395847;background:#e3edcb;border:3px double #6a994e;padding:8px;font-weight:700}
+.blind-practice[data-success='false'] .practice-cue{color:#5a3e28;background:#f5e4bd;border:2px solid #8b5e34;padding:8px;font-weight:700}
+.blind-practice[data-success='true'] .practice-reveal{border-color:#6a994e;background:#edf2d8}
+.journal-pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 14px;border-bottom:2px solid #b38d61;padding-bottom:8px}
+.journal-pager button{min-width:70px;min-height:44px;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23}
+.journal-pager span{font-size:14px;font-weight:700}
+.journal-page p{line-height:1.7;font-size:15px;margin:0 0 16px;padding:0 0 12px;border-bottom:1px solid #b38d61}
+.journal-memories summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:#5a3e28}
+#worldModal[data-content-view='gathering-review'] .modal-card{height:min(850px,calc(100dvh - 24px))}
+#worldModal[data-content-view='gathering-review'] .modal-body{overflow:auto;flex:1;min-height:0}
+#worldModal[data-content-view='gathering-review'] .content-footer{flex-shrink:0}
+#worldModal[data-content-view='gathering-review'] .content-scroll-hint{display:none!important}
+/* R19: the root/collider is untouched; empty arms and real legs are composited. */
+body[data-delivering] #player[data-delivery-visible='true'] #playerSprite{visibility:hidden!important}
+.delivery-walker{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none}
+.delivery-walker[hidden]{display:none}
+body[data-delivering] [data-kind='npc-indicator'],body[data-delivering] [data-audit='quest-marker']{display:none!important}
+body[data-delivering] #playerLocator,body[data-delivering] .player-locator,body[data-delivering] .tile-ring,body[data-delivering] #player::before,body[data-delivering] #player::after{display:none!important}
+body[data-delivering='merchant'] .ob[data-npc='merchant'],body[data-delivering='elder'] .ob[data-npc='elder'],body[data-delivering='child'] .ob[data-npc='child']{visibility:hidden!important}
+.delivery-dots i:first-child{background:#ffb627;border-radius:2px;box-shadow:0 0 0 2px #fff6e3;z-index:1}
+.delivery-dots i:not(:first-child){background:#fff6e3}
+.carry-label[data-anchor='edge']::after{content:'箭頭：先走這個方向';font-size:11px;border-bottom:0}
+.carry-distance::after{content:'➤';display:inline-block;margin-left:6px;color:#8b5e34;rotate:var(--target-angle);font-size:16px}
+.carry-label{min-height:30px;padding:4px;line-height:16px}
+.handover-parcel{filter:none!important}
+.journal-tastes h3{margin:4px 0 8px;font-size:17px}
+.journal-tastes article{display:flex;align-items:center;gap:12px;min-height:70px;border-bottom:1px solid #b38d61;padding:4px 0;font-size:14px;line-height:1.6}
+.journal-tastes img{width:45px;height:60px;object-fit:contain;image-rendering:pixelated}
+.journal-memories summary{border:2px solid #8b5e34;background:#f5e4bd;min-height:48px;padding:4px 10px;margin:10px 0;box-sizing:border-box;font-weight:700}
+.journal-memories summary::after{content:'＋';margin-left:auto;padding-left:8px}
+.journal-memories[open] summary::after{content:'－'}
+.practice-replay-water{min-height:44px;border:1px solid #8b5e34;background:#fff6e3;color:#3e2f23;padding:6px 12px;font:inherit}
+.practice-timing{height:14px;background:linear-gradient(to right,#d7bea1 0 33%,#6a994e 33% 70%,#d7bea1 70%);position:relative;border:1px solid #8b5e34;margin:8px 0 3px}
+.practice-timing::after{content:'';position:absolute;top:-3px;bottom:-3px;width:3px;background:#d95737;left:var(--reel-position)}
+.practice-timing-label{font-size:12px}
+.pond-stage[data-blind='true'][data-reel][data-rhythm] .pond-bobber{left:var(--bobber-x,50%)!important;top:var(--bobber-y,32%)!important;width:24px!important;height:36px!important;transform:translate(-50%,-50%)!important;clip-path:none!important;opacity:1!important;rotate:0deg!important}
+@media(max-width:350px),(orientation:landscape) and (max-height:600px){.journal-tastes article{min-height:62px}.journal-tastes img{height:52px;width:39px}}
+
+.pond-stage[data-blind="true"][data-reel="active"]::after{display:none!important}
+@media(max-width:350px){#worldModal[data-practice='true'] .pond-stage{height:130px!important;min-height:130px!important}.blind-practice{gap:3px}}

@@ -1,0 +1,25 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const {chromium}=require('playwright'),{ROOT,serve}=require('./r85-browser-helper'),{captureNative}=require('./native-evidence-capture');
+const stamp=new Date().toISOString().replace(/[:.]/g,'-'),out=path.join(ROOT,'docs/content/r22/offline',stamp);fs.mkdirSync(out,{recursive:true});
+const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const version=JSON.parse(fs.readFileSync(path.join(ROOT,'package.json'))).appVersion;
+const report={status:'EXECUTED',fixture:'Unmodified R17 UI-earned fish save; the pond is first opened only after switching offline. No new catch, gift, serving, or invitation completion is injected.',checks:[],sourceHashes:Object.fromEntries(['index.html','package.json','manifest.webmanifest','sw.js',...fs.readdirSync(path.join(ROOT,'src')).filter(f=>/\.(js|css)$/.test(f)).map(f=>'src/'+f),'scripts/test-content-r22-offline-e2e.js'].map(f=>[f,sha(path.join(ROOT,f))])),errors:[]};
+let server,browser,ctx;
+const check=(yes,text)=>{assert(yes,text);report.checks.push(text);console.log('PASS '+text);};
+(async()=>{try{
+ const app=await serve();server=app.server;browser=await chromium.launch({headless:true});ctx=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,serviceWorkers:'allow'});
+ const save=JSON.parse(fs.readFileSync(path.join(ROOT,'docs/content/r17/fish-earned-save.json')));
+ await ctx.addInitScript(save=>{if(!sessionStorage.getItem('r22-offline-seed')){localStorage.setItem('pixel_idle_farm_save_v1',JSON.stringify(save));sessionStorage.setItem('r22-offline-seed','1');}},save);
+ const p=await ctx.newPage();p.on('pageerror',e=>report.errors.push(String(e)));p.setDefaultTimeout(30000);
+ const ready=()=>p.waitForFunction(()=>window.__farm&&window.Atlas.isReady()&&!document.querySelector('#startupLoading'));
+ await p.goto(app.origin+'/?swtest');await ready();await p.waitForFunction(()=>navigator.serviceWorker.controller&&sessionStorage.getItem('pixelFarmPwaAutoReloaded'));await ready();
+ await ctx.setOffline(true);await p.reload();await ready();await p.evaluate(()=>FarmWorld.visitSite('fishing_dock'));await p.locator('.pond-stage').waitFor();
+ const proof=await p.evaluate(async()=>{const bg=getComputedStyle(document.querySelector('.pond-stage')).backgroundImage.match(/url\(["']?(.*?)["']?\)/)[1],response=await fetch(bg);return {bg,ok:response.ok,fromCache:!!(await caches.match(bg,{ignoreSearch:false})),styleSheets:[...document.styleSheets].map(s=>s.href)};});report.offlineProof=proof;
+ check(proof.ok&&proof.fromCache,'the very first offline pond texture fetch succeeds from the exact precache key');
+ check(new URL(proof.bg).searchParams.get('v')===version,'computed background uses the current package/cache version');
+ check(proof.styleSheets.some(u=>u&&u.includes('src/content-r22.css?v='+version)),'new R22 stylesheet remains available after offline reload');
+ check(await p.locator('.pond-bobber').evaluate(e=>e.complete&&e.naturalWidth===32),'actual bobber image is loaded offline');
+ const file=path.join(out,'390x844-offline-first-pond.png');await captureNative(p,file);report.frame={path:path.relative(ROOT,file).replace(/\\/g,'/'),sha256:sha(file),size:[390,844]};
+ check(report.errors.length===0,'no uncaught browser errors');report.status='VERIFIED';
+}catch(e){report.status='BLOCKED';report.failure=e.stack;console.error(e);process.exitCode=1;}finally{await ctx?.close();await browser?.close();if(server)await new Promise(r=>server.close(r));fs.writeFileSync(path.join(out,'offline.json'),JSON.stringify(report,null,2)+'\n');}})();

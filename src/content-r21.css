@@ -1,0 +1,10 @@
+/* R21: readable landing cue, separate from the foot-position ring. */
+.delivery-goal::after{content:none!important}
+.delivery-goal-label{position:absolute;z-index:9800;width:max-content;max-width:132px;min-height:26px;display:grid;place-items:center;box-sizing:border-box;padding:3px 6px;border:2px solid #3e2f23;border-radius:2px;background:#fff6e3;color:#3e2f23;box-shadow:0 0 0 2px #fff6e3;font:700 12px/16px 'Microsoft JhengHei',sans-serif;text-align:center;white-space:nowrap;pointer-events:none;image-rendering:pixelated}
+.delivery-goal-label[hidden]{display:none!important}
+.carry-label[data-r21-station-cue='true']::before{content:'站這裡交籃';display:block;font-weight:700;border-bottom:1px solid #8b5e34;padding-bottom:2px;margin-bottom:2px}
+#worldModal[data-content-view='gathering-review'] .serving-journal{margin:8px 0}
+#worldModal[data-content-view='gathering-review'] .serving-journal>h3,#worldModal[data-content-view='gathering-review'] .reserve-journal>h3{margin:8px 0;padding:5px 8px;border-left:4px solid #6a994e;background:#edf2d8;color:#3e2f23;font-size:15px}
+#worldModal[data-content-view='gathering-review'] .reserve-journal{margin:12px 0;padding:6px 8px;border:2px solid #8b5e34;background:#fff6e3}
+#worldModal[data-content-view='gathering-review'] .reserve-journal p{margin:4px 0;line-height:1.6}
+#worldModal[data-content-view='gathering-review'] .reserve-journal .reserve-receipt{font-size:12px;color:#5a3e28}

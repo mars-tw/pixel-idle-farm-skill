@@ -1,0 +1,46 @@
+/* R16: readable ground position, water decisions and one shared table. */
+body[data-delivering] #toolBar,body[data-delivering] .tool-bar,body[data-delivering] #toolBar *{visibility:hidden!important;pointer-events:none!important}
+body[data-delivering] #seedHud,body[data-delivering] .seed-hud,body[data-delivering] #toolBar{display:none!important}
+#player{opacity:1!important}
+#player[data-occluded='true'] #playerSprite{visibility:hidden!important}
+.player-locator{opacity:1;transform:translate(-50%,-86%)}
+.player-locator>div{filter:brightness(0) invert(.93) sepia(.4);opacity:.5;clip-path:inset(67% 0 0);}
+.player-locator::after{content:'';position:absolute;left:20%;top:87%;width:60%;height:12%;border:3px solid #ffce63;border-radius:50%;box-shadow:0 0 0 2px #3e2f23;background:#fff6e355}
+.player-locator>span{top:108%;border:1px solid #8b5e34;z-index:1;font-weight:700;text-decoration:none}
+.delivery-dots i{width:22px;height:17px;font:bold 12px/17px sans-serif;background:#ffce63;border:2px solid #3e2f23;box-shadow:0 0 0 2px #fff6e3;color:#3e2f23}
+.delivery-dots i:last-child{background:#fff6e3;border:3px double #d95737}
+body:has(#worldModal.show[data-content-view^='gathering']) #mapWorld,body:has(#worldModal.show[data-content-view='sharing-invitation']) #mapWorld{filter:brightness(.16)}
+body:has(#worldModal.show[data-content-view^='gathering']) .farm-gathering{visibility:hidden!important}
+#worldModal[data-content-view^='gathering']{background:#201b16e8}
+#worldModal[data-content-view='gathering-complete'] .content-footer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+#worldModal[data-content-view='gathering-complete'] .content-footer button{white-space:nowrap;word-break:keep-all;min-width:0;font-size:14px;padding:6px}
+#gatherSip,#gatherContinue,#gatherReturn{grid-column:1/-1}
+#worldModal .content-primary:not(:disabled){background:#ffce63;color:#3e2f23;border:2px solid #8b5e34;font-weight:700}
+#worldModal .content-primary:disabled{background:#d6d1c5;color:#696256;border-color:#9c968a;opacity:1}
+#worldModal[data-gather-step='food'] .serving-foods{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#worldModal .other-foods{display:none!important}
+.serving-foods button{position:relative;min-width:0;border:1px solid #8b5e34;padding:5px 2px;font-size:13px}
+.serving-foods button span{display:block;word-break:keep-all}.serving-foods button img{width:44px;height:40px;object-fit:contain}
+.serving-foods button[aria-pressed='true']{outline:3px solid #d95737;outline-offset:-3px;background:#fff0c3!important}
+.serving-foods button[aria-pressed='true']::after{content:'✓ 已選';display:block;font-weight:700;color:#8a321f}
+.gather-stage .shared-dish-label{display:block!important;visibility:visible!important;z-index:15;top:113px;left:156px;box-sizing:border-box;width:54px;padding:1px 2px;font:12px/16px 'Microsoft JhengHei',sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+.gather-stage .serving-plate,.farm-gathering .serving-plate{width:63px!important;height:51px!important;transform:translate(-10.5px,-8.5px)}
+.gather-stage .meal-player,.gather-stage .meal-person-child,.farm-gathering .meal-player,.farm-gathering .meal-person-child{z-index:10}
+.gather-stage .serving-plate.in-transit{filter:drop-shadow(1px 0 #fff6e3) drop-shadow(-1px 0 #ffce63) drop-shadow(0 5px 1px #3e2f23)}
+.plate-trail{position:absolute;left:87px;top:170px;width:45px;height:29px;border-left:2px dotted #8b5e3490;border-bottom:2px dotted #8b5e3490;border-radius:0 0 0 14px;pointer-events:none}
+.blind-practice{display:flex;flex-direction:column;gap:4px}.practice-cue{font-weight:700;background:#fff0c3;border-left:4px solid #d95737;padding:8px;margin:2px 0;min-height:42px;box-sizing:border-box}
+.practice-reveal:empty{display:none}.practice-rule,.practice-ledger{font-size:14px;line-height:1.5;margin:3px 0}
+.blind-practice[data-result] .practice-rule{display:none}
+.practice-guesses{display:flex;flex-wrap:wrap;gap:4px}.practice-guesses p{width:100%;margin:0}
+.practice-guesses button{flex:1;min-height:44px;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23}
+#worldModal[data-practice='true'] .content-footer{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#worldModal[data-practice='true'] .practice-reel,#worldModal[data-practice='true'] .practice-again{grid-column:1/-1}
+.pond-stage[data-blind='true'][data-result='late'] .pond-bobber,.pond-stage[data-blind='true'][data-result='early'] .pond-bobber{transform:translateY(0)!important;opacity:1!important}
+.pond-stage[data-blind='true'][data-reel='wait']:not([data-result]) .pond-bobber{transform:translateY(6px)!important}
+.pond-stage[data-blind='true'][data-result='late']::after{content:'錯過了・水紋散開';position:absolute;right:8px;bottom:8px;background:#fff6e3;color:#8a321f;padding:5px}
+.sharing-bowl{display:block;width:144px;height:108px;object-fit:contain;image-rendering:pixelated;margin:12px auto}
+.invite-choices{display:flex;gap:6px}.invite-choices button{flex:1;min-height:48px;border:1px solid #8b5e34;background:#fff6e3;color:#3e2f23;font-size:14px}
+.invite-choices button[aria-pressed='true']{outline:3px solid #d95737;background:#fff0c3}.invite-reply{line-height:1.7;border-left:3px solid #d95737;padding:8px}
+@media(max-width:350px){.practice-rule,.practice-ledger{font-size:12px}.blind-practice .pond-stage{height:180px!important;min-height:180px}.serving-foods button{font-size:11px}.serving-foods button img{width:36px;height:32px}#worldModal[data-content-view='gathering-complete'] .content-footer button{font-size:13px}}
+@media(min-width:700px) and (min-height:700px){.practice-rule,.practice-ledger,.practice-cue,.practice-reveal,.practice-guesses button,.invite-choices button,.invite-reply,.serving-foods button,#worldModal[data-content-view='gathering-complete'] .gather-progress,#worldModal[data-content-view='gathering-complete'] .content-footer button{font-size:20px}}
+@media(orientation:landscape) and (max-height:600px){.blind-practice{display:block}.blind-practice .pond-stage{float:left;width:45%;height:160px!important;min-height:160px;margin-right:12px}.practice-rule,.practice-ledger{font-size:12px}.practice-cue{margin-left:48%}#worldModal[data-practice='true'] .content-footer{clear:both;display:flex}.sharing-bowl{float:left;margin:0 14px 0 0;width:120px;height:90px}}

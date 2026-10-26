@@ -2,7 +2,7 @@
 :root {
   --world-ink:#3e2f23; --world-paper:#fff6e3; --world-line:#b3874b; --world-accent:#a7492e;
   --sun-gold:#ffb627; --sun-red:#d95737; --sun-paper:#fff6e3; --sun-wood:#8b5e34;
-  --sun-texture:url('../assets/generated/r82/paper-192.png?v=content-r15-20261019-1');
+  --sun-texture:url('../assets/generated/r82/paper-192.png?v=content-r24-20261026-2');
 }
 body { color:var(--world-ink); }
 .title { width:154px; max-width:24vw; color:#fff6e3; text-shadow:0 2px #58371d; }
@@ -72,7 +72,7 @@ body { color:var(--world-ink); }
 .heirloom-choices button:has(img) { padding:4px 4px 8px; background:#f9e1ab; font-weight:700; }
 .sun-task { display:flex; gap:12px; align-items:center; }
 .sun-task-icon { width:64px; height:64px; flex-shrink:0; image-rendering:pixelated; }
-.sun-icon { display:inline-block; width:32px; height:32px; background-image:url('../assets/generated/r82/icons-128.png?v=content-r15-20261019-1'); background-size:128px 64px; image-rendering:pixelated; vertical-align:middle; }
+.sun-icon { display:inline-block; width:32px; height:32px; background-image:url('../assets/generated/r82/icons-128.png?v=content-r24-20261026-2'); background-size:128px 64px; image-rendering:pixelated; vertical-align:middle; }
 .sun-icon-basket { background-position:0 0; }
 .sun-icon-note { background-position:-32px 0; }
 .sun-icon-wheat { background-position:-64px 0; }
@@ -81,9 +81,9 @@ body { color:var(--world-ink); }
 .sun-icon-seed { background-position:-32px -32px; }
 .sun-icon-sun { background-position:-64px -32px; }
 .sun-icon-tea { background-position:-96px -32px; }
-.daily-open .ui-icon, .side-tabs .i-tab-journal { background-image:url('../assets/generated/r82/note-32.png?v=content-r15-20261019-1'); }
-.tool-bar .i-tool-water { background-image:url('../assets/generated/r82/water-32.png?v=content-r15-20261019-1'); }
-.seed-hud .i-crop-wheat { background-image:url('../assets/generated/r82/wheat-32.png?v=content-r15-20261019-1'); }
+.daily-open .ui-icon, .side-tabs .i-tab-journal { background-image:url('../assets/generated/r82/note-32.png?v=content-r24-20261026-2'); }
+.tool-bar .i-tool-water { background-image:url('../assets/generated/r82/water-32.png?v=content-r24-20261026-2'); }
+.seed-hud .i-crop-wheat { background-image:url('../assets/generated/r82/wheat-32.png?v=content-r24-20261026-2'); }
 .action-a, .action-a[data-harvest='ready'] { color:#58391f; background:#ffd675; border:2px solid #9b6a36; border-bottom:4px solid #9b6a36; border-radius:14px; }
 .dpad .dpad-btn { background:#fff1cde8; color:#8b5e34; border:1px solid #986536; box-shadow:0 2px 0 #6c4c3380; }
 .dpad .dpad-center { background:transparent; border:0; box-shadow:none; }

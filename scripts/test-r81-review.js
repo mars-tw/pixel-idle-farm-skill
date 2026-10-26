@@ -64,10 +64,12 @@ async function run() {
   }
 }
 async function journey(browser, origin) {
-  const profile = path.join(ROOT, ".audit-tmp", "r81-review-" + Date.now());
+  // Nested verification copies must leave room for Windows CacheStorage entry paths.
+  const profile = path.join(ROOT, ".audit-tmp", "p81-" + Date.now().toString(36));
   const options = { headless:true, viewport:{width:430,height:932}, deviceScaleFactor:3, hasTouch:true, serviceWorkers:"allow" };
   let context = await chromium.launchPersistentContext(profile, options);
-  const errors = [], requests = new Set(), failures = [];
+  const errors = [], requests = new Set(), failures = [], offlineNetworkFailures = [];
+  context.on("requestfailed",r=>offlineNetworkFailures.push({url:r.url(),failure:r.failure()?.errorText}));
   try {
     const page = context.pages()[0];
     page.on("pageerror",e=>errors.push(String(e)));
@@ -126,7 +128,11 @@ async function journey(browser, origin) {
     check(await page.evaluate(()=>window.FarmHeirloom.status(window.__farm.state()).choice==="table"),"browser freeze/resume and reload retain the remembered choice");
     await page.waitForFunction(()=>!!navigator.serviceWorker.controller,{},{timeout:90000});
     await page.evaluate(async()=>{const reg=await navigator.serviceWorker.ready; if(reg.active.state!=="activated")await new Promise(resolve=>reg.active.addEventListener("statechange",resolve,{once:true}));});
-    check(await page.evaluate(async()=>{const cache=await caches.open(`pixel-farm-rpg-${window.FARM_CACHE_VERSION}-static`);return (await cache.keys()).some(r=>r.url.includes("heirloom-ui.js"));}),"new story modules are actually in offline cache");
+    const cacheProof=await page.evaluate(async()=>{const name=`pixel-farm-rpg-${window.FARM_CACHE_VERSION}-static`,cache=await caches.open(name),reg=await navigator.serviceWorker.ready;return {name,allCaches:await caches.keys(),workerState:reg.active?.state,urls:(await cache.keys()).map(r=>r.url)};});
+    cacheProof.httpFailures=failures;cacheProof.networkFailures=offlineNetworkFailures;cacheProof.profilePathChars=profile.length;
+    console.log("CACHE_READBACK",JSON.stringify({name:cacheProof.name,count:cacheProof.urls.length,allCaches:cacheProof.allCaches,workerState:cacheProof.workerState,httpFailures:failures,networkFailures:offlineNetworkFailures}));
+    fs.writeFileSync(path.join(OUT,"offline-cache-readback.json"),JSON.stringify(cacheProof,null,2));
+    check(cacheProof.urls.some(url=>url.includes("heirloom-ui.js")),"new story modules are actually in offline cache");
     const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem(window.GAME.saveKey)));
     check(saved.heirloom.delivered && saved.heirloom.choice==="table","delivery written to persistent storage");
     check(errors.length===0,"review journey has no uncaught browser errors");

@@ -125,3 +125,7 @@
 # 新內容第15輪美術
 
 米莉捧籃、伸手、收手三格與河鯉閉合水環，由 `image_gen.imagegen` 生成；工具未揭露模型識別。參考本專案第八輪米莉造型與既有水紋，沒有使用外部角色或第三方素材。原圖、提示詞、原生像素處理及 SHA-256 見 `docs/art/PROMPTS_CONTENT_R15.json` 與 `assets/generated/content-r15/manifest.json`，沿用本專案 MIT 授權。
+
+## 新內容第16輪美術
+
+「留一口的邀請」共享碟由 `image_gen.imagegen` 生成一張透明原圖，模型 slug 未揭露。沿用 R89 完整風格前綴與右上暖光，以既有點心色盤和 nearest-neighbor 製成 64×48 原生素材，保留透明 alpha。原圖、實際提示詞及來源雜湊見 `docs/art/masters/content-r16-sharing.png`、`docs/art/PROMPTS_CONTENT_R16.json`、`assets/generated/content-r16/manifest.json`。本輪程式與新素材沿用 MIT；既有角色姿勢、來源及授權保留。

@@ -6,7 +6,7 @@
 (function (root) {
   "use strict";
   const C = typeof module !== "undefined" && module.exports ? require("./config.js") : (root.CONFIG || root);
-  const VERSION = 1;
+  const VERSION = 2;
   const COUNT_CAP = 1000000;
   const EVENT_CAP = 100;
   const MEAL_CAP = 99;
@@ -71,6 +71,16 @@
     { id: "sweet", name: "甜", description: "夾一片烤胡蘿蔔，添一點甜。", ingredients: { carrot: 1 } },
     { id: "sour", name: "酸", description: "配一把溪邊野莓，酸香清爽。", ingredients: { wild_berry: 1 } },
     { id: "hot", name: "熱", description: "灶邊回烤，用布包好趁熱送。", ingredients: {} },
+  ];
+  const SHARED_PAIRINGS = [
+    { id:"sour_hot",name:"野莓酸香＋灶邊熱餅",tastes:["sour","hot"],description:"一份加野莓、一份趁熱包好。" },
+    { id:"hot_sweet",name:"灶邊熱餅＋甜胡蘿蔔",tastes:["hot","sweet"],description:"一份趁熱、一份加烤胡蘿蔔。" },
+    { id:"sweet_sour",name:"甜胡蘿蔔＋野莓酸香",tastes:["sweet","sour"],description:"一份甜、一份酸，裝成兩個獨立小盤。" },
+  ];
+  const SHARED_ORDERS = [
+    {id:"market_fireside",name:"收攤後的灶邊桌",guests:["merchant","elder"],reward:{coins:10,xp:0,materials:{}},response:"蘿拉把秤收好，班伯也把魚竿靠回牆邊。酸香和熱餅都到手，兩人終於一起坐下。"},
+    {id:"fireside_garden",name:"灶火旁的空椅子",guests:["elder","child"],reward:{coins:0,xp:0,materials:{wood:2}},response:"班伯護著熱餅，圖圖把甜點分給空椅子。灶火旁多留了一個真正能坐下的位置。"},
+    {id:"garden_market",name:"花園收攤茶桌",guests:["child","merchant"],reward:{coins:0,xp:5,materials:{}},response:"圖圖端著甜點，蘿拉倒了酸香野莓茶。紅格手記記下花園與市集第一次共用一張桌。"},
   ];
   // R6 presentation is separate from the retained R1–R5 narrative API contract.
   const MEMORIES = {
@@ -228,6 +238,14 @@
       recorded: gathering.recorded===true,
       refills: (Array.isArray(gathering.refills)?gathering.refills:[]).filter(h=>object(h)&&['sour','hot','sweet'].includes(h.taste)&&Number.isFinite(h.at)&&typeof h.receipt==='string').slice(-24).map(h=>({taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),receipt:h.receipt.slice(0,240)})),
       servings: (gathering.completed === true && NEIGHBORS.every(n => a.neighbors[n.id].matched) && Array.isArray(gathering.servings) ? gathering.servings : []).filter(h => object(h) && NEIGHBORS.some(n => n.id === h.id) && ['sour','hot','sweet'].includes(h.taste) && Number.isFinite(h.at)).slice(-24).map((h,i,hs) => ({id:h.id,taste:h.taste,at:qty(h.at,Number.MAX_SAFE_INTEGER),matched:NEIGHBORS.find(n=>n.id===h.id).taste===h.taste,reply:servingReply(h.id,h.taste,hs.slice(0,i).some(x=>NEIGHBORS.find(n=>n.id===x.id).taste!==x.taste))})) };
+    const invitation=gathering.invitation;
+    if(object(invitation)&&NEIGHBORS.some(n=>n.id===invitation.id)&&Number.isSafeInteger(invitation.at)&&invitation.at>=0&&a.gathering.servings.some(h=>!h.matched)&&NEIGHBORS.every(n=>a.gathering.servings.some(h=>h.id===n.id&&h.matched)))a.gathering.invitation={id:invitation.id,at:invitation.at,reply:typeof invitation.reply==='string'?invitation.reply.slice(0,240):''};
+    const sharedMeals=object(a.sharedMeals)&&a.sharedMeals.version===2?a.sharedMeals:{};
+    const orders=object(sharedMeals.orders)?sharedMeals.orders:{};
+    a.sharedMeals={version:2,currentIndex:Math.min(SHARED_ORDERS.length,qty(sharedMeals.currentIndex,SHARED_ORDERS.length)),orders:{},records:[],processedTokens:(Array.isArray(sharedMeals.processedTokens)?sharedMeals.processedTokens:[]).filter(t=>typeof t==='string'&&t.length>=8&&t.length<=120).slice(-48)};
+    for(const order of SHARED_ORDERS){const old=object(orders[order.id])?orders[order.id]:{},fulfilled=[...new Set((Array.isArray(old.fulfilled)?old.fulfilled:[]).filter(id=>order.guests.includes(id)))],attempts=(Array.isArray(old.attempts)?old.attempts:[]).filter(x=>object(x)&&SHARED_PAIRINGS.some(p=>p.id===x.pairingId)&&Number.isSafeInteger(x.at)&&x.at>=0).slice(-8).map(x=>({pairingId:x.pairingId,at:x.at,newlyFulfilled:[...new Set((Array.isArray(x.newlyFulfilled)?x.newlyFulfilled:[]).filter(id=>order.guests.includes(id)))]}));const completed=fulfilled.length===2&&Number.isSafeInteger(old.completedAt)&&old.completedAt>=0;a.sharedMeals.orders[order.id]={fulfilled,attempts,completedAt:completed?old.completedAt:null,rewardGranted:completed&&old.rewardGranted===true,completionMode:completed&&old.completionMode==='supplemented'?'supplemented':completed?'once':null};}
+    a.sharedMeals.records=SHARED_ORDERS.filter(o=>a.sharedMeals.orders[o.id].completedAt!==null).map(o=>({id:o.id,at:a.sharedMeals.orders[o.id].completedAt,completionMode:a.sharedMeals.orders[o.id].completionMode,response:o.response,rewardGranted:a.sharedMeals.orders[o.id].rewardGranted}));
+    while(a.sharedMeals.currentIndex<SHARED_ORDERS.length&&a.sharedMeals.orders[SHARED_ORDERS[a.sharedMeals.currentIndex].id].completedAt!==null)a.sharedMeals.currentIndex++;
     a.fishNotes = Object.fromEntries(FISH.filter((f) => object(a.fishNotes) && a.fishNotes[f.id] === true).map((f) => [f.id, true]));
     // Old saves retain their real notes and remaining fish. Historical catch
     // events also include fish already delivered; never invent current fish.
@@ -522,10 +540,10 @@
     const n=NEIGHBORS.find(n=>n.id===id),flavor={sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[taste];
     if(!n||!flavor)return '';
     return n.taste===taste ? {
-      merchant:'蘿拉端起茶杯：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」',
-      elder:'班伯把雙盤推近：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」',
-      child:'圖圖舉起點心：「你還記得上回的甜味餐籃！花椅旁這一份，留給晚到的朋友。」'
-    }[id]+(shared?{merchant:' 她把桌中央那盤推近：「剛才分食的，留著配茶吧。」',elder:' 他看了看中央那盤：「剛才大家分的，也別放涼了。」',child:' 她指著桌中央：「剛才大家分食的那盤，也留一口給朋友！」'}[id]:'') : n.name+'接過'+flavor+'：「這份先放中間，大家一起吃。我還是想念'+{sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[n.taste]+'。」';
+      merchant:'蘿拉抬手招呼米莉：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」',
+      elder:'班伯捧起茶杯：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」',
+      child:shared?'圖圖捧著甜味點心：「上次甜味餐籃的滋味我還記得，剛才那盤也很好吃！」':'圖圖捧著甜味點心：「上次甜味餐籃的滋味我還記得，這份也很好吃！」'
+    }[id]+(shared&&id!=='child'?{merchant:'「剛才分食的那盤，留著配茶吧。」',elder:'「剛才大家分的那盤，也別放涼了。」'}[id]:'') : n.name+'接過'+flavor+'：「這份先放中間，大家一起吃。我還是想念'+{sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[n.taste]+'。」';
   }
   function serveGathering(state,id,taste,now) {
     const g=gathering(state,now);
@@ -577,6 +595,42 @@
     const p=gatheringPortions(state,now).find(p=>p.taste===taste);
     if(!p||p.remaining<1)return fail('no_portion','這份已端完；先備齊材料，再補一份。');
     return serveGatheringTaste(state,id,taste,now);
+  }
+  function sharedMealRequirements(state,pairing) {
+    const ingredients={};
+    for(const taste of pairing.tastes){const flavor=FLAVORS.find(f=>f.id===taste);for(const [id,n] of Object.entries(flavor.ingredients))ingredients[id]=(ingredients[id]||0)+n;}
+    return requirements(state,{rustic_bread:2},'meals').concat(requirements(state,ingredients,'inventory'));
+  }
+  function sharedMealChoices(state,now) {
+    if(!ensure(state,now).ok)return [];
+    const book=state.adventure.sharedMeals,index=book.currentIndex,order=SHARED_ORDERS[index]||null;
+    if(!order)return {complete:true,currentIndex:index,total:SHARED_ORDERS.length,order:null,pairings:[],records:copy(book.records)};
+    const progress=book.orders[order.id],guestRows=order.guests.map(id=>{const n=NEIGHBORS.find(x=>x.id===id);return{id,name:n.name,taste:n.taste,flavor:FLAVORS.find(f=>f.id===n.taste).name,fulfilled:progress.fulfilled.includes(id)};});
+    const pairings=SHARED_PAIRINGS.map(pairing=>{const requirements=sharedMealRequirements(state,pairing),newlyFulfilled=guestRows.filter(g=>!g.fulfilled&&pairing.tastes.includes(g.taste)).map(g=>g.id);return{...copy(pairing),requirements,newlyFulfilled,canShare:state.adventure.gathering.completed&&newlyFulfilled.length>0&&requirements.every(r=>r.complete)};});
+    return {complete:false,currentIndex:index,total:SHARED_ORDERS.length,order:{...copy(order),guests:guestRows,fulfilled:copy(progress.fulfilled),attempts:copy(progress.attempts)},pairings,records:copy(book.records)};
+  }
+  function shareMeal(state,pairingId,expectedOrderId,interactionToken,now) {
+    let preBook=state&&state.adventure&&state.adventure.sharedMeals,normalized=false;
+    if(!preBook||preBook.version!==2){const first=ensure(state,now);if(!first.ok)return first;preBook=state.adventure.sharedMeals;normalized=true;}
+    const currentOrder=SHARED_ORDERS[preBook.currentIndex];
+    if(typeof interactionToken!=='string'||interactionToken.length<8||interactionToken.length>120)return fail('bad_token','這次確認資料不完整，請重新打開訂單。');
+    if(preBook&&Array.isArray(preBook.processedTokens)&&preBook.processedTokens.includes(interactionToken))return fail('duplicate_commit','這次交單已經處理過，不會再次取用餐點。');
+    if(!currentOrder||currentOrder.id!==expectedOrderId)return fail('stale_order','訂單已經換頁，請依目前兩位客人的需要重新選擇。');
+    if(!normalized){const init=ensure(state,now);if(!init.ok)return init;}
+    if(!state.adventure.gathering.completed)return fail('locked','先完成第一次共同聚餐，再從手記安排下一桌。');
+    const book=state.adventure.sharedMeals,order=SHARED_ORDERS[book.currentIndex];if(!order)return fail('all_orders_complete','三張雙人共餐訂單都完成了。');
+    const pairing=SHARED_PAIRINGS.find(p=>p.id===pairingId);if(!pairing)return fail('unknown_shared_meal','找不到這組雙口味搭配。');
+    const progress=book.orders[order.id],newlyFulfilled=order.guests.filter(id=>!progress.fulfilled.includes(id)&&pairing.tastes.includes(NEIGHBORS.find(n=>n.id===id).taste));
+    if(!newlyFulfilled.length)return fail('no_progress','這組搭配不會滿足尚未吃到的居民，不扣食材也不加進度。');
+    const requirements=sharedMealRequirements(state,pairing);
+    if(!requirements.every(r=>r.complete))return fail('missing_resources','食材還沒齊，這次不會取用任何東西。',{requirements});
+    consume(state,requirements);
+    book.processedTokens.push(interactionToken);book.processedTokens=book.processedTokens.slice(-48);
+    progress.fulfilled.push(...newlyFulfilled);progress.fulfilled=[...new Set(progress.fulfilled)];progress.attempts.push({pairingId,at:at(state,now),newlyFulfilled:copy(newlyFulfilled)});progress.attempts=progress.attempts.slice(-8);
+    const completed=progress.fulfilled.length===2;let rewardGranted=false,record=null;
+    if(completed){progress.completedAt=at(state,now);progress.completionMode=progress.attempts.length===1?'once':'supplemented';if(!progress.rewardGranted){grant(state,order.reward);progress.rewardGranted=true;rewardGranted=true;}record={id:order.id,at:progress.completedAt,completionMode:progress.completionMode,response:order.response,rewardGranted:progress.rewardGranted};book.records.push(record);book.currentIndex++;}
+    const names=newlyFulfilled.map(id=>NEIGHBORS.find(n=>n.id===id).name).join('、'),message=completed?order.response:names+'吃到合口味的一份；另一位仍保留在訂單上，下次補餐會再取用兩份麥餅與配料。';
+    return ok(message,{orderId:order.id,pairingId,newlyFulfilled:copy(newlyFulfilled),fulfilled:copy(progress.fulfilled),completed,completionMode:progress.completionMode,consumed:copy(requirements),reward:rewardGranted?copy(order.reward):reward(0,0,{}),rewardGranted,record:record?copy(record):null,nextOrderId:SHARED_ORDERS[book.currentIndex]?.id||null});
   }
   function summary(state, now) {
     const init = ensure(state, now); if (!init.ok) return init;
@@ -636,7 +690,7 @@
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
   const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, buyMaterial, commissions, deliverCommission,
-    neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion };
+    neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;
 })(typeof window !== "undefined" ? window : globalThis);

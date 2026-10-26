@@ -1,0 +1,10 @@
+/* R22: delivery directions end at handover; supply history is not a reserve. */
+.basket-carrying:not([data-phase='walking']) .carry-distance::after{content:none;display:none}
+.carry-label[data-r21-station-cue='true']::before{content:'沿路線走近交籃'}
+.reserve-receipt{display:block}
+.portion-balances,.invitation-status{font-size:13px;line-height:1.6}
+@media(orientation:landscape) and (max-height:600px){
+ #worldModal[data-content-view='gathering-complete'][data-gather-step='supplies'] .content-footer{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #worldModal[data-content-view='gathering-complete'][data-gather-step='supplies'] #gatherReturn{grid-column:auto}
+ #worldModal[data-content-view='gathering-complete'][data-gather-step='supplies'] .gather-extras{display:flow-root}
+}

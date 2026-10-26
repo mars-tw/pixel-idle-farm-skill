@@ -1,5 +1,5 @@
 /* R85: leaf-dappled play space, woven-basket silhouette and a stamped farm album. */
-:root{--sun-texture:url('../assets/generated/r85/paper-128.png?v=content-r15-20261019-1')}
+:root{--sun-texture:url('../assets/generated/r85/paper-128.png?v=content-r24-20261026-2')}
 .sab-ic img{display:block;width:28px;height:28px;image-rendering:pixelated}
 .sun-beam{animation:r85LightIn .45s ease-out both!important;transform:none;z-index:2!important}
 .sun-beam .sun-pool{inset:-8%!important;height:auto!important;opacity:1;background:radial-gradient(ellipse,#fff1ad9c 0%,#ffdc7266 38%,#ffd56f32 58%,transparent 74%)!important}
@@ -13,7 +13,7 @@
 .player .p-sprite{translate:var(--stance-x,0px) 0px;position:relative;z-index:1}
 .player::before{content:'';position:absolute;left:50%;bottom:0;width:48%;height:7%;translate:calc(-50% + var(--stance-x,0px)) 0;background:radial-gradient(ellipse,#3e2f237a,transparent 73%);pointer-events:none}
 @keyframes r85LightIn{from{opacity:0}to{opacity:1}}
-.daily-modal-card{background:#fff6e3 url('../assets/generated/r85/album-128.png?v=content-r15-20261019-1') left top/100% 100% no-repeat;padding:16px 18px 14px 24px;border:2px solid #8b5e34;border-top:2px solid #8b5e34;image-rendering:pixelated}
+.daily-modal-card{background:#fff6e3 url('../assets/generated/r85/album-128.png?v=content-r24-20261026-2') left top/100% 100% no-repeat;padding:16px 18px 14px 24px;border:2px solid #8b5e34;border-top:2px solid #8b5e34;image-rendering:pixelated}
 .daily-heading{border-bottom:1px solid #c7a56a;padding-bottom:7px}
 .daily-heading>div{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .daily-heading .sun-portrait{width:56px;height:56px;flex-shrink:0}

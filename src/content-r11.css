@@ -2,7 +2,7 @@
 body[data-handover] .farm-memory,body[data-handover] .world-keepsake,body[data-handover] .ob[data-frame*='mail'],body[data-handover] .ob[data-kind='building']{visibility:hidden!important}
 body[data-delivering] .mobile-controls .dpad{visibility:hidden}
 .handover-parcel{filter:drop-shadow(1px 1px 0 #3e2f23) drop-shadow(-1px 0 0 #fff6e3)}
-.gather-stage .meal-table,.farm-gathering .meal-table{left:170px;top:157px;width:236px!important;height:118px!important;background-image:url('../assets/generated/content-r11/table.png?v=content-r15-20261019-1')!important;background-size:236px 118px!important;z-index:3}
+.gather-stage .meal-table,.farm-gathering .meal-table{left:170px;top:157px;width:236px!important;height:118px!important;background-image:url('../assets/generated/content-r11/table.png?v=content-r24-20261026-2')!important;background-size:236px 118px!important;z-index:3}
 .gather-stage .meal-person-merchant,.farm-gathering .meal-person-merchant{left:77px;top:37px;z-index:2}
 .gather-stage .meal-person-elder,.farm-gathering .meal-person-elder{left:207px;top:37px;z-index:2}
 .gather-stage .meal-person-child,.farm-gathering .meal-person-child{left:226px;top:173px;z-index:5}

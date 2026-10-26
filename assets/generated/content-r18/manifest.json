@@ -1,0 +1,269 @@
+{
+  "status": "VERIFIED",
+  "tool": "image_gen.imagegen",
+  "model": null,
+  "modelNote": "Exact model not exposed by built-in tool.",
+  "stylePrefix": "Sunlight Farm / 陽光農場, premium cozy pixel-art storybook RPG, controlled honey gold #FFB627, cream #FFF6E3, apple green #6A994E, forest green #395847, tea brown #3E2F23, brick gingham #D95737, cool slate shadows #536979, fixed warm key light from UPPER RIGHT, crisp grouped pixel clusters, one native-pixel dark outline, hue-shift shadows, restrained dithering, no photo, no vector, no noise, no text except explicitly requested.",
+  "master": "docs/art/masters/content-r18/water-sheet.png",
+  "masterSha256": "f692b8619bc6da781132e7b4a246ddf830bcc961a7820a49f37ad03bf6ca6209",
+  "paletteSource": "assets/generated/r89/manifest.json",
+  "palette": [
+    "#251D35",
+    "#352941",
+    "#49364B",
+    "#5B4758",
+    "#344657",
+    "#3F584B",
+    "#4C6C48",
+    "#5D8447",
+    "#72A04B",
+    "#8ABB52",
+    "#A8D263",
+    "#D0E47A",
+    "#483044",
+    "#5A3A42",
+    "#70473F",
+    "#895641",
+    "#A96D47",
+    "#C78A52",
+    "#E0AC65",
+    "#F0D082",
+    "#2F3450",
+    "#34465F",
+    "#355E74",
+    "#397B8B",
+    "#4397A6",
+    "#5DB3BC",
+    "#83CED0",
+    "#B7E5D4",
+    "#522D43",
+    "#71313F",
+    "#93383E",
+    "#B9483F",
+    "#D65E42",
+    "#EB794A",
+    "#F49A56",
+    "#F7C56A",
+    "#5B423C",
+    "#7A5A3B",
+    "#9A783B",
+    "#B9983F",
+    "#D5B747",
+    "#E8D255",
+    "#F5E678",
+    "#FFF0A3",
+    "#423047",
+    "#573750",
+    "#70405C",
+    "#8E4B6C",
+    "#AE5D7D",
+    "#CE7895",
+    "#E9A0AD",
+    "#F5C8BD",
+    "#32303E",
+    "#464754",
+    "#5C5F69",
+    "#777B7E",
+    "#969991",
+    "#B5B5A4",
+    "#D4CFB5",
+    "#EEE3C8",
+    "#FFF4D8",
+    "#385878",
+    "#4D78A0",
+    "#6B9FC1",
+    "#94C6DB",
+    "#C7E7E5",
+    "#88A84B",
+    "#719143",
+    "#788F50",
+    "#7B9352",
+    "#7E9755",
+    "#819B58",
+    "#849F5B",
+    "#87A35E",
+    "#536979",
+    "#45596B",
+    "#BBCB80",
+    "#E4D373",
+    "#9DA95D",
+    "#FFF1B5",
+    "#395847",
+    "#799C54",
+    "#B5C56C",
+    "#DCE69A",
+    "#F3D68C",
+    "#293D46"
+  ],
+  "processing": "4x3 cell extraction, nearest-neighbor 96x72 grid, binary alpha, exact established R89 palette. No painted replacement frames.",
+  "frames": [
+    {
+      "file": "assets/generated/content-r18/river_carp-0.png",
+      "sha256": "8caafe350880d8c9a40e0d1bae51e2b124c75ac88718ab94867d518429d17651",
+      "width": 96,
+      "height": 72,
+      "fish": "river_carp",
+      "frame": 0,
+      "sourceBox": [
+        0,
+        0,
+        362,
+        362
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-1.png",
+      "sha256": "fa252aaa829bc5c3faf6448309f31b8e7d0b06023979f091c7a907e57d358edd",
+      "width": 96,
+      "height": 72,
+      "fish": "river_carp",
+      "frame": 1,
+      "sourceBox": [
+        362,
+        0,
+        724,
+        362
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-2.png",
+      "sha256": "141ddfaf833dea63d7caa5b1a03b115f286ae907d0bc602af41e4b7f1c5aa027",
+      "width": 96,
+      "height": 72,
+      "fish": "river_carp",
+      "frame": 2,
+      "sourceBox": [
+        724,
+        0,
+        1086,
+        362
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-3.png",
+      "sha256": "e4cacfc3aa192a6e9ad6dc8c93675ceb72da99234349a6d815cfbeb24a5186e2",
+      "width": 96,
+      "height": 72,
+      "fish": "river_carp",
+      "frame": 3,
+      "sourceBox": [
+        1086,
+        0,
+        1448,
+        362
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-0.png",
+      "sha256": "caeb40426551b4620c6e9283af044fde7cb6191ee467620afb4f33508f047a93",
+      "width": 96,
+      "height": 72,
+      "fish": "silver_dace",
+      "frame": 0,
+      "sourceBox": [
+        0,
+        362,
+        362,
+        724
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-1.png",
+      "sha256": "7cef3aad2c58f1bcd694869b4f4e64e43e0226c8a51207a2658dc95a1b87d9b5",
+      "width": 96,
+      "height": 72,
+      "fish": "silver_dace",
+      "frame": 1,
+      "sourceBox": [
+        362,
+        362,
+        724,
+        724
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-2.png",
+      "sha256": "5e09c71b6b2db87e7ba442dbbd1d1c7371c45efb6d8226104a8d2a44a7374f84",
+      "width": 96,
+      "height": 72,
+      "fish": "silver_dace",
+      "frame": 2,
+      "sourceBox": [
+        724,
+        362,
+        1086,
+        724
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-3.png",
+      "sha256": "39477f7c3ef32c5219d6d319aa45c31421e2179cb30740539669c5b1f27f39e0",
+      "width": 96,
+      "height": 72,
+      "fish": "silver_dace",
+      "frame": 3,
+      "sourceBox": [
+        1086,
+        362,
+        1448,
+        724
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-0.png",
+      "sha256": "d5ae476f07575e6bd8e7369b2aa4f22f06f347418d602dab47c5da72262a60da",
+      "width": 96,
+      "height": 72,
+      "fish": "river_perch",
+      "frame": 0,
+      "sourceBox": [
+        0,
+        724,
+        362,
+        1086
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-1.png",
+      "sha256": "8fa4228c39888af4bda0d8b1701f13a0a5054e2325bbad08a33a4826a13e79cb",
+      "width": 96,
+      "height": 72,
+      "fish": "river_perch",
+      "frame": 1,
+      "sourceBox": [
+        362,
+        724,
+        724,
+        1086
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-2.png",
+      "sha256": "2963a582c5b32617198c437a0fba2cec02347c1e641b71a8501490a5d2a508bc",
+      "width": 96,
+      "height": 72,
+      "fish": "river_perch",
+      "frame": 2,
+      "sourceBox": [
+        724,
+        724,
+        1086,
+        1086
+      ]
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-3.png",
+      "sha256": "1a896f36a7bc402a65e273c9f47a142265d955ade2576ed50e53a9fcfc42db30",
+      "width": 96,
+      "height": 72,
+      "fish": "river_perch",
+      "frame": 3,
+      "sourceBox": [
+        1086,
+        724,
+        1448,
+        1086
+      ]
+    }
+  ]
+}

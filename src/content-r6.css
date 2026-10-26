@@ -41,7 +41,7 @@ body:has(.handover-player) #player .p-sprite{visibility:hidden!important}
 .handover-actor[data-pose='reach']{transform:scaleX(-1)}
 .pond-stage[data-motion='closed-rings'] .pond-bobber,.pond-stage[data-motion='straight-wake'] .pond-bobber,.pond-stage[data-motion='short-splash'] .pond-bobber{opacity:0}
 #worldModal[data-content-view='fishing'] .pond-stage{height:clamp(190px,30dvh,310px);border:0;box-shadow:inset 0 0 0 2px #8b5e3466;clip-path:polygon(3% 0,97% 0,100% 8%,100% 92%,97% 100%,3% 100%,0 92%,0 8%)}
-#worldModal[data-content-view='fishing'] .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r15-20261019-1');background-position:center;background-size:cover}
+#worldModal[data-content-view='fishing'] .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r24-20261026-2');background-position:center;background-size:cover}
 #worldModal[data-content-view='fishing'] #worldCatch:not(:disabled){background:#ffce63;color:#3e2f23;border-color:#8b5e34;font-weight:700;box-shadow:none}
 .pond-catch{display:block;width:100%;height:auto;max-height:170px;object-fit:contain;image-rendering:pixelated}.pond-catch[hidden]{display:none}
 #worldModal[data-fishing-state='caught'] .pond-stage{height:110px;opacity:.75}

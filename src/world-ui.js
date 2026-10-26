@@ -14,6 +14,87 @@
   let current = null, lastPanels = "", lastObjective = "", lastSites = "", lastFringe = "", lastTick = 0;
   let dialogueTimer = 0;
   const notify = (text) => { if (farm()) farm().toast(text); };
+  // Resident presentation owns decoded bitmaps, never game clocks or served state.
+  const residentPoseOwners = new WeakMap(), residentPoseNodes = new WeakMap();
+  let residentPoseOwnerSequence = 0;
+  const residentPoseIds = ['merchant','elder','child'], residentPoseKinds = ['wait','sit','sip','offer'], residentPoseEventLimit=128, residentPoseErrorLimit=32;
+  const poseErrorData = error => ({name:error?.name||'Error',message:error?.message||String(error),stack:error?.stack??null,code:error?.code??null,isNativeDomException:error instanceof DOMException});
+  const poseURL = value => new URL(String(value),document.baseURI).href;
+  const poseName = value => /\/(wait|sit|sip|offer)-(merchant|elder|child)\.png(?:[?#]|$)/.exec(value)?.[1]||null;
+  function poseOwnerLive(owner,node){return owner.active&&owner.root.isConnected&&(!owner.modal||owner.modal.classList.contains('show'))&&(!node||node.isConnected&&owner.root.contains(node)&&residentPoseNodes.get(node)===owner);}
+  function poseEvent(owner,row){owner.eventCountTotal++;if(owner.events.length>=residentPoseEventLimit){owner.events.shift();owner.eventLogDrops++;}owner.events.push(row);}
+  function poseFailure(owner,error,url,nativeDecode=false){
+    const key=JSON.stringify([String(url),error?.name||'Error',error?.code??null]);owner.failed=true;owner.errorCountTotal++;
+    let row=owner.requestErrors.find(item=>item.key===key)||(owner.firstNativeDecodeError?.key===key?owner.firstNativeDecodeError:null)||(owner.firstFailure?.key===key?owner.firstFailure:null);
+    if(row)row.count++;else{row={key,url,error,count:1};if(owner.requestErrors.length>=residentPoseErrorLimit){owner.requestErrors.shift();owner.errorLogDrops++;}owner.requestErrors.push(row);poseEvent(owner,{kind:'error',url,code:error?.code??null,at:performance.now()});}
+    if(!owner.firstFailure)owner.firstFailure=row;if(nativeDecode&&error instanceof DOMException&&!owner.firstNativeDecodeError)owner.firstNativeDecodeError=row;
+    if(!poseOwnerLive(owner))return;
+    const host=owner.root.closest('.modal-body')||owner.root.parentElement;
+    if(host&&!owner.alert){const alert=document.createElement('p');alert.className='project-desc';alert.dataset.residentPoseError=String(owner.id);alert.setAttribute('role','alert');alert.textContent='插圖暫時讀不到，請回農場後再試。';host.appendChild(alert);owner.alert=alert;}
+  }
+  function disposeResidentPoseScenes(root){
+    if(!root)return;const layouts=root.matches?.('.meal-layout')?[root]:[...root.querySelectorAll('.meal-layout')];
+    for(const layout of layouts){const owner=residentPoseOwners.get(layout);if(owner){owner.active=false;owner.generation++;poseEvent(owner,{kind:'disposed',at:performance.now()});}}
+  }
+  function ensureResidentPoseScene(layout){
+    const nodes=[...layout.querySelectorAll('img[data-seated-resident]')],prior=residentPoseOwners.get(layout);
+    if(prior?.active&&prior.nodes.length===nodes.length&&nodes.every((node,i)=>node===prior.nodes[i]))return prior;
+    if(prior){prior.active=false;prior.generation++;}
+    const owner={id:++residentPoseOwnerSequence,generation:1,active:true,root:layout,modal:layout.closest('#worldModal'),nodes,pool:new Map(),states:new Map(),requestErrors:[],events:[],alert:null,failed:false,firstFailure:null,firstNativeDecodeError:null,errorCountTotal:0,errorLogDrops:0,eventCountTotal:0,eventLogDrops:0,requestCount:0,noopCount:0,srcCommitCount:0,visualCommitCount:0,coalescedPendingCount:0};residentPoseOwners.set(layout,owner);
+    for(const id of residentPoseIds)for(const pose of residentPoseKinds){
+      const raw='assets/generated/'+(pose==='wait'?'content-r13':'content-r9')+'/'+pose+'-'+id+'.png'+(window.FARM_VERSION_QUERY||''),url=poseURL(raw),image=new Image(),record={url,image,status:'pending',error:null,decodeCalls:1};owner.pool.set(url,record);image.src=url;
+      record.promise=image.decode().then(()=>{if(!image.complete||image.naturalWidth!==48||image.naturalHeight!==64){const error=new Error('Resident pose dimensions are not ready');error.code='RESIDENT_POSE_BAD_DIMENSIONS';throw error;}record.status='ready';poseEvent(owner,{kind:'decoded',url,at:performance.now()});return record;}).catch(error=>{record.status='failed';record.error=error;poseFailure(owner,error,url,true);return record;});
+    }
+    for(const node of nodes){residentPoseNodes.set(node,owner);owner.states.set(node,{version:0,desiredURL:null,desiredRaw:null,desiredMeta:null,displayedURL:node.complete&&node.naturalWidth>0?node.currentSrc:null,renderedPose:null,pending:false,error:null,promise:null,invalidRaw:null});}
+    owner.ready=Promise.all([...owner.pool.values()].map(record=>record.promise));
+    for(const node of nodes)requestResidentPose(node,node.getAttribute('src'),{pose:poseName(node.getAttribute('src')||'')});
+    return owner;
+  }
+  function prepareResidentPoses(root){
+    if(!root)return Promise.resolve({status:'not-applicable'});const layouts=root.matches?.('.meal-layout')?[root]:[...root.querySelectorAll('.meal-layout')],owners=[];
+    for(const layout of layouts)if(!layout.querySelector('.reserved-table'))owners.push(ensureResidentPoseScene(layout));
+    return Promise.all(owners.map(owner=>owner.ready)).then(()=>residentPresentationState(root));
+  }
+  function requestResidentPose(node,raw,meta={}){
+    if(!(node instanceof HTMLImageElement))return Promise.resolve(false);
+    const layout=node.closest('.meal-layout');if(!layout)return Promise.resolve(false);
+    const owner=residentPoseNodes.get(node)||ensureResidentPoseScene(layout),state=owner.states.get(node);if(!state)return Promise.resolve(false);
+    owner.requestCount++;const rawValue=String(raw);if(state.invalidRaw===rawValue&&state.error){poseFailure(owner,state.error,rawValue);return Promise.resolve(false);}let url;try{url=poseURL(rawValue);}catch(error){state.version++;state.desiredURL=null;state.desiredRaw=rawValue;state.desiredMeta=meta;state.invalidRaw=rawValue;state.pending=false;state.promise=null;state.error=error;poseFailure(owner,error,rawValue);return Promise.resolve(false);}state.invalidRaw=null;
+    if(state.desiredURL===url){state.desiredMeta=meta;if(state.pending){owner.coalescedPendingCount++;return state.promise;}}
+    else{state.version++;state.desiredURL=url;state.desiredRaw=String(raw);state.desiredMeta=meta;}
+    const version=state.version,generation=owner.generation,record=owner.pool.get(url);
+    if(!record){const error=state.error?.code==='RESIDENT_POSE_UNMANAGED_URL'&&state.failedURL===url?state.error:new Error('Requested resident pose is outside the declared frame pool');error.code='RESIDENT_POSE_UNMANAGED_URL';state.failedURL=url;state.error=error;state.pending=false;poseFailure(owner,error,url);return Promise.resolve(false);}
+    const commit=()=>{
+      if(!poseOwnerLive(owner,node)||owner.generation!==generation||state.version!==version||state.desiredURL!==url){poseEvent(owner,{kind:'stale-commit-blocked',url,at:performance.now()});return false;}
+      state.pending=false;
+      if(record.status!=='ready'){state.error=record.error||new Error('Resident pose is not decoded');poseFailure(owner,state.error,url);return false;}
+      const desiredPose=state.desiredMeta?.pose||poseName(url),desiredGesture=state.desiredMeta?.gesture||(desiredPose==='wait'||desiredPose==='sit'?'rest':'sip-or-bite'),hasReaction=state.desiredMeta?.personalReaction!==undefined;
+      const sourceReady=node.currentSrc===url&&node.complete&&node.naturalWidth>0&&node.naturalHeight>0;
+      const metadataSame=node.dataset.renderedSrc===url&&node.dataset.renderedPose===(desiredPose||'')&&node.dataset.upperPose===desiredPose&&node.dataset.gesture===desiredGesture&&(!hasReaction||node.dataset.personalReaction===state.desiredMeta.personalReaction);
+      if(sourceReady&&metadataSame&&state.displayedURL===url&&state.renderedPose===desiredPose&&!state.error){owner.noopCount++;return true;}
+      if(!sourceReady){node.src=state.desiredRaw;owner.srcCommitCount++;}
+      if(node.currentSrc!==url||!node.complete||node.naturalWidth<=0||node.naturalHeight<=0){const error=state.error?.code==='RESIDENT_POSE_COMMIT_NOT_READY'?state.error:new Error('Decoded resident pose was not ready after native source commit');error.code='RESIDENT_POSE_COMMIT_NOT_READY';state.error=error;poseFailure(owner,error,url);return false;}
+      state.error=null;state.displayedURL=url;state.renderedPose=desiredPose;const setData=(key,value)=>{if(node.dataset[key]!==value)node.dataset[key]=value;};setData('renderedSrc',url);setData('renderedPose',desiredPose||'');if(desiredPose)setData('upperPose',desiredPose);setData('gesture',desiredGesture);if(hasReaction)setData('personalReaction',state.desiredMeta.personalReaction);
+      owner.visualCommitCount++;poseEvent(owner,{kind:'committed',url,version,at:performance.now()});return true;
+    };
+    if(record.status!=='pending')return Promise.resolve(commit());
+    state.pending=true;state.error=null;state.promise=record.promise.then(commit).catch(error=>{state.pending=false;state.error=error;poseFailure(owner,error,url);return false;});return state.promise;
+  }
+  function residentPresentationState(root){
+    if(!root)return {status:'not-applicable',atBrowserMs:performance.now(),scenes:[],errors:[]};
+    const layouts=(root.matches?.('.meal-layout')?[root]:[...root.querySelectorAll('.meal-layout')]).filter(layout=>!layout.querySelector('.reserved-table'));
+    if(!layouts.length)return {status:root.querySelector('.gather-stage')?'missing':'not-applicable',atBrowserMs:performance.now(),scenes:[],errors:[]};
+    const scenes=layouts.map(layout=>{
+      const nodes=[...layout.querySelectorAll('img[data-seated-resident]')],owner=residentPoseOwners.get(layout),ids=nodes.map(node=>node.dataset.seatedResident),missing=nodes.length!==3||residentPoseIds.some(id=>ids.filter(x=>x===id).length!==1);
+      if(!owner)return {status:missing?'missing':'unmanaged',nodes:ids,errors:[]};
+      const errorRows=[];for(const row of[owner.firstNativeDecodeError,owner.firstFailure,...owner.requestErrors])if(row&&!errorRows.some(item=>item.key===row.key)&&errorRows.length<residentPoseErrorLimit)errorRows.push(row);const errors=errorRows.map(row=>({url:row.url,count:row.count,error:poseErrorData(row.error)})),rows=nodes.map(node=>{const state=owner.states.get(node);return {id:node.dataset.seatedResident,managed:residentPoseNodes.get(node)===owner&&!!state,version:state?.version??null,desiredRaw:state?.desiredRaw??null,desiredURL:state?.desiredURL??null,desiredPose:state?.desiredMeta?.pose??null,displayedURL:state?.displayedURL??null,renderedPose:state?.renderedPose??null,pending:state?.pending??true,error:state?.error?poseErrorData(state.error):null,native:{src:node.src,currentSrc:node.currentSrc,complete:node.complete,naturalWidth:node.naturalWidth,naturalHeight:node.naturalHeight,isConnected:node.isConnected}};});
+      const frames=[...owner.pool.values()].map(record=>({url:record.url,status:record.status,decodeCalls:record.decodeCalls,retainedImage:record.image instanceof HTMLImageElement,error:record.error?poseErrorData(record.error):null}));
+      const status=!poseOwnerLive(owner)?'disposed':missing?'missing':owner.failed?'error':rows.some(row=>!row.managed)?'unmanaged':frames.some(frame=>frame.status!=='ready')||rows.some(row=>row.pending||row.error||row.desiredURL!==row.displayedURL||!row.native.complete||row.native.currentSrc!==row.displayedURL||row.native.naturalWidth<=0)?'pending':'ready';
+      return {ownerId:owner.id,generation:owner.generation,status,failed:owner.failed,eventLogLimit:residentPoseEventLimit,eventLogDrops:owner.eventLogDrops,eventCountTotal:owner.eventCountTotal,errorLogLimit:residentPoseErrorLimit,errorLogSize:owner.requestErrors.length,errorLogDrops:owner.errorLogDrops,errorCountTotal:owner.errorCountTotal,requestCount:owner.requestCount,noopCount:owner.noopCount,srcCommitCount:owner.srcCommitCount,visualCommitCount:owner.visualCommitCount,coalescedPendingCount:owner.coalescedPendingCount,firstNativeDecodeError:owner.firstNativeDecodeError?{url:owner.firstNativeDecodeError.url,count:owner.firstNativeDecodeError.count,error:poseErrorData(owner.firstNativeDecodeError.error)}:null,requiredFrames:12,frames,nodes:rows,errors,events:owner.events.slice()};
+    });
+    const status=['error','missing','unmanaged','disposed','pending'].find(value=>scenes.some(scene=>scene.status===value))||'ready';return {status,atBrowserMs:performance.now(),scenes,errors:scenes.flatMap(scene=>scene.errors)};
+  }
+
   const refresh = (s) => { current = s || current; if (!current) return; reconcile(current); syncHeaderVars(); renderObjective(current); renderPanels(); if (window.DailyUI) window.DailyUI.refresh(current); };
   const costText = (rows) => (rows || []).map((r) => `${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}`).join("・");
   const npcTile = (id) => current.map.tiles.find((t) => t.npc === id);
@@ -290,16 +371,18 @@
     if (!box) { box = document.createElement("div"); box.id = "worldModal"; box.className = "modal world-modal"; box.setAttribute("aria-labelledby", "worldModalTitle"); document.body.appendChild(box); }
     delete box.dataset.practice;
     box.classList.remove("content-r1");
+    disposeResidentPoseScenes(box);
     box.innerHTML = `<div class="modal-card"><button class="world-modal-close" aria-label="關閉" title="關閉">×</button><h2 id="worldModalTitle">${esc(title)}</h2><div class="modal-body">${body}</div></div>`;
+    prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r15-20261019-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r89/miri-0.png?v=content-r15-20261019-1" alt="戴草帽、紅格巾與小藤簍的農夫" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r24-20261026-2" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r89/miri-0.png?v=content-r24-20261026-2" alt="戴草帽、紅格巾與小藤簍的農夫" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');
       heading.before(titlebar);titlebar.append(heading,close);
     }
-    box.querySelector(".world-modal-close").onclick = () => { stopFishing(); farm().closeModal("worldModal"); };
+    box.querySelector(".world-modal-close").onclick = () => { stopFishing(); disposeResidentPoseScenes(box); farm().closeModal("worldModal"); };
     farm().openModal("worldModal", ".world-modal-close");
     return box;
   }
@@ -428,6 +511,7 @@
     }
     paintMinimap(s, tileSize);
     if(window.ContentR6)window.ContentR6.paintWorld(s,tileSize);
+    document.querySelectorAll('.farm-gathering .meal-layout').forEach(layout=>{if(!layout.querySelector('.reserved-table'))ensureResidentPoseScene(layout);});
     syncWorldHitTargets();
     const location = s.player.x >= 17 ? "東林・溪畔採集地" : s.player.y >= 9 ? "河畔・復興計畫" : "陽光農場・祖母的田";
     if (el("worldLocation").textContent !== location) el("worldLocation").textContent = location;
@@ -556,5 +640,5 @@
     if (npcId === "elder") return "下田時別忘了雞舍。添水、梳毛、餵食，牠們都記得你。";
     return fallback;
   }
-  window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal };
+  window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal, prepareResidentPoses, requestResidentPose, residentPresentationState, disposeResidentPoseScenes };
 })();

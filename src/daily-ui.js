@@ -74,7 +74,7 @@
       while (heading.firstChild) copy.append(heading.firstChild);
       heading.append(copy);
       const portrait = document.createElement("img"); portrait.className = "sun-portrait";
-      portrait.src = "assets/generated/r89/miri-0.png?v=content-r15-20261019-1"; portrait.alt = "農夫的晨光日誌"; portrait.width = 52; portrait.height = 52;
+      portrait.src = "assets/generated/r89/miri-0.png?v=content-r24-20261026-2"; portrait.alt = "農夫的晨光日誌"; portrait.width = 52; portrait.height = 52;
       heading.prepend(portrait);
       const banner=document.createElement('div');banner.id='basketBanner';banner.hidden=true;banner.innerHTML='<img src="assets/generated/r88/basket-32.png" width="48" height="48" alt=""><span>把光收進餐籃<small>兩份小麥，替葛瑞留一籃。</small></span>';
       heading.after(banner);

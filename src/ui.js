@@ -75,7 +75,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r15-20261019-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r24-20261026-2";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -2862,6 +2862,31 @@
     if (!state.camera) state.camera = {};
     state.camera.focusTileId = null; state.camera.focusUntil = 0; state.camera.followPlayer = true;
   }
+  function deliveryPlan(fromId,targetId,standId) {
+    const target=G.getTileById(state,targetId);if(!target)return null;
+    const roofs=[...document.querySelectorAll('.ob[data-kind="structure"],.ob[data-kind="tea-porch"],.ob[data-kind="building"]')];
+    const covered=t=>{const cx=(t.x+.5)*TILE,feet=(t.y+.92)*TILE,bounds={left:cx-30,right:cx+30,top:feet-86,bottom:feet};return roofs.some(e=>{const x=parseFloat(e.style.left),y=parseFloat(e.style.top);return +e.style.zIndex>feet&&window.ContentR17.overlaps(bounds,{left:x,top:y,right:x+parseFloat(e.style.width),bottom:y+parseFloat(e.style.height)});});};
+    const tableWorld=$('mapWorld'),tableWorldRect=tableWorld.getBoundingClientRect(),tableScale=tableWorldRect.width/tableWorld.offsetWidth||1;
+    const tables=[...tableWorld.querySelectorAll('.world-site[data-project-id="picnic_table"],.farm-gathering .meal-table')].filter(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return !e.hidden&&s.visibility!=='hidden'&&s.display!=='none'&&r.width>0&&r.height>0;}).map(e=>{const r=e.getBoundingClientRect();return {left:(r.left-tableWorldRect.left)/tableScale,top:(r.top-tableWorldRect.top)/tableScale,right:(r.right-tableWorldRect.left)/tableScale,bottom:(r.bottom-tableWorldRect.top)/tableScale};});
+    const hardMap=window.ContentR23.deliveryTableMap(state,tables,TILE);
+    const clearMap={...hardMap,map:{...hardMap.map,tiles:hardMap.map.tiles.map(t=>covered(t)?{...t,blocked:true}:t)}};
+    // Roof windows may remain a soft fallback. Solid tables never are.
+    const pathFor=id=>G.bfsPath(clearMap,fromId,id)||G.bfsPath(hardMap,fromId,id);
+    if(standId){const path=pathFor(standId);return path?{tileId:standId,path}:null;}
+    // Side-by-side feet keep full bodies and the exchange visible.
+    // The child's existing north-cell stance is beside its visually staged
+    // position; keep the collider and click target on their original cells.
+    const offsets=target.npc==='child'&&G.isWalkable(state,G.getTileXY(state,target.x,target.y-1))?[[0,-1]]:[[-1,0],[1,0]];
+    const candidates=offsets.map(([dx,dy])=>G.getTileXY(state,target.x+dx,target.y+dy)).filter(t=>G.isWalkable(state,t));
+    const choices=candidates.map(t=>{
+      const path=pathFor(t.id);if(!path)return null;
+      const cx=(t.x+.5)*TILE-(target.npc==='child'&&t.y===target.y-1?TILE*.8:0),feet=(t.y+.92)*TILE;
+      const bounds={left:cx-34,right:cx+34,top:feet-90,bottom:feet};
+      const hidden=roofs.some(e=>{const x=parseFloat(e.style.left),y=parseFloat(e.style.top);return +e.style.zIndex>feet&&window.ContentR17.overlaps(bounds,{left:x,top:y,right:x+parseFloat(e.style.width),bottom:y+parseFloat(e.style.height)});});
+      return {tileId:t.id,path,hidden};
+    }).filter(Boolean).sort((a,b)=>Number(a.hidden)-Number(b.hidden)||a.path.length-b.path.length);
+    return choices[0]||null;
+  }
   function focusCameraOnTile(tileId) {
     const tile = G.getTileById(state, tileId);
     if (!tile) return false;
@@ -2891,7 +2916,7 @@
     if (!animate) pl.style.transition = "none"; else pl.style.transition = "";
     const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE - TILE * 0.08;
     pl.style.left = pxv(cx); pl.style.top = pxv(baselineY);
-    pl.style.zIndex = Math.round(baselineY);             // y-sort：與物件/建築互相遮擋
+    if(!document.body?.dataset?.delivering) pl.style.zIndex = Math.round(baselineY);             // y-sort：與物件/建築互相遮擋
     // Keep foot-depth order. Open only a local sight window in the roof and its
     // attached porch; never fade an entire building behind an opaque second image.
     const actorBounds={left:cx-w/2,right:cx+w/2,top:baselineY-h,bottom:baselineY};
@@ -2899,7 +2924,7 @@
     const occlude=(el,behind)=>{
       el.classList.toggle('actor-behind',behind);
       if(behind)actorBehind=true;
-      el.style.maskImage='';
+      if(!document.body?.dataset?.delivering||!el.dataset.deliveryCutaway)el.style.maskImage='';
     };
     document.querySelectorAll('.ob[data-kind="structure"][data-structure-id]').forEach(el=>{
       const left=parseFloat(el.style.left),top=parseFloat(el.style.top),ew=parseFloat(el.style.width),eh=parseFloat(el.style.height);
@@ -2920,7 +2945,8 @@
     const vw = scene.clientWidth, vh = scene.clientHeight;
     const worldW = state.map.width * TILE, worldH = state.map.height * TILE;
     let tile = null;
-    if (state.camera && state.camera.focusTileId && now() < (state.camera.focusUntil || 0)) {
+    // Sitting at the farm table is a held view; return to player follow when leaving it.
+    if (state.camera && state.camera.focusTileId && (now() < (state.camera.focusUntil || 0) || document.body.dataset.reunion === 'true' || document.body.dataset.handover === 'true')) {
       tile = G.getTileById(state, state.camera.focusTileId);
     } else if (state.camera && state.camera.focusTileId) {
       clearCameraFocus();
@@ -4149,7 +4175,7 @@
     if(pe.dataset.occluded==='true'){
       if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span>米莉・腳下</span>';worldEl.appendChild(locator);}
       locator.hidden=false;locator.style.cssText=`left:${pe.style.left};top:${pe.style.top};width:${rootWidth}px;height:${eh}px`;
-      locator.firstChild.style.cssText=sp.style.cssText;
+      locator.firstChild.style.cssText=sp.style.cssText;locator.dataset.kind='partial-monochrome';
     }else if(locator)locator.hidden=true;
   }
   function setPlayerIdle() { state.player.action = "idle"; }
@@ -4715,13 +4741,14 @@
       selectSeed: (id) => { if (G.isCropUnlocked(state, id)) chooseSeed(id); },
       moving: () => !!moveTimer,
       cancelJourney: () => { walkPath([]); positionPlayer(false); scheduleSave(); },
+      followPlayer: () => { clearCameraFocus(); updateCamera(false); },
       deliveryDistance: (tileId) => G.pathToAdjacent(state,state.player.tileId,tileId)?.path.length ?? null,
-      deliveryRoute: (tileId) => {
+      deliveryRoute: (tileId,standId) => {
         const root=$('player'),world=$('mapWorld'),r=root.getBoundingClientRect(),wr=world.getBoundingClientRect(),scale=wr.width/world.offsetWidth;
         const x=Math.round((r.left+r.width/2-wr.left)/scale/TILE-.5),y=Math.round((r.top+r.height*.86-wr.top)/scale/TILE-1+.08);
         const visual=G.getTileXY(state,x,y),from=visual&&G.isWalkable(state,visual)?visual.id:state.player.tileId;
-        const plan=G.pathToAdjacent(state,from,tileId);
-        return plan?{from,path:plan.path,size:TILE}:null;
+        const plan=deliveryPlan(from,tileId,standId);
+        return plan?{from,path:plan.path,targetId:plan.tileId,size:TILE}:null;
       },
       vfxSpawns: () => vfxSpawnCount,
       sunTick: () => updateSunpatchTick(now()),
@@ -4729,12 +4756,12 @@
       activeTab: () => { const b = document.querySelector(".side-tab.sel"); return b ? b.dataset.tab : null; },
       stationTile: (type) => stationTileOf(type),
       applyPromoScene,
-      travelAndDo: (tileId, action, effect) => {
+      travelAndDo: (tileId, action, effect, options) => {
         // R79：走路途中直接改道（walkPath 會取消舊路線與尚未結算的動作），不再要玩家等。
         if (hasOpenModal()) return false;
         const tile = G.getTileById(state, tileId);
         if (!tile) return false;
-        const plan = G.pathToAdjacent(state, state.player.tileId, tileId);
+        const plan = options?.standId ? deliveryPlan(state.player.tileId,tileId,options.standId) : G.pathToAdjacent(state, state.player.tileId, tileId);
         if (!plan) return false;
         selectedTileId = null; state.interaction.selectedTileId = null;
         hideSceneActions(); hideBuildWheel(); hideObjectBubble();

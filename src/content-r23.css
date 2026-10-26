@@ -1,0 +1,2 @@
+/* Walking props follow the actual interpolated body each frame. */
+body[data-delivering]:not([data-handover]) #mapWorld .handover-parcel{transition:none!important}

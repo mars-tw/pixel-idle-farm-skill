@@ -5,7 +5,7 @@
 .basket-carrying small{display:block;margin-top:8px;font-size:14px;line-height:1.5}
 .basket-carrying button{display:block;margin-top:12px;min-height:44px;padding:8px 16px;background:#f5e4bd;border:1px solid #8b5e34;color:#3e2f23;font:inherit}
 .neighbor-entry button,#kitchenNeighbors{min-height:48px;padding:8px 12px;background:#ffce63;border:2px solid #8b5e34;color:#3e2f23;border-radius:1px}
-#worldModal.content-r1 .modal-card{display:flex;flex-direction:column;width:640px;max-height:calc(100dvh - 24px);padding:16px;background:#fff6e3 url('../assets/generated/r89/paper-128.png?v=content-r15-20261019-1') center/100% 100%;border:2px solid #8b5e34;border-radius:1px;box-sizing:border-box;overflow:hidden;color:#3e2f23}
+#worldModal.content-r1 .modal-card{display:flex;flex-direction:column;width:640px;max-height:calc(100dvh - 24px);padding:16px;background:#fff6e3 url('../assets/generated/r89/paper-128.png?v=content-r24-20261026-2') center/100% 100%;border:2px solid #8b5e34;border-radius:1px;box-sizing:border-box;overflow:hidden;color:#3e2f23}
 #worldModal.content-r1 h2{flex:none;margin:0 48px 10px 0;padding:0;color:#3e2f23;font:700 25px KaiTi,DFKai-SB,serif}
 #worldModal.content-r1 .world-modal-close{top:8px;right:8px;min-width:44px;min-height:44px;border:1px solid #8b5e34;background:#f5e4bd;color:#3e2f23;border-radius:1px}
 #worldModal.content-r1 .modal-body{flex:1 1 auto;min-height:0;max-height:none;margin:0;overflow:auto;overscroll-behavior:contain;font:16px/1.6 'Microsoft JhengHei',sans-serif}
@@ -37,7 +37,7 @@ body>.basket-cancelled{position:fixed;top:20dvh;left:12px;right:12px;max-width:5
 #worldModal.content-r1 button:disabled{cursor:default;background:#e6d5b7;color:#725434;box-shadow:none}
 #worldModal.content-r1 button:focus-visible{outline:3px solid #8b5e34;outline-offset:2px}
 #worldModal.content-r1 button:focus:not(:focus-visible){outline:none}
-.pond-guide{margin:4px 0 12px}.pond-stage{height:180px;position:relative;overflow:hidden;background:#536979 url('../assets/generated/content-r1/water.webp?v=content-r15-20261019-1') center/cover;image-rendering:pixelated;border:2px solid #8b5e34}
+.pond-guide{margin:4px 0 12px}.pond-stage{height:180px;position:relative;overflow:hidden;background:#536979 url('../assets/generated/content-r1/water.webp?v=content-r24-20261026-2') center/cover;image-rendering:pixelated;border:2px solid #8b5e34}
 .pond-bobber{position:absolute;left:calc(50% - 24px);top:calc(45% - 36px);width:48px;height:72px;object-fit:contain;image-rendering:pixelated;transition:none;will-change:transform,opacity}
 .pond-stage[data-pose='missed'] .pond-bobber{opacity:.5}
 /* Rasterized water effects retain the same native pixel density as the pond. */

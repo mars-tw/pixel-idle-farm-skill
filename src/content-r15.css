@@ -22,4 +22,4 @@ body[data-delivering] .world-location{visibility:hidden}
 .blind-practice .practice-reveal{font-size:14px;line-height:1.5}
 .pond-bobber{rotate:0deg!important}
 @media(max-width:350px){.gather-recall p{font-size:12px}.handover-frame>span{font-size:12px}#worldModal[data-content-view='gathering-complete'][data-gather-step='food'] .gather-stage{height:140px;min-height:140px}#worldModal[data-gather-step='food'] .gather-stage .meal-layout{--meal-scale:.49!important}}
-.note-replay .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r15-20261019-1');background-position:center;background-size:cover}
+.note-replay .pond-stage{background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r24-20261026-2');background-position:center;background-size:cover}

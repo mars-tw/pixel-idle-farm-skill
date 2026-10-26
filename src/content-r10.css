@@ -10,14 +10,14 @@ body[data-reunion] .sun-beam,body[data-reunion] .sun-pool,body[data-reunion] .pl
 .pond-stage[data-motion='bent-wake'] .pond-bobber{transform:translateX(44px);opacity:1}
 .pond-stage[data-reel='active'] .pond-bobber{transform:translateY(40px)!important;opacity:.22!important;filter:none!important}
 .fish-comparison img{filter:brightness(0) saturate(0);opacity:.65}
-#worldModal[data-fishing-state='caught'] .pond-stage{opacity:1;background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r15-20261019-1')}
-.gather-stage .meal-table,.farm-gathering .meal-table{width:240px!important;height:150px!important;scale:1;left:170px;top:154px;background-image:url('../assets/generated/content-r10/table.png?v=content-r15-20261019-1')!important;background-size:240px 150px!important;background-position:center!important}
+#worldModal[data-fishing-state='caught'] .pond-stage{opacity:1;background-image:url('../assets/generated/content-r7/quiet-water.webp?v=content-r24-20261026-2')}
+.gather-stage .meal-table,.farm-gathering .meal-table{width:240px!important;height:150px!important;scale:1;left:170px;top:154px;background-image:url('../assets/generated/content-r10/table.png?v=content-r24-20261026-2')!important;background-size:240px 150px!important;background-position:center!important}
 .gather-stage .meal-person-merchant,.farm-gathering .meal-person-merchant{left:84px;top:62px}
 .gather-stage .meal-person-elder,.farm-gathering .meal-person-elder{left:192px;top:62px}
 .gather-stage .meal-person-child,.farm-gathering .meal-person-child{left:202px;top:160px}
 .gather-stage .meal-player,.farm-gathering .meal-player{left:84px;top:160px}
-.gather-stage .meal-trace-merchant,.farm-gathering .meal-trace-merchant{left:91px;top:122px;width:48px!important;height:48px!important;content:url('../assets/generated/content-r10/cup.png?v=content-r15-20261019-1')}
-.gather-stage .meal-trace-elder,.farm-gathering .meal-trace-elder{left:191px;top:126px;width:64px!important;height:48px!important;content:url('../assets/generated/content-r10/hot.png?v=content-r15-20261019-1')}
+.gather-stage .meal-trace-merchant,.farm-gathering .meal-trace-merchant{left:91px;top:122px;width:48px!important;height:48px!important;content:url('../assets/generated/content-r10/cup.png?v=content-r24-20261026-2')}
+.gather-stage .meal-trace-elder,.farm-gathering .meal-trace-elder{left:191px;top:126px;width:64px!important;height:48px!important;content:url('../assets/generated/content-r10/hot.png?v=content-r24-20261026-2')}
 .gather-stage .meal-trace-child,.farm-gathering .meal-trace-child{left:280px;top:198px}
 .gather-shared{margin:4px 0;min-height:48px;line-height:1.5}
 .gather-choices .neighbor-tabs{margin:4px 0;gap:4px}.gather-choices .neighbor-tabs button{font-size:14px;min-height:44px}

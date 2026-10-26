@@ -165,16 +165,9 @@
       function replay(t){if(!pane.isConnected||box.dataset.contentView!=='note')return;const stage=pane.querySelector('.pond-stage'),phase=A.observeFishingCast({fishId:id,startedAt:Date.now()-((t-start)%5000),observationVersion:2},Date.now());stage.dataset.reel=phase.canReel?'active':'wait';stage.dataset.motion=phase.motion;stage.dataset.pose=phase.pose;window.ContentR8.drawWater(stage,phase);requestAnimationFrame(replay);}requestAnimationFrame(replay);
     });
     box.querySelectorAll('[data-note]').forEach(b => { b.onclick = () => openFishNotes(s, b.dataset.note); });
-    if(n){const practice=document.createElement('button');practice.id='pondPractice';practice.className='content-secondary';practice.textContent='遮字練習，只看水面';box.querySelector('.content-footer').prepend(practice);practice.onclick=()=>{
-      const id=n.id,cast={fishId:id,startedAt:Date.now(),observationVersion:2};
-      const pane=document.createElement('section');pane.className='note-replay blind-practice';
-      pane.innerHTML='<p>先看水面，結束後再揭曉。不投餌、不計魚獲。</p><div class="pond-stage" data-rhythm="'+id+'"><canvas class="pond-effects"></canvas><img class="pond-bobber" src="'+art('bobber.png')+'" alt="紅白浮標"><img class="pond-fisher" src="assets/generated/content-r13/fishing-0.png'+(window.FARM_VERSION_QUERY||'')+'" alt="米莉持竿觀察水面"></div><p class="practice-reveal" role="status"></p><button class="practice-reel">試著提竿</button><button class="stop-note-replay">回筆記</button>';
-      box.querySelector('.modal-body').prepend(pane);box.dataset.practice='true';box.querySelector('h2').textContent='只看水面，認認這一竿';practice.hidden=true;
-      pane.querySelector('.stop-note-replay').onclick=()=>openFishNotes(s,id);let attempted=false;
-      pane.querySelector('.practice-reel').onclick=()=>{if(attempted)return;attempted=true;const phase=A.observeFishingCast(cast,Date.now());pane.querySelector('.practice-reveal').textContent=phase.canReel?'這下咬穩了。等一會，看看是哪一種水形。':'這一下還沒咬穩，接著看水面。';};
-      function replay(){if(!pane.isConnected||box.dataset.contentView!=='note')return;const elapsed=Date.now()-cast.startedAt,stage=pane.querySelector('.pond-stage'),phase=A.observeFishingCast(cast,cast.startedAt+Math.min(4800,elapsed));stage.dataset.reel=phase.canReel?'active':'wait';stage.dataset.motion=phase.motion;stage.dataset.pose=phase.pose;stage.dataset.phase=phase.index;window.ContentR8.drawWater(stage,phase);
-        if(elapsed>=5000){pane.querySelector('.practice-reveal').textContent=n.name+'・'+n.clue+' '+n.note+' 魚簍、累計釣獲與筆記頁數都不變。';pane.querySelector('.practice-reel').hidden=true;return;}requestAnimationFrame(replay);
-      }requestAnimationFrame(replay);
+    if(n){const practice=document.createElement('button');practice.id='pondPractice';practice.className='content-secondary';practice.textContent='看水紋猜魚，只看水面';box.querySelector('.content-footer').prepend(practice);practice.onclick=()=>{
+      return window.ContentR16.practice(s,box,notes,()=>openFishNotes(s,n.id));
+
     };}
     box.querySelector("#backToPond").onclick = () => openFishing(s);
   }

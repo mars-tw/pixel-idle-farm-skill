@@ -5,4 +5,16 @@ docs/content/r8/** -text whitespace=cr-at-eol
 docs/content/r9/** -text whitespace=cr-at-eol
 docs/content/r14/** -text whitespace=cr-at-eol
 assets/generated/content-r15/manifest.json whitespace=cr-at-eol
+assets/generated/content-r18/manifest.json whitespace=cr-at-eol
 docs/content/r15/** -text whitespace=cr-at-eol
+docs/content/r16/** -text whitespace=cr-at-eol
+docs/content/r17/** -text whitespace=cr-at-eol
+docs/content/r18/** -text whitespace=cr-at-eol
+docs/art/masters/content-r18/** -text
+docs/content/r19/** -text whitespace=cr-at-eol
+docs/content/r19/logs/** -text -whitespace
+docs/art/masters/content-r19/** -text
+assets/generated/content-r19/manifest.json whitespace=cr-at-eol
+docs/evidence/R68/source-manifest.json text eol=lf
+docs/content/r20/** -text whitespace=cr-at-eol
+docs/content/r20/logs/** -text -whitespace
