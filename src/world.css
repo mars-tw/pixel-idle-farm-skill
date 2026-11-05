@@ -158,7 +158,7 @@ header { position: fixed; z-index: 9902; top: max(18px, env(safe-area-inset-top)
 @media (max-height: 500px) and (min-width: 600px) {
   .title { font-size: 19px; } .title small { display: none; }
   header { display: flex; right: 65px; } .res-bar { margin-top: 0; }
-  #questDock { top: 60px; width: 238px; }
+  #questDock { top: var(--world-quest-top, 60px); width: 238px; }
   .seed-hud, #mapScene .seed-hud { top: 179px; }
   .toolbar { top: 10px; right: 8px; }
   .map-fit-toggle { top: 103px; right: 8px; }

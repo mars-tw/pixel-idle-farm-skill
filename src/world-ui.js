@@ -603,6 +603,8 @@
     const portrait = window.innerWidth <= 859 && window.innerHeight > 500;
     if (portrait) document.documentElement.style.setProperty("--world-quest-top", Math.max(112, bottom + 12) + "px");
     if (window.innerWidth > 859) document.documentElement.style.setProperty("--world-system-top", Math.max(78, bottom + 12) + "px");
+    // R30：橫式矮視口也要跟著標題列實高走，任務列才不會被資源列蓋住上半。
+    if (window.innerHeight <= 500 && window.innerWidth > window.innerHeight) document.documentElement.style.setProperty("--world-quest-top", Math.max(60, bottom + 8) + "px");
   }
   // R79：任務列多一行提示時，種子列跟著往下，不被任務列蓋住。
   function syncSeedHudTop() {

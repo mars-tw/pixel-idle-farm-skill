@@ -2845,7 +2845,7 @@
         if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; el.classList.toggle('sun-grown',plot.sunGrown===true); el.classList.toggle('sunlit-crop',!!(G.isSunlit && G.isSunlit(state,tile.plotIndex,t))); }
         if (prog.ready) {
           cropMatureCue("map:" + tile.plotIndex, tile.id, el);
-          addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2);
+          addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2, "ready-crop");
         } else {
           resetCropMatureCue("map:" + tile.plotIndex);
           addBar(tile.x * TILE + TILE * 0.12, (tile.y + 1) * TILE - 6, TILE * 0.76, prog.ratio);
@@ -2875,7 +2875,9 @@
   }
   function addDot(cx, top, variant) {
     const el = document.createElement("div"); el.className = "ob-dot" + (variant ? " ob-dot-" + variant : "");
-    el.style.left = pxv(Math.round(cx - 5)); el.style.top = pxv(top);
+    const dotSize = variant === "ready-crop" ? 7 : 11;
+    if (variant === "ready-crop") { el.style.width = "7px"; el.style.height = "7px"; }
+    el.style.left = pxv(Math.round(cx - dotSize / 2)); el.style.top = pxv(top);
     worldEl.appendChild(el); obDyn.push(el);
     return el;
   }
@@ -2893,6 +2895,27 @@
     const frame = window.Atlas.getFrame("npcs", tile.npc + "_idle_a");
     const spriteTop = sprite ? parseFloat(sprite.style.top) : Math.round((tile.y + 1) * TILE - TILE * (frame ? frame.h / frame.w : 4 / 3));
     return spriteTop - Math.max(14, Math.round(TILE * .18));
+  }
+  // R30：名牌避讓——名牌與玩家或其他 NPC 重疊時自動上移，直到交集為 0 或達上限；
+  // 位移量記在 data-plate-shift 供量測。anchor 是名牌所屬 NPC 本人，不列入障礙。
+  function shiftNameplateAbove(el, anchor) {
+    if (!el || !worldEl) return;
+    const rectOverlap = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)) > 0;
+    const obstacles = [];
+    const player = $("player");
+    if (player) obstacles.push(player);
+    worldEl.querySelectorAll('.ob[data-kind="npc"], .ob[data-kind="animal"]').forEach((n) => { if (n !== anchor) obstacles.push(n); });
+    if (!obstacles.length) return;
+    let shifted = 0;
+    for (let step = 0; step < 12; step++) {
+      const r = el.getBoundingClientRect();
+      if (!obstacles.some((o) => rectOverlap(r, o.getBoundingClientRect()))) break;
+      const top = parseFloat(el.style.top);
+      if (!Number.isFinite(top)) break;
+      el.style.top = pxv(top - 8);
+      shifted += 8;
+    }
+    if (shifted) el.dataset.plateShift = String(shifted);
   }
   function strHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
   // Stage 7：地圖上動物頭上的照護狀態小圖示（hungry/thirsty/needs_groom 才顯示，happy 不額外標，
@@ -2981,6 +3004,7 @@
         plate.style.left = pxv(npcCenterX(tile)); plate.style.top = pxv(npcIndicatorTop(tile) - 4);
         plate.style.zIndex = Math.round(baselineY + 30);
         worldEl.appendChild(plate); obDyn.push(plate);
+        shiftNameplateAbove(plate, el);
       }
       // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
       const req = state.npcRequests && state.npcRequests[tile.npc];
@@ -3011,6 +3035,7 @@
       if (req && G.canFulfillNpcRequest(state, tile.npc)) m.classList.add("qmarker-ready");
     }
     mEl.appendChild(m);
+    if (tile.npc) shiftNameplateAbove(m, obDyn.find((n) => n.dataset.kind === "npc" && n.dataset.tileId === tile.id) || null);
   }
   // ---- 動作 VFX 疊層（地圖可見回饋）----
   const ACTION_VFX = { water: "water_droplets", hoe: "soil_dust", clear: "soil_dust", build: "soil_dust",
