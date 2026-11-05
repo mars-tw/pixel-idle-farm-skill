@@ -3203,7 +3203,8 @@
     const w = state.gender === 'm' ? TILE*1.18 : Math.max(64,Math.round(TILE*.85/8)*8), h = w * (64 / 48);
     // Visual stance only: the physics tile and interaction/impact target never move.
     const northOfChild=state.map.tiles.some(t=>t.npc==='child'&&t.x===tile.x&&t.y===tile.y+1);
-    pl.style.setProperty('--stance-x',northOfChild ? pxv(-TILE*.8) : tile.plotIndex!=null ? pxv(-TILE*.66) : '0px');
+    const besideNpc=state.map.tiles.some(t=>t.npc&&t.x===tile.x&&Math.abs(t.y-tile.y)===1);
+    pl.style.setProperty('--stance-x',northOfChild ? pxv(-TILE*.8) : besideNpc ? pxv(-TILE*.7) : tile.plotIndex!=null ? pxv(-TILE*.66) : '0px');
     pl.style.width = pxv(w); pl.style.height = pxv(h);
     if (!animate) pl.style.transition = "none"; else pl.style.transition = "";
     const cx = (tile.x + 0.5) * TILE, baselineY = (tile.y + 1) * TILE - TILE * 0.08;
@@ -3340,6 +3341,7 @@
   function hideBuildWheel() {
     const el = $("buildWheel"); if (!el) return;
     el.hidden = true; el.innerHTML = "";
+    clearBuildPreview();
   }
   function hideObjectBubble() {
     const el = $("objectBubble"); if (!el) return;
@@ -3348,6 +3350,36 @@
   function hideSceneActions() {
     const el = $("sceneActionBar"); if (!el) return;
     el.hidden = true; el.innerHTML = "";
+  }
+  let buildPreviewEl = null;
+  function clearBuildPreview() { if (buildPreviewEl) { buildPreviewEl.hidden = true; delete buildPreviewEl.dataset.tileId; delete buildPreviewEl.dataset.state; } }
+  function renderBuildPreview(tile) {
+    if (!worldEl || !tile || currentTool() !== "build" || !state.interaction.buildType) { clearBuildPreview(); return; }
+    const def = window.BUILDINGS[state.interaction.buildType]; if (!def) { clearBuildPreview(); return; }
+    if (!buildPreviewEl) {
+      buildPreviewEl = document.createElement("div");
+      buildPreviewEl.className = "build-preview";
+      buildPreviewEl.dataset.audit = "build-preview";
+      buildPreviewEl.innerHTML = '<span class="build-preview-cost"></span>';
+      worldEl.appendChild(buildPreviewEl);
+    }
+    const ok = !!(G.canBuildOn && G.canBuildOn(state, tile) && G.buildingUnlocked(state, def.id) && G.canAffordCost(state, def.cost) && !(G.buildingAtMaxCount && G.buildingAtMaxCount(state, def.id)));
+    buildPreviewEl.className = "build-preview " + (ok ? "is-ok" : "is-blocked");
+    buildPreviewEl.dataset.tileId = tile.id;
+    buildPreviewEl.dataset.state = ok ? "ok" : "blocked";
+    buildPreviewEl.dataset.buildType = def.id;
+    buildPreviewEl.style.left = pxv(tile.x * TILE); buildPreviewEl.style.top = pxv(tile.y * TILE);
+    buildPreviewEl.style.width = pxv(TILE); buildPreviewEl.style.height = pxv(TILE);
+    buildPreviewEl.style.zIndex = 9400;
+    const costText = buildCostText(def);
+    const remain = Object.entries(def.cost || {}).map(([k, v]) => {
+      const have = k === "coins" ? state.coins : ((state.materials && state.materials[k]) || 0);
+      const name = k === "coins" ? "金" : ((window.MATERIALS[k] && window.MATERIALS[k].name) || k);
+      return (have - v) + " " + name;
+    }).join("、");
+    const label = buildPreviewEl.querySelector(".build-preview-cost");
+    if (label) label.textContent = "花費 " + costText + "・剩 " + remain;
+    buildPreviewEl.hidden = false;
   }
   function tileViewportPoint(tileId, yf) {
     const scene = $("mapScene"), el = tileElOf(tileId);
@@ -4810,6 +4842,13 @@
         if (hasOpenModal()) return;
         const ob = ev.target && ev.target.closest ? ev.target.closest(".ob[data-kind]") : null;
         if (ob && ev.pointerType) lastMapPointer = { pointerType: ev.pointerType, tileId: ob.dataset.tileId || "", at: now() };
+      }, { passive: true });
+      world.addEventListener("pointermove", (ev) => {
+        if (currentTool() !== "build" || !state.interaction.buildType) return;
+        const host = ev.target && ev.target.closest ? ev.target.closest("[data-tile-id]") : null;
+        const tid = host && host.dataset ? host.dataset.tileId : "";
+        const tile = tid ? G.getTileById(state, tid) : null;
+        if (tile) renderBuildPreview(tile);
       }, { passive: true });
       world.addEventListener("click", (ev) => {
         const ob = ev.target && ev.target.closest ? ev.target.closest(".ob[data-kind]") : null;

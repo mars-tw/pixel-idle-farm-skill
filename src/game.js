@@ -1368,11 +1368,14 @@
     if (!target) return null;
     const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
     let best = null;
+    let bestSide = null;
     for (const [dx, dy] of dirs) {
       const nt = getTileXY(state, target.x + dx, target.y + dy);
       if (!nt || !isWalkable(state, nt)) continue;
       const p = bfsPath(state, fromId, nt.id);
-      if (p && (best === null || p.length < best.path.length)) best = { tileId: nt.id, path: p };
+      if (!p) continue;
+      const side = target.npc ? (dx !== 0 ? 0 : 1) : 0;
+      if (best === null || side < bestSide || (side === bestSide && p.length < best.path.length)) { best = { tileId: nt.id, path: p }; bestSide = side; }
     }
     return best;
   }
