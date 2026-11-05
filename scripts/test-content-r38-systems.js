@@ -123,5 +123,11 @@ test('A5 Lv 2 里程碑列具體解鎖，兩個介面的新標記看過後各自
   assert.match(ui, /new-unlock-badge/);
 });
 
+test("R38 整合：自動換工具時重畫工具列，有效光圈不播實心白圓格", () => {
+  const ui = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8");
+  assert.match(ui, /if \(syncQuestTool\(\)\) renderToolbar\(\);/);
+  assert.match(ui, /valid \? "valid_ring" : "invalid_ring", \{ scale: 1\.05, startFrame: valid \? 2 : 0 \}/);
+});
+
 if (process.exitCode) process.exit(1);
-console.log(`VERIFIED content R38 A1-A5 (${passed}/7)`);
+console.log(`VERIFIED content R38 A1-A5 (${passed}/8)`);

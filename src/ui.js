@@ -969,7 +969,8 @@
   function syncQuestTool() {
     const step = currentToolStep();
     if (step.key !== autoToolStepKey) { autoToolStepKey = step.key; manualToolStepKey = ""; }
-    if (step.tool && manualToolStepKey !== step.key && currentTool() !== step.tool) state.interaction.tool = step.tool;
+    if (step.tool && manualToolStepKey !== step.key && currentTool() !== step.tool) { state.interaction.tool = step.tool; return true; }
+    return false;
   }
   function setTool(t, options) {
     clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble();
@@ -1707,7 +1708,7 @@
   window.FarmEarlyChoiceRoutesHtml = earlyChoiceRoutesHtml;
   function renderQuestDock() {
     const box = $("questDock"); if (!box) return;
-    syncQuestTool();
+    if (syncQuestTool()) renderToolbar(); // R38 整合：步驟自動換工具時，工具列選取框一起更新
     if (window.FarmWorld && window.FarmWorld.renderObjective(state)) return;
     if (G.syncStoryProgress) G.syncStoryProgress(state);
     const cur = G.currentQuest(state);
@@ -3151,14 +3152,14 @@
     sp.style.top = (el.offsetTop + el.offsetHeight * ((opts && opts.yf) || 0.5)) + "px";
     trimFxLayer(layer, 1);
     layer.appendChild(sp);
-    let f = 0;
+    let f = (opts && opts.startFrame) || 0; // R38 整合：光圈可略過實心白圓的前兩格
     const paint = () => { const stl = window.Atlas.frameStyleFor(sheet, vfxRow + "_" + String(f).padStart(2, "0"), size, size);
       if (stl) { sp.style.backgroundImage = stl.backgroundImage; sp.style.backgroundSize = stl.backgroundSize; sp.style.backgroundPosition = stl.backgroundPosition; } };
     paint();
     const iv = setInterval(() => { f++; if (f > 5) { clearInterval(iv); sp.remove(); return; } paint(); }, 75);
     setTimeout(() => { clearInterval(iv); sp.remove(); }, 650);
   }
-  function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1.05 }); }
+  function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1.05, startFrame: valid ? 2 : 0 }); } // R38 整合：valid_ring 第 0、1 格是實心白圓，評審截圖看起來像缺圖
   function stationTileOf(type) { const t = state.map.tiles.find((x) => x.station === type); return t ? t.id : null; }
 
   // ---------- 玩家定位 / camera / 移動 ----------
