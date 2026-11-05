@@ -24,7 +24,7 @@ test('升級面板只有一個標題關閉入口，買不起時顯示還差 X �
   const pane = html.slice(start, html.indexOf('<div class="side-pane sel" data-pane="story">', start));
   assert.equal((pane.match(/class="pane-head"/g) || []).length, 1);
   assert.match(pane, /class="building-upgrades-head">已放置建物/);
-  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金（還差 \$\{fmtNum\(next\.cost - state\.coins\)\}）/);
+  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金（還差 \$\{fmtNum\(shortfall\)\}）/);
   assert.match(ui, /buildingCostShortfall/);
   assert.match(ui, /const visibleUpgrades = upgradeKeys/);
   assert.doesNotMatch(ui, /appendListMore\(box, "upgrades"/);
@@ -108,16 +108,17 @@ test('第一次三格小麥收成足以完成班伯主線，市集不再重複�
   assert.equal(A.claim(state, 'c1_first_harvest', now).ok, true);
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
-  assert.ok(orders.every((row) => JSON.stringify(row.wants) !== JSON.stringify({ wheat: 2 })));
+  assert.ok(orders.every((row) => Object.keys(row.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
+  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 3)), true);
   assert.equal(state.storage.items.wheat, 4);
 });
 
-test('每日收成門檻不超過首章 6 份，印章冊標示已領取 0/3', () => {
+test('每日三項不重複首章收成與小麥交付，印章冊標示已領取 0/3', () => {
   for (let day = 0; day < 12; day++) {
     const state = S.defaultState(day * 86400000);
-    state.daily = { day, cropId: 'wheat', water: 0, harvest: 0, claimed: {}, stamps: 0, stamped: false, collected: {} };
-    const harvest = D.status(state, day * 86400000).tasks.find((row) => row.id === 'harvest');
-    assert.ok(harvest.need <= C.CROPS.wheat.yield * 3);
+    const tasks = D.status(state, day * 86400000).tasks;
+    assert.deepEqual(tasks.map((row) => row.id), ['water', 'talk', 'sell']);
+    assert.doesNotMatch(tasks.map((row) => row.title + row.detail).join(' '), /收成 6|交 2 份小麥|小麥餐籃/);
   }
   assert.match(dailyUi, /已完成 \$\{st\.completed\}\/3・已領取 \$\{st\.claimed\}\/3/);
 });

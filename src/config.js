@@ -157,7 +157,7 @@ const UPGRADES = {
   plotCount: {
     name: "開墾農地", icon: "🟫", desc: "增加可種植的農地格數",
     levels: [
-      { cost: 40,   value: 8 },
+      { cost: 25,   value: 8 },
       { cost: 140,  value: 10 },
       { cost: 420,  value: 12 },
     ],

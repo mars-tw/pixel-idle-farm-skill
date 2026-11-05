@@ -38,28 +38,28 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
     const harvest = G.harvest(state, i, now);
     assert.equal(harvest.ok, true);
     A.record(state, { type: 'harvest', cropId: 'wheat', count: harvest.added }, now);
-    D.record(state, 'harvest', harvest.added, now);
   }
   assert.equal(state.storage.items.wheat, 6);
   A.record(state, { type: 'talk', npcId: 'elder' }, now);
   assert.equal(A.claim(state, 'c1_first_harvest', now).ok, true);
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
-  assert.ok(orders.every((order) => JSON.stringify(order.wants) !== JSON.stringify({ wheat: 2 })));
-  assert.equal(D.status(state, now).tasks.find((row) => row.id === 'basket').ready, true);
-  assert.equal(D.claim(state, 'basket', D.dayNumber(now), now).ok, true);
-  assert.equal(state.storage.items.wheat || 0, 2);
+  assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
+  assert.equal(G.mainStoryReserve(state, 'wheat'), 2);
+  assert.deepEqual(D.status(state, now).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
+  assert.equal(state.storage.items.wheat || 0, 4, '每日目標不再消耗主線小麥');
 });
 
-test('開場、主線與手記統一把兩份小麥交給班伯，市集沒有重複條件', () => {
+test('開場與主線統一把兩份小麥交給班伯，每日目標改成不同動作', () => {
   assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?把其中 2 份交給班伯[\s\S]*?wants: \{ wheat: 2 \}/);
   assert.match(world, /把其中 2 份交給班伯/);
   assert.match(world, /種下第一把小麥，做陽光餐籃/);
   assert.doesNotMatch(world, /給葛瑞送一籃/);
-  assert.match(daily, /留 2 份\$\{crop\.name\}給班伯的灶台/);
+  assert.deepEqual(D.status(S.defaultState(1800000000000), 1800000000000).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
   const state = S.defaultState(1800000000000);
   const orders = G.refreshOrders(state, 1800000000000, () => 0);
-  assert.ok(orders.every((order) => JSON.stringify(order.wants) !== JSON.stringify({ wheat: 2 })));
+  assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
+  assert.match(ui, /主線保留 2 份小麥/);
 });
 
 test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {
@@ -70,8 +70,8 @@ test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完�
   assert.match(ui, /確認丟棄/);
   const state = S.defaultState(1800000000000);
   const order = G.refreshOrders(state, 1800000000000, () => 0)[0];
-  assert.equal(G.orderMissingText(state, order), '還缺胡蘿蔔 ×2');
-  state.storage.items.carrot = 2;
+  assert.equal(G.orderMissingText(state, order), '還缺小麥 ×2');
+  state.storage.items.wheat = 2;
   assert.equal(G.orderMissingText(state, order), '交付');
 });
 
@@ -79,7 +79,7 @@ test('成熟格、背包名稱、升級實價與設定目前狀態皆有明確�
   assert.match(world, /田裡有 \$\{readyCount\} 格可以收成/);
   assert.match(ui, /class="res-name">背包<\/span>/);
   assert.match(ui, /title="背包：\$\{used\} 份／\$\{cap\} 份/);
-  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金（還差 \$\{fmtNum\(next\.cost - state\.coins\)\}）/);
+  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金（還差 \$\{fmtNum\(shortfall\)\}）/);
   assert.match(ui, /目前：\$\{enabled \? "開" : "關"\}/);
   assert.doesNotMatch(ui.slice(ui.indexOf('function settingRowHtml'), ui.indexOf('function soundVolumeHtml')), />\$\{enabled \? "開啟" : "關閉"\}<\/button>/);
 });

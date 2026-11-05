@@ -637,9 +637,7 @@
     if (!held.length) return "";
     const total = held.reduce((sum, k) => sum + mats[k], 0);
     const detail = held.map((k) => `${window.MATERIALS[k].name} ${mats[k]}`).join("・");
-    return `<div class="res mat" title="建材：${detail}"><span class="ic">🧰</span> ${total}</div>`;
-    return "";
-      
+    return `<div class="res mat" title="材料：${detail}" aria-label="材料，共 ${total} 份；${detail}"><span class="ic">🧰</span><span class="res-name">材料</span> ${total}</div>`;
   }
 
   // ---------- 種子選擇 ----------
@@ -1089,6 +1087,7 @@
           ${isFestival ? `<div class="festival-tag">🏮四季物產</div>` : ""}
           ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
           <div class="o-flavor">${narrative.offer}</div>` : ""}
+          ${G.mainStoryReserve && G.mainStoryReserve(state, "wheat") && o.wants.wheat ? `<div class="o-reserve" data-audit="story-reserve">主線保留 2 份小麥</div>` : ""}
           <div class="o-wants">${wantsHtml}</div>
           <div class="o-reward">🪙 ${fmtNum(pay.coins)} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${rarity.label} · ⏳ ${fmtTime(Math.max(0, o.expiresAt - now()))}</div>
@@ -1104,6 +1103,7 @@
         </div>`;
       const fulfill = el.querySelector(".ful");
       if (fulfill) fulfill.onclick = () => {
+          if (G.orderConsumesStoryReserve && G.orderConsumesStoryReserve(state, o) && !window.confirm("交付後會動用主線保留的 2 份小麥，仍要交付嗎？")) return;
           const r = G.fulfillOrder(state, o.id, now());
           if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
           else toast("作物不足，無法交付");
@@ -1213,10 +1213,10 @@
   function renderUpgrades() {
     const box = $("upgrades"); box.innerHTML = "";
     const orderRewardEstimate = 18;
-    const upgradeBand = (next) => !next ? 3 : state.coins >= next.cost ? 0 : next.cost - state.coins <= orderRewardEstimate ? 1 : 2;
+    const upgradeBand = (key, next) => !next ? 3 : G.canBuyUpgrade(state, key) ? 0 : G.upgradeShortfall(state, key) <= orderRewardEstimate ? 1 : 2;
     const upgradeKeys = window.UPGRADE_ORDER.slice().sort((a, b) => {
       const na = G.nextUpgrade(state, a), nb = G.nextUpgrade(state, b);
-      return upgradeBand(na) - upgradeBand(nb) || (na ? na.cost : Infinity) - (nb ? nb.cost : Infinity);
+      return upgradeBand(a, na) - upgradeBand(b, nb) || (na ? na.cost : Infinity) - (nb ? nb.cost : Infinity);
     });
     // R26：升級項目直接全部列出，不再用難懂的「顯示更多 1」折疊。
     const visibleUpgrades = upgradeKeys;
@@ -1225,10 +1225,11 @@
       const lv = state.upgrades[key];
       const max = G.upgradeMaxLevel(key);
       const next = G.nextUpgrade(state, key);
-      const band = upgradeBand(next);
+      const band = upgradeBand(key, next);
       const bandLabel = ["現在買得起", "差一點", "長期目標", "已滿級"][band];
-      const nextStep = next && state.coins < next.cost
-        ? (band === 1 ? `再交一張訂單約可得 ${orderRewardEstimate} 金` : `先累積 ${fmtNum(next.cost - state.coins)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
+      const shortfall = G.upgradeShortfall(state, key);
+      const nextStep = next && shortfall > 0
+        ? (band === 1 ? `還差 ${fmtNum(shortfall)} 金；再交一張訂單約可補足` : `還差 ${fmtNum(shortfall)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
         : "";
       const el = document.createElement("div");
       el.className = "up";
@@ -1240,7 +1241,7 @@
           <div class="u-desc">${def.desc}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${nextStep}。</span>` : ""}</div>
         </div>
         ${next
-          ? `<button class="btn buy small" ${state.coins >= next.cost ? "" : "disabled"}>${state.coins >= next.cost ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(next.cost - state.coins)}）`}</button>`
+          ? `<button class="btn buy small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button>`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -3875,6 +3876,7 @@
       const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
       if (window.FarmWorld && d) d.line = window.FarmWorld.dialogue(tile.npc, d.line);
       if (window.AdventureAPI) window.AdventureAPI.record(state, { type: "talk", npcId: tile.npc }, now());
+      if (window.FarmDaily) window.FarmDaily.record(state, "talk", 1, now());
       if (window.FarmWorld && tile.npc === "mayor") G.advanceStory(state, "read_sign");
       npcLineIdx[tile.npc] = (npcLineIdx[tile.npc] || 0) + 1;
       activeTalk = { npcId: tile.npc, until: now() + 2600 };
@@ -4243,7 +4245,11 @@
         </div>`;
       $("clearBtn").onclick = () => {
         const r = G.clearObstacle(state, tile.id);
-        if (r.ok) { playAction("hoe"); toast("⛏️ 已清除，獲得建材"); afterChange(true); renderTileContext(); renderQuestDock(); }
+        if (r.ok) {
+          playAction("hoe");
+          const gained = Object.entries(r.grants || ob.grants || {}).map(([k, v]) => `＋${v} ${k === "wood" ? "木料" : (window.MATERIALS[k] && window.MATERIALS[k].name) || k}`).join("、");
+          toast(gained || "已取得材料"); afterChange(true); renderTileContext(); renderQuestDock();
+        }
         else if (r.reason === "no_coins") toast("🪙 金幣不足");
       };
       return;

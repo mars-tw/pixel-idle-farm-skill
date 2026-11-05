@@ -7,51 +7,39 @@ function test(label, fn) { fn(); passed++; console.log("PASS " + label); }
 function fresh() { return S.defaultState(T); }
 function complete(s, now) {
   const st = D.status(s, now);
-  D.record(s, "water", 3, now); D.record(s, "harvest", 8, now);
-  s.storage.items[st.tasks[2].cropId] = 2;
-  return ["water", "harvest", "basket"].map((id) => D.claim(s, id, st.day, now));
+  D.record(s, "water", 3, now); D.record(s, "talk", 1, now); D.record(s, "sell", 1, now);
+  return ["water", "talk", "sell"].map((id) => D.claim(s, id, st.day, now));
 }
-test("new farmer gets reachable wheat basket and no free rewards", () => {
+test("new farmer gets three distinct reachable chores and no free rewards", () => {
   const s = fresh(), coins = s.coins, st = D.status(s, T);
-  assert.equal(st.tasks[2].cropId, "wheat"); assert.equal(st.done, 0); assert.equal(s.coins, coins);
+  assert.deepEqual(st.tasks.map((task) => task.id), ["water", "talk", "sell"]); assert.equal(st.done, 0); assert.equal(s.coins, coins);
   assert.equal(D.claim(s, "water", st.day, T).ok, false);
 });
-test("basket uses only crops unlocked at the start of the day", () => {
-  for (let lv = 1; lv <= 10; lv++) for (let day = 0; day < 7; day++) {
-    const s = fresh(); s.level = lv;
-    const crop = D.status(s, T + day * DAY).tasks[2].cropId;
-    assert.ok(C.CROPS[crop].unlockLevel <= lv);
-    s.level++; assert.equal(D.status(s, T + day * DAY).tasks[2].cropId, crop);
-  }
+test("daily chores do not consume main-story crops", () => {
+  const s = fresh(); s.storage.items.wheat = 2; const before = JSON.stringify(s.storage.items);
+  D.record(s, "talk", 1, T); D.record(s, "sell", 1, T);
+  assert.equal(D.claim(s, "talk", s.daily.day, T).ok, true); assert.equal(D.claim(s, "sell", s.daily.day, T).ok, true);
+  assert.equal(JSON.stringify(s.storage.items), before);
 });
 test("successful watering counts once; invalid and repeated watering do not count", () => {
   const s = fresh(); G.waterPlot(s, 0, T); assert.equal(D.status(s, T).tasks[0].have, 0);
   G.plant(s, 0, "wheat", T); assert.equal(G.waterPlot(s, 0, T + 1).ok, true);
   assert.equal(G.waterPlot(s, 0, T + 2).ok, false); assert.equal(D.status(s, T + 2).tasks[0].have, 1);
 });
-test("harvest counts stored produce only and never unripe input", () => {
-  const s = fresh(); G.plant(s, 0, "wheat", T);
-  assert.equal(G.harvest(s, 0, T + 1).ok, false); assert.equal(D.status(s, T).tasks[1].have, 0);
-  const r = G.harvest(s, 0, T + 60000); assert.equal(r.ok, true); assert.equal(D.status(s, T + 60000).tasks[1].have, r.added);
-  G.harvest(s, 0, T + 60000); assert.equal(D.status(s, T + 60000).tasks[1].have, r.added);
+test("talk progress counts once", () => {
+  const s = fresh(); D.record(s, "talk", 1, T); D.record(s, "talk", 1, T);
+  assert.equal(D.status(s, T).tasks[1].have, 1);
 });
-test("lost harvest in full storage gives no daily progress", () => {
-  const s = fresh(); s.storage.items.wheat = G.storageCapacity(s); G.plant(s, 0, "wheat", T);
-  assert.equal(G.harvest(s, 0, T + 60000).added, 0); assert.equal(D.status(s, T).tasks[1].have, 0);
-});
-test("basket cannot be delivered without enough stock and pays only once", () => {
-  const s = fresh(), st = D.status(s, T), coins = s.coins;
-  s.storage.items.wheat = 1; assert.equal(D.claim(s, "basket", st.day, T).ok, false);
-  assert.equal(s.storage.items.wheat, 1); assert.equal(s.coins, coins);
-  s.storage.items.wheat = 3;
-  const r = D.claim(s, "basket", st.day, T); assert.equal(r.ok, true);
-  assert.equal(s.storage.items.wheat, 1); assert.equal(s.coins, coins + r.coins);
-  assert.equal(D.claim(s, "basket", st.day, T).reason, "claimed"); assert.equal(s.storage.items.wheat, 1);
+test("successful direct sale counts and reward pays only once", () => {
+  const s = fresh(), st = D.status(s, T), coins = s.coins; s.storage.items.wheat = 1;
+  assert.equal(G.sellItem(s, "wheat", 1, T).ok, true); assert.equal(D.status(s, T).tasks[2].have, 1);
+  const r = D.claim(s, "sell", st.day, T); assert.equal(r.ok, true);
+  assert.equal(D.claim(s, "sell", st.day, T).reason, "claimed"); assert.ok(s.coins > coins);
 });
 test("all three real tasks grant exactly one stamp and compost", () => {
   const s = fresh(), rewards = complete(s, T);
   assert.equal(rewards.filter((r) => r.stamp).length, 1); assert.equal(s.daily.stamps, 1); assert.equal(s.materials.compost, 1);
-  assert.equal(D.claim(s, "basket", s.daily.day, T).ok, false); assert.equal(s.daily.stamps, 1);
+  assert.equal(D.claim(s, "sell", s.daily.day, T).ok, false); assert.equal(s.daily.stamps, 1);
 });
 test("Taiwan midnight resets progress and preserves earned stamps", () => {
   const a = Date.parse("2026-10-15T23:59:59+08:00"), b = a + 1000, s = fresh();
@@ -87,7 +75,7 @@ test("seven days unlock both text collectibles and persist through migration", (
 test("old saves have no fabricated daily progress; malformed fields are repaired", () => {
   const s = fresh(); delete s.daily; const m = S.migrate(s);
   assert.equal(D.status(m, T).stamps, 0);
-  m.daily = { day: "broken", stamps: -3, harvest: Infinity, claimed: { water: "yes" }, cropId: "missing" };
+  m.daily = { day: "broken", stamps: -3, talk: Infinity, claimed: { water: "yes" }, cropId: "missing" };
   const st = D.status(S.migrate(m), T); assert.equal(st.tasks[0].have, 0); assert.equal(st.stamps, 0); assert.equal(st.done, 0);
 });
 test("quick harvest ignores locked and unripe plots", () => {
@@ -117,9 +105,8 @@ test("unknown daily actions and invalid quantities never grant progress", () => 
   const st = D.status(s, T); assert.equal(st.tasks[0].have, 0); assert.equal(st.tasks[1].have, 0);
   assert.equal(D.claim(s, "missing", st.day, T).ok, false);
 });
-test("higher-level farmers receive a rotating crop basket over several days", () => {
-  const s = fresh(); s.level = 4; const crops = new Set();
-  for (let i = 0; i < 6; i++) crops.add(D.status(s, T + i * DAY).tasks[2].cropId);
-  assert.deepEqual([...crops].sort(), ["carrot", "tomato", "wheat"]);
+test("daily action set stays distinct across several days", () => {
+  const s = fresh();
+  for (let i = 0; i < 6; i++) assert.deepEqual(D.status(s, T + i * DAY).tasks.map((task) => task.id), ["water", "talk", "sell"]);
 });
 console.log(`R80 daily: ${passed} passed`);

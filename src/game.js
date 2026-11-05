@@ -642,6 +642,7 @@
     if (state.storage.items[cropId] === 0) delete state.storage.items[cropId];
     state.coins += coins;
     state.stats.totalCoinsEarned += coins;
+    if (Daily) Daily.record(state, "sell", n, now);
     if (isQualityItem(cropId)) state.stats.qualitySold = (state.stats.qualitySold || 0) + n;
     checkAchievements(state);
     return { ok: true, coins, qty: n };
@@ -674,7 +675,7 @@
     mooncap_spore: [1, 2], amber_resin: [1, 2], forest_chestnut: [1, 2], frost_cherry: [1, 2],
   };
   const BEGINNER_ORDERS = [
-    { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "merchant", flavor: "蘿拉先留了一張胡蘿蔔試賣單；升到 2 級後再來準備。" },
+    { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "mayor", flavor: "葛瑞要登記 2 份小麥；交付前，記得先替班伯留 2 份。" },
     { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "merchant", flavor: "市集想試賣 3 份小麥，班伯的 2 份先留在主線。" },
     { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "child", flavor: "圖圖想準備 4 份小麥做野餐點心。" },
   ];
@@ -806,6 +807,17 @@
   function canFulfill(state, order) {
     return Object.entries(order.wants).every(([cropId, qty]) => (state.storage.items[cropId] || 0) >= qty);
   }
+  function mainStoryReserve(state, itemId) {
+    const completed = (state.story && state.story.completed) || {};
+    return itemId === "wheat" && !completed.first_delivery ? 2 : 0;
+  }
+  function orderConsumesStoryReserve(state, order) {
+    return Object.entries(order.wants || {}).some(([itemId, qty]) => {
+      const reserve = mainStoryReserve(state, itemId);
+      const have = (state.storage && state.storage.items[itemId]) || 0;
+      return reserve > 0 && have >= qty && have - qty < reserve;
+    });
+  }
   function orderMissingText(state, order) {
     const missing = Object.entries(order.wants || {}).map(([itemId, qty]) => {
       const short = Math.max(0, qty - ((state.storage && state.storage.items[itemId]) || 0));
@@ -873,6 +885,14 @@
     const lv = state.upgrades[key];
     if (lv >= upgradeMaxLevel(key)) return null;
     return UPGRADES[key].levels[lv]; // 下一級（lv 是已購級數，陣列 0-index = 下一級）
+  }
+  function canBuyUpgrade(state, key) {
+    const next = nextUpgrade(state, key);
+    return !!next && state.coins >= next.cost;
+  }
+  function upgradeShortfall(state, key) {
+    const next = nextUpgrade(state, key);
+    return next ? Math.max(0, next.cost - state.coins) : 0;
   }
   function buyUpgrade(state, key) {
     const next = nextUpgrade(state, key);
@@ -2437,8 +2457,8 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, canFulfill, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
-    upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
+    makeOrder, refreshOrders, canFulfill, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
+    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物
