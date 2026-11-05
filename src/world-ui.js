@@ -582,7 +582,7 @@
     const scene = el("mapScene");
     ctx.strokeStyle = "rgba(255,255,235,.55)"; ctx.lineWidth = 1;
     ctx.strokeRect(-s.camera.x / size * 10, -s.camera.y / size * 10, scene.clientWidth / size * 10, scene.clientHeight / size * 10);
-    ctx.fillStyle = "#fff5b2"; ctx.fillRect(s.player.x * 10 + 2, s.player.y * 10 + 2, 6, 6);
+    ctx.fillStyle = "#2b2118"; ctx.fillRect(s.player.x * 10, s.player.y * 10, 10, 10); ctx.fillStyle = "#ff5a3c"; ctx.fillRect(s.player.x * 10 + 1, s.player.y * 10 + 1, 8, 8); ctx.fillStyle = "#fff6e3"; ctx.fillRect(s.player.x * 10 + 3, s.player.y * 10 + 3, 4, 4); button.dataset.playerDot = s.player.x + "," + s.player.y;
     button.onclick = (e) => { const r = canvas.getBoundingClientRect(); const x = Math.floor((e.clientX - r.left) / r.width * s.map.width), y = Math.floor((e.clientY - r.top) / r.height * s.map.height); const tile = window.getTileXY(s, x, y); if (tile) { farm().setTool("hand"); farm().clickTile(tile.id); } };
   }
   function tick(s, t) {
@@ -610,6 +610,7 @@
   }
   // R79：任務列多一行提示時，種子列跟著往下，不被任務列蓋住。
   function syncSeedHudTop() {
+    if (document.querySelector("#buildWheel:not([hidden])")) return;
     const dock = el("questDock");
     if (!dock) return;
     const r = dock.getBoundingClientRect();

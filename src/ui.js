@@ -1319,7 +1319,7 @@
           <div class="u-desc">${def.desc}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${nextStep}。</span>` : ""}</div>
         </div>
         ${next
-          ? `<div><button class="btn buy small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button>${G.canBuyUpgrade(state, key) && state.coins === next.cost ? `<div class="u-next" data-audit="upgrade-spend-all">升級後金幣會變成 0。</div>` : ""}</div>`
+          ? `<div class="u-action"><button class="btn buy small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${G.canBuyUpgrade(state, key) && state.coins === next.cost ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後金幣會變成 0。</div>` : ""}`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -2669,11 +2669,14 @@
       if (buildable) cls += " build-target";
       const kind = lockedArea ? "locked-area" : "";
       const frame = terrainFrame(tile, prog);
+      const bankSides = tile.terrain === "water" ? edgeSidesFor(tile) : [];
+      if (bankSides.length) cls += bankSides.map((d) => " bank-" + d).join("");
       const sig = cls + "|" + kind + "|" + frame;
       if (cell.groundSig === sig) continue;
       cell.groundSig = sig;
       cell.el.className = cls;
       cell.el.dataset.kind = kind;
+      if (tile.terrain === "water") { cell.el.dataset.bank = bankSides.join(""); const mud = "rgba(133,102,62,.92)", grassEdge = "rgba(104,148,74,.88)", stone = "rgba(146,138,118,.85)"; const shadows = []; if (bankSides.includes("n")) shadows.push("inset 0 3px 0 " + stone, "inset 0 9px 0 " + mud, "inset 0 13px 0 " + grassEdge); if (bankSides.includes("s")) shadows.push("inset 0 -3px 0 " + stone, "inset 0 -9px 0 " + mud, "inset 0 -13px 0 " + grassEdge); if (bankSides.includes("w")) shadows.push("inset 3px 0 0 " + stone, "inset 9px 0 0 " + mud, "inset 13px 0 0 " + grassEdge); if (bankSides.includes("e")) shadows.push("inset -3px 0 0 " + stone, "inset -9px 0 0 " + mud, "inset -13px 0 0 " + grassEdge); shadows.push("inset 0 0 16px rgba(18,66,102,.38)"); cell.el.style.boxShadow = shadows.join(", "); }
       cell.el.dataset.buildable = buildable ? "true" : "false";
       cell.el.style.outline = buildable ? "2px dashed #fff1a8" : "";
       cell.el.style.outlineOffset = buildable ? "-3px" : "";
@@ -3063,7 +3066,8 @@
       if (tile.id === questTarget) continue; // The quest arrow is the single indicator for this NPC.
       const ready = req && G.canFulfillNpcRequest(state, tile.npc);
       if (ready || (sq && sq.status === "available") || !(state.story.dialogueSeen && state.story.dialogueSeen[tile.npc])) {
-        const dot = addDot(cx, npcIndicatorTop(tile) - 11, ready ? "ready" : null);
+        const dot = ready ? addDot(cx, baselineY - TILE * 0.18, null) : addDot(cx, npcIndicatorTop(tile) - 11, null);
+        if (ready) { dot.classList.add("ob-dot-ground-ring"); dot.dataset.audit = "npc-ground-ring"; dot.style.width = Math.round(TILE * 0.92) + "px"; dot.style.height = Math.round(TILE * 0.3) + "px"; dot.style.left = pxv(Math.round(cx - TILE * 0.46)); }
         dot.dataset.npc = tile.npc; dot.dataset.tileId = tile.id; dot.dataset.kind = "npc-indicator";
       }
     }
@@ -3077,7 +3081,9 @@
     m.dataset.audit = "quest-marker";
     m.dataset.quest = window.FarmWorld ? ($("questDock").dataset.quest || "") : ((state.story && state.story.questId) || "");
     m.dataset.tileId = targetId;
-    m.innerHTML = tile.npc && window.NPCS[tile.npc] ? `<span class="npc-nameplate" data-audit="quest-npc-nameplate" data-npc="${tile.npc}">！${window.NPCS[tile.npc].name}</span><div class="qdot"></div><div class="qpin"></div>` : '<div class="qdot"></div><div class="qpin"></div>';
+    const feetTop = (tile.y + 1) * TILE;
+    const markerTop = tile.npc ? npcIndicatorTop(tile) : tile.y * TILE;
+    m.innerHTML = tile.npc && window.NPCS[tile.npc] ? `<span class="npc-nameplate" data-audit="quest-npc-nameplate" data-npc="${tile.npc}">！${window.NPCS[tile.npc].name}</span><div class="qdot"></div><div class="qpin"></div><span class="qring" data-audit="quest-ground-ring" style="top:${Math.round(feetTop - markerTop - TILE * 0.16)}px;width:${Math.round(TILE * 0.92)}px;height:${Math.round(TILE * 0.3)}px"></span>` : '<div class="qdot"></div><div class="qpin"></div>';
     m.style.left = pxv(tile.npc ? npcCenterX(tile) : (tile.x + 0.5) * TILE);
     m.style.top = pxv(tile.npc ? npcIndicatorTop(tile) : tile.y * TILE);
     if (tile.npc) {
@@ -3086,6 +3092,7 @@
       if (req && G.canFulfillNpcRequest(state, tile.npc)) m.classList.add("qmarker-ready");
     }
     mEl.appendChild(m);
+    const qring = m.querySelector(".qring"); if (qring) qring.style.top = Math.round(feetTop - markerTop + m.offsetHeight - TILE * 0.18) + "px";
     if (tile.npc) shiftNameplateAbove(m, obDyn.find((n) => n.dataset.kind === "npc" && n.dataset.tileId === tile.id) || null);
   }
   // ---- 動作 VFX 疊層（地圖可見回饋）----
@@ -3400,6 +3407,8 @@
       }
     }
   }
+  function buildCostHtml(def) { return Object.entries(def.cost || {}).map(([k, v]) => `<span class="bw-cost">${escapeHtml(k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k))}</span>`).join("、"); }
+  function buildCostHtml(def) { return Object.entries(def.cost || {}).map(([k, v]) => `<span class="bw-cost">${escapeHtml(k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k))}</span>`).join("、"); }
   function buildCostText(def) {
     return Object.entries(def.cost || {}).map(([k, v]) => k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k)).join("、");
   }
@@ -3446,7 +3455,7 @@
       b.dataset.type = type;
       b.disabled = !status.enabled;
       b.title = `${def.name}・${buildCostText(def)}・${status.text}`;
-      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}<small>${escapeHtml(buildCostText(def))}<br>${escapeHtml(status.text)}</small></span>`;
+      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}<small>${buildCostHtml(def)}<br>${escapeHtml(status.text)}</small></span>`;
       b.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = type;
@@ -4545,7 +4554,7 @@
     sp.style.transform = flip ? "scaleX(-1)" : "";
     let locator=$("playerLocator");
     if(pe.dataset.occluded==='true'){
-      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span></span>';worldEl.appendChild(locator);}
+      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.dataset.audit='player-locator';locator.dataset.kind='player-outline';locator.innerHTML='<div></div><span></span>';worldEl.appendChild(locator);}
       locator.querySelector('span').textContent=state.gender === "m" ? "凱" : "米莉";
       locator.hidden=false;locator.style.cssText=`left:${pe.style.left};top:${pe.style.top};width:${rootWidth}px;height:${eh}px`;
       locator.firstChild.style.cssText=sp.style.cssText;locator.dataset.kind='partial-monochrome';
