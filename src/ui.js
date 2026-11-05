@@ -123,8 +123,9 @@
   // R79：同一句 2.5 秒內不重複；最多同時 3 則（最舊的先收）。
   const TOAST_DEDUPE_MS = 2500, TOAST_MAX = 3;
   const recentToasts = new Map();
-  function toast(msg) {
+  function toast(msg, deferCount) {
     const zone = $("toast-zone"); if (!zone) return;
+    const dlg = $("worldDialogue"); if (dlg && !dlg.hidden && (deferCount || 0) < 40) { setTimeout(() => { recentToasts.delete(String(msg)); toast(msg, (deferCount || 0) + 1); }, 300); return; }
     const key = String(msg), at = Date.now();
     const last = recentToasts.get(key);
     if (last && at - last < TOAST_DEDUPE_MS) return;
@@ -775,19 +776,22 @@
   let questDockCollapsed = false;
   function setupQuestDockCollapse() {
     const box = $("questDock"); if (!box) return;
-    const ensure = () => {
+    let wasShort = false;
+    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short) box.classList.remove("quest-auto-collapsed"); wasShort = short; };
+    const ensure = () => { syncShortDefault();
       box.classList.toggle("quest-collapsed", questDockCollapsed);
       let btn = box.querySelector("[data-audit='quest-collapse']");
       if (!btn) {
         btn = document.createElement("button");
         btn.type = "button"; btn.className = "quest-collapse-btn"; btn.dataset.audit = "quest-collapse";
-        btn.onclick = (ev) => { ev.stopPropagation(); questDockCollapsed = !questDockCollapsed; ensure(); };
+        btn.onclick = (ev) => { ev.stopPropagation(); questDockCollapsed = !questDockCollapsed; box.classList.remove("quest-auto-collapsed"); ensure(); };
         box.appendChild(btn);
       }
       btn.textContent = questDockCollapsed ? "展開" : "收合";
       if (btn.setAttribute) { btn.setAttribute("aria-expanded", questDockCollapsed ? "false" : "true"); btn.setAttribute("aria-label", questDockCollapsed ? "展開任務卡" : "收合任務卡"); }
     };
     ensure();
+    if (typeof window !== "undefined" && window.addEventListener) window.addEventListener("resize", syncShortDefault);
     if (typeof MutationObserver === "function") new MutationObserver(ensure).observe(box, { childList: true });
   }
   function setupSideTabs() {
@@ -888,7 +892,7 @@
     state.interaction.tool = t;
     if (t !== "build") state.interaction.buildType = null;
     renderToolbar(); renderQuestDock(); renderSceneActionsForSelection();
-    $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(t === "build" ? "選一個建物，再點地面放置" : window.TOOLS[t].desc);
+    $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(t === "build" ? "建造工具" : window.TOOLS[t].desc);
     if (t === "build") showBuildCatalog();
     scheduleSave();
   }
@@ -3306,10 +3310,12 @@
     box.style.maxHeight = Math.max(60, Math.floor(bottom - top)) + "px";
     box.style.top = Math.floor(top) + "px";
   }
+  function avoidPlayerForBuild(box) { const playerEl = $("player"); if (!playerEl || typeof box.getBoundingClientRect !== "function") return; const scene0 = $("mapScene"); const sr0 = scene0 && typeof scene0.getBoundingClientRect === "function" ? scene0.getBoundingClientRect() : { top: 0 }; const questEl = $("questDock"); if (questEl) { const qb = box.getBoundingClientRect(), qr = questEl.getBoundingClientRect(); if (qr.width && qb.left < qr.right && qb.right > qr.left && qb.top < qr.bottom && qb.bottom > qr.top) box.style.top = Math.floor(qr.bottom - sr0.top + 8) + "px"; } const br = box.getBoundingClientRect(), pr = playerEl.getBoundingClientRect(); if (!pr.width || !(br.left < pr.right && br.right > pr.left && br.top < pr.bottom && br.bottom > pr.top)) return; const scene = $("mapScene"); const sr = scene && typeof scene.getBoundingClientRect === "function" ? scene.getBoundingClientRect() : { left: 0, right: window.innerWidth, top: 0 }; const dxRight = pr.right + 12 - br.left, dxLeft = pr.left - 12 - br.right; if (br.right + dxRight <= Math.min(sr.right, window.innerWidth) - 6) { box.style.left = (br.left - sr.left + br.width / 2 + dxRight) + "px"; return; } if (br.left + dxLeft >= Math.max(sr.left, 0) + 6) { box.style.left = (br.left - sr.left + br.width / 2 + dxLeft) + "px"; return; } const belowTop = pr.bottom + 8; const needH = box.scrollHeight || br.height; if (belowTop + needH <= window.innerHeight - 64) { box.style.top = Math.floor(belowTop - sr.top) + "px"; box.style.maxHeight = Math.floor(window.innerHeight - 64 - belowTop) + "px"; return; } box.style.maxHeight = Math.max(120, Math.floor(pr.top - 12 - br.top)) + "px"; }
   function showBuildCatalog() {
     const box = $("buildWheel"); if (!box) return;
     hideObjectBubble(); hideSceneActions();
-    box.innerHTML = `<div class="build-catalog-hint">選一個建物，再點地面放置</div>`;
+    box.innerHTML = `<div class="build-catalog-hint">選一個建物，再點地面放置</div><button type="button" class="build-close" data-audit="build-close" aria-label="關閉建造選單" title="關閉建造選單">×</button>`;
+    box.querySelector(".build-close").onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); setTool("hand"); };
     visibleBuildingCatalogTypes().forEach((type) => {
       const def = window.BUILDINGS[type]; if (!def) return;
       const status = buildCatalogStatus(type);
@@ -3330,8 +3336,8 @@
     });
     box.hidden = false;
     box.style.left = "50%";
-    placeBuildCatalog(box);
-    onceHint("build_catalog", "選一個建物，再點地面放置");
+    placeBuildCatalog(box); avoidPlayerForBuild(box);
+    /* R28：面板內已有「選一個建物」提示，浮動提示不重複顯示。 */
   }
   function buildOptionsForTile(tile) {
     if (!tile || tile.terrain !== "grass" || tile.object || tile.buildingId || tile.structureId || tile.blocked || tile.station || tile.npc) return [];
@@ -3351,6 +3357,8 @@
     const opts = buildOptionsForTile(tile);
     if (!opts.length) { toast("沒有可直接建造的項目"); hideBuildWheel(); return; }
     box.innerHTML = "";
+    box.innerHTML = `<button type="button" class="build-close" data-audit="build-close" aria-label="關閉建造選單" title="關閉建造選單">×</button>`;
+    box.querySelector(".build-close").onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); setTool("hand"); };
     opts.forEach((type) => {
       const def = window.BUILDINGS[type];
       const b = document.createElement("button");

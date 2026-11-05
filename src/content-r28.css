@@ -1,0 +1,148 @@
+/* R28 B 線：版面（第 6～10 項）。只調整版面、定位與狀態外觀，不改內容與數值。 */
+
+/* 6：矮螢幕預設收合由 JS 加上 quest-collapsed；對話或完成提示出現時暫時收成一行。
+   一行內容：章節＋進度、標題（省略）、主按鈕；其餘說明、提示、進度條與路線先收起。 */
+#questDock.quest-auto-collapsed {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 44px; max-height: 52px; overflow: hidden;
+  padding-top: 6px; padding-bottom: 6px;
+}
+#questDock.quest-auto-collapsed .world-objective-detail,
+#questDock.quest-auto-collapsed .world-objective-hint,
+#questDock.quest-auto-collapsed .world-objective-routes,
+#questDock.quest-auto-collapsed .world-meter,
+#questDock.quest-auto-collapsed .world-objective-bottom > span { display: none !important; }
+#questDock.quest-auto-collapsed .world-chapter { margin: 0; flex: 0 0 auto; flex-wrap: nowrap; }
+#questDock.quest-auto-collapsed .world-chapter > span:first-child,
+body:has(#worldDialogue:not([hidden])) #questDock .world-chapter > span:first-child,
+body:has(#toast-zone > .toast) #questDock .world-chapter > span:first-child,
+body:has(#buildWheel:not([hidden])) #questDock .world-chapter > span:first-child { display: none; }
+/* 建造選單開啟時任務卡暫時收合，避免蓋住選單上半部。 */
+body:has(#buildWheel:not([hidden])) #questDock {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 44px; max-height: 52px; overflow: hidden;
+  padding-top: 6px; padding-bottom: 6px;
+}
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-detail,
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-hint,
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-routes,
+body:has(#buildWheel:not([hidden])) #questDock .world-meter,
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-bottom > span { display: none !important; }
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-title {
+  flex: 1 1 auto; min-width: 0; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+body:has(#buildWheel:not([hidden])) #questDock .world-chapter { margin: 0; flex: 0 0 auto; flex-wrap: nowrap; }
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-bottom { margin: 0; flex: 0 0 auto; }
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-bottom > button {
+  display: inline-flex; align-items: center; min-height: 32px; white-space: nowrap;
+}
+#questDock.quest-auto-collapsed .world-objective-title {
+  flex: 1 1 auto; min-width: 0; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#questDock.quest-auto-collapsed .world-objective-bottom { margin: 0; flex: 0 0 auto; }
+#questDock.quest-auto-collapsed .world-objective-bottom > button {
+  display: inline-flex; align-items: center; min-height: 32px; white-space: nowrap;
+}
+/* 對話框或完成提示可見期間，任務卡暫時收合（提示消失或對話關閉後自動回復）。 */
+body:has(#worldDialogue:not([hidden])) #questDock,
+body:has(#toast-zone > .toast) #questDock {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 44px; max-height: 52px; overflow: hidden;
+  padding-top: 6px; padding-bottom: 6px;
+}
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-detail,
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-hint,
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-routes,
+body:has(#worldDialogue:not([hidden])) #questDock .world-meter,
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-bottom > span,
+body:has(#toast-zone > .toast) #questDock .world-objective-detail,
+body:has(#toast-zone > .toast) #questDock .world-objective-hint,
+body:has(#toast-zone > .toast) #questDock .world-objective-routes,
+body:has(#toast-zone > .toast) #questDock .world-meter,
+body:has(#toast-zone > .toast) #questDock .world-objective-bottom > span { display: none !important; }
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-title,
+body:has(#toast-zone > .toast) #questDock .world-objective-title {
+  flex: 1 1 auto; min-width: 0; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+body:has(#worldDialogue:not([hidden])) #questDock .world-chapter,
+body:has(#toast-zone > .toast) #questDock .world-chapter { margin: 0; flex: 0 0 auto; flex-wrap: nowrap; }
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-bottom,
+body:has(#toast-zone > .toast) #questDock .world-objective-bottom { margin: 0; flex: 0 0 auto; }
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-bottom > button,
+body:has(#toast-zone > .toast) #questDock .world-objective-bottom > button {
+  display: inline-flex; align-items: center; min-height: 32px; white-space: nowrap;
+}
+
+/* 8：手機直式面板改全寬底部抽屜；捲動提示貼在抽屜下緣，寬度與抽屜相同、不往外壓遊戲畫面。 */
+@media (max-width: 859px) and (min-height: 521px) {
+  .side-panel.world-panel-open .side-body {
+    left: 6px; right: 6px; width: auto; max-width: none;
+    top: auto; height: 60dvh; max-height: calc(70dvh - 28px);
+    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+  }
+  .side-panel.world-panel-open > .panel-scroll-hint {
+    left: 6px; right: 6px; width: auto; max-width: none;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, rgba(255, 248, 223, .92), #fff8df);
+    border-left: 2px solid #b3874b; border-right: 2px solid #b3874b; border-bottom: 2px solid #b3874b;
+    border-radius: 0 0 8px 8px;
+  }
+  .side-panel.world-panel-open:has(> .panel-scroll-hint:not([hidden])) .side-body {
+    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+    border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+  }
+}
+
+/* 9：建造選單文字至少 12px，右上角有關閉鈕。 */
+.build-wheel { position: absolute; width: min(360px, calc(100vw - 16px)); max-width: min(360px, calc(100vw - 16px)); }
+.build-wheel .build-wheel-btn { min-height: 0; padding: 6px 4px; }
+.build-wheel .bw-ic { font-size: 20px; }
+.build-wheel .build-wheel-btn { flex-direction: row; justify-content: flex-start; text-align: left; }
+.build-wheel .bw-t { flex: 1 1 auto; min-width: 0; }
+.build-wheel .build-wheel-btn { padding: 4px 3px; }
+.build-wheel .bw-ic { font-size: 18px; }
+.build-wheel .bw-t { font-size: 12px; line-height: 1.15; }
+.build-wheel .bw-t small { font-size: 12px; line-height: 1.15; }
+.build-wheel .build-catalog-hint { padding-right: 40px; font-size: 12px; }
+.build-close {
+  position: absolute; top: 6px; right: 6px; z-index: 5;
+  width: 36px; height: 36px; min-width: 36px; min-height: 36px;
+  padding: 0; border: 1.5px solid #8b5e34; border-radius: 999px;
+  background: #fff8df; color: #5a3a1a; font-size: 18px; font-weight: 900; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+/* 10：設定開關做成滑塊切換鈕——綠底圓鈕在右為開，灰底圓鈕在左為關，並保留文字狀態。 */
+.setting-toggle[data-enabled] {
+  position: relative; flex: 0 0 auto;
+  width: 58px; min-width: 58px; height: 32px; min-height: 32px;
+  padding: 0; border-radius: 999px; border: 2px solid #7d9b6a;
+  background: #2f6b33; color: transparent; font-size: 0; overflow: hidden;
+}
+.setting-toggle[data-enabled]::before {
+  content: ""; position: absolute; top: 3px; left: 3px;
+  width: 22px; height: 22px; border-radius: 999px; background: #fffdf4;
+  box-shadow: 0 1px 4px rgba(40, 30, 10, .35); transition: left .15s ease;
+}
+.setting-toggle[data-enabled="true"]::before { left: 29px; }
+.setting-toggle[data-enabled="true"]::after {
+  content: "開"; position: absolute; left: 7px; top: 50%; transform: translateY(-50%);
+  color: #fff8df; font-size: 11px; font-weight: 900; line-height: 1;
+}
+.setting-toggle[data-enabled="false"] { background: #cbbfa8; border-color: #a08b6a; }
+.setting-toggle[data-enabled="false"]::before { left: 3px; }
+.setting-toggle[data-enabled="false"]::after {
+  content: "關"; position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+  color: #5a4632; font-size: 11px; font-weight: 900; line-height: 1;
+}
+/* 設定底部按鈕列與「完成」不被切掉：完成鈕固定在卡片可視下緣內。 */
+.settings-card { padding-bottom: 14px; }
+#settingsOk { position: sticky; bottom: 0; z-index: 2; flex: 0 0 auto; }
+
+/* 10：開場便箋卡片高度貼合內容，內文與按鈕間不留大片空白，按鈕仍完整落在卡片內。 */
+#worldModal:has(.sun-welcome) .modal-card { height: auto; }
+#worldModal:has(.sun-welcome) #worldSunBegin { margin-top: 8px; }
+#worldModal:has(.sun-welcome) .modal-body { flex: 0 1 auto; }
