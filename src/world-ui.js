@@ -226,7 +226,8 @@
     lastObjective = sig;
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
     const activeGoal = q && rowsOf(q).find((row) => !row.complete) || (q && rowsOf(q)[rowsOf(q).length - 1]);
-    const progressText = activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q ? "1/1" : "");
+    // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
+    const progressText = activeGoal ? `${activeGoal.name ? activeGoal.name + " " : ""}${activeGoal.current}/${activeGoal.required}` : (q ? "1/1" : "");
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
     box.dataset.targetId = target ? target.id : "";
@@ -401,7 +402,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r30-20261105-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r30-20261105-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r31-20261105-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r31-20261105-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');
@@ -641,7 +642,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥，每格能收 2 份；收成 6 份後，把其中 2 份交給班伯。」</p><p class="project-desc">先照顧田裡的小麥，再跟葛瑞和鎮民打聲招呼；班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥，每格能收 2 份；收成 6 份後，把其中 2 份交給班伯。」</p><p class="project-desc">葛瑞會先帶你認識農場；種好三格小麥後，班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };

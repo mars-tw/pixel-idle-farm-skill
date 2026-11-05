@@ -75,7 +75,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r30-20261105-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r31-20261105-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1792,10 +1792,22 @@
     return `<section class="farm-privacy" aria-labelledby="farmPrivacyTitle">
       <div class="settings-series-title" id="farmPrivacyTitle">農場與你的資料</div>
       <nav class="settings-series-links" id="settingsSeriesLinks" aria-label="資料說明"><a href="#farmPrivacyStorage">本機存檔</a><a href="#farmPrivacyCollection">資料用途</a><a href="#farmPrivacyOffline">離線遊玩</a></nav>
-      <p class="settings-series-copy" id="farmPrivacyStorage">本機存檔：進度和設定保存在這台裝置。匯出的存檔由你自行保管；清除網站資料會刪除本機進度。</p>
+      <p class="settings-series-copy shown" id="farmPrivacyStorage">本機存檔：進度和設定保存在這台裝置。匯出的存檔由你自行保管；清除網站資料會刪除本機進度。</p>
       <p class="settings-series-copy" id="farmPrivacyCollection">資料用途：遊戲不要求帳號，不傳送個人資料，沒有廣告或追蹤。</p>
       <p class="settings-series-copy" id="farmPrivacyOffline">離線遊玩：網頁首次載入會向目前網站取得遊戲檔案，快取完成後可離線遊玩。</p>
     </section>`;
+  }
+  // R31：三段資料說明一次只顯示一段（點哪個看哪個），設定面板不再超出一屏。
+  if (typeof document !== "undefined" && !window.__farmPrivacyTabs) {
+    window.__farmPrivacyTabs = true;
+    document.addEventListener("click", (ev) => {
+      const link = ev.target && ev.target.closest && ev.target.closest("#settingsSeriesLinks a");
+      if (!link) return;
+      ev.preventDefault();
+      const id = (link.getAttribute("href") || "").slice(1);
+      document.querySelectorAll(".farm-privacy .settings-series-copy").forEach((p) => p.classList.toggle("shown", p.id === id));
+      document.querySelectorAll("#settingsSeriesLinks a").forEach((a) => a.classList.toggle("on", a === link));
+    });
   }
   function setSaveStatus(msg, ok) {
     const box = $("saveStatus"); if (!box) return;

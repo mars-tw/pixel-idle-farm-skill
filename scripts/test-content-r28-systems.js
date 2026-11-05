@@ -81,7 +81,7 @@ test('A4 建造只列已解鎖與下一項，升級有三段排序與可達路�
 });
 
 test('A5 開場、手記、印章冊與農場幫手文字一致', () => {
-  assert.ok(world.indexOf('先種三格小麥') < world.indexOf('再跟葛瑞') && world.indexOf('id="worldSunBegin"') < world.indexOf('id="worldBegin"'), '開場按鈕順序跟內文一致');
+  assert.ok(world.indexOf('先種三格小麥') < world.indexOf('葛瑞會先帶你認識農場') && world.indexOf('id="worldSunBegin"') < world.indexOf('id="worldBegin"') && !world.includes('先照顧田裡的小麥，再跟葛瑞'), '開場便箋不再要求先種田再找葛瑞（R31：與任務第一步「找葛瑞」一致），按鈕順序跟內文一致');
   assert.match(ui, /function currentQuestFirst\(ids, cur\)/);
   assert.match(dailyUi, /已完成 \$\{st\.completed\}\/3・已領取 \$\{st\.claimed\}\/3/);
   const state = S.defaultState(1_900_000_000_000);

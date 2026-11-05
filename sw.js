@@ -1,4 +1,4 @@
-const CACHE_VERSION = "content-r30-20261105-1";
+const CACHE_VERSION = "content-r31-20261105-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -47,6 +47,7 @@ const CORE_ASSETS = [
   versioned("./src/content-r28.css"),
   versioned("./src/content-r29.css"),
   versioned("./src/content-r30.css"),
+  versioned("./src/content-r31.css"),
   versioned("./src/content-r16.js"),
   versioned("./src/content-r16.css"),
   versioned("./assets/generated/content-r16/sharing-bowl.png"),

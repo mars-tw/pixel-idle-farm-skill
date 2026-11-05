@@ -1,0 +1,6 @@
+/* R31：資料說明一次只顯示一段，設定面板不再超出一屏。 */
+.farm-privacy .settings-series-copy { display: none; }
+.farm-privacy .settings-series-copy.shown { display: block; }
+/* R31：一次只有一個前景層。側邊面板或彈窗開著時，NPC 對話框先收起（關掉面板後若仍在顯示時間內會再出現）。 */
+body:has(.side-panel.world-panel-open) #worldDialogue,
+body:has(.modal.show) #worldDialogue { display: none !important; }
