@@ -75,7 +75,9 @@ test('A4 建造只列已解鎖與下一項，升級有三段排序與可達路�
   assert.match(ui, /function visibleBuildingCatalogTypes\(\)/);
   assert.match(ui, /農場等級 \$\{def \? def\.unlockLevel/);
   assert.match(ui, /\["現在買得起", "差一點", "長期目標", "已滿級"\]/);
-  assert.match(ui, /再交一張訂單約可補足/);
+  const nextSteps = C.UPGRADE_ORDER.map((key) => G.upgradeCardInfo(state, key).nextStep);
+  assert.equal(new Set(nextSteps).size, nextSteps.length, '每種升級要有不同用途與下一步');
+  assert.match(ui, /G\.upgradeCardInfo\(state, key\)/);
   state.coins += 12 + 16;
   assert.ok(C.UPGRADE_ORDER.some((key) => G.nextUpgrade(state, key) && state.coins >= G.nextUpgrade(state, key).cost), '第一章兩次主線獎勵後至少一項可買');
 });

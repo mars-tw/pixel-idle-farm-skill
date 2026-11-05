@@ -15,7 +15,7 @@ function test(name, fn) {
   catch (error) { console.error("FAIL " + name + "\n" + error.stack); process.exitCode = 1; }
 }
 
-test("新存檔第一天三張訂單全為已解鎖作物、各不相同且時限至少 30 分鐘", () => {
+test("新存檔第一批三張訂單全為已解鎖作物、各不相同且不限時", () => {
   const state = S.defaultState(T0);
   state.adventure = { claimed: { c1_first_harvest: true } };
   const orders = G.refreshOrders(state, T0, () => 0);
@@ -23,7 +23,7 @@ test("新存檔第一天三張訂單全為已解鎖作物、各不相同且時�
   assert.deepEqual(orders.map((order) => order.wants), [{ wheat: 2 }, { wheat: 3 }, { wheat: 4 }]);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
   assert.equal(new Set(orders.map((order) => JSON.stringify(order.wants))).size, 3);
-  assert.ok(orders.every((order) => order.expiresAt - (order.createdAt || T0) >= 30 * 60 * 1000));
+  assert.ok(orders.every((order) => order.firstBatch === true && order.expiresAt === null));
   assert.ok(orders.every((order) => !/份量不用多/.test(order.flavor || "")));
 
   state.story.questId = "first_delivery";

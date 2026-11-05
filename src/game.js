@@ -607,7 +607,7 @@
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
-    if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level })];
+    if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農班伯。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     return out;
@@ -744,7 +744,7 @@
       id: template.id, wants: Object.assign({}, template.wants), rarity: "common",
       // 新手單採固定單價，避免固定加成讓大單的每份報酬反而較低。
       rewardCoins: (def ? def.sellValue : 1) * 7 * qty, rewardXp: Math.max(2, Math.ceil(qty / 2)),
-      createdAt: now, expiresAt: now + GAME.orderTtlMs + (template.ttlOffsetMs || 0),
+      createdAt: now, expiresAt: null, firstBatch: true,
       npcId: template.npcId, flavor: template.flavor,
     };
   }
@@ -792,16 +792,20 @@
   }
   // R35：市集開放前的預告卡直接用開放時第一批訂單的同一份範本（委託人、需求、報酬一字不差）。
   function previewMarketOrders(state, now) {
-    return ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
+    const available = new Set(availableOrderItems(state));
+    const ids = available.has("carrot")
+      ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
+      : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
+    return ids
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
-      .filter(Boolean)
+      .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)))
       .map((template) => { const order = makeBeginnerOrder(template, now); return Object.assign(order, { narrative: orderNarrative(state, order) }); });
   }
   function marketPreviewAction(state) {
-    const held = Math.max(0, Number(state && state.storage && state.storage.items && state.storage.items.wheat) || 0);
-    return held < 2
-      ? { held, target: "field", label: `先收成小麥（持有 ${held}/2）` }
-      : { held, target: "elder", label: "前往老農班伯" };
+    const harvested = Math.min(6, Math.max(0, Number(state && state.stats && state.stats.harvested && state.stats.harvested.wheat) || 0));
+    return harvested < 6
+      ? { harvested, target: "field", label: `先收成小麥（已收 ${harvested}/6，交班伯需 2）` }
+      : { harvested, target: "elder", label: "前往老農班伯（交付 2 份小麥）" };
   }
   function refreshOrders(state, now, rng) {
     const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
@@ -810,9 +814,9 @@
       return state.orders;
     }
     // 移除過期訂單，補滿到 orderSlots
-    state.orders = state.orders.filter((o) => o.expiresAt > now);
+    state.orders = state.orders.filter((o) => o.firstBatch === true || o.expiresAt > now);
     let seed = (state.ordersSeededAt || 0);
-    if (firstDayChapterOne(state, now)) {
+    if (firstDayChapterOne(state, now) && (state.ordersSeededAt || 0) < 3) {
       const available = new Set(availableOrderItems(state));
       const preferredIds = available.has("carrot")
         ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
@@ -934,7 +938,7 @@
     const story = order.rarity === "festival" ? syncStoryProgress(state, "festival_order", now) : null;
     checkAchievements(state);
     const milestones = [];
-    if ((state.level || 1) > beforeLevel) milestones.push(milestoneCard("level_up", { level: state.level }));
+    if ((state.level || 1) > beforeLevel) milestones.push(milestoneCard("level_up", { level: state.level, state, now }));
     return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story, milestones,
       settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: "查看新訂單，或把收益投入農場升級。" } };
   }
@@ -961,6 +965,30 @@
   function upgradeShortfall(state, key) {
     const next = nextUpgrade(state, key);
     return next ? Math.max(0, next.cost - state.coins) : 0;
+  }
+  function upgradeCardInfo(state, key) {
+    const def = UPGRADES[key], next = nextUpgrade(state, key);
+    if (!def || !next) return { effect: def ? def.desc : "", nextStep: "已達最高等級。", reserveRisk: false, roundSeedCost: 0 };
+    const lv = Math.max(0, Number(state.upgrades && state.upgrades[key]) || 0);
+    const previous = lv > 0 ? def.levels[lv - 1].value : null;
+    let effect = def.desc;
+    if (key === "plotCount") effect = `開墾農地：+${next.value - activePlotCount(state)} 格田`;
+    if (key === "growthSpeed") effect = `肥沃土壤：生長時間 −${Math.round((1 - next.value) * 100)}%`;
+    if (key === "sellBonus") effect = `市集人脈：賣出與訂單收益 +${Math.round(next.value * 100)}%`;
+    if (key === "storageLevel") effect = `擴建穀倉：容量增加 ${next.value - (previous || 0)} 格`;
+    if (key === "helperLevel") effect = next.value.autoPlant ? "稻草人幫手：自動收成並補種" : "稻草人幫手：自動收成成熟作物";
+    const shortfall = Math.max(0, next.cost - state.coins);
+    const use = {
+      plotCount: "多一格田可同時多種一株作物",
+      growthSpeed: "縮短每輪作物等待時間",
+      sellBonus: "提高每次出貨與訂單收入",
+      storageLevel: "避免收成因倉庫已滿而浪費",
+      helperLevel: "離線時也能持續處理成熟作物",
+    }[key];
+    const nextStep = shortfall > 0 ? `還差 ${shortfall} 金；${use}` : `可升級；${use}`;
+    const seed = CROPS[state.selectedSeed] || CROPS.wheat;
+    const roundSeedCost = activePlotCount(state) * seed.seedCost;
+    return { effect, nextStep, reserveRisk: state.coins >= next.cost && state.coins - next.cost < roundSeedCost, roundSeedCost };
   }
   function buyUpgrade(state, key) {
     const next = nextUpgrade(state, key);
@@ -2234,7 +2262,11 @@
     if (type === "level_up") {
       const level = data.level || 2;
       const names = levelUnlocks(level).map((entry) => entry.name);
-      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: "新的農場等級", unlocked: data.unlocked || (names.length ? names.join("、") : "新的農場能力"), next: "查看種子與升級頁，看看新選項。" };
+      const unlockText = data.unlocked || (names.length ? names.join("、") : "新的農場能力");
+      let guideApi = root.AdventureAPI;
+      if (!guideApi && data.state && typeof module !== "undefined" && module.exports) guideApi = require("./adventure.js");
+      const guide = data.state && guideApi && guideApi.guide ? guideApi.guide(data.state, data.now) : null;
+      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `Lv ${level}・${unlockText}`, unlocked: unlockText, next: data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
     }
     return null;
   }
@@ -2631,7 +2663,7 @@
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
     makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
-    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
+    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, upgradeCardInfo, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物

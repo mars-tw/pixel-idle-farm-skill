@@ -1197,7 +1197,7 @@
           <div class="o-wants">${wantsHtml}</div>
           ${sharedHtml}
           <div class="o-reward">🪙 ${fmtNum(pay.coins)} · <span class="xp">⭐ ${pay.xp}</span></div>
-          <div class="o-meta">${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}</div>
+          <div class="o-meta">${o.firstBatch ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}`}</div>
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
         </div>
         <div class="o-actions">
@@ -1218,8 +1218,15 @@
       if (trash) trash.onclick = () => requestOrderTrash(o.id);
       const orderGo = el.querySelector(".order-go");
       if (orderGo) orderGo.onclick = () => {
+        const cropId = Object.keys(o.wants || {})[0];
         const tile = state.map.tiles.find((row) => row.plotIndex != null && row.plotIndex < G.activePlotCount(state) && !state.plots[row.plotIndex].cropId);
-        if (tile) { switchTab("tile"); focusCameraOnTile(tile.id); toast("已帶你到可種植的田地。"); }
+        if (tile) {
+          const panel = document.querySelector(".side-panel");
+          if (panel) panel.classList.remove("world-panel-open");
+          if (cropId && G.isCropUnlocked(state, cropId)) chooseSeed(cropId);
+          focusCameraOnTile(tile.id);
+          toast(`已選好${window.CROPS[cropId] ? window.CROPS[cropId].name : "訂單作物"}種子，帶你到可種植的田地。`);
+        }
         else toast("田裡沒有空格，先收成成熟作物。");
       };
       const cancelTrash = el.querySelector(".trash-cancel");
@@ -1338,13 +1345,12 @@
       const lv = state.upgrades[key];
       const max = G.upgradeMaxLevel(key);
       const next = G.nextUpgrade(state, key);
+      const cardInfo = G.upgradeCardInfo(state, key);
       const band = upgradeBand(key, next);
       const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
       const bandLabel = ["現在買得起", "差一點", "長期目標", "已滿級"][band];
       const shortfall = G.upgradeShortfall(state, key);
-      const nextStep = next && shortfall > 0
-        ? (!marketUnlocked ? "先把 2 份小麥交給老農班伯，市集就會開放" : band === 1 ? `還差 ${fmtNum(shortfall)} 金；再交一張訂單約可補足` : `還差 ${fmtNum(shortfall)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
-        : "";
+      const nextStep = next ? cardInfo.nextStep : "";
       const el = document.createElement("div");
       el.className = "up";
       el.dataset.affordability = ["affordable", "near", "long-term", "maxed"][band];
@@ -1352,15 +1358,15 @@
         <div class="u-ic">${key === "plotCount" ? uiIcon("tool_plant") : def.icon}</div>
         <div class="u-body">
           <div class="u-name">${def.name} <span class="lv">Lv ${lv}/${max}</span></div>
-          <div class="u-desc">${def.desc}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${nextStep}。</span>` : ""}</div>
+          <div class="u-desc">${escapeHtml(cardInfo.effect)}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${escapeHtml(nextStep)}</span>` : ""}</div>
         </div>
         ${next
-          ? `<div class="u-action"><button class="btn buy small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${G.canBuyUpgrade(state, key) && state.coins === next.cost ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後金幣會變成 0。</div>` : ""}`
+          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? "確認後升級" : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後不足一輪種子成本（${fmtNum(cardInfo.roundSeedCost)} 金）。</div>` : ""}`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
           // R35：會把金幣花到 0 時先確認一次。
-          if (state.coins === next.cost && typeof window.confirm === "function" && !window.confirm(`買下「${def.name}」後金幣會變成 0，確定要買嗎？`)) return;
+          if (cardInfo.reserveRisk && typeof window.confirm === "function" && !window.confirm(`買下「${def.name}」後不足一輪種子成本，確定要買嗎？`)) return;
           const r = G.buyUpgrade(state, key);
           if (r.ok) {
             enqueueSettlement(r.settlement);
@@ -3644,7 +3650,8 @@
     const crop = window.CROPS[plot.cropId];
     const name = crop ? crop.name : "作物";
     const prog = G.getCropProgress(state, plot, now());
-    return name + "・" + (prog.ready ? "可收成" : prog.wet ? "已澆水" : "待澆水");
+    const planted = state.plots.filter((row) => row && row.cropId).length;
+    return name + "・" + (prog.ready ? "可收成" : prog.wet ? "已澆水" : planted < 3 ? "已種下・種滿 3 格再澆水" : "待澆水");
   }
   function renderTileStateLabel(tile) {
     let label = $("tileStateLabel");

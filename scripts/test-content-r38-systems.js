@@ -28,7 +28,8 @@ test('A1 市集未開放時兩項一致，領完兩項即可蓋章', () => {
   assert.equal(status.claimed, status.available);
   const ui = read('src/daily-ui.js');
   assert.match(ui, /市集開放後 \+1/);
-  assert.match(ui, /今天可做的項目都領完/);
+  assert.match(ui, /把今天可做的 \$\{st\.available\} 項都領取，就能蓋章並得堆肥 1/);
+  assert.match(ui, /今天的印章已蓋好/);
 });
 
 test('A1 市集開放後三項一致，三項都領完才蓋章', () => {

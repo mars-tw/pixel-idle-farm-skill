@@ -163,12 +163,12 @@ const HELP = `
     assert(up.rows.length >= 2, '升級卡數量不足');
     for (const r of up.rows) assert(r.descW >= 150, `升級卡說明被擠成窄欄（${r.descW}px）`);
     const withSpend = up.rows.find((r) => r.spend);
-    assert(withSpend, '找不到「升級後金幣會變成 0」提示（金幣需剛好等於價格）');
-    assert(withSpend.spend.r.top >= withSpend.btn.bottom - 1, '「升級後金幣會變成 0」不在按鈕下方');
-    assert(withSpend.spend.r.left >= withSpend.card.left - 1 && withSpend.spend.r.right <= withSpend.card.right + 1 && withSpend.spend.r.bottom <= withSpend.card.bottom + 1, '「升級後金幣會變成 0」超出卡片');
-    assert(withSpend.spend.r.width >= withSpend.card.width * 0.8, `「升級後金幣會變成 0」不是完整一行（寬 ${Math.round(withSpend.spend.r.width)}／卡 ${Math.round(withSpend.card.width)}）`);
+    assert(withSpend, '找不到「升級後不足一輪種子成本」提示');
+    assert(withSpend.spend.r.top >= withSpend.btn.bottom - 1, '種子成本提示不在按鈕下方');
+    assert(withSpend.spend.r.left >= withSpend.card.left - 1 && withSpend.spend.r.right <= withSpend.card.right + 1 && withSpend.spend.r.bottom <= withSpend.card.bottom + 1, '種子成本提示超出卡片');
+    assert(withSpend.spend.r.width >= withSpend.card.width * 0.8, `種子成本提示不是完整一行（寬 ${Math.round(withSpend.spend.r.width)}／卡 ${Math.round(withSpend.card.width)}）`);
     for (const v of up.btnVsHint) assert.equal(v, 0, `面板底部按鈕被「往下還有內容」提示蓋住（交集 ${v}px）`);
-    console.log(`OK 升級卡 說明寬 ${up.rows.map((r) => r.descW).join('/')}px、「升級後金幣會變成 0」在按鈕下方完整一行、底部按鈕與提示交集 0`);
+    console.log(`OK 升級卡 說明寬 ${up.rows.map((r) => r.descW).join('/')}px、種子成本提示在按鈕下方完整一行、底部按鈕與提示交集 0`);
     await page.screenshot({ path: path.join(SHOT_DIR, 'upgrades-1366x768.png') });
     await page.evaluate(() => { const p = document.querySelector('.side-panel'); if (p) p.classList.remove('world-panel-open'); });
     await page.waitForTimeout(300);

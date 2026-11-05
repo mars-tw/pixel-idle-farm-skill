@@ -27,7 +27,7 @@ test("A1 市集第一批訂單依已解鎖品項產生差異", () => {
   const itemIds = [...new Set(orders.flatMap((order) => Object.keys(order.wants)))];
   assert.ok(itemIds.length >= 2, "第一批至少有兩種已解鎖作物");
   assert.ok(itemIds.every((id) => C.CROPS[id] && C.CROPS[id].unlockLevel <= state.level));
-  assert.ok(new Set(orders.map((order) => order.expiresAt)).size > 1, "倒數時間必須錯開");
+  assert.ok(orders.every((order) => order.firstBatch === true && order.expiresAt === null), "首批訂單必須不限時");
   const wheat = orders.filter((order) => order.wants.wheat).sort((a, b) => a.wants.wheat - b.wants.wheat);
   assert.ok(wheat.length >= 2 && wheat[1].wants.wheat > wheat[0].wants.wheat);
   assert.ok(wheat[1].rewardCoins > wheat[0].rewardCoins, "同作物需求較多時，總獎勵必須更高");

@@ -35,7 +35,7 @@ test("A2 新存檔文案不提前建議訂單收益，市集每日不計入可�
   assert.match(sell.detail, /市集開放後.*先把 2 份小麥交給老農班伯/);
   assert.doesNotMatch(sell.detail, /訂單.*(?:金|收益)/);
   const ui = fs.readFileSync("src/ui.js", "utf8");
-  assert.match(ui, /\? \(!marketUnlocked \? "先把 2 份小麥交給老農班伯，市集就會開放" : band === 1/); // R36 整合：引導改為卡片上看得見的「下一步」，不只放 aria-label
+  assert.match(ui, /const nextStep = next \? cardInfo\.nextStep : ""/); // R39：每張卡的差額與用途由同一份可測資料產生
   const summary = A.summary(state, T);
   assert.equal(summary.chapters[0].claimed, 0);
   assert.equal(summary.chapters[0].status, "active");

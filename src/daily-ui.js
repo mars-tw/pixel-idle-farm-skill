@@ -53,7 +53,7 @@
     el("dailyPage").textContent = `${page + 1}/${list.length}`;
     el('dailyPrev').textContent=tab==='today' && page>0 ? st.tasks[page-1].title : '前一頁';
     el('dailyNext').textContent=tab==='today' && page<2 ? st.tasks[page+1].title : '下一頁';
-    el("dailyFooter").textContent = tab === "heirloom" ? "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。" : st.stamped ? "今天已蓋章。明天 00:00 有新餐籃。" : "今天可做的項目都領完，得印章與堆肥各 1。每日 00:00 更新。";
+    el("dailyFooter").textContent = tab === "heirloom" ? "第一份陽光餐籃不換日、不重領。你選的那一頁會留下來。" : st.stamped ? "今天的印章已蓋好。明天 00:00 有新餐籃。" : `把今天可做的 ${st.available} 項都領取，就能蓋章並得堆肥 1。每日 00:00 更新。`;
     if (restoreClaimFocus) {
       const claim = el("dailyClaim");
       (claim && !claim.disabled ? claim : el("dailyClose")).focus();

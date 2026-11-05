@@ -357,11 +357,11 @@
     const milestone = (type, data) => typeof root.milestoneCard === "function" ? root.milestoneCard(type, data) :
       type === "market_open" ? { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "照任務列去灶台做晚餐；訂單看板之後隨時可以接單。" } :
       type === "chapter_one" ? { kind: "milestone", type, title: "第一章完成", earned: "農場重新有了第一批收成", unlocked: "河畔復興與下一章故事", next: "前往河邊，看看等待修復的設施。" } :
-      { kind: "milestone", type, title: `升到 Lv ${data.level}`, earned: "新的農場等級", unlocked: "新的作物與農場能力", next: "查看種子與升級頁，看看新選項。" };
+      { kind: "milestone", type, title: `升到 Lv ${data.level}`, earned: `Lv ${data.level}・新的作物與農場能力`, unlocked: "新的作物與農場能力", next: data.actionLabel || "繼續目前任務" };
     const milestones = [];
     if (id === "c1_first_harvest") milestones.push(milestone("market_open"));
     if (id === "c1_first_meal") milestones.push(milestone("chapter_one"));
-    if ((state.level || 1) > beforeLevel) milestones.push(milestone("level_up", { level: state.level }));
+    if ((state.level || 1) > beforeLevel) milestones.push(milestone("level_up", { level: state.level, state, now, actionLabel: guide(state, now).actionLabel }));
     return ok("「" + q.name + "」完成了。", { id, reward: copy(q.reward), nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null,
       milestones,
       settlement: { kind: "quest", coins: q.reward.coins || 0, xp: q.reward.xp || 0,
@@ -687,6 +687,10 @@
     if (step.type === "care") return "照顧動物";
     return `前往${npc && npc.name ? npc.name : "目標"}`;
   }
+  function storyPanelAvailability(state) {
+    const marketUnlocked = !!(state && state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
+    return { marketUnlocked, showNeighborBasket: marketUnlocked, showRiverCommissions: marketUnlocked };
+  }
   function buyMaterial(state, id, count, now) {
     const prices = { wood: 6, stone: 8 };
     if (!own(prices, id) || !Number.isSafeInteger(count) || count < 1 || count > 10) return fail("bad_purchase", "找不到這筆建材訂購。");
@@ -730,7 +734,7 @@
     record(state, "order", now);
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
-  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, taskActionLabel, buyMaterial, commissions, deliverCommission,
+  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission,
     neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

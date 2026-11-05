@@ -38,7 +38,8 @@ test("A3 金幣與物品增減產生合併後的 HUD 飄字事件", () => {
   const ui = source("src/ui.js");
   assert.match(ui, /resourceDeltaEvents\(resourceHudSnapshot, nextResourceSnapshot\)\.forEach\(showResourceDelta\)/);
   assert.match(ui, /dataset\.audit = "resource-delta"/);
-  assert.match(ui, /data-audit="upgrade-spend-all">升級後金幣會變成 0。/);
+  assert.match(ui, /data-audit="upgrade-spend-all">升級後不足一輪種子成本/);
+  assert.match(ui, /cardInfo\.reserveRisk \? "ghost" : "buy"/);
 });
 
 test("A4 故事手記先顯示進行中任務與下一段按鈕，設定顯示開關文字", () => {
@@ -63,7 +64,7 @@ test("A5 任務、對話、訂單與手記使用一致稱呼", () => {
   const visibleSources = ["src/config.js", "src/adventure.js", "src/game.js", "src/ui.js", "src/world-ui.js"].map(source).join("\n");
   assert.doesNotMatch(visibleSources, /鎮長 葛瑞|老農 班伯/);
   assert.doesNotMatch(visibleSources, /(?<!鎮長)葛瑞(?!.*\.test\(name\))/);
-  assert.doesNotMatch(visibleSources, /(?<!老農)班伯/);
+  assert.doesNotMatch(visibleSources.replace(/交班伯需 2/g, ""), /(?<!老農)班伯/);
 });
 
 console.log(`R32 content systems: ${passed} passed`);

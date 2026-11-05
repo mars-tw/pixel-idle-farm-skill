@@ -231,7 +231,7 @@ const INTERSECT_JS = `
         return { sels, label: label && !label.hidden ? label.textContent.trim() : null, labelAbove: !!(lr && tr && lr.bottom <= tr.top + 6), labelInView: !!(lr && lr.left >= 0 && lr.top >= 0 && lr.right <= innerWidth && lr.bottom <= innerHeight), actions, toolbar: toolbarSel ? toolbarSel.textContent.trim() : '' };
       });
       assert.equal(single.sels.length, 1, `${w}×${h} 種植／澆水應只高亮一格，實際 ${single.sels.length} 格`);
-      assert.equal(single.label, '小麥・待澆水', `${w}×${h} 格上方狀態應為「小麥・待澆水」，實際「${single.label}」`);
+      assert.equal(single.label, '小麥・已種下・種滿 3 格再澆水', `${w}×${h} 未種滿三格時應提示種滿再澆水，實際「${single.label}」`);
       assert(single.labelAbove, `${w}×${h} 狀態標籤不在選取格上方`);
       assert(single.labelInView, `${w}×${h} 狀態標籤不在畫面內`);
       assert.deepEqual(single.actions, ['water'], `${w}×${h} 中央浮動按鈕應與澆水工具一致且只有一顆，實際 ${JSON.stringify(single.actions)}（工具列：${single.toolbar}）`);
