@@ -4,3 +4,19 @@
 /* R31：一次只有一個前景層。側邊面板或彈窗開著時，NPC 對話框先收起（關掉面板後若仍在顯示時間內會再出現）。 */
 body:has(.side-panel.world-panel-open) #worldDialogue,
 body:has(.modal.show) #worldDialogue { display: none !important; }
+/* R31：市集未開放時，實際定位的是 .side-body（fixed，上下都有錨點）；桌面取消下錨、手機取消上錨，高度跟著內容。 */
+@media (min-width: 860px) {
+  .side-panel.world-panel-open .side-body:has(.side-pane.sel .order-market-locked) { bottom: auto !important; height: auto !important; max-height: none !important; }
+}
+@media (max-width: 859px) {
+  .side-panel.world-panel-open .side-body:has(.side-pane.sel .order-market-locked) { top: auto !important; height: auto !important; max-height: none !important; }
+}
+/* R31：任務標題的步驟名在展開時顯示（「種下作物 2/3」）；收合成一行時只留數字，避免與按鈕重複、被截斷。 */
+#questDock .qp-step { font-weight: 600; color: #6b4a1e; }
+#questDock.quest-auto-collapsed .qp-step,
+#questDock.quest-collapsed .qp-step,
+#questDock.quest-target-collapsed .qp-step,
+body:has(#worldDialogue:not([hidden])) #questDock .qp-step,
+body:has(#toast-zone > .toast) #questDock .qp-step,
+body:has(#buildWheel:not([hidden])) #questDock .qp-step { display: none; }
+@media (max-width: 859px), (max-height: 600px) { #questDock .qp-step { display: none; } }
