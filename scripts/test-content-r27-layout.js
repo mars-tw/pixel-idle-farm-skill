@@ -130,7 +130,7 @@ const INTERSECT_JS = `
           if (!body) return null;
           const br = rectOf(body);
           const hint = document.querySelector('.side-panel > [data-audit="panel-scroll-hint"]');
-          const hr = hint && !hint.hidden ? rectOf(hint) : null;
+          const hr = hint && !hint.hidden && getComputedStyle(hint).display !== 'none' && hint.getBoundingClientRect().height > 0 ? rectOf(hint) : null;
           const pane = body.querySelector('.side-pane.sel');
           const els = pane ? [...pane.querySelectorAll('button, .o-reward, .o-meta, .o-client')] : [];
           let maxInter = 0; let who = '';
@@ -141,14 +141,14 @@ const INTERSECT_JS = `
             if (v > maxInter) { maxInter = v; who = e.textContent.trim().slice(0, 20); }
           }
           const style = hint ? getComputedStyle(hint) : null;
-          return { body: br, hint: hr, hintHidden: hint ? hint.hidden : null, maxInter, who, bgImage: style ? style.backgroundImage : '', scrollH: body.scrollHeight, clientH: body.clientHeight };
+          return { body: br, hint: hr, hintHidden: !hr, hintVisible: !!hr, hasMore: !!(pane && pane.querySelector('.r32-show-more')), hiddenCards: pane ? pane.querySelectorAll('.r32-panel-hidden').length : 0, maxInter, who, bgImage: style ? style.backgroundImage : '', scrollH: body.scrollHeight, clientH: body.clientHeight };
         }, INTERSECT_JS);
         assert(m, `${w}×${h} ${tab} 面板未開啟`);
         if (m.scrollH > m.clientH) {
-          assert(m.hint && !m.hintHidden, `${w}×${h} ${tab} 未捲到底時應顯示底部捲動提示`);
-          assert(m.bgImage.includes('gradient'), `${w}×${h} ${tab} 捲動提示應為漸層，實際 ${m.bgImage}`);
-          assert(m.hint.top >= m.body.bottom - 1, `${w}×${h} ${tab} 提示覆蓋面板內容（提示上緣 ${Math.round(m.hint.top)} < 面板下緣 ${Math.round(m.body.bottom)}）`);
+          assert.equal(m.hintVisible, false, `${w}×${h} ${tab} 不應再顯示「往下還有內容」（R36 只留一種提示）`);
+          if (m.hiddenCards > 0) assert(m.hasMore, `${w}×${h} ${tab} 收起卡片後應以「再顯示 N 項」作為唯一提示`);
           assert.equal(m.maxInter, 0, `${w}×${h} ${tab} 提示與「${m.who}」交集 ${m.maxInter}px 不為 0`);
+          assert(m.body.bottom <= h + 1, `${w}×${h} ${tab} 面板底邊 ${Math.round(m.body.bottom)} 超出視窗高 ${h}`);
         }
         await page.screenshot({ path: path.join(SHOT_DIR, `${shotFor[tab]}-${w}x${h}.png`) });
         const bottom = await page.evaluate(() => {
@@ -158,9 +158,9 @@ const INTERSECT_JS = `
           const btns = pane ? [...pane.querySelectorAll('button')].filter((b) => { const r = b.getBoundingClientRect(); const d = b.closest('details'); return r.width > 0 && r.height > 0 && (!d || d.open); }) : [];
           const last = btns[btns.length - 1];
           const hint = document.querySelector('.side-panel > [data-audit="panel-scroll-hint"]');
-          if (!last) return { count: btns.length, fully: false, hintHidden: hint ? hint.hidden : null };
+          if (!last) return { count: btns.length, fully: false, hintHidden: hint ? (hint.hidden || getComputedStyle(hint).display === 'none' || hint.getBoundingClientRect().height === 0) : true };
           const r = last.getBoundingClientRect(), br = body.getBoundingClientRect();
-          return { count: btns.length, fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? hint.hidden : null, text: last.textContent.trim().slice(0, 20) };
+          return { count: btns.length, fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? (hint.hidden || getComputedStyle(hint).display === 'none' || hint.getBoundingClientRect().height === 0) : true, text: last.textContent.trim().slice(0, 20) };
         });
         await page.waitForTimeout(200);
         const bottom2 = await page.evaluate(() => {
@@ -170,11 +170,11 @@ const INTERSECT_JS = `
           const btns = pane ? [...pane.querySelectorAll('button')].filter((b) => { const r = b.getBoundingClientRect(); const d = b.closest('details'); return r.width > 0 && r.height > 0 && (!d || d.open); }) : [];
           const last = btns[btns.length - 1];
           const hint = document.querySelector('.side-panel > [data-audit="panel-scroll-hint"]');
-          if (!last) return { count: btns.length, fully: false, hintHidden: hint ? hint.hidden : null, text: '' };
+          if (!last) return { count: btns.length, fully: false, hintHidden: hint ? (hint.hidden || getComputedStyle(hint).display === 'none' || hint.getBoundingClientRect().height === 0) : true, text: '' };
           const r = last.getBoundingClientRect(), br = body.getBoundingClientRect();
-          return { count: btns.length, fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? hint.hidden : null, text: last.textContent.trim().slice(0, 20) };
+          return { count: btns.length, fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? (hint.hidden || getComputedStyle(hint).display === 'none' || hint.getBoundingClientRect().height === 0) : true, text: last.textContent.trim().slice(0, 20) };
         });
-        if (m.scrollH > m.clientH) assert(bottom2.hintHidden === true, `${w}×${h} ${tab} 捲到底後提示應隱藏`);
+        if (m.scrollH > m.clientH) assert(bottom2.hintHidden === true, `${w}×${h} ${tab} 捲到底後不應出現「往下還有內容」`);
         if (bottom2.count) assert(bottom2.fully, `${w}×${h} ${tab} 捲到底最後按鈕未完整可見：「${bottom2.text || ''}」`);
         console.log(`OK 面板 ${w}×${h} ${tab} 提示交集 0、捲到底按鈕完整可見`);
       }

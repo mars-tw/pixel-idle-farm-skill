@@ -45,6 +45,7 @@
     if (sig !== signature || box.dataset.quest !== "first_sun_basket") {
       signature = sig;
       box.dataset.quest = "first_sun_basket"; box.dataset.targetId = q.target ? q.target.id : "";
+      box.dataset.stepType = q.kind; if (document.body) document.body.dataset.questStep = q.kind;
       box.innerHTML = `<div class="world-chapter"><span>祖母手記・第一份陽光餐籃</span><span>${h.sunWheat >= 2 ? "2" : "1"}/3</span></div><div class="world-objective-title"></div><div class="world-objective-detail"></div><div class="world-objective-bottom"><span>光裡照料 → 收成 → 分享</span><button type="button" data-world-go></button></div>`;
       box.querySelector("button").onclick = () => guide(s);
     }

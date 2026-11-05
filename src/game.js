@@ -1259,6 +1259,20 @@
   function getTileById(state, id) { return (state.map.tiles || []).find((t) => t.id === id) || null; }
   function getTileXY(state, x, y) { return (state.map.tiles || []).find((t) => t.x === x && t.y === y) || null; }
   // 可站立：soil/grass/path 且無障礙、無建築/結構、無站點、非水、未明確阻擋
+  // R36: sprite extends north from the footprint base; tiles whose foot point
+  // (tile centre, 0.08 tile above the base, mirroring ui.js) lands inside the
+  // square sprite rect are not walkable, so the player never stands on a roof.
+  function isRoofBlocked(state, tile) {
+    if (!tile) return false;
+    const footX = tile.x + 0.5, footY = tile.y + 1 - 0.08;
+    for (const s of (C.STRUCTURES || [])) {
+      if (!s || !s.occlude) continue;
+      const width = s.w + ((s.id === "shop" || s.id === "barn") ? 0.25 : 0);
+      const left = s.x + s.w / 2 - width / 2, bottom = s.y + s.h, top = bottom - width;
+      if (footX > left && footX < left + width && footY > top && footY < bottom) return true;
+    }
+    return false;
+  }
   function isWalkable(state, tile) {
     if (!tile) return false;
     const repaired = !!(state.flags && state.flags.bridgeRepaired);
@@ -1271,6 +1285,7 @@
     if (tile.blocked) return false;       // 多格建築 footprint
     if (tile.structureId) return false;
     if (tile.buildingId) return false;
+    if (isRoofBlocked(state, tile)) return false;
     return true;
   }
   // BFS 最短路徑（4 向，繞過障礙/水/建築）。回傳 tileId 陣列（不含起點、含終點）；不可達回 null
@@ -2522,7 +2537,7 @@
     homeBuildingFor, animalCapacity, animalsInHome, isAnimalUnlocked,
     addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, collectHome, feedAnimal,
     // 可走動地圖：尋路 / 目標解析
-    getTileById, getTileXY, isWalkable, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
+    getTileById, getTileXY, isWalkable, isRoofBlocked, bfsPath, pathToAdjacent, planMoveTo, facingTo, plotOfTile,
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）

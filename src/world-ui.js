@@ -231,6 +231,8 @@
     const progressText = activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q && q.canClaim ? `✓ 回報${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}` : (q ? "1/1" : ""));
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
+    box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
+    if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
     box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
       <div class="world-objective-title">${q ? esc(q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
