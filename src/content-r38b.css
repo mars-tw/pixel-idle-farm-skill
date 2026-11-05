@@ -1,0 +1,139 @@
+/* R38 B 線（第 6～10 項）：矮螢幕對話不擋 HUD、陽光格看得懂、訂單主次、
+   河畔復興卡片、手機文字與目標方向。只調整版面、定位與繪製參數；
+   河畔卡片與方向箭頭元素由 world-ui.js 建立。 */
+
+/* 6：1366×600 對話框仍在上方窄條（top ≤ 24、高 ≤ 20%），
+   但橫向收在 Logo 右邊與資源列左邊之間，不蓋金幣／等級／背包／材料。
+   「略過」固定在「繼續」左方，兩顆之間留 60px。 */
+@media (max-height: 600px) {
+  .world-dialogue,
+  .world-dialogue.dialogue-compact-top:not(.dialogue-compact-bottom) {
+    box-sizing: border-box;
+    top: 8px !important;
+    max-height: 20dvh !important; overflow-y: auto;
+    padding: 8px 12px !important;
+  }
+  }
+@media (max-height: 600px) and (min-width: 1000px) {
+  .world-dialogue, .world-dialogue.dialogue-compact-top, .world-dialogue.dialogue-compact-bottom { padding: 8px 248px 8px 12px !important; }
+  .world-dialogue .dialogue-continue, .world-dialogue.dialogue-compact-top .dialogue-continue, .world-dialogue.dialogue-compact-bottom .dialogue-continue {
+    position: absolute !important; top: 50% !important; bottom: auto !important;
+    transform: translateY(-50%);
+    right: 8px !important; left: auto !important;
+    width: 104px !important; min-width: 104px !important; max-width: 104px !important;
+    height: 32px !important; min-height: 32px !important; padding: 0 10px !important; margin: 0 !important;
+  }
+  .world-dialogue .dialogue-close, .world-dialogue.dialogue-compact-top .dialogue-close, .world-dialogue.dialogue-compact-bottom .dialogue-close {
+    position: absolute !important; top: 50% !important; bottom: auto !important;
+    transform: translateY(-50%);
+    right: 172px !important; left: auto !important;
+    height: 32px !important; min-height: 32px !important; padding: 0 8px !important; margin: 0 !important;
+  }
+}
+.world-dialogue.dialogue-compact-bottom { bottom: 8px !important; }
+@media (max-height: 600px) and (min-width: 1000px) {
+  .world-dialogue.dialogue-compact-bottom { top: 8px !important; bottom: auto !important; }
+  .world-dialogue,
+  .world-dialogue.dialogue-compact-top,
+  .world-dialogue.dialogue-compact-bottom {
+    left: 276px !important; right: 548px !important;
+    width: auto !important; max-width: none !important;
+    transform: none !important;
+  }
+}
+
+
+/* 7：陽光田格——拿掉純白實心圓（.sun-mote 的 #fff6c4 實心圓＋光暈、
+   art-r89 的 sunshaft 大圖 screen 混色），改半透明暖色光暈（一般混色、
+   低不透明度，不再衝到近白），左上角加一顆 CSS 繪製的小型陽光像素圖示；
+   作物本體降亮度回到看得清。 */
+.sun-beam .sun-mote { display: none !important; }
+.sun-beam::after { display: none !important; }
+.sun-beam .sun-pool {
+  background: radial-gradient(50% 50% at 50% 55%, rgba(255, 205, 92, .34), rgba(255, 190, 80, .16) 55%, transparent 74%) !important;
+  mix-blend-mode: normal !important; opacity: .62;
+}
+.sun-beam .sun-ray {
+  background: linear-gradient(180deg, rgba(255, 226, 140, 0) 0%, rgba(255, 214, 110, .14) 55%, rgba(255, 200, 92, .22) 100%) !important;
+  mix-blend-mode: normal !important; opacity: .6;
+}
+.sun-beam::before {
+  content: "" !important; position: absolute; z-index: 3;
+  left: 12px !important; top: 10px !important; right: auto !important; bottom: auto !important;
+  width: 8px !important; height: 8px !important;
+  background: #f2b63c !important; background-image: none !important;
+  opacity: 1 !important; mix-blend-mode: normal !important;
+  image-rendering: pixelated;
+  box-shadow:
+    8px 0 0 #f2b63c, 16px 0 0 #f2b63c,
+    0 8px 0 #f2b63c, 8px 8px 0 #ffd257, 16px 8px 0 #f2b63c,
+    0 16px 0 #f2b63c, 8px 16px 0 #f2b63c, 16px 16px 0 #f2b63c,
+    8px -8px 0 #e8a51f, -8px 8px 0 #e8a51f, 24px 8px 0 #e8a51f, 8px 24px 0 #e8a51f;
+}
+.sunlit-crop, .ob.crop.sunlit-crop {
+  filter: brightness(1.08) saturate(1.06) drop-shadow(1px -1px 0 rgba(255, 214, 110, .55)) !important;
+  transform: scale(1.05) !important;
+}
+
+/* 8：訂單卡主次——「交付」維持主要按鈕；「丟棄」改次要小字文字鈕，
+   與交付間隔 12px；確認列（保留／確認丟棄）同樣間隔 12px。 */
+.order .o-actions { gap: 12px !important; }
+.order .o-actions .trash {
+  align-self: flex-end;
+  min-width: 0 !important; min-height: 32px !important;
+  padding: 3px 8px !important;
+  background: transparent !important; border: 0 !important; box-shadow: none !important;
+  color: #96503c !important; font-size: 11px !important; font-weight: 700;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.order .o-actions .trash-cancel { font-size: 11px !important; }
+/* 8：手機訂單面板底部不再有灰黑漸層或大塊空白——面板改純色底、
+   高度跟著內容（上限內可捲），不留固定高度的空白尾段。 */
+.side-pane[data-pane="orders"] { background: #f6e7c6 !important; }
+@media (max-width: 859px) and (orientation: portrait) {
+  .side-panel.world-panel-open .side-body:has(> .side-pane[data-pane="orders"].sel) {
+    bottom: auto !important; height: auto !important;
+    max-height: calc(100dvh - 340px);
+    background: #fff8df !important;
+    padding-bottom: 12px !important;
+  }
+  .side-pane[data-pane="orders"] { margin-bottom: 0 !important; }
+}
+
+/* 9：河畔復興計畫卡片（標題＋一句說明＋按鈕），在升級面板內跟著捲動，
+   不再是浮在面板底部被切掉的孤立按鈕。 */
+.riverside-card {
+  margin: 14px 0 4px; padding: 10px 12px;
+  border: 2px solid #7f9c5a; border-radius: 11px;
+  background: #eef6dc; color: #33451f;
+}
+.riverside-card h3 { font-size: 14px; font-weight: 900; margin: 0 0 4px; }
+.riverside-card p { font-size: 12px; line-height: 1.5; margin: 0 0 8px; color: #4d5c38; }
+.riverside-card .btn { width: 100%; }
+/* 面板首屏收合（有「再顯示 N 項」）時，河畔卡跟建物清單一起收起，展開後才出現，不擠掉首屏卡片。 */
+@media (max-height: 500px) { .side-pane:has(.r32-show-more) .riverside-card { display: none !important; } }
+
+/* 10：手機訂單說明與工具列文字至少 12px。 */
+@media (max-width: 859px) {
+  .toolbar .btn { font-size: 12px !important; }
+  .tool-bar .tool, .tool-bar .tool .tn { font-size: 12px !important; }
+  .side-tabs .side-tab { font-size: 12px !important; }
+  .side-pane[data-pane="orders"] .o-flavor,
+  .side-pane[data-pane="orders"] .o-meta,
+  .side-pane[data-pane="orders"] .o-reward { font-size: 12px !important; line-height: 1.45; }
+}
+
+/* 10：手機目標方向箭頭（world-ui.js 建立 #objectiveArrow）：
+   目標在畫面外時貼在畫面邊緣指向目標；桌面隱藏。 */
+.objective-arrow {
+  position: fixed; z-index: 9903; display: none;
+  align-items: center; gap: 3px;
+  min-width: 44px; min-height: 44px; padding: 4px 7px;
+  border: 2px solid #e8c85a; border-radius: 999px;
+  background: rgba(46, 66, 34, .92); color: #ffe98a;
+  font-size: 12px; font-weight: 900; line-height: 1;
+  pointer-events: none;
+}
+.objective-arrow .oa-arrow { display: inline-block; font-size: 15px; }
+.objective-arrow.show { display: inline-flex; }
+@media (min-width: 860px) { .objective-arrow.show { display: none; } }
