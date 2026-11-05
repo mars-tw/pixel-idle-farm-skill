@@ -12,7 +12,7 @@
     document.querySelector('.wrap').append(dock);
     const sync=()=>{if(window.FarmWorld)window.FarmWorld.syncWorldHitTargets();};
     const close=()=>{if(!menu.hidden){menu.hidden=true;sync();}if(more.getAttribute('aria-expanded')!=='false')more.setAttribute('aria-expanded','false');};
-    more.onclick=(event)=>{event.stopPropagation();menu.hidden=!menu.hidden;more.setAttribute('aria-expanded',String(!menu.hidden));sync();};
+    more.onclick=(event)=>{event.stopPropagation();const dlg=document.getElementById('worldDialogue');if(menu.hidden&&dlg&&!dlg.hidden)dlg.hidden=true;/* R37：對話開著時按「更多」，先收起對話再開選單，不再被對話擋住 */menu.hidden=!menu.hidden;more.setAttribute('aria-expanded',String(!menu.hidden));sync();};
     menu.addEventListener('click',event=>{if(event.target.closest('button'))close();});
     dock.addEventListener('click',event=>{if(!event.target.closest('#farmMore'))close();});
     document.addEventListener('pointerdown',event=>{if(!event.target.closest('#farmMenu,#farmMore'))close();});

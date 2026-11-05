@@ -109,4 +109,9 @@ function readyForFirstHarvestClaim() {
   return state;
 }
 
-console.log(`PASS content-r37 systems ${passed}/7`);
+test("A0 整合：對話開著時按「更多」先收起對話再開選單", () => {
+  const more = require("fs").readFileSync(require("path").join(__dirname, "../src/art-r84.js"), "utf8");
+  assert.match(more, /if\(menu\.hidden&&dlg&&!dlg\.hidden\)dlg\.hidden=true;/);
+});
+
+console.log(`PASS content-r37 systems ${passed}/8`);
