@@ -382,6 +382,10 @@
   .order .o-actions { display: flex; flex-direction: column; gap: 4px; }
   .order .trash-confirm { background: #f2c3ad; color: #7d2717; border-color: #c96f50; }
   .order .trash-cancel { background: #e7f5dd; color: #285b1d; border-color: #94bd68; }
+  .side-pane[data-pane="orders"] { background: linear-gradient(180deg, #f8edcf, #ead5a7); border: 3px solid #8b5e34; border-radius: 14px; padding: 12px; box-shadow: inset 0 0 0 2px #c99d5d, 0 4px 0 rgba(84,50,24,.18); }
+  .side-pane[data-pane="orders"] > .pane-head { margin: 0 42px 10px 0; padding: 6px 9px; color: #5f3b1f; background: #fff8df; border: 1.5px solid #b3874b; border-radius: 8px; }
+  .side-pane[data-pane="orders"] .order { background: #fff8df; border-color: #b3874b; }
+  .order .ful:disabled { opacity: 1; max-width: 132px; white-space: normal; line-height: 1.25; color: #7d2717; background: #f4d5bd; border: 1.5px solid #c98563; }
   .streak-badge { font-size: 11px; font-weight: 800; color: #b5560a; }
 
   /* ===== 升級 ===== */
@@ -1330,7 +1334,7 @@
     <!-- 右：分頁側欄（故事 / 磚資訊 / 訂單 / 升級）-->
     <div class="panel side-panel">
       <div class="side-tabs" id="sideTabs">
-        <button class="side-tab" data-tab="tile" aria-label="切換到磚資訊分頁"><span class="ui-icon i-tab-tile" aria-hidden="true"></span>磚資訊</button>
+        <button class="side-tab" data-tab="tile" aria-label="切換到地塊資訊分頁"><span class="ui-icon i-tab-tile" aria-hidden="true"></span>地塊資訊</button>
         <button class="side-tab" data-tab="orders" aria-label="切換到訂單分頁"><span class="ui-icon i-tab-orders" aria-hidden="true"></span>訂單 <span class="tab-badge" id="ordersBadge"></span></button>
         <button class="side-tab" data-tab="upgrades" aria-label="切換到升級分頁"><span class="ui-icon i-tab-upgrades" aria-hidden="true"></span>升級 <span class="tab-badge" id="upgradesBadge"></span></button>
         <button class="side-tab sel" data-tab="story" aria-label="切換到故事分頁" aria-selected="true"><span class="ui-icon i-tab-story" aria-hidden="true"></span>故事 <span class="tab-badge" id="storyBadge" hidden></span></button>
@@ -1366,7 +1370,7 @@
   </div>
 
   <div class="toolbar">
-    <button class="btn small ghost" id="genderToggle" title="切換主角性別">主角</button>
+    <button class="btn small ghost" id="genderToggle" title="切換主角性別"><span class="gender-icon" aria-hidden="true">👩</span><span>女主角</span></button>
     <button class="btn small ghost" id="settingsBtn" data-audit="settings-open" aria-label="開啟設定"><span class="ui-icon i-system-settings" aria-hidden="true"></span>設定</button>
     <button class="btn small ghost" id="spriteToggle">像素圖</button>
     <button class="btn small ghost" id="howToBtn"><span class="ui-icon i-system-help" aria-hidden="true"></span>玩法</button>

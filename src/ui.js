@@ -825,7 +825,9 @@
   // Stage 6：主角性別按鈕標籤
   function syncGenderBtn() {
     const b = $("genderToggle"); if (!b) return;
-    b.textContent = state.gender === "m" ? "男主角" : "女主角";
+    const male = state.gender === "m";
+    b.innerHTML = `<span class="gender-icon" aria-hidden="true">${male ? "🧑" : "👩"}</span><span>${male ? "男主角" : "女主角"}</span>`;
+    if (b.setAttribute) b.setAttribute("aria-label", `目前是${male ? "男主角" : "女主角"}，按一下切換`);
   }
 
   // ---------- 工具列（roadmap：工具模式）----------
@@ -1032,7 +1034,7 @@
           ${confirmingTrash
             ? `<button class="btn ghost small trash-cancel">保留</button>
           <button class="btn small trash-confirm">確認丟棄</button>`
-            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>交付</button>
+            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? "交付" : escapeHtml(G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
           <button class="btn ghost small trash">丟棄</button>`}
         </div>`;
       const fulfill = el.querySelector(".ful");
@@ -2363,7 +2365,7 @@
     }
     if (btn) {
       const natural = mode === "natural";
-      btn.textContent = natural ? "原尺寸" : "整圖";
+      btn.textContent = natural ? "縮放看整張地圖" : "用原尺寸逛地圖";
       btn.title = natural ? "切換為整張地圖完整顯示" : "切換為原尺寸場景內捲動";
       if (btn.setAttribute) {
         btn.setAttribute("aria-pressed", natural ? "true" : "false");

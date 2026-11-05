@@ -1,4 +1,5 @@
 /* R24 shared meal choice cards reuse the existing paper modal and controls. */
+.chore-progress{height:7px;background:#c7aa70;border:1px solid #815a2f}.chore-progress i{background:#39732f}
 #worldModal[data-content-view='shared-meals'] .shared-meal-grid{display:grid;gap:10px}
 .shared-meal-progress{font-weight:800;color:#6b431f;background:#f6e6bd;border:1px solid #b98b51;padding:8px}
 .shared-guests{display:flex;gap:6px}.shared-guest{display:flex;flex:1;flex-wrap:wrap;gap:3px;border:2px solid #b98b51;background:#fff9e9;padding:6px}.shared-guest[data-fulfilled='true']{border-color:#6f8d54;background:#eef2d8}.shared-guest small{width:100%;color:#6b5a45}.shared-pairing-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.shared-pairing-tabs button{min-height:44px;padding:4px;border:1px solid #a76e43;background:#fff9e9;font-weight:700}.shared-pairing-tabs button[aria-pressed='true']{background:#f2d694;border:2px solid #9a4a2f}

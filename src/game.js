@@ -674,6 +674,7 @@
     mooncap_spore: [1, 2], amber_resin: [1, 2], forest_chestnut: [1, 2], frost_cherry: [1, 2],
   };
   const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
+  const BEGINNER_ORDER_QTYS = [2, 3, 4];
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
   const ORDER_COPY = {
     mayor: {
@@ -729,19 +730,31 @@
       && (stats.fulfilledOrders || 0) === 0
       && ((stats.harvested || {}).wheat || 0) > 0;
   }
-  function makeTutorialDeliveryOrder(now) {
-    return {
-      id: TUTORIAL_DELIVERY_ORDER_ID,
-      wants: { wheat: CROPS.wheat.yield },
-      rarity: "common",
-      rewardCoins: 45,
-      rewardXp: 3,
-      expiresAt: now + GAME.orderTtlMs,
-      tutorial: true,
-      npcId: "mayor",
-      flavor: "鎮長先替你掛一張首收小麥委託，交付 2 份就能拿到開墾補助。",
-      thanks: "第一批小麥收到了，農場重新開張有個好開始。",
+  function firstDayChapterOne(state, now) {
+    const story = state.story || {};
+    const createdAt = Number.isFinite(state.createdAt) ? state.createdAt : now;
+    return now - createdAt < 24 * 60 * 60 * 1000
+      && (C.PROLOGUE_QUESTS || []).includes(story.questId || C.FIRST_QUEST);
+  }
+  function makeBeginnerOrder(qty, now, tutorial) {
+    const npcIds = { 2: "mayor", 3: "merchant", 4: "elder" };
+    const copy = {
+      2: "首收先送 2 份小麥，就能領開墾補助。",
+      3: "市集想試賣 3 份小麥，收成後送到看板。",
+      4: "班伯要做家常麥餅，請留 4 份小麥。",
     };
+    return {
+      id: tutorial ? TUTORIAL_DELIVERY_ORDER_ID : `beginner_wheat_${qty}`,
+      wants: { wheat: qty }, rarity: "common",
+      rewardCoins: tutorial ? 45 : 12 + qty * 3,
+      rewardXp: tutorial ? 3 : 2,
+      createdAt: now, expiresAt: now + GAME.orderTtlMs,
+      tutorial: !!tutorial, npcId: npcIds[qty], flavor: copy[qty],
+      thanks: tutorial ? "第一批小麥收到了，農場重新開張有個好開始。" : undefined,
+    };
+  }
+  function makeTutorialDeliveryOrder(now) {
+    return makeBeginnerOrder(CROPS.wheat.yield, now, true);
   }
   function makeOrder(state, now, rng, idSeed) {
     const pool = availableOrderItems(state); // 作物 + 已解鎖動物產品
@@ -787,6 +800,18 @@
   function refreshOrders(state, now, rng) {
     // 移除過期訂單，補滿到 orderSlots
     state.orders = state.orders.filter((o) => o.expiresAt > now);
+    if (firstDayChapterOne(state, now)) {
+      const tutorial = tutorialDeliveryOrderNeeded(state);
+      const kept = new Map();
+      for (const order of state.orders) {
+        const qty = order && order.wants && Object.keys(order.wants).length === 1 ? order.wants.wheat : 0;
+        if (BEGINNER_ORDER_QTYS.includes(qty) && !kept.has(qty)) kept.set(qty, order);
+      }
+      if (tutorial) kept.set(CROPS.wheat.yield, makeTutorialDeliveryOrder(now));
+      state.orders = BEGINNER_ORDER_QTYS.map((qty) => kept.get(qty) || makeBeginnerOrder(qty, now, false));
+      state.ordersSeededAt = Math.max(state.ordersSeededAt || 0, 3);
+      return state.orders;
+    }
     if (tutorialDeliveryOrderNeeded(state)) {
       state.orders = state.orders.filter((o) => o.id !== TUTORIAL_DELIVERY_ORDER_ID);
       state.orders.unshift(makeTutorialDeliveryOrder(now));
@@ -802,6 +827,14 @@
   }
   function canFulfill(state, order) {
     return Object.entries(order.wants).every(([cropId, qty]) => (state.storage.items[cropId] || 0) >= qty);
+  }
+  function orderMissingText(state, order) {
+    const missing = Object.entries(order.wants || {}).map(([itemId, qty]) => {
+      const short = Math.max(0, qty - ((state.storage && state.storage.items[itemId]) || 0));
+      const def = getItemDef(itemId) || { name: itemId };
+      return short > 0 ? `${def.name} ×${short}` : "";
+    }).filter(Boolean);
+    return missing.length ? `還缺${missing.join("、")}・去田裡收成` : "交付";
   }
   // 刻意設計：訂單是固定契約價（rewardCoins/rewardXp 在生成當下就定了），不吃天氣 sellMul——
   // 天氣只影響「直售」（sellMultiplier）。避免訂單獎勵隨天氣忽高忽低，讓訂單成為穩定的收益來源。
@@ -2421,7 +2454,7 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder, orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, canFulfill, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, canFulfill, orderMissingText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
