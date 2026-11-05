@@ -151,7 +151,7 @@ const HELP = `
       await page.waitForTimeout(250);
 
       // 7：手機橫式——任務卡不覆蓋任一方向鍵；種子欄不壓小地圖與頂列
-      if (w === 844 && h === 390) {
+      if (w === 844 && h === 390) { await page.evaluate(() => document.querySelector('#settingsBtn').click()); await page.waitForTimeout(350); await page.evaluate(() => { const b = document.querySelector('[data-setting-key="showDpad"]'); if (b && b.dataset.enabled !== 'true') b.click(); }); await page.waitForTimeout(200); await page.evaluate(() => document.querySelector('#settingsOk').click()); await page.waitForTimeout(300);
         const land = await page.evaluate((src) => {
           eval(src);
           const quest = ro(document.querySelector('#questDock'));

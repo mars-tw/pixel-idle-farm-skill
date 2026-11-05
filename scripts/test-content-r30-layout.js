@@ -374,13 +374,13 @@ async function measurePaneBottom(page, paneSelector, cardSelector) {
           const pr = ro(pane);
           const visibleH = cards.map((c) => { const r = ro(c); return Math.max(0, Math.min(r.bottom, pr.bottom) - Math.max(r.top, pr.top)); });
           const shadow = getComputedStyle(pane).boxShadow || '';
-          return { count: cards.length, firstFull: visibleH[0] >= ro(cards[0]).height - 1, secondFrac: cards[1] ? visibleH[1] / ro(cards[1]).height : 0, hasShadow: shadow.includes('inset') };
+          const bodyEl = document.querySelector('.side-body'); const br2 = bodyEl ? ro(bodyEl) : pr; const cutCards = cards.filter((c) => { const r = ro(c); return r.bottom > br2.top && r.top < br2.bottom && (r.bottom > br2.bottom + 1 || r.top < br2.top - 1); }).length; return { count: cards.length, total: pane.querySelectorAll('.order').length, hidden: pane.querySelectorAll('.r32-panel-hidden').length, hasMore: !!pane.querySelector('.r32-show-more'), cutCards, firstFull: visibleH[0] >= ro(cards[0]).height - 1, secondFrac: cards[1] ? visibleH[1] / ro(cards[1]).height : 0, hasShadow: shadow.includes('inset') };
         }, HELP);
-        assert(firstScreen.count >= 2, `${w}×${h} 手機訂單抽屜訂單不足（${firstScreen.count} 張）`);
+        assert(firstScreen.total >= 2, `${w}×${h} 手機訂單抽屜訂單不足（${firstScreen.total} 張）`);
         assert(firstScreen.firstFull, `${w}×${h} 手機訂單第一張未完整顯示在第一屏`);
-        assert(firstScreen.secondFrac >= 0.45, `${w}×${h} 手機訂單第一屏第二張僅露出 ${(firstScreen.secondFrac * 100).toFixed(0)}%，未達 1.5 張`);
+        assert.equal(firstScreen.cutCards, 0, `${w}×${h} 手機訂單第一屏有被切半的卡（R32 改為完整卡＋再顯示 N 項）`); if (firstScreen.hidden > 0) assert(firstScreen.hasMore, `${w}×${h} 手機訂單首屏收起卡片後缺少「再顯示 N 項」`);
         assert(firstScreen.hasShadow, `${w}×${h} 手機訂單抽屜缺少捲動陰影`);
-        console.log(`OK 訂單第一屏 ${w}×${h} 完整 1 張＋第二張 ${(firstScreen.secondFrac * 100).toFixed(0)}%、有捲動陰影`);
+        console.log(`OK 訂單第一屏 ${w}×${h} 完整卡片無切半（可見 ${firstScreen.count}/${firstScreen.total}）、有捲動陰影`);
       }
       const ordersBottom = await measurePaneBottom(page, '.side-pane[data-pane="orders"]', '.order, .list-more, .orders-empty');
       assert(ordersBottom.count >= 1, `${w}×${h} 訂單面板沒有可量測的卡片`);
