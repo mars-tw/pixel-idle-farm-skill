@@ -303,7 +303,11 @@
     }
     const upgrades = el("buildingUpgrades");
     if (upgrades && !el("worldProjectsButton")) {
-      const b = document.createElement("button"); b.id = "worldProjectsButton"; b.className = "btn buy"; b.textContent = "河畔復興計畫"; b.onclick = () => openProjects(); upgrades.before(b);
+      const card = document.createElement("section"); card.id = "worldProjectsCard"; card.className = "riverside-card"; card.dataset.audit = "riverside-card";
+      const h = document.createElement("h3"); h.textContent = "河畔復興計畫";
+      const p = document.createElement("p"); p.textContent = "用材料修好釣台、花圃與野餐桌，讓河邊重新熱鬧起來。";
+      const b = document.createElement("button"); b.id = "worldProjectsButton"; b.className = "btn buy"; b.textContent = "查看河畔復興計畫"; b.onclick = () => openProjects();
+      card.append(h, p, b); upgrades.before(card);
     }
     document.querySelectorAll(".side-body .pane-head").forEach((h) => {
       if (h.querySelector(".world-close")) return;
@@ -591,11 +595,32 @@
     ctx.fillStyle = "#2b2118"; ctx.fillRect(s.player.x * 10, s.player.y * 10, 10, 10); ctx.fillStyle = "#ff5a3c"; ctx.fillRect(s.player.x * 10 + 1, s.player.y * 10 + 1, 8, 8); ctx.fillStyle = "#fff6e3"; ctx.fillRect(s.player.x * 10 + 3, s.player.y * 10 + 3, 4, 4); button.dataset.playerDot = s.player.x + "," + s.player.y;
     button.onclick = (e) => { const r = canvas.getBoundingClientRect(); const x = Math.floor((e.clientX - r.left) / r.width * s.map.width), y = Math.floor((e.clientY - r.top) / r.height * s.map.height); const tile = window.getTileXY(s, x, y); if (tile) { farm().setTool("hand"); farm().clickTile(tile.id); } };
   }
+  function updateObjectiveArrow() {
+    if (!current || window.innerWidth > 859) { const old = el("objectiveArrow"); if (old) old.classList.remove("show"); return; }
+    let arrow = el("objectiveArrow");
+    if (!arrow) { arrow = document.createElement("div"); arrow.id = "objectiveArrow"; arrow.className = "objective-arrow"; arrow.dataset.audit = "objective-arrow"; arrow.setAttribute("aria-hidden", "true"); arrow.innerHTML = '<span class="oa-arrow">➤</span><small>目標</small>'; document.body.appendChild(arrow); }
+    if (document.querySelector(".side-panel.world-panel-open, .modal.show")) { arrow.classList.remove("show"); return; }
+    const dock = el("questDock");
+    let tid = dock && dock.dataset.targetId ? dock.dataset.targetId : null;
+    if (!tid) { try { tid = markerTile(current); } catch (e) { tid = null; } }
+    const node = tid ? document.querySelector('.gtile[data-tile-id="' + tid + '"]') : null;
+    if (!node) { arrow.classList.remove("show"); return; }
+    const r = node.getBoundingClientRect();
+    if (!r.width) { arrow.classList.remove("show"); return; }
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2, margin = 28;
+    if (cx >= margin && cx <= window.innerWidth - margin && cy >= margin && cy <= window.innerHeight - margin) { arrow.classList.remove("show"); return; }
+    const x = Math.min(Math.max(cx, 12), window.innerWidth - 64);
+    const y = Math.min(Math.max(cy, 76), window.innerHeight - 150);
+    arrow.style.left = Math.round(x) + "px"; arrow.style.top = Math.round(y) + "px";
+    const deg = Math.round(Math.atan2(cy - window.innerHeight / 2, cx - window.innerWidth / 2) * 180 / Math.PI);
+    const span = arrow.querySelector(".oa-arrow"); if (span) span.style.transform = "rotate(" + deg + "deg)";
+    arrow.dataset.targetId = tid; arrow.classList.add("show");
+  }
   function tick(s, t) {
     if (t - lastTick < 750) return;
     lastTick = t; current = s;
     syncWorldHitTargets();
-    if (window.DailyUI) window.DailyUI.refresh(s);
+    updateObjectiveArrow(); if (window.DailyUI) window.DailyUI.refresh(s);
     reconcile(s);
     arrangePicnic(s);
     syncHeaderVars();
