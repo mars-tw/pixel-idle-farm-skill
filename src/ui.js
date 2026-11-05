@@ -632,8 +632,13 @@
   // 建材顯示（>0 才顯示，省空間）
   function matChips() {
     const mats = state.materials || {};
-    return Object.keys(window.MATERIALS).filter((k) => (mats[k] || 0) > 0)
-      .map((k) => `<div class="res mat" title="${window.MATERIALS[k].name}"><span class="ic">${window.MATERIALS[k].emoji}</span> ${mats[k]}</div>`).join("");
+    const held = Object.keys(window.MATERIALS).filter((k) => (mats[k] || 0) > 0);
+    if (!held.length) return "";
+    const total = held.reduce((sum, k) => sum + mats[k], 0);
+    const detail = held.map((k) => `${window.MATERIALS[k].name} ${mats[k]}`).join("・");
+    return `<div class="res mat" title="建材：${detail}"><span class="ic">🧰</span> ${total}</div>`;
+    return "";
+      
   }
 
   // ---------- 種子選擇 ----------
@@ -2456,6 +2461,7 @@
       if (locked) cls += " locked";
       if (lockedArea) cls += " locked-area";
       if (prog && prog.wet && !prog.ready) cls += " wet";
+      if (tile.plotIndex != null && !locked) cls += " state-" + (!plot || !plot.cropId ? "empty" : prog.ready ? "ready" : prog.wet ? "watered" : prog.stage <= 0 ? "seeded" : "growing");
       if (cell.tileId === selectedTileId) cls += " sel";
       if (pendingTouchFarmAction && cell.tileId === pendingTouchFarmAction.tileId) cls += " touch-pending";
       const kind = lockedArea ? "locked-area" : "";
@@ -2465,6 +2471,7 @@
       cell.groundSig = sig;
       cell.el.className = cls;
       cell.el.dataset.kind = kind;
+      cell.el.dataset.plotState = tile.plotIndex == null || locked ? "" : (!plot || !plot.cropId ? "empty" : prog.ready ? "ready" : prog.wet ? "watered" : prog.stage <= 0 ? "seeded" : "growing");
       window.Atlas.applyTo(cell.el, "terrain", frame);
     }
   }
@@ -2799,6 +2806,18 @@
         // Staging offset must not put the foreground child behind the orchard canopy.
         if(tile.npc==='child')el.style.zIndex=Math.round(baselineY);
       }
+      // R25：靠近或選取時顯示名字（任務目標名牌由 renderMarkers 負責）
+      const playerTile = G.getTileById(state, state.player.tileId);
+      const nearNpc = playerTile && Math.abs(playerTile.x - tile.x) + Math.abs(playerTile.y - tile.y) <= 2;
+      if ((nearNpc || selectedTileId === tile.id) && tile.id !== questTarget && worldEl) {
+        const plate = document.createElement("div");
+        plate.className = "npc-nameplate npc-nameplate-near";
+        plate.dataset.audit = "npc-nameplate"; plate.dataset.npc = tile.npc; plate.dataset.tileId = tile.id;
+        plate.textContent = npc.name;
+        plate.style.left = pxv(cx); plate.style.top = pxv(npcIndicatorTop(tile) - 4);
+        plate.style.zIndex = Math.round(baselineY + 30);
+        worldEl.appendChild(plate); obDyn.push(plate);
+      }
       // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
       const req = state.npcRequests && state.npcRequests[tile.npc];
       const sq = G.npcSideQuestStatus ? G.npcSideQuestStatus(state, tile.npc) : null;
@@ -2819,7 +2838,7 @@
     m.dataset.audit = "quest-marker";
     m.dataset.quest = window.FarmWorld ? ($("questDock").dataset.quest || "") : ((state.story && state.story.questId) || "");
     m.dataset.tileId = targetId;
-    m.innerHTML = '<div class="qdot"></div><div class="qpin"></div>';
+    m.innerHTML = tile.npc && window.NPCS[tile.npc] ? `<span class="npc-nameplate" data-audit="quest-npc-nameplate" data-npc="${tile.npc}">！${window.NPCS[tile.npc].name}</span><div class="qdot"></div><div class="qpin"></div>` : '<div class="qdot"></div><div class="qpin"></div>';
     m.style.left = pxv((tile.x + 0.5) * TILE);
     m.style.top = pxv(tile.npc ? npcIndicatorTop(tile) : tile.y * TILE);
     if (tile.npc) {
