@@ -740,9 +740,53 @@
       if (b.setAttribute) b.setAttribute("aria-selected", selected ? "true" : "false");
     });
     document.querySelectorAll(".side-pane").forEach((p) => p.classList.toggle("sel", p.dataset.pane === name));
+    const sideBody = document.querySelector(".side-body"); if (sideBody) sideBody.scrollTop = 0;
     if (name === "story") renderStory();
+    syncPanelScrollHint();
     if (name === "journal") renderJournal();
     if (window.FarmWorld) window.FarmWorld.renderPanels();
+  }
+  // R26：面板捲動提示——內容超高且尚未捲到底時，在面板底部顯示「往下還有內容」。
+  let panelScrollHintEl = null;
+  function syncPanelScrollHint() {
+    const body = (typeof document.querySelector === "function") ? document.querySelector(".side-body") : null;
+    if (!body || typeof body.scrollHeight !== "number" || typeof document.createElement !== "function") return;
+    if (!panelScrollHintEl || panelScrollHintEl.parentElement !== body) {
+      panelScrollHintEl = document.createElement("div");
+      panelScrollHintEl.className = "panel-scroll-hint";
+      panelScrollHintEl.dataset.audit = "panel-scroll-hint";
+      panelScrollHintEl.textContent = "往下還有內容，捲動查看";
+      body.appendChild(panelScrollHintEl);
+      if (typeof body.addEventListener === "function") body.addEventListener("scroll", syncPanelScrollHint, { passive: true });
+    }
+    panelScrollHintEl.hidden = !(body.scrollHeight - body.clientHeight - body.scrollTop > 24);
+  }
+  function setupPanelScrollHint() {
+    syncPanelScrollHint();
+    if (typeof MutationObserver !== "function") return;
+    const body = document.querySelector(".side-body");
+    if (body) new MutationObserver(syncPanelScrollHint).observe(body, { childList: true });
+    const panel = document.querySelector(".side-panel");
+    if (panel) new MutationObserver(syncPanelScrollHint).observe(panel, { attributes: true, attributeFilter: ["class"] });
+  }
+  // R26：任務卡可收合——點一下收成一行摘要（章節進度＋目前步驟），再點展開。
+  let questDockCollapsed = false;
+  function setupQuestDockCollapse() {
+    const box = $("questDock"); if (!box) return;
+    const ensure = () => {
+      box.classList.toggle("quest-collapsed", questDockCollapsed);
+      let btn = box.querySelector("[data-audit='quest-collapse']");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.type = "button"; btn.className = "quest-collapse-btn"; btn.dataset.audit = "quest-collapse";
+        btn.onclick = (ev) => { ev.stopPropagation(); questDockCollapsed = !questDockCollapsed; ensure(); };
+        box.appendChild(btn);
+      }
+      btn.textContent = questDockCollapsed ? "展開" : "收合";
+      if (btn.setAttribute) { btn.setAttribute("aria-expanded", questDockCollapsed ? "false" : "true"); btn.setAttribute("aria-label", questDockCollapsed ? "展開任務卡" : "收合任務卡"); }
+    };
+    ensure();
+    if (typeof MutationObserver === "function") new MutationObserver(ensure).observe(box, { childList: true });
   }
   function setupSideTabs() {
     const mobileTabsQuery = (typeof window.matchMedia === "function")
@@ -2726,6 +2770,15 @@
     worldEl.appendChild(el); obDyn.push(el);
     return el;
   }
+  // R26：名牌錨在 NPC 頭頂——以 NPC 圖片的實際中心與頂緣為準，跟著 NPC 移動。
+  function npcCenterX(tile) {
+    const sprite = obDyn.find((el) => el.dataset.kind === "npc" && el.dataset.tileId === tile.id);
+    if (sprite) {
+      const l = parseFloat(sprite.style.left), w = parseFloat(sprite.style.width);
+      if (Number.isFinite(l) && Number.isFinite(w) && w > 0) return l + w / 2;
+    }
+    return (tile.x + 0.5) * TILE;
+  }
   function npcIndicatorTop(tile) {
     const sprite = obDyn.find((el) => el.dataset.kind === "npc" && el.dataset.tileId === tile.id);
     const frame = window.Atlas.getFrame("npcs", tile.npc + "_idle_a");
@@ -2816,7 +2869,7 @@
         plate.className = "npc-nameplate npc-nameplate-near";
         plate.dataset.audit = "npc-nameplate"; plate.dataset.npc = tile.npc; plate.dataset.tileId = tile.id;
         plate.textContent = npc.name;
-        plate.style.left = pxv(cx); plate.style.top = pxv(npcIndicatorTop(tile) - 4);
+        plate.style.left = pxv(npcCenterX(tile)); plate.style.top = pxv(npcIndicatorTop(tile) - 4);
         plate.style.zIndex = Math.round(baselineY + 30);
         worldEl.appendChild(plate); obDyn.push(plate);
       }
@@ -2841,7 +2894,7 @@
     m.dataset.quest = window.FarmWorld ? ($("questDock").dataset.quest || "") : ((state.story && state.story.questId) || "");
     m.dataset.tileId = targetId;
     m.innerHTML = tile.npc && window.NPCS[tile.npc] ? `<span class="npc-nameplate" data-audit="quest-npc-nameplate" data-npc="${tile.npc}">！${window.NPCS[tile.npc].name}</span><div class="qdot"></div><div class="qpin"></div>` : '<div class="qdot"></div><div class="qpin"></div>';
-    m.style.left = pxv((tile.x + 0.5) * TILE);
+    m.style.left = pxv(tile.npc ? npcCenterX(tile) : (tile.x + 0.5) * TILE);
     m.style.top = pxv(tile.npc ? npcIndicatorTop(tile) : tile.y * TILE);
     if (tile.npc) {
       m.dataset.npc = tile.npc;
@@ -4726,6 +4779,8 @@
 
     bindToolbar();
     setupSideTabs();
+    setupPanelScrollHint();
+    setupQuestDockCollapse();
     startPerformanceMonitor();
     setupPwa();
 
