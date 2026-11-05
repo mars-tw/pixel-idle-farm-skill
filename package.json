@@ -1,7 +1,7 @@
 {
   "name": "pixel-idle-farm",
-  "version": "0.1.59",
-  "appVersion": "content-r36-20261106-1",
+  "version": "0.1.60",
+  "appVersion": "content-r37-20261106-1",
   "description": "陽光農場：離線種田、親手送餐與鄰居共餐。",
   "type": "commonjs",
   "scripts": {

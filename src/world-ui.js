@@ -409,7 +409,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r36-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r36-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r37-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r37-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');
@@ -649,8 +649,9 @@
       const targetCovered = rects.some((t) => (dock && rectOverlap(t, dock.getBoundingClientRect()) > 0) || (seed && rectOverlap(t, seed.getBoundingClientRect()) > 0));
       const coveredPlot = plotNodes.find((n) => { const r = n.getBoundingClientRect(); return (dock && rectOverlap(r, dock.getBoundingClientRect()) > 0) || (seed && rectOverlap(r, seed.getBoundingClientRect()) > 0); }) ? plotNodes[0] : null;
       const focusId = targetCovered ? tid : (coveredPlot ? coveredPlot.dataset.tileId : tid);
+      const talking = !!document.querySelector("#worldDialogue:not([hidden])"); // R37 整合：對話中鏡頭留給說話者，不為了被蓋的田格移走
       // 新的被蓋目標立即聚焦；同一目標才沿用 3 秒節流，避免鏡頭反覆跳。
-      if (focusId && (focusId !== lastTargetAvoidId || nowMs - lastTargetAvoidAt > 3000 || !(current.camera && current.camera.focusTileId === focusId))) { lastTargetAvoidAt = nowMs; lastTargetAvoidId = focusId; const f = farm(); if (f && f.focusTile) f.focusTile(focusId); }
+      if (focusId && !(talking && !targetCovered) && (focusId !== lastTargetAvoidId || nowMs - lastTargetAvoidAt > 3000 || !(current.camera && current.camera.focusTileId === focusId))) { lastTargetAvoidAt = nowMs; lastTargetAvoidId = focusId; const f = farm(); if (f && f.focusTile) f.focusTile(focusId); }
     }
     syncSeedHudTop();
   }
