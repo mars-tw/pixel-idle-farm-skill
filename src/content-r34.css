@@ -1,0 +1,72 @@
+/* R34 B 線：中期畫面（第 6～10 項）。只調整版面、定位與繪製，不改資料與文案。 */
+
+/* 6：主角在建物後方時，定位輪廓顯示全身——半透明本體加奶油色描邊，
+   不再只剩腳底一截與橢圓。名牌維持在輪廓下方指向本體。 */
+.player-locator { opacity: 1; }
+.player-locator > div {
+  clip-path: none;
+  opacity: .88;
+  filter:
+    drop-shadow(2px 0 0 #fff6e3) drop-shadow(-2px 0 0 #fff6e3)
+    drop-shadow(0 2px 0 #fff6e3) drop-shadow(0 -2px 0 #fff6e3)
+    drop-shadow(0 0 4px rgba(62, 47, 35, .85));
+}
+.player-locator::after { display: none; }
+.player-locator > span { top: 100%; }
+
+/* 7：池塘不再是平塗藍色方塊——水面疊既有 quiet-water 材質與波紋，
+   岸線（泥土／草緣）由 paintGround 依鄰格寫入每格的內陰影。 */
+.gtile.water::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .10) 0 2px, transparent 2px 23px),
+    url("../assets/generated/content-r7/quiet-water.webp?v=content-r33-20261105-1");
+  background-size: 100% 100%, 144px 144px;
+  background-repeat: repeat;
+  image-rendering: pixelated;
+  opacity: .38;
+}
+
+/* 8：升級卡——說明欄不被右側按鈕擠成窄欄；「升級後金幣會變成 0」是按鈕下方完整一行；
+   面板底部按鈕不被「往下還有內容」提示蓋住（提示可見時捲動區再往上讓位）。 */
+.up { flex-wrap: wrap; }
+.up .u-action { flex: 0 0 auto; margin-left: auto; }
+.up .u-spend-all {
+  flex: 0 0 100%; width: 100%;
+  margin-top: 2px; text-align: right;
+  white-space: nowrap;
+}
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .up .u-spend-all { white-space: normal; }
+}
+
+/* 9：建造卡價格不斷行——費用逐項以不斷行片段呈現，中文詞不從中間拆開。 */
+.build-wheel .bw-t { overflow-wrap: normal; word-break: keep-all; }
+.build-wheel .bw-t small { overflow-wrap: normal; word-break: keep-all; }
+.build-wheel .bw-cost { white-space: nowrap; }
+/* 9：任務高亮改成地面圈——可交付時不再在鎮民身上發綠光，頭頂點只留實心色。 */
+.qmarker-ready .qdot { box-shadow: none; }
+.qmarker .qring {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  border: 3px solid #57b84b; border-radius: 50%;
+  background: rgba(123, 219, 123, .18);
+  box-shadow: 0 0 0 2px rgba(255, 246, 227, .9);
+  pointer-events: none;
+}
+.ob-dot-ground-ring {
+  border: 3px solid #57b84b; border-radius: 50%;
+  background: rgba(123, 219, 123, .18);
+  box-shadow: 0 0 0 2px rgba(255, 246, 227, .9);
+  animation: none;
+}
+
+/* 10：手機頂部——標誌列留出安全區上距，logo 完整顯示不切頂、不切左。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  header { top: max(14px, env(safe-area-inset-top)); left: 12px; right: 12px; }
+  .title { overflow: visible; }
+  .title .farm-logo {
+    display: block; flex: 0 0 auto;
+    margin-top: 2px;
+    object-fit: contain; object-position: left center;
+  }
+}
