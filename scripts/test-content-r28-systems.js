@@ -90,5 +90,15 @@ test('A5 開場、手記、印章冊與農場幫手文字一致', () => {
   assert.equal(C.UPGRADES.helperLevel.icon, '🌾');
 });
 
-console.log(`VERIFIED content R28 systems ${passed}/5`);
+test('整合：未解鎖作物的訂單寫出哪一級解鎖', () => {
+  const state = S.defaultState(1_900_000_000_000);
+  state.level = 1;
+  assert.equal(G.orderLockText(state, { wants: { carrot: 2 } }), `胡蘿蔔 Lv ${C.CROPS.carrot.unlockLevel} 解鎖`);
+  assert.equal(G.orderLockText(state, { wants: { wheat: 3 } }), '');
+  state.level = C.CROPS.carrot.unlockLevel;
+  assert.equal(G.orderLockText(state, { wants: { carrot: 2 } }), '');
+  assert.match(ui, /data-audit="order-lock"/);
+});
+
+console.log(`VERIFIED content R28 systems ${passed}/6`);
 if (process.exitCode) process.exit(1);

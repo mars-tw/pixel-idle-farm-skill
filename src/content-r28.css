@@ -146,3 +146,5 @@ body:has(#toast-zone > .toast) #questDock .world-objective-bottom > button {
 #worldModal:has(.sun-welcome) .modal-card { height: auto; }
 #worldModal:has(.sun-welcome) #worldSunBegin { margin-top: 8px; }
 #worldModal:has(.sun-welcome) .modal-body { flex: 0 1 auto; }
+/* R28 整合：未解鎖作物的訂單說明哪一級解鎖。 */
+.o-lock { margin-top: 3px; font-size: 12px; color: #7a4a12; font-weight: 600; }

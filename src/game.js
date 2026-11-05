@@ -814,6 +814,11 @@
     }).filter(Boolean);
     return missing.length ? `還缺${missing.join("、")}` : "交付";
   }
+  // R28 整合：訂單要的作物還沒解鎖時，直接說哪一級解鎖，不讓「去田裡」變成死路。
+  function orderLockText(state, order) {
+    const locked = Object.keys(order.wants || {}).map((itemId) => CROPS[itemId]).filter((crop) => crop && crop.unlockLevel > (state.level || 1));
+    return locked.length ? locked.map((crop) => `${crop.name} Lv ${crop.unlockLevel} 解鎖`).join("、") : "";
+  }
   // 刻意設計：訂單是固定契約價（rewardCoins/rewardXp 在生成當下就定了），不吃天氣 sellMul——
   // 天氣只影響「直售」（sellMultiplier）。避免訂單獎勵隨天氣忽高忽低，讓訂單成為穩定的收益來源。
   function orderPayout(state, order) {
@@ -2432,7 +2437,7 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, canFulfill, orderMissingText, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, canFulfill, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
