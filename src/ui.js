@@ -3485,7 +3485,7 @@
       bar.appendChild(b);
     });
     bar.hidden = false;
-    syncSceneActionBarInset(); // R72：橫式只讓出與固定控制盤的實際交疊
+    syncSceneActionBarInset(); try { const playerEl = $("player"); if (playerEl && typeof bar.getBoundingClientRect === "function") { const br = bar.getBoundingClientRect(), pr = playerEl.getBoundingClientRect(); const hit = Math.max(0, Math.min(br.right, pr.right) - Math.max(br.left, pr.left)) * Math.max(0, Math.min(br.bottom, pr.bottom) - Math.max(br.top, pr.top)); bar.classList.toggle("scene-action-avoid-player", hit > 0); if (hit > 0) bar.style.bottom = Math.max(8, window.innerHeight - pr.top + 10) + "px"; else bar.style.bottom = ""; } } catch (e) {}
   }
   function runSceneAction(action, tileId) {
     const tile = G.getTileById(state, tileId); if (!tile) return;
