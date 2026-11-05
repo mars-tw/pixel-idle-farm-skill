@@ -5028,7 +5028,7 @@
       document.querySelectorAll("#orders .o-meta").forEach((m, idx) => {
         const o = state.orders[idx]; if (!o) return;
         const rarity = window.ORDER_RARITY[o.rarity];
-        m.innerHTML = `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - t))}`;
+        m.innerHTML = o.firstBatch || o.expiresAt == null ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - t))}`; // R39 整合：每秒更新也要保留首批不限時
       });
     }
     // 天氣自然到期改變時，資源列的天氣圖示也要跟著換，不然會跟地圖上的 #weatherLayer 對不上

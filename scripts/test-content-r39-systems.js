@@ -104,5 +104,10 @@ test('A5 去田裡會關面板、選訂單作物並置中空田', () => {
   assert.match(handler, /focusCameraOnTile\(tile\.id\)/);
 });
 
+test("R39 整合：每秒更新倒數時，首批訂單仍顯示不限時", () => {
+  const ui = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8");
+  assert.match(ui, /m\.innerHTML = o\.firstBatch \|\| o\.expiresAt == null \? "首批不限時"/);
+});
+
 if (process.exitCode) process.exit(1);
-console.log(`VERIFIED content R39 A1-A5 and A4b (${passed}/7)`);
+console.log(`VERIFIED content R39 A1-A5 and A4b (${passed}/8)`);
