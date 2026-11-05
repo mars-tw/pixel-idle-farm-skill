@@ -1,0 +1,104 @@
+/* R30 B 線：裁切歸零與畫面（第 6～10 項）。只調整版面、定位、捲動與繪製參數，不改內容與數值。 */
+
+/* 6：設定面板捲到底時，最後一段文字與「完成」鈕之間保留明確留白；
+   清單底部留白加大，捲動定位（scroll-padding）同步，避免最後一行貼住清單下緣。 */
+.settings-card .settings-list {
+  padding-bottom: 20px;
+  scroll-padding-bottom: 20px;
+}
+.settings-card #settingsOk {
+  margin-top: 12px;
+}
+
+/* 7：手機 HUD 不截字——標題列改直向兩行，標誌不被資源列擠壓；
+   資源列單行均分，容量欄只留圖示＋數字（例如「0/30」），等級欄保留進度數字。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  header { flex-direction: column; align-items: stretch; gap: 4px; }
+  .title { width: auto; max-width: 100%; flex-wrap: nowrap; }
+  .title .farm-logo { width: 148px; height: 48px; flex: 0 0 auto; }
+  .res-bar { flex-wrap: nowrap; gap: 4px; width: 100%; max-width: none; }
+  .res-bar .res {
+    flex: 1 1 0; min-width: 0; justify-content: center;
+    padding: 4px 5px; font-size: 12px; gap: 4px; overflow: hidden;
+  }
+  .res-bar .res .ui-icon { width: 24px; height: 24px; }
+  .res-bar .res.storage .res-name { display: none; }
+  .res-bar .res.level .xp-track { width: 26px; }
+  .res-bar .res .sub { overflow: visible; text-overflow: clip; }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  /* 橫式任務列改跟標題列實高走，不被資源列蓋住上半（覆寫舊的寫死上距） */
+  #questDock { top: var(--world-quest-top, 92px); }
+  /* 橫式維持單行：標題列高度不變，才不會壓縮地圖與任務列的定位基準 */
+  header { flex-direction: row; align-items: center; gap: 6px; }
+  .title { width: auto; max-width: 100%; flex-wrap: nowrap; flex: 0 0 auto; }
+  .title .farm-logo { width: 132px; height: 40px; flex: 0 0 auto; }
+  .res-bar { flex-wrap: nowrap; gap: 4px; width: auto; flex: 1 1 auto; max-width: none; }
+  .res-bar .res {
+    flex: 1 1 0; min-width: 0; justify-content: center;
+    padding: 3px 5px; font-size: 12px; gap: 4px; overflow: hidden; min-height: 30px;
+  }
+  .res-bar .res .ui-icon { width: 22px; height: 22px; }
+  .res-bar .res.storage .res-name { display: none; }
+  .res-bar .res.level .xp-track { width: 26px; }
+  .res-bar .res .sub { overflow: visible; text-overflow: clip; }
+}
+
+/* 8：成熟作物一種畫法——作物本體＋小型閃光點；光暈只留在田框內，不再往外擴、
+   不蓋住作物輪廓。陽光光斑保留，但改成半透明暖色且光池不超出落點田格。 */
+.gtile.farm-plot.state-ready {
+  box-shadow: inset 0 0 0 2px rgba(255, 217, 74, .9);
+}
+.crop-mature-pop {
+  filter: drop-shadow(0 0 2px rgba(255, 214, 90, .35));
+}
+.mature-flash {
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 224, 130, .32), rgba(255, 214, 90, .12) 48%, transparent 72%);
+  mix-blend-mode: normal;
+}
+.sunlit-crop, .ob.crop.sunlit-crop {
+  filter: saturate(1.07) drop-shadow(0 0 2px rgba(255, 214, 90, .35));
+}
+.ob-dot-ready-crop {
+  background: #ffd94a;
+  box-shadow: 0 0 5px rgba(255, 210, 60, .75);
+}
+/* 陽光光斑的光池與光柱圖由既有美術管線（art-r85～r89）以半透明暖色繪製，此處不覆寫；
+   本線只確保受光作物本體不被高亮洗白（見上方 .sunlit-crop），並以像素量測驗收。 */
+
+/* 9：NPC 名牌指向明確——任務名牌下方的指向三角曾被美術規則隱藏，此處恢復顯示
+   （仍指向 NPC 頭頂）；靠近／選取名牌下方加小三角，底色與名牌一致；
+   名牌與玩家或其他角色重疊時由 JS 自動上移（data-plate-shift 記錄位移）。 */
+.qmarker .qpin { display: block; }
+.npc-nameplate-near::after {
+  content: "";
+  position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 6px solid transparent; border-right: 6px solid transparent;
+  border-top: 6px solid rgba(24, 42, 32, .92);
+  pointer-events: none;
+}
+.npc-nameplate-near { overflow: visible; }
+
+/* 10：全面板最後一項可見——捲動容器底部保留留白，捲到底時最後一張卡片不貼住
+   工具列或頁籤列；手機抽屜加上捲動陰影提示下方還有內容。
+   手記的舊紀錄區（details）閉合時內容不得洩漏溢出捲動範圍，展開後才計入捲動高度。 */
+details.legacy-story:not([open]) > :not(summary) { display: none !important; }
+details.legacy-story[open] > #storyPanel { display: block; }
+.side-body { padding-bottom: 24px; }
+#dailyBody { min-height: 0; }
+.daily-modal-card { min-height: 0; }
+#dailyBody { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; }
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .side-panel .side-pane.sel {
+    padding-bottom: 24px;
+    box-shadow: inset 0 -22px 16px -14px rgba(74, 53, 22, .38), 0 -10px 30px rgba(0, 0, 0, .18);
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .side-panel .side-pane.sel {
+    padding-bottom: 24px;
+    box-shadow: inset 0 -22px 16px -14px rgba(74, 53, 22, .38), 0 -10px 30px rgba(0, 0, 0, .18);
+  }
+}
