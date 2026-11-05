@@ -751,12 +751,14 @@
   function syncPanelScrollHint() {
     const body = (typeof document.querySelector === "function") ? document.querySelector(".side-body") : null;
     if (!body || typeof body.scrollHeight !== "number" || typeof document.createElement !== "function") return;
-    if (!panelScrollHintEl || panelScrollHintEl.parentElement !== body) {
+    const panel = (typeof body.closest === "function" ? body.closest(".side-panel") : null) || body.parentElement;
+    if (!panel) return;
+    if (!panelScrollHintEl || panelScrollHintEl.parentElement !== panel) {
       panelScrollHintEl = document.createElement("div");
       panelScrollHintEl.className = "panel-scroll-hint";
       panelScrollHintEl.dataset.audit = "panel-scroll-hint";
-      panelScrollHintEl.textContent = "往下還有內容，捲動查看";
-      body.appendChild(panelScrollHintEl);
+      panelScrollHintEl.textContent = "往下還有內容";
+      panel.appendChild(panelScrollHintEl);
       if (typeof body.addEventListener === "function") body.addEventListener("scroll", syncPanelScrollHint, { passive: true });
     }
     panelScrollHintEl.hidden = !(body.scrollHeight - body.clientHeight - body.scrollTop > 24);
@@ -1222,7 +1224,7 @@
       const el = document.createElement("div");
       el.className = "up";
       el.innerHTML = `
-        <div class="u-ic">${def.icon}</div>
+        <div class="u-ic">${key === "plotCount" ? uiIcon("tool_plant") : def.icon}</div>
         <div class="u-body">
           <div class="u-name">${def.name} <span class="lv">Lv ${lv}/${max}</span></div>
           <div class="u-desc">${def.desc}</div>
@@ -3270,6 +3272,22 @@
     if (!G.canAffordCost(state, def.cost)) return { enabled: false, text: buildingCostShortfall(def.cost) || "資源不足" };
     return { enabled: true, text: "可以建造" };
   }
+  function placeBuildCatalog(box) {
+    const scene = $("mapScene");
+    box.style.left = "50%";
+    box.style.transform = "translate(-50%, 0)";
+    if (!scene || typeof scene.getBoundingClientRect !== "function") { box.style.top = "86px"; return; }
+    const sr = scene.getBoundingClientRect();
+    const header = document.querySelector("header");
+    const toolbar = $("toolBar");
+    const hr = header && typeof header.getBoundingClientRect === "function" ? header.getBoundingClientRect() : null;
+    const tr = toolbar && typeof toolbar.getBoundingClientRect === "function" ? toolbar.getBoundingClientRect() : null;
+    let top = hr ? Math.max(6, hr.bottom - sr.top + 8) : 86;
+    let bottom = tr && tr.top > sr.top ? tr.top - sr.top - 8 : sr.height - 8;
+    if (bottom <= top + 60) { top = 6; bottom = sr.height - 6; }
+    box.style.maxHeight = Math.max(60, Math.floor(bottom - top)) + "px";
+    box.style.top = Math.floor(top) + "px";
+  }
   function showBuildCatalog() {
     const box = $("buildWheel"); if (!box) return;
     hideObjectBubble(); hideSceneActions();
@@ -3294,7 +3312,7 @@
     });
     box.hidden = false;
     box.style.left = "50%";
-    box.style.top = "86px";
+    placeBuildCatalog(box);
     onceHint("build_catalog", "選一個建物，再點地面放置");
   }
   function buildOptionsForTile(tile) {
@@ -3327,6 +3345,7 @@
       box.appendChild(b);
     });
     box.hidden = false;
+    box.style.transform = ""; box.style.maxHeight = "";
     placeSceneOverlay(box, tileViewportPoint(tile.id, 0.15));
     onceHint("build_wheel", "🏗 點選項即建造；點空白處取消");
   }
@@ -3388,11 +3407,40 @@
     if (tile.npc) add("talk");
     return actions.slice(0, 3);
   }
+  function tileStateLabelText(tile) {
+    if (!tile || tile.plotIndex == null) return "";
+    const active = G.activePlotCount(state);
+    if (tile.plotIndex >= active) return "未開墾・待解鎖";
+    const plot = state.plots[tile.plotIndex];
+    if (!plot || !plot.cropId) return "空地・可種植";
+    const crop = window.CROPS[plot.cropId];
+    const name = crop ? crop.name : "作物";
+    const prog = G.getCropProgress(state, plot, now());
+    return name + "・" + (prog.ready ? "可收成" : prog.wet ? "已澆水" : "待澆水");
+  }
+  function renderTileStateLabel(tile) {
+    let label = $("tileStateLabel");
+    const text = tileStateLabelText(tile);
+    if (!text) { if (label) label.hidden = true; return; }
+    if (!label) {
+      label = document.createElement("div");
+      label.id = "tileStateLabel"; label.className = "tile-state-label"; label.dataset.audit = "tile-state-label";
+      const world = $("mapWorld"); if (!world) return;
+      world.appendChild(label);
+    }
+    label.textContent = text;
+    label.dataset.tileId = tile.id;
+    label.style.left = ((tile.x + 0.5) * TILE) + "px";
+    label.style.top = (tile.y * TILE - 6) + "px";
+    label.hidden = false;
+  }
   function renderSceneActionsForSelection() {
     const bar = $("sceneActionBar"); if (!bar) return;
-    const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null;
+    const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile);
+    const toolActions = { hand: ["plant", "harvest"], water: ["water"], build: ["build"], clear: ["clear"], inspect: [] }[currentTool()] || [];
     const actions = sceneActionsForTile(tile);
     if (!tile || !actions.length) { hideSceneActions(); return; }
+    if (tile && tile.plotIndex != null) { const filtered = actions.filter((a) => toolActions.includes(a.action)); actions.splice(0, actions.length, ...filtered.slice(0, 1)); if (!actions.length) { hideSceneActions(); return; } }
     bar.innerHTML = "";
     actions.forEach((entry) => {
       const meta = SCENE_ACTION_META[entry.action] || ["●", entry.action];
@@ -4345,7 +4393,7 @@
     sp.style.transform = flip ? "scaleX(-1)" : "";
     let locator=$("playerLocator");
     if(pe.dataset.occluded==='true'){
-      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span>米莉・腳下</span>';worldEl.appendChild(locator);}
+      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span>米莉</span>';worldEl.appendChild(locator);}
       locator.hidden=false;locator.style.cssText=`left:${pe.style.left};top:${pe.style.top};width:${rootWidth}px;height:${eh}px`;
       locator.firstChild.style.cssText=sp.style.cssText;locator.dataset.kind='partial-monochrome';
     }else if(locator)locator.hidden=true;
