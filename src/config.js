@@ -413,9 +413,9 @@ const OBSTACLES = {
 // Lv2 金幣約為建造價 1.8～2.7 倍，Lv3 再為 Lv2 的 2.2～3 倍，並持續吃對應建材；
 // 三段封頂避免瞬間無限升級，前期仍保留一個可企及的首次強化目標。
 const BUILDINGS = {
-  compostHeap: { id: "compostHeap", name: "堆肥場", emoji: "🍂", unlockLevel: 2,
+  compostHeap: { id: "compostHeap", name: "堆肥場", emoji: "🍂", unlockLevel: 1,
                  levels: [
-                   { cost: { coins: 60, compost: 3 }, effect: { growthAura: 0.90 }, effectLabel: "作物成長時間 ×0.90" },
+                   { cost: { coins: 30 }, effect: { growthAura: 0.90 }, effectLabel: "作物成長時間 ×0.90" },
                    { cost: { coins: 160, compost: 5 }, effect: { growthAura: 0.84 }, effectLabel: "作物成長時間 ×0.84" },
                    { cost: { coins: 480, compost: 9 }, effect: { growthAura: 0.78 }, effectLabel: "作物成長時間 ×0.78" },
                  ],

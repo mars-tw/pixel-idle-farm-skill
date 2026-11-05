@@ -5,14 +5,17 @@ const C = require("../src/config.js");
 const S = require("../src/state.js");
 const G = require("../src/game.js");
 const D = require("../src/daily.js");
+const A = require("../src/adventure.js");
 
 const T = Date.parse("2026-11-05T09:00:00+08:00");
 let passed = 0;
 function test(name, fn) { fn(); passed++; console.log("PASS " + name); }
 const source = (path) => fs.readFileSync(path, "utf8");
 
-test("A1 Lv1 first-day orders contain only unlocked crops", () => {
+test("A1 Lv1 first-day orders stay closed until the main wheat delivery, then contain only unlocked crops", () => {
   const s = S.defaultState(T);
+  assert.deepEqual(G.refreshOrders(s, T, () => 0.1), []);
+  A.ensure(s, T); s.adventure.claimed.c1_first_harvest = true;
   const orders = G.refreshOrders(s, T, () => 0.1);
   assert.equal(orders.length, C.GAME.orderSlots);
   for (const order of orders) for (const id of Object.keys(order.wants)) {
@@ -21,17 +24,12 @@ test("A1 Lv1 first-day orders contain only unlocked crops", () => {
   }
 });
 
-test("A1 cards label two reserved wheat and consuming it requires confirmation", () => {
+test("A1 market gate replaces reserve labels and confirmation", () => {
   const s = S.defaultState(T); G.refreshOrders(s, T, () => 0.1);
-  const order = s.orders.find((row) => row.wants.wheat === 3);
-  s.storage.items.wheat = 4;
-  assert.equal(G.mainStoryReserve(s, "wheat"), 2);
-  assert.equal(G.orderConsumesStoryReserve(s, order), true);
-  s.storage.items.wheat = 5;
-  assert.equal(G.orderConsumesStoryReserve(s, order), false);
+  assert.equal(s.orders.length, 0);
   const ui = source("src/ui.js");
-  assert.match(ui, /主線保留 2 份小麥/);
-  assert.match(ui, /交付後會動用主線保留的 2 份小麥/);
+  assert.match(ui, /先把 2 份小麥交給班伯，市集訂單就會開放/);
+  assert.doesNotMatch(ui, /主線保留 2 份小麥|交付後會動用主線保留/);
 });
 
 test("A2 upgrade shortfall is exact and affordable upgrades have no shortfall", () => {
@@ -47,7 +45,7 @@ test("A2 upgrade shortfall is exact and affordable upgrades have no shortfall", 
 });
 
 test("A2 first completed order makes at least one upgrade affordable", () => {
-  const s = S.defaultState(T); G.refreshOrders(s, T, () => 0.1);
+  const s = S.defaultState(T); A.ensure(s, T); s.adventure.claimed.c1_first_harvest = true; G.refreshOrders(s, T, () => 0.1);
   for (let i = 0; i < 3; i++) assert.equal(G.plant(s, i, "wheat", T).ok, true);
   for (let i = 0; i < 3; i++) assert.equal(G.harvest(s, i, T + C.CROPS.wheat.growMs + 1).ok, true);
   const first = s.orders.find((order) => order.id === "beginner_wheat_2");

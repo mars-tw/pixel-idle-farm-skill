@@ -107,6 +107,12 @@
     const h = Math.floor(m / 60), rm = m % 60;
     return h + "h" + (rm ? " " + rm + "m" : "");
   }
+  function fmtOrderCountdown(ms) {
+    const total = Math.max(0, Math.ceil(ms / 1000));
+    const minutes = Math.floor(total / 60);
+    const seconds = total % 60;
+    return `${minutes} 分 ${String(seconds).padStart(2, "0")} 秒`;
+  }
   function fmtNum(n) {
     if (n < 1000) return "" + n;
     if (n < 1e6) return (n / 1000).toFixed(n < 1e4 ? 1 : 0) + "k";
@@ -123,6 +129,35 @@
   // R79：同一句 2.5 秒內不重複；最多同時 3 則（最舊的先收）。
   const TOAST_DEDUPE_MS = 2500, TOAST_MAX = 3;
   const recentToasts = new Map();
+  const settlementQueue = [];
+  let settlementVisible = false;
+  function showNextSettlement() {
+    if (settlementVisible || !settlementQueue.length) return;
+    const data = settlementQueue.shift();
+    const zone = $("toast-zone");
+    if (!zone) { settlementVisible = false; return; }
+    settlementVisible = true;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "toast settlement-card";
+    card.dataset.audit = "settlement-card";
+    card.textContent = `獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${data.next}`;
+    zone.appendChild(card);
+    let timer = setTimeout(close, 2500);
+    function close() {
+      if (!settlementVisible) return;
+      settlementVisible = false;
+      clearTimeout(timer);
+      card.remove();
+      showNextSettlement();
+    }
+    card.onclick = close;
+  }
+  function enqueueSettlement(data) {
+    if (!data || !data.next) return;
+    settlementQueue.push(data);
+    showNextSettlement();
+  }
   function toast(msg, deferCount) {
     const zone = $("toast-zone"); if (!zone) return;
     const dlg = $("worldDialogue"); if (dlg && !dlg.hidden && (deferCount || 0) < 40) { setTimeout(() => { recentToasts.delete(String(msg)); toast(msg, (deferCount || 0) + 1); }, 300); return; }
@@ -1023,6 +1058,7 @@
       const crop = window.CROPS[plot.cropId];
       const r = G.harvest(state, i, t);
       if (r.ok) {
+        enqueueSettlement(r.settlement);
         playAction("harvest");
         playSound("harvest"); playSound("coin"); screenBurst(cx, cy, [crop.emoji], { count: Math.min(12, 5 + r.added), distance: 58 }); flyCoinsToHud(cx, cy, 4); harvestComboText(cx, cy);
         floatText(cx, cy, "+" + r.added + " " + crop.emoji, "#dff5c8");
@@ -1057,7 +1093,15 @@
     const streakMul = 1 + Math.min(window.ORDER_STREAK_CAP, state.orderStreak * window.ORDER_STREAK_BONUS);
     $("streakHint").innerHTML = state.orderStreak > 0
       ? `<span class="streak-badge">🔥 連單 ${state.orderStreak}（獎金 ×${streakMul.toFixed(2)}）</span>` : "";
-    if (state.orders.length === 0) { box.innerHTML = `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`; return; }
+    if (state.orders.length === 0) {
+      const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
+      box.innerHTML = marketUnlocked
+        ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
+        : `<div class="order-market-locked" data-audit="order-market-locked"><p>先把 2 份小麥交給班伯，市集訂單就會開放</p><button type="button" class="btn buy small" data-order-main-go>前往班伯</button></div>`;
+      const go = box.querySelector("[data-order-main-go]");
+      if (go) go.onclick = () => { const target = G.questMarkerTile && G.questMarkerTile(state, now()); if (target) focusCameraOnTile(target); };
+      return;
+    }
     const ordered = state.orders.slice().sort((a, b) => {
       const ca = G.canFulfill(state, a) ? 1 : 0;
       const cb = G.canFulfill(state, b) ? 1 : 0;
@@ -1087,10 +1131,9 @@
           ${isFestival ? `<div class="festival-tag">🏮四季物產</div>` : ""}
           ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
           <div class="o-flavor">${narrative.offer}</div>` : ""}
-          ${G.mainStoryReserve && G.mainStoryReserve(state, "wheat") && o.wants.wheat ? `<div class="o-reserve" data-audit="story-reserve">主線保留 2 份小麥</div>` : ""}
           <div class="o-wants">${wantsHtml}</div>
           <div class="o-reward">🪙 ${fmtNum(pay.coins)} · <span class="xp">⭐ ${pay.xp}</span></div>
-          <div class="o-meta">${rarity.label} · ⏳ ${fmtTime(Math.max(0, o.expiresAt - now()))}</div>
+          <div class="o-meta">${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}</div>
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
         </div>
         <div class="o-actions">
@@ -1103,9 +1146,8 @@
         </div>`;
       const fulfill = el.querySelector(".ful");
       if (fulfill) fulfill.onclick = () => {
-          if (G.orderConsumesStoryReserve && G.orderConsumesStoryReserve(state, o) && !window.confirm("交付後會動用主線保留的 2 份小麥，仍要交付嗎？")) return;
           const r = G.fulfillOrder(state, o.id, now());
-          if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); toast((narrative ? narrative.npcName + "：「" + narrative.thanks + "」 +" : "📜 訂單完成！+") + fmtNum(r.coins) + " 🪙" + (r.streakMul > 1 ? " (×" + r.streakMul.toFixed(2) + ")" : "")); afterChange(true); renderOrders(); }
+          if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); enqueueSettlement(r.settlement); afterChange(true); renderOrders(); }
           else toast("作物不足，無法交付");
         };
       const trash = el.querySelector(".trash");
@@ -1247,8 +1289,8 @@
         el.querySelector("button").onclick = () => {
           const r = G.buyUpgrade(state, key);
           if (r.ok) {
+            enqueueSettlement(r.settlement);
             levelUpFx(el); playSound("level");
-            toast(def.icon + " " + def.name + " → Lv " + r.level);
             if (key === "plotCount") buildFarm();
             afterChange(true); renderUpgrades(); renderSeeds();
           } else if (r.reason === "no_coins") toast("🪙 金幣不足");
@@ -1597,13 +1639,14 @@
     const targetId = G.questMarkerTile ? G.questMarkerTile(state, now()) : null;
     const title = cur ? cur.title : "自由經營";
     const action = questActionText(cur);
+    const progress = cur ? questStepProgress(cur.id, (state.story && state.story.completed) || {}) : { done: 0, total: 0 };
     const isFestivalQuest = cur && cur.id === "finish_festival_order";
     box.dataset.quest = cur ? cur.id : "free";
     box.dataset.targetId = targetId || "";
     box.classList.toggle("festival", !!isFestivalQuest);
     box.classList.toggle("expanded", questDockExpanded);
     box.innerHTML = `<div class="qd-body">
-        <div class="qd-title"><span>📍</span><span>${title}</span><span class="qd-summary">${action}</span>${isFestivalQuest ? `<em class="festival-tag">🏮四季物產</em>` : ""}</div>
+        <div class="qd-title"><span>📍</span><span>${title}</span>${cur ? `<em class="qd-progress" data-audit="quest-progress">${progress.done}/${progress.total}</em>` : ""}<span class="qd-summary">${action} ${cur ? `${progress.done}/${progress.total}` : ""}</span>${isFestivalQuest ? `<em class="festival-tag">🏮四季物產</em>` : ""}</div>
         <div class="qd-action">${action}</div>
         ${cur && cur.id === "repair_bridge" ? bridgeMaterialRowsHtml(true) : ""}
         ${cur && (cur.id === "collect_east_forage") ? forageRowsHtml(true) : ""}
@@ -3520,7 +3563,7 @@
         G.advanceStory(state, "deliver");
         spawnVfx(tile.id, "product_pop");
         playSound("order"); playSound("coin");
-        toast("交付 +" + fmtNum(r.coins));
+        enqueueSettlement(r.settlement);
         afterChange(true); renderOrders();
       } else toast("交付條件不足");
     });
@@ -4796,7 +4839,7 @@
       document.querySelectorAll("#orders .o-meta").forEach((m, idx) => {
         const o = state.orders[idx]; if (!o) return;
         const rarity = window.ORDER_RARITY[o.rarity];
-        m.innerHTML = `${rarity.label} · ⏳ ${fmtTime(Math.max(0, o.expiresAt - t))}`;
+        m.innerHTML = `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - t))}`;
       });
     }
     // 天氣自然到期改變時，資源列的天氣圖示也要跟著換，不然會跟地圖上的 #weatherLayer 對不上
@@ -5034,6 +5077,8 @@
         return true;
       },
       toast,
+      enqueueSettlement,
+      settlementStatus: () => ({ visible: settlementVisible, queued: settlementQueue.length }),
       selectTab: switchTab,
       openModal,
       closeModal,
@@ -5057,7 +5102,7 @@
   function bindToolbar() {
     $("harvestAllBtn").onclick = () => {
       const r = G.harvestAll(state, now());
-      if (r.totalAdded > 0) { const c = elementCenter($("mapScene")); screenBurst(c.x, c.y, ["\ud83c\udf3e", "\ud83e\udd55", "\ud83c\udf45"], { count: 16, distance: 88 }); flyCoinsToHud(c.x, c.y, 5); harvestComboText(c.x, c.y); playSound("harvest"); playSound("coin"); toast("🧺 收成 " + r.totalAdded + " 個作物"); if (r.totalLost) toast("📦 倉滿損失 " + r.totalLost); afterChange(true); }
+      if (r.totalAdded > 0) { enqueueSettlement(r.settlement); const c = elementCenter($("mapScene")); screenBurst(c.x, c.y, ["\ud83c\udf3e", "\ud83e\udd55", "\ud83c\udf45"], { count: 16, distance: 88 }); flyCoinsToHud(c.x, c.y, 5); harvestComboText(c.x, c.y); playSound("harvest"); playSound("coin"); toast("🧺 收成 " + r.totalAdded + " 個作物"); if (r.totalLost) toast("📦 倉滿損失 " + r.totalLost); afterChange(true); }
       else toast("沒有成熟的作物");
     };
     $("sellAllBtn").onclick = () => {

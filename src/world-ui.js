@@ -225,11 +225,13 @@
     }
     lastObjective = sig;
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
+    const activeGoal = q && rowsOf(q).find((row) => !row.complete) || (q && rowsOf(q)[rowsOf(q).length - 1]);
+    const progressText = activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q ? "1/1" : "");
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
     box.dataset.targetId = target ? target.id : "";
     box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
-      <div class="world-objective-title">${q ? esc(q.name) : "農場又熱鬧起來了"}</div>
+      <div class="world-objective-title">${q ? esc(q.name) + ` <span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(q.description) : "你留下的每一份收穫，都有了去處。"}</div>
       ${choiceRoutes}
       ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
@@ -334,12 +336,13 @@
     if (!target) return;
     const started = farm().travelAndDo(target.id, "use", () => {
       const result = A.claim(current, q.id, Date.now());
-      notify(result.message);
       if (result.ok) {
+        if (window.refreshOrders) window.refreshOrders(current, Date.now());
+        if (farm() && farm().enqueueSettlement) farm().enqueueSettlement(result.settlement);
         speak((window.NPCS[q.npcId] || {}).name || "鎮民", completionLine(q.id));
         if (q.id === "c3_harvest_picnic") showPicnic();
         refresh(current);
-      }
+      } else notify(result.message);
     });
     if (!started) notify("現在走不到那裡，先把路清出來。");
   }
@@ -377,7 +380,7 @@
     let box = el("worldDialogue");
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
-    box.innerHTML = `<button class="dialogue-close" aria-label="關閉對話" title="關閉對話">×</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
+    box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
     box.hidden = false; box.classList.remove("dialogue-flip-top"); try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); if (hit > 0) box.classList.add("dialogue-flip-top"); if (sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); setTimeout(() => { if (box.hidden) return; const s2 = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); if (!s2) return; const r2 = s2.getBoundingClientRect(), d2 = box.getBoundingClientRect(); const h2 = Math.max(0, Math.min(r2.right, d2.right) - Math.max(r2.left, d2.left)) * Math.max(0, Math.min(r2.bottom, d2.bottom) - Math.max(r2.top, d2.top)); box.classList.toggle("dialogue-flip-top", h2 > 0); }, 260); } } } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };

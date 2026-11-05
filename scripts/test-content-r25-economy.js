@@ -17,6 +17,7 @@ function test(name, fn) {
 
 test("新存檔第一天三張訂單全為已解鎖作物、各不相同且時限至少 30 分鐘", () => {
   const state = S.defaultState(T0);
+  state.adventure = { claimed: { c1_first_harvest: true } };
   const orders = G.refreshOrders(state, T0, () => 0);
   assert.equal(orders.length, 3);
   assert.deepEqual(orders.map((order) => order.wants), [{ wheat: 2 }, { wheat: 3 }, { wheat: 4 }]);
@@ -34,6 +35,7 @@ test("新存檔第一天三張訂單全為已解鎖作物、各不相同且時�
 
 test("停用交付鈕使用可行動的缺料文字", () => {
   const state = S.defaultState(T0);
+  state.adventure = { claimed: { c1_first_harvest: true } };
   const order = G.refreshOrders(state, T0, () => 0)[0];
   assert.equal(G.canFulfill(state, order), false);
   assert.equal(G.orderMissingText(state, order), "還缺小麥 ×2");

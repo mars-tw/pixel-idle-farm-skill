@@ -353,7 +353,9 @@
     a.quests[id].claimedAt = at(state, now);
     grant(state, q.reward);
     sync(state, at(state, now));
-    return ok("「" + q.name + "」完成了。", { id, reward: copy(q.reward), nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null });
+    return ok("「" + q.name + "」完成了。", { id, reward: copy(q.reward), nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null,
+      settlement: { kind: "quest", coins: q.reward.coins || 0, xp: q.reward.xp || 0,
+        next: id === "c1_first_harvest" ? "市集訂單已開放，去看板看看第一批委託。" : (QUESTS[index + 1] ? "繼續進行「" + QUESTS[index + 1].name + "」。" : "繼續經營陽光農場。") } });
   }
   function projects(state) {
     if (!ensure(state).ok) return [];

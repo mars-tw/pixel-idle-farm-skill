@@ -109,7 +109,7 @@ test('第一次三格小麥收成足以完成班伯主線，市集不再重複�
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
   assert.ok(orders.every((row) => Object.keys(row.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 3)), true);
+  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 3)), false);
   assert.equal(state.storage.items.wheat, 4);
 });
 
@@ -126,7 +126,7 @@ test('每日三項不重複首章收成與小麥交付，印章冊標示已領�
 test('開場、對話與設定文案符合 R26', () => {
   assert.match(world, /先跟鎮民打招呼、認識農場/);
   assert.match(world, /class="dialogue-continue">繼續 ▶<\/button>/);
-  assert.match(world, /class="dialogue-close" aria-label="關閉對話"/);
+  assert.match(world, /class="dialogue-close" aria-label="略過對話"/);
   assert.match(ui, /<details class="settings-advanced" data-audit="settings-advanced"><summary>進階<\/summary>/);
   const settings = ui.slice(ui.indexOf('function renderSettingsPanel'), ui.indexOf('function renderSmartAssistant'));
   const advanced = settings.match(/<details class="settings-advanced"[\s\S]*?<\/details>/)?.[0] || '';

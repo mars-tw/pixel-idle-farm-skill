@@ -169,6 +169,7 @@ async function scrollPanelToBottom(page) {
       }
 
       // 6：升級與訂單面板——下緣不超過底部工具列上緣、可捲動、捲到底最後按鈕完整可見
+      await page.evaluate(() => { const s = window.__farm.state(); window.AdventureAPI.ensure(s, Date.now()); s.adventure.claimed.c1_first_harvest = true; window.refreshOrders(s, Date.now()); window.__farm.refresh(); });
       for (const tab of ['upgrades', 'orders']) {
         await openPanel(page, tab);
         const m = await panelMeasure(page);
@@ -245,6 +246,7 @@ async function scrollPanelToBottom(page) {
     // 10：主要淡色文字對比 ≥ 4.5:1（在 1366×768 實際渲染元素上計算）
     {
       const { ctx, page } = await newPage(browser, intercepted, 1366, 768);
+      await page.evaluate(() => { const s = window.__farm.state(); window.AdventureAPI.ensure(s, Date.now()); s.adventure.claimed.c1_first_harvest = true; window.refreshOrders(s, Date.now()); window.__farm.refresh(); });
       await openPanel(page, 'orders');
       const rows = await page.evaluate(() => {
         const parse = (s) => { const m = /rgba?\(([^)]+)\)/.exec(s || ''); if (!m) return null; const p = m[1].split(',').map(Number); return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 }; };

@@ -41,9 +41,11 @@ test('A1 新存檔前十二步的成熟提示單一且與實際成熟格一致',
   assert.match(read('src/adventure.js'), /goal\("harvest", 6, "收成小麥", "wheat"\)/);
 });
 
-test('A2 市集訂單只出已解鎖作物，並清楚保留班伯兩份小麥', () => {
+test('A2 市集交付班伯前不出單，開放後只出已解鎖作物', () => {
   const now = 1_900_000_000_000;
   const state = S.defaultState(now);
+  assert.deepEqual(G.refreshOrders(state, now, () => 0), []);
+  A.ensure(state, now); state.adventure.claimed.c1_first_harvest = true;
   const orders = G.refreshOrders(state, now, () => 0);
   assert.equal(orders.length, 3);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
@@ -51,8 +53,8 @@ test('A2 市集訂單只出已解鎖作物，並清楚保留班伯兩份小麥',
   const quest = A.quests(state, now).find((row) => row.id === 'c1_first_harvest');
   assert.deepEqual(quest.wants, { wheat: 2 });
   assert.match(read('src/adventure.js'), /把 2 份小麥交給班伯/);
-  assert.match(ui, /主線保留 2 份小麥/);
-  assert.match(ui, /交付後會動用主線保留的 2 份小麥/);
+  assert.match(ui, /先把 2 份小麥交給班伯，市集訂單就會開放/);
+  assert.doesNotMatch(ui, /主線保留 2 份小麥|交付後會動用主線保留/);
   assert.doesNotMatch(ui + world + read('src/game.js'), /兩條路都不影響主線|這張訂單可選做/);
 });
 
@@ -69,7 +71,7 @@ test('A4 建造只列已解鎖與下一項，升級有三段排序與可達路�
   const visible = C.BUILDING_ORDER.filter((type) => G.buildingUnlocked(state, type));
   const next = C.BUILDING_ORDER.find((type) => !G.buildingUnlocked(state, type));
   const catalog = next ? visible.concat(next) : visible;
-  assert.deepEqual(catalog, ['compostHeap']);
+  assert.deepEqual(catalog, ['compostHeap', 'silo']);
   assert.match(ui, /function visibleBuildingCatalogTypes\(\)/);
   assert.match(ui, /農場等級 \$\{def \? def\.unlockLevel/);
   assert.match(ui, /\["現在買得起", "差一點", "長期目標", "已滿級"\]/);

@@ -170,6 +170,7 @@ const HELP = `
 
       // 8：手機直式面板改全寬底部抽屜（僅 390×844）
       if (w === 390 && h === 844) {
+        await page.evaluate(() => { const s = window.__farm.state(); window.AdventureAPI.ensure(s, Date.now()); s.adventure.claimed.c1_first_harvest = true; window.refreshOrders(s, Date.now()); window.__farm.refresh(); });
         for (const tab of ['orders', 'upgrades', 'story']) {
           await page.evaluate((t) => window.FarmWorld.openPanel(t), tab);
           await page.waitForTimeout(350);

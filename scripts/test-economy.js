@@ -124,6 +124,7 @@ console.log("\n== 4. 倉庫容量與溢出 ==");
 console.log("\n== 5. 訂單：生成 / 完成優於直售 / 連單 ==");
 {
   const st = S.defaultState(T0);
+  st.adventure = { claimed: { c1_first_harvest: true } };
   st.level = 2; // 解鎖胡蘿蔔，讓訂單更有料
   const rng = makeRng(42);
   G.refreshOrders(st, T0, rng);

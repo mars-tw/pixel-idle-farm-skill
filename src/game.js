@@ -592,6 +592,7 @@
     const prog = getCropProgress(state, plot, now);
     if (!prog.ready) return { ok: false, reason: "not_ready" };
     const crop = CROPS[plot.cropId];
+    const firstHarvest = !Object.values(state.stats.harvested || {}).some((count) => count > 0);
     ensureSunState(state);
     const sunlit = isSunlit(state, plotIndex, now);
     const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0);
@@ -606,16 +607,17 @@
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
+    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給班伯。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     return out;
   }
   function harvestAll(state, now) {
-    let totalAdded = 0, totalLost = 0, totalXp = 0; const perCrop = {};
+    let totalAdded = 0, totalLost = 0, totalXp = 0, settlement = null; const perCrop = {};
     for (let i = 0; i < state.plots.length; i++) {
       const r = harvest(state, i, now);
-      if (r.ok) { totalAdded += r.added; totalLost += r.lost; totalXp += r.xp; perCrop[r.cropId] = (perCrop[r.cropId] || 0) + r.added; }
+      if (r.ok) { if (!settlement && r.settlement) settlement = r.settlement; totalAdded += r.added; totalLost += r.lost; totalXp += r.xp; perCrop[r.cropId] = (perCrop[r.cropId] || 0) + r.added; }
     }
-    return { totalAdded, totalLost, totalXp, perCrop };
+    return { totalAdded, totalLost, totalXp, perCrop, settlement };
   }
 
   // Thumb action: a reachable, fully storable harvest; sunlight first, then distance.
@@ -675,9 +677,9 @@
     mooncap_spore: [1, 2], amber_resin: [1, 2], forest_chestnut: [1, 2], frost_cherry: [1, 2],
   };
   const BEGINNER_ORDERS = [
-    { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "mayor", flavor: "葛瑞要登記 2 份小麥；交付前，記得先替班伯留 2 份。" },
-    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "merchant", flavor: "市集想試賣 3 份小麥，班伯的 2 份先留在主線。" },
-    { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "child", flavor: "圖圖想準備 4 份小麥做野餐點心。" },
+    { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
+    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", flavor: "圖圖想準備 3 份小麥做野餐點心。" },
+    { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
   ];
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
   const ORDER_COPY = {
@@ -785,6 +787,11 @@
     };
   }
   function refreshOrders(state, now, rng) {
+    const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
+    if (!marketUnlocked) {
+      state.orders = [];
+      return state.orders;
+    }
     // 移除過期訂單，補滿到 orderSlots
     state.orders = state.orders.filter((o) => o.expiresAt > now);
     if (firstDayChapterOne(state, now)) {
@@ -809,7 +816,8 @@
   }
   function mainStoryReserve(state, itemId) {
     const completed = (state.story && state.story.completed) || {};
-    return itemId === "wheat" && !completed.first_delivery ? 2 : 0;
+    const delivered = completed.first_delivery || !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
+    return itemId === "wheat" && !delivered ? 2 : 0;
   }
   function orderConsumesStoryReserve(state, order) {
     return Object.entries(order.wants || {}).some(([itemId, qty]) => {
@@ -868,7 +876,8 @@
     refreshOrders(state, now, rng);
     const story = order.rarity === "festival" ? syncStoryProgress(state, "festival_order", now) : null;
     checkAchievements(state);
-    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story };
+    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story,
+      settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: "查看新訂單，或把收益投入農場升級。" } };
   }
   function trashOrder(state, orderId, now, rng) {
     const idx = state.orders.findIndex((o) => o.id === orderId);
@@ -907,7 +916,7 @@
         state.plots.push({ id: "p" + String(state.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
       }
     }
-    return { ok: true, level: state.upgrades[key] };
+    return { ok: true, level: state.upgrades[key], settlement: { kind: "upgrade", coins: 0, xp: 0, next: "回到田地，試試升級後的效果。" } };
   }
   function helperFlags(state) {
     const lv = state.upgrades.helperLevel;
@@ -992,6 +1001,11 @@
 
   // ---------- 建築 ----------
   function buildingUnlocked(state, type) { const d = BUILDINGS[type]; return !!d && state.level >= d.unlockLevel; }
+  function canBuild(state, type) {
+    const def = BUILDINGS[type];
+    return !!def && buildingUnlocked(state, type) && canAffordCost(state, def.cost)
+      && !buildingAtMaxCount(state, type) && (state.map.tiles || []).some((tile) => canBuildOn(state, tile));
+  }
   function buildingCount(state, type) { return (state.buildings || []).filter((b) => b.type === type).length; }
   function buildingAtMaxCount(state, type) {
     const def = BUILDINGS[type];
@@ -2463,7 +2477,7 @@
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物
     canAffordCost, spendCost, grantMaterials, getTile, clearObstacle,
-    buildingUnlocked, buildingCount, buildingAtMaxCount, canBuildOn, buildBuilding,
+    buildingUnlocked, canBuild, buildingCount, buildingAtMaxCount, canBuildOn, buildBuilding,
     homeBuildingFor, animalCapacity, animalsInHome, isAnimalUnlocked,
     addAnimal, buyAnimal, animalProgress, collectAnimal, collectAllAnimals, collectHome, feedAnimal,
     // 可走動地圖：尋路 / 目標解析

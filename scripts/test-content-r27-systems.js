@@ -45,7 +45,7 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.equal(G.mainStoryReserve(state, 'wheat'), 2);
+  assert.equal(G.orderConsumesStoryReserve(state, orders[0]), false);
   assert.deepEqual(D.status(state, now).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
   assert.equal(state.storage.items.wheat || 0, 4, '每日目標不再消耗主線小麥');
 });
@@ -57,9 +57,10 @@ test('開場與主線統一把兩份小麥交給班伯，每日目標改成不�
   assert.doesNotMatch(world, /給葛瑞送一籃/);
   assert.deepEqual(D.status(S.defaultState(1800000000000), 1800000000000).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
   const state = S.defaultState(1800000000000);
+  A.ensure(state, 1800000000000); state.adventure.claimed.c1_first_harvest = true;
   const orders = G.refreshOrders(state, 1800000000000, () => 0);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.match(ui, /主線保留 2 份小麥/);
+  assert.match(ui, /先把 2 份小麥交給班伯，市集訂單就會開放/);
 });
 
 test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {
@@ -69,6 +70,7 @@ test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完�
   assert.match(ui, /requestOrderTrash\(o\.id\)/);
   assert.match(ui, /確認丟棄/);
   const state = S.defaultState(1800000000000);
+  A.ensure(state, 1800000000000); state.adventure.claimed.c1_first_harvest = true;
   const order = G.refreshOrders(state, 1800000000000, () => 0)[0];
   assert.equal(G.orderMissingText(state, order), '還缺小麥 ×2');
   state.storage.items.wheat = 2;
