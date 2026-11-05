@@ -53,3 +53,14 @@ html.show-dpad .dpad { display: grid; }
   .world-dialogue.dialogue-compact-top p { font-size: 12px; line-height: 1.45; }
   .world-dialogue.dialogue-compact-top .dialogue-portrait { width: 36px; height: 36px; }
 }
+/* R32：故事手記裡的「河畔委託」是同一面板的小節，不是第二個面板（不加關閉鈕、不用面板標題樣式）。 */
+.story-subhead { margin: 14px 0 6px; padding-top: 10px; border-top: 1px dashed #c9b58a; font-size: 15px; color: #4a3a22; }
+/* R32：矮螢幕上方窄條對話，「略過」與「繼續」並排在右側同一列，不再上下錯開。 */
+@media (max-height: 600px), (max-width: 859px) {
+  .world-dialogue.dialogue-compact-top, .world-dialogue.dialogue-compact-bottom { padding-right: 150px !important; position: fixed; }
+  .world-dialogue.dialogue-compact-top .dialogue-close, .world-dialogue.dialogue-compact-bottom .dialogue-close,
+  .world-dialogue.dialogue-compact-top .dialogue-continue, .world-dialogue.dialogue-compact-bottom .dialogue-continue {
+    position: absolute !important; top: 50% !important; bottom: auto !important; transform: translateY(-50%); height: 32px !important; min-height: 0 !important; padding: 0 10px !important; margin: 0 !important; line-height: 30px; }
+  .world-dialogue.dialogue-compact-top .dialogue-close, .world-dialogue.dialogue-compact-bottom .dialogue-close { right: 82px !important; left: auto !important; }
+  .world-dialogue.dialogue-compact-top .dialogue-continue, .world-dialogue.dialogue-compact-bottom .dialogue-continue { right: 8px !important; left: auto !important; }
+}

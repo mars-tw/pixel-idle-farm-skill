@@ -69,6 +69,8 @@ const HELP = `
       const parent = node.parentElement; if (!parent) continue;
       const pcs = getComputedStyle(parent);
       if (pcs.display === 'none' || pcs.visibility === 'hidden') continue;
+      // R32：收合中的 <details> 內容不會繪製，不算被裁切（展開後同樣逐節點檢查）。
+      if (parent.closest('details:not([open])') && !parent.closest('summary')) continue;
       const range = document.createRange(); range.selectNodeContents(node);
       const r = range.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) continue;

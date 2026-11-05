@@ -289,7 +289,7 @@
         <h3>${esc(q.name)}</h3><p>${esc(q.description)}</p>
         <div class="adventure-meta">${rowsOf(q).map((r) => `<span>${r.complete ? "✓" : "·"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}</div>
         ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "帶去交付" : "前往目標"}</button>` : ""}</article>`).join("")}</div>
-        <h3 class="pane-head">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}`;
+        <h3 class="story-subhead">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}`;
       panel.querySelector("#worldNeighborButton").onclick = () => window.ContentR1.openNeighbors(current);
       if(window.ContentR6 && A.gathering(current,Date.now()).unlocked){const b=document.createElement('button');b.id='worldGatheringButton';b.textContent=current.adventure.gathering.completed?'翻共同聚餐手記':'三個位子，一起吃';b.onclick=()=>window.ContentR6.openGathering(current);panel.querySelector('.neighbor-entry').appendChild(b);}
       panel.querySelectorAll("[data-quest-go]").forEach((b) => { b.onclick = () => goQuest(list.find((q) => q.id === b.dataset.questGo)); });
@@ -403,7 +403,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r32-20261105-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r32-20261105-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r33-20261105-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r33-20261105-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

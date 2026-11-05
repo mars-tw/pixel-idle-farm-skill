@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r32-20261105-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r33-20261105-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -2155,10 +2155,9 @@
       settingRowHtml("musicEnabled", "背景音樂", "田園循環配樂，音量跟著下方滑桿；關掉音效時也會一起停。", settings.musicEnabled !== false),
       soundVolumeHtml(settings.soundVolume, settings.soundEnabled !== false),
       textSizeHtml(settings.textSize || "medium"),
-      `<details class="settings-advanced" data-audit="settings-advanced"><summary>進階</summary>${performanceModeHtml(settings.performanceMode || "auto")}${performanceDiagnosticsHtml()}${pwaVersionHtml()}</details>`,
-      offlineReviewHtml(state.lastOfflineSummary),
-      settingsSeriesLinksHtml(),
-      saveManagerHtml(),
+      // R32：離線回顧與資料說明收進「進階」，設定在 1366×768 一屏放得下。
+      `<details class="settings-advanced" data-audit="settings-advanced"><summary>進階</summary>${performanceModeHtml(settings.performanceMode || "auto")}${performanceDiagnosticsHtml()}${pwaVersionHtml()}${offlineReviewHtml(state.lastOfflineSummary)}${settingsSeriesLinksHtml()}</details>`,
+      `<details class="settings-advanced settings-save" data-audit="settings-save"><summary>存檔管理・匯出與匯入</summary>${saveManagerHtml()}</details>`,
       window.FarmWorld ? `<div class="setting-row"><div><div class="setting-title">農場主角</div><div class="setting-desc">${state.gender === "m" ? "Kai" : "Miri"}</div></div><button class="btn ghost" id="settingGenderButton">切換主角</button></div><button class="btn ghost" id="settingResetButton">重置農場存檔</button>` : "",
     ].join("");
     box.querySelectorAll("[data-setting-key]").forEach((btn) => {
