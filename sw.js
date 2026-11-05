@@ -42,6 +42,7 @@ const CORE_ASSETS = [
   versioned("./src/content-r23.js"),
   versioned("./src/content-r24.css"),
   versioned("./src/content-r24.js"),
+  versioned("./src/content-r26.css"),
   versioned("./src/content-r16.js"),
   versioned("./src/content-r16.css"),
   versioned("./assets/generated/content-r16/sharing-bowl.png"),
