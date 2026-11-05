@@ -38,7 +38,9 @@
   }
   function status(s, now) {
     const d = ensure(s, now), crop = C.CROPS[d.cropId];
-    const waterNeed = 2 + d.day % 2, harvestNeed = 4 + d.day % 3 * 2;
+    const waterNeed = 2 + d.day % 2;
+    // 新玩家三格小麥的第一輪收成是 6 份；每日目標不可比主線首收還高。
+    const harvestNeed = Math.min(C.CROPS.wheat.yield * 3, 4 + d.day % 3 * 2);
     const items = s.storage && s.storage.items || {};
     const tasks = [
       { id: "water", title: "替新芽添水", detail: "種下作物後，用澆水工具照顧它。每株只算一次。", have: d.water, need: waterNeed, coins: 4 },

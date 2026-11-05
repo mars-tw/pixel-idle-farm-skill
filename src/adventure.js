@@ -646,6 +646,23 @@
       unlocks: { kitchen: claimed(a, "c1_first_harvest"), fishing: restored(a, "fishing_dock"), fishingRod: a.unlocks.fishingRod === true, mealGifts: restored(a, "picnic_table"), gardenGuestbook: restored(a, "garden") && claimed(a, "c3_harvest_picnic") },
       fishing: { cooldownMs: FISH_COOLDOWN_MS, remainingMs: a.lastFishAt === null ? 0 : Math.max(0, FISH_COOLDOWN_MS - (at(state, now) - a.lastFishAt)), used: sum(a.catch), capacity: CATCH_CAP } });
   }
+  function guide(state, now) {
+    const view = summary(state, now);
+    if (!view.ok) return view;
+    const q = view.currentQuest;
+    if (!q) return ok("冒險主線已完成。", { questId: null, chapter: 3, chapterProgress: { claimed: 3, total: 3 }, step: null, stepText: "繼續經營農場", actionLabel: "繼續經營" });
+    const step = q.objectives.find((row) => !row.complete) || q.requirements.find((row) => !row.complete) || null;
+    const npc = (C.NPCS || {})[q.npcId] || { name: "鎮民" };
+    const chapterProgress = view.chapters.find((row) => row.number === q.chapter) || { claimed: 0, total: 3 };
+    return ok(step ? "前往目前目標。" : "回報目前任務。", {
+      questId: q.id,
+      chapter: q.chapter,
+      chapterProgress: { claimed: chapterProgress.claimed, total: chapterProgress.total },
+      step: step ? copy(step) : null,
+      stepText: step ? `${step.name} ${Math.min(step.current, step.required)}/${step.required}` : `找${npc.name}回報`,
+      actionLabel: step ? step.name : `找${npc.name}回報`,
+    });
+  }
   function buyMaterial(state, id, count, now) {
     const prices = { wood: 6, stone: 8 };
     if (!own(prices, id) || !Number.isSafeInteger(count) || count < 1 || count > 10) return fail("bad_purchase", "找不到這筆建材訂購。");
@@ -689,7 +706,7 @@
     record(state, "order", now);
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
-  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, buyMaterial, commissions, deliverCommission,
+  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, buyMaterial, commissions, deliverCommission,
     neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

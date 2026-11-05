@@ -837,7 +837,15 @@
 
   // ---------- 工具列（roadmap：工具模式）----------
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
-  function setTool(t) { clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble(); state.interaction.tool = t; renderToolbar(); renderQuestDock(); renderSceneActionsForSelection(); $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(window.TOOLS[t].desc); scheduleSave(); }
+  function setTool(t) {
+    clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble();
+    state.interaction.tool = t;
+    if (t !== "build") state.interaction.buildType = null;
+    renderToolbar(); renderQuestDock(); renderSceneActionsForSelection();
+    $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(t === "build" ? "選一個建物，再點地面放置" : window.TOOLS[t].desc);
+    if (t === "build") showBuildCatalog();
+    scheduleSave();
+  }
   function renderToolbar() {
     const bar = $("toolBar"); if (!bar) return; bar.innerHTML = "";
     window.TOOL_ORDER.forEach((id) => {
@@ -1081,6 +1089,14 @@
       return `<span class="cost-chip ${have >= need ? "" : "miss"}" title="持有 ${fmtNum(have)}">${icon} ${fmtNum(need)}</span>`;
     }).join("");
   }
+  function buildingCostShortfall(cost) {
+    const missing = Object.entries(cost || {}).map(([key, need]) => {
+      const short = Math.max(0, need - buildingResourceAmount(key));
+      if (!short) return "";
+      return key === "coins" ? `還差 ${fmtNum(short)} 金` : `還差 ${fmtNum(short)} ${(window.MATERIALS[key] && window.MATERIALS[key].name) || key}`;
+    }).filter(Boolean);
+    return missing.join("、");
+  }
   function buildingUpgradeCardHtml(building, context) {
     const def = window.BUILDINGS[building.type];
     if (!def) return "";
@@ -1094,7 +1110,7 @@
       <span class="bu-icon" aria-hidden="true">${def.emoji}</span>
       <div class="bu-main">
         <div class="bu-title">${escapeHtml(buildingInstanceName(building))} <span class="bu-level">Lv ${level}/${max}</span>
-          ${next ? `<span class="afford-badge ${affordable ? "" : "miss"}">${affordable ? "可負擔" : "資源不足"}</span>` : ""}
+          ${next ? `<span class="afford-badge ${affordable ? "" : "miss"}">${affordable ? "可負擔" : escapeHtml(buildingCostShortfall(next.cost))}</span>` : ""}
         </div>
         <span class="bu-meter" aria-label="建物等級 ${level} / ${max}">${steps}</span>
         <div class="bu-effect"><b>目前</b> ${escapeHtml(current.effectLabel || def.desc || "")}</div>
@@ -1144,7 +1160,8 @@
       const bb = nb && state.coins >= nb.cost ? 0 : nb ? 1 : 2;
       return ba - bb;
     });
-    const visibleUpgrades = visibleListItems("upgrades", upgradeKeys, 4);
+    // R26：升級項目直接全部列出，不再用難懂的「顯示更多 1」折疊。
+    const visibleUpgrades = upgradeKeys;
     visibleUpgrades.forEach((key) => {
       const def = window.UPGRADES[key];
       const lv = state.upgrades[key];
@@ -1159,7 +1176,7 @@
           <div class="u-desc">${def.desc}</div>
         </div>
         ${next
-          ? `<button class="btn buy small" ${state.coins >= next.cost ? "" : "disabled"}>🪙 ${fmtNum(next.cost)}</button>`
+          ? `<button class="btn buy small" ${state.coins >= next.cost ? "" : "disabled"}>${state.coins >= next.cost ? `🪙 ${fmtNum(next.cost)}` : `還差 ${fmtNum(next.cost - state.coins)} 金`}</button>`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -1174,7 +1191,6 @@
       }
       box.appendChild(el);
     });
-    appendListMore(box, "upgrades", upgradeKeys.length, visibleUpgrades.length, renderUpgrades);
     renderBuildingUpgrades();
   }
 
@@ -1966,13 +1982,11 @@
     box.innerHTML = [
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
-      settingRowHtml("soundEnabled", "音效", "首次點擊或按鍵後，主要操作會播放短促 WebAudio 回饋。", settings.soundEnabled !== false),
+      settingRowHtml("soundEnabled", "音效", "首次點擊或按鍵後，主要操作會播放短促音效。", settings.soundEnabled !== false),
       settingRowHtml("musicEnabled", "背景音樂", "田園循環配樂，音量跟著下方滑桿；關掉音效時也會一起停。", settings.musicEnabled !== false),
       soundVolumeHtml(settings.soundVolume, settings.soundEnabled !== false),
       textSizeHtml(settings.textSize || "medium"),
-      performanceModeHtml(settings.performanceMode || "auto"),
-      performanceDiagnosticsHtml(),
-      pwaVersionHtml(),
+      `<details class="settings-advanced" data-audit="settings-advanced"><summary>進階</summary>${performanceModeHtml(settings.performanceMode || "auto")}${performanceDiagnosticsHtml()}${pwaVersionHtml()}</details>`,
       offlineReviewHtml(state.lastOfflineSummary),
       settingsSeriesLinksHtml(),
       saveManagerHtml(),
@@ -2466,6 +2480,10 @@
       if (tile.plotIndex != null && !locked) cls += " state-" + (!plot || !plot.cropId ? "empty" : prog.ready ? "ready" : prog.wet ? "watered" : prog.stage <= 0 ? "seeded" : "growing");
       if (cell.tileId === selectedTileId) cls += " sel";
       if (pendingTouchFarmAction && cell.tileId === pendingTouchFarmAction.tileId) cls += " touch-pending";
+      const buildable = currentTool() === "build" && !!state.interaction.buildType
+        && tile.terrain === "grass" && !tile.object && !tile.buildingId && !tile.structureId
+        && !tile.blocked && !tile.station && !tile.npc;
+      if (buildable) cls += " build-target";
       const kind = lockedArea ? "locked-area" : "";
       const frame = terrainFrame(tile, prog);
       const sig = cls + "|" + kind + "|" + frame;
@@ -2473,6 +2491,9 @@
       cell.groundSig = sig;
       cell.el.className = cls;
       cell.el.dataset.kind = kind;
+      cell.el.dataset.buildable = buildable ? "true" : "false";
+      cell.el.style.outline = buildable ? "2px dashed #fff1a8" : "";
+      cell.el.style.outlineOffset = buildable ? "-3px" : "";
       cell.el.dataset.plotState = tile.plotIndex == null || locked ? "" : (!plot || !plot.cropId ? "empty" : prog.ready ? "ready" : prog.wet ? "watered" : prog.stage <= 0 ? "seeded" : "growing");
       window.Atlas.applyTo(cell.el, "terrain", frame);
     }
@@ -3163,7 +3184,41 @@
     }
   }
   function buildCostText(def) {
-    return Object.entries(def.cost || {}).map(([k, v]) => k === "coins" ? "C" + v : v + ((window.MATERIALS[k] && window.MATERIALS[k].emoji) || k)).join(" ");
+    return Object.entries(def.cost || {}).map(([k, v]) => k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k)).join("、");
+  }
+  function buildCatalogStatus(type) {
+    const def = window.BUILDINGS[type];
+    if (!def || !G.buildingUnlocked(state, type)) return { enabled: false, text: "尚未解鎖" };
+    if (G.buildingAtMaxCount && G.buildingAtMaxCount(state, type)) return { enabled: false, text: "數量已滿" };
+    if (!G.canAffordCost(state, def.cost)) return { enabled: false, text: buildingCostShortfall(def.cost) || "資源不足" };
+    return { enabled: true, text: "可以建造" };
+  }
+  function showBuildCatalog() {
+    const box = $("buildWheel"); if (!box) return;
+    hideObjectBubble(); hideSceneActions();
+    box.innerHTML = `<div class="build-catalog-hint">選一個建物，再點地面放置</div>`;
+    window.BUILDING_ORDER.forEach((type) => {
+      const def = window.BUILDINGS[type]; if (!def) return;
+      const status = buildCatalogStatus(type);
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "build-wheel-btn" + (state.interaction.buildType === type ? " selected" : "");
+      b.dataset.type = type;
+      b.disabled = !status.enabled;
+      b.title = `${def.name}・${buildCostText(def)}・${status.text}`;
+      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}<small>${escapeHtml(buildCostText(def))}<br>${escapeHtml(status.text)}</small></span>`;
+      b.onclick = (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        state.interaction.buildType = type;
+        $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS.build) + escapeHtml(`已選${def.name}，請點亮起的草地放置`);
+        showBuildCatalog(); paintGround(); scheduleSave();
+      };
+      box.appendChild(b);
+    });
+    box.hidden = false;
+    box.style.left = "50%";
+    box.style.top = "86px";
+    onceHint("build_catalog", "選一個建物，再點地面放置");
   }
   function buildOptionsForTile(tile) {
     if (!tile || tile.terrain !== "grass" || tile.object || tile.buildingId || tile.structureId || tile.blocked || tile.station || tile.npc) return [];
@@ -3176,6 +3231,10 @@
   function showBuildWheel(tile) {
     const box = $("buildWheel"); if (!box || !tile) return;
     hideObjectBubble(); hideSceneActions();
+    if (state.interaction.buildType) {
+      buildFromWheel(tile.id, state.interaction.buildType);
+      return;
+    }
     const opts = buildOptionsForTile(tile);
     if (!opts.length) { toast("沒有可直接建造的項目"); hideBuildWheel(); return; }
     box.innerHTML = "";
@@ -3202,10 +3261,12 @@
       playSound("ui");
       spawnVfx(tileId, "soil_dust");
       toast(def.emoji + " " + def.name);
+      state.interaction.buildType = null;
       hideBuildWheel();
       afterChange(true);
       buildMap();
       renderTileContext();
+      showBuildCatalog();
     } else {
       spawnRing(tileId, false);
       toast(r.reason === "cost" ? "資源不足" : r.reason === "locked" ? "等級不足" : r.reason === "max_count" ? "數量已滿" : "不能建造");
@@ -3796,6 +3857,7 @@
       if (tile.buildingId) return { invalid: "這裡已有建築" };
       if (tile.object) return { invalid: "先清除障礙才能蓋" };
       if (tile.terrain !== "grass") return { invalid: "只能蓋在草地" };
+      if (!state.interaction.buildType) return { invalid: "先從可建清單選一個建物" };
       return { action: "build" };
     }
     return {};
@@ -3845,8 +3907,20 @@
       if (r.ok) { if (!animationStarted) playAction("hoe", face); playSound("ui"); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
       else if (r.reason === "no_coins") { spawnRing(tileId, false); toast("🪙 金幣不足"); }
     } else if (action === "build") {
-      if (!animationStarted) playAction("hoe", face); spawnVfx(tileId, "soil_dust"); renderTileContext();
-      toast("🏗️ 選一個建築蓋在這裡");
+      const type = state.interaction.buildType;
+      const def = window.BUILDINGS[type];
+      const r = type ? G.buildBuilding(state, tileId, type, t) : { ok: false, reason: "missing_type" };
+      if (r.ok) {
+        if (!animationStarted) playAction("hoe", face);
+        spawnVfx(tileId, "soil_dust"); playSound("ui");
+        toast(`${def.emoji} 已興建${def.name}`);
+        state.interaction.buildType = null;
+        afterChange(true); buildMap(); renderTileContext(); showBuildCatalog();
+      } else {
+        spawnRing(tileId, false);
+        toast(r.reason === "cost" ? "資源不足" : r.reason === "max_count" ? "數量已滿" : r.reason === "missing_type" ? "先選一個建物" : "這裡不能建造");
+        showBuildCatalog();
+      }
     } else if (action === "collect") {
       const b = state.buildings.find((x) => x.id === tile.buildingId);
       if (b) { const r = G.collectHome(state, b.id, t); // 只收「這一家」（per-building）

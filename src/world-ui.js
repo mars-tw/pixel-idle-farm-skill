@@ -209,6 +209,7 @@
     if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { lastObjective = ""; syncSeedHudTop(); return true; }
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
+    const guide = A.guide(s, Date.now());
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
@@ -222,15 +223,15 @@
       return true;
     }
     lastObjective = sig;
-    const step = q ? (unfinished ? `${unfinished.name} ${Math.min(unfinished.current, unfinished.required)}/${unfinished.required}` : "物品備齊，交給鎮民") : "村民留下了野餐合照。繼續經營你的農場。";
+    const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
     box.dataset.targetId = target ? target.id : "";
-    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${summary.claimed}/${summary.total}</span></div>
+    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
       <div class="world-objective-title">${q ? esc(q.name) : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(q.description) : "你留下的每一份收穫，都有了去處。"}</div>
       ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
-      <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q && q.canClaim ? "交付" : unfinished ? esc(unfinished.name) : "前往"}</button></div>
+      <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button></div>
       <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
     box.querySelector("[data-world-go]").onclick = () => q ? goQuest(q) : openKitchen();
     syncSeedHudTop();
@@ -357,8 +358,10 @@
     let box = el("worldDialogue");
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
-    box.innerHTML = `<button aria-label="關閉對話" title="關閉對話">×</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p>`;
-    box.hidden = false; box.querySelector("button").onclick = () => { box.hidden = true; };
+    box.innerHTML = `<button class="dialogue-close" aria-label="關閉對話" title="關閉對話">×</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
+    box.hidden = false;
+    box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
+    box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };
     // R79：toast 移到對話框上方（CSS 依此變數讓位）
     const top = box.getBoundingClientRect().top;
     if (top > 0) document.documentElement.style.setProperty("--world-dialogue-top-gap", Math.round(window.innerHeight - top + 8) + "px");
@@ -591,7 +594,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「收成先留一籃，別全拿去賣。門邊總有人，還沒吃飯。」</p><p class="project-desc">跟著田裡的光種小麥，收成後給葛瑞送一籃。你怎麼送，他就怎麼回應。</p><button class="btn buy" id="worldSunBegin">做第一份陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民認識農場</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「收成先留一籃，別全拿去賣。門邊總有人，還沒吃飯。」</p><p class="project-desc">跟著田裡的光種小麥，收成後給葛瑞送一籃。你怎麼送，他就怎麼回應。</p><button class="btn buy" id="worldSunBegin">做第一份陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };
