@@ -167,3 +167,25 @@
 /* 10：開墾農地圖示與其他工具圖示同尺寸對齊。 */
 .up .u-ic { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: 0 0 auto; }
 .up .u-ic .ui-icon { width: 32px; height: 32px; }
+
+/* R27 整合修正：手機直式任務卡是兩欄 grid（art-r84），新加的說明、成熟提示與兩條路線
+   會被自動排進窄的右欄，擠成一長條。手機上一律跨滿整列；路線只留標題與獎勵一行。 */
+@media (max-width: 859px) and (min-height: 521px) {
+  #questDock .world-objective-detail,
+  #questDock .world-objective-routes,
+  #questDock > .world-objective-hint,
+  #questDock .world-meter { grid-column: 1 / -1; }
+  #questDock .world-objective-routes { display: flex; flex-direction: column; gap: 3px; }
+  #questDock .world-objective-routes .world-objective-hint { margin-top: 0; }
+  #questDock .world-objective-routes .world-objective-hint span,
+  #questDock .world-objective-routes .world-objective-hint small { display: none; }
+}
+/* 窄螢幕開著側邊面板時，任務卡先收起，不與面板疊在一起。 */
+@media (max-width: 859px) {
+  body:has(.side-panel.world-panel-open) #questDock { display: none; }
+}
+@media (max-height: 520px) {
+  #questDock .world-objective-routes .world-objective-hint span,
+  #questDock .world-objective-routes .world-objective-hint small { display: none; }
+  #questDock .world-objective-routes .world-objective-hint { margin-top: 2px; padding: 1px 6px; }
+}
