@@ -133,6 +133,9 @@
   const feedbackQueue = G.createFeedbackQueue ? G.createFeedbackQueue() : null;
   const settlementQueue = [];
   let settlementVisible = false;
+  let closeActiveSettlement = null;
+  // R37：結算／里程碑卡顯示時，玩家點其他地方（例如打開訂單）就先收起卡片，不攔截操作
+  document.addEventListener("pointerdown", (event) => { if (closeActiveSettlement && !(event.target && event.target.closest && event.target.closest(".settlement-card"))) closeActiveSettlement(); }, true);
   function showNextSettlement() {
     if (settlementVisible) return;
     const data = feedbackQueue ? feedbackQueue.next() : settlementQueue.shift();
@@ -153,11 +156,13 @@
       if (!settlementVisible) return;
       settlementVisible = false;
       clearTimeout(timer);
+      closeActiveSettlement = null;
       card.remove();
       if (feedbackQueue) feedbackQueue.close();
       showNextSettlement();
     }
     card.onclick = close;
+    closeActiveSettlement = close;
   }
   function enqueueSettlement(data) {
     if (!data || !data.next) return;

@@ -2219,7 +2219,7 @@
   function milestoneCard(type, data) {
     data = data || {};
     if (type === "chapter_one") return { kind: "milestone", type, title: "第一章完成", earned: "農場重新有了第一批收成", unlocked: "河畔復興與下一章故事", next: "前往河邊，看看等待修復的設施。" };
-    if (type === "market_open") return { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "前往訂單看板，查看第一批委託。" };
+    if (type === "market_open") return { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "照任務列去灶台做晚餐；訂單看板之後隨時可以接單。" };
     if (type === "level_up") return { kind: "milestone", type, title: `升到 Lv ${data.level || 2}`, earned: "新的農場等級", unlocked: data.unlocked || "新的作物與農場能力", next: "查看種子與升級頁，看看新選項。" };
     return null;
   }

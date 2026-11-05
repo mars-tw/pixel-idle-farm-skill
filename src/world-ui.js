@@ -372,12 +372,12 @@
   let speakWaitTimer = 0;
   function speak(name, text) {
     const zone = el("toast-zone");
-    if (zone && zone.children && zone.children.length > 0) {
+    const speakBlocked = () => { const z = el("toast-zone"); return !!((z && z.children && z.children.length > 0) || document.querySelector(".side-panel.world-panel-open") || document.querySelector("#farmMenu:not([hidden])") || document.querySelector(".modal.show")); }; // R37：面板開著時對話延後，不蓋過玩家剛打開的面板
+    if (speakBlocked()) {
       pendingSpeak = { name, text };
       clearInterval(speakWaitTimer);
       speakWaitTimer = setInterval(() => {
-        const z = el("toast-zone");
-        if (z && z.children && z.children.length > 0) return;
+        if (speakBlocked()) return;
         clearInterval(speakWaitTimer);
         const pending = pendingSpeak; pendingSpeak = null;
         if (pending) speak(pending.name, pending.text);
