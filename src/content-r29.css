@@ -1,0 +1,112 @@
+/* R29 B 線：版面（第 6～10 項）。只調整版面、定位與狀態外觀，不改內容與數值。 */
+
+/* 6：任務目標被任務卡或種子欄蓋住時，JS 加上避讓狀態：任務卡收合、種子欄移到另一側。 */
+#questDock.quest-target-collapsed {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 44px; max-height: 52px; overflow: hidden;
+  padding-top: 6px; padding-bottom: 6px;
+  width: auto; max-width: min(560px, calc(100vw - 24px));
+}
+#questDock.quest-target-collapsed .world-objective-detail,
+#questDock.quest-target-collapsed .world-objective-hint,
+#questDock.quest-target-collapsed .world-objective-routes,
+#questDock.quest-target-collapsed .world-meter,
+#questDock.quest-target-collapsed .world-objective-bottom > span { display: none !important; }
+#questDock.quest-target-collapsed .world-chapter { margin: 0; flex: 0 0 auto; flex-wrap: nowrap; }
+#questDock.quest-target-collapsed .world-chapter > span:first-child { display: none; }
+#questDock.quest-target-collapsed .world-objective-title {
+  flex: 1 1 auto; min-width: 5em; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#questDock.quest-target-collapsed .world-objective-bottom { margin: 0; flex: 0 0 auto; }
+#questDock.quest-target-collapsed .world-objective-bottom > button {
+  display: inline-flex; align-items: center; min-height: 32px; white-space: nowrap;
+}
+.seed-hud.seed-hud-shifted, #mapScene .seed-hud.seed-hud-shifted {
+  left: auto; right: 20px;
+}
+.seed-hud.seed-hud-bottom, #mapScene .seed-hud.seed-hud-bottom {
+  top: auto; bottom: 118px;
+}
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .seed-hud.seed-hud-shifted, #mapScene .seed-hud.seed-hud-shifted { right: 12px; }
+  .seed-hud.seed-hud-bottom, #mapScene .seed-hud.seed-hud-bottom { bottom: 132px; }
+}
+
+/* 7：手機橫式收合任務列完整顯示目前動作（至少「種下作物」四字），不截成兩個字。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  #questDock.quest-collapsed, #questDock.quest-target-collapsed, #questDock.quest-auto-collapsed {
+    width: 316px; max-width: calc(100vw - 24px);
+  }
+  #questDock.quest-auto-collapsed .world-objective-bottom > button {
+    display: inline-flex; align-items: center; min-height: 32px; white-space: nowrap; flex: 0 0 auto;
+  }
+  #questDock.quest-auto-collapsed .world-objective-title { min-width: 4em; }
+  #questDock .world-objective-bottom > button { flex: 0 0 auto; min-width: 5.5em; padding-left: 10px; padding-right: 10px; }
+  #questDock.quest-auto-collapsed, #questDock.quest-collapsed, #questDock.quest-target-collapsed { padding-right: 84px; }
+  #questDock.quest-auto-collapsed .world-chapter > span:first-child { display: none; }
+  #questDock .world-objective-bottom { flex: 0 0 auto; }
+  #questDock.quest-collapsed .world-chapter > span:first-child,
+  #questDock.quest-target-collapsed .world-chapter > span:first-child { display: none; }
+  #questDock.quest-collapsed .world-objective-bottom,
+  #questDock.quest-target-collapsed .world-objective-bottom { flex: 1 1 auto; min-width: 0; }
+  #questDock.quest-collapsed .world-objective-bottom > span,
+  #questDock.quest-target-collapsed .world-objective-bottom > span {
+    display: inline-block; flex: 1 1 auto; min-width: 4em;
+    white-space: nowrap; overflow: visible; text-overflow: clip;
+    font-size: 12px; line-height: 1.3;
+  }
+  /* 浮動交談鈕避開主角時，JS 加上這個狀態移到主角上方。 */
+  .scene-action-bar.scene-action-avoid-player {
+    bottom: auto;
+  }
+}
+
+/* 8：對話框避開說話者——說話者在畫面下半部時，對話框改放上半部。 */
+.world-dialogue.dialogue-flip-top {
+  bottom: auto; top: 76px;
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .world-dialogue.dialogue-flip-top { top: 8px; }
+}
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .world-dialogue.dialogue-flip-top { bottom: auto; top: 8px; }
+}
+
+/* 9：設定面板內容在面板內捲動，「完成」鈕固定在卡片下緣且不遮最後一行。 */
+.settings-card {
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.settings-card .settings-list {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  overscroll-behavior: contain; scroll-padding-bottom: 12px;
+  padding-bottom: 12px;
+}
+.settings-card #settingsOk {
+  position: static; flex: 0 0 auto; margin-top: 10px;
+}
+
+/* 10：選取框只框一格（不往外擴）、成熟發光降曝、名牌固定在 NPC 頭頂。 */
+.gtile.sel {
+  box-shadow: inset 0 0 0 3px #ffe27a;
+  outline: none;
+}
+.gtile.farm-plot.state-ready {
+  box-shadow: inset 0 0 0 2px rgba(255, 217, 74, .85);
+}
+.crop-mature-pop {
+  filter: drop-shadow(0 0 3px rgba(255, 230, 120, .45));
+}
+.mature-flash {
+  opacity: .45;
+}
+.sunlit-crop {
+  filter: brightness(1.08) saturate(1.05) drop-shadow(0 0 2px rgba(255, 232, 163, .5));
+  transform: none;
+}
+.ob.crop.sunlit-crop { transform: none; }
+.npc-nameplate-near {
+  transform: translate(-50%, -100%);
+}
+.qmarker[data-npc] { margin-left: 0; }

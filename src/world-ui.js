@@ -12,7 +12,7 @@
   const el = (id) => document.getElementById(id);
   const farm = () => window.__farm;
   let current = null, lastPanels = "", lastObjective = "", lastSites = "", lastFringe = "", lastTick = 0;
-  let dialogueTimer = 0;
+  let dialogueTimer = 0; let lastTargetAvoidAt = 0;
   const notify = (text) => { if (farm()) farm().toast(text); };
   // Resident presentation owns decoded bitmaps, never game clocks or served state.
   const residentPoseOwners = new WeakMap(), residentPoseNodes = new WeakMap();
@@ -95,7 +95,7 @@
     const status=['error','missing','unmanaged','disposed','pending'].find(value=>scenes.some(scene=>scene.status===value))||'ready';return {status,atBrowserMs:performance.now(),scenes,errors:scenes.flatMap(scene=>scene.errors)};
   }
 
-  const refresh = (s) => { current = s || current; if (!current) return; reconcile(current); syncHeaderVars(); renderObjective(current); renderPanels(); if (window.DailyUI) window.DailyUI.refresh(current); };
+  const refresh = (s) => { current = s || current; if (!current) return; reconcile(current); syncHeaderVars(); renderObjective(current); renderPanels(); if (window.DailyUI) window.DailyUI.refresh(current); setTimeout(ensureTargetVisible, 60); };
   const costText = (rows) => (rows || []).map((r) => `${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}`).join("・");
   const npcTile = (id) => current.map.tiles.find((t) => t.npc === id);
   const stationTile = (id) => current.map.tiles.find((t) => t.station === id);
@@ -378,7 +378,7 @@
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
     box.innerHTML = `<button class="dialogue-close" aria-label="關閉對話" title="關閉對話">×</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
-    box.hidden = false;
+    box.hidden = false; box.classList.remove("dialogue-flip-top"); try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); if (hit > 0) box.classList.add("dialogue-flip-top"); if (sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); setTimeout(() => { if (box.hidden) return; const s2 = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); if (!s2) return; const r2 = s2.getBoundingClientRect(), d2 = box.getBoundingClientRect(); const h2 = Math.max(0, Math.min(r2.right, d2.right) - Math.max(r2.left, d2.left)) * Math.max(0, Math.min(r2.bottom, d2.bottom) - Math.max(r2.top, d2.top)); box.classList.toggle("dialogue-flip-top", h2 > 0); }, 260); } } } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };
     // R79：toast 移到對話框上方（CSS 依此變數讓位）
@@ -590,7 +590,7 @@
     syncHeaderVars();
     renderObjective(s);
     syncSeedHudTop();
-    if (document.querySelector(".world-panel-open")) renderPanels();
+    ensureTargetVisible(); if (document.querySelector(".world-panel-open")) renderPanels();
   }
   // 資源列換行時，任務列（直式）與系統鈕（桌機）跟著往下。R79：資源變動當下就同步，不等下一個 tick。
   function syncHeaderVars() {
@@ -609,6 +609,29 @@
     if (!r.height) return;
     const top = Math.ceil(r.bottom + 10) + "px";
     if (document.documentElement.style.getPropertyValue("--world-seed-top") !== top) document.documentElement.style.setProperty("--world-seed-top", top);
+  }
+  function rectOverlap(a, b) { return Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)); }
+  function ensureTargetVisible() {
+    if (!current) return;
+    const dock = el("questDock"), seed = el("seedHud");
+    let tid = null;
+    try { tid = markerTile(current); } catch (e) { tid = null; }
+    if (!tid) { if (dock) dock.classList.remove("quest-target-collapsed"); if (seed) seed.classList.remove("seed-hud-shifted", "seed-hud-bottom"); return; }
+    const nodes = [document.querySelector('.gtile[data-tile-id="' + tid + '"]'), document.querySelector('[data-kind="npc"][data-tile-id="' + tid + '"]'), document.querySelector('[data-kind="crop"][data-tile-id="' + tid + '"]')].filter(Boolean);
+    const rects = nodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0);
+    if (!rects.length) return;
+    const coveredBy = (box) => { if (!box) return 0; const r = box.getBoundingClientRect(); if (!r.width || !r.height) return 0; return Math.max.apply(null, rects.map((t) => rectOverlap(t, r)).concat([0])); };
+    if (dock) { if (coveredBy(dock) > 0) dock.classList.add("quest-target-collapsed"); else dock.classList.remove("quest-target-collapsed"); }
+    if (seed && coveredBy(seed) > 0) {
+      const cx = rects[0].left + rects[0].width / 2;
+      seed.classList.toggle("seed-hud-shifted", cx < window.innerWidth / 2);
+      if (coveredBy(seed) > 0) seed.classList.add("seed-hud-bottom");
+    } else if (seed) { seed.classList.remove("seed-hud-shifted", "seed-hud-bottom"); }
+    if ((dock && coveredBy(dock) > 0) || (seed && coveredBy(seed) > 0)) {
+      const nowMs = Date.now();
+      if (nowMs - lastTargetAvoidAt > 3000) { lastTargetAvoidAt = nowMs; const f = farm(); if (f && f.focusTile) f.focusTile(tid); }
+    }
+    syncSeedHudTop();
   }
   function welcome(s, offline) {
     current = s;
