@@ -1,0 +1,75 @@
+/* R37 B 線（第 6～10 項）：UI 不蓋田、角色不疊、建造占地預覽、手機 HUD、場景清理。
+   只調整版面、定位與繪製參數；建造預覽元素由 ui.js 建立，站位偏好在 game.js。 */
+
+/* 6：種子欄只在播種步驟展開；其他步驟只留「＋全部」一個小按鈕，
+   不再整列壓在田上。點小按鈕仍可打開種子袋選種（手上拿種子）。 */
+body:not([data-quest-step="plant"]) .seed-hud .seed:not(.more),
+body:not([data-quest-step="plant"]) #mapScene .seed-hud .seed:not(.more) { display: none !important; }
+body:not([data-quest-step="plant"]) .seed-hud .seed-drawer,
+body:not([data-quest-step="plant"]) #mapScene .seed-hud .seed-drawer { display: none !important; }
+body:not([data-quest-step="plant"]) .seed-hud,
+body:not([data-quest-step="plant"]) #mapScene .seed-hud {
+  width: 48px; max-width: 48px; min-width: 48px;
+}
+body:not([data-quest-step="plant"]) .seed-hud .seed-row,
+body:not([data-quest-step="plant"]) #mapScene .seed-hud .seed-row { max-width: 48px; }
+body:not([data-quest-step="plant"]) .seed-hud .seed-quickbar,
+body:not([data-quest-step="plant"]) #mapScene .seed-hud .seed-quickbar { flex-wrap: nowrap; }
+body:not([data-quest-step="plant"]) .seed-hud .seed.more,
+body:not([data-quest-step="plant"]) #mapScene .seed-hud .seed.more {
+  width: 44px; min-width: 44px; max-width: 44px; min-height: 44px;
+}
+/* 7＋10：NPC 名牌永遠在建物精靈之上，不被房子蓋住；
+   任務名牌與靠近名牌都抬到世界物件之上（房子 z-index 為腳底 baseline，遠低於此）。 */
+.npc-nameplate-near { z-index: 9600 !important; }
+.qmarker .npc-nameplate { position: relative; z-index: 9600; }
+#markerLayer { z-index: 9600; }
+
+/* 8：建造占地預覽——選中建物後，游標／觸控所在格顯示占地框：
+   可放綠色、不可放紅色；上方標籤顯示花費與剩餘。 */
+.build-preview {
+  position: absolute; pointer-events: none; z-index: 9400;
+  box-sizing: border-box; border-radius: 4px;
+}
+.build-preview.is-ok {
+  background: rgba(86, 184, 75, .34);
+  border: 3px solid #57b84b;
+  box-shadow: inset 0 0 0 2px rgba(255, 246, 227, .85);
+}
+.build-preview.is-blocked {
+  background: rgba(212, 101, 74, .34);
+  border: 3px solid #d4654a;
+  box-shadow: inset 0 0 0 2px rgba(255, 246, 227, .7);
+}
+.build-preview-cost {
+  position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%);
+  white-space: nowrap; pointer-events: none;
+  padding: 3px 8px; border-radius: 999px;
+  background: rgba(24, 42, 32, .92); color: #fffbe8;
+  border: 1px solid rgba(255, 251, 232, .85);
+  font-size: 12px; font-weight: 800; line-height: 1.35;
+}
+.build-preview.is-blocked .build-preview-cost { background: rgba(94, 34, 22, .92); }
+
+/* 9：手機橫式 844×390——頂部資源列依內容縮短，不留大段空白：
+   資源列改內容寬，資源格不均分拉長。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  header .res-bar {
+    flex: 0 1 auto; width: auto; max-width: calc(100vw - 24px);
+    flex-wrap: nowrap; justify-content: flex-start;
+  }
+  header .res-bar .res { flex: 0 0 auto; min-width: 0; }
+}
+/* 9：手機直式 390×844——底部工具列文字至少 11px。 */
+@media (max-width: 859px) and (orientation: portrait) {
+  .toolbar .btn { font-size: 11px !important; }
+  .tool-bar .tool .tn, .tool-bar .tool { font-size: 11px; }
+  .side-tabs .side-tab { font-size: 11px; }
+}
+@media (max-width: 859px) {
+  .toolbar .btn { font-size: 11px !important; }
+  .side-tabs .side-tab { font-size: 11px; }
+}
+
+/* 10：樹樁旁不再有深色暈影——落影降到幾乎看不出來（alpha 0.05）。 */
+.ob[data-object="stump"] { filter: drop-shadow(0 1px 1px rgba(31, 42, 24, .05)) !important; }
