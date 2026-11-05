@@ -353,7 +353,22 @@
     };
     return lines[id] || "下次有收穫，也記得來找我們。";
   }
+  let pendingSpeak = null;
+  let speakWaitTimer = 0;
   function speak(name, text) {
+    const zone = el("toast-zone");
+    if (zone && zone.children && zone.children.length > 0) {
+      pendingSpeak = { name, text };
+      clearInterval(speakWaitTimer);
+      speakWaitTimer = setInterval(() => {
+        const z = el("toast-zone");
+        if (z && z.children && z.children.length > 0) return;
+        clearInterval(speakWaitTimer);
+        const pending = pendingSpeak; pendingSpeak = null;
+        if (pending) speak(pending.name, pending.text);
+      }, 200);
+      return;
+    }
     clearTimeout(dialogueTimer);
     let box = el("worldDialogue");
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }

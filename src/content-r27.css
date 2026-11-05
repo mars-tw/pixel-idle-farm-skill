@@ -1,0 +1,169 @@
+/* R27 B 線：版面與回饋（第 6～10 項）。只調整版面、定位與對比，不改內容與數值。 */
+
+/* 6：捲動提示改為面板底部保留區——漸層加小箭頭，不覆蓋按鈕、獎勵或倒數文字。 */
+.panel-scroll-hint {
+  position: static;
+  flex: 0 0 auto;
+  width: auto;
+  max-width: none;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 6px 14px 2px;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(255, 248, 223, 0), rgba(255, 248, 223, .96) 55%, #fff8df);
+  color: #5a3a1a;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  box-shadow: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+}
+.panel-scroll-hint::after { content: "▼"; font-size: 10px; line-height: 1; }
+.panel-scroll-hint[hidden] { display: none !important; }
+.side-panel:not(.world-panel-open) > .panel-scroll-hint { display: none !important; }
+.side-panel.world-panel-open > .panel-scroll-hint {
+  position: fixed;
+  z-index: 9905;
+  right: 20px;
+  width: 350px;
+  max-width: calc(100vw - 24px);
+  bottom: var(--world-bottom, 92px);
+}
+.side-panel.world-panel-open:has(> .panel-scroll-hint:not([hidden])) .side-body {
+  bottom: calc(var(--world-bottom, 92px) + 28px);
+}
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  .side-panel.world-panel-open > .panel-scroll-hint {
+    left: 12px; right: 12px; width: auto; max-width: none;
+    bottom: calc(130px + env(safe-area-inset-bottom, 0px));
+  }
+  .side-panel.world-panel-open:has(> .panel-scroll-hint:not([hidden])) .side-body {
+    bottom: calc(158px + env(safe-area-inset-bottom, 0px));
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .side-panel.world-panel-open > .panel-scroll-hint {
+    left: auto; right: 12px; width: 320px; bottom: 70px;
+  }
+  .side-panel.world-panel-open:has(> .panel-scroll-hint:not([hidden])) .side-body {
+    bottom: 98px;
+  }
+}
+
+/* 6：建造選單卡片文字完整顯示，不以省略號截斷名稱、費用與狀態。 */
+.build-wheel { overflow-y: auto; overscroll-behavior: contain; }
+.build-wheel .build-wheel-btn { height: auto; min-height: 54px; }
+.build-wheel .bw-t {
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+.build-wheel .bw-t small { display: block; line-height: 1.3; }
+.build-catalog-hint {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  font-weight: 800;
+  color: #5a3a1a;
+  text-align: center;
+  line-height: 1.35;
+}
+
+/* 7：任務卡章節、進度與按鈕文字不斷行。 */
+#questDock .world-chapter { flex-wrap: nowrap; }
+#questDock .world-chapter > span { white-space: nowrap; }
+#questDock .world-chapter > span:first-child { flex: 1 1 auto; min-width: 0; }
+#questDock .world-chapter > span:last-child { flex: 0 0 auto; }
+#questDock .world-objective-bottom > button { white-space: nowrap; flex: 0 0 auto; }
+#questDock .world-objective-bottom > span { min-width: 0; }
+
+/* 7：手機橫式——任務卡變矮不碰方向鍵，種子快捷列避開頂部 HUD。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  #questDock { top: 56px; width: 264px; max-width: 264px; padding: 8px 10px; }
+  #questDock .world-objective-title { font-size: 13px; line-height: 1.35; }
+  #questDock .world-objective-hint { margin-top: 4px; padding: 2px 6px; font-size: 11px; line-height: 1.35; }
+  #questDock .world-objective-bottom { margin-top: 5px; }
+  #questDock .world-meter { margin-top: 6px; }
+  #mapScene .seed-hud { top: 54px; left: auto; right: 84px; max-width: calc(100vw - 260px); }
+  #mapScene .seed-row { max-width: calc(100vw - 260px); }
+}
+
+/* 8：單格狀態標籤——只在選取的田格上方顯示一則狀態。 */
+.tile-state-label {
+  position: absolute;
+  z-index: 9850;
+  transform: translate(-50%, -100%);
+  width: max-content;
+  max-width: 180px;
+  padding: 3px 8px;
+  border: 1.5px solid #8b5e34;
+  border-radius: 999px;
+  background: #fff8df;
+  color: #4a3200;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(60, 40, 10, .25);
+}
+.tile-state-label[hidden] { display: none !important; }
+.gtile.sel { box-shadow: inset 0 0 0 3px #ffe27a, 0 0 0 2px rgba(90, 58, 26, .65); }
+
+/* 9：NPC 名牌錨在頭頂上方，不落到玩家或 NPC 腳下。 */
+.qmarker { transform: translate(-50%, -100%); }
+.npc-nameplate-near { transform: translate(-50%, -100%); }
+
+/* 10：對比與一致——淡色提示與章節字加深到可讀對比。 */
+.world-objective-hint {
+  background: #ffe9a8;
+  color: #4a3200;
+}
+.world-objective-hint.sun {
+  background: #ffdf6b;
+  color: #4a3200;
+  box-shadow: inset 3px 0 0 #8a5a00;
+}
+#questDock[data-quest="first_sun_basket"] .world-objective-hint {
+  background: #ffe9a8;
+  color: #4a3200;
+}
+.story-kicker { color: #3f5218; }
+.daily-kicker { color: #3d551f; }
+.journal-chapters { color: #3a2c1a; }
+
+/* 10：每日印章冊進度條——軌道有邊框、填色明確，0% 也看得出是空軌。 */
+.chore-progress {
+  height: 8px;
+  border: 1px solid #8a6d2f;
+  border-radius: 999px;
+  background: #f7ecc8;
+  overflow: hidden;
+  box-shadow: none;
+}
+.chore-progress i { display: block; height: 100%; background: #2f6b33; }
+
+/* 10：開場彈窗主按鈕貼近卡片底部，下方空白縮小。 */
+#worldModal:has(.sun-welcome) .modal-body { display: flex; flex-direction: column; }
+#worldModal:has(.sun-welcome) #worldSunBegin { margin-top: auto; }
+
+@media (max-height: 500px) and (min-width: 600px) {
+  #worldModal:has(.sun-welcome) .sun-welcome { height: 100px; flex-basis: 100px; }
+  #worldModal:has(.sun-welcome) .modal-body { margin-top: 2px; }
+}
+  /* 10：設定面板底部「完成」不被切掉。 */
+.settings-card { padding-bottom: 12px; }
+#settingsOk { flex: 0 0 auto; margin-top: 10px; }
+
+/* 10：開墾農地圖示與其他工具圖示同尺寸對齊。 */
+.up .u-ic { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: 0 0 auto; }
+.up .u-ic .ui-icon { width: 32px; height: 32px; }

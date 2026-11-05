@@ -93,7 +93,7 @@ async function panelMeasure(page) {
     const dock = document.querySelector('#farmDock');
     if (!body) return null;
     const br = body.getBoundingClientRect(), dr = dock ? dock.getBoundingClientRect() : null;
-    const hint = body.querySelector('[data-audit="panel-scroll-hint"]');
+    const hint = document.querySelector('[data-audit="panel-scroll-hint"]');
     return {
       top: br.top, bottom: br.bottom, dockTop: dr ? dr.top : innerHeight,
       scrollH: body.scrollHeight, clientH: body.clientHeight,
@@ -113,7 +113,7 @@ async function scrollPanelToBottom(page) {
     const last = btns[btns.length - 1];
     if (!last) return { btnCount: btns.length, fully: false };
     const r = last.getBoundingClientRect(), br = body.getBoundingClientRect();
-    const hint = body.querySelector('[data-audit="panel-scroll-hint"]');
+    const hint = document.querySelector('[data-audit="panel-scroll-hint"]');
     return { btnCount: btns.length, lastText: last.textContent.trim().slice(0, 24), fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? hint.hidden : null };
   });
 }
