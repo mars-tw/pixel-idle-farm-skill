@@ -110,3 +110,5 @@
   transform: translate(-50%, -100%);
 }
 .qmarker[data-npc] { margin-left: 0; }
+/* R29 整合：「主線保留」是附註，不搶訂單需求的主視覺。 */
+.order-card .o-reserve, .o-reserve { font-size: 12px; line-height: 1.4; font-weight: 600; color: #7a4a12; margin: 2px 0 0; }
