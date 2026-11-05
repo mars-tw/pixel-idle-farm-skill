@@ -122,7 +122,7 @@ test('每日三項不重複首章收成與小麥交付，印章冊標示已領�
     assert.deepEqual(tasks.map((row) => row.id), ['water', 'talk', 'sell']);
     assert.doesNotMatch(tasks.map((row) => row.title + row.detail).join(' '), /收成 6|交 2 份小麥|小麥餐籃/);
   }
-  assert.match(dailyUi, /目前可做 \$\{st\.available\} 項・已完成 \$\{st\.completed\}\/\$\{st\.available\}・已領取 \$\{st\.claimed\}\/\$\{st\.available\}/);
+  assert.match(dailyUi, /今天可做 \$\{st\.available\} 項・達成 \$\{st\.completed\}・已領 \$\{st\.claimed\}/);
 });
 
 test('開場、對話與設定文案符合 R26', () => {

@@ -1,0 +1,36 @@
+.market-preview-state {
+  display: inline-block;
+  margin-left: 0.45em;
+  padding: 0.12em 0.45em;
+  border: 1px solid #a77738;
+  border-radius: 999px;
+  color: #745022;
+  background: #fff1c9;
+  font-size: 0.88em;
+  font-weight: 800;
+}
+
+.world-dialogue .dialogue-continue {
+  min-width: 104px;
+  min-height: 42px;
+  padding: 8px 16px;
+  border: 1px solid #527a3b;
+  background: #5f8a45;
+  color: #fffdf4;
+  font-size: 14px;
+  font-weight: 850;
+  box-shadow: 0 2px 0 #3f612e;
+}
+
+.world-dialogue .dialogue-close {
+  min-width: 0;
+  min-height: 30px;
+  padding: 4px 7px;
+  border: 0;
+  background: transparent;
+  color: #725f48;
+  font-size: 11px;
+  font-weight: 650;
+  text-decoration: underline;
+  box-shadow: none;
+}
