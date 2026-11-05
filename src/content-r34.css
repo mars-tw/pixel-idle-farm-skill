@@ -20,7 +20,7 @@
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background-image:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, .10) 0 2px, transparent 2px 23px),
-    url("../assets/generated/content-r7/quiet-water.webp?v=content-r33-20261105-1");
+    url("../assets/generated/content-r7/quiet-water.webp?v=content-r34-20261106-1");
   background-size: 100% 100%, 144px 144px;
   background-repeat: repeat;
   image-rendering: pixelated;
