@@ -140,7 +140,7 @@ async function scrollPanelToBottom(page) {
         console.log(`OK 間距 ${w}×${h} 方向鍵與物品格 ${gap.gap}px ≥ 8px`);
 
         // 8：任務卡可收合——收成一行摘要（章節進度＋目前步驟），再點展開保留短說明
-        await page.waitForSelector('[data-audit="quest-collapse"]', { timeout: 5000 });
+        await page.waitForSelector('[data-audit="quest-collapse"]', { timeout: 5000 }); const initiallyCollapsed = await page.evaluate(() => { const b = document.querySelector('#questDock'); return b.classList.contains('quest-collapsed') || b.classList.contains('quest-auto-collapsed'); }); if (initiallyCollapsed) { await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); }
         const before = await page.evaluate(() => document.querySelector('#questDock').getBoundingClientRect().height);
         await page.locator('[data-audit="quest-collapse"]').click();
         await page.waitForTimeout(200);

@@ -797,7 +797,7 @@
     if (name === "story") renderStory();
     syncPanelScrollHint();
     if (name === "journal") renderJournal();
-    if (window.FarmWorld) window.FarmWorld.renderPanels();
+    if (window.FarmWorld) window.FarmWorld.renderPanels(); schedulePanelFit();
   }
   // R26：面板捲動提示——內容超高且尚未捲到底時，在面板底部顯示「往下還有內容」。
   let panelScrollHintEl = null;
@@ -825,18 +825,18 @@
     if (panel) new MutationObserver(syncPanelScrollHint).observe(panel, { attributes: true, attributeFilter: ["class"] });
   }
   // R26：任務卡可收合——點一下收成一行摘要（章節進度＋目前步驟），再點展開。
-  let questDockCollapsed = false;
+  let questDockCollapsed = false; let questDockUserToggled = false;
   function setupQuestDockCollapse() {
     const box = $("questDock"); if (!box) return;
     let wasShort = false;
-    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short) box.classList.remove("quest-auto-collapsed"); wasShort = short; };
+    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; const mobile = typeof window !== "undefined" && (window.innerWidth <= 859 || (window.matchMedia && window.matchMedia("(any-pointer: coarse) and (max-height: 480px)").matches)); if (!questDockUserToggled && mobile) box.classList.add("quest-auto-collapsed"); if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short && !mobile) box.classList.remove("quest-auto-collapsed"); wasShort = short; };
     const ensure = () => { syncShortDefault();
       box.classList.toggle("quest-collapsed", questDockCollapsed);
       let btn = box.querySelector("[data-audit='quest-collapse']");
       if (!btn) {
         btn = document.createElement("button");
         btn.type = "button"; btn.className = "quest-collapse-btn"; btn.dataset.audit = "quest-collapse";
-        btn.onclick = (ev) => { ev.stopPropagation(); questDockCollapsed = !questDockCollapsed; box.classList.remove("quest-auto-collapsed"); ensure(); };
+        btn.onclick = (ev) => { ev.stopPropagation(); questDockUserToggled = true; questDockCollapsed = !questDockCollapsed; box.classList.remove("quest-auto-collapsed"); ensure(); }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed"); ensure(); };
         box.appendChild(btn);
       }
       btn.textContent = questDockCollapsed ? "展開" : "收合";
@@ -907,7 +907,7 @@
       };
     });
   }
-  function appendListMore(container, key, total, shown, renderFn) {
+  const panelFitExpanded = {}; function fitPanelFirstScreen() { try { const body = document.querySelector(".side-body"); const panel = document.querySelector(".side-panel"); if (!body || !panel || !panel.classList || typeof panel.classList.contains !== "function" || !panel.classList.contains("world-panel-open")) return; const pane = body.querySelector(".side-pane.sel"); if (!pane) return; const key = pane.dataset.pane || "pane"; if (panelFitExpanded[key]) { pane.querySelectorAll(".r32-panel-hidden").forEach((c) => c.classList.remove("r32-panel-hidden")); const old = pane.querySelector(".r32-show-more"); if (old) old.remove(); return; } const cardSel = key === "orders" ? ".order" : key === "upgrades" ? ".up, .building-upgrade-card" : ".adventure-quest, .quest, .order, .up, .building-upgrade-card, .story-card"; const cards = [...pane.querySelectorAll(cardSel)].filter((c) => c.offsetParent !== null || c.getBoundingClientRect().height > 0); if (cards.length < 2) return; cards.forEach((c) => c.classList.remove("r32-panel-hidden")); let btn = pane.querySelector(".r32-show-more"); if (btn) btn.remove(); const bodyRect = body.getBoundingClientRect(); if (!bodyRect.height) return; let visibleCount = cards.length; const over = (c) => c.getBoundingClientRect().bottom > bodyRect.bottom + 1; for (let i = 0; i < cards.length; i++) { if (over(cards[i])) { visibleCount = i; break; } } if (visibleCount >= cards.length) return; visibleCount = Math.max(1, visibleCount); while (visibleCount > 1) { const lastVis = cards[visibleCount - 1]; if (!over(lastVis)) break; visibleCount--; } const hiddenCount0 = cards.length - visibleCount; cards.slice(visibleCount).forEach((c) => c.classList.add("r32-panel-hidden")); btn = document.createElement("button"); btn.type = "button"; btn.className = "btn ghost small side-list-more r32-show-more"; btn.dataset.audit = "panel-show-more"; btn.textContent = "再顯示 " + hiddenCount0 + " 項"; btn.setAttribute("aria-label", "再顯示 " + hiddenCount0 + " 項"); btn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); panelFitExpanded[key] = true; fitPanelFirstScreen(); }; (cards[visibleCount - 1].parentElement || pane).appendChild(btn); let guard = 0; while (btn.getBoundingClientRect().bottom > bodyRect.bottom + 1 && visibleCount > 1 && guard++ < cards.length) { const extra = cards[visibleCount - 1]; extra.classList.add("r32-panel-hidden"); visibleCount--; btn.textContent = "再顯示 " + (cards.length - visibleCount) + " 項"; btn.setAttribute("aria-label", btn.textContent); } } catch (e) {} } function schedulePanelFit() { if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => { fitPanelFirstScreen(); syncPanelScrollHint(); }); else fitPanelFirstScreen(); } function appendListMore(container, key, total, shown, renderFn) {
     if (!container || total <= shown) return;
     if (typeof container.insertAdjacentHTML === "function") {
       container.insertAdjacentHTML("beforeend", sideListMoreHtml(key, total, shown));
@@ -1691,7 +1691,7 @@
     if (state.settings.smartAssistant == null) state.settings.smartAssistant = true;
     if (state.settings.smartAssistantCollapsed == null) state.settings.smartAssistantCollapsed = true;
     if (state.settings.offlineSummary == null) state.settings.offlineSummary = true;
-    if (state.settings.soundEnabled == null) state.settings.soundEnabled = true;
+    if (state.settings.soundEnabled == null) state.settings.soundEnabled = true; if (state.settings.showDpad == null) state.settings.showDpad = false;
     if (state.settings.musicEnabled == null) state.settings.musicEnabled = true;
     state.settings.soundVolume = clamp01(state.settings.soundVolume, 0.55);
     if (!["auto", "high", "low"].includes(state.settings.performanceMode)) state.settings.performanceMode = "auto";
@@ -2151,7 +2151,7 @@
     box.innerHTML = [
       settingRowHtml("smartAssistant", "智慧農務助手", "在地圖角落顯示即時行動建議與一鍵前往。", settings.smartAssistant !== false),
       settingRowHtml("offlineSummary", "離線摘要", "離開 5 分鐘以上回來時顯示本次收益摘要。", settings.offlineSummary !== false),
-      settingRowHtml("soundEnabled", "音效", "首次點擊或按鍵後，主要操作會播放短促音效。", settings.soundEnabled !== false),
+      settingRowHtml("soundEnabled", "音效", "首次點擊或按鍵後，主要操作會播放短促音效。", settings.soundEnabled !== false), settingRowHtml("showDpad", "顯示方向鍵", "點地圖即可移動；需要方向鍵時再開啟顯示。", settings.showDpad === true),
       settingRowHtml("musicEnabled", "背景音樂", "田園循環配樂，音量跟著下方滑桿；關掉音效時也會一起停。", settings.musicEnabled !== false),
       soundVolumeHtml(settings.soundVolume, settings.soundEnabled !== false),
       textSizeHtml(settings.textSize || "medium"),
@@ -2166,7 +2166,7 @@
         ev.stopPropagation();
         const key = btn.dataset.settingKey;
         ensureSettings();
-        state.settings[key] = state.settings[key] === false;
+        state.settings[key] = state.settings[key] === false; if (key === "showDpad") applyShowDpad();
         if (key === "smartAssistant" && state.settings.smartAssistant) state.settings.smartAssistantCollapsed = true;
         if (key === "soundEnabled" && state.settings.soundEnabled !== false) { unlockAudio(true); playSound("ui"); }
         else playSound("ui");
@@ -2947,16 +2947,16 @@
     if (player) obstacles.push(player);
     worldEl.querySelectorAll('.ob[data-kind="npc"], .ob[data-kind="animal"]').forEach((n) => { if (n !== anchor) obstacles.push(n); });
     if (!obstacles.length) return;
-    let shifted = 0;
-    for (let step = 0; step < 12; step++) {
+    const isMarker = el.classList && el.classList.contains("qmarker"); const plate = isMarker ? el.querySelector(".npc-nameplate") : el; if (!plate) return; const baseLeft = parseFloat(el.style.left); const clearSide = (t) => { t.classList.remove("plate-side-left", "plate-side-right"); if (t.dataset) { delete t.dataset.plateSide; delete t.dataset.plateShift; } if (t !== el && t.style) t.style.transform = ""; }; clearSide(el); if (plate !== el) clearSide(plate); const hitsSide = () => { const r = plate.getBoundingClientRect(); return obstacles.some((o) => rectOverlap(r, o.getBoundingClientRect())); }; if (!hitsSide()) return; const anchorRect = anchor && anchor.getBoundingClientRect ? anchor.getBoundingClientRect() : null; const playerRect = player && player.getBoundingClientRect ? player.getBoundingClientRect() : null; const npcCx = anchorRect ? anchorRect.left + anchorRect.width / 2 : plate.getBoundingClientRect().left + plate.getBoundingClientRect().width / 2; const preferRight = playerRect ? (playerRect.left + playerRect.width / 2) <= npcCx : true; const order = preferRight ? ["right", "left"] : ["left", "right"]; const pw = plate.getBoundingClientRect().width || 64;
+    for (const side of order) {
       const r = el.getBoundingClientRect();
-      if (!obstacles.some((o) => rectOverlap(r, o.getBoundingClientRect()))) break;
-      const top = parseFloat(el.style.top);
-      if (!Number.isFinite(top)) break;
-      el.style.top = pxv(top - 8);
-      shifted += 8;
+      const shift = Math.round(pw / 2 + (anchorRect ? anchorRect.width / 2 : 24) + 10); if (isMarker) plate.style.transform = "translateX(" + (side === "right" ? shift : -shift) + "px)"; else { if (!Number.isFinite(baseLeft)) continue; el.style.left = pxv(baseLeft + (side === "right" ? shift : -shift)); } const rr = plate.getBoundingClientRect(); if (rr.left >= -4 && rr.right <= window.innerWidth + 4 && !hitsSide()) { el.classList.add(side === "right" ? "plate-side-right" : "plate-side-left"); el.dataset.plateSide = side; el.dataset.plateShift = String(shift); if (plate !== el) { plate.classList.add(side === "right" ? "plate-side-right" : "plate-side-left"); plate.dataset.plateSide = side; plate.dataset.plateShift = String(shift); } return; }
+      // 此側仍重疊或出界，試另一側。
+      void 0;
+      void 0;
+      void 0;
     }
-    if (shifted) el.dataset.plateShift = String(shifted);
+    if (isMarker) plate.style.transform = ""; else if (Number.isFinite(baseLeft)) el.style.left = pxv(baseLeft);
   }
   function strHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
   // Stage 7：地圖上動物頭上的照護狀態小圖示（hungry/thirsty/needs_groom 才顯示，happy 不額外標，
@@ -3224,11 +3224,11 @@
       camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
       camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
     }
-    state.camera.x = camX; state.camera.y = camY;
+    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 4; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } } state.camera.x = camX; state.camera.y = camY;
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
     if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
-    window.ContentR6?.fitMapLabels();
+    window.ContentR6?.fitMapLabels(); try { const hud2 = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar"].flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); worldEl.querySelectorAll(".ob-bar, .ob-dot-ready-crop, .tile-state-label").forEach((lab) => { const r = lab.getBoundingClientRect(); const hit = hud2.some((h) => r.left < h.right && r.right > h.left && r.top < h.bottom && r.bottom > h.top); lab.style.visibility = hit ? "hidden" : ""; lab.dataset.hudHidden = hit ? "true" : "false"; }); } catch (e) {}
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
@@ -4655,7 +4655,7 @@
     const narrow = window.innerWidth <= 859 || window.innerHeight <= 480; // R70：寬橫式手機（如 932×430）亦屬行動姿勢
     document.documentElement.classList.toggle("primary-coarse", primaryCoarse);
     document.documentElement.classList.toggle("mobile-controls-enabled", primaryCoarse && narrow);
-    syncFixedLayerAvoidance();
+    syncFixedLayerAvoidance(); schedulePanelFit();
   }
   function stepPlayerDir(dir) {
     if (hasOpenModal() || moveTimer || !state || !state.player) return;
@@ -4690,7 +4690,7 @@
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
     else toast(blockedReason(tile));
   }
-  function updateQuickHarvest() {
+  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (G.quickHarvestStatus && G.quickHarvestStatus(state, now()).count > 0) return true; } catch (e) {} const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
     const action = $("actionA");
     if (!action || !G.quickHarvestStatus) return;
     if (quickHarvestTarget && !moveTimer && state.player.action === "idle") quickHarvestTarget = null;
@@ -4700,7 +4700,7 @@
     action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
     if (typeof action.setAttribute === "function") {
       action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count ? `${st.count} 格成熟，點一下走近並收成一格` : "與前方目標互動");
-      action.setAttribute("aria-disabled", String(busy));
+      action.setAttribute("aria-disabled", String(busy)); updateInteractVisibility();
     }
   }
   function activateThumbAction() {
@@ -4720,7 +4720,7 @@
   }
   function setupSceneControls() {
     if (sceneControlBound) return;
-    sceneControlBound = true;
+    sceneControlBound = true; try { ensureSettings(); applyShowDpad(); } catch (e) {}
     setPrimaryPointerClass();
     window.addEventListener("resize", setPrimaryPointerClass);
     if (window.matchMedia) {
