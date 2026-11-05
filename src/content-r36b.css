@@ -1,0 +1,68 @@
+/* R36 B 線（第 6～10 項）：主角不上屋頂、UI 不蓋田、面板單一提示、畫面瑕疵、手機橫式減量。
+   只調整版面、定位與繪製參數；建物碰撞在 game.js 的 isRoofBlocked，步驟標記在 world-ui.js。 */
+
+/* 6：主角在建物後方時沿用 R34 輪廓，但名牌留在輪廓下方指向腳底，不貼到屋頂上。 */
+.player-locator > span { top: 100%; bottom: auto; }
+
+/* 8：長面板只留「再顯示 N 項」一種提示；舊的「往下還有內容」不再顯示，
+   面板底邊回到工具列上方的安全底距，最下方按鈕可完整捲入可視區。 */
+.panel-scroll-hint { display: none !important; }
+.side-panel.world-panel-open .side-body { scroll-padding-bottom: 16px; }
+
+/* 9：樹樁只留小而淡的落影，不再有大塊深色暈影；晴天雲影改小改淡，不像髒污。 */
+.ob[data-object="stump"] { filter: drop-shadow(0 1px 1px rgba(31, 42, 24, .14)) !important; }
+#weatherLayer[data-weather="clear"]::after {
+  background:
+    radial-gradient(11% 7% at 22% 30%, rgba(30, 52, 36, .07), transparent 70%),
+    radial-gradient(13% 8% at 64% 58%, rgba(30, 52, 36, .06), transparent 72%),
+    radial-gradient(10% 6% at 86% 18%, rgba(30, 52, 36, .05), transparent 70%),
+    radial-gradient(12% 7% at 38% 84%, rgba(30, 52, 36, .05), transparent 72%);
+}
+/* 9：建造模式下成熟作物不發大面積光，只留田格內的細框與本體。 */
+body:has(#buildWheel:not([hidden])) .gtile.farm-plot.state-ready {
+  box-shadow: inset 0 0 0 2px rgba(255, 217, 74, .85) !important;
+}
+body:has(#buildWheel:not([hidden])) .ob.crop,
+body:has(#buildWheel:not([hidden])) .crop-mature-pop {
+  filter: none !important; animation: none !important;
+}
+body:has(#buildWheel:not([hidden])) .mature-flash { display: none !important; }
+body:has(#buildWheel:not([hidden])) .sun-beam { display: none !important; }
+body:has(#buildWheel:not([hidden])) .ob-dot-ready-crop { box-shadow: none !important; }
+
+/* 9：設定面板右上關閉鈕，標題不被鈕壓住。 */
+.settings-card { position: relative; }
+.settings-card h2 { padding-right: 52px; }
+.settings-close {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  width: 40px; height: 40px; min-width: 40px; min-height: 40px;
+  padding: 0; border: 1.5px solid #8b5e34; border-radius: 999px;
+  background: #fff8df; color: #5a3a1a; font-size: 20px; font-weight: 900; line-height: 1;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+
+/* 9：手機開場標誌四邊留白，左邊界至少 12px，不貼邊、不切頂。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  header { left: max(12px, env(safe-area-inset-left)); }
+  .title .farm-logo { margin-left: 0; object-fit: contain; object-position: left center; }
+}
+
+/* 7＋10：手機橫式（矮螢幕）任務列與種子欄併成上方一列：
+   任務列在左、種子欄在右且同高；非播種步驟收起種子欄，田區不再被兩列蓋住。
+   自由經營（free）與回報（claim）時種子欄保留，方便隨時播種。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  #questDock { top: var(--world-quest-top, 60px); }
+  .seed-hud, #mapScene .seed-hud {
+    top: var(--world-quest-top, 60px); left: auto; right: 12px;
+    height: 48px; max-height: 48px; overflow: hidden;
+    display: flex; align-items: center;
+  }
+  #mapScene .seed-row { flex-wrap: nowrap; }
+  #mapScene .seed-quickbar { flex-wrap: nowrap; }
+  body[data-quest-step="water"] .seed-hud,
+  body[data-quest-step="harvest"] .seed-hud,
+  body[data-quest-step="deliver"] .seed-hud,
+  body[data-quest-step="wait"] .seed-hud { display: none !important; }
+  /* 互動鈕固定在右下安全角，不壓田格與 NPC（NPC 與田格多在鏡頭中央與左上）。 */
+  .action-a { right: 12px; }
+}

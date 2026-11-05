@@ -810,21 +810,15 @@
     if (window.FarmWorld) window.FarmWorld.renderPanels(); schedulePanelFit();
   }
   // R26：面板捲動提示——內容超高且尚未捲到底時，在面板底部顯示「往下還有內容」。
-  let panelScrollHintEl = null;
+  let panelScrollHintEl = null; // R36: only the show-more button remains as the panel hint.
   function syncPanelScrollHint() {
     const body = (typeof document.querySelector === "function") ? document.querySelector(".side-body") : null;
     if (!body || typeof body.scrollHeight !== "number" || typeof document.createElement !== "function") return;
     const panel = (typeof body.closest === "function" ? body.closest(".side-panel") : null) || body.parentElement;
     if (!panel) return;
-    if (!panelScrollHintEl || panelScrollHintEl.parentElement !== panel) {
-      panelScrollHintEl = document.createElement("div");
-      panelScrollHintEl.className = "panel-scroll-hint";
-      panelScrollHintEl.dataset.audit = "panel-scroll-hint";
-      panelScrollHintEl.textContent = "往下還有內容";
-      panel.appendChild(panelScrollHintEl);
-      if (typeof body.addEventListener === "function") body.addEventListener("scroll", syncPanelScrollHint, { passive: true });
-    }
-    panelScrollHintEl.hidden = !(body.scrollHeight - body.clientHeight - body.scrollTop > 24);
+    if (panelScrollHintEl) { panelScrollHintEl.remove(); panelScrollHintEl = null; }
+    if (panel.querySelector && panel.querySelector(".panel-scroll-hint")) panel.querySelector(".panel-scroll-hint").remove();
+    return;
   }
   function setupPanelScrollHint() {
     syncPanelScrollHint();
@@ -4113,6 +4107,7 @@
     if (tile.region === "east_deep" && !(state.flags && state.flags.eastDeepUnlocked)) return "🌲 東林深處尚未開通";
     if (tile.object) return window.OBSTACLES[tile.object].emoji + " 障礙擋路（用清除工具）";
     if (tile.buildingId) return "這裡有建築";
+    if (G.isRoofBlocked && G.isRoofBlocked(state, tile)) return "屋頂上不能站，繞到建物前面吧";
     return "無法前往";
   }
   function inspectTile(tile) {
@@ -5270,6 +5265,7 @@
       openModal("settingsModal", "#settingsOk");
     };
     $("settingsOk").onclick = () => closeModal("settingsModal");
+    if ($("settingsClose")) $("settingsClose").onclick = () => closeModal("settingsModal");
     $("howToBtn").onclick = () => openModal("howToModal", "#howToOk");
     $("howToOk").onclick = () => closeModal("howToModal");
     $("offlineOk").onclick = () => closeModal("offlineModal");

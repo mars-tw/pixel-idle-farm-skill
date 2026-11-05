@@ -97,7 +97,7 @@ async function panelMeasure(page) {
     return {
       top: br.top, bottom: br.bottom, dockTop: dr ? dr.top : innerHeight,
       scrollH: body.scrollHeight, clientH: body.clientHeight,
-      hintExists: !!hint, hintHidden: hint ? hint.hidden : null,
+      hintExists: !!hint, hintHidden: hint ? (hint.hidden || getComputedStyle(hint).display === 'none' || hint.getBoundingClientRect().height === 0) : true, hintVisible: hint ? (!hint.hidden && getComputedStyle(hint).display !== 'none' && hint.getBoundingClientRect().height > 0) : false, hasMore: !!body.querySelector('.side-pane.sel .r32-show-more'), hiddenCards: body.querySelectorAll('.side-pane.sel .r32-panel-hidden').length,
     };
   });
 }
@@ -114,7 +114,7 @@ async function scrollPanelToBottom(page) {
     if (!last) return { btnCount: btns.length, fully: false };
     const r = last.getBoundingClientRect(), br = body.getBoundingClientRect();
     const hint = document.querySelector('[data-audit="panel-scroll-hint"]');
-    return { btnCount: btns.length, lastText: last.textContent.trim().slice(0, 24), fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? hint.hidden : null };
+    return { btnCount: btns.length, lastText: last.textContent.trim().slice(0, 24), fully: r.top >= br.top - 1 && r.bottom <= br.bottom + 1, hintHidden: hint ? (hint.hidden || getComputedStyle(hint).display === 'none' || hint.getBoundingClientRect().height === 0) : true, hintVisible: hint ? (!hint.hidden && getComputedStyle(hint).display !== 'none' && hint.getBoundingClientRect().height > 0) : false };
   });
 }
 
@@ -176,13 +176,13 @@ async function scrollPanelToBottom(page) {
         assert(m, `${w}×${h} ${tab} 面板未開啟`);
         assert(m.bottom <= m.dockTop + 1, `${w}×${h} ${tab} 面板下緣 ${Math.round(m.bottom)} 超過工具列上緣 ${Math.round(m.dockTop)}`);
         if (tab === 'upgrades') assert(m.scrollH > m.clientH, `${w}×${h} 升級面板內容應可捲動（scrollH ${m.scrollH} ≤ clientH ${m.clientH}）`);
-        if (m.scrollH > m.clientH) assert(m.hintExists && m.hintHidden === false, `${w}×${h} ${tab} 面板未捲到底時應顯示「往下還有」提示`);
+        if (m.scrollH > m.clientH) { assert.equal(m.hintVisible, false, `${w}×${h} ${tab} 面板不應再顯示「往下還有內容」（R36 只留一種提示）`); if (m.hiddenCards > 0) assert(m.hasMore, `${w}×${h} ${tab} 面板收起卡片後應以「再顯示 N 項」作為唯一提示`); }
         await page.screenshot({ path: path.join(SHOT_DIR, `${tab}-${w}x${h}.png`) });
         const s = await scrollPanelToBottom(page);
         await page.waitForTimeout(150);
         const s2 = await scrollPanelToBottom(page);
         assert(s2.btnCount > 0 && s2.fully, `${w}×${h} ${tab} 捲到底最後一個按鈕未完整可見（「${s2.lastText}」）`);
-        if (m.scrollH > m.clientH) assert(s2.hintHidden === true, `${w}×${h} ${tab} 捲到底後「往下還有」提示應隱藏`);
+        if (m.scrollH > m.clientH) assert(s2.hintHidden === true && s2.hintVisible === false, `${w}×${h} ${tab} 捲到底後不應出現「往下還有內容」`);
         console.log(`OK 面板 ${w}×${h} ${tab} 下緣 ${Math.round(m.bottom)} ≤ 工具列上緣 ${Math.round(m.dockTop)}、捲到底最後按鈕「${s2.lastText}」完整可見`);
         if (mobile) {
           const hidden = await page.evaluate((fnSrc) => {
