@@ -352,6 +352,9 @@ async function measurePaneBottom(page, paneSelector, cardSelector) {
       // 訂單佈置：若現有訂單不足 2 張，補入合法訂單物件後刷新（僅測試佈置，不改資料邏輯）
       await page.evaluate(() => {
         const s = window.__farm.state();
+        // R30 A 線：市集在交給班伯後才開放；先建立「市集已開放」狀態（同 R26～R28 版面測試的佈置）。
+        window.AdventureAPI.ensure(s, Date.now()); s.adventure.claimed.c1_first_harvest = true;
+        if (window.refreshOrders) window.refreshOrders(s, Date.now());
         if (!Array.isArray(s.orders) || s.orders.length < 2) {
           const now = Date.now();
           const mk = (id, wants, npcId) => ({ id, wants, rarity: 'common', rewardCoins: 30, rewardXp: 2, createdAt: now, expiresAt: now + 30 * 60 * 1000, npcId });
