@@ -34,3 +34,5 @@
   text-decoration: underline;
   box-shadow: none;
 }
+.new-unlock-badge{display:inline-block;margin-left:5px;padding:1px 4px;border:1px solid #9d602d;background:#ffcf64;color:#4b2e19;font-style:normal;font-size:10px;line-height:1.2;vertical-align:middle}
+.new-unlock-summary{border-left:4px solid #d95737}

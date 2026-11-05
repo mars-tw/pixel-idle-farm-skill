@@ -742,7 +742,8 @@
     const def = getItemDef(firstId);
     return {
       id: template.id, wants: Object.assign({}, template.wants), rarity: "common",
-      rewardCoins: (def ? def.sellValue : 1) * qty + 12, rewardXp: Math.max(2, Math.ceil(qty / 2)),
+      // 新手單採固定單價，避免固定加成讓大單的每份報酬反而較低。
+      rewardCoins: (def ? def.sellValue : 1) * 7 * qty, rewardXp: Math.max(2, Math.ceil(qty / 2)),
       createdAt: now, expiresAt: now + GAME.orderTtlMs + (template.ttlOffsetMs || 0),
       npcId: template.npcId, flavor: template.flavor,
     };
@@ -758,7 +759,7 @@
     const nKinds = rarityId === "festival" && pool.length >= 2
       ? rngInt(rng, 2, Math.min(3, pool.length))
       : (pool.length >= 2 && (rng || Math.random)() < 0.45 ? 2 : 1);
-    const wants = {}; let baseValue = 0, baseXp = 0;
+    const wants = {}; let baseXp = 0, contractCoins = 0;
     const chosen = [];
     for (let k = 0; k < nKinds; k++) {
       let itemId; let guard = 0;
@@ -773,7 +774,8 @@
       const qty = rngInt(rng, mn, mx);
       wants[itemId] = (wants[itemId] || 0) + qty;
       const def = getItemDef(itemId);
-      baseValue += (def ? def.sellValue : 0) * qty;
+      // 每個品項先定出固定單價再乘數量，避免整單四捨五入造成大單單價倒掛。
+      contractCoins += Math.max(1, Math.round((def ? def.sellValue : 0) * rarity.payMult)) * qty;
       baseXp += (CROPS[itemId] ? (CROPS[itemId].orderXp || CROPS[itemId].xp) : Math.round((def ? def.sellValue : 0) * 0.6)) * qty;
     }
     const id = "order_" + idSeed;
@@ -782,7 +784,7 @@
       id,
       wants,
       rarity: rarityId,
-      rewardCoins: Math.round(baseValue * rarity.payMult),
+      rewardCoins: contractCoins,
       rewardXp: Math.max(1, Math.round(baseXp * 0.5 * rarity.xpMult * (1 + xpBonus))),
       expiresAt: now + GAME.orderTtlMs,
       npcId: orderNpcIdFor(id),
@@ -2229,8 +2231,35 @@
     data = data || {};
     if (type === "chapter_one") return { kind: "milestone", type, title: "第一章完成", earned: "農場重新有了第一批收成", unlocked: "河畔復興與下一章故事", next: "前往河邊，看看等待修復的設施。" };
     if (type === "market_open") return { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "照任務列去灶台做晚餐；訂單看板之後隨時可以接單。" };
-    if (type === "level_up") return { kind: "milestone", type, title: `升到 Lv ${data.level || 2}`, earned: "新的農場等級", unlocked: data.unlocked || "新的作物與農場能力", next: "查看種子與升級頁，看看新選項。" };
+    if (type === "level_up") {
+      const level = data.level || 2;
+      const names = levelUnlocks(level).map((entry) => entry.name);
+      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: "新的農場等級", unlocked: data.unlocked || (names.length ? names.join("、") : "新的農場能力"), next: "查看種子與升級頁，看看新選項。" };
+    }
     return null;
+  }
+  function levelUnlocks(level) {
+    const rows = [];
+    Object.values(CROPS || {}).forEach((crop) => {
+      if (crop.unlockLevel === level) rows.push({ id: crop.id, name: `${crop.name}種子`, kind: "seed" });
+    });
+    Object.values(BUILDINGS || {}).forEach((building) => {
+      if (building.unlockLevel === level) rows.push({ id: building.id, name: building.name, kind: "upgrade" });
+    });
+    return rows;
+  }
+  function unseenLevelUnlocks(state, surface) {
+    const seen = state && state.flags && state.flags.unlocksSeen && Number(state.flags.unlocksSeen[surface]) || 1;
+    const level = Math.max(1, Number(state && state.level) || 1);
+    const rows = [];
+    for (let lv = seen + 1; lv <= level; lv++) rows.push(...levelUnlocks(lv));
+    return rows.filter((entry) => surface === "seeds" ? entry.kind === "seed" : true);
+  }
+  function markLevelUnlocksSeen(state, surface) {
+    if (!state.flags) state.flags = {};
+    if (!state.flags.unlocksSeen) state.flags.unlocksSeen = { seeds: 1, upgrades: 1 };
+    state.flags.unlocksSeen[surface] = Math.max(1, Number(state.level) || 1);
+    return state.flags.unlocksSeen[surface];
   }
   function createFeedbackQueue() {
     const waiting = [];
@@ -2615,7 +2644,7 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done, chapter5Done, milestoneCard, createFeedbackQueue, interactionLabelForTile,
+    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done, chapter5Done, milestoneCard, levelUnlocks, unseenLevelUnlocks, markLevelUnlocksSeen, createFeedbackQueue, interactionLabelForTile,
     canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
     forageNodeDef, forageTile, forageNodeStatus, eastForageStatus, eastForageTargetTile,
     eastDeepStatus, canUnlockEastDeep, unlockEastDeep,

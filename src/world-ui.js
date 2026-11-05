@@ -658,7 +658,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥，每格能收 2 份；收成 6 份後，把其中 2 份交給老農班伯。」</p><p class="project-desc">鎮長葛瑞會先帶你認識農場；種好三格小麥後，老農班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥後，再把其中 2 份交給老農班伯。</p><button class="btn buy" id="worldSunBegin">去見鎮長葛瑞</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };

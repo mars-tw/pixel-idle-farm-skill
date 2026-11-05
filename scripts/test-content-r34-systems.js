@@ -74,7 +74,7 @@ test("A4 稱呼與主角名全遊戲一致", () => {
 
 test("A5 種子欄有品類與數量，預告訂單有實際獎勵", () => {
   const ui = read("src/ui.js");
-  assert.match(ui, /<span class="sn">種子 \$\{escapeHtml\(c\.name\)\}<\/span><span class="sc">\$\{c\.seedCost\} 金<\/span>/); // R35：數字是單價，寫成「1 金」不再像庫存量
+  assert.match(ui, /<span class="sn">種子 \$\{escapeHtml\(c\.name\)\}\$\{isNew \? '<em class="new-unlock-badge">新<\/em>' : ''\}<\/span><span class="sc">\$\{c\.seedCost\} 金<\/span>/); // R38：「新」標記可插在名稱後，單價仍須緊接顯示
   // R35：預告卡與市集開放後第一批訂單同一份範本，委託人、需求與報酬逐欄相同。
   assert.match(ui, /G\.previewMarketOrders\(state, now\(\)\)/);
   const st = S.defaultState(1_900_000_000_000); st.level = C.CROPS.carrot.unlockLevel; st.story = st.story || {};

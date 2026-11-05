@@ -663,6 +663,9 @@
     if (lastModalFocus && typeof lastModalFocus.focus === "function") {
       setTimeout(() => lastModalFocus.focus(), 0);
     }
+    // 面板關閉回到世界時依目前任務同步一次；同一步驟手動選過工具則維持玩家選擇。
+    syncQuestTool();
+    renderToolbar();
     return true;
   }
   function closeOpenModal() {
@@ -738,7 +741,7 @@
     renderSceneActionsForSelection();
     scheduleSave();
   }
-  function seedChip(c, seasonUnlocked, sId, compact) {
+  function seedChip(c, seasonUnlocked, sId, compact, isNew) {
     const unlocked = c.unlockLevel <= state.level;
     const el = document.createElement("div");
     const inSeason = seasonUnlocked && c.season && c.season === sId;
@@ -747,7 +750,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}</span><span class="sc">${c.seedCost} 金</span>${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">Lv${c.unlockLevel}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
@@ -759,6 +762,7 @@
     const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
     const sId = G.currentSeason ? G.currentSeason(state, now()) : "";
     const unlockedIds = crops.filter((c) => c.unlockLevel <= state.level).map((c) => c.id);
+    const newSeedIds = new Set((G.unseenLevelUnlocks ? G.unseenLevelUnlocks(state, "seeds") : []).map((entry) => entry.id));
     if (!window.CROPS[selectedSeed] || unlockedIds.indexOf(selectedSeed) === -1) selectedSeed = unlockedIds[0] || "wheat";
     const quickIds = [];
     const addQuick = (id) => {
@@ -770,7 +774,7 @@
 
     const quick = document.createElement("div");
     quick.className = "seed-quickbar";
-    quickIds.slice(0, 5).forEach((id) => quick.appendChild(seedChip(window.CROPS[id], seasonUnlocked, sId, true)));
+    quickIds.slice(0, 5).forEach((id) => quick.appendChild(seedChip(window.CROPS[id], seasonUnlocked, sId, true, newSeedIds.has(id))));
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
     more.title = "全部種子";
@@ -795,9 +799,10 @@
     if (seedDrawerOpen) {
       const drawer = document.createElement("div");
       drawer.className = "seed-drawer";
-      crops.forEach((c) => drawer.appendChild(seedChip(c, seasonUnlocked, sId, false)));
+      crops.forEach((c) => drawer.appendChild(seedChip(c, seasonUnlocked, sId, false, newSeedIds.has(c.id))));
       row.appendChild(drawer);
     }
+    if (newSeedIds.size && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "seeds"); scheduleSave(); }
   }
 
   // ---------- 側欄分頁 ----------
@@ -1312,6 +1317,13 @@
   }
   function renderUpgrades() {
     const box = $("upgrades"); box.innerHTML = "";
+    const newUpgrades = G.unseenLevelUnlocks ? G.unseenLevelUnlocks(state, "upgrades") : [];
+    if (newUpgrades.length) {
+      const note = document.createElement("div");
+      note.className = "up new-unlock-summary";
+      note.innerHTML = `<div class="u-body"><div class="u-name"><span class="new-unlock-badge">新</span> 新解鎖</div><div class="u-desc">${newUpgrades.map((entry) => escapeHtml(entry.name)).join("、")}</div></div>`;
+      box.appendChild(note);
+    }
     const orderRewardEstimate = 18;
     const upgradeBand = (key, next) => !next ? 3 : G.canBuyUpgrade(state, key) ? 0 : G.upgradeShortfall(state, key) <= orderRewardEstimate ? 1 : 2;
     const upgradeKeys = window.UPGRADE_ORDER.slice().sort((a, b) => {
@@ -1360,6 +1372,7 @@
       box.appendChild(el);
     });
     renderBuildingUpgrades();
+    if (newUpgrades.length && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "upgrades"); scheduleSave(); }
   }
 
   // ---------- 故事 / 任務（地圖驅動：state.story 任務鏈）----------
