@@ -1,0 +1,70 @@
+{
+  "asset": "app icon",
+  "model": "gpt-image-2-2026-04-21",
+  "endpoint": "OpenAI images/generations",
+  "quality": "high",
+  "size": "1024x1024",
+  "created_utc": "2026-11-05T08:46:25.231277+00:00",
+  "prompt": "Mobile app icon for a cozy pixel-art farming RPG called Sunny Farm. Crisp, clean high-quality pixel art with a limited warm palette, bold 1px dark outlines, clear hue-shifted shading, no dithering noise, no text, no letters. Centered close-up of a cheerful young farmer girl with a wide straw hat, two red braids, cream blouse and green overalls, hugging a woven basket of fresh carrots, tomatoes and a sunflower. Behind her a big golden sun with soft rays on a clean warm sky gradient and a gentle green field line. Simple uncluttered background, strong silhouette, high contrast, reads clearly at 64x64. Full-bleed square, no border, no rounded corners.",
+  "candidates": 3,
+  "chosen": "pixel_2",
+  "chosen_source_sha256": "957d6099c9487eefc9d0bbf68eb8f8222c314dcd1d05668a6e05c39181403534",
+  "selection": "Picked from 3 pixel-art and 3 painterly candidates: pixel style matches the game; face, straw hat and sun stay readable at 64 and 32 px.",
+  "post_processing": "Lanczos downscale only; no edits.",
+  "files": [
+    {
+      "path": "assets/brand/app-icon-1024.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 1290688,
+      "sha256": "a5210bbf7da026027271d919ccb8a16957df920c6d61a3339f0cd95ca1cd737e"
+    },
+    {
+      "path": "assets/brand/app-icon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 386573,
+      "sha256": "817ce395f3f74c3a9f394097919bf8915ed83a48a54c2b7dc7ba8e0b8c6b7c97"
+    },
+    {
+      "path": "assets/brand/app-icon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "bytes": 73551,
+      "sha256": "c43e7484588ed7adbbcf4d723aca98b5c97c73c29c3585accaa988e72b74eac5"
+    },
+    {
+      "path": "assets/brand/app-icon-180.png",
+      "size": [
+        180,
+        180
+      ],
+      "bytes": 65634,
+      "sha256": "b45b746aafac2788d19f791e1d2d8ffb4c3e57b12fcc9e6d55ea504a019430bb"
+    },
+    {
+      "path": "assets/brand/app-icon-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "bytes": 9835,
+      "sha256": "2370d7eb353915ee6a3ab75fff43f45f4ed43c4dbe3ca5e5932bcb3464806c72"
+    },
+    {
+      "path": "assets/brand/app-icon-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "bytes": 2686,
+      "sha256": "21f2a2a8b9991b897c70689e1fd5813a1bd4e74557775bb10ab2f355c6914a23"
+    }
+  ]
+}

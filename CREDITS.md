@@ -129,3 +129,8 @@
 ## 新內容第16輪美術
 
 「留一口的邀請」共享碟由 `image_gen.imagegen` 生成一張透明原圖，模型 slug 未揭露。沿用 R89 完整風格前綴與右上暖光，以既有點心色盤和 nearest-neighbor 製成 64×48 原生素材，保留透明 alpha。原圖、實際提示詞及來源雜湊見 `docs/art/masters/content-r16-sharing.png`、`docs/art/PROMPTS_CONTENT_R16.json`、`assets/generated/content-r16/manifest.json`。本輪程式與新素材沿用 MIT；既有角色姿勢、來源及授權保留。
+
+## App 圖示重製（2026-11-05）
+
+- `assets/brand/app-icon-{1024,512,192,180,64,32}.png`：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high，1024×1024）生成。像素風 3 張與插畫風 3 張候選中選像素版第 2 張：與遊戲畫風一致，縮到 64／32 px 仍看得出草帽女孩、菜籃與太陽。只做縮放，未修圖。
+- 完整提示詞、候選數與來源雜湊見 [assets/brand/manifest.json](assets/brand/manifest.json)。
