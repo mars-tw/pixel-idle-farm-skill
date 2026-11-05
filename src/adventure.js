@@ -341,6 +341,7 @@
     if (index < 0) return fail("unknown_quest", "找不到這個任務。");
     const init = ensure(state, now); if (!init.ok) return init;
     const a = state.adventure; const q = QUESTS[index];
+    const beforeLevel = state.level || 1;
     if (claimed(a, id)) return fail("already_claimed", "這份獎勵已經領過了。");
     if (!unlockedQuest(a, index)) return fail("locked", "先完成前一個任務。");
     if (!q.goals.every((g) => goalCount(a, g) >= g.count)) return fail("not_ready", "任務目標還沒完成。");
@@ -353,7 +354,16 @@
     a.quests[id].claimedAt = at(state, now);
     grant(state, q.reward);
     sync(state, at(state, now));
+    const milestone = (type, data) => typeof root.milestoneCard === "function" ? root.milestoneCard(type, data) :
+      type === "market_open" ? { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "前往訂單看板，查看第一批委託。" } :
+      type === "chapter_one" ? { kind: "milestone", type, title: "第一章完成", earned: "農場重新有了第一批收成", unlocked: "河畔復興與下一章故事", next: "前往河邊，看看等待修復的設施。" } :
+      { kind: "milestone", type, title: `升到 Lv ${data.level}`, earned: "新的農場等級", unlocked: "新的作物與農場能力", next: "查看種子與升級頁，看看新選項。" };
+    const milestones = [];
+    if (id === "c1_first_harvest") milestones.push(milestone("market_open"));
+    if (id === "c1_first_meal") milestones.push(milestone("chapter_one"));
+    if ((state.level || 1) > beforeLevel) milestones.push(milestone("level_up", { level: state.level }));
     return ok("「" + q.name + "」完成了。", { id, reward: copy(q.reward), nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null,
+      milestones,
       settlement: { kind: "quest", coins: q.reward.coins || 0, xp: q.reward.xp || 0,
         next: id === "c1_first_harvest" ? "市集訂單已開放，去看板看看第一批委託。" : (QUESTS[index + 1] ? "繼續進行「" + QUESTS[index + 1].name + "」。" : "繼續經營陽光農場。") } });
   }
@@ -662,8 +672,20 @@
       chapterProgress: { claimed: chapterProgress.claimed, total: chapterProgress.total },
       step: step ? copy(step) : null,
       stepText: step ? `${step.name} ${Math.min(step.current, step.required)}/${step.required}` : `找${npc.name}回報`,
-      actionLabel: q.id === "c1_first_harvest" && !step ? "把 2 份小麥交給老農班伯" : step ? step.name : `找${npc.name}回報`,
+      actionLabel: taskActionLabel(q, step, npc),
     });
+  }
+  function taskActionLabel(q, step, npc) {
+    if (!step || step.type === "talk") return "前往交談";
+    if (step.type === "harvest") return step.id === "wheat" ? "收成小麥" : "收成作物";
+    if (step.type === "water") return "替作物澆水";
+    if (step.type === "plant") return "種下作物";
+    if (step.type === "cook") return "前往料理";
+    if (step.type === "restore") return "前往修復";
+    if (step.type === "fish") return "前往釣魚";
+    if (step.type === "forage") return "前往採集";
+    if (step.type === "care") return "照顧動物";
+    return `前往${npc && npc.name ? npc.name : "目標"}`;
   }
   function buyMaterial(state, id, count, now) {
     const prices = { wood: 6, stone: 8 };
@@ -708,7 +730,7 @@
     record(state, "order", now);
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
-  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, buyMaterial, commissions, deliverCommission,
+  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, taskActionLabel, buyMaterial, commissions, deliverCommission,
     neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

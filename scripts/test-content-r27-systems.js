@@ -65,7 +65,7 @@ test('開場與主線統一把兩份小麥交給班伯，每日目標改成不�
 
 test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {
   assert.doesNotMatch(ui, /class="o-optional"/);
-  assert.match(ui, /class="btn buy small ful" \$\{can \? "" : "disabled"\}>\$\{can \? "交付" : escapeHtml\(G\.orderMissingText/);
+  assert.match(ui, /class="btn buy small ful" \$\{can \? "" : "disabled"\}>\$\{can \? "交付" : escapeHtml\(G\.orderAllocationText/);
   assert.match(ui, /class="btn ghost small order-go"[^>]*>去田裡</);
   assert.match(ui, /requestOrderTrash\(o\.id\)/);
   assert.match(ui, /確認丟棄/);

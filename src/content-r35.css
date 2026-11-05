@@ -10,3 +10,8 @@
   background: url("../assets/generated/r35/pond-480.png?v=content-r35-20261106-1") center / 100% 100% no-repeat;
   pointer-events: none; z-index: 1; image-rendering: auto;
 }
+
+/* R36：里程碑沿用結算佇列，四項資訊分行呈現。 */
+.settlement-card.milestone-card { display: grid; gap: 3px; text-align: left; min-width: min(320px, calc(100vw - 24px)); }
+.settlement-card.milestone-card strong { font-size: 15px; color: #fff4b0; }
+.settlement-card.milestone-card span { display: block; font-size: 12px; line-height: 1.25; }

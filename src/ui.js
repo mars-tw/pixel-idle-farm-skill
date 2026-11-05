@@ -130,19 +130,23 @@
   // R79：同一句 2.5 秒內不重複；最多同時 3 則（最舊的先收）。
   const TOAST_DEDUPE_MS = 2500, TOAST_MAX = 3;
   const recentToasts = new Map();
+  const feedbackQueue = G.createFeedbackQueue ? G.createFeedbackQueue() : null;
   const settlementQueue = [];
   let settlementVisible = false;
   function showNextSettlement() {
-    if (settlementVisible || !settlementQueue.length) return;
-    const data = settlementQueue.shift();
+    if (settlementVisible) return;
+    const data = feedbackQueue ? feedbackQueue.next() : settlementQueue.shift();
+    if (!data) return;
     const zone = $("toast-zone");
     if (!zone) { settlementVisible = false; return; }
     settlementVisible = true;
     const card = document.createElement("button");
     card.type = "button";
-    card.className = "toast settlement-card";
-    card.dataset.audit = "settlement-card";
-    card.textContent = `獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${data.next}`;
+    card.className = "toast settlement-card" + (data.kind === "milestone" ? " milestone-card" : "");
+    card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
+    card.innerHTML = data.kind === "milestone"
+      ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span><span>新解鎖：${escapeHtml(data.unlocked)}</span><span>下一步：${escapeHtml(data.next)}</span>`
+      : `獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
     function close() {
@@ -150,14 +154,20 @@
       settlementVisible = false;
       clearTimeout(timer);
       card.remove();
+      if (feedbackQueue) feedbackQueue.close();
       showNextSettlement();
     }
     card.onclick = close;
   }
   function enqueueSettlement(data) {
     if (!data || !data.next) return;
-    settlementQueue.push(data);
+    if (feedbackQueue) feedbackQueue.push(data); else settlementQueue.push(data);
     showNextSettlement();
+  }
+  function enqueueResultFeedback(result) {
+    if (!result) return;
+    if (result.settlement) enqueueSettlement(result.settlement);
+    (result.milestones || []).forEach(enqueueSettlement);
   }
   function toast(msg, deferCount) {
     const zone = $("toast-zone"); if (!zone) return;
@@ -938,10 +948,29 @@
   }
 
   // ---------- 工具列（roadmap：工具模式）----------
+  let autoToolStepKey = "";
+  let manualToolStepKey = "";
   function currentTool() { return (state.interaction && state.interaction.tool) || "hand"; }
-  function setTool(t) {
+  function currentToolStep() {
+    if (window.AdventureAPI && window.FarmWorld) {
+      const guide = window.AdventureAPI.guide(state, now());
+      if (guide && guide.ok && guide.questId) {
+        const type = guide.step && guide.step.type;
+        return { key: `${guide.questId}:${type || "report"}`, tool: type === "water" ? "water" : type === "harvest" ? "hand" : null };
+      }
+    }
+    const quest = G.currentQuest(state);
+    return quest ? { key: quest.id, tool: quest.objective === "water" ? "water" : quest.objective === "harvest" ? "hand" : null } : { key: "", tool: null };
+  }
+  function syncQuestTool() {
+    const step = currentToolStep();
+    if (step.key !== autoToolStepKey) { autoToolStepKey = step.key; manualToolStepKey = ""; }
+    if (step.tool && manualToolStepKey !== step.key && currentTool() !== step.tool) state.interaction.tool = step.tool;
+  }
+  function setTool(t, options) {
     clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble();
     state.interaction.tool = t;
+    if (!(options && options.automatic)) manualToolStepKey = currentToolStep().key;
     if (t !== "build") state.interaction.buildType = null;
     renderToolbar(); renderQuestDock(); renderSceneActionsForSelection();
     $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(t === "build" ? "建造工具" : window.TOOLS[t].desc);
@@ -1077,7 +1106,7 @@
       const crop = window.CROPS[plot.cropId];
       const r = G.harvest(state, i, t);
       if (r.ok) {
-        enqueueSettlement(r.settlement);
+        enqueueResultFeedback(r);
         playAction("harvest");
         playSound("harvest"); playSound("coin"); screenBurst(cx, cy, [crop.emoji], { count: Math.min(12, 5 + r.added), distance: 58 }); flyCoinsToHud(cx, cy, 4); harvestComboText(cx, cy);
         floatText(cx, cy, "+" + r.added + " " + crop.emoji, "#dff5c8");
@@ -1125,12 +1154,8 @@
       if (go) go.onclick = () => { const target = (state.map.tiles || []).find((tile) => tile.npc === "elder"); if (target) focusCameraOnTile(target.id); };
       return;
     }
-    const ordered = state.orders.slice().sort((a, b) => {
-      const ca = G.canFulfill(state, a) ? 1 : 0;
-      const cb = G.canFulfill(state, b) ? 1 : 0;
-      if (ca !== cb) return cb - ca;
-      return (a.expiresAt || 0) - (b.expiresAt || 0);
-    });
+    const ordered = state.orders.slice();
+    const allocationById = Object.fromEntries((G.orderAllocation ? G.orderAllocation(state, ordered) : []).map((row) => [row.orderId, row]));
     const visibleOrders = visibleListItems("orders", ordered, 4);
     const sharedNeeds = {};
     const sharedCounts = {};
@@ -1141,7 +1166,7 @@
     visibleOrders.forEach((o) => {
       const rarity = window.ORDER_RARITY[o.rarity];
       const pay = G.orderPayout(state, o);
-      const can = G.canFulfill(state, o);
+      const can = allocationById[o.id] ? allocationById[o.id].ready : G.canFulfill(state, o);
       const narrative = G.orderNarrative ? G.orderNarrative(state, o) : null;
       const wantsHtml = Object.entries(o.wants).map(([cid, q]) => {
         const have = state.storage.items[cid] || 0;
@@ -1174,14 +1199,14 @@
           ${confirmingTrash
             ? `<button class="btn ghost small trash-cancel">保留</button>
           <button class="btn small trash-confirm">確認丟棄</button>`
-            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? "交付" : escapeHtml(G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
+            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? "交付" : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
           ${can ? "" : `<button class="btn ghost small order-go">去田裡</button>`}
           <button class="btn ghost small trash">丟棄</button>`}
         </div>`;
       const fulfill = el.querySelector(".ful");
       if (fulfill) fulfill.onclick = () => {
           const r = G.fulfillOrder(state, o.id, now());
-          if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); enqueueSettlement(r.settlement); afterChange(true); renderOrders(); }
+          if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); enqueueResultFeedback(r); afterChange(true); renderOrders(); }
           else toast("作物不足，無法交付");
         };
       const trash = el.querySelector(".trash");
@@ -1302,13 +1327,15 @@
       const max = G.upgradeMaxLevel(key);
       const next = G.nextUpgrade(state, key);
       const band = upgradeBand(key, next);
+      const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
       const bandLabel = ["現在買得起", "差一點", "長期目標", "已滿級"][band];
       const shortfall = G.upgradeShortfall(state, key);
       const nextStep = next && shortfall > 0
-        ? (band === 1 ? `還差 ${fmtNum(shortfall)} 金；再交一張訂單約可補足` : `還差 ${fmtNum(shortfall)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
+        ? (!marketUnlocked ? "" : band === 1 ? `還差 ${fmtNum(shortfall)} 金；再交一張訂單約可補足` : `還差 ${fmtNum(shortfall)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
         : "";
       const el = document.createElement("div");
       el.className = "up";
+      if (!marketUnlocked) el.setAttribute("aria-label", `${def.name}。先把 2 份小麥交給老農班伯，市集就會開放。`);
       el.dataset.affordability = ["affordable", "near", "long-term", "maxed"][band];
       el.innerHTML = `
         <div class="u-ic">${key === "plotCount" ? uiIcon("tool_plant") : def.icon}</div>
@@ -1669,6 +1696,7 @@
   window.FarmEarlyChoiceRoutesHtml = earlyChoiceRoutesHtml;
   function renderQuestDock() {
     const box = $("questDock"); if (!box) return;
+    syncQuestTool();
     if (window.FarmWorld && window.FarmWorld.renderObjective(state)) return;
     if (G.syncStoryProgress) G.syncStoryProgress(state);
     const cur = G.currentQuest(state);
@@ -3648,7 +3676,7 @@
         G.advanceStory(state, "deliver");
         spawnVfx(tile.id, "product_pop");
         playSound("order"); playSound("coin");
-        enqueueSettlement(r.settlement);
+        enqueueResultFeedback(r);
         afterChange(true); renderOrders();
       } else toast("交付條件不足");
     });
@@ -3811,7 +3839,7 @@
     // Stage 6：NPC（走過去交談）
     if (tile.npc) { if (isTouch) { spawnRing(tile.id, true); updateMap(now()); return; } useNpc(tile); updateMap(now()); return; }
 
-    if (tileReadyCrop(tile) && tool === "hand") {
+    if (tileReadyCrop(tile)) {
       clearTouchFarmPreview(false);
       spawnRing(tileId, true); moveAndAct(tileId, "harvest"); updateMap(now()); return;
     }
@@ -4180,7 +4208,7 @@
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
-        toast("🧺 收成 " + r.added + " " + crop.name + (r.sun ? "（陽光 +" + r.sun.bonus + "）" : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } afterChange(true); }
+        toast("🧺 收成 " + r.added + " " + crop.name + (r.sun ? "（陽光 +" + r.sun.bonus + "）" : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } enqueueResultFeedback(r); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧☀ 在陽光裡澆水，長得更快" : "💧 澆水變濕土加速"); afterChange(false); }
@@ -4716,10 +4744,21 @@
     if (quickHarvestTarget && !moveTimer && state.player.action === "idle") quickHarvestTarget = null;
     const st = G.quickHarvestStatus(state, now());
     const busy = !!quickHarvestTarget;
-    action.textContent = busy ? "收成中" : st.count ? `收成 ${st.count}` : "互動";
+    let targetLabel = "互動";
+    if (st.count && st.tileId) targetLabel = G.interactionLabelForTile ? G.interactionLabelForTile(state, G.getTileById(state, st.tileId), now()) : "收成・成熟作物";
+    else {
+      const facing = facingTile();
+      if (facing && G.interactionLabelForTile) targetLabel = G.interactionLabelForTile(state, facing, now());
+      if (targetLabel === "互動") {
+        const pt = G.getTileById(state, state.player.tileId);
+        const neighbor = pt && [[0,-1],[0,1],[-1,0],[1,0]].map(([dx,dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((tile) => tile && sceneActionsForTile(tile).length);
+        if (neighbor && G.interactionLabelForTile) targetLabel = G.interactionLabelForTile(state, neighbor, now());
+      }
+    }
+    action.textContent = busy ? "收成中" : targetLabel;
     action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
     if (typeof action.setAttribute === "function") {
-      action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count ? `${st.count} 格成熟，點一下走近並收成一格` : "與前方目標互動");
+      action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count ? `${targetLabel}，共有 ${st.count} 格成熟` : targetLabel);
       action.setAttribute("aria-disabled", String(busy)); updateInteractVisibility();
     }
   }
@@ -5164,7 +5203,8 @@
       },
       toast,
       enqueueSettlement,
-      settlementStatus: () => ({ visible: settlementVisible, queued: settlementQueue.length }),
+      enqueueResultFeedback,
+      settlementStatus: () => feedbackQueue ? ({ visible: settlementVisible, queued: feedbackQueue.status().queued, active: feedbackQueue.status().active }) : ({ visible: settlementVisible, queued: settlementQueue.length }),
       selectTab: switchTab,
       openModal,
       closeModal,

@@ -52,7 +52,9 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
     let guide = A.guide(state, now);
     assert.equal(guide.questId, id);
     assert.ok(guide.step, id + ' 應有真實未完成子目標');
-    assert.equal(guide.actionLabel, guide.step.name);
+    assert.equal(guide.actionLabel, A.taskActionLabel(view.currentQuest, guide.step, C.NPCS[view.currentQuest.npcId]));
+    assert.notEqual(guide.actionLabel, view.currentQuest.name);
+    assert.notEqual(guide.actionLabel, view.currentQuest.description);
     assert.match(guide.stepText, new RegExp('^' + guide.step.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ' \\d+/\\d+$'));
     assert.doesNotMatch(guide.stepText, /物品備齊|交給鎮民/);
     const q = view.currentQuest;
@@ -74,10 +76,10 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
     assert.equal(guide.step, null);
     if (id === 'c1_first_harvest') {
       assert.equal(guide.stepText, '找老農班伯回報');
-      assert.equal(guide.actionLabel, '把 2 份小麥交給老農班伯');
+      assert.equal(guide.actionLabel, '前往交談');
     } else {
       assert.match(guide.stepText, /^找.+回報$/);
-      assert.equal(guide.actionLabel, guide.stepText);
+      assert.equal(guide.actionLabel, '前往交談');
     }
     assert.equal(A.claim(state, id, now).ok, true);
   }
@@ -120,7 +122,7 @@ test('每日三項不重複首章收成與小麥交付，印章冊標示已領�
     assert.deepEqual(tasks.map((row) => row.id), ['water', 'talk', 'sell']);
     assert.doesNotMatch(tasks.map((row) => row.title + row.detail).join(' '), /收成 6|交 2 份小麥|小麥餐籃/);
   }
-  assert.match(dailyUi, /已完成 \$\{st\.completed\}\/3・已領取 \$\{st\.claimed\}\/3/);
+  assert.match(dailyUi, /目前可做 \$\{st\.available\} 項・已完成 \$\{st\.completed\}\/\$\{st\.available\}・已領取 \$\{st\.claimed\}\/\$\{st\.available\}/);
 });
 
 test('開場、對話與設定文案符合 R26', () => {

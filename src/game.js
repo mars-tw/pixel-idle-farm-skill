@@ -607,6 +607,7 @@
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
+    if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農班伯。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     return out;
@@ -832,6 +833,34 @@
   function canFulfill(state, order) {
     return Object.entries(order.wants).every(([cropId, qty]) => (state.storage.items[cropId] || 0) >= qty);
   }
+  // R36：訂單共用同一份庫存時，依面板（state.orders）順序保留物品。
+  function orderAllocation(state, orders) {
+    const remaining = Object.assign({}, (state.storage && state.storage.items) || {});
+    return (orders || state.orders || []).map((order) => {
+      const missing = {};
+      for (const [itemId, qty] of Object.entries(order.wants || {})) {
+        const have = Math.max(0, remaining[itemId] || 0);
+        if (have < qty) missing[itemId] = qty - have;
+      }
+      const ready = Object.keys(missing).length === 0;
+      if (ready) for (const [itemId, qty] of Object.entries(order.wants || {})) remaining[itemId] -= qty;
+      return { orderId: order.id, ready, missing, remaining: Object.assign({}, remaining) };
+    });
+  }
+  function orderAllocationFor(state, orderId) {
+    return orderAllocation(state).find((row) => row.orderId === orderId) || null;
+  }
+  function orderAllocationText(state, order, itemNames) {
+    const row = orderAllocationFor(state, order.id);
+    if (!row || row.ready) return "交付";
+    const index = Math.max(0, (state.orders || []).findIndex((entry) => entry.id === order.id));
+    const prior = (state.orders || []).slice(0, index);
+    return Object.entries(row.missing).map(([itemId, qty]) => {
+      const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
+      const sharedBefore = prior.some((entry) => (entry.wants || {})[itemId] > 0);
+      return `${sharedBefore ? `前面的訂單已用掉${def ? def.name : itemId}・` : ""}還差 ${qty} 份`;
+    }).join("；");
+  }
   function mainStoryReserve(state, itemId) {
     const completed = (state.story && state.story.completed) || {};
     const delivered = completed.first_delivery || !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
@@ -871,7 +900,9 @@
     const idx = state.orders.findIndex((o) => o.id === orderId);
     if (idx === -1) return { ok: false, reason: "gone" };
     const order = state.orders[idx];
-    if (!canFulfill(state, order)) return { ok: false, reason: "short" };
+    const allocation = orderAllocationFor(state, orderId);
+    if (!allocation || !allocation.ready) return { ok: false, reason: "reserved", missing: allocation ? allocation.missing : {} };
+    const beforeLevel = state.level || 1;
     // 扣作物
     for (const [cropId, qty] of Object.entries(order.wants)) {
       state.storage.items[cropId] -= qty;
@@ -894,7 +925,9 @@
     refreshOrders(state, now, rng);
     const story = order.rarity === "festival" ? syncStoryProgress(state, "festival_order", now) : null;
     checkAchievements(state);
-    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story,
+    const milestones = [];
+    if ((state.level || 1) > beforeLevel) milestones.push(milestoneCard("level_up", { level: state.level }));
+    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story, milestones,
       settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: "查看新訂單，或把收益投入農場升級。" } };
   }
   function trashOrder(state, orderId, now, rng) {
@@ -2168,6 +2201,38 @@
       chapter5: Object.assign({ unlocked: chapter4Complete, complete: chapter5.total > 0 && chapter5.done >= chapter5.total && chapter5.replied }, chapter5),
     };
   }
+  function milestoneCard(type, data) {
+    data = data || {};
+    if (type === "chapter_one") return { kind: "milestone", type, title: "第一章完成", earned: "農場重新有了第一批收成", unlocked: "河畔復興與下一章故事", next: "前往河邊，看看等待修復的設施。" };
+    if (type === "market_open") return { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "前往訂單看板，查看第一批委託。" };
+    if (type === "level_up") return { kind: "milestone", type, title: `升到 Lv ${data.level || 2}`, earned: "新的農場等級", unlocked: data.unlocked || "新的作物與農場能力", next: "查看種子與升級頁，看看新選項。" };
+    return null;
+  }
+  function createFeedbackQueue() {
+    const waiting = [];
+    let active = null;
+    return {
+      push(data) { if (data) waiting.push(data); return this.next(); },
+      next() { if (!active && waiting.length) active = waiting.shift(); return active; },
+      close() { active = null; return this.next(); },
+      status() { return { active, queued: waiting.length }; },
+    };
+  }
+  function interactionLabelForTile(state, tile, now) {
+    if (!tile) return "互動";
+    if (tile.plotIndex != null) {
+      const plot = (state.plots || [])[tile.plotIndex];
+      if (plot && plot.cropId && getCropProgress(state, plot, now || Date.now()).ready) {
+        const crop = CROPS[plot.cropId];
+        return `收成・${crop ? crop.name : "作物"}田`;
+      }
+    }
+    if (tile.npc) { const npc = (C.NPCS || {})[tile.npc]; return `交談・${npc ? npc.name : "鎮民"}`; }
+    if (tile.station) { const station = (C.STATIONS || {})[tile.station]; return `使用・${station ? station.name : "設施"}`; }
+    if (tile.structureId) { const structure = (C.STRUCTURES || []).find((row) => row.id === tile.structureId); return `使用・${structure ? structure.name : "建物"}`; }
+    if (tile.forage) return "採集・東林採集點";
+    return "互動";
+  }
   function journalAchievements(state) {
     const a = state.achievements || {};
     return Object.keys(ACHIEVEMENTS).map((id) => ({
@@ -2512,7 +2577,7 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, previewMarketOrders, canFulfill, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, previewMarketOrders, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
@@ -2526,7 +2591,7 @@
     // Stage 4：多格結構 / 故事任務
     structureAt, planMoveToStructure, currentQuest, syncStoryProgress, advanceStory, questMarkerTile,
     // Stage 5：世界探索（橋 / 封鎖區 / 事件點）
-    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done, chapter5Done,
+    bridgeTile, eventTile, chapter1Done, chapter2Done, chapter3Done, chapter4Done, chapter5Done, milestoneCard, createFeedbackQueue, interactionLabelForTile,
     canRepairBridge, bridgeMaterialStatus, bridgeMaterialTargetTile, repairBridge, triggerEvent,
     forageNodeDef, forageTile, forageNodeStatus, eastForageStatus, eastForageTargetTile,
     eastDeepStatus, canUnlockEastDeep, unlockEastDeep,

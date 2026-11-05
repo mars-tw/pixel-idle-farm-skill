@@ -52,7 +52,7 @@ test('A2 市集交付班伯前不出單，開放後只出已解鎖作物', () =>
   assert.ok(orders.some((order) => JSON.stringify(order.wants) === JSON.stringify({ wheat: 2 })));
   const quest = A.quests(state, now).find((row) => row.id === 'c1_first_harvest');
   assert.deepEqual(quest.wants, { wheat: 2 });
-  assert.match(read('src/adventure.js'), /把 2 份小麥交給老農班伯/);
+  assert.match(read('src/adventure.js'), /再把其中 2 份交給老農班伯/);
   assert.match(ui, /把 2 份小麥交給老農班伯後開放/);
   assert.doesNotMatch(ui, /主線保留 2 份小麥|交付後會動用主線保留/);
   assert.doesNotMatch(ui + world + read('src/game.js'), /兩條路都不影響主線|這張訂單可選做/);
@@ -83,7 +83,7 @@ test('A4 建造只列已解鎖與下一項，升級有三段排序與可達路�
 test('A5 開場、手記、印章冊與農場幫手文字一致', () => {
   assert.ok(world.indexOf('先種三格小麥') < world.indexOf('葛瑞會先帶你認識農場') && world.indexOf('id="worldSunBegin"') < world.indexOf('id="worldBegin"') && !world.includes('先照顧田裡的小麥，再跟葛瑞'), '開場便箋不再要求先種田再找葛瑞（R31：與任務第一步「找葛瑞」一致），按鈕順序跟內文一致');
   assert.match(ui, /function currentQuestFirst\(ids, cur\)/);
-  assert.match(dailyUi, /已完成 \$\{st\.completed\}\/3・已領取 \$\{st\.claimed\}\/3/);
+  assert.match(dailyUi, /目前可做 \$\{st\.available\} 項・已完成 \$\{st\.completed\}\/\$\{st\.available\}・已領取 \$\{st\.claimed\}\/\$\{st\.available\}/);
   const state = S.defaultState(1_900_000_000_000);
   let status = D.status(state, 1_900_000_000_000);
   assert.equal(status.completed, 0); assert.equal(status.claimed, 0);

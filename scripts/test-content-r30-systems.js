@@ -66,9 +66,10 @@ test("A3 四種關鍵事件皆產生結算卡資料", () => {
 
 test("A3 結算卡共用單一 FIFO 佇列，一次只顯示一張", () => {
   const ui = source("src/ui.js");
-  assert.match(ui, /const settlementQueue = \[\]/);
-  assert.match(ui, /if \(settlementVisible \|\| !settlementQueue\.length\) return/);
-  assert.match(ui, /settlementQueue\.shift\(\)/);
+  assert.match(ui, /const feedbackQueue = G\.createFeedbackQueue \? G\.createFeedbackQueue\(\) : null/);
+  assert.match(ui, /if \(settlementVisible\) return/);
+  assert.match(ui, /feedbackQueue \? feedbackQueue\.next\(\) : settlementQueue\.shift\(\)/);
+  assert.match(ui, /if \(feedbackQueue\) feedbackQueue\.close\(\)/);
   assert.match(ui, /setTimeout\(close, 2500\)/);
   assert.match(ui, /card\.onclick = close/);
   assert.match(ui, /獲得 \$\{data\.coins \|\| 0\} 金・\$\{data\.xp \|\| 0\} 經驗・下一步：/);

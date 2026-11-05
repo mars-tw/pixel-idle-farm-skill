@@ -284,11 +284,11 @@
     const sig = JSON.stringify([list, projects, commissions, current.adventure.neighbors, current.adventure.gathering]);
     if (sig !== lastPanels) {
       lastPanels = sig;
-      panel.innerHTML = `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div><div class="adventure-quests">${list.map((q) => `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
-        <div class="world-chapter">第 ${q.chapter} 章・${esc(q.chapterName)} <span>${{ locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]}</span></div>
+      panel.innerHTML = `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div><div class="adventure-quests">${list.map((q) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "本章進行中" }[q.status]; return `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
+        <div class="world-chapter">第 ${q.chapter} 章・${esc(q.chapterName)} <span>${chapterLabel}</span></div>
         <h3>${esc(q.name)}</h3><p>${esc(q.description)}</p>
         <div class="adventure-meta">${rowsOf(q).map((r) => `<span>${r.complete ? "✓" : "·"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}</div>
-        ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "帶去交付" : "前往目標"}</button>` : ""}</article>`).join("")}</div>
+        ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "前往交談" : A.taskActionLabel(q, rowsOf(q).find((row) => !row.complete), (window.NPCS || {})[q.npcId])}</button>` : ""}</article>`; }).join("")}</div>
         <h3 class="story-subhead">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}`;
       panel.querySelector("#worldNeighborButton").onclick = () => window.ContentR1.openNeighbors(current);
       if(window.ContentR6 && A.gathering(current,Date.now()).unlocked){const b=document.createElement('button');b.id='worldGatheringButton';b.textContent=current.adventure.gathering.completed?'翻共同聚餐手記':'三個位子，一起吃';b.onclick=()=>window.ContentR6.openGathering(current);panel.querySelector('.neighbor-entry').appendChild(b);}
@@ -340,7 +340,11 @@
       const result = A.claim(current, q.id, Date.now());
       if (result.ok) {
         if (window.refreshOrders) window.refreshOrders(current, Date.now());
-        if (farm() && farm().enqueueSettlement) farm().enqueueSettlement(result.settlement);
+        if (farm() && farm().enqueueResultFeedback) farm().enqueueResultFeedback(result);
+        else if (farm() && farm().enqueueSettlement) {
+          farm().enqueueSettlement(result.settlement);
+          (result.milestones || []).forEach(farm().enqueueSettlement);
+        }
         speak((window.NPCS[q.npcId] || {}).name || "鎮民", completionLine(q.id));
         if (q.id === "c3_harvest_picnic") showPicnic();
         refresh(current);

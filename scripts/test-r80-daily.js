@@ -5,18 +5,21 @@ const T = Date.parse("2026-10-15T10:00:00+08:00"), DAY = 86400000;
 let passed = 0;
 function test(label, fn) { fn(); passed++; console.log("PASS " + label); }
 function fresh() { return S.defaultState(T); }
+function openMarket(s) { s.adventure = s.adventure || {}; s.adventure.claimed = s.adventure.claimed || {}; s.adventure.claimed.c1_first_harvest = true; return s; }
 function complete(s, now) {
+  openMarket(s);
   const st = D.status(s, now);
   D.record(s, "water", 3, now); D.record(s, "talk", 1, now); D.record(s, "sell", 1, now);
   return ["water", "talk", "sell"].map((id) => D.claim(s, id, st.day, now));
 }
-test("new farmer gets three distinct reachable chores and no free rewards", () => {
+test("new farmer sees three distinct chores, with the market chore gated and no free rewards", () => {
   const s = fresh(), coins = s.coins, st = D.status(s, T);
   assert.deepEqual(st.tasks.map((task) => task.id), ["water", "talk", "sell"]); assert.equal(st.done, 0); assert.equal(s.coins, coins);
+  assert.equal(st.available, 2); assert.equal(st.tasks[2].available, false); assert.match(st.tasks[2].detail, /市集開放後/);
   assert.equal(D.claim(s, "water", st.day, T).ok, false);
 });
 test("daily chores do not consume main-story crops", () => {
-  const s = fresh(); s.storage.items.wheat = 2; const before = JSON.stringify(s.storage.items);
+  const s = openMarket(fresh()); s.storage.items.wheat = 2; const before = JSON.stringify(s.storage.items);
   D.record(s, "talk", 1, T); D.record(s, "sell", 1, T);
   assert.equal(D.claim(s, "talk", s.daily.day, T).ok, true); assert.equal(D.claim(s, "sell", s.daily.day, T).ok, true);
   assert.equal(JSON.stringify(s.storage.items), before);
@@ -31,7 +34,7 @@ test("talk progress counts once", () => {
   assert.equal(D.status(s, T).tasks[1].have, 1);
 });
 test("successful direct sale counts and reward pays only once", () => {
-  const s = fresh(), st = D.status(s, T), coins = s.coins; s.storage.items.wheat = 1;
+  const s = openMarket(fresh()), st = D.status(s, T), coins = s.coins; s.storage.items.wheat = 1;
   assert.equal(G.sellItem(s, "wheat", 1, T).ok, true); assert.equal(D.status(s, T).tasks[2].have, 1);
   const r = D.claim(s, "sell", st.day, T); assert.equal(r.ok, true);
   assert.equal(D.claim(s, "sell", st.day, T).reason, "claimed"); assert.ok(s.coins > coins);

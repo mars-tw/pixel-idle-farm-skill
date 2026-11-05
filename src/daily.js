@@ -37,17 +37,21 @@
     if (type === "talk") d.talk = Math.min(1, d.talk + count(amount, 1));
     if (type === "sell") d.sell = Math.min(1, d.sell + count(amount, 1));
   }
+  function marketUnlocked(s) {
+    return !!(s && s.adventure && s.adventure.claimed && s.adventure.claimed.c1_first_harvest);
+  }
   function status(s, now) {
     const d = ensure(s, now);
     const waterNeed = 2 + d.day % 2;
     const tasks = [
       { id: "water", title: "替新芽添水", detail: "種下作物後，用澆水工具照顧它。每株只算一次。", have: d.water, need: waterNeed, coins: 4 },
       { id: "talk", title: "向鎮民問早", detail: "找任一位鎮民交談一次，聽聽今天農場有什麼新鮮事。", have: d.talk, need: 1, coins: 5 },
-      { id: "sell", title: "賣出一份作物", detail: "把任一份作物賣到市集；訂單交付不算在這一項。", have: d.sell, need: 1, coins: 6 },
-    ].map((t) => ({ ...t, completed: t.have >= t.need, claimed: !!d.claimed[t.id], ready: !d.claimed[t.id] && t.have >= t.need }));
+      { id: "sell", title: "賣出一份作物", detail: marketUnlocked(s) ? "把任一份作物賣到市集；訂單交付不算在這一項。" : "市集開放後：先把 2 份小麥交給老農班伯，市集就會開放。", have: d.sell, need: 1, coins: 6, available: marketUnlocked(s) },
+    ].map((t) => ({ ...t, available: t.available !== false, completed: t.available !== false && t.have >= t.need, claimed: !!d.claimed[t.id], ready: t.available !== false && !d.claimed[t.id] && t.have >= t.need }));
+    const available = tasks.filter((t) => t.available);
     return { day: d.day, date: key(d.day), nextAt: (d.day + 1) * DAY - OFFSET, tasks, stamps: d.stamps, stamped: d.stamped,
-      completed: tasks.filter((t) => t.completed).length, claimed: tasks.filter((t) => t.claimed).length,
-      done: tasks.filter((t) => t.claimed).length, keepsakes: keepsakes.map((k) => ({ ...k, owned: !!d.collected[k.id] })) };
+      available: available.length, completed: available.filter((t) => t.completed).length, claimed: available.filter((t) => t.claimed).length,
+      done: available.filter((t) => t.claimed).length, keepsakes: keepsakes.map((k) => ({ ...k, owned: !!d.collected[k.id] })) };
   }
   function claim(s, id, expectedDay, now) {
     const st = status(s, now), task = st.tasks.find((t) => t.id === id), d = s.daily;
@@ -58,14 +62,14 @@
     s.stats.totalCoinsEarned = (s.stats.totalCoinsEarned || 0) + task.coins;
     let stamp = false;
     const unlocked = [];
-    if (["water", "talk", "sell"].every((k) => d.claimed[k]) && !d.stamped) {
+    if (st.tasks.filter((t) => t.available).every((t) => d.claimed[t.id]) && !d.stamped) {
       d.stamped = true; d.stamps++; stamp = true;
       s.materials.compost = (s.materials.compost || 0) + 1;
       for (const k of keepsakes) if (d.stamps >= k.at && !d.collected[k.id]) { d.collected[k.id] = true; unlocked.push(k.name); }
     }
     return { ok: true, coins: task.coins, stamp, unlocked };
   }
-  const API = { normalize, ensure, record, status, claim, dayNumber };
+  const API = { normalize, ensure, record, status, claim, dayNumber, marketUnlocked };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   else root.FarmDaily = API;
 })(typeof window !== "undefined" ? window : globalThis);
