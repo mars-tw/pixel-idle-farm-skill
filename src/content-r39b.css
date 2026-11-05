@@ -1,0 +1,138 @@
+/* R39 B 線（第 6～10 項）：矮螢幕對話與標籤不裁切、面板最後一項不被切、
+   手機橫式減量、像素化控制元件、手機訂單底部抽屜。
+   只調整版面、定位與控制元件外觀；作物標籤翻面由 ui.js 依標籤本身位置判斷，
+   河畔卡與面板收合沿用既有元素與 fitPanelFirstScreen。 */
+
+/* 6：1366×600 上方窄條對話維持 R32 規則（top ≤ 24、高 ≤ 20%），
+   頭像縮成 40px 並完整留在框內，不再被 64px 最小尺寸撐出框外裁切。
+   只限寬矮螢幕：844 橫式等窄矮版面沿用既有對話避讓（框高觸發避開 NPC）。 */
+@media (max-height: 600px) and (min-width: 1000px) {
+  .world-dialogue .dialogue-portrait,
+  .world-dialogue.dialogue-compact-top .dialogue-portrait,
+  .world-dialogue.dialogue-compact-bottom .dialogue-portrait {
+    width: 40px !important; height: 40px !important;
+    min-width: 40px !important; min-height: 40px !important;
+    float: left; margin: 0 8px 4px 0;
+    object-fit: contain; image-rendering: pixelated;
+  }
+}
+
+/* 6：作物浮動標籤被畫面上緣切到時，ui.js 加上 tile-state-label-below 改掛在田格下方；
+   一般情況仍在田格上方（translate -100%）。 */
+.tile-state-label.tile-state-label-below { transform: translate(-50%, 0); }
+
+/* 7：「再顯示 N 項」黏在面板下緣內，首屏再矮也不被推出面板外。 */
+.r32-show-more { position: sticky; bottom: 8px; z-index: 5; }
+
+/* 7：面板捲到底時，最後一張卡可完整捲入可視區（捲動區底部保留距）。 */
+.side-panel.world-panel-open .side-body { scroll-padding-bottom: 24px; }
+
+/* 7：首屏已有「再顯示 N 項」時，河畔復興計畫卡跟其他收合卡一起收起，
+   不在面板下緣露出半張；展開後（按鈕移除）才出現（擴充 R38 的矮螢幕規則到全部高度）。 */
+.side-pane:has(.r32-show-more) .riverside-card { display: none !important; }
+
+/* 8：手機橫式 844×390——任務列與種子欄維持同一列（R36），資源列不換行成第二列，
+   互動鈕降進底部工具列同一帶，不再浮在中央可操作區上方蓋住田格與角色。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  header .res-bar, #resBar { flex-wrap: nowrap !important; }
+  .seed-hud, #mapScene .seed-hud {
+    top: var(--world-quest-top, 60px) !important;
+    height: 48px; max-height: 48px;
+  }
+  .action-a { bottom: 6px !important; right: 12px !important; }
+}
+
+/* 9：像素化控制元件——與訂單卡、升級卡相同的像素邊框（2px 實邊）、
+   硬陰影與狀態色（CSS 實作，不新增圖檔）。
+   開關：「開／關」字固定在右側同一位置，只有圓鈕左右移動表示狀態。 */
+.setting-toggle[data-enabled] {
+  width: 76px; min-width: 76px; height: 36px; min-height: 36px;
+  border: 2px solid #8b5e34 !important; border-radius: 6px !important;
+  background: #2f6b33; box-shadow: 0 2px 0 rgba(90, 58, 26, .45);
+  overflow: hidden;
+}
+.setting-toggle[data-enabled]::before {
+  top: 4px; left: 4px; width: 22px; height: 22px;
+  border: 2px solid #8b5e34; border-radius: 4px;
+  background: #fffdf4; box-shadow: 0 2px 0 rgba(90, 58, 26, .4);
+  box-sizing: border-box;
+}
+.setting-toggle[data-enabled="true"]::before { left: 24px; }
+.setting-toggle[data-enabled="true"]::after {
+  content: "開"; left: auto; right: 8px; top: 50%; transform: translateY(-50%);
+  color: #fff8df; font-size: 11px; font-weight: 900; line-height: 1;
+}
+.setting-toggle[data-enabled="false"] { background: #cbbfa8; border-color: #8b5e34 !important; }
+.setting-toggle[data-enabled="false"]::before { left: 4px; }
+.setting-toggle[data-enabled="false"]::after {
+  content: "關"; left: auto; right: 8px; top: 50%; transform: translateY(-50%);
+  color: #5a4632; font-size: 11px; font-weight: 900; line-height: 1;
+}
+/* 9：音量滑桿改像素軌道與方塊拉把，不再是一般網頁樣式。 */
+.setting-slider input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  height: 36px; min-height: 36px; background: transparent; accent-color: auto;
+  cursor: pointer;
+}
+.setting-slider input[type="range"]::-webkit-slider-runnable-track {
+  height: 12px; background: #f7ecc8;
+  border: 2px solid #8b5e34; border-radius: 4px;
+  box-shadow: inset 0 2px 0 rgba(90, 58, 26, .25);
+}
+.setting-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 24px; height: 24px; margin-top: -8px;
+  background: #ffcf64; border: 2px solid #8b5e34; border-radius: 4px;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .45);
+}
+.setting-slider input[type="range"]::-moz-range-track {
+  height: 12px; background: #f7ecc8;
+  border: 2px solid #8b5e34; border-radius: 4px;
+  box-shadow: inset 0 2px 0 rgba(90, 58, 26, .25);
+}
+.setting-slider input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px;
+  background: #ffcf64; border: 2px solid #8b5e34; border-radius: 4px;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .45);
+}
+.setting-slider input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
+/* 9：設定模式頁籤（效能／文字大小等 .setting-mode 與面板 .side-tab）同像素邊框與狀態色。 */
+.setting-mode {
+  border: 2px solid #8b5e34 !important; border-radius: 6px !important;
+  background: #fff8df; color: #5a3a1a;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .35);
+}
+.setting-mode.sel {
+  background: #f7d481; border-color: #8b5e34 !important; color: #4b2e19;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .55), inset 0 0 0 2px rgba(255, 248, 223, .65);
+}
+.side-tabs .side-tab {
+  border: 2px solid transparent; border-radius: 6px;
+  box-sizing: border-box;
+}
+.side-tabs .side-tab.sel {
+  background: #f7d481; border-color: #8b5e34;
+  color: #4b2e19; box-shadow: 0 2px 0 rgba(90, 58, 26, .45);
+}
+/* 9：面板與彈窗關閉鈕同像素邊框與硬陰影（對話「略過」維持次要小字，不在此列）。 */
+.world-close, .world-modal-close, .settings-close, .build-close {
+  background: #fff8df !important; color: #5a3a1a !important;
+  border: 2px solid #8b5e34 !important; border-radius: 6px !important;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .45) !important;
+  box-sizing: border-box;
+}
+
+/* 10：手機直式訂單面板改底部抽屜——錨在底部工具列上方，最高 62% 畫面，
+   上方保留世界可見；「丟棄」維持次要小字樣式，但觸控區至少 44px。 */
+@media (max-width: 859px) and (orientation: portrait) {
+  .side-panel.world-panel-open .side-body:has(> .side-pane[data-pane="orders"].sel) {
+    top: auto !important;
+    bottom: calc(var(--world-bottom, 86px) + 8px) !important;
+    height: auto !important;
+    max-height: 62dvh !important;
+  }
+}
+.order .o-actions .trash {
+  min-width: 44px !important; min-height: 44px !important;
+  display: inline-flex; align-items: center; justify-content: center;
+}
