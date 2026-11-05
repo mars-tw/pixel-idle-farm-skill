@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r37-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r38-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -3132,7 +3132,7 @@
     }
     mEl.appendChild(m);
     const qring = m.querySelector(".qring"); if (qring) qring.style.top = Math.round(feetTop - markerTop + m.offsetHeight - TILE * 0.18) + "px";
-    if (tile.npc) shiftNameplateAbove(m, obDyn.find((n) => n.dataset.kind === "npc" && n.dataset.tileId === tile.id) || null);
+    if (tile.npc) { const plateAnchor = obDyn.find((n) => n.dataset.kind === "npc" && n.dataset.tileId === tile.id) || null; shiftNameplateAbove(m, plateAnchor); [260, 520].forEach((ms) => setTimeout(() => { if (m.isConnected) shiftNameplateAbove(m, plateAnchor); }, ms)); } // R38 整合：玩家走位過場結束後再判一次，避免名牌壓到剛走到的玩家
   }
   // ---- 動作 VFX 疊層（地圖可見回饋）----
   const ACTION_VFX = { water: "water_droplets", hoe: "soil_dust", clear: "soil_dust", build: "soil_dust",
