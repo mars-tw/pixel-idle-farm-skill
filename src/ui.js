@@ -1152,7 +1152,7 @@
         ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
         : `<div class="order-market-locked" data-audit="order-market-locked">
           <p><b>市集預告</b><span class="market-preview-state">預覽・尚未開放</span>：把 2 份小麥交給老農班伯後開放。下面是開放後第一批會出現的訂單。</p>
-          ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗</div><div class="o-meta">市集開放後可接</div></div></div>`; }).join("")}
+          ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗（未含加成）</div><div class="o-meta">市集開放後可接${o.lockNote ? `・${escapeHtml(o.lockNote)}` : ""}</div></div></div>`; }).join("")}
           <button type="button" class="btn buy small" data-order-main-go>${escapeHtml(G.marketPreviewAction(state).label)}</button>
         </div>`;
       const go = box.querySelector("[data-order-main-go]");
@@ -1196,7 +1196,7 @@
           ${sharedHtml ? "" : `<div class="o-flavor">${narrative.offer}</div>`}` : ""}
           <div class="o-wants">${wantsHtml}</div>
           ${sharedHtml}
-          <div class="o-reward">🪙 ${fmtNum(pay.coins)} · <span class="xp">⭐ ${pay.xp}</span></div>
+          <div class="o-reward">🪙 ${fmtNum(pay.coins)}${pay.coins > o.rewardCoins ? `<small class="o-bonus">（含加成 +${fmtNum(pay.coins - o.rewardCoins)}）</small>` : ""} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${o.firstBatch ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}`}</div>
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
         </div>

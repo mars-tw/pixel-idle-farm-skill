@@ -792,14 +792,19 @@
   }
   // R35：市集開放前的預告卡直接用開放時第一批訂單的同一份範本（委託人、需求、報酬一字不差）。
   function previewMarketOrders(state, now) {
+    // R39 整合：預告固定顯示市集開放時會出現的那一組（交付老農班伯時通常已升到 Lv 2、胡蘿蔔已解鎖），
+    // 尚未解鎖的作物在卡上註明解鎖等級，避免預告與開放後第一批對不上。
     const available = new Set(availableOrderItems(state));
-    const ids = available.has("carrot")
-      ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
-      : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
-    return ids
+    const crops = (typeof CROPS !== "undefined" && CROPS) || (typeof window !== "undefined" && window.CROPS) || {};
+    return ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
-      .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)))
-      .map((template) => { const order = makeBeginnerOrder(template, now); return Object.assign(order, { narrative: orderNarrative(state, order) }); });
+      .filter(Boolean)
+      .map((template) => {
+        const order = makeBeginnerOrder(template, now);
+        const locked = Object.keys(template.wants).find((id) => !available.has(id));
+        const def = locked && crops[locked];
+        return Object.assign(order, { narrative: orderNarrative(state, order), lockNote: locked ? `Lv ${(def && def.unlockLevel) || 2} 解鎖${(def && def.name) || locked}種子` : "" });
+      });
   }
   function marketPreviewAction(state) {
     const harvested = Math.min(6, Math.max(0, Number(state && state.stats && state.stats.harvested && state.stats.harvested.wheat) || 0));
@@ -979,7 +984,7 @@
     if (key === "helperLevel") effect = next.value.autoPlant ? "稻草人幫手：自動收成並補種" : "稻草人幫手：自動收成成熟作物";
     const shortfall = Math.max(0, next.cost - state.coins);
     const use = {
-      plotCount: "多一格田可同時多種一株作物",
+      plotCount: "田變多，每輪就能同時多種幾株作物", // R39 整合：不寫死格數，避免與上一行「+N 格田」矛盾
       growthSpeed: "縮短每輪作物等待時間",
       sellBonus: "提高每次出貨與訂單收入",
       storageLevel: "避免收成因倉庫已滿而浪費",

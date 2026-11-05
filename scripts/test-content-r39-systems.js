@@ -109,5 +109,18 @@ test("R39 整合：每秒更新倒數時，首批訂單仍顯示不限時", () =
   assert.match(ui, /m\.innerHTML = o\.firstBatch \|\| o\.expiresAt == null \? "首批不限時"/);
 });
 
+test("R39 整合：預告固定為開放時那一組、未解鎖作物註明等級、加成另外標示、開墾文案不矛盾", () => {
+  const G2 = require("../src/game.js"), S2 = require("../src/state.js");
+  const st = S2.defaultState(1_900_000_000_000);
+  const preview = G2.previewMarketOrders(st, 1_900_000_000_000);
+  assert.deepEqual(preview.map((o) => o.id), ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]);
+  assert.match(preview[1].lockNote, /^Lv 2 解鎖胡蘿蔔種子$/);
+  const ui = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8");
+  assert.match(ui, /（含加成 \+\$\{fmtNum\(pay\.coins - o\.rewardCoins\)\}）/);
+  assert.match(ui, /經驗（未含加成）<\/div>/);
+  const game = require("fs").readFileSync(require("path").join(__dirname, "../src/game.js"), "utf8");
+  assert.doesNotMatch(game, /多一格田/);
+});
+
 if (process.exitCode) process.exit(1);
-console.log(`VERIFIED content R39 A1-A5 and A4b (${passed}/8)`);
+console.log(`VERIFIED content R39 A1-A5 and A4b (${passed}/9)`);
