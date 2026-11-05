@@ -70,3 +70,5 @@
     object-fit: contain; object-position: left center;
   }
 }
+/* R34 整合：「與其他訂單共用」是附註，小字，不搶需求數字。 */
+.o-shared { font-size: 12px !important; line-height: 1.4; font-weight: 600; color: #8a5a1c; margin: 2px 0 0; }
