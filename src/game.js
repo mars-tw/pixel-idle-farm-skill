@@ -737,9 +737,9 @@
       && (C.PROLOGUE_QUESTS || []).includes(story.questId || C.FIRST_QUEST);
   }
   function makeBeginnerOrder(qty, now, tutorial) {
-    const npcIds = { 2: "mayor", 3: "merchant", 4: "elder" };
+    const npcIds = { 2: "elder", 3: "merchant", 4: "elder" };
     const copy = {
-      2: "首收先送 2 份小麥，就能領開墾補助。",
+      2: "首收請留 2 份小麥給班伯的灶台，這張訂單可選做。",
       3: "市集想試賣 3 份小麥，收成後送到看板。",
       4: "班伯要做家常麥餅，請留 4 份小麥。",
     };
@@ -834,7 +834,7 @@
       const def = getItemDef(itemId) || { name: itemId };
       return short > 0 ? `${def.name} ×${short}` : "";
     }).filter(Boolean);
-    return missing.length ? `還缺${missing.join("、")}・去田裡收成` : "交付";
+    return missing.length ? `還缺${missing.join("、")}` : "交付";
   }
   // 刻意設計：訂單是固定契約價（rewardCoins/rewardXp 在生成當下就定了），不吃天氣 sellMul——
   // 天氣只影響「直售」（sellMultiplier）。避免訂單獎勵隨天氣忽高忽低，讓訂單成為穩定的收益來源。

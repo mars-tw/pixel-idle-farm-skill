@@ -38,9 +38,9 @@ test("停用交付鈕使用可行動的缺料文字", () => {
   const state = S.defaultState(T0);
   const order = G.refreshOrders(state, T0, () => 0)[0];
   assert.equal(G.canFulfill(state, order), false);
-  assert.equal(G.orderMissingText(state, order), "還缺小麥 ×2・去田裡收成");
+  assert.equal(G.orderMissingText(state, order), "還缺小麥 ×2");
   state.storage.items.wheat = 1;
-  assert.equal(G.orderMissingText(state, order), "還缺小麥 ×1・去田裡收成");
+  assert.equal(G.orderMissingText(state, order), "還缺小麥 ×1");
   const ui = fs.readFileSync(require.resolve("../src/ui.js"), "utf8");
   assert.ok(ui.includes('${can ? "交付" : escapeHtml(G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}'));
 });

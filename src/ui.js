@@ -624,7 +624,7 @@
         <div><div>Lv ${state.level}</div><div class="xp-track"><div class="xp-fill" style="width:${xpPct}%"></div></div></div>
         <span class="sub">${nextXp != null ? xpInLv + "/" + xpNeed : "MAX"}</span>
       </div>
-      <div class="res storage" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")} ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
+      <div class="res storage" title="背包：${used} 份／${cap} 份" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")}<span class="res-name">背包</span> ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
       ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
       ${matChips()}`;
@@ -1081,6 +1081,7 @@
         <div class="o-rarity" style="background:${rarity.color}"></div>
         <div class="o-body">
           ${isFestival ? `<div class="festival-tag">🏮四季物產</div>` : ""}
+          <div class="o-optional" data-audit="order-optional">可選</div>
           ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
           <div class="o-flavor">${narrative.offer}</div>` : ""}
           <div class="o-wants">${wantsHtml}</div>
@@ -1092,6 +1093,7 @@
             ? `<button class="btn ghost small trash-cancel">保留</button>
           <button class="btn small trash-confirm">確認丟棄</button>`
             : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? "交付" : escapeHtml(G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
+          ${can ? "" : `<button class="btn ghost small order-go">去田裡</button>`}
           <button class="btn ghost small trash">丟棄</button>`}
         </div>`;
       const fulfill = el.querySelector(".ful");
@@ -1102,6 +1104,12 @@
         };
       const trash = el.querySelector(".trash");
       if (trash) trash.onclick = () => requestOrderTrash(o.id);
+      const orderGo = el.querySelector(".order-go");
+      if (orderGo) orderGo.onclick = () => {
+        const tile = state.map.tiles.find((row) => row.plotIndex != null && row.plotIndex < G.activePlotCount(state) && !state.plots[row.plotIndex].cropId);
+        if (tile) { switchTab("tile"); focusCameraOnTile(tile.id); toast("已帶你到可種植的田地。"); }
+        else toast("田裡沒有空格，先收成成熟作物。");
+      };
       const cancelTrash = el.querySelector(".trash-cancel");
       if (cancelTrash) cancelTrash.onclick = () => { clearPendingOrderTrash(o.id, true); toast("已保留訂單"); };
       const confirmTrash = el.querySelector(".trash-confirm");
@@ -1220,7 +1228,7 @@
           <div class="u-desc">${def.desc}</div>
         </div>
         ${next
-          ? `<button class="btn buy small" ${state.coins >= next.cost ? "" : "disabled"}>${state.coins >= next.cost ? `🪙 ${fmtNum(next.cost)}` : `還差 ${fmtNum(next.cost - state.coins)} 金`}</button>`
+          ? `<button class="btn buy small" ${state.coins >= next.cost ? "" : "disabled"}>${state.coins >= next.cost ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(next.cost - state.coins)}）`}</button>`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -1544,6 +1552,22 @@
     if (cur.id === "finish_festival_order") return "主動作：完成一張豐年祭四季物產訂單。";
     return "主動作：" + cur.desc;
   }
+  function earlyChoiceRoutes(farmState) {
+    const stats = (farmState && farmState.stats) || {};
+    const adventure = (farmState && farmState.adventure) || {};
+    if ((stats.plantCount || 0) < 1 || (stats.fulfilledOrders || 0) > 0 || ((adventure.claimed && Object.keys(adventure.claimed).length) || 0) >= 2) return [];
+    return [
+      { id: "order", title: "先完成班伯訂單", reward: "+45 金幣", next: "下一步：收成後到訂單看板交付 2 份小麥。" },
+      { id: "field", title: "先存錢擴一格田", reward: "+2 格產量", next: "下一步：保留收成、累積 40 金，再到升級頁開墾。" },
+    ];
+  }
+  function earlyChoiceRoutesHtml(farmState) {
+    const routes = earlyChoiceRoutes(farmState);
+    if (!routes.length) return "";
+    return `<div class="world-objective-routes" data-audit="early-choice-routes" aria-label="前期自主路線">${routes.map((route) => `<div class="world-objective-hint route" data-route="${route.id}"><b>${escapeHtml(route.title)}・${escapeHtml(route.reward)}</b><span>${escapeHtml(route.next)}</span></div>`).join("")}<small>兩條路都不影響主線完成。</small></div>`;
+  }
+  window.FarmEarlyChoiceRoutes = earlyChoiceRoutes;
+  window.FarmEarlyChoiceRoutesHtml = earlyChoiceRoutesHtml;
   function renderQuestDock() {
     const box = $("questDock"); if (!box) return;
     if (window.FarmWorld && window.FarmWorld.renderObjective(state)) return;
@@ -1593,7 +1617,7 @@
         <div class="setting-title">${escapeHtml(title)}</div>
         <div class="setting-desc">${escapeHtml(desc)}</div>
       </div>
-      <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}" aria-label="${escapeHtml(title)}${enabled ? "已開啟" : "已關閉"}">${enabled ? "開啟" : "關閉"}</button>
+      <button class="setting-toggle" data-audit="setting-toggle" data-setting-key="${escapeHtml(key)}" data-enabled="${enabled ? "true" : "false"}" aria-label="${escapeHtml(title)}${enabled ? "已開啟" : "已關閉"}">目前：${enabled ? "開" : "關"}</button>
     </div>`;
   }
   function soundVolumeHtml(volume, enabled) {

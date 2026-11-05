@@ -214,8 +214,9 @@
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
     const hint = objectiveHint(s, unfinished);
+    const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
-    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind]);
+    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes]);
     if (sig === lastObjective) {
       syncSeedHudTop();
       const hintEl = box.querySelector(".world-objective-hint");
@@ -230,6 +231,7 @@
     box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
       <div class="world-objective-title">${q ? esc(q.name) : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(q.description) : "你留下的每一份收穫，都有了去處。"}</div>
+      ${choiceRoutes}
       ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
       <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button></div>
       <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
@@ -241,6 +243,8 @@
   function objectiveHint(s, row) {
     const now = Date.now();
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
+    const readyCount = (s.plots || []).slice(0, active).filter((p) => p && p.cropId && window.getCropProgress(s, p, now).ready).length;
+    if (readyCount > 0) return { kind: "ready", text: `田裡有 ${readyCount} 格可以收成` };
     const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
     if (sun && sun.active && sun.plots.length) {
       const useful = sun.plots.some((i) => i < active && s.plots[i]);
@@ -594,7 +598,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「收成先留一籃，別全拿去賣。門邊總有人，還沒吃飯。」</p><p class="project-desc">跟著田裡的光種小麥，收成後給葛瑞送一籃。你怎麼送，他就怎麼回應。</p><button class="btn buy" id="worldSunBegin">做第一份陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥。收成後留 2 份小麥給班伯的灶台，別全拿去賣。」</p><p class="project-desc">先找葛瑞聊聊，再照顧田裡的小麥；班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };
