@@ -787,6 +787,13 @@
       npcId: orderNpcIdFor(id),
     };
   }
+  // R35：市集開放前的預告卡直接用開放時第一批訂單的同一份範本（委託人、需求、報酬一字不差）。
+  function previewMarketOrders(state, now) {
+    return ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
+      .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
+      .filter(Boolean)
+      .map((template) => { const order = makeBeginnerOrder(template, now); return Object.assign(order, { narrative: orderNarrative(state, order) }); });
+  }
   function refreshOrders(state, now, rng) {
     const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
     if (!marketUnlocked) {
@@ -2505,7 +2512,7 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, canFulfill, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, previewMarketOrders, canFulfill, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,

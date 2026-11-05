@@ -74,9 +74,14 @@ test("A4 稱呼與主角名全遊戲一致", () => {
 
 test("A5 種子欄有品類與數量，預告訂單有實際獎勵", () => {
   const ui = read("src/ui.js");
-  assert.match(ui, /<span class="sn">種子 \$\{escapeHtml\(c\.name\)\}<\/span><span class="sc">×\$\{c\.seedCost\}<\/span>/);
-  assert.match(ui, /蘿拉的餐籃[\s\S]*?報酬 18 金・2 經驗/);
-  assert.match(ui, /圖圖的點心盤[\s\S]*?報酬 16 金・2 經驗/);
+  assert.match(ui, /<span class="sn">種子 \$\{escapeHtml\(c\.name\)\}<\/span><span class="sc">\$\{c\.seedCost\} 金<\/span>/); // R35：數字是單價，寫成「1 金」不再像庫存量
+  // R35：預告卡與市集開放後第一批訂單同一份範本，委託人、需求與報酬逐欄相同。
+  assert.match(ui, /G\.previewMarketOrders\(state, now\(\)\)/);
+  const st = S.defaultState(1_900_000_000_000); st.level = C.CROPS.carrot.unlockLevel; st.story = st.story || {};
+  const preview = G.previewMarketOrders(st, 1_900_000_000_000);
+  A.ensure(st, 1_900_000_000_000); st.adventure.claimed.c1_first_harvest = true;
+  const real = G.refreshOrders(st, 1_900_000_000_000, () => 0);
+  assert.deepEqual(preview.map((o) => [o.id, JSON.stringify(o.wants), o.rewardCoins, o.rewardXp, o.npcId]), real.slice(0, preview.length).map((o) => [o.id, JSON.stringify(o.wants), o.rewardCoins, o.rewardXp, o.npcId]));
   assert.doesNotMatch(ui, /報酬：金幣與經驗/);
 });
 

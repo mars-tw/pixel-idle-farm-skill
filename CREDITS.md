@@ -134,3 +134,7 @@
 
 - `assets/brand/app-icon-{1024,512,192,180,64,32}.png`：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high，1024×1024）生成。像素風 3 張與插畫風 3 張候選中選像素版第 2 張：與遊戲畫風一致，縮到 64／32 px 仍看得出草帽女孩、菜籃與太陽。只做縮放，未修圖。
 - 完整提示詞、候選數與來源雜湊見 [assets/brand/manifest.json](assets/brand/manifest.json)。
+
+## 河畔池塘重繪（2026-11-06）
+
+- `assets/generated/r35/pond-480.png`：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high）以洋紅底生成 3 張候選，選第 1 張，洋紅色鍵去背後縮成 480 px，顯示為 3×3 格的自然池塘（土岸、石頭、草叢、睡蓮），取代格子拼成的直角藍色方塊。提示詞與雜湊見 [assets/generated/r35/manifest.json](assets/generated/r35/manifest.json)。

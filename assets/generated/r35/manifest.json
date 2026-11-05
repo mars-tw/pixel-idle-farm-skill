@@ -1,0 +1,24 @@
+{
+  "asset": "river pond overlay (tiles x0-2, y9-11)",
+  "model": "gpt-image-2-2026-04-21",
+  "endpoint": "OpenAI images/generations",
+  "quality": "high",
+  "size": "1024x1024",
+  "created_utc": "2026-11-05T17:07:25.841785+00:00",
+  "prompt": "Top-down 2D pixel art game asset for a cozy farming RPG, matching a warm hand-painted 16-bit style: a small natural farm pond seen from directly above, with an irregular rounded shoreline of packed earth, a few smooth grey stones, short grass tufts and two lily pads, clear teal-blue water with subtle darker depth in the middle and soft pixel ripples. The pond is L-shaped: it fills the whole bottom two-thirds of the square canvas edge to edge, plus the left third of the top row, leaving the top-right area empty. Everything outside the pond and its muddy bank is a perfectly flat solid magenta background (#FF00FF) for chroma keying, with no gradient, no shadow and no magenta inside the pond. No text, no frame, no characters, no perspective, crisp pixel edges, limited palette.",
+  "candidates": 3,
+  "chosen": "pond_1",
+  "chosen_source_sha256": "b1ea62f06c365b333730cff76757a7bc3756ebb47c5ef74b2eade04136fcce6a",
+  "post_processing": "Magenta chroma key to alpha (fringe softened), Lanczos downscale to 480 px, displayed at 3x3 tiles.",
+  "files": [
+    {
+      "path": "assets/generated/r35/pond-480.png",
+      "bytes": 267615,
+      "sha256": "16b28d9e27bf836539aa09107bcc949cc5fbffec530639c19cbb04b1daaf81e1",
+      "size": [
+        480,
+        480
+      ]
+    }
+  ]
+}

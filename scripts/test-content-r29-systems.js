@@ -28,7 +28,7 @@ test("A1 market gate replaces reserve labels and confirmation", () => {
   const s = S.defaultState(T); G.refreshOrders(s, T, () => 0.1);
   assert.equal(s.orders.length, 0);
   const ui = source("src/ui.js");
-  assert.match(ui, /先把 2 份小麥交給老農班伯，市集訂單就會開放/);
+  assert.match(ui, /把 2 份小麥交給老農班伯後開放/);
   assert.doesNotMatch(ui, /主線保留 2 份小麥|交付後會動用主線保留/);
 });
 

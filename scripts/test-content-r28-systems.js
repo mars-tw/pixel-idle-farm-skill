@@ -53,7 +53,7 @@ test('A2 市集交付班伯前不出單，開放後只出已解鎖作物', () =>
   const quest = A.quests(state, now).find((row) => row.id === 'c1_first_harvest');
   assert.deepEqual(quest.wants, { wheat: 2 });
   assert.match(read('src/adventure.js'), /把 2 份小麥交給老農班伯/);
-  assert.match(ui, /先把 2 份小麥交給老農班伯，市集訂單就會開放/);
+  assert.match(ui, /把 2 份小麥交給老農班伯後開放/);
   assert.doesNotMatch(ui, /主線保留 2 份小麥|交付後會動用主線保留/);
   assert.doesNotMatch(ui + world + read('src/game.js'), /兩條路都不影響主線|這張訂單可選做/);
 });

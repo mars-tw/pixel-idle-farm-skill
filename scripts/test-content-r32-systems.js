@@ -12,7 +12,9 @@ function test(name, fn) { fn(); passed++; console.log("PASS " + name); }
 
 test("A1 未開放市集提供三張預告訂單與可點的主要動作", () => {
   const ui = source("src/ui.js");
-  assert.equal((ui.match(/data-audit="preview-order"/g) || []).length, 3);
+  // R35：預告卡改由 previewMarketOrders 產生（與開放後第一批同範本），仍須是 3 張。
+  assert.match(ui, /data-audit="preview-order"/);
+  assert.equal(require('../src/game.js').previewMarketOrders(require('../src/state.js').defaultState(1_900_000_000_000), 1_900_000_000_000).length, 3);
   assert.match(ui, /data-order-main-go>前往老農班伯<\/button>/);
   assert.match(ui, /tile\.npc === "elder"/);
   assert.match(ui, /解鎖條件：交給老農班伯 0\/2/);

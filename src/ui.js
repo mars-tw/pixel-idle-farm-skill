@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r34-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r35-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -732,7 +732,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}</span><span class="sc">×${c.seedCost}</span>${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}</span><span class="sc">${c.seedCost} 金</span>${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">Lv${c.unlockLevel}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
@@ -1117,10 +1117,8 @@
       box.innerHTML = marketUnlocked
         ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
         : `<div class="order-market-locked" data-audit="order-market-locked">
-          <p>先把 2 份小麥交給老農班伯，市集訂單就會開放。</p>
-          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>晨光麥袋</b><div class="o-wants">🌾 小麥 2 份</div><div class="o-reward">報酬 16 金・木材 6・石材 2</div><div class="o-meta">解鎖條件：交給老農班伯 0/2</div></div></div>
-          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>蘿拉的餐籃</b><div class="o-wants">🥕 胡蘿蔔 2 份</div><div class="o-reward">報酬 18 金・2 經驗</div><div class="o-meta">解鎖條件：完成「留一把小麥」</div></div></div>
-          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>圖圖的點心盤</b><div class="o-wants">🌾 小麥 4 份</div><div class="o-reward">報酬 16 金・2 經驗</div><div class="o-meta">解鎖條件：市集開放</div></div></div>
+          <p><b>市集預告</b>：把 2 份小麥交給老農班伯後開放（解鎖條件：交給老農班伯 0/2）。下面是開放後第一批會出現的訂單。</p>
+          ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗</div><div class="o-meta">市集開放後可接</div></div></div>`; }).join("")}
           <button type="button" class="btn buy small" data-order-main-go>前往老農班伯</button>
         </div>`;
       const go = box.querySelector("[data-order-main-go]");
@@ -1323,6 +1321,8 @@
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
+          // R35：會把金幣花到 0 時先確認一次。
+          if (state.coins === next.cost && typeof window.confirm === "function" && !window.confirm(`買下「${def.name}」後金幣會變成 0，確定要買嗎？`)) return;
           const r = G.buyUpgrade(state, key);
           if (r.ok) {
             enqueueSettlement(r.settlement);

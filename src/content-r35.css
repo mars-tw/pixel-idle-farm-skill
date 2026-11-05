@@ -1,0 +1,12 @@
+/* R35：河畔池塘改用 gpt-image-2 生成的自然池塘（有土岸、石頭、草叢與睡蓮），
+   取代格子拼成的直角藍色方塊。池塘 7 格（x0～2、y9～11）的水面格改透明，
+   由 t0_9 格掛一張 3×3 格大的池塘圖；右側河道（x=16）維持原本水面。 */
+.gtile.water:is([data-tile-id="t0_9"],[data-tile-id="t0_10"],[data-tile-id="t1_10"],[data-tile-id="t2_10"],[data-tile-id="t0_11"],[data-tile-id="t1_11"],[data-tile-id="t2_11"]) {
+  background: none !important; box-shadow: none !important;
+}
+.gtile.water:is([data-tile-id="t0_9"],[data-tile-id="t0_10"],[data-tile-id="t1_10"],[data-tile-id="t2_10"],[data-tile-id="t0_11"],[data-tile-id="t1_11"],[data-tile-id="t2_11"])::before { content: none !important; }
+.gtile[data-tile-id="t0_9"]::after {
+  content: ""; position: absolute; left: 0; top: 0; width: 300%; height: 300%;
+  background: url("../assets/generated/r35/pond-480.png?v=content-r35-20261106-1") center / 100% 100% no-repeat;
+  pointer-events: none; z-index: 1; image-rendering: auto;
+}

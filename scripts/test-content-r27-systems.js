@@ -60,7 +60,7 @@ test('開場與主線統一把兩份小麥交給班伯，每日目標改成不�
   A.ensure(state, 1800000000000); state.adventure.claimed.c1_first_harvest = true;
   const orders = G.refreshOrders(state, 1800000000000, () => 0);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.match(ui, /先把 2 份小麥交給老農班伯，市集訂單就會開放/);
+  assert.match(ui, /把 2 份小麥交給老農班伯後開放/);
 });
 
 test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {
