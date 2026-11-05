@@ -452,7 +452,7 @@
   }
   function openKitchen() {
     const recipes = A.recipes(current);
-    const box = modal("農舍灶台", `<p class="project-desc">班伯的食譜放在灶邊。料理留在餐籃裡，交給鎮民時才會取用。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3>${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><div class="project-cost">${costText(r.requirements)}</div><button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "等班伯教你"}</button></div>`).join(""));
+    const box = modal("農舍灶台", `<p class="project-desc">老農 班伯的食譜放在灶邊。料理留在餐籃裡，交給鎮民時才會取用。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3>${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><div class="project-cost">${costText(r.requirements)}</div><button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "等老農 班伯教你"}</button></div>`).join(""));
     box.querySelector("#kitchenNeighbors").onclick = () => window.ContentR1.openNeighbors(current);
     box.querySelectorAll("[data-cook]").forEach((b) => { b.onclick = () => {
       farm().closeModal("worldModal");
@@ -500,7 +500,7 @@
   }
   function showPicnic() {
     arrangePicnic(current);
-    const box = modal("這次，大家都回來了", '<p class="project-desc">午後，葛瑞收起了告示，蘿拉帶來餐籃，班伯讓雞舍安靜下來。圖圖把壓好的小花放在桌邊。</p><p class="project-desc">你種的麥子、河裡的魚和溪邊的薄荷，現在都成了大家的第一頓野餐。</p><button class="btn buy" id="worldPicnicGo">到河畔找大家</button>');
+    const box = modal("這次，大家都回來了", '<p class="project-desc">午後，鎮長 葛瑞收起了告示，蘿拉帶來餐籃，老農 班伯讓雞舍安靜下來。圖圖把壓好的小花放在桌邊。</p><p class="project-desc">你種的麥子、河裡的魚和溪邊的薄荷，現在都成了大家的第一頓野餐。</p><button class="btn buy" id="worldPicnicGo">到河畔找大家</button>');
     box.querySelector("#worldPicnicGo").onclick = () => { farm().closeModal("worldModal"); farm().setTool("hand"); farm().clickTile("t10_9"); };
   }
   function openGuestbook() {
@@ -643,7 +643,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥，每格能收 2 份；收成 6 份後，把其中 2 份交給班伯。」</p><p class="project-desc">葛瑞會先帶你認識農場；種好三格小麥後，班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥，每格能收 2 份；收成 6 份後，把其中 2 份交給老農 班伯。」</p><p class="project-desc">鎮長 葛瑞會先帶你認識農場；種好三格小麥後，老農 班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };

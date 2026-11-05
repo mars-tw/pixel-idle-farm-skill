@@ -51,8 +51,8 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
 });
 
 test('開場與主線統一把兩份小麥交給班伯，每日目標改成不同動作', () => {
-  assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?把其中 2 份交給班伯[\s\S]*?wants: \{ wheat: 2 \}/);
-  assert.match(world, /把其中 2 份交給班伯/);
+  assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?把其中 2 份交給老農 班伯[\s\S]*?wants: \{ wheat: 2 \}/);
+  assert.match(world, /把其中 2 份交給老農 班伯/);
   assert.match(world, /種下第一把小麥，做陽光餐籃/);
   assert.doesNotMatch(world, /給葛瑞送一籃/);
   assert.deepEqual(D.status(S.defaultState(1800000000000), 1800000000000).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
@@ -60,7 +60,7 @@ test('開場與主線統一把兩份小麥交給班伯，每日目標改成不�
   A.ensure(state, 1800000000000); state.adventure.claimed.c1_first_harvest = true;
   const orders = G.refreshOrders(state, 1800000000000, () => 0);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.match(ui, /先把 2 份小麥交給班伯，市集訂單就會開放/);
+  assert.match(ui, /先把 2 份小麥交給老農 班伯，市集訂單就會開放/);
 });
 
 test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {

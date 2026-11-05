@@ -38,6 +38,7 @@
   let quickHarvestTarget = null;
   let atlasReady = false;
   let journalDetailSelection = null;
+  let resourceHudSnapshot = null;
   let perfMonitorStarted = false;
   let perfAvgFps = 60;
   let perfLowFrames = 0;
@@ -185,6 +186,21 @@
     f.style.left = x + "px"; f.style.top = y + "px";
     document.body.appendChild(f);
     setTimeout(() => f.remove(), 900);
+  }
+  function showResourceDelta(event) {
+    const target = document.querySelector(event.target === "coins" ? ".res.coins" : ".res.storage");
+    if (!target || typeof target.getBoundingClientRect !== "function") return;
+    const rect = target.getBoundingClientRect();
+    const f = document.createElement("div");
+    f.className = "float resource-delta";
+    f.dataset.audit = "resource-delta";
+    f.dataset.target = event.target;
+    f.textContent = event.text;
+    f.style.color = event.text.startsWith("－") ? "#b93b32" : "#2f7a39";
+    f.style.left = Math.round(rect.left + rect.width / 2) + "px";
+    f.style.top = Math.round(rect.bottom + 4) + "px";
+    document.body.appendChild(f);
+    setTimeout(() => f.remove(), 1200);
   }
   function reducedMotion() {
     try {
@@ -641,6 +657,9 @@
 
   // ---------- 資源列 ----------
   function renderResBar() {
+    const nextResourceSnapshot = G.resourceSnapshot(state);
+    if (resourceHudSnapshot) G.resourceDeltaEvents(resourceHudSnapshot, nextResourceSnapshot).forEach(showResourceDelta);
+    resourceHudSnapshot = nextResourceSnapshot;
     const cap = G.storageCapacity(state), used = G.storageUsed(state);
     const lvXp = window.LEVEL_XP[state.level - 1] || 0;
     const nextXp = window.LEVEL_XP[state.level] != null ? window.LEVEL_XP[state.level] : null;
@@ -1097,9 +1116,15 @@
       const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
       box.innerHTML = marketUnlocked
         ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
-        : `<div class="order-market-locked" data-audit="order-market-locked"><p>先把 2 份小麥交給班伯，市集訂單就會開放</p><button type="button" class="btn buy small" data-order-main-go>前往班伯</button></div>`;
+        : `<div class="order-market-locked" data-audit="order-market-locked">
+          <p>先把 2 份小麥交給老農 班伯，市集訂單就會開放。</p>
+          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>晨光麥袋</b><div class="o-wants">🌾 小麥 2 份</div><div class="o-reward">報酬 16 金・木材 6・石材 2</div><div class="o-meta">解鎖條件：交給老農 班伯 0/2</div></div></div>
+          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>蘿拉的餐籃</b><div class="o-wants">🥕 胡蘿蔔</div><div class="o-reward">報酬：金幣與經驗</div><div class="o-meta">解鎖條件：完成「留一把小麥」</div></div></div>
+          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>圖圖的點心盤</b><div class="o-wants">🍓 當季作物</div><div class="o-reward">報酬：金幣與經驗</div><div class="o-meta">解鎖條件：市集開放</div></div></div>
+          <button type="button" class="btn buy small" data-order-main-go>前往老農 班伯</button>
+        </div>`;
       const go = box.querySelector("[data-order-main-go]");
-      if (go) go.onclick = () => { const target = G.questMarkerTile && G.questMarkerTile(state, now()); if (target) focusCameraOnTile(target); };
+      if (go) go.onclick = () => { const target = (state.map.tiles || []).find((tile) => tile.npc === "elder"); if (target) focusCameraOnTile(target.id); };
       return;
     }
     const ordered = state.orders.slice().sort((a, b) => {
@@ -1283,7 +1308,7 @@
           <div class="u-desc">${def.desc}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${nextStep}。</span>` : ""}</div>
         </div>
         ${next
-          ? `<button class="btn buy small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button>`
+          ? `<div><button class="btn buy small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button>${G.canBuyUpgrade(state, key) && state.coins === next.cost ? `<div class="u-next" data-audit="upgrade-spend-all">升級後金幣會變成 0。</div>` : ""}</div>`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -1594,7 +1619,7 @@
     if (cur.id === "plant_wheat") return "主動作：選手工具，點空農土種下小麥。";
     if (cur.id === "first_water") return "主動作：走到水井，或選澆水工具點麥田。";
     if (cur.id === "first_harvest") return `主動作：收成小麥 ${Math.min(6, (state.stats.harvested && state.stats.harvested.wheat) || 0)}/6 份；每格可收 2 份。`;
-    if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給班伯。";
+    if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給老農 班伯。";
     if (cur.id === "clear_old_path") return "主動作：選清除工具，點金色箭頭標示的樹樁。";
     if (cur.id === "repair_bridge") {
       const st = G.bridgeMaterialStatus ? G.bridgeMaterialStatus(state) : null;
@@ -1604,7 +1629,7 @@
     if (cur.id === "discover_east_forage") return "主動作：前往東林採集點，先辨認可採的藥草或菇木。";
     if (cur.id === "collect_east_forage") return "主動作：各採一份東林藥草與螢光菇。";
     if (cur.id === "report_east_forage") return "主動作：回到商人身邊交付東林樣品。";
-    if (cur.id === "learn_animal_care") return "主動作：找老農班伯交談。";
+    if (cur.id === "learn_animal_care") return "主動作：找老農 班伯交談。";
     if (cur.id === "feed_care_animal") return "主動作：走到雞舍，餵食、澆水或梳理動物。";
     if (cur.id === "raise_affinity_happy") return "主動作：持續照護同一隻動物到開心。";
     if (cur.id === "collect_quality_product") return "主動作：親密度高時收集優質或頂級產物。";
@@ -1620,8 +1645,8 @@
     const mainDelivered = !!(adventure.claimed && adventure.claimed.c1_first_harvest);
     if (wheatHarvested < 6 || mainDelivered) return [];
     return [
-      { id: "main", title: "先完成主線", reward: "+16 金與建材", next: "下一步：把 2 份小麥交給班伯。" },
-      { id: "field", title: "先整理田地", reward: "保留其餘收成", next: "可選：先查看升級，再回來找班伯。" },
+      { id: "main", title: "先完成主線", reward: "+16 金與建材", next: "下一步：把 2 份小麥交給老農 班伯。" },
+      { id: "field", title: "先整理田地", reward: "保留其餘收成", next: "可選：先查看升級，再回來找老農 班伯。" },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {
@@ -2345,10 +2370,12 @@
         }), 3)}</div>
         <button type="button" class="btn ghost small story-mail-btn" id="openLettersFromStory">打開信箱</button>
       </div>` : "";
+    const activeQuestHtml = cur ? `<div class="quest active story-current" data-audit="story-current"><span class="qmark">➤</span><span class="qtext"><span>${escapeHtml(cur.title)}</span><em>${questStepProgress(cur.id, completed).done}/${questStepProgress(cur.id, completed).total}</em></span></div><button type="button" class="btn buy small story-next-go" data-audit="story-next-go">前往下一段劇情</button>` : "";
     box.innerHTML = `<div class="story-card">
       <div class="story-kicker">${kicker}</div>
       <div class="story-title">${title}</div>
       <div class="story-copy">${copy}</div>
+      ${activeQuestHtml}
       <div class="story-progress" data-progress="${doneCount}/${QUEST_ORDER.length}">
         <div class="story-progress-head"><span>任務完成度</span><b>${doneCount}/${QUEST_ORDER.length}</b></div>
         <div class="story-progress-track"><i style="width:${donePct}%"></i></div>
@@ -2363,6 +2390,8 @@
     </div>`;
     const openMail = $("openLettersFromStory");
     if (openMail) openMail.onclick = openLettersModal;
+    const nextStory = box.querySelector(".story-next-go");
+    if (nextStory) nextStory.onclick = () => { const target = G.questMarkerTile && G.questMarkerTile(state, now()); if (target) focusCameraOnTile(target); };
     bindListMore(box, renderStory);
   }
   // Stage 6：側欄對話記錄（走近 NPC 交談後累積）
@@ -3851,7 +3880,7 @@
       state.player.facing = G.facingTo(stand, tile);
       const chk = G.canRepairBridge(state);
       if (!chk.ok) {
-        if (chk.reason === "chapter") toast(window.FarmWorld ? "先把第一餐帶給班伯，再來修橋。" : "⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
+        if (chk.reason === "chapter") toast(window.FarmWorld ? "先把第一餐帶給老農 班伯，再來修橋。" : "⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
         else if (chk.reason === "materials") toast("🪵 修橋材料不足，跟著任務 Dock 清大樹與巨石");
         else toast("目前無法修橋");
         spawnRing(tile.id, false); renderTileContext(); renderQuestDock(); return;

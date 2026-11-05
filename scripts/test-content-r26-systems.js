@@ -74,7 +74,7 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
     assert.equal(guide.step, null);
     if (id === 'c1_first_harvest') {
       assert.equal(guide.stepText, '找老農 班伯回報');
-      assert.equal(guide.actionLabel, '把 2 份小麥交給班伯');
+      assert.equal(guide.actionLabel, '把 2 份小麥交給老農 班伯');
     } else {
       assert.match(guide.stepText, /^找.+回報$/);
       assert.equal(guide.actionLabel, guide.stepText);

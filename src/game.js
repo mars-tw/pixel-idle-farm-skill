@@ -607,7 +607,7 @@
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
-    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給班伯。" };
+    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農 班伯。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     return out;
   }
@@ -917,6 +917,29 @@
       }
     }
     return { ok: true, level: state.upgrades[key], settlement: { kind: "upgrade", coins: 0, xp: 0, next: "回到田地，試試升級後的效果。" } };
+  }
+  function resourceSnapshot(state) {
+    return {
+      coins: Number(state && state.coins) || 0,
+      items: Object.assign({}, state && state.storage && state.storage.items),
+    };
+  }
+  function resourceDeltaEvents(before, after) {
+    const prev = before || { coins: 0, items: {} };
+    const next = after || { coins: 0, items: {} };
+    const events = [];
+    const coinDelta = (Number(next.coins) || 0) - (Number(prev.coins) || 0);
+    if (coinDelta) events.push({ target: "coins", delta: coinDelta, text: `${coinDelta > 0 ? "+" : "－"}${Math.abs(coinDelta)} 金` });
+    const itemParts = [];
+    const ids = new Set(Object.keys(prev.items || {}).concat(Object.keys(next.items || {})));
+    ids.forEach((id) => {
+      const delta = ((next.items || {})[id] || 0) - ((prev.items || {})[id] || 0);
+      if (!delta) return;
+      const def = getItemDef(id) || { name: id };
+      itemParts.push(`${delta > 0 ? "+" : "－"}${Math.abs(delta)} ${def.name}`);
+    });
+    if (itemParts.length) events.push({ target: "storage", text: itemParts.join("、"), changes: itemParts.length });
+    return events;
   }
   function helperFlags(state) {
     const lv = state.upgrades.helperLevel;
@@ -2472,7 +2495,7 @@
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
     makeOrder, refreshOrders, canFulfill, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
-    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, buyUpgrade, helperFlags,
+    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物
