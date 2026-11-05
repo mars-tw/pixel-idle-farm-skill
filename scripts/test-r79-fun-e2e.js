@@ -184,7 +184,7 @@ async function toastRules(browser, base) {
         const same = document.querySelectorAll("#toast-zone .toast").length;
         ["一", "二", "三", "四", "五"].forEach((x) => t("訊息" + x));
         const capped = document.querySelectorAll("#toast-zone .toast").length;
-        window.FarmWorld.speak("鎮長 葛瑞", "這是一段比較長的對話，用來確認提示訊息會移到對話框上方，不會壓在一起。");
+        window.FarmWorld.speak("鎮長葛瑞", "這是一段比較長的對話，用來確認提示訊息會移到對話框上方，不會壓在一起。");
         t("對話框開著時的提示");
         return { same, capped };
       });

@@ -419,7 +419,7 @@
       playSound("sunrise");
       if (r.first) {
         const line = "看，陽光照到田上了！趁光還在，在光裡種下、澆水或收成，作物會長得更快，收成也多一份。";
-        if (window.FarmWorld && window.FarmWorld.speak) window.FarmWorld.speak("鎮長 葛瑞", line); else toast("☀ " + line);
+        if (window.FarmWorld && window.FarmWorld.speak) window.FarmWorld.speak("鎮長葛瑞", line); else toast("☀ " + line);
       }
       scheduleSave();
     }
@@ -732,7 +732,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.seedCost}</span>${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}</span><span class="sc">×${c.seedCost}</span>${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">Lv${c.unlockLevel}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
@@ -1117,11 +1117,11 @@
       box.innerHTML = marketUnlocked
         ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
         : `<div class="order-market-locked" data-audit="order-market-locked">
-          <p>先把 2 份小麥交給老農 班伯，市集訂單就會開放。</p>
-          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>晨光麥袋</b><div class="o-wants">🌾 小麥 2 份</div><div class="o-reward">報酬 16 金・木材 6・石材 2</div><div class="o-meta">解鎖條件：交給老農 班伯 0/2</div></div></div>
-          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>蘿拉的餐籃</b><div class="o-wants">🥕 胡蘿蔔</div><div class="o-reward">報酬：金幣與經驗</div><div class="o-meta">解鎖條件：完成「留一把小麥」</div></div></div>
-          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>圖圖的點心盤</b><div class="o-wants">🍓 當季作物</div><div class="o-reward">報酬：金幣與經驗</div><div class="o-meta">解鎖條件：市集開放</div></div></div>
-          <button type="button" class="btn buy small" data-order-main-go>前往老農 班伯</button>
+          <p>先把 2 份小麥交給老農班伯，市集訂單就會開放。</p>
+          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>晨光麥袋</b><div class="o-wants">🌾 小麥 2 份</div><div class="o-reward">報酬 16 金・木材 6・石材 2</div><div class="o-meta">解鎖條件：交給老農班伯 0/2</div></div></div>
+          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>蘿拉的餐籃</b><div class="o-wants">🥕 胡蘿蔔 2 份</div><div class="o-reward">報酬 18 金・2 經驗</div><div class="o-meta">解鎖條件：完成「留一把小麥」</div></div></div>
+          <div class="order preview" data-audit="preview-order"><div class="o-body"><b>圖圖的點心盤</b><div class="o-wants">🌾 小麥 4 份</div><div class="o-reward">報酬 16 金・2 經驗</div><div class="o-meta">解鎖條件：市集開放</div></div></div>
+          <button type="button" class="btn buy small" data-order-main-go>前往老農班伯</button>
         </div>`;
       const go = box.querySelector("[data-order-main-go]");
       if (go) go.onclick = () => { const target = (state.map.tiles || []).find((tile) => tile.npc === "elder"); if (target) focusCameraOnTile(target.id); };
@@ -1134,6 +1134,12 @@
       return (a.expiresAt || 0) - (b.expiresAt || 0);
     });
     const visibleOrders = visibleListItems("orders", ordered, 4);
+    const sharedNeeds = {};
+    const sharedCounts = {};
+    state.orders.forEach((order) => Object.entries(order.wants || {}).forEach(([id, qty]) => {
+      sharedNeeds[id] = (sharedNeeds[id] || 0) + qty;
+      sharedCounts[id] = (sharedCounts[id] || 0) + 1;
+    }));
     visibleOrders.forEach((o) => {
       const rarity = window.ORDER_RARITY[o.rarity];
       const pay = G.orderPayout(state, o);
@@ -1142,7 +1148,11 @@
       const wantsHtml = Object.entries(o.wants).map(([cid, q]) => {
         const have = state.storage.items[cid] || 0;
         const ok = have >= q;
-        return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)}${have}/${q}</span>`;
+        return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)} 需要 ${fmtNum(q)}・持有 ${fmtNum(have)}</span>`;
+      }).join("");
+      const sharedHtml = Object.keys(o.wants).filter((cid) => sharedCounts[cid] > 1 && sharedNeeds[cid] > (state.storage.items[cid] || 0)).map((cid) => {
+        const item = window.getItemDef ? window.getItemDef(cid) : window.CROPS[cid];
+        return `<div class="o-shared" data-audit="order-shared">與其他訂單共用${escapeHtml(item ? item.name : cid)}</div>`;
       }).join("");
       const el = document.createElement("div");
       const isFestival = o.rarity === "festival";
@@ -1155,8 +1165,9 @@
         <div class="o-body">
           ${isFestival ? `<div class="festival-tag">🏮四季物產</div>` : ""}
           ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
-          <div class="o-flavor">${narrative.offer}</div>` : ""}
+          ${sharedHtml ? "" : `<div class="o-flavor">${narrative.offer}</div>`}` : ""}
           <div class="o-wants">${wantsHtml}</div>
+          ${sharedHtml}
           <div class="o-reward">🪙 ${fmtNum(pay.coins)} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}</div>
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
@@ -1619,7 +1630,7 @@
     if (cur.id === "plant_wheat") return "主動作：選手工具，點空農土種下小麥。";
     if (cur.id === "first_water") return "主動作：走到水井，或選澆水工具點麥田。";
     if (cur.id === "first_harvest") return `主動作：收成小麥 ${Math.min(6, (state.stats.harvested && state.stats.harvested.wheat) || 0)}/6 份；每格可收 2 份。`;
-    if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給老農 班伯。";
+    if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給老農班伯。";
     if (cur.id === "clear_old_path") return "主動作：選清除工具，點金色箭頭標示的樹樁。";
     if (cur.id === "repair_bridge") {
       const st = G.bridgeMaterialStatus ? G.bridgeMaterialStatus(state) : null;
@@ -1629,7 +1640,7 @@
     if (cur.id === "discover_east_forage") return "主動作：前往東林採集點，先辨認可採的藥草或菇木。";
     if (cur.id === "collect_east_forage") return "主動作：各採一份東林藥草與螢光菇。";
     if (cur.id === "report_east_forage") return "主動作：回到商人身邊交付東林樣品。";
-    if (cur.id === "learn_animal_care") return "主動作：找老農 班伯交談。";
+    if (cur.id === "learn_animal_care") return "主動作：找老農班伯交談。";
     if (cur.id === "feed_care_animal") return "主動作：走到雞舍，餵食、澆水或梳理動物。";
     if (cur.id === "raise_affinity_happy") return "主動作：持續照護同一隻動物到開心。";
     if (cur.id === "collect_quality_product") return "主動作：親密度高時收集優質或頂級產物。";
@@ -1645,8 +1656,8 @@
     const mainDelivered = !!(adventure.claimed && adventure.claimed.c1_first_harvest);
     if (wheatHarvested < 6 || mainDelivered) return [];
     return [
-      { id: "main", title: "先完成主線", reward: "+16 金與建材", next: "下一步：把 2 份小麥交給老農 班伯。" },
-      { id: "field", title: "先整理田地", reward: "保留其餘收成", next: "可選：先查看升級，再回來找老農 班伯。" },
+      { id: "main", title: "先完成主線", reward: "+16 金與建材", next: "下一步：把 2 份小麥交給老農班伯。" },
+      { id: "field", title: "先整理田地", reward: "保留其餘收成", next: "可選：先查看升級，再回來找老農班伯。" },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {
@@ -2158,7 +2169,7 @@
       // R32：離線回顧與資料說明收進「進階」，設定在 1366×768 一屏放得下。
       `<details class="settings-advanced" data-audit="settings-advanced"><summary>進階</summary>${performanceModeHtml(settings.performanceMode || "auto")}${performanceDiagnosticsHtml()}${pwaVersionHtml()}${offlineReviewHtml(state.lastOfflineSummary)}${settingsSeriesLinksHtml()}</details>`,
       `<details class="settings-advanced settings-save" data-audit="settings-save"><summary>存檔管理・匯出與匯入</summary>${saveManagerHtml()}</details>`,
-      window.FarmWorld ? `<div class="setting-row"><div><div class="setting-title">農場主角</div><div class="setting-desc">${state.gender === "m" ? "Kai" : "Miri"}</div></div><button class="btn ghost" id="settingGenderButton">切換主角</button></div><button class="btn ghost" id="settingResetButton">重置農場存檔</button>` : "",
+      window.FarmWorld ? `<div class="setting-row"><div><div class="setting-title">農場主角</div><div class="setting-desc">${state.gender === "m" ? "凱" : "米莉"}</div></div><button class="btn ghost" id="settingGenderButton">切換主角</button></div><button class="btn ghost" id="settingResetButton">重置農場存檔</button>` : "",
     ].join("");
     box.querySelectorAll("[data-setting-key]").forEach((btn) => {
       btn.onclick = (ev) => {
@@ -3879,7 +3890,7 @@
       state.player.facing = G.facingTo(stand, tile);
       const chk = G.canRepairBridge(state);
       if (!chk.ok) {
-        if (chk.reason === "chapter") toast(window.FarmWorld ? "先把第一餐帶給老農 班伯，再來修橋。" : "⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
+        if (chk.reason === "chapter") toast(window.FarmWorld ? "先把第一餐帶給老農班伯，再來修橋。" : "⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
         else if (chk.reason === "materials") toast("🪵 修橋材料不足，跟著任務 Dock 清大樹與巨石");
         else toast("目前無法修橋");
         spawnRing(tile.id, false); renderTileContext(); renderQuestDock(); return;
@@ -4534,7 +4545,8 @@
     sp.style.transform = flip ? "scaleX(-1)" : "";
     let locator=$("playerLocator");
     if(pe.dataset.occluded==='true'){
-      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span>米莉</span>';worldEl.appendChild(locator);}
+      if(!locator){locator=document.createElement('div');locator.id='playerLocator';locator.className='player-locator';locator.innerHTML='<div></div><span></span>';worldEl.appendChild(locator);}
+      locator.querySelector('span').textContent=state.gender === "m" ? "凱" : "米莉";
       locator.hidden=false;locator.style.cssText=`left:${pe.style.left};top:${pe.style.top};width:${rootWidth}px;height:${eh}px`;
       locator.firstChild.style.cssText=sp.style.cssText;locator.dataset.kind='partial-monochrome';
     }else if(locator)locator.hidden=true;
@@ -5201,7 +5213,7 @@
     $("genderToggle").onclick = () => {
       state.gender = state.gender === "m" ? "f" : "m";
       syncGenderBtn();
-      paintIdlePlayer(); positionPlayer(false); toast(state.gender === "m" ? "🧑 主角：Kai（男）" : "👩 主角：Miri（女）");
+      paintIdlePlayer(); positionPlayer(false); toast(state.gender === "m" ? "🧑 主角：凱（男）" : "👩 主角：米莉（女）");
       scheduleSave();
     };
     $("settingsBtn").onclick = () => {

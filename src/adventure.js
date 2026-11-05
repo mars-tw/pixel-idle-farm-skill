@@ -19,7 +19,7 @@
     { id: "picnic", name: "收穫野餐" },
   ];
   const PROJECTS = [
-    { id: "fishing_dock", name: "河畔釣台", description: "補好河邊踏板，老農 班伯會借你一支魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" },
+    { id: "fishing_dock", name: "河畔釣台", description: "補好河邊踏板，老農班伯會借你一支魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" },
       cost: { wood: 4, stone: 2 }, unlockQuest: "c1_first_meal", unlocks: ["fishing", "fishing_rod"] },
     { id: "picnic_table", name: "野餐桌", description: "鋪好桌面，讓大家帶著料理來河邊坐坐。", target: { kind: "station", id: "picnic_table", tileId: "t10_10" },
       cost: { wood: 6, wheat: 4 }, unlockQuest: "c2_river_basket", unlocks: ["baked_carrot", "mint_tea", "meal_gifts"] },
@@ -47,11 +47,11 @@
       hint: "今天這籃麥餅，我要配著茶吃。忙了一天，倒想添一點酸酸的野莓，嘴裡會清爽些。",
       wrongReply: "你上回帶的麥餅我收好了。這一籃也分一半給你；只是收攤後，我還惦著那口酸酸的野莓。",
       matchedReply: "你還記得那口酸！秤放回攤上，兩張凳子都拉到陽光裡了。野莓餅一人一半；紅格書籤留在你的手記，下回接著聊。" },
-    { id: "elder", name: "老農 班伯", title: "灶火還留著", taste: "hot",
-      story: "老農 班伯把雞舍的門帶上，才發現你站在灶邊。桌上只擺了一個盤子。他接過餐籃，從櫥裡再拿一個，把修了一半的魚竿挪到牆邊。今天那根竿子可以晚點再修。",
+    { id: "elder", name: "老農班伯", title: "灶火還留著", taste: "hot",
+      story: "老農班伯把雞舍的門帶上，才發現你站在灶邊。桌上只擺了一個盤子。他接過餐籃，從櫥裡再拿一個，把修了一半的魚竿挪到牆邊。今天那根竿子可以晚點再修。",
       reply: "本來想隨便吃兩口。你一來，倒像該好好坐下吃頓飯了。",
       recallContext: "他剛關好雞舍，先把雙手靠向灶口。魚竿挪到牆邊，留給你的盤子擺在灶旁；他沒急著收拾，先拉開旁邊的凳子。",
-      matchedStory: "老農 班伯把修好的魚竿靠回雞舍牆邊，灶旁已擺好兩個盤子。他替你拉開凳子，把紅格書籤放進桌上的手記。你護著餐籃走來，他就知道今天可以一起坐下。",
+      matchedStory: "老農班伯把修好的魚竿靠回雞舍牆邊，灶旁已擺好兩個盤子。他替你拉開凳子，把紅格書籤放進桌上的手記。你護著餐籃走來，他就知道今天可以一起坐下。",
       matchedConversation: "魚竿修好了，先靠在牆邊。你的盤子就在灶旁，坐下吃完再去看河。",
       hint: "你今天送來的麥餅，讓我想多吃兩口。從雞舍回來手都涼了，還冒熱氣的餅，最合胃口。",
       wrongReply: "今天這籃我留在灶旁了，等回烤再吃。從雞舍回來，手裡捧一塊熱餅才暖和。",
@@ -78,14 +78,14 @@
     { id:"sweet_sour",name:"甜胡蘿蔔＋野莓酸香",tastes:["sweet","sour"],description:"一份甜、一份酸，裝成兩個獨立小盤。" },
   ];
   const SHARED_ORDERS = [
-    {id:"market_fireside",name:"收攤後的灶邊桌",guests:["merchant","elder"],reward:{coins:10,xp:0,materials:{}},response:"蘿拉把秤收好，老農 班伯也把魚竿靠回牆邊。酸香和熱餅都到手，兩人終於一起坐下。"},
-    {id:"fireside_garden",name:"灶火旁的空椅子",guests:["elder","child"],reward:{coins:0,xp:0,materials:{wood:2}},response:"老農 班伯護著熱餅，圖圖把甜點分給空椅子。灶火旁多留了一個真正能坐下的位置。"},
+    {id:"market_fireside",name:"收攤後的灶邊桌",guests:["merchant","elder"],reward:{coins:10,xp:0,materials:{}},response:"蘿拉把秤收好，老農班伯也把魚竿靠回牆邊。酸香和熱餅都到手，兩人終於一起坐下。"},
+    {id:"fireside_garden",name:"灶火旁的空椅子",guests:["elder","child"],reward:{coins:0,xp:0,materials:{wood:2}},response:"老農班伯護著熱餅，圖圖把甜點分給空椅子。灶火旁多留了一個真正能坐下的位置。"},
     {id:"garden_market",name:"花園收攤茶桌",guests:["child","merchant"],reward:{coins:0,xp:5,materials:{}},response:"圖圖端著甜點，蘿拉倒了酸香野莓茶。紅格手記記下花園與市集第一次共用一張桌。"},
   ];
   // R6 presentation is separate from the retained R1–R5 narrative API contract.
   const MEMORIES = {
     merchant: { token: "陽光茶凳", heading: "蘿拉把茶杯留在陽光裡", detail: "秤放回攤上，兩張凳子拉到陽光裡。她把茶杯倒扣在你的位子，下次來就翻過來。", reply: "秤收好了，凳子就留在陽光裡。這只茶杯是你的，來了自己坐。", wrong: "她把這一口配著茶慢慢吃完，又把空杯推向你：『收攤後，想找個能把一整天洗掉的滋味。你也坐下試試。』" },
-    elder: { token: "修好的魚竿", heading: "老農 班伯掛起魚竿，留下兩只盤子", detail: "魚竿修好了，掛上雞舍外的木架。灶旁的兩個盤子不再收進櫥裡，老農 班伯拍拍靠灶那張凳子。", reply: "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。", wrong: "老農 班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』" },
+    elder: { token: "修好的魚竿", heading: "老農班伯掛起魚竿，留下兩只盤子", detail: "魚竿修好了，掛上雞舍外的木架。灶旁的兩個盤子不再收進櫥裡，老農班伯拍拍靠灶那張凳子。", reply: "魚竿掛好囉。灶旁兩個盤子都留著，手涼就坐近一點，吃完再去看河。", wrong: "老農班伯先把盤子挪近灶口，雙手搓了搓：『先別收火。從雞舍回來，連指節都僵了；我想捧著吃，慢慢暖回來。』" },
     child: { token: "壓花空椅", heading: "圖圖替空椅子放了一朵花", detail: "壓好的花放上空椅子，圖圖把第三塊點心也留好。不是等誰來領獎，是想讓後到的人也能坐下吃。", reply: "是甜甜的胡蘿蔔！壓好的花放在空椅子上了。這塊點心先不動，下次你帶誰來，我都留位子。", wrong: "圖圖把眼睛瞇成兩條線，仍把餅分了三塊：『這一口會讓臉皺起來耶！我想要吃完還忍不住舔手指的那種。空椅子也要一塊。』" }
   };
   const RHYTHMS = {
@@ -100,20 +100,20 @@
   const goal = (type, count, name, id) => ({ type, count, name, id: id || null });
   const reward = (coins, xp, materials, extra) => Object.assign({ coins, xp, materials: materials || {} }, extra || {});
   const QUESTS = [
-    { id: "c1_homecoming", chapter: 1, name: "把田叫醒", npcId: "mayor", description: "跟鎮長 葛瑞打聲招呼，再種下三格作物，替它們澆水。", target: { kind: "npc", id: "mayor" }, wants: {},
-      goals: [goal("talk", 1, "找鎮長 葛瑞交談", "mayor"), goal("plant", 3, "種下作物"), goal("water", 3, "替作物澆水")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
-    { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收成 6 份小麥（每格 2 份），再把其中 2 份交給老農 班伯。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
+    { id: "c1_homecoming", chapter: 1, name: "把田叫醒", npcId: "mayor", description: "跟鎮長葛瑞打聲招呼，再種下三格作物，替它們澆水。", target: { kind: "npc", id: "mayor" }, wants: {},
+      goals: [goal("talk", 1, "找鎮長葛瑞交談", "mayor"), goal("plant", 3, "種下作物"), goal("water", 3, "替作物澆水")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
+    { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收成 6 份小麥（每格 2 份），再把其中 2 份交給老農班伯。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
       goals: [goal("harvest", 6, "收成小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
-    { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在野餐廚房做一份農家麥餅，帶給老農 班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
+    { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在野餐廚房做一份農家麥餅，帶給老農班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
       goals: [goal("cook", 1, "烤一份農家麥餅", "rustic_bread")], reward: reward(20, 4, { wood: 6 }, { fishingRod: true }) },
-    { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木材、兩份石材修好釣台，再試試老農 班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
+    { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木材、兩份石材修好釣台，再試試老農班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
       goals: [goal("restore", 1, "修好河畔釣台", "fishing_dock")], reward: reward(16, 4) },
     { id: "c2_river_basket", chapter: 2, name: "河風裡的提籃", npcId: "merchant", description: "釣兩尾魚，採一份溪畔薄荷。蘿拉收一尾魚和薄荷，替野餐桌備好木料。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: { river_mint: 1 }, wantsCatch: 1,
       goals: [goal("fish", 2, "釣兩尾魚"), goal("forage", 1, "採一份溪畔薄荷", "river_mint")], reward: reward(24, 6, { wood: 6 }) },
     { id: "c2_picnic_table", chapter: 2, name: "多放幾張椅子", npcId: "merchant", description: "修好野餐桌，找蘿拉確認座位，再交兩份胡蘿蔔試做點心。", target: { kind: "station", id: "picnic_table", tileId: "t10_10" }, wants: { carrot: 2 },
       goals: [goal("restore", 1, "修好野餐桌", "picnic_table"), goal("talk", 1, "找蘿拉交談", "merchant")], reward: reward(32, 8) },
-    { id: "c3_good_neighbors", chapter: 3, name: "鄰居都到齊", npcId: "elder", description: "照顧動物三次、完成兩張訂單，把兩份小麥帶給老農 班伯。野餐前先把日常顧好。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
-      goals: [goal("care", 3, "照顧動物"), goal("order", 2, "交付市集訂單"), goal("talk", 1, "找老農 班伯交談", "elder")], reward: reward(40, 8, { wood: 4 }) },
+    { id: "c3_good_neighbors", chapter: 3, name: "鄰居都到齊", npcId: "elder", description: "照顧動物三次、完成兩張訂單，把兩份小麥帶給老農班伯。野餐前先把日常顧好。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
+      goals: [goal("care", 3, "照顧動物"), goal("order", 2, "交付市集訂單"), goal("talk", 1, "找老農班伯交談", "elder")], reward: reward(40, 8, { wood: 4 }) },
     { id: "c3_garden", chapter: 3, name: "桌邊的小花園", npcId: "child", description: "整理花園，烤胡蘿蔔餅、泡薄荷茶。圖圖想把第一朵小花壓進筆記本。", target: { kind: "station", id: "garden", tileId: "t6_2" }, wants: {},
       goals: [goal("restore", 1, "整理花園", "garden"), goal("cook", 1, "烤一份胡蘿蔔餅", "baked_carrot"), goal("cook", 1, "泡一壺溪畔薄荷茶", "mint_tea")], reward: reward(0, 8, {}, { collectible: "pressed_flower" }) },
     { id: "c3_harvest_picnic", chapter: 3, name: "把收穫端上桌", npcId: "child", description: "找圖圖一起開飯。帶一份麥餅、一份胡蘿蔔烤餅、一壺薄荷茶和兩尾魚，留張野餐合照。", target: { kind: "npc", id: "child" }, wants: {},
@@ -448,7 +448,7 @@
   function deliverNeighbor(state, id, taste, now) {
     if (!NEIGHBORS.some((n) => n.id === id) || !FLAVORS.some((f) => f.id === taste)) return fail("bad_basket", "找不到這份餐籃。");
     const init = ensure(state, now); if (!init.ok) return init;
-    if (!claimed(state.adventure, "c1_first_harvest")) return fail("locked", "先跟老農 班伯學做農家麥餅。");
+    if (!claimed(state.adventure, "c1_first_harvest")) return fail("locked", "先跟老農班伯學做農家麥餅。");
     const flavor = basketFlavors(state, now).find((f) => f.id === taste);
     if (!flavor.canSend) return fail("missing_resources", "餐籃還沒裝齊。先做一份農家麥餅，再留好配料。", { requirements: flavor.requirements });
     const n = NEIGHBORS.find((entry) => entry.id === id), rec = state.adventure.neighbors[id];
@@ -543,7 +543,7 @@
     if(!n||!flavor)return '';
     return n.taste===taste ? {
       merchant:'蘿拉抬手招呼米莉：「酸味野莓，和你送來的酸味餐籃一樣。這杯換我請你！」',
-      elder:'老農 班伯捧起茶杯：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」',
+      elder:'老農班伯捧起茶杯：「熱味麥餅，還記得我的熱味餐籃！先吃，魚竿晚點再修。」',
       child:shared?'圖圖捧著甜味點心：「上次甜味餐籃的滋味我還記得，剛才那盤也很好吃！」':'圖圖捧著甜味點心：「上次甜味餐籃的滋味我還記得，這份也很好吃！」'
     }[id]+(shared&&id!=='child'?{merchant:'「剛才分食的那盤，留著配茶吧。」',elder:'「剛才大家分的那盤，也別放涼了。」'}[id]:'') : n.name+'接過'+flavor+'：「這份先放中間，大家一起吃。我還是想念'+{sour:'酸味野莓',hot:'熱味麥餅',sweet:'甜味胡蘿蔔點心'}[n.taste]+'。」';
   }
@@ -662,7 +662,7 @@
       chapterProgress: { claimed: chapterProgress.claimed, total: chapterProgress.total },
       step: step ? copy(step) : null,
       stepText: step ? `${step.name} ${Math.min(step.current, step.required)}/${step.required}` : `找${npc.name}回報`,
-      actionLabel: q.id === "c1_first_harvest" && !step ? "把 2 份小麥交給老農 班伯" : step ? step.name : `找${npc.name}回報`,
+      actionLabel: q.id === "c1_first_harvest" && !step ? "把 2 份小麥交給老農班伯" : step ? step.name : `找${npc.name}回報`,
     });
   }
   function buyMaterial(state, id, count, now) {
@@ -679,7 +679,7 @@
   }
   const COMMISSIONS = [
     { id: "river_market", name: "蘿拉的河鮮籃", npcId: "merchant", wantsCatch: 2, reward: reward(18, 3) },
-    { id: "elder_supper", name: "老農 班伯的灶邊晚餐", npcId: "elder", wantsCatch: 1, wantsMeals: { rustic_bread: 1 }, reward: reward(14, 3, { wood: 2 }) },
+    { id: "elder_supper", name: "老農班伯的灶邊晚餐", npcId: "elder", wantsCatch: 1, wantsMeals: { rustic_bread: 1 }, reward: reward(14, 3, { wood: 2 }) },
     { id: "child_tea", name: "圖圖的野餐茶", npcId: "child", wantsMeals: { mint_tea: 1 }, reward: reward(12, 3) },
   ];
   function commissions(state, now) {

@@ -28,7 +28,7 @@ test("A1 market gate replaces reserve labels and confirmation", () => {
   const s = S.defaultState(T); G.refreshOrders(s, T, () => 0.1);
   assert.equal(s.orders.length, 0);
   const ui = source("src/ui.js");
-  assert.match(ui, /先把 2 份小麥交給老農 班伯，市集訂單就會開放/);
+  assert.match(ui, /先把 2 份小麥交給老農班伯，市集訂單就會開放/);
   assert.doesNotMatch(ui, /主線保留 2 份小麥|交付後會動用主線保留/);
 });
 
@@ -70,7 +70,7 @@ test("A4 daily goals are distinct from chapter-one harvest and wheat delivery", 
 });
 
 test("A5 Bamber has named quest data, a marker, routing, and grandma note portrait", () => {
-  assert.equal(C.NPCS.elder.name, "老農 班伯");
+  assert.equal(C.NPCS.elder.name, "老農班伯");
   assert.deepEqual(C.QUESTS.first_delivery.marker, { kind: "npc", type: "elder" });
   const ui = source("src/ui.js"), world = source("src/world-ui.js");
   assert.match(ui, /quest-npc-nameplate/);

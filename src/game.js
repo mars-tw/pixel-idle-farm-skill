@@ -607,7 +607,7 @@
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
-    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農 班伯。" };
+    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農班伯。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     return out;
   }
@@ -677,9 +677,10 @@
     mooncap_spore: [1, 2], amber_resin: [1, 2], forest_chestnut: [1, 2], frost_cherry: [1, 2],
   };
   const BEGINNER_ORDERS = [
-    { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
-    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", flavor: "圖圖想準備 3 份小麥做野餐點心。" },
-    { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
+    { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", ttlOffsetMs: 0, flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
+    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
+    { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 2 份胡蘿蔔做野餐點心。" },
+    { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", ttlOffsetMs: 10 * 60 * 1000, flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
   ];
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
   const ORDER_COPY = {
@@ -740,8 +741,8 @@
     const def = getItemDef(firstId);
     return {
       id: template.id, wants: Object.assign({}, template.wants), rarity: "common",
-      rewardCoins: Math.max(18, (def ? def.sellValue : 1) * qty + 12), rewardXp: 2,
-      createdAt: now, expiresAt: now + GAME.orderTtlMs,
+      rewardCoins: (def ? def.sellValue : 1) * qty + 12, rewardXp: Math.max(2, Math.ceil(qty / 2)),
+      createdAt: now, expiresAt: now + GAME.orderTtlMs + (template.ttlOffsetMs || 0),
       npcId: template.npcId, flavor: template.flavor,
     };
   }
@@ -794,16 +795,26 @@
     }
     // 移除過期訂單，補滿到 orderSlots
     state.orders = state.orders.filter((o) => o.expiresAt > now);
+    let seed = (state.ordersSeededAt || 0);
     if (firstDayChapterOne(state, now)) {
+      const available = new Set(availableOrderItems(state));
+      const preferredIds = available.has("carrot")
+        ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
+        : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
+      const selectedTemplates = preferredIds.map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
+        .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)));
       const kept = new Map();
       for (const order of state.orders) {
-        if (order && BEGINNER_ORDERS.some((template) => template.id === order.id)) kept.set(order.id, order);
+        if (order && selectedTemplates.some((template) => template.id === order.id)) kept.set(order.id, order);
       }
-      state.orders = BEGINNER_ORDERS.map((template) => kept.get(template.id) || makeBeginnerOrder(template, now));
+      state.orders = selectedTemplates.map((template) => kept.get(template.id) || makeBeginnerOrder(template, now));
+      while (state.orders.length < GAME.orderSlots) {
+        seed++;
+        state.orders.push(makeOrder(state, now, rng, String(now) + "_" + seed));
+      }
       state.ordersSeededAt = Math.max(state.ordersSeededAt || 0, 3);
       return state.orders;
     }
-    let seed = (state.ordersSeededAt || 0);
     while (state.orders.length < GAME.orderSlots) {
       seed++;
       state.orders.push(makeOrder(state, now, rng, String(now) + "_" + seed));

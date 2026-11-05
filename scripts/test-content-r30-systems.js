@@ -14,7 +14,7 @@ function unlockMarket(state) { A.ensure(state, T); state.adventure.claimed.c1_fi
 test("A1 市集在班伯交付前為空，交付後首批委託人不混用葛瑞或班伯", () => {
   const state = S.defaultState(T);
   assert.deepEqual(G.refreshOrders(state, T, () => 0.1), []);
-  assert.match(source("src/ui.js"), /先把 2 份小麥交給老農 班伯，市集訂單就會開放/);
+  assert.match(source("src/ui.js"), /先把 2 份小麥交給老農班伯，市集訂單就會開放/);
   unlockMarket(state);
   const orders = G.refreshOrders(state, T, () => 0.1);
   assert.equal(orders.length, C.GAME.orderSlots);

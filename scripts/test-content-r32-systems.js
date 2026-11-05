@@ -13,9 +13,9 @@ function test(name, fn) { fn(); passed++; console.log("PASS " + name); }
 test("A1 未開放市集提供三張預告訂單與可點的主要動作", () => {
   const ui = source("src/ui.js");
   assert.equal((ui.match(/data-audit="preview-order"/g) || []).length, 3);
-  assert.match(ui, /data-order-main-go>前往老農 班伯<\/button>/);
+  assert.match(ui, /data-order-main-go>前往老農班伯<\/button>/);
   assert.match(ui, /tile\.npc === "elder"/);
-  assert.match(ui, /解鎖條件：交給老農 班伯 0\/2/);
+  assert.match(ui, /解鎖條件：交給老農班伯 0\/2/);
 });
 
 test("A2 新存檔至少一項建物可建造", () => {
@@ -52,16 +52,16 @@ test("A4 故事手記先顯示進行中任務與下一段按鈕，設定顯示�
 });
 
 test("A5 任務、對話、訂單與手記使用一致稱呼", () => {
-  assert.equal(C.NPCS.mayor.name, "鎮長 葛瑞");
-  assert.equal(C.NPCS.elder.name, "老農 班伯");
+  assert.equal(C.NPCS.mayor.name, "鎮長葛瑞");
+  assert.equal(C.NPCS.elder.name, "老農班伯");
   const adventureState = S.defaultState(T);
   const quests = A.quests(adventureState, T);
-  assert.ok(quests.some((q) => /鎮長 葛瑞/.test(q.description)));
-  assert.ok(quests.some((q) => /老農 班伯/.test(q.description)));
+  assert.ok(quests.some((q) => /鎮長葛瑞/.test(q.description)));
+  assert.ok(quests.some((q) => /老農班伯/.test(q.description)));
   const visibleSources = ["src/config.js", "src/adventure.js", "src/game.js", "src/ui.js", "src/world-ui.js"].map(source).join("\n");
-  assert.doesNotMatch(visibleSources, /老農班伯/);
-  assert.doesNotMatch(visibleSources, /(?<!鎮長 )葛瑞(?!.*\.test\(name\))/);
-  assert.doesNotMatch(visibleSources, /(?<!老農 )班伯/);
+  assert.doesNotMatch(visibleSources, /鎮長 葛瑞|老農 班伯/);
+  assert.doesNotMatch(visibleSources, /(?<!鎮長)葛瑞(?!.*\.test\(name\))/);
+  assert.doesNotMatch(visibleSources, /(?<!老農)班伯/);
 });
 
 console.log(`R32 content systems: ${passed} passed`);

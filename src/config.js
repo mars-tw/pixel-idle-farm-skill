@@ -132,11 +132,11 @@ const SEASON_EVENTS = {
     season: "冬",
     name: "冬灶湯",
     icon: "🍲",
-    desc: "交一份冬羽甘藍或兩份馬鈴薯，替老農 班伯的灶邊湯鍋添料。",
+    desc: "交一份冬羽甘藍或兩份馬鈴薯，替老農班伯的灶邊湯鍋添料。",
     requiresAny: { winter_kale: 1, potato: 2 },
     reward: { xp: 7, collectible: "winter_soup_note" },
     actionLabel: "添料入鍋",
-    done: "冬灶湯完成，老農 班伯把湯鍋旁的照護短箋交給你。",
+    done: "冬灶湯完成，老農班伯把湯鍋旁的照護短箋交給你。",
   },
 };
 
@@ -235,7 +235,7 @@ const ACHIEVEMENTS = {
   seasonalTable:{ name: "四季餐桌", desc: "收成四種季節作物", icon: "🍽️" },
   festivalDeal: { name: "豐年祭供應商", desc: "完成一張豐年祭訂單", icon: "🏮" },
   letterKeeper: { name: "信箋守護者", desc: "讀完祖母留下的八封季節信", icon: "📬" },
-  neighborLetters: { name: "四鄰來信", desc: "讀完鎮長 葛瑞、蘿拉、老農 班伯與圖圖的鎮民附箋", icon: "💌", noBonus: true },
+  neighborLetters: { name: "四鄰來信", desc: "讀完鎮長葛瑞、蘿拉、老農班伯與圖圖的鎮民附箋", icon: "💌", noBonus: true },
   fullPantry:   { name: "滿滿食物櫃", desc: "每一種作物都至少收成一次", icon: "🧺" },
   stallOwner:   { name: "四季攤主", desc: "興建豐年祭小攤", icon: "🎪" },
 };
@@ -367,7 +367,7 @@ const COLLECTIBLES = {
     name: "冬灶湯短箋",
     emoji: "🍲",
     source: "完成冬灶湯",
-    desc: "老農 班伯夾在照護筆記裡的小紙條，只作故事收藏。",
+    desc: "老農班伯夾在照護筆記裡的小紙條，只作故事收藏。",
   },
 };
 
@@ -603,11 +603,11 @@ const STATION_PLACEMENT = [
 // ===== Stage 6：NPC 鎮民（地圖實體，走近才能交談；台詞依故事進度變化）=====
 // phase：start（序章）→ ch1done → bridge → ch2done → ch3done → ch4done → ch5done → postscript
 const NPCS = {
-  mayor: { id: "mayor", name: "鎮長 葛瑞", title: "晨光鎮長", frame: "mayor", lines: {
+  mayor: { id: "mayor", name: "鎮長葛瑞", title: "晨光鎮長", frame: "mayor", lines: {
     start:   ["晨光鎮歡迎你回來，孩子。", "你祖母的田荒了好一陣，先到告示牌接第一張委託吧。"],
     ch1done: ["麥香又飄回鎮上了，大家都在談論你。", "東邊那座橋年久失修——把它修好，就能踏進東林。"],
     bridge:  ["橋通了！東林的古樹是晨光鎮的老守護。", "去樹下看看，聽說藏著你祖母留下的舊物。"],
-    ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農 班伯，學學照顧動物吧。"],
+    ch2done: ["連東林都走遍了，真有你祖母的影子。", "想讓農場更熱鬧？去找老農班伯，學學照顧動物吧。"],
     ch3done: ["作物跟動物你都顧得妥妥貼貼，鎮民都看在眼裡。", "以後我這偶爾會帶點小委託來，別嫌我麻煩啊。"],
     ch4done: ["豐年祭辦得穩，四季物產也站上檯面了。", "晨光鎮今年的招牌，就靠你的農場撐起來。"],
     ch5done: ["你祖母把信交給我時，手一直按著那頂草帽。", "現在我懂了，她等的不是舊農場回來，是你願意把它往前帶。"],
@@ -621,7 +621,7 @@ const NPCS = {
     ch4done: ["四季貨架終於補齊，甜椒、葡萄和鴨蛋都能掛上祭典牌。", "豐年祭那張訂單，我會替你放在市集最顯眼的位置。"],
     ch5done: ["你祖母以前總把最好的種子留到最後才賣，說那是替明年留路。", "你回的那封信，我會替她放在貨架最裡側，不給風吹走。"],
     postscript: ["下季的貨單我先替你空著，甜椒、向日葵和葡萄都有人問。", "別把市集看成終點，它只是讓農場故事被更多人帶走的地方。"] } },
-  elder: { id: "elder", name: "老農 班伯", title: "隔壁老農", frame: "elder", lines: {
+  elder: { id: "elder", name: "老農班伯", title: "隔壁老農", frame: "elder", lines: {
     start:   ["雞舍那隻母雞養得還行，記得常餵牠。"],
     ch1done: ["想要更多蛋奶？把動物顧好，產量自然上來。"],
     bridge:  ["東林的草肥，以後放羊吃草最好。"],
@@ -778,8 +778,8 @@ const QUESTS = {
   first_harvest:     { id: "first_harvest", title: "收成 6 份小麥",
     desc: "等小麥成熟後走過去收成；每格可收 2 份。", next: "first_delivery",
     objective: "harvest", marker: { kind: "soil" } },
-  first_delivery:    { id: "first_delivery", title: "把 2 份小麥交給老農 班伯",
-    desc: "帶著 2 份小麥找老農 班伯，完成第一章的主線交付。", next: "clear_old_path",
+  first_delivery:    { id: "first_delivery", title: "把 2 份小麥交給老農班伯",
+    desc: "帶著 2 份小麥找老農班伯，完成第一章的主線交付。", next: "clear_old_path",
     objective: "elder_wheat", marker: { kind: "npc", type: "elder" } },
   clear_old_path:    { id: "clear_old_path", title: "清開荒地舊路",
     desc: "用清除工具清掉擋路的樹樁，取得修橋用木材並打通南邊。", next: "repair_bridge",
@@ -802,7 +802,7 @@ const QUESTS = {
     objective: "report_forage", marker: { kind: "npc", type: "merchant" }, chapter: 2 },
   // ===== 第三章：動物照護（Stage 7）=====
   learn_animal_care: { id: "learn_animal_care", title: "跟老農學動物照護",
-    desc: "找老農 班伯聊聊，學習怎麼照顧動物。", next: "feed_care_animal",
+    desc: "找老農班伯聊聊，學習怎麼照顧動物。", next: "feed_care_animal",
     trigger: "npc_elder", marker: { kind: "npc", type: "elder" }, chapter: 3 },
   feed_care_animal:  { id: "feed_care_animal", title: "餵食、澆水或梳理一隻動物",
     desc: "走到雞舍或畜舍，選一隻動物餵食、澆水或梳理。", next: "raise_affinity_happy",
@@ -934,15 +934,15 @@ const LETTERS = [
     unlock: { type: "festival_orders", count: 1 },
     body: [
       "若豐年祭的燈籠又掛起來了，我想晨光鎮一定比我記憶裡更亮。",
-      "我把這些信交給鎮長 葛瑞時，沒有把話說滿，因為我不知道回來的人會不會怨我留下太多未完成的事。",
+      "我把這些信交給鎮長葛瑞時，沒有把話說滿，因為我不知道回來的人會不會怨我留下太多未完成的事。",
       "可我一直相信，農場不是祖母的，也不是祖父的，它屬於每一個願意讓土地和人重新靠近的人。",
       "現在輪到你寫一封信了，不必寫給過去的我，寫給明天還會走進這塊田的自己。"
     ],
   },
   {
     id: "letter_mayor_notice_back",
-    title: "鎮長 葛瑞：公告欄背面的字",
-    from: "鎮長 葛瑞",
+    title: "鎮長葛瑞：公告欄背面的字",
+    from: "鎮長葛瑞",
     season: "四季",
     unlock: { type: "side_quest_done", npcId: "mayor" },
     body: [
@@ -965,8 +965,8 @@ const LETTERS = [
   },
   {
     id: "letter_elder_care_note",
-    title: "老農 班伯：照護筆記末頁",
-    from: "老農 班伯",
+    title: "老農班伯：照護筆記末頁",
+    from: "老農班伯",
     season: "四季",
     unlock: { type: "side_quest_done", npcId: "elder" },
     body: [

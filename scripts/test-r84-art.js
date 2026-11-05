@@ -54,7 +54,7 @@ async function run(){
         const guide=await page.locator('#heirloomGuide').evaluate(e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return r.width>=44&&r.height>=44&&e.contains(hit);});
         check(guide,`${w}x${h} recipe action reachable without scrolling`);
         await page.locator('#dailyClose').click();
-        await page.evaluate(()=>window.FarmWorld.speak('鎮長 葛瑞','看，陽光照到田上了！'));
+        await page.evaluate(()=>window.FarmWorld.speak('鎮長葛瑞','看，陽光照到田上了！'));
         check(await page.locator('#farmDock').isHidden()&&await page.locator('#farmDock button:visible').count()===0&&await page.locator('#mobileControls').isHidden(),`${w}x${h} dialogue hides every dock child and movement`);
         await shot(page,`${w}x${h}-dialogue`);
         await page.locator('#worldDialogue button').click();

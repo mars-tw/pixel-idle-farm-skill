@@ -262,7 +262,7 @@ async function setPlayerNearMayor(page, dx, dy) {
       await page.waitForTimeout(300);
       // ---- 第 10 項：矮螢幕對話框上方窄條 ----
       if (h <= 600) {
-        await page.evaluate(() => window.FarmWorld.speak('鎮長 葛瑞', '田邊的路清出來了，收成時記得留一點給餐籃。'));
+        await page.evaluate(() => window.FarmWorld.speak('鎮長葛瑞', '田邊的路清出來了，收成時記得留一點給餐籃。'));
         await page.waitForTimeout(500);
         const dlg = await page.evaluate((src) => {
           eval(src);

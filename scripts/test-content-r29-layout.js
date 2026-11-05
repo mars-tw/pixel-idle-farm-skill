@@ -186,7 +186,7 @@ async function brightRatio(page, rect) {
         window.__farm.focusTile(north.id);
       });
       await page.waitForTimeout(400);
-      await page.evaluate(() => { window.FarmWorld.speak('鎮長 葛瑞', '收成先留一籃，別全拿去賣。'); });
+      await page.evaluate(() => { window.FarmWorld.speak('鎮長葛瑞', '收成先留一籃，別全拿去賣。'); });
       await page.waitForFunction(() => { const d = document.querySelector('#worldDialogue'); return d && !d.hidden && getComputedStyle(d).display !== 'none'; }, null, { timeout: 9000 });
       await page.waitForTimeout(750);
       const dlg = await page.evaluate((src) => {
