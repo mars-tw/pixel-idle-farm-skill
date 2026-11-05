@@ -102,3 +102,17 @@ details.legacy-story[open] > #storyPanel { display: block; }
     box-shadow: inset 0 -22px 16px -14px rgba(74, 53, 22, .38), 0 -10px 30px rgba(0, 0, 0, .18);
   }
 }
+
+/* R30 整合：市集未開放時訂單面板只有一行說明，面板高度跟著內容，不留大片空白。 */
+.side-panel.world-panel-open:has(.side-pane.sel .order-market-locked) .side-body { height: auto !important; min-height: 0 !important; }
+@media (min-width: 860px) {
+  .side-panel.world-panel-open:has(.side-pane.sel .order-market-locked) { height: auto !important; min-height: 0 !important; bottom: auto !important; }
+}
+@media (max-width: 859px) {
+  .side-panel.world-panel-open:has(.side-pane.sel .order-market-locked) { height: auto !important; min-height: 0 !important; top: auto !important; }
+}
+.side-panel.world-panel-open:has(.side-pane.sel .order-market-locked) > .panel-scroll-hint { display: none !important; }
+.order-market-locked { padding: 10px 4px 6px; }
+.order-market-locked p { margin: 0 0 10px; line-height: 1.6; }
+/* R30 整合：種子欄移到右上時，地點標籤改放到種子欄下方，不再互相蓋住。 */
+body:has(.seed-hud.seed-hud-shifted) .world-location { top: calc(var(--safe-top,0px) + 214px) !important; }
