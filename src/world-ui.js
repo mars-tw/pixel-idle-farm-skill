@@ -660,7 +660,8 @@
     const rects = nodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0);
     if (!rects.length) return;
     const plotNodes = [...document.querySelectorAll(".gtile.farm-plot")];
-    const plotRects = plotNodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0);
+    const targetIsPlot = !!document.querySelector('.gtile.farm-plot[data-tile-id="' + tid + '"]'); // R38 整合：只有目標是田時，才把其他田格也列入避讓
+    const plotRects = targetIsPlot ? plotNodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0) : [];
     const coveredBy = (box) => { if (!box) return 0; const r = box.getBoundingClientRect(); if (!r.width || !r.height) return 0; return Math.max.apply(null, rects.concat(plotRects).map((t) => rectOverlap(t, r)).concat([0])); };
     /* R37：plotRects 已併入 coveredBy，任務列與種子欄對任何田格重疊都會觸發避讓。 */
     if (dock) { if (coveredBy(dock) > 0) dock.classList.add("quest-target-collapsed"); else dock.classList.remove("quest-target-collapsed"); }
@@ -672,8 +673,7 @@
     if ((dock && coveredBy(dock) > 0) || (seed && coveredBy(seed) > 0)) {
       const nowMs = Date.now();
       const targetCovered = rects.some((t) => (dock && rectOverlap(t, dock.getBoundingClientRect()) > 0) || (seed && rectOverlap(t, seed.getBoundingClientRect()) > 0));
-      const coveredPlot = plotNodes.find((n) => { const r = n.getBoundingClientRect(); return (dock && rectOverlap(r, dock.getBoundingClientRect()) > 0) || (seed && rectOverlap(r, seed.getBoundingClientRect()) > 0); }) ? plotNodes[0] : null;
-      const targetIsPlot = !!document.querySelector('.gtile.farm-plot[data-tile-id="' + tid + '"]'); // R38 整合：目標不是田（例如找鎮長）時，不為了其他被蓋的田把鏡頭拉走
+      const coveredPlot = targetIsPlot && plotNodes.find((n) => { const r = n.getBoundingClientRect(); return (dock && rectOverlap(r, dock.getBoundingClientRect()) > 0) || (seed && rectOverlap(r, seed.getBoundingClientRect()) > 0); }) ? plotNodes[0] : null;
       const focusId = targetCovered ? tid : (coveredPlot && targetIsPlot ? coveredPlot.dataset.tileId : null);
       const talking = !!document.querySelector("#worldDialogue:not([hidden])"); // R37 整合：對話中鏡頭留給說話者，不為了被蓋的田格移走
       // 新的被蓋目標立即聚焦；同一目標才沿用 3 秒節流，避免鏡頭反覆跳。
