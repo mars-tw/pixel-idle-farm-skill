@@ -244,7 +244,7 @@
     const now = Date.now();
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
     const readyCount = (s.plots || []).slice(0, active).filter((p) => p && p.cropId && window.getCropProgress(s, p, now).ready).length;
-    if (readyCount > 0) return { kind: "ready", text: `田裡有 ${readyCount} 格可以收成` };
+    if (readyCount > 0) return { kind: "ready", text: `田裡有 ${readyCount} 格可以收成。` };
     const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
     if (sun && sun.active && sun.plots.length) {
       const useful = sun.plots.some((i) => i < active && s.plots[i]);
@@ -613,7 +613,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥。收成後留 2 份小麥給班伯的灶台，別全拿去賣。」</p><p class="project-desc">先找葛瑞聊聊，再照顧田裡的小麥；班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">「先種三格小麥，每格能收 2 份；收成 6 份後，把其中 2 份交給班伯。」</p><p class="project-desc">先照顧田裡的小麥，再跟葛瑞和鎮民打聲招呼；班伯會在灶台邊等你。</p><button class="btn buy" id="worldSunBegin">種下第一把小麥，做陽光餐籃</button><button class="btn ghost" id="worldBegin">先跟鎮民打招呼、認識農場</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };

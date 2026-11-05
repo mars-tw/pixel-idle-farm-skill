@@ -15,11 +15,12 @@ function test(name, fn) {
   catch (error) { console.error("FAIL " + name + "\n" + error.stack); process.exitCode = 1; }
 }
 
-test("新存檔第一天三張訂單的小麥需求不超過 4、各不相同且時限至少 30 分鐘", () => {
+test("新存檔第一天三張訂單不重複班伯主線、各不相同且時限至少 30 分鐘", () => {
   const state = S.defaultState(T0);
   const orders = G.refreshOrders(state, T0, () => 0);
   assert.equal(orders.length, 3);
-  assert.deepEqual(orders.map((order) => order.wants.wheat), [2, 3, 4]);
+  assert.deepEqual(orders.map((order) => order.wants), [{ carrot: 2 }, { wheat: 3 }, { wheat: 4 }]);
+  assert.ok(orders.every((order) => JSON.stringify(order.wants) !== JSON.stringify({ wheat: 2 })));
   assert.equal(new Set(orders.map((order) => JSON.stringify(order.wants))).size, 3);
   assert.ok(orders.every((order) => order.expiresAt - (order.createdAt || T0) >= 30 * 60 * 1000));
   assert.ok(orders.every((order) => !/份量不用多/.test(order.flavor || "")));
@@ -27,20 +28,17 @@ test("新存檔第一天三張訂單的小麥需求不超過 4、各不相同且
   state.story.questId = "first_delivery";
   state.stats.harvested.wheat = C.CROPS.wheat.yield;
   const tutorialOrders = G.refreshOrders(state, T0 + C.CROPS.wheat.growMs, () => 0);
-  assert.deepEqual(tutorialOrders.map((order) => order.wants.wheat), [2, 3, 4]);
-  assert.equal(tutorialOrders[0].id, "tutorial_first_delivery");
-  state.storage.items.wheat = C.CROPS.wheat.yield;
-  assert.equal(G.fulfillOrder(state, tutorialOrders[0].id, T0 + C.CROPS.wheat.growMs, () => 0).ok, true,
-    "教學保證的一次小麥收成足以交付首單");
+  assert.deepEqual(tutorialOrders.map((order) => order.wants), [{ carrot: 2 }, { wheat: 3 }, { wheat: 4 }]);
+  assert.ok(tutorialOrders.every((order) => order.id !== "tutorial_first_delivery"));
 });
 
 test("停用交付鈕使用可行動的缺料文字", () => {
   const state = S.defaultState(T0);
   const order = G.refreshOrders(state, T0, () => 0)[0];
   assert.equal(G.canFulfill(state, order), false);
-  assert.equal(G.orderMissingText(state, order), "還缺小麥 ×2");
-  state.storage.items.wheat = 1;
-  assert.equal(G.orderMissingText(state, order), "還缺小麥 ×1");
+  assert.equal(G.orderMissingText(state, order), "還缺胡蘿蔔 ×2");
+  state.storage.items.carrot = 1;
+  assert.equal(G.orderMissingText(state, order), "還缺胡蘿蔔 ×1");
   const ui = fs.readFileSync(require.resolve("../src/ui.js"), "utf8");
   assert.ok(ui.includes('${can ? "交付" : escapeHtml(G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}'));
 });

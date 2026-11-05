@@ -673,8 +673,11 @@
     forest_herb: [2, 4], glow_mushroom: [1, 3], wild_berry: [1, 3], river_mint: [1, 3],
     mooncap_spore: [1, 2], amber_resin: [1, 2], forest_chestnut: [1, 2], frost_cherry: [1, 2],
   };
-  const TUTORIAL_DELIVERY_ORDER_ID = "tutorial_first_delivery";
-  const BEGINNER_ORDER_QTYS = [2, 3, 4];
+  const BEGINNER_ORDERS = [
+    { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "merchant", flavor: "蘿拉先留了一張胡蘿蔔試賣單；升到 2 級後再來準備。" },
+    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "merchant", flavor: "市集想試賣 3 份小麥，班伯的 2 份先留在主線。" },
+    { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "child", flavor: "圖圖想準備 4 份小麥做野餐點心。" },
+  ];
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
   const ORDER_COPY = {
     mayor: {
@@ -722,39 +725,22 @@
       thanks: order.thanks || copy.thanks,
     };
   }
-  function tutorialDeliveryOrderNeeded(state) {
-    const story = state.story || {};
-    const done = story.completed || {};
-    const stats = state.stats || {};
-    return story.questId === "first_delivery" && !done.first_delivery
-      && (stats.fulfilledOrders || 0) === 0
-      && ((stats.harvested || {}).wheat || 0) > 0;
-  }
   function firstDayChapterOne(state, now) {
     const story = state.story || {};
     const createdAt = Number.isFinite(state.createdAt) ? state.createdAt : now;
     return now - createdAt < 24 * 60 * 60 * 1000
       && (C.PROLOGUE_QUESTS || []).includes(story.questId || C.FIRST_QUEST);
   }
-  function makeBeginnerOrder(qty, now, tutorial) {
-    const npcIds = { 2: "elder", 3: "merchant", 4: "elder" };
-    const copy = {
-      2: "首收請留 2 份小麥給班伯的灶台，這張訂單可選做。",
-      3: "市集想試賣 3 份小麥，收成後送到看板。",
-      4: "班伯要做家常麥餅，請留 4 份小麥。",
-    };
+  function makeBeginnerOrder(template, now) {
+    const firstId = Object.keys(template.wants)[0];
+    const qty = template.wants[firstId];
+    const def = getItemDef(firstId);
     return {
-      id: tutorial ? TUTORIAL_DELIVERY_ORDER_ID : `beginner_wheat_${qty}`,
-      wants: { wheat: qty }, rarity: "common",
-      rewardCoins: tutorial ? 45 : 12 + qty * 3,
-      rewardXp: tutorial ? 3 : 2,
+      id: template.id, wants: Object.assign({}, template.wants), rarity: "common",
+      rewardCoins: Math.max(18, (def ? def.sellValue : 1) * qty + 12), rewardXp: 2,
       createdAt: now, expiresAt: now + GAME.orderTtlMs,
-      tutorial: !!tutorial, npcId: npcIds[qty], flavor: copy[qty],
-      thanks: tutorial ? "第一批小麥收到了，農場重新開張有個好開始。" : undefined,
+      npcId: template.npcId, flavor: template.flavor,
     };
-  }
-  function makeTutorialDeliveryOrder(now) {
-    return makeBeginnerOrder(CROPS.wheat.yield, now, true);
   }
   function makeOrder(state, now, rng, idSeed) {
     const pool = availableOrderItems(state); // 作物 + 已解鎖動物產品
@@ -801,21 +787,13 @@
     // 移除過期訂單，補滿到 orderSlots
     state.orders = state.orders.filter((o) => o.expiresAt > now);
     if (firstDayChapterOne(state, now)) {
-      const tutorial = tutorialDeliveryOrderNeeded(state);
       const kept = new Map();
       for (const order of state.orders) {
-        const qty = order && order.wants && Object.keys(order.wants).length === 1 ? order.wants.wheat : 0;
-        if (BEGINNER_ORDER_QTYS.includes(qty) && !kept.has(qty)) kept.set(qty, order);
+        if (order && BEGINNER_ORDERS.some((template) => template.id === order.id)) kept.set(order.id, order);
       }
-      if (tutorial) kept.set(CROPS.wheat.yield, makeTutorialDeliveryOrder(now));
-      state.orders = BEGINNER_ORDER_QTYS.map((qty) => kept.get(qty) || makeBeginnerOrder(qty, now, false));
+      state.orders = BEGINNER_ORDERS.map((template) => kept.get(template.id) || makeBeginnerOrder(template, now));
       state.ordersSeededAt = Math.max(state.ordersSeededAt || 0, 3);
       return state.orders;
-    }
-    if (tutorialDeliveryOrderNeeded(state)) {
-      state.orders = state.orders.filter((o) => o.id !== TUTORIAL_DELIVERY_ORDER_ID);
-      state.orders.unshift(makeTutorialDeliveryOrder(now));
-      if (state.orders.length > GAME.orderSlots) state.orders.length = GAME.orderSlots;
     }
     let seed = (state.ordersSeededAt || 0);
     while (state.orders.length < GAME.orderSlots) {
@@ -1420,7 +1398,7 @@
     if (q.id === "plant_wheat") return hasCrop(state, "wheat");
     if (q.id === "first_water") return hasWetCrop(state, "wheat");
     if (q.id === "first_harvest") return ((state.stats.harvested || {}).wheat || 0) > 0;
-    if (q.id === "first_delivery") return (state.stats.fulfilledOrders || 0) > 0 || q.objective === event;
+    if (q.id === "first_delivery") return !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
     if (q.id === "clear_old_path") return (state.stats.cleared || 0) > 0 || q.objective === event;
     // 第二章（Stage 5）
     if (q.id === "repair_bridge") return !!(state.flags && state.flags.bridgeRepaired);
@@ -2452,7 +2430,7 @@
     getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
-    tutorialDeliveryOrderNeeded, makeTutorialDeliveryOrder, orderNarrative,
+    orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
     makeOrder, refreshOrders, canFulfill, orderMissingText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, buyUpgrade, helperFlags,

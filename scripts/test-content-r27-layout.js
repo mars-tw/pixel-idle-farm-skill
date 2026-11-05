@@ -90,7 +90,7 @@ const INTERSECT_JS = `
       await page.locator('#worldBegin').click();
       await page.waitForTimeout(500);
 
-      // 6：建造選單完整落在 HUD 與工具列之間，所有卡片名稱與按鈕都看得到
+      // 6：R28 僅列已解鎖與下一個將解鎖項目；可見卡片仍須完整落在 HUD 與工具列之間
       const build = await page.evaluate(() => {
         window.__farm.setTool('build');
         const box = document.querySelector('#buildWheel');
@@ -104,7 +104,8 @@ const INTERSECT_JS = `
         });
         return { hidden: box.hidden, box: { top: br.top, bottom: br.bottom, left: br.left, right: br.right }, hudBottom: hud.bottom, toolTop: tr && tr.height > 0 ? tr.top : innerHeight, btns };
       });
-      assert(!build.hidden && build.btns.length >= 5, `${w}×${h} 建造選單未開啟或卡片不足`);
+      assert(!build.hidden && build.btns.length === 1, `${w}×${h} 新存檔建造選單應只列下一個解鎖建物（實際 ${build.btns.length}）`);
+      assert(build.btns[0].text.includes('農場等級 2 解鎖'), `${w}×${h} 下一個建物缺少明確解鎖條件`);
       assert(build.box.top >= build.hudBottom - 1, `${w}×${h} 建造選單上緣 ${Math.round(build.box.top)} 超出 HUD 下緣 ${Math.round(build.hudBottom)}`);
       assert(build.box.bottom <= build.toolTop + 1, `${w}×${h} 建造選單下緣 ${Math.round(build.box.bottom)} 超出工具列上緣 ${Math.round(build.toolTop)}`);
       assert(build.box.top >= 0 && build.box.bottom <= h + 1, `${w}×${h} 建造選單超出視窗`);

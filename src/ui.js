@@ -867,7 +867,7 @@
     container.appendChild(btn);
   }
 
-  // 幫手自動化捷徑：早期隱藏（初期動作必須走到目標執行）；升「幫手機器人」後才解鎖
+  // 幫手自動化捷徑：早期隱藏（初期動作必須走到目標執行）；升「稻草人幫手」後才解鎖
   function syncHud() {
     const ga = $("globalActions"); if (!ga) return;
     const unlocked = (state.upgrades && state.upgrades.helperLevel > 0);
@@ -1083,7 +1083,6 @@
         <div class="o-rarity" style="background:${rarity.color}"></div>
         <div class="o-body">
           ${isFestival ? `<div class="festival-tag">🏮四季物產</div>` : ""}
-          <div class="o-optional" data-audit="order-optional">可選</div>
           ${narrative ? `<div class="o-client" data-audit="order-npc">${narrative.npcName}｜${narrative.npcTitle}</div>
           <div class="o-flavor">${narrative.offer}</div>` : ""}
           <div class="o-wants">${wantsHtml}</div>
@@ -1208,11 +1207,11 @@
   }
   function renderUpgrades() {
     const box = $("upgrades"); box.innerHTML = "";
+    const orderRewardEstimate = 18;
+    const upgradeBand = (next) => !next ? 3 : state.coins >= next.cost ? 0 : next.cost - state.coins <= orderRewardEstimate ? 1 : 2;
     const upgradeKeys = window.UPGRADE_ORDER.slice().sort((a, b) => {
       const na = G.nextUpgrade(state, a), nb = G.nextUpgrade(state, b);
-      const ba = na && state.coins >= na.cost ? 0 : na ? 1 : 2;
-      const bb = nb && state.coins >= nb.cost ? 0 : nb ? 1 : 2;
-      return ba - bb;
+      return upgradeBand(na) - upgradeBand(nb) || (na ? na.cost : Infinity) - (nb ? nb.cost : Infinity);
     });
     // R26：升級項目直接全部列出，不再用難懂的「顯示更多 1」折疊。
     const visibleUpgrades = upgradeKeys;
@@ -1221,13 +1220,19 @@
       const lv = state.upgrades[key];
       const max = G.upgradeMaxLevel(key);
       const next = G.nextUpgrade(state, key);
+      const band = upgradeBand(next);
+      const bandLabel = ["現在買得起", "差一點", "長期目標", "已滿級"][band];
+      const nextStep = next && state.coins < next.cost
+        ? (band === 1 ? `再交一張訂單約可得 ${orderRewardEstimate} 金` : `先累積 ${fmtNum(next.cost - state.coins)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
+        : "";
       const el = document.createElement("div");
       el.className = "up";
+      el.dataset.affordability = ["affordable", "near", "long-term", "maxed"][band];
       el.innerHTML = `
         <div class="u-ic">${key === "plotCount" ? uiIcon("tool_plant") : def.icon}</div>
         <div class="u-body">
           <div class="u-name">${def.name} <span class="lv">Lv ${lv}/${max}</span></div>
-          <div class="u-desc">${def.desc}</div>
+          <div class="u-desc">${def.desc}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${nextStep}。</span>` : ""}</div>
         </div>
         ${next
           ? `<button class="btn buy small" ${state.coins >= next.cost ? "" : "disabled"}>${state.coins >= next.cost ? `${fmtNum(next.cost)} 金` : `${fmtNum(next.cost)} 金（還差 ${fmtNum(next.cost - state.coins)}）`}</button>`
@@ -1289,6 +1294,13 @@
     return `<div class="quest ${done ? "done" : ""} ${active ? "active" : ""}">
       <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span>
       <span class="qtext"><span>${q.title}</span><em>${step.done}/${step.total}</em></span></div>`;
+  }
+  function currentQuestFirst(ids, cur) {
+    const rows = (ids || []).slice();
+    if (!cur) return rows;
+    const index = rows.indexOf(cur.id);
+    if (index > 0) rows.unshift(rows.splice(index, 1)[0]);
+    return rows;
   }
   function chapter5Letters() {
     const byId = {};
@@ -1533,8 +1545,8 @@
     if (cur.id === "intro_reopen_farm") return "主動作：點金色箭頭旁的告示牌，走過去閱讀。";
     if (cur.id === "plant_wheat") return "主動作：選手工具，點空農土種下小麥。";
     if (cur.id === "first_water") return "主動作：走到水井，或選澆水工具點麥田。";
-    if (cur.id === "first_harvest") return "主動作：等小麥成熟，點麥田走過去收成。";
-    if (cur.id === "first_delivery") return "主動作：走到訂單看板，交付 2 小麥新手訂單。";
+    if (cur.id === "first_harvest") return `主動作：收成小麥 ${Math.min(6, (state.stats.harvested && state.stats.harvested.wheat) || 0)}/6 份；每格可收 2 份。`;
+    if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給班伯。";
     if (cur.id === "clear_old_path") return "主動作：選清除工具，點金色箭頭標示的樹樁。";
     if (cur.id === "repair_bridge") {
       const st = G.bridgeMaterialStatus ? G.bridgeMaterialStatus(state) : null;
@@ -1555,18 +1567,19 @@
     return "主動作：" + cur.desc;
   }
   function earlyChoiceRoutes(farmState) {
-    const stats = (farmState && farmState.stats) || {};
     const adventure = (farmState && farmState.adventure) || {};
-    if ((stats.plantCount || 0) < 1 || (stats.fulfilledOrders || 0) > 0 || ((adventure.claimed && Object.keys(adventure.claimed).length) || 0) >= 2) return [];
+    const wheatHarvested = adventure.byTarget && adventure.byTarget.harvest && adventure.byTarget.harvest.wheat || 0;
+    const mainDelivered = !!(adventure.claimed && adventure.claimed.c1_first_harvest);
+    if (wheatHarvested < 6 || mainDelivered) return [];
     return [
-      { id: "order", title: "先完成班伯訂單", reward: "+45 金幣", next: "下一步：收成後到訂單看板交付 2 份小麥。" },
-      { id: "field", title: "先存錢擴一格田", reward: "+2 格產量", next: "下一步：保留收成、累積 40 金，再到升級頁開墾。" },
+      { id: "main", title: "先完成主線", reward: "+16 金與建材", next: "下一步：把 2 份小麥交給班伯。" },
+      { id: "field", title: "先整理田地", reward: "保留其餘收成", next: "可選：先查看升級，再回來找班伯。" },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {
     const routes = earlyChoiceRoutes(farmState);
     if (!routes.length) return "";
-    return `<div class="world-objective-routes" data-audit="early-choice-routes" aria-label="前期自主路線">${routes.map((route) => `<div class="world-objective-hint route" data-route="${route.id}"><b>${escapeHtml(route.title)}・${escapeHtml(route.reward)}</b><span>${escapeHtml(route.next)}</span></div>`).join("")}<small>兩條路都不影響主線完成。</small></div>`;
+    return `<div class="world-objective-routes" data-audit="early-choice-routes" aria-label="第一次收成後的路線">${routes.map((route) => `<div class="world-objective-hint route" data-route="${route.id}"><b>${escapeHtml(route.title)}・${escapeHtml(route.reward)}</b><span>${escapeHtml(route.next)}</span></div>`).join("")}</div>`;
   }
   window.FarmEarlyChoiceRoutes = earlyChoiceRoutes;
   window.FarmEarlyChoiceRoutesHtml = earlyChoiceRoutesHtml;
@@ -2218,7 +2231,7 @@
     const title = cur ? cur.title : "陽光農場的新篇章";
     const copy = cur ? cur.desc
       : "農場重新熱鬧了起來。東林已通，繼續照顧田地與動物，把收穫留進鄰居的餐籃。";
-    const quests = compactRowsHtml("story-main", QUEST_ORDER.map((id) => questRow(id, completed, cur)), 4);
+    const quests = compactRowsHtml("story-main", currentQuestFirst(QUEST_ORDER, cur).map((id) => questRow(id, completed, cur)), 4);
     // 第二章：序章 6/6 後才顯示，獨立完成度（不影響主面板 0/6 讀值）
     const ch2Html = ch1Done ? `
       <div class="chapter2">
@@ -2227,7 +2240,7 @@
           <div class="story-progress-head"><span>探索完成度</span><b>${ch2Done}/${CHAPTER2_ORDER.length}</b></div>
           <div class="story-progress-track"><i style="width:${ch2Pct}%"></i></div>
         </div>
-        <div class="quest-list">${compactRowsHtml("story-ch2", CHAPTER2_ORDER.map((id) => questRow(id, completed, cur)), 3)}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch2", currentQuestFirst(CHAPTER2_ORDER, cur).map((id) => questRow(id, completed, cur)), 3)}</div>
       </div>` : "";
     // 第三章：第二章 2/2 後才顯示，獨立完成度（Stage 7 動物照護）
     const ch3Html = ch2AllDone ? `
@@ -2237,7 +2250,7 @@
           <div class="story-progress-head"><span>照護完成度</span><b>${ch3Done}/${CHAPTER3_ORDER.length}</b></div>
           <div class="story-progress-track"><i style="width:${ch3Pct}%"></i></div>
         </div>
-        <div class="quest-list">${compactRowsHtml("story-ch3", CHAPTER3_ORDER.map((id) => questRow(id, completed, cur)), 3)}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch3", currentQuestFirst(CHAPTER3_ORDER, cur).map((id) => questRow(id, completed, cur)), 3)}</div>
       </div>` : "";
     const ch4Html = ch3AllDone ? `
       <div class="chapter2 chapter4">
@@ -2246,7 +2259,7 @@
           <div class="story-progress-head"><span>四季完成度</span><b>${ch4Done}/${CHAPTER4_ORDER.length}</b></div>
           <div class="story-progress-track"><i style="width:${ch4Pct}%"></i></div>
         </div>
-        <div class="quest-list">${compactRowsHtml("story-ch4", CHAPTER4_ORDER.map((id) => questRow(id, completed, cur)), 3)}</div>
+        <div class="quest-list">${compactRowsHtml("story-ch4", currentQuestFirst(CHAPTER4_ORDER, cur).map((id) => questRow(id, completed, cur)), 3)}</div>
       </div>` : "";
     const letterRows = chapter5Letters().map((l) => {
       const unlocked = !!((mail.unlocked || {})[l.id]);
@@ -3267,10 +3280,15 @@
   }
   function buildCatalogStatus(type) {
     const def = window.BUILDINGS[type];
-    if (!def || !G.buildingUnlocked(state, type)) return { enabled: false, text: "尚未解鎖" };
+    if (!def || !G.buildingUnlocked(state, type)) return { enabled: false, text: `農場等級 ${def ? def.unlockLevel : "？"} 解鎖` };
     if (G.buildingAtMaxCount && G.buildingAtMaxCount(state, type)) return { enabled: false, text: "數量已滿" };
     if (!G.canAffordCost(state, def.cost)) return { enabled: false, text: buildingCostShortfall(def.cost) || "資源不足" };
     return { enabled: true, text: "可以建造" };
+  }
+  function visibleBuildingCatalogTypes() {
+    const unlocked = window.BUILDING_ORDER.filter((type) => G.buildingUnlocked(state, type));
+    const next = window.BUILDING_ORDER.find((type) => !G.buildingUnlocked(state, type));
+    return next ? unlocked.concat(next) : unlocked;
   }
   function placeBuildCatalog(box) {
     const scene = $("mapScene");
@@ -3292,7 +3310,7 @@
     const box = $("buildWheel"); if (!box) return;
     hideObjectBubble(); hideSceneActions();
     box.innerHTML = `<div class="build-catalog-hint">選一個建物，再點地面放置</div>`;
-    window.BUILDING_ORDER.forEach((type) => {
+    visibleBuildingCatalogTypes().forEach((type) => {
       const def = window.BUILDINGS[type]; if (!def) return;
       const status = buildCatalogStatus(type);
       const b = document.createElement("button");
@@ -4230,7 +4248,7 @@
     renderBuildMenu(box, tile);
   }
   function renderBuildMenu(box, tile) {
-    const opts = window.BUILDING_ORDER.map((type) => {
+    const opts = visibleBuildingCatalogTypes().map((type) => {
       const def = window.BUILDINGS[type];
       const unlocked = G.buildingUnlocked(state, type);
       const afford = G.canAffordCost(state, def.cost);
@@ -4240,7 +4258,7 @@
         <div class="build-opt ${unlocked && afford && !atMax ? "" : "locked"}">
           <span class="bo-ic">${def.emoji}</span>
           <span class="bo-body"><span class="bo-name">${def.name}</span><br>
-            <span class="bo-cost">${def.desc} · ${costTxt}${atMax ? " · 已達上限" : unlocked ? "" : " · 🔒Lv" + def.unlockLevel}</span></span>
+            <span class="bo-cost">${def.desc} · ${costTxt}${atMax ? " · 已達上限" : unlocked ? "" : " · 🔒農場等級 " + def.unlockLevel + " 解鎖"}</span></span>
           <button class="btn buy small bbtn" data-type="${type}" ${unlocked && afford && !atMax ? "" : "disabled"}>蓋</button>
         </div>`;
     }).join("");

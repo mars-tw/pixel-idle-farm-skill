@@ -19,7 +19,7 @@ function test(name, fn) {
   catch (error) { console.error('  ✗ ' + name + '\n    ' + error.stack); process.exitCode = 1; }
 }
 
-test('新存檔首輪六份小麥可依序完成首章前兩項、班伯保留份、新手訂單與印章餐籃', () => {
+test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣同一份交付', () => {
   let now = 1800000000000;
   const state = S.defaultState(now);
   assert.ok(C.GAME.startCoins >= C.CROPS.wheat.seedCost * 3);
@@ -44,40 +44,34 @@ test('新存檔首輪六份小麥可依序完成首章前兩項、班伯保留�
   A.record(state, { type: 'talk', npcId: 'elder' }, now);
   assert.equal(A.claim(state, 'c1_first_harvest', now).ok, true);
   assert.equal(state.storage.items.wheat, 4);
-  state.story.questId = 'first_delivery';
-  const order = G.refreshOrders(state, now, () => 0).find((row) => row.id === 'tutorial_first_delivery');
-  assert.ok(order);
-  assert.equal(order.npcId, 'elder');
-  assert.deepEqual(order.wants, { wheat: 2 });
-  assert.equal(G.fulfillOrder(state, order.id, now, () => 0).ok, true);
+  const orders = G.refreshOrders(state, now, () => 0);
+  assert.ok(orders.every((order) => JSON.stringify(order.wants) !== JSON.stringify({ wheat: 2 })));
   assert.equal(D.status(state, now).tasks.find((row) => row.id === 'basket').ready, true);
   assert.equal(D.claim(state, 'basket', D.dayNumber(now), now).ok, true);
-  assert.equal(state.storage.items.wheat || 0, 0);
+  assert.equal(state.storage.items.wheat || 0, 2);
 });
 
-test('開場、主線、訂單與印章冊統一留兩份小麥給班伯的灶台', () => {
-  assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?留 2 份小麥給班伯的灶台[\s\S]*?wants: \{ wheat: 2 \}/);
-  assert.match(world, /留 2 份小麥給班伯的灶台/);
+test('開場、主線與手記統一把兩份小麥交給班伯，市集沒有重複條件', () => {
+  assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?把其中 2 份交給班伯[\s\S]*?wants: \{ wheat: 2 \}/);
+  assert.match(world, /把其中 2 份交給班伯/);
   assert.match(world, /種下第一把小麥，做陽光餐籃/);
   assert.doesNotMatch(world, /給葛瑞送一籃/);
   assert.match(daily, /留 2 份\$\{crop\.name\}給班伯的灶台/);
   const state = S.defaultState(1800000000000);
-  state.story.questId = 'first_delivery';
-  state.stats.harvested.wheat = 6;
-  const order = G.refreshOrders(state, 1800000000000, () => 0)[0];
-  assert.match(G.orderNarrative(state, order).offer, /留 2 份小麥給班伯的灶台/);
+  const orders = G.refreshOrders(state, 1800000000000, () => 0);
+  assert.ok(orders.every((order) => JSON.stringify(order.wants) !== JSON.stringify({ wheat: 2 })));
 });
 
-test('訂單卡有可選標籤、缺料主按鈕與獨立去田裡按鈕，丟棄維持二次確認', () => {
-  assert.match(ui, /class="o-optional"[^>]*>可選</);
+test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {
+  assert.doesNotMatch(ui, /class="o-optional"/);
   assert.match(ui, /class="btn buy small ful" \$\{can \? "" : "disabled"\}>\$\{can \? "交付" : escapeHtml\(G\.orderMissingText/);
   assert.match(ui, /class="btn ghost small order-go"[^>]*>去田裡</);
   assert.match(ui, /requestOrderTrash\(o\.id\)/);
   assert.match(ui, /確認丟棄/);
   const state = S.defaultState(1800000000000);
   const order = G.refreshOrders(state, 1800000000000, () => 0)[0];
-  assert.equal(G.orderMissingText(state, order), '還缺小麥 ×2');
-  state.storage.items.wheat = 2;
+  assert.equal(G.orderMissingText(state, order), '還缺胡蘿蔔 ×2');
+  state.storage.items.carrot = 2;
   assert.equal(G.orderMissingText(state, order), '交付');
 });
 
@@ -90,13 +84,12 @@ test('成熟格、背包名稱、升級實價與設定目前狀態皆有明確�
   assert.doesNotMatch(ui.slice(ui.indexOf('function settingRowHtml'), ui.indexOf('function soundVolumeHtml')), />\$\{enabled \? "開啟" : "關閉"\}<\/button>/);
 });
 
-test('首次種植後任務卡提供兩條不阻擋主線的自主路線', () => {
+test('第一次收成完成後才顯示兩條路線，交付後收起', () => {
   assert.match(ui, /function earlyChoiceRoutes\(farmState\)/);
-  assert.match(ui, /先完成班伯訂單/);
-  assert.match(ui, /\+45 金幣/);
-  assert.match(ui, /先存錢擴一格田/);
-  assert.match(ui, /\+2 格產量/);
-  assert.match(ui, /不影響主線/);
+  assert.match(ui, /wheatHarvested < 6 \|\| mainDelivered/);
+  assert.match(ui, /先完成主線/);
+  assert.match(ui, /先整理田地/);
+  assert.doesNotMatch(ui, /兩條路都不影響主線完成/);
   assert.match(world, /window\.FarmEarlyChoiceRoutesHtml/);
 });
 

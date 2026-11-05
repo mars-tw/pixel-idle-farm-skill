@@ -102,8 +102,8 @@
   const QUESTS = [
     { id: "c1_homecoming", chapter: 1, name: "把田叫醒", npcId: "mayor", description: "跟葛瑞打聲招呼，再種下三格作物，替它們澆水。", target: { kind: "npc", id: "mayor" }, wants: {},
       goals: [goal("talk", 1, "找葛瑞交談", "mayor"), goal("plant", 3, "種下作物"), goal("water", 3, "替作物澆水")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
-    { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收下第一批作物，找班伯聊聊，留 2 份小麥給班伯的灶台。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
-      goals: [goal("harvest", 6, "收成作物"), goal("talk", 1, "找班伯交談", "elder")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
+    { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收成 6 份小麥（每格 2 份），再把其中 2 份交給班伯。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
+      goals: [goal("harvest", 6, "收成小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
     { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在野餐廚房做一份農家麥餅，帶給班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
       goals: [goal("cook", 1, "烤一份農家麥餅", "rustic_bread")], reward: reward(20, 4, { wood: 6 }, { fishingRod: true }) },
     { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木材、兩份石材修好釣台，再試試班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
@@ -660,7 +660,7 @@
       chapterProgress: { claimed: chapterProgress.claimed, total: chapterProgress.total },
       step: step ? copy(step) : null,
       stepText: step ? `${step.name} ${Math.min(step.current, step.required)}/${step.required}` : `找${npc.name}回報`,
-      actionLabel: step ? step.name : `找${npc.name}回報`,
+      actionLabel: q.id === "c1_first_harvest" && !step ? "把 2 份小麥交給班伯" : step ? step.name : `找${npc.name}回報`,
     });
   }
   function buyMaterial(state, id, count, now) {

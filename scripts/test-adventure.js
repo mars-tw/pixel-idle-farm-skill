@@ -117,7 +117,7 @@ test("repeated claims and save reloads grant rewards only once", () => {
 
 test("ready state persists, but missing delivery items cannot be claimed", () => {
   const state = fresh(); wakeFarm(state); good(A.claim(state, "c1_homecoming", T0));
-  good(A.record(state, { type: "harvest", qty: 6 }, T0)); good(A.record(state, { type: "talk", npcId: "elder" }, T0));
+  good(A.record(state, { type: "harvest", cropId: "wheat", qty: 6 }, T0));
   state.storage.items.wheat = 2; assert.equal(q(state, "c1_first_harvest").status, "ready");
   const readyAt = state.adventure.quests.c1_first_harvest.readyAt;
   delete state.storage.items.wheat;
@@ -314,7 +314,16 @@ test("full three-chapter run uses real crops, care, orders and forage; no materi
   }
   function deliverExistingOrder() {
     G.refreshOrders(state, now, () => 0);
-    const order = state.orders.find((entry) => G.canFulfill(state, entry)); assert.ok(order, "a real existing order is affordable");
+    let order = state.orders.find((entry) => G.canFulfill(state, entry));
+    if (!order) {
+      const candidate = state.orders.find((entry) => Object.keys(entry.wants).every((id) => C.CROPS[id] && C.CROPS[id].unlockLevel <= state.level));
+      assert.ok(candidate, "a real existing order uses unlocked crops");
+      for (const [cropId, needed] of Object.entries(candidate.wants)) {
+        while ((state.storage.items[cropId] || 0) < needed) harvestBatch(cropId, 1);
+      }
+      order = candidate;
+    }
+    assert.ok(G.canFulfill(state, order), "a real existing order is affordable after growing its unlocked crop");
     good(G.fulfillOrder(state, order.id, now, () => 0)); action(() => A.record(state, "order", now)); G.advanceStory(state, "deliver", now);
   }
   G.advanceStory(state, "read_sign", now);

@@ -46,8 +46,9 @@
       { id: "water", title: "替新芽添水", detail: "種下作物後，用澆水工具照顧它。每株只算一次。", have: d.water, need: waterNeed, coins: 4 },
       { id: "harvest", title: "收一籃新鮮", detail: "主線收成也算；作物成熟後，走到田邊收成並放進倉庫。", have: d.harvest, need: harvestNeed, coins: 6 },
       { id: "basket", title: `${crop.name}餐籃`, detail: `留 2 份${crop.name}給班伯的灶台，交付後會從倉庫取走。`, have: count(items[d.cropId]), need: 2, coins: crop.sellValue * 2 + 4, cropId: d.cropId },
-    ].map((t) => ({ ...t, claimed: !!d.claimed[t.id], ready: !d.claimed[t.id] && t.have >= t.need }));
+    ].map((t) => ({ ...t, completed: t.have >= t.need, claimed: !!d.claimed[t.id], ready: !d.claimed[t.id] && t.have >= t.need }));
     return { day: d.day, date: key(d.day), nextAt: (d.day + 1) * DAY - OFFSET, tasks, stamps: d.stamps, stamped: d.stamped,
+      completed: tasks.filter((t) => t.completed).length, claimed: tasks.filter((t) => t.claimed).length,
       done: tasks.filter((t) => t.claimed).length, keepsakes: keepsakes.map((k) => ({ ...k, owned: !!d.collected[k.id] })) };
   }
   function claim(s, id, expectedDay, now) {

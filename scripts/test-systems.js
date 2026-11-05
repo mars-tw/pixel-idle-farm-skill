@@ -15,6 +15,7 @@ const fs = require("fs");
 const C = require(path.join(__dirname, "..", "src", "config.js"));
 const S = require(path.join(__dirname, "..", "src", "state.js"));
 const G = require(path.join(__dirname, "..", "src", "game.js"));
+const A = require(path.join(__dirname, "..", "src", "adventure.js"));
 
 let failed = 0;
 function assert(cond, msg) { if (cond) console.log("  ✓ " + msg); else { console.error("  ✗ " + msg); failed++; } }
@@ -303,16 +304,11 @@ console.log("\n== 13. 故事任務完成度同步（作物先完成也會補進�
   assert(harvest.ok && harvest.completedIds.includes("first_harvest") && st.story.questId === "first_delivery",
     "收成小麥後 first_harvest 完成度增加");
 
-  G.refreshOrders(st, T0 + 2500, () => 0.2);
-  const tutorial = st.orders.find((o) => o.id === "tutorial_first_delivery");
-  assert(tutorial && tutorial.wants.wheat === C.CROPS.wheat.yield, "首收後生成 2 小麥新手保底訂單");
-  assert(tutorial.rewardCoins === 45 && tutorial.rewardXp === 3, "新手保底訂單報酬維持 45 金 / 3 XP，不跳過早期升級節奏");
-  assert(G.canFulfill(st, tutorial), "首收後新手保底訂單立即可交付");
-
-  G.fulfillOrder(st, tutorial.id, T0 + 3000);
+  A.ensure(st, T0 + 2500);
+  st.adventure.claimed.c1_first_harvest = true;
   const delivery = G.syncStoryProgress(st);
   assert(delivery.ok && delivery.completedIds.includes("first_delivery") && st.story.questId === "clear_old_path",
-    "交付訂單後 first_delivery 完成度增加");
+    "班伯主線交付後 first_delivery 完成度增加");
 
   const stump = st.map.tiles.find((t) => t.object === "stump");
   G.clearObstacle(st, stump.id);

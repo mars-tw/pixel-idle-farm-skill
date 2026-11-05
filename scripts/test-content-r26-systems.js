@@ -30,10 +30,11 @@ test('升級面板只有一個標題關閉入口，買不起時顯示還差 X �
   assert.doesNotMatch(ui, /appendListMore\(box, "upgrades"/);
 });
 
-test('建造模式先顯示完整可建清單、價格、負擔狀態與放置提示', () => {
+test('建造模式顯示已解鎖與下一項、價格、負擔狀態與放置提示', () => {
   assert.match(ui, /if \(t === "build"\) showBuildCatalog\(\)/);
   assert.match(ui, /選一個建物，再點地面放置/);
-  assert.match(ui, /window\.BUILDING_ORDER\.forEach/);
+  assert.match(ui, /visibleBuildingCatalogTypes\(\)\.forEach/);
+  assert.match(ui, /const next = window\.BUILDING_ORDER\.find/);
   assert.match(ui, /buildCostText\(def\)/);
   assert.match(ui, /buildingCostShortfall\(def\.cost\)/);
   assert.match(ui, /state\.interaction\.buildType = type/);
@@ -71,8 +72,13 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
     }
     guide = A.guide(state, now);
     assert.equal(guide.step, null);
-    assert.match(guide.stepText, /^找.+回報$/);
-    assert.equal(guide.actionLabel, guide.stepText);
+    if (id === 'c1_first_harvest') {
+      assert.equal(guide.stepText, '找老農 班伯回報');
+      assert.equal(guide.actionLabel, '把 2 份小麥交給班伯');
+    } else {
+      assert.match(guide.stepText, /^找.+回報$/);
+      assert.equal(guide.actionLabel, guide.stepText);
+    }
     assert.equal(A.claim(state, id, now).ok, true);
   }
   assert.equal(A.summary(state, now).claimed, 9);
@@ -80,7 +86,7 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
   assert.doesNotMatch(world, /物品備齊，交給鎮民/);
 });
 
-test('第一次三格小麥收成足以完成主線交付與一張新手訂單', () => {
+test('第一次三格小麥收成足以完成班伯主線，市集不再重複扣兩份', () => {
   let now = 1800000000000;
   const state = S.defaultState(now);
   A.record(state, { type: 'talk', npcId: 'mayor' }, now);
@@ -101,12 +107,9 @@ test('第一次三格小麥收成足以完成主線交付與一張新手訂單',
   A.record(state, { type: 'talk', npcId: 'elder' }, now);
   assert.equal(A.claim(state, 'c1_first_harvest', now).ok, true);
   assert.equal(state.storage.items.wheat, 4);
-  state.story.questId = 'first_delivery';
-  G.refreshOrders(state, now, () => 0);
-  const order = state.orders.find((row) => row.id === 'tutorial_first_delivery' || row.wants.wheat === 2);
-  assert.ok(order);
-  assert.equal(G.fulfillOrder(state, order.id, now, () => 0).ok, true);
-  assert.ok((state.storage.items.wheat || 0) >= 2);
+  const orders = G.refreshOrders(state, now, () => 0);
+  assert.ok(orders.every((row) => JSON.stringify(row.wants) !== JSON.stringify({ wheat: 2 })));
+  assert.equal(state.storage.items.wheat, 4);
 });
 
 test('每日收成門檻不超過首章 6 份，印章冊標示已領取 0/3', () => {
@@ -116,7 +119,7 @@ test('每日收成門檻不超過首章 6 份，印章冊標示已領取 0/3', (
     const harvest = D.status(state, day * 86400000).tasks.find((row) => row.id === 'harvest');
     assert.ok(harvest.need <= C.CROPS.wheat.yield * 3);
   }
-  assert.match(dailyUi, /已領取 \$\{st\.done\}\/3/);
+  assert.match(dailyUi, /已完成 \$\{st\.completed\}\/3・已領取 \$\{st\.claimed\}\/3/);
 });
 
 test('開場、對話與設定文案符合 R26', () => {
