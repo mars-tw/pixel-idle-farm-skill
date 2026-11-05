@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r35-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r36-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1325,11 +1325,10 @@
       const bandLabel = ["現在買得起", "差一點", "長期目標", "已滿級"][band];
       const shortfall = G.upgradeShortfall(state, key);
       const nextStep = next && shortfall > 0
-        ? (!marketUnlocked ? "" : band === 1 ? `還差 ${fmtNum(shortfall)} 金；再交一張訂單約可補足` : `還差 ${fmtNum(shortfall)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
+        ? (!marketUnlocked ? "先把 2 份小麥交給老農班伯，市集就會開放" : band === 1 ? `還差 ${fmtNum(shortfall)} 金；再交一張訂單約可補足` : `還差 ${fmtNum(shortfall)} 金；每張訂單約可得 ${orderRewardEstimate} 金`)
         : "";
       const el = document.createElement("div");
       el.className = "up";
-      if (!marketUnlocked) el.setAttribute("aria-label", `${def.name}。先把 2 份小麥交給老農班伯，市集就會開放。`);
       el.dataset.affordability = ["affordable", "near", "long-term", "maxed"][band];
       el.innerHTML = `
         <div class="u-ic">${key === "plotCount" ? uiIcon("tool_plant") : def.icon}</div>
