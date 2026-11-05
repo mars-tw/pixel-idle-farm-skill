@@ -20,3 +20,5 @@ body:has(#worldDialogue:not([hidden])) #questDock .qp-step,
 body:has(#toast-zone > .toast) #questDock .qp-step,
 body:has(#buildWheel:not([hidden])) #questDock .qp-step { display: none; }
 @media (max-width: 859px), (max-height: 600px) { #questDock .qp-step { display: none; } }
+/* R31：手機畫面窄，地點標籤會被任務卡蓋成半截；手機上不顯示地點標籤（小地圖與任務卡已說明位置）。 */
+@media (max-width: 859px) { .world-location { display: none !important; } }
