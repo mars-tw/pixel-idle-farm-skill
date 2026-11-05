@@ -1220,6 +1220,45 @@
 <link rel="stylesheet" href="src/content-r22.css?v=content-r24-20261026-2">
 <link rel="stylesheet" href="src/content-r23.css?v=content-r24-20261026-2">
 <link rel="stylesheet" href="src/content-r24.css?v=content-r24-20261026-2">
+<style id="r25-layout">
+/* R25 B線：版面與畫面可讀性（開場／對話／手機 HUD／名牌／田格狀態） */
+/* 6 桌面開場：便箋卡片置中定高，插圖完整顯示不裁切 */
+#worldModal:has(.sun-welcome) { align-items: center; justify-content: center; padding: 20px 16px; background: rgba(46, 32, 16, .55); }
+#worldModal:has(.sun-welcome) .modal-card { width: min(560px, calc(100vw - 32px)); max-width: calc(100vw - 32px); height: min(600px, calc(100dvh - 40px)); min-height: 0; max-height: calc(100dvh - 40px); margin: 0 auto; border: 3px solid #8b5e34; border-radius: 10px; display: flex; flex-direction: column; padding: 0 18px 16px; overflow: hidden; }
+#worldModal:has(.sun-welcome) .sun-welcome { height: 230px; min-height: 0; flex: 0 0 230px; margin: 0 -18px 12px; }
+#worldModal:has(.sun-welcome) .sun-welcome-scene { width: 100%; height: 100%; max-height: none; object-fit: contain; background: #f3e6c6; }
+#worldModal:has(.sun-welcome) .modal-body { flex: 1 1 auto; min-height: 0; max-height: none; overflow-y: auto; margin: 6px 0 0; }
+@media (max-height: 500px) and (min-width: 600px) {
+  #worldModal:has(.sun-welcome) .sun-welcome { height: 150px; flex-basis: 150px; }
+}
+/* 7 對話不遮操作：對話框在底部工具列上方，工具列與方向鍵保持可見 */
+.world-dialogue { bottom: 100px; }
+body:has(#worldDialogue:not([hidden])) #farmDock { visibility: visible; display: grid; pointer-events: auto; }
+body:has(#worldDialogue:not([hidden])) #mobileControls { visibility: visible; }
+@media (max-width: 859px) {
+  .world-dialogue { bottom: 78px; max-height: 36dvh; overflow-y: auto; }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .world-dialogue { bottom: 70px; width: min(440px, calc(100vw - 24px)); max-height: 30dvh; overflow-y: auto; }
+}
+/* 8 手機 HUD：資源列單行不換行，等級數字保留 */
+@media (max-width: 859px) {
+  .res-bar { flex-wrap: nowrap; }
+  .res-bar .res { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; }
+  .res-bar .res .sub { overflow: hidden; text-overflow: ellipsis; }
+  .res-bar .res.level .xp-track { width: 32px; }
+  #mapScene .seed .sn { white-space: nowrap; overflow: visible; text-overflow: clip; }
+}
+/* 9 誰是誰：任務 NPC 名牌、靠近／選取時的名牌、地點標籤底板 */
+.npc-nameplate { display: block; width: max-content; max-width: 180px; margin: 0 auto 3px; padding: 3px 8px; background: rgba(24, 42, 32, .92); color: #fffbe8; border: 1px solid rgba(255, 251, 232, .85); border-radius: 4px; font-size: 12px; font-weight: 800; line-height: 1.35; white-space: nowrap; pointer-events: none; }
+.npc-nameplate-near { position: absolute; transform: translate(-50%, -100%); z-index: 9500; margin: 0; text-align: center; }
+.world-location { background: rgba(24, 42, 32, .88); color: #ffffff; padding: 4px 8px; border: 1px solid rgba(255, 255, 255, .65); border-radius: 4px; font-size: 12px; font-weight: 700; text-shadow: none; }
+/* 10 田格狀態：濕土深色、可收成亮框、播種與成長中邊框各不同 */
+.gtile.farm-plot.state-seeded { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .65), inset 0 2px 4px rgba(0, 0, 0, .25); }
+.gtile.farm-plot.state-watered { box-shadow: inset 0 0 0 3px rgba(38, 110, 180, .9), inset 0 -14px 0 rgba(16, 58, 110, .38); filter: brightness(.8) saturate(1.15); }
+.gtile.farm-plot.state-growing { box-shadow: inset 0 0 0 2px rgba(110, 192, 74, .85), inset 0 2px 4px rgba(0, 0, 0, .2); }
+.gtile.farm-plot.state-ready { box-shadow: inset 0 0 0 3px #ffd94a, 0 0 12px rgba(255, 210, 80, .75); }
+</style>
 </head>
 <body class="r68-loading">
 <div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="陽光農場載入中">
