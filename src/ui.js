@@ -404,6 +404,28 @@
     const playerTile=G.getTileById(state,state.player.tileId);
     const playerNode=$('player');
     if(playerNode)playerNode.classList.toggle('sunlit-player',!!(st.active && playerTile && playerTile.plotIndex!=null && G.isSunlit(state,playerTile.plotIndex,t)));
+    // R40：受光格標記（暖色邊框＋小太陽＋剩餘秒數進度條），每格一個、只框該格。
+    const sunSecs = Math.max(0, Math.ceil((st.remainingMs || 0) / 1000));
+    const sunPct = st.durationMs ? Math.max(0, Math.min(100, (st.remainingMs || 0) / st.durationMs * 100)) : 0;
+    const wantSun = st.active ? st.plots : [];
+    worldEl.querySelectorAll(".r40-sun-tile").forEach((n) => { if (!wantSun.includes(Number(n.dataset.plotIndex))) n.remove(); });
+    for (const i of wantSun) {
+      const tile = state.map.tiles.find((x) => x.plotIndex === i); if (!tile) continue;
+      let m = worldEl.querySelector('.r40-sun-tile[data-plot-index="' + i + '"]');
+      if (!m) {
+        m = document.createElement("div");
+        m.className = "r40-sun-tile"; m.dataset.audit = "r40-sun-tile"; m.dataset.plotIndex = String(i); m.dataset.tileId = tile.id;
+        m.setAttribute("aria-hidden", "true");
+        m.innerHTML = '<span class="r40-sun-icon">☀</span><span class="r40-sun-secs"></span><span class="r40-sun-bar"><i></i></span>';
+        worldEl.appendChild(m);
+      }
+      m.style.left = pxv(tile.x * TILE); m.style.top = pxv(tile.y * TILE);
+      m.style.width = pxv(TILE); m.style.height = pxv(TILE);
+      m.style.zIndex = String(Math.round((tile.y + 1) * TILE + 2));
+      m.dataset.remainingSeconds = String(sunSecs);
+      const secsEl = m.querySelector(".r40-sun-secs"); if (secsEl) secsEl.textContent = sunSecs + " 秒";
+      const fill = m.querySelector(".r40-sun-bar i"); if (fill) fill.style.width = sunPct.toFixed(1) + "%";
+    }
     const sig = st.active ? TILE + "|" + state.sun.startsAt + "|" + st.plots.join(",") : "";
     if (sig === sunSig && (!sig || worldEl.querySelector(".sun-beam:not(.caught)"))) return;
     sunSig = sig;
@@ -3170,7 +3192,7 @@
     const iv = setInterval(() => { f++; if (f > 5) { clearInterval(iv); sp.remove(); return; } paint(); }, 75);
     setTimeout(() => { clearInterval(iv); sp.remove(); }, 650);
   }
-  function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1.05, startFrame: valid ? 2 : 0 }); } // R38 整合：valid_ring 第 0、1 格是實心白圓，評審截圖看起來像缺圖
+  function spawnRing(tileId, valid) { spawnVfx(tileId, valid ? "valid_ring" : "invalid_ring", { scale: 1, startFrame: valid ? 2 : 0 }); } // R38 整合：valid_ring 第 0、1 格是實心白圓，評審截圖看起來像缺圖
   function stationTileOf(type) { const t = state.map.tiles.find((x) => x.station === type); return t ? t.id : null; }
 
   // ---------- 玩家定位 / camera / 移動 ----------
@@ -3296,7 +3318,7 @@
       camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
       camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
     }
-    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 4; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } } state.camera.x = camX; state.camera.y = camY;
+    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#worldDialogue:not([hidden])"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 4; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } } state.camera.x = camX; state.camera.y = camY;
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
     if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
@@ -3654,12 +3676,13 @@
     const active = G.activePlotCount(state);
     if (tile.plotIndex >= active) return "未開墾・待解鎖";
     const plot = state.plots[tile.plotIndex];
-    if (!plot || !plot.cropId) return "空地・可種植";
+    const sunSuffix = (G.isSunlit && G.isSunlit(state, tile.plotIndex, now())) ? "・在光裡：生長加速・收成 +1" : "";
+    if (!plot || !plot.cropId) return "空地・可種植" + sunSuffix;
     const crop = window.CROPS[plot.cropId];
     const name = crop ? crop.name : "作物";
     const prog = G.getCropProgress(state, plot, now());
     const planted = state.plots.filter((row) => row && row.cropId).length;
-    return name + "・" + (prog.ready ? "可收成" : prog.wet ? "已澆水" : planted < 3 ? "已種下・種滿 3 格再澆水" : "待澆水");
+    return name + "・" + (prog.ready ? "可收成" : prog.wet ? "已澆水" : planted < 3 ? "已種下・種滿 3 格再澆水" : "待澆水") + sunSuffix;
   }
   function renderTileStateLabel(tile) {
     let label = $("tileStateLabel");

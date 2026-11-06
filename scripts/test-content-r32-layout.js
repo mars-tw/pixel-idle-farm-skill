@@ -260,7 +260,7 @@ async function setPlayerNearMayor(page, dx, dy) {
       }
       await page.evaluate(() => { const p = document.querySelector('.side-panel'); if (p) p.classList.remove('world-panel-open'); });
       await page.waitForTimeout(300);
-      // ---- 第 10 項：矮螢幕對話框上方窄條 ----
+      // ---- 第 10 項：矮螢幕對話框下方安全區（R40 改規則，不再是上方窄條） ----
       if (h <= 600) {
         await page.evaluate(() => window.FarmWorld.speak('鎮長葛瑞', '田邊的路清出來了，收成時記得留一點給餐籃。'));
         await page.waitForTimeout(500);
@@ -269,12 +269,15 @@ async function setPlayerNearMayor(page, dx, dy) {
           const box = document.querySelector('#worldDialogue');
           if (!box || !vis(box)) return null;
           const r = ro(box);
-          const cs = getComputedStyle(box); return { top: Math.round(r.top), height: Math.round(r.height), pct: r.height / innerHeight * 100, mode: box.dataset.dialogueMode || '', maxH: cs.maxHeight, minH: cs.minHeight, csH: cs.height, offH: box.offsetHeight, clientH: box.clientHeight, scrollH: box.scrollHeight, boxSizing: cs.boxSizing, cls: box.className, overflowY: cs.overflowY };
+          const cs = getComputedStyle(box); const p = box.querySelector('p'); const close = box.querySelector('.dialogue-close'); const cont = box.querySelector('.dialogue-continue'); const npc = document.querySelector('.ob[data-kind="npc"][data-npc="mayor"]'); return { top: Math.round(r.top), bottom: Math.round(r.bottom), height: Math.round(r.height), pct: r.height / innerHeight * 100, mode: box.dataset.dialogueMode || '', maxH: cs.maxHeight, minH: cs.minHeight, csH: cs.height, offH: box.offsetHeight, clientH: box.clientHeight, scrollH: box.scrollHeight, boxSizing: cs.boxSizing, cls: box.className, overflowY: cs.overflowY, pVsBtn: (p && close && cont) ? Math.max(inter(ro(p), ro(close)), inter(ro(p), ro(cont))) : 999, npcVsBox: npc ? Math.round(inter(ro(npc), r)) : 999, npcInView: npc ? (ro(npc).top >= -1 && ro(npc).bottom <= innerHeight + 1 && ro(npc).left >= -1 && ro(npc).right <= innerWidth + 1) : false };
         }, HELP);
         assert(dlg, `${tag} 矮螢幕對話框不存在`);
-        assert(dlg.pct <= 20.5, `${tag} 矮螢幕對話框高 ${dlg.height}px 占 ${dlg.pct.toFixed(1)}%，超過 20%`);
-        assert(dlg.top <= 24, `${tag} 矮螢幕對話框應在上方窄條（top ${dlg.top}px）`);
-        console.log(`OK 矮螢幕對話 ${tag} 上方窄條高 ${dlg.height}px（${dlg.pct.toFixed(1)}%）`);
+        assert(dlg.pct <= 30.5, `${tag} 矮螢幕對話框高 ${dlg.height}px 占 ${dlg.pct.toFixed(1)}%，超過 30%`);
+        assert(dlg.top >= h * 0.55 && dlg.bottom <= h - 60, `${tag} 矮螢幕對話框應在下方安全區（top ${dlg.top}px、bottom ${dlg.bottom}px／${h}）`);
+        assert.equal(dlg.pVsBtn, 0, `${tag} 矮螢幕對話「略過／繼續」不應壓到台詞（交集 ${dlg.pVsBtn}）`);
+        assert.equal(dlg.npcVsBox, 0, `${tag} 矮螢幕對話框不應遮住說話者（交集 ${dlg.npcVsBox}）`);
+        assert(dlg.npcInView, `${tag} 矮螢幕說話者應在畫面內`);
+        console.log(`OK 矮螢幕對話 ${tag} 下方安全區高 ${dlg.height}px（${dlg.pct.toFixed(1)}%）、文字與按鈕交集 0、說話者可見`);
         await page.screenshot({ path: path.join(SHOT_DIR, `dialogue-short-${tag}.png`) });
         await page.evaluate(() => { const b = document.querySelector('#worldDialogue'); if (b) b.hidden = true; });
       }
