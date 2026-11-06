@@ -19,4 +19,10 @@ test("手機種子卡顯示單價、收合任務卡隱藏步驟名並單行顯�
   assert.match(css, /#questDock\.quest-collapsed \.world-objective-title \.qp-step,/);
   assert.match(css, /#questDock\.quest-collapsed \.world-objective-title, #questDock\.quest-auto-collapsed \.world-objective-title \{ white-space: nowrap !important;/);
 });
-console.log(`VERIFIED content R51 flow (${passed}/3)`);
+test("R53／R54：提示不重複疊加、無法交付時不顯示交付後剩餘、手機訂單卡壓縮讓首屏兩張完整", () => {
+  assert.ok(ui.includes("if (!deferCount && pendingToasts.has(key)) return;"));
+  assert.ok(ui.includes("storyImpact && storyImpact.storyNeed > 0 && can ?"));
+  assert.ok(css.includes('.side-pane[data-pane="orders"] .order { padding: 8px 10px !important; margin-bottom: 6px !important; }'));
+  assert.ok(ui.includes("預覽・還沒開放"));
+});
+console.log(`VERIFIED content R51 flow (${passed}/4)`);

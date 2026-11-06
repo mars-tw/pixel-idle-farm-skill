@@ -31,7 +31,7 @@ const stock=s=>({bread:s.adventure.meals.rustic_bread,berry:s.storage.items.wild
  const legacy=state();delete legacy.adventure.sharedMeals;assert(A.ensure(legacy,2100).ok);assert.equal(legacy.adventure.sharedMeals.version,2);assert.equal(legacy.adventure.sharedMeals.currentIndex,0);assert.equal(legacy.adventure.sharedMeals.records.length,0);assert.equal(A.sharedMealChoices(legacy,2100).order.guests.length,2);
  console.log('PASS legacy save migrates without invented partials, records, or rewards');
 }
-for(const f of ['index.html','sw.js','package.json','src/content-r24.js','src/content-r24.css'])assert(fs.existsSync(f));assert.match(fs.readFileSync('index.html','utf8'),/content-r24\.js\?v=content-r53-20261106-1/);assert.match(fs.readFileSync('src/content-r6.js','utf8'),/id="sharedMealEntry"/);
+for(const f of ['index.html','sw.js','package.json','src/content-r24.js','src/content-r24.css'])assert(fs.existsSync(f));assert.match(fs.readFileSync('index.html','utf8'),/content-r24\.js\?v=content-r54-20261106-1/);assert.match(fs.readFileSync('src/content-r6.js','utf8'),/id="sharedMealEntry"/);
 {
  const ui=fs.readFileSync('src/content-r24.js','utf8'),resultBody=ui.slice(ui.indexOf('function showResult'),ui.indexOf('function open'));
  assert.match(ui,/busy=true;box\.querySelectorAll\('\.content-footer button,\[data-pairing-tab\]'\)\.forEach\(b=>b\.disabled=true\)/);
