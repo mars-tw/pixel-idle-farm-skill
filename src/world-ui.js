@@ -206,6 +206,7 @@
   function renderObjective(s) {
     current = s;
     const box = el("questDock"); if (!box || !s) return false;
+    try { updateSunChip(s); } catch (e) {}
     if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { lastObjective = ""; syncSeedHudTop(); return true; }
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
@@ -215,7 +216,6 @@
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
     const hint = objectiveHint(s, unfinished);
     const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
-    updateSunChip(s);
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
     const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes]);
     if (sig === lastObjective) {
@@ -270,7 +270,7 @@
     chip.textContent = `☀ 陽光照在 ${plots.length} 格田・剩 ${Math.ceil(sun.remainingMs / 1000)} 秒`;
     chip.setAttribute("aria-label", chip.textContent + "，點一下看受光的田");
     const dock = el("questDock"); const r = dock && dock.getBoundingClientRect ? dock.getBoundingClientRect() : null;
-    if (r && r.height) { chip.style.left = Math.round(r.left) + "px"; chip.style.top = Math.round(r.bottom + 6) + "px"; }
+    if (r && r.height) { const right = r.right + 8 + 230 < window.innerWidth; chip.style.left = Math.round(right ? r.right + 8 : r.left) + "px"; chip.style.top = Math.round(right ? r.top + 4 : r.bottom + 6) + "px"; } // R42：優先放在任務卡右側，避免疊到種子欄
   }
   // R79：等待時告訴玩家還要多久、現在能做什麼；光斑出現時引導去光裡。
   function objectiveHint(s, row) {
