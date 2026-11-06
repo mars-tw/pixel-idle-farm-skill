@@ -112,13 +112,13 @@ async function openPane(page, pane) {
           natural: img ? img.naturalWidth : 0 };
       }, HELP);
       assert(m.box, '1366x600 對話框應顯示');
-      assert(m.box.top <= 24, `對話框 top ${m.box.top} 應 ≤ 24（R32 規則）`);
-      assert(m.box.height <= 600 * 0.20 + 1, `對話框高 ${Math.round(m.box.height)} 應 ≤ 螢幕 20%（120）`);
+      assert(m.box.top >= 600 * 0.55 && m.box.bottom <= 600 - 60, `對話框應在下方安全區（top ${Math.round(m.box.top)}、bottom ${Math.round(m.box.bottom)}／600，R40 規則）`);
+      assert(m.box.height <= 600 * 0.30 + 1, `對話框高 ${Math.round(m.box.height)} 應 ≤ 螢幕 30%（180）`);
       assert(m.img, '鎮長對話應有頭像');
       assert(Math.abs(m.img.width - 40) <= 1 && Math.abs(m.img.height - 40) <= 1, `頭像應縮成 40px，實際 ${Math.round(m.img.width)}×${Math.round(m.img.height)}`);
       assert(m.img.top >= m.box.top - 1 && m.img.bottom <= m.box.bottom + 1 && m.img.left >= m.box.left - 1 && m.img.right <= m.box.right + 1,
         `頭像應完整在對話框內：頭像 ${JSON.stringify(m.img)}／框 ${JSON.stringify(m.box)}`);
-      console.log(`OK 第 6 項 1366x600：對話框 top=${Math.round(m.box.top)}、高=${Math.round(m.box.height)}，頭像 40×40 完整在框內（natural ${m.natural}）`);
+      console.log(`OK 第 6 項 1366x600：對話框在下方安全區 top=${Math.round(m.box.top)}、高=${Math.round(m.box.height)}，頭像 40×40 完整在框內（natural ${m.natural}）`);
       await ctx.close();
     }
 

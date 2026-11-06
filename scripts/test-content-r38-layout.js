@@ -99,13 +99,13 @@ const HELP = `
           close: close ? ro(close) : null, cont: cont ? ro(cont) : null };
       }, HELP);
       assert(m, '1366x600 對話框應顯示');
-      assert(m.box.top <= 24, `對話框 top ${m.box.top} 應 ≤ 24`);
-      assert(m.box.height <= 600 * 0.20 + 1, `對話框高 ${Math.round(m.box.height)} 應 ≤ 螢幕 20%（120）`);
+      assert(m.box.top >= 600 * 0.55 && m.box.bottom <= 600 - 60, `對話框應在下方安全區（top ${Math.round(m.box.top)}、bottom ${Math.round(m.box.bottom)}／600）`);
+      assert(m.box.height <= 600 * 0.30 + 1, `對話框高 ${Math.round(m.box.height)} 應 ≤ 螢幕 30%（180）`);
       assert.deepEqual(m.hits, [], `對話框蓋住資源列：${JSON.stringify(m.hits)}`);
       assert(m.close && m.cont, '對話框應有「略過」與「繼續」');
       const gap = m.cont.left - m.close.right;
       assert(gap >= 48, `「略過」與「繼續」間距 ${Math.round(gap)}px 應 ≥ 48px`);
-      console.log(`OK 第 6 項 1366x600：對話框 top=${Math.round(m.box.top)}、高=${Math.round(m.box.height)}，與 ${m.res.length} 格資源列交集 0，按鈕間距 ${Math.round(gap)}px ≥ 48`);
+      console.log(`OK 第 6 項 1366x600：對話框在下方安全區 top=${Math.round(m.box.top)}、高=${Math.round(m.box.height)}，與 ${m.res.length} 格資源列交集 0，按鈕間距 ${Math.round(gap)}px ≥ 48`);
       await ctx.close();
     }
 

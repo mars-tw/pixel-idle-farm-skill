@@ -55,6 +55,7 @@ const CORE_ASSETS = [
   versioned("./src/content-r37b.css"),
   versioned("./src/content-r38b.css"),
   versioned("./src/content-r39b.css"),
+  versioned("./src/content-r40b.css"),
   versioned("./assets/generated/r35/pond-480.png"),
   versioned("./src/content-r16.js"),
   versioned("./src/content-r16.css"),

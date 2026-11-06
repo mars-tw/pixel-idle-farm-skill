@@ -1,0 +1,130 @@
+/* R40 B 線（第 6～10 項）：矮螢幕對話回到下方、陽光看得見、大型面板收合 HUD、
+   手機橫式說話者可見、選取框只框一格。只調整版面、定位與繪製；
+   陽光格標記元素由 ui.js 建立（.r40-sun-tile），說話者鏡頭由 world-ui.js 的 speak 處理。 */
+
+/* 6＋9：矮螢幕（1366×600、844×390）對話改放下方安全區（工具列上方），
+   與桌面同一位置；高不超過 30%，台詞完整顯示，略過／繼續不壓文字。 */
+@media (max-height: 600px) {
+  .world-dialogue,
+  .world-dialogue.dialogue-compact-top,
+  .world-dialogue.dialogue-compact-top:not(.dialogue-compact-bottom),
+  .world-dialogue.dialogue-compact-bottom,
+  .world-dialogue.dialogue-flip-top {
+    box-sizing: border-box;
+    top: auto !important; bottom: 96px !important;
+    left: 50% !important; right: auto !important;
+    transform: translateX(-50%) !important;
+    width: min(640px, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: 30dvh !important; min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 10px 236px 10px 12px !important;
+  }
+  .world-dialogue b { display: inline !important; margin: 0 8px 0 0 !important; }
+  .world-dialogue p {
+    display: inline !important; font-size: 13px !important; line-height: 1.5 !important;
+  }
+  .world-dialogue .dialogue-portrait,
+  .world-dialogue.dialogue-compact-top .dialogue-portrait,
+  .world-dialogue.dialogue-compact-bottom .dialogue-portrait {
+    width: 40px !important; height: 40px !important;
+    min-width: 40px !important; min-height: 40px !important;
+    float: left; margin: 0 8px 4px 0;
+    object-fit: contain; image-rendering: pixelated;
+  }
+  .world-dialogue .dialogue-close,
+  .world-dialogue .dialogue-continue,
+  .world-dialogue.dialogue-compact-top .dialogue-close,
+  .world-dialogue.dialogue-compact-top .dialogue-continue,
+  .world-dialogue.dialogue-compact-bottom .dialogue-close,
+  .world-dialogue.dialogue-compact-bottom .dialogue-continue {
+    position: absolute !important; top: 50% !important; bottom: auto !important;
+    transform: translateY(-50%);
+    height: 36px !important; min-height: 36px !important;
+    margin: 0 !important; line-height: 1.2;
+    float: none !important;
+  }
+  .world-dialogue .dialogue-continue,
+  .world-dialogue.dialogue-compact-top .dialogue-continue,
+  .world-dialogue.dialogue-compact-bottom .dialogue-continue {
+    right: 8px !important; left: auto !important;
+    width: 76px !important; min-width: 76px !important; max-width: 76px !important;
+    padding: 0 6px !important;
+  }
+  .world-dialogue .dialogue-close,
+  .world-dialogue.dialogue-compact-top .dialogue-close,
+  .world-dialogue.dialogue-compact-bottom .dialogue-close {
+    right: 140px !important; left: auto !important;
+    width: 68px !important; min-width: 68px !important; max-width: 68px !important;
+    padding: 0 6px !important;
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .world-dialogue,
+  .world-dialogue.dialogue-compact-top,
+  .world-dialogue.dialogue-compact-bottom,
+  .world-dialogue.dialogue-flip-top { bottom: 76px !important; }
+}
+
+/* 7：受光田格標記——暖色邊框、小太陽圖示、剩餘秒數與細進度條（ui.js 建立）。 */
+.r40-sun-tile {
+  position: absolute; box-sizing: border-box; pointer-events: none;
+  border: 3px solid #ff9d1b;
+  box-shadow: inset 0 0 0 2px rgba(255, 226, 140, .9), inset 0 0 18px rgba(255, 170, 40, .35);
+  background: rgba(255, 176, 32, .14);
+}
+.r40-sun-icon {
+  position: absolute; left: 2px; top: 2px;
+  font-size: 14px; line-height: 1; color: #ff9d1b;
+  text-shadow: 0 1px 0 #7a4a00, 1px 0 0 #7a4a00, -1px 0 0 #7a4a00, 0 -1px 0 #7a4a00;
+}
+.r40-sun-secs {
+  position: absolute; right: 2px; top: 2px;
+  padding: 1px 4px; border-radius: 3px;
+  background: rgba(70, 46, 0, .82); color: #ffe9a8;
+  font-size: 10px; font-weight: 800; line-height: 1.3;
+}
+.r40-sun-bar {
+  position: absolute; left: 3px; right: 3px; bottom: 3px;
+  height: 5px; border-radius: 3px; overflow: hidden;
+  background: rgba(70, 46, 0, .65); box-shadow: 0 0 0 1px rgba(255, 240, 180, .7);
+}
+.r40-sun-bar i { display: block; height: 100%; background: linear-gradient(90deg, #ffb627, #ffe27a); }
+
+/* 8：大型面板（訂單／升級／手記等側邊面板與設定）開啟時，任務卡收成一行、種子欄隱藏；
+   關閉後自動恢復（純 CSS 狀態，不需 JS 切換）。 */
+body:has(.side-panel.world-panel-open) #questDock,
+body:has(#settingsModal.show) #questDock {
+  max-height: 56px !important; overflow: hidden !important;
+  padding-top: 8px !important; padding-bottom: 8px !important;
+}
+body:has(.side-panel.world-panel-open) #questDock .world-objective-detail,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-hint,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-routes,
+body:has(.side-panel.world-panel-open) #questDock .world-meter,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-bottom > span,
+body:has(#settingsModal.show) #questDock .world-objective-detail,
+body:has(#settingsModal.show) #questDock .world-objective-hint,
+body:has(#settingsModal.show) #questDock .world-objective-routes,
+body:has(#settingsModal.show) #questDock .world-meter,
+body:has(#settingsModal.show) #questDock .world-objective-bottom > span { display: none !important; }
+body:has(.side-panel.world-panel-open) #questDock .world-objective-title,
+body:has(#settingsModal.show) #questDock .world-objective-title {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+body:has(.side-panel.world-panel-open) .seed-hud,
+body:has(.side-panel.world-panel-open) #mapScene .seed-hud,
+body:has(#settingsModal.show) .seed-hud,
+body:has(#settingsModal.show) #mapScene .seed-hud { display: none !important; }
+
+/* 9：手機橫式對話期間，互動鈕不蓋說話者（說話者鏡頭由 speak 處理）。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  body:has(#worldDialogue:not([hidden])) #actionA,
+  body:has(#worldDialogue:not([hidden])) .action-a { visibility: hidden !important; }
+}
+
+/* 10：選取框只框一格——內框不外擴、無額外外框，寬度即一格田。 */
+.gtile.sel, .gtile.touch-pending {
+  box-shadow: inset 0 0 0 3px #ffe27a !important;
+  outline: none !important; outline-offset: 0 !important;
+}
