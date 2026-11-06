@@ -1,7 +1,4 @@
 /* R41 整合：面板開啟時任務卡用收合摘要（保留行動按鈕）、里程碑卡避開資源列、NPC 腳下小名字、陰影減淡、手機標誌不貼邊 */
-body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed { max-height: none !important; overflow: visible !important; }
-body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed .world-objective-bottom > span { display: revert !important; }
-body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed .world-objective-title { white-space: normal; }
 @media (min-width: 621px) {
   #toast-zone:has(.settlement-card.milestone-card) { top: max(116px, env(safe-area-inset-top)) !important; }
 }
@@ -16,3 +13,9 @@ body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed .world-o
 }
 #dailyTopBack { display: none !important; }
 .u-confirm-note { display: block; font-size: 10px; line-height: 1.1; font-weight: 600; opacity: .85; }
+/* R41 整合：大型面板開啟時，任務卡排成一列：任務標題＋行動按鈕＋收合，不被 56px 上限切掉按鈕 */
+body:has(.side-panel.world-panel-open) #questDock:not(.quest-collapsed) { display: flex !important; flex-wrap: nowrap; align-items: center; gap: 8px; max-height: none !important; overflow: visible !important; }
+body:has(.side-panel.world-panel-open) #questDock:not(.quest-collapsed) .world-chapter { display: none !important; }
+body:has(.side-panel.world-panel-open) #questDock:not(.quest-collapsed) .world-objective-title { flex: 1 1 auto; min-width: 0; margin: 0 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body:has(.side-panel.world-panel-open) #questDock:not(.quest-collapsed) .world-objective-bottom { display: flex !important; flex: 0 0 auto; margin: 0 !important; }
+.daily-task-strip:has(.daily-locked-row) { align-content: start !important; }

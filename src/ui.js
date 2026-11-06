@@ -879,13 +879,6 @@
     ensure();
     if (typeof window !== "undefined" && window.addEventListener) window.addEventListener("resize", syncShortDefault);
     if (typeof MutationObserver === "function") new MutationObserver(ensure).observe(box, { childList: true });
-    // R41：大型面板開啟時，任務卡改用既有的收合摘要（保留章節進度與行動按鈕），關閉後回到玩家原本的狀態
-    const side = typeof document.querySelector === "function" ? document.querySelector(".side-panel") : null;
-    if (side && typeof MutationObserver === "function") new MutationObserver(() => {
-      const open = side.classList.contains("world-panel-open");
-      box.classList.toggle("quest-panel-collapsed", open);
-      box.classList.toggle("quest-collapsed", open || questDockCollapsed);
-    }).observe(side, { attributes: true, attributeFilter: ["class"] });
   }
   function setupSideTabs() {
     const mobileTabsQuery = (typeof window.matchMedia === "function")

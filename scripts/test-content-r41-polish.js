@@ -11,8 +11,8 @@ test("遠處 NPC 腳下有小名字且不參與名牌避讓", () => {
   assert.match(css, /\.npc-footname \{[^}]*pointer-events: none/);
 });
 test("大型面板開啟時任務卡改用收合摘要並保留行動按鈕", () => {
-  assert.match(ui, /box\.classList\.toggle\("quest-collapsed", open \|\| questDockCollapsed\)/);
-  assert.match(css, /#questDock\.quest-panel-collapsed \{ max-height: none !important; overflow: visible !important; \}/);
+  assert.match(css, /#questDock:not\(\.quest-collapsed\) \.world-objective-bottom \{ display: flex !important;/);
+  assert.match(css, /#questDock:not\(\.quest-collapsed\) \{ display: flex !important;[^}]*max-height: none !important/);
 });
 test("升級按鈕寫出價格，警告寫出升級後餘額", () => {
   assert.match(ui, /金<small class="u-confirm-note">需確認<\/small>/);
