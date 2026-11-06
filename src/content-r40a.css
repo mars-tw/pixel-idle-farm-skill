@@ -41,3 +41,12 @@
   .side-pane[data-pane="orders"] .o-flavor { display: none; }
   .side-pane[data-pane="orders"] .o-story-impact { margin-top: 2px; padding: 1px 0; border: 0; background: transparent; font-size: 10px; line-height: 1.15; }
 }
+
+/* R40 整合：鎖定列只佔一行；手機材料欄不被擠成一字一行 */
+.daily-task-strip:has(.daily-locked-row) { grid-auto-rows: auto !important; align-items: start; }
+.daily-locked-row { min-height: 0 !important; height: auto !important; align-self: start !important; flex: 0 0 auto !important; }
+@media (max-width: 620px) {
+  .res.mat { display: flex !important; flex-direction: column !important; align-items: flex-start !important; justify-content: center !important; gap: 0 !important; }
+  .res.mat .ic { display: none !important; }
+  .res.mat .material-name { display: block; white-space: nowrap !important; font-size: 11px !important; line-height: 1.25 !important; writing-mode: horizontal-tb !important; }
+}
