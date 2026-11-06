@@ -24,4 +24,9 @@ test("面板開啟時任務標題可兩行、對話中隱藏前往、二選一�
   assert.match(css, /#worldDialogue:not\(\[hidden\]\)\) #questDock \[data-world-go\] \{ visibility: hidden; \}/);
   assert.match(css, /content: "選這條 ▶"/);
 });
-console.log(`VERIFIED content R44 wording (${passed}/4)`);
+test("作物先熟、田裡已無可澆作物時，澆水步驟補記完成，不會卡關", () => {
+  assert.match(world, /function unstickWaterStep\(s\)/);
+  assert.match(world, /if \(waterable \|\| !anyReady\) return false;/);
+  assert.match(world, /A\.record\(s, \{ type: "water", count: remain \}, now\)/);
+});
+console.log(`VERIFIED content R44 wording (${passed}/5)`);

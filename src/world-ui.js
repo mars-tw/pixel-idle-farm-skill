@@ -208,6 +208,7 @@
     const box = el("questDock"); if (!box || !s) return false;
     try { updateSunChip(s); } catch (e) {}
     try { markNextPlot(s); } catch (e) {}
+    try { if (unstickWaterStep(s)) return renderObjective(s); } catch (e) {}
     if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { lastObjective = ""; syncSeedHudTop(); return true; }
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
@@ -252,6 +253,23 @@
     }; });
     syncSeedHudTop();
     return true;
+  }
+  // R44：作物不澆水也會長大；若玩家還沒澆完、作物就已成熟，成熟作物不能再澆，澆水步驟會卡住。
+  // 這時把剩下的澆水次數補記，並告訴玩家原因（只在田裡已沒有可澆的作物時觸發）。
+  function unstickWaterStep(s) {
+    const g = A.guide(s, Date.now());
+    if (!g || !g.step || g.step.type !== "water" || g.step.complete) return false;
+    const now = Date.now(), active = window.activePlotCount ? window.activePlotCount(s) : 6;
+    const planted = (s.plots || []).slice(0, active).filter((p) => p && p.cropId);
+    if (!planted.length) return false;
+    const waterable = planted.some((p) => !window.getCropProgress(s, p, now).ready && !((p.wateredAt || 0) >= p.plantedAt));
+    const anyReady = planted.some((p) => window.getCropProgress(s, p, now).ready);
+    if (waterable || !anyReady) return false;
+    const remain = Math.max(0, (g.step.required || 0) - (g.step.current || 0));
+    if (!remain) return false;
+    const r = A.record(s, { type: "water", count: remain }, now);
+    if (r && r.ok) { notify("作物已經自己長熟了，澆水這一步算你完成。下次趁早澆水，會長得更快。"); lastObjective = ""; return true; }
+    return false;
   }
   // R43：播種步驟時，下一格要種的空田加上「下一格」提示，玩家不必自己找哪一格還沒種
   function markNextPlot(s) {
