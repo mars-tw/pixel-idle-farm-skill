@@ -879,6 +879,14 @@
     }).join("；");
   }
   function mainStoryReserve(state, itemId) {
+    if (itemId === "wheat" && state.adventure) {
+      const a = state.adventure;
+      const mealReady = (a.claimed && a.claimed.c1_first_meal)
+        || (a.meals && a.meals.rustic_bread > 0)
+        || (a.byTarget && a.byTarget.cook && a.byTarget.cook.rustic_bread > 0);
+      if (mealReady) return 0;
+      if (a.claimed && a.claimed.c1_first_harvest) return 2;
+    }
     const completed = (state.story && state.story.completed) || {};
     const delivered = completed.first_delivery || !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
     return itemId === "wheat" && !delivered ? 2 : 0;
@@ -889,6 +897,24 @@
       const have = (state.storage && state.storage.items[itemId]) || 0;
       return reserve > 0 && have >= qty && have - qty < reserve;
     });
+  }
+  function orderStoryImpact(state, order) {
+    const parts = Object.entries(order.wants || {}).map(([itemId, qty]) => {
+      const have = Math.max(0, (state.storage && state.storage.items && state.storage.items[itemId]) || 0);
+      const remaining = Math.max(0, have - qty);
+      const reserve = mainStoryReserve(state, itemId);
+      const def = getItemDef(itemId) || { name: itemId };
+      return { itemId, itemName: def.name, remaining, storyNeed: reserve, risky: reserve > remaining };
+    });
+    const relevant = parts.find((part) => part.storyNeed > 0) || parts[0] || { remaining: 0, storyNeed: 0, risky: false };
+    return {
+      parts,
+      remaining: relevant.remaining,
+      storyNeed: relevant.storyNeed,
+      risky: parts.some((part) => part.risky),
+      text: `交付後剩 ${relevant.remaining} 份・主線還需 ${relevant.storyNeed} 份`,
+      warning: parts.some((part) => part.risky) ? "交付後主線物資會不足，還要再收成。" : "",
+    };
   }
   function orderMissingText(state, order) {
     const missing = Object.entries(order.wants || {}).map(([itemId, qty]) => {
@@ -932,6 +958,10 @@
     state.stats.totalCoinsEarned += pay.coins;
     addXp(state, pay.xp);
     state.stats.fulfilledOrders++;
+    if (order.id === "beginner_wheat_2" && state.adventure && state.adventure.firstChoice) {
+      state.adventure.firstChoice.orderCompleted = true;
+      state.adventure.firstChoice.tracked = "meal";
+    }
     if (order.rarity === "festival") {
       state.stats.festivalOrders = (state.stats.festivalOrders || 0) + 1;
       if (!state.collections) state.collections = {};
@@ -2667,7 +2697,7 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, mainStoryReserve, orderConsumesStoryReserve, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, mainStoryReserve, orderConsumesStoryReserve, orderStoryImpact, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, upgradeCardInfo, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,

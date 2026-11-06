@@ -55,7 +55,8 @@ test("A2 first completed order makes at least one upgrade affordable", () => {
 
 test("A3 material HUD and gain feedback name the resource clearly", () => {
   const ui = source("src/ui.js");
-  assert.match(ui, /<span class="res-name">材料<\/span>/);
+  assert.match(ui, /class="material-name">🪵 木料/);
+  assert.match(ui, /class="material-name">🪨 石材/);
   assert.match(ui, /title="材料：\$\{detail\}"/);
   assert.match(ui, /＋\$\{v\} \$\{k === "wood" \? "木料"/);
 });
@@ -75,7 +76,7 @@ test("A5 Bamber has named quest data, a marker, routing, and grandma note portra
   const ui = source("src/ui.js"), world = source("src/world-ui.js");
   assert.match(ui, /quest-npc-nameplate/);
   assert.match(world, /if \(q\.canClaim\) return npcTile\(q\.npcId\)/);
-  assert.match(world, /box\.querySelector\("\[data-world-go\]"\)\.onclick = \(\) => q \? goQuest\(q\)/);
+  assert.match(world, /guide\.route === "order" \? openPanel\("orders"\) : q \? goQuest\(q\)/);
   assert.match(world, /r84\/grandma-0\.png/);
   assert.doesNotMatch(world.match(/hero\.innerHTML =[^;]+;/)[0], /miri-0\.png/);
 });

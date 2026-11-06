@@ -1272,6 +1272,7 @@ body:has(#worldDialogue:not([hidden])) #mobileControls { visibility: visible; }
 <link rel="stylesheet" href="src/content-r37b.css?v=content-r39-20261106-1">
 <link rel="stylesheet" href="src/content-r38b.css?v=content-r39-20261106-1">
 <link rel="stylesheet" href="src/content-r39b.css?v=content-r39-20261106-1">
+<link rel="stylesheet" href="src/content-r40a.css?v=content-r39-20261106-1">
 </head>
 <body class="r68-loading">
 <div class="startup-loading" id="startupLoading" data-season="spring" data-audit="r68-loading" role="status" aria-live="polite" aria-busy="true" aria-label="陽光農場載入中">
@@ -1483,7 +1484,7 @@ body:has(#worldDialogue:not([hidden])) #mobileControls { visibility: visible; }
 
 <div class="modal daily-modal" id="dailyModal" role="dialog" aria-modal="true" aria-labelledby="dailyTitle">
   <div class="modal-card daily-modal-card">
-    <div><h2 id="dailyTitle">晨光日誌</h2><p id="dailyDate"></p></div>
+    <div class="daily-fixed-head"><div><h2 id="dailyTitle">晨光日誌</h2><p id="dailyDate"></p></div><div class="daily-head-actions"><button id="dailyTopBack" type="button">返回農場</button><button id="dailyTopClose" type="button" aria-label="關閉每日印章冊">×</button></div></div>
     <div class="daily-tabs"><button id="dailyToday" type="button" aria-pressed="true">今日農務</button><button id="dailyCollection" type="button" aria-pressed="false">祖母手記</button><button id="dailyHeirloom" type="button" aria-pressed="false">陽光餐籃</button></div>
     <div id="dailyBody" aria-live="polite"></div>
     <div class="daily-nav"><button id="dailyPrev" type="button" aria-label="上一項">←</button><span id="dailyPage"></span><button id="dailyNext" type="button" aria-label="下一項">→</button></div>

@@ -66,7 +66,8 @@ test('開場與主線統一把兩份小麥交給班伯，每日目標改成不�
 
 test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完整', () => {
   assert.doesNotMatch(ui, /class="o-optional"/);
-  assert.match(ui, /class="btn buy small ful" \$\{can \? "" : "disabled"\}>\$\{can \? "交付" : escapeHtml\(G\.orderAllocationText/);
+  assert.match(ui, /class="btn buy small ful" \$\{can \? "" : "disabled"\}>\$\{can \? \(storyImpact && storyImpact\.risky \? "交付前請確認" : "交付"\)/);
+  assert.match(ui, /fulfill\.dataset\.confirmed !== "true"/);
   assert.match(ui, /class="btn ghost small order-go"[^>]*>去田裡</);
   assert.match(ui, /requestOrderTrash\(o\.id\)/);
   assert.match(ui, /確認丟棄/);
@@ -87,12 +88,13 @@ test('成熟格、背包名稱、升級實價與設定目前狀態皆有明確�
   assert.doesNotMatch(ui.slice(ui.indexOf('function settingRowHtml'), ui.indexOf('function soundVolumeHtml')), />\$\{enabled \? "開啟" : "關閉"\}<\/button>/);
 });
 
-test('第一次收成完成後才顯示兩條路線，交付後收起', () => {
+test('市集開放後提供可儲存、可切換的兩條實際路線', () => {
   assert.match(ui, /function earlyChoiceRoutes\(farmState\)/);
-  assert.match(ui, /wheatHarvested < 6 \|\| mainDelivered/);
-  assert.match(ui, /先完成主線/);
-  assert.match(ui, /先整理田地/);
-  assert.doesNotMatch(ui, /兩條路都不影響主線完成/);
+  assert.match(ui, /AdventureAPI\.firstChoiceStatus\(farmState\)/);
+  assert.match(ui, /先做農家麥餅/);
+  assert.match(ui, /先接蘿拉的小麥單/);
+  assert.match(world, /A\.trackFirstPath/);
+  assert.match(world, /A\.chooseFirstPath/);
   assert.match(world, /window\.FarmEarlyChoiceRoutesHtml/);
 });
 

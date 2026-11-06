@@ -111,7 +111,8 @@ test('第一次三格小麥收成足以完成班伯主線，市集不再重複�
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
   assert.ok(orders.every((row) => Object.keys(row.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 4)), false);
+  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 4)), true);
+  assert.equal(G.orderStoryImpact(state, orders.find((row) => row.wants.wheat === 4)).text, '交付後剩 0 份・主線還需 2 份');
   assert.equal(state.storage.items.wheat, 4);
 });
 

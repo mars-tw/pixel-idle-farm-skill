@@ -225,7 +225,7 @@
     }
     lastObjective = sig;
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
-    const activeGoal = q && rowsOf(q).find((row) => !row.complete);
+    const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
     const progressStep = activeGoal && activeGoal.name ? activeGoal.name : "";
     const progressText = activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q && q.canClaim ? `✓ 回報${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}` : (q ? "1/1" : ""));
@@ -235,13 +235,19 @@
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
     box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
-      <div class="world-objective-title">${q ? esc(q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
-      <div class="world-objective-detail">${q ? esc(q.description) : "你留下的每一份收穫，都有了去處。"}</div>
+      <div class="world-objective-title">${q ? esc(guide.displayTitle || q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
+      <div class="world-objective-detail">${q ? esc(guide.displayDescription || q.description) : "你留下的每一份收穫，都有了去處。"}</div>
       ${choiceRoutes}
       ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
       <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button></div>
       <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
-    box.querySelector("[data-world-go]").onclick = () => q ? goQuest(q) : openKitchen();
+    box.querySelector("[data-world-go]").onclick = () => guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen();
+    box.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => {
+      const status = A.firstChoiceStatus(s);
+      const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
+      if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); }
+      else notify(result.message);
+    }; });
     syncSeedHudTop();
     return true;
   }

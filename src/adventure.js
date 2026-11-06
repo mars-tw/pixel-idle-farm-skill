@@ -666,6 +666,17 @@
     const step = q.objectives.find((row) => !row.complete) || q.requirements.find((row) => !row.complete) || null;
     const npc = (C.NPCS || {})[q.npcId] || { name: "鎮民" };
     const chapterProgress = view.chapters.find((row) => row.number === q.chapter) || { claimed: 0, total: 3 };
+    const choice = firstChoiceStatus(state);
+    if (q.id === "c1_first_meal" && choice.selected === "order" && choice.tracked === "order" && !choice.orderCompleted) {
+      const have = Math.max(0, (state.storage && state.storage.items && state.storage.items.wheat) || 0);
+      return ok("先完成蘿拉的小麥單。", {
+        questId: q.id, chapter: q.chapter,
+        chapterProgress: { claimed: chapterProgress.claimed, total: chapterProgress.total },
+        route: "order", step: { type: "order", id: "beginner_wheat_2", name: "交付蘿拉的小麥單", current: Math.min(2, have), required: 2, complete: false },
+        stepText: `備妥小麥 ${Math.min(2, have)}/2`, actionLabel: "查看蘿拉的訂單",
+        displayTitle: "蘿拉的 2 份小麥單", displayDescription: "先賺一筆，再回來做農家麥餅；主線不會中斷。",
+      });
+    }
     return ok(step ? "前往目前目標。" : "回報目前任務。", {
       questId: q.id,
       chapter: q.chapter,
@@ -674,6 +685,32 @@
       stepText: step ? `${step.name} ${Math.min(step.current, step.required)}/${step.required}` : `找${npc.name}回報`,
       actionLabel: taskActionLabel(q, step, npc),
     });
+  }
+  function firstChoiceStatus(state) {
+    const a = state && state.adventure;
+    const available = !!(a && a.claimed && a.claimed.c1_first_harvest) && !(a.claimed && a.claimed.c1_first_meal);
+    const saved = a && object(a.firstChoice) ? a.firstChoice : {};
+    const selected = saved.selected === "meal" || saved.selected === "order" ? saved.selected : null;
+    const tracked = saved.tracked === "meal" || saved.tracked === "order" ? saved.tracked : selected;
+    return { available, selected, tracked, orderCompleted: saved.orderCompleted === true };
+  }
+  function chooseFirstPath(state, choice) {
+    if (choice !== "meal" && choice !== "order") return fail("bad_choice", "請選一條想先追蹤的路線。");
+    const status = firstChoiceStatus(state);
+    if (!status.available) return fail("locked", "市集開放後才能選擇第一條路線。");
+    if (!object(state.adventure.firstChoice)) state.adventure.firstChoice = {};
+    state.adventure.firstChoice.selected = choice;
+    state.adventure.firstChoice.tracked = choice;
+    state.adventure.firstChoice.orderCompleted = state.adventure.firstChoice.orderCompleted === true;
+    return ok(choice === "meal" ? "已先追蹤農家麥餅主線。" : "已先追蹤蘿拉的小麥單。", firstChoiceStatus(state));
+  }
+  function trackFirstPath(state, choice) {
+    const status = firstChoiceStatus(state);
+    if (!status.available || !status.selected) return fail("locked", "先選擇第一條路線。");
+    if (choice !== "meal" && choice !== "order") return fail("bad_choice", "找不到這條路線。");
+    if (choice === "order" && status.orderCompleted) return fail("complete", "蘿拉的小麥單已完成。");
+    state.adventure.firstChoice.tracked = choice;
+    return ok(choice === "meal" ? "任務列已切回農家麥餅。" : "任務列已切到蘿拉的小麥單。", firstChoiceStatus(state));
   }
   function taskActionLabel(q, step, npc) {
     if (!step || step.type === "talk") return "前往交談";
@@ -734,7 +771,7 @@
     record(state, "order", now);
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
-  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission,
+  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission,
     neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

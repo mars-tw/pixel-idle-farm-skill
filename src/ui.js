@@ -706,10 +706,8 @@
   function matChips() {
     const mats = state.materials || {};
     const held = Object.keys(window.MATERIALS).filter((k) => (mats[k] || 0) > 0);
-    if (!held.length) return "";
-    const total = held.reduce((sum, k) => sum + mats[k], 0);
     const detail = held.map((k) => `${window.MATERIALS[k].name} ${mats[k]}`).join("・");
-    return `<div class="res mat" title="材料：${detail}" aria-label="材料，共 ${total} 份；${detail}"><span class="ic">🧰</span><span class="res-name">材料</span> ${total}</div>`;
+    return `<div class="res mat" title="材料：${detail}" aria-label="木料 ${mats.wood || 0} 份，石材 ${mats.stone || 0} 份${detail ? "；" + detail : ""}"><span class="ic">🧰</span><span class="material-name">🪵 木料 ${mats.wood || 0}</span><span class="material-sep">・</span><span class="material-name">🪨 石材 ${mats.stone || 0}</span></div>`;
   }
 
   // ---------- 種子選擇 ----------
@@ -1173,6 +1171,7 @@
       const pay = G.orderPayout(state, o);
       const can = allocationById[o.id] ? allocationById[o.id].ready : G.canFulfill(state, o);
       const narrative = G.orderNarrative ? G.orderNarrative(state, o) : null;
+      const storyImpact = G.orderStoryImpact ? G.orderStoryImpact(state, o) : null;
       const wantsHtml = Object.entries(o.wants).map(([cid, q]) => {
         const have = state.storage.items[cid] || 0;
         const ok = have >= q;
@@ -1198,18 +1197,25 @@
           ${sharedHtml}
           <div class="o-reward">🪙 ${fmtNum(pay.coins)}${pay.coins > o.rewardCoins ? `<small class="o-bonus">（含加成 +${fmtNum(pay.coins - o.rewardCoins)}）</small>` : ""} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${o.firstBatch ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}`}</div>
+          ${storyImpact && storyImpact.storyNeed > 0 ? `<div class="o-story-impact${storyImpact.risky ? " risky" : ""}" data-audit="order-story-impact">${escapeHtml(storyImpact.text)}</div>` : ""}
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
         </div>
         <div class="o-actions">
           ${confirmingTrash
             ? `<button class="btn ghost small trash-cancel">保留</button>
           <button class="btn small trash-confirm">確認丟棄</button>`
-            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? "交付" : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
+            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
           ${can ? "" : `<button class="btn ghost small order-go">去田裡</button>`}
           <button class="btn ghost small trash">丟棄</button>`}
         </div>`;
       const fulfill = el.querySelector(".ful");
       if (fulfill) fulfill.onclick = () => {
+          if (storyImpact && storyImpact.risky && fulfill.dataset.confirmed !== "true") {
+            fulfill.dataset.confirmed = "true";
+            fulfill.textContent = "仍要交付";
+            toast(`${storyImpact.warning} ${storyImpact.text}`);
+            return;
+          }
           const r = G.fulfillOrder(state, o.id, now());
           if (r.ok) { clearPendingOrderTrash(); G.advanceStory(state, "deliver"); orderCompleteFx(el, r.coins); playSound("order"); playSound("coin"); enqueueResultFeedback(r); afterChange(true); renderOrders(); }
           else toast("作物不足，無法交付");
@@ -1696,19 +1702,18 @@
     return "主動作：" + cur.desc;
   }
   function earlyChoiceRoutes(farmState) {
-    const adventure = (farmState && farmState.adventure) || {};
-    const wheatHarvested = adventure.byTarget && adventure.byTarget.harvest && adventure.byTarget.harvest.wheat || 0;
-    const mainDelivered = !!(adventure.claimed && adventure.claimed.c1_first_harvest);
-    if (wheatHarvested < 6 || mainDelivered) return [];
+    const status = window.AdventureAPI && window.AdventureAPI.firstChoiceStatus(farmState);
+    if (!status || !status.available) return [];
     return [
-      { id: "main", title: "先完成主線", reward: "+16 金與建材", next: "下一步：把 2 份小麥交給老農班伯。" },
-      { id: "field", title: "先整理田地", reward: "保留其餘收成", next: "可選：先查看升級，再回來找老農班伯。" },
+      { id: "meal", title: "先做農家麥餅", reward: "主線", next: "用 2 份小麥做餅，再帶給老農班伯。", selected: status.selected === "meal", tracked: status.tracked === "meal" },
+      { id: "order", title: "先接蘿拉的小麥單", reward: "賺錢", next: status.orderCompleted ? "訂單已完成，已回到主線。" : "交 2 份小麥賺錢，再回來做餅。", selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {
     const routes = earlyChoiceRoutes(farmState);
     if (!routes.length) return "";
-    return `<div class="world-objective-routes" data-audit="early-choice-routes" aria-label="第一次收成後的路線">${routes.map((route) => `<div class="world-objective-hint route" data-route="${route.id}"><b>${escapeHtml(route.title)}・${escapeHtml(route.reward)}</b><span>${escapeHtml(route.next)}</span></div>`).join("")}</div>`;
+    const chosen = routes.some((route) => route.selected);
+    return `<div class="world-objective-routes" data-audit="early-choice-routes" aria-label="市集開放後的路線"><strong>${chosen ? "切換任務列追蹤" : "你想先做哪一件事？"}</strong>${routes.map((route) => `<button type="button" data-first-choice="${route.id}" class="world-objective-hint route${route.tracked ? " tracked" : ""}" ${route.disabled ? "disabled" : ""}><b>${escapeHtml(route.title)}・${escapeHtml(route.reward)}</b><span>${escapeHtml(route.next)}</span></button>`).join("")}</div>`;
   }
   window.FarmEarlyChoiceRoutes = earlyChoiceRoutes;
   window.FarmEarlyChoiceRoutesHtml = earlyChoiceRoutesHtml;
@@ -3720,6 +3725,14 @@
   function deliverOrderAtBoard(tile) {
     const order = state.orders.find((o) => G.canFulfill(state, o));
     if (!order) { useStation(tile); return; }
+    const impact = G.orderStoryImpact ? G.orderStoryImpact(state, order) : null;
+    if (impact && impact.risky) {
+      selectTab("orders");
+      document.querySelector(".side-panel").classList.add("world-panel-open");
+      renderOrders();
+      toast(`${impact.warning} 請在訂單卡確認後再交付。`);
+      return;
+    }
     const plan = G.planMoveTo(state, tile.id);
     if (!plan) { toast("走不到交付點"); return; }
     spawnRing(tile.id, true);

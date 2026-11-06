@@ -58,11 +58,11 @@ test('A2 市集交付班伯前不出單，開放後只出已解鎖作物', () =>
   assert.doesNotMatch(ui + world + read('src/game.js'), /兩條路都不影響主線|這張訂單可選做/);
 });
 
-test('A3 路線只在首收完成後、班伯交付前顯示', () => {
-  assert.match(ui, /wheatHarvested < 6 \|\| mainDelivered/);
-  assert.match(ui, /adventure\.claimed\.c1_first_harvest/);
-  assert.match(ui, /先完成主線/);
-  assert.match(ui, /先整理田地/);
+test('A3 路線在市集開放後成為可儲存與切換的實際選擇', () => {
+  assert.match(ui, /AdventureAPI\.firstChoiceStatus\(farmState\)/);
+  assert.match(ui, /status\.available/);
+  assert.match(ui, /先做農家麥餅/);
+  assert.match(ui, /先接蘿拉的小麥單/);
   assert.doesNotMatch(ui, /stats\.plantCount \|\| 0\) < 1/);
 });
 

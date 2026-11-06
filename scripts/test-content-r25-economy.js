@@ -42,7 +42,7 @@ test("停用交付鈕使用可行動的缺料文字", () => {
   state.storage.items.wheat = 1;
   assert.equal(G.orderMissingText(state, order), "還缺小麥 ×1");
   const ui = fs.readFileSync(require.resolve("../src/ui.js"), "utf8");
-  assert.ok(ui.includes('${can ? "交付" : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}'));
+  assert.ok(ui.includes('${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}'));
 });
 
 test("第 1～3 章任務按鈕文字都是動作句，不含統計名詞", () => {
