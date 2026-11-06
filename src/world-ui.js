@@ -256,6 +256,7 @@
   }
   // R44：作物不澆水也會長大；若玩家還沒澆完、作物就已成熟，成熟作物不能再澆，澆水步驟會卡住。
   // 這時把剩下的澆水次數補記，並告訴玩家原因（只在田裡已沒有可澆的作物時觸發）。
+  let waterStuckSince = 0;
   function unstickWaterStep(s) {
     const g = A.guide(s, Date.now());
     if (!g || !g.step || g.step.type !== "water" || g.step.complete) return false;
@@ -264,7 +265,10 @@
     if (!planted.length) return false;
     const waterable = planted.some((p) => !window.getCropProgress(s, p, now).ready && !((p.wateredAt || 0) >= p.plantedAt));
     const anyReady = planted.some((p) => window.getCropProgress(s, p, now).ready);
-    if (waterable || !anyReady) return false;
+    if (waterable || !anyReady) { waterStuckSince = 0; return false; }
+    if (!waterStuckSince) waterStuckSince = now;
+    if (now - waterStuckSince < 8000) return false; // 狀態持續 8 秒才補記，避免剛熟的一瞬間就跳過
+    waterStuckSince = 0;
     const remain = Math.max(0, (g.step.required || 0) - (g.step.current || 0));
     if (!remain) return false;
     const r = A.record(s, { type: "water", count: remain }, now);
