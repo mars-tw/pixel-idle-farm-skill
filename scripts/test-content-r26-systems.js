@@ -127,7 +127,7 @@ test('每日三項不重複首章收成與小麥交付，印章冊標示已領�
 });
 
 test('開場、對話與設定文案符合 R26', () => {
-  assert.match(world, /先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥後，再把其中 2 份交給老農班伯。/);
+  assert.match(world, /先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥（每格收 2 份，共 6 份）後，再把其中 2 份交給老農班伯。/);
   assert.match(world, /id="worldSunBegin">去見鎮長葛瑞/);
   assert.match(world, /class="dialogue-continue">繼續 ▶<\/button>/);
   assert.match(world, /class="dialogue-close" aria-label="略過對話"/);

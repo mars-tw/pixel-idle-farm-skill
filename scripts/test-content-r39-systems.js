@@ -26,7 +26,7 @@ test('A1 任務列與市集預告共用已收小麥 0/6 到 6/6', () => {
     harvested: 6, target: 'elder', label: '前往老農班伯（交付 2 份小麥）',
   });
   const ui = read('src/ui.js');
-  assert.match(ui, /planted < 3 \? "已種下・種滿 3 格再澆水" : "待澆水"/);
+  assert.match(ui, /planted < 3 \? `已種 \$\{planted\}／3 格・種滿再澆水` : "待澆水"/ /* R42：標籤寫出已種格數，意圖不變：種滿前不顯示待澆水 */);
 });
 
 test('A1 印章冊未領完顯示可做項數，領完後才說印章已蓋好', () => {

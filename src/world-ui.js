@@ -215,6 +215,7 @@
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
     const hint = objectiveHint(s, unfinished);
     const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
+    updateSunChip(s);
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
     const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes]);
     if (sig === lastObjective) {
@@ -234,12 +235,12 @@
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
-    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
+    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}${q.canClaim ? "・待回報" : ""}` : "本章 3/3"}</span></div>
       <div class="world-objective-title">${q ? esc(guide.displayTitle || q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(guide.displayDescription || q.description) : "你留下的每一份收穫，都有了去處。"}</div>
       ${choiceRoutes}
       ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
-      <div class="world-objective-bottom"><span>${esc(step)}</span><button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button></div>
+      <div class="world-objective-bottom"><span${esc(step) === esc(`${progressStep} ${progressText}`.trim()) ? ' class="step-dup"' : ""}>${esc(step)}</span><button type="button" data-world-go ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "hidden" : ""}>${q ? esc(guide.actionLabel) : "繼續經營"}</button></div>
       <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
     box.querySelector("[data-world-go]").onclick = () => guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen();
     box.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => {
@@ -250,6 +251,26 @@
     }; });
     syncSeedHudTop();
     return true;
+  }
+  // R42：陽光出現時，畫面上一定看得到一個「陽光在哪、還剩多久」的小標籤（不會被對話或面板藏起），點一下鏡頭帶到受光的田
+  function updateSunChip(s) {
+    if (typeof document.createElement !== "function" || !document.body) return;
+    const now = Date.now();
+    const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
+    const active = window.activePlotCount ? window.activePlotCount(s) : 6;
+    const plots = sun && sun.active ? sun.plots.filter((i) => i < active) : [];
+    let chip = el("sunChip");
+    if (!plots.length) { if (chip) chip.hidden = true; return; }
+    if (!chip) {
+      chip = document.createElement("button"); chip.type = "button"; chip.id = "sunChip"; chip.className = "sun-chip"; chip.dataset.audit = "sun-chip";
+      chip.onclick = () => { const cur = current; const st = cur && window.sunpatchStatus ? window.sunpatchStatus(cur, Date.now()) : null; const idx = st && st.plots && st.plots[0]; const tile = cur && cur.map && cur.map.tiles.find((t) => t.plotIndex === idx); if (tile && farm() && farm().focusTile) farm().focusTile(tile.id); };
+      document.body.appendChild(chip);
+    }
+    chip.hidden = false;
+    chip.textContent = `☀ 陽光照在 ${plots.length} 格田・剩 ${Math.ceil(sun.remainingMs / 1000)} 秒`;
+    chip.setAttribute("aria-label", chip.textContent + "，點一下看受光的田");
+    const dock = el("questDock"); const r = dock && dock.getBoundingClientRect ? dock.getBoundingClientRect() : null;
+    if (r && r.height) { chip.style.left = Math.round(r.left) + "px"; chip.style.top = Math.round(r.bottom + 6) + "px"; }
   }
   // R79：等待時告訴玩家還要多久、現在能做什麼；光斑出現時引導去光裡。
   function objectiveHint(s, row) {
@@ -422,7 +443,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r41-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r41-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r42-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r42-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');
@@ -694,7 +715,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥後，再把其中 2 份交給老農班伯。</p><button class="btn buy" id="worldSunBegin">去見鎮長葛瑞</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥（每格收 2 份，共 6 份）後，再把其中 2 份交給老農班伯。</p><button class="btn buy" id="worldSunBegin">去見鎮長葛瑞</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };

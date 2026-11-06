@@ -151,7 +151,7 @@ const HELP = `
     await page.waitForTimeout(700);
     const up = await page.evaluate((src) => {
       eval(src);
-      const cards = [...document.querySelectorAll('.side-pane[data-pane="upgrades"] .up')];
+      const cards = [...document.querySelectorAll('.side-pane[data-pane="upgrades"] .up')].filter((c) => !c.classList.contains('r32-panel-hidden')); // R42：被「再顯示」收起的卡不在畫面上，不量寬度
       const rows = cards.slice(0, 3).map((c) => {
         const d = c.querySelector('.u-desc'); const btn = c.querySelector('button'); const spend = c.querySelector('[data-audit="upgrade-spend-all"]');
         return { card: ro(c), descW: d ? Math.round(ro(d).width) : 0, btn: btn ? ro(btn) : null, spend: spend ? { r: ro(spend), text: spend.textContent.trim() } : null };

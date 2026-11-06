@@ -1,0 +1,17 @@
+/* R42：陽光小標籤、升級警告換行、狀態標籤不像按鈕、二選一大卡 */
+.sun-chip {
+  position: fixed; z-index: 9050; min-height: 32px; padding: 4px 10px; border: 2px solid #c98b1c; border-radius: 6px;
+  background: #fff3c4; color: #6b4210; font-size: 12px; font-weight: 800; box-shadow: 0 2px 0 #b07415; cursor: pointer;
+}
+.sun-chip[hidden] { display: none !important; }
+body:has(.side-panel.world-panel-open) .sun-chip, body:has(.modal.show) .sun-chip { display: none !important; }
+[data-audit="upgrade-spend-all"] { white-space: normal !important; overflow-wrap: anywhere; text-align: left; max-width: 100%; box-sizing: border-box; }
+.order .o-actions .btn[disabled].ful, .order .btn.buy[disabled] {
+  background: transparent !important; border: 1px dashed #c4785d !important; box-shadow: none !important; color: #a3452c !important; cursor: default; font-weight: 700;
+}
+#questDock .world-objective-routes { grid-template-columns: 1fr !important; }
+#questDock .world-objective-routes .route { white-space: normal; word-break: keep-all; padding: 8px 10px; }
+#questDock .world-objective-routes .route b { font-size: 13px; }
+#questDock .world-objective-routes .route span { font-size: 11px !important; line-height: 1.35; }
+#questDock [data-world-go][hidden] { display: none !important; }
+#questDock:not(.quest-collapsed):not(.quest-auto-collapsed) .world-objective-bottom > span.step-dup { display: none; }

@@ -175,7 +175,7 @@ async function scrollPanelToBottom(page) {
         const m = await panelMeasure(page);
         assert(m, `${w}×${h} ${tab} 面板未開啟`);
         assert(m.bottom <= m.dockTop + 1, `${w}×${h} ${tab} 面板下緣 ${Math.round(m.bottom)} 超過工具列上緣 ${Math.round(m.dockTop)}`);
-        if (tab === 'upgrades') assert(m.scrollH > m.clientH, `${w}×${h} 升級面板內容應可捲動（scrollH ${m.scrollH} ≤ clientH ${m.clientH}）`);
+        if (tab === 'upgrades') assert(m.scrollH > m.clientH || m.hasMore, `${w}×${h} 升級面板內容應可捲動或以「再顯示 N 項」收起（scrollH ${m.scrollH} ≤ clientH ${m.clientH}）`); // R42：被黏底按鈕蓋到的卡改收起，內容可能剛好不需捲動，但仍須有「再顯示」入口
         if (m.scrollH > m.clientH) { assert.equal(m.hintVisible, false, `${w}×${h} ${tab} 面板不應再顯示「往下還有內容」（R36 只留一種提示）`); if (m.hiddenCards > 0) assert(m.hasMore, `${w}×${h} ${tab} 面板收起卡片後應以「再顯示 N 項」作為唯一提示`); }
         await page.screenshot({ path: path.join(SHOT_DIR, `${tab}-${w}x${h}.png`) });
         const s = await scrollPanelToBottom(page);
