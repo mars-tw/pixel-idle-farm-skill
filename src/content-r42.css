@@ -48,3 +48,22 @@ body:has(#worldDialogue:not([hidden])) #questDock[data-step-type="talk"] [data-w
 #questDock .world-objective-routes .route { padding-right: 10px !important; }
 #questDock .world-objective-routes .route::after { position: static !important; transform: none !important; display: inline-block; justify-self: start; margin-top: 4px; }
 #settingsList > :last-child { margin-bottom: 72px !important; }
+/* R47 整合：手機橫式收合任務卡不寫「本章任務」、任務名不截斷並顯示步驟進度 */
+@media (max-height: 480px) and (orientation: landscape) {
+  #questDock.quest-collapsed .world-chapter > span:first-child, #questDock.quest-auto-collapsed .world-chapter > span:first-child { display: none !important; }
+  #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { white-space: nowrap !important; overflow: visible !important; text-overflow: clip !important; max-width: none !important; }
+  #questDock.quest-collapsed .world-objective-title .qp-step, #questDock.quest-auto-collapsed .world-objective-title .qp-step { display: none !important; }
+  #questDock.quest-collapsed .world-objective-title [data-audit="quest-progress"], #questDock.quest-auto-collapsed .world-objective-title [data-audit="quest-progress"] { display: inline !important; }
+}
+/* R47 整合：收合任務卡仍保留「選擇下一步」（R26 收合時隱藏按鈕的規則不套用到這顆） */
+#questDock.quest-collapsed .world-objective-bottom [data-choice-open],
+#questDock.quest-auto-collapsed .world-objective-bottom [data-choice-open],
+#questDock.quest-target-collapsed .world-objective-bottom [data-choice-open] { display: inline-flex !important; }
+#questDock.quest-collapsed .world-objective-bottom:has([data-choice-open]) { display: flex !important; }
+#questDock.quest-collapsed .world-objective-routes, #questDock.quest-auto-collapsed .world-objective-routes { display: none !important; }
+#questDock.quest-collapsed .world-objective-bottom:has([data-choice-open]) { position: static !important; margin-left: auto !important; }
+#questDock.quest-collapsed [data-choice-open] { position: static !important; white-space: nowrap; }
+#questDock.quest-collapsed:has([data-choice-open]) { padding-right: 72px !important; }
+#questDock.quest-collapsed .world-objective-bottom:has([data-choice-open]) > span { display: none !important; }
+#questDock.quest-collapsed:has([data-choice-open]) { width: auto !important; max-width: min(460px, calc(100vw - 24px)) !important; }
+#questDock.quest-collapsed .world-objective-bottom:has([data-choice-open]) { flex: 0 0 auto !important; min-width: max-content !important; }
