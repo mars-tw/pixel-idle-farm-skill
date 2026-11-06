@@ -138,4 +138,4 @@
 ## 河畔池塘重繪（2026-11-06）
 
 - `assets/generated/r35/pond-480.png`：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high）以洋紅底生成 3 張候選，選第 1 張，洋紅色鍵去背後縮成 480 px，顯示為 3×3 格的自然池塘（土岸、石頭、草叢、睡蓮），取代格子拼成的直角藍色方塊。提示詞與雜湊見 [assets/generated/r35/manifest.json](assets/generated/r35/manifest.json)。
-- `assets/generated/r49/`（開場插圖 welcome-512／1024、地面 grass-72、小徑 path-72、工具與日誌圖示 *-64）：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high）各生成 2 張候選後選 1 張。插圖裁成 2:1 縮圖；草地與小徑取中央區塊縮成 72 px 並做無縫化；圖示以洋紅底生成、色鍵去背後縮成 64 px。取代原本被放大的整張地面底圖（黃色光斑易與陽光加成混淆、像素比角色粗）、繪本風開場插圖與舊工具圖示。提示詞、處理步驟與雜湊見 [assets/generated/r49/manifest.json](assets/generated/r49/manifest.json)。
+- `assets/generated/r49/`（開場插圖 welcome-px-512／1024、地面 grass-36、小徑 path-36、工具與日誌圖示 *-64）：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high）各生成 2 張候選後選 1 張。插圖裁成 2:1 後縮成 256×128 再以最近鄰放大（R50 統一像素顆粒）；草地與小徑取中央區塊縮成 36 px 並做無縫化、畫面上 2 倍顯示；圖示以洋紅底生成、色鍵去背後縮成 64 px。取代原本被放大的整張地面底圖（黃色光斑易與陽光加成混淆、像素比角色粗）、繪本風開場插圖與舊工具圖示。提示詞、處理步驟與雜湊見 [assets/generated/r49/manifest.json](assets/generated/r49/manifest.json)。

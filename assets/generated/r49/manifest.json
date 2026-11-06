@@ -11,15 +11,15 @@
       "created_utc": "2026-11-06T07:12:11.830188+00:00",
       "source_candidate": "welcome_2.png",
       "source_sha256": "670ec8a01ecabd82fe4307d0571d1dd655ceaf866213b54d96e65178b2f659e7",
-      "processing": "裁成 2:1、LANCZOS 縮到 512×256 與 1024×512",
+      "processing": "裁成 2:1、LANCZOS 縮到 512×256 與 1024×512；R50 再縮成 256×128、64 色，以最近鄰放大成 512／1024，與遊戲內像素顆粒一致",
       "outputs": [
         {
-          "file": "welcome-512.webp",
-          "sha256": "69a85525ae9c5aaef225644260aa3b8e0db623f485fce271119812f2dfc9ccd3"
+          "file": "welcome-px-512.png",
+          "sha256": "071956e9d90074ea13d291501132a979adae0a1cbd38e340af04d1b9ae5c47ec"
         },
         {
-          "file": "welcome-1024.webp",
-          "sha256": "bf2864672641a507536eeadfd0fa4518a03fcae8decf3957ab9b8026b5b061c7"
+          "file": "welcome-px-1024.png",
+          "sha256": "dbee492cf3b7ac93bca29685868d2486149be7a707dca85c6643cd0e96782fff"
         }
       ]
     },
@@ -67,11 +67,11 @@
       "created_utc": "2026-11-06T07:12:31.600703+00:00",
       "source_candidate": "grass_1.png",
       "source_sha256": "a371b9dfd3e41e682149515a7d2861d335f56c4ca96fcc1e0aa8c408e13cc5f9",
-      "processing": "取中央 288px、BOX 縮到 72px、位移交叉淡化成無縫、色調偏暖、48 色量化",
+      "processing": "取中央 288px、BOX 縮到 72px、位移交叉淡化成無縫、色調偏暖、48 色量化；R50 再以 BOX 縮成 36 px、32 色，畫面上以 2 倍像素顯示",
       "outputs": [
         {
-          "file": "grass-72.png",
-          "sha256": "795843ef31116a2ddaf21206b06d9ab74e24eac520d064e8cd308c87d540320d"
+          "file": "grass-36.png",
+          "sha256": "a3a968dbcf365b5371f1514f25dabe566e3abbdfb29f8f95622ffaa4e67046a2"
         }
       ]
     },
@@ -83,11 +83,11 @@
       "created_utc": "2026-11-06T07:20:53.559920+00:00",
       "source_candidate": "path_1.png",
       "source_sha256": "3d4867004be169ee148179d73ecbefefe95e4331a23e28e7b03662368e5a1fb7",
-      "processing": "取中央 288px、BOX 縮到 72px、位移交叉淡化成無縫、48 色量化",
+      "processing": "取中央 288px、BOX 縮到 72px、位移交叉淡化成無縫、48 色量化；R50 再以 BOX 縮成 36 px、32 色，畫面上以 2 倍像素顯示",
       "outputs": [
         {
-          "file": "path-72.png",
-          "sha256": "ab3076e10ba6701006479c7425d616d9b9c5cf6d399881d5004df5a2e27d3d8a"
+          "file": "path-36.png",
+          "sha256": "2b0c6586e35ee89113cdb954df599b3af1356075ace0311a09c391f5a659fe10"
         }
       ]
     }
