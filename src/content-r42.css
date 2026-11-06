@@ -83,7 +83,7 @@ body:has(.side-panel.world-panel-open) #questDock .world-objective-title .qp-ste
 @media (max-width: 859px) and (orientation: portrait) {
   .side-pane[data-pane="orders"] .order { padding: 8px 10px !important; margin-bottom: 6px !important; }
   .side-pane[data-pane="orders"] .order .o-client, .side-pane[data-pane="orders"] .order .o-meta { font-size: 11px !important; line-height: 1.25 !important; margin: 0 !important; }
-  .side-pane[data-pane="orders"] .order .o-actions { gap: 6px !important; }
+  .side-pane[data-pane="orders"] .order .o-actions { gap: 12px !important; }
   .side-pane[data-pane="orders"] .order .o-actions .btn { min-height: 44px; padding-top: 4px !important; padding-bottom: 4px !important; }
   .side-pane[data-pane="orders"] .o-story-impact { display: none !important; }
 }
