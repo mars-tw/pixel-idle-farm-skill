@@ -1172,8 +1172,9 @@
         ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
         : `<div class="order-market-locked" data-audit="order-market-locked">
           <p><b>市集預告</b><span class="market-preview-state">預覽・尚未開放</span>：把 2 份小麥交給老農班伯後開放。下面是開放後第一批會出現的訂單。</p>
+          <button style="margin:0 0 8px" type="button" class="btn buy small" data-order-main-go>${escapeHtml(G.marketPreviewAction(state).label)}</button>
+          <!-- R46：主要行動放在預告卡上方，手機首屏不再蓋住訂單 -->
           ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗（未含加成）</div><div class="o-meta">市集開放後可接${o.lockNote ? `・${escapeHtml(o.lockNote)}` : ""}</div></div></div>`; }).join("")}
-          <button type="button" class="btn buy small" data-order-main-go>${escapeHtml(G.marketPreviewAction(state).label)}</button>
         </div>`;
       const go = box.querySelector("[data-order-main-go]");
       if (go) go.onclick = () => { const action = G.marketPreviewAction(state); const target = action.target === "field" ? (state.map.tiles || []).find((tile) => tile.plotIndex === 0) : (state.map.tiles || []).find((tile) => tile.npc === "elder"); if (target) focusCameraOnTile(target.id); };

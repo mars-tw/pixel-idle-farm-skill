@@ -33,9 +33,6 @@ body:has(#worldDialogue:not([hidden])) #questDock[data-step-type="talk"] [data-w
 #questDock .world-objective-routes .route { position: relative; padding-right: 74px !important; cursor: pointer; }
 #questDock .world-objective-routes .route::after { content: "選這條 ▶"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 3px 7px; border-radius: 4px; background: #6b4a1f; color: #fff6dc; font-size: 11px; font-weight: 800; }
 #questDock .world-objective-routes .route.tracked::after { content: "追蹤中"; background: #4f8a3c; }
-@media (max-width: 859px) and (orientation: portrait) {
-  .side-pane[data-pane="orders"] [data-order-main-go] { position: sticky; bottom: 6px; z-index: 6; box-shadow: 0 -10px 12px -4px #fff8e8; }
-}
 /* R46：手機訂單面板底部預留空間，最後一張卡可捲到固定按鈕上方；設定最後一列不被「完成」擋住；手機標誌放大；待選路線入口醒目 */
 @media (max-width: 859px) and (orientation: portrait) {
   .side-pane[data-pane="orders"] { padding-bottom: 64px !important; }
