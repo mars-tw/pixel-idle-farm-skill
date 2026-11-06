@@ -104,7 +104,7 @@
       goals: [goal("talk", 1, "找鎮長葛瑞交談", "mayor"), goal("plant", 3, "種下作物"), goal("water", 3, "替作物澆水")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
     { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收成 6 份小麥（每格 2 份），再把其中 2 份交給老農班伯。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
       goals: [goal("harvest", 6, "收成小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
-    { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在野餐廚房做一份農家麥餅，帶給老農班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
+    { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在農舍灶台做一份農家麥餅，帶給老農班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
       goals: [goal("cook", 1, "烤一份農家麥餅", "rustic_bread")], reward: reward(20, 4, { wood: 6 }, { fishingRod: true }) },
     { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木材、兩份石材修好釣台，再試試老農班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
       goals: [goal("restore", 1, "修好河畔釣台", "fishing_dock")], reward: reward(16, 4) },

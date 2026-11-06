@@ -405,7 +405,7 @@
   function completionLine(id) {
     const lines = {
       c1_homecoming: "門口終於有新苗了。這些木料你先收著，等河邊的釣台修好，咱們再坐下來聊。",
-      c1_first_harvest: "把剛收的小麥帶去野餐廚房，做一份自己的晚餐吧。灶火還能用。",
+      c1_first_harvest: "把剛收的小麥帶去農舍灶台，做一份自己的晚餐吧。灶火還能用。",
       c1_first_meal: "這塊餅有你祖母的味道。魚竿和剩下的木料拿去吧，河邊一直在等人。",
       c2_fishing_dock: "踏板踩起來穩了。輕點和橫拉都先別急，等浮標沉下去再提竿。多看幾次，你就認得牠們了。",
       c2_river_basket: "魚很新鮮，薄荷也香。我把木料備好了，河邊再多放張桌子，就能招待大家。",
@@ -457,7 +457,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r43-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r43-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r44-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r44-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

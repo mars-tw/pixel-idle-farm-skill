@@ -809,7 +809,7 @@
   function marketPreviewAction(state) {
     const harvested = Math.min(6, Math.max(0, Number(state && state.stats && state.stats.harvested && state.stats.harvested.wheat) || 0));
     return harvested < 6
-      ? { harvested, target: "field", label: `先收成小麥（已收 ${harvested}/6，交班伯需 2）` }
+      ? { harvested, target: "field", label: `先收成小麥（已收 ${harvested}/6，要交老農班伯 2 份）` }
       : { harvested, target: "elder", label: "前往老農班伯（交付 2 份小麥）" };
   }
   function refreshOrders(state, now, rng) {

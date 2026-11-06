@@ -27,3 +27,12 @@ body:has(.side-panel.world-panel-open) .sun-chip, body:has(.modal.show) .sun-chi
 .upgrade-unlock-banner { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; padding: 6px 10px; border: 1px solid #d8b56c; border-radius: 4px; background: #fff6dc; color: #5c3f15; font-size: 12px; font-weight: 700; }
 #adventurePanel .world-chapter, #adventurePanel .adventure-meta, #adventurePanel .chapter-state, .side-pane[data-pane="story"] .world-chapter, .side-pane[data-pane="story"] .adventure-meta { color: #4c5a33 !important; opacity: 1 !important; }
 body:has(.side-panel.world-panel-open) #questDock.quest-collapsed { display: flex !important; align-items: center; gap: 8px; }
+/* R44：面板開啟時任務標題可換兩行；對話中隱藏前往鈕；二選一卡看得出可點；手機市集預告的行動鈕固定在面板底部 */
+body:has(.side-panel.world-panel-open) #questDock .world-objective-title { white-space: normal !important; overflow: hidden !important; text-overflow: clip !important; display: -webkit-box !important; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; }
+body:has(#worldDialogue:not([hidden])) #questDock [data-world-go] { visibility: hidden; }
+#questDock .world-objective-routes .route { position: relative; padding-right: 74px !important; cursor: pointer; }
+#questDock .world-objective-routes .route::after { content: "選這條 ▶"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 3px 7px; border-radius: 4px; background: #6b4a1f; color: #fff6dc; font-size: 11px; font-weight: 800; }
+#questDock .world-objective-routes .route.tracked::after { content: "追蹤中"; background: #4f8a3c; }
+@media (max-width: 859px) and (orientation: portrait) {
+  .side-pane[data-pane="orders"] [data-order-main-go] { position: sticky; bottom: 6px; z-index: 6; box-shadow: 0 -10px 12px -4px #fff8e8; }
+}

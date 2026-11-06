@@ -17,7 +17,7 @@ function test(name, fn) {
 test('A1 任務列與市集預告共用已收小麥 0/6 到 6/6', () => {
   const state = S.defaultState(T);
   assert.deepEqual(G.marketPreviewAction(state), {
-    harvested: 0, target: 'field', label: '先收成小麥（已收 0/6，交班伯需 2）',
+    harvested: 0, target: 'field', label: '先收成小麥（已收 0/6，要交老農班伯 2 份）',
   });
   state.stats.harvested.wheat = 4;
   assert.match(G.marketPreviewAction(state).label, /已收 4\/6/);
