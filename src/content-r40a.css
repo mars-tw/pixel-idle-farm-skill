@@ -50,3 +50,5 @@
   .res.mat .ic { display: none !important; }
   .res.mat .material-name { display: block; white-space: nowrap !important; font-size: 11px !important; line-height: 1.25 !important; writing-mode: horizontal-tb !important; }
 }
+/* R40 整合：「再顯示 N 項」黏在面板底部時，上方加一段紙色漸層，讓後方的卡片像「往下還有」而不是被切壞 */
+.side-pane .r32-show-more { box-shadow: 0 -26px 18px -6px #fff8e8, 0 2px 0 #c9ad7a; background: #fff3d6; }
