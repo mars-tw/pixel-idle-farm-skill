@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r40-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r41-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -879,6 +879,13 @@
     ensure();
     if (typeof window !== "undefined" && window.addEventListener) window.addEventListener("resize", syncShortDefault);
     if (typeof MutationObserver === "function") new MutationObserver(ensure).observe(box, { childList: true });
+    // R41：大型面板開啟時，任務卡改用既有的收合摘要（保留章節進度與行動按鈕），關閉後回到玩家原本的狀態
+    const side = typeof document.querySelector === "function" ? document.querySelector(".side-panel") : null;
+    if (side && typeof MutationObserver === "function") new MutationObserver(() => {
+      const open = side.classList.contains("world-panel-open");
+      box.classList.toggle("quest-panel-collapsed", open);
+      box.classList.toggle("quest-collapsed", open || questDockCollapsed);
+    }).observe(side, { attributes: true, attributeFilter: ["class"] });
   }
   function setupSideTabs() {
     const mobileTabsQuery = (typeof window.matchMedia === "function")
@@ -1389,7 +1396,7 @@
           <div class="u-desc">${escapeHtml(cardInfo.effect)}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${escapeHtml(nextStep)}</span>` : ""}</div>
         </div>
         ${next
-          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? "確認後升級" : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後不足一輪種子成本（${fmtNum(cardInfo.roundSeedCost)} 金）。</div>` : ""}`
+          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">需確認</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，不足一輪種子成本（${fmtNum(cardInfo.roundSeedCost)} 金）。</div>` : ""}`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -3132,6 +3139,14 @@
         plate.style.zIndex = Math.round(baselineY + 30);
         worldEl.appendChild(plate); obDyn.push(plate);
         shiftNameplateAbove(plate, el);
+      } else if (tile.id !== questTarget && worldEl) {
+        // R41：遠處 NPC 腳下常駐小名字，避免被誤認成玩家（不參與名牌避讓量測）
+        const foot = document.createElement("div");
+        foot.className = "npc-footname"; foot.dataset.audit = "npc-footname"; foot.dataset.npc = tile.npc; foot.setAttribute("aria-hidden", "true");
+        foot.textContent = String(npc.name || "").split(" ").pop();
+        foot.style.left = pxv(npcCenterX(tile)); foot.style.top = pxv(baselineY + 2);
+        foot.style.zIndex = Math.round(baselineY + 2);
+        worldEl.appendChild(foot); obDyn.push(foot);
       }
       // Stage 10：委託可交付時放綠點（優先）；否則首次見面尚未對話過時放金點
       const req = state.npcRequests && state.npcRequests[tile.npc];

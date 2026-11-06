@@ -1,0 +1,18 @@
+/* R41 整合：面板開啟時任務卡用收合摘要（保留行動按鈕）、里程碑卡避開資源列、NPC 腳下小名字、陰影減淡、手機標誌不貼邊 */
+body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed { max-height: none !important; overflow: visible !important; }
+body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed .world-objective-bottom > span { display: revert !important; }
+body:has(.side-panel.world-panel-open) #questDock.quest-panel-collapsed .world-objective-title { white-space: normal; }
+@media (min-width: 621px) {
+  #toast-zone:has(.settlement-card.milestone-card) { top: max(116px, env(safe-area-inset-top)) !important; }
+}
+.npc-footname {
+  position: absolute; transform: translate(-50%, 0); pointer-events: none;
+  padding: 0 5px; border-radius: 3px; background: rgba(48, 38, 22, .62); color: #fff6dc;
+  font-size: 10px; line-height: 15px; white-space: nowrap; letter-spacing: .02em;
+}
+.canopy-shadow { opacity: .5 !important; }
+@media (max-width: 859px) {
+  .farm-logo { margin-left: 4px; margin-top: 4px; max-width: calc(100vw - 32px); }
+}
+#dailyTopBack { display: none !important; }
+.u-confirm-note { display: block; font-size: 10px; line-height: 1.1; font-weight: 600; opacity: .85; }
