@@ -17,7 +17,7 @@ test("A1 未開放市集提供三張預告訂單與可點的主要動作", () =>
   assert.equal(require('../src/game.js').previewMarketOrders(require('../src/state.js').defaultState(1_900_000_000_000), 1_900_000_000_000).length, 3);
   assert.match(ui, /data-order-main-go>\$\{escapeHtml\(G\.marketPreviewAction\(state\)\.label\)\}<\/button>/);
   assert.match(ui, /tile\.npc === "elder"/);
-  assert.match(ui, /預覽・尚未開放/);
+  assert.match(ui, /預覽・還沒開放/);
 });
 
 test("A2 新存檔至少一項建物可建造", () => {

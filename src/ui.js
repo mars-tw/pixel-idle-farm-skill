@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r52-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r53-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -130,6 +130,7 @@
   // R79：同一句 2.5 秒內不重複；最多同時 3 則（最舊的先收）。
   const TOAST_DEDUPE_MS = 2500, TOAST_MAX = 3;
   const recentToasts = new Map();
+  const pendingToasts = new Set();
   const feedbackQueue = G.createFeedbackQueue ? G.createFeedbackQueue() : null;
   const settlementQueue = [];
   let settlementVisible = false;
@@ -176,8 +177,13 @@
   }
   function toast(msg, deferCount) {
     const zone = $("toast-zone"); if (!zone) return;
-    const dlg = $("worldDialogue"); if (dlg && !dlg.hidden && (deferCount || 0) < 40) { setTimeout(() => { recentToasts.delete(String(msg)); toast(msg, (deferCount || 0) + 1); }, 300); return; }
-    const key = String(msg), at = Date.now();
+    const key = String(msg);
+    // R53：對話中延後的提示同一句只排一次；畫面上已有同一句也不再重複疊加
+    if (!deferCount && pendingToasts.has(key)) return;
+    if ([...zone.children].some((n) => n.textContent === key)) { pendingToasts.delete(key); return; }
+    const dlg = $("worldDialogue"); if (dlg && !dlg.hidden && (deferCount || 0) < 40) { pendingToasts.add(key); setTimeout(() => { recentToasts.delete(key); toast(msg, (deferCount || 0) + 1); }, 300); return; }
+    pendingToasts.delete(key);
+    const at = Date.now();
     const last = recentToasts.get(key);
     if (last && at - last < TOAST_DEDUPE_MS) return;
     recentToasts.set(key, at);
@@ -1171,7 +1177,7 @@
       box.innerHTML = marketUnlocked
         ? `<div style="font-size:12px;color:var(--ink-soft)">尚無訂單…</div>`
         : `<div class="order-market-locked" data-audit="order-market-locked">
-          <p><b>市集預告</b><span class="market-preview-state">預覽・尚未開放</span>：把 2 份小麥交給老農班伯後開放。下面是開放後第一批會出現的訂單。</p>
+          <p><b>市集預告</b><span class="market-preview-state">預覽・還沒開放</span>：把 2 份小麥交給老農班伯後開放。下面是開放後第一批會出現的訂單。</p>
           <button style="margin:0 0 8px" type="button" class="btn buy small" data-order-main-go>${escapeHtml(G.marketPreviewAction(state).label)}</button>
           <!-- R46：主要行動放在預告卡上方，手機首屏不再蓋住訂單 -->
           ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗（未含加成）</div><div class="o-meta">市集開放後可接${o.lockNote ? `・${escapeHtml(o.lockNote)}` : ""}</div></div></div>`; }).join("")}
@@ -1224,7 +1230,7 @@
           ${sharedHtml}
           <div class="o-reward">🪙 ${fmtNum(pay.coins)}${pay.coins > o.rewardCoins ? `<small class="o-bonus">（含加成 +${fmtNum(pay.coins - o.rewardCoins)}）</small>` : ""} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${o.firstBatch ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}`}</div>
-          ${storyImpact && storyImpact.storyNeed > 0 ? `<div class="o-story-impact${storyImpact.risky ? " risky" : ""}" data-audit="order-story-impact">${escapeHtml(storyImpact.text)}</div>` : ""}
+          ${storyImpact && storyImpact.storyNeed > 0 && can ? `<div class="o-story-impact${storyImpact.risky ? " risky" : ""}" data-audit="order-story-impact">${escapeHtml(storyImpact.text)}</div>` : ""}
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
         </div>
         <div class="o-actions">

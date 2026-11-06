@@ -12,7 +12,7 @@ test("升級會讓金幣不夠買一輪種子時，按鈕停用並寫「先留�
 });
 test("手記已交付任務標「已完成」，任務列章節進度寫「本章任務」", () => {
   assert.match(world, /claimed: "已完成" \}\[q\.status\]/);
-  assert.match(world, /本章任務 \$\{guide\.chapterProgress\.claimed\}/);
+  assert.match(world, /本章已交付 \$\{guide\.chapterProgress\.claimed\}/);
 });
 test("待選路線時有「選擇下一步」入口，按下會展開任務卡", () => {
   assert.match(world, /<button type="button" data-choice-open>選擇下一步<\/button>/);

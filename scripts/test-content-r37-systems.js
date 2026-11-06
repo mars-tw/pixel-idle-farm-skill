@@ -61,7 +61,7 @@ test("A2 市集預告依主線已收小麥數切換文字與目的地", () => {
   state.stats.harvested.wheat = 6;
   assert.deepEqual(G.marketPreviewAction(state), { harvested: 6, target: "elder", label: "前往老農班伯（交付 2 份小麥）" });
   const ui = read("src/ui.js");
-  assert.match(ui, /預覽・尚未開放/);
+  assert.match(ui, /預覽・還沒開放/);
   assert.match(ui, /action\.target === "field".*tile\.plotIndex === 0/);
 });
 

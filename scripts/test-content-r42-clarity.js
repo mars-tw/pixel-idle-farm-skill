@@ -17,7 +17,7 @@ test("二選一寫出各自後果，尚未選擇時隱藏前往鈕", () => {
   assert.match(world, /\$\{choiceRoutes && !\/route\[\^"\]\*tracked\/\.test\(choiceRoutes\)[^`]*`<button type="button" data-choice-open>選擇下一步<\/button>`/); // R46：待選時以「選擇下一步」取代隱藏的前往鈕
 });
 test("任務完成待回報時章節進度寫「待回報」，作物標籤寫出已種格數", () => {
-  assert.match(world, /本章任務 \$\{guide\.chapterProgress\.claimed\}\/\$\{guide\.chapterProgress\.total\}\$\{q\.canClaim \? "・待回報" : ""\}/);
+  assert.ok(world.includes("`本章已交付 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}`"), "章節進度改寫成已交付數，不再與 ✓ 回報並列「待回報」"); // R53
   assert.match(ui, /已種 \$\{planted\}／3 格・種滿再澆水/);
 });
 test("升級／手記面板中被黏底「再顯示」蓋到的卡會收起，訂單保留首屏兩張", () => {

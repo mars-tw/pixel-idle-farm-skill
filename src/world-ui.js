@@ -237,7 +237,7 @@
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
-    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章任務 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}${q.canClaim ? "・待回報" : ""}` : "本章 3/3"}</span></div>
+    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章已交付 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
       <div class="world-objective-title">${q ? esc(guide.displayTitle || q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(guide.displayDescription || q.description) : "你留下的每一份收穫，都有了去處。"}</div>
       ${choiceRoutes}
@@ -480,7 +480,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r49/welcome-px-512.png?v=content-r52-20261106-1" srcset="assets/generated/r49/welcome-px-512.png?v=content-r52-20261106-1 1x, assets/generated/r49/welcome-px-1024.png?v=content-r52-20261106-1 2x" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r52-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r49/welcome-px-512.png?v=content-r53-20261106-1" srcset="assets/generated/r49/welcome-px-512.png?v=content-r53-20261106-1 1x, assets/generated/r49/welcome-px-1024.png?v=content-r53-20261106-1 2x" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r53-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

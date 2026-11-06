@@ -75,3 +75,7 @@ body:has(#worldDialogue:not([hidden])) #questDock:is([data-step-type="talk"], [d
 body:has(.side-panel.world-panel-open) #questDock .world-objective-title .qp-step { display: none !important; }
 #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { white-space: nowrap !important; flex: 0 1 auto; min-width: 0; margin-right: 6px; }
 @media (max-height: 480px) and (orientation: landscape) { #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { margin-right: 12px !important; } }
+/* R53：手機打開側邊面板時，一般提示移到面板上方，不蓋住訂單內容 */
+@media (max-width: 859px) and (orientation: portrait) {
+  body:has(.side-panel.world-panel-open) #toast-zone:not(:has(.milestone-card)) { top: 150px !important; bottom: auto !important; }
+}
