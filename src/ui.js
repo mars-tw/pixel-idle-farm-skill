@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r50-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r51-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1181,6 +1181,9 @@
       return;
     }
     const ordered = state.orders.slice();
+    // R51：第一個選擇還在時，把任務卡提到的蘿拉 4 份大單排在最前面，避免玩家交錯單
+    const firstChoice = window.AdventureAPI && window.AdventureAPI.firstChoiceStatus ? window.AdventureAPI.firstChoiceStatus(state) : null;
+    if (firstChoice && firstChoice.available && !firstChoice.orderCompleted && firstChoice.selected !== "meal") { const k = ordered.findIndex((o) => o.id === "beginner_wheat_4"); if (k > 0) ordered.unshift(ordered.splice(k, 1)[0]); }
     const allocationById = Object.fromEntries((G.orderAllocation ? G.orderAllocation(state, ordered) : []).map((row) => [row.orderId, row]));
     const visibleOrders = visibleListItems("orders", ordered, 4);
     const sharedNeeds = {};

@@ -48,7 +48,7 @@ check("光斑 16 秒後消失，間隔後再出現，第二次不再標記 first
   G.updateSunpatch(s, T0, fixed(0.5));
   const start = T0 + G.SUNPATCH.firstDelayMs;
   G.updateSunpatch(s, start, fixed(0.5));
-  const end = start + G.SUNPATCH.durationMs;
+  const end = start + (G.SUNPATCH.firstDurationMs || G.SUNPATCH.durationMs); // R51：第一道光配合教學停較久，之後恢復 16 秒
   assert.equal(G.updateSunpatch(s, end, fixed(0.5)).expired, true);
   assert.equal(G.sunpatchActive(s, end), false);
   assert.equal(G.updateSunpatch(s, end + G.SUNPATCH.intervalMs - 1, fixed(0.5)).spawned, false);
@@ -141,7 +141,7 @@ check("晴朗天氣間隔較短", () => {
   s.weather = { id: "sunny", untilMs: T0 + 10 * 60000 };
   const start = T0 + G.SUNPATCH.firstDelayMs;
   G.updateSunpatch(s, start, fixed(0.5));
-  assert.equal(s.sun.nextAt - start, G.SUNPATCH.durationMs + G.SUNPATCH.sunnyIntervalMs);
+  assert.equal(s.sun.nextAt - start, (G.SUNPATCH.firstDurationMs || G.SUNPATCH.durationMs) + G.SUNPATCH.sunnyIntervalMs); // R51：第一道光時長
 });
 
 check("離線很久回來只補一道光，不會連續觸發", () => {

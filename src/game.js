@@ -161,6 +161,7 @@
     intervalMs: 40000,       // 兩道光之間
     sunnyIntervalMs: 28000,  // 晴朗天氣更常出現
     durationMs: 16000,       // 每道光停留時間
+    firstDurationMs: 40000,  // R51：第一道光配合教學對話停久一點，玩家讀完對話仍看得到光
     maxPlots: 2,
     growthBoost: 0.3,        // 種／澆：立刻推進成長時間 30%
     growthBoostCapMs: 180000,
@@ -197,7 +198,7 @@
       active,
       plots: active ? sun.plots.filter((i) => !(sun.used || []).includes(i)) : [],
       remainingMs: active ? Math.max(0, sun.endsAt - now) : 0,
-      durationMs: SUNPATCH.durationMs,
+      durationMs: sun.durationMs || SUNPATCH.durationMs,
       nextInMs: !active && sun.nextAt ? Math.max(0, sun.nextAt - now) : 0,
       catches: (state.stats && state.stats.sunCatches) || 0,
     };
@@ -235,8 +236,9 @@
     if (SUNPATCH.blockedWeather[weather]) { sun.nextAt = now + Math.round(interval / 2); return out; }
     const plots = pickSunPlots(state, now, random);
     if (!plots.length) { sun.nextAt = now + interval; return out; }
-    sun.plots = plots; sun.used = []; sun.startsAt = now; sun.endsAt = now + SUNPATCH.durationMs;
-    sun.nextAt = now + SUNPATCH.durationMs + interval;
+    const dur = sun.spawned ? SUNPATCH.durationMs : SUNPATCH.firstDurationMs; sun.spawned = (sun.spawned || 0) + 1;
+    sun.plots = plots; sun.used = []; sun.startsAt = now; sun.endsAt = now + dur; sun.durationMs = dur;
+    sun.nextAt = now + dur + interval;
     out.spawned = true;
     if (!sun.introduced) { sun.introduced = true; out.first = true; }
     return out;

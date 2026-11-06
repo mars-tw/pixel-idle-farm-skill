@@ -67,3 +67,11 @@ body:has(#worldDialogue:not([hidden])) #questDock[data-step-type="talk"] [data-w
 #questDock.quest-collapsed .world-objective-bottom:has([data-choice-open]) > span { display: none !important; }
 #questDock.quest-collapsed:has([data-choice-open]) { width: auto !important; max-width: min(460px, calc(100vw - 24px)) !important; }
 #questDock.quest-collapsed .world-objective-bottom:has([data-choice-open]) { flex: 0 0 auto !important; min-width: max-content !important; }
+/* R51：手機種子卡也顯示單價 */
+@media (max-width: 859px) { #mapScene .seed .sc { display: block !important; font-size: 10px; line-height: 1.1; } }
+/* R51：收合任務卡只顯示「任務名＋進度」一行，不再把詞切成兩行；按鈕不壓進度 */
+#questDock.quest-collapsed .world-objective-title .qp-step,
+#questDock.quest-auto-collapsed .world-objective-title .qp-step,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-title .qp-step { display: none !important; }
+#questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { white-space: nowrap !important; flex: 0 1 auto; min-width: 0; margin-right: 6px; }
+@media (max-height: 480px) and (orientation: landscape) { #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { margin-right: 12px !important; } }
