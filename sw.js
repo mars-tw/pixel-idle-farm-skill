@@ -1,4 +1,4 @@
-const CACHE_VERSION = "content-r48-20261106-1";
+const CACHE_VERSION = "content-r49-20261106-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -59,6 +59,17 @@ const CORE_ASSETS = [
   versioned("./src/content-r40b.css"),
   versioned("./src/content-r41.css"),
   versioned("./src/content-r42.css"),
+  versioned("./src/content-r49-art.css"),
+  versioned("./assets/generated/r49/grass-72.png"),
+  versioned("./assets/generated/r49/path-72.png"),
+  versioned("./assets/generated/r49/welcome-512.webp"),
+  versioned("./assets/generated/r49/welcome-1024.webp"),
+  versioned("./assets/generated/r49/tool_plant-64.png"),
+  versioned("./assets/generated/r49/tool_water-64.png"),
+  versioned("./assets/generated/r49/tool_clear-64.png"),
+  versioned("./assets/generated/r49/tool_build-64.png"),
+  versioned("./assets/generated/r49/tool_inspect-64.png"),
+  versioned("./assets/generated/r49/note-64.png"),
   versioned("./assets/generated/r35/pond-480.png"),
   versioned("./src/content-r16.js"),
   versioned("./src/content-r16.css"),
