@@ -58,7 +58,7 @@ test('A3 升級效果有數字、下一步各異，低於一輪種子成本改�
   assert.equal(plot.reserveRisk, true);
   const ui = read('src/ui.js');
   assert.match(ui, /cardInfo\.reserveRisk \? "ghost" : "buy"/);
-  assert.match(ui, /金<small class="u-confirm-note">需確認<\/small>/); // R41：按鈕直接寫價格並標示需確認
+  assert.match(ui, /金<small class="u-confirm-note">先留種子錢<\/small>/); // R46：會花到買不起種子時停用並寫原因
 });
 
 test('A4 預告與首批逐欄一致，首批不限時，補單恢復倒數', () => {

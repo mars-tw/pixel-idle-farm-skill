@@ -14,10 +14,10 @@ test("陽光出現時有不被對話藏起的小標籤，點一下帶到受光�
 test("二選一寫出各自後果，尚未選擇時隱藏前往鈕", () => {
   assert.match(ui, /馬上 \+14 金（現有 \$\{\(farmState && farmState\.coins\) \|\| 0\} 金），再回來做餅/); // R43：理由寫實際金幣，不再宣稱「才夠升級」
   assert.match(ui, /先拿經驗、第 1 章更快完成/);
-  assert.match(world, /data-world-go \$\{choiceRoutes && !\/route\[\^"\]\*tracked\/\.test\(choiceRoutes\)/);
+  assert.match(world, /\$\{choiceRoutes && !\/route\[\^"\]\*tracked\/\.test\(choiceRoutes\)[^`]*`<button type="button" data-choice-open>選擇下一步<\/button>`/); // R46：待選時以「選擇下一步」取代隱藏的前往鈕
 });
 test("任務完成待回報時章節進度寫「待回報」，作物標籤寫出已種格數", () => {
-  assert.match(world, /本章 \$\{guide\.chapterProgress\.claimed\}\/\$\{guide\.chapterProgress\.total\}\$\{q\.canClaim \? "・待回報" : ""\}/);
+  assert.match(world, /本章任務 \$\{guide\.chapterProgress\.claimed\}\/\$\{guide\.chapterProgress\.total\}\$\{q\.canClaim \? "・待回報" : ""\}/);
   assert.match(ui, /已種 \$\{planted\}／3 格・種滿再澆水/);
 });
 test("升級／手記面板中被黏底「再顯示」蓋到的卡會收起，訂單保留首屏兩張", () => {

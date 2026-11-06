@@ -237,14 +237,15 @@
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
-    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}${q.canClaim ? "・待回報" : ""}` : "本章 3/3"}</span></div>
+    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章任務 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}${q.canClaim ? "・待回報" : ""}` : "本章 3/3"}</span></div>
       <div class="world-objective-title">${q ? esc(guide.displayTitle || q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
       <div class="world-objective-detail">${q ? esc(guide.displayDescription || q.description) : "你留下的每一份收穫，都有了去處。"}</div>
       ${choiceRoutes}
       ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
-      <div class="world-objective-bottom"><span${esc(step) === esc(`${progressStep} ${progressText}`.trim()) ? ' class="step-dup"' : ""}>${esc(step)}</span><button type="button" data-world-go ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "hidden" : ""}>${q ? esc(guide.actionLabel) : "繼續經營"}</button></div>
+      <div class="world-objective-bottom"><span${esc(step) === esc(`${progressStep} ${progressText}`.trim()) ? ' class="step-dup"' : ""}>${esc(step)}</span>${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? `<button type="button" data-choice-open>選擇下一步</button>` : `<button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button>`}</div>
       <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
-    box.querySelector("[data-world-go]").onclick = () => guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen();
+    const choiceOpen = box.querySelector("[data-choice-open]"); if (choiceOpen) choiceOpen.onclick = () => { box.classList.remove("quest-collapsed", "quest-auto-collapsed", "quest-target-collapsed"); const t = box.querySelector("[data-audit='quest-collapse']"); if (t && /展開/.test(t.textContent)) t.click(); const r = box.querySelector("[data-first-choice]"); if (r && r.focus) r.focus(); }; // R46：待選路線時，收合狀態也有明確入口
+    const goBtn = box.querySelector("[data-world-go]"); if (goBtn) goBtn.onclick = () => guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen();
     box.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => {
       const status = A.firstChoiceStatus(s);
       const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
@@ -350,7 +351,7 @@
     if (sig !== lastPanels) {
       lastPanels = sig;
       const availability = A.storyPanelAvailability(current);
-      panel.innerHTML = `<div class="adventure-quests">${list.map((q) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "本章進行中" }[q.status]; return `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
+      panel.innerHTML = `<div class="adventure-quests">${list.map((q) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; return `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
         <div class="world-chapter">第 ${q.chapter} 章・${esc(q.chapterName)} <span>${chapterLabel}</span></div>
         <h3>${esc(q.name)}</h3><p>${esc(q.description)}</p>
         <div class="adventure-meta">${rowsOf(q).map((r) => `<span>${r.complete ? "✓" : "·"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}</div>
@@ -479,7 +480,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r45-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r45-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r46-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r46-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

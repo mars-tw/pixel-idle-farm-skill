@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r45-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r46-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1389,7 +1389,7 @@
           <div class="u-desc">${escapeHtml(cardInfo.effect)}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${escapeHtml(nextStep)}</span>` : ""}</div>
         </div>
         ${next
-          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">需確認</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，買一輪種子要 ${fmtNum(cardInfo.roundSeedCost)} 金。</div>` : ""}`
+          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) && !cardInfo.reserveRisk ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">先留種子錢</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，買一輪種子要 ${fmtNum(cardInfo.roundSeedCost)} 金。</div>` : ""}`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
