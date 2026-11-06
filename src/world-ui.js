@@ -207,6 +207,7 @@
     current = s;
     const box = el("questDock"); if (!box || !s) return false;
     try { updateSunChip(s); } catch (e) {}
+    try { markNextPlot(s); } catch (e) {}
     if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { lastObjective = ""; syncSeedHudTop(); return true; }
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
@@ -246,11 +247,24 @@
     box.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => {
       const status = A.firstChoiceStatus(s);
       const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
-      if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); }
+      if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); if (!status.selected) { const g2 = A.guide(s, Date.now()); const q2 = A.summary(s, Date.now()).currentQuest; if (g2 && g2.route === "order") openPanel("orders"); else if (q2) goQuest(q2); } } // R43：選完路線立刻帶玩家去做，不必再找前往鈕
       else notify(result.message);
     }; });
     syncSeedHudTop();
     return true;
+  }
+  // R43：播種步驟時，下一格要種的空田加上「下一格」提示，玩家不必自己找哪一格還沒種
+  function markNextPlot(s) {
+    if (typeof document.querySelectorAll !== "function") return;
+    document.querySelectorAll(".gtile.next-plot").forEach((n) => n.classList.remove("next-plot"));
+    const g = A.guide(s, Date.now());
+    if (!g || !g.step || g.step.type !== "plant" || g.step.complete) return;
+    const active = window.activePlotCount ? window.activePlotCount(s) : 6;
+    const idx = (s.plots || []).slice(0, active).findIndex((p) => p && !p.cropId);
+    if (idx < 0) return;
+    const tile = s.map && s.map.tiles.find((t) => t.plotIndex === idx);
+    const node = tile && document.querySelector('.gtile[data-tile-id="' + tile.id + '"]');
+    if (node) node.classList.add("next-plot");
   }
   // R42：陽光出現時，畫面上一定看得到一個「陽光在哪、還剩多久」的小標籤（不會被對話或面板藏起），點一下鏡頭帶到受光的田
   function updateSunChip(s) {
@@ -391,7 +405,7 @@
   function completionLine(id) {
     const lines = {
       c1_homecoming: "門口終於有新苗了。這些木料你先收著，等河邊的釣台修好，咱們再坐下來聊。",
-      c1_first_harvest: "把剛收的小麥帶去農舍灶台，做一份自己的晚餐吧。灶火還能用。",
+      c1_first_harvest: "把剛收的小麥帶去野餐廚房，做一份自己的晚餐吧。灶火還能用。",
       c1_first_meal: "這塊餅有你祖母的味道。魚竿和剩下的木料拿去吧，河邊一直在等人。",
       c2_fishing_dock: "踏板踩起來穩了。輕點和橫拉都先別急，等浮標沉下去再提竿。多看幾次，你就認得牠們了。",
       c2_river_basket: "魚很新鮮，薄荷也香。我把木料備好了，河邊再多放張桌子，就能招待大家。",
@@ -443,7 +457,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r42-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r42-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r88/welcome-512.webp?v=content-r43-20261106-1" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r43-20261106-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

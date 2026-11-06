@@ -12,7 +12,7 @@ test("陽光出現時有不被對話藏起的小標籤，點一下帶到受光�
   assert.match(css, /\.sun-chip \{[^}]*position: fixed/);
 });
 test("二選一寫出各自後果，尚未選擇時隱藏前往鈕", () => {
-  assert.match(ui, /馬上 \+14 金，夠升級開墾農地/);
+  assert.match(ui, /馬上 \+14 金（現有 \$\{\(farmState && farmState\.coins\) \|\| 0\} 金），再回來做餅/); // R43：理由寫實際金幣，不再宣稱「才夠升級」
   assert.match(ui, /先拿經驗、第 1 章更快完成/);
   assert.match(world, /data-world-go \$\{choiceRoutes && !\/route\[\^"\]\*tracked\/\.test\(choiceRoutes\)/);
 });

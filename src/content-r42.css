@@ -15,3 +15,15 @@ body:has(.side-panel.world-panel-open) .sun-chip, body:has(.modal.show) .sun-chi
 #questDock .world-objective-routes .route span { font-size: 11px !important; line-height: 1.35; }
 #questDock [data-world-go][hidden] { display: none !important; }
 #questDock:not(.quest-collapsed):not(.quest-auto-collapsed) .world-objective-bottom > span.step-dup { display: none; }
+/* R43：下一格空田提示、二選一兩色、解鎖橫幅、手記對比、面板開啟時收合任務卡也保留標題與行動鈕 */
+.gtile.next-plot { outline: 3px dashed #f2b632; outline-offset: -4px; animation: nextPlotPulse 1.2s ease-in-out infinite; }
+.gtile.next-plot::after { content: "下一格"; position: absolute; left: 50%; top: -14px; transform: translateX(-50%); padding: 0 5px; border-radius: 3px; background: #f2b632; color: #4d2f08; font-size: 10px; font-weight: 800; line-height: 15px; white-space: nowrap; pointer-events: none; z-index: 5; }
+@keyframes nextPlotPulse { 50% { outline-color: #fff2b0; } }
+@media (prefers-reduced-motion: reduce) { .gtile.next-plot { animation: none; } }
+#questDock .world-objective-routes .route[data-first-choice="meal"] { border-left: 6px solid #4f8a3c !important; background: #eef7df !important; }
+#questDock .world-objective-routes .route[data-first-choice="order"] { border-left: 6px solid #d99a22 !important; background: #fff4d4 !important; }
+#questDock .world-objective-routes .route[data-first-choice="meal"] b::before { content: "主線｜"; color: #3c6e2d; }
+#questDock .world-objective-routes .route[data-first-choice="order"] b::before { content: "市集｜"; color: #9a6410; }
+.upgrade-unlock-banner { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; padding: 6px 10px; border: 1px solid #d8b56c; border-radius: 4px; background: #fff6dc; color: #5c3f15; font-size: 12px; font-weight: 700; }
+#adventurePanel .world-chapter, #adventurePanel .adventure-meta, #adventurePanel .chapter-state, .side-pane[data-pane="story"] .world-chapter, .side-pane[data-pane="story"] .adventure-meta { color: #4c5a33 !important; opacity: 1 !important; }
+body:has(.side-panel.world-panel-open) #questDock.quest-collapsed { display: flex !important; align-items: center; gap: 8px; }

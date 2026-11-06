@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r42-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r43-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1356,8 +1356,8 @@
     const newUpgrades = G.unseenLevelUnlocks ? G.unseenLevelUnlocks(state, "upgrades") : [];
     if (newUpgrades.length) {
       const note = document.createElement("div");
-      note.className = "up new-unlock-summary";
-      note.innerHTML = `<div class="u-body"><div class="u-name"><span class="new-unlock-badge">新</span> 新解鎖</div><div class="u-desc">${newUpgrades.map((entry) => escapeHtml(entry.name)).join("、")}</div></div>`;
+      note.className = "upgrade-unlock-banner new-unlock-summary"; // R43：解鎖通知改成細橫幅，不再像一張升級卡
+      note.innerHTML = `<span class="new-unlock-badge">新</span> 這一級解鎖：${newUpgrades.map((entry) => escapeHtml(entry.name)).join("、")}`;
       box.appendChild(note);
     }
     const orderRewardEstimate = 18;
@@ -1728,7 +1728,7 @@
     if (!status || !status.available) return [];
     return [
       { id: "meal", title: "先做農家麥餅", reward: "推進故事", next: "用 2 份小麥做餅帶給老農班伯：先拿經驗、第 1 章更快完成。", selected: status.selected === "meal", tracked: status.tracked === "meal" },
-      { id: "order", title: "先接蘿拉的小麥單", reward: "先賺金幣", next: status.orderCompleted ? "訂單已完成，已回到主線。" : "交 2 份小麥：馬上 +14 金，夠升級開墾農地，再回來做餅。", selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
+      { id: "order", title: "先接蘿拉的小麥單", reward: "先賺金幣", next: status.orderCompleted ? "訂單已完成，已回到主線。" : `交 2 份小麥：馬上 +14 金（現有 ${(farmState && farmState.coins) || 0} 金），再回來做餅。`, selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {

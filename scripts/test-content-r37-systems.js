@@ -94,7 +94,7 @@ test("A5 第一批交付後卡片、任務列與班伯台詞只指向料理", ()
   assert.equal(guide.questId, "c1_first_meal");
   assert.equal(guide.actionLabel, "前往料理");
   const world = read("src/world-ui.js");
-  assert.match(world, /c1_first_harvest: "把剛收的小麥帶去農舍灶台，做一份自己的晚餐吧。灶火還能用。"/);
+  assert.match(world, /c1_first_harvest: "把剛收的小麥帶去野餐廚房，做一份自己的晚餐吧。灶火還能用。"/); // R43：與任務「在野餐廚房做」同一地點
   assert.doesNotMatch(world, /c1_first_harvest: "別只顧著把作物賣掉/);
 });
 
