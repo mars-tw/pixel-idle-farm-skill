@@ -62,7 +62,7 @@ test('A3 路線在市集開放後成為可儲存與切換的實際選擇', () =>
   assert.match(ui, /AdventureAPI\.firstChoiceStatus\(farmState\)/);
   assert.match(ui, /status\.available/);
   assert.match(ui, /先做農家麥餅/);
-  assert.match(ui, /先接蘿拉的小麥單/);
+  assert.match(ui, /先接蘿拉的 4 份大單/);
   assert.doesNotMatch(ui, /stats\.plantCount \|\| 0\) < 1/);
 });
 

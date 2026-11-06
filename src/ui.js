@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r46-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r47-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1728,8 +1728,8 @@
     const status = window.AdventureAPI && window.AdventureAPI.firstChoiceStatus(farmState);
     if (!status || !status.available) return [];
     return [
-      { id: "meal", title: "先做農家麥餅", reward: "推進故事", next: "用 2 份小麥做餅帶給老農班伯：先拿經驗、第 1 章更快完成。", selected: status.selected === "meal", tracked: status.tracked === "meal" },
-      { id: "order", title: "先接蘿拉的小麥單", reward: "先賺金幣", next: status.orderCompleted ? "訂單已完成，已回到主線。" : `交 2 份小麥：馬上 +14 金（現有 ${(farmState && farmState.coins) || 0} 金），再回來做餅。`, selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
+      { id: "meal", title: "先做農家麥餅", reward: "推進故事", next: "用 2 份小麥做餅：先拿經驗、第 1 章更快完成；剩下的小麥留著接小單。", selected: status.selected === "meal", tracked: status.tracked === "meal" },
+      { id: "order", title: "先接蘿拉的 4 份大單", reward: "先賺金幣", next: status.orderCompleted ? "訂單已完成，已回到主線。" : `交出 4 份小麥：馬上 +28 金（現有 ${(farmState && farmState.coins) || 0} 金），但要再種一輪小麥才能做餅。`, selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {
@@ -3572,7 +3572,8 @@
       b.dataset.type = type;
       b.disabled = !status.enabled;
       b.title = `${def.name}・${buildCostText(def)}・${status.text}`;
-      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}<small>${buildCostHtml(def)}<br>${escapeHtml(status.text)}</small></span>`;
+      const effect = (def.levels && def.levels[0] && def.levels[0].effectLabel) || def.desc || ""; // R47：建造卡寫出效果，不再盲買
+      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}${effect ? `<em class="bw-effect">${escapeHtml(effect)}</em>` : ""}<small>${buildCostHtml(def)}<br>${escapeHtml(status.text)}</small></span>`;
       b.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = type;

@@ -672,9 +672,9 @@
       return ok("先完成蘿拉的小麥單。", {
         questId: q.id, chapter: q.chapter,
         chapterProgress: { claimed: chapterProgress.claimed, total: chapterProgress.total },
-        route: "order", step: { type: "order", id: "beginner_wheat_2", name: "交付蘿拉的小麥單", current: Math.min(2, have), required: 2, complete: false },
-        stepText: `備妥小麥 ${Math.min(2, have)}/2`, actionLabel: "查看蘿拉的訂單",
-        displayTitle: "蘿拉的 2 份小麥單", displayDescription: "先賺一筆，再回來做農家麥餅；主線不會中斷。",
+        route: "order", step: { type: "order", id: "beginner_wheat_4", name: "交付蘿拉的小麥單", current: Math.min(4, have), required: 4, complete: false },
+        stepText: `備妥小麥 ${Math.min(4, have)}/4`, actionLabel: "查看蘿拉的訂單",
+        displayTitle: "蘿拉的 4 份小麥單", displayDescription: "交出 4 份小麥先賺 28 金；之後要再種一輪小麥，才能做農家麥餅。",
       });
     }
     return ok(step ? "前往目前目標。" : "回報目前任務。", {

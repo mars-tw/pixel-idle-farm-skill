@@ -92,7 +92,7 @@ test('市集開放後提供可儲存、可切換的兩條實際路線', () => {
   assert.match(ui, /function earlyChoiceRoutes\(farmState\)/);
   assert.match(ui, /AdventureAPI\.firstChoiceStatus\(farmState\)/);
   assert.match(ui, /先做農家麥餅/);
-  assert.match(ui, /先接蘿拉的小麥單/);
+  assert.match(ui, /先接蘿拉的 4 份大單/);
   assert.match(world, /A\.trackFirstPath/);
   assert.match(world, /A\.chooseFirstPath/);
   assert.match(world, /window\.FarmEarlyChoiceRoutesHtml/);

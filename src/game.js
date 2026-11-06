@@ -958,7 +958,7 @@
     state.stats.totalCoinsEarned += pay.coins;
     addXp(state, pay.xp);
     state.stats.fulfilledOrders++;
-    if (order.id === "beginner_wheat_2" && state.adventure && state.adventure.firstChoice) {
+    if (order.id === "beginner_wheat_4" && state.adventure && state.adventure.firstChoice) { // R47：第一個選擇改用 4 份大單，選它就得再種一輪才能做餅，才是真的取捨
       state.adventure.firstChoice.orderCompleted = true;
       state.adventure.firstChoice.tracked = "meal";
     }

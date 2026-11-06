@@ -45,9 +45,11 @@ test('兩種第一選擇都能切換追蹤並回到第一章主線', () => {
     assert.equal(A.trackFirstPath(state, choice === 'meal' ? 'order' : 'meal').ok, true);
     assert.equal(A.trackFirstPath(state, choice).ok, true);
     if (choice === 'order') {
-      state.orders = [{ id: 'beginner_wheat_2', wants: { wheat: 2 }, rarity: 'common', rewardCoins: 14, rewardXp: 2, firstBatch: true }];
+      // R47：市集路線改為蘿拉的 4 份大單（交出全部小麥，之後要再種一輪才能做餅）
+      state.storage.items.wheat = Math.max(4, state.storage.items.wheat || 0);
+      state.orders = [{ id: 'beginner_wheat_4', wants: { wheat: 4 }, rarity: 'common', rewardCoins: 28, rewardXp: 2, firstBatch: true }];
       state.orderStreak = 0;
-      assert.equal(G.fulfillOrder(state, 'beginner_wheat_2', T0 + 1, () => 0).ok, true);
+      assert.equal(G.fulfillOrder(state, 'beginner_wheat_4', T0 + 1, () => 0).ok, true);
       assert.equal(A.firstChoiceStatus(state).orderCompleted, true);
       assert.equal(A.firstChoiceStatus(state).tracked, 'meal');
     }
