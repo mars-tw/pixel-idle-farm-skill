@@ -44,3 +44,7 @@ body:has(#worldDialogue:not([hidden])) #questDock[data-step-type="talk"] [data-w
 .build-wheel-btn .bw-effect { display: block; font-style: normal; font-size: 11px; font-weight: 700; color: #3f6b2c; line-height: 1.25; margin: 1px 0 2px; }
 #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) [data-choice-open] { display: none !important; }
 .setting-toggle[data-enabled="false"] { opacity: .72; filter: grayscale(.6); }
+/* R47 整合：「選這條」改放在卡片底部一行，不蓋說明；設定最後一列與「完成」之間留空 */
+#questDock .world-objective-routes .route { padding-right: 10px !important; }
+#questDock .world-objective-routes .route::after { position: static !important; transform: none !important; display: inline-block; justify-self: start; margin-top: 4px; }
+#settingsList > :last-child { margin-bottom: 72px !important; }
