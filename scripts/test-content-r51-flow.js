@@ -12,7 +12,7 @@ test("第一道陽光停 40 秒，之後恢復 16 秒", () => {
   assert.match(game, /durationMs: sun\.durationMs \|\| SUNPATCH\.durationMs,/);
 });
 test("第一個選擇未完成時，4 份大單排在訂單最前面", () => {
-  assert.match(ui, /const k = ordered\.findIndex\(\(o\) => o\.id === "beginner_wheat_4"\); if \(k > 0\) ordered\.unshift/);
+  assert.ok(ui.includes('const k = state.orders.findIndex((o) => o.id === "beginner_wheat_4"); if (k > 0) state.orders.unshift'), "直接調整 state.orders 順序，分配與交付一致");
 });
 test("手機種子卡顯示單價、收合任務卡隱藏步驟名並單行顯示", () => {
   assert.match(css, /#mapScene \.seed \.sc \{ display: block !important;/);

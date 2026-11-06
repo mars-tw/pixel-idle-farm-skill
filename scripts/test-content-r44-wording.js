@@ -21,7 +21,7 @@ test("升級警告句子縮短", () => {
 });
 test("面板開啟時任務標題可兩行、對話中隱藏前往、二選一有「選這條」", () => {
   assert.match(css, /-webkit-line-clamp: 2/);
-  assert.match(css, /#worldDialogue:not\(\[hidden\]\)\) #questDock\[data-step-type="talk"\] \[data-world-go\] \{ visibility: hidden; \}/);
+  assert.ok(css.includes('body:has(#worldDialogue:not([hidden])) #questDock:is([data-step-type="talk"], [data-step-type="claim"]) [data-world-go] { visibility: hidden; }'), "交談與回報步驟對話中隱藏前往鈕"); // R52：回報步驟也隱藏
   assert.match(css, /content: "選這條 ▶"/);
 });
 test("作物先熟、田裡已無可澆作物時，澆水步驟補記完成，不會卡關", () => {

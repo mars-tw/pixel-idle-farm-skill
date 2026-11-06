@@ -10,7 +10,7 @@ test("市集路線改用 4 份大單，交出全部小麥後要再種才能做�
   assert.match(adv, /id: "beginner_wheat_4", name: "交付蘿拉的小麥單", current: Math\.min\(4, have\), required: 4/);
   assert.match(adv, /之後要再種一輪小麥，才能做農家麥餅/);
   assert.match(game, /if \(order\.id === "beginner_wheat_4" && state\.adventure && state\.adventure\.firstChoice\)/);
-  assert.match(ui, /交出 4 份小麥：馬上 \+28 金/);
+  assert.ok(ui.includes("交出 4 份小麥：馬上 +${"), "選項寫實際交付金額"); // R52：與訂單卡含加成金額一致
 });
 test("建造卡寫出第一級效果", () => {
   assert.match(ui, /<em class="bw-effect">\$\{escapeHtml\(effect\)\}<\/em>/);

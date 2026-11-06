@@ -1,14 +1,14 @@
 /* R49 美術：gpt-image-2（gpt-image-2-2026-04-21）重繪，見 assets/generated/r49/manifest.json */
 /* 地面改用細像素無縫草地，取代被放大的整張底圖（原本黃色光斑會和陽光加成混淆、像素也比角色粗） */
-#mapWorld::before { background: url('../assets/generated/r49/grass-36.png?v=content-r51-20261106-1') 0 0 / 72px 72px repeat !important; image-rendering: pixelated; }
-#groundLayer .gtile.path { background: url('../assets/generated/r49/path-36.png?v=content-r51-20261106-1') center / 72px 72px !important; image-rendering: pixelated; }
+#mapWorld::before { background: url('../assets/generated/r49/grass-36.png?v=content-r52-20261106-1') 0 0 / 72px 72px repeat !important; image-rendering: pixelated; }
+#groundLayer .gtile.path { background: url('../assets/generated/r49/path-36.png?v=content-r52-20261106-1') center / 72px 72px !important; image-rendering: pixelated; }
 /* 工具與日誌圖示：同一套描邊與色盤，手機 32px 也能辨識 */
-.i-tool-plant { background-image: url('../assets/generated/r49/tool_plant-64.png?v=content-r51-20261106-1') !important; }
-.i-tool-water { background-image: url('../assets/generated/r49/tool_water-64.png?v=content-r51-20261106-1') !important; }
-.i-tool-clear { background-image: url('../assets/generated/r49/tool_clear-64.png?v=content-r51-20261106-1') !important; }
-.i-tool-build { background-image: url('../assets/generated/r49/tool_build-64.png?v=content-r51-20261106-1') !important; }
-.i-tool-inspect { background-image: url('../assets/generated/r49/tool_inspect-64.png?v=content-r51-20261106-1') !important; }
-.daily-open .ui-icon, .side-tabs .i-tab-journal { background-image: url('../assets/generated/r49/note-64.png?v=content-r51-20261106-1') !important; }
+.i-tool-plant { background-image: url('../assets/generated/r49/tool_plant-64.png?v=content-r52-20261106-1') !important; }
+.i-tool-water { background-image: url('../assets/generated/r49/tool_water-64.png?v=content-r52-20261106-1') !important; }
+.i-tool-clear { background-image: url('../assets/generated/r49/tool_clear-64.png?v=content-r52-20261106-1') !important; }
+.i-tool-build { background-image: url('../assets/generated/r49/tool_build-64.png?v=content-r52-20261106-1') !important; }
+.i-tool-inspect { background-image: url('../assets/generated/r49/tool_inspect-64.png?v=content-r52-20261106-1') !important; }
+.daily-open .ui-icon, .side-tabs .i-tab-journal { background-image: url('../assets/generated/r49/note-64.png?v=content-r52-20261106-1') !important; }
 .i-tool-plant, .i-tool-water, .i-tool-clear, .i-tool-build, .i-tool-inspect, .daily-open .ui-icon, .side-tabs .i-tab-journal { background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important; image-rendering: auto; }
 
 /* R50：地面、小徑與開場插圖統一為約 2 倍像素（與建築 2.5 倍、角色 1.3～1.7 倍相近），避免細草地配粗建築 */

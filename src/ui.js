@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r51-20261106-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r52-20261106-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -1180,10 +1180,11 @@
       if (go) go.onclick = () => { const action = G.marketPreviewAction(state); const target = action.target === "field" ? (state.map.tiles || []).find((tile) => tile.plotIndex === 0) : (state.map.tiles || []).find((tile) => tile.npc === "elder"); if (target) focusCameraOnTile(target.id); };
       return;
     }
-    const ordered = state.orders.slice();
-    // R51：第一個選擇還在時，把任務卡提到的蘿拉 4 份大單排在最前面，避免玩家交錯單
+    // R51／R52：第一個選擇還在時，把任務卡提到的蘿拉 4 份大單排在最前面；直接調整 state.orders，
+    // 讓畫面順序、共用作物分配、「還差幾份」文字與實際交付判定用同一個順序
     const firstChoice = window.AdventureAPI && window.AdventureAPI.firstChoiceStatus ? window.AdventureAPI.firstChoiceStatus(state) : null;
-    if (firstChoice && firstChoice.available && !firstChoice.orderCompleted && firstChoice.selected !== "meal") { const k = ordered.findIndex((o) => o.id === "beginner_wheat_4"); if (k > 0) ordered.unshift(ordered.splice(k, 1)[0]); }
+    if (firstChoice && firstChoice.available && !firstChoice.orderCompleted && firstChoice.selected !== "meal") { const k = state.orders.findIndex((o) => o.id === "beginner_wheat_4"); if (k > 0) state.orders.unshift(state.orders.splice(k, 1)[0]); }
+    const ordered = state.orders.slice();
     const allocationById = Object.fromEntries((G.orderAllocation ? G.orderAllocation(state, ordered) : []).map((row) => [row.orderId, row]));
     const visibleOrders = visibleListItems("orders", ordered, 4);
     const sharedNeeds = {};
@@ -1380,7 +1381,7 @@
       const cardInfo = G.upgradeCardInfo(state, key);
       const band = upgradeBand(key, next);
       const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
-      const bandLabel = ["現在買得起", "差一點", "長期目標", "已滿級"][band];
+      const bandLabel = band === 0 && G.upgradeCardInfo && G.upgradeCardInfo(state, key).reserveRisk ? "先留種子錢" : ["現在買得起", "差一點", "長期目標", "已滿級"][band]; // R52：會花到買不起種子時不寫「現在買得起」
       const shortfall = G.upgradeShortfall(state, key);
       const nextStep = next ? cardInfo.nextStep : "";
       const el = document.createElement("div");
@@ -1732,7 +1733,7 @@
     if (!status || !status.available) return [];
     return [
       { id: "meal", title: "先做農家麥餅", reward: "推進故事", next: "用 2 份小麥做餅：先拿經驗、第 1 章更快完成；剩下的小麥留著接小單。", selected: status.selected === "meal", tracked: status.tracked === "meal" },
-      { id: "order", title: "先接蘿拉的 4 份大單", reward: "先賺金幣", next: status.orderCompleted ? "訂單已完成，已回到主線。" : `交出 4 份小麥：馬上 +28 金（現有 ${(farmState && farmState.coins) || 0} 金），但要再種一輪小麥才能做餅。`, selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
+      { id: "order", title: "先接蘿拉的 4 份大單", reward: "先賺金幣", next: status.orderCompleted ? "訂單已完成，已回到主線。" : `交出 4 份小麥：馬上 +${(() => { const o = (farmState.orders || []).find((x) => x.id === "beginner_wheat_4"); return o && G.orderPayout ? G.orderPayout(farmState, o).coins : 28; })()} 金（現有 ${(farmState && farmState.coins) || 0} 金），但要再種一輪小麥才能做餅。`, selected: status.selected === "order", tracked: status.tracked === "order", disabled: status.orderCompleted },
     ];
   }
   function earlyChoiceRoutesHtml(farmState) {

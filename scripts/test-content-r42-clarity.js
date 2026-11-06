@@ -12,7 +12,7 @@ test("陽光出現時有不被對話藏起的小標籤，點一下帶到受光�
   assert.match(css, /\.sun-chip \{[^}]*position: fixed/);
 });
 test("二選一寫出各自後果，尚未選擇時隱藏前往鈕", () => {
-  assert.match(ui, /交出 4 份小麥：馬上 \+28 金（現有 \$\{\(farmState && farmState\.coins\) \|\| 0\} 金），但要再種一輪小麥才能做餅/); // R47：改用 4 份大單，選擇有真正代價
+  assert.ok(ui.includes("交出 4 份小麥：馬上 +${") && ui.includes("G.orderPayout(farmState, o).coins : 28") && ui.includes("但要再種一輪小麥才能做餅"), "選項寫實際交付金額（含加成）"); // R52
   assert.match(ui, /先拿經驗、第 1 章更快完成/);
   assert.match(world, /\$\{choiceRoutes && !\/route\[\^"\]\*tracked\/\.test\(choiceRoutes\)[^`]*`<button type="button" data-choice-open>選擇下一步<\/button>`/); // R46：待選時以「選擇下一步」取代隱藏的前往鈕
 });
