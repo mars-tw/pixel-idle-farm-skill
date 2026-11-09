@@ -369,6 +369,7 @@ const CORE_ASSETS = [
   versioned("./src/art-r83.css"),
 
   versioned("./src/adventure.js"),
+  versioned("./src/neighbors-r61.js"),
   versioned("./src/world-ui.js"),
   versioned("./assets/audio/r79-sunny-farm-loop.ogg"),
   versioned("./assets/audio/r79-sunny-farm-loop.m4a"),
