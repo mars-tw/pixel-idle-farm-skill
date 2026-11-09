@@ -300,7 +300,7 @@
       btn.setAttribute("aria-label", label);
       const size = Math.round(tileSize * 1.08);
       btn.style.cssText = `left:${Math.round((tile.x + 0.5) * tileSize)}px;top:${Math.round((tile.y + 1) * tileSize)}px;width:${size}px;height:${size}px;z-index:${Math.round((tile.y + 1) * tileSize) + 2};`;
-      btn.innerHTML = `<img src="${esc(art)}?v=content-r68-20261110-1" alt="" draggable="false">`;
+      btn.innerHTML = `<img src="${esc(art)}?v=content-r69-20261110-1" alt="" draggable="false">`;
       btn.onclick = (ev) => { ev.stopPropagation(); onClick(); };
       world.appendChild(btn);
       return btn;
@@ -354,7 +354,7 @@
       btn.dataset.r66bBuild = row.type;
       btn.disabled = row.built || !row.canBuild;
       btn.title = `${row.name}・${row.costCoins} 金・${row.produceText}`;
-      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r68-20261110-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small>${row.costCoins} 金<br>${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</small></span>`;
+      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r69-20261110-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small>${row.costCoins} 金<br>${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</small></span>`;
       btn.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = row.type;
