@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Detect the exact subprocess responsible for provenance drift. The guard never
 // restores or rewrites user files: a mutation fails at its originating step.
 const fs=require('node:fs'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict');
@@ -91,6 +91,7 @@ const unit=[
   "node scripts/test-content-r60-systems.js",
   "node scripts/test-content-r60-layout.js",
   "node scripts/test-content-r61-systems.js",
+  "node scripts/test-content-r61-neighbors.js",
 ];
 const commands=process.argv[2]==='r79'?['node scripts/test-r79-sunpatch.js','node scripts/test-r79-fun-e2e.js']:unit;
 for(const command of commands){console.log('EXECUTED '+command);const [exe,...args]=command.split(' '),r=cp.spawnSync(exe,args,{stdio:'inherit',windowsHide:true});assert.deepEqual(snapshot(),before,'Read-only provenance changed during '+command);if(r.status!==0)process.exit(r.status||1);}

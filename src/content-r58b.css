@@ -212,3 +212,13 @@ body:has(#buildWheel:not([hidden])) #questDock .world-objective-title .qp-step {
 #questDock .r61a-festival-banner[data-active="true"] { background: #ffe3a8; box-shadow: inset 4px 0 #d76532; }
 #questDock .r61a-festival-banner small { display: block; white-space: normal; }
 #questDock .r61a-festival-banner button { min-height: 36px; margin-top: 2px; }
+/* R61B（第 7 項）：手札鄰居區塊——好感愛心、下一段故事進度、已揭曉的喜歡禮物、重看故事與送禮入口。 */
+.r61b-neighbors { margin-top: 10px; display: grid; gap: 8px; }
+.r61b-card { border: 1px solid rgba(120,90,40,.35); border-radius: 10px; padding: 8px 10px; background: rgba(255,250,235,.6); }
+.r61b-name { margin: 0 0 4px; font-size: 15px; }
+.r61b-hearts, .r61b-next, .r61b-loved, .r61b-got { margin: 2px 0; font-size: 13px; line-height: 1.45; }
+.r61b-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.r61b-actions button, .r61b-gift-btn { white-space: nowrap; }
+.r61b-gift-list { display: grid; gap: 6px; }
+.r61b-story-line { font-size: 15px; line-height: 1.7; white-space: pre-wrap; }
+.r61b-story-step { font-size: 12px; opacity: .75; }
