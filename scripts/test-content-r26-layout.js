@@ -146,14 +146,14 @@ async function scrollPanelToBottom(page) {
         await page.waitForTimeout(200);
         const collapsed = await page.evaluate(() => {
           const box = document.querySelector('#questDock');
-          const step = box.querySelector('.r68a-now small, .r67a-now small, .world-objective-title .qp-step');
-          const progress = box.querySelector('.r68a-now-action, .r67a-now-action, [data-audit="quest-progress"]');
+          const step = [...box.querySelectorAll('.r68a-now-action, .r67a-now-action, .r68a-now small, .r67a-now small, .world-objective-title .qp-step')].find((e) => e.getBoundingClientRect().height > 0);
+          const progress = [...box.querySelectorAll('*')].find((e) => e.children.length === 0 && e.getBoundingClientRect().height > 0 && getComputedStyle(e).visibility !== 'hidden' && /\d+\s*\/\s*\d+/.test(e.textContent)); // R68：三層卡的進度可能在標題列、現在做或主要按鈕上，任一可見即可
           const vis = (e) => { if (!e) return false; const s = getComputedStyle(e), r = e.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && r.height > 0; };
           return { cls: box.classList.contains('quest-collapsed'), h: box.getBoundingClientRect().height, step: vis(step), progress: vis(progress), text: box.textContent };
         });
         assert(collapsed.cls, `${w}×${h} 任務卡未收合`);
         assert(collapsed.h < before, `${w}×${h} 任務卡收合後高度未變小（${before}→${collapsed.h}）`);
-        assert(collapsed.text.trim().length > 0, `${w}×${h} 收合摘要不可整張空白；R67／R68 另驗主要按鈕`);
+        assert(collapsed.step && collapsed.progress, `${w}×${h} 收合摘要應保留目前步驟與主要按鈕（R68：步驟改讀「現在做」，進度改讀主要按鈕）`);
         await page.screenshot({ path: path.join(SHOT_DIR, `quest-collapsed-${w}x${h}.png`) });
         await page.locator('[data-audit="quest-collapse"]').click();
         await page.waitForTimeout(200);
