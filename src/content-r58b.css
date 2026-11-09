@@ -615,3 +615,9 @@ body:has(.npc-bubble .r60a-story-choices) .scene-action-bar { display: none !imp
 .r66b-actions { margin-top: 7px; display: flex; gap: 6px; flex-wrap: wrap; }
 .r66b-act { min-height: 44px; padding: 6px 12px; border: 1.5px solid #94bd68; border-radius: 8px; background: #e7f5dd; color: #285b1d; font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
 .r66b-act:disabled { opacity: .55; cursor: not-allowed; }
+/* R66 整合：任務卡暫時收合（提示、對話、建造選單、手機預設收合）時，收起「五選三／換一件」鈕，標題不可被擠成 0 高；展開後才出現。 */
+#questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r66a-daily-pick,
+body:has(#toast-zone > .toast) #questDock .r66a-daily-pick,
+body:has(#worldDialogue:not([hidden])) #questDock .r66a-daily-pick,
+body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none !important; }
+#questDock .world-objective-title { flex-shrink: 0; }
