@@ -280,6 +280,7 @@ body:has(.npc-bubble .r60a-story-choices) .qmarker .npc-nameplate { visibility: 
   display: block; width: 100%; min-height: 48px; padding: 8px 12px;
   font-size: 15px; text-align: left;
 }
+
 .r61b-neighbors { scroll-margin-top: 8px; }
 
 /* R62B（第 10 項）：手機直式開場（彈窗開著）時，頂部標誌與資源列完整留在畫面內：
@@ -297,3 +298,31 @@ body:has(.npc-bubble .r60a-story-choices) .qmarker .npc-nameplate { visibility: 
     flex: 1 1 0; flex-wrap: wrap; justify-content: flex-end; min-width: 0; box-sizing: border-box;
   }
 }
+
+/* R63A：主線先看、委託全文展開，以及只在收穫祭期間出現的廣場布置與攤位。 */
+.r63a-main-story-wrap { display: flex; flex-direction: column; margin-bottom: 0; }
+.r63a-main-story-wrap > .story-subhead { order: -2; margin: 0 0 5px; }
+.r63a-main-story { order: -1; border: 2px solid #b86b27; background: #fff5d5; box-shadow: inset 4px 0 #e29a3a; }
+.r63a-main-story > p { white-space: normal; overflow: visible; text-overflow: clip; }
+.r63a-main-story { padding: 5px 8px; margin: 0 0 2px; }
+.r63a-main-story .world-chapter { margin-bottom: 1px; font-size: 11px; line-height: 1.15; }
+.r63a-main-story h3 { margin: 1px 0; font-size: 14px; line-height: 1.2; }
+.r63a-main-story > p { margin: 1px 0; font-size: 12px; line-height: 1.25; }
+.r63a-main-story .adventure-meta { display: flex; flex-wrap: wrap; gap: 1px 7px; margin: 1px 0; font-size: 11px; line-height: 1.2; }
+.r63a-main-story > button { min-height: 32px; margin-top: 2px; padding: 3px 7px; }
+.r63a-full-request { margin: 5px 0; }
+.r63a-full-request summary { cursor: pointer; color: #704717; font-weight: 800; }
+.r63a-full-request[open] > p { display: block !important; overflow: visible !important; -webkit-line-clamp: unset !important; white-space: normal; }
+.r63a-main-next { width: 100%; display: grid; gap: 2px; margin-top: 6px; padding: 7px 9px; text-align: left; border: 1px solid #ad7b32; border-radius: 8px; background: #fff7dc; color: #523915; }
+.r63a-main-next small, .r63a-main-next em { display: block; }
+.r63a-main-next.complete { border-color: #6d9a54; background: #eef8e5; }
+.r63a-festival-scene { position: absolute; transform: translate(-50%, -100%); }
+.r63a-festival-decoration { display: grid; place-items: center; width: 42px; height: 42px; font-size: 28px; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(70,45,15,.35)); }
+.r63a-festival-neighbor { display: grid; place-items: center; width: 40px; height: 48px; font-size: 30px; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(45,35,20,.45)); }
+#mapWorld[data-r63a-festival="active"] > .ob[data-kind="npc"],
+#mapWorld[data-r63a-festival="active"] > .npc-footname,
+#mapWorld[data-r63a-festival="active"] > .qmarker { visibility: hidden; }
+.r63a-festival-stall { display: grid; place-items: center; min-width: 64px; min-height: 58px; padding: 3px 6px; border: 2px solid #8f491d; border-radius: 8px; background: #ffd66d; color: #5a2d11; box-shadow: 0 3px 0 rgba(89,48,20,.45); cursor: pointer; }
+.r63a-festival-stall span { font-size: 27px; line-height: 1; }
+.r63a-festival-stall b { font-size: 11px; white-space: nowrap; }
+.r63a-stall-goals { padding-left: 22px; line-height: 1.7; }

@@ -242,7 +242,8 @@
       if (document.body) document.body.dataset.questStep = "choice";
       box.innerHTML = `${festivalHtml}<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
         ${hint ? `<div class="world-objective-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</div>` : ""}
-        <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small>${goal.actionLabel ? `<em>${esc(goal.actionLabel)}</em>` : ""}</button>`).join("")}</div>`;
+        <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small>${goal.actionLabel ? `<em>${esc(goal.actionLabel)}</em>` : ""}</button>`).join("")}</div>
+        ${early.nextStep ? `<button type="button" class="r63a-main-next${early.nextStep.complete ? " complete" : ""}" data-early-goal="meal" ${early.nextStep.complete ? "disabled" : ""}><b>${early.nextStep.complete ? "✓ " : ""}${esc(early.nextStep.label)}：${esc(early.nextStep.name)}</b><small>${esc(early.nextStep.detail)}</small>${early.nextStep.actionLabel && !early.nextStep.complete ? `<em>${esc(early.nextStep.actionLabel)}</em>` : ""}</button>` : ""}`;
       box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
       const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
       syncSeedHudTop();
@@ -392,16 +393,18 @@
     if (sig !== lastPanels) {
       lastPanels = sig;
       const availability = A.storyPanelAvailability(current);
-      panel.innerHTML = `<div class="adventure-quests">${list.map((q) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; return `<article class="adventure-quest ${q.status}" data-quest="${q.id}">
+      const currentMain = A.summary(current, Date.now()).currentQuest;
+      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; return `<article class="adventure-quest ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
         <div class="world-chapter">第 ${q.chapter} 章・${esc(q.chapterName)} <span>${chapterLabel}</span></div>
         <h3>${esc(q.name)}</h3><p>${esc(q.description)}</p>
         <div class="adventure-meta">${rowsOf(q).map((r) => `<span>${r.complete ? "✓" : "·"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}</div>
-        ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "前往交談" : A.taskActionLabel(q, rowsOf(q).find((row) => !row.complete), (window.NPCS || {})[q.npcId])}</button>` : ""}</article>`; }).join("")}</div>
+        ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "前往交談" : A.taskActionLabel(q, rowsOf(q).find((row) => !row.complete), (window.NPCS || {})[q.npcId])}</button>` : ""}</article>`; };
+      panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
         ${availability.showNeighborBasket ? `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div>` : ""}
         ${availability.showRiverCommissions ? `<h3 class="story-subhead">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}` : ""}`;
       const r58host = document.createElement("div"); r58host.className = "r58-section";
       // R60B：鄰居委託先列現在可做的（未鎖定且未完成），其餘收進可展開的「之後的委託」；卡片文字與交付規則不變。
-      const personalCard = (p) => `<div class="r58-card${p.unlocked && !p.completed ? " r60-available-card" : " r60-later-card"}" data-r58-personal-card="${esc(p.id)}"${p.unlocked && !p.completed ? ' data-r60-available="1"' : ""}><h4>${esc(p.npcName)}・${esc(p.title)}</h4><p>${esc(p.dialogue)}</p><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`;
+      const personalCard = (p) => `<div class="r58-card${p.unlocked && !p.completed ? " r60-available-card" : " r60-later-card"}" data-r58-personal-card="${esc(p.id)}"${p.unlocked && !p.completed ? ' data-r60-available="1"' : ""}><h4>${esc(p.npcName)}・${esc(p.title)}</h4><details class="r63a-full-request"><summary>查看委託全文</summary><p>${esc(p.dialogue)}</p></details><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`;
       const availablePersonal = personal.filter((p) => p.unlocked && !p.completed);
       const laterPersonal = personal.filter((p) => !p.unlocked || p.completed);
       r58host.innerHTML = `${r58evt.active ? `<div class="r58-card r59-event r60-event-card" data-r58-event="${esc(r58evt.active.id)}"><h4>${esc(r58evt.active.icon)} ${esc(r58evt.active.name)}</h4><p>${esc(r58evt.active.dialogue)}</p><p class="r58-meta">請選一個做法・剩 ${Math.max(1, Math.ceil(r58evt.active.remainingMs / 60000))} 分鐘</p><div class="r59-event-options">${r58evt.active.options.map((option) => `<button data-r58-resolve="${esc(option.id)}" ${option.available ? "" : "disabled"}>${esc(option.label)}<small>${esc(option.available ? option.resultText : option.unavailableReason)}</small></button>`).join("")}</div></div>` : `<div class="r58-card r60-event-note"><h4>🌾 農場小事</h4><p class="r58-meta">小事會在遊玩途中自己找上門，處理完一件，下一件約在 2～3 分鐘後出現。</p></div>`}
@@ -410,7 +413,8 @@
         ${availablePersonal.map(personalCard).join("")}
         ${laterPersonal.length ? `<details class="r60-later-quests"><summary class="r60-later-summary">之後的委託（${laterPersonal.length}）</summary>${laterPersonal.map(personalCard).join("")}</details>` : ""}
         ${permanent.filter((result) => result.unlocked).map((result) => `<div class="r58-card r59-permanent" data-r59-permanent="${esc(result.npcId)}"><h4>${esc(result.icon)} ${esc(result.name)}</h4><p>${esc(result.text)}</p><p class="r58-meta">${esc(result.revisit)}</p></div>`).join("")}`;
-      if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host); if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-panel-rendered")); /* R59：手札重繪會換掉卡片、清掉首屏收合，通知 ui.js 重新收合 */
+      const mainStoryHost = panel.querySelector(".r63a-main-story-wrap");
+      if (mainStoryHost) mainStoryHost.after(r58host); else if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host); if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-panel-rendered")); /* R59：手札重繪會換掉卡片、清掉首屏收合，通知 ui.js 重新收合 */
       panel.querySelectorAll("[data-r58-resolve]").forEach((b) => { b.onclick = () => { const r = A.resolveRandomEvent(current, b.dataset.r58Resolve, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastPanels = ""; refresh(current); }; });
       panel.querySelectorAll("[data-r58-personal]").forEach((b) => { b.onclick = () => {
         closePanels();
@@ -738,10 +742,24 @@
     }
     paintMinimap(s, tileSize);
     if(window.ContentR6)window.ContentR6.paintWorld(s,tileSize);
+    paintFestivalScene(s, tileSize, world, t);
     document.querySelectorAll('.farm-gathering .meal-layout').forEach(layout=>{if(!layout.querySelector('.reserved-table'))ensureResidentPoseScene(layout);});
     syncWorldHitTargets();
     const location = s.player.x >= 17 ? "東林・溪畔採集地" : s.player.y >= 9 ? "河畔・復興計畫" : "陽光農場・祖母的田";
     if (el("worldLocation").textContent !== location) el("worldLocation").textContent = location;
+  }
+  function paintFestivalScene(s, size, world, now) {
+    world.querySelectorAll(".r63a-festival-scene").forEach((node) => node.remove());
+    const scene = A.festivalScene ? A.festivalScene(s, now) : { active: false };
+    world.dataset.r63aFestival = scene.active ? "active" : "inactive";
+    if (!scene.active) return;
+    const tileOf = (id) => window.getTileById(s, id);
+    scene.decorations.forEach((item) => { const tile = tileOf(item.tileId); if (!tile) return; const node = document.createElement("span"); node.className = "r63a-festival-scene r63a-festival-decoration"; node.dataset.festivalDecoration = item.id; node.textContent = item.icon; node.setAttribute("aria-label", item.name); node.style.cssText = `left:${(tile.x + .5) * size}px;top:${(tile.y + .1) * size}px;z-index:${Math.round((tile.y + 1) * size)};`; world.appendChild(node); });
+    scene.neighbors.forEach((item) => { const tile = tileOf(item.tileId); if (!tile) return; const node = document.createElement("span"); node.className = "r63a-festival-scene r63a-festival-neighbor"; node.dataset.festivalNeighbor = item.id; node.dataset.tileId = item.tileId; node.textContent = ({ mayor: "🧑‍🌾", elder: "👨‍🌾", merchant: "🧑‍🍳", child: "🧒" })[item.id]; node.setAttribute("aria-label", `${item.name}在收穫祭廣場`); node.style.cssText = `left:${(tile.x + .5) * size}px;top:${(tile.y + .08) * size}px;z-index:${Math.round((tile.y + 1) * size)};`; world.appendChild(node); });
+    const stallTile = tileOf(scene.stall.tileId); if (!stallTile) return;
+    const stall = document.createElement("button"); stall.type = "button"; stall.className = "r63a-festival-scene r63a-festival-stall"; stall.dataset.festivalStall = scene.stall.id; stall.dataset.tileId = scene.stall.tileId; stall.innerHTML = `<span>${scene.stall.icon}</span><b>${esc(scene.stall.name)}</b>`; stall.setAttribute("aria-label", "查看收穫祭三個目標與獎勵"); stall.style.cssText = `left:${(stallTile.x + .5) * size}px;top:${(stallTile.y + .05) * size}px;z-index:${Math.round((stallTile.y + 1) * size)};`;
+    stall.onclick = (event) => { event.stopPropagation(); const live = A.festivalScene(s, Date.now()); if (!live.active || !live.stall) { notify("這一場收穫祭已經結束，布置也收起來了。"); refresh(s); return; } const goalText = live.stall.goals.map((goal) => `<li>${goal.complete ? "✓" : "○"} ${esc(goal.name)} ${goal.current}/${goal.required}</li>`).join(""); modal("祭典攤位", `<p class="project-desc">完成三個現場目標，就能領取本場獎勵。</p><ul class="r63a-stall-goals">${goalText}</ul><p class="project-desc"><b>獎勵：</b>${esc(live.stall.rewardText)}</p>`); };
+    world.appendChild(stall);
   }
   function paintFringe(s, size, world) {
     const sig = `${size}|${s.map.width}|${s.map.height}`;
@@ -921,7 +939,12 @@
     const neighbor = A.neighbors(current, Date.now()).find((n) => n.id === npcId && n.deliveries);
     if (neighbor) return neighbor.lastMatched ? neighbor.memory.reply : neighbor.deliveries>1 ? neighbor.memory.wrong : neighbor.reaction;
     const q = A.summary(current, Date.now()).currentQuest;
-    if (q && q.npcId === npcId) return q.canClaim ? "東西都備好了？我在這裡等你，帶來一起看看吧。" : q.description;
+    if (npcId === "mayor" && q && q.id === "c1_homecoming") return "你就是她的孫子吧？先去祖母的田種下第一格，讓我看看你的本事。";
+    if (q && q.npcId === npcId) {
+      if (q.canClaim) return "東西都備好了？我在這裡等你，帶來一起看看吧。";
+      const ownNames = { mayor: ["鎮長葛瑞", "鎮長"], elder: ["老農班伯"], merchant: ["商人蘿拉", "蘿拉"], child: ["孩童圖圖", "圖圖"] }[npcId] || [];
+      return ownNames.reduce((line, name) => line.replaceAll(name, "我"), q.description);
+    }
     if (npcId === "child") return current.adventure.claimed.c3_harvest_picnic ? "我把野餐合照收好了。下次再帶你新種的東西來！" : "河邊要是有桌子，我想帶小花和點心來。你也會來嗎？";
     if (npcId === "merchant") return "新鮮作物可以交訂單。留一點給自己的餐籃，河邊很快會需要它們。";
     if (npcId === "elder") return "下田時別忘了雞舍。添水、梳毛、餵食，牠們都記得你。";
