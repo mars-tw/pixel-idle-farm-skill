@@ -64,7 +64,7 @@ test('A2 新手預告與開放首批同步，且同作物大單單價不倒掛',
   for (let i = 1; i < wheat.length; i++) {
     assert.ok(wheat[i].rewardCoins / wheat[i].wants.wheat >= wheat[i - 1].rewardCoins / wheat[i - 1].wants.wheat);
   }
-  assert.equal(wheat.find((order) => order.wants.wheat === 4).rewardCoins, 28);
+  assert.equal(wheat.find((order) => order.wants.wheat === 2).rewardCoins, 14);
 });
 
 test('A2 一般訂單在同品項與稀有度內不會因數量增加而降低單價', () => {

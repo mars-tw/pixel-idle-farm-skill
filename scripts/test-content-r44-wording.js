@@ -13,11 +13,11 @@ test("麥餅地點統一為農舍灶台", () => {
 });
 test("市集預告按鈕寫完整的老農班伯", () => {
   const st = S.defaultState(1_900_000_000_000);
-  assert.equal(G.marketPreviewAction(st).label, "老農班伯的開市小麥（已收 0/2）");
+  assert.equal(G.marketPreviewAction(st).label, "交給老農班伯 2 份小麥（已收 0/2）");
   assert.doesNotMatch(read("src/game.js"), /交班伯需/);
 });
 test("升級警告句子縮短", () => {
-  assert.match(ui, /金，買一輪種子要 \$\{fmtNum\(cardInfo\.roundSeedCost\)\} 金。/);
+  assert.match(ui, /金，買一輪種子要 \$\{fmtNum\(cardInfo\.roundSeedCost\)\} 金；仍可開墾。/);
 });
 test("面板開啟時任務標題可兩行、對話中隱藏前往、二選一有「選這條」", () => {
   assert.match(css, /-webkit-line-clamp: 2/);

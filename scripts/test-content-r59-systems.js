@@ -20,8 +20,8 @@ function trigger(state, eventIndex, at = T0) {
 test("1 主線所有入口共用老農班伯的開市小麥 2 份進度", () => {
   const state = fresh(); state.adventure.claimed.c1_homecoming = true; ok(A.ensure(state, T0));
   assert.match(A.quests(state, T0).find((q) => q.id === "c1_first_harvest").description, /2 份小麥/);
-  assert.match(A.earlyGoals(state, T0).goals[0].name, /老農班伯的開市小麥（已收 0\/2）/);
-  assert.deepEqual(G.marketPreviewAction(state), { harvested: 0, target: "field", label: "老農班伯的開市小麥（已收 0/2）" });
+  assert.match(A.earlyGoals(state, T0).goals[0].name, /交給老農班伯 2 份小麥（已收 0\/2）/);
+  assert.deepEqual(G.marketPreviewAction(state), { harvested: 0, target: "field", label: "交給老農班伯 2 份小麥（已收 0/2）" });
   state.storage.items.wheat = 2;
   assert.deepEqual(G.marketPreviewAction(state), { harvested: 2, target: "elder", label: "交給老農班伯 2 份小麥（已收 2/2）" });
   assert.match(fs.readFileSync(path.join(__dirname, "../src/game.js"), "utf8"), /「老農班伯的開市小麥」還需/);

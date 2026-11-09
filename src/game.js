@@ -689,6 +689,7 @@
   };
   const BEGINNER_ORDERS = [
     { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", ttlOffsetMs: 0, flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
+    { id: "beginner_carrot_1", wants: { carrot: 1 }, npcId: "mayor", ttlOffsetMs: 3 * 60 * 1000, flavor: "鎮長想先收 1 份胡蘿蔔，替巡路的人添菜。" },
     { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
     { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 2 份胡蘿蔔做野餐點心。" },
     { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", ttlOffsetMs: 10 * 60 * 1000, flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
@@ -806,7 +807,7 @@
     // 尚未解鎖的作物在卡上註明解鎖等級，避免預告與開放後第一批對不上。
     const available = new Set(availableOrderItems(state));
     const crops = (typeof CROPS !== "undefined" && CROPS) || (typeof window !== "undefined" && window.CROPS) || {};
-    return ["beginner_wheat_4", "beginner_wheat_2", "beginner_carrot_2"] // R57：預告順序與開放後第一批一致（4 份大單在最前）
+    return ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
       .filter(Boolean)
       .map((template) => {
@@ -817,9 +818,10 @@
       });
   }
   function marketPreviewAction(state) {
+    if (state && state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest) return { harvested: 2, target: "elder", label: "✓ 已交給老農班伯" };
     const harvested = Math.min(2, Math.max(0, Number(state && state.storage && state.storage.items && state.storage.items.wheat) || 0));
     return harvested < 2
-      ? { harvested, target: "field", label: `老農班伯的開市小麥（已收 ${harvested}/2）` }
+      ? { harvested, target: "field", label: `交給老農班伯 2 份小麥（已收 ${harvested}/2）` }
       : { harvested, target: "elder", label: "交給老農班伯 2 份小麥（已收 2/2）" };
   }
   function refreshOrders(state, now, rng) {
@@ -834,7 +836,7 @@
     if (firstDayChapterOne(state, now) && (state.ordersSeededAt || 0) < 3) {
       const available = new Set(availableOrderItems(state));
       const preferredIds = available.has("carrot")
-        ? ["beginner_wheat_4", "beginner_wheat_2", "beginner_carrot_2"] // R57：與預告同順序
+        ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
         : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
       const selectedTemplates = preferredIds.map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
         .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)));
@@ -890,6 +892,15 @@
       if (item.priorReserved > 0) return `庫存 ${item.stock}－前單 ${item.priorReserved}＝可用 ${item.available}${item.missing ? `，還差 ${item.missing}` : ""}`;
       return `需要 ${item.required}・可用 ${item.available}${item.missing ? `，還差 ${item.missing} ${name}` : ""}`;
     }).join("；");
+  }
+  function orderPriorityAdvice(state, order) {
+    const wants = Object.keys((order && order.wants) || {});
+    if (wants.length !== 1) return "";
+    const itemId = wants[0];
+    const peers = (state.orders || []).filter((row) => row && row.wants && row.wants[itemId]);
+    if (peers.length < 2) return "";
+    const first = peers.slice().sort((a, b) => a.wants[itemId] - b.wants[itemId] || String(a.id).localeCompare(String(b.id)))[0];
+    return first.id === order.id ? "先交這張：需求較少，能先完成。" : "同樣需要這項作物，建議先交需求較少的訂單。";
   }
   function mainStoryReserve(state, itemId) {
     if (itemId === "wheat" && state.adventure) {
@@ -2719,7 +2730,7 @@
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
     makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, mainStoryReserve, orderConsumesStoryReserve, orderStoryImpact, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
-    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, upgradeCardInfo, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags,
+    upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, upgradeCardInfo, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags, orderPriorityAdvice,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
     // MVP2：建材 / 地圖 / 建築 / 動物
