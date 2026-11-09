@@ -68,7 +68,7 @@ test('訂單卡不再用可選文案解釋主線，缺料與丟棄操作仍完�
   assert.doesNotMatch(ui, /class="o-optional"/);
   assert.match(ui, /class="btn buy small ful" \$\{can \? "" : "disabled"\}>\$\{can \? \(storyImpact && storyImpact\.risky \? "交付前請確認" : "交付"\)/);
   assert.match(ui, /fulfill\.dataset\.confirmed !== "true"/);
-  assert.match(ui, /class="btn ghost small order-go"[^>]*>去田裡</);
+  assert.match(ui, /class="btn ghost small order-go"[^>]*>${[^`]*"去雞舍" : "去田裡"}</); // R68 整合同步：作物訂單仍是「去田裡」，動物產物改「去雞舍」
   assert.match(ui, /requestOrderTrash\(o\.id\)/);
   assert.match(ui, /確認丟棄/);
   const state = S.defaultState(1800000000000);
