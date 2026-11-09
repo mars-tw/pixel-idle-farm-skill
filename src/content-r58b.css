@@ -434,3 +434,39 @@ html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-c
 html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63-primary em { flex: 0 0 auto; white-space: nowrap; font-style: normal; font-weight: 800; }
 html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed):has(.r63-primary) .world-objective-title { flex: 0 0 auto !important; width: auto !important; min-width: max-content !important; max-width: none !important; overflow: visible !important; white-space: nowrap; }
 body:has(#toast-zone > .toast) #questDock .r63a-main-next small, body:has(#worldDialogue:not([hidden])) #questDock .r63a-main-next small { display: none; }
+
+/* R64B（第 5、6、7 項）：喜好線索、故事好處、可補做標記、愛心跳動與鄰居面板關閉鈕。 */
+.r64b-clue { color: #7a5a1e; background: rgba(255, 243, 196, .65); border-radius: 6px; padding: 3px 6px; }
+.r64b-disliked { color: #8a5a4a; }
+.r64b-benefit { color: #4f6b2f; font-weight: 700; }
+.r64b-benefit[data-r64b-benefit="locked"] { color: #7a6a52; font-weight: 400; }
+.r64b-catchup { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: #ffe1a8; color: #7a4b12; font-size: 11px; font-weight: 800; vertical-align: middle; white-space: nowrap; }
+.r64b-neighbor-close { min-width: 44px !important; min-height: 44px !important; width: 44px; height: 44px; }
+@keyframes r64b-heart-beat { 0% { transform: scale(1); } 30% { transform: scale(1.25); } 55% { transform: scale(0.95); } 80% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.r64b-heart-beat { display: inline-block; animation: r64b-heart-beat 0.6s ease-in-out 2; }
+
+/* R64B（第 8 項）：桌面任務卡——「今日三件事」標題完整不截斷，主線下一步在三件事下方整行。 */
+@media (min-width: 860px) {
+  #questDock:has(> .world-objective-routes), #questDock:has(> .r63a-main-next) {
+    display: flex !important; flex-direction: column; align-items: stretch;
+    padding-right: 10px !important;
+  }
+  #questDock:has(> .world-objective-routes) .world-objective-title { padding-right: 56px; }
+  #questDock:has(> .world-objective-routes) .world-objective-title,
+  #questDock:has(> .r63a-main-next) .world-objective-title {
+    width: 100% !important; max-width: 100% !important; flex: 0 0 auto;
+  }
+  #questDock .world-objective-routes { width: 100%; max-width: 100%; box-sizing: border-box; flex: 0 0 auto; }
+  #questDock .r63a-main-next {
+    width: 100% !important; max-width: 100%; box-sizing: border-box;
+    flex: 0 0 auto; grid-column: 1 / -1; order: 3;
+  }
+  #questDock:has(> .world-objective-routes) .world-objective-bottom, #questDock:has(> .r63a-main-next) .world-objective-bottom { width: 100%; max-width: 100%; box-sizing: border-box; flex: 0 0 auto; }
+}
+
+/* R64B（第 8 項）：手機展開任務卡最多占畫面高度一半，超過在卡內捲動。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) {
+    max-height: 50dvh !important; overflow-y: auto !important; overflow-x: hidden;
+  }
+}

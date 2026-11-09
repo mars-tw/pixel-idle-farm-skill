@@ -64,7 +64,9 @@
     const unlocked = [];
     if (st.tasks.filter((t) => t.available).every((t) => d.claimed[t.id]) && !d.stamped) {
       d.stamped = true; d.stamps++; stamp = true;
-      s.materials.compost = (s.materials.compost || 0) + 1;
+      // R64B（第 6 項）：老農班伯第 2 段故事——每天做完今日農務，多領 1 份堆肥。
+      const elderBenefit = !!((s.adventure && s.adventure.r61b && s.adventure.r61b.seen && s.adventure.r61b.seen.elder) || []).includes(1);
+      s.materials.compost = (s.materials.compost || 0) + (elderBenefit ? 2 : 1);
       for (const k of keepsakes) if (d.stamps >= k.at && !d.collected[k.id]) { d.collected[k.id] = true; unlocked.push(k.name); }
     }
     return { ok: true, coins: task.coins, stamp, unlocked };

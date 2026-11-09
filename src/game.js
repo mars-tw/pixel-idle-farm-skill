@@ -569,10 +569,16 @@
     const w = currentWeather(state, now);
     return (1 + bonus + achievementBonus(state)) * WEATHER[w].sellMul;
   }
+  // R64B（第 6 項）：鄰居第 2 段故事好處——只讀 neighbors-r61 寫入的已看紀錄，不新增存檔欄位。
+  function r64bStoryBenefit(state, npcId) {
+    const seen = state && state.adventure && state.adventure.r61b && state.adventure.r61b.seen;
+    return !!(seen && Array.isArray(seen[npcId]) && seen[npcId].includes(1));
+  }
   function sellUnitValue(state, itemId, now) {
     const def = getItemDef(itemId); // 作物或動物產品
     const seasonMul = def && def.season && state.level >= (SEASON_UNLOCK_LEVEL || 6) && def.season === currentSeason(state, now) ? 1.15 + buildingSeasonalBonus(state) : 1;
-    return Math.max(1, Math.round((def ? def.sellValue : 0) * seasonMul * sellMultiplier(state, now)));
+    const r64bMul = r64bStoryBenefit(state, "merchant") ? 1.05 : 1; // R64B：蘿拉第 2 段故事——市集收購價多 5%
+    return Math.max(1, Math.round((def ? def.sellValue : 0) * seasonMul * sellMultiplier(state, now) * r64bMul));
   }
 
   // ---------- 種植 / 收成 ----------
@@ -1021,9 +1027,13 @@
     if (lv >= upgradeMaxLevel(key)) return null;
     return UPGRADES[key].levels[lv]; // 下一級（lv 是已購級數，陣列 0-index = 下一級）
   }
+  // R64B（第 6 項）：鎮長葛瑞第 2 段故事——開墾農地少付 5 金（只影響 plotCount 的實際應付金額）。
+  function r64bUpgradeCost(state, key, next) {
+    return next ? (key === "plotCount" && r64bStoryBenefit(state, "mayor") ? Math.max(0, next.cost - 5) : next.cost) : 0;
+  }
   function canBuyUpgrade(state, key) {
     const next = nextUpgrade(state, key);
-    return !!next && state.coins >= next.cost;
+    return !!next && state.coins >= r64bUpgradeCost(state, key, next);
   }
   function upgradeShortfall(state, key) {
     const next = nextUpgrade(state, key);
@@ -1056,8 +1066,9 @@
   function buyUpgrade(state, key) {
     const next = nextUpgrade(state, key);
     if (!next) return { ok: false, reason: "maxed" };
-    if (state.coins < next.cost) return { ok: false, reason: "no_coins" };
-    state.coins -= next.cost;
+    const cost = r64bUpgradeCost(state, key, next);
+    if (state.coins < cost) return { ok: false, reason: "no_coins" };
+    state.coins -= cost;
     state.upgrades[key]++;
     // 開墾農地：補足 plots 陣列長度
     if (key === "plotCount") {
@@ -1071,7 +1082,7 @@
       }
     }
     return { ok: true, level: state.upgrades[key],
-      feedback: [{ kind: "upgrade", target: "coins", text: `－${next.cost} 金`, amount: -next.cost }],
+      feedback: [{ kind: "upgrade", target: "coins", text: `－${cost} 金`, amount: -cost }],
       settlement: { kind: "upgrade", coins: 0, xp: 0, next: "回到田地，試試升級後的效果。" } };
   }
   function resourceSnapshot(state) {
@@ -1904,7 +1915,7 @@
     if (!st.node.starter && !state.flags.eastForageDiscovered) return { ok: false, reason: "undiscovered" };
     if (!st.ready) return { ok: false, reason: "cooldown", readyAt: st.readyAt };
     const mealBonus = mealFlatBonus(state, "forage", now);
-    const qty = (st.node.yield || 1) + mealBonus;
+    const qty = (st.node.yield || 1) + mealBonus + (r64bStoryBenefit(state, "child") ? 1 : 0); // R64B：圖圖第 2 段故事——採集多拿 1 份
     const { added, lost } = addToStorage(state, st.node.itemId, qty);
     if (!state.flags.forageNodes) state.flags.forageNodes = {};
     state.flags.forageNodes[st.node.id] = now;

@@ -112,6 +112,55 @@
     merchant: { loved: "哎呀——你怎麼知道我愛這個！市價我都不用算了，這份我自己留著享用，謝謝你啦，大客戶！", normal: "謝謝謝謝！你放心，我蘿拉收禮不白收，下次你來攤上，我給你挑最好的。" },
     child: { loved: "哇——是我最喜歡的！你怎麼知道？你是不是有偷看我的地圖！謝謝你，我要把它畫進地圖裡面！", normal: "給我的嗎？謝謝！我要放在我的寶藏盒子裡面，跟我的地圖放一起！" },
   };
+  // R64B（第 5 項）：喜好線索——寫進日常對話與手札，讓玩家能推理該送什麼，不必亂試。
+  const CLUES = {
+    mayor: "鎮公所茶桌上要是擺一盤番茄，或剛烤好的農家麥餅，我批公文都特別有精神。",
+    elder: "我這老嘴就愛胡蘿蔔那口甜；胡蘿蔔麥粒燉鍋熱熱地喝一碗，下田全身都暖。",
+    merchant: "跑攤一整天，我最想留一顆草莓、幾顆葡萄給自己，酸酸甜甜的才提神。",
+    child: "草莓跟野莓酸酸甜甜的最好吃！向日葵黃黃的我也好喜歡，想把它畫進地圖裡。",
+  };
+  // R64B（第 5 項）：每人一種不喜歡的禮物，送到會被委婉婉拒，好感不增加、東西不收下。
+  const DISLIKED = { mayor: "sunflower", elder: "strawberry", merchant: "carrot", child: "river_mint" };
+  const DISLIKED_LINES = {
+    mayor: "這花是好看，就是花香重了些，我鼻子受不了。先謝謝你，這份你留著擺家裡吧。",
+    elder: "這草莓太嬌貴，我這老牙口怕酸甜黏牙。你自己留著吃，我心領了，少年仔。",
+    merchant: "哎呀，胡蘿蔔我攤上天天綁、天天賣，休息時就想換個口味。這份先還你，謝謝啦。",
+    child: "薄荷涼涼的，好像把牙膏吃進嘴巴……這個我不行啦，謝謝你，我下次想吃甜甜的。",
+  };
+  // R64B（第 6 項）：聽完第 2 段故事（好感 3 解鎖的那段）後得到的實際好處。
+  const BENEFITS = {
+    mayor: { id: "mayor_reclaim_discount", text: "開墾農地少付 5 金" },
+    elder: { id: "elder_daily_compost", text: "每天做完今日農務，多領 1 份堆肥" },
+    merchant: { id: "merchant_sell_bonus", text: "市集收購價多 5%" },
+    child: { id: "child_forage_bonus", text: "採集時多拿 1 份" },
+  };
+  function benefitUnlocked(state, npcId) {
+    const seen = state && state.adventure && state.adventure.r61b && state.adventure.r61b.seen;
+    return !!(seen && Array.isArray(seen[npcId]) && seen[npcId].includes(1));
+  }
+  function benefitOf(state, npcId, now) {
+    ensure(state, now);
+    const def = BENEFITS[npcId];
+    return def ? { id: def.id, text: def.text, unlocked: benefitUnlocked(state, npcId) } : null;
+  }
+  // R64B（第 7 項）：鄰居委託排序——現在能做且章節最接近目前主線的在前，舊章節未完成標可補做排後面。
+  function sortPersonalQuests(list, currentChapter) {
+    const cur = Math.max(1, Math.min(5, Number(currentChapter) || 1));
+    const group = (p) => {
+      if (p.completed) return 3;
+      if (!p.unlocked) return 2;
+      return p.chapter < cur ? 1 : 0;
+    };
+    return [...(list || [])].map((p) => Object.assign({}, p, {
+      canDoNow: !!(p.unlocked && !p.completed),
+      catchUp: !!(p.unlocked && !p.completed && p.chapter < cur),
+    })).sort((a, b) =>
+      group(a) - group(b)
+      || Math.abs(a.chapter - cur) - Math.abs(b.chapter - cur)
+      || a.chapter - b.chapter
+      || Number(b.canComplete) - Number(a.canComplete)
+      || String(a.id).localeCompare(String(b.id)));
+  }
   // 第 3 段專屬禮物：kind=item 進背包（storage.items），kind=meal 進餐籃（adventure.meals）。
   const GIFTS = {
     mayor: { kind: "item", id: "r61b_mayor_bell", name: "葛瑞的送信銅鈴", note: "掛上之後走在鎮上，鈴聲清脆，像自己人回家。" },
@@ -130,9 +179,11 @@
     if (!b.giftDay || typeof b.giftDay !== "object") b.giftDay = {}; // npcId -> 上次送禮的日界鍵
     if (!b.revealed || typeof b.revealed !== "object") b.revealed = {}; // npcId -> [已送過的物品]
     if (!b.giftItem || typeof b.giftItem !== "object") b.giftItem = {}; // npcId -> 專屬禮物已領
+    if (!b.dislikedSeen || typeof b.dislikedSeen !== "object") b.dislikedSeen = {}; // R64B：npcId -> [送過才知道不喜歡的物品]
     for (const p of PEOPLE) {
       if (!Array.isArray(b.seen[p.id])) b.seen[p.id] = [];
       if (!Array.isArray(b.revealed[p.id])) b.revealed[p.id] = [];
+      if (!Array.isArray(b.dislikedSeen[p.id])) b.dislikedSeen[p.id] = [];
     }
     return { ok: true };
   }
@@ -195,7 +246,9 @@
     return [...ids].filter((id) => ownedOf(state, id) > 0).map((id) => ({
       id, name: displayName(state, id), owned: ownedOf(state, id),
       loved: loved.includes(id),
+      disliked: DISLIKED[npcId] === id,
       revealed: b.revealed[npcId].includes(id),
+      dislikedRevealed: b.dislikedSeen[npcId].includes(id),
     })).sort((x, y) => Number(y.loved) - Number(x.loved) || x.name.localeCompare(y.name, "zh-Hant"));
   }
   function canGiftToday(state, npcId, now) {
@@ -208,6 +261,13 @@
     if (!person) return { ok: false, reason: "no_npc", message: "找不到這位鄰居。" };
     if (!canGiftToday(state, npcId, now)) return { ok: false, reason: "daily_limit", message: `今天已經送過${person.short}了，明天再來吧。` };
     if (ownedOf(state, itemId) <= 0) return { ok: false, reason: "not_owned", message: "背包裡沒有這樣東西，先去收成或做一道料理吧。" };
+    // R64B（第 5 項）：不喜歡的禮物被委婉婉拒——不收下、好感 +0、今天還能再送別的。
+    if (DISLIKED[npcId] === itemId) {
+      const b0 = state.adventure.r61b;
+      if (!b0.dislikedSeen[npcId].includes(itemId)) b0.dislikedSeen[npcId].push(itemId);
+      return { ok: true, loved: false, disliked: true, gained: 0, favor: favorOf(state, npcId), line: DISLIKED_LINES[npcId], itemName: displayName(state, itemId), giftRevealed: false,
+        message: `${person.short}委婉地婉拒了這份禮物，好感沒有增加。`, pendingStory: null };
+    }
     if (!takeOne(state, itemId)) return { ok: false, reason: "not_owned", message: "背包裡沒有這樣東西，先去收成或做一道料理吧。" };
     const loved = (LOVED[npcId] || []).includes(itemId);
     const gained = loved ? 2 : 1;
@@ -259,7 +319,9 @@
       b.giftItem[npcId] = true;
       gift = { id: g.id, name: g.name, note: g.note, kind: g.kind };
     }
-    return { ok: true, firstTime, story: { index, title: story.title, lines: story.lines }, gift };
+    // R64B（第 6 項）：第一次聽完第 2 段故事，好處正式生效。
+    const benefit = index === 1 && firstTime ? benefitOf(state, npcId, now) : null;
+    return { ok: true, firstTime, story: { index, title: story.title, lines: story.lines }, gift, benefit };
   }
   // 手札鄰居區塊資料：好感愛心、下一段還差多少、已揭曉喜好、已看故事可重看。
   function journalData(state, now) {
@@ -275,6 +337,10 @@
         nextNeed: prog.nextNeed, remaining: prog.remaining, allUnlocked: prog.allUnlocked,
         canGiftToday: canGiftToday(state, p.id, now),
         pending: (() => { const s = pendingStory(state, p.id, now); return s ? { index: s.index, title: s.title } : null; })(),
+        clue: CLUES[p.id],
+        disliked: { id: DISLIKED[p.id], name: displayName(state, DISLIKED[p.id]) },
+        dislikedRevealed: b.dislikedSeen[p.id].includes(DISLIKED[p.id]),
+        benefit: benefitOf(state, p.id, now),
         lovedRevealed: lovedIds.filter((id) => b.revealed[p.id].includes(id)).map((id) => ({ id, name: displayName(state, id) })),
         lovedHiddenCount: lovedIds.filter((id) => !b.revealed[p.id].includes(id)).length,
         giftOptions: giftOptions(state, p.id, now),
@@ -285,7 +351,7 @@
     });
   }
 
-  const NeighborsR61 = { PEOPLE, STORIES, LOVED, GIFT_LINES, GIFTS, STORY_AT, ensure, favorOf, giftOptions, canGiftToday, giveGift, storyState, pendingStory, nextStoryProgress, markStorySeen, journalData, displayName };
+  const NeighborsR61 = { PEOPLE, STORIES, LOVED, CLUES, DISLIKED, DISLIKED_LINES, BENEFITS, GIFT_LINES, GIFTS, STORY_AT, ensure, favorOf, benefitUnlocked, benefitOf, sortPersonalQuests, giftOptions, canGiftToday, giveGift, storyState, pendingStory, nextStoryProgress, markStorySeen, journalData, displayName };
   root.NeighborsR61 = NeighborsR61;
   if (typeof module !== "undefined" && module.exports) module.exports = NeighborsR61;
 
@@ -304,6 +370,33 @@
     if (f && f.safeSaveNow) f.safeSaveNow();
     if (root.FarmWorld && root.FarmWorld.refresh) root.FarmWorld.refresh(state);
   }
+  // R64B（第 9 項）：鄰居面板右上角關閉鈕（至少 44px），按下關掉面板並回到手札鄰居區塊。
+  function returnToJournal(state, box) {
+    if (farm() && farm().closeModal) farm().closeModal("worldModal");
+    if (root.FarmWorld && root.FarmWorld.openPanel) root.FarmWorld.openPanel("journal");
+    else if (farm() && farm().selectTab) farm().selectTab("journal");
+    injectJournal(state);
+    const sec = document.querySelector("[data-r61b-neighbors]");
+    if (sec && sec.scrollIntoView) sec.scrollIntoView({ block: "start" });
+  }
+  function wireNeighborClose(state, box) {
+    const btn = box.querySelector(".world-modal-close");
+    if (!btn) return;
+    btn.classList.add("r64b-neighbor-close");
+    btn.dataset.r64bNeighborClose = "";
+    btn.setAttribute("aria-label", "關閉鄰居面板，回到手札");
+    btn.setAttribute("title", "關閉，回到手札");
+    btn.onclick = () => returnToJournal(state, box);
+  }
+  function beatHearts(npcId) {
+    const card = document.querySelector(`[data-r61b-neighbor="${npcId}"]`);
+    const hearts = card && card.querySelector(".r61b-hearts");
+    if (!hearts) return;
+    hearts.classList.remove("r64b-heart-beat");
+    void hearts.offsetWidth;
+    hearts.classList.add("r64b-heart-beat");
+    setTimeout(() => hearts.classList.remove("r64b-heart-beat"), 1300);
+  }
   function playStory(state, npcId, index) {
     const list = storyState(state, npcId, Date.now());
     const story = list[index];
@@ -315,6 +408,7 @@
       `<div class="r61b-story" data-r61b-story="${npcId}-${index}"><p class="r61b-story-line" data-r61b-line></p><p class="r61b-story-step" data-r61b-step></p></div>`,
       "");
     box.classList.add("r61b-modal");
+    wireNeighborClose(state, box);
     const card = box.querySelector(".modal-card");
     const bar = document.createElement("div"); bar.className = "content-footer r61b-footer";
     bar.innerHTML = `<button type="button" class="content-primary" data-r61b-next>下一句</button><button type="button" class="content-secondary" data-r61b-close>先聊到這裡</button>`;
@@ -331,8 +425,9 @@
       saveNow(state); injectJournal(state);
       if (farm() && farm().closeModal) farm().closeModal("worldModal");
       if (result.gift && farm() && farm().toast) farm().toast(`收到專屬禮物：${result.gift.name}。${result.gift.note}`);
+      else if (result.benefit && farm() && farm().toast) farm().toast(`聽完這段故事，獲得好處：${result.benefit.text}。`);
     };
-    bar.querySelector("[data-r61b-close]").onclick = () => { if (farm() && farm().closeModal) farm().closeModal("worldModal"); };
+    bar.querySelector("[data-r61b-close]").onclick = () => returnToJournal(state, box);
     render();
   }
   function openGiftPicker(state, npcId) {
@@ -340,15 +435,16 @@
     if (!data) return;
     const opts = data.giftOptions;
     const box = root.FarmWorld.contentModal(`送禮給${data.name}`,
-      opts.length
-        ? `<p class="r61b-gift-hint">${data.canGiftToday ? "選一樣背包或餐籃裡的東西送出去。今天每人只能送一次喔。" : "今天已經送過了，明天再來吧。"}</p><div class="r61b-gift-list">${opts.map((o) => `<button type="button" class="r61b-gift-btn" data-r61b-gift="${esc(o.id)}" ${data.canGiftToday ? "" : "disabled"}>${esc(o.name)}（有 ${o.owned} 份）${o.revealed && o.loved ? "・他很喜歡" : ""}</button>`).join("")}</div>`
-        : `<p class="r61b-gift-hint">背包和餐籃都是空的，先去田裡收成，或到灶台做一道料理再來吧。</p>`, "");
+      `<p class="r61b-gift-hint r64b-clue">線索：${esc(data.clue)}</p>` + (opts.length
+        ? `<p class="r61b-gift-hint">${data.canGiftToday ? "選一樣背包或餐籃裡的東西送出去。今天每人只能送一次喔。" : "今天已經送過了，明天再來吧。"}</p><div class="r61b-gift-list">${opts.map((o) => `<button type="button" class="r61b-gift-btn" data-r61b-gift="${esc(o.id)}" ${data.canGiftToday ? "" : "disabled"}>${esc(o.name)}（有 ${o.owned} 份）${o.revealed && o.loved ? "・他很喜歡" : ""}${o.dislikedRevealed ? "・他不太喜歡" : ""}</button>`).join("")}</div>`
+        : `<p class="r61b-gift-hint">背包和餐籃都是空的，先去田裡收成，或到灶台做一道料理再來吧。</p>`), "");
     box.classList.add("r61b-modal");
+    wireNeighborClose(state, box);
     const card = box.querySelector(".modal-card");
     const bar = document.createElement("div"); bar.className = "content-footer r61b-footer";
     bar.innerHTML = `<button type="button" class="content-secondary" data-r61b-back>回鄰居手札</button>`;
     card.appendChild(bar);
-    bar.querySelector("[data-r61b-back]").onclick = () => { if (farm() && farm().closeModal) farm().closeModal("worldModal"); };
+    bar.querySelector("[data-r61b-back]").onclick = () => returnToJournal(state, box);
     box.querySelectorAll("[data-r61b-gift]").forEach((btn) => {
       btn.onclick = () => {
         const result = giveGift(state, npcId, btn.dataset.r61bGift, Date.now());
@@ -356,6 +452,7 @@
         if (farm() && farm().closeModal) farm().closeModal("worldModal");
         if (farm() && farm().toast) farm().toast(result.ok ? `${result.line}（好感 +${result.gained}）` : result.message);
         injectJournal(state);
+        if (result.ok && result.loved) beatHearts(npcId);
         if (result.ok && result.pendingStory) setTimeout(() => playStory(state, npcId, result.pendingStory.index), 350);
       };
     });
@@ -368,7 +465,10 @@
         <h3 class="r61b-name">${esc(d.name)}</h3>
         <p class="r61b-hearts" data-r61b-favor="${d.favor}">好感 ${d.hearts}（${d.favor}）</p>
         <p class="r61b-next">${d.allUnlocked ? "三段故事都聽過了" : `下一段故事：好感 ${d.nextNeed} 解鎖，還差 ${d.remaining}`}</p>
-        <p class="r61b-loved">喜歡的禮物：${d.lovedRevealed.length ? d.lovedRevealed.map((x) => esc(x.name)).join("、") : "還沒發現，送過才會知道"}${d.lovedHiddenCount ? `（還有 ${d.lovedHiddenCount} 樣沒發現）` : ""}</p>
+        <p class="r61b-loved">喜歡的禮物：${d.lovedRevealed.length ? d.lovedRevealed.map((x) => esc(x.name)).join("、") : `線索：${esc(d.clue)}`}${d.lovedRevealed.length && d.lovedHiddenCount ? `（還有 ${d.lovedHiddenCount} 樣沒發現）` : ""}</p>
+        ${d.lovedRevealed.length ? `<p class="r61b-clue r64b-clue">線索：${esc(d.clue)}</p>` : ""}
+        ${d.dislikedRevealed ? `<p class="r61b-disliked r64b-disliked">不太喜歡：${esc(d.disliked.name)}（送這個不會增加好感）</p>` : ""}
+        <p class="r61b-benefit r64b-benefit" data-r64b-benefit="${d.benefit.unlocked ? "owned" : "locked"}">${d.benefit.unlocked ? `已獲得：${esc(d.benefit.text)}` : `聽完第 2 段故事可獲得：${esc(d.benefit.text)}`}</p>
         ${d.gift ? `<p class="r61b-got">專屬禮物：${esc(d.gift.name)}・${esc(d.gift.note)}</p>` : ""}
         <div class="r61b-actions">
           <button type="button" class="r61b-gift-open" data-r61b-gift-open="${d.id}" ${d.canGiftToday ? "" : "disabled"}>${d.canGiftToday ? "送禮" : "今天送過了"}</button>
