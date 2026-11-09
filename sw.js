@@ -60,6 +60,7 @@ const CORE_ASSETS = [
   versioned("./src/content-r41.css"),
   versioned("./src/content-r42.css"),
   versioned("./src/content-r55a.css"),
+  versioned("./src/content-r55b.css"),
   versioned("./src/content-r49-art.css"),
   versioned("./assets/generated/r49/grass-36.png"),
   versioned("./assets/generated/r49/path-36.png"),
