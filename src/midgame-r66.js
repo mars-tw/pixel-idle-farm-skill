@@ -206,7 +206,7 @@
     const crop = C.CROPS[b.merchantDeal.cropId];
     const normalPrice = crop ? crop.seedCost : 1;
     return { npcId: "merchant", name: "商人蘿拉", title: "今日特價", day: today, cropId: b.merchantDeal.cropId,
-      cropName: itemNameOf(b.merchantDeal.cropId), normalPrice, specialPrice: Math.max(1, Math.floor(normalPrice / 2)), bought: b.merchantDeal.bought || 0 };
+      cropName: itemNameOf(b.merchantDeal.cropId), normalPrice, specialPrice: Math.max(1, Math.floor(normalPrice / 2)), packsPerBuy: normalPrice < 2 ? 2 : 1, bought: b.merchantDeal.bought || 0 }; // R66 整合：原價 1 金的種子無法再打折，改成買一送一
   }
   function buyMerchantSpecial(state, now) {
     now = Number.isFinite(now) ? now : Date.now();
@@ -215,10 +215,10 @@
     state.coins -= deal.specialPrice;
     if (A && A.ensure) A.ensure(state, now);
     const packs = state.adventure.r58.r59.seedPacks;
-    packs[deal.cropId] = Math.min(99, (packs[deal.cropId] || 0) + 1);
+    packs[deal.cropId] = Math.min(99, (packs[deal.cropId] || 0) + (deal.packsPerBuy || 1));
     state.adventure.r66b.merchantDeal.bought = (state.adventure.r66b.merchantDeal.bought || 0) + 1;
     return { ok: true, cropId: deal.cropId, cropName: deal.cropName, price: deal.specialPrice, seedPacks: packs[deal.cropId],
-      message: `用特價 ${deal.specialPrice} 金買了 1 包${deal.cropName}種子，種的時候會先用種子包。` };
+      message: `用特價 ${deal.specialPrice} 金買了 ${deal.packsPerBuy || 1} 包${deal.cropName}種子，種的時候會先用種子包。` };
   }
   function treasureInfo(state, now) {
     ensure(state, now);
@@ -253,7 +253,7 @@
     return [
       { npcId: "mayor", name: mayor.name, title: mayor.title, detail: `今天想收 ${mayor.qty} 份${mayor.cropName}，你有 ${mayor.have} 份。完成給 ${mayor.rewardCoins} 金，比一般訂單划算。`, actionLabel: mayor.claimed ? "今天已交付" : "交付委託", canAct: mayor.canDeliver, done: mayor.claimed },
       { npcId: "elder", name: advice.name, title: advice.title, detail: advice.active ? "今天的指點生效中，作物成長時間縮短一成。" : "每天可以請教一次，今天還沒請教。", actionLabel: advice.askedToday ? "今天請教過了" : "請教種田", canAct: !advice.askedToday, done: advice.askedToday },
-      { npcId: "merchant", name: deal.name, title: deal.title, detail: `今天${deal.cropName}種子特價 ${deal.specialPrice} 金（原價 ${deal.normalPrice} 金），今天已買 ${deal.bought} 包。`, actionLabel: "買特價種子", canAct: (state.coins || 0) >= deal.specialPrice, done: false },
+      { npcId: "merchant", name: deal.name, title: deal.title, detail: deal.packsPerBuy > 1 ? `今天${deal.cropName}種子買一送一：${deal.specialPrice} 金拿 ${deal.packsPerBuy} 包，今天已買 ${deal.bought} 次。` : `今天${deal.cropName}種子特價 ${deal.specialPrice} 金（原價 ${deal.normalPrice} 金），今天已買 ${deal.bought} 包。`, actionLabel: "買特價種子", canAct: (state.coins || 0) >= deal.specialPrice, done: false },
       { npcId: "child", name: treasure.name, title: treasure.title, detail: treasure.found ? "今天的寶藏找到了，明天圖圖會再藏一個。" : "圖圖在地圖某處藏了小土堆，找到有小禮物。", actionLabel: treasure.found ? "今天找到了" : "去找寶藏", canAct: !treasure.found, done: treasure.found, tileId: treasure.tileId },
     ];
   }

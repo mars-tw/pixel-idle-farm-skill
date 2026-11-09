@@ -174,5 +174,15 @@ test("9 接線：新檔掛進首頁與快取、素材存在、CSS 標 R66B、版
   assert.match(cfg, /BUILDING_ORDER = \["compostHeap", "silo"/, "既有建造順序開頭不可被新設施改變");
 });
 
-console.log(`VERIFIED content R66 midgame (${passed}/9)`);
+test("10 整合：特價一定比原價划算（原價 1 金的種子改買一送一）", () => {
+  const st = fresh(1, 50);
+  const deal = M.merchantSpecial(st, T0);
+  const perPack = deal.specialPrice / (deal.packsPerBuy || 1);
+  assert.ok(perPack < deal.normalPrice, `每包 ${perPack} 金應低於原價 ${deal.normalPrice} 金`);
+  const before = (st.adventure.r58.r59.seedPacks[deal.cropId] || 0);
+  assert.equal(M.buyMerchantSpecial(st, T0).ok, true);
+  assert.equal(st.adventure.r58.r59.seedPacks[deal.cropId] - before, deal.packsPerBuy || 1);
+});
+
+console.log(`VERIFIED content R66 midgame (${passed}/10)`);
 if (process.exitCode) process.exit(1);

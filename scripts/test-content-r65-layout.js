@@ -282,7 +282,8 @@ async function launchBrowser() {
         console.log(`OK ${tag} 第 7 項：收合卡一行顯示「${fest.bannerText.split('\n')[0]}」`);
         // 展開後才看得到三個小目標
         await page.locator("[data-audit='quest-collapse']").click();
-        await page.waitForTimeout(500);
+        // R66 整合：整批連跑負載高時 500ms 不夠，改為等到展開內容出現（最多 3 秒），斷言不變
+        await page.waitForFunction(() => { const b = document.querySelector('#questDock .r61a-festival-banner'); return b && /收成 3 份番茄/.test(b.innerText); }, null, { timeout: 3000 }).catch(() => {});
         const festOpen = await page.evaluate(() => {
           const banner = document.querySelector('#questDock .r61a-festival-banner');
           return banner ? banner.innerText.trim() : '';

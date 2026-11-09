@@ -621,3 +621,15 @@ body:has(#toast-zone > .toast) #questDock .r66a-daily-pick,
 body:has(#worldDialogue:not([hidden])) #questDock .r66a-daily-pick,
 body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none !important; }
 #questDock .world-objective-title { flex-shrink: 0; }
+/* R66 整合：今日五選三的候選做成可勾選的卡片（類別標籤、勾選框、獎勵一行），不用預設灰按鈕。 */
+.r66a-daily-candidates { display: grid; gap: 8px; margin: 8px 0 12px; }
+.r66a-candidate { display: grid; grid-template-columns: 26px 56px 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 8px; row-gap: 2px; min-height: 52px; padding: 8px 12px; text-align: left; border: 2px solid #c9a46a; border-radius: 10px; background: #fffaf0; color: #4a3218; cursor: pointer; box-shadow: 0 2px 0 rgba(120,80,30,.18); }
+.r66a-candidate .r66a-check { grid-row: 1 / span 2; width: 22px; height: 22px; border: 2px solid #a8743f; border-radius: 6px; background: #fff; }
+.r66a-candidate .r66a-kind { grid-row: 1; padding: 1px 7px; border-radius: 999px; background: #f1dfb8; color: #6b4a1f; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.r66a-candidate b { grid-row: 1; font-size: 14px; text-align: left; justify-self: start; }
+.r66a-candidate .r66a-kind { justify-self: start; }
+.r66a-candidate small { grid-column: 2 / span 2; grid-row: 2; color: #7a5a30; font-size: 12px; }
+.r66a-candidate[aria-pressed="true"] { border-color: #d98a1f; background: #fff1cc; box-shadow: 0 0 0 2px rgba(217,138,31,.35), 0 2px 0 rgba(120,80,30,.18); }
+.r66a-candidate[aria-pressed="true"] .r66a-check { background: #e29a3a; border-color: #b8691d; box-shadow: inset 0 0 0 3px #fff; }
+.r66a-candidate:disabled { opacity: 1; cursor: default; border-style: dashed; }
+.r66a-confirm { min-height: 44px; min-width: 140px; padding: 8px 18px; border: 2px solid #8f491d; border-radius: 10px; background: #ffd66d; color: #5a2d11; font-weight: 800; box-shadow: 0 3px 0 rgba(89,48,20,.45); cursor: pointer; }
