@@ -473,7 +473,7 @@
     if (!claimed(a, "c1_first_meal")) {
       if (bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", actionLabel: "吃麥餅" };
       if (wheat >= 2) return { action: "cook", target: "kitchen", tileId: "t10_10", text: "食材已齊，前往農舍灶台做農家麥餅。", actionLabel: "前往灶台" };
-      return { action: "plant", target: "field", tileId: null, text: `還差 ${Math.max(0, 2 - wheat)} 份小麥，先種下小麥。`, actionLabel: "去種小麥" };
+      return { action: "plant", target: "field", tileId: null, text: `回家的第一餐還差 ${Math.max(0, 2 - wheat)} 份小麥，先種下小麥。`, actionLabel: "去種小麥" };
     }
     return { action: "explore", target: "fishing_dock", tileId: null, text: "第一餐吃完了，去河邊看看釣台。", actionLabel: "去河邊看看" };
   }
@@ -1236,7 +1236,7 @@
     const available = !!state.adventure.claimed.c1_first_harvest && !state.adventure.claimed.c1_first_meal;
     const have = Math.max(0, ((state.storage || {}).items || {}).wheat || 0);
     const missing = Math.max(0, 2 - have);
-    return { available, missing, target: missing ? "field" : "kitchen", text: missing ? `做一份自己的晚餐：還差 ${missing} 份小麥，先回田裡收成。` : "做一份自己的晚餐：食材已齊，前往農舍灶台。" };
+    return { available, missing, target: missing ? "field" : "kitchen", text: missing ? `回家的第一餐：還差 ${missing} 份小麥，先回田裡收成。` : "做一份自己的晚餐：食材已齊，前往農舍灶台。" };
   }
   function mainStoryChoice(state, npcId, now) {
     if (!ensure(state, now).ok || !R60_STORY_CHOICES[npcId]) return null;

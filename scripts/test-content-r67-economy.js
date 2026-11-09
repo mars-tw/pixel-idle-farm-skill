@@ -41,8 +41,8 @@ test("1 訂單文案是一句口語，不再出現庫存算式", () => {
     assert.doesNotMatch(text, /[=＝－-]/, text);
     assert.doesNotMatch(text, /庫存|可用/, text);
   }
-  assert.equal(readyText, "手上有 6 份小麥，夠交這張了");
-  assert.equal(shortText, "還要 4 份小麥，手上的先留給老農班伯和前面的訂單；再種 4 格（約 15 秒）");
+  assert.equal(readyText, "這張要 4 份小麥；手上有 6 份，夠交這張了"); // R69B 同步：訂單改完整一句，先講這張要幾份
+  assert.equal(shortText, "這張要 4 份小麥；你手上 6 份先留給老農班伯和前面的訂單，所以還要再種 4 格（約 15 秒）"); // R69B 同步：完整一句講清要幾份、保留給誰、再種幾格
   assert.equal(typeof G.orderItemStatusText, "function", "訂單卡每項物品共用同一句口語");
   assert.equal(G.orderItemStatusText(state, state.orders[1], "wheat"), shortText);
   const ui = fs.readFileSync("src/ui.js", "utf8");

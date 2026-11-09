@@ -22,7 +22,7 @@ test("A1 共用小麥依訂單順序分配，第二張還差 2 份", () => {
   const rows = G.orderAllocation(state);
   assert.deepEqual(rows.map((row) => row.ready), [true, false]);
   assert.equal(rows[1].missing.wheat, 2);
-  assert.equal(G.orderAllocationText(state, state.orders[1]), "還要 2 份小麥，手上的先留給老農班伯和前面的訂單；再種 2 格（約 15 秒）"); // R67B 同步：分配數字不變，文案改口語句（原算式改為還要幾份＋留給誰）
+  assert.equal(G.orderAllocationText(state, state.orders[1]), "這張要 4 份小麥；你手上 6 份有 2 份先留給老農班伯、2 份先給前面的訂單，所以還要再種 2 格（約 15 秒）"); // R69B 同步：分配數字不變，改完整一句並分開寫主線保留與前單占用
   assert.equal(G.fulfillOrder(state, "second", T).reason, "reserved", "後單不可繞過面板直接交付");
 });
 

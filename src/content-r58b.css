@@ -759,3 +759,5 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
 #questDock .r67a-task, #questDock .world-objective-route.r67a-task { width: auto !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
 #questDock .r67a-task b, #questDock .r67a-task small { white-space: normal !important; overflow-wrap: anywhere; }
 #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now) small { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+/* R69B：訂單需求改成完整一句後，需求文字可換行完整顯示，不截斷、不超出卡片。 */
+.side-pane[data-pane="orders"] .o-wants .w { white-space: normal !important; overflow-wrap: anywhere; line-height: 1.4; }
