@@ -29,11 +29,14 @@
 
   // ---------- 解鎖 / 成長倍率 ----------
   function unlockedCrops(state) {
-    return Object.values(CROPS).filter((c) => c.unlockLevel <= state.level).map((c) => c.id);
+    return Object.values(CROPS).filter((c) => isCropUnlocked(state, c.id)).map((c) => c.id);
   }
   function isCropUnlocked(state, cropId) {
     const c = CROPS[cropId];
-    return !!c && c.unlockLevel <= state.level;
+    if (!c || c.unlockLevel > state.level) return false;
+    // R62A：胡蘿蔔從第一次開墾取得；等級到但還買不到種子時，不算已解鎖。
+    if (cropId === "carrot") return ((state.upgrades || {}).plotCount || 0) >= 1;
+    return true;
   }
   // MVP2：玩家擁有的動物可生產的產品（訂單只會要玩家做得出的產品）
   function unlockedProducts(state) {
@@ -694,6 +697,7 @@
     { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", ttlOffsetMs: 0, flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
     { id: "beginner_carrot_1", wants: { carrot: 1 }, npcId: "mayor", ttlOffsetMs: 3 * 60 * 1000, flavor: "鎮長想先收 1 份胡蘿蔔，替巡路的人添菜。" },
     { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
+    { id: "beginner_berry_1", wants: { wild_berry: 1 }, rewardCoins: 10, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想要 1 份田邊野莓，拌進野餐點心裡。" }, // R62 整合：首批一張改收採集物，小麥不再被三張單搶
     { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 2 份胡蘿蔔做野餐點心。" },
     { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", ttlOffsetMs: 10 * 60 * 1000, flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
   ];
@@ -757,7 +761,7 @@
     return {
       id: template.id, wants: Object.assign({}, template.wants), rarity: "common",
       // 新手單採固定單價，避免固定加成讓大單的每份報酬反而較低。
-      rewardCoins: (def ? def.sellValue : 1) * 7 * qty, rewardXp: Math.max(2, Math.ceil(qty / 2)),
+      rewardCoins: Number.isFinite(template.rewardCoins) ? template.rewardCoins : (def ? def.sellValue : 1) * 7 * qty, rewardXp: Math.max(2, Math.ceil(qty / 2)),
       createdAt: now, expiresAt: null, firstBatch: true,
       npcId: template.npcId, flavor: template.flavor,
     };
@@ -806,19 +810,16 @@
   }
   // R35：市集開放前的預告卡直接用開放時第一批訂單的同一份範本（委託人、需求、報酬一字不差）。
   function previewMarketOrders(state, now) {
-    // R39 整合：預告固定顯示市集開放時會出現的那一組（交付老農班伯時通常已升到 Lv 2、胡蘿蔔已解鎖），
-    // 尚未解鎖的作物在卡上註明解鎖等級，避免預告與開放後第一批對不上。
-    const available = new Set(availableOrderItems(state));
-    const crops = (typeof CROPS !== "undefined" && CROPS) || (typeof window !== "undefined" && window.CROPS) || {};
-    return ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
+    // R62A：預告也只列玩家現在能買種子、種得出的作物，避免先出現胡蘿蔔單。
+    const available = new Set(availableOrderItems(state)); (C.FORAGE_NODES || []).filter((node) => node.starter && node.itemId === "wild_berry").forEach((node) => available.add(node.itemId)); // R62 整合：田邊野莓開場就採得到，可進首批訂單
+    const preferredIds = available.has("carrot")
+      ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
+      : ["beginner_wheat_2", "beginner_berry_1", "beginner_wheat_4"];
+    return preferredIds
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
       .filter(Boolean)
-      .map((template) => {
-        const order = makeBeginnerOrder(template, now);
-        const locked = Object.keys(template.wants).find((id) => !available.has(id));
-        const def = locked && crops[locked];
-        return Object.assign(order, { narrative: orderNarrative(state, order), lockNote: locked ? `Lv ${(def && def.unlockLevel) || 2} 解鎖${(def && def.name) || locked}種子` : "" });
-      });
+      .filter((template) => Object.keys(template.wants).every((id) => available.has(id)))
+      .map((template) => { const order = makeBeginnerOrder(template, now); return Object.assign(order, { narrative: orderNarrative(state, order), lockNote: "" }); });
   }
   function marketPreviewAction(state) {
     if (state && state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest) return { harvested: 2, target: "elder", label: "✓ 已交給老農班伯" };
@@ -837,10 +838,10 @@
     state.orders = state.orders.filter((o) => o.firstBatch === true || o.expiresAt > now);
     let seed = (state.ordersSeededAt || 0);
     if (firstDayChapterOne(state, now) && (state.ordersSeededAt || 0) < 3) {
-      const available = new Set(availableOrderItems(state));
+      const available = new Set(availableOrderItems(state)); (C.FORAGE_NODES || []).filter((node) => node.starter && node.itemId === "wild_berry").forEach((node) => available.add(node.itemId)); // R62 整合：田邊野莓開場就採得到，可進首批訂單
       const preferredIds = available.has("carrot")
         ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
-        : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
+        : ["beginner_wheat_2", "beginner_berry_1", "beginner_wheat_4"];
       const selectedTemplates = preferredIds.map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
         .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)));
       const kept = new Map();
@@ -1035,7 +1036,7 @@
     const lv = Math.max(0, Number(state.upgrades && state.upgrades[key]) || 0);
     const previous = lv > 0 ? def.levels[lv - 1].value : null;
     let effect = def.desc;
-    if (key === "plotCount") effect = `開墾農地：+${next.value - activePlotCount(state)} 格田`;
+    if (key === "plotCount") effect = `開墾農地：+${next.value - activePlotCount(state)} 格田${lv === 0 ? "・附送胡蘿蔔種子 3 份" : ""}`;
     if (key === "growthSpeed") effect = `肥沃土壤：生長時間 −${Math.round((1 - next.value) * 100)}%`;
     if (key === "sellBonus") effect = `市集人脈：賣出與訂單收益 +${Math.round(next.value * 100)}%`;
     if (key === "storageLevel") effect = `擴建穀倉：容量增加 ${next.value - (previous || 0)} 格`;
@@ -1064,6 +1065,10 @@
       const target = activePlotCount(state);
       while (state.plots.length < target) {
         state.plots.push({ id: "p" + String(state.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
+      }
+      if (state.upgrades[key] === 1) {
+        const packs = state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.seedPacks;
+        if (packs) packs.carrot = Math.min(99, Math.max(0, packs.carrot || 0) + 3);
       }
     }
     return { ok: true, level: state.upgrades[key],

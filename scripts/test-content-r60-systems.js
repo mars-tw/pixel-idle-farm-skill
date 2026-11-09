@@ -20,7 +20,7 @@ test("1 主線交付前後只有一種狀態說法", () => {
   assert.equal(G.marketPreviewAction(state).label, "交給老農班伯 2 份小麥（已收 2/2）");
   state.adventure.claimed.c1_first_harvest = true;
   goal = A.earlyGoals(state, T0).goals[0];
-  assert.equal(goal.name, "已交給老農班伯"); assert.equal(goal.complete, true); // 同步：打勾由任務卡樣板依 complete 加上，名稱本身不再含 ✓（避免畫面出現 ✓✓）
+  assert.equal(goal.name, "去灶台做一份農家麥餅（回家的第一餐）"); assert.equal(goal.complete, false); // R62：交完開市小麥後，今日三件事原位換成固定主線下一步。
   assert.doesNotMatch(goal.name, /已收|\/2/);
   assert.equal(G.marketPreviewAction(state).label, "✓ 已交給老農班伯");
 });
@@ -42,9 +42,9 @@ test("2 麥餅有三分鐘增益、HUD 寫名稱效果分秒，晚餐缺口導�
 test("3 市集預覽與第一批不卡小麥，開墾買得起就能按", () => {
   const state = fresh(); state.level = 2; state.adventure.claimed.c1_first_harvest = true;
   const preview = G.previewMarketOrders(state, T0);
-  assert.ok(preview.every((o) => !o.wants.wheat || o.wants.wheat <= 2));
+  assert.ok(preview.every((o) => Object.keys(o.wants).every((id) => (id === "wild_berry" || G.isCropUnlocked(state, id))))); assert.ok(preview.filter((o) => o.wants.wheat).length <= 2); // R62 整合：只列現在種得出或開場採得到（田邊野莓）的物品，且最多兩張小麥單。
   G.refreshOrders(state, T0, () => 0.5);
-  assert.ok(state.orders.some((o) => !o.wants.wheat), JSON.stringify(state.orders));
+  assert.ok(state.orders.every((o) => !o.wants.carrot), JSON.stringify(state.orders)); // R62：未開墾前不得先出胡蘿蔔單。
   state.orders = [
     { id: "small", wants: { wheat: 2 } }, { id: "large", wants: { wheat: 4 } },
   ];
@@ -81,7 +81,7 @@ test("5 小事件兩分鐘後回收選擇，不可選項寫清楚缺口", () => 
   let i = 0; assert.equal(A.maybeTriggerRandomEvent(state, T0, () => [0.01, 0][i++]).ok, true);
   const active = A.randomEvents(state, T0).active;
   assert.equal(active.options.find((o) => o.id === "buy").unavailableReason, "金幣不足：有 0／需 12");
-  assert.equal(active.options.find((o) => o.id === "trade").unavailableReason, "小麥不足：有 1／需 3");
+  assert.equal(active.options.find((o) => o.id === "trade").unavailableReason, "小麥不足：有 1／需 2"); // R62：旅行商人的需求降為兩份。
   assert.equal(A.resolveRandomEvent(state, "decline", T0 + 1).ok, true);
   assert.equal(A.randomEventRecall(state, T0 + 120000), "");
   assert.match(A.randomEventRecall(state, T0 + 120001), /上回沒買/);

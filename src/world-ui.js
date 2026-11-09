@@ -251,7 +251,7 @@
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
     const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
-    const progressStep = activeGoal && activeGoal.name ? activeGoal.name : "";
+    const progressStep = activeGoal && activeGoal.name ? `${q && q.chapter >= 4 ? q.name + "・" : ""}${activeGoal.name}` : "";
     const progressText = activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q && q.canClaim ? `✓ 回報${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}` : (q ? "1/1" : ""));
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
@@ -457,6 +457,11 @@
   function goEarlyGoal(id) {
     const quest = A.quests(current, Date.now()).find((row) => row.id === "c1_first_harvest");
     if (id === "harvest" && quest) { goQuest(quest); return; }
+    if (id === "meal") {
+      const mealQuest = A.quests(current, Date.now()).find((row) => row.id === "c1_first_meal");
+      if (mealQuest && mealQuest.canClaim) goQuest(mealQuest); else visitKitchen();
+      return;
+    }
     if (id === "dock") { visitSite("fishing_dock"); return; }
     if (id === "market") {
       const target = npcTile("merchant");
@@ -612,7 +617,7 @@
   }
   function openKitchen() {
     const recipes = A.recipes(current);
-    const box = modal("農舍灶台", `<p class="project-desc">每道料理都會寫清楚效果與解鎖方式。做好的料理會留在餐籃裡。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3><span aria-hidden="true">${esc(r.icon || "🍽️")}</span> ${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><p class="r59-recipe-status">${r.unlocked ? "已學會" : esc(r.unlockText || "尚未學會")}</p><div class="project-cost">${costText(r.requirements)}</div>${r.effect ? `<p class="project-desc r58-buff"><b>效果：</b>${esc(String(r.effect.summary).replace(/。$/, ""))}・持續 ${esc(r.effect.durationText)}</p>` : `<p class="project-desc"><b>分享：</b>送給${esc(r.share.who)}，${esc(r.share.reward)}。</p>`}<button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "尚未學會"}</button>${r.effect ? `<button data-eat="${r.id}" ${r.unlocked && r.quantity > 0 ? "" : "disabled"}>享用一份・${esc(r.effect.label)}・${esc(r.effect.durationText)}</button>` : ""}</div>`).join(""));
+    const box = modal("農舍灶台", `<p class="project-desc">每道料理都會寫清楚效果與解鎖方式。做好的料理會留在餐籃裡。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3><span aria-hidden="true">${esc(r.icon || "🍽️")}</span> ${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><p class="r59-recipe-status">${r.unlocked ? "已學會" : esc(r.unlockText || "尚未學會")}</p><div class="project-cost">${costText(r.requirements)}</div>${r.effect ? `<p class="project-desc r58-buff"><b>效果：</b>${esc(String(r.effect.summary).replace(/。$/, ""))}・持續 ${esc(r.effect.durationText)}</p>` : `<p class="project-desc"><b>分享：</b>送給${esc(r.share.who)}，${esc(r.share.reward)}。</p>`}<button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "做一份" : `做一份・${costText(r.requirements.filter((need) => !need.complete))}` : "尚未學會"}</button>${r.effect && r.quantity > 0 ? `<button data-eat="${r.id}">享用一份・${esc(r.effect.label)}・${esc(r.effect.durationText)}</button>` : ""}</div>`).join(""));
     box.querySelector("#kitchenNeighbors").onclick = () => window.ContentR1.openNeighbors(current);
     box.querySelectorAll("[data-cook]").forEach((b) => { b.onclick = () => {
       farm().closeModal("worldModal");

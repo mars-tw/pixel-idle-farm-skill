@@ -775,7 +775,7 @@
   }
   function chooseSeed(id) {
     const c = window.CROPS[id];
-    if (!c || c.unlockLevel > state.level) return;
+    if (!c || !G.isCropUnlocked(state, id)) return;
     clearTouchFarmPreview();
     hideBuildWheel();
     hideObjectBubble();
@@ -788,7 +788,7 @@
     scheduleSave();
   }
   function seedChip(c, seasonUnlocked, sId, compact, isNew) {
-    const unlocked = c.unlockLevel <= state.level;
+    const unlocked = G.isCropUnlocked(state, c.id);
     const el = document.createElement("div");
     const inSeason = seasonUnlocked && c.season && c.season === sId;
     const seasonBadge = c.season ? `<span class="seed-season ${inSeason ? "active" : ""}">${inSeason ? "x1.15" : escapeHtml(c.season)}</span>` : "";
@@ -797,7 +797,7 @@
     el.title = c.name;
     el.innerHTML = unlocked
       ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${compact ? "" : seasonBadge}`
-      : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">Lv${c.unlockLevel}</span>${compact ? "" : seasonBadge}`;
+      : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.id === "carrot" && state.level >= c.unlockLevel ? "開墾取得" : `Lv${c.unlockLevel}`}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
   }
@@ -807,12 +807,12 @@
     const crops = Object.values(window.CROPS);
     const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
     const sId = G.currentSeason ? G.currentSeason(state, now()) : "";
-    const unlockedIds = crops.filter((c) => c.unlockLevel <= state.level).map((c) => c.id);
+    const unlockedIds = crops.filter((c) => G.isCropUnlocked(state, c.id)).map((c) => c.id);
     const newSeedIds = new Set((G.unseenLevelUnlocks ? G.unseenLevelUnlocks(state, "seeds") : []).map((entry) => entry.id));
     if (!window.CROPS[selectedSeed] || unlockedIds.indexOf(selectedSeed) === -1) selectedSeed = unlockedIds[0] || "wheat";
     const quickIds = [];
     const addQuick = (id) => {
-      if (id && quickIds.indexOf(id) === -1 && window.CROPS[id] && window.CROPS[id].unlockLevel <= state.level) quickIds.push(id);
+      if (id && quickIds.indexOf(id) === -1 && window.CROPS[id] && G.isCropUnlocked(state, id)) quickIds.push(id);
     };
     addQuick(selectedSeed);
     recentSeeds.forEach(addQuick);

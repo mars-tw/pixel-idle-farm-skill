@@ -234,7 +234,7 @@ console.log("\n== 10. 賣出動物產品（價格用產品定義）==");
 console.log("\n== 11. 濕土澆水：比乾土更快成長 ==");
 {
   const st = S.defaultState(T0);
-  st.level = 2; st.coins = 100; // 解鎖胡蘿蔔 + 種子錢
+  st.level = 2; st.coins = 100; st.upgrades.plotCount = 1; // R62：等級與第一次開墾共同解鎖胡蘿蔔。
   G.plant(st, 0, "carrot", T0); // 乾土
   G.plant(st, 1, "carrot", T0); // 將澆水
   const w = G.waterPlot(st, 1, T0);
@@ -259,13 +259,13 @@ console.log("\n== 11b. Stage 6.5：離線收益也要吃到濕土加速（修正
   const wetMs = Math.max(1000, Math.floor(grow * C.MOISTURE_MUL));
   // 乾土：offline 到「濕土才會熟」的時間點，乾土應該還沒熟
   const dry = S.defaultState(T0);
-  dry.level = 2; dry.coins = 100;
+  dry.level = 2; dry.coins = 100; dry.upgrades.plotCount = 1;
   G.plant(dry, 0, "carrot", T0);
   const dryOff = G.applyOffline(dry, T0 + wetMs + 500);
   assert((dryOff.perCrop.carrot || 0) === 0 && dryOff.readyPlots === 0, "乾土在濕土成熟時間點離線結束時還沒熟");
   // 濕土：同樣的離線時長，應該已經自動收成（幫手解鎖時）或至少標記待收
   const wet = S.defaultState(T0);
-  wet.level = 2; wet.coins = 100; wet.upgrades.helperLevel = 1; // 解鎖離線自動收成
+  wet.level = 2; wet.coins = 100; wet.upgrades.plotCount = 1; wet.upgrades.helperLevel = 1; // 解鎖胡蘿蔔與離線自動收成
   G.plant(wet, 0, "carrot", T0);
   G.waterPlot(wet, 0, T0);
   const wetOff = G.applyOffline(wet, T0 + wetMs + 500);
@@ -861,8 +861,8 @@ console.log("\n== 16. Stage 11.1：Farm Journal（journalSummary 唯讀彙總層
   // 邊界值：胡蘿蔔 unlockLevel=2，等級剛好卡在邊界兩側都要驗證（避免 unlockedCrops 的
   // <= 比較被改成 < 這種 off-by-one 沒被抓到）
   assert(j0.crops.find((c) => c.id === "carrot").unlocked === false, "Lv1 時胡蘿蔔（unlockLevel 2）尚未解鎖");
-  const stLv2 = S.defaultState(T0); stLv2.level = 2;
-  assert(G.journalSummary(stLv2, T0).crops.find((c) => c.id === "carrot").unlocked === true, "Lv2 時胡蘿蔔剛好解鎖（邊界值）");
+  const stLv2 = S.defaultState(T0); stLv2.level = 2; stLv2.upgrades.plotCount = 1;
+  assert(G.journalSummary(stLv2, T0).crops.find((c) => c.id === "carrot").unlocked === true, "Lv2 且完成第一次開墾時胡蘿蔔解鎖（邊界值）");
 
   // 成就：未解鎖成就在圖鑑裡要有對應項目（但顯示邏輯是 UI 層的事，這裡只驗證資料本身）
   assert(j0.achievements.length === Object.keys(C.ACHIEVEMENTS).length, "成就總數與 ACHIEVEMENTS 設定一致");

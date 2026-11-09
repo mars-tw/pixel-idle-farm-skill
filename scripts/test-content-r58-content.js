@@ -63,7 +63,7 @@ test("每位鄰居 2 件個人委託可完成、好感提升且不可重複", ()
   assert.equal(A.completePersonalQuest(s, "mayor_first_notice", T0).reason, "missing_resources");
   assert.equal(JSON.stringify(s.storage.items), before);
   // 逐件完成第一章委託。
-  s.storage.items = { wheat: 20, carrot: 20 };
+  s.storage.items = { wheat: 20, carrot: 20, river_mint: 1 }; // R62：鎮長首件改收採集物，不再搶小麥。
   for (const q of list.filter((x) => x.chapter === 1)) {
     const coins = s.coins; const r = ok(A.completePersonalQuest(s, q.id, T0));
     assert.equal(r.favor, 1); assert.ok(s.coins > coins); assert.ok(r.doneLine.length > 5);
