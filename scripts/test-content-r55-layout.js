@@ -144,15 +144,21 @@ const HELP = `
       for (const x of hdr.leaves) if (x.t) assert(x.sw <= x.cw + 1, `${tag} 資源子文字「${x.t}」被截斷：${x.sw}>${x.cw}`);
       console.log(`OK 第 7 項 ${tag} 標誌完整（寬 ${Math.round(hdr.logo.r.width)}px）、資源四項一列不超出畫面`);
       // 第 8 項：訂單面板（無「再顯示」）應有漸層提示，捲到底消失；升級面板有「再顯示」時不得同時出現
-      await page.evaluate(() => window.FarmWorld.openPanel('orders'));
-      await page.waitForTimeout(700);
-      const ord = await page.evaluate((src) => {
+      // R55 整合：A 線把市集預告縮成一張後，訂單面板不一定可捲動；改為依序找第一個可捲動且沒有「再顯示」的面板驗證提示
+      const measurePane = (src) => {
         eval(src);
         const body = document.querySelector('.side-panel.world-panel-open .side-body');
         const hint = document.querySelector('[data-audit="panel-scroll-hint"]');
         return { scrollable: body ? body.scrollHeight > body.clientHeight + 2 : false, hasMore: !!document.querySelector('.side-pane.sel .r32-show-more'), hint: hint && vis(hint) ? { text: hint.textContent.trim(), bg: getComputedStyle(hint).backgroundImage } : null };
-      }, HELP);
-      assert(ord.scrollable, `${tag} 訂單面板應可捲動（才驗提示）`);
+      };
+      let ord = null;
+      for (const tab of ['orders', 'story', 'journal', 'upgrades']) {
+        await page.evaluate((t) => { document.querySelector('.side-panel').classList.remove('world-panel-open'); window.FarmWorld.openPanel(t); }, tab);
+        await page.waitForTimeout(700);
+        const m = await page.evaluate(measurePane, HELP);
+        if (m.scrollable && !m.hasMore) { ord = m; break; }
+      }
+      assert(ord && ord.scrollable, `${tag} 應至少有一個可捲動且無「再顯示」的面板可驗提示`);
       assert.equal(ord.hasMore, false, `${tag} 訂單面板不應有「再顯示」才驗漸層提示`);
       assert(ord.hint && ord.hint.text.includes('往下還有'), `${tag} 長面板未顯示「往下還有」提示：${JSON.stringify(ord)}`);
       assert(ord.hint.bg.includes('gradient'), `${tag} 捲動提示應有漸層：${ord.hint.bg}`);
