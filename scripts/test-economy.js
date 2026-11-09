@@ -136,7 +136,7 @@ console.log("\n== 5. 訂單：生成 / 完成優於直售 / 連單 ==");
   for (const [cid, q] of Object.entries(order.wants)) directValue += C.CROPS[cid].sellValue * q;
   assert(order.rewardCoins > directValue, `訂單獎金(${order.rewardCoins}) > 直售(${directValue})`);
   // 備齊作物並完成
-  for (const [cid, q] of Object.entries(order.wants)) st.storage.items[cid] = q;
+  for (const [cid, q] of Object.entries(order.wants)) st.storage.items[cid] = q + (cid === "wheat" ? 2 : 0); // R66：小麥另保留 2 份給主線。
   const f = G.fulfillOrder(st, order.id, T0, rng);
   assert(f.ok && f.coins > 0, "完成訂單得金幣");
   assert(st.orderStreak === 1, "連單 +1");

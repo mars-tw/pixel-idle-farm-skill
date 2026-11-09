@@ -76,7 +76,7 @@ test('A4 預告與首批逐欄一致，首批不限時，補單恢復倒數', ()
     assert.equal(state.orders[i].expiresAt, null);
   }
   const first = state.orders[0];
-  state.storage.items = { ...first.wants };
+  state.storage.items = Object.fromEntries(Object.entries(first.wants).map(([id, qty]) => [id, qty + (id === "wheat" ? 2 : 0)])); // R66：小麥先扣主線保留。
   assert.equal(G.fulfillOrder(state, first.id, T + 1, () => 0.5).ok, true);
   assert.ok(state.orders.some((order) => order.firstBatch !== true && Number.isFinite(order.expiresAt)));
   assert.match(read('src/ui.js'), /o\.firstBatch \? "首批不限時"/);

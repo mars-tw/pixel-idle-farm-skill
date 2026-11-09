@@ -878,15 +878,17 @@
   // R36：訂單共用同一份庫存時，依面板（state.orders）順序保留物品。
   function orderAllocation(state, orders) {
     const remaining = Object.assign({}, (state.storage && state.storage.items) || {});
+    const storyReserved = {};
+    for (const itemId of Object.keys(remaining)) { storyReserved[itemId] = Math.min(remaining[itemId] || 0, mainStoryReserve(state, itemId)); remaining[itemId] = Math.max(0, (remaining[itemId] || 0) - storyReserved[itemId]); }
     return (orders || state.orders || []).map((order) => {
       const missing = {}, items = {};
       for (const [itemId, qty] of Object.entries(order.wants || {})) {
         const stock = Math.max(0, ((state.storage && state.storage.items) || {})[itemId] || 0);
         const available = Math.max(0, remaining[itemId] || 0);
-        const priorReserved = Math.max(0, stock - available);
+        const priorReserved = Math.max(0, stock - available), storyReserve = storyReserved[itemId] || 0;
         const short = Math.max(0, qty - available);
         if (short) missing[itemId] = short;
-        items[itemId] = { required: qty, stock, available, priorReserved, missing: short };
+        items[itemId] = { required: qty, stock, available, priorReserved, storyReserve, missing: short };
       }
       const ready = Object.keys(missing).length === 0;
       if (ready) for (const [itemId, qty] of Object.entries(order.wants || {})) remaining[itemId] -= qty;
@@ -902,6 +904,7 @@
     return Object.entries(row.items || {}).map(([itemId, item]) => {
       const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
       const name = def ? def.name : itemId;
+      if (item.storyReserve > 0) { const seconds = Math.ceil(((CROPS[itemId] && CROPS[itemId].growMs) || 0) / 1000), earlier = Math.max(0, item.priorReserved - item.storyReserve); return `庫存 ${item.stock}－主線保留 ${item.storyReserve} 份${earlier ? `－前單 ${earlier}` : ""}＝可用 ${item.available}${item.missing ? `，還差 ${item.missing}；再種 ${item.missing} 格${name}（約 ${seconds} 秒）` : ""}`; }
       if (item.priorReserved > 0) return `庫存 ${item.stock}－前單 ${item.priorReserved}＝可用 ${item.available}${item.missing ? `，還差 ${item.missing}` : ""}`;
       return `需要 ${item.required}・可用 ${item.available}${item.missing ? `，還差 ${item.missing} ${name}` : ""}`;
     }).join("；");
