@@ -126,3 +126,80 @@ body:has(#buildWheel:not([hidden])) #questDock .world-objective-title .qp-step {
 .r60a-story-choices { display:grid; gap:6px; margin-top:8px; }
 .r60a-story-choices button { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:7px 9px; border:1px solid rgba(255,255,255,.45); border-radius:8px; background:#fff8df; color:#49351f; text-align:left; }
 .r60a-story-choices button small { color:#735b38; white-space:nowrap; }
+
+/* R60B（第 6 項）：鄰居委託先列現在可做的；尚未解鎖與已完成的收在可展開的「之後的委託」。
+   事件卡在上方時縮小，讓第一張可做委託完整留在首屏；只改版面，不改內容與規則。 */
+.r60-later-quests { margin: 10px 0 4px; }
+.r60-later-summary {
+  cursor: pointer; padding: 8px 10px; border: 1px solid #d8c9a6; border-radius: 8px;
+  background: #f3ecd7; color: #6b5322; font-size: 13px; font-weight: 700; line-height: 1.4;
+}
+.r60-later-quests .r58-card { margin-top: 8px; }
+.r60-show-more { position: static; display: block; margin: 10px auto 6px; }
+.r60-later-quests:not([open]) > :not(summary) { display: none !important; }
+.r58-section .r60-event-note {
+  display: flex; align-items: center; gap: 8px; padding: 6px 10px;
+}
+.r58-section .r60-event-note h4 { margin: 0; white-space: nowrap; }
+.r58-section .r60-event-note p { margin: 0; }
+.r58-section .r60-event-card h4 {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.r58-section .r60-event-card > p {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+/* R60B（第 6 項補強）：事件卡在上方時縮成標題與選項為主，可做委託卡也略為收緊，讓第一張完整留在首屏。 */
+.r58-section .r60-event-card { padding: 6px 10px; }
+.r58-section .r60-event-card h4 { margin: 0 0 3px; font-size: 14px; }
+.r58-section .r60-event-card .r58-meta { margin: 2px 0; font-size: 11px; }
+.r58-section .r60-event-card .r59-event-options { gap: 5px; margin-top: 4px; }
+.r58-section .r60-event-card .r59-event-options button { min-height: 34px; padding: 4px 8px; }
+.r58-section > .story-subhead { margin: 6px 0 2px; padding-top: 2px; font-size: 14px; line-height: 1.3; }
+.r58-section > .story-subhead + .project-desc { margin: 0 0 4px; font-size: 11px; line-height: 1.4; }
+.r58-section .r60-available-card { padding: 8px 10px; }
+.r58-section .r60-available-card h4 { margin: 0 0 3px; }
+.r58-section .r60-available-card p { margin: 3px 0; }
+.r58-section .r60-available-card > p {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.r58-section .r60-available-card button { min-height: 40px; margin-top: 4px; }
+@media (max-width: 859px) {
+  .r58-section .r60-event-card > p { -webkit-line-clamp: 1; }
+  .r58-section .r60-event-card { padding: 5px 8px; }
+  .r58-section .r60-event-card .r59-event-options button { min-height: 32px; padding: 3px 7px; }
+  .r58-section .r60-available-card > p {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .r58-section .r60-available-card .r58-meta { font-size: 11px; line-height: 1.35; margin: 2px 0; }
+  .r58-section .r60-available-card button { min-height: 38px; }
+  .r58-section > .story-subhead { margin-top: 3px; }
+  .r58-section > .story-subhead + .project-desc { margin-bottom: 2px; }
+}
+
+/* R60B（第 8 項）：今日三件事每一項標題一行、說明在下一行，不擠在同一段，說明最後一行不留單一字。 */
+#questDock .world-objective-route {
+  display: flex; flex-direction: column; align-items: stretch; gap: 2px; text-align: left;
+}
+#questDock .world-objective-route > b {
+  display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.35;
+}
+#questDock .world-objective-route > small {
+  display: block; line-height: 1.4; text-wrap: balance;
+}
+
+/* R60B（第 7 項）：手機收成只留中央收成按鈕，右下互動鈕在中央收成出現時隱藏；保留的按鈕文字不斷行。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #mapScene:has(.scene-action-bar:not([hidden]) > button[data-action="harvest"]) #actionA {
+    display: none !important;
+  }
+  .action-a { white-space: nowrap; }
+  #sceneActionBar .scene-action-btn .sab-t { white-space: nowrap; }
+}
+
+/* R60B（第 9 項）：手機開場右上資源列完整留在畫面內，裝不下時換到下一行，不往右切出去。 */
+@media (max-width: 859px) {
+  header .res-bar, #resBar {
+    max-width: calc(100vw - 24px) !important; box-sizing: border-box; flex-wrap: wrap;
+  }
+  #resBar .res { min-width: 0; box-sizing: border-box; }
+}
