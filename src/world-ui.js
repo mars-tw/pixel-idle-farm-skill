@@ -238,6 +238,7 @@
       box.dataset.targetId = "";
       if (document.body) document.body.dataset.questStep = "choice";
       box.innerHTML = `<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
+        ${hint ? `<div class="world-objective-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</div>` : ""}
         <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small></button>`).join("")}</div>`;
       box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
       syncSeedHudTop();
@@ -486,6 +487,19 @@
   }
   let pendingSpeak = null;
   let speakWaitTimer = 0;
+  function placeDialogue(box, speaker) {
+    if (!box || box.hidden || !speaker) return;
+    const r = speaker.getBoundingClientRect();
+    const speakerAboveMiddle = (r.top + r.bottom) / 2 < window.innerHeight / 2;
+    if (window.innerHeight <= 600) {
+      box.classList.toggle("dialogue-compact-bottom", speakerAboveMiddle);
+      box.classList.toggle("dialogue-compact-top", !speakerAboveMiddle);
+      box.classList.remove("dialogue-flip-top");
+    } else {
+      box.classList.remove("dialogue-compact-top", "dialogue-compact-bottom");
+      box.classList.toggle("dialogue-flip-top", !speakerAboveMiddle);
+    }
+  }
   function speak(name, text) {
     const zone = el("toast-zone");
     const speakBlocked = () => { const z = el("toast-zone"); return !!((z && z.children && z.children.length > 0) || document.querySelector(".side-panel.world-panel-open") || document.querySelector("#farmMenu:not([hidden])") || document.querySelector(".modal.show")); }; // R37：面板開著時對話延後，不蓋過玩家剛打開的面板
@@ -505,7 +519,7 @@
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
     box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
-    box.hidden = false; box.classList.remove("dialogue-flip-top"); box.classList.remove("dialogue-compact-bottom"); box.classList.toggle("dialogue-compact-top", window.innerHeight <= 600); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact-bottom" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); if (hit > 0) { if (window.innerHeight <= 600) box.classList.toggle("dialogue-compact-bottom", (sr.top + sr.bottom) / 2 < window.innerHeight / 2); else box.classList.add("dialogue-flip-top"); } if (hit > 0 || sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); setTimeout(() => { if (box.hidden) return; const s2 = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); if (!s2) return; const r2 = s2.getBoundingClientRect(), d2 = box.getBoundingClientRect(); const h2 = Math.max(0, Math.min(r2.right, d2.right) - Math.max(r2.left, d2.left)) * Math.max(0, Math.min(r2.bottom, d2.bottom) - Math.max(r2.top, d2.top)); if (window.innerHeight <= 600) { box.classList.toggle("dialogue-compact-bottom", (r2.top + r2.bottom) / 2 < window.innerHeight / 2); if (h2 > 0) { const f2 = farm(); if (f2 && f2.focusTile && speaker.dataset.tileId) f2.focusTile(speaker.dataset.tileId); } } else box.classList.toggle("dialogue-flip-top", h2 > 0); }, 260); } } } catch (e) {}
+    box.hidden = false; box.classList.remove("dialogue-flip-top", "dialogue-compact-top", "dialogue-compact-bottom"); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); const outside = sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth; placeDialogue(box, speaker); if (hit > 0 || outside) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); } [260, 650].forEach((delay) => setTimeout(() => { const node = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); placeDialogue(box, node); }, delay)); } else if (window.innerHeight <= 600) box.classList.add("dialogue-compact-top"); } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };
     // R79：toast 移到對話框上方（CSS 依此變數讓位）

@@ -150,7 +150,7 @@
     card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
     card.innerHTML = data.kind === "milestone"
       ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span><span>新解鎖：${escapeHtml(data.unlocked)}</span><span>下一步：${escapeHtml(data.next)}</span>`
-      : `獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
+      : `${data.sunBonus ? `陽光 +${data.sunBonus}・` : ""}獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
     function close() {
@@ -173,6 +173,7 @@
   function enqueueResultFeedback(result) {
     if (!result) return;
     (result.feedback || []).forEach(showActionFeedback);
+    if (result.sun && result.sun.kind === "harvest" && result.settlement) result.settlement.sunBonus = result.sun.bonus || 1;
     if (result.settlement) enqueueSettlement(result.settlement);
     (result.milestones || []).forEach(enqueueSettlement);
   }
