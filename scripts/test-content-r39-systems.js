@@ -17,7 +17,7 @@ function test(name, fn) {
 test('A1 任務列與市集預告共用班伯開市小麥 0/2 到 2/2', () => {
   const state = S.defaultState(T);
   assert.deepEqual(G.marketPreviewAction(state), {
-    harvested: 0, target: 'field', label: '老農班伯的開市小麥（已收 0/2）',
+    harvested: 0, target: 'field', label: '交給老農班伯 2 份小麥（已收 0/2）',
   });
   state.storage.items.wheat = 1;
   assert.match(G.marketPreviewAction(state).label, /已收 1\/2/);
@@ -58,7 +58,7 @@ test('A3 升級效果有數字、下一步各異，低於一輪種子成本改�
   assert.equal(plot.reserveRisk, true);
   const ui = read('src/ui.js');
   assert.match(ui, /cardInfo\.reserveRisk \? "ghost" : "buy"/);
-  assert.match(ui, /金<small class="u-confirm-note">先留種子錢<\/small>/); // R46：會花到買不起種子時停用並寫原因
+  assert.match(ui, /金<small class="u-confirm-note">留種提醒<\/small>/);
 });
 
 test('A4 預告與首批逐欄一致，首批不限時，補單恢復倒數', () => {
@@ -113,7 +113,7 @@ test("R39 整合：預告固定為開放時那一組、未解鎖作物註明等�
   const G2 = require("../src/game.js"), S2 = require("../src/state.js");
   const st = S2.defaultState(1_900_000_000_000);
   const preview = G2.previewMarketOrders(st, 1_900_000_000_000);
-  assert.deepEqual(preview.map((o) => o.id), ["beginner_wheat_4", "beginner_wheat_2", "beginner_carrot_2"]); // R57：預告與首批都把 4 份大單排第一
+  assert.deepEqual(preview.map((o) => o.id), ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]);
   assert.match(preview.find((o) => o.id === "beginner_carrot_2").lockNote, /^Lv 2 解鎖胡蘿蔔種子$/);
   const ui = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8");
   assert.match(ui, /（含加成 \+\$\{fmtNum\(pay\.coins - o\.rewardCoins\)\}）/);

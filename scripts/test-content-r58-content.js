@@ -137,7 +137,7 @@ test("新料理 2 道可用前期作物做、享用後效果生效且會過期",
   assert.equal(G.orderPayout(s, order, later).coins, basePay);
   assert.equal(G.effectiveGrowMs(s, "wheat", later), baseGrow);
   assert.equal(A.eatMeal(s, "wheat_carrot_pancake", later).reason, "missing_resources");
-  assert.equal(A.eatMeal(s, "rustic_bread", T0).reason, "not_edible");
+  assert.equal(A.eatMeal(s, "rustic_bread", T0).reason, "missing_resources");
 });
 
 console.log("\nR58 content tests: " + passed + " passed, " + failed + " failed.");

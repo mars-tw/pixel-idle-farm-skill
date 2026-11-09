@@ -114,6 +114,10 @@
     const seconds = total % 60;
     return `${minutes} 分 ${String(seconds).padStart(2, "0")} 秒`;
   }
+  function fmtBuffCountdown(ms) {
+    const total = Math.max(0, Math.ceil(ms / 1000));
+    return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+  }
   function fmtNum(n) {
     if (n < 1000) return "" + n;
     if (n < 1e6) return (n / 1000).toFixed(n < 1e4 ? 1 : 0) + "k";
@@ -733,7 +737,7 @@
     const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
     const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
     const mealBuffs = window.AdventureAPI && window.AdventureAPI.activeBuffs ? window.AdventureAPI.activeBuffs(state, now()) : null;
-    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 25%"><span class="ic">🥞</span><span class="sub">${fmtTime(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 20%"><span class="ic">🥘</span><span class="sub">${fmtTime(mealBuffs.orderRemainingMs)}</span></div>` : ""}` : "";
+    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 25%"><span class="ic">🍞</span><span class="sub">麥餅・成長 +25%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 20%"><span class="ic">🥘</span><span class="sub">燉鍋・訂單 +20%・${fmtBuffCountdown(mealBuffs.orderRemainingMs)}</span></div>` : ""}` : "";
     $("resBar").innerHTML = `
       <div class="res coins">${uiIcon("system_coin")} ${fmtNum(state.coins)}</div>
       <div class="res level">${uiIcon("system_xp")}
@@ -1255,6 +1259,7 @@
           <div class="o-reward">🪙 ${fmtNum(pay.coins)}${pay.coins > o.rewardCoins ? `<small class="o-bonus">（含加成 +${fmtNum(pay.coins - o.rewardCoins)}）</small>` : ""} · <span class="xp">⭐ ${pay.xp}</span></div>
           <div class="o-meta">${o.firstBatch ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}`}</div>
           ${storyImpact && storyImpact.storyNeed > 0 && can ? `<div class="o-story-impact${storyImpact.risky ? " risky" : ""}" data-audit="order-story-impact">${escapeHtml(storyImpact.text)}</div>` : ""}
+          ${G.orderPriorityAdvice && G.orderPriorityAdvice(state, o) ? `<div class="o-story-impact" data-audit="order-priority-advice">${escapeHtml(G.orderPriorityAdvice(state, o))}</div>` : ""}
           ${!can && G.orderLockText && G.orderLockText(state, o) ? `<div class="o-lock" data-audit="order-lock">🔒 ${escapeHtml(G.orderLockText(state, o))}，升級後再種</div>` : ""}
         </div>
         <div class="o-actions">
@@ -1419,7 +1424,7 @@
       const cardInfo = G.upgradeCardInfo(state, key);
       const band = upgradeBand(key, next);
       const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
-      const bandLabel = band === 0 && G.upgradeCardInfo && G.upgradeCardInfo(state, key).reserveRisk ? "先留種子錢" : ["現在買得起", "差一點", "長期目標", "已滿級"][band]; // R52：會花到買不起種子時不寫「現在買得起」
+      const bandLabel = band === 0 && G.upgradeCardInfo && G.upgradeCardInfo(state, key).reserveRisk ? "留種提醒" : ["現在買得起", "差一點", "長期目標", "已滿級"][band];
       const shortfall = G.upgradeShortfall(state, key);
       const nextStep = next ? cardInfo.nextStep : "";
       const el = document.createElement("div");
@@ -1432,7 +1437,7 @@
           <div class="u-desc">${escapeHtml(cardInfo.effect)}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${escapeHtml(nextStep)}</span>` : ""}</div>
         </div>
         ${next
-          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) && !cardInfo.reserveRisk ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">先留種子錢</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，買一輪種子要 ${fmtNum(cardInfo.roundSeedCost)} 金。</div>` : ""}`
+          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">留種提醒</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">提醒：升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，買一輪種子要 ${fmtNum(cardInfo.roundSeedCost)} 金；仍可開墾。</div>` : ""}`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {
@@ -1492,9 +1497,10 @@
   function questRow(id, completed, cur) {
     const q = window.QUESTS[id]; const done = !!completed[id]; const active = cur && cur.id === id;
     const step = questStepProgress(id, completed);
+    const title = id === "first_delivery" && done ? "已交給老農班伯" : q.title;
     return `<div class="quest ${done ? "done" : ""} ${active ? "active" : ""}">
       <span class="qmark">${done ? "✓" : active ? "➤" : "□"}</span>
-      <span class="qtext"><span>${q.title}</span><em>${step.done}/${step.total}</em></span></div>`;
+      <span class="qtext"><span>${title}</span><em>${step.done}/${step.total}</em></span></div>`;
   }
   function currentQuestFirst(ids, cur) {
     const rows = (ids || []).slice();
@@ -1746,7 +1752,7 @@
     if (cur.id === "intro_reopen_farm") return "主動作：點金色箭頭旁的告示牌，走過去閱讀。";
     if (cur.id === "plant_wheat") return "主動作：選手工具，點空農土種下小麥。";
     if (cur.id === "first_water") return "主動作：走到水井，或選澆水工具點麥田。";
-    if (cur.id === "first_harvest") return `主動作：老農班伯的開市小麥（已收 ${Math.min(2, (state.storage.items && state.storage.items.wheat) || 0)}/2）。`;
+    if (cur.id === "first_harvest") return `主動作：交給老農班伯 2 份小麥（已收 ${Math.min(2, (state.storage.items && state.storage.items.wheat) || 0)}/2）。`;
     if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給老農班伯。";
     if (cur.id === "clear_old_path") return "主動作：選清除工具，點金色箭頭標示的樹樁。";
     if (cur.id === "repair_bridge") {
@@ -4188,7 +4194,11 @@
         const chk = G.canRequestFrom(state, tile.npc, now());
         if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
       }
+      const storyChoice = window.AdventureAPI && window.AdventureAPI.mainStoryChoice ? window.AdventureAPI.mainStoryChoice(state, tile.npc, now()) : null;
+      const recall = window.AdventureAPI && window.AdventureAPI.mainStoryRecall ? window.AdventureAPI.mainStoryRecall(state, tile.npc, now()) : "";
       const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
+      if (storyChoice && storyChoice.available) { d.line = storyChoice.lines.join(" "); d.storyChoice = storyChoice; }
+      else if (recall) d.line = recall;
       if (window.FarmWorld && d) d.line = window.FarmWorld.dialogue(tile.npc, d.line);
       if (window.AdventureAPI) window.AdventureAPI.record(state, { type: "talk", npcId: tile.npc }, now());
       if (window.FarmDaily) window.FarmDaily.record(state, "talk", 1, now());
@@ -4210,11 +4220,16 @@
     const old = worldEl.querySelector(".npc-bubble"); if (old) old.remove();
     const b = document.createElement("div");
     b.className = "npc-bubble"; b.dataset.audit = "dialogue-bubble"; b.dataset.npc = d.id;
-    b.innerHTML = `<div class="nb-name">${d.name}</div><div class="nb-line">${d.line}</div>`;
+    b.innerHTML = `<div class="nb-name">${d.name}</div><div class="nb-line">${d.line}</div>${d.storyChoice ? `<div class="r60a-story-choices">${d.storyChoice.options.map((option) => `<button type="button" data-r60-story-choice="${escapeHtml(option.id)}"><b>${escapeHtml(option.label)}</b><small>${escapeHtml(option.result)}</small></button>`).join("")}</div>` : ""}`;
     b.style.left = pxv((tile.x + 0.5) * TILE); b.style.top = pxv(npcIndicatorTop(tile));
     worldEl.appendChild(b);
     if (bubbleTimer) clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(() => { const e = worldEl && worldEl.querySelector(".npc-bubble"); if (e) e.remove(); }, 2800);
+    b.querySelectorAll("[data-r60-story-choice]").forEach((button) => { button.onclick = () => {
+      const result = window.AdventureAPI.resolveMainStoryChoice(state, d.id, button.dataset.r60StoryChoice, now());
+      toast(result.message); if (result.ok) { d.line = result.journalText; delete d.storyChoice; pushDialogueLog({ name: d.name, line: result.journalText }); afterChange(true); }
+      const old = worldEl && worldEl.querySelector(".npc-bubble"); if (old) old.remove();
+    }; });
+    bubbleTimer = setTimeout(() => { const e = worldEl && worldEl.querySelector(".npc-bubble"); if (e) e.remove(); }, d.storyChoice ? 12000 : 2800);
   }
   function pushDialogueLog(d) {
     if (!d) return;

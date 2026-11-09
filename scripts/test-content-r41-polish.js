@@ -15,7 +15,7 @@ test("大型面板開啟時任務卡改用收合摘要並保留行動按鈕", ()
   assert.match(css, /#questDock:not\(\.quest-collapsed\) \{ display: flex !important;[^}]*max-height: none !important/);
 });
 test("升級按鈕寫出價格，警告寫出升級後餘額", () => {
-  assert.match(ui, /金<small class="u-confirm-note">先留種子錢<\/small>/);
+  assert.match(ui, /金<small class="u-confirm-note">留種提醒<\/small>/);
   assert.match(ui, /升級後剩 \$\{fmtNum\(Math\.max\(0, state\.coins - next\.cost\)\)\} 金/);
 });
 test("里程碑卡在桌面避開第二列資源、R41 樣式已載入並快取", () => {

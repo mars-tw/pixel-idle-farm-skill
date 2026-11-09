@@ -38,7 +38,7 @@ test("A3 金幣與物品增減產生合併後的 HUD 飄字事件", () => {
   const ui = source("src/ui.js");
   assert.match(ui, /resourceDeltaEvents\(resourceHudSnapshot, nextResourceSnapshot\)\.forEach\(showResourceDelta\)/);
   assert.match(ui, /dataset\.audit = "resource-delta"/);
-  assert.match(ui, /data-audit="upgrade-spend-all">升級後剩 \$\{fmtNum\(Math\.max\(0, state\.coins - next\.cost\)\)\} 金，買一輪種子要 /); // R44：句子縮短，避免最後幾字被擠到獨立一行；R41：同時寫出升級後餘額
+  assert.match(ui, /data-audit="upgrade-spend-all">提醒：升級後剩 \$\{fmtNum\(Math\.max\(0, state\.coins - next\.cost\)\)\} 金，買一輪種子要 /);
   assert.match(ui, /cardInfo\.reserveRisk \? "ghost" : "buy"/);
 });
 

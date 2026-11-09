@@ -1,4 +1,4 @@
-// R46：花到買不起種子的升級直接停用並寫原因、手記已交付任務標「已完成」、章節進度標「本章任務」、待選路線時有「選擇下一步」入口、手機訂單底部預留空間。
+// R60：買得起即可升級，留種改成提醒；其餘 R46 守門維持。
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -6,9 +6,9 @@ const read = (f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
 let passed = 0;
 function test(name, fn) { fn(); passed++; console.log("PASS " + name); }
 const ui = read("src/ui.js"), world = read("src/world-ui.js"), css = read("src/content-r42.css");
-test("升級會讓金幣不夠買一輪種子時，按鈕停用並寫「先留種子錢」", () => {
-  assert.match(ui, /\$\{G\.canBuyUpgrade\(state, key\) && !cardInfo\.reserveRisk \? "" : "disabled"\}/);
-  assert.match(ui, /先留種子錢/);
+test("升級買得起即可按，留種改成提醒", () => {
+  assert.match(ui, /\$\{G\.canBuyUpgrade\(state, key\) \? "" : "disabled"\}/);
+  assert.match(ui, /留種提醒/);
 });
 test("手記已交付任務標「已完成」，章節進度留在故事手記", () => {
   assert.match(world, /claimed: "已完成" \}\[q\.status\]/);

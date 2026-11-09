@@ -122,3 +122,7 @@ body:has(#buildWheel:not([hidden])) #questDock .world-objective-title .qp-step {
   box-shadow: none !important;
   cursor: not-allowed;
 }
+/* R60A：主線二選一只調整新增的對話選項，不碰 R60B 手札與手機版面。 */
+.r60a-story-choices { display:grid; gap:6px; margin-top:8px; }
+.r60a-story-choices button { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:7px 9px; border:1px solid rgba(255,255,255,.45); border-radius:8px; background:#fff8df; color:#49351f; text-align:left; }
+.r60a-story-choices button small { color:#735b38; white-space:nowrap; }
