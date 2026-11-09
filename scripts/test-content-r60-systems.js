@@ -20,7 +20,7 @@ test("1 主線交付前後只有一種狀態說法", () => {
   assert.equal(G.marketPreviewAction(state).label, "交給老農班伯 2 份小麥（已收 2/2）");
   state.adventure.claimed.c1_first_harvest = true;
   goal = A.earlyGoals(state, T0).goals[0];
-  assert.equal(goal.name, "✓ 已交給老農班伯");
+  assert.equal(goal.name, "已交給老農班伯"); assert.equal(goal.complete, true); // 同步：打勾由任務卡樣板依 complete 加上，名稱本身不再含 ✓（避免畫面出現 ✓✓）
   assert.doesNotMatch(goal.name, /已收|\/2/);
   assert.equal(G.marketPreviewAction(state).label, "✓ 已交給老農班伯");
 });
@@ -30,11 +30,11 @@ test("2 麥餅有三分鐘增益、HUD 寫名稱效果分秒，晚餐缺口導�
   const bread = A.recipes(state).find((r) => r.id === "rustic_bread");
   assert.equal(bread.effect.mul, 0.75); assert.equal(bread.effect.durationMs, 180000); assert.equal(bread.effect.durationText, "3 分鐘");
   state.storage.items.wheat = 2; assert.equal(A.cook(state, "rustic_bread", T0).ok, true); assert.equal(A.eatMeal(state, "rustic_bread", T0).ok, true);
-  assert.equal(A.activeBuffs(state, T0 + 1000).growthRemainingMs, 179000);
+  assert.equal(A.activeBuffs(state, T0 + 1000).growthRemainingMs, 179000); const buff = A.activeBuffs(state, T0 + 1000); assert.equal(buff.growthMeal, "農家麥餅"); assert.equal(buff.growthPct, 25); // 整合同步：HUD 改寫實際吃下的料理名稱，不再固定寫「麥餅」
   state.storage.items.wheat = 1;
   assert.deepEqual(A.firstMealTask(state, T0 + 1), { available: true, missing: 1, target: "field", text: "做一份自己的晚餐：還差 1 份小麥，先回田裡收成。" });
   const ui = fs.readFileSync("src/ui.js", "utf8");
-  assert.match(ui, /麥餅・成長 \+25%・\$\{fmtBuffCountdown\(mealBuffs\.growthRemainingMs\)\}/);
+  assert.match(ui, /${mealBuffs.growthMeal || "料理"}・成長 +${mealBuffs.growthPct || 25}%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}/);
   const world = fs.readFileSync("src/world-ui.js", "utf8");
   assert.match(world, /送給\$\{esc\(r\.share\.who\)\}/); assert.doesNotMatch(world, /不提供限時增益/);
 });

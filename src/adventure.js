@@ -322,8 +322,9 @@
     const r58buffRaw = object(r58raw.buffs) ? r58raw.buffs : {};
     const cleanBuff = (value, kind) => {
       if (!object(value) || !Number.isSafeInteger(value.until) || value.until < 0) return null;
-      if (kind === "growth") return Number.isFinite(value.mul) && value.mul > 0 && value.mul < 1 ? { until: value.until, mul: value.mul } : null;
-      return Number.isFinite(value.bonus) && value.bonus > 0 && value.bonus <= 1 ? { until: value.until, bonus: value.bonus } : null;
+      const meal = typeof value.meal === "string" && RECIPES.some((x) => x.id === value.meal) ? { meal: value.meal } : {}; // R60：保留吃下的料理，HUD 才能寫名稱
+      if (kind === "growth") return Number.isFinite(value.mul) && value.mul > 0 && value.mul < 1 ? Object.assign({ until: value.until, mul: value.mul }, meal) : null;
+      return Number.isFinite(value.bonus) && value.bonus > 0 && value.bonus <= 1 ? Object.assign({ until: value.until, bonus: value.bonus }, meal) : null;
     };
     let r58active = null;
     if (object(r58raw.activeEvent) && R58_EVENTS.some((e) => e.id === r58raw.activeEvent.id)
@@ -399,7 +400,7 @@
     const available = claimed(a, "c1_homecoming") && !claimed(a, "c1_first_meal");
     const harvest = quests(state, now).find((q) => q.id === "c1_first_harvest");
     const goals = [
-      { id: "harvest", name: claimed(a, "c1_first_harvest") ? "✓ 已交給老農班伯" : `交給老農班伯 2 份小麥（已收 ${Math.min(2, (state.storage.items || {}).wheat || 0)}/2）`, detail: claimed(a, "c1_first_harvest") ? "市集已開放" : "交付後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: claimed(a, "c1_first_harvest"), canClaim: !!(harvest && harvest.canClaim), target: "elder" },
+      { id: "harvest", name: claimed(a, "c1_first_harvest") ? "已交給老農班伯" : `交給老農班伯 2 份小麥（已收 ${Math.min(2, (state.storage.items || {}).wheat || 0)}/2）`, detail: claimed(a, "c1_first_harvest") ? "市集已開放" : "交付後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: claimed(a, "c1_first_harvest"), canClaim: !!(harvest && harvest.canClaim), target: "elder" },
       { id: "dock", name: "修好河畔釣台", detail: `木料 ${(state.materials || {}).wood || 0}/4・石材 ${(state.materials || {}).stone || 0}/2`, rewardText: "開放釣魚", complete: restored(a, "fishing_dock"), target: "fishing_dock", actionLabel: ((state.materials || {}).wood || 0) >= 4 && ((state.materials || {}).stone || 0) >= 2 ? "去修釣台" : "" },
       { id: "market", name: "跟蘿拉打招呼", detail: "蘿拉在農場東側的市集攤位", rewardText: "5 金", complete: a.earlyGoals.marketPreview === true, target: "merchant" },
     ];
@@ -1052,7 +1053,7 @@
     const order = buffs.order && buffs.order.until > t ? buffs.order : null;
     return { growthMul: growth ? growth.mul : 1, orderBonus: order ? order.bonus : 0,
       growthUntil: growth ? growth.until : 0, orderUntil: order ? order.until : 0,
-      growthRemainingMs: growth ? growth.until - t : 0, orderRemainingMs: order ? order.until - t : 0 };
+      growthMeal: growth && growth.meal ? (RECIPES.find((x) => x.id === growth.meal) || {}).name || "" : "", orderMeal: order && order.meal ? (RECIPES.find((x) => x.id === order.meal) || {}).name || "" : "", growthPct: growth ? Math.round((1 - growth.mul) * 100) : 0, orderPct: order ? Math.round(order.bonus * 100) : 0, growthRemainingMs: growth ? growth.until - t : 0, orderRemainingMs: order ? order.until - t : 0 };
   }
   function eatMeal(state, id, now) {
     const r = RECIPES.find((entry) => entry.id === id);
@@ -1062,8 +1063,8 @@
     if ((state.adventure.meals[id] || 0) < 1) return fail("missing_resources", "餐籃裡還沒有這道料理，先去灶台做一份。");
     state.adventure.meals[id]--;
     const t = at(state, now); const until = t + r.effect.durationMs;
-    if (r.effect.kind === "growth") state.adventure.r58.buffs.growth = { until, mul: r.effect.mul };
-    else state.adventure.r58.buffs.order = { until, bonus: r.effect.bonus };
+    if (r.effect.kind === "growth") state.adventure.r58.buffs.growth = { until, mul: r.effect.mul, meal: r.id };
+    else state.adventure.r58.buffs.order = { until, bonus: r.effect.bonus, meal: r.id };
     return ok(r.name + "享用完了。" + r.effect.summary, { id, effect: copy(r.effect), until, buffs: activeBuffs(state, now) });
   }
   function firstMealTask(state, now) {

@@ -76,7 +76,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r60-20261109-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r60-20261109-2";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -737,7 +737,7 @@
     const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
     const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
     const mealBuffs = window.AdventureAPI && window.AdventureAPI.activeBuffs ? window.AdventureAPI.activeBuffs(state, now()) : null;
-    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 25%"><span class="ic">🍞</span><span class="sub">麥餅・成長 +25%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 20%"><span class="ic">🥘</span><span class="sub">燉鍋・訂單 +20%・${fmtBuffCountdown(mealBuffs.orderRemainingMs)}</span></div>` : ""}` : "";
+    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 25%"><span class="ic">🍞</span><span class="sub">${mealBuffs.growthMeal || "料理"}・成長 +${mealBuffs.growthPct || 25}%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 20%"><span class="ic">🥘</span><span class="sub">${mealBuffs.orderMeal || "料理"}・訂單 +${mealBuffs.orderPct || 20}%・${fmtBuffCountdown(mealBuffs.orderRemainingMs)}</span></div>` : ""}` : "";
     $("resBar").innerHTML = `
       <div class="res coins">${uiIcon("system_coin")} ${fmtNum(state.coins)}</div>
       <div class="res level">${uiIcon("system_xp")}
