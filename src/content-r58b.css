@@ -222,3 +222,78 @@ body:has(#buildWheel:not([hidden])) #questDock .world-objective-title .qp-step {
 .r61b-gift-list { display: grid; gap: 6px; }
 .r61b-story-line { font-size: 15px; line-height: 1.7; white-space: pre-wrap; }
 .r61b-story-step { font-size: 12px; opacity: .75; }
+
+/* R62B（第 6 項）：田格陽光倒數改成淡黃小標籤「☀ 剩餘秒數」，跟作物進度條分開放，不互相重疊。
+   只改標示樣式與位置，不改陽光規則與既有文字；空土格沒有作物進度條，只會看到這個陽光標籤。 */
+.r40-sun-tile .r40-sun-secs {
+  left: 50%; right: auto; top: 2px; transform: translateX(-50%);
+  padding: 1px 7px; border: 1px solid #b3872f; border-radius: 999px;
+  background: #ffe9a8; color: #4a3200; white-space: nowrap;
+}
+.r40-sun-tile .r40-sun-secs::before { content: "☀ "; }
+.r40-sun-tile .r40-sun-icon { display: none; }
+.r40-sun-tile .r40-sun-bar { top: 24px; bottom: auto; left: 8px; right: 8px; }
+
+/* R62B（第 7 項）：主線二選一泡泡出現時，泡泡在名牌之上、選項可以點，該段時間先藏起附近名牌，
+   讓選項文字完整可讀；泡泡關掉後名牌照常顯示。 */
+.npc-bubble:has(.r60a-story-choices) { z-index: 9860; pointer-events: auto; }
+.npc-bubble .r60a-story-choices button { pointer-events: auto; }
+body:has(.npc-bubble .r60a-story-choices) .npc-nameplate-near,
+body:has(.npc-bubble .r60a-story-choices) .npc-footname,
+body:has(.npc-bubble .r60a-story-choices) .qmarker .npc-nameplate { visibility: hidden !important; }
+
+/* R62B（第 8 項）：收穫祭進行中（或下一場預告）時，橫幅獨立一列放在任務卡最上方、寬度跟任務卡一樣寬，
+   任務卡內容改成直向排列，不再被擠進窄欄；有橫幅時任務卡不被收合高度裁掉。 */
+#questDock:has(.r61a-festival-banner) {
+  display: flex !important; flex-direction: column; align-items: stretch;
+}
+#questDock.quest-collapsed:has(.r61a-festival-banner),
+#questDock.quest-auto-collapsed:has(.r61a-festival-banner),
+#questDock.quest-target-collapsed:has(.r61a-festival-banner) {
+  max-height: none !important; overflow: visible !important;
+}
+#questDock .r61a-festival-banner {
+  grid-column: 1 / -1; order: -1; flex: 0 0 auto;
+  width: 100%; max-width: 100%; box-sizing: border-box; margin: 0 0 7px;
+}
+#questDock:has(.r61a-festival-banner) .world-objective-title,
+#questDock:has(.r61a-festival-banner) .world-objective-routes,
+#questDock:has(.r61a-festival-banner) .world-objective-bottom,
+#questDock:has(.r61a-festival-banner) .world-objective-hint,
+#questDock:has(.r61a-festival-banner) .world-meter {
+  width: 100%; max-width: 100%; box-sizing: border-box; grid-column: 1 / -1;
+}
+
+/* R62B（第 9 項）：手札（故事面板）標題列的「鄰居好感」入口，點了直接跳到鄰居區塊，不佔清單高度；
+   鄰居區塊捲動定位時留一點上方空隙，不貼住面板標題。 */
+.r62b-neighbor-entry {
+  box-sizing: border-box; border: 2px solid #8b5e34; border-radius: 8px;
+  background: #ffcf64; color: #5a3d00; font-weight: 800;
+  cursor: pointer; box-shadow: 0 2px 0 rgba(90, 58, 26, .45);
+}
+.side-pane[data-pane="story"] .pane-head .r62b-neighbor-entry {
+  display: inline-block; width: auto; min-height: 36px; margin-left: 8px;
+  padding: 4px 10px; font-size: 13px; vertical-align: middle;
+}
+.r62b-neighbor-entry-wrap { margin: 0 0 10px; }
+.r62b-neighbor-entry-wrap .r62b-neighbor-entry {
+  display: block; width: 100%; min-height: 48px; padding: 8px 12px;
+  font-size: 15px; text-align: left;
+}
+.r61b-neighbors { scroll-margin-top: 8px; }
+
+/* R62B（第 10 項）：手機直式開場（彈窗開著）時，頂部標誌與資源列完整留在畫面內：
+   標誌不被擠歪、資源列裝不下就換行，不往右切出去；頂部高度保留安全區。 */
+@media (max-width: 859px) and (min-height: 521px) {
+  header {
+    top: max(10px, env(safe-area-inset-top)) !important;
+    box-sizing: border-box; max-width: 100vw;
+  }
+  header .title { flex: 0 0 auto; min-width: 0; box-sizing: border-box; }
+  header .farm-logo {
+    width: auto; max-width: 128px; max-height: 40px; object-fit: contain;
+  }
+  header .res-bar, #resBar {
+    flex: 1 1 0; flex-wrap: wrap; justify-content: flex-end; min-width: 0; box-sizing: border-box;
+  }
+}
