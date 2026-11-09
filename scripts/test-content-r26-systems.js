@@ -113,8 +113,10 @@ test('第一次三格小麥收成足以完成班伯主線，市集不再重複�
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
   assert.ok(orders.every((row) => Object.keys(row.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 4)), true);
-  assert.equal(G.orderStoryImpact(state, orders.find((row) => row.wants.wheat === 4)).text, '交付後剩 0 份・「老農班伯的開市小麥」還需 2 份');
+  // R60 同步：首批改為只有一張 2 份小麥單（計畫第 3 項），4 份大單已移除；交 2 份後仍剩 2 份夠做第一餐，不吃到保留量。
+  assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 2)), false);
+  assert.equal(G.orderConsumesStoryReserve(state, { id: "probe_wheat_4", wants: { wheat: 4 } }), true);
+  assert.equal(G.orderStoryImpact(state, orders.find((row) => row.wants.wheat === 2)).text, '交付後剩 2 份・「回家的第一餐」還需 2 份');
   assert.equal(state.storage.items.wheat, 4);
 });
 

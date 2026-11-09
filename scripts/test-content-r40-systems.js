@@ -27,13 +27,13 @@ function marketState() {
   return state;
 }
 
-test('訂單卡能計算交付後庫存與主線保留量', () => {
+test('訂單卡能計算交付後庫存與主線保留量', () => { // R60 同步：已交班伯後保留的 2 份小麥是做「回家的第一餐」麥餅，任務名改正，數字不變
   const state = marketState();
   const small = { id: 'beginner_wheat_2', wants: { wheat: 2 } };
   const large = { id: 'beginner_wheat_4', wants: { wheat: 4 } };
-  assert.equal(G.orderStoryImpact(state, small).text, '交付後剩 2 份・「老農班伯的開市小麥」還需 2 份');
+  assert.equal(G.orderStoryImpact(state, small).text, '交付後剩 2 份・「回家的第一餐」還需 2 份');
   assert.equal(G.orderStoryImpact(state, small).risky, false);
-  assert.equal(G.orderStoryImpact(state, large).text, '交付後剩 0 份・「老農班伯的開市小麥」還需 2 份');
+  assert.equal(G.orderStoryImpact(state, large).text, '交付後剩 0 份・「回家的第一餐」還需 2 份');
   assert.equal(G.orderStoryImpact(state, large).risky, true);
 });
 

@@ -24,7 +24,7 @@ test("1 主線所有入口共用老農班伯的開市小麥 2 份進度", () => 
   assert.deepEqual(G.marketPreviewAction(state), { harvested: 0, target: "field", label: "交給老農班伯 2 份小麥（已收 0/2）" });
   state.storage.items.wheat = 2;
   assert.deepEqual(G.marketPreviewAction(state), { harvested: 2, target: "elder", label: "交給老農班伯 2 份小麥（已收 2/2）" });
-  assert.match(fs.readFileSync(path.join(__dirname, "../src/game.js"), "utf8"), /「老農班伯的開市小麥」還需/);
+  assert.match(fs.readFileSync(path.join(__dirname, "../src/game.js"), "utf8"), /"老農班伯的開市小麥"}」還需/); // R60 同步：交付前仍寫班伯任務名，交付後改寫「回家的第一餐」，故改比對樣板中的任務名
 });
 
 test("2 四種事件的每個選項都結算、寫日誌並回收選擇", () => {

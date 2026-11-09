@@ -28,8 +28,12 @@ test("A1 市集第一批訂單依已解鎖品項產生差異", () => {
   assert.ok(itemIds.length >= 2, "第一批至少有兩種已解鎖作物");
   assert.ok(itemIds.every((id) => C.CROPS[id] && C.CROPS[id].unlockLevel <= state.level));
   assert.ok(orders.every((order) => order.firstBatch === true && order.expiresAt === null), "首批訂單必須不限時");
-  const wheat = orders.filter((order) => order.wants.wheat).sort((a, b) => a.wants.wheat - b.wants.wheat);
-  assert.ok(wheat.length >= 2 && wheat[1].wants.wheat > wheat[0].wants.wheat);
+  // R60 同步：首批改為一張小麥單＋兩張胡蘿蔔單（計畫第 3 項，避免搶小麥），「同作物需求多者獎勵高」改用有兩張單的作物檢查，規則不放寬。
+  const pairCrop = ["wheat", "carrot"].find((id) => orders.filter((order) => order.wants[id]).length >= 2);
+  assert.ok(pairCrop, "首批至少一種作物有兩張需求不同的訂單");
+  const wheat = orders.filter((order) => order.wants[pairCrop]).sort((a, b) => a.wants[pairCrop] - b.wants[pairCrop]);
+  assert.ok(wheat.length >= 2 && wheat[1].wants[pairCrop] > wheat[0].wants[pairCrop]);
+  assert.ok(orders.filter((order) => order.wants.wheat).length <= 1, "R60：首批最多一張小麥單");
   assert.ok(wheat[1].rewardCoins > wheat[0].rewardCoins, "同作物需求較多時，總獎勵必須更高");
   const economicRows = orders.map((order) => ({
     value: Object.entries(order.wants).reduce((sum, [id, qty]) => sum + C.CROPS[id].sellValue * qty, 0),

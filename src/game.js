@@ -936,7 +936,7 @@
       remaining: relevant.remaining,
       storyNeed: relevant.storyNeed,
       risky: parts.some((part) => part.risky),
-      text: `交付後剩 ${relevant.remaining} 份・「老農班伯的開市小麥」還需 ${relevant.storyNeed} 份`,
+      text: `交付後剩 ${relevant.remaining} 份・「${state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest ? "回家的第一餐" : "老農班伯的開市小麥"}」還需 ${relevant.storyNeed} 份`, // R60：交付開市小麥後保留的 2 份是做第一餐的麥餅，寫對任務名
       warning: parts.some((part) => part.risky) ? "交付後主線物資會不足，還要再收成。" : "",
     };
   }
