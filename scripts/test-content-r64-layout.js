@@ -105,7 +105,7 @@ const HELP = `
         const title = box.querySelector('.world-objective-title');
         const progress = box.querySelector('[data-audit="quest-progress"]');
         const routes = box.querySelector('.world-objective-routes');
-        const next = box.querySelector('.r63a-main-next');
+        const next = box.querySelector('.r67a-now');
         return {
           ih: innerHeight, dock: ro(box),
           dockScrollH: box.scrollHeight, dockClientH: box.clientHeight,
@@ -124,11 +124,12 @@ const HELP = `
         assert.match(dock.progress, /^\d+\/3$/, `${tag} 第 8 項：進度應完整顯示（實際「${dock.progress}」）`);
         assert.ok(dock.title.sw <= dock.title.cw + 1, `${tag} 第 8 項：標題不應被截斷（捲動寬 ${dock.title.sw}／可視寬 ${dock.title.cw}「${dock.title.text}」）`);
         assert.ok(dock.routes, `${tag} 第 8 項：應有今日三件事清單`);
-        assert.ok(dock.next, `${tag} 第 8 項：應有主線下一步`);
-        assert.ok(dock.next.r.top >= dock.routes.bottom - 2, `${tag} 第 8 項：主線下一步應在三件事下方（下一步頂 ${Math.round(dock.next.r.top)}／清單底 ${Math.round(dock.routes.bottom)}）`);
+        assert.ok(dock.next, `${tag} 第 8 項：應有現在做`);
+        if (dock.collapsed) assert.equal(dock.routes.height, 0, `${tag} 第 8 項：收合時第三層清單應完整收起`);
+        else assert.ok(dock.next.r.bottom <= dock.routes.top + 2, `${tag} 第 8 項：現在做應在三件清單上方（現在做底 ${Math.round(dock.next.r.bottom)}／清單頂 ${Math.round(dock.routes.top)}）`);
         assert.ok(dock.next.r.width >= dock.dock.width * 0.85, `${tag} 第 8 項：主線下一步應整行寬（${Math.round(dock.next.r.width)}／卡寬 ${Math.round(dock.dock.width)}）`);
         assert.ok(dock.next.r.left >= dock.dock.left - 1 && dock.next.r.right <= dock.dock.right + 1, `${tag} 第 8 項：主線下一步不可超出任務卡`);
-        console.log(`OK ${tag} 第 8 項：桌面標題完整「${dock.title.text}」、主線下一步整行在三件事下方`);
+        console.log(`OK ${tag} 第 8 項：桌面標題完整「${dock.title.text}」、「現在做」整行在三件清單上方`);
       } else {
         /* 手機展開：最多 50% 畫面高，超過內部捲動 */
         assert.equal(dock.collapsed, false, `${tag} 第 8 項：手機任務卡應已展開`);
