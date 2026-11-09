@@ -873,7 +873,8 @@
     const panel = (typeof body.closest === "function" ? body.closest(".side-panel") : null) || body.parentElement;
     if (!panel) return;
     if (panelScrollHintEl && panelScrollHintEl.parentElement && panelScrollHintEl.parentElement !== body) { panelScrollHintEl.remove(); panelScrollHintEl = null; }
-    const pane = body.querySelector ? body.querySelector(".side-pane.sel") : null; const hasMore = !!(pane && pane.querySelector && pane.querySelector(".r32-show-more, .r60-show-more")); const scrollable = body.scrollHeight > body.clientHeight + 2; const atBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 2; if (!scrollable || atBottom || hasMore) { if (panelScrollHintEl) { panelScrollHintEl.remove(); panelScrollHintEl = null; } return; } if (!panelScrollHintEl) { panelScrollHintEl = document.createElement("div"); panelScrollHintEl.className = "panel-scroll-hint r55-scroll-hint"; panelScrollHintEl.dataset.audit = "panel-scroll-hint"; panelScrollHintEl.setAttribute("aria-hidden", "true"); panelScrollHintEl.innerHTML = "往下還有 <span aria-hidden=\"true\">⌄</span>"; } if (panelScrollHintEl.parentElement !== body) body.appendChild(panelScrollHintEl); panelScrollHintEl.hidden = false;
+    const pane = body.querySelector ? body.querySelector(".side-pane.sel") : null; const hasMore = !!(pane && pane.querySelector && pane.querySelector(".r32-show-more, .r60-show-more")); const scrollable = body.scrollHeight > body.clientHeight + 2; const atBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 2; if (!scrollable || atBottom || hasMore) { if (panelScrollHintEl) { panelScrollHintEl.remove(); panelScrollHintEl = null; } return; } if (!panelScrollHintEl) { panelScrollHintEl = document.createElement("div"); panelScrollHintEl.className = "panel-scroll-hint r55-scroll-hint"; panelScrollHintEl.dataset.audit = "panel-scroll-hint"; panelScrollHintEl.setAttribute("aria-hidden", "true"); panelScrollHintEl.innerHTML = "往下還有 <span aria-hidden=\"true\">⌄</span>"; } if (panelScrollHintEl.parentElement !== body) body.appendChild(panelScrollHintEl); panelScrollHintEl.hidden = false; // R63B（第 9 項）：手札（故事分頁）顯示下方還剩幾項
+    if (pane && pane.dataset && pane.dataset.pane === "story" && typeof body.getBoundingClientRect === "function") { const br = body.getBoundingClientRect(); const cards = [...pane.querySelectorAll(".adventure-quest, .r58-card, .story-card, .r61b-card, .quest")]; const below = cards.filter((c) => { const r = c.getBoundingClientRect(); return r.height > 0 && r.top >= br.bottom - 2; }).length; const hiddenN = pane.querySelectorAll(".r32-panel-hidden").length; const n = below + hiddenN; const label = "往下還有 " + n + " 項 ⌄"; if (n > 0 && panelScrollHintEl.textContent !== label) panelScrollHintEl.textContent = label; } else if (/往下還有 \d+ 項/.test(panelScrollHintEl.textContent || "")) panelScrollHintEl.innerHTML = "往下還有 <span aria-hidden=\"true\">⌄</span>";
     return;
   }
   function setupPanelScrollHint() {
@@ -889,7 +890,7 @@
   function setupQuestDockCollapse() {
     const box = $("questDock"); if (!box) return;
     let wasShort = false;
-    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; const mobile = typeof window !== "undefined" && (window.innerWidth <= 859 || (window.matchMedia && window.matchMedia("(any-pointer: coarse) and (max-height: 480px)").matches)); const freeChoice = box.dataset.quest === "early_free_choice"; if (!questDockUserToggled && mobile && !freeChoice) box.classList.add("quest-auto-collapsed"); if (!questDockUserToggled && freeChoice) box.classList.remove("quest-auto-collapsed"); if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short && !mobile) box.classList.remove("quest-auto-collapsed"); wasShort = short; };
+    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; const mobile = typeof window !== "undefined" && (window.innerWidth <= 859 || (window.matchMedia && window.matchMedia("(any-pointer: coarse) and (max-height: 480px)").matches)); if (!questDockUserToggled && mobile) box.classList.add("quest-auto-collapsed"); if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short && !mobile) box.classList.remove("quest-auto-collapsed"); wasShort = short; }; // R63B（第 5 項）：手機任務卡一律預設收成一行（含今日三件事），點一下展開
     const ensure = () => { syncShortDefault();
       box.classList.toggle("quest-collapsed", questDockCollapsed);
       let btn = box.querySelector("[data-audit='quest-collapse']");
@@ -901,6 +902,7 @@
       }
       // R58：自動收合時按鈕也寫「展開」，一按就展開（原本寫「收合」且要按兩次）。
       const folded = questDockCollapsed || box.classList.contains("quest-auto-collapsed");
+      const titleEl = box.querySelector(".world-objective-title"); if (titleEl) { const full = (titleEl.textContent || "").trim().replace(/\s+/g, " "); if (full && titleEl.getAttribute("title") !== full) titleEl.setAttribute("title", full); } // R63B（第 7 項）：完整任務名放 title 屬性
       btn.textContent = folded ? "展開" : "收合";
       if (btn.setAttribute) { btn.setAttribute("aria-expanded", folded ? "false" : "true"); btn.setAttribute("aria-label", folded ? "展開任務卡" : "收合任務卡"); }
     };
