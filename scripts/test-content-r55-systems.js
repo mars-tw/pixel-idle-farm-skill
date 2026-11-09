@@ -19,7 +19,7 @@ function test(name, fn) {
 
 test('共用小麥依訂單順序顯示算式，按鈕狀態與可用量一致', () => {
   const state = State.defaultState(T0);
-  state.storage.items.wheat = 4;
+  state.storage.items.wheat = 6; // R66：主線保留 2 份，另有 4 份可交第一張訂單。
   state.orders = [
     { id: 'wheat-4', wants: { wheat: 4 } },
     { id: 'wheat-2', wants: { wheat: 2 } },
@@ -27,8 +27,8 @@ test('共用小麥依訂單順序顯示算式，按鈕狀態與可用量一致',
   const rows = G.orderAllocation(state);
   assert.equal(rows[0].ready, true);
   assert.equal(rows[1].ready, false);
-  assert.equal(G.orderAllocationText(state, state.orders[0]), '需要 4・可用 4');
-  assert.equal(G.orderAllocationText(state, state.orders[1]), '庫存 4－前單 4＝可用 0，還差 2');
+  assert.equal(G.orderAllocationText(state, state.orders[0]), '庫存 6－主線保留 2 份＝可用 4');
+  assert.equal(G.orderAllocationText(state, state.orders[1]), '庫存 6－主線保留 2 份－前單 4＝可用 0，還差 2；再種 2 格小麥（約 15 秒）');
 });
 
 test('收成、訂單交付與升級都回傳可渲染的即時回饋資料', () => {
@@ -39,7 +39,7 @@ test('收成、訂單交付與升級都回傳可渲染的即時回饋資料', ()
   assert.equal(harvest.feedback[0].text, '小麥 +2');
 
   const orderState = State.defaultState(T0);
-  orderState.storage.items.wheat = 2;
+  orderState.storage.items.wheat = 4; // R66：2 份主線保留，另 2 份可交訂單。
   orderState.adventure = { claimed: { c1_first_harvest: true } };
   orderState.ordersSeededAt = 3;
   orderState.orders = [{ id: 'test-order', wants: { wheat: 2 }, rarity: 'common', rewardCoins: 10, rewardXp: 1, expiresAt: T0 + 10000 }];

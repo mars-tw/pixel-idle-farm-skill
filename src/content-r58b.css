@@ -594,3 +594,11 @@ body:has(.modal.show) #questDock .world-objective-title .qp-step {
    列本身卻還留著，縮成 18×18 的白色小方塊。這時整列一起收起；列裡沒有任何按鈕時也不顯示。 */
 body:has(.npc-bubble .r60a-story-choices) .scene-action-bar { display: none !important; }
 .scene-action-bar:not(:has(> button)) { display: none !important; }
+/* R66A：每日五選三與世界小事件 */
+.r66a-daily-pick { width:100%; min-height:36px; }
+.r66a-daily-candidates,.r66a-event-options { display:grid; gap:6px; }
+.r66a-daily-candidates button { display:flex; justify-content:space-between; gap:8px; text-align:left; }
+.r66a-daily-candidates button[aria-pressed="true"] { outline:3px solid #e5a93d; }
+.r66a-world-event { position:absolute; transform:translate(-50%,-100%); min-width:64px; min-height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px solid #6f4b2d; background:#fff1b8; color:#56371f; border-radius:8px; }
+.r66a-world-event > span { font-size:28px; line-height:1; }
+.r66a-world-event > b { font-size:11px; white-space:nowrap; }

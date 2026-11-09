@@ -50,7 +50,7 @@ test("A3 四種關鍵事件皆產生結算卡資料", () => {
   assert.equal(quest.settlement.kind, "quest");
   G.refreshOrders(questState, T, () => 0.1);
   const order = questState.orders[0];
-  questState.storage.items.wheat = order.wants.wheat;
+  questState.storage.items.wheat = order.wants.wheat + 2; // R66：訂單可用數先扣主線保留 2 份。
   const delivered = G.fulfillOrder(questState, order.id, T + 1, () => 0.1);
   assert.equal(delivered.settlement.kind, "order");
   const upgradeState = S.defaultState(T);

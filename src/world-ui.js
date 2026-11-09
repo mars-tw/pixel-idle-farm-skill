@@ -222,7 +222,7 @@
     const festivalTime = Math.max(0, Math.ceil((festival.remainingMs || 0) / 1000));
     const festivalDone = festival.goals ? festival.goals.filter((g) => g.complete).length : 0;
     const festivalCompact = festival.active ? `<span class="r65b-festival-compact" aria-hidden="true">祭典 ${festivalDone}/${festival.goals.length}・${Math.floor(festivalTime / 60) >= 1 ? `剩 ${Math.floor(festivalTime / 60)} 分` : "剩不到 1 分"}</span>` : "";
-    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner" data-active="${festival.active}"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b>${festivalCompact}<small>${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
+    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner" data-active="${festival.active}"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b>${festivalCompact}<small>${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.supportMessage ? `<button type="button" data-festival-field>${esc(festival.supportMessage)}</button>` : ""}${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
@@ -246,9 +246,18 @@
       box.innerHTML = `${festivalHtml}<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
         ${hint && !(hint.kind === "ready" && early.goals.some((goal) => goal.id === "harvest" && !goal.complete)) ? `<button type="button" class="world-objective-hint" data-hint="${esc(hint.kind)}" data-next-tile="${esc(hint.tileId || "")}">${esc(hint.text)}</button>` : ""}
         <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}${goal.id === primaryGoal ? " r63-primary" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small>${goal.actionLabel ? `<em>${esc(goal.actionLabel)}</em>` : ""}</button>`).join("")}</div>
+        <button type="button" class="r66a-daily-pick" data-r66a-daily>${early.chosen ? (early.canSwap ? "換一件（今天剩 1 次）" : "今天已換過一件") : "從五件中挑三件"}</button>
+        ${early.complete ? '<button type="button" class="r66a-daily-claim" data-r66a-claim>領取今日三件事獎勵</button>' : ""}
         ${early.nextStep ? `<button type="button" class="r63a-main-next${early.nextStep.complete ? " complete" : ""}${primaryGoal === "meal" ? " r63-primary" : ""}" data-early-goal="meal" ${early.nextStep.complete ? "disabled" : ""}><b>${early.nextStep.complete ? "✓ " : ""}${esc(early.nextStep.label)}：${esc(early.nextStep.name)}</b><small>${esc(early.nextStep.detail)}</small>${early.nextStep.actionLabel && !early.nextStep.complete ? `<em>${esc(early.nextStep.actionLabel)}</em>` : ""}</button>` : ""}`;
       box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
+      const dailyButton = box.querySelector("[data-r66a-daily]"); if (dailyButton) { dailyButton.disabled = early.chosen && !early.canSwap; dailyButton.onclick = () => {
+        const picked = new Set(early.goals.map((goal) => goal.id));
+        const panel = modal(early.chosen ? "換一件今日事項" : "今日五選三", `<p class="project-desc">${early.chosen ? "今天可把一件換成未選的一件；第一天的老農班伯主線不能換。" : "挑三件今天想做的事。第一天要保留老農班伯主線。"}</p><div class="r66a-daily-candidates">${early.candidates.map((goal) => `<button type="button" data-r66a-candidate="${esc(goal.id)}" aria-pressed="${goal.selected}" ${goal.locked ? "disabled" : ""}><b>${esc(goal.name)}</b><small>${esc(goal.rewardText)}</small></button>`).join("")}</div><button type="button" data-r66a-confirm>確定</button>`);
+        panel.querySelectorAll("[data-r66a-candidate]").forEach((button) => { button.onclick = () => { const id = button.dataset.r66aCandidate; if (picked.has(id)) picked.delete(id); else if (picked.size < 3) picked.add(id); button.setAttribute("aria-pressed", String(picked.has(id))); }; });
+        panel.querySelector("[data-r66a-confirm]").onclick = () => { let result; if (!early.chosen) result = A.chooseDailyGoals(s, [...picked], Date.now()); else { const old = early.goals.map((goal) => goal.id), removed = old.find((id) => !picked.has(id)), added = [...picked].find((id) => !old.includes(id)); result = A.swapDailyGoal(s, removed, added, Date.now()); } notify(result.message); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); if (result.ok) { panel.remove(); lastObjective = ""; renderObjective(s); } }; } };
       const nextHint = box.querySelector("[data-next-tile]"); if (nextHint) nextHint.onclick = () => goNextFarmStep();
+      const festivalField = box.querySelector("[data-festival-field]"); if (festivalField) festivalField.onclick = () => goFestivalField();
+      const dailyClaim = box.querySelector("[data-r66a-claim]"); if (dailyClaim) dailyClaim.onclick = () => { const result = A.claimDailyGoals(s, Date.now()); notify(result.message); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
       const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
       syncSeedHudTop();
       return true;
@@ -515,6 +524,13 @@
       farm().setTool("hand");
       farm().clickTile(target.id);
     }
+    if (id === "cook") { visitKitchen(); return; }
+    if (id === "forage") { const target = (current.map && current.map.tiles || []).find((tile) => tile.forage); if (target && farm() && farm().focusTile) { closePanels(); farm().focusTile(target.id); } }
+  }
+  function goFestivalField() {
+    if (!farm()) return; const tiles = (current.map && current.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < (window.activePlotCount ? window.activePlotCount(current) : 6));
+    const target = tiles.find((tile) => !current.plots[tile.plotIndex].cropId); if (!target) { notify("先收成一格作物，空出田地再種番茄。"); return; }
+    closePanels(); farm().setTool("hand"); if (farm().selectSeed) farm().selectSeed("tomato"); if (farm().focusTile) farm().focusTile(target.id); farm().clickTile(target.id);
   }
   function goNextFarmStep() {
     const step = A.nextFarmStep(current, Date.now()); if (!step || !farm()) return;
@@ -766,6 +782,7 @@
     paintMinimap(s, tileSize);
     if(window.ContentR6)window.ContentR6.paintWorld(s,tileSize);
     paintFestivalScene(s, tileSize, world, t);
+    paintR66WorldEvent(s, tileSize, world, t);
     document.querySelectorAll('.farm-gathering .meal-layout').forEach(layout=>{if(!layout.querySelector('.reserved-table'))ensureResidentPoseScene(layout);});
     syncWorldHitTargets();
     const location = s.player.x >= 17 ? "東林・溪畔採集地" : s.player.y >= 9 ? "河畔・復興計畫" : "陽光農場・祖母的田";
@@ -804,6 +821,15 @@
       const submit = box.querySelector("#festivalJudge"); if (submit) submit.onclick = () => { const result = A.judgeFestivalEntry(s, picked, Date.now()); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); const detail = result.ok ? `<ul>${result.details.map((row) => `<li><b>${esc(row.name)}</b>：${esc(row.sources.length ? row.sources.join("、") : "本次沒有加分")}</li>`).join("")}</ul><p><b>下次提示：</b>${esc(result.tip)}</p><p><b>獎勵：</b>${esc(result.rewardText)}</p>` : ""; modal("作物評比結果", `<p class="r64a-stars" aria-label="${result.ok ? result.stars : 0} 顆星">${result.ok ? "★".repeat(result.stars) + "☆".repeat(3 - result.stars) : "☆☆☆"}</p><p>${esc(result.message)}</p>${detail}`); refresh(s); };
     };
     world.appendChild(stall);
+  }
+  function paintR66WorldEvent(s, size, world, now) {
+    world.querySelectorAll(".r66a-world-event").forEach((node) => node.remove());
+    const active = A.worldEventObject ? A.worldEventObject(s, now) : null; if (!active) return;
+    const tile = window.getTileById(s, active.tileId); if (!tile) return;
+    const button = document.createElement("button"); button.type = "button"; button.className = "r66a-world-event"; button.dataset.r66aWorldEvent = active.id; button.dataset.tileId = active.tileId;
+    button.innerHTML = `<span aria-hidden="true">${active.id === "crow_steal" ? "🐦‍⬛" : "🐣"}</span><b>${esc(active.label)}</b>`; button.setAttribute("aria-label", `${active.label}，點一下處理`); button.style.cssText = `left:${(tile.x + .5) * size}px;top:${(tile.y + .3) * size}px;z-index:${Math.round((tile.y + 1) * size)};`;
+    button.onclick = (event) => { event.stopPropagation(); const live = A.worldEventObject(s, Date.now()); if (!live) { notify("這件小事已經結束了。"); refresh(s); return; } const panel = modal(live.name, `<p>${esc(live.dialogue)}</p><p class="project-desc">剩 ${Math.max(1, Math.ceil(live.remainingMs / 1000))} 秒</p><div class="r66a-event-options">${live.options.map((option) => `<button type="button" data-r66a-event-choice="${esc(option.id)}" ${option.available ? "" : "disabled"}>${esc(option.label)}<small>${esc(option.available ? option.resultText : option.unavailableReason)}</small></button>`).join("")}</div>`); panel.querySelectorAll("[data-r66a-event-choice]").forEach((choice) => { choice.onclick = () => { const result = A.resolveRandomEvent(s, choice.dataset.r66aEventChoice, Date.now()); notify(result.message); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); panel.remove(); refresh(s); }; }); };
+    world.appendChild(button);
   }
   function paintFringe(s, size, world) {
     const sig = `${size}|${s.map.width}|${s.map.height}`;

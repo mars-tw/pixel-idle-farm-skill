@@ -59,6 +59,13 @@
   // R59A：每件農場小事都有選擇，選項文字就是實際成本與結果。
   const R58_EVENT_MIN_MS = 120000;
   const R58_EVENT_MAX_MS = 180000;
+  const R66_DAILY_CANDIDATES = [
+    { id: "harvest", type: "farming", category: "種田", rewardText: "16 金、6 經驗與修繕建材" },
+    { id: "dock", type: "repair", category: "修建", rewardText: "建材 1 份" },
+    { id: "market", type: "social", category: "社交", rewardText: "好感與 5 金" },
+    { id: "forage", type: "explore", category: "探索採集", rewardText: "種子 1 包" },
+    { id: "cook", type: "cooking", category: "料理", rewardText: "料理食材 1 份" },
+  ];
   const R58_EVENTS = [
     { id: "traveling_merchant", name: "旅行商人來訪", icon: "🧳", speaker: "旅行商人", dialogue: "旅行商人掀起布簾，露出幾包草莓種子。", expiresMs: 300000, options: [
       { id: "buy", label: "花 12 金買 2 包", resultText: "草莓種子 2 包" }, { id: "trade", label: "用 2 份小麥換 1 包", resultText: "草莓種子 1 包" }, { id: "decline", label: "這次先婉拒", resultText: "不花資源" }] },
@@ -343,8 +350,7 @@
     let r58active = null;
     if (object(r58raw.activeEvent) && R58_EVENTS.some((e) => e.id === r58raw.activeEvent.id)
       && Number.isSafeInteger(r58raw.activeEvent.startedAt) && r58raw.activeEvent.startedAt >= 0
-      && Number.isSafeInteger(r58raw.activeEvent.expiresAt) && r58raw.activeEvent.expiresAt > r58raw.activeEvent.startedAt
-      && r58raw.activeEvent.expiresAt > now) {
+      && Number.isSafeInteger(r58raw.activeEvent.expiresAt) && r58raw.activeEvent.expiresAt > r58raw.activeEvent.startedAt) {
       r58active = { id: r58raw.activeEvent.id, startedAt: r58raw.activeEvent.startedAt, expiresAt: r58raw.activeEvent.expiresAt };
     }
     const r59raw = object(r58raw.r59) ? r58raw.r59 : {};
@@ -369,6 +375,9 @@
     const r61raw = object(a.r61) ? a.r61 : {};
     const festivalRaw = object(r61raw.festival) ? r61raw.festival : {};
     const validChoice = object(r61raw.marketFlagChoice) && ["gate", "stall"].includes(r61raw.marketFlagChoice.id) ? r61raw.marketFlagChoice : null;
+    const dailyRaw = object(r61raw.daily) ? r61raw.daily : {};
+    const dailyDay = Math.floor(now / 86400000);
+    const dailySelected = [...new Set((Array.isArray(dailyRaw.selected) ? dailyRaw.selected : []).filter((id) => R66_DAILY_CANDIDATES.some((row) => row.id === id)))];
     a.r61 = {
       marketFlagChoice: validChoice ? { id: validChoice.id, at: qty(validChoice.at, Number.MAX_SAFE_INTEGER), journal: String(validChoice.journal || "").slice(0, 180) } : null,
       world: { marketFlag: r61raw.world && ["gate", "stall"].includes(r61raw.world.marketFlag) ? r61raw.world.marketFlag : null, tastingMark: !!(r61raw.world && r61raw.world.tastingMark), noticeBench: !!(r61raw.world && r61raw.world.noticeBench), festivalTables: !!(r61raw.world && r61raw.world.festivalTables) },
@@ -387,7 +396,12 @@
         judging: object(festivalRaw.judging) && Number.isInteger(festivalRaw.judging.stars) ? copy(festivalRaw.judging) : null,
         settlement: object(festivalRaw.settlement) ? copy(festivalRaw.settlement) : null,
         festivalRecipe: festivalRaw.festivalRecipe === true,
+        supportProvisioned: festivalRaw.supportProvisioned === true,
+        supportMessage: typeof festivalRaw.supportMessage === "string" ? festivalRaw.supportMessage.slice(0, 160) : "",
+        harvestCrop: typeof festivalRaw.harvestCrop === "string" && C.CROPS[festivalRaw.harvestCrop] ? festivalRaw.harvestCrop : null,
+        harvestRequired: Math.max(1, Math.min(3, qty(festivalRaw.harvestRequired) || 3)),
       },
+      daily: dailyRaw.day === dailyDay ? { day: dailyDay, selected: dailySelected.length === 3 ? dailySelected : ["harvest", "dock", "market"], chosen: dailyRaw.chosen === true, swapped: dailyRaw.swapped === true, claimed: dailyRaw.claimed === true } : { day: dailyDay, selected: ["harvest", "dock", "market"], chosen: false, swapped: false, claimed: false },
     };
     if (a.r61.festival.unlocked && !a.r61.festival.startsAt && !a.r61.festival.nextAt) a.r61.festival.startsAt = now;
     if (a.lastFishAt !== null && !(Number.isSafeInteger(a.lastFishAt) && a.lastFishAt >= 0)) a.lastFishAt = null;
@@ -472,18 +486,55 @@
     const harvestDone = claimed(a, "c1_first_harvest");
     const wheatHave = ((state.storage || {}).items || {}).wheat || 0;
     const next = nextFarmStep(state, now);
-    const goals = [
+    const allGoals = [
       { id: "harvest", type: "farming", name: `交給老農班伯 2 份小麥（已收 ${harvestDone ? 2 : Math.min(2, wheatHave)}/2）`, detail: harvestDone ? "已交付，市集已開放" : next.text, rewardText: "16 金、6 經驗與修繕建材", complete: harvestDone, canClaim: !!(harvest && harvest.canClaim), target: next.target, tileId: next.tileId, actionLabel: harvestDone ? "" : next.actionLabel },
       { id: "dock", type: "repair", name: "修好河畔釣台", detail: ((state.materials || {}).wood || 0) >= 4 && ((state.materials || {}).stone || 0) >= 2 && !restored(a, "fishing_dock") ? "材料齊了，可以修" : `木料 ${(state.materials || {}).wood || 0}/4・石材 ${(state.materials || {}).stone || 0}/2`, rewardText: "開放釣魚", complete: restored(a, "fishing_dock"), target: "fishing_dock", actionLabel: ((state.materials || {}).wood || 0) >= 4 && ((state.materials || {}).stone || 0) >= 2 ? "去修" : "" },
       { id: "market", type: "social", name: "跟蘿拉打招呼", detail: "蘿拉在農場東側的市集攤位", rewardText: "5 金", complete: a.earlyGoals.marketPreview === true, target: "merchant" },
+      { id: "forage", type: "explore", name: "去溪畔採集 1 次", detail: "到東側溪畔找找野外採集物", rewardText: "種子 1 包", complete: qty(a.counts.forage) >= 1, target: "forage" },
+      { id: "cook", type: "cooking", name: "做 1 道料理", detail: "到農舍灶台準備一道料理", rewardText: "料理食材 1 份", complete: qty(a.counts.cook) >= 1, target: "kitchen", tileId: "t10_10" },
     ];
+    const goals = a.r61.daily.selected.map((id) => allGoals.find((goal) => goal.id === id)).filter(Boolean);
     const meal = quests(state, now).find((q) => q.id === "c1_first_meal");
     const mealHave = (a.meals || {}).rustic_bread || 0;
     const nextStep = !harvestDone ? null : {
       id: "meal", label: "主線下一步", name: "回家的第一餐",
       detail: next.text, complete: claimed(a, "c1_first_meal"), canClaim: !!(meal && meal.canClaim), target: next.target, tileId: next.tileId, action: next.action, actionLabel: next.actionLabel,
     };
-    return { available, complete: goals.every((goal) => goal.complete), goals, nextStep };
+    return { available, complete: goals.every((goal) => goal.complete), goals, nextStep, candidates: allGoals.map((goal) => Object.assign({}, goal, { selected: a.r61.daily.selected.includes(goal.id), locked: goal.id === "harvest" && !harvestDone })), chosen: a.r61.daily.chosen, canSwap: a.r61.daily.chosen && !a.r61.daily.swapped, swapped: a.r61.daily.swapped };
+  }
+  function chooseDailyGoals(state, ids, now) {
+    if (!ensure(state, now).ok) return fail("bad_state", "每日事項還沒準備好。");
+    if (state.adventure.r61.daily.chosen) return fail("already_chosen", "今天已經選好三件事了；還能換一件。");
+    const picked = [...new Set(Array.isArray(ids) ? ids : [])];
+    if (picked.length !== 3 || picked.some((id) => !R66_DAILY_CANDIDATES.some((row) => row.id === id))) return fail("pick_three", "請從五件候選中挑三件。");
+    if (!claimed(state.adventure, "c1_first_harvest") && !picked.includes("harvest")) return fail("story_locked", "第一天要保留交給老農班伯的主線事項。");
+    state.adventure.r61.daily.selected = picked; state.adventure.r61.daily.chosen = true;
+    return ok("今天就做這三件事。", { selected: picked.slice(), candidates: R66_DAILY_CANDIDATES.map(copy) });
+  }
+  function swapDailyGoal(state, removeId, addId, now) {
+    if (!ensure(state, now).ok) return fail("bad_state", "每日事項還沒準備好。");
+    const daily = state.adventure.r61.daily;
+    if (!daily.chosen) return fail("choose_first", "先從五件候選中挑三件。");
+    if (daily.swapped) return fail("already_swapped", "今天已經換過一件了。");
+    if (removeId === "harvest" && !claimed(state.adventure, "c1_first_harvest")) return fail("story_locked", "交給老農班伯是第一天主線，不能換掉。");
+    if (!daily.selected.includes(removeId) || daily.selected.includes(addId) || !R66_DAILY_CANDIDATES.some((row) => row.id === addId)) return fail("bad_swap", "請用未選的一件換掉目前事項。");
+    daily.selected = daily.selected.map((id) => id === removeId ? addId : id); daily.swapped = true;
+    return ok("今天的一件事已換好。", { selected: daily.selected.slice(), swapped: true });
+  }
+  function claimDailyGoals(state, now) {
+    const view = earlyGoals(state, now); if (!view.available) return fail("locked", "完成教學後才會有今日三件事。");
+    const daily = state.adventure.r61.daily; if (daily.claimed) return fail("already_claimed", "今天的三件事已領過獎勵了。");
+    if (!view.goals.every((goal) => goal.complete)) return fail("not_ready", "先完成今天選的三件事。");
+    const rewardInfo = { coins: 10, materials: {}, seedPacks: {}, favor: {}, items: {} };
+    for (const goal of view.goals) {
+      if (goal.type === "farming") rewardInfo.coins += 5;
+      else if (goal.type === "repair") { state.materials.wood = credit(state.materials.wood, 1); rewardInfo.materials.wood = 1; }
+      else if (goal.type === "social") { state.adventure.r58.favor.merchant = Math.min(999, qty(state.adventure.r58.favor.merchant) + 1); rewardInfo.favor.merchant = 1; }
+      else if (goal.type === "explore") { state.adventure.r58.r59.seedPacks.carrot = Math.min(99, qty(state.adventure.r58.r59.seedPacks.carrot) + 1); rewardInfo.seedPacks.carrot = 1; }
+      else if (goal.type === "cooking") { state.storage.items.wheat = qty(state.storage.items.wheat) + 1; rewardInfo.items.wheat = 1; }
+    }
+    state.coins = credit(state.coins, rewardInfo.coins); daily.claimed = true;
+    return ok(`今日三件事完成，另得全完成小獎 10 金。`, { reward: rewardInfo, selected: daily.selected.slice() });
   }
   function quests(state, now) {
     if (!ensure(state, now).ok) return [];
@@ -1004,10 +1055,29 @@
   }
   function randomEvents(state, now) {
     if (!ensure(state, now).ok) return { active: null, nextEventAt: 0, history: [] };
+    settleExpiredWorldEvent(state, now);
     return { active: r58EventView(state, now), nextEventAt: state.adventure.r58.nextEventAt, history: copy(state.adventure.r58.history) };
+  }
+  function worldEventObject(state, now) {
+    const view = randomEvents(state, now).active;
+    if (!view || !["crow_steal", "lost_chick"].includes(view.id)) return null;
+    return Object.assign({}, view, { tileId: view.id === "crow_steal" ? ((state.map.tiles || []).find((tile) => tile.plotIndex === 0) || {}).id : "t8_7", label: view.id === "crow_steal" ? "田邊的烏鴉" : "走失的小雞" });
+  }
+  function settleExpiredWorldEvent(state, now) {
+    const a = state.adventure && state.adventure.r58, t = at(state, now);
+    if (!a || !a.activeEvent || a.activeEvent.expiresAt > t) return null;
+    const def = R58_EVENTS.find((row) => row.id === a.activeEvent.id); if (!def) { a.activeEvent = null; return null; }
+    let text = `${def.name}：你沒有及時處理，事情只好用比較不理想的方式收場。`;
+    if (def.id === "crow_steal") { const have = qty(state.storage && state.storage.items && state.storage.items.wheat); if (have) { state.storage.items.wheat = have - 1; if (!state.storage.items.wheat) delete state.storage.items.wheat; text = "烏鴉來偷吃：你沒及時趕到，牠叼走了 1 份小麥。"; } }
+    if (def.id === "lost_chick") text = "走失的小雞：等太久後，小雞自己鑽回雞舍，沒有留下謝禮。";
+    a.r59.journal.push({ eventId: def.id, choiceId: "timeout", at: t, text }); a.r59.journal = a.r59.journal.slice(-40);
+    a.history.push({ id: def.id, at: t, result: "expired", choiceId: "timeout" }); a.history = a.history.slice(-24); a.activeEvent = null;
+    if (a.nextEventAt <= t) a.nextEventAt = t + R58_EVENT_MIN_MS;
+    return { id: def.id, choiceId: "timeout", journalText: text };
   }
   function maybeTriggerRandomEvent(state, now, rng) {
     const init = ensure(state, now); if (!init.ok) return init;
+    settleExpiredWorldEvent(state, now);
     const a = state.adventure; const t = at(state, now);
     if (a.r58.activeEvent) return ok("農場小事正在等你處理。", { triggered: false, event: r58EventView(state, now) });
     if (t < a.r58.nextEventAt) return ok("農場暫時很平靜。", { triggered: false, event: null, nextEventAt: a.r58.nextEventAt });
@@ -1235,7 +1305,7 @@
     return state.adventure.r61.marketFlagChoice.id === "gate" ? "入口那面旗很管用，旅人還沒走近就知道今天有市集。" : "試吃攤旁的旗一動，客人就跟著香味轉過來了。";
   }
   function festivalBaseline(a) {
-    return { tomato: qty(a.byTarget.harvest.tomato), cook: qty(a.counts.cook), talks: Object.fromEntries(["mayor", "elder", "merchant", "child"].map((id) => [id, qty(a.byTarget.talk[id])])) };
+    return Object.assign(Object.fromEntries(Object.keys(C.CROPS || {}).map((id) => [id, qty(a.byTarget.harvest[id])])), { cook: qty(a.counts.cook), talks: Object.fromEntries(["mayor", "elder", "merchant", "child"].map((id) => [id, qty(a.byTarget.talk[id])])) });
   }
   function festivalStatus(state, now) {
     if (!ensure(state, now).ok) return { unlocked: false, active: false, goals: [] };
@@ -1243,28 +1313,38 @@
     if (!f.unlocked) return { unlocked: false, active: false, goals: [], message: "完成第五章後解鎖收穫祭。" };
     if (f.endsAt && t >= f.endsAt) {
       const base = f.baseline || festivalBaseline(state.adventure);
-      const tomato = Math.max(0, qty(state.adventure.byTarget.harvest.tomato) - qty(base.tomato));
+      const harvestCrop = f.harvestCrop || "tomato", harvestRequired = Math.max(1, Math.min(3, f.harvestRequired || 3));
+      const tomato = Math.max(0, qty(state.adventure.byTarget.harvest[harvestCrop]) - qty(base[harvestCrop]));
       const cooked = Math.max(0, qty(state.adventure.counts.cook) - qty(base.cook));
       const talked = ["mayor", "elder", "merchant", "child"].filter((id) => qty(state.adventure.byTarget.talk[id]) > qty(base.talks && base.talks[id])).length;
-      const goalsCompleted = [tomato >= 3, cooked >= 1, talked >= 2].filter(Boolean).length;
+      const goalsCompleted = [tomato >= harvestRequired, cooked >= 1, talked >= 2].filter(Boolean).length;
       const participation = !f.goalsClaimed ? 5 : 0;
       if (participation) grant(state, reward(participation, 0));
       f.settlement = { roundAt: f.startsAt, goalsCompleted, stars: f.judging ? f.judging.stars : 0, rewards: [f.goalsClaimed ? "收穫祭獎章 1 枚與河畔彩旗裝飾 1 件" : "參加獎 5 金", f.judging ? f.judging.rewardText : "本場未參加作物評比"], nextAt: f.endsAt + FESTIVAL_INTERVAL_MS, shown: false };
       f.startsAt = 0; f.endsAt = 0; f.baseline = null; f.nextAt = f.settlement.nextAt; f.completed = f.goalsClaimed; f.rounds = Math.min(999, f.rounds + 1);
     }
     if (!f.endsAt && ((f.startsAt && t >= f.startsAt) || (f.nextAt && t >= f.nextAt))) {
-      f.startsAt = t; f.endsAt = t + FESTIVAL_DURATION_MS; f.nextAt = 0; f.baseline = festivalBaseline(state.adventure); f.completed = false; f.rewardGranted = false; f.goalsClaimed = false; f.judging = null;
+      f.startsAt = t; f.endsAt = t + FESTIVAL_DURATION_MS; f.nextAt = 0; f.baseline = festivalBaseline(state.adventure); f.completed = false; f.rewardGranted = false; f.goalsClaimed = false; f.judging = null; f.supportProvisioned = false;
+      const unlocked = Object.keys(C.CROPS || {}).filter((id) => !C.CROPS[id].unlockLevel || C.CROPS[id].unlockLevel <= (state.level || 1));
+      f.harvestCrop = unlocked.includes("tomato") ? "tomato" : (unlocked[0] || "wheat"); f.harvestRequired = 3;
+    }
+    if (f.endsAt > t && !f.supportProvisioned) {
+      const haveTomato = qty(state.storage && state.storage.items && state.storage.items.tomato);
+      const fieldTomato = (state.plots || []).some((plot) => plot && plot.cropId === "tomato");
+      if (!haveTomato && !fieldTomato) { state.adventure.r58.r59.seedPacks.tomato = Math.min(99, qty(state.adventure.r58.r59.seedPacks.tomato) + 3); f.supportMessage = `送你 3 包番茄種子，先去種番茄（約 ${Math.ceil((C.CROPS.tomato && C.CROPS.tomato.growMs || 60000) / 1000)} 秒）。`; }
+      f.supportProvisioned = true;
     }
     const active = f.endsAt > t, base = f.baseline || festivalBaseline(state.adventure);
-    const tomato = Math.max(0, qty(state.adventure.byTarget.harvest.tomato) - qty(base.tomato));
+    const harvestCrop = f.harvestCrop || "tomato"; const harvestRequired = Math.max(1, Math.min(3, f.harvestRequired || 3));
+    const tomato = Math.max(0, qty(state.adventure.byTarget.harvest[harvestCrop]) - qty(base[harvestCrop]));
     const cooked = Math.max(0, qty(state.adventure.counts.cook) - qty(base.cook));
     const talked = ["mayor", "elder", "merchant", "child"].filter((id) => qty(state.adventure.byTarget.talk[id]) > qty(base.talks && base.talks[id])).length;
     const goals = [
-      { id: "tomato", name: "收成 3 份番茄", current: Math.min(3, tomato), required: 3, complete: tomato >= 3 },
+      { id: "tomato", cropId: harvestCrop, name: `收成 ${harvestRequired} 份${C.CROPS[harvestCrop] ? C.CROPS[harvestCrop].name : "作物"}`, current: Math.min(harvestRequired, tomato), required: harvestRequired, complete: tomato >= harvestRequired },
       { id: "cook", name: "做 1 道料理", current: Math.min(1, cooked), required: 1, complete: cooked >= 1 },
       { id: "talk", name: "跟 2 位鄰居說話", current: Math.min(2, talked), required: 2, complete: talked >= 2 },
     ];
-    return { unlocked: true, active, completed: f.completed, goalsClaimed: f.goalsClaimed, canComplete: active && !f.goalsClaimed && goals.every((g) => g.complete), startsAt: f.startsAt, endsAt: f.endsAt, nextAt: f.nextAt, remainingMs: active ? f.endsAt - t : Math.max(0, f.nextAt - t), goals, judging: f.judging ? copy(f.judging) : null, medals: f.medals, decorations: f.decorations, rounds: f.rounds };
+    return { unlocked: true, active, completed: f.completed, goalsClaimed: f.goalsClaimed, canComplete: active && !f.goalsClaimed && goals.every((g) => g.complete), startsAt: f.startsAt, endsAt: f.endsAt, nextAt: f.nextAt, remainingMs: active ? f.endsAt - t : Math.max(0, f.nextAt - t), goals, judging: f.judging ? copy(f.judging) : null, medals: f.medals, decorations: f.decorations, rounds: f.rounds, supportMessage: f.supportMessage || "", target: f.supportMessage ? "field" : null };
   }
   function completeFestival(state, now) {
     const status = festivalStatus(state, now), f = state.adventure.r61.festival;
@@ -1332,7 +1412,7 @@
       stall: { id: "harvest_festival_stall", name: "祭典攤位", icon: "🎪", tileId: "t15_9", goals: copy(status.goals), judging: status.judging, rewardText: "三目標：收穫祭獎章 1 枚與河畔彩旗；作物評比：一至三星獎勵" },
     };
   }
-  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, quests, claim, earlyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, personalQuests, completePersonalQuest, permanentResults,
+  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, quests, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
     mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;
