@@ -3782,7 +3782,11 @@
       bar.appendChild(b);
     });
     bar.hidden = false;
-    syncSceneActionBarInset(); try { const playerEl = $("player"); if (playerEl && typeof bar.getBoundingClientRect === "function") { const br = bar.getBoundingClientRect(), pr = playerEl.getBoundingClientRect(); const hit = Math.max(0, Math.min(br.right, pr.right) - Math.max(br.left, pr.left)) * Math.max(0, Math.min(br.bottom, pr.bottom) - Math.max(br.top, pr.top)); bar.classList.toggle("scene-action-avoid-player", hit > 0); if (hit > 0) bar.style.bottom = Math.max(8, window.innerHeight - pr.top + 10) + "px"; else bar.style.bottom = ""; } } catch (e) {}
+    syncSceneActionBarInset(); avoidPlayerWithSceneBar(bar); const avoidUntil = performance.now() + 1600; const avoidTrack = () => { if (bar.hidden) return; avoidPlayerWithSceneBar(bar); if (performance.now() < avoidUntil) requestAnimationFrame(avoidTrack); }; requestAnimationFrame(avoidTrack);
+  }
+  // 主角走路時持續避讓：每次先回到預設位置再量，交集才抬到主角上方（R58：只在出現瞬間判斷會被走過來的主角蓋到）。
+  function avoidPlayerWithSceneBar(bar) {
+    try { const playerEl = $("player"); if (!playerEl || typeof bar.getBoundingClientRect !== "function") return; bar.style.bottom = ""; const br = bar.getBoundingClientRect(), pr = playerEl.getBoundingClientRect(); const hit = Math.max(0, Math.min(br.right, pr.right) - Math.max(br.left, pr.left)) * Math.max(0, Math.min(br.bottom, pr.bottom) - Math.max(br.top, pr.top)); bar.classList.toggle("scene-action-avoid-player", hit > 0); if (hit > 0) bar.style.bottom = Math.max(8, window.innerHeight - pr.top + 10) + "px"; } catch (e) {}
   }
   function runSceneAction(action, tileId) {
     const tile = G.getTileById(state, tileId); if (!tile) return;

@@ -489,15 +489,23 @@
   let speakWaitTimer = 0;
   function placeDialogue(box, speaker) {
     if (!box || box.hidden || !speaker) return;
+    // 實際量兩種擺法與說話者的交集，取遮得少的（同分時沿用中線規則），避免鏡頭動畫時機造成誤判。
     const r = speaker.getBoundingClientRect();
+    const overlap = () => { const d = box.getBoundingClientRect(); return Math.max(0, Math.min(r.right, d.right) - Math.max(r.left, d.left)) * Math.max(0, Math.min(r.bottom, d.bottom) - Math.max(r.top, d.top)); };
     const speakerAboveMiddle = (r.top + r.bottom) / 2 < window.innerHeight / 2;
-    if (window.innerHeight <= 600) {
-      box.classList.toggle("dialogue-compact-bottom", speakerAboveMiddle);
-      box.classList.toggle("dialogue-compact-top", !speakerAboveMiddle);
-      box.classList.remove("dialogue-flip-top");
-    } else {
-      box.classList.remove("dialogue-compact-top", "dialogue-compact-bottom");
-      box.classList.toggle("dialogue-flip-top", !speakerAboveMiddle);
+    const compact = window.innerHeight <= 600;
+    const set = (top) => {
+      if (compact) { box.classList.toggle("dialogue-compact-bottom", !top); box.classList.toggle("dialogue-compact-top", top); box.classList.remove("dialogue-flip-top"); }
+      else { box.classList.remove("dialogue-compact-top", "dialogue-compact-bottom"); box.classList.toggle("dialogue-flip-top", top); }
+    };
+    set(!speakerAboveMiddle); const preferred = overlap();
+    if (preferred === 0) return;
+    set(speakerAboveMiddle); const other = overlap();
+    if (other >= preferred) set(!speakerAboveMiddle);
+    // 兩種擺法都還遮到（矮螢幕兩種 class 可能落在同一位置）：把鏡頭移到說話者，每段對話最多補一次。
+    if (Math.min(other, preferred) > 0 && !box.dataset.refocused) {
+      box.dataset.refocused = "1";
+      const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId);
     }
   }
   function speak(name, text) {
@@ -519,7 +527,7 @@
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
     box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
-    box.hidden = false; box.classList.remove("dialogue-flip-top", "dialogue-compact-top", "dialogue-compact-bottom"); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); const outside = sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth; placeDialogue(box, speaker); if (hit > 0 || outside) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); } [260, 650].forEach((delay) => setTimeout(() => { const node = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); placeDialogue(box, node); }, delay)); } else if (window.innerHeight <= 600) box.classList.add("dialogue-compact-top"); } catch (e) {}
+    box.hidden = false; delete box.dataset.refocused; box.classList.remove("dialogue-flip-top", "dialogue-compact-top", "dialogue-compact-bottom"); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); const outside = sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth; placeDialogue(box, speaker); if (hit > 0 || outside) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); } const trackUntil = performance.now() + 1400; const track = () => { if (box.hidden) return; const node = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); placeDialogue(box, node); if (performance.now() < trackUntil) requestAnimationFrame(track); }; requestAnimationFrame(track); } else if (window.innerHeight <= 600) box.classList.add("dialogue-compact-top"); } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };
     // R79：toast 移到對話框上方（CSS 依此變數讓位）

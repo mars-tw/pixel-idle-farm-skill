@@ -88,7 +88,8 @@ test('任務卡只留目前步驟、進度與主要按鈕，章節交付移到�
   assert.ok(objectiveTemplate.includes('data-world-go'));
   assert.ok(!objectiveTemplate.includes('本章已交付'));
   assert.ok(!objectiveTemplate.includes('${choiceRoutes}'));
-  assert.ok(!objectiveTemplate.includes('world-objective-hint'));
+  // R58 同步：今日三件事卡可帶「一行」倒數提示（陽光 N 秒／最快 N 秒成熟，R79 回饋），仍不得多於一行、不得放章節交付與路線。
+  assert.ok((objectiveTemplate.match(/world-objective-hint/g) || []).length <= 1);
   assert.ok(ui.includes('data-audit="story-chapter-progress"'));
   assert.match(css, /prefers-reduced-motion: reduce[\s\S]*r55NumberFlash/);
   assert.match(css, /quest-collapsed \.world-objective-title \.qp-step/);
