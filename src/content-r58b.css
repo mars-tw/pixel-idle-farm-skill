@@ -759,3 +759,33 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
 #questDock .r67a-task, #questDock .world-objective-route.r67a-task { width: auto !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
 #questDock .r67a-task b, #questDock .r67a-task small { white-space: normal !important; overflow-wrap: anywhere; }
 #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now) small { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+
+/* R69A：任務卡五狀態 × 四尺寸的單一排版矩陣；祭典進行中由祭典目標取得「現在做」焦點。 */
+#questDock { min-width:0; }
+#questDock :is(.r67a-objective-head,.r68a-objective-head) { width:100%; min-width:0; box-sizing:border-box; }
+#questDock :is(.r67a-objective-head,.r68a-objective-head) [data-audit="quest-progress"] { flex:0 0 auto; white-space:nowrap; }
+#questDock :is(.r67a-now,.r68a-now) { min-width:0; box-sizing:border-box; }
+#questDock :is(.r67a-now-action,.r68a-now-action,.r63-primary) { min-width:max-content; min-height:44px; max-width:none; line-height:1.25; white-space:nowrap !important; word-break:keep-all; writing-mode:horizontal-tb; }
+#questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now,.r68a-now) { width:100% !important; max-width:100%; padding-right:8px !important; }
+#questDock .r69a-main-row { display:block; min-width:0; padding:4px 7px; border:1px solid #d8bd8a; border-radius:7px; background:rgba(255,255,255,.7); color:#5d472c; font-size:12px; line-height:1.3; overflow-wrap:anywhere; }
+#questDock .r69a-festival-now { border-color:#bd7424; background:#fff0b8; }
+@media (min-width:860px) {
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) { display:grid !important; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:6px; width:min(420px,calc(100vw - 40px)); min-height:52px !important; height:52px !important; max-height:52px !important; overflow:hidden !important; padding:4px 52px 4px 8px !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-objective-head,.r68a-objective-head,.r67a-task-list,.r68a-requirements,.r68a-festival-summary,.r69a-main-row) { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) { display:grid !important; grid-column:1 / -1; grid-template-columns:minmax(0,1fr) auto; width:100%; padding:2px 4px !important; border:0; background:transparent; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) b { display:none; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) small { display:block !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+}
+@media (max-width:859px) {
+  #questDock { width:calc(100vw - 24px) !important; max-width:420px; }
+  #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) { max-height:min(50dvh,360px) !important; overflow-y:auto !important; }
+  #questDock :is(.r67a-now,.r68a-now) { grid-template-columns:minmax(0,1fr) auto; }
+  #questDock :is(.r67a-now-action,.r68a-now-action,.r63-primary) { max-width:44vw; overflow:hidden; text-overflow:ellipsis; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) { display:grid !important; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:4px; width:calc(100vw - 24px) !important; min-height:52px !important; height:52px !important; max-height:52px !important; overflow:hidden !important; padding:4px 48px 4px 7px !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-objective-head,.r68a-objective-head,.r67a-task-list,.r68a-requirements,.r69a-main-row) { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) { display:grid !important; grid-column:1 / -1; grid-template-columns:minmax(0,1fr) auto; width:100%; min-width:0; padding:2px 3px !important; border:0; background:transparent; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) b { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) small { display:block !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+  html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-festival-summary { position:static !important; display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-now { display:grid !important; }
+}
