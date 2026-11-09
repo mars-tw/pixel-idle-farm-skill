@@ -60,7 +60,7 @@
   const R58_EVENT_MAX_MS = 180000;
   const R58_EVENTS = [
     { id: "traveling_merchant", name: "旅行商人來訪", icon: "🧳", speaker: "旅行商人", dialogue: "旅行商人掀起布簾，露出幾包草莓種子。", expiresMs: 300000, options: [
-      { id: "buy", label: "花 12 金買 2 包", resultText: "草莓種子 2 包" }, { id: "trade", label: "用 3 份小麥換 1 包", resultText: "草莓種子 1 包" }, { id: "decline", label: "這次先婉拒", resultText: "不花資源" }] },
+      { id: "buy", label: "花 12 金買 2 包", resultText: "草莓種子 2 包" }, { id: "trade", label: "用 2 份小麥換 1 包", resultText: "草莓種子 1 包" }, { id: "decline", label: "這次先婉拒", resultText: "不花資源" }] },
     { id: "crow_steal", name: "烏鴉來偷吃", icon: "🐦‍⬛", speaker: "農場小事", dialogue: "烏鴉在田邊歪著頭，眼睛直盯著麥穗。", expiresMs: 180000, options: [
       { id: "shoo", label: "揮手趕走牠", resultText: "烏鴉羽毛 1 份" }, { id: "feed", label: "撒 1 份小麥餵牠", resultText: "下次帶來小禮物" }] },
     { id: "afternoon_rain", name: "午後小雨", icon: "🌦️", speaker: "農場小事", dialogue: "雨點落在田埂上，乾土和空木桶都等著你。", expiresMs: 180000, options: [
@@ -70,7 +70,7 @@
   ];
   // R58：鄰居個人委託。第一件在第一章展開後出現，第二件在第一章主線完成後出現。
   const R58_PERSONAL_QUESTS = [
-    { id: "mayor_first_notice", npcId: "mayor", chapter: 1, unlockClaimed: "c1_homecoming", title: "公告欄的第一張消息", wants: { wheat: 2 }, reward: { coins: 10, xp: 2, materials: {} }, dialogue: "鎮長葛瑞把公告欄的卷邊壓平，說：「農場重新開工的消息，我想親手貼。帶 2 份小麥來，讓路過的人先聞聞新麥香。」", doneLine: "鎮長葛瑞在消息角落畫了一顆小太陽，說：「這樣大家一進鎮，就知道農場回來了。」" },
+    { id: "mayor_first_notice", npcId: "mayor", chapter: 1, unlockClaimed: "c1_homecoming", title: "公告欄的第一張消息", wants: { river_mint: 1 }, reward: { coins: 10, xp: 2, materials: {} }, dialogue: "鎮長葛瑞把公告欄的卷邊壓平，說：「農場重新開工的消息，我想親手貼。帶 1 份溪畔薄荷來，我把它夾在公告旁，讓路過的人聞到河邊的新鮮氣味。」", doneLine: "鎮長葛瑞把薄荷夾在消息角落，說：「這樣大家一進鎮，就知道農場和河邊都醒來了。」" },
     { id: "mayor_road_lunch", npcId: "mayor", chapter: 2, unlockClaimed: "c1_first_meal", title: "巡路人的午餐", wants: { carrot: 2 }, reward: { coins: 12, xp: 3, materials: { wood: 1 } }, dialogue: "鎮長葛瑞要沿著新路巡一圈，說：「包裡有 2 份胡蘿蔔，我就能走到河邊再走回來，不必半路喊餓。」", doneLine: "鎮長葛瑞把木料塞給你，說：「巡路的人吃飽了，橋邊的消息也會準時回來。」" },
     { id: "elder_carrot_break", npcId: "elder", chapter: 1, unlockClaimed: "c1_homecoming", title: "下田前的胡蘿蔔", wants: { carrot: 1 }, reward: { coins: 8, xp: 2, materials: {} }, dialogue: "老農班伯扶著鋤頭說：「老骨頭下田前，得先有一口甜的。帶 1 份胡蘿蔔來，我陪你看一圈田。」", doneLine: "老農班伯咬了一口胡蘿蔔，點點頭說：「甜。有這一口，今天的土就翻得動。」" },
     { id: "elder_seed_check", npcId: "elder", chapter: 2, unlockClaimed: "c1_first_meal", title: "替你驗一把麥", wants: { wheat: 3 }, reward: { coins: 14, xp: 3, materials: { compost: 1 } }, dialogue: "老農班伯攤開手掌說：「拿 3 份小麥來，我替你驗驗今年的麥夠不夠飽滿，順便教你留種。」", doneLine: "老農班伯把最飽滿的幾粒挑出來，說：「留種要留最好的。這包堆肥你拿去，田會記得。」" },
@@ -432,8 +432,14 @@
     const a = state.adventure;
     const available = claimed(a, "c1_homecoming") && !claimed(a, "c1_first_meal");
     const harvest = quests(state, now).find((q) => q.id === "c1_first_harvest");
+    const harvestDone = claimed(a, "c1_first_harvest");
+    const meal = quests(state, now).find((q) => q.id === "c1_first_meal");
+    const mealHave = (a.meals || {}).rustic_bread || 0;
+    const wheatHave = ((state.storage || {}).items || {}).wheat || 0;
     const goals = [
-      { id: "harvest", name: claimed(a, "c1_first_harvest") ? "已交給老農班伯" : `交給老農班伯 2 份小麥（已收 ${Math.min(2, (state.storage.items || {}).wheat || 0)}/2）`, detail: claimed(a, "c1_first_harvest") ? "市集已開放" : "交付後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: claimed(a, "c1_first_harvest"), canClaim: !!(harvest && harvest.canClaim), target: "elder" },
+      harvestDone
+        ? { id: "meal", name: "去灶台做一份農家麥餅（回家的第一餐）", detail: mealHave ? "農家麥餅已做好，帶給老農班伯" : wheatHave >= 2 ? "食材已齊，前往農舍灶台" : `還差 ${Math.max(0, 2 - wheatHave)} 份小麥`, rewardText: "完成第一章主線", complete: claimed(a, "c1_first_meal"), canClaim: !!(meal && meal.canClaim), target: mealHave ? "elder" : "kitchen", actionLabel: mealHave ? "帶去交付" : "前往灶台" }
+        : { id: "harvest", name: `交給老農班伯 2 份小麥（已收 ${Math.min(2, wheatHave)}/2）`, detail: "交付後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: false, canClaim: !!(harvest && harvest.canClaim), target: "elder" },
       { id: "dock", name: "修好河畔釣台", detail: `木料 ${(state.materials || {}).wood || 0}/4・石材 ${(state.materials || {}).stone || 0}/2`, rewardText: "開放釣魚", complete: restored(a, "fishing_dock"), target: "fishing_dock", actionLabel: ((state.materials || {}).wood || 0) >= 4 && ((state.materials || {}).stone || 0) >= 2 ? "去修釣台" : "" },
       { id: "market", name: "跟蘿拉打招呼", detail: "蘿拉在農場東側的市集攤位", rewardText: "5 金", complete: a.earlyGoals.marketPreview === true, target: "merchant" },
     ];
@@ -945,14 +951,14 @@
   }
   function eventChoiceAvailable(state, eventId, choiceId) {
     if (eventId === "traveling_merchant" && choiceId === "buy") return state.coins >= 12;
-    if (eventId === "traveling_merchant" && choiceId === "trade") return ((state.storage.items || {}).wheat || 0) >= 3;
+    if (eventId === "traveling_merchant" && choiceId === "trade") return ((state.storage.items || {}).wheat || 0) >= 2;
     if (eventId === "crow_steal" && choiceId === "feed") return ((state.storage.items || {}).wheat || 0) >= 1;
     return true;
   }
   function eventChoiceReason(state, eventId, choiceId) {
     if (eventChoiceAvailable(state, eventId, choiceId)) return "";
     if (eventId === "traveling_merchant" && choiceId === "buy") return `金幣不足：有 ${Math.max(0, state.coins || 0)}／需 12`;
-    const need = eventId === "traveling_merchant" && choiceId === "trade" ? 3 : 1;
+    const need = eventId === "traveling_merchant" && choiceId === "trade" ? 2 : 1;
     return `小麥不足：有 ${Math.max(0, ((state.storage || {}).items || {}).wheat || 0)}／需 ${need}`;
   }
   function randomEvents(state, now) {
@@ -994,7 +1000,7 @@
     const r59 = a.r58.r59;
     if (view.id === "traveling_merchant") {
       if (choiceId === "buy") { state.coins -= 12; rewardInfo.coins = -12; r59.seedPacks.strawberry += 2; rewardInfo.seedPacks.strawberry = 2; message = "你付了 12 金，收下 2 包草莓種子。種草莓時會先用這兩包，不再扣金幣。"; }
-      else if (choiceId === "trade") { state.storage.items.wheat -= 3; if (!state.storage.items.wheat) delete state.storage.items.wheat; r59.seedPacks.strawberry += 1; rewardInfo.seedPacks.strawberry = 1; message = "旅行商人收下 3 份小麥，換給你 1 包草莓種子。"; }
+      else if (choiceId === "trade") { state.storage.items.wheat -= 2; if (!state.storage.items.wheat) delete state.storage.items.wheat; r59.seedPacks.strawberry += 1; rewardInfo.seedPacks.strawberry = 1; message = "旅行商人收下 2 份小麥，換給你 1 包草莓種子。"; }
       else { r59.eventFlags.merchantDeclined = true; message = "你這次沒有買。旅行商人收起布簾，說下回見面還會記得你。"; }
     } else if (view.id === "crow_steal" && choiceId === "shoo") {
       if (!object(state.materials)) state.materials = {};
@@ -1033,7 +1039,7 @@
     const key = `${last.eventId}:${last.choiceId}`;
     return ({
       "traveling_merchant:buy": "旅行商人笑著說，上回買走的草莓種子正適合這季。",
-      "traveling_merchant:trade": "旅行商人還記得上回換走的三份小麥。",
+      "traveling_merchant:trade": "旅行商人還記得上回換走的兩份小麥。",
       "traveling_merchant:decline": "旅行商人說，上回沒買也不要緊，今天照樣慢慢挑。",
       "crow_steal:shoo": "老農班伯撿起田邊的羽毛，笑說那隻烏鴉還記得你。",
       "crow_steal:feed": "烏鴉把亮亮的小石子放在田邊，算是回送你的小禮物。",

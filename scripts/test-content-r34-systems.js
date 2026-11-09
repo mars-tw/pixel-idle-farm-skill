@@ -20,13 +20,14 @@ function test(name, fn) {
 test("A1 市集第一批訂單依已解鎖品項產生差異", () => {
   const state = S.defaultState(T);
   state.level = 2;
+  state.upgrades.plotCount = 1; // R62：第一次開墾後才把胡蘿蔔加入首批訂單。
   state.story.questId = "first_delivery";
   state.adventure = { claimed: { c1_first_harvest: true } };
   const orders = G.refreshOrders(state, T, () => 0.1);
   assert.equal(orders.length, C.GAME.orderSlots);
   const itemIds = [...new Set(orders.flatMap((order) => Object.keys(order.wants)))];
   assert.ok(itemIds.length >= 2, "第一批至少有兩種已解鎖作物");
-  assert.ok(itemIds.every((id) => C.CROPS[id] && C.CROPS[id].unlockLevel <= state.level));
+  assert.ok(itemIds.every((id) => C.CROPS[id] && G.isCropUnlocked(state, id)));
   assert.ok(orders.every((order) => order.firstBatch === true && order.expiresAt === null), "首批訂單必須不限時");
   // R60 同步：首批改為一張小麥單＋兩張胡蘿蔔單（計畫第 3 項，避免搶小麥），「同作物需求多者獎勵高」改用有兩張單的作物檢查，規則不放寬。
   const pairCrop = ["wheat", "carrot"].find((id) => orders.filter((order) => order.wants[id]).length >= 2);

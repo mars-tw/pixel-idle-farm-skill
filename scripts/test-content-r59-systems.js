@@ -48,7 +48,7 @@ test("2 四種事件的每個選項都結算、寫日誌並回收選擇", () => 
 });
 
 test("3 每位鄰居完成兩件委託後都有永久結果", () => {
-  const state = fresh(); state.adventure.claimed.c1_homecoming = true; state.adventure.claimed.c1_first_meal = true; state.storage.items = { wheat: 99, carrot: 99 };
+  const state = fresh(); state.adventure.claimed.c1_homecoming = true; state.adventure.claimed.c1_first_meal = true; state.storage.items = { wheat: 99, carrot: 99, river_mint: 1 }; // R62：鎮長首件改收採集物。
   for (const quest of A.personalQuests(state, T0)) ok(A.completePersonalQuest(state, quest.id, T0 + 1));
   const results = A.permanentResults(state, T0 + 2);
   assert.equal(results.length, 4); assert.ok(results.every((row) => row.unlocked && row.revisit.length > 10));

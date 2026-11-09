@@ -299,6 +299,7 @@ test("CommonJS and browser window.AdventureAPI have the same pure API", () => {
 
 test("full three-chapter run uses real crops, care, orders and forage; no material injection", () => {
   const state = fresh(); let now = T0;
+  state.upgrades.plotCount = 1; // R62：胡蘿蔔需先完成第一次開墾；完整三章流程先滿足此前置。
   const storyGuard = () => snapshot(state.story);
   function action(fn) { const before = storyGuard(); const result = fn(); assert.equal(storyGuard(), before, "AdventureAPI must not modify existing story"); return good(result); }
   function talk(id) { state.story.dialogueSeen[id] = true; action(() => A.record(state, { type: "talk", npcId: id }, now)); }

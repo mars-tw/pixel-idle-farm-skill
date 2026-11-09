@@ -112,7 +112,7 @@ test('第一次三格小麥收成足以完成班伯主線，市集不再重複�
   assert.equal(A.claim(state, 'c1_first_harvest', now).ok, true);
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
-  assert.ok(orders.every((row) => Object.keys(row.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
+  assert.ok(orders.every((row) => Object.keys(row.wants).every((id) => id === "wild_berry" || C.CROPS[id].unlockLevel <= state.level))); // R62 整合同步：首批一張改收開場可採的田邊野莓
   // R60 同步：首批改為只有一張 2 份小麥單（計畫第 3 項），4 份大單已移除；交 2 份後仍剩 2 份夠做第一餐，不吃到保留量。
   assert.equal(G.orderConsumesStoryReserve(state, orders.find((row) => row.wants.wheat === 2)), false);
   assert.equal(G.orderConsumesStoryReserve(state, { id: "probe_wheat_4", wants: { wheat: 4 } }), true);
