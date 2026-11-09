@@ -35,20 +35,20 @@ function fishable() {
   return state;
 }
 
-test("new state is additive, deterministic, and has nine causally ordered quests", () => {
+test("new state is additive, deterministic, and has fifteen causally ordered quests", () => {
   const state = S.defaultState(T0); const before = snapshot(state);
   good(A.ensure(state, T0));
   const { adventure, ...unchanged } = state;
   assert.equal(snapshot(unchanged), before);
   const once = snapshot(state); good(A.ensure(state, T0)); assert.equal(snapshot(state), once);
   const list = A.quests(state, T0);
-  assert.equal(list.length, 9);
-  assert.deepEqual(list.map((entry) => entry.status), ["active", ...Array(8).fill("locked")]);
-  for (let chapter = 1; chapter <= 3; chapter++) assert.equal(list.filter((entry) => entry.chapter === chapter).length, 3);
+  assert.equal(list.length, 15);
+  assert.deepEqual(list.map((entry) => entry.status), ["active", ...Array(14).fill("locked")]);
+  for (let chapter = 1; chapter <= 5; chapter++) assert.equal(list.filter((entry) => entry.chapter === chapter).length, 3);
   for (const entry of list) {
     assert.ok(C.NPCS[entry.npcId]);
     assert.ok(entry.name && entry.description && entry.target);
-    assert.ok(entry.objectives.length);
+    assert.ok(entry.objectives.length + entry.requirements.length);
     assert.ok(entry.objectives.every((objective) => Number.isFinite(objective.current) && objective.required > 0));
     assert.ok(entry.reward.materials);
   }
@@ -237,7 +237,7 @@ test("mixed meal/catch delivery does not consume any resource when one is missin
   const state = fresh(); unlockThrough(state, "c3_garden");
   for (const project of Object.values(state.adventure.projects)) project.restored = true;
   good(A.record(state, { type: "talk", npcId: "child" }, T0));
-  state.adventure.meals = { rustic_bread: 1, baked_carrot: 1, mint_tea: 1, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0 };
+  state.adventure.meals = { rustic_bread: 1, baked_carrot: 1, mint_tea: 1, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0, tomato_harvest_stew: 0, strawberry_market_tart: 0, carrot_trail_soup: 0 };
   state.adventure.catch.river_carp = 1;
   const before = snapshot([state.adventure.meals, state.adventure.catch, state.coins, state.xp]);
   assert.equal(A.claim(state, "c3_harvest_picnic", T0).reason, "missing_resources");
@@ -358,18 +358,18 @@ test("full three-chapter run uses real crops, care, orders and forage; no materi
   action(() => A.cook(state, "baked_carrot", now)); action(() => A.cook(state, "mint_tea", now)); action(() => A.cook(state, "rustic_bread", now));
   action(() => A.claim(state, "c3_garden", now)); action(() => A.fish(state, now, () => 0));
   const economy = snapshot([state.coins, state.xp, state.materials]);
-  assert.ok(A.quests(state, now).at(-1).canClaim); action(() => A.claim(state, "c3_harvest_picnic", now));
-  const view = A.summary(state, now); assert.equal(view.complete, true); assert.equal(view.claimed, 9);
-  assert.ok(view.chapters.every((chapter) => chapter.status === "complete")); assert.ok(A.projects(state).every((p) => p.restored));
+  assert.ok(A.quests(state, now).find((q) => q.id === "c3_harvest_picnic").canClaim); action(() => A.claim(state, "c3_harvest_picnic", now));
+  const view = A.summary(state, now); assert.equal(view.complete, false); assert.equal(view.claimed, 9);
+  assert.ok(view.chapters.slice(0, 3).every((chapter) => chapter.status === "complete")); assert.equal(view.chapters[3].status, "active"); assert.ok(A.projects(state).every((p) => p.restored));
   assert.equal(view.unlocks.gardenGuestbook, true); assert.equal(view.collectibles.length, 2);
-  assert.equal(view.fishing.used, 0); assert.deepEqual(view.meals, { rustic_bread: 0, baked_carrot: 0, mint_tea: 0, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0 });
+  assert.equal(view.fishing.used, 0); assert.deepEqual(view.meals, { rustic_bread: 0, baked_carrot: 0, mint_tea: 0, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0, tomato_harvest_stew: 0, strawberry_market_tart: 0, carrot_trail_soup: 0 });
   assert.ok(state.materials.wood >= 0 && state.materials.stone >= 0); assert.equal(state.stats.cleared, 1);
   assert.ok(!Object.keys(state.storage.items).some((id) => id === "rustic_bread" || id === "river_carp"));
   assert.notEqual(snapshot([state.coins, state.xp, state.materials]), economy);
   const finalEconomy = snapshot([state.coins, state.xp, state.materials]);
-  for (const entry of A.quests(state, now)) assert.equal(A.claim(state, entry.id, now).reason, "already_claimed");
+  for (const entry of A.quests(state, now).filter((q) => q.chapter <= 3)) assert.equal(A.claim(state, entry.id, now).reason, "already_claimed");
   assert.equal(snapshot([state.coins, state.xp, state.materials]), finalEconomy);
-  const reloaded = S.migrate(JSON.parse(snapshot(state))); assert.equal(A.summary(reloaded, now).complete, true);
+  const reloaded = S.migrate(JSON.parse(snapshot(state))); assert.equal(A.summary(reloaded, now).claimed, 9); assert.equal(A.summary(reloaded, now).complete, false);
 });
 
 test("renewable material purchases are atomic, bounded and never free", () => {

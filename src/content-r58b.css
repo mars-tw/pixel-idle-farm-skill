@@ -203,3 +203,12 @@ body:has(#buildWheel:not([hidden])) #questDock .world-objective-title .qp-step {
   }
   #resBar .res { min-width: 0; box-sizing: border-box; }
 }
+
+/* R61A：第五章完成後，收穫祭狀態固定顯示在任務／今日三件事上方。 */
+#questDock .r61a-festival-banner {
+  display: grid; gap: 3px; margin: 0 0 7px; padding: 7px 9px; border: 1px solid #d69a36;
+  border-radius: 9px; background: #fff4cf; color: #684323; line-height: 1.35;
+}
+#questDock .r61a-festival-banner[data-active="true"] { background: #ffe3a8; box-shadow: inset 4px 0 #d76532; }
+#questDock .r61a-festival-banner small { display: block; white-space: normal; }
+#questDock .r61a-festival-banner button { min-height: 36px; margin-top: 2px; }

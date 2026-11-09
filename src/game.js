@@ -62,6 +62,7 @@
   function mealBuffs(state) { return (state && state.adventure && state.adventure.r58 && state.adventure.r58.buffs) || null; }
   function mealGrowthMul(state, now) { const buffs = mealBuffs(state); const g = buffs && buffs.growth; const t = Number.isFinite(now) ? now : 0; return g && Number.isFinite(g.until) && g.until > t && Number.isFinite(g.mul) && g.mul > 0 && g.mul < 1 ? g.mul : 1; }
   function mealOrderBonus(state, now) { const buffs = mealBuffs(state); const o = buffs && buffs.order; const t = Number.isFinite(now) ? now : 0; return o && Number.isFinite(o.until) && o.until > t && Number.isFinite(o.bonus) && o.bonus > 0 && o.bonus <= 1 ? o.bonus : 0; }
+  function mealFlatBonus(state, kind, now) { const buffs = mealBuffs(state); const b = buffs && buffs[kind]; const t = Number.isFinite(now) ? now : 0; return b && Number.isFinite(b.until) && b.until > t && Number.isFinite(b.bonus) && b.bonus > 0 ? Math.floor(b.bonus) : 0; }
   function growthMultiplier(state, now) {
     let m = 1;
     const lv = state.upgrades.growthSpeed;
@@ -604,7 +605,8 @@
     const firstHarvest = !Object.values(state.stats.harvested || {}).some((count) => count > 0);
     ensureSunState(state);
     const sunlit = isSunlit(state, plotIndex, now);
-    const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0);
+    const mealBonus = mealFlatBonus(state, "harvest", now);
+    const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0) + mealBonus;
     const xp = crop.xp + (sunlit ? SUNPATCH.xpBonus : 0);
     const { added, lost } = addToStorage(state, crop.id, qty);
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
@@ -620,6 +622,7 @@
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "把 2 份小麥交給老農班伯，完成「老農班伯的開市小麥」。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
+    if (mealBonus) out.meal = { kind: "harvest", bonus: mealBonus };
     return out;
   }
   function harvestAll(state, now) {
@@ -1896,14 +1899,15 @@
     if (!st.unlocked) return { ok: false, reason: "locked_deep" };
     if (!st.node.starter && !state.flags.eastForageDiscovered) return { ok: false, reason: "undiscovered" };
     if (!st.ready) return { ok: false, reason: "cooldown", readyAt: st.readyAt };
-    const qty = st.node.yield || 1;
+    const mealBonus = mealFlatBonus(state, "forage", now);
+    const qty = (st.node.yield || 1) + mealBonus;
     const { added, lost } = addToStorage(state, st.node.itemId, qty);
     if (!state.flags.forageNodes) state.flags.forageNodes = {};
     state.flags.forageNodes[st.node.id] = now;
     state.stats.collected[st.node.itemId] = (state.stats.collected[st.node.itemId] || 0) + added;
     if (added > 0) recordDiscovery(state, st.node.itemId, now);
     const story = syncStoryProgress(state, "collect_forage", now);
-    return { ok: true, node: st.node, item: st.item, added, lost, story };
+    return { ok: true, node: st.node, item: st.item, added, lost, story, mealBonus };
   }
   function ensureEastForageReportRequest(state, now) {
     const cfg = C.EAST_FORAGE_REPORT;
