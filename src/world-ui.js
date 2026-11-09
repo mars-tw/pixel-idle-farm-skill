@@ -238,6 +238,7 @@
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
     box.innerHTML = `<div class="world-objective-title">${q ? `${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : `<span class="qp-step">${esc(guide.displayTitle || q.name)}</span> `}<span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+      ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? choiceRoutes : ""}
       <div class="world-objective-bottom">${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? `<button type="button" data-choice-open>選擇下一步</button>` : `<button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button>`}</div>`;
     const chooseFirstRoute = (button) => {
       const status = A.firstChoiceStatus(s);
@@ -245,6 +246,7 @@
       if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; farm().closeModal("worldModal"); renderObjective(s); if (!status.selected) { const g2 = A.guide(s, Date.now()); const q2 = A.summary(s, Date.now()).currentQuest; if (g2 && g2.route === "order") openPanel("orders"); else if (q2) goQuest(q2); } }
       else notify(result.message);
     };
+    box.querySelectorAll("#questDock > .world-objective-routes [data-first-choice], .world-objective-routes [data-first-choice]").forEach((button) => { if (box.contains(button)) button.onclick = () => chooseFirstRoute(button); }); // R57：展開的任務卡直接列出兩個選項
     const choiceOpen = box.querySelector("[data-choice-open]"); if (choiceOpen) choiceOpen.onclick = () => {
       const choiceModal = modal("選擇下一步", choiceRoutes);
       choiceModal.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => chooseFirstRoute(button); });
@@ -479,7 +481,7 @@
     prepareResidentPoses(box);
     if (title === "籃底有祖母留下的便箋") {
       const hero = document.createElement("div"); hero.className = "sun-welcome";
-      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r49/welcome-px-512.png?v=content-r56-20261109-1" srcset="assets/generated/r49/welcome-px-512.png?v=content-r56-20261109-1 1x, assets/generated/r49/welcome-px-1024.png?v=content-r56-20261109-1 2x" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r56-20261109-1" alt="留下便箋的祖母" width="96" height="96">';
+      hero.innerHTML = '<img class="sun-welcome-scene" src="assets/generated/r49/welcome-px-512.png?v=content-r57-20261109-1" srcset="assets/generated/r49/welcome-px-512.png?v=content-r57-20261109-1 1x, assets/generated/r49/welcome-px-1024.png?v=content-r57-20261109-1 2x" alt="陽光落在餐籃、紅格餐布與祖母的便箋上" width="384" height="192"><img class="sun-portrait" src="assets/generated/r84/grandma-0.png?v=content-r57-20261109-1" alt="留下便箋的祖母" width="96" height="96">';
       box.querySelector(".modal-card").prepend(hero);
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');

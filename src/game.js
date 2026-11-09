@@ -799,7 +799,7 @@
     // 尚未解鎖的作物在卡上註明解鎖等級，避免預告與開放後第一批對不上。
     const available = new Set(availableOrderItems(state));
     const crops = (typeof CROPS !== "undefined" && CROPS) || (typeof window !== "undefined" && window.CROPS) || {};
-    return ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
+    return ["beginner_wheat_4", "beginner_wheat_2", "beginner_carrot_2"] // R57：預告順序與開放後第一批一致（4 份大單在最前）
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
       .filter(Boolean)
       .map((template) => {
@@ -827,7 +827,7 @@
     if (firstDayChapterOne(state, now) && (state.ordersSeededAt || 0) < 3) {
       const available = new Set(availableOrderItems(state));
       const preferredIds = available.has("carrot")
-        ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]
+        ? ["beginner_wheat_4", "beginner_wheat_2", "beginner_carrot_2"] // R57：與預告同順序
         : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
       const selectedTemplates = preferredIds.map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
         .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)));

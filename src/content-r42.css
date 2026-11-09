@@ -85,3 +85,6 @@ body:has(#worldDialogue:not([hidden])) #questDock:is([data-step-type="talk"], [d
   .side-pane[data-pane="orders"] .o-story-impact { display: none !important; }
 }
 @media (max-height: 480px) and (orientation: landscape) { #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { flex: 0 0 auto !important; overflow: visible !important; } #questDock.quest-collapsed, #questDock.quest-auto-collapsed { width: auto !important; max-width: calc(100vw - 260px) !important; } } /* R54：手機橫式任務名與進度不被按鈕擠掉 */
+/* R57：展開的任務卡直接列出二選一；收合時只留「選擇下一步」；手機一般提示一次只顯示一則且不斷字 */
+#questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):has(.world-objective-routes) [data-choice-open] { display: none !important; }
+@media (max-width: 859px) { #toast-zone > .toast:not(.settlement-card) ~ .toast:not(.settlement-card) { display: none !important; } #toast-zone > .toast { word-break: keep-all; } }

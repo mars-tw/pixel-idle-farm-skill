@@ -113,8 +113,8 @@ test("R39 整合：預告固定為開放時那一組、未解鎖作物註明等�
   const G2 = require("../src/game.js"), S2 = require("../src/state.js");
   const st = S2.defaultState(1_900_000_000_000);
   const preview = G2.previewMarketOrders(st, 1_900_000_000_000);
-  assert.deepEqual(preview.map((o) => o.id), ["beginner_wheat_2", "beginner_carrot_2", "beginner_wheat_4"]);
-  assert.match(preview[1].lockNote, /^Lv 2 解鎖胡蘿蔔種子$/);
+  assert.deepEqual(preview.map((o) => o.id), ["beginner_wheat_4", "beginner_wheat_2", "beginner_carrot_2"]); // R57：預告與首批都把 4 份大單排第一
+  assert.match(preview.find((o) => o.id === "beginner_carrot_2").lockNote, /^Lv 2 解鎖胡蘿蔔種子$/);
   const ui = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8");
   assert.match(ui, /（含加成 \+\$\{fmtNum\(pay\.coins - o\.rewardCoins\)\}）/);
   assert.match(ui, /經驗（未含加成）<\/div>/);
