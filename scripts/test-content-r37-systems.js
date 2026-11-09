@@ -84,11 +84,11 @@ test("A4 對話的繼續是實心主按鈕，略過是小字次按鈕", () => {
   assert.match(css, /\.dialogue-close[\s\S]*background: transparent[\s\S]*font-size: 11px/);
 });
 
-test("A5 第一批交付後卡片、任務列與班伯台詞只指向料理", () => {
+test("A5 第一批交付後依庫存導向種麥，班伯台詞仍交代料理", () => {
   const state = readyForFirstHarvestClaim();
   const result = A.claim(state, "c1_first_harvest", T);
   assert.equal(result.ok, true);
-  assert.match(result.settlement.next, /農舍灶台.*晚餐/);
+  assert.match(result.settlement.next, /還差 2 份小麥.*種下小麥/); // R65：交付後庫存為零，單一下一步必須先補小麥。
   assert.match(result.milestones.find((row) => row.type === "market_open").next, /灶台做晚餐/);
   const guide = A.guide(state, T);
   assert.equal(guide.questId, "c1_first_meal");
