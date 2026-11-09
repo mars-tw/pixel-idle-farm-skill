@@ -22,7 +22,7 @@ test("任務卡只顯示目前步驟，章節交付進度移到故事手記，�
   assert.match(ui, /已種 \$\{planted\}／3 格・種滿再澆水/);
 });
 test("升級／手記面板中被黏底「再顯示」蓋到的卡會收起，訂單保留首屏兩張", () => {
-  assert.match(ui, /key !== "orders" && visibleCount > 1 && cards\[visibleCount - 1\]\.getBoundingClientRect\(\)\.bottom > btn\.getBoundingClientRect\(\)\.top \+ 1/);
+  assert.match(ui, /key !== "orders" && visibleCount > \(key === "story" \? 0 : 1\) && cards\[visibleCount - 1\]\.getBoundingClientRect\(\)\.bottom > btn\.getBoundingClientRect\(\)\.top \+ 1/); // R59B：故事清單只剩一張卡被橫條壓到也要收起（比原 > 1 更嚴），其餘清單保留原下限
 });
 test("R42 樣式已載入並快取", () => {
   assert.match(html, /src\/content-r42\.css\?v=/);
