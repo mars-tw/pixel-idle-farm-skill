@@ -49,5 +49,21 @@ test("5 作物評比列三樣明細、加分來源、補星提示與拉開獎勵
   assert.equal(result.stars, 3); assert.ok(result.details.some((row) => row.sources.includes("料理 +1"))); assert.match(result.rewardText, /50 金.*專屬.*河畔豐收拼盤/); assert.match(fs.readFileSync("src/world-ui.js", "utf8"), /result\.details.*result\.tip.*result\.rewardText/);
 });
 
-console.log(`VERIFIED content R65A systems (${passed}/5)`);
+test("6 整合：成熟以遊戲判斷為準、第 4 章起手札不用前期下一步、三件事不重複收成提示", () => {
+  const state = fresh(); ok(A.finishTutorial ? { ok: true } : { ok: true });
+  state.adventure.claimed.c1_homecoming = true;
+  state.plots[0] = Object.assign({}, state.plots[0], { cropId: "wheat", plantedAt: T0 - 999999, wateredAt: 0 });
+  const saved = global.getCropProgress;
+  global.getCropProgress = () => ({ ready: false });
+  try { assert.notEqual(A.nextFarmStep(state, T0).action, "harvest", "遊戲說還沒熟時，不可叫玩家收成"); }
+  finally { if (saved) global.getCropProgress = saved; else delete global.getCropProgress; }
+  global.getCropProgress = () => ({ ready: true });
+  try { assert.equal(A.nextFarmStep(state, T0).action, "harvest"); }
+  finally { if (saved) global.getCropProgress = saved; else delete global.getCropProgress; }
+  const world = fs.readFileSync("src/world-ui.js", "utf8");
+  assert.match(world, /main && q\.chapter === 1 && A\.nextFarmStep/, "只有第 1 章主線卡可用前期下一步");
+  assert.match(world, /hint\.kind === "ready" && early\.goals\.some\(\(goal\) => goal\.id === "harvest" && !goal\.complete\)/, "收成提示已在班伯項目內時不另列一行");
+});
+
+console.log(`VERIFIED content R65A systems (${passed}/6)`);
 if (process.exitCode) process.exit(1);

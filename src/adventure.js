@@ -440,7 +440,7 @@
   function readyHarvestPlots(state, now) {
     const t = at(state, now); const active = state.upgrades && state.upgrades.plotCount > 0 && C.UPGRADES && C.UPGRADES.plotCount ? C.UPGRADES.plotCount.levels[state.upgrades.plotCount - 1].value : C.GAME.startPlots;
     return (state.map && state.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < active).filter((tile) => {
-      const plot = state.plots && state.plots[tile.plotIndex]; if (!plot || !plot.cropId || !C.CROPS[plot.cropId]) return false;
+      const plot = state.plots && state.plots[tile.plotIndex]; if (!plot || !plot.cropId || !C.CROPS[plot.cropId]) return false; if (typeof window !== "undefined" && typeof window.getCropProgress === "function") return !!window.getCropProgress(state, plot, t).ready; // R65 整合：成熟判斷以遊戲本身為準，避免任務卡說可收成、田上還在倒數
       let growMs = C.CROPS[plot.cropId].growMs; const growth = state.adventure && state.adventure.r58 && state.adventure.r58.buffs && state.adventure.r58.buffs.growth;
       if (growth && growth.until > t) growMs = Math.max(1000, Math.floor(growMs * growth.mul));
       if ((plot.wateredAt || 0) >= plot.plantedAt) growMs = Math.max(1000, Math.floor(growMs * (C.MOISTURE_MUL || 0.75)));
