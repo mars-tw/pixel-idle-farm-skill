@@ -32,7 +32,7 @@ test("2 麥餅有三分鐘增益、HUD 寫名稱效果分秒，晚餐缺口導�
   state.storage.items.wheat = 2; assert.equal(A.cook(state, "rustic_bread", T0).ok, true); assert.equal(A.eatMeal(state, "rustic_bread", T0).ok, true);
   assert.equal(A.activeBuffs(state, T0 + 1000).growthRemainingMs, 179000); const buff = A.activeBuffs(state, T0 + 1000); assert.equal(buff.growthMeal, "農家麥餅"); assert.equal(buff.growthPct, 25); // 整合同步：HUD 改寫實際吃下的料理名稱，不再固定寫「麥餅」
   state.storage.items.wheat = 1;
-  assert.deepEqual(A.firstMealTask(state, T0 + 1), { available: false, missing: 1, target: "field", text: "做一份自己的晚餐：還差 1 份小麥，先回田裡收成。" }); // R64：做出麥餅即完成第一餐，不再倒退成缺料中的主線。
+  assert.deepEqual(A.firstMealTask(state, T0 + 1), { available: false, missing: 1, target: "field", text: "回家的第一餐：還差 1 份小麥，先回田裡收成。" }); // R69B 同步：主線缺口寫明是給回家的第一餐，與訂單缺口分開；R64 原意（做出麥餅即完成第一餐）不變。
   const ui = fs.readFileSync("src/ui.js", "utf8");
   assert.match(ui, /${mealBuffs.growthMeal || "料理"}・成長 +${mealBuffs.growthPct || 25}%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}/);
   const world = fs.readFileSync("src/world-ui.js", "utf8");

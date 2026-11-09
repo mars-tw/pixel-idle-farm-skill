@@ -27,8 +27,8 @@ test('共用小麥依訂單順序顯示口語句，按鈕狀態與可用量一�
   const rows = G.orderAllocation(state);
   assert.equal(rows[0].ready, true);
   assert.equal(rows[1].ready, false);
-  assert.equal(G.orderAllocationText(state, state.orders[0]), '手上有 6 份小麥，夠交這張了'); // R67B 同步：可用量不變，改口語句
-  assert.equal(G.orderAllocationText(state, state.orders[1]), '還要 2 份小麥，手上的先留給老農班伯和前面的訂單；再種 2 格（約 15 秒）'); // R67B 同步：缺量不變，改口語句
+  assert.equal(G.orderAllocationText(state, state.orders[0]), '這張要 4 份小麥；手上有 6 份，夠交這張了'); // R69B 同步：可用量不變，改完整一句先講這張要幾份
+  assert.equal(G.orderAllocationText(state, state.orders[1]), '這張要 2 份小麥；你手上 6 份先留給老農班伯和前面的訂單，所以還要再種 2 格（約 15 秒）'); // R69B 同步：缺量不變，改完整一句講清要幾份與保留給誰
 });
 
 test('收成、訂單交付與升級都回傳可渲染的即時回饋資料', () => {

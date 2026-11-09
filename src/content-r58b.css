@@ -789,3 +789,5 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
   html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-festival-summary { position:static !important; display:none !important; }
   #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-now { display:grid !important; }
 }
+/* R69B：訂單需求改成完整一句後，需求文字可換行完整顯示，不截斷、不超出卡片。 */
+.side-pane[data-pane="orders"] .o-wants .w { white-space: normal !important; overflow-wrap: anywhere; line-height: 1.4; }

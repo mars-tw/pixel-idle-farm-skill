@@ -1,6 +1,8 @@
 'use strict';
 /* R58 版面：完成兩步教學後，「今日三件事」三個目標看得到、按得到（R63B 起手機預設收成一行，點一下展開）；
-   收合鈕文字與狀態一致（自動收合時寫「展開」，按一次即展開）。 */
+   收合鈕文字與狀態一致（自動收合時寫「展開」，按一次即展開）。
+   本機沙箱無法 listen／無 Playwright 瀏覽器時可用環境變數改走 file 與系統 Chrome（比照 R62／R63）：
+   FARM_TEST_FILE=1 FARM_TEST_CHROME="C:/Program Files/Google/Chrome/Application/chrome.exe" */
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -18,13 +20,13 @@ function serve() {
     res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     fs.createReadStream(file).pipe(res);
   });
-  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server)));
+  return new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', () => resolve(server)); });
 }
 
 (async () => {
-  const server = await serve();
-  const base = `http://127.0.0.1:${server.address().port}/index.html`;
-  const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined });
+  let useFile = process.env.FARM_TEST_FILE === '1'; let server = null; if (!useFile) { try { server = await serve(); } catch (e) { useFile = true; } if (server) server.on('error', () => {}); } // 沙箱無法 listen 時改走 file（比照 R62／R63 既有路由）
+  const base = useFile ? 'file:///' + ROOT.replace(/\\/g, '/') + '/index.html' : `http://127.0.0.1:${server.address().port}/index.html`;
+  let browser; const launch = { headless: true }; if (process.env.FARM_TEST_CHROME) { launch.executablePath = process.env.FARM_TEST_CHROME; launch.args = ['--no-sandbox']; } else if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH) launch.executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH; try { browser = await chromium.launch(launch); } catch (e) { browser = null; for (const p of ['C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', 'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe', '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser']) { if (fs.existsSync(p)) { try { browser = await chromium.launch({ headless: true, executablePath: p, args: ['--no-sandbox'] }); break; } catch (err) {} } } if (!browser) throw e; }
   try {
     for (const view of [{ w: 390, h: 844, mobile: true }, { w: 1366, h: 768, mobile: false }]) {
       const ctx = await browser.newContext({ viewport: { width: view.w, height: view.h }, isMobile: view.mobile, hasTouch: view.mobile, serviceWorkers: 'block' });
@@ -69,6 +71,6 @@ function serve() {
       console.log(`OK ${view.w}×${view.h} 今日三件事 3 個目標可見、收合鈕一按即切換`);
       await ctx.close();
     }
-  } finally { await browser.close(); server.close(); }
+  } finally { await browser.close(); if (server) server.close(); }
   console.log('VERIFIED content R58 layout');
 })().catch((e) => { console.error(e); process.exit(1); });

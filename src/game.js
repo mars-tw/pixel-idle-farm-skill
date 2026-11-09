@@ -1000,22 +1000,22 @@
     if (itemId !== "wheat") return "主線";
     return state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest ? "回家的第一餐" : "老農班伯";
   }
-  // R67B（第 4 項）：訂單缺料改成一句口語，不再寫庫存算式。
+  // R69B（第 4 項）：訂單改成完整一句——這張要幾份、手上的為何保留、還要種幾格一次講清；保留原因分主線（給誰）與前面的訂單。
   function orderItemStatusText(state, order, itemId, itemNames) {
     const row = orderAllocationFor(state, order.id) || orderAllocation(state, [order])[0];
     const item = row && row.items ? row.items[itemId] : null;
     if (!item) return "缺少作物";
     const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
     const name = def ? def.name : itemId;
-    if (!item.missing) return `手上有 ${item.stock} 份${name}，夠交這張了`;
-    let text;
-    if (item.storyReserve > 0 && item.priorReserved > item.storyReserve) text = `還要 ${item.missing} 份${name}，手上的先留給${storyReserveTargetName(state, itemId)}和前面的訂單`;
-    else if (item.storyReserve > 0) text = `還要 ${item.missing} 份${name}（手上 ${item.stock} 份留給${storyReserveTargetName(state, itemId)}）`;
-    else if (item.priorReserved > 0) text = `還要 ${item.missing} 份${name}，手上的先給前面的訂單了`;
-    else if (item.stock > 0) text = `還要 ${item.missing} 份${name}（手上有 ${item.stock} 份）`;
-    else text = `還要 ${item.missing} 份${name}`;
-    const grow = CROPS[itemId] ? `；再種 ${item.missing} 格（約 ${orderGrowDurationText(itemId)}）` : "";
-    return text + grow;
+    if (!item.missing) return `這張要 ${item.required} 份${name}；手上有 ${item.stock} 份，夠交這張了`;
+    const priorOrders = Math.max(0, item.priorReserved - item.storyReserve);
+    let reason; if (item.storyReserve > 0 && priorOrders > 0) reason = item.available > 0 ? `你手上 ${item.stock} 份有 ${item.storyReserve} 份先留給${storyReserveTargetName(state, itemId)}、${priorOrders} 份先給前面的訂單` : `你手上 ${item.stock} 份先留給${storyReserveTargetName(state, itemId)}和前面的訂單`;
+    else if (item.storyReserve > 0) reason = item.available > 0 ? `你手上 ${item.stock} 份有 ${item.storyReserve} 份先留給${storyReserveTargetName(state, itemId)}` : `你手上 ${item.stock} 份先留給${storyReserveTargetName(state, itemId)}`;
+    else if (item.priorReserved > 0) reason = item.available > 0 ? `你手上 ${item.stock} 份有 ${item.priorReserved} 份先給前面的訂單` : `你手上 ${item.stock} 份先給前面的訂單了`;
+    else if (item.stock > 0) reason = `你手上 ${item.stock} 份可以先交這張`;
+    else reason = `你手上還沒有${name}`;
+    const grow = CROPS[itemId] ? `所以還要再種 ${item.missing} 格（約 ${orderGrowDurationText(itemId)}）` : `所以還差 ${item.missing} 份${name}`;
+    return `這張要 ${item.required} 份${name}；${reason}，${grow}`;
   }
   function orderAllocationText(state, order, itemNames) {
     const row = orderAllocationFor(state, order.id);
@@ -1178,7 +1178,7 @@
       storageLevel: "避免收成因倉庫已滿而浪費",
       helperLevel: "離線時也能持續處理成熟作物",
     }[key];
-    const nextStep = shortfall > 0 ? `還差 ${shortfall} 金；${use}` : `可升級；${use}`;
+    const nextStep = shortfall > 0 ? `這項升級還差 ${shortfall} 金；${use}` : `可升級；${use}`;
     const seed = CROPS[state.selectedSeed] || CROPS.wheat;
     const roundSeedCost = activePlotCount(state) * seed.seedCost;
     return { effect, nextStep, reserveRisk: key === "plotCount" ? false : state.coins >= next.cost && state.coins - next.cost < roundSeedCost, roundSeedCost };
