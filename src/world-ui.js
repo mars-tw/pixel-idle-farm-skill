@@ -805,7 +805,9 @@
     const plotRects = targetIsPlot ? plotNodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0) : [];
     const coveredBy = (box) => { if (!box) return 0; const r = box.getBoundingClientRect(); if (!r.width || !r.height) return 0; return Math.max.apply(null, rects.concat(plotRects).map((t) => rectOverlap(t, r)).concat([0])); };
     /* R37：plotRects 已併入 coveredBy，任務列與種子欄對任何田格重疊都會觸發避讓。 */
-    if (dock) { if (coveredBy(dock) > 0) dock.classList.add("quest-target-collapsed"); else dock.classList.remove("quest-target-collapsed"); }
+    // R58：「今日三件事」是玩家要自己挑的清單，不因目標被蓋到而收掉（否則手機上三個目標全看不到）。
+    if (dock && dock.dataset.quest === "early_free_choice") dock.classList.remove("quest-target-collapsed");
+    else if (dock) { if (coveredBy(dock) > 0) dock.classList.add("quest-target-collapsed"); else dock.classList.remove("quest-target-collapsed"); }
     if (seed && coveredBy(seed) > 0) {
       const cx = rects[0].left + rects[0].width / 2;
       seed.classList.toggle("seed-hud-shifted", cx < window.innerWidth / 2);

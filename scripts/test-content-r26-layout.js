@@ -140,7 +140,7 @@ async function scrollPanelToBottom(page) {
         console.log(`OK 間距 ${w}×${h} 方向鍵與物品格 ${gap.gap}px ≥ 8px`);
 
         // 8：R55 規則——任務卡收合摘要只保留目前步驟與該步驟進度。
-        await page.waitForSelector('[data-audit="quest-collapse"]', { timeout: 5000 }); const initiallyCollapsed = await page.evaluate(() => { const b = document.querySelector('#questDock'); return b.classList.contains('quest-collapsed') || b.classList.contains('quest-auto-collapsed'); }); if (initiallyCollapsed) { await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); }
+        await page.waitForSelector('[data-audit="quest-collapse"]', { timeout: 5000 }); const initiallyCollapsed = await page.evaluate(() => { const b = document.querySelector('#questDock'); return b.classList.contains('quest-collapsed') || b.classList.contains('quest-auto-collapsed'); }); if (initiallyCollapsed) { /* R58 同步：自動收合時按鈕寫「展開」，按一次即展開（舊版要按兩次）。 */ await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); }
         const before = await page.evaluate(() => document.querySelector('#questDock').getBoundingClientRect().height);
         await page.locator('[data-audit="quest-collapse"]').click();
         await page.waitForTimeout(200);

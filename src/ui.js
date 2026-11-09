@@ -882,18 +882,20 @@
   function setupQuestDockCollapse() {
     const box = $("questDock"); if (!box) return;
     let wasShort = false;
-    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; const mobile = typeof window !== "undefined" && (window.innerWidth <= 859 || (window.matchMedia && window.matchMedia("(any-pointer: coarse) and (max-height: 480px)").matches)); if (!questDockUserToggled && mobile) box.classList.add("quest-auto-collapsed"); if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short && !mobile) box.classList.remove("quest-auto-collapsed"); wasShort = short; };
+    const syncShortDefault = () => { const short = typeof window !== "undefined" && window.innerHeight <= 600; const mobile = typeof window !== "undefined" && (window.innerWidth <= 859 || (window.matchMedia && window.matchMedia("(any-pointer: coarse) and (max-height: 480px)").matches)); const freeChoice = box.dataset.quest === "early_free_choice"; if (!questDockUserToggled && mobile && !freeChoice) box.classList.add("quest-auto-collapsed"); if (!questDockUserToggled && freeChoice) box.classList.remove("quest-auto-collapsed"); if (short && !wasShort) box.classList.add("quest-auto-collapsed"); if (!short && !mobile) box.classList.remove("quest-auto-collapsed"); wasShort = short; };
     const ensure = () => { syncShortDefault();
       box.classList.toggle("quest-collapsed", questDockCollapsed);
       let btn = box.querySelector("[data-audit='quest-collapse']");
       if (!btn) {
         btn = document.createElement("button");
         btn.type = "button"; btn.className = "quest-collapse-btn"; btn.dataset.audit = "quest-collapse";
-        btn.onclick = (ev) => { ev.stopPropagation(); questDockUserToggled = true; questDockCollapsed = !questDockCollapsed; box.classList.remove("quest-auto-collapsed"); ensure(); }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed"); ensure(); };
+        btn.onclick = (ev) => { ev.stopPropagation(); const shown = !questDockCollapsed && !box.classList.contains("quest-auto-collapsed"); questDockUserToggled = true; questDockCollapsed = shown; box.classList.remove("quest-auto-collapsed"); ensure(); }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed"); ensure(); };
         box.appendChild(btn);
       }
-      btn.textContent = questDockCollapsed ? "展開" : "收合";
-      if (btn.setAttribute) { btn.setAttribute("aria-expanded", questDockCollapsed ? "false" : "true"); btn.setAttribute("aria-label", questDockCollapsed ? "展開任務卡" : "收合任務卡"); }
+      // R58：自動收合時按鈕也寫「展開」，一按就展開（原本寫「收合」且要按兩次）。
+      const folded = questDockCollapsed || box.classList.contains("quest-auto-collapsed");
+      btn.textContent = folded ? "展開" : "收合";
+      if (btn.setAttribute) { btn.setAttribute("aria-expanded", folded ? "false" : "true"); btn.setAttribute("aria-label", folded ? "展開任務卡" : "收合任務卡"); }
     };
     ensure();
     if (typeof window !== "undefined" && window.addEventListener) window.addEventListener("resize", syncShortDefault);
