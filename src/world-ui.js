@@ -757,7 +757,15 @@
     world.querySelectorAll(".r63a-festival-scene").forEach((node) => node.remove());
     const scene = A.festivalScene ? A.festivalScene(s, now) : { active: false };
     world.dataset.r63aFestival = scene.active ? "active" : "inactive";
-    if (!scene.active) return;
+    if (!scene.active) {
+      const settlement = A.takeFestivalSettlement ? A.takeFestivalSettlement(s, now) : null;
+      if (settlement) {
+        const nextMinutes = Math.ceil(Math.max(0, settlement.nextAt - now) / 60000);
+        modal("收穫祭小結算", `<p class="r64a-settlement-score">完成 ${settlement.goalsCompleted}/3 項・作物評比 ${settlement.stars ? settlement.stars + " 顆星" : "未參加"}</p><ul>${settlement.rewards.map((row) => `<li>${esc(row)}</li>`).join("")}</ul><p class="project-desc">下一場約在 ${nextMinutes} 分鐘後開始。</p>`);
+        if (farm() && farm().safeSaveNow) farm().safeSaveNow();
+      }
+      return;
+    }
     const tileOf = (id) => window.getTileById(s, id);
     // R63 整合：布置改用像素圖（彩旗、燈籠架為手繪像素 SVG，長桌沿用宴席桌素材），不用表情符號。
     const art = { bunting: ["assets/generated/content-r63/bunting.svg", 2.6], lanterns: ["assets/generated/content-r63/lanterns.svg", .8], long_table: ["assets/generated/content-r10/table.png", 1.7] };
@@ -765,8 +773,18 @@
     // 鄰居留在原位（仍可交談完成「跟鄰居說話」），頭上冒出祭典招呼。
     scene.neighbors.forEach((item) => { const tile = (s.map.tiles || []).find((tl) => tl.npc === item.id); if (!tile) return; const node = document.createElement("span"); node.className = "r63a-festival-scene r63a-festival-cheer"; node.dataset.festivalNeighbor = item.id; node.textContent = ({ mayor: "祭典開始囉！", elder: "來嚐嚐新麥！", merchant: "攤位擺好了", child: "去看彩旗！" })[item.id] || "收穫祭快樂"; node.setAttribute("aria-label", `${item.name}在收穫祭打招呼`); node.style.cssText = `left:${(tile.x + .5) * size}px;top:${(tile.y - .55) * size}px;z-index:${Math.round((tile.y + 2) * size)};`; world.appendChild(node); });
     const stallTile = tileOf(scene.stall.tileId); if (!stallTile) return;
-    const stall = document.createElement("button"); stall.type = "button"; stall.className = "r63a-festival-scene r63a-festival-stall"; stall.dataset.festivalStall = scene.stall.id; stall.dataset.tileId = scene.stall.tileId; stall.innerHTML = `<img src="assets/generated/content-r63/stall.svg?v=content-r63-20261109-1" alt="" draggable="false"><b>${esc(scene.stall.name)}</b>`; stall.setAttribute("aria-label", "查看收穫祭三個目標與獎勵"); stall.style.cssText = `left:${(stallTile.x + .5) * size}px;top:${(stallTile.y + .05) * size}px;z-index:${Math.round((stallTile.y + 1) * size)};`;
-    stall.onclick = (event) => { event.stopPropagation(); const live = A.festivalScene(s, Date.now()); if (!live.active || !live.stall) { notify("這一場收穫祭已經結束，布置也收起來了。"); refresh(s); return; } const goalText = live.stall.goals.map((goal) => `<li>${goal.complete ? "✓" : "○"} ${esc(goal.name)} ${goal.current}/${goal.required}</li>`).join(""); modal("祭典攤位", `<p class="project-desc">完成三個現場目標，就能領取本場獎勵。</p><ul class="r63a-stall-goals">${goalText}</ul><p class="project-desc"><b>獎勵：</b>${esc(live.stall.rewardText)}</p>`); };
+    const stall = document.createElement("button"); stall.type = "button"; stall.className = "r63a-festival-scene r63a-festival-stall"; stall.dataset.festivalStall = scene.stall.id; stall.dataset.tileId = scene.stall.tileId; stall.innerHTML = `<img src="assets/generated/content-r63/stall.svg?v=content-r63-20261109-1" alt="" draggable="false"><b>${esc(scene.stall.name)}</b>`; stall.setAttribute("aria-label", "查看收穫祭三個目標與獎勵，參加作物評比"); stall.style.cssText = `left:${(stallTile.x + .5) * size}px;top:${(stallTile.y + .05) * size}px;z-index:${Math.round((stallTile.y + 1) * size)};`;
+    stall.onclick = (event) => {
+      event.stopPropagation(); const live = A.festivalScene(s, Date.now());
+      if (!live.active || !live.stall) { notify("這一場收穫祭已經結束，布置也收起來了。"); refresh(s); return; }
+      const goalText = live.stall.goals.map((goal) => `<li>${goal.complete ? "✓" : "○"} ${esc(goal.name)} ${goal.current}/${goal.required}</li>`).join("");
+      const entries = A.festivalEntries(s, Date.now());
+      const entryHtml = live.stall.judging ? `<p class="r64a-judged">本場已評比：${live.stall.judging.stars} 顆星・${esc(live.stall.judging.rewardText)}</p>` : entries.length ? `<fieldset class="r64a-festival-entry"><legend>選三樣作物或料理</legend>${entries.map((row) => `<button type="button" data-festival-entry="${esc(row.id)}" aria-pressed="false"><span aria-hidden="true">${esc(row.icon)}</span>${esc(row.name)} <small>${row.quantity} 份</small></button>`).join("")}</fieldset><p class="project-desc">種類多樣、有當季作物又有料理，星等會更高。</p><button type="button" id="festivalJudge" disabled>參加作物評比（已選 0/3）</button>` : '<p class="project-desc">背包裡還沒有可參賽的作物或料理。</p>';
+      const box = modal("祭典攤位", `<p class="project-desc">本場有 10 分鐘。完成三個現場目標，也別忘了每場一次的作物評比。</p><ul class="r63a-stall-goals">${goalText}</ul><p class="project-desc"><b>獎勵：</b>${esc(live.stall.rewardText)}</p>${entryHtml}`);
+      const picked = [];
+      box.querySelectorAll("[data-festival-entry]").forEach((button) => { button.onclick = () => { const id = button.dataset.festivalEntry; const index = picked.indexOf(id); if (index >= 0) picked.splice(index, 1); else if (picked.length < 3) picked.push(id); button.setAttribute("aria-pressed", String(picked.includes(id))); const submit = box.querySelector("#festivalJudge"); submit.disabled = picked.length !== 3; submit.textContent = `參加作物評比（已選 ${picked.length}/3）`; }; });
+      const submit = box.querySelector("#festivalJudge"); if (submit) submit.onclick = () => { const result = A.judgeFestivalEntry(s, picked, Date.now()); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); modal("作物評比結果", `<p class="r64a-stars" aria-label="${result.ok ? result.stars : 0} 顆星">${result.ok ? "★".repeat(result.stars) + "☆".repeat(3 - result.stars) : "☆☆☆"}</p><p>${esc(result.message)}</p>`); refresh(s); };
+    };
     world.appendChild(stall);
   }
   function paintFringe(s, size, world) {
@@ -947,7 +965,7 @@
     const neighbor = A.neighbors(current, Date.now()).find((n) => n.id === npcId && n.deliveries);
     if (neighbor) return neighbor.lastMatched ? neighbor.memory.reply : neighbor.deliveries>1 ? neighbor.memory.wrong : neighbor.reaction;
     const q = A.summary(current, Date.now()).currentQuest;
-    if (npcId === "mayor" && q && q.id === "c1_homecoming") return "你就是她的孫子吧？先去祖母的田種下第一格，讓我看看你的本事。";
+    if (npcId === "mayor" && q && q.id === "c1_homecoming") return current.gender === "m" ? "你就是她的孫子凱吧？先去祖母的田種下第一格，讓我看看你的本事。" : "你就是她的孫女米莉吧？先去祖母的田種下第一格，讓我看看你的本事。";
     if (q && q.npcId === npcId) {
       if (q.canClaim) return "東西都備好了？我在這裡等你，帶來一起看看吧。";
       const ownNames = { mayor: ["鎮長葛瑞", "鎮長"], elder: ["老農班伯"], merchant: ["商人蘿拉", "蘿拉"], child: ["孩童圖圖", "圖圖"] }[npcId] || [];

@@ -73,7 +73,7 @@ test("5 今日三件事寫出釣台缺口、可修狀態與蘿拉位置", () => 
   assert.match(goals.find((row) => row.id === "dock").detail, /木料 0\/4・石材 0\/2/);
   assert.match(goals.find((row) => row.id === "market").detail, /農場東側的市集攤位/);
   state.materials.wood = 4; state.materials.stone = 2; goals = A.earlyGoals(state, T0).goals;
-  assert.equal(goals.find((row) => row.id === "dock").actionLabel, "去修釣台");
+  assert.equal(goals.find((row) => row.id === "dock").actionLabel, "去修"); // R64：材料齊提示與按鈕都改成短動作。
 });
 
 console.log(`\nR59A systems: ${passed} passed, ${failed} failed.`);

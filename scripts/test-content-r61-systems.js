@@ -78,12 +78,12 @@ test("4 收穫祭開啟、倒數、三目標、獎勵與二十分鐘後再次開
   }
   stock(state); for (const id of ["tomato_harvest_stew", "strawberry_market_tart", "carrot_trail_soup"]) ok(A.cook(state, id, T0 + 3));
   ok(A.claim(state, "c5_festival_dinner", T0 + 4));
-  let festival = A.festivalStatus(state, T0 + 5); assert.equal(festival.active, true); assert.equal(festival.remainingMs, 300000);
+  let festival = A.festivalStatus(state, T0 + 5); assert.equal(festival.active, true); assert.equal(festival.remainingMs, 600000); // R64：收穫祭改為十分鐘。
   ok(A.record(state, { type: "harvest", cropId: "tomato", count: 3 }, T0 + 6)); stock(state); ok(A.cook(state, "tomato_harvest_stew", T0 + 7));
   ok(A.record(state, { type: "talk", npcId: "mayor" }, T0 + 8)); ok(A.record(state, { type: "talk", npcId: "merchant" }, T0 + 9));
   festival = A.festivalStatus(state, T0 + 10); assert.equal(festival.canComplete, true); assert.ok(festival.goals.every((g) => g.complete));
   const done = ok(A.completeFestival(state, T0 + 10)); assert.deepEqual(done.reward, { medals: 1, decorations: 1 });
-  festival = A.festivalStatus(state, T0 + 10 + 20 * 60 * 1000); assert.equal(festival.active, true); assert.equal(festival.rounds, 1);
+  festival = A.festivalStatus(state, T0 + 10 + 30 * 60 * 1000); assert.equal(festival.active, true); assert.equal(festival.rounds, 1); // R64：本場十分鐘結束，再等二十分鐘開下一場。
   assert.match(fs.readFileSync("src/world-ui.js", "utf8"), /r61a-festival-banner/); assert.match(fs.readFileSync("src/content-r58b.css", "utf8"), /R61A/);
 });
 

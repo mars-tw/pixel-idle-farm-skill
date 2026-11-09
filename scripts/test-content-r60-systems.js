@@ -32,7 +32,7 @@ test("2 麥餅有三分鐘增益、HUD 寫名稱效果分秒，晚餐缺口導�
   state.storage.items.wheat = 2; assert.equal(A.cook(state, "rustic_bread", T0).ok, true); assert.equal(A.eatMeal(state, "rustic_bread", T0).ok, true);
   assert.equal(A.activeBuffs(state, T0 + 1000).growthRemainingMs, 179000); const buff = A.activeBuffs(state, T0 + 1000); assert.equal(buff.growthMeal, "農家麥餅"); assert.equal(buff.growthPct, 25); // 整合同步：HUD 改寫實際吃下的料理名稱，不再固定寫「麥餅」
   state.storage.items.wheat = 1;
-  assert.deepEqual(A.firstMealTask(state, T0 + 1), { available: true, missing: 1, target: "field", text: "做一份自己的晚餐：還差 1 份小麥，先回田裡收成。" });
+  assert.deepEqual(A.firstMealTask(state, T0 + 1), { available: false, missing: 1, target: "field", text: "做一份自己的晚餐：還差 1 份小麥，先回田裡收成。" }); // R64：做出麥餅即完成第一餐，不再倒退成缺料中的主線。
   const ui = fs.readFileSync("src/ui.js", "utf8");
   assert.match(ui, /${mealBuffs.growthMeal || "料理"}・成長 +${mealBuffs.growthPct || 25}%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}/);
   const world = fs.readFileSync("src/world-ui.js", "utf8");
@@ -57,7 +57,7 @@ test("3 市集預覽與第一批不卡小麥，開墾買得起就能按", () => 
 
 test("4 三個主線節點各有三句對白、二選一、實際結果、日誌與不同回收台詞", () => {
   const cases = [
-    ["mayor", {}, "tools", "neighbors"],
+    ["mayor", {}, "farm", "town"], // R64：鎮長選項改成眼前的種田／聽鎮上故事。
     ["elder", { c1_first_harvest: true }, "sell", "seed"],
     ["merchant", { c1_homecoming: true }, "sign", "listen"],
   ];

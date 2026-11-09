@@ -434,3 +434,10 @@ html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-c
 html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63-primary em { flex: 0 0 auto; white-space: nowrap; font-style: normal; font-weight: 800; }
 html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed):has(.r63-primary) .world-objective-title { flex: 0 0 auto !important; width: auto !important; min-width: max-content !important; max-width: none !important; overflow: visible !important; white-space: nowrap; }
 body:has(#toast-zone > .toast) #questDock .r63a-main-next small, body:has(#worldDialogue:not([hidden])) #questDock .r63a-main-next small { display: none; }
+/* R64A：收穫祭作物評比與結算，只補祭典攤位內容，不更動任務卡版面。 */
+.r64a-festival-entry { display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr)); gap:8px; margin:12px 0; padding:10px; border:1px solid #c9b77d; border-radius:10px; }
+.r64a-festival-entry legend { padding:0 6px; font-weight:800; }
+.r64a-festival-entry button { min-height:48px; white-space:normal; }
+.r64a-festival-entry button[aria-pressed="true"] { outline:3px solid #e0a72a; background:#fff4c7; }
+.r64a-stars { font-size:32px; letter-spacing:5px; color:#b56a13; text-align:center; margin:8px 0; }
+.r64a-judged,.r64a-settlement-score { padding:10px; border-radius:8px; background:#fff4c7; font-weight:800; }
