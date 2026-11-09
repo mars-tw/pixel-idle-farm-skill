@@ -239,7 +239,7 @@
       if (document.body) document.body.dataset.questStep = "choice";
       box.innerHTML = `<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
         ${hint ? `<div class="world-objective-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</div>` : ""}
-        <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small></button>`).join("")}</div>`;
+        <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small>${goal.actionLabel ? `<em>${esc(goal.actionLabel)}</em>` : ""}</button>`).join("")}</div>`;
       box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
       syncSeedHudTop();
       return true;
@@ -366,9 +366,10 @@
     const projects = A.projects(current);
     const commissions = A.commissions(current, Date.now());
     const personal = A.personalQuests ? A.personalQuests(current, Date.now()) : [];
+    const permanent = A.permanentResults ? A.permanentResults(current, Date.now()) : [];
     const r58evt = A.randomEvents ? A.randomEvents(current, Date.now()) : { active: null };
     const buffs = A.activeBuffs ? A.activeBuffs(current, Date.now()) : null;
-    const sig = JSON.stringify([list, projects, commissions, current.adventure.neighbors, current.adventure.gathering, personal, r58evt, buffs && Math.floor(buffs.growthRemainingMs / 30000), buffs && Math.floor(buffs.orderRemainingMs / 30000)]);
+    const sig = JSON.stringify([list, projects, commissions, current.adventure.neighbors, current.adventure.gathering, personal, permanent, r58evt, buffs && Math.floor(buffs.growthRemainingMs / 30000), buffs && Math.floor(buffs.orderRemainingMs / 30000)]);
     if (sig !== lastPanels) {
       lastPanels = sig;
       const availability = A.storyPanelAvailability(current);
@@ -380,12 +381,13 @@
         ${availability.showNeighborBasket ? `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div>` : ""}
         ${availability.showRiverCommissions ? `<h3 class="story-subhead">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}` : ""}`;
       const r58host = document.createElement("div"); r58host.className = "r58-section";
-      r58host.innerHTML = `${r58evt.active ? `<div class="r58-card" data-r58-event="${esc(r58evt.active.id)}"><h4>${esc(r58evt.active.icon)} ${esc(r58evt.active.name)}</h4><p>${esc(r58evt.active.dialogue)}</p><p class="r58-meta">處理後可得：${esc(r58evt.active.rewardText)}・剩 ${Math.max(1, Math.ceil(r58evt.active.remainingMs / 60000))} 分鐘</p><button data-r58-resolve>${esc(r58evt.active.actionLabel)}</button></div>` : `<div class="r58-card"><h4>🌾 農場小事</h4><p class="r58-meta">小事會在遊玩途中自己找上門，處理完一件，下一件約在 2～3 分鐘後出現。</p></div>`}
+      r58host.innerHTML = `${r58evt.active ? `<div class="r58-card r59-event" data-r58-event="${esc(r58evt.active.id)}"><h4>${esc(r58evt.active.icon)} ${esc(r58evt.active.name)}</h4><p>${esc(r58evt.active.dialogue)}</p><p class="r58-meta">請選一個做法・剩 ${Math.max(1, Math.ceil(r58evt.active.remainingMs / 60000))} 分鐘</p><div class="r59-event-options">${r58evt.active.options.map((option) => `<button data-r58-resolve="${esc(option.id)}" ${option.available ? "" : "disabled"}>${esc(option.label)}<small>${esc(option.resultText)}</small></button>`).join("")}</div></div>` : `<div class="r58-card"><h4>🌾 農場小事</h4><p class="r58-meta">小事會在遊玩途中自己找上門，處理完一件，下一件約在 2～3 分鐘後出現。</p></div>`}
         ${buffs && (buffs.growthRemainingMs > 0 || buffs.orderRemainingMs > 0) ? `<div class="r58-card r58-buff"><h4>🍽️ 料理增益生效中</h4><p class="r58-meta">${buffs.growthRemainingMs > 0 ? `成長加速・剩 ${Math.ceil(buffs.growthRemainingMs / 60000)} 分鐘 ` : ""}${buffs.orderRemainingMs > 0 ? `訂單收入提高・剩 ${Math.ceil(buffs.orderRemainingMs / 60000)} 分鐘` : ""}</p></div>` : ""}
         <h3 class="story-subhead">鄰居個人委託</h3><p class="project-desc">每位鄰居有兩件自己的小委託，完成會讓好感 +1。</p>
-        ${personal.map((p) => `<div class="r58-card" data-r58-personal-card="${esc(p.id)}"><h4>${esc(p.npcName)}・${esc(p.title)}</h4><p>${esc(p.dialogue)}</p><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`).join("")}`;
+        ${personal.map((p) => `<div class="r58-card" data-r58-personal-card="${esc(p.id)}"><h4>${esc(p.npcName)}・${esc(p.title)}</h4><p>${esc(p.dialogue)}</p><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`).join("")}
+        ${permanent.filter((result) => result.unlocked).map((result) => `<div class="r58-card r59-permanent" data-r59-permanent="${esc(result.npcId)}"><h4>${esc(result.icon)} ${esc(result.name)}</h4><p>${esc(result.text)}</p><p class="r58-meta">${esc(result.revisit)}</p></div>`).join("")}`;
       if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host);
-      panel.querySelectorAll("[data-r58-resolve]").forEach((b) => { b.onclick = () => { const r = A.resolveRandomEvent(current, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastPanels = ""; refresh(current); }; });
+      panel.querySelectorAll("[data-r58-resolve]").forEach((b) => { b.onclick = () => { const r = A.resolveRandomEvent(current, b.dataset.r58Resolve, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastPanels = ""; refresh(current); }; });
       panel.querySelectorAll("[data-r58-personal]").forEach((b) => { b.onclick = () => {
         closePanels();
         const p = personal.find((entry) => entry.id === b.dataset.r58Personal), tile = p && npcTile(p.npcId);
@@ -596,7 +598,7 @@
   }
   function openKitchen() {
     const recipes = A.recipes(current);
-    const box = modal("農舍灶台", `<p class="project-desc">老農班伯的食譜放在灶邊。料理留在餐籃裡，交給鎮民時才會取用。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3>${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><div class="project-cost">${costText(r.requirements)}</div><button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "等老農班伯教你"}</button>${r.effect ? `<p class="project-desc r58-buff">${esc(r.effect.summary)}</p><button data-eat="${r.id}" ${r.unlocked && r.quantity > 0 ? "" : "disabled"}>享用一份・${esc(r.effect.label)}</button>` : ""}</div>`).join(""));
+    const box = modal("農舍灶台", `<p class="project-desc">每道料理都會寫清楚效果與解鎖方式。做好的料理會留在餐籃裡。</p><button id="kitchenNeighbors">裝一份鄰居餐籃</button>` + recipes.map((r) => `<div class="recipe-row" data-recipe="${r.id}"><h3><span aria-hidden="true">${esc(r.icon || "🍽️")}</span> ${esc(r.name)} <small>餐籃 ${r.quantity}</small></h3><p class="project-desc">${esc(r.description)}</p><p class="r59-recipe-status">${r.unlocked ? "已學會" : esc(r.unlockText || "尚未學會")}</p><div class="project-cost">${costText(r.requirements)}</div>${r.effect ? `<p class="project-desc r58-buff"><b>效果：</b>${esc(r.effect.summary)}・持續 ${esc(r.effect.durationText)}</p>` : `<p class="project-desc"><b>用途：</b>帶去分享，不提供限時增益。</p>`}<button data-cook="${r.id}" ${r.canCook ? "" : "disabled"}>${r.unlocked ? r.canCook ? "烹調一份" : "食材未齊" : "尚未學會"}</button>${r.effect ? `<button data-eat="${r.id}" ${r.unlocked && r.quantity > 0 ? "" : "disabled"}>享用一份・${esc(r.effect.label)} ${esc(r.effect.durationText)}</button>` : ""}</div>`).join(""));
     box.querySelector("#kitchenNeighbors").onclick = () => window.ContentR1.openNeighbors(current);
     box.querySelectorAll("[data-cook]").forEach((b) => { b.onclick = () => {
       farm().closeModal("worldModal");

@@ -27,20 +27,25 @@
       cost: { coins: 80, wood: 4 }, unlockQuest: "c3_good_neighbors", unlocks: ["pressed_flower", "garden_guestbook"] },
   ];
   const RECIPES = [
-    { id: "rustic_bread", name: "農家麥餅", description: "把剛收的小麥烤成第一餐。", ingredients: { wheat: 2 }, unlockQuest: "c1_first_harvest" },
-    { id: "baked_carrot", name: "胡蘿蔔烤餅", description: "加上胡蘿蔔，烤一份能帶去野餐的點心。", ingredients: { wheat: 1, carrot: 2 }, unlockProject: "picnic_table" },
-    { id: "mint_tea", name: "溪畔薄荷茶", description: "用溪畔薄荷泡茶，配上一小片麥餅。", ingredients: { river_mint: 1, wheat: 1 }, unlockProject: "picnic_table" },
-    { id: "wheat_carrot_pancake", name: "小麥胡蘿蔔煎餅", description: "小麥和胡蘿蔔煎得香脆，趁熱享用後，接下來五分鐘作物成長時間縮短。", ingredients: { wheat: 2, carrot: 1 }, unlockQuest: "c1_first_harvest", effect: { kind: "growth", mul: 0.75, durationMs: 300000, label: "成長加速", summary: "五分鐘內作物成長時間 ×0.75。" } },
-    { id: "carrot_wheat_stew", name: "胡蘿蔔麥粒燉鍋", description: "胡蘿蔔和麥粒燉成一鍋，端去市集分享後，接下來五分鐘訂單收入提高。", ingredients: { wheat: 1, carrot: 2 }, unlockQuest: "c1_first_harvest", effect: { kind: "order", bonus: 0.2, durationMs: 300000, label: "訂單收入提高", summary: "五分鐘內訂單金幣收入 +20%。" } },
+    { id: "rustic_bread", name: "農家麥餅", icon: "🥖", description: "把剛收的小麥烤成第一餐。", ingredients: { wheat: 2 }, unlockQuest: "c1_first_harvest", unlockText: "完成主線「老農班伯的開市小麥」後學會" },
+    { id: "baked_carrot", name: "胡蘿蔔烤餅", icon: "🥕", description: "加上胡蘿蔔，烤一份能帶去野餐的點心。", ingredients: { wheat: 1, carrot: 2 }, unlockProject: "picnic_table", unlockText: "修好野餐桌後學會" },
+    { id: "mint_tea", name: "溪畔薄荷茶", icon: "🍵", description: "用溪畔薄荷泡茶，配上一小片麥餅。", ingredients: { river_mint: 1, wheat: 1 }, unlockProject: "picnic_table", unlockText: "修好野餐桌後學會" },
+    { id: "wheat_carrot_pancake", name: "小麥胡蘿蔔煎餅", icon: "🥞", description: "小麥和胡蘿蔔煎得香脆。", ingredients: { wheat: 2, carrot: 1 }, unlockQuest: "c1_first_harvest", unlockText: "完成主線「老農班伯的開市小麥」後學會", effect: { kind: "growth", mul: 0.75, durationMs: 300000, durationText: "5 分鐘", label: "成長加速", summary: "作物成長時間縮短 25%。" } },
+    { id: "carrot_wheat_stew", name: "胡蘿蔔麥粒燉鍋", icon: "🥘", description: "胡蘿蔔和麥粒慢慢燉成一鍋。", ingredients: { wheat: 1, carrot: 2 }, unlockQuest: "c1_first_harvest", unlockText: "完成主線「老農班伯的開市小麥」後學會", effect: { kind: "order", bonus: 0.2, durationMs: 300000, durationText: "5 分鐘", label: "訂單收入提高", summary: "訂單金幣收入提高 20%。" } },
+    { id: "bamber_rain_soup", name: "老農班伯的雨水清湯", icon: "🍲", description: "老農班伯教你的清湯，雨天喝最暖。", ingredients: { rainwater: 1, carrot: 1 }, unlockPersonalNpc: "elder", unlockText: "完成老農班伯的兩件個人委託後學會" },
   ];
-  // R58：農場小事件。每件只有一個處理動作，結算後才排下一件（約 2～3 分鐘）。
+  // R59A：每件農場小事都有選擇，選項文字就是實際成本與結果。
   const R58_EVENT_MIN_MS = 120000;
   const R58_EVENT_MAX_MS = 180000;
   const R58_EVENTS = [
-    { id: "traveling_merchant", name: "旅行商人來訪", icon: "🧳", speaker: "旅行商人", dialogue: "旅行商人壓低帽子說：「這包稀有種子只賣這一站，12 金，錯過就跟著馬車走了。」", actionLabel: "買下稀有種子包・12 金", expiresMs: 300000, rewardText: "草莓 1 份收進倉庫" },
-    { id: "crow_steal", name: "烏鴉來偷吃", icon: "🐦‍⬛", speaker: "農場小事", dialogue: "烏鴉盯著田裡的穗子打轉，翅膀一拍，就想落下來偷吃。", actionLabel: "趕走烏鴉", expiresMs: 180000, rewardText: "烏鴉羽毛 1 份" },
-    { id: "afternoon_rain", name: "午後小雨", icon: "🌦️", speaker: "農場小事", dialogue: "午後的雲慢慢壓低，第一滴雨落在葉尖上，乾土正等著這一陣雨。", actionLabel: "趁雨讓田喝飽水", expiresMs: 180000, rewardText: "田裡作物全部自動澆水" },
-    { id: "lost_chick", name: "走失的小雞", icon: "🐣", speaker: "農場小事", dialogue: "雞舍邊傳來細細的叫聲，一隻小雞鑽進草叢裡，繞了半天出不來。", actionLabel: "帶小雞回雞舍", expiresMs: 180000, rewardText: "雞蛋 1 顆收進倉庫" },
+    { id: "traveling_merchant", name: "旅行商人來訪", icon: "🧳", speaker: "旅行商人", dialogue: "旅行商人掀起布簾，露出幾包草莓種子。", expiresMs: 300000, options: [
+      { id: "buy", label: "花 12 金買 2 包", resultText: "草莓種子 2 包" }, { id: "trade", label: "用 3 份小麥換 1 包", resultText: "草莓種子 1 包" }, { id: "decline", label: "這次先婉拒", resultText: "不花資源" }] },
+    { id: "crow_steal", name: "烏鴉來偷吃", icon: "🐦‍⬛", speaker: "農場小事", dialogue: "烏鴉在田邊歪著頭，眼睛直盯著麥穗。", expiresMs: 180000, options: [
+      { id: "shoo", label: "揮手趕走牠", resultText: "烏鴉羽毛 1 份" }, { id: "feed", label: "撒 1 份小麥餵牠", resultText: "下次帶來小禮物" }] },
+    { id: "afternoon_rain", name: "午後小雨", icon: "🌦️", speaker: "農場小事", dialogue: "雨點落在田埂上，乾土和空木桶都等著你。", expiresMs: 180000, options: [
+      { id: "water", label: "讓田吸飽雨水", resultText: "田裡作物全部澆水" }, { id: "collect", label: "接一桶雨水", resultText: "雨水 1 份" }] },
+    { id: "lost_chick", name: "走失的小雞", icon: "🐣", speaker: "農場小事", dialogue: "一隻小雞卡在草叢裡，圖圖也在遠處著急張望。", expiresMs: 180000, options: [
+      { id: "coop", label: "帶回雞舍", resultText: "雞蛋 1 顆" }, { id: "tutu", label: "送去給圖圖", resultText: "圖圖好感 +1" }] },
   ];
   // R58：鄰居個人委託。第一件在第一章展開後出現，第二件在第一章主線完成後出現。
   const R58_PERSONAL_QUESTS = [
@@ -124,8 +129,8 @@
   const QUESTS = [
     { id: "c1_homecoming", chapter: 1, name: "種下第一格", npcId: "mayor", description: "先找鎮長葛瑞，再親手種下第一格作物。接下來要做什麼，由你決定。", target: { kind: "npc", id: "mayor" }, wants: {},
       goals: [goal("talk", 1, "找鎮長葛瑞交談", "mayor"), goal("plant", 1, "種下第一格")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
-    { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收成 6 份小麥（每格 2 份），再把其中 2 份交給老農班伯。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
-      goals: [goal("harvest", 6, "收成小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
+    { id: "c1_first_harvest", chapter: 1, name: "老農班伯的開市小麥", npcId: "elder", description: "交給老農班伯 2 份小麥，讓市集認得農場的新收成。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
+      goals: [goal("harvest", 2, "收成老農班伯的開市小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
     { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在農舍灶台做一份農家麥餅，帶給老農班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
       goals: [goal("cook", 1, "烤一份農家麥餅", "rustic_bread")], reward: reward(20, 4, { wood: 6 }, { fishingRod: true }) },
     { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木材、兩份石材修好釣台，再試試老農班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
@@ -313,6 +318,7 @@
       && r58raw.activeEvent.expiresAt > now) {
       r58active = { id: r58raw.activeEvent.id, startedAt: r58raw.activeEvent.startedAt, expiresAt: r58raw.activeEvent.expiresAt };
     }
+    const r59raw = object(r58raw.r59) ? r58raw.r59 : {};
     a.r58 = {
       nextEventAt: Number.isSafeInteger(r58raw.nextEventAt) && r58raw.nextEventAt >= 0 ? r58raw.nextEventAt : now + R58_EVENT_MIN_MS,
       lastEventAt: Number.isSafeInteger(r58raw.lastEventAt) && r58raw.lastEventAt >= 0 ? r58raw.lastEventAt : 0,
@@ -321,6 +327,12 @@
       favor: cleanCounts(r58raw.favor, Object.keys(C.NPCS || {}), 999),
       personal: { completed: r58completed, completedAt: Object.fromEntries(r58completed.map((id) => [id, Number.isSafeInteger(r58completedAtRaw[id]) && r58completedAtRaw[id] >= 0 ? r58completedAtRaw[id] : 0])) },
       buffs: { growth: cleanBuff(r58buffRaw.growth, "growth"), order: cleanBuff(r58buffRaw.order, "order") },
+      r59: {
+        eventFlags: object(r59raw.eventFlags) ? copy(r59raw.eventFlags) : {},
+        seedPacks: cleanCounts(r59raw.seedPacks, Object.keys(C.CROPS || {}), 99),
+        journal: (Array.isArray(r59raw.journal) ? r59raw.journal : []).filter((row) => object(row) && typeof row.text === "string" && Number.isSafeInteger(row.at)).slice(-40).map((row) => ({ at: row.at, eventId: String(row.eventId || ""), choiceId: String(row.choiceId || ""), text: row.text.slice(0, 180) })),
+        permanent: object(r59raw.permanent) ? copy(r59raw.permanent) : {},
+      },
     };
     if (a.lastFishAt !== null && !(Number.isSafeInteger(a.lastFishAt) && a.lastFishAt >= 0)) a.lastFishAt = null;
     if (a.migrated !== true) backfill(state, a);
@@ -370,9 +382,9 @@
     const available = claimed(a, "c1_homecoming") && !claimed(a, "c1_first_meal");
     const harvest = quests(state, now).find((q) => q.id === "c1_first_harvest");
     const goals = [
-      { id: "harvest", name: "收成 6 份小麥交給老農班伯", detail: "主線・完成後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: claimed(a, "c1_first_harvest"), canClaim: !!(harvest && harvest.canClaim), target: "elder" },
-      { id: "dock", name: "修好河畔釣台", detail: "用開場取得的木料與石材修復", rewardText: "開放釣魚", complete: restored(a, "fishing_dock"), target: "fishing_dock" },
-      { id: "market", name: "跟蘿拉打招呼", detail: "先看看市集預告", rewardText: "5 金", complete: a.earlyGoals.marketPreview === true, target: "merchant" },
+      { id: "harvest", name: `老農班伯的開市小麥（已收 ${Math.min(2, (state.storage.items || {}).wheat || 0)}/2）`, detail: "交給老農班伯 2 份後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: claimed(a, "c1_first_harvest"), canClaim: !!(harvest && harvest.canClaim), target: "elder" },
+      { id: "dock", name: "修好河畔釣台", detail: `木料 ${(state.materials || {}).wood || 0}/4・石材 ${(state.materials || {}).stone || 0}/2`, rewardText: "開放釣魚", complete: restored(a, "fishing_dock"), target: "fishing_dock", actionLabel: ((state.materials || {}).wood || 0) >= 4 && ((state.materials || {}).stone || 0) >= 2 ? "去修釣台" : "" },
+      { id: "market", name: "跟蘿拉打招呼", detail: "蘿拉在農場東側的市集攤位", rewardText: "5 金", complete: a.earlyGoals.marketPreview === true, target: "merchant" },
     ];
     return { available, complete: goals.every((goal) => goal.complete), goals };
   }
@@ -471,11 +483,17 @@
     record(state, { type: "restore", projectId: id }, now);
     return ok(p.name + "修好了。", { id, cost: copy(p.cost), unlocks: p.unlocks.slice() });
   }
-  function recipeUnlocked(a, r) { return r.unlockQuest ? claimed(a, r.unlockQuest) : restored(a, r.unlockProject); }
+  function recipeUnlocked(a, r) {
+    if (r.unlockPersonalNpc) return !!(a.r58 && a.r58.r59 && a.r58.r59.permanent[r.unlockPersonalNpc]);
+    return r.unlockQuest ? claimed(a, r.unlockQuest) : restored(a, r.unlockProject);
+  }
+  function recipeRequirements(state, ingredients) {
+    return Object.entries(ingredients || {}).flatMap(([id, required]) => requirements(state, { [id]: required }, own(C.MATERIALS, id) ? "materials" : "inventory"));
+  }
   function recipes(state) {
     if (!ensure(state).ok) return [];
     return RECIPES.map((r) => {
-      const unlocked = recipeUnlocked(state.adventure, r); const rows = requirements(state, r.ingredients, "inventory");
+      const unlocked = recipeUnlocked(state.adventure, r); const rows = recipeRequirements(state, r.ingredients);
       return Object.assign(copy(r), { target: { kind: "station", id: "kitchen", tileId: "t10_10" }, status: unlocked ? "available" : "locked", unlocked, quantity: state.adventure.meals[r.id], output: { id: r.id, source: "meals", qty: 1 },
         requirements: rows, canCook: unlocked && state.adventure.meals[r.id] < MEAL_CAP && rows.every((need) => need.complete) });
     });
@@ -486,7 +504,7 @@
     const init = ensure(state, now); if (!init.ok) return init;
     if (!recipeUnlocked(state.adventure, r)) return fail("locked", "這道料理還沒解鎖。");
     if (state.adventure.meals[id] >= MEAL_CAP) return fail("meals_full", "這道料理已經備得夠多了。");
-    const rows = requirements(state, r.ingredients, "inventory");
+    const rows = recipeRequirements(state, r.ingredients);
     if (!rows.every((need) => need.complete)) return fail("missing_resources", "料理食材還沒備齊。", { requirements: rows });
     consume(state, rows);
     state.adventure.meals[id]++;
@@ -857,7 +875,18 @@
     if (!a.r58.activeEvent) return null;
     const def = R58_EVENTS.find((e) => e.id === a.r58.activeEvent.id);
     if (!def) return null;
-    return Object.assign(copy(def), { startedAt: a.r58.activeEvent.startedAt, expiresAt: a.r58.activeEvent.expiresAt, remainingMs: Math.max(0, a.r58.activeEvent.expiresAt - at(state, now)) });
+    const out = Object.assign(copy(def), { startedAt: a.r58.activeEvent.startedAt, expiresAt: a.r58.activeEvent.expiresAt, remainingMs: Math.max(0, a.r58.activeEvent.expiresAt - at(state, now)) });
+    const flags = a.r58.r59.eventFlags;
+    if (out.id === "traveling_merchant" && flags.merchantDeclined) out.dialogue = "旅行商人認出你，笑說：「上次沒買也不要緊，今天還是讓你慢慢挑。」";
+    if (out.id === "crow_steal" && flags.crowFed) out.dialogue = "那隻烏鴉又來了，先把一顆亮亮的小石子放在田邊，才抬頭等你。";
+    out.options = (out.options || []).map((option) => Object.assign(option, { available: eventChoiceAvailable(state, out.id, option.id) }));
+    return out;
+  }
+  function eventChoiceAvailable(state, eventId, choiceId) {
+    if (eventId === "traveling_merchant" && choiceId === "buy") return state.coins >= 12;
+    if (eventId === "traveling_merchant" && choiceId === "trade") return ((state.storage.items || {}).wheat || 0) >= 3;
+    if (eventId === "crow_steal" && choiceId === "feed") return ((state.storage.items || {}).wheat || 0) >= 1;
+    return true;
   }
   function randomEvents(state, now) {
     if (!ensure(state, now).ok) return { active: null, nextEventAt: 0, history: [] };
@@ -875,41 +904,59 @@
     const unit = (n) => Math.max(0, Math.min(1 - Number.EPSILON, n));
     const def = R58_EVENTS[Math.floor(unit(pick) * R58_EVENTS.length)];
     a.r58.activeEvent = { id: def.id, startedAt: t, expiresAt: t + def.expiresMs };
+    if (def.id === "crow_steal" && a.r58.r59.eventFlags.crowFed && !a.r58.r59.eventFlags.crowGifted) {
+      if (!object(state.materials)) state.materials = {};
+      state.materials.stone = credit(state.materials.stone, 1);
+      a.r58.r59.eventFlags.crowGifted = true;
+    }
     a.r58.lastEventAt = t;
     a.r58.nextEventAt = t + R58_EVENT_MIN_MS + Math.floor(unit(gapRoll) * (R58_EVENT_MAX_MS - R58_EVENT_MIN_MS));
     return ok(def.dialogue, { triggered: true, event: r58EventView(state, now) });
   }
-  function resolveRandomEvent(state, now) {
+  function resolveRandomEvent(state, choiceId, now) {
+    if (typeof choiceId === "number" || choiceId === undefined) { now = choiceId === undefined ? now : choiceId; choiceId = null; }
     const init = ensure(state, now); if (!init.ok) return init;
     const a = state.adventure; const t = at(state, now);
     const view = r58EventView(state, now);
     if (!view) return fail("no_event", "現在沒有等你處理的農場小事。");
-    let message = ""; const rewardInfo = { items: {}, materials: {}, coins: 0, wateredPlots: 0 };
+    const option = (view.options || []).find((row) => row.id === choiceId) || (view.options || [])[0];
+    if (!option) return fail("unknown_choice", "這件小事沒有這個選項。");
+    if (!eventChoiceAvailable(state, view.id, option.id)) return fail("missing_resources", "手邊的資源還不夠，先換個做法吧。");
+    choiceId = option.id;
+    let message = ""; const rewardInfo = { items: {}, materials: {}, seedPacks: {}, favor: {}, coins: 0, wateredPlots: 0 };
+    const r59 = a.r58.r59;
     if (view.id === "traveling_merchant") {
-      if (!Number.isFinite(state.coins) || state.coins < 12) return fail("missing_resources", "金幣不夠，旅行商人還在等你湊齊 12 金。");
-      state.coins -= 12; rewardInfo.coins = -12;
-      if (!object(state.storage)) state.storage = { items: {} };
-      if (!object(state.storage.items)) state.storage.items = {};
-      state.storage.items.strawberry = qty(state.storage.items.strawberry, Number.MAX_SAFE_INTEGER) + 1; rewardInfo.items.strawberry = 1;
-      message = "買下稀有種子包了。包裡的草莓先收進倉庫，旅行商人朝下一站揮了揮手。";
-    } else if (view.id === "crow_steal") {
+      if (choiceId === "buy") { state.coins -= 12; rewardInfo.coins = -12; r59.seedPacks.strawberry += 2; rewardInfo.seedPacks.strawberry = 2; message = "你付了 12 金，收下 2 包草莓種子。種草莓時會先用這兩包，不再扣金幣。"; }
+      else if (choiceId === "trade") { state.storage.items.wheat -= 3; if (!state.storage.items.wheat) delete state.storage.items.wheat; r59.seedPacks.strawberry += 1; rewardInfo.seedPacks.strawberry = 1; message = "旅行商人收下 3 份小麥，換給你 1 包草莓種子。"; }
+      else { r59.eventFlags.merchantDeclined = true; message = "你這次沒有買。旅行商人收起布簾，說下回見面還會記得你。"; }
+    } else if (view.id === "crow_steal" && choiceId === "shoo") {
       if (!object(state.materials)) state.materials = {};
       state.materials.feather = credit(state.materials.feather, 1); rewardInfo.materials.feather = 1;
       message = "你揮揮手趕走烏鴉，牠慌忙飛起，掉下一根亮亮的羽毛。";
-    } else if (view.id === "afternoon_rain") {
+    } else if (view.id === "crow_steal") {
+      state.storage.items.wheat -= 1; if (!state.storage.items.wheat) delete state.storage.items.wheat;
+      r59.eventFlags.crowFed = true; message = "烏鴉吃完小麥，歪著頭看了你一會兒。下次再來，牠也許會帶點東西。";
+    } else if (view.id === "afternoon_rain" && choiceId === "water") {
       const plots = Array.isArray(state.plots) ? state.plots : [];
       for (const plot of plots) if (plot && plot.cropId) { plot.wateredAt = Math.max(qty(plot.wateredAt, Number.MAX_SAFE_INTEGER), t); rewardInfo.wateredPlots++; }
       message = rewardInfo.wateredPlots ? "午後小雨落下來，田裡的作物都喝飽了水。" : "午後小雨落下來，田埂濕潤了，只是現在還沒有種下的作物。";
-    } else if (view.id === "lost_chick") {
+    } else if (view.id === "afternoon_rain") {
+      state.materials.rainwater = credit(state.materials.rainwater, 1); rewardInfo.materials.rainwater = 1; message = "你接滿一桶乾淨雨水，收進材料箱。";
+    } else if (view.id === "lost_chick" && choiceId === "coop") {
       if (!object(state.storage)) state.storage = { items: {} };
       if (!object(state.storage.items)) state.storage.items = {};
       state.storage.items.egg = qty(state.storage.items.egg, Number.MAX_SAFE_INTEGER) + 1; rewardInfo.items.egg = 1;
       message = "你把小雞帶回雞舍，母雞在門口迎接，順手留下一顆還帶著暖意的蛋。";
+    } else if (view.id === "lost_chick") {
+      a.r58.favor.child = Math.min(999, (a.r58.favor.child || 0) + 1); rewardInfo.favor.child = 1; r59.eventFlags.chickToTutu = true;
+      message = "圖圖抱穩小雞，認真向你道謝。圖圖好感 +1。";
     }
-    a.r58.history.push({ id: view.id, at: t, result: "resolved" }); a.r58.history = a.r58.history.slice(-24);
+    const journalText = `${view.name}：${message}`;
+    r59.journal.push({ eventId: view.id, choiceId, at: t, text: journalText }); r59.journal = r59.journal.slice(-40);
+    a.r58.history.push({ id: view.id, at: t, result: "resolved", choiceId }); a.r58.history = a.r58.history.slice(-24);
     a.r58.activeEvent = null;
     if (a.r58.nextEventAt <= t) a.r58.nextEventAt = t + R58_EVENT_MIN_MS;
-    return ok(message, { id: view.id, reward: rewardInfo, nextEventAt: a.r58.nextEventAt });
+    return ok(message, { id: view.id, choiceId, reward: rewardInfo, journalText, nextEventAt: a.r58.nextEventAt });
   }
   function personalQuests(state, now) {
     if (!ensure(state, now).ok) return [];
@@ -919,7 +966,9 @@
       const completed = a.r58.personal.completed.includes(q.id);
       const unlocked = !!a.claimed[q.unlockClaimed];
       const rows = requirements(state, q.wants, "inventory");
-      return Object.assign(copy(q), { npcName: npc.name, favor: a.r58.favor[q.npcId] || 0, completed, unlocked,
+      let dialogue = q.dialogue;
+      if (q.npcId === "child" && a.r58.r59.eventFlags.chickToTutu) dialogue += " 圖圖又補了一句：「上次那隻小雞現在很乖，我每天都有去看牠。」";
+      return Object.assign(copy(q), { npcName: npc.name, favor: a.r58.favor[q.npcId] || 0, completed, unlocked, dialogue,
         status: completed ? "completed" : unlocked ? "available" : "locked", requirements: rows,
         canComplete: !completed && unlocked && rows.every((r) => r.complete) });
     });
@@ -938,7 +987,19 @@
     a.r58.personal.completedAt[id] = at(state, now);
     a.r58.favor[q.npcId] = Math.min(999, (a.r58.favor[q.npcId] || 0) + 1);
     grant(state, copy(q.reward));
+    const sameNpcDone = R58_PERSONAL_QUESTS.filter((entry) => entry.npcId === q.npcId).every((entry) => a.r58.personal.completed.includes(entry.id));
+    if (sameNpcDone) a.r58.r59.permanent[q.npcId] = true;
     return ok(q.doneLine, { id, npcId: q.npcId, favor: a.r58.favor[q.npcId], reward: copy(q.reward), doneLine: q.doneLine });
+  }
+  function permanentResults(state, now) {
+    if (!ensure(state, now).ok) return [];
+    const p = state.adventure.r58.r59.permanent;
+    return [
+      { npcId: "mayor", unlocked: !!p.mayor, icon: "📌", name: "鎮長葛瑞的新公告", kind: "object", text: "農場重新開張的告示已貼上公告欄。", revisit: "鎮長葛瑞說：「公告每天都有人看，農場的名字已經傳到河對岸了。」" },
+      { npcId: "elder", unlocked: !!p.elder, icon: "🍲", name: "老農班伯的雨水清湯", kind: "recipe", text: "灶台永久新增一道料理。", revisit: "老農班伯說：「雨水清湯學會就不會忘，灶火留給你。」" },
+      { npcId: "merchant", unlocked: !!p.merchant, icon: "🍓", name: "蘿拉的草莓種子包", kind: "product", text: "市集攤位永久多出草莓種子包。", revisit: "蘿拉說：「紅格布旁的位置替草莓種子留著。」" },
+      { npcId: "child", unlocked: !!p.child, icon: "🌾", name: "圖圖的小稻草人", kind: "object", text: "田邊永久放上一個小稻草人。", revisit: "圖圖說：「小稻草人每天都替我跟新芽打招呼。」" },
+    ];
   }
   function activeBuffs(state, now) {
     const fallback = { growthMul: 1, orderBonus: 0, growthUntil: 0, orderUntil: 0, growthRemainingMs: 0, orderRemainingMs: 0 };
@@ -962,7 +1023,7 @@
     else state.adventure.r58.buffs.order = { until, bonus: r.effect.bonus };
     return ok(r.name + "享用完了。" + r.effect.summary, { id, effect: copy(r.effect), until, buffs: activeBuffs(state, now) });
   }
-  const AdventureAPI = { ensure, record, finishTutorial, quests, claim, earlyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, personalQuests, completePersonalQuest,
+  const AdventureAPI = { ensure, record, finishTutorial, quests, claim, earlyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, personalQuests, completePersonalQuest, permanentResults,
     neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

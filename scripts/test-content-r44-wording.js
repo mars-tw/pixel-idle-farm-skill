@@ -13,7 +13,7 @@ test("麥餅地點統一為農舍灶台", () => {
 });
 test("市集預告按鈕寫完整的老農班伯", () => {
   const st = S.defaultState(1_900_000_000_000);
-  assert.equal(G.marketPreviewAction(st).label, "先收成小麥（已收 0/6，要交老農班伯 2 份）");
+  assert.equal(G.marketPreviewAction(st).label, "老農班伯的開市小麥（已收 0/2）");
   assert.doesNotMatch(read("src/game.js"), /交班伯需/);
 });
 test("升級警告句子縮短", () => {

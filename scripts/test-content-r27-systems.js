@@ -51,7 +51,7 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
 });
 
 test('開場與主線統一把兩份小麥交給班伯，每日目標改成不同動作', () => {
-  assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?把其中 2 份交給老農班伯[\s\S]*?wants: \{ wheat: 2 \}/);
+  assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?交給老農班伯 2 份小麥[\s\S]*?wants: \{ wheat: 2 \}/);
   assert.match(world, /先收成、修釣台，或去跟蘿拉打招呼/);
   assert.match(world, /先去找鎮長葛瑞，再親手種下第一格/);
   assert.match(world, /id="worldSunBegin">去見鎮長葛瑞/);
