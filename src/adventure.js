@@ -1229,9 +1229,9 @@
     return {
       active: true,
       decorations: [
-        { id: "bunting", name: "收穫祭彩旗", icon: "🎏", tileId: "t13_7" },
+        { id: "bunting", name: "收穫祭彩旗", icon: "🎏", tileId: "t12_8" },
         { id: "lanterns", name: "河畔燈籠", icon: "🏮", tileId: "t14_8" },
-        { id: "long_table", name: "收穫祭長桌", icon: "🍽️", tileId: "t12_9" },
+        { id: "long_table", name: "收穫祭長桌", icon: "🍽️", tileId: "t13_10" },
       ],
       neighbors: [
         { id: "mayor", name: "鎮長葛瑞", tileId: "t12_8" },

@@ -5,6 +5,9 @@ const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
 const VERSION_QUERY = "?v=" + CACHE_VERSION;
 const OFFLINE_URL = versioned("./offline.html");
 const CORE_ASSETS = [
+  versioned("./assets/generated/content-r63/bunting.svg"),
+  versioned("./assets/generated/content-r63/lanterns.svg"),
+  versioned("./assets/generated/content-r63/stall.svg"),
   versioned("./assets/generated/content-r19/idle-child.png"),
   versioned("./assets/generated/content-r19/reach-child.png"),
   versioned("./assets/generated/content-r19/hold-child.png"),

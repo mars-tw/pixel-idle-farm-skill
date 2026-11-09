@@ -88,5 +88,23 @@ test("4 收穫祭期間有彩旗、燈籠、長桌、四位鄰居與可互動攤
   assert.match(world, /查看收穫祭三個目標與獎勵/);
 });
 
-console.log(`VERIFIED content R63A systems (${passed}/4)`);
+test("5 整合：收穫祭布置用像素圖、鄰居仍可交談；手機收合時保留一顆主要按鈕", () => {
+  const world = fs.readFileSync("src/world-ui.js", "utf8");
+  const css = fs.readFileSync("src/content-r58b.css", "utf8");
+  const sw = fs.readFileSync("sw.js", "utf8");
+  for (const f of ["bunting.svg", "lanterns.svg", "stall.svg"]) {
+    assert.ok(fs.existsSync("assets/generated/content-r63/" + f), f + " 應存在");
+    assert.ok(sw.includes("assets/generated/content-r63/" + f), f + " 應列入離線快取");
+    assert.ok(world.includes("content-r63/" + f), f + " 應被收穫祭場景使用");
+  }
+  assert.doesNotMatch(world, /node\.textContent = item\.icon/, "布置不可再用表情符號");
+  assert.doesNotMatch(css, /data-r63a-festival="active"\] > \.ob\[data-kind="npc"\]/, "收穫祭期間不可藏起真正的鄰居（要能交談完成目標）");
+  assert.match(world, /r63-primary/);
+  assert.match(css, /quest-auto-collapsed[^{]*\.r63-primary \{ display: flex !important/);
+  const state = fresh(); state.adventure.claimed.c1_homecoming = true;
+  const early = A.earlyGoals(state, T0);
+  assert.ok(early.goals.some((g) => !g.complete), "交付前至少有一項可當主要按鈕");
+});
+
+console.log(`VERIFIED content R63A systems (${passed}/5)`);
 if (process.exitCode) process.exit(1);

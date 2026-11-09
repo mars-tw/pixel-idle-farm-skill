@@ -317,13 +317,11 @@ body:has(.npc-bubble .r60a-story-choices) .qmarker .npc-nameplate { visibility: 
 .r63a-main-next small, .r63a-main-next em { display: block; }
 .r63a-main-next.complete { border-color: #6d9a54; background: #eef8e5; }
 .r63a-festival-scene { position: absolute; transform: translate(-50%, -100%); }
-.r63a-festival-decoration { display: grid; place-items: center; width: 42px; height: 42px; font-size: 28px; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(70,45,15,.35)); }
-.r63a-festival-neighbor { display: grid; place-items: center; width: 40px; height: 48px; font-size: 30px; pointer-events: none; filter: drop-shadow(0 2px 1px rgba(45,35,20,.45)); }
-#mapWorld[data-r63a-festival="active"] > .ob[data-kind="npc"],
-#mapWorld[data-r63a-festival="active"] > .npc-footname,
-#mapWorld[data-r63a-festival="active"] > .qmarker { visibility: hidden; }
+.r63a-festival-decoration { display: block; height: auto; pointer-events: none; image-rendering: pixelated; filter: drop-shadow(0 3px 1px rgba(70,45,15,.35)); }
+.r63a-festival-decoration[data-festival-decoration="lanterns"] { filter: drop-shadow(0 0 6px rgba(255,170,60,.75)) drop-shadow(0 3px 1px rgba(70,45,15,.35)); }
+.r63a-festival-cheer { transform: translate(-50%, -100%); padding: 2px 7px; border: 2px solid #8f491d; border-radius: 8px; background: #fff3c9; color: #5a2d11; font-size: 11px; font-weight: 800; white-space: nowrap; pointer-events: none; box-shadow: 0 2px 0 rgba(89,48,20,.35); }
 .r63a-festival-stall { display: grid; place-items: center; min-width: 64px; min-height: 58px; padding: 3px 6px; border: 2px solid #8f491d; border-radius: 8px; background: #ffd66d; color: #5a2d11; box-shadow: 0 3px 0 rgba(89,48,20,.45); cursor: pointer; }
-.r63a-festival-stall span { font-size: 27px; line-height: 1; }
+.r63a-festival-stall img { width: 48px; height: auto; image-rendering: pixelated; display: block; }
 .r63a-festival-stall b { font-size: 11px; white-space: nowrap; }
 .r63a-stall-goals { padding-left: 22px; line-height: 1.7; }
 /* R63B（第 7 項）：任務卡標題一行顯示，過長用省略號，完整名稱放在 title 屬性（ui.js 設定）；不得拆成多行碎片。 */
@@ -426,3 +424,13 @@ body:has(.npc-bubble .r60a-story-choices) .scene-action-bar [data-action="talk"]
   #questDock.quest-auto-collapsed:has(.r61a-festival-banner),
   #questDock.quest-target-collapsed:has(.r61a-festival-banner) { max-height: 25dvh !important; }
 }
+/* R63 整合：任務卡收合（手機預設、對話／提示暫時收合）時，仍留一顆「現在該做什麼」的主要按鈕，單行顯示。 */
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .world-objective-routes:has(.r63-primary) { display: flex !important; flex-direction: row !important; flex: 1 1 auto; min-width: 0; margin: 0; }
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .world-objective-routes > .world-objective-route:not(.r63-primary),
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63a-main-next:not(.r63-primary) { display: none !important; }
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63-primary { display: flex !important; flex-direction: row !important; align-items: center; justify-content: space-between; text-align: left; gap: 6px; flex: 1 1 auto; min-width: 0; min-height: 44px; margin: 0; padding: 4px 8px; }
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63-primary b { flex: 1 1 auto; min-width: 0; text-align: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63-primary small { display: none !important; }
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r63-primary em { flex: 0 0 auto; white-space: nowrap; font-style: normal; font-weight: 800; }
+html body #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed):has(.r63-primary) .world-objective-title { flex: 0 0 auto !important; width: auto !important; min-width: max-content !important; max-width: none !important; overflow: visible !important; white-space: nowrap; }
+body:has(#toast-zone > .toast) #questDock .r63a-main-next small, body:has(#worldDialogue:not([hidden])) #questDock .r63a-main-next small { display: none; }
