@@ -219,7 +219,7 @@ async function brightRatio(page, rect) {
         const land = await page.evaluate((src) => {
           eval(src);
           const quest = document.querySelector('#questDock');
-          const btn = quest.querySelector('.world-objective-bottom button');
+          const btn = quest.querySelector('.r68a-now button, .world-objective-bottom button');
           const scene = ro(document.querySelector('#mapScene'));
           return {
             btnText: btn ? btn.textContent.trim() : '',
@@ -245,7 +245,7 @@ async function brightRatio(page, rect) {
         }, HELP);
         assert(talk.has, '844×390 選取 NPC 後未出現交談鈕');
         assert.equal(talk.vs, 0, `844×390 交談鈕蓋住主角（交集 ${talk.vs}px）`);
-        const landAfter = await page.evaluate((src) => { eval(src); const b = document.querySelector('#questDock .world-objective-bottom button'); const c = document.querySelector('#questDock [data-audit="quest-collapse"]'); return b ? { text: b.textContent.trim(), scroll: b.scrollWidth, client: b.clientWidth, cls: document.querySelector('#questDock').className, vsCollapse: c && vis(c) ? Math.round(inter(ro(b), ro(c))) : 0 } : null; }, HELP);
+        const landAfter = await page.evaluate((src) => { eval(src); const b = document.querySelector('#questDock .r68a-now button, #questDock .world-objective-bottom button'); const c = document.querySelector('#questDock [data-audit="quest-collapse"]'); return b ? { text: b.textContent.trim(), scroll: b.scrollWidth, client: b.clientWidth, cls: document.querySelector('#questDock').className, vsCollapse: c && vis(c) ? Math.round(inter(ro(b), ro(c))) : 0 } : null; }, HELP);
         assert(landAfter && landAfter.text.includes('種下作物') && landAfter.scroll <= landAfter.client + 2, `844×390 點選 NPC 後任務列動作被截斷（實際「${landAfter && landAfter.text}」內容寬 ${landAfter && landAfter.scroll}px／可視寬 ${landAfter && landAfter.client}px，狀態 ${landAfter && landAfter.cls}）`);
         assert.equal(landAfter.vsCollapse, 0, `844×390 任務列動作被收合鈕蓋住（交集 ${landAfter.vsCollapse}px）`);
         await page.screenshot({ path: path.join(SHOT_DIR, 'landscape-844x390.png') });

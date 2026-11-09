@@ -464,7 +464,7 @@
   function nextFarmStep(state, now) {
     if (!ensure(state, now).ok) return { action: "wait", target: null, tileId: null, text: "先回到農場看看。", actionLabel: "回到農場" };
     const a = state.adventure; const ready = readyHarvestPlots(state, now); const wheat = ((state.storage || {}).items || {}).wheat || 0; const bread = (a.meals || {}).rustic_bread || 0;
-    if (ready.length) return { action: "harvest", target: "field", tileId: ready[0].id, count: ready.length, text: `田裡有 ${ready.length} 格可以收成，先收成。`, actionLabel: "去收成" };
+    if (ready.length) return { action: "harvest", target: "field", tileId: ready[0].id, count: ready.length, text: `田裡有 ${ready.length} 格可以收成，點一下收成。`, actionLabel: "去收成" };
     if (!claimed(a, "c1_first_harvest")) {
       if (wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", actionLabel: "帶去交付" };
       const growing = (state.plots || []).some((plot) => plot && plot.cropId === "wheat");

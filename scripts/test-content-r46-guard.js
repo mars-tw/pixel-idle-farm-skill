@@ -15,7 +15,7 @@ test("手記已交付任務標「已完成」，章節進度留在故事手記",
   assert.match(ui, /data-audit="story-chapter-progress"/);
 });
 test("待選路線時只有「選擇下一步」入口，按下才開啟路線選擇", () => {
-  assert.match(world, /<button type="button" data-choice-open>選擇下一步<\/button>/);
+  assert.match(world, /\? "data-choice-open" : "data-world-go"/);
   assert.match(world, /choiceOpen\.onclick = \(\) => \{\s*const choiceModal = modal\("選擇下一步", choiceRoutes\)/);
 });
 test("手機訂單面板底部預留空間", () => {
