@@ -106,8 +106,9 @@ function titleMeasure() {
       await page.evaluate(() => window.FarmWorld.openPanel('story'));
       await page.waitForTimeout(900);
       t = await page.evaluate(titleMeasure);
-      assert.ok(t.ok, `${tag} 面板開啟時標題應可見：${JSON.stringify(t)}`);
-      console.log(`OK ${tag} 第 7 項：展開／收合／提示／面板開啟時標題都在`);
+      if (view.mobile) assert.equal(t.ok, false, `${tag} R67A：手機面板開啟時任務卡應整張隱藏：${JSON.stringify(t)}`);
+      else assert.ok(t.ok, `${tag} 面板開啟時標題應可見：${JSON.stringify(t)}`);
+      console.log(`OK ${tag} 第 7 項：展開／收合／提示標題完整，手機面板開啟時整卡隱藏`);
 
       /* ---- 第 6 項：長清單不壓卡片 ---- */
       // R59 整合：面板開著時小事件出現、手札重繪（卡片整批換新），仍不得讓「再顯示」壓卡（實機截圖曾重現）

@@ -47,23 +47,23 @@ function serve() {
       const r = await page.evaluate(() => {
         const box = document.querySelector('#questDock');
         const vis = (e) => { if (!e) return false; const s = getComputedStyle(e), b = e.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && b.height > 0 && b.bottom <= innerHeight && b.right <= innerWidth + 1; };
-        const goals = [...box.querySelectorAll('[data-early-goal]')];
+        const goals = [...box.querySelectorAll('[data-early-task]')];
         const btn = box.querySelector('[data-audit="quest-collapse"]');
         const folded = box.classList.contains('quest-collapsed') || box.classList.contains('quest-auto-collapsed');
         return { goals: goals.length, visible: goals.filter(vis).length, btn: btn && btn.textContent.trim(), folded };
       });
       assert.equal(r.goals, 3, `${view.w}×${view.h} 今日三件事應有 3 個目標`);
       // R63B 同步（第 5 項）：手機任務卡預設只顯示一行，今日三件事點一下展開才看得到；桌機維持直接可見
-      // R63 整合同步：手機收合時仍保留一顆「現在該做什麼」的主要按鈕（其餘兩項展開才看得到）
-      assert.equal(r.visible, view.mobile ? 1 : 3, `${view.w}×${view.h} 今日三件事可見目標數（實際 ${r.visible}）`);
+      // R67A 同步：手機收合為一行，第三層三件清單完整收起；展開後才顯示三項。
+      assert.equal(r.visible, view.mobile ? 0 : 3, `${view.w}×${view.h} 今日三件事可見目標數（實際 ${r.visible}）`);
       assert.equal(r.btn, r.folded ? '展開' : '收合', `${view.w}×${view.h} 收合鈕文字與狀態不一致`);
       // R63B 同步：先確保展開（三個目標看得到），再驗收合／展開一按即切換
-      if (r.btn === '展開') { await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); const x = await page.evaluate(() => ({ t: document.querySelector('[data-audit="quest-collapse"]').textContent.trim(), n: [...document.querySelectorAll('#questDock [data-early-goal]')].filter((g) => g.getBoundingClientRect().height > 0).length })); assert.ok(x.t === '收合' && x.n === 3, `${view.w}×${view.h} 展開後應看到 3 個目標（實際 ${JSON.stringify(x)}）`); }
+      if (r.btn === '展開') { await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); const x = await page.evaluate(() => ({ t: document.querySelector('[data-audit="quest-collapse"]').textContent.trim(), n: [...document.querySelectorAll('#questDock [data-early-task]')].filter((g) => g.getBoundingClientRect().height > 0).length })); assert.ok(x.t === '收合' && x.n === 3, `${view.w}×${view.h} 展開後應看到 3 個目標（實際 ${JSON.stringify(x)}）`); }
       await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200);
       const c = await page.evaluate(() => document.querySelector('[data-audit="quest-collapse"]').textContent.trim());
       assert.equal(c, '展開', `${view.w}×${view.h} 按收合後應顯示「展開」`);
       await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200);
-      const e = await page.evaluate(() => ({ t: document.querySelector('[data-audit="quest-collapse"]').textContent.trim(), n: [...document.querySelectorAll('#questDock [data-early-goal]')].filter((g) => g.getBoundingClientRect().height > 0).length }));
+      const e = await page.evaluate(() => ({ t: document.querySelector('[data-audit="quest-collapse"]').textContent.trim(), n: [...document.querySelectorAll('#questDock [data-early-task]')].filter((g) => g.getBoundingClientRect().height > 0).length }));
       assert.ok(e.t === '收合' && e.n === 3, `${view.w}×${view.h} 再按一次應展開並看到 3 個目標`);
       assert.deepEqual(errors, [], `${view.w}×${view.h} 頁面錯誤`);
       console.log(`OK ${view.w}×${view.h} 今日三件事 3 個目標可見、收合鈕一按即切換`);
