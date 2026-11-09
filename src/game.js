@@ -598,7 +598,11 @@
     if (!freeSeed && state.coins < cost) return { ok: false, reason: "no_coins" };
     if (freeSeed) seedPacks[cropId]--; else state.coins -= cost;
     plot.cropId = cropId;
-    plot.plantedAt = now;
+    const r65TutorialHeadStart = cropId === "wheat"
+      && state.stats.plantCount < 3
+      && ["plant_wheat", "first_water", "first_harvest"].includes(state.story && state.story.questId)
+      && !(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
+    plot.plantedAt = now - (r65TutorialHeadStart ? 5000 : 0);
     delete plot.wateredAt;
     delete plot.sunGrown;
     state.stats.plantCount++;
@@ -702,7 +706,7 @@
   const BEGINNER_ORDERS = [
     { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", ttlOffsetMs: 0, flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
     { id: "beginner_carrot_1", wants: { carrot: 1 }, npcId: "mayor", ttlOffsetMs: 3 * 60 * 1000, flavor: "鎮長想先收 1 份胡蘿蔔，替巡路的人添菜。" },
-    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
+    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
     { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 2 份胡蘿蔔做野餐點心。" },
     { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", ttlOffsetMs: 10 * 60 * 1000, flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
   ];

@@ -18,11 +18,11 @@ test("1 主角稱呼依米莉與凱切換，沒有寫死孫子或小伙子", () 
   assert.match(world, /current\.gender === "m"/); assert.match(world, /孫女米莉/); assert.match(world, /孫子凱/); assert.doesNotMatch(world, /小伙子/);
 });
 
-test("2 第一餐做出即完成並前進；缺零份小麥與釣台材料齊的提示可執行", () => {
+test("2 第一餐吃下才完成並前進；缺零份小麥與釣台材料齊的提示可執行", () => {
   const state = fresh(); state.adventure.claimed.c1_homecoming = true; state.adventure.quests.c1_homecoming.status = "claimed"; state.adventure.claimed.c1_first_harvest = true; state.adventure.quests.c1_first_harvest.status = "claimed";
-  state.storage.items.wheat = 0; let early = A.earlyGoals(state, T0); assert.match(early.nextStep.detail, /種小麥|收成/); assert.doesNotMatch(early.nextStep.detail, /帶去交付/);
-  state.storage.items.wheat = 2; const cooked = ok(A.cook(state, "rustic_bread", T0 + 1)); assert.equal(cooked.storyAdvance.ok, true); assert.equal(state.adventure.claimed.c1_first_meal, true); assert.equal(A.earlyGoals(state, T0 + 2).nextStep.complete, true); assert.equal(A.guide(state, T0 + 2).questId, "c2_fishing_dock");
-  assert.equal(state.adventure.meals.rustic_bread, 1, "完成第一餐不應吃掉玩家剛做好的麥餅"); ok(A.eatMeal(state, "rustic_bread", T0 + 3)); assert.equal(state.adventure.claimed.c1_first_meal, true);
+  state.storage.items.wheat = 0; let early = A.earlyGoals(state, T0); assert.match(early.nextStep.detail, /種.*小麥|收成/); assert.doesNotMatch(early.nextStep.detail, /帶去交付/);
+  state.storage.items.wheat = 2; const cooked = ok(A.cook(state, "rustic_bread", T0 + 1)); assert.equal(cooked.storyAdvance, null); assert.equal(state.adventure.claimed.c1_first_meal, undefined); assert.equal(A.earlyGoals(state, T0 + 2).nextStep.action, "eat");
+  assert.equal(state.adventure.meals.rustic_bread, 1); ok(A.eatMeal(state, "rustic_bread", T0 + 3)); assert.equal(state.adventure.claimed.c1_first_meal, true); assert.equal(A.earlyGoals(state, T0 + 3).nextStep.complete, true); assert.equal(A.guide(state, T0 + 3).questId, "c2_fishing_dock");
   state.materials.wood = 4; state.materials.stone = 2; early = A.earlyGoals(state, T0 + 4); assert.equal(early.goals.find((g) => g.id === "dock").detail, "材料齊了，可以修"); assert.equal(early.goals.find((g) => g.id === "dock").actionLabel, "去修");
 });
 
@@ -33,7 +33,7 @@ test("3 鎮長第一次二選一有種田與鎮上故事，結果寫日誌並有
 });
 
 test("4 收穫祭為十分鐘，三種星等、獎勵、每場一次與三星配方都成立", () => {
-  const one = festivalState(); one.storage.items.wheat = 3; assert.equal(A.festivalStatus(one, T0).remainingMs, 600000); assert.equal(ok(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 1)).stars, 1); assert.equal(one.coins, S.defaultState(T0).coins + 10); assert.equal(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 2).reason, "already_judged");
+  const one = festivalState(); one.storage.items.wheat = 3; assert.equal(A.festivalStatus(one, T0).remainingMs, 600000); assert.equal(ok(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 1)).stars, 1); assert.equal(one.coins, S.defaultState(T0).coins + 8); assert.equal(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 2).reason, "already_judged"); // R65：拉開一至三星獎勵。
   const two = festivalState(); Object.assign(two.storage.items, { wheat: 1, carrot: 1, tomato: 1 }); const twoResult = ok(A.judgeFestivalEntry(two, ["wheat", "carrot", "tomato"], T0 + 1)); assert.equal(twoResult.stars, 2); assert.equal(twoResult.reward.decorations, 1);
   const three = festivalState(); Object.assign(three.storage.items, { radish: 1, carrot: 1 }); three.adventure.meals.rustic_bread = 1; const threeResult = ok(A.judgeFestivalEntry(three, ["radish", "carrot", "rustic_bread"], T0 + 1)); assert.equal(threeResult.stars, 3); assert.equal(threeResult.reward.recipe, "riverside_harvest_platter"); assert.equal(A.recipes(three).find((r) => r.id === "riverside_harvest_platter").unlocked, true);
 });

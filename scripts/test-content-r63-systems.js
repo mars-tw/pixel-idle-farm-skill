@@ -43,7 +43,7 @@ test("1 今日三件事固定保留班伯項目，完成即計入，第一餐另
   state.adventure.quests.c1_first_meal.status = "claimed";
   view = A.earlyGoals(state, T0 + 2);
   assert.equal(view.nextStep.complete, true);
-  assert.match(view.nextStep.detail, /第一章完成/);
+  assert.match(view.nextStep.detail, /第一餐吃完了/); // R65：完成後沿用單一下一步來源。
 });
 
 test("2 鎮長第一次對白用自己的口氣，其他主線 NPC 會改成第一人稱", () => {

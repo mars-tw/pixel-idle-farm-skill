@@ -242,10 +242,11 @@
       if (document.body) document.body.dataset.questStep = "choice";
       const primaryGoal = early.nextStep && !early.nextStep.complete ? "meal" : (early.goals.find((goal) => !goal.complete) || {}).id; // R63：收合時只留這一顆主要按鈕
       box.innerHTML = `${festivalHtml}<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
-        ${hint ? `<div class="world-objective-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</div>` : ""}
+        ${hint ? `<button type="button" class="world-objective-hint" data-hint="${esc(hint.kind)}" data-next-tile="${esc(hint.tileId || "")}">${esc(hint.text)}</button>` : ""}
         <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}${goal.id === primaryGoal ? " r63-primary" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small>${goal.actionLabel ? `<em>${esc(goal.actionLabel)}</em>` : ""}</button>`).join("")}</div>
         ${early.nextStep ? `<button type="button" class="r63a-main-next${early.nextStep.complete ? " complete" : ""}${primaryGoal === "meal" ? " r63-primary" : ""}" data-early-goal="meal" ${early.nextStep.complete ? "disabled" : ""}><b>${early.nextStep.complete ? "✓ " : ""}${esc(early.nextStep.label)}：${esc(early.nextStep.name)}</b><small>${esc(early.nextStep.detail)}</small>${early.nextStep.actionLabel && !early.nextStep.complete ? `<em>${esc(early.nextStep.actionLabel)}</em>` : ""}</button>` : ""}`;
       box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
+      const nextHint = box.querySelector("[data-next-tile]"); if (nextHint) nextHint.onclick = () => goNextFarmStep();
       const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
       syncSeedHudTop();
       return true;
@@ -342,9 +343,11 @@
   // R79：等待時告訴玩家還要多久、現在能做什麼；光斑出現時引導去光裡。
   function objectiveHint(s, row) {
     const now = Date.now();
+    const next = A.nextFarmStep ? A.nextFarmStep(s, now) : null;
+    if (next && next.action === "harvest") return { kind: "ready", text: next.text, tileId: next.tileId };
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
     const readyCount = (s.plots || []).slice(0, active).filter((p) => p && p.cropId && window.getCropProgress(s, p, now).ready).length;
-    if (readyCount > 0) return { kind: "ready", text: `田裡有 ${readyCount} 格可以收成。` };
+    if (readyCount > 0) return { kind: "ready", text: `田裡有 ${readyCount} 格可以收成，先收成。` };
     const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
     if (sun && sun.active && sun.plots.length) {
       const useful = sun.plots.some((i) => i < active && s.plots[i]);
@@ -399,11 +402,11 @@
       lastPanels = sig;
       const availability = A.storyPanelAvailability(current);
       const currentMain = A.summary(current, Date.now()).currentQuest;
-      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; return `<article class="adventure-quest ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
+      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const mainStep = main && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; return `<article class="adventure-quest ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
         <div class="world-chapter">第 ${q.chapter} 章・${esc(q.chapterName)} <span>${chapterLabel}</span></div>
-        <h3>${esc(q.name)}</h3><p>${esc(q.description)}</p>
+        <h3>${esc(q.name)}</h3><p>${esc(mainStep ? mainStep.text : q.description)}</p>
         <div class="adventure-meta">${rowsOf(q).map((r) => `<span>${r.complete ? "✓" : "·"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}</div>
-        ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}">${q.canClaim ? "前往交談" : A.taskActionLabel(q, rowsOf(q).find((row) => !row.complete), (window.NPCS || {})[q.npcId])}</button>` : ""}</article>`; };
+        ${q.status !== "claimed" && q.status !== "locked" ? `<div class="adventure-meta"><span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span></div><button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}>${esc(mainStep ? mainStep.actionLabel : q.canClaim ? "前往交談" : A.taskActionLabel(q, rowsOf(q).find((row) => !row.complete), (window.NPCS || {})[q.npcId]))}</button>` : ""}</article>`; };
       panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
         ${availability.showNeighborBasket ? `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div>` : ""}
         ${availability.showRiverCommissions ? `<h3 class="story-subhead">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}` : ""}`;
@@ -448,7 +451,7 @@
       const neighborButton = panel.querySelector("#worldNeighborButton");
       if (neighborButton) neighborButton.onclick = () => window.ContentR1.openNeighbors(current);
       if(window.ContentR6 && availability.showNeighborBasket && A.gathering(current,Date.now()).unlocked){const b=document.createElement('button');b.id='worldGatheringButton';b.textContent=current.adventure.gathering.completed?'翻共同聚餐手記':'三個位子，一起吃';b.onclick=()=>window.ContentR6.openGathering(current);panel.querySelector('.neighbor-entry').appendChild(b);}
-      panel.querySelectorAll("[data-quest-go]").forEach((b) => { b.onclick = () => goQuest(list.find((q) => q.id === b.dataset.questGo)); });
+      panel.querySelectorAll("[data-quest-go]").forEach((b) => { b.onclick = () => b.dataset.mainNext ? goNextFarmStep() : goQuest(list.find((q) => q.id === b.dataset.questGo)); });
       panel.querySelectorAll("[data-commission]").forEach((b) => { b.onclick = () => {
         closePanels();
         const c = commissions.find((entry) => entry.id === b.dataset.commission), tile = npcTile(c.npcId);
@@ -510,6 +513,18 @@
       farm().setTool("hand");
       farm().clickTile(target.id);
     }
+  }
+  function goNextFarmStep() {
+    const step = A.nextFarmStep(current, Date.now()); if (!step || !farm()) return;
+    if (step.tileId && farm().focusTile) farm().focusTile(step.tileId);
+    if (step.action === "harvest" && step.tileId) { closePanels(); farm().setTool("hand"); farm().clickTile(step.tileId); return; }
+    if (step.action === "deliver") { const q = A.quests(current, Date.now()).find((row) => row.id === "c1_first_harvest"); if (q) goQuest(q); return; }
+    if (step.action === "cook" || step.action === "eat") { visitKitchen(); return; }
+    if (step.action === "explore") { visitSite("fishing_dock"); return; }
+    const tiles = (current.map && current.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < (window.activePlotCount ? window.activePlotCount(current) : 6));
+    const target = step.action === "tend" ? tiles.find((tile) => { const p = current.plots[tile.plotIndex]; return p && p.cropId && (p.wateredAt || 0) < p.plantedAt; }) : tiles.find((tile) => !current.plots[tile.plotIndex].cropId);
+    if (!target) { notify(step.text); return; }
+    closePanels(); farm().setTool(step.action === "tend" ? "water" : "hand"); if (step.action === "plant" && farm().selectSeed) farm().selectSeed("wheat"); farm().clickTile(target.id);
   }
   function claimQuest(q) {
     const target = npcTile(q.npcId);
@@ -784,7 +799,7 @@
       const box = modal("祭典攤位", `<p class="project-desc">本場有 10 分鐘。完成三個現場目標，也別忘了每場一次的作物評比。</p><ul class="r63a-stall-goals">${goalText}</ul><p class="project-desc"><b>獎勵：</b>${esc(live.stall.rewardText)}</p>${entryHtml}`);
       const picked = [];
       box.querySelectorAll("[data-festival-entry]").forEach((button) => { button.onclick = () => { const id = button.dataset.festivalEntry; const index = picked.indexOf(id); if (index >= 0) picked.splice(index, 1); else if (picked.length < 3) picked.push(id); button.setAttribute("aria-pressed", String(picked.includes(id))); const submit = box.querySelector("#festivalJudge"); submit.disabled = picked.length !== 3; submit.textContent = `參加作物評比（已選 ${picked.length}/3）`; }; });
-      const submit = box.querySelector("#festivalJudge"); if (submit) submit.onclick = () => { const result = A.judgeFestivalEntry(s, picked, Date.now()); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); modal("作物評比結果", `<p class="r64a-stars" aria-label="${result.ok ? result.stars : 0} 顆星">${result.ok ? "★".repeat(result.stars) + "☆".repeat(3 - result.stars) : "☆☆☆"}</p><p>${esc(result.message)}</p>`); refresh(s); };
+      const submit = box.querySelector("#festivalJudge"); if (submit) submit.onclick = () => { const result = A.judgeFestivalEntry(s, picked, Date.now()); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); const detail = result.ok ? `<ul>${result.details.map((row) => `<li><b>${esc(row.name)}</b>：${esc(row.sources.length ? row.sources.join("、") : "本次沒有加分")}</li>`).join("")}</ul><p><b>下次提示：</b>${esc(result.tip)}</p><p><b>獎勵：</b>${esc(result.rewardText)}</p>` : ""; modal("作物評比結果", `<p class="r64a-stars" aria-label="${result.ok ? result.stars : 0} 顆星">${result.ok ? "★".repeat(result.stars) + "☆".repeat(3 - result.stars) : "☆☆☆"}</p><p>${esc(result.message)}</p>${detail}`); refresh(s); };
     };
     world.appendChild(stall);
   }
