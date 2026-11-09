@@ -1786,7 +1786,7 @@
     }
     const readyForReport = Object.keys(wants).every((id) => have[id] >= wants[id]);
     const collectedAll = Object.keys(wants).every((id) => found[id] >= wants[id]);
-    const nodes = (C.FORAGE_NODES || []).map((n) => Object.assign({ tile: forageTile(state, n.id) }, forageNodeStatus(state, n.id, now)));
+    const nodes = (C.FORAGE_NODES || []).filter((n) => !n.starter).map((n) => Object.assign({ tile: forageTile(state, n.id) }, forageNodeStatus(state, n.id, now)));
     return {
       discovered: !!(state.flags && state.flags.eastForageDiscovered),
       reported: !!(state.flags && state.flags.eastForageReported),
@@ -1860,9 +1860,9 @@
   function discoverForage(state, nodeId, now) {
     const node = forageNodeDef(nodeId);
     if (!node) return { ok: false, reason: "unknown" };
-    if (!state.flags || !state.flags.bridgeRepaired) return { ok: false, reason: "locked" };
+    if (!node.starter && (!state.flags || !state.flags.bridgeRepaired)) return { ok: false, reason: "locked" };
     if (node.requiresFlag && !state.flags[node.requiresFlag]) return { ok: false, reason: "locked_deep" };
-    state.flags.eastForageDiscovered = true;
+    if (!node.starter) state.flags.eastForageDiscovered = true;
     const story = syncStoryProgress(state, "discover_forage", now);
     return { ok: true, node, story };
   }
@@ -1870,9 +1870,9 @@
     now = now || Date.now();
     const st = forageNodeStatus(state, nodeId, now);
     if (!st) return { ok: false, reason: "unknown" };
-    if (!state.flags || !state.flags.bridgeRepaired) return { ok: false, reason: "locked" };
+    if (!st.node.starter && (!state.flags || !state.flags.bridgeRepaired)) return { ok: false, reason: "locked" };
     if (!st.unlocked) return { ok: false, reason: "locked_deep" };
-    if (!state.flags.eastForageDiscovered) return { ok: false, reason: "undiscovered" };
+    if (!st.node.starter && !state.flags.eastForageDiscovered) return { ok: false, reason: "undiscovered" };
     if (!st.ready) return { ok: false, reason: "cooldown", readyAt: st.readyAt };
     const qty = st.node.yield || 1;
     const { added, lost } = addToStorage(state, st.node.itemId, qty);

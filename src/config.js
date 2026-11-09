@@ -278,6 +278,8 @@ const FORAGE_ITEMS = {
   wild_berry:    { id: "wild_berry",    name: "東林野莓", emoji: "🫐", sellValue: 6, region: "east", season: "秋",
     flavor: "最甜的野莓總長在最扎手的那叢，秋天教人先學會耐心，再嚐甜。" },
   river_mint:    { id: "river_mint",    name: "溪畔薄荷", emoji: "🍃", sellValue: 7, region: "east", season: "春" },
+  fallen_branch: { id: "fallen_branch", name: "木枝", emoji: "🪵", sellValue: 2, region: "farm",
+    flavor: "風把乾燥的細枝送到田埂邊，撿起來正好能補農場的小地方。" },
   mooncap_spore: { id: "mooncap_spore", name: "月帽菇孢", emoji: "🌙", sellValue: 18, region: "east_deep", season: "冬" },
   amber_resin:   { id: "amber_resin",   name: "古樹琥珀脂", emoji: "🟠", sellValue: 24, region: "east_deep", season: "夏" },
   forest_chestnut: { id: "forest_chestnut", name: "東林栗子", emoji: "🌰", sellValue: 20, region: "east_deep", season: "秋" },
@@ -286,6 +288,10 @@ const FORAGE_ITEMS = {
 const FORAGE_NODE_COOLDOWN_MS = 10 * 60 * 1000;
 const EAST_DEEP_FORAGE_COOLDOWN_MS = 30 * 60 * 1000;
 const FORAGE_NODES = [
+  { id: "farm_berry_patch", itemId: "wild_berry", x: 6, y: 8, yield: 1, name: "田邊野莓", starter: true,
+    desc: "農場邊就能找到的一小叢野莓。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
+  { id: "farm_branch_pile", itemId: "fallen_branch", x: 9, y: 8, yield: 1, name: "落葉木枝", starter: true,
+    desc: "風吹落的乾木枝，隨手就能撿進背包。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
   { id: "east_herb_patch", itemId: "forest_herb", x: 18, y: 5, yield: 1, name: "東林藥草叢",
     desc: "橋後林地才長得好的清香藥草。", cooldownMs: FORAGE_NODE_COOLDOWN_MS },
   { id: "east_mushroom_log", itemId: "glow_mushroom", x: 21, y: 4, yield: 1, name: "螢光菇木",
