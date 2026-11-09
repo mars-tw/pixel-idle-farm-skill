@@ -602,3 +602,16 @@ body:has(.npc-bubble .r60a-story-choices) .scene-action-bar { display: none !imp
 .r66a-world-event { position:absolute; transform:translate(-50%,-100%); min-width:64px; min-height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px solid #6f4b2d; background:#fff1b8; color:#56371f; border-radius:8px; }
 .r66a-world-event > span { font-size:28px; line-height:1; }
 .r66a-world-event > b { font-size:11px; white-space:nowrap; }
+
+/* R66B（第 5、6 項）：中期設施地圖物件、收取標示、鄰居專屬互動與建造選單補充 */
+.r66b-map-node { position: absolute; transform: translate(-50%, -100%); padding: 0; border: none; background: none; cursor: pointer; min-width: 44px; min-height: 44px; }
+.r66b-map-node img { display: block; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.r66b-ready-badge { position: absolute; left: 50%; top: -14px; transform: translateX(-50%); white-space: nowrap; font-size: 10px; font-weight: 900; color: #4a3500; background: #ffe27a; border: 1px solid #cf8c23; border-radius: 7px; padding: 1px 6px; pointer-events: none; }
+.r66b-build-art { display: block; width: 32px; height: 32px; image-rendering: pixelated; }
+.r66b-neighbors { margin-top: 14px; display: grid; gap: 8px; }
+.r66b-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 9px; background: rgba(255, 255, 255, .56); }
+.r66b-name { font-size: 13px; font-weight: 900; color: #3d2f1c; }
+.r66b-detail { margin-top: 3px; font-size: 12px; line-height: 1.45; color: #5f503a; }
+.r66b-actions { margin-top: 7px; display: flex; gap: 6px; flex-wrap: wrap; }
+.r66b-act { min-height: 44px; padding: 6px 12px; border: 1.5px solid #94bd68; border-radius: 8px; background: #e7f5dd; color: #285b1d; font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
+.r66b-act:disabled { opacity: .55; cursor: not-allowed; }

@@ -74,6 +74,9 @@
     m *= WEATHER[w].growthMul;
     m *= buildingGrowthAura(state); // MVP2：堆肥場/蜂箱等建築的成長加成
     m *= mealGrowthMul(state, now); // R58：小麥胡蘿蔔煎餅的限時成長加速
+    // R66B（第 6 項）：老農班伯請教種田的當日小加成（由 src/midgame-r66.js 寫入，成長時間 ×0.90）
+    const r66Advice = state.adventure && state.adventure.r66b && state.adventure.r66b.adviceBuff;
+    if (r66Advice && Number.isFinite(r66Advice.until) && r66Advice.until > (Number.isFinite(now) ? now : 0) && Number.isFinite(r66Advice.mul) && r66Advice.mul > 0 && r66Advice.mul < 1) m *= r66Advice.mul;
     return m;
   }
   function buildingEffectLimit(def) {
@@ -1353,6 +1356,8 @@
     if (!a) return { ok: false, reason: "gone" };
     const def = ANIMALS[a.type];
     const cycles = Math.floor((now - a.lastProducedAt) / def.produceMs);
+    // R66B（第 5 項）：雞舍餵食槽——每次收雞蛋多 1 顆（設施由 src/midgame-r66.js 提供）
+    const r66EggBonus = a.type === "chicken" && (state.buildings || []).some((b) => b.type === "r66_feed_trough") ? 1 : 0;
     if (cycles <= 0) return { ok: false, reason: "not_ready" };
     const tier = qualityTierFor(animalAffinity(state, a, now));
     const productId = qualityProductId(def.product, tier);
@@ -1361,7 +1366,8 @@
     state.stats.collected[productId] = (state.stats.collected[productId] || 0) + added;
     if (added > 0) recordDiscovery(state, productId, now);
     if (added > 0) checkAchievements(state);
-    return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, cycles };
+    if (r66EggBonus) { const extra = addToStorage(state, productId, r66EggBonus); if (extra.added > 0) { state.stats.collected[productId] = (state.stats.collected[productId] || 0) + extra.added; recordDiscovery(state, productId, now); } return { ok: true, product: productId, baseProduct: def.product, tier, added: added + extra.added, lost: lost + extra.lost, cycles, eggBonus: extra.added }; }
+    return { ok: true, product: productId, baseProduct: def.product, tier, added, lost, cycles, eggBonus: 0 };
   }
   function collectAllAnimals(state, now) {
     const perProduct = {}; let total = 0, lost = 0;
