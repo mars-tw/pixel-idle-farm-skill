@@ -373,6 +373,11 @@ const CORE_ASSETS = [
 
   versioned("./src/adventure.js"),
   versioned("./src/neighbors-r61.js"),
+  versioned("./src/midgame-r66.js"),
+  versioned("./assets/generated/content-r66/beehive.svg"),
+  versioned("./assets/generated/content-r66/herb-garden.svg"),
+  versioned("./assets/generated/content-r66/feed-trough.svg"),
+  versioned("./assets/generated/content-r66/treasure.svg"),
   versioned("./src/world-ui.js"),
   versioned("./assets/audio/r79-sunny-farm-loop.ogg"),
   versioned("./assets/audio/r79-sunny-farm-loop.m4a"),

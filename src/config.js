@@ -493,6 +493,26 @@ const BUILDINGS = {
                  ],
                  maxCount: 1,
                  desc: "Lv1 當季作物直售額外 +15%（最多 1 座生效）" },
+  // R66B（第 5 項）：Lv 2 中期小設施。不加入 BUILDING_ORDER，避免改變既有建造目錄順序；
+  // 建造入口由 src/midgame-r66.js 注入既有建造選單，產出邏輯也在該檔。
+  r66_beehive: { id: "r66_beehive", name: "蜂箱", emoji: "🐝", unlockLevel: 2,
+                 levels: [
+                   { cost: { coins: 40 }, effect: { r66Facility: "beehive" }, effectLabel: "每 3 分鐘產 1 份蜂蜜" },
+                 ],
+                 maxCount: 1,
+                 desc: "每 3 分鐘產 1 份蜂蜜，可交訂單或做料理（最多 1 座）" },
+  r66_herb_garden: { id: "r66_herb_garden", name: "香草小圃", emoji: "🌿", unlockLevel: 2,
+                 levels: [
+                   { cost: { coins: 35 }, effect: { r66Facility: "herb" }, effectLabel: "每 4 分鐘產 1 份薄荷" },
+                 ],
+                 maxCount: 1,
+                 desc: "每 4 分鐘產 1 份薄荷，是薄荷茶的食材（最多 1 座）" },
+  r66_feed_trough: { id: "r66_feed_trough", name: "雞舍餵食槽", emoji: "🥣", unlockLevel: 2,
+                 levels: [
+                   { cost: { coins: 45 }, effect: { r66Facility: "feed_trough", eggBonus: 1 }, effectLabel: "每次收雞蛋多 1 顆" },
+                 ],
+                 maxCount: 1,
+                 desc: "每次收雞蛋多 1 顆（最多 1 座）" },
 };
 // 舊有建造、動物解鎖與靜態稽核仍讀 def.cost / def.effect；由 levels[0] 衍生，
 // 避免保留兩份可能漂移的 Lv1 真值。
