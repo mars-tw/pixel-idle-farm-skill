@@ -6,3 +6,111 @@
 .r58-meta { font-size: 12px; color: #7a6a52; }
 .r58-done { color: #5a9e3f; font-weight: 700; }
 .r58-buff { border-left: 4px solid #f4b942; padding-left: 8px; }
+
+/* R59B（第 6～9 項）：長清單不壓卡片、任務卡標題永遠在、田上提示不溢出、事件主要按鈕用主色。
+   只改版面與按鈕外觀，不改遊戲規則與文字內容；新規則集中在本檔末尾。 */
+/* 6：「再顯示 N 項」放在清單末尾；會被它壓到的卡由 ui.js 首屏收合（納入 .r58-card）先收起，橫條不覆蓋任何可見卡。 */
+.side-list-more {
+  position: static !important;
+  bottom: auto !important;
+  z-index: auto !important;
+  clear: both;
+  box-shadow: none !important;
+}
+.r32-show-more { position: sticky !important; bottom: 8px !important; z-index: 5; clear: both; box-shadow: none !important; }
+.side-pane .r32-show-more { margin: 10px auto 6px; }
+.r58-section > .r32-show-more,
+.adventure-quests > .r32-show-more,
+#adventurePanel > .r32-show-more { order: -1; }
+/* 6：卡片內文與按鈕完整留在卡片框內，長字不把按鈕推出卡外。 */
+.side-pane .adventure-quest,
+.side-pane .r58-card,
+.side-pane .order,
+.side-pane .story-card,
+.world-modal .recipe-row {
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+.side-pane .adventure-quest button,
+.side-pane .r58-card button,
+.side-pane .order button,
+.side-pane .story-card button,
+.world-modal .recipe-row button {
+  box-sizing: border-box;
+  max-width: 100%;
+  white-space: normal;
+}
+/* 6：可交付的委託排到清單最前面（只改視覺順序，不改 DOM 與交付判定）。 */
+#adventurePanel { display: flex; flex-direction: column; }
+#adventurePanel > .adventure-quests { display: flex; flex-direction: column; }
+#adventurePanel > .adventure-quest:has(> button:not(:disabled)),
+#adventurePanel > .adventure-quests > .adventure-quest:has(> button:not(:disabled)) { order: -1; }
+.r58-section { display: flex; flex-direction: column; }
+.r58-section > .r58-card:has(> button:not(:disabled)) { order: -1; }
+#orders { display: flex; flex-direction: column; }
+#orders > .order:has(.ful:not(:disabled)) { order: -1; }
+#orders > .side-list-more { order: 99; }
+/* 6：灶台清單可捲動，捲到底時最後一道料理完整進到可視區、不切半張。 */
+.world-modal .modal-body { scroll-padding-bottom: 24px; }
+.world-modal .recipe-row { scroll-margin-bottom: 12px; }
+.world-modal .recipe-row:last-child { margin-bottom: 6px; padding-bottom: 14px; }
+@media (max-height: 500px) {
+  .world-modal .modal-body { max-height: calc(100dvh - 120px); }
+  .world-modal .modal-card { padding-top: 12px; padding-bottom: 12px; }
+}
+
+/* 7：今日三件事標題在收合、提示、對話、建造選單與面板開啟時都保留，不只剩進度數字。 */
+#questDock .world-objective-title { visibility: visible !important; }
+#questDock.quest-collapsed .world-objective-title,
+#questDock.quest-auto-collapsed .world-objective-title,
+#questDock.quest-target-collapsed .world-objective-title,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-title,
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-title,
+body:has(#toast-zone > .toast) #questDock .world-objective-title,
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-title {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+#questDock .world-objective-title .qp-step,
+#questDock.quest-collapsed .world-objective-title .qp-step,
+#questDock.quest-auto-collapsed .world-objective-title .qp-step,
+#questDock.quest-target-collapsed .world-objective-title .qp-step,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-title .qp-step,
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-title .qp-step,
+body:has(#toast-zone > .toast) #questDock .world-objective-title .qp-step,
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-title .qp-step {
+  display: inline !important;
+  visibility: visible !important;
+}
+
+/* 8：田上提示標籤可換行（陽光說明在 ui.js 分到第二行），文字不溢出框外。 */
+.tile-state-label {
+  white-space: pre-line !important;
+  text-align: center;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+  max-width: min(200px, calc(100vw - 16px));
+}
+
+/* 9：小事件、委託與灶台的主要按鈕用主色（黃色），停用時才用灰色。 */
+.r58-card button:not(:disabled),
+.adventure-quest button:not(:disabled),
+.world-modal .recipe-row button:not(:disabled) {
+  background: #ffcf64 !important;
+  background-image: none !important;
+  color: #5a3d00 !important;
+  border: 2px solid #8b5e34 !important;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .45) !important;
+  font-weight: 800;
+  cursor: pointer;
+}
+.r58-card button:disabled,
+.adventure-quest button:disabled,
+.world-modal .recipe-row button:disabled {
+  background: #e6ded0 !important;
+  background-image: none !important;
+  color: #7d6d52 !important;
+  border: 2px solid #c9b995 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
