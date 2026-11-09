@@ -840,6 +840,57 @@
       ? { harvested, target: "field", label: `交給老農班伯 2 份小麥（已收 ${harvested}/2）` }
       : { harvested, target: "elder", label: "交給老農班伯 2 份小麥（已收 2/2）" };
   }
+  function orderCompletionMs(state, order) {
+    let plots = 0, ms = 0;
+    for (const [itemId, qty] of Object.entries(order.wants || {})) {
+      const crop = CROPS[itemId];
+      if (!crop) return Infinity;
+      plots += Math.ceil(qty / crop.yield);
+      ms = Math.max(ms, crop.growMs);
+    }
+    return plots <= activePlotCount(state) ? ms : Infinity;
+  }
+  // R67B（第 5 項）：Lv 2 同時出現的訂單至少兩位委託人、兩種物品，且一張 3 分鐘內做得完。
+  // 只用現在種得出或收得到的物品湊多樣性；只有一種可用物品時不硬湊（維持 R62 契約）。
+  function ensureLv2OrderVariety(state, now) {
+    if ((state.level || 1) !== 2 || !Array.isArray(state.orders) || state.orders.length < 2) return;
+    const available = availableOrderItems(state);
+    if (available.length < 2) return;
+    const itemSet = () => new Set(state.orders.flatMap((order) => Object.keys(order.wants || {})));
+    const npcSet = () => new Set(state.orders.map((order) => orderNpcIdFor(order)));
+    const hasQuick = () => state.orders.some((order) => orderCompletionMs(state, order) <= 3 * 60 * 1000);
+    if (itemSet().size >= 2 && npcSet().size >= 2 && hasQuick()) return;
+    const replaceIndex = () => {
+      for (let i = state.orders.length - 1; i >= 0; i--) if (state.orders[i].id !== "beginner_wheat_4") return i;
+      return -1;
+    };
+    if (itemSet().size < 2 || npcSet().size < 2) {
+      const items = itemSet(), npcs = npcSet();
+      const present = new Set(state.orders.map((order) => order.id));
+      const template = BEGINNER_ORDERS.find((row) => !present.has(row.id)
+        && Object.keys(row.wants).every((id) => available.includes(id))
+        && (Object.keys(row.wants).some((id) => !items.has(id)) || !npcs.has(row.npcId)));
+      const idx = replaceIndex();
+      if (idx >= 0 && template) state.orders[idx] = makeBeginnerOrder(template, now);
+      else if (idx >= 0) {
+        const extra = available.find((id) => !items.has(id));
+        const npcId = ORDER_NPC_IDS.find((id) => !npcs.has(id)) || "mayor";
+        if (extra) state.orders[idx] = makeBeginnerOrder({ id: "r67_lv2_" + extra, wants: { [extra]: 1 }, npcId }, now);
+      }
+    }
+    if (npcSet().size < 2) {
+      const npcs = npcSet();
+      const other = ORDER_NPC_IDS.find((id) => !npcs.has(id) && (C.NPCS || {})[id]);
+      const idx = replaceIndex();
+      if (other && idx >= 0) state.orders[idx] = Object.assign({}, state.orders[idx], { npcId: other });
+    }
+    if (!hasQuick()) {
+      const idx = replaceIndex();
+      const quick = BEGINNER_ORDERS.find((row) => ["beginner_wheat_2", "beginner_carrot_1"].includes(row.id)
+        && Object.keys(row.wants).every((id) => available.includes(id)) && !state.orders.some((order) => order.id === row.id));
+      if (idx >= 0 && quick) state.orders[idx] = makeBeginnerOrder(quick, now);
+    }
+  }
   function refreshOrders(state, now, rng) {
     const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
     if (!marketUnlocked) {
@@ -866,6 +917,7 @@
         state.orders.push(makeOrder(state, now, rng, String(now) + "_" + seed));
       }
       state.ordersSeededAt = Math.max(state.ordersSeededAt || 0, 3);
+      ensureLv2OrderVariety(state, now);
       return state.orders;
     }
     while (state.orders.length < GAME.orderSlots) {
@@ -873,6 +925,7 @@
       state.orders.push(makeOrder(state, now, rng, String(now) + "_" + seed));
     }
     state.ordersSeededAt = seed;
+    ensureLv2OrderVariety(state, now);
     return state.orders;
   }
   function canFulfill(state, order) {
@@ -901,16 +954,38 @@
   function orderAllocationFor(state, orderId) {
     return orderAllocation(state).find((row) => row.orderId === orderId) || null;
   }
+  function orderGrowDurationText(itemId) {
+    const crop = CROPS[itemId];
+    if (!crop) return "";
+    const seconds = Math.ceil(crop.growMs / 1000);
+    if (seconds < 60) return `${seconds} 秒`;
+    return seconds % 60 === 0 ? `${seconds / 60} 分鐘` : `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`;
+  }
+  function storyReserveTargetName(state, itemId) {
+    if (itemId !== "wheat") return "主線";
+    return state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest ? "回家的第一餐" : "老農班伯";
+  }
+  // R67B（第 4 項）：訂單缺料改成一句口語，不再寫庫存算式。
+  function orderItemStatusText(state, order, itemId, itemNames) {
+    const row = orderAllocationFor(state, order.id) || orderAllocation(state, [order])[0];
+    const item = row && row.items ? row.items[itemId] : null;
+    if (!item) return "缺少作物";
+    const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
+    const name = def ? def.name : itemId;
+    if (!item.missing) return `手上有 ${item.stock} 份${name}，夠交這張了`;
+    let text;
+    if (item.storyReserve > 0 && item.priorReserved > item.storyReserve) text = `還要 ${item.missing} 份${name}，手上的先留給${storyReserveTargetName(state, itemId)}和前面的訂單`;
+    else if (item.storyReserve > 0) text = `還要 ${item.missing} 份${name}（手上 ${item.stock} 份留給${storyReserveTargetName(state, itemId)}）`;
+    else if (item.priorReserved > 0) text = `還要 ${item.missing} 份${name}，手上的先給前面的訂單了`;
+    else if (item.stock > 0) text = `還要 ${item.missing} 份${name}（手上有 ${item.stock} 份）`;
+    else text = `還要 ${item.missing} 份${name}`;
+    const grow = CROPS[itemId] ? `；再種 ${item.missing} 格（約 ${orderGrowDurationText(itemId)}）` : "";
+    return text + grow;
+  }
   function orderAllocationText(state, order, itemNames) {
     const row = orderAllocationFor(state, order.id);
     if (!row) return "缺少作物";
-    return Object.entries(row.items || {}).map(([itemId, item]) => {
-      const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
-      const name = def ? def.name : itemId;
-      if (item.storyReserve > 0) { const seconds = Math.ceil(((CROPS[itemId] && CROPS[itemId].growMs) || 0) / 1000), earlier = Math.max(0, item.priorReserved - item.storyReserve); return `庫存 ${item.stock}－主線保留 ${item.storyReserve} 份${earlier ? `－前單 ${earlier}` : ""}＝可用 ${item.available}${item.missing ? `，還差 ${item.missing}；再種 ${item.missing} 格${name}（約 ${seconds} 秒）` : ""}`; }
-      if (item.priorReserved > 0) return `庫存 ${item.stock}－前單 ${item.priorReserved}＝可用 ${item.available}${item.missing ? `，還差 ${item.missing}` : ""}`;
-      return `需要 ${item.required}・可用 ${item.available}${item.missing ? `，還差 ${item.missing} ${name}` : ""}`;
-    }).join("；");
+    return Object.keys(row.items || {}).map((itemId) => orderItemStatusText(state, order, itemId, itemNames)).join("；");
   }
   function orderPriorityAdvice(state, order) {
     const wants = Object.keys((order && order.wants) || {});
@@ -1055,7 +1130,7 @@
     const lv = Math.max(0, Number(state.upgrades && state.upgrades[key]) || 0);
     const previous = lv > 0 ? def.levels[lv - 1].value : null;
     let effect = def.desc;
-    if (key === "plotCount") effect = `開墾農地：+${next.value - activePlotCount(state)} 格田${lv === 0 ? "・附送胡蘿蔔種子 3 份" : ""}`;
+    if (key === "plotCount") effect = `開墾農地：+${next.value - activePlotCount(state)} 格田${lv === 0 ? "・附送胡蘿蔔種子 3 份，另附小麥種子包種滿所有空格" : "・附送小麥種子包種滿所有空格"}`;
     if (key === "growthSpeed") effect = `肥沃土壤：生長時間 −${Math.round((1 - next.value) * 100)}%`;
     if (key === "sellBonus") effect = `市集人脈：賣出與訂單收益 +${Math.round(next.value * 100)}%`;
     if (key === "storageLevel") effect = `擴建穀倉：容量增加 ${next.value - (previous || 0)} 格`;
@@ -1071,7 +1146,14 @@
     const nextStep = shortfall > 0 ? `還差 ${shortfall} 金；${use}` : `可升級；${use}`;
     const seed = CROPS[state.selectedSeed] || CROPS.wheat;
     const roundSeedCost = activePlotCount(state) * seed.seedCost;
-    return { effect, nextStep, reserveRisk: state.coins >= next.cost && state.coins - next.cost < roundSeedCost, roundSeedCost };
+    return { effect, nextStep, reserveRisk: key === "plotCount" ? false : state.coins >= next.cost && state.coins - next.cost < roundSeedCost, roundSeedCost };
+  }
+  function seedPackStore(state) {
+    if (!state.adventure) state.adventure = {};
+    if (!state.adventure.r58) state.adventure.r58 = {};
+    if (!state.adventure.r58.r59) state.adventure.r58.r59 = {};
+    if (!state.adventure.r58.r59.seedPacks) state.adventure.r58.r59.seedPacks = {};
+    return state.adventure.r58.r59.seedPacks;
   }
   function buyUpgrade(state, key) {
     const next = nextUpgrade(state, key);
@@ -1086,9 +1168,12 @@
       while (state.plots.length < target) {
         state.plots.push({ id: "p" + String(state.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
       }
+      const r67Packs = seedPackStore(state);
+      const r67Empty = state.plots.slice(0, target).filter((plot) => !plot.cropId).length;
+      if (r67Empty > 0) r67Packs.wheat = Math.min(99, Math.max(0, r67Packs.wheat || 0) + r67Empty);
       if (state.upgrades[key] === 1) {
-        const packs = state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.seedPacks;
-        if (packs) packs.carrot = Math.min(99, Math.max(0, packs.carrot || 0) + 3);
+        const packs = seedPackStore(state);
+        packs.carrot = Math.min(99, Math.max(0, packs.carrot || 0) + 3);
       }
     }
     return { ok: true, level: state.upgrades[key],
@@ -2761,7 +2846,7 @@
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, mainStoryReserve, orderConsumesStoryReserve, orderStoryImpact, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, orderItemStatusText, mainStoryReserve, orderConsumesStoryReserve, orderStoryImpact, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, upgradeCardInfo, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags, orderPriorityAdvice,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,

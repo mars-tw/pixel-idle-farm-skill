@@ -45,8 +45,8 @@ test("A1 市集第一批訂單依已解鎖品項產生差異", () => {
 
 test("A2 訂單卡寫清楚需要、持有與跨單共用", () => {
   const ui = read("src/ui.js");
-  assert.match(ui, /需要 \$\{fmtNum\(q\)\}・可用 \$\{fmtNum\(available\)\}/);
-  assert.match(ui, /庫存 \$\{fmtNum\(item\.stock\)\}－前單 \$\{fmtNum\(item\.priorReserved\)\}＝可用/);
+  assert.match(ui, /G\.orderItemStatusText\(state, o, cid\)/); // R67B 同步：需求列改用 game.js 的口語句，不再寫「需要・可用」算式
+  assert.doesNotMatch(ui, /＝可用|庫存 \$\{fmtNum\(item\.stock\)\}－/); // R67B 同步：訂單卡不得再出現庫存算式
   assert.match(ui, /sharedNeeds\[cid\] > \(state\.storage\.items\[cid\] \|\| 0\)/);
   assert.match(ui, /與其他訂單共用\$\{escapeHtml\(item \? item\.name : cid\)\}/);
 });

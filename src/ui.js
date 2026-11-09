@@ -1235,11 +1235,7 @@
         const item = allocationById[o.id] && allocationById[o.id].items && allocationById[o.id].items[cid];
         const available = item ? item.available : (state.storage.items[cid] || 0);
         const ok = available >= q;
-        const allocationText = item && item.storyReserve > 0
-          ? `庫存 ${fmtNum(item.stock)}－主線保留 ${fmtNum(item.storyReserve)} 份${item.priorReserved > item.storyReserve ? `－前單 ${fmtNum(item.priorReserved - item.storyReserve)}` : ""}＝可用 ${fmtNum(item.available)}${item.missing ? `，還差 ${fmtNum(item.missing)}` : ""}`
-          : item && item.priorReserved > 0
-          ? `庫存 ${fmtNum(item.stock)}－前單 ${fmtNum(item.priorReserved)}＝可用 ${fmtNum(item.available)}${item.missing ? `，還差 ${fmtNum(item.missing)}` : ""}`
-          : `需要 ${fmtNum(q)}・可用 ${fmtNum(available)}${item && item.missing ? `，還差 ${fmtNum(item.missing)}` : ""}`;
+        const allocationText = G.orderItemStatusText ? G.orderItemStatusText(state, o, cid) : item && item.missing ? "還要 " + fmtNum(item.missing) + " 份" : "已經夠了";
         return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)} ${allocationText}</span>`;
       }).join("");
       const sharedHtml = Object.keys(o.wants).filter((cid) => sharedCounts[cid] > 1 && sharedNeeds[cid] > (state.storage.items[cid] || 0)).map((cid) => {

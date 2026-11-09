@@ -675,4 +675,9 @@ body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none 
 @media (max-width:859px) {
   body:has(.side-panel.world-panel-open) #questDock,
   body:has(.side-panel.world-panel-open) #questDock[data-quest="early_free_choice"] { display:none !important; }
+/* R67B（第 4 項）：訂單口語句較長，矮螢幕把訂單卡行高與間距收緊，首屏不切半張卡 */
+@media (max-height: 500px) {
+  .side-pane[data-pane="orders"] .order { padding: 4px 7px !important; gap: 5px; }
+  .side-pane[data-pane="orders"] .o-wants .w { line-height: 1.25 !important; }
+  .side-pane[data-pane="orders"] .o-client, .side-pane[data-pane="orders"] .o-flavor, .side-pane[data-pane="orders"] .o-meta, .side-pane[data-pane="orders"] .o-reward { line-height: 1.25 !important; margin: 0 !important; }
 }

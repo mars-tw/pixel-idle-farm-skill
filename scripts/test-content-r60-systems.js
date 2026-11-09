@@ -50,7 +50,7 @@ test("3 市集預覽與第一批不卡小麥，開墾買得起就能按", () => 
   ];
   assert.match(G.orderPriorityAdvice(state, state.orders[0]), /先交這張/);
   const next = G.nextUpgrade(state, "plotCount"); state.coins = next.cost;
-  assert.equal(G.canBuyUpgrade(state, "plotCount"), true); assert.equal(G.upgradeCardInfo(state, "plotCount").reserveRisk, true);
+  assert.equal(G.canBuyUpgrade(state, "plotCount"), true); assert.equal(G.upgradeCardInfo(state, "plotCount").reserveRisk, false); // R67B 同步：開墾附送種子種滿空格，買得起就直接按，不再留種提醒
   assert.match(fs.readFileSync("src/ui.js", "utf8"), /提醒：升級後剩/);
   assert.doesNotMatch(fs.readFileSync("src/ui.js", "utf8"), /G\.canBuyUpgrade\(state, key\) && !cardInfo\.reserveRisk/);
 });

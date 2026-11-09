@@ -33,7 +33,7 @@ test("2 五類有不同獎勵，全完成另有小獎", () => {
 test("3 訂單可用數先扣主線保留，並提示再種幾格與秒數", () => {
   const s = fresh(); s.storage.items.wheat = 4; s.orders = [{ id: "wheat", wants: { wheat: 3 } }];
   const row = G.orderAllocationFor(s, "wheat"); assert.equal(row.items.wheat.storyReserve, 2); assert.equal(row.items.wheat.available, 2); assert.equal(row.ready, false);
-  const text = G.orderAllocationText(s, s.orders[0]); assert.match(text, /主線保留 2 份/); assert.match(text, new RegExp(`再種 1 格小麥（約 ${Math.ceil(C.CROPS.wheat.growMs / 1000)} 秒）`));
+  const text = G.orderAllocationText(s, s.orders[0]); assert.match(text, /留給老農班伯/); assert.match(text, new RegExp(`再種 1 格（約 ${Math.ceil(C.CROPS.wheat.growMs / 1000)} 秒）`)); // R67B 同步：「主線保留 2 份」算式改口語「留給老農班伯」，保留量與再種提示不變
 });
 
 test("4 開祭時沒有番茄會送三包種子，三個目標在十分鐘內可完成", () => {

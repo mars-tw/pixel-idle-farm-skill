@@ -55,7 +55,7 @@ test('A3 升級效果有數字、下一步各異，低於一輪種子成本改�
   assert.match(plot.effect, /\+2 格田/);
   assert.match(growth.effect, /−10%/);
   assert.notEqual(plot.nextStep, growth.nextStep);
-  assert.equal(plot.reserveRisk, true);
+  assert.equal(plot.reserveRisk, false); // R67B 同步：開墾附送種子包種滿所有空格，不再有留種風險（其他升級規則不變）
   const ui = read('src/ui.js');
   assert.match(ui, /cardInfo\.reserveRisk \? "ghost" : "buy"/);
   assert.match(ui, /金<small class="u-confirm-note">留種提醒<\/small>/);

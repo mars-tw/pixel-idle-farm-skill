@@ -17,7 +17,7 @@ function test(name, fn) {
   catch (error) { console.error('FAIL ' + name + '\n' + error.stack); process.exitCode = 1; }
 }
 
-test('共用小麥依訂單順序顯示算式，按鈕狀態與可用量一致', () => {
+test('共用小麥依訂單順序顯示口語句，按鈕狀態與可用量一致', () => { // R67B 同步：原名「顯示算式」改為口語句，分配規則不變
   const state = State.defaultState(T0);
   state.storage.items.wheat = 6; // R66：主線保留 2 份，另有 4 份可交第一張訂單。
   state.orders = [
@@ -27,8 +27,8 @@ test('共用小麥依訂單順序顯示算式，按鈕狀態與可用量一致',
   const rows = G.orderAllocation(state);
   assert.equal(rows[0].ready, true);
   assert.equal(rows[1].ready, false);
-  assert.equal(G.orderAllocationText(state, state.orders[0]), '庫存 6－主線保留 2 份＝可用 4');
-  assert.equal(G.orderAllocationText(state, state.orders[1]), '庫存 6－主線保留 2 份－前單 4＝可用 0，還差 2；再種 2 格小麥（約 15 秒）');
+  assert.equal(G.orderAllocationText(state, state.orders[0]), '手上有 6 份小麥，夠交這張了'); // R67B 同步：可用量不變，改口語句
+  assert.equal(G.orderAllocationText(state, state.orders[1]), '還要 2 份小麥，手上的先留給老農班伯和前面的訂單；再種 2 格（約 15 秒）'); // R67B 同步：缺量不變，改口語句
 });
 
 test('收成、訂單交付與升級都回傳可渲染的即時回饋資料', () => {
