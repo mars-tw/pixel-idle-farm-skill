@@ -696,8 +696,7 @@
   const BEGINNER_ORDERS = [
     { id: "beginner_wheat_2", wants: { wheat: 2 }, npcId: "merchant", ttlOffsetMs: 0, flavor: "蘿拉想先試賣 2 份新鮮小麥。" },
     { id: "beginner_carrot_1", wants: { carrot: 1 }, npcId: "mayor", ttlOffsetMs: 3 * 60 * 1000, flavor: "鎮長想先收 1 份胡蘿蔔，替巡路的人添菜。" },
-    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
-    { id: "beginner_berry_1", wants: { wild_berry: 1 }, rewardCoins: 10, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想要 1 份田邊野莓，拌進野餐點心裡。" }, // R62 整合：首批一張改收採集物，小麥不再被三張單搶
+    { id: "beginner_wheat_3", wants: { wheat: 3 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 3 份小麥做野餐點心。" },
     { id: "beginner_carrot_2", wants: { carrot: 2 }, npcId: "child", ttlOffsetMs: 5 * 60 * 1000, flavor: "圖圖想準備 2 份胡蘿蔔做野餐點心。" },
     { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", ttlOffsetMs: 10 * 60 * 1000, flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
   ];
@@ -811,10 +810,10 @@
   // R35：市集開放前的預告卡直接用開放時第一批訂單的同一份範本（委託人、需求、報酬一字不差）。
   function previewMarketOrders(state, now) {
     // R62A：預告也只列玩家現在能買種子、種得出的作物，避免先出現胡蘿蔔單。
-    const available = new Set(availableOrderItems(state)); (C.FORAGE_NODES || []).filter((node) => node.starter && node.itemId === "wild_berry").forEach((node) => available.add(node.itemId)); // R62 整合：田邊野莓開場就採得到，可進首批訂單
+    const available = new Set(availableOrderItems(state));
     const preferredIds = available.has("carrot")
       ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
-      : ["beginner_wheat_2", "beginner_berry_1", "beginner_wheat_4"];
+      : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
     return preferredIds
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
       .filter(Boolean)
@@ -838,10 +837,10 @@
     state.orders = state.orders.filter((o) => o.firstBatch === true || o.expiresAt > now);
     let seed = (state.ordersSeededAt || 0);
     if (firstDayChapterOne(state, now) && (state.ordersSeededAt || 0) < 3) {
-      const available = new Set(availableOrderItems(state)); (C.FORAGE_NODES || []).filter((node) => node.starter && node.itemId === "wild_berry").forEach((node) => available.add(node.itemId)); // R62 整合：田邊野莓開場就採得到，可進首批訂單
+      const available = new Set(availableOrderItems(state));
       const preferredIds = available.has("carrot")
         ? ["beginner_wheat_2", "beginner_carrot_2", "beginner_carrot_1"]
-        : ["beginner_wheat_2", "beginner_berry_1", "beginner_wheat_4"];
+        : ["beginner_wheat_2", "beginner_wheat_3", "beginner_wheat_4"];
       const selectedTemplates = preferredIds.map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
         .filter((template) => template && Object.keys(template.wants).every((id) => available.has(id)));
       const kept = new Map();
