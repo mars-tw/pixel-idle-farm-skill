@@ -16,7 +16,7 @@ test("第一個選擇未完成時，4 份大單排在訂單最前面", () => {
 });
 test("手機種子卡顯示單價、收合任務卡保留步驟名並單行顯示", () => {
   assert.match(css, /#mapScene \.seed \.sc \{ display: block !important;/);
-  assert.match(css, /#questDock\.quest-collapsed \.world-objective-title \.qp-step,/);
+  assert.ok(!css.includes("#questDock.quest-collapsed .world-objective-title .qp-step,"), "R55 起任務名放在 .qp-step，收合時不得再隱藏"); // R55 整合：規則反轉
   assert.match(css, /#questDock\.quest-collapsed \.world-objective-title, #questDock\.quest-auto-collapsed \.world-objective-title \{ white-space: nowrap !important;/);
 });
 test("R53／R54：提示不重複疊加、無法交付時不顯示交付後剩餘、手機訂單卡壓縮讓首屏兩張完整", () => {

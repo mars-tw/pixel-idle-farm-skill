@@ -52,7 +52,6 @@ body:has(#worldDialogue:not([hidden])) #questDock:is([data-step-type="talk"], [d
 @media (max-height: 480px) and (orientation: landscape) {
   #questDock.quest-collapsed .world-chapter > span:first-child, #questDock.quest-auto-collapsed .world-chapter > span:first-child { display: none !important; }
   #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { white-space: nowrap !important; overflow: visible !important; text-overflow: clip !important; max-width: none !important; }
-  #questDock.quest-collapsed .world-objective-title .qp-step, #questDock.quest-auto-collapsed .world-objective-title .qp-step { display: none !important; }
   #questDock.quest-collapsed .world-objective-title [data-audit="quest-progress"], #questDock.quest-auto-collapsed .world-objective-title [data-audit="quest-progress"] { display: inline !important; }
 }
 /* R47 整合：收合任務卡仍保留「選擇下一步」（R26 收合時隱藏按鈕的規則不套用到這顆） */
@@ -70,9 +69,7 @@ body:has(#worldDialogue:not([hidden])) #questDock:is([data-step-type="talk"], [d
 /* R51：手機種子卡也顯示單價 */
 @media (max-width: 859px) { #mapScene .seed .sc { display: block !important; font-size: 10px; line-height: 1.1; } }
 /* R51：收合任務卡只顯示「任務名＋進度」一行，不再把詞切成兩行；按鈕不壓進度 */
-#questDock.quest-collapsed .world-objective-title .qp-step,
-#questDock.quest-auto-collapsed .world-objective-title .qp-step,
-body:has(.side-panel.world-panel-open) #questDock .world-objective-title .qp-step { display: none !important; }
+/* R55 整合：移除收合時隱藏 .qp-step 的舊規則——R55 起任務名放在 .qp-step */
 #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { white-space: nowrap !important; flex: 0 1 auto; min-width: 0; margin-right: 6px; }
 @media (max-height: 480px) and (orientation: landscape) { #questDock.quest-collapsed .world-objective-title, #questDock.quest-auto-collapsed .world-objective-title { margin-right: 12px !important; } }
 /* R53：手機打開側邊面板時，一般提示移到面板上方，不蓋住訂單內容 */
