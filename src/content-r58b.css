@@ -681,3 +681,6 @@ body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none 
   .side-pane[data-pane="orders"] .o-wants .w { line-height: 1.25 !important; }
   .side-pane[data-pane="orders"] .o-client, .side-pane[data-pane="orders"] .o-flavor, .side-pane[data-pane="orders"] .o-meta, .side-pane[data-pane="orders"] .o-reward { line-height: 1.25 !important; margin: 0 !important; }
 }
+/* R67 整合：等待成熟與陽光倒數併進「現在做」那一層的一行小字，不另成一列。 */
+#questDock .r67a-now .r67-now-hint { display: block; margin-top: 1px; padding: 0; border: 0; background: none; font-style: normal; font-size: 12px; font-weight: 700; color: #8a5a12; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r67a-now .r67-now-hint { display: none; }
