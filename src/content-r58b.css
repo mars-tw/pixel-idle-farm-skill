@@ -669,12 +669,15 @@ body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none 
   #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now b { display:none; }
 }
 @media (max-width:420px) and (min-height:521px) {
-  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now { display:none !important; }
-  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-objective-head { flex:1 1 auto; }
+  /* R67 整合：手機直式收合仍保留「現在做」的主要按鈕（只收起說明文字），玩家不用展開就知道下一步 */
+  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now { display:grid !important; flex:1 1 auto; min-width:0; grid-template-columns:minmax(0,1fr); padding:2px 48px 2px 4px; border:0; background:none; }
+  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now > span { display:none !important; }
+  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now-action { min-height:40px; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 }
 @media (max-width:859px) {
   body:has(.side-panel.world-panel-open) #questDock,
   body:has(.side-panel.world-panel-open) #questDock[data-quest="early_free_choice"] { display:none !important; }
+}
 /* R67B（第 4 項）：訂單口語句較長，矮螢幕把訂單卡行高與間距收緊，首屏不切半張卡 */
 @media (max-height: 500px) {
   .side-pane[data-pane="orders"] .order { padding: 4px 7px !important; gap: 5px; }

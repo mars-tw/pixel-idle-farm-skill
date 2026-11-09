@@ -28,6 +28,7 @@ async function launchBrowser(){
   const world=fs.readFileSync(path.join(ROOT,'src/world-ui.js'),'utf8');
   assert.match(css,/R67A：今日三件事改成單一卡內三層/);
   assert.match(world,/class="r67a-now"/);
+  { let d=0; for (const ch of css.replace(/\/\*[\s\S]*?\*\//g,'')) { if (ch==='{') d++; if (ch==='}') d--; assert.ok(d>=0,'CSS 多了右大括號'); } assert.equal(d,0,'content-r58b.css 大括號未平衡（合併時漏掉 }，後面的規則會被包進錯的 @media）'); } // R67 整合
   const {server,intercepted}=await startServer(); const browser=await launchBrowser();
   try {
     for(const view of VIEWS){
@@ -44,7 +45,7 @@ async function launchBrowser(){
       const cap=view.mobile?0.40:0.45; if(!view.mobile||view.h>view.w) assert.ok(open.h<=view.h*cap+2,`${tag} 展開高 ${open.h} 超過 ${Math.round(view.h*cap)}`);
       await page.locator("[data-audit='quest-collapse']").click(); await page.waitForTimeout(350);
       const folded=await page.evaluate(()=>{const box=document.querySelector('#questDock'),br=box.getBoundingClientRect(),vis=e=>e&&getComputedStyle(e).display!=='none'&&getComputedStyle(e).visibility!=='hidden'&&e.getBoundingClientRect().height>0;const kids=[...box.children].filter(vis).map(e=>({c:e.className,r:e.getBoundingClientRect()}));return{h:br.height,w:br.width,scrollH:box.scrollHeight,clientH:box.clientHeight,kids:kids.map(x=>({c:x.c,top:x.r.top,bottom:x.r.bottom,left:x.r.left,right:x.r.right})),card:{top:br.top,bottom:br.bottom,left:br.left,right:br.right},taskVisible:vis(box.querySelector('.r67a-task-list'))};});
-      assert.equal(folded.taskVisible,false,`${tag} 收合不可露出第三層`); for(const k of folded.kids) assert.ok(k.top>=folded.card.top-2&&k.bottom<=folded.card.bottom+2&&k.left>=folded.card.left-2&&k.right<=folded.card.right+2,`${tag} 收合內容 ${k.c} 不可裁切`); if(view.mobile) assert.ok(folded.h<=52.5,`${tag} 手機收合應為一行`);
+      assert.equal(folded.taskVisible,false,`${tag} 收合不可露出第三層`); for(const k of folded.kids) assert.ok(k.top>=folded.card.top-2&&k.bottom<=folded.card.bottom+2&&k.left>=folded.card.left-2&&k.right<=folded.card.right+2,`${tag} 收合內容 ${k.c} 不可裁切`); if(view.mobile) assert.ok(folded.h<=52.5,`${tag} 手機收合應為一行`); { const act=await page.evaluate(()=>{const b=document.querySelector('#questDock .r67a-now-action');return !!(b&&getComputedStyle(b).display!=='none'&&b.getBoundingClientRect().height>=32&&b.textContent.trim());}); assert.ok(act,`${tag} 收合時仍要看得到「現在做」的主要按鈕`); } // R67 整合
       if(view.mobile){await page.evaluate(()=>window.FarmWorld.openPanel('story'));await page.waitForTimeout(350);const hidden=await page.evaluate(()=>getComputedStyle(document.querySelector('#questDock')).display==='none');assert.equal(hidden,true,`${tag} 手札開啟時任務卡應整張隱藏`);await page.evaluate(()=>document.querySelector('.side-panel').classList.remove('world-panel-open'));await page.waitForTimeout(200);}
       if(view.w===390){
         cls=await page.locator('#questDock').getAttribute('class')||''; if(/quest-(auto-)?collapsed|quest-target-collapsed/.test(cls)){await page.locator("[data-audit='quest-collapse']").click();await page.waitForTimeout(250);}
