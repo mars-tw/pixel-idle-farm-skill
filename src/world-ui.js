@@ -409,9 +409,10 @@
         ${availability.showRiverCommissions ? `<h3 class="story-subhead">河畔委託</h3><p class="project-desc">市集每五分鐘整理一批餐籃。多釣的魚和料理，送給需要的鄰居。</p>${commissions.map((c) => `<div class="adventure-quest"><h3>${esc(c.name)}</h3><p class="project-desc">${costText(c.requirements)}・報酬 ${c.reward.coins} 金${c.reward.materials.wood ? `・木料 ${c.reward.materials.wood}` : ""}</p><button data-commission="${c.id}" ${c.canClaim ? "" : "disabled"}>${c.completed ? "本批已送達" : c.unlocked ? c.canClaim ? "帶去交付" : "餐籃未齊" : "修好釣台後開放"}</button></div>`).join("")}` : ""}`;
       const r58host = document.createElement("div"); r58host.className = "r58-section";
       // R60B：鄰居委託先列現在可做的（未鎖定且未完成），其餘收進可展開的「之後的委託」；卡片文字與交付規則不變。
-      const personalCard = (p) => `<div class="r58-card${p.unlocked && !p.completed ? " r60-available-card" : " r60-later-card"}" data-r58-personal-card="${esc(p.id)}"${p.unlocked && !p.completed ? ' data-r60-available="1"' : ""}><h4>${esc(p.npcName)}・${esc(p.title)}</h4><details class="r63a-full-request"><summary>查看委託全文</summary><p>${esc(p.dialogue)}</p></details><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`;
-      const availablePersonal = personal.filter((p) => p.unlocked && !p.completed);
-      const laterPersonal = personal.filter((p) => !p.unlocked || p.completed);
+      const personalCard = (p) => `<div class="r58-card${p.unlocked && !p.completed ? " r60-available-card" : " r60-later-card"}" data-r58-personal-card="${esc(p.id)}"${p.unlocked && !p.completed ? ' data-r60-available="1"' : ""}${p.catchUp ? ' data-r64b-catchup="1"' : ""}><h4>${esc(p.npcName)}・${esc(p.title)}${p.catchUp ? '<span class="r64b-catchup">可補做</span>' : ""}</h4><details class="r63a-full-request"><summary>查看委託全文</summary><p>${esc(p.dialogue)}</p></details><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`;
+      const sortedPersonal = window.NeighborsR61 && window.NeighborsR61.sortPersonalQuests ? window.NeighborsR61.sortPersonalQuests(personal, currentMain ? currentMain.chapter : 5) : personal; // R64B（第 7 項）
+      const availablePersonal = sortedPersonal.filter((p) => p.unlocked && !p.completed);
+      const laterPersonal = sortedPersonal.filter((p) => !p.unlocked || p.completed);
       r58host.innerHTML = `${r58evt.active ? `<div class="r58-card r59-event r60-event-card" data-r58-event="${esc(r58evt.active.id)}"><h4>${esc(r58evt.active.icon)} ${esc(r58evt.active.name)}</h4><p>${esc(r58evt.active.dialogue)}</p><p class="r58-meta">請選一個做法・剩 ${Math.max(1, Math.ceil(r58evt.active.remainingMs / 60000))} 分鐘</p><div class="r59-event-options">${r58evt.active.options.map((option) => `<button data-r58-resolve="${esc(option.id)}" ${option.available ? "" : "disabled"}>${esc(option.label)}<small>${esc(option.available ? option.resultText : option.unavailableReason)}</small></button>`).join("")}</div></div>` : `<div class="r58-card r60-event-note"><h4>🌾 農場小事</h4><p class="r58-meta">小事會在遊玩途中自己找上門，處理完一件，下一件約在 2～3 分鐘後出現。</p></div>`}
         ${buffs && (buffs.growthRemainingMs > 0 || buffs.orderRemainingMs > 0) ? `<div class="r58-card r58-buff"><h4>🍽️ 料理增益生效中</h4><p class="r58-meta">${buffs.growthRemainingMs > 0 ? `成長加速・剩 ${Math.ceil(buffs.growthRemainingMs / 60000)} 分鐘 ` : ""}${buffs.orderRemainingMs > 0 ? `訂單收入提高・剩 ${Math.ceil(buffs.orderRemainingMs / 60000)} 分鐘` : ""}</p></div>` : ""}
         <h3 class="story-subhead">鄰居個人委託</h3><p class="project-desc">每位鄰居有兩件自己的小委託，完成會讓好感 +1。</p>
@@ -971,10 +972,11 @@
       const ownNames = { mayor: ["鎮長葛瑞", "鎮長"], elder: ["老農班伯"], merchant: ["商人蘿拉", "蘿拉"], child: ["孩童圖圖", "圖圖"] }[npcId] || [];
       return ownNames.reduce((line, name) => line.replaceAll(name, "我"), q.description);
     }
-    if (npcId === "child") return current.adventure.claimed.c3_harvest_picnic ? "我把野餐合照收好了。下次再帶你新種的東西來！" : "河邊要是有桌子，我想帶小花和點心來。你也會來嗎？";
-    if (npcId === "merchant") return "新鮮作物可以交訂單。留一點給自己的餐籃，河邊很快會需要它們。";
-    if (npcId === "elder") return "下田時別忘了雞舍。添水、梳毛、餵食，牠們都記得你。";
-    return fallback;
+    const r64bClue = (window.NeighborsR61 && window.NeighborsR61.CLUES && window.NeighborsR61.CLUES[npcId]) || ""; // R64B（第 5 項）：日常對話帶喜好線索
+    if (npcId === "child") return (current.adventure.claimed.c3_harvest_picnic ? "我把野餐合照收好了。下次再帶你新種的東西來！" : "河邊要是有桌子，我想帶小花和點心來。你也會來嗎？") + (r64bClue ? " " + r64bClue : "");
+    if (npcId === "merchant") return "新鮮作物可以交訂單。留一點給自己的餐籃，河邊很快會需要它們。" + (r64bClue ? " " + r64bClue : "");
+    if (npcId === "elder") return "下田時別忘了雞舍。添水、梳毛、餵食，牠們都記得你。" + (r64bClue ? " " + r64bClue : "");
+    return npcId === "mayor" && r64bClue && fallback ? fallback + " " + r64bClue : fallback;
   }
   window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal, prepareResidentPoses, requestResidentPose, residentPresentationState, disposeResidentPoseScenes };
 })();
