@@ -45,7 +45,7 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
   assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
-  assert.equal(G.orderConsumesStoryReserve(state, orders[0]), false);
+  assert.equal(G.orderConsumesStoryReserve(state, orders.find((o) => o.id === 'beginner_wheat_2')), false); // R57：首批第一張改為 4 份大單（刻意與主線搶小麥），2 份小單仍不動用主線保留
   assert.deepEqual(D.status(state, now).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
   assert.equal(state.storage.items.wheat || 0, 4, '每日目標不再消耗主線小麥');
 });
