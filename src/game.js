@@ -317,7 +317,7 @@
     state.xp += amount;
     const before = state.level;
     state.level = levelFromXp(state.xp);
-    if (before < 2 && state.level >= 2 && Array.isArray(state.orders) && state.orders.length) ensureLv2OrderVariety(state, Date.now()); // R68 整合：Lv 1 開張的第一批訂單在升到 Lv 2 時也換出第二種，不必等空出訂單格
+    if (before < 2 && state.level >= 2 && Array.isArray(state.orders) && state.orders.length) { ensureLv2OrderVariety(state, Date.now()); promoteOrderVariety(state); } // R68 整合：Lv 1 開張的第一批訂單在升到 Lv 2 時也換出第二種，不必等空出訂單格
     return state.level - before; // 升了幾級
   }
   function achievementBonus(state) {
@@ -861,6 +861,15 @@
   }
   // R67B（第 5 項）：Lv 2 同時出現的訂單至少兩位委託人、兩種物品，且一張 3 分鐘內做得完。
   // R68B（第 4 項）：只解鎖小麥時，第二張改為老農班伯要 1 顆雞蛋（起始雞舍可取得），不再放棄多樣性。
+  // R68 整合：訂單面板預設只看得到前兩張；第二張與第一張同物同人時，把後面不同的訂單排到第二張，讓變化看得見。
+  function promoteOrderVariety(state) {
+    if (!Array.isArray(state.orders) || state.orders.length < 3) return;
+    const sig = (o) => Object.keys(o.wants || {}).sort().join("+") + "@" + orderNpcIdFor(o);
+    const first = sig(state.orders[0]);
+    if (sig(state.orders[1]) !== first) return;
+    const idx = state.orders.findIndex((o, i) => i > 1 && sig(o) !== first);
+    if (idx > 1) state.orders.splice(1, 0, state.orders.splice(idx, 1)[0]);
+  }
   function ensureLv2OrderVariety(state, now) {
     if ((state.level || 1) !== 2 || !Array.isArray(state.orders) || state.orders.length < 2) return;
     const available = availableOrderItems(state);
@@ -943,7 +952,7 @@
         state.orders.push(makeOrder(state, now, rng, String(now) + "_" + seed));
       }
       state.ordersSeededAt = Math.max(state.ordersSeededAt || 0, 3);
-      ensureLv2OrderVariety(state, now);
+      ensureLv2OrderVariety(state, now); promoteOrderVariety(state);
       return state.orders;
     }
     while (state.orders.length < GAME.orderSlots) {
@@ -951,7 +960,7 @@
       state.orders.push(makeOrder(state, now, rng, String(now) + "_" + seed));
     }
     state.ordersSeededAt = seed;
-    ensureLv2OrderVariety(state, now);
+    ensureLv2OrderVariety(state, now); promoteOrderVariety(state);
     return state.orders;
   }
   function canFulfill(state, order) {

@@ -1284,7 +1284,7 @@
             ? `<button class="btn ghost small trash-cancel">保留</button>
           <button class="btn small trash-confirm">確認丟棄</button>`
             : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(allocationById[o.id] && !allocationById[o.id].ready ? `還差 ${Object.values(allocationById[o.id].missing || {}).reduce((x, y) => x + y, 0)} 份` : G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
-          ${can ? "" : `<button class="btn ghost small order-go">去田裡</button>`}
+          ${can ? "" : `<button class="btn ghost small order-go">${Object.keys(o.wants || {}).some((id) => !window.CROPS[id] && Object.values(window.ANIMALS || {}).some((a) => a.product === id)) ? "去雞舍" : "去田裡"}</button>`}
           <button class="btn ghost small trash">丟棄</button>`}
         </div>`;
       const fulfill = el.querySelector(".ful");
@@ -1304,6 +1304,8 @@
       const orderGo = el.querySelector(".order-go");
       if (orderGo) orderGo.onclick = () => {
         const cropId = Object.keys(o.wants || {})[0];
+        const animal = Object.values(window.ANIMALS || {}).find((a) => a.product === cropId); // R68 整合：動物產物的訂單帶去動物的家，不帶去田裡
+        if (animal && !window.CROPS[cropId]) { const home = state.map.tiles.find((row) => row.buildingId && (row.buildingId === "b_coop" && animal.home === "chickenCoop" || row.buildingId.includes(String(animal.home || "").replace(/[A-Z].*/, "")))); const panel = document.querySelector(".side-panel"); if (panel) panel.classList.remove("world-panel-open"); if (home) focusCameraOnTile(home.id); toast(`${animal.name}在${animal.home === "chickenCoop" ? "雞舍" : "牧場"}，等牠產出就能交貨。`); return; }
         const tile = state.map.tiles.find((row) => row.plotIndex != null && row.plotIndex < G.activePlotCount(state) && !state.plots[row.plotIndex].cropId);
         if (tile) {
           const panel = document.querySelector(".side-panel");

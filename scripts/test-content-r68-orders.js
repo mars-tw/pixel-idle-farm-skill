@@ -121,5 +121,11 @@ test("6 整合：第二種訂單排在前兩張（訂單面板預設只顯示兩
   }
 });
 
-console.log(`VERIFIED content R68B orders (${passed}/6)`);
+test("7 整合：動物產物訂單的按鈕寫「去雞舍」並帶到雞舍，不寫去田裡", () => {
+  const ui = fs.readFileSync("src/ui.js", "utf8");
+  assert.match(ui, /a\.product === id\)\) \? "去雞舍" : "去田裡"/);
+  assert.match(ui, /const animal = Object\.values\(window\.ANIMALS \|\| \{\}\)\.find\(\(a\) => a\.product === cropId\)/);
+});
+
+console.log(`VERIFIED content R68B orders (${passed}/7)`);
 if (process.exitCode) process.exit(1);
