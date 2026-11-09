@@ -19,11 +19,11 @@ function trigger(s, pick, at) {
 }
 
 test("四種小事件都能觸發並結算，且間隔約 2～3 分鐘", () => {
-  // 旅行商人：付 12 金得草莓，結算後不能重複領。
+  // R59A：旅行商人付 12 金得 2 包可直接種的草莓種子，結算後不能重複領。
   let s = fresh(); s.coins = 30;
   let ev = trigger(s, 0, T0); assert.equal(ev.id, "traveling_merchant");
   ok(A.resolveRandomEvent(s, T0 + 1000));
-  assert.equal(s.coins, 18); assert.equal(s.storage.items.strawberry, 1);
+  assert.equal(s.coins, 18); assert.equal(s.adventure.r58.r59.seedPacks.strawberry, 2);
   assert.equal(A.resolveRandomEvent(s, T0 + 2000).reason, "no_event");
   assert.ok(s.adventure.r58.nextEventAt >= T0 + 120000 && s.adventure.r58.nextEventAt <= T0 + 180000, "下一件在 2～3 分鐘後");
   // 烏鴉：得羽毛材料。

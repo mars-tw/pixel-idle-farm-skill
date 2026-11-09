@@ -237,7 +237,7 @@ test("mixed meal/catch delivery does not consume any resource when one is missin
   const state = fresh(); unlockThrough(state, "c3_garden");
   for (const project of Object.values(state.adventure.projects)) project.restored = true;
   good(A.record(state, { type: "talk", npcId: "child" }, T0));
-  state.adventure.meals = { rustic_bread: 1, baked_carrot: 1, mint_tea: 1, wheat_carrot_pancake: 0, carrot_wheat_stew: 0 };
+  state.adventure.meals = { rustic_bread: 1, baked_carrot: 1, mint_tea: 1, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0 };
   state.adventure.catch.river_carp = 1;
   const before = snapshot([state.adventure.meals, state.adventure.catch, state.coins, state.xp]);
   assert.equal(A.claim(state, "c3_harvest_picnic", T0).reason, "missing_resources");
@@ -362,7 +362,7 @@ test("full three-chapter run uses real crops, care, orders and forage; no materi
   const view = A.summary(state, now); assert.equal(view.complete, true); assert.equal(view.claimed, 9);
   assert.ok(view.chapters.every((chapter) => chapter.status === "complete")); assert.ok(A.projects(state).every((p) => p.restored));
   assert.equal(view.unlocks.gardenGuestbook, true); assert.equal(view.collectibles.length, 2);
-  assert.equal(view.fishing.used, 0); assert.deepEqual(view.meals, { rustic_bread: 0, baked_carrot: 0, mint_tea: 0, wheat_carrot_pancake: 0, carrot_wheat_stew: 0 });
+  assert.equal(view.fishing.used, 0); assert.deepEqual(view.meals, { rustic_bread: 0, baked_carrot: 0, mint_tea: 0, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0 });
   assert.ok(state.materials.wood >= 0 && state.materials.stone >= 0); assert.equal(state.stats.cleared, 1);
   assert.ok(!Object.keys(state.storage.items).some((id) => id === "rustic_bread" || id === "river_carp"));
   assert.notEqual(snapshot([state.coins, state.xp, state.materials]), economy);

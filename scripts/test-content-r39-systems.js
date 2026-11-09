@@ -14,16 +14,16 @@ function test(name, fn) {
   catch (error) { console.error(`FAIL ${name}\n${error.stack}`); process.exitCode = 1; }
 }
 
-test('A1 任務列與市集預告共用已收小麥 0/6 到 6/6', () => {
+test('A1 任務列與市集預告共用班伯開市小麥 0/2 到 2/2', () => {
   const state = S.defaultState(T);
   assert.deepEqual(G.marketPreviewAction(state), {
-    harvested: 0, target: 'field', label: '先收成小麥（已收 0/6，要交老農班伯 2 份）',
+    harvested: 0, target: 'field', label: '老農班伯的開市小麥（已收 0/2）',
   });
-  state.stats.harvested.wheat = 4;
-  assert.match(G.marketPreviewAction(state).label, /已收 4\/6/);
-  state.stats.harvested.wheat = 6;
+  state.storage.items.wheat = 1;
+  assert.match(G.marketPreviewAction(state).label, /已收 1\/2/);
+  state.storage.items.wheat = 2;
   assert.deepEqual(G.marketPreviewAction(state), {
-    harvested: 6, target: 'elder', label: '前往老農班伯（交付 2 份小麥）',
+    harvested: 2, target: 'elder', label: '交給老農班伯 2 份小麥（已收 2/2）',
   });
   const ui = read('src/ui.js');
   assert.match(ui, /planted < 3 \? `已種 \$\{planted\}／3 格・種滿再澆水` : "待澆水"/ /* R42：標籤寫出已種格數，意圖不變：種滿前不顯示待澆水 */);

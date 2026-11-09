@@ -31,9 +31,9 @@ test('訂單卡能計算交付後庫存與主線保留量', () => {
   const state = marketState();
   const small = { id: 'beginner_wheat_2', wants: { wheat: 2 } };
   const large = { id: 'beginner_wheat_4', wants: { wheat: 4 } };
-  assert.equal(G.orderStoryImpact(state, small).text, '交付後剩 2 份・主線還需 2 份');
+  assert.equal(G.orderStoryImpact(state, small).text, '交付後剩 2 份・「老農班伯的開市小麥」還需 2 份');
   assert.equal(G.orderStoryImpact(state, small).risky, false);
-  assert.equal(G.orderStoryImpact(state, large).text, '交付後剩 0 份・主線還需 2 份');
+  assert.equal(G.orderStoryImpact(state, large).text, '交付後剩 0 份・「老農班伯的開市小麥」還需 2 份');
   assert.equal(G.orderStoryImpact(state, large).risky, true);
 });
 

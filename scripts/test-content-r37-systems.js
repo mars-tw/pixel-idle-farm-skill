@@ -56,10 +56,10 @@ test("A1 市集開放里程碑與任務列都指向料理", () => {
 
 test("A2 市集預告依主線已收小麥數切換文字與目的地", () => {
   const state = S.defaultState(T);
-  state.stats.harvested.wheat = 0;
-  assert.deepEqual(G.marketPreviewAction(state), { harvested: 0, target: "field", label: "先收成小麥（已收 0/6，要交老農班伯 2 份）" });
-  state.stats.harvested.wheat = 6;
-  assert.deepEqual(G.marketPreviewAction(state), { harvested: 6, target: "elder", label: "前往老農班伯（交付 2 份小麥）" });
+  state.storage.items.wheat = 0;
+  assert.deepEqual(G.marketPreviewAction(state), { harvested: 0, target: "field", label: "老農班伯的開市小麥（已收 0/2）" });
+  state.storage.items.wheat = 2;
+  assert.deepEqual(G.marketPreviewAction(state), { harvested: 2, target: "elder", label: "交給老農班伯 2 份小麥（已收 2/2）" });
   const ui = read("src/ui.js");
   assert.match(ui, /預覽・還沒開放/);
   assert.match(ui, /action\.target === "field".*tile\.plotIndex === 0/);

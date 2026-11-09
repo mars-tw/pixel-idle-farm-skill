@@ -6,3 +6,11 @@
 .r58-meta { font-size: 12px; color: #7a6a52; }
 .r58-done { color: #5a9e3f; font-weight: 700; }
 .r58-buff { border-left: 4px solid #f4b942; padding-left: 8px; }
+/* R59A：事件選項、永久結果與料理／HUD 狀態；不改動 B 線清單版面。 */
+.r59-event-options{display:grid;gap:8px}
+.r59-event-options button{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left}
+.r59-event-options button small{font-weight:400;opacity:.82}
+.r59-permanent{border-color:#e7b84d;background:rgba(255,244,190,.78)}
+.r59-recipe-status{margin:4px 0;color:#76551c;font-weight:700}
+.r59-buff-chip{border-color:#e7b84d;background:#fff3bd}
+.world-objective-route em{display:block;margin-top:3px;font-style:normal;color:#72500d;font-weight:700}

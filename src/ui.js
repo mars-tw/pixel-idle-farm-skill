@@ -732,6 +732,8 @@
     const sId = G.currentSeason ? G.currentSeason(state, now()) : "春";
     const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
     const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
+    const mealBuffs = window.AdventureAPI && window.AdventureAPI.activeBuffs ? window.AdventureAPI.activeBuffs(state, now()) : null;
+    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 25%"><span class="ic">🥞</span><span class="sub">${fmtTime(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 20%"><span class="ic">🥘</span><span class="sub">${fmtTime(mealBuffs.orderRemainingMs)}</span></div>` : ""}` : "";
     $("resBar").innerHTML = `
       <div class="res coins">${uiIcon("system_coin")} ${fmtNum(state.coins)}</div>
       <div class="res level">${uiIcon("system_xp")}
@@ -741,6 +743,7 @@
       <div class="res storage" title="背包：${used} 份／${cap} 份" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")}<span class="res-name">背包</span> ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
       ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
+      ${buffHtml}
       ${matChips()}`;
   }
   // 建材顯示（>0 才顯示，省空間）
@@ -1742,7 +1745,7 @@
     if (cur.id === "intro_reopen_farm") return "主動作：點金色箭頭旁的告示牌，走過去閱讀。";
     if (cur.id === "plant_wheat") return "主動作：選手工具，點空農土種下小麥。";
     if (cur.id === "first_water") return "主動作：走到水井，或選澆水工具點麥田。";
-    if (cur.id === "first_harvest") return `主動作：收成小麥 ${Math.min(6, (state.stats.harvested && state.stats.harvested.wheat) || 0)}/6 份；每格可收 2 份。`;
+    if (cur.id === "first_harvest") return `主動作：老農班伯的開市小麥（已收 ${Math.min(2, (state.storage.items && state.storage.items.wheat) || 0)}/2）。`;
     if (cur.id === "first_delivery") return "主動作：把 2 份小麥交給老農班伯。";
     if (cur.id === "clear_old_path") return "主動作：選清除工具，點金色箭頭標示的樹樁。";
     if (cur.id === "repair_bridge") {

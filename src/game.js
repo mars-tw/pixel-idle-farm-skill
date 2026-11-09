@@ -581,17 +581,19 @@
     if (!plot) return { ok: false, reason: "no_plot" };
     if (plotIndex >= activePlotCount(state)) return { ok: false, reason: "locked_plot" };
     if (plot.cropId) return { ok: false, reason: "occupied" };
-    if (!isCropUnlocked(state, cropId)) return { ok: false, reason: "locked_crop" };
     const cost = CROPS[cropId].seedCost;
-    if (state.coins < cost) return { ok: false, reason: "no_coins" };
-    state.coins -= cost;
+    const seedPacks = state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.seedPacks;
+    const freeSeed = seedPacks && (seedPacks[cropId] || 0) > 0;
+    if (!freeSeed && !isCropUnlocked(state, cropId)) return { ok: false, reason: "locked_crop" };
+    if (!freeSeed && state.coins < cost) return { ok: false, reason: "no_coins" };
+    if (freeSeed) seedPacks[cropId]--; else state.coins -= cost;
     plot.cropId = cropId;
     plot.plantedAt = now;
     delete plot.wateredAt;
     delete plot.sunGrown;
     state.stats.plantCount++;
     const sun = sunBoostGrowth(state, plotIndex, now);
-    return sun ? { ok: true, sun } : { ok: true };
+    return sun ? { ok: true, sun, usedSeedPack: freeSeed } : { ok: true, usedSeedPack: freeSeed };
   }
   function harvest(state, plotIndex, now) {
     const plot = state.plots[plotIndex];
@@ -616,7 +618,7 @@
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
-    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農班伯。" };
+    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "把 2 份小麥交給老農班伯，完成「老農班伯的開市小麥」。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     return out;
   }
@@ -815,10 +817,10 @@
       });
   }
   function marketPreviewAction(state) {
-    const harvested = Math.min(6, Math.max(0, Number(state && state.stats && state.stats.harvested && state.stats.harvested.wheat) || 0));
-    return harvested < 6
-      ? { harvested, target: "field", label: `先收成小麥（已收 ${harvested}/6，要交老農班伯 2 份）` }
-      : { harvested, target: "elder", label: "前往老農班伯（交付 2 份小麥）" };
+    const harvested = Math.min(2, Math.max(0, Number(state && state.storage && state.storage.items && state.storage.items.wheat) || 0));
+    return harvested < 2
+      ? { harvested, target: "field", label: `老農班伯的開市小麥（已收 ${harvested}/2）` }
+      : { harvested, target: "elder", label: "交給老農班伯 2 份小麥（已收 2/2）" };
   }
   function refreshOrders(state, now, rng) {
     const marketUnlocked = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
@@ -923,7 +925,7 @@
       remaining: relevant.remaining,
       storyNeed: relevant.storyNeed,
       risky: parts.some((part) => part.risky),
-      text: `交付後剩 ${relevant.remaining} 份・主線還需 ${relevant.storyNeed} 份`,
+      text: `交付後剩 ${relevant.remaining} 份・「老農班伯的開市小麥」還需 ${relevant.storyNeed} 份`,
       warning: parts.some((part) => part.risky) ? "交付後主線物資會不足，還要再收成。" : "",
     };
   }

@@ -396,6 +396,7 @@ const MATERIALS = {
   stone:   { id: "stone",   name: "石材", emoji: "🪨" },
   compost: { id: "compost", name: "堆肥", emoji: "🍂" },
   feather: { id: "feather", name: "烏鴉羽毛", emoji: "🪶" },
+  rainwater:{ id: "rainwater", name: "雨水", emoji: "🪣" },
 };
 
 // ===== MVP2：地形（地圖磚規則，非裝飾）=====
@@ -782,11 +783,11 @@ const QUESTS = {
   first_water:       { id: "first_water", title: "替小麥澆水",
     desc: "走到水井汲水，或用澆水工具替麥田澆水。", next: "first_harvest",
     objective: "water", marker: { kind: "station", type: "well" } },
-  first_harvest:     { id: "first_harvest", title: "收成 6 份小麥",
-    desc: "等小麥成熟後走過去收成；每格可收 2 份。", next: "first_delivery",
+  first_harvest:     { id: "first_harvest", title: "老農班伯的開市小麥（已收 0/2）",
+    desc: "收成 2 份小麥，準備交給老農班伯。", next: "first_delivery",
     objective: "harvest", marker: { kind: "soil" } },
-  first_delivery:    { id: "first_delivery", title: "把 2 份小麥交給老農班伯",
-    desc: "帶著 2 份小麥找老農班伯，完成第一章的主線交付。", next: "clear_old_path",
+  first_delivery:    { id: "first_delivery", title: "老農班伯的開市小麥（已收 2/2）",
+    desc: "把 2 份小麥交給老農班伯，完成第一章的主線交付。", next: "clear_old_path",
     objective: "elder_wheat", marker: { kind: "npc", type: "elder" } },
   clear_old_path:    { id: "clear_old_path", title: "清開荒地舊路",
     desc: "用清除工具清掉擋路的樹樁，取得修橋用木材並打通南邊。", next: "repair_bridge",
