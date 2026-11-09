@@ -22,9 +22,9 @@ test("1 灶台餐籃為零不顯示享用，做一份會寫食材缺口", () => 
 test("2 市集預告、第一批與隨機訂單只要求現在買得到種子的作物", () => {
   const state = fresh(); state.level = 2; state.adventure.claimed.c1_first_harvest = true;
   assert.equal(G.isCropUnlocked(state, "carrot"), false);
-  assert.ok(G.previewMarketOrders(state, T0).every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id))));
+  assert.ok(G.previewMarketOrders(state, T0).every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id) || id === "egg"))); // R68B：Lv 2 只解鎖小麥時預告第二張為雞蛋單
   G.refreshOrders(state, T0, () => 0.5);
-  assert.ok(state.orders.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id))), JSON.stringify(state.orders));
+  assert.ok(state.orders.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id) || id === "egg")), JSON.stringify(state.orders)); // R68B：同上，首批第二張為雞蛋單
   assert.ok(state.orders.every((o) => !o.wants.carrot), "開墾前不可出胡蘿蔔單");
 });
 

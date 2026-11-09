@@ -42,7 +42,7 @@ test("2 麥餅有三分鐘增益、HUD 寫名稱效果分秒，晚餐缺口導�
 test("3 市集預覽與第一批不卡小麥，開墾買得起就能按", () => {
   const state = fresh(); state.level = 2; state.adventure.claimed.c1_first_harvest = true;
   const preview = G.previewMarketOrders(state, T0);
-  assert.ok(preview.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id)))); // R62：只列目前真的種得出的作物。
+  assert.ok(preview.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id) || id === "egg"))); // R68B：Lv 2 只解鎖小麥時預告第二張為雞蛋單（起始雞舍可取得）
   G.refreshOrders(state, T0, () => 0.5);
   assert.ok(state.orders.every((o) => !o.wants.carrot), JSON.stringify(state.orders)); // R62：未開墾前不得先出胡蘿蔔單。
   state.orders = [

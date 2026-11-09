@@ -741,3 +741,17 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
 body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now > span { display:none !important; }
 body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now { display:grid !important; grid-template-columns:minmax(0,1fr); padding:3px 48px 3px 6px; }
 body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now-action { width:100%; max-width:none; white-space:nowrap; }
+/* R68B（第 6 項）：手機右下浮動互動按鈕完整留在畫面內；文字過長時省略，完整文字保留在 title（JS 設定）。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #actionA {
+    left: auto !important; right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    max-width: min(44vw, 176px) !important; box-sizing: border-box !important;
+    overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  #actionA {
+    max-width: min(36vw, 176px) !important; box-sizing: border-box !important;
+    overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+  }
+}

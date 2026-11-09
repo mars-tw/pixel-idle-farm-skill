@@ -73,7 +73,7 @@ test('A4 建造只列已解鎖與下一項，升級有三段排序與可達路�
   const catalog = next ? visible.concat(next) : visible;
   assert.deepEqual(catalog, ['compostHeap', 'silo']);
   assert.match(ui, /function visibleBuildingCatalogTypes\(\)/);
-  assert.match(ui, /農場等級 \$\{def \? def\.unlockLevel/);
+  assert.match(ui, /需要 Lv \$\{def\.unlockLevel\}（還差 \$\{levelGap\} 級）/); // R68B 第 5 項：建造卡改寫等級缺口
   assert.match(ui, /\["現在買得起", "差一點", "長期目標", "已滿級"\]/);
   const nextSteps = C.UPGRADE_ORDER.map((key) => G.upgradeCardInfo(state, key).nextStep);
   assert.equal(new Set(nextSteps).size, nextSteps.length, '每種升級要有不同用途與下一步');

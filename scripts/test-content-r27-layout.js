@@ -106,7 +106,7 @@ const INTERSECT_JS = `
       });
       assert(!build.hidden && build.btns.length === 2, `${w}×${h} 新存檔建造選單應列 Lv1 可建物與下一個解鎖建物（實際 ${build.btns.length}）`);
       assert(build.btns[0].text.includes('可以建造'), `${w}×${h} Lv1 堆肥場缺少明確負擔狀態`);
-      assert(build.btns[1].text.includes('農場等級 3 解鎖'), `${w}×${h} 下一個建物缺少明確解鎖條件`);
+      assert(build.btns[1].text.includes('需要 Lv 3（還差 2 級）'), `${w}×${h} 下一個建物缺少明確解鎖條件`); // R68B 第 5 項：建造卡改寫等級缺口
       assert(build.box.top >= build.hudBottom - 1, `${w}×${h} 建造選單上緣 ${Math.round(build.box.top)} 超出 HUD 下緣 ${Math.round(build.hudBottom)}`);
       assert(build.box.bottom <= build.toolTop + 1, `${w}×${h} 建造選單下緣 ${Math.round(build.box.bottom)} 超出工具列上緣 ${Math.round(build.toolTop)}`);
       assert(build.box.top >= 0 && build.box.bottom <= h + 1, `${w}×${h} 建造選單超出視窗`);
