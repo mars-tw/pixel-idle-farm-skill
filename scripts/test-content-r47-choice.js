@@ -16,7 +16,7 @@ test("建造卡寫出第一級效果", () => {
   assert.match(ui, /<em class="bw-effect">\$\{escapeHtml\(effect\)\}<\/em>/);
 });
 test("任務卡展開時不重複顯示「選擇下一步」", () => {
-  assert.match(css, /#questDock:not\(\.quest-collapsed\):not\(\.quest-auto-collapsed\):not\(\.quest-target-collapsed\) \[data-choice-open\] \{ display: none !important; \}/);
+  assert.ok(!css.includes("#questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) [data-choice-open] { display: none"), "R56：選擇下一步是唯一入口，展開時也要顯示");
 });
 test("收合任務卡仍保留「選擇下一步」並撐開寬度；手機橫式收合只顯示任務名與進度", () => {
   assert.match(css, /#questDock\.quest-collapsed \.world-objective-bottom \[data-choice-open\],/);

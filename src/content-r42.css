@@ -42,7 +42,7 @@ body:has(#worldDialogue:not([hidden])) #questDock:is([data-step-type="talk"], [d
 #questDock [data-choice-open] { background: #6b4a1f !important; color: #fff6dc !important; border-color: #4a3211 !important; }
 /* R47：建造卡效果、展開時不重複顯示「選擇下一步」、關閉狀態的開關整體變淡 */
 .build-wheel-btn .bw-effect { display: block; font-style: normal; font-size: 11px; font-weight: 700; color: #3f6b2c; line-height: 1.25; margin: 1px 0 2px; }
-#questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) [data-choice-open] { display: none !important; }
+/* R56：R55 起「選擇下一步」是唯一的路線入口，展開時也要顯示 */
 .setting-toggle[data-enabled="false"] { opacity: .72; filter: grayscale(.6); }
 /* R47 整合：「選這條」改放在卡片底部一行，不蓋說明；設定最後一列與「完成」之間留空 */
 #questDock .world-objective-routes .route { padding-right: 10px !important; }

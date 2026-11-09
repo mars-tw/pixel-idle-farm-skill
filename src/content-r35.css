@@ -7,7 +7,7 @@
 .gtile.water:is([data-tile-id="t0_9"],[data-tile-id="t0_10"],[data-tile-id="t1_10"],[data-tile-id="t2_10"],[data-tile-id="t0_11"],[data-tile-id="t1_11"],[data-tile-id="t2_11"])::before { content: none !important; }
 .gtile[data-tile-id="t0_9"]::after {
   content: ""; position: absolute; left: 0; top: 0; width: 300%; height: 300%;
-  background: url("../assets/generated/r35/pond-480.png?v=content-r55-20261109-1") center / 100% 100% no-repeat;
+  background: url("../assets/generated/r35/pond-480.png?v=content-r56-20261109-1") center / 100% 100% no-repeat;
   pointer-events: none; z-index: 1; image-rendering: auto;
 }
 
