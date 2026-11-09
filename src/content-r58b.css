@@ -1,0 +1,8 @@
+/* R58B：農場小事、鄰居個人委託與料理增益。只加內容卡片，不改既有版面與按鈕尺寸。 */
+.r58-section { margin-top: 12px; }
+.r58-card { border: 1px solid #d8c9a6; border-radius: 8px; padding: 10px; margin: 8px 0; background: #fffdf4; }
+.r58-card h4 { margin: 0 0 6px; }
+.r58-card p { margin: 4px 0; }
+.r58-meta { font-size: 12px; color: #7a6a52; }
+.r58-done { color: #5a9e3f; font-weight: 700; }
+.r58-buff { border-left: 4px solid #f4b942; padding-left: 8px; }

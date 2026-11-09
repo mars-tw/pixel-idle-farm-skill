@@ -1214,7 +1214,7 @@
     }));
     visibleOrders.forEach((o) => {
       const rarity = window.ORDER_RARITY[o.rarity];
-      const pay = G.orderPayout(state, o);
+      const pay = G.orderPayout(state, o, now());
       const can = allocationById[o.id] ? allocationById[o.id].ready : G.canFulfill(state, o);
       const narrative = G.orderNarrative ? G.orderNarrative(state, o) : null;
       const storyImpact = G.orderStoryImpact ? G.orderStoryImpact(state, o) : null;
@@ -2594,6 +2594,7 @@
       a.unlocked ? `${a.icon} ${a.name}` : "❔ 未解鎖成就", "achievement", a.id)), 5);
     const collectibleRows = compactRowsHtml("journal-collectibles", (j.collectibles || []).map((c) => item(c.unlocked,
       c.unlocked ? `${c.emoji} ${c.name}` : "◼ 未取得收藏品", "collectible", c.id)), 5);
+    const grandmaLetterRows = compactRowsHtml("journal-grandma-letters", (j.grandmaLetters || []).map((l) => item(l.read, l.read ? `✉️ ${l.title}・已收進手記` : l.unlocked ? `📬 ${l.title}・待讀` : "🔒 祖母的信・尚未寄達", "grandma-letter", l.id)), 5);
     const npcSideRows = compactRowsHtml("journal-npc-sidequests", j.npcs.map((n) => {
       const sq = n.sideQuest;
       const lore = sq && sq.loreUnlocked ? `<span class="sq-lore">・${sq.lore}</span>` : "";
@@ -2625,6 +2626,7 @@
         ${item(j.world.eastDeepUnlocked, j.world.eastDeepUnlocked ? "✅ 東林深處已解鎖" : "🔒 東林深處未解鎖", "world", "east_deep")}
       </div>
       ${head("📜 收藏品", "collectibles")}<div class="journal-grid" data-audit="journal-collectibles">${collectibleRows}</div>
+      ${head("✉️ 祖母的里程碑信", "grandmaLetters")}<div class="journal-grid" data-audit="journal-grandma-letters">${grandmaLetterRows}</div>
       ${head("🏆 成就", "achievements")}
       <div class="journal-grid">${achRows}</div>
     </div>`;

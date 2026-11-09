@@ -183,6 +183,7 @@ const HELP = `
       await page.waitForTimeout(300);
       // 第 10 項
       await page.evaluate(() => window.FarmWorld.speak('葛瑞', '收成先留一籃，別全拿去賣。'));
+      await page.waitForFunction(() => document.querySelector('.dialogue-portrait'), null, { timeout: 15000 }).catch(() => {});
       await page.waitForTimeout(400);
       const dlg = await page.evaluate(() => { const img = document.querySelector('.dialogue-portrait'); if (!img) return null; const r = img.getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height), nw: img.naturalWidth, ir: getComputedStyle(img).imageRendering }; });
       assert(dlg, `${tag} 對話頭像不存在`);
