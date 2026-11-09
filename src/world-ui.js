@@ -220,7 +220,9 @@
     const early = A.earlyGoals ? A.earlyGoals(s, Date.now()) : { available: false, goals: [] };
     const festival = A.festivalStatus ? A.festivalStatus(s, Date.now()) : { unlocked: false, active: false, goals: [] };
     const festivalTime = Math.max(0, Math.ceil((festival.remainingMs || 0) / 1000));
-    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner" data-active="${festival.active}"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b><small>${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
+    const festivalDone = festival.goals ? festival.goals.filter((g) => g.complete).length : 0;
+    const festivalCompact = festival.active ? `<span class="r65b-festival-compact" aria-hidden="true">祭典 ${festivalDone}/${festival.goals.length}・${Math.floor(festivalTime / 60) >= 1 ? `剩 ${Math.floor(festivalTime / 60)} 分` : "剩不到 1 分"}</span>` : "";
+    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner" data-active="${festival.active}"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b>${festivalCompact}<small>${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
@@ -742,7 +744,7 @@
         b.style.cssText = `left:${(tile.x + .5) * tileSize - w * anchor[0]}px;top:${baseline - h * anchor[1]}px;width:${w}px;height:${h}px;z-index:${Math.round(baseline)};`;
         Object.assign(b.style, window.Atlas.frameStyleFor(spec.sheet, frame, w, h));
         b.setAttribute("aria-label", p.name + (p.restored ? "，使用" : "，修復計畫"));
-        b.innerHTML = `<span class="world-site-label">${esc(p.name)}${p.restored ? "" : "・待修"}</span>${p.canRestore ? '<span class="world-marker"></span>' : ""}`;
+        b.innerHTML = `<span class="world-site-label">${esc(p.name)}${p.restored ? "・已修好" : "・待修"}</span>${p.restored ? '<span class="r65b-site-done" aria-hidden="true">✓</span>' : ""}${p.canRestore ? '<span class="world-marker"></span>' : ""}`;
         b.onclick = (event) => { event.stopPropagation(); visitSite(p.id); }; world.appendChild(b);
       });
     }

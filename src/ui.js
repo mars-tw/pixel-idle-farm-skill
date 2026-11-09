@@ -4902,6 +4902,9 @@
     const dd = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[state.player.facing || "down"];
     return G.getTileXY(state, state.player.x + dd[0], state.player.y + dd[1]);
   }
+  // R65B（第 7 項）：收穫祭進行中，祭典攤位也是互動對象（只決定互動鈕顯示與點按去向，不改祭典規則）。
+  function festivalStallTileId() { try { const sc = window.AdventureAPI && window.AdventureAPI.festivalScene ? window.AdventureAPI.festivalScene(state, now()) : null; return sc && sc.active && sc.stall ? sc.stall.tileId : ""; } catch (e) { return ""; } }
+  function nearFestivalStall() { const stallId = festivalStallTileId(); if (!stallId || !state || !state.player) return false; const pt = G.getTileById(state, state.player.tileId); const tiles = []; try { tiles.push(facingTile()); } catch (e) {} if (pt) for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) tiles.push(G.getTileXY(state, pt.x + dx, pt.y + dy)); return tiles.some((t) => t && t.id === stallId); }
   function activateFacingTile() {
     if (hasOpenModal()) return;
     const tile = facingTile();
@@ -4913,9 +4916,10 @@
     const actions = sceneActionsForTile(tile);
     if (actions.length) runSceneAction(actions[0].action, tile.id);
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
+    else if (tile.id === festivalStallTileId()) { const stallBtn = document.querySelector("[data-festival-stall]"); if (stallBtn && !stallBtn.disabled) stallBtn.click(); else handleMapClick(tile.id, "direct"); }
     else toast(blockedReason(tile));
   }
-  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (G.quickHarvestStatus && G.quickHarvestStatus(state, now()).count > 0) return true; } catch (e) {} const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
+  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (G.quickHarvestStatus && G.quickHarvestStatus(state, now()).count > 0) return true; } catch (e) {} const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} try { if (nearFestivalStall()) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
     const action = $("actionA");
     if (!action || !G.quickHarvestStatus) return;
     if (quickHarvestTarget && !moveTimer && state.player.action === "idle") quickHarvestTarget = null;
@@ -4932,6 +4936,7 @@
         if (neighbor && G.interactionLabelForTile) targetLabel = G.interactionLabelForTile(state, neighbor, now());
       }
     }
+    try { if (nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
     action.textContent = busy ? "收成中" : targetLabel;
     action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
     if (typeof action.setAttribute === "function") {
