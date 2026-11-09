@@ -636,7 +636,7 @@
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
-    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "把 2 份小麥交給老農班伯，完成「老農班伯的開市小麥」。" };
+    if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: farmNextStepText(state, now, "把 2 份小麥交給老農班伯。") };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
     if (mealBonus) out.meal = { kind: "harvest", bonus: mealBonus };
     return out;
@@ -1094,7 +1094,7 @@
     if ((state.level || 1) > beforeLevel) milestones.push(milestoneCard("level_up", { level: state.level, state, now }));
     return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story, milestones,
       feedback: [{ kind: "order", target: "coins", text: `+${pay.coins} 金`, amount: pay.coins }],
-      settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: "查看新訂單，或把收益投入農場升級。" } };
+      settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: farmNextStepText(state, now, "查看新訂單，或把收益投入農場升級。") } };
   }
   function trashOrder(state, orderId, now, rng) {
     const idx = state.orders.findIndex((o) => o.id === orderId);
@@ -2449,9 +2449,20 @@
       let guideApi = root.AdventureAPI;
       if (!guideApi && data.state && typeof module !== "undefined" && module.exports) guideApi = require("./adventure.js");
       const guide = data.state && guideApi && guideApi.guide ? guideApi.guide(data.state, data.now) : null;
-      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `Lv ${level}・${unlockText}`, unlocked: unlockText, next: data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
+      const next = data.state && guideApi && guideApi.nextFarmStep && !((data.state.adventure || {}).claimed || {}).c1_first_meal
+        ? guideApi.nextFarmStep(data.state, data.now) : null;
+      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `Lv ${level}・${unlockText}`, unlocked: unlockText, next: (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
     }
     return null;
+  }
+  function farmNextStepText(state, now, fallback) {
+    let guideApi = root.AdventureAPI;
+    if (!guideApi && typeof module !== "undefined" && module.exports) guideApi = require("./adventure.js");
+    if (state && guideApi && guideApi.nextFarmStep && !(((state.adventure || {}).claimed || {}).c1_first_meal)) {
+      const next = guideApi.nextFarmStep(state, now);
+      if (next && next.text) return next.text;
+    }
+    return fallback;
   }
   function levelUnlocks(level) {
     const rows = [];

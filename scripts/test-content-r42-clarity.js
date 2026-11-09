@@ -14,7 +14,7 @@ test("陽光出現時有不被對話藏起的小標籤，點一下帶到受光�
 test("二選一寫出各自後果，尚未選擇時隱藏前往鈕", () => {
   assert.ok(ui.includes("交出 4 份小麥：馬上 +${") && ui.includes("G.orderPayout(farmState, o).coins : 28") && ui.includes("但要再種一輪小麥才能做餅"), "選項寫實際交付金額（含加成）"); // R52
   assert.match(ui, /先拿經驗、第 1 章更快完成/);
-  assert.match(world, /\$\{choiceRoutes && !\/route\[\^"\]\*tracked\/\.test\(choiceRoutes\)[^`]*`<button type="button" data-choice-open>選擇下一步<\/button>`/); // R46：待選時以「選擇下一步」取代隱藏的前往鈕
+  assert.match(world, /\? "data-choice-open" : "data-world-go"/); // R68：待選時同一個「現在做」主按鈕切成選擇下一步
 });
 test("任務卡只顯示目前步驟，章節交付進度移到故事手記，作物標籤寫出已種格數", () => {
   assert.ok(!world.slice(world.indexOf('box.innerHTML = `<div class="world-objective-title">'), world.indexOf('const choiceOpen =')).includes("本章已交付"));

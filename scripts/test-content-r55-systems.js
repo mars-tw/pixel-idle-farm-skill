@@ -83,7 +83,7 @@ test('任務卡只留目前步驟、進度與主要按鈕，章節交付移到�
   const worldUi = read('src/world-ui.js');
   const ui = read('src/ui.js');
   const css = read('src/content-r55a.css');
-  const objectiveTemplate = worldUi.slice(worldUi.indexOf('box.innerHTML = `<div class="world-objective-title">'), worldUi.indexOf('const choiceOpen =', worldUi.indexOf('box.innerHTML = `<div class="world-objective-title">')));
+  const objectiveTemplate = worldUi.slice(worldUi.indexOf('box.innerHTML = `<div class="world-objective-title r68a-objective-head"'), worldUi.indexOf('const choiceOpen =', worldUi.indexOf('box.innerHTML = `<div class="world-objective-title r68a-objective-head"')));
   assert.ok(objectiveTemplate.includes('data-audit="quest-progress"'));
   assert.ok(objectiveTemplate.includes('data-world-go'));
   assert.ok(!objectiveTemplate.includes('本章已交付'));

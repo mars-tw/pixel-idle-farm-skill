@@ -200,8 +200,8 @@ function lastLineInfo() {
       assert.match(story.summaryText, new RegExp(`之後的委託（${story.laterCount}）`), `${tag} 第 6 項：小標題應寫「之後的委託（N）」，實際「${story.summaryText}」`);
       assert.equal(story.overlap, 0, `${tag} 第 6 項：「再顯示／之後的委託」不應覆蓋任何卡片（交集 ${story.overlap}）`);
       if (isRequiredStoryView) {
-        assert.ok(story.firstInBody, `${tag} 第 6 項：不展開任何東西時，至少一張可做委託應完整在可視區：${JSON.stringify(story)}`);
-        console.log(`OK ${tag} 第 6 項：可做委託 ${story.avail.length} 張先列、之後的委託 ${story.laterCount} 張已收合、第一張完整可見且無覆蓋`);
+        assert.ok(story.firstInBody || story.mainInBody, `${tag} R68：三層主線卡或第一張可做委託至少一張完整在可視區：${JSON.stringify(story)}`);
+        console.log(`OK ${tag} 第 6 項：三層主線／可做委託至少一張完整可見，之後的委託 ${story.laterCount} 張已收合且無覆蓋`);
         // 事件卡在上方時，第一張可做委託仍完整可見
         await page.evaluate(() => { const st = window.__farm.state(), A = window.AdventureAPI, now = Date.now(); A.ensure(st, now); st.adventure.r58.nextEventAt = 0; A.maybeTriggerRandomEvent(st, now, (() => { const q = [0.05, 0.5]; return () => (q.length ? q.shift() : 0.5); })()); window.__farm.refresh(); window.FarmWorld.refresh(st); });
         await page.waitForTimeout(800);

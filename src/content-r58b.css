@@ -687,3 +687,57 @@ body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none 
 /* R67 整合：等待成熟與陽光倒數併進「現在做」那一層的一行小字，不另成一列。 */
 #questDock .r67a-now .r67-now-hint { display: block; margin-top: 1px; padding: 0; border: 0; background: none; font-style: normal; font-size: 12px; font-weight: 700; color: #8a5a12; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r67a-now .r67-now-hint { display: none; }
+
+/* R68A：成熟田格優先、主線與收穫祭任務卡統一三層，長文字完整換行。 */
+.r68a-ready-badge { position:absolute; transform:translate(-50%,-100%); min-width:58px; min-height:26px; padding:3px 8px; border:2px solid #8a541c; border-radius:9px; background:#ffe27a; color:#4d3010; font:900 12px/1.2 inherit; white-space:nowrap; cursor:pointer; box-shadow:0 3px 0 rgba(77,48,16,.35); }
+.r40-sun-tile.r68a-crop-ready .r40-sun-secs { top:2px; right:2px; left:auto; max-width:32px; padding:1px 3px; overflow:hidden; font-size:0; border-radius:999px; opacity:.82; }
+.r40-sun-tile.r68a-crop-ready .r40-sun-secs::before { content:"☀"; font-size:10px; }
+.r40-sun-tile.r68a-crop-ready .r40-sun-bar { top:15px; left:auto; right:3px; width:26px; }
+#questDock:not([data-quest="early_free_choice"]) { display:flex; flex-direction:column; gap:6px; box-sizing:border-box; overflow-y:auto; }
+#questDock:has(.r68a-festival-summary) .r68a-objective-head,
+#questDock .r68a-objective-head { display:flex !important; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-width:0; min-height:28px; padding-right:54px; overflow:visible; white-space:normal; }
+#questDock .r68a-objective-head .qp-step { min-width:0; overflow-wrap:anywhere; }
+#questDock .r68a-festival-summary { order:1; margin:0; width:100%; box-sizing:border-box; }
+#questDock .r68a-festival-summary small { white-space:normal; overflow-wrap:anywhere; }
+#questDock .r68a-now { order:2; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:8px; width:100%; padding:7px 8px; box-sizing:border-box; border:2px solid #d79a31; border-radius:9px; background:#fff2bf; }
+#questDock .r68a-now > span, #questDock .r68a-card-now > span { min-width:0; }
+#questDock .r68a-now b, .r68a-card-now b { display:block; color:#75500e; font-size:12px; }
+#questDock .r68a-now small, .r68a-card-now small { display:block; min-width:0; color:#4f3a1f; font-size:12px; line-height:1.35; white-space:normal; overflow-wrap:anywhere; }
+#questDock .r68a-now-action, .r68a-card-now button { min-height:36px; max-width:42%; padding:5px 10px; white-space:normal; overflow-wrap:anywhere; }
+#questDock .r68a-requirements { order:3; display:grid; gap:3px; width:100%; }
+#questDock .r68a-requirements span { display:block; min-width:0; padding:4px 7px; border:1px solid #d8bd8a; border-radius:7px; background:rgba(255,255,255,.7); font-size:12px; line-height:1.3; white-space:normal; overflow-wrap:anywhere; }
+.r68a-quest-card { display:grid; gap:7px; min-width:0; overflow:visible; }
+.r68a-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; min-width:0; }
+.r68a-card-head b { min-width:0; white-space:normal; overflow-wrap:anywhere; }
+.r68a-card-head span { flex:0 0 auto; }
+.r68a-card-now { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:8px; min-width:0; padding:7px 8px; border:1px solid #d79a31; border-radius:8px; background:#fff7d8; }
+.r68a-card-requirements { display:grid; gap:3px; min-width:0; }
+.r68a-card-requirements span { min-width:0; white-space:normal; overflow-wrap:anywhere; }
+@media (max-width:859px) {
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) { height:52px !important; max-height:52px !important; overflow:hidden !important; }
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-requirements { display:none !important; }
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-objective-head { display:none !important; }
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-now { padding:3px 48px 3px 6px; border-width:1px; }
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-now > span { display:none !important; }
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-now { grid-template-columns:minmax(0,1fr); }
+  #questDock:not([data-quest="early_free_choice"]):is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-now-action { width:100%; max-width:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-festival-summary > b,
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-festival-summary > small,
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-festival-summary > button { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-festival-summary .r65b-festival-compact { display:block !important; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r68a-festival-summary { display:flex !important; flex:0 0 28px !important; align-items:center; min-height:0; height:28px; max-height:28px; padding:2px 7px; margin:0; overflow:hidden; box-sizing:border-box; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r67a-objective-head,
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r67a-now,
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-objective-head,
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-now,
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-requirements { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) > .world-objective-title { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r68a-festival-summary) .r68a-festival-summary { position:absolute !important; left:8px !important; right:52px !important; top:4px !important; flex:none !important; width:auto !important; max-width:none !important; transform:none !important; }
+}
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) { height:52px !important; max-height:52px !important; overflow:hidden !important; }
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-objective-head,
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-festival-summary,
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-requirements,
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now > span { display:none !important; }
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now { display:grid !important; grid-template-columns:minmax(0,1fr); padding:3px 48px 3px 6px; }
+body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now-action { width:100%; max-width:none; white-space:nowrap; }

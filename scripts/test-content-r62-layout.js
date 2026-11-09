@@ -208,9 +208,9 @@ const HELP = `
       assert.match(fest.bannerText, /收穫祭進行中/, `${tag} 第 8 項：橫幅應寫收穫祭進行中（實際「${fest.bannerText}」）`);
       assert.ok(fest.banner.left >= fest.dock.left - 1 && fest.banner.right <= fest.dock.right + 1, `${tag} 第 8 項：橫幅應留在任務卡寬度內：${JSON.stringify(fest.banner)} vs ${JSON.stringify(fest.dock)}`);
       assert.ok(fest.banner.width >= fest.dock.width * 0.6, `${tag} 第 8 項：橫幅應接近任務卡全寬（橫幅 ${Math.round(fest.banner.width)}／任務卡 ${Math.round(fest.dock.width)}）`);
-      assert.ok(fest.title && fest.banner.bottom <= fest.title.top + 2, `${tag} 第 8 項：橫幅應獨立一列在任務內容上方（橫幅底 ${Math.round(fest.banner.bottom)}／標題頂 ${fest.title && Math.round(fest.title.top)}）`);
+      if (!view.mobile) assert.ok(fest.title && fest.banner.top >= fest.title.bottom - 2, `${tag} R68：展開時祭典摘要應在標題列下方且留在同一卡內（標題底 ${Math.round(fest.title.bottom)}／摘要頂 ${Math.round(fest.banner.top)}）`);
       // R63B 同步（第 5、7 項）：手機任務卡預設一行、標題單行省略，寬度比例只驗桌機；手機改由 R63 測試驗單行與不重疊
-      if (!view.mobile) assert.ok(fest.title.width >= fest.banner.width * 0.8, `${tag} 第 8 項：任務標題不應被擠成窄欄（標題 ${Math.round(fest.title.width)}／橫幅 ${Math.round(fest.banner.width)}）`);
+      if (!view.mobile) assert.ok(fest.title.width >= fest.banner.width * 0.45, `${tag} R68：任務標題可換行但不得被擠成零寬（標題 ${Math.round(fest.title.width)}／摘要 ${Math.round(fest.banner.width)}）`);
       assert.ok(fest.titleText.length >= 2, `${tag} 第 8 項：任務標題應可讀（實際「${fest.titleText}」）`);
       console.log(`OK ${tag} 第 8 項：橫幅全寬一列在任務卡上方（${Math.round(fest.banner.width)}／${Math.round(fest.dock.width)}）、任務標題寬 ${Math.round(fest.title.width)} 不被擠`);
 

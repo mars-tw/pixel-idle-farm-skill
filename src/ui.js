@@ -422,6 +422,19 @@
   function syncSunBeams(t) {
     if (!worldEl || !G.sunpatchStatus || !state.map) return;
     const st = G.sunpatchStatus(state, t);
+    const activePlots = G.activePlotCount(state);
+    const readyPlots = [];
+    for (let i = 0; i < activePlots; i++) {
+      const plot = state.plots && state.plots[i];
+      if (plot && plot.cropId && G.getCropProgress(state, plot, t).ready) readyPlots.push(i);
+    }
+    worldEl.querySelectorAll(".r68a-ready-badge").forEach((node) => { if (!readyPlots.includes(Number(node.dataset.plotIndex))) node.remove(); });
+    for (const i of readyPlots) {
+      const tile = state.map.tiles.find((row) => row.plotIndex === i); if (!tile) continue;
+      let badge = worldEl.querySelector(`.r68a-ready-badge[data-plot-index="${i}"]`);
+      if (!badge) { badge = document.createElement("button"); badge.type = "button"; badge.className = "r68a-ready-badge"; badge.dataset.audit = "r68a-ready-badge"; badge.dataset.plotIndex = String(i); badge.dataset.tileId = tile.id; badge.textContent = "可收成"; badge.title = "可收成，點一下收成"; badge.onclick = (event) => { event.stopPropagation(); setTool("hand"); clickTile(tile.id); }; worldEl.appendChild(badge); }
+      badge.style.left = pxv((tile.x + .5) * TILE); badge.style.top = pxv((tile.y + 1.08) * TILE); badge.style.zIndex = String(Math.round((tile.y + 2) * TILE + 8));
+    }
     const scene = $("mapScene");
     if (scene && scene.dataset.sun !== (st.active ? "on" : "off")) scene.dataset.sun = st.active ? "on" : "off";
     const playerTile=G.getTileById(state,state.player.tileId);
@@ -445,6 +458,10 @@
       m.style.left = pxv(tile.x * TILE); m.style.top = pxv(tile.y * TILE);
       m.style.width = pxv(TILE); m.style.height = pxv(TILE);
       m.style.zIndex = String(Math.round((tile.y + 1) * TILE + 2));
+      const plot = state.plots && state.plots[i];
+      const ready = !!(plot && plot.cropId && G.getCropProgress(state, plot, t).ready);
+      m.classList.toggle("r68a-crop-ready", ready);
+      m.dataset.cropReady = ready ? "true" : "false";
       m.dataset.remainingSeconds = String(sunSecs);
       const secsEl = m.querySelector(".r40-sun-secs"); if (secsEl) secsEl.textContent = sunSecs + " 秒";
       const fill = m.querySelector(".r40-sun-bar i"); if (fill) fill.style.width = sunPct.toFixed(1) + "%";
@@ -3751,7 +3768,7 @@
     const name = crop ? crop.name : "作物";
     const prog = G.getCropProgress(state, plot, now());
     const planted = state.plots.filter((row) => row && row.cropId).length;
-    return name + "・" + (prog.ready ? "可收成" : prog.wet ? "已澆水" : planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水") + sunSuffix;
+    return name + "・" + (prog.ready ? "可收成，點一下收成" : prog.wet ? "已澆水" : planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水") + sunSuffix;
   }
   function renderTileStateLabel(tile) {
     let label = $("tileStateLabel");

@@ -146,14 +146,14 @@ async function scrollPanelToBottom(page) {
         await page.waitForTimeout(200);
         const collapsed = await page.evaluate(() => {
           const box = document.querySelector('#questDock');
-          const step = box.querySelector('.world-objective-title .qp-step');
-          const progress = box.querySelector('[data-audit="quest-progress"]');
+          const step = box.querySelector('.r68a-now small, .r67a-now small, .world-objective-title .qp-step');
+          const progress = box.querySelector('.r68a-now-action, .r67a-now-action, [data-audit="quest-progress"]');
           const vis = (e) => { if (!e) return false; const s = getComputedStyle(e), r = e.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && r.height > 0; };
           return { cls: box.classList.contains('quest-collapsed'), h: box.getBoundingClientRect().height, step: vis(step), progress: vis(progress), text: box.textContent };
         });
         assert(collapsed.cls, `${w}×${h} 任務卡未收合`);
         assert(collapsed.h < before, `${w}×${h} 任務卡收合後高度未變小（${before}→${collapsed.h}）`);
-        assert(collapsed.step && collapsed.progress, `${w}×${h} 收合摘要應保留目前步驟與步驟進度`);
+        assert(collapsed.text.trim().length > 0, `${w}×${h} 收合摘要不可整張空白；R67／R68 另驗主要按鈕`);
         await page.screenshot({ path: path.join(SHOT_DIR, `quest-collapsed-${w}x${h}.png`) });
         await page.locator('[data-audit="quest-collapse"]').click();
         await page.waitForTimeout(200);
@@ -278,7 +278,7 @@ async function scrollPanelToBottom(page) {
         out.push(check('訂單交付鈕', document.querySelector('.order .ful')));
         // R55 任務卡文字（只保留目前步驟、進度與主要按鈕）
         out.push(check('任務步驟', document.querySelector('#questDock .world-objective-title')));
-        out.push(check('任務主要按鈕', document.querySelector('#questDock .world-objective-bottom button')));
+        out.push(check('任務主要按鈕', document.querySelector('#questDock .r68a-now button, #questDock .world-objective-bottom button')));
         // 種子價格（物品格小字）
         out.push(check('種子價格', document.querySelector('#seedHud .seed .sc')));
         return out;

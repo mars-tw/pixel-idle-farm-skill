@@ -60,7 +60,7 @@ test("3 手札最上方固定是目前主線，含完整說明、需求、前往
   assert.match(world, /r63a-main-story-wrap/);
   assert.match(world, /目前主線/);
   assert.match(world, /questCard\(currentMain, true\)/);
-  assert.match(world, /rowsOf\(q\)\.map/);
+  assert.match(world, /const rows = rowsOf\(q\)/);
   assert.match(world, /data-quest-go/);
   assert.match(world, /<details class="r63a-full-request"><summary>查看委託全文<\/summary>/);
   assert.match(css, /\.r63a-full-request\[open\] > p/);

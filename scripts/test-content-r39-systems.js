@@ -43,7 +43,7 @@ test('A2 Lv 2 里程碑的獲得具體，下一步等於任務列行動', () => 
   const guide = A.guide(state, T);
   const card = G.milestoneCard('level_up', { level: 2, state, now: T });
   assert.match(card.earned, /^Lv 2・.*胡蘿蔔種子/);
-  assert.equal(card.next, guide.actionLabel);
+  assert.equal(card.next, A.nextFarmStep(state, T).text);
   assert.doesNotMatch(card.earned, /新的農場等級/);
 });
 
