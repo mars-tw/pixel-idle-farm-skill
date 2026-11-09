@@ -59,7 +59,7 @@ test("3 每位鄰居完成兩件委託後都有永久結果", () => {
 test("4 料理都有圖示與解鎖文字，增益有數值、時間與 HUD 倒數", () => {
   const state = fresh(); const locked = A.recipes(state, T0);
   assert.ok(locked.every((row) => row.icon && row.unlockText));
-  assert.ok(locked.filter((row) => row.effect).every((row) => row.effect.durationMs > 0 && row.effect.durationText && /%/.test(row.effect.summary)));
+  assert.ok(locked.filter((row) => row.effect).every((row) => row.effect.durationMs > 0 && row.effect.durationText && /%|1 份/.test(row.effect.summary)));
   state.adventure.claimed.c1_first_harvest = true; state.storage.items = { wheat: 10, carrot: 10 }; ok(A.ensure(state, T0));
   ok(A.cook(state, "wheat_carrot_pancake", T0)); ok(A.eatMeal(state, "wheat_carrot_pancake", T0));
   assert.ok(A.activeBuffs(state, T0).growthRemainingMs > 0); assert.equal(A.activeBuffs(state, T0 + 300001).growthRemainingMs, 0);

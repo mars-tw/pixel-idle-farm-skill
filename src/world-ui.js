@@ -218,13 +218,16 @@
     const q = summary.currentQuest;
     const guide = A.guide(s, Date.now());
     const early = A.earlyGoals ? A.earlyGoals(s, Date.now()) : { available: false, goals: [] };
+    const festival = A.festivalStatus ? A.festivalStatus(s, Date.now()) : { unlocked: false, active: false, goals: [] };
+    const festivalTime = Math.max(0, Math.ceil((festival.remainingMs || 0) / 1000));
+    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner" data-active="${festival.active}"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b><small>${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
     const hint = objectiveHint(s, unfinished);
     const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
-    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes, early]);
+    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes, early, festival.active, festival.completed, festival.canComplete, festival.goals, festivalTime]);
     if (sig === lastObjective) {
       syncSeedHudTop();
       const hintEl = box.querySelector(".world-objective-hint");
@@ -237,10 +240,11 @@
       box.dataset.stepType = "choice";
       box.dataset.targetId = "";
       if (document.body) document.body.dataset.questStep = "choice";
-      box.innerHTML = `<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
+      box.innerHTML = `${festivalHtml}<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
         ${hint ? `<div class="world-objective-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</div>` : ""}
         <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small>${goal.actionLabel ? `<em>${esc(goal.actionLabel)}</em>` : ""}</button>`).join("")}</div>`;
       box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
+      const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
       syncSeedHudTop();
       return true;
     }
@@ -257,6 +261,8 @@
     box.innerHTML = `<div class="world-objective-title">${q ? `${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : `<span class="qp-step">${esc(guide.displayTitle || q.name)}</span> `}<span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? choiceRoutes : ""}
       <div class="world-objective-bottom">${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? `<button type="button" data-choice-open>選擇下一步</button>` : `<button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button>`}</div>`;
+    if (festivalHtml) box.insertAdjacentHTML("afterbegin", festivalHtml);
+    const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
     const chooseFirstRoute = (button) => {
       const status = A.firstChoiceStatus(s);
       const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
@@ -426,6 +432,7 @@
     closePanels();
     if (!farm()) return; // R79：走路途中按「前往」直接改道，不再擋下
     if (q.canClaim) { claimQuest(q); return; }
+    if (Array.isArray(q.opening) && q.opening.length) speak((window.NPCS[q.npcId] || {}).name || "鎮民", q.opening.join(" "));
     const row = rowsOf(q).find((r) => !r.complete);
     if (row && row.type === "restore") { visitSite(row.id); return; }
     if (row && (row.type === "cook" || row.source === "meals")) { visitKitchen(); return; }
@@ -471,14 +478,16 @@
           farm().enqueueSettlement(result.settlement);
           (result.milestones || []).forEach(farm().enqueueSettlement);
         }
-        speak((window.NPCS[q.npcId] || {}).name || "鎮民", completionLine(q.id));
+        speak((window.NPCS[q.npcId] || {}).name || "鎮民", completionLine(q));
         if (q.id === "c3_harvest_picnic") showPicnic();
         refresh(current);
       } else notify(result.message);
     });
     if (!started) notify("現在走不到那裡，先把路清出來。");
   }
-  function completionLine(id) {
+  function completionLine(quest) {
+    const id = typeof quest === "string" ? quest : quest.id;
+    if (quest && Array.isArray(quest.completion) && quest.completion.length) return quest.completion.join(" ");
     const lines = {
       c1_homecoming: "門口終於有新苗了。這些木料你先收著，等河邊的釣台修好，咱們再坐下來聊。",
       c1_first_harvest: "把剛收的小麥帶去農舍灶台，做一份自己的晚餐吧。灶火還能用。",

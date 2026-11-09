@@ -4194,8 +4194,8 @@
         const chk = G.canRequestFrom(state, tile.npc, now());
         if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
       }
-      const storyChoice = window.AdventureAPI && window.AdventureAPI.mainStoryChoice ? window.AdventureAPI.mainStoryChoice(state, tile.npc, now()) : null;
-      const recall = window.AdventureAPI && window.AdventureAPI.mainStoryRecall ? window.AdventureAPI.mainStoryRecall(state, tile.npc, now()) : "";
+      const storyChoice = window.AdventureAPI && window.AdventureAPI.mainStoryChoice ? (window.AdventureAPI.mainStoryChoice(state, tile.npc, now()) || (tile.npc === "merchant" && window.AdventureAPI.r61MarketChoice ? window.AdventureAPI.r61MarketChoice(state, now()) : null)) : null;
+      const recall = window.AdventureAPI && window.AdventureAPI.mainStoryRecall ? (tile.npc === "merchant" && window.AdventureAPI.r61MarketRecall && window.AdventureAPI.r61MarketRecall(state, now()) || window.AdventureAPI.mainStoryRecall(state, tile.npc, now())) : "";
       const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
       if (storyChoice && storyChoice.available) { d.line = storyChoice.lines.join(" "); d.storyChoice = storyChoice; }
       else if (recall) d.line = recall;
@@ -4225,7 +4225,7 @@
     worldEl.appendChild(b);
     if (bubbleTimer) clearTimeout(bubbleTimer);
     b.querySelectorAll("[data-r60-story-choice]").forEach((button) => { button.onclick = () => {
-      const result = window.AdventureAPI.resolveMainStoryChoice(state, d.id, button.dataset.r60StoryChoice, now());
+      const result = d.storyChoice && d.storyChoice.id === "c4_market_flag" ? window.AdventureAPI.chooseR61MarketFlag(state, button.dataset.r60StoryChoice, now()) : window.AdventureAPI.resolveMainStoryChoice(state, d.id, button.dataset.r60StoryChoice, now());
       toast(result.message); if (result.ok) { d.line = result.journalText; delete d.storyChoice; pushDialogueLog({ name: d.name, line: result.journalText }); afterChange(true); }
       const old = worldEl && worldEl.querySelector(".npc-bubble"); if (old) old.remove();
     }; });
