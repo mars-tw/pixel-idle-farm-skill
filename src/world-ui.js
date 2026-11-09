@@ -119,7 +119,11 @@
     window[name] = function (...args) {
       A.ensure(args[0], Date.now());
       const result = original.apply(this, args);
-      if (result && result.ok) A.record(args[0], hooks[name](args[0], args, result), Date.now());
+      if (result && result.ok) {
+        A.record(args[0], hooks[name](args[0], args, result), Date.now());
+        const tutorial = A.finishTutorial && A.finishTutorial(args[0], Date.now());
+        if (tutorial && tutorial.ok) notify(tutorial.message);
+      }
       return result;
     };
   });
@@ -213,13 +217,14 @@
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
     const guide = A.guide(s, Date.now());
+    const early = A.earlyGoals ? A.earlyGoals(s, Date.now()) : { available: false, goals: [] };
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
     const hint = objectiveHint(s, unfinished);
     const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
-    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes]);
+    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, choiceRoutes, early]);
     if (sig === lastObjective) {
       syncSeedHudTop();
       const hintEl = box.querySelector(".world-objective-hint");
@@ -227,6 +232,17 @@
       return true;
     }
     lastObjective = sig;
+    if (early.available && !early.complete) {
+      box.dataset.quest = "early_free_choice";
+      box.dataset.stepType = "choice";
+      box.dataset.targetId = "";
+      if (document.body) document.body.dataset.questStep = "choice";
+      box.innerHTML = `<div class="world-objective-title"><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></div>
+        <div class="world-objective-routes" data-audit="early-free-goals">${early.goals.map((goal) => `<button type="button" class="world-objective-route${goal.complete ? " tracked" : ""}" data-early-goal="${goal.id}" ${goal.complete ? "disabled" : ""}><b>${goal.complete ? "✓ " : ""}${esc(goal.name)}</b><small>${esc(goal.detail)}・獎勵：${esc(goal.rewardText)}</small></button>`).join("")}</div>`;
+      box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
+      syncSeedHudTop();
+      return true;
+    }
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
     const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
@@ -407,6 +423,18 @@
     if (row && row.consume && window.CROPS[row.id] && farm().selectSeed) farm().selectSeed(row.id);
     farm().clickTile(target.id);
   }
+  function goEarlyGoal(id) {
+    const quest = A.quests(current, Date.now()).find((row) => row.id === "c1_first_harvest");
+    if (id === "harvest" && quest) { goQuest(quest); return; }
+    if (id === "dock") { visitSite("fishing_dock"); return; }
+    if (id === "market") {
+      const target = npcTile("merchant");
+      if (!target) return;
+      closePanels();
+      farm().setTool("hand");
+      farm().clickTile(target.id);
+    }
+  }
   function claimQuest(q) {
     const target = npcTile(q.npcId);
     if (!target) return;
@@ -461,7 +489,7 @@
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
     box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
-    box.hidden = false; box.classList.remove("dialogue-flip-top"); box.classList.remove("dialogue-compact-bottom"); box.classList.toggle("dialogue-compact-top", window.innerHeight <= 600); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact-bottom" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); if (hit > 0) { if (window.innerHeight <= 600) box.classList.add("dialogue-compact-bottom"); else box.classList.add("dialogue-flip-top"); } if (hit > 0 || sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); setTimeout(() => { if (box.hidden) return; const s2 = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); if (!s2) return; const r2 = s2.getBoundingClientRect(), d2 = box.getBoundingClientRect(); const h2 = Math.max(0, Math.min(r2.right, d2.right) - Math.max(r2.left, d2.left)) * Math.max(0, Math.min(r2.bottom, d2.bottom) - Math.max(r2.top, d2.top)); if (window.innerHeight <= 600) { box.classList.add("dialogue-compact-bottom"); if (h2 > 0) { const f2 = farm(); if (f2 && f2.focusTile && speaker.dataset.tileId) f2.focusTile(speaker.dataset.tileId); } } else box.classList.toggle("dialogue-flip-top", h2 > 0); }, 260); } } } catch (e) {}
+    box.hidden = false; box.classList.remove("dialogue-flip-top"); box.classList.remove("dialogue-compact-bottom"); box.classList.toggle("dialogue-compact-top", window.innerHeight <= 600); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact-bottom" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); if (hit > 0) { if (window.innerHeight <= 600) box.classList.toggle("dialogue-compact-bottom", (sr.top + sr.bottom) / 2 < window.innerHeight / 2); else box.classList.add("dialogue-flip-top"); } if (hit > 0 || sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); setTimeout(() => { if (box.hidden) return; const s2 = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); if (!s2) return; const r2 = s2.getBoundingClientRect(), d2 = box.getBoundingClientRect(); const h2 = Math.max(0, Math.min(r2.right, d2.right) - Math.max(r2.left, d2.left)) * Math.max(0, Math.min(r2.bottom, d2.bottom) - Math.max(r2.top, d2.top)); if (window.innerHeight <= 600) { box.classList.toggle("dialogue-compact-bottom", (r2.top + r2.bottom) / 2 < window.innerHeight / 2); if (h2 > 0) { const f2 = farm(); if (f2 && f2.focusTile && speaker.dataset.tileId) f2.focusTile(speaker.dataset.tileId); } } else box.classList.toggle("dialogue-flip-top", h2 > 0); }, 260); } } } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };
     // R79：toast 移到對話框上方（CSS 依此變數讓位）
@@ -753,7 +781,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥（每格收 2 份，共 6 份）後，再把其中 2 份交給老農班伯。</p><button class="btn buy" id="worldSunBegin">去見鎮長葛瑞</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先去找鎮長葛瑞，再親手種下第一格。完成這兩步後，你可以自己決定先收成、修釣台，或去跟蘿拉打招呼。</p><button class="btn buy" id="worldSunBegin">去見鎮長葛瑞</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };

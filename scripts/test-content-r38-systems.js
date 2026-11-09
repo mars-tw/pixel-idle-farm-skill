@@ -90,7 +90,7 @@ test('A2 一般訂單在同品項與稀有度內不會因數量增加而降低�
 test('A3 便箋、主按鈕與任務第一步都先找鎮長，勾號只屬於完成步驟', () => {
   const world = read('src/world-ui.js');
   const ui = read('src/ui.js');
-  assert.match(world, /先去找鎮長葛瑞，他會帶你認識農場；種好三格小麥（每格收 2 份，共 6 份）後，再把其中 2 份交給老農班伯。/);
+  assert.match(world, /先去找鎮長葛瑞，再親手種下第一格。完成這兩步後，你可以自己決定先收成、修釣台，或去跟蘿拉打招呼。/);
   assert.match(world, /id="worldSunBegin">去見鎮長葛瑞/);
   const state = S.defaultState(T);
   const guide = require('../src/adventure.js').guide(state, T);

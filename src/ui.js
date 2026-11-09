@@ -4129,7 +4129,7 @@
     spawnRing(tile.id, true);
     walkPath(plan.path, () => {
       const cur = G.currentQuest(state);
-      if (((cur && cur.id === "discover_east_forage") || window.FarmWorld) && !state.flags.eastForageDiscovered) {
+      if (!node.starter && ((cur && cur.id === "discover_east_forage") || window.FarmWorld) && !state.flags.eastForageDiscovered) {
         const r = G.discoverForage(state, tile.forage, now());
         if (r.ok) {
           playAction("use", state.player.facing);

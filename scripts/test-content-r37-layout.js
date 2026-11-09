@@ -103,9 +103,10 @@ async function applyStep(page, kind) {
     if (k === 'plant') {
       s.adventure.counts.plant = 0; s.adventure.counts.water = 0;
       for (let i = 0; i < 3; i++) { s.plots[i].cropId = null; delete s.plots[i].wateredAt; }
-    } else if (k === 'water') {
-      s.adventure.counts.plant = 3; s.adventure.counts.water = 0;
-      for (let i = 0; i < 3; i++) { s.plots[i].cropId = 'wheat'; s.plots[i].plantedAt = Date.now() - 60 * 1000; delete s.plots[i].wateredAt; }
+    } else if (k === 'choice') {
+      s.adventure.claimed = { c1_homecoming: true };
+      s.adventure.counts.harvest = 0;
+      for (let i = 0; i < 3; i++) { s.plots[i].cropId = null; delete s.plots[i].wateredAt; }
     } else if (k === 'harvest') {
       s.adventure.claimed = { c1_homecoming: true };
       s.adventure.counts.harvest = 0;
@@ -156,9 +157,9 @@ async function measureStep(page, tag, expected) {
     for (const [w, h] of [[1366, 768], [1366, 600]]) {
       const tag = `${w}x${h}`;
       const { ctx, page } = await newPage(browser, intercepted, w, h);
-      for (const step of ['plant', 'water', 'harvest', 'claim']) {
+      for (const step of ['plant', 'choice', 'harvest', 'claim']) {
         await applyStep(page, step);
-        await measureStep(page, tag, step);
+        await measureStep(page, tag, step === 'plant' ? 'plant' : 'choice');
       }
       await page.screenshot({ path: path.join(SHOT_DIR, `steps-${tag}.png`) });
 
@@ -198,6 +199,7 @@ async function measureStep(page, tag, expected) {
       const tileIds = await page.evaluate(() => {
         const s = window.__farm.state();
         s.coins = 200; s.level = Math.max(s.level, 3); s.materials = s.materials || {}; s.materials.wood = 20; s.materials.stone = 20;
+        s.adventure.claimed.c1_first_harvest = true; s.adventure.earlyGoals.marketPreview = true; s.adventure.projects.fishing_dock.restored = true;
         window.__farm.refresh();
         window.__farm.setTool('build');
         const btn = document.querySelector('#buildWheel [data-type="compostHeap"]');
@@ -215,6 +217,7 @@ async function measureStep(page, tag, expected) {
         const c = await page.evaluate((id) => { const e = document.querySelector('.gtile[data-tile-id="' + id + '"]'); if (!e) return null; const r = e.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }, tileIds[tileId]);
         assert(c, `${tag} 田格 ${tileId} 不在畫面`);
         await page.mouse.move(c.x, c.y);
+        await page.evaluate((id) => { const e = document.querySelector('.gtile[data-tile-id="' + id + '"]'); if (e) e.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerType: 'mouse' })); }, tileIds[tileId]);
         await page.waitForTimeout(450);
         return page.evaluate((src) => {
           eval(src);

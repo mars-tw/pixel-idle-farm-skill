@@ -20,7 +20,7 @@
   ];
   const PROJECTS = [
     { id: "fishing_dock", name: "河畔釣台", description: "補好河邊踏板，老農班伯會借你一支魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" },
-      cost: { wood: 4, stone: 2 }, unlockQuest: "c1_first_meal", unlocks: ["fishing", "fishing_rod"] },
+      cost: { wood: 4, stone: 2 }, unlockQuest: "c1_homecoming", unlocks: ["fishing", "fishing_rod"] },
     { id: "picnic_table", name: "野餐桌", description: "鋪好桌面，讓大家帶著料理來河邊坐坐。", target: { kind: "station", id: "picnic_table", tileId: "t10_10" },
       cost: { wood: 6, wheat: 4 }, unlockQuest: "c2_river_basket", unlocks: ["baked_carrot", "mint_tea", "meal_gifts"] },
     { id: "garden", name: "花園", description: "整理一片小花圃，留下壓花和野餐後的留言。", target: { kind: "station", id: "garden", tileId: "t6_2" },
@@ -100,8 +100,8 @@
   const goal = (type, count, name, id) => ({ type, count, name, id: id || null });
   const reward = (coins, xp, materials, extra) => Object.assign({ coins, xp, materials: materials || {} }, extra || {});
   const QUESTS = [
-    { id: "c1_homecoming", chapter: 1, name: "把田叫醒", npcId: "mayor", description: "跟鎮長葛瑞打聲招呼，再種下三格作物，替它們澆水。", target: { kind: "npc", id: "mayor" }, wants: {},
-      goals: [goal("talk", 1, "找鎮長葛瑞交談", "mayor"), goal("plant", 3, "種下作物"), goal("water", 3, "替作物澆水")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
+    { id: "c1_homecoming", chapter: 1, name: "種下第一格", npcId: "mayor", description: "先找鎮長葛瑞，再親手種下第一格作物。接下來要做什麼，由你決定。", target: { kind: "npc", id: "mayor" }, wants: {},
+      goals: [goal("talk", 1, "找鎮長葛瑞交談", "mayor"), goal("plant", 1, "種下第一格")], reward: reward(12, 2, { wood: 6, stone: 2 }) },
     { id: "c1_first_harvest", chapter: 1, name: "留一把小麥", npcId: "elder", description: "收成 6 份小麥（每格 2 份），再把其中 2 份交給老農班伯。", target: { kind: "npc", id: "elder" }, wants: { wheat: 2 },
       goals: [goal("harvest", 6, "收成小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
     { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在農舍灶台做一份農家麥餅，帶給老農班伯嚐嚐。他準備好了修釣台的木料。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {}, wantsMeals: { rustic_bread: 1 },
@@ -257,6 +257,8 @@
     for (const f of FISH) { a.catch[f.id] = Math.min(free, a.catch[f.id]); free -= a.catch[f.id]; }
     if (!object(a.collectibles)) a.collectibles = {};
     if (!object(a.unlocks)) a.unlocks = {};
+    if (!object(a.earlyGoals)) a.earlyGoals = {};
+    a.earlyGoals.marketPreview = a.earlyGoals.marketPreview === true;
     if (!object(a.claimed)) a.claimed = {};
     if (!object(a.quests)) a.quests = {};
     if (!object(a.projects)) a.projects = {};
@@ -294,7 +296,36 @@
     a.counts[e.type] = Math.min(COUNT_CAP, a.counts[e.type] + count);
     if (id && a.byTarget[e.type]) a.byTarget[e.type][id] = Math.min(COUNT_CAP, (a.byTarget[e.type][id] || 0) + count);
     sync(state, at(state, now));
-    return ok("已記下這次行動。", { type: e.type, count, total: a.counts[e.type] });
+    let marketPreviewReward = null;
+    if (claimed(a, "c1_homecoming") && e.type === "talk" && id === "merchant" && !a.earlyGoals.marketPreview) {
+      a.earlyGoals.marketPreview = true;
+      marketPreviewReward = reward(5, 0);
+      grant(state, marketPreviewReward);
+    }
+    sync(state, at(state, now));
+    return ok(marketPreviewReward ? "蘿拉給了你 5 金，市集開張後再來看看。" : "已記下這次行動。", { type: e.type, count, total: a.counts[e.type], marketPreviewReward });
+  }
+
+  function finishTutorial(state, now) {
+    const init = ensure(state, now); if (!init.ok) return init;
+    if (claimed(state.adventure, "c1_homecoming")) return fail("already_claimed", "新手教學已經完成了。");
+    if (state.adventure.quests.c1_homecoming.status !== "ready") return fail("not_ready", "先找鎮長葛瑞，再種下第一格。");
+    const result = claim(state, "c1_homecoming", now);
+    if (result.ok) result.message = "第一格種好了。接下來自由選一件事吧。";
+    return result;
+  }
+
+  function earlyGoals(state, now) {
+    if (!ensure(state, now).ok) return { available: false, goals: [] };
+    const a = state.adventure;
+    const available = claimed(a, "c1_homecoming") && !claimed(a, "c1_first_meal");
+    const harvest = quests(state, now).find((q) => q.id === "c1_first_harvest");
+    const goals = [
+      { id: "harvest", name: "收成 6 份小麥交給老農班伯", detail: "主線・完成後開放市集", rewardText: "16 金、6 經驗與修繕建材", complete: claimed(a, "c1_first_harvest"), canClaim: !!(harvest && harvest.canClaim), target: "elder" },
+      { id: "dock", name: "修好河畔釣台", detail: "用開場取得的木料與石材修復", rewardText: "開放釣魚", complete: restored(a, "fishing_dock"), target: "fishing_dock" },
+      { id: "market", name: "跟蘿拉打招呼", detail: "先看看市集預告", rewardText: "5 金", complete: a.earlyGoals.marketPreview === true, target: "merchant" },
+    ];
+    return { available, complete: goals.every((goal) => goal.complete), goals };
   }
   function quests(state, now) {
     if (!ensure(state, now).ok) return [];
@@ -771,7 +802,7 @@
     record(state, "order", now);
     return ok(entry.name + "已送到。", { id, reward: entry.reward });
   }
-  const AdventureAPI = { ensure, record, quests, claim, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission,
+  const AdventureAPI = { ensure, record, finishTutorial, quests, claim, earlyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission,
     neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

@@ -61,6 +61,7 @@ body:has(#buildWheel:not([hidden])) .ob-dot-ready-crop { box-shadow: none !impor
   #mapScene .seed-quickbar { flex-wrap: nowrap; }
   body[data-quest-step="water"] .seed-hud,
   body[data-quest-step="harvest"] .seed-hud,
+  body[data-quest-step="choice"] .seed-hud,
   body[data-quest-step="deliver"] .seed-hud,
   body[data-quest-step="wait"] .seed-hud { display: none !important; }
   /* 互動鈕固定在右下安全角，不壓田格與 NPC（NPC 與田格多在鏡頭中央與左上）。 */
