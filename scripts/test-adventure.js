@@ -237,7 +237,7 @@ test("mixed meal/catch delivery does not consume any resource when one is missin
   const state = fresh(); unlockThrough(state, "c3_garden");
   for (const project of Object.values(state.adventure.projects)) project.restored = true;
   good(A.record(state, { type: "talk", npcId: "child" }, T0));
-  state.adventure.meals = { rustic_bread: 1, baked_carrot: 1, mint_tea: 1, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0, tomato_harvest_stew: 0, strawberry_market_tart: 0, carrot_trail_soup: 0 };
+  state.adventure.meals = { rustic_bread: 1, baked_carrot: 1, mint_tea: 1, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0, tomato_harvest_stew: 0, strawberry_market_tart: 0, carrot_trail_soup: 0, riverside_harvest_platter: 0 }; // R64：新三星配方也是受管餐籃欄位。
   state.adventure.catch.river_carp = 1;
   const before = snapshot([state.adventure.meals, state.adventure.catch, state.coins, state.xp]);
   assert.equal(A.claim(state, "c3_harvest_picnic", T0).reason, "missing_resources");
@@ -331,7 +331,7 @@ test("full three-chapter run uses real crops, care, orders and forage; no materi
   talk("mayor"); talk("elder"); talk("merchant"); talk("child");
   harvestBatch("wheat", 3);
   action(() => A.claim(state, "c1_homecoming", now)); action(() => A.claim(state, "c1_first_harvest", now));
-  action(() => A.cook(state, "rustic_bread", now)); action(() => A.claim(state, "c1_first_meal", now));
+  action(() => A.cook(state, "rustic_bread", now)); assert.equal(state.adventure.claimed.c1_first_meal, true); // R64：做出麥餅即完成第一餐。
   assert.equal(A.summary(state, now).unlocks.fishingRod, true);
   action(() => A.restore(state, "fishing_dock", now)); action(() => A.claim(state, "c2_fishing_dock", now));
   deliverExistingOrder();
@@ -363,7 +363,7 @@ test("full three-chapter run uses real crops, care, orders and forage; no materi
   const view = A.summary(state, now); assert.equal(view.complete, false); assert.equal(view.claimed, 9);
   assert.ok(view.chapters.slice(0, 3).every((chapter) => chapter.status === "complete")); assert.equal(view.chapters[3].status, "active"); assert.ok(A.projects(state).every((p) => p.restored));
   assert.equal(view.unlocks.gardenGuestbook, true); assert.equal(view.collectibles.length, 2);
-  assert.equal(view.fishing.used, 0); assert.deepEqual(view.meals, { rustic_bread: 0, baked_carrot: 0, mint_tea: 0, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0, tomato_harvest_stew: 0, strawberry_market_tart: 0, carrot_trail_soup: 0 });
+  assert.equal(view.fishing.used, 0); assert.deepEqual(view.meals, { rustic_bread: 1, baked_carrot: 0, mint_tea: 0, wheat_carrot_pancake: 0, carrot_wheat_stew: 0, bamber_rain_soup: 0, tomato_harvest_stew: 0, strawberry_market_tart: 0, carrot_trail_soup: 0, riverside_harvest_platter: 0 }); // R64：第一餐完成不再吃掉剛做的麥餅，三星配方納入餐籃。
   assert.ok(state.materials.wood >= 0 && state.materials.stone >= 0); assert.equal(state.stats.cleared, 1);
   assert.ok(!Object.keys(state.storage.items).some((id) => id === "rustic_bread" || id === "river_carp"));
   assert.notEqual(snapshot([state.coins, state.xp, state.materials]), economy);

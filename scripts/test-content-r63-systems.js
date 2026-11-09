@@ -15,7 +15,7 @@ function finishThroughChapter5(state) {
   for (const q of A.quests(state, T0)) { state.adventure.claimed[q.id] = true; state.adventure.quests[q.id].status = "claimed"; state.adventure.quests[q.id].rewardGranted = true; }
   state.adventure.r61.festival.unlocked = true;
   state.adventure.r61.festival.startsAt = T0;
-  state.adventure.r61.festival.endsAt = T0 + 300000;
+  state.adventure.r61.festival.endsAt = T0 + 600000; // R64：收穫祭改為十分鐘。
   state.adventure.r61.festival.nextAt = 0;
   state.adventure.r61.festival.baseline = { harvest: 0, cook: 0, mayorTalk: 0, merchantTalk: 0 };
   state.adventure.r61.festival.completed = false;
@@ -48,7 +48,7 @@ test("1 今日三件事固定保留班伯項目，完成即計入，第一餐另
 
 test("2 鎮長第一次對白用自己的口氣，其他主線 NPC 會改成第一人稱", () => {
   const world = fs.readFileSync("src/world-ui.js", "utf8");
-  assert.match(world, /你就是她的孫子吧？先去祖母的田種下第一格，讓我看看你的本事。/);
+  assert.match(world, /孫女米莉/); assert.match(world, /孫子凱/); // R64：稱呼依存檔主角切換。
   assert.doesNotMatch(world, /return "先找鎮長葛瑞/);
   assert.match(world, /ownNames\.reduce\(\(line, name\) => line\.replaceAll\(name, "我"\)/);
   for (const name of ["鎮長葛瑞", "老農班伯", "商人蘿拉", "孩童圖圖"]) assert.ok(world.includes(name));
@@ -80,7 +80,7 @@ test("4 收穫祭期間有彩旗、燈籠、長桌、四位鄰居與可互動攤
   assert.equal(active.stall.name, "祭典攤位");
   assert.equal(active.stall.goals.length, 3);
   assert.match(active.stall.rewardText, /收穫祭獎章 1 枚/);
-  const ended = A.festivalScene(state, T0 + 300001);
+  const ended = A.festivalScene(state, T0 + 600001);
   assert.deepEqual(ended, { active: false, decorations: [], neighbors: [], stall: null });
   const world = fs.readFileSync("src/world-ui.js", "utf8");
   assert.match(world, /world\.querySelectorAll\("\.r63a-festival-scene"\)\.forEach\(\(node\) => node\.remove\(\)\)/);
