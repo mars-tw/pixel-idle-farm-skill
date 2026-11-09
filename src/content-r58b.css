@@ -477,3 +477,120 @@ body:has(#toast-zone > .toast) #questDock .r63a-main-next small, body:has(#world
     max-height: 50dvh !important; overflow-y: auto !important; overflow-x: hidden;
   }
 }
+
+/* R65B（第 4 項）：已修好的釣台、野餐桌、花園改用完成標示（金色小徽章＋「已修好」標籤），不再顯示「待修」；
+   釣台與野餐桌沿用既有修好圖（world-ui.js 切換 _repaired 圖框），花園另加一排小花裝飾。只改顯示，不改修復規則。 */
+.world-site[data-restored="true"] { opacity: 1; filter: none; }
+.world-site[data-restored="true"] .world-site-label {
+  background: rgba(43, 92, 48, .94); color: #fff6cf;
+  box-shadow: inset 0 0 0 1px #ffcf64;
+}
+.world-site .r65b-site-done {
+  position: absolute; top: -9px; right: -6px; z-index: 2;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #ffcf64; color: #5a3d00; border: 2px solid #8b5e34;
+  font-size: 12px; font-weight: 900; line-height: 1; pointer-events: none;
+  box-shadow: 0 2px 0 rgba(90, 58, 26, .45);
+}
+.world-site[data-project-id="garden"][data-restored="true"]::after {
+  content: ""; position: absolute; left: 6%; right: 6%; bottom: -5px; height: 8px; pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 50%, #ff8fb3 3px, transparent 4px),
+    radial-gradient(circle at 30% 50%, #ffd76a 3px, transparent 4px),
+    radial-gradient(circle at 52% 50%, #ff8fb3 3px, transparent 4px),
+    radial-gradient(circle at 74% 50%, #ffffff 3px, transparent 4px),
+    radial-gradient(circle at 94% 50%, #ffd76a 3px, transparent 4px);
+}
+
+/* R65B（第 5 項）：任務卡不截不蓋不殘影。
+   收合時整卡排成一行（標題＋主要按鈕＋收合鈕），高度固定、超出直接收起，不露半截黃條；
+   展開時主線下一步與標題右側留出收合鈕的位置，文字不跑到鈕底下；
+   彈窗開啟時任務卡連同標題一起退場，不留沒有底的浮字。 */
+@media (min-width: 860px) {
+  /* 桌面收合保留直向排列（標題在上、主線下一步整行在下），只把高度上限放開到裝得下內容，不再切掉半截。 */
+  #questDock.quest-collapsed:has(> .r63a-main-next):not(:has(.r61a-festival-banner)),
+  #questDock.quest-auto-collapsed:has(> .r63a-main-next):not(:has(.r61a-festival-banner)),
+  #questDock.quest-target-collapsed:has(> .r63a-main-next):not(:has(.r61a-festival-banner)) {
+    max-height: none !important; overflow: visible !important; height: auto !important;
+  }
+}
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #questDock.quest-collapsed:not(:has(.r61a-festival-banner)),
+  #questDock.quest-auto-collapsed:not(:has(.r61a-festival-banner)),
+  #questDock.quest-target-collapsed:not(:has(.r61a-festival-banner)) {
+    display: flex !important; flex-direction: row !important; align-items: center !important;
+    gap: 8px; max-height: 56px !important; overflow: hidden !important; box-sizing: border-box;
+  }
+}
+#questDock.quest-collapsed:not(:has(.r61a-festival-banner)) .r63-primary,
+#questDock.quest-auto-collapsed:not(:has(.r61a-festival-banner)) .r63-primary,
+#questDock.quest-target-collapsed:not(:has(.r61a-festival-banner)) .r63-primary {
+  flex: 1 1 auto; min-width: 0; max-height: 44px; overflow: hidden; padding-right: 56px !important;
+}
+#questDock.quest-collapsed:not(:has(.r61a-festival-banner)) .world-objective-title,
+#questDock.quest-auto-collapsed:not(:has(.r61a-festival-banner)) .world-objective-title,
+#questDock.quest-target-collapsed:not(:has(.r61a-festival-banner)) .world-objective-title {
+  flex: 0 1 auto; min-width: 0;
+}
+@media (min-width: 860px) {
+  #questDock .r63a-main-next { padding-right: 60px; }
+  #questDock .world-objective-title { padding-right: 60px; }
+}
+body:has(.modal.show) #questDock {
+  display: none !important; visibility: hidden !important; pointer-events: none !important;
+}
+body:has(.modal.show) #questDock .world-objective-title,
+body:has(.modal.show) #questDock .world-objective-title .qp-step {
+  visibility: hidden !important;
+}
+
+/* R65B（第 6 項）：手機直式頂部標誌完整、資源列可讀（裝不下換第二列）；
+   手機橫式收合任務列壓低，上下兩列合計不夾住世界。 */
+@media (max-width: 859px) and (min-height: 521px) {
+  header { left: 8px !important; right: 8px !important; }
+  header .title { flex: 0 0 auto; min-width: 0; }
+  header .farm-logo {
+    width: 108px; max-width: 108px; height: auto; max-height: 42px; object-fit: contain; object-position: left center;
+  }
+  header .res-bar, #resBar {
+    flex: 1 1 140px; flex-wrap: wrap; justify-content: flex-end; min-width: 0; box-sizing: border-box;
+  }
+  #resBar .res { white-space: nowrap; min-width: 0; box-sizing: border-box; }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  #questDock.quest-collapsed, #questDock.quest-auto-collapsed, #questDock.quest-target-collapsed { max-height: 48px !important; }
+  header .farm-logo { max-height: 30px; }
+  .tool-bar .tool { min-height: 44px; }
+}
+
+/* R65B（第 7 項）：手機收穫祭不疊層。收合時橫幅只留一行「祭典 N/3・剩 X 分」，三個小目標展開才看；
+   展開時照常顯示完整橫幅。互動鈕文字由 ui.js 寫出對象（互動・祭典攤位）。 */
+.r65b-festival-compact { display: none; font-weight: 800; white-space: nowrap; }
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #questDock.quest-collapsed .r61a-festival-banner > b,
+  #questDock.quest-auto-collapsed .r61a-festival-banner > b,
+  #questDock.quest-target-collapsed .r61a-festival-banner > b,
+  #questDock.quest-collapsed .r61a-festival-banner > small,
+  #questDock.quest-auto-collapsed .r61a-festival-banner > small,
+  #questDock.quest-target-collapsed .r61a-festival-banner > small,
+  #questDock.quest-collapsed .r61a-festival-banner > button,
+  #questDock.quest-auto-collapsed .r61a-festival-banner > button,
+  #questDock.quest-target-collapsed .r61a-festival-banner > button { display: none !important; }
+  #questDock.quest-collapsed .r61a-festival-banner,
+  #questDock.quest-auto-collapsed .r61a-festival-banner,
+  #questDock.quest-target-collapsed .r61a-festival-banner {
+    display: flex !important; align-items: center;
+  }
+  #questDock.quest-collapsed .r65b-festival-compact,
+  #questDock.quest-auto-collapsed .r65b-festival-compact,
+  #questDock.quest-target-collapsed .r65b-festival-compact {
+    display: block !important; flex: 1 1 auto; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+}
+
+/* R65B（第 8 項）：白色小方塊是場景動作列的空殼——主線二選一泡泡出現時唯一的「交談」鈕被收起，
+   列本身卻還留著，縮成 18×18 的白色小方塊。這時整列一起收起；列裡沒有任何按鈕時也不顯示。 */
+body:has(.npc-bubble .r60a-story-choices) .scene-action-bar { display: none !important; }
+.scene-action-bar:not(:has(> button)) { display: none !important; }
