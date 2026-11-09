@@ -179,11 +179,15 @@ function lastLineInfo() {
         let overlap = 0;
         [summary, showMore].forEach((bar) => { if (!bar) return; const bb = bar.getBoundingClientRect(); if (bb.height <= 0) return; cards.forEach((c) => { if (c.contains(bar) || bar.contains(c)) return; overlap += inter(bb, c.getBoundingClientRect()); }); });
         const first = avail[0] || null;
+        const main = pane.querySelector('[data-r63a-main-story]'); const mainRect = main && main.getBoundingClientRect();
+        const eventCard = pane.querySelector('.r60-event-card'); const eventRect = eventCard && eventCard.getBoundingClientRect();
         return {
           body: { top: Math.round(br.top), bottom: Math.round(br.bottom), left: Math.round(br.left), right: Math.round(br.right) },
           avail, laterCount: details ? details.querySelectorAll('.r58-card').length : 0, laterVisible,
           summaryText: summary ? summary.textContent.trim() : '', detailsOpen: details ? details.open : null,
           firstInBody: !!(first && first.top >= br.top - 1 && first.bottom <= br.bottom + 1 && first.left >= br.left - 1 && first.right <= br.right + 1 && !first.hidden),
+          mainInBody: !!(mainRect && mainRect.top >= br.top - 1 && mainRect.bottom <= br.bottom + 1),
+          eventInBody: !!(eventRect && eventRect.top >= br.top - 1 && eventRect.bottom <= br.bottom + 1),
           overlap: Math.round(overlap),
         };
       });
@@ -203,9 +207,9 @@ function lastLineInfo() {
         await page.waitForTimeout(800);
         const withEvent = await measureStory();
         if (await page.evaluate(() => !!document.querySelector('.r60-event-card'))) {
-          assert.ok(withEvent.firstInBody, `${tag} 第 6 項：事件卡在上方時，第一張可做委託仍應完整在可視區：${JSON.stringify(withEvent)}`);
+          assert.ok(withEvent.mainInBody && withEvent.eventInBody, `${tag} 第 6 項：R63 主線卡與事件卡都應完整在可視區：${JSON.stringify(withEvent)}`);
           assert.equal(withEvent.overlap, 0, `${tag} 第 6 項：事件情境下「之後的委託」不應覆蓋卡片`);
-          console.log(`OK ${tag} 第 6 項（事件情境）：事件卡縮小後第一張可做委託仍完整可見`);
+          console.log(`OK ${tag} 第 6 項（事件情境）：R63 主線卡與事件卡完整可見，可做委託接續在下方`);
         } else {
           console.log(`SKIP ${tag} 第 6 項（事件情境）：此時段未觸發小事件`);
         }

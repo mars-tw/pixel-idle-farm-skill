@@ -20,8 +20,8 @@ test("1 主線交付前後只有一種狀態說法", () => {
   assert.equal(G.marketPreviewAction(state).label, "交給老農班伯 2 份小麥（已收 2/2）");
   state.adventure.claimed.c1_first_harvest = true;
   goal = A.earlyGoals(state, T0).goals[0];
-  assert.equal(goal.name, "去灶台做一份農家麥餅（回家的第一餐）"); assert.equal(goal.complete, false); // R62：交完開市小麥後，今日三件事原位換成固定主線下一步。
-  assert.doesNotMatch(goal.name, /已收|\/2/);
+  assert.equal(goal.name, "交給老農班伯 2 份小麥（已收 2/2）"); assert.equal(goal.complete, true); // R63：班伯項目保留並打勾。
+  assert.equal(A.earlyGoals(state, T0).nextStep.name, "回家的第一餐");
   assert.equal(G.marketPreviewAction(state).label, "✓ 已交給老農班伯");
 });
 

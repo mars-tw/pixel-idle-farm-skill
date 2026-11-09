@@ -28,12 +28,13 @@ test("2 市集預告、第一批與隨機訂單只要求現在買得到種子的
   assert.ok(state.orders.every((o) => !o.wants.carrot), "開墾前不可出胡蘿蔔單");
 });
 
-test("3 開市小麥交付後，今日三件事固定顯示第一餐；第四、五章任務卡帶任務名稱", () => {
+test("3 開市小麥交付後，今日三件事保留班伯項目，第一餐另列主線下一步；第四、五章任務卡帶任務名稱", () => {
   const state = fresh(); state.adventure.claimed.c1_homecoming = true; state.adventure.claimed.c1_first_harvest = true;
   const goals = A.earlyGoals(state, T0).goals;
-  assert.equal(goals[0].id, "meal");
-  assert.equal(goals[0].name, "去灶台做一份農家麥餅（回家的第一餐）");
-  assert.equal(goals[0].target, "kitchen");
+  assert.equal(goals[0].id, "harvest");
+  assert.equal(goals[0].name, "交給老農班伯 2 份小麥（已收 2/2）");
+  assert.equal(goals[0].complete, true);
+  assert.equal(A.earlyGoals(state, T0).nextStep.name, "回家的第一餐");
   const world = fs.readFileSync("src/world-ui.js", "utf8");
   assert.match(world, /q && q\.chapter >= 4 \? q\.name \+ "・"/);
 });

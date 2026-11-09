@@ -58,8 +58,10 @@ test('三件事以任一順序完成後，第一章仍可完成', () => {
     const state = afterTutorial();
     order.forEach((id, step) => actions[id](state, T0 + 10 + index * 20 + step * 2));
     const nextGoals = A.earlyGoals(state, T0 + 100 + index);
-    assert.equal(nextGoals.goals[0].id, 'meal', order.join(' → ')); // R62：開市小麥完成後固定換成第一餐下一步。
-    assert.equal(nextGoals.complete, false, '第一餐尚未完成前今日三件事不可提早結束');
+    assert.equal(nextGoals.goals[0].id, 'harvest', order.join(' → ')); // R63：班伯項目保留並打勾，第一餐另列主線下一步。
+    assert.equal(nextGoals.goals[0].complete, true, order.join(' → '));
+    assert.equal(nextGoals.nextStep.id, 'meal', order.join(' → '));
+    assert.equal(nextGoals.complete, true, '三件事全完成就顯示 3/3；第一餐不占三件事名額');
     assert.equal(A.cook(state, 'rustic_bread', T0 + 110 + index).ok, true);
     assert.equal(A.claim(state, 'c1_first_meal', T0 + 120 + index).ok, true);
     assert.equal(A.summary(state, T0 + 121 + index).chapters[0].claimed, 3);
