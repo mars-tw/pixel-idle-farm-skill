@@ -110,6 +110,9 @@ function titleMeasure() {
       console.log(`OK ${tag} 第 7 項：展開／收合／提示／面板開啟時標題都在`);
 
       /* ---- 第 6 項：長清單不壓卡片 ---- */
+      // R59 整合：面板開著時小事件出現、手札重繪（卡片整批換新），仍不得讓「再顯示」壓卡（實機截圖曾重現）
+      await page.evaluate(() => { const st = window.__farm.state(), A = window.AdventureAPI, now = Date.now(); A.ensure(st, now); st.adventure.r58.nextEventAt = 0; A.maybeTriggerRandomEvent(st, now, (() => { const q = [0.05, 0.5]; return () => (q.length ? q.shift() : 0.5); })()); window.__farm.refresh(); window.FarmWorld.refresh(st); });
+      await page.waitForTimeout(700);
       const story = await page.evaluate(() => {
         const pane = document.querySelector('.side-pane[data-pane="story"]');
         const body = document.querySelector('.side-panel.world-panel-open .side-body') || document.querySelector('.side-body');
@@ -131,6 +134,8 @@ function titleMeasure() {
       }
       assert.deepEqual(story.btnOut, [], `${tag} 每張卡的按鈕應在卡片框內：${JSON.stringify(story.btnOut)}`);
       console.log(`OK ${tag} 第 6 項（故事手札）：再顯示交集 0、首屏無半張卡、按鈕在卡內（卡 ${story.cards} 張）`);
+      await page.evaluate(() => { const st = window.__farm.state(), A = window.AdventureAPI, ev = A.randomEvents(st, Date.now()).active; if (ev) { const opt = ev.options[ev.options.length - 1]; A.resolveRandomEvent(st, opt.id, Date.now()); window.__farm.refresh(); window.FarmWorld.refresh(st); } }); // 量完即婉拒，事件卡不影響後面「可交付委託排前面」的量測
+      await page.waitForTimeout(500);
 
       /* ---- 第 6 項：可交付委託排前面 ＋ 第 9 項主色 ---- */
       const delivered = await page.evaluate(() => {

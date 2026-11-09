@@ -386,7 +386,7 @@
         <h3 class="story-subhead">鄰居個人委託</h3><p class="project-desc">每位鄰居有兩件自己的小委託，完成會讓好感 +1。</p>
         ${personal.map((p) => `<div class="r58-card" data-r58-personal-card="${esc(p.id)}"><h4>${esc(p.npcName)}・${esc(p.title)}</h4><p>${esc(p.dialogue)}</p><p class="r58-meta">第 ${p.chapter} 章・好感 ${p.favor}・${costText(p.requirements)}・報酬 ${p.reward.coins} 金・${p.reward.xp} 經驗</p>${p.completed ? `<p class="r58-done">已完成</p>` : `<button data-r58-personal="${esc(p.id)}" ${p.canComplete ? "" : "disabled"}>${p.unlocked ? (p.canComplete ? "帶去交付" : "物品未齊") : "尚未出現"}</button>`}</div>`).join("")}
         ${permanent.filter((result) => result.unlocked).map((result) => `<div class="r58-card r59-permanent" data-r59-permanent="${esc(result.npcId)}"><h4>${esc(result.icon)} ${esc(result.name)}</h4><p>${esc(result.text)}</p><p class="r58-meta">${esc(result.revisit)}</p></div>`).join("")}`;
-      if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host);
+      if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host); if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-panel-rendered")); /* R59：手札重繪會換掉卡片、清掉首屏收合，通知 ui.js 重新收合 */
       panel.querySelectorAll("[data-r58-resolve]").forEach((b) => { b.onclick = () => { const r = A.resolveRandomEvent(current, b.dataset.r58Resolve, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastPanels = ""; refresh(current); }; });
       panel.querySelectorAll("[data-r58-personal]").forEach((b) => { b.onclick = () => {
         closePanels();
