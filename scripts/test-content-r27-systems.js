@@ -44,7 +44,7 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
   assert.equal(A.claim(state, 'c1_first_harvest', now).ok, true);
   assert.equal(state.storage.items.wheat, 4);
   const orders = G.refreshOrders(state, now, () => 0);
-  assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
+  assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id] ? C.CROPS[id].unlockLevel <= state.level : id === "egg"))); // R68B：Lv 2 只解鎖小麥時第二張為雞蛋單
   assert.equal(G.orderConsumesStoryReserve(state, orders.find((o) => o.id === 'beginner_wheat_2')), false); // R57：首批第一張改為 4 份大單（刻意與主線搶小麥），2 份小單仍不動用主線保留
   assert.deepEqual(D.status(state, now).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
   assert.equal(state.storage.items.wheat || 0, 4, '每日目標不再消耗主線小麥');
@@ -60,7 +60,7 @@ test('開場與主線統一把兩份小麥交給班伯，每日目標改成不�
   const state = S.defaultState(1800000000000);
   A.ensure(state, 1800000000000); state.adventure.claimed.c1_first_harvest = true;
   const orders = G.refreshOrders(state, 1800000000000, () => 0);
-  assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id].unlockLevel <= state.level)));
+  assert.ok(orders.every((order) => Object.keys(order.wants).every((id) => C.CROPS[id] ? C.CROPS[id].unlockLevel <= state.level : id === "egg"))); // R68B：Lv 2 只解鎖小麥時第二張為雞蛋單
   assert.match(ui, /把 2 份小麥交給老農班伯後開放/);
 });
 

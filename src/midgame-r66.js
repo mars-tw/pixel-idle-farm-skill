@@ -63,9 +63,9 @@
     ensure(state, now);
     const def = FACILITIES[type];
     if (!def) return { ok: false, reason: "unknown", message: "找不到這個設施。" };
-    if ((state.level || 1) < def.unlockLevel) return { ok: false, reason: "locked", message: `農場等級 ${def.unlockLevel} 才能建造${def.name}。` };
+    if ((state.level || 1) < def.unlockLevel) return { ok: false, reason: "locked", message: `需要 Lv ${def.unlockLevel}（還差 ${def.unlockLevel - (state.level || 1)} 級）才能建造${def.name}。` };
     if (buildingOf(state, type)) return { ok: false, reason: "built", message: `${def.name}已經建好了。` };
-    if ((state.coins || 0) < def.costCoins) return { ok: false, reason: "cost", message: `金幣不足，建造${def.name}需要 ${def.costCoins} 金。` };
+    if ((state.coins || 0) < def.costCoins) return { ok: false, reason: "cost", message: `還差 ${def.costCoins - (state.coins || 0)} 金，建造${def.name}需要 ${def.costCoins} 金。` };
     return { ok: true };
   }
   function buildFacility(state, type, tileId, now) {
@@ -109,6 +109,9 @@
         built: !!building, buildingId: building ? building.id : null, tileId: building ? building.tileId : null,
         pending, ready: pending > 0, nextInMs: building ? nextInMs(state, building, now) : 0,
         canBuild: canBuildFacility(state, type, now).ok,
+        levelGap: Math.max(0, def.unlockLevel - (state.level || 1)),
+        coinShortfall: Math.max(0, def.costCoins - (state.coins || 0)),
+        gapText: building ? "已建造" : (Math.max(0, def.unlockLevel - (state.level || 1)) > 0 || Math.max(0, def.costCoins - (state.coins || 0)) > 0 ? [Math.max(0, def.unlockLevel - (state.level || 1)) > 0 ? `需要 Lv ${def.unlockLevel}（還差 ${Math.max(0, def.unlockLevel - (state.level || 1))} 級）` : "", Math.max(0, def.costCoins - (state.coins || 0)) > 0 ? `還差 ${Math.max(0, def.costCoins - (state.coins || 0))} 金` : ""].filter(Boolean).join("、") : "可以建造"),
       };
     });
   }
@@ -351,7 +354,7 @@
       btn.dataset.r66bBuild = row.type;
       btn.disabled = row.built || !row.canBuild;
       btn.title = `${row.name}・${row.costCoins} 金・${row.produceText}`;
-      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r67-20261110-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small>${row.costCoins} 金<br>${row.built ? "已建造" : row.canBuild ? "可以建造" : `農場等級 ${row.unlockLevel} 或金幣不足`}</small></span>`;
+      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r67-20261110-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small>${row.costCoins} 金<br>${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</small></span>`;
       btn.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = row.type;

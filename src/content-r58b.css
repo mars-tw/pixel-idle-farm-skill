@@ -687,3 +687,17 @@ body:has(#buildWheel:not([hidden])) #questDock .r66a-daily-pick { display: none 
 /* R67 整合：等待成熟與陽光倒數併進「現在做」那一層的一行小字，不另成一列。 */
 #questDock .r67a-now .r67-now-hint { display: block; margin-top: 1px; padding: 0; border: 0; background: none; font-style: normal; font-size: 12px; font-weight: 700; color: #8a5a12; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #questDock:is(.quest-auto-collapsed, .quest-collapsed, .quest-target-collapsed) .r67a-now .r67-now-hint { display: none; }
+/* R68B（第 6 項）：手機右下浮動互動按鈕完整留在畫面內；文字過長時省略，完整文字保留在 title（JS 設定）。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #actionA {
+    left: auto !important; right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    max-width: min(44vw, 176px) !important; box-sizing: border-box !important;
+    overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  #actionA {
+    max-width: min(36vw, 176px) !important; box-sizing: border-box !important;
+    overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+  }
+}

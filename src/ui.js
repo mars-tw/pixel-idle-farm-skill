@@ -3590,7 +3590,11 @@
   }
   function buildCatalogStatus(type) {
     const def = window.BUILDINGS[type];
-    if (!def || !G.buildingUnlocked(state, type)) return { enabled: false, text: `農場等級 ${def ? def.unlockLevel : "？"} 解鎖` };
+    if (!def) return { enabled: false, text: "找不到這個建物" };
+    // R68B（第 5 項）：等級缺口與金幣（建材）缺口分開寫，兩者都滿足才顯示可建。
+    const levelGap = Math.max(0, (def.unlockLevel || 1) - (state.level || 1));
+    const costGap = buildingCostShortfall(def.cost);
+    if (levelGap > 0 || costGap) return { enabled: false, text: [levelGap > 0 ? `需要 Lv ${def.unlockLevel}（還差 ${levelGap} 級）` : "", costGap].filter(Boolean).join("、") };
     if (G.buildingAtMaxCount && G.buildingAtMaxCount(state, type)) return { enabled: false, text: "數量已滿" };
     if (!G.canAffordCost(state, def.cost)) return { enabled: false, text: buildingCostShortfall(def.cost) || "資源不足" };
     return { enabled: true, text: "可以建造" };
@@ -4936,6 +4940,7 @@
     }
     try { if (nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
     action.textContent = busy ? "收成中" : targetLabel;
+    action.title = busy ? "正在收成" : targetLabel; // R68B（第 6 項）：浮動按鈕文字省略時保留完整說明
     action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
     if (typeof action.setAttribute === "function") {
       action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count ? `${targetLabel}，共有 ${st.count} 格成熟` : targetLabel);

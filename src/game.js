@@ -714,6 +714,8 @@
     { id: "beginner_wheat_4", wants: { wheat: 4 }, npcId: "merchant", ttlOffsetMs: 10 * 60 * 1000, flavor: "蘿拉需要 4 份小麥補上市集貨架。" },
   ];
   const ORDER_NPC_IDS = ["mayor", "merchant", "elder", "child"];
+  // R68B（第 4 項）：Lv 2 只解鎖小麥時的多樣性訂單（預告與首批共用同一份範本）。
+  const LV2_WHEAT_ONLY_ORDER = { id: "r68_lv2_egg_1", wants: { egg: 1 }, npcId: "elder", flavor: "老農班伯想收 1 顆雞蛋，做一頓簡單的早餐。" };
   const ORDER_COPY = {
     mayor: {
       offer: "鎮公所要補一批 {item}，麻煩你送到看板登記。",
@@ -831,7 +833,13 @@
       .map((id) => BEGINNER_ORDERS.find((template) => template.id === id))
       .filter(Boolean)
       .filter((template) => Object.keys(template.wants).every((id) => available.has(id)))
-      .map((template) => { const order = makeBeginnerOrder(template, now); return Object.assign(order, { narrative: orderNarrative(state, order), lockNote: "" }); });
+      .map((template) => { const order = makeBeginnerOrder(template, now); return Object.assign(order, { narrative: orderNarrative(state, order), lockNote: "" }); })
+      .map((order, idx, rows) => {
+        // R68B：Lv 2 只解鎖小麥時，預告與首批同樣換上雞蛋單（維持 R35 預告一字不差）。
+        if ((state.level || 1) !== 2 || available.size >= 2 || order.id === "beginner_wheat_4" || idx !== rows.length - 2) return order;
+        const egg = makeBeginnerOrder(LV2_WHEAT_ONLY_ORDER, now);
+        return Object.assign(egg, { narrative: orderNarrative(state, egg), lockNote: "" });
+      });
   }
   function marketPreviewAction(state) {
     if (state && state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest) return { harvested: 2, target: "elder", label: "✓ 已交給老農班伯" };
@@ -851,11 +859,27 @@
     return plots <= activePlotCount(state) ? ms : Infinity;
   }
   // R67B（第 5 項）：Lv 2 同時出現的訂單至少兩位委託人、兩種物品，且一張 3 分鐘內做得完。
-  // 只用現在種得出或收得到的物品湊多樣性；只有一種可用物品時不硬湊（維持 R62 契約）。
+  // R68B（第 4 項）：只解鎖小麥時，第二張改為老農班伯要 1 顆雞蛋（起始雞舍可取得），不再放棄多樣性。
   function ensureLv2OrderVariety(state, now) {
     if ((state.level || 1) !== 2 || !Array.isArray(state.orders) || state.orders.length < 2) return;
     const available = availableOrderItems(state);
-    if (available.length < 2) return;
+    if (available.length < 2) {
+      const hasFallback = state.orders.some((order) => order.id === "r68_lv2_egg_1" || (order.wants && order.wants.egg));
+      const hasWheat = state.orders.some((order) => order.wants && order.wants.wheat);
+      if (!hasFallback && hasWheat) {
+        for (let i = state.orders.length - 1; i >= 0; i--) {
+          if (state.orders[i].id === "beginner_wheat_4") continue;
+          state.orders[i] = makeBeginnerOrder(LV2_WHEAT_ONLY_ORDER, now);
+          break;
+        }
+      }
+      if (!state.orders.some((order) => orderCompletionMs(state, order) <= 3 * 60 * 1000)) {
+        const idx = state.orders.findIndex((order) => order.id !== "r68_lv2_egg_1" && order.id !== "beginner_wheat_4");
+        const quick = BEGINNER_ORDERS.find((row) => row.id === "beginner_wheat_2" && !state.orders.some((order) => order.id === row.id));
+        if (idx >= 0 && quick) state.orders[idx] = makeBeginnerOrder(quick, now);
+      }
+      return;
+    }
     const itemSet = () => new Set(state.orders.flatMap((order) => Object.keys(order.wants || {})));
     const npcSet = () => new Set(state.orders.map((order) => orderNpcIdFor(order)));
     const hasQuick = () => state.orders.some((order) => orderCompletionMs(state, order) <= 3 * 60 * 1000);

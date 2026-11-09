@@ -72,12 +72,13 @@ test("3 Lv 2 開墾前先生成的同人同物訂單，開墾後重新整理會�
   assert.ok(state.orders.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id))), "只要求種得出的物品");
 });
 
-test("4 Lv 2 尚未開墾時仍只要求種得出的物品，不硬湊第二種", () => {
+test("4 Lv 2 尚未開墾只解鎖小麥時，第二張改雞蛋單且不出胡蘿蔔單（R68B 第 4 項同步）", () => {
   const state = fresh();
   state.level = 2; state.adventure.claimed.c1_first_harvest = true;
   G.refreshOrders(state, T0, () => 0.5);
   assert.ok(state.orders.length >= 1);
-  assert.ok(state.orders.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id))), JSON.stringify(state.orders));
+  assert.ok(state.orders.every((o) => Object.keys(o.wants).every((id) => G.isCropUnlocked(state, id) || id === "egg")), JSON.stringify(state.orders));
+  assert.ok(state.orders.some((o) => o.id === "r68_lv2_egg_1" && o.wants.egg === 1), "只解鎖小麥時第二張應為雞蛋單");
   assert.ok(state.orders.every((o) => !o.wants.carrot), "開墾前不可出胡蘿蔔單");
 });
 
