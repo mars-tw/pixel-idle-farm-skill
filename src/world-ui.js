@@ -361,6 +361,19 @@
     document.querySelector(".side-panel").classList.add("world-panel-open");
     renderPanels();
   }
+  // R62B（第 9 項）：手札頂部「鄰居好感」入口——切到圖鑑分頁並直接捲到鄰居區塊，看愛心、下一段故事與送禮。
+  function openNeighborsJournal() {
+    if (!farm()) return;
+    farm().selectTab("journal");
+    document.querySelector(".side-panel").classList.add("world-panel-open");
+    const jump = () => {
+      if (window.NeighborsR61 && current) window.NeighborsR61.injectJournal(current);
+      const sec = document.querySelector("[data-r61b-neighbors]");
+      if (sec && sec.scrollIntoView) sec.scrollIntoView({ block: "start" });
+    };
+    if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => setTimeout(jump, 30));
+    else jump();
+  }
   function closePanels() {
     const panel = document.querySelector(".side-panel");
     if (panel) panel.classList.remove("world-panel-open");
@@ -405,6 +418,23 @@
         if (!p || !tile) { notify("先走完這段路，再去交付。"); return; }
         if (!farm().travelAndDo(tile.id, "collect", () => { const r = A.completePersonalQuest(current, p.id, Date.now()); notify(r.message); if (r.ok) { speak(p.npcName, r.doneLine || r.message); if (farm() && farm().safeSaveNow) farm().safeSaveNow(); } lastPanels = ""; refresh(current); })) notify("先走完這段路，再去交付。");
       }; });
+      // R62B（第 9 項）：手札標題列放「鄰居好感」入口，不佔清單高度、不必再去圖鑑最底下找。
+      const r62bPane = panel.closest ? panel.closest(".side-pane") : null;
+      const r62bHead = r62bPane && r62bPane.querySelector ? r62bPane.querySelector(".pane-head") : null;
+      if (r62bHead && !r62bHead.querySelector("[data-r62b-neighbors]")) {
+        const r62bBtn = document.createElement("button");
+        r62bBtn.type = "button"; r62bBtn.className = "r62b-neighbor-entry"; r62bBtn.dataset.r62bNeighbors = "";
+        r62bBtn.textContent = "鄰居好感";
+        r62bBtn.setAttribute("aria-label", "查看鄰居好感：四位鄰居的愛心、下一段故事與送禮");
+        r62bBtn.onclick = () => openNeighborsJournal();
+        r62bHead.appendChild(r62bBtn);
+      } else if (!r62bHead) {
+        const r62bEntry = document.createElement("div");
+        r62bEntry.className = "r62b-neighbor-entry-wrap";
+        r62bEntry.innerHTML = '<button type="button" class="r62b-neighbor-entry" data-r62b-neighbors>鄰居好感</button>';
+        panel.prepend(r62bEntry);
+        r62bEntry.querySelector("[data-r62b-neighbors]").onclick = () => openNeighborsJournal();
+      }
       const neighborButton = panel.querySelector("#worldNeighborButton");
       if (neighborButton) neighborButton.onclick = () => window.ContentR1.openNeighbors(current);
       if(window.ContentR6 && availability.showNeighborBasket && A.gathering(current,Date.now()).unlocked){const b=document.createElement('button');b.id='worldGatheringButton';b.textContent=current.adventure.gathering.completed?'翻共同聚餐手記':'三個位子，一起吃';b.onclick=()=>window.ContentR6.openGathering(current);panel.querySelector('.neighbor-entry').appendChild(b);}
