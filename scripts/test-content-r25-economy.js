@@ -42,7 +42,7 @@ test("停用交付鈕使用可行動的缺料文字", () => {
   state.storage.items.wheat = 1;
   assert.equal(G.orderMissingText(state, order), "還缺小麥 ×1");
   const ui = fs.readFileSync(require.resolve("../src/ui.js"), "utf8");
-  assert.ok(ui.includes('${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}'));
+  assert.ok(ui.includes('${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(allocationById[o.id] && !allocationById[o.id].ready ? `還差 ${') && ui.includes('G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText'), '停用的交付鈕寫出可行動的缺料文字'); // R55 整合：按鈕簡寫「還差 N 份」，完整算式留在需求列
 });
 
 test("第 1～3 章任務按鈕文字都是動作句，不含統計名詞", () => {

@@ -1254,7 +1254,7 @@
           ${confirmingTrash
             ? `<button class="btn ghost small trash-cancel">保留</button>
           <button class="btn small trash-confirm">確認丟棄</button>`
-            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
+            : `<button class="btn buy small ful" ${can ? "" : "disabled"}>${can ? (storyImpact && storyImpact.risky ? "交付前請確認" : "交付") : escapeHtml(allocationById[o.id] && !allocationById[o.id].ready ? `還差 ${Object.values(allocationById[o.id].missing || {}).reduce((x, y) => x + y, 0)} 份` : G.orderAllocationText ? G.orderAllocationText(state, o) : G.orderMissingText ? G.orderMissingText(state, o) : "缺少作物")}</button>
           ${can ? "" : `<button class="btn ghost small order-go">去田裡</button>`}
           <button class="btn ghost small trash">丟棄</button>`}
         </div>`;

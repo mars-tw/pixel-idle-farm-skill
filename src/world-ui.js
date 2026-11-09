@@ -237,7 +237,7 @@
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
-    box.innerHTML = `<div class="world-objective-title">${q ? `${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : esc(guide.displayTitle || q.name) + " "}<span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+    box.innerHTML = `<div class="world-objective-title">${q ? `${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : `<span class="qp-step">${esc(guide.displayTitle || q.name)}</span> `}<span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       <div class="world-objective-bottom">${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? `<button type="button" data-choice-open>選擇下一步</button>` : `<button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button>`}</div>`;
     const chooseFirstRoute = (button) => {
       const status = A.firstChoiceStatus(s);
