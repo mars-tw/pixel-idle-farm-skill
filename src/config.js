@@ -415,7 +415,7 @@ const OBSTACLES = {
 const BUILDINGS = {
   compostHeap: { id: "compostHeap", name: "堆肥場", emoji: "🍂", unlockLevel: 1,
                  levels: [
-                   { cost: { coins: 16 }, effect: { growthAura: 0.90 }, effectLabel: "作物成長時間 ×0.90" },
+                   { cost: { coins: 12 }, effect: { growthAura: 0.90 }, effectLabel: "作物成長時間 ×0.90" },
                    { cost: { coins: 160, compost: 5 }, effect: { growthAura: 0.84 }, effectLabel: "作物成長時間 ×0.84" },
                    { cost: { coins: 480, compost: 9 }, effect: { growthAura: 0.78 }, effectLabel: "作物成長時間 ×0.78" },
                  ],

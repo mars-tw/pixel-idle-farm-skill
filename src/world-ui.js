@@ -237,21 +237,20 @@
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
-    box.innerHTML = `<div class="world-chapter"><span>${q ? `第 ${q.chapter} 章・${esc(q.chapterName)}` : "收穫野餐"}</span><span>${q ? `本章已交付 ${guide.chapterProgress.claimed}/${guide.chapterProgress.total}` : "本章 3/3"}</span></div>
-      <div class="world-objective-title">${q ? esc(guide.displayTitle || q.name) + ` ${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : ""}<span data-audit="quest-progress">${esc(progressText)}</span>` : "農場又熱鬧起來了"}</div>
-      <div class="world-objective-detail">${q ? esc(guide.displayDescription || q.description) : "你留下的每一份收穫，都有了去處。"}</div>
-      ${choiceRoutes}
-      ${hint ? `<div class="world-objective-hint ${hint.kind}" data-hint="${hint.kind}">${esc(hint.text)}</div>` : ""}
-      <div class="world-objective-bottom"><span${esc(step) === esc(`${progressStep} ${progressText}`.trim()) ? ' class="step-dup"' : ""}>${esc(step)}</span>${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? `<button type="button" data-choice-open>選擇下一步</button>` : `<button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button>`}</div>
-      <div class="world-meter"><i style="width:${summary.claimed / summary.total * 100}%"></i></div>`;
-    const choiceOpen = box.querySelector("[data-choice-open]"); if (choiceOpen) choiceOpen.onclick = () => { box.classList.remove("quest-collapsed", "quest-auto-collapsed", "quest-target-collapsed"); const t = box.querySelector("[data-audit='quest-collapse']"); if (t && /展開/.test(t.textContent)) t.click(); const r = box.querySelector("[data-first-choice]"); if (r && r.focus) r.focus(); }; // R46：待選路線時，收合狀態也有明確入口
-    const goBtn = box.querySelector("[data-world-go]"); if (goBtn) goBtn.onclick = () => guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen();
-    box.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => {
+    box.innerHTML = `<div class="world-objective-title">${q ? `${progressStep ? `<span class="qp-step">${esc(progressStep)}</span> ` : esc(guide.displayTitle || q.name) + " "}<span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+      <div class="world-objective-bottom">${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? `<button type="button" data-choice-open>選擇下一步</button>` : `<button type="button" data-world-go>${q ? esc(guide.actionLabel) : "繼續經營"}</button>`}</div>`;
+    const chooseFirstRoute = (button) => {
       const status = A.firstChoiceStatus(s);
       const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
-      if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); if (!status.selected) { const g2 = A.guide(s, Date.now()); const q2 = A.summary(s, Date.now()).currentQuest; if (g2 && g2.route === "order") openPanel("orders"); else if (q2) goQuest(q2); } } // R43：選完路線立刻帶玩家去做，不必再找前往鈕
+      if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; farm().closeModal("worldModal"); renderObjective(s); if (!status.selected) { const g2 = A.guide(s, Date.now()); const q2 = A.summary(s, Date.now()).currentQuest; if (g2 && g2.route === "order") openPanel("orders"); else if (q2) goQuest(q2); } }
       else notify(result.message);
-    }; });
+    };
+    const choiceOpen = box.querySelector("[data-choice-open]"); if (choiceOpen) choiceOpen.onclick = () => {
+      const choiceModal = modal("選擇下一步", choiceRoutes);
+      choiceModal.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => chooseFirstRoute(button); });
+      const first = choiceModal.querySelector("[data-first-choice]"); if (first && first.focus) first.focus();
+    };
+    const goBtn = box.querySelector("[data-world-go]"); if (goBtn) goBtn.onclick = () => guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen();
     syncSeedHudTop();
     return true;
   }

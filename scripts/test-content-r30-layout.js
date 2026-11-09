@@ -393,6 +393,8 @@ async function measurePaneBottom(page, paneSelector, cardSelector) {
       console.log(`OK 訂單 ${w}×${h} 捲到底最後一項完整可見（${ordersBottom.scroller}）`);
       await page.evaluate(() => document.querySelector('.side-tab[data-tab="upgrades"]').click());
       await page.waitForTimeout(350);
+      await page.evaluate(() => { const d = document.querySelector('.r55-future-upgrades'); if (d) d.open = true; });
+      await page.waitForTimeout(100);
       const upBottom = await measurePaneBottom(page, '.side-pane[data-pane="upgrades"]', '.up, .building-upgrade-card');
       assert(upBottom.count >= 1, `${w}×${h} 升級面板沒有可量測的卡片`);
       assert(upBottom.inScroller, `${w}×${h} 升級最後一項未完整在捲動區（卡下緣 ${upBottom.lastBottom}／容器下緣 ${upBottom.scrollerBottom}）`);

@@ -84,7 +84,9 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
     assert.equal(A.claim(state, id, now).ok, true);
   }
   assert.equal(A.summary(state, now).claimed, 9);
-  assert.match(world, /本章已交付 \$\{guide\.chapterProgress\.claimed\}\/\$\{guide\.chapterProgress\.total\}/);
+  assert.match(world, /<span class="qp-step">\$\{esc\(progressStep\)\}<\/span>/);
+  assert.doesNotMatch(world.slice(world.indexOf('box.innerHTML = `<div class="world-objective-title">'), world.indexOf('const choiceOpen =')), /本章已交付/);
+  assert.match(ui, /data-audit="story-chapter-progress"/);
   assert.doesNotMatch(world, /物品備齊，交給鎮民/);
 });
 

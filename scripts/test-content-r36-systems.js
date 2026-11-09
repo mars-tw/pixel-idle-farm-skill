@@ -22,7 +22,7 @@ test("A1 共用小麥依訂單順序分配，第二張還差 2 份", () => {
   const rows = G.orderAllocation(state);
   assert.deepEqual(rows.map((row) => row.ready), [true, false]);
   assert.equal(rows[1].missing.wheat, 2);
-  assert.equal(G.orderAllocationText(state, state.orders[1]), "前面的訂單已用掉小麥・還差 2 份");
+  assert.equal(G.orderAllocationText(state, state.orders[1]), "庫存 4－前單 2＝可用 2，還差 2");
   assert.equal(G.fulfillOrder(state, "second", T).reason, "reserved", "後單不可繞過面板直接交付");
 });
 

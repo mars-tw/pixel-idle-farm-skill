@@ -608,7 +608,8 @@
     plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown;
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
-    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled };
+    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled,
+      feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: "收成 6 份小麥，再把 2 份交給老農班伯。" };
     if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
@@ -856,14 +857,18 @@
   function orderAllocation(state, orders) {
     const remaining = Object.assign({}, (state.storage && state.storage.items) || {});
     return (orders || state.orders || []).map((order) => {
-      const missing = {};
+      const missing = {}, items = {};
       for (const [itemId, qty] of Object.entries(order.wants || {})) {
-        const have = Math.max(0, remaining[itemId] || 0);
-        if (have < qty) missing[itemId] = qty - have;
+        const stock = Math.max(0, ((state.storage && state.storage.items) || {})[itemId] || 0);
+        const available = Math.max(0, remaining[itemId] || 0);
+        const priorReserved = Math.max(0, stock - available);
+        const short = Math.max(0, qty - available);
+        if (short) missing[itemId] = short;
+        items[itemId] = { required: qty, stock, available, priorReserved, missing: short };
       }
       const ready = Object.keys(missing).length === 0;
       if (ready) for (const [itemId, qty] of Object.entries(order.wants || {})) remaining[itemId] -= qty;
-      return { orderId: order.id, ready, missing, remaining: Object.assign({}, remaining) };
+      return { orderId: order.id, ready, missing, items, remaining: Object.assign({}, remaining) };
     });
   }
   function orderAllocationFor(state, orderId) {
@@ -871,13 +876,12 @@
   }
   function orderAllocationText(state, order, itemNames) {
     const row = orderAllocationFor(state, order.id);
-    if (!row || row.ready) return "交付";
-    const index = Math.max(0, (state.orders || []).findIndex((entry) => entry.id === order.id));
-    const prior = (state.orders || []).slice(0, index);
-    return Object.entries(row.missing).map(([itemId, qty]) => {
+    if (!row) return "缺少作物";
+    return Object.entries(row.items || {}).map(([itemId, item]) => {
       const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
-      const sharedBefore = prior.some((entry) => (entry.wants || {})[itemId] > 0);
-      return `${sharedBefore ? `前面的訂單已用掉${def ? def.name : itemId}・` : ""}還差 ${qty} 份`;
+      const name = def ? def.name : itemId;
+      if (item.priorReserved > 0) return `庫存 ${item.stock}－前單 ${item.priorReserved}＝可用 ${item.available}${item.missing ? `，還差 ${item.missing}` : ""}`;
+      return `需要 ${item.required}・可用 ${item.available}${item.missing ? `，還差 ${item.missing} ${name}` : ""}`;
     }).join("；");
   }
   function mainStoryReserve(state, itemId) {
@@ -977,6 +981,7 @@
     const milestones = [];
     if ((state.level || 1) > beforeLevel) milestones.push(milestoneCard("level_up", { level: state.level, state, now }));
     return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story, milestones,
+      feedback: [{ kind: "order", target: "coins", text: `+${pay.coins} 金`, amount: pay.coins }],
       settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: "查看新訂單，或把收益投入農場升級。" } };
   }
   function trashOrder(state, orderId, now, rng) {
@@ -1040,7 +1045,9 @@
         state.plots.push({ id: "p" + String(state.plots.length + 1).padStart(2, "0"), cropId: null, plantedAt: 0 });
       }
     }
-    return { ok: true, level: state.upgrades[key], settlement: { kind: "upgrade", coins: 0, xp: 0, next: "回到田地，試試升級後的效果。" } };
+    return { ok: true, level: state.upgrades[key],
+      feedback: [{ kind: "upgrade", target: "coins", text: `－${next.cost} 金`, amount: -next.cost }],
+      settlement: { kind: "upgrade", coins: 0, xp: 0, next: "回到田地，試試升級後的效果。" } };
   }
   function resourceSnapshot(state) {
     return {

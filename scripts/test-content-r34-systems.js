@@ -40,7 +40,8 @@ test("A1 市集第一批訂單依已解鎖品項產生差異", () => {
 
 test("A2 訂單卡寫清楚需要、持有與跨單共用", () => {
   const ui = read("src/ui.js");
-  assert.match(ui, /需要 \$\{fmtNum\(q\)\}・持有 \$\{fmtNum\(have\)\}/);
+  assert.match(ui, /需要 \$\{fmtNum\(q\)\}・可用 \$\{fmtNum\(available\)\}/);
+  assert.match(ui, /庫存 \$\{fmtNum\(item\.stock\)\}－前單 \$\{fmtNum\(item\.priorReserved\)\}＝可用/);
   assert.match(ui, /sharedNeeds\[cid\] > \(state\.storage\.items\[cid\] \|\| 0\)/);
   assert.match(ui, /與其他訂單共用\$\{escapeHtml\(item \? item\.name : cid\)\}/);
 });

@@ -172,6 +172,7 @@
   }
   function enqueueResultFeedback(result) {
     if (!result) return;
+    (result.feedback || []).forEach(showActionFeedback);
     if (result.settlement) enqueueSettlement(result.settlement);
     (result.milestones || []).forEach(enqueueSettlement);
   }
@@ -221,7 +222,18 @@
     f.style.left = Math.round(rect.left + rect.width / 2) + "px";
     f.style.top = Math.round(rect.bottom + 4) + "px";
     document.body.appendChild(f);
+    target.classList.remove("r55-hud-flash");
+    void target.offsetWidth;
+    target.classList.add("r55-hud-flash");
+    setTimeout(() => target.classList.remove("r55-hud-flash"), 480);
     setTimeout(() => f.remove(), 1200);
+  }
+  function showActionFeedback(event) {
+    if (!event) return;
+    if (event.kind === "harvest" && event.plotIndex != null && state && state.map) {
+      const tile = state.map.tiles.find((row) => row.plotIndex === event.plotIndex);
+      if (tile) { const c = tileCenter(tile.id); floatText(c.x, c.y - 20, event.text, "#fff3a6"); }
+    }
   }
   function reducedMotion() {
     try {
@@ -1180,7 +1192,8 @@
           <p><b>市集預告</b><span class="market-preview-state">預覽・還沒開放</span>：把 2 份小麥交給老農班伯後開放。下面是開放後第一批會出現的訂單。</p>
           <button style="margin:0 0 8px" type="button" class="btn buy small" data-order-main-go>${escapeHtml(G.marketPreviewAction(state).label)}</button>
           <!-- R46：主要行動放在預告卡上方，手機首屏不再蓋住訂單 -->
-          ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗（未含加成）</div><div class="o-meta">市集開放後可接${o.lockNote ? `・${escapeHtml(o.lockNote)}` : ""}</div></div></div>`; }).join("")}
+          ${(G.previewMarketOrders ? G.previewMarketOrders(state, now()) : []).slice(0, 1).map((o) => { const [cid, qty] = Object.entries(o.wants)[0]; const def = (window.CROPS && window.CROPS[cid]) || { name: cid, emoji: "" }; return `<div class="order preview" data-audit="preview-order"><div class="o-body"><b>${escapeHtml(o.narrative.npcName)}｜${escapeHtml(o.narrative.npcTitle)}</b><div class="o-wants">${def.emoji || ""} ${escapeHtml(def.name)} ${qty} 份</div><div class="o-reward">報酬 ${fmtNum(o.rewardCoins)} 金・${o.rewardXp} 經驗（未含加成）</div><div class="o-meta">市集開放後可接${o.lockNote ? `・${escapeHtml(o.lockNote)}` : ""}</div></div></div>`; }).join("")}
+          <p class="market-preview-more" data-audit="market-preview-more">開放後還有 2 張。</p>
         </div>`;
       const go = box.querySelector("[data-order-main-go]");
       if (go) go.onclick = () => { const action = G.marketPreviewAction(state); const target = action.target === "field" ? (state.map.tiles || []).find((tile) => tile.plotIndex === 0) : (state.map.tiles || []).find((tile) => tile.npc === "elder"); if (target) focusCameraOnTile(target.id); };
@@ -1206,9 +1219,13 @@
       const narrative = G.orderNarrative ? G.orderNarrative(state, o) : null;
       const storyImpact = G.orderStoryImpact ? G.orderStoryImpact(state, o) : null;
       const wantsHtml = Object.entries(o.wants).map(([cid, q]) => {
-        const have = state.storage.items[cid] || 0;
-        const ok = have >= q;
-        return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)} 需要 ${fmtNum(q)}・持有 ${fmtNum(have)}</span>`;
+        const item = allocationById[o.id] && allocationById[o.id].items && allocationById[o.id].items[cid];
+        const available = item ? item.available : (state.storage.items[cid] || 0);
+        const ok = available >= q;
+        const allocationText = item && item.priorReserved > 0
+          ? `庫存 ${fmtNum(item.stock)}－前單 ${fmtNum(item.priorReserved)}＝可用 ${fmtNum(item.available)}${item.missing ? `，還差 ${fmtNum(item.missing)}` : ""}`
+          : `需要 ${fmtNum(q)}・可用 ${fmtNum(available)}${item && item.missing ? `，還差 ${fmtNum(item.missing)}` : ""}`;
+        return `<span class="w ${ok ? "have" : "miss"}">${itemEmoji(cid)} ${allocationText}</span>`;
       }).join("");
       const sharedHtml = Object.keys(o.wants).filter((cid) => sharedCounts[cid] > 1 && sharedNeeds[cid] > (state.storage.items[cid] || 0)).map((cid) => {
         const item = window.getItemDef ? window.getItemDef(cid) : window.CROPS[cid];
@@ -1377,7 +1394,15 @@
       const na = G.nextUpgrade(state, a), nb = G.nextUpgrade(state, b);
       return upgradeBand(a, na) - upgradeBand(b, nb) || (na ? na.cost : Infinity) - (nb ? nb.cost : Infinity);
     });
-    // R26：升級項目直接全部列出，不再用難懂的「顯示更多 1」折疊。
+    const firstChapterComplete = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_meal);
+    const firstActionable = Math.max(0, upgradeKeys.findIndex((key) => !!G.nextUpgrade(state, key)));
+    let futureDetails = null, futureBody = null;
+    if (!firstChapterComplete && upgradeKeys.length > 1) {
+      futureDetails = document.createElement("details");
+      futureDetails.className = "r55-future-upgrades";
+      futureDetails.innerHTML = `<summary>之後的目標（${upgradeKeys.length - 1}）</summary><div class="r55-future-upgrades-list"></div>`;
+      futureBody = futureDetails.querySelector(".r55-future-upgrades-list");
+    }
     const visibleUpgrades = upgradeKeys;
     visibleUpgrades.forEach((key) => {
       const def = window.UPGRADES[key];
@@ -1415,8 +1440,9 @@
           } else if (r.reason === "no_coins") toast("🪙 金幣不足");
         };
       }
-      box.appendChild(el);
+      if (!firstChapterComplete && key !== upgradeKeys[firstActionable]) futureBody.appendChild(el); else box.appendChild(el);
     });
+    if (futureDetails) box.appendChild(futureDetails);
     renderBuildingUpgrades();
     if (newUpgrades.length && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "upgrades"); scheduleSave(); }
   }
@@ -2412,6 +2438,13 @@
     const copy = cur ? cur.desc
       : "農場重新熱鬧了起來。東林已通，繼續照顧田地與動物，把收穫留進鄰居的餐籃。";
     const quests = compactRowsHtml("story-main", currentQuestFirst(QUEST_ORDER, cur).map((id) => questRow(id, completed, cur)), 4);
+    const adventureSummary = window.AdventureAPI && window.AdventureAPI.summary ? window.AdventureAPI.summary(state, now()) : null;
+    const adventureChapter = adventureSummary && adventureSummary.currentQuest
+      ? adventureSummary.chapters.find((row) => row.number === adventureSummary.currentQuest.chapter)
+      : adventureSummary && adventureSummary.chapters ? adventureSummary.chapters[adventureSummary.chapters.length - 1] : null;
+    const adventureProgressHtml = adventureChapter
+      ? `<div class="story-progress r55-adventure-progress" data-audit="story-chapter-progress"><div class="story-progress-head"><span>第 ${adventureChapter.number} 章已交付</span><b>${adventureChapter.claimed}/${adventureChapter.total}</b></div></div>`
+      : "";
     // 第二章：序章 6/6 後才顯示，獨立完成度（不影響主面板 0/6 讀值）
     const ch2Html = ch1Done ? `
       <div class="chapter2">
@@ -2469,6 +2502,7 @@
       <div class="story-kicker">${kicker}</div>
       <div class="story-title">${title}</div>
       <div class="story-copy">${copy}</div>
+      ${adventureProgressHtml}
       ${activeQuestHtml}
       <div class="story-progress" data-progress="${doneCount}/${QUEST_ORDER.length}">
         <div class="story-progress-head"><span>任務完成度</span><b>${doneCount}/${QUEST_ORDER.length}</b></div>

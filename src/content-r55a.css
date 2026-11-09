@@ -1,0 +1,52 @@
+/* R55 A：系統回饋、前期資訊減量與任務卡節奏。 */
+.market-preview-more {
+  margin: 8px 2px 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.r55-future-upgrades {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 253, 244, .72);
+}
+.r55-future-upgrades > summary {
+  min-height: 44px;
+  padding: 11px 12px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-weight: 900;
+}
+.r55-future-upgrades-list { padding: 0 8px 8px; }
+
+.r55-hud-flash { animation: r55HudFlash .46s steps(2, end); }
+@keyframes r55HudFlash {
+  0%, 100% { filter: none; }
+  50% { filter: brightness(1.45); }
+}
+
+/* R26 規則更新：收合摘要顯示目前步驟與該步驟進度，不再顯示章節總進度。 */
+#questDock.quest-collapsed .world-objective-title .qp-step,
+#questDock.quest-auto-collapsed .world-objective-title .qp-step,
+#questDock.quest-target-collapsed .world-objective-title .qp-step { display: inline !important; }
+#questDock.quest-collapsed .world-objective-title,
+#questDock.quest-auto-collapsed .world-objective-title,
+#questDock.quest-target-collapsed .world-objective-title {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .r55-hud-flash { animation: r55HudFlash .46s steps(2, end) !important; transform: none !important; }
+  .float.resource-delta {
+    animation: r55NumberFlash .9s steps(2, end) forwards !important;
+    transform: translate(-50%, 0) !important;
+  }
+  @keyframes r55NumberFlash {
+    0%, 100% { opacity: 0; }
+    25%, 75% { opacity: 1; }
+  }
+}

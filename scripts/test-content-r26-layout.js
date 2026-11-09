@@ -139,31 +139,31 @@ async function scrollPanelToBottom(page) {
         assert(gap.gap >= 8, `${w}×${h} 方向鍵與物品格間距 ${gap.gap}px 小於 8px`);
         console.log(`OK 間距 ${w}×${h} 方向鍵與物品格 ${gap.gap}px ≥ 8px`);
 
-        // 8：任務卡可收合——收成一行摘要（章節進度＋目前步驟），再點展開保留短說明
+        // 8：R55 規則——任務卡收合摘要只保留目前步驟與該步驟進度。
         await page.waitForSelector('[data-audit="quest-collapse"]', { timeout: 5000 }); const initiallyCollapsed = await page.evaluate(() => { const b = document.querySelector('#questDock'); return b.classList.contains('quest-collapsed') || b.classList.contains('quest-auto-collapsed'); }); if (initiallyCollapsed) { await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(200); }
         const before = await page.evaluate(() => document.querySelector('#questDock').getBoundingClientRect().height);
         await page.locator('[data-audit="quest-collapse"]').click();
         await page.waitForTimeout(200);
         const collapsed = await page.evaluate(() => {
           const box = document.querySelector('#questDock');
-          const chapter = box.querySelector('.world-chapter');
-          const step = box.querySelector('.world-objective-bottom > span');
+          const step = box.querySelector('.world-objective-title .qp-step');
+          const progress = box.querySelector('[data-audit="quest-progress"]');
           const vis = (e) => { if (!e) return false; const s = getComputedStyle(e), r = e.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && r.height > 0; };
-          return { cls: box.classList.contains('quest-collapsed'), h: box.getBoundingClientRect().height, chapter: vis(chapter), step: vis(step), text: box.textContent };
+          return { cls: box.classList.contains('quest-collapsed'), h: box.getBoundingClientRect().height, step: vis(step), progress: vis(progress), text: box.textContent };
         });
         assert(collapsed.cls, `${w}×${h} 任務卡未收合`);
         assert(collapsed.h < before, `${w}×${h} 任務卡收合後高度未變小（${before}→${collapsed.h}）`);
-        assert(collapsed.chapter && collapsed.step, `${w}×${h} 收合摘要應保留章節進度與目前步驟`);
+        assert(collapsed.step && collapsed.progress, `${w}×${h} 收合摘要應保留目前步驟與步驟進度`);
         await page.screenshot({ path: path.join(SHOT_DIR, `quest-collapsed-${w}x${h}.png`) });
         await page.locator('[data-audit="quest-collapse"]').click();
         await page.waitForTimeout(200);
         const expanded = await page.evaluate(() => {
           const box = document.querySelector('#questDock');
-          const detail = box.querySelector('.world-objective-detail');
-          const s = detail ? getComputedStyle(detail) : null, r = detail ? detail.getBoundingClientRect() : null;
-          return { cls: box.classList.contains('quest-collapsed'), detailVisible: !!(s && s.display !== 'none' && r && r.height > 0) };
+          const progress = box.querySelector('[data-audit="quest-progress"]');
+          const go = box.querySelector('[data-world-go], [data-choice-open]');
+          return { cls: box.classList.contains('quest-collapsed'), focused: !!progress && !!go };
         });
-        assert(!expanded.cls && expanded.detailVisible, `${w}×${h} 任務卡展開後應保留一行短說明`);
+        assert(!expanded.cls && expanded.focused, `${w}×${h} 任務卡展開後應保留步驟進度與主要按鈕`);
         await page.screenshot({ path: path.join(SHOT_DIR, `quest-expanded-${w}x${h}.png`) });
         console.log(`OK 任務卡 ${w}×${h} 可收合（${Math.round(before)}→${Math.round(collapsed.h)}px）與展開`);
       }
@@ -276,9 +276,9 @@ async function scrollPanelToBottom(page) {
         out.push(check('訂單獎勵', document.querySelector('.o-reward')));
         out.push(check('訂單倒數', document.querySelector('.o-meta')));
         out.push(check('訂單交付鈕', document.querySelector('.order .ful')));
-        // 任務卡文字（深底淺字）
-        out.push(check('任務章節', document.querySelector('#questDock .world-chapter')));
-        out.push(check('任務說明', document.querySelector('#questDock .world-objective-detail')));
+        // R55 任務卡文字（只保留目前步驟、進度與主要按鈕）
+        out.push(check('任務步驟', document.querySelector('#questDock .world-objective-title')));
+        out.push(check('任務主要按鈕', document.querySelector('#questDock .world-objective-bottom button')));
         // 種子價格（物品格小字）
         out.push(check('種子價格', document.querySelector('#seedHud .seed .sc')));
         return out;
@@ -296,23 +296,19 @@ async function scrollPanelToBottom(page) {
         return { label: '升級說明', ratio: Number(((x + 0.05) / (y + 0.05)).toFixed(2)) };
       });
       if (upRows) rows.push(upRows);
-      // 0% 進度條：淺底深填；完成狀態 ✓ 標籤（以實際 CSS 級聯驗證 ::before）
+      // R55 移除任務卡章節總進度條；已完成任務在故事面板仍保留 ✓ 標籤。
       const meter = await page.evaluate(() => {
-        const track = document.querySelector('#questDock .world-meter');
-        const fill = track ? track.querySelector('i') : null;
-        if (!track || !fill) return null;
-        const lumOf = (s) => { const m = /rgba?\(([^)]+)\)/.exec(s); const p = m[1].split(',').map(Number); const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(p[0]) + 0.7152 * f(p[1]) + 0.0722 * f(p[2]); };
         const quest = document.querySelector('.adventure-quest');
         let checkMark = '';
         if (quest) { quest.classList.add('claimed'); checkMark = getComputedStyle(quest.querySelector('.world-chapter span:last-child'), '::before').content; quest.classList.remove('claimed'); }
-        return { trackLum: lumOf(getComputedStyle(track).backgroundColor), fillLum: lumOf(getComputedStyle(fill).backgroundColor), checkMark };
+        return { chapterMeterRemoved: !document.querySelector('#questDock .world-meter'), checkMark };
       });
       for (const r of rows) {
         assert(!r.missing, `對比量測缺少元素：${r.label}`);
         assert(r.ratio >= 4.5, `${r.label} 對比 ${r.ratio}:1 低於 4.5:1`);
         console.log(`OK 對比 ${r.label} ${r.ratio}:1 ≥ 4.5:1`);
       }
-      assert(meter && meter.trackLum > meter.fillLum, '0% 進度條應為淺底深填（底色亮度需高於填色）');
+      assert(meter && meter.chapterMeterRemoved, 'R55 任務卡不應再顯示章節總進度條');
       assert(meter.checkMark.includes('✓'), `完成狀態應有 ✓ 標籤，實際 ::before 內容 ${meter.checkMark}`);
       console.log('OK 進度條 0% 淺底深填、完成狀態有 ✓ 標籤');
       await ctx.close();
