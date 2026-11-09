@@ -110,5 +110,16 @@ test("5 建造卡分別寫等級與金幣缺口，兩者都滿足才顯示可建
   assert.doesNotMatch(ui, /或金幣不足/);
 });
 
-console.log(`VERIFIED content R68B orders (${passed}/5)`);
+test("6 整合：第二種訂單排在前兩張（訂單面板預設只顯示兩張）", () => {
+  for (const roll of [0, 0.5, 0.99]) {
+  const s = fresh(1, 40);
+  s.adventure.claimed.c1_first_harvest = true;
+  G.refreshOrders(s, T0, () => roll); // 市集開張時（Lv 1）先生成第一批
+  G.addXp(s, global.xpForLevel(2) - (s.xp || 0) + 1); // 實際升級路徑：不另外整理訂單
+  const idx = s.orders.findIndex((o) => !(o.wants && o.wants.wheat));
+  assert.ok(idx >= 0 && idx <= 1, `非小麥訂單應在前兩張，實際位置 ${idx}：${JSON.stringify(s.orders.map((o) => Object.keys(o.wants)))}`);
+  }
+});
+
+console.log(`VERIFIED content R68B orders (${passed}/6)`);
 if (process.exitCode) process.exit(1);

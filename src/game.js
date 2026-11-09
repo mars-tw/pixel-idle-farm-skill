@@ -317,6 +317,7 @@
     state.xp += amount;
     const before = state.level;
     state.level = levelFromXp(state.xp);
+    if (before < 2 && state.level >= 2 && Array.isArray(state.orders) && state.orders.length) ensureLv2OrderVariety(state, Date.now()); // R68 整合：Lv 1 開張的第一批訂單在升到 Lv 2 時也換出第二種，不必等空出訂單格
     return state.level - before; // 升了幾級
   }
   function achievementBonus(state) {
@@ -870,6 +871,7 @@
         for (let i = state.orders.length - 1; i >= 0; i--) {
           if (state.orders[i].id === "beginner_wheat_4") continue;
           state.orders[i] = makeBeginnerOrder(LV2_WHEAT_ONLY_ORDER, now);
+          if (i > 1) state.orders.splice(1, 0, state.orders.splice(i, 1)[0]); // R68 整合：第二種訂單排在第二張，不被「再顯示」收起
           break;
         }
       }
