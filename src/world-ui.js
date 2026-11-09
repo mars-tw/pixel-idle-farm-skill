@@ -331,7 +331,11 @@
     chip.textContent = `☀ 陽光照在 ${plots.length} 格田・剩 ${Math.ceil(sun.remainingMs / 1000)} 秒`;
     chip.setAttribute("aria-label", chip.textContent + "，點一下看受光的田");
     const dock = el("questDock"); const r = dock && dock.getBoundingClientRect ? dock.getBoundingClientRect() : null;
-    if (r && r.height) { const right = r.right + 8 + 230 < window.innerWidth; chip.style.left = Math.round(right ? r.right + 8 : r.left) + "px"; chip.style.top = Math.round(right ? r.top + 4 : r.bottom + 6) + "px"; } // R42：優先放在任務卡右側，避免疊到種子欄
+    if (r && r.height) { const right = r.right + 8 + 230 < window.innerWidth; chip.style.left = Math.round(right ? r.right + 8 : r.left) + "px"; chip.style.top = Math.round(right ? r.top + 4 : r.bottom + 6) + "px"; // R42：優先放在任務卡右側，避免疊到種子欄
+      // R63B（第 6 項）：陽光標籤改放任務卡下方時，不得蓋住種子欄（含「全部」鈕）
+      const seed = el("seedHud"); const sr = seed && seed.getBoundingClientRect ? seed.getBoundingClientRect() : null; const cr = chip.getBoundingClientRect ? chip.getBoundingClientRect() : null;
+      if (sr && cr && sr.height && cr.left < sr.right && cr.right > sr.left && cr.top < sr.bottom && cr.bottom > sr.top) chip.style.top = Math.round(sr.bottom + 6) + "px";
+    }
   }
   // R79：等待時告訴玩家還要多久、現在能做什麼；光斑出現時引導去光裡。
   function objectiveHint(s, row) {
@@ -799,8 +803,8 @@
     if (!r.width) { arrow.classList.remove("show"); return; }
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2, margin = 28;
     if (cx >= margin && cx <= window.innerWidth - margin && cy >= margin && cy <= window.innerHeight - margin) { arrow.classList.remove("show"); return; }
-    const x = Math.min(Math.max(cx, 12), window.innerWidth - 64);
-    const y = Math.min(Math.max(cy, 76), window.innerHeight - 150);
+    let x = Math.min(Math.max(cx, 12), window.innerWidth - 64);
+    let y = Math.min(Math.max(cy, 76), window.innerHeight - 150); if (dock && dock.getBoundingClientRect) { const dr = dock.getBoundingClientRect(); if (dr.height && x < dr.right + 8 && x + 64 > dr.left - 8 && y < dr.bottom + 8 && y + 44 > dr.top - 8) { y = Math.round(dr.bottom + 8); if (y + 44 > window.innerHeight - 8) x = Math.max(12, Math.round(dr.left - 72)); } } // R63B（第 6 項）：目標圓鈕不壓任務卡與收合鈕
     arrow.style.left = Math.round(x) + "px"; arrow.style.top = Math.round(y) + "px";
     const deg = Math.round(Math.atan2(cy - window.innerHeight / 2, cx - window.innerWidth / 2) * 180 / Math.PI);
     const span = arrow.querySelector(".oa-arrow"); if (span) span.style.transform = "rotate(" + deg + "deg)";

@@ -297,3 +297,104 @@ body:has(.npc-bubble .r60a-story-choices) .qmarker .npc-nameplate { visibility: 
     flex: 1 1 0; flex-wrap: wrap; justify-content: flex-end; min-width: 0; box-sizing: border-box;
   }
 }
+
+/* R63B（第 7 項）：任務卡標題一行顯示，過長用省略號，完整名稱放在 title 屬性（ui.js 設定）；不得拆成多行碎片。 */
+#questDock .world-objective-title,
+body:has(.side-panel.world-panel-open) #questDock .world-objective-title {
+  white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
+  display: block !important; -webkit-line-clamp: unset !important; line-height: 1.35;
+  min-width: 0; box-sizing: border-box;
+}
+#questDock .world-objective-title .qp-step,
+#questDock .world-objective-title [data-audit="quest-progress"] { white-space: nowrap; }
+#questDock.quest-collapsed .world-objective-title,
+#questDock.quest-auto-collapsed .world-objective-title,
+#questDock.quest-target-collapsed .world-objective-title {
+  flex: 1 1 auto !important; min-width: 0 !important; max-width: 100%;
+  overflow: hidden !important; text-overflow: ellipsis !important;
+}
+
+/* R63B（第 6 項）：任務卡與常駐按鈕命中至少 44px，收合列上下留白配合 44px 按鈕（一行總高不超過 56px）。 */
+#questDock .quest-collapse-btn { min-width: 44px; min-height: 44px; }
+#questDock .world-objective-bottom > button,
+#questDock .world-objective-routes button,
+#questDock .r61a-festival-banner button { min-height: 44px; }
+.sun-chip { min-height: 44px; box-sizing: border-box; }
+.map-fit-toggle { min-width: 44px; min-height: 44px; box-sizing: border-box; }
+#questDock.quest-collapsed,
+#questDock.quest-auto-collapsed,
+#questDock.quest-target-collapsed { padding-top: 2px !important; padding-bottom: 2px !important; }
+#questDock.quest-collapsed .world-objective-bottom > button,
+#questDock.quest-auto-collapsed .world-objective-bottom > button,
+#questDock.quest-target-collapsed .world-objective-bottom > button,
+body:has(#worldDialogue:not([hidden])) #questDock .world-objective-bottom > button,
+body:has(#toast-zone > .toast) #questDock .world-objective-bottom > button,
+body:has(#buildWheel:not([hidden])) #questDock .world-objective-bottom > button { min-height: 44px !important; }
+body:has(#worldDialogue:not([hidden])) #questDock,
+body:has(#toast-zone > .toast) #questDock,
+body:has(#buildWheel:not([hidden])) #questDock { padding-top: 2px !important; padding-bottom: 2px !important; }
+
+/* R63B（第 8 項）：主線二選一泡泡出現時，收起「交談」動作鈕，選完泡泡關閉後自動恢復。 */
+body:has(.npc-bubble .r60a-story-choices) #actionA,
+body:has(.npc-bubble .r60a-story-choices) .scene-action-bar [data-action="talk"] { display: none !important; }
+
+/* R63B（第 5、9 項）：手機任務卡精簡與手札捲動提示。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  /* 第 5 項：收合時只剩一行（任務名＋進度＋一顆主要按鈕）；高度直式 ≤18%、橫式 ≤25%（見下方橫式覆寫）。 */
+  #questDock.quest-collapsed,
+  #questDock.quest-auto-collapsed,
+  #questDock.quest-target-collapsed {
+    max-height: 18dvh !important; overflow: hidden !important;
+  }
+  /* 第 5 項：收穫祭橫幅併入同一張卡的一行（單行省略），不另疊一張、不把卡撐高。 */
+  #questDock.quest-collapsed .r61a-festival-banner,
+  #questDock.quest-auto-collapsed .r61a-festival-banner,
+  #questDock.quest-target-collapsed .r61a-festival-banner {
+    display: flex !important; align-items: center; gap: 6px;
+    flex: 1 1 100%; width: 100%; max-width: 100%; box-sizing: border-box;
+    margin: 0; padding: 3px 52px 3px 8px;
+    white-space: nowrap; overflow: hidden; line-height: 1.3;
+  }
+  #questDock.quest-collapsed .r61a-festival-banner > b,
+  #questDock.quest-auto-collapsed .r61a-festival-banner > b,
+  #questDock.quest-target-collapsed .r61a-festival-banner > b { flex: 0 0 auto; white-space: nowrap; }
+  #questDock.quest-collapsed .r61a-festival-banner > small,
+  #questDock.quest-auto-collapsed .r61a-festival-banner > small,
+  #questDock.quest-target-collapsed .r61a-festival-banner > small {
+    flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #questDock.quest-collapsed .r61a-festival-banner > button,
+  #questDock.quest-auto-collapsed .r61a-festival-banner > button,
+  #questDock.quest-target-collapsed .r61a-festival-banner > button { display: none !important; }
+  #questDock.quest-collapsed:has(.r61a-festival-banner),
+  #questDock.quest-auto-collapsed:has(.r61a-festival-banner),
+  #questDock.quest-target-collapsed:has(.r61a-festival-banner) {
+    flex-wrap: wrap !important; row-gap: 4px !important;
+    max-height: 18dvh !important; overflow: hidden !important;
+  }
+  #questDock.quest-collapsed:has(.r61a-festival-banner) .world-objective-title,
+  #questDock.quest-auto-collapsed:has(.r61a-festival-banner) .world-objective-title,
+  #questDock.quest-target-collapsed:has(.r61a-festival-banner) .world-objective-title {
+    width: auto !important; flex: 1 1 auto;
+  }
+  #questDock.quest-collapsed:has(.r61a-festival-banner) .world-objective-bottom,
+  #questDock.quest-auto-collapsed:has(.r61a-festival-banner) .world-objective-bottom,
+  #questDock.quest-target-collapsed:has(.r61a-festival-banner) .world-objective-bottom {
+    width: auto !important; flex: 0 0 auto; margin: 0;
+  }
+  /* 第 9 項：手札捲動提示留在面板可視區底部，不被底部工具列擋住。 */
+  .side-panel.world-panel-open .panel-scroll-hint {
+    position: sticky !important; bottom: 8px !important; z-index: 7;
+    margin-bottom: 4px; pointer-events: none;
+  }
+  .side-panel.world-panel-open .side-body { scroll-padding-bottom: 52px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  /* 第 5 項：橫式任務卡收合高度 ≤25%。 */
+  #questDock.quest-collapsed,
+  #questDock.quest-auto-collapsed,
+  #questDock.quest-target-collapsed,
+  #questDock.quest-collapsed:has(.r61a-festival-banner),
+  #questDock.quest-auto-collapsed:has(.r61a-festival-banner),
+  #questDock.quest-target-collapsed:has(.r61a-festival-banner) { max-height: 25dvh !important; }
+}
