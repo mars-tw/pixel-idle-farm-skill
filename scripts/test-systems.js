@@ -1150,7 +1150,7 @@ console.log("\n== 19. R48: grandma letters, crops3, festival stall ==");
   assert(C.COLLECTIBLES.grandma_hat && C.COLLECTIBLES.seed_pouch && C.ACHIEVEMENTS.letterKeeper
     && C.ACHIEVEMENTS.fullPantry && C.ACHIEVEMENTS.stallOwner,
     "R48 collectibles and achievements are registered");
-  assert(C.LETTERS.length === 13 && C.CHAPTER5_LETTERS.length === 8 && C.TOWNSFOLK_LETTERS.length === 4
+  assert(C.LETTERS.length === 17 && C.CHAPTER5_LETTERS.length === 8 && C.TOWNSFOLK_LETTERS.length === 4
     && C.LETTERS.every((l) => Array.isArray(l.body) && l.body.length >= 3 && l.body.length <= 6),
     "letters include eight grandma letters, four townsfolk notes, and one memory garden note");
 

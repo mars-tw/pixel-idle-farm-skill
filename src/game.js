@@ -58,6 +58,10 @@
     return unlockedCrops(state).concat(unlockedProducts(state), unlockedForageItems(state));
   }
   // 成長時間倍率：肥沃土壤升級 × 天氣（rain 加速）
+  // R58：料理增益（純讀取 adventure.r58.buffs，不建立新存檔欄位）
+  function mealBuffs(state) { return (state && state.adventure && state.adventure.r58 && state.adventure.r58.buffs) || null; }
+  function mealGrowthMul(state, now) { const buffs = mealBuffs(state); const g = buffs && buffs.growth; const t = Number.isFinite(now) ? now : 0; return g && Number.isFinite(g.until) && g.until > t && Number.isFinite(g.mul) && g.mul > 0 && g.mul < 1 ? g.mul : 1; }
+  function mealOrderBonus(state, now) { const buffs = mealBuffs(state); const o = buffs && buffs.order; const t = Number.isFinite(now) ? now : 0; return o && Number.isFinite(o.until) && o.until > t && Number.isFinite(o.bonus) && o.bonus > 0 && o.bonus <= 1 ? o.bonus : 0; }
   function growthMultiplier(state, now) {
     let m = 1;
     const lv = state.upgrades.growthSpeed;
@@ -65,6 +69,7 @@
     const w = currentWeather(state, now);
     m *= WEATHER[w].growthMul;
     m *= buildingGrowthAura(state); // MVP2：堆肥場/蜂箱等建築的成長加成
+    m *= mealGrowthMul(state, now); // R58：小麥胡蘿蔔煎餅的限時成長加速
     return m;
   }
   function buildingEffectLimit(def) {
@@ -937,11 +942,11 @@
   }
   // 刻意設計：訂單是固定契約價（rewardCoins/rewardXp 在生成當下就定了），不吃天氣 sellMul——
   // 天氣只影響「直售」（sellMultiplier）。避免訂單獎勵隨天氣忽高忽低，讓訂單成為穩定的收益來源。
-  function orderPayout(state, order) {
+  function orderPayout(state, order, now) {
     const streakMul = 1 + Math.min(ORDER_STREAK_CAP, state.orderStreak * ORDER_STREAK_BONUS);
     const sellLv = state.upgrades.sellBonus;
     const sellBonus = sellLv > 0 ? UPGRADES.sellBonus.levels[sellLv - 1].value : 0;
-    const coins = Math.round(order.rewardCoins * (1 + sellBonus + achievementBonus(state)) * streakMul);
+    const coins = Math.round(order.rewardCoins * (1 + sellBonus + achievementBonus(state)) * streakMul * (1 + mealOrderBonus(state, now)));
     const xp = Math.round(order.rewardXp * streakMul);
     return { coins, xp, streakMul };
   }
@@ -959,7 +964,7 @@
       if (isQualityItem(cropId)) state.stats.qualitySold = (state.stats.qualitySold || 0) + qty;
     }
     state.orderStreak++;
-    const pay = orderPayout(state, order);
+    const pay = orderPayout(state, order, now);
     state.coins += pay.coins;
     state.stats.totalCoinsEarned += pay.coins;
     addXp(state, pay.xp);
@@ -1529,6 +1534,10 @@
       const st = npcSideQuestStatus(state, unlock.npcId);
       return !!(st && st.completed);
     }
+    if (unlock.type === "r58_first_harvest") { const harvested = (state.stats && state.stats.harvested) || {}; return Object.values(harvested).some((n) => (n || 0) > 0); }
+    if (unlock.type === "r58_market_open") return !!((state.adventure || {}).claimed && state.adventure.claimed.c1_first_harvest);
+    if (unlock.type === "r58_first_cook") { const adv = state.adventure || {}; const meals = adv.meals || {}; return ((adv.counts || {}).cook || 0) > 0 || Object.values(meals).some((n) => (n || 0) > 0); }
+    if (unlock.type === "r58_first_personal") return !!((((state.adventure || {}).r58 || {}).personal || {}).completed || []).length;
     if (unlock.type === "building_owned") return buildingCount(state, unlock.id || unlock.building) > 0;
     return false;
   }
@@ -2400,6 +2409,7 @@
       chapters: journalChapters(state),
       achievements,
       collectibles,
+      grandmaLetters: (LETTERS || []).filter((l) => l.unlock && /^r58_/.test(l.unlock.type || "")).map((l) => ({ id: l.id, title: l.title, from: l.from, unlocked: !!(((state.mail || {}).unlocked || {})[l.id]), read: !!(((state.mail || {}).read || {})[l.id]) })),
       completion: {
         crops: completionOf(crops, (c) => c.discovered),
         products: completionOf(products, (p) => p.discovered),
@@ -2488,7 +2498,7 @@
 
     for (const order of (state.orders || [])) {
       if (!requestCanDeliver(state, order)) continue;
-      const pay = orderPayout(state, order);
+      const pay = orderPayout(state, order, now);
       suggestions.push({
         id: "order:" + order.id,
         type: "order",
