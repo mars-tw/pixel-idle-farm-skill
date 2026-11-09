@@ -8,7 +8,13 @@
     const menu=document.createElement('div');menu.id='farmMenu';menu.hidden=true;menu.setAttribute('aria-label','農場選單');
     document.querySelector('.side-panel').append(menu);
     menu.append(document.getElementById('sideTabs'),document.querySelector('.toolbar'),document.getElementById('mapFitToggle'));
+    const moreTools=document.createElement('div'); moreTools.className='r55-more-tools'; moreTools.setAttribute('aria-label','更多工具');
+    const moreToolDefs=[['clear','清除','i-tool-clear'],['inspect','查看','i-tool-inspect']];
+    const syncMoreTools=()=>{ moreTools.querySelectorAll('.r55-more-tool').forEach((b)=>{ const def=moreToolDefs.find((d)=>d[0]===b.dataset.r55Tool); const target=def?[...document.querySelectorAll('#farmDock .tool')].find((e)=>e.getAttribute('aria-label')===def[1]):null; const sel=!!(target&&target.classList.contains('sel')); b.classList.toggle('sel',sel); b.setAttribute('aria-pressed',sel?'true':'false'); }); };
+    moreToolDefs.forEach(([id,label,icon])=>{ const b=document.createElement('button'); b.type='button'; b.className='r55-more-tool'; b.dataset.r55Tool=id; b.setAttribute('aria-label',label+'工具'); b.setAttribute('aria-pressed','false'); b.innerHTML='<span class="ui-icon '+icon+'" aria-hidden="true"></span><span>'+label+'</span>'; b.onclick=()=>{ const target=[...document.querySelectorAll('#farmDock .tool')].find((e)=>e.getAttribute('aria-label')===label); if(target)target.click(); syncMoreTools(); }; moreTools.appendChild(b); });
+    menu.prepend(moreTools);
     dock.append(document.getElementById('toolBar'),document.getElementById('dailyOpen'),more);
+    const toolBarEl=document.getElementById('toolBar'); if(toolBarEl&&typeof MutationObserver==='function') new MutationObserver(syncMoreTools).observe(toolBarEl,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); syncMoreTools();
     document.querySelector('.wrap').append(dock);
     const sync=()=>{if(window.FarmWorld)window.FarmWorld.syncWorldHitTargets();};
     const close=()=>{if(!menu.hidden){menu.hidden=true;sync();}if(more.getAttribute('aria-expanded')!=='false')more.setAttribute('aria-expanded','false');};

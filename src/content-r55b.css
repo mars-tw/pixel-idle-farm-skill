@@ -1,0 +1,103 @@
+/* R55 B 線（第 6～10 項）：手機操作重做。
+   只調整手機版面、定位與頭像顆粒；不新增圖檔，頭像沿用既有素材。 */
+
+/* 「更多」裡的清除／查看：桌機不顯示，手機才出現（第 6 項）。 */
+.r55-more-tools { display: none; }
+.r55-more-tool { font-family: inherit; }
+
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  /* 第 6 項：底部工具列只剩五格——手、澆水、建造、日誌、更多。 */
+  #farmDock { grid-template-columns: repeat(5, minmax(56px, 1fr)); }
+  #farmDock .tool[aria-label="清除"],
+  #farmDock .tool[aria-label="查看"] { display: none !important; }
+  #farmDock .tool,
+  #farmDock #dailyOpen,
+  #farmMore { min-width: 56px; font-size: 12px; }
+  #farmDock .tool .tn,
+  #farmDock #dailyOpen,
+  #farmMore span { font-size: 12px; }
+  .r55-more-tools {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px;
+  }
+  .r55-more-tool {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    min-width: 56px; min-height: 48px; padding: 6px 8px;
+    border: 1.5px solid #b3874b; border-radius: 9px;
+    background: #fff8df; color: #684323; font-size: 13px; font-weight: 800; cursor: pointer;
+  }
+  .r55-more-tool .ui-icon { width: 28px; height: 28px; image-rendering: pixelated; }
+  .r55-more-tool.sel { background: #f5d789; border-color: #8b5e34; }
+
+  /* 第 7 項：頂部欄精簡——標誌縮小完整顯示，資源一列排下不超出畫面。 */
+  header { gap: 4px; }
+  .title { display: flex; flex-direction: column; align-items: flex-start; gap: 0; width: auto; }
+  .title .farm-logo {
+    width: 128px; height: 40px; max-width: 128px; flex: 0 0 auto;
+    object-fit: contain; object-position: left center; image-rendering: pixelated;
+  }
+  .title small { font-size: 10px; white-space: nowrap; line-height: 1.2; }
+  .res-bar { flex-wrap: nowrap; gap: 4px; min-width: 0; }
+  .res-bar .res {
+    min-width: 0; overflow: hidden; white-space: nowrap;
+    padding: 3px 5px; gap: 4px; font-size: 12px;
+  }
+  .res-bar .res .ui-icon { width: 22px; height: 22px; flex: 0 0 auto; }
+
+  /* 第 7 項：種子卡名稱、價格與「全部」完整顯示，不再被省略號切掉。 */
+  #mapScene .seed { min-width: 52px; }
+  #mapScene .seed .sn {
+    max-width: none; overflow: visible; text-overflow: clip; white-space: nowrap; font-size: 12px;
+  }
+  #mapScene .seed .sc { overflow: visible; white-space: nowrap; font-size: 11px; }
+
+  /* 第 8 項：長面板底部漸層捲動提示（JS 只在可捲、未到底、且沒有「再顯示」時顯示）。 */
+  .side-panel.world-panel-open .r55-scroll-hint:not([hidden]) {
+    display: flex !important; align-items: flex-end; justify-content: center;
+    position: sticky; bottom: 0; z-index: 6;
+    width: 100%; margin: 6px 0 0; padding: 22px 12px 8px;
+    background: linear-gradient(180deg, rgba(255, 248, 223, 0), rgba(255, 248, 223, .97) 58%);
+    color: #5a3a1a; font-size: 12px; font-weight: 800; line-height: 1.3;
+    text-align: center; pointer-events: none;
+  }
+  .r55-scroll-hint[hidden] { display: none !important; }
+}
+
+/* 第 7 項：直式手機頂欄改成一列（標誌在左、資源在右）。 */
+@media (max-width: 859px) and (orientation: portrait) {
+  header { flex-direction: row; align-items: center; flex-wrap: nowrap; }
+  .title { flex: 0 0 auto; }
+  .res-bar { flex: 1 1 auto; justify-content: flex-end; }
+  .res-bar .res { flex: 0 1 auto; padding: 2px 3px; font-size: 11px; gap: 2px; }
+  .res-bar .res .ui-icon { width: 18px; height: 18px; }
+  .res-bar .res.level .xp-track { width: 16px; }
+}
+
+/* 第 9 項：橫式可玩區——工具列壓到 52px 以內，互動鈕貼齊底部。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  header .farm-logo, .title .farm-logo { width: 132px; height: 40px; max-width: 132px; }
+  #farmDock { border-top-width: 2px; padding-top: 0; padding-bottom: 0; }
+  #farmDock .tool,
+  #farmDock #dailyOpen,
+  #farmMore { min-height: 44px; height: 44px; padding-top: 1px; padding-bottom: 1px; }
+  #farmDock .ui-icon, #farmMore img { width: 24px; height: 24px; }
+  #actionA { min-width: 56px; min-height: 48px; height: 48px; }
+}
+
+/* 第 10 項：對話頭像與遊戲內角色同一種像素顆粒，整數倍縮放。
+   原圖 80×80：一般 80px（原尺寸）、矮螢幕 40px（二分之一），不取 64／56／36 等非整數倍。 */
+.world-dialogue .dialogue-portrait,
+.world-dialogue.dialogue-compact-top .dialogue-portrait,
+.world-dialogue.dialogue-compact-bottom .dialogue-portrait {
+  width: 80px; height: 80px; min-width: 80px; min-height: 80px;
+  object-fit: contain; image-rendering: pixelated;
+}
+@media (max-height: 600px), (max-width: 859px) {
+  .world-dialogue .dialogue-portrait,
+  .world-dialogue.dialogue-compact-top .dialogue-portrait,
+  .world-dialogue.dialogue-compact-bottom .dialogue-portrait {
+    width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .r55-scroll-hint { scroll-behavior: auto; }
+}

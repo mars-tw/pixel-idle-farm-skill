@@ -846,21 +846,21 @@
     if (window.FarmWorld) window.FarmWorld.renderPanels(); schedulePanelFit();
   }
   // R26：面板捲動提示——內容超高且尚未捲到底時，在面板底部顯示「往下還有內容」。
-  let panelScrollHintEl = null; // R36: only the show-more button remains as the panel hint.
+  let panelScrollHintEl = null; // R55: gradient hint only when scrollable, not at bottom, and no show-more.
   function syncPanelScrollHint() {
     const body = (typeof document.querySelector === "function") ? document.querySelector(".side-body") : null;
     if (!body || typeof body.scrollHeight !== "number" || typeof document.createElement !== "function") return;
     const panel = (typeof body.closest === "function" ? body.closest(".side-panel") : null) || body.parentElement;
     if (!panel) return;
-    if (panelScrollHintEl) { panelScrollHintEl.remove(); panelScrollHintEl = null; }
-    if (panel.querySelector && panel.querySelector(".panel-scroll-hint")) panel.querySelector(".panel-scroll-hint").remove();
+    if (panelScrollHintEl && panelScrollHintEl.parentElement && panelScrollHintEl.parentElement !== body) { panelScrollHintEl.remove(); panelScrollHintEl = null; }
+    const pane = body.querySelector ? body.querySelector(".side-pane.sel") : null; const hasMore = !!(pane && pane.querySelector && pane.querySelector(".r32-show-more")); const scrollable = body.scrollHeight > body.clientHeight + 2; const atBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 2; if (!scrollable || atBottom || hasMore) { if (panelScrollHintEl) { panelScrollHintEl.remove(); panelScrollHintEl = null; } return; } if (!panelScrollHintEl) { panelScrollHintEl = document.createElement("div"); panelScrollHintEl.className = "panel-scroll-hint r55-scroll-hint"; panelScrollHintEl.dataset.audit = "panel-scroll-hint"; panelScrollHintEl.setAttribute("aria-hidden", "true"); panelScrollHintEl.innerHTML = "往下還有 <span aria-hidden=\"true\">⌄</span>"; } if (panelScrollHintEl.parentElement !== body) body.appendChild(panelScrollHintEl); panelScrollHintEl.hidden = false;
     return;
   }
   function setupPanelScrollHint() {
     syncPanelScrollHint();
     if (typeof MutationObserver !== "function") return;
     const body = document.querySelector(".side-body");
-    if (body) new MutationObserver(syncPanelScrollHint).observe(body, { childList: true });
+    if (body && typeof body.addEventListener === "function") body.addEventListener("scroll", syncPanelScrollHint, { passive: true }); if (body) new MutationObserver(syncPanelScrollHint).observe(body, { childList: true, subtree: true });
     const panel = document.querySelector(".side-panel");
     if (panel) new MutationObserver(syncPanelScrollHint).observe(panel, { attributes: true, attributeFilter: ["class"] });
   }
