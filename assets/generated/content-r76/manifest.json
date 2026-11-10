@@ -1,0 +1,57 @@
+{
+  "model": "muse-wonder-1.0 via muse.image_generation",
+  "tool": "muse.image_generation（原圖）＋ Pillow 裁切縮放",
+  "generated": "2026-11-11",
+  "background": "沿用 content-r72 已去背的顧客圖，裁出頭肩範圍後縮成 160×160",
+  "note": "班伯、蘿拉、圖圖的對話頭像。不是新生成的圖：由 R72 擺攤顧客圖裁切，讓對話裡的臉與擺攤時看到的是同一個人。鎮長沿用 assets/generated/r84/grey-*.png。",
+  "files": [
+    {
+      "file": "portrait-elder.png",
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "83f2385695705124cae4dde621e494a306ed35d101c15fb38bebd97c590213ce",
+      "bytes": 46265,
+      "source": "assets/generated/content-r72/customer-elder.png",
+      "crop": [
+        0,
+        0,
+        282,
+        282
+      ]
+    },
+    {
+      "file": "portrait-merchant.png",
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "c8928b5a59692f52f4d9a9a65019bf73ed9a0e3d66bca039f7c39e466312e806",
+      "bytes": 42482,
+      "source": "assets/generated/content-r72/customer-merchant.png",
+      "crop": [
+        44,
+        0,
+        172,
+        128
+      ]
+    },
+    {
+      "file": "portrait-child.png",
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "b4f04752e4f58724ac35110827e6b2373ad9111c79c8cbca45b44264b5bebf14",
+      "bytes": 38455,
+      "source": "assets/generated/content-r72/customer-child.png",
+      "crop": [
+        0,
+        0,
+        210,
+        210
+      ]
+    }
+  ]
+}
