@@ -1,0 +1,99 @@
+{
+  "model": "MUSE muse.image_generation",
+  "tool": "muse.image_generation",
+  "generated": "2026-11-10",
+  "background": "純洋紅 #FF00FF 產生後去背；場景物件最近鄰縮小 1/4，物品圖示縮為 32x32",
+  "note": "OpenAI gpt-image-2 額度用盡，本輪改用 MUSE 出圖",
+  "files": [
+    {
+      "file": "sun_mirror.png",
+      "size": [
+        182,
+        207
+      ],
+      "sha256": "e27980a78a00c6b63ea686c56cfc0bf898a4f6d92f3afa053cf6a41394956d14",
+      "bytes": 57432
+    },
+    {
+      "file": "sun_jar.png",
+      "size": [
+        175,
+        214
+      ],
+      "sha256": "705cafce0fef7423c3f99a64671f39c315cf8d1ecc399b13e05e727d24c1462a",
+      "bytes": 59683
+    },
+    {
+      "file": "drying_rack_empty.png",
+      "size": [
+        254,
+        246
+      ],
+      "sha256": "86985db875268864953b7161dd9686b9e941fb0ea26869039955f79717ddf9d2",
+      "bytes": 88511
+    },
+    {
+      "file": "drying_rack_full.png",
+      "size": [
+        256,
+        246
+      ],
+      "sha256": "cc9180330a3b10a4e72fb625b8226062e69e992e9554ba1933cce264d597c196",
+      "bytes": 89505
+    },
+    {
+      "file": "farm_sign.png",
+      "size": [
+        230,
+        222
+      ],
+      "sha256": "52a6a7cbb4892a009f1025d035bf65e0abd5bec48f632e5d353c3db24d9f1ad7",
+      "bytes": 53199
+    },
+    {
+      "file": "cooking_pot.png",
+      "size": [
+        171,
+        225
+      ],
+      "sha256": "fc8eee6366bff7ac16b3e07006029c81ac66e954dc9ef37742eb1250fac6c3f0",
+      "bytes": 42262
+    },
+    {
+      "file": "item-sun_wheat.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "683bb249404c2db0a238183c53d6ae612a024a07e0684accd428a63532a1beff",
+      "bytes": 2047
+    },
+    {
+      "file": "item-sun_carrot.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "579eeeb1456177a5a5fc06e18c2dc6c019576f8d873edef8b953f5232e865fef",
+      "bytes": 1752
+    },
+    {
+      "file": "item-sun_tomato.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "435ad182b74d411ec35406278553208935aefa7281dd1cccbaa29f3609b1ded4",
+      "bytes": 2395
+    },
+    {
+      "file": "item-sun_strawberry.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "5c3d997bc0a85c520120f9869c2182c82450665f43e0ff95e37ca3d3ea1b12f5",
+      "bytes": 2041
+    }
+  ]
+}
