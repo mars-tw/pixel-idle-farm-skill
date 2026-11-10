@@ -1,0 +1,70 @@
+{
+  "model": "MUSE muse.image_generation",
+  "generated": "2026-11-10",
+  "background": "純洋紅 #FF00FF 產出後去背，最近鄰縮小 1/4",
+  "files": [
+    {
+      "file": "beehive.png",
+      "size": [
+        198,
+        244
+      ],
+      "sha256": "10f0e53f64df4f86f36a1bc696d64aae4cf0a40c57adc39739cf651957dd1b3a",
+      "bytes": 82925
+    },
+    {
+      "file": "herb-garden.png",
+      "size": [
+        160,
+        132
+      ],
+      "sha256": "31c30c9db588855b03fb0dea5a84fd95dc62938e019d46fc9d66f1f5dcb30390",
+      "bytes": 38949
+    },
+    {
+      "file": "feed-trough.png",
+      "size": [
+        164,
+        94
+      ],
+      "sha256": "c606592a5333c2397e145fcb0070083499ce4641bbd0b7e90b2538b0a9672912",
+      "bytes": 26242
+    },
+    {
+      "file": "bunting.png",
+      "size": [
+        184,
+        84
+      ],
+      "sha256": "58777a860dfbb0cafe3aa4123be986d276568536e2d48b6dcab6b92bb805063d",
+      "bytes": 10751
+    },
+    {
+      "file": "lantern-post.png",
+      "size": [
+        102,
+        155
+      ],
+      "sha256": "c0e52337e188c24d9f697ce4d265d274f31b04844fa075c063418ed2c3231a99",
+      "bytes": 12960
+    },
+    {
+      "file": "festival-stall.png",
+      "size": [
+        113,
+        132
+      ],
+      "sha256": "e3f6589049e56741fc9cb7c6f83bb65a9a26bbb36c748291e7b4f6cf909576c3",
+      "bytes": 24883
+    },
+    {
+      "file": "judge-table.png",
+      "size": [
+        155,
+        126
+      ],
+      "sha256": "74db8e23ad0ae3211e55a21a2ae1cd6f71fbf9d9f0609eda2a08e388c799fc6f",
+      "bytes": 28209
+    }
+  ]
+}

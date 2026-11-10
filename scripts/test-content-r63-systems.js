@@ -92,10 +92,11 @@ test("5 整合：收穫祭布置用像素圖、鄰居仍可交談；手機收合
   const world = fs.readFileSync("src/world-ui.js", "utf8");
   const css = fs.readFileSync("src/content-r58b.css", "utf8");
   const sw = fs.readFileSync("sw.js", "utf8");
-  for (const f of ["bunting.svg", "lanterns.svg", "stall.svg"]) {
-    assert.ok(fs.existsSync("assets/generated/content-r63/" + f), f + " 應存在");
-    assert.ok(sw.includes("assets/generated/content-r63/" + f), f + " 應列入離線快取");
-    assert.ok(world.includes("content-r63/" + f), f + " 應被收穫祭場景使用");
+  // R70 同步：收穫祭布置由手繪 SVG 換成 MUSE 產的精緻像素圖（content-r70），檢查目的（用像素圖、進快取、被場景使用）不變
+  for (const f of ["bunting.png", "lantern-post.png", "festival-stall.png"]) {
+    assert.ok(fs.existsSync("assets/generated/content-r70/" + f), f + " 應存在");
+    assert.ok(sw.includes("assets/generated/content-r70/" + f), f + " 應列入離線快取");
+    assert.ok(world.includes("content-r70/" + f), f + " 應被收穫祭場景使用");
   }
   assert.doesNotMatch(world, /node\.textContent = item\.icon/, "布置不可再用表情符號");
   assert.doesNotMatch(css, /data-r63a-festival="active"\] > \.ob\[data-kind="npc"\]/, "收穫祭期間不可藏起真正的鄰居（要能交談完成目標）");
