@@ -842,7 +842,14 @@
     const care = document.createElement("div");
     care.className = "r72a-care-picker";
     care.ariaLabel = "選擇照顧方式";
-    care.innerHTML = Object.values(G.FARM_CARE || {}).map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span>${mode.icon}</span>${mode.name}</button>`).join("");
+    const careEffectText = (mode) => {
+      if (!mode) return "";
+      if (mode.id === "water") return "勤澆水：生長時間縮短 25%";
+      if (mode.id === "compost") return `施堆肥：產量 +1，30% 優質，用掉 1 份堆肥（剩 ${Math.max(0, Number(state.materials && state.materials.compost) || 0)}）`;
+      return "放著長：生長時間增加 20%，收成帶回 1 包種子";
+    };
+    const modes = Object.values(G.FARM_CARE || {});
+    care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect" data-care-effect role="status">${careEffectText(G.FARM_CARE && G.FARM_CARE[selectedCare])}</div>`;
     care.querySelectorAll("[data-care]").forEach((button) => button.onclick = () => { selectedCare = button.dataset.care; state.selectedCare = selectedCare; renderSeeds(); scheduleSave(); });
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
@@ -3060,7 +3067,7 @@
         if (el) {
           el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; el.classList.toggle('sun-grown',plot.sunGrown===true); el.classList.toggle('sunlit-crop',!!(G.isSunlit && G.isSunlit(state,tile.plotIndex,t)));
           const mode = G.FARM_CARE && G.FARM_CARE[plot.careMode];
-          if (mode) { const badge = document.createElement("span"); badge.className = "r72a-plot-care"; badge.textContent = mode.icon; badge.title = mode.name; badge.setAttribute("aria-label", mode.name); el.appendChild(badge); }
+          if (mode) { const careHint = mode.id === "water" ? "勤澆水：生長時間縮短 25%" : mode.id === "compost" ? "施堆肥：產量 +1，30% 優質" : "放著長：生長時間增加 20%，收成帶回 1 包種子"; const badge = document.createElement("span"); badge.className = "r72a-plot-care"; badge.textContent = mode.icon; badge.title = careHint; badge.dataset.careDescription = careHint; badge.setAttribute("aria-label", careHint); el.appendChild(badge); }
         }
         if (prog.ready) {
           cropMatureCue("map:" + tile.plotIndex, tile.id, el);
