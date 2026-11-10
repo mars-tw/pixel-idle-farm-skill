@@ -198,17 +198,23 @@ const HELP = `
         eval(src);
         const dock = document.querySelector('#questDock');
         const banner = dock.querySelector('.r61a-festival-banner');
+        const now = dock.querySelector('.r69a-festival-now');
+        const visibleBanner = banner && vis(banner) ? banner : null;
+        // R69 同步：短桌面會自動收合，祭典摘要已併入「現在做」；不可再量已隱藏的舊橫幅。
+        const summary = visibleBanner || (now && vis(now) ? now : null);
         const title = dock.querySelector('.world-objective-title');
         return {
-          dock: ro(dock), banner: banner ? ro(banner) : null, bannerText: banner ? banner.textContent.trim() : '',
+          dock: ro(dock), banner: summary ? ro(summary) : null, bannerText: summary ? summary.innerText.trim() : '', expandedBanner: !!visibleBanner,
           title: title ? ro(title) : null, titleText: title ? title.textContent.trim() : '',
         };
       }, HELP);
       assert.ok(fest.banner, `${tag} 第 8 項：收穫祭進行中應有橫幅`);
-      assert.match(fest.bannerText, /收穫祭進行中/, `${tag} 第 8 項：橫幅應寫收穫祭進行中（實際「${fest.bannerText}」）`);
+      assert.match(fest.bannerText, fest.expandedBanner ? /收穫祭進行中/ : /祭典：|祭典 \d+\/3/, `${tag} 第 8 項：展開應寫收穫祭進行中，收合應保留祭典摘要（實際「${fest.bannerText}」）`);
       assert.ok(fest.banner.left >= fest.dock.left - 1 && fest.banner.right <= fest.dock.right + 1, `${tag} 第 8 項：橫幅應留在任務卡寬度內：${JSON.stringify(fest.banner)} vs ${JSON.stringify(fest.dock)}`);
-      assert.ok(fest.banner.width >= fest.dock.width * 0.6, `${tag} 第 8 項：橫幅應接近任務卡全寬（橫幅 ${Math.round(fest.banner.width)}／任務卡 ${Math.round(fest.dock.width)}）`);
-      if (!view.mobile) assert.ok(fest.title && fest.banner.top >= fest.title.bottom - 2, `${tag} R68：展開時祭典摘要應在標題列下方且留在同一卡內（標題底 ${Math.round(fest.title.bottom)}／摘要頂 ${Math.round(fest.banner.top)}）`);
+      // R69 同步：展開橫幅仍需全寬；桌面收合改成「標題／進度｜祭典摘要＋主要按鈕」雙欄，不可再要求摘要獨占 60%。
+      if (fest.expandedBanner) assert.ok(fest.banner.width >= fest.dock.width * 0.6, `${tag} 第 8 項：展開橫幅應接近任務卡全寬（橫幅 ${Math.round(fest.banner.width)}／任務卡 ${Math.round(fest.dock.width)}）`);
+      else assert.ok(fest.banner.width > 0, `${tag} 第 8 項：收合祭典摘要應有可見寬度`);
+      if (!view.mobile && fest.expandedBanner) assert.ok(fest.title && fest.banner.top >= fest.title.bottom - 2, `${tag} R68：展開時祭典摘要應在標題列下方且留在同一卡內（標題底 ${Math.round(fest.title.bottom)}／摘要頂 ${Math.round(fest.banner.top)}）`);
       // R63B 同步（第 5、7 項）：手機任務卡預設一行、標題單行省略，寬度比例只驗桌機；手機改由 R63 測試驗單行與不重疊
       if (!view.mobile) assert.ok(fest.title.width >= Math.min(fest.banner.width * 0.8, 200), `${tag} R68：三層卡標題列右側有收合鈕，標題至少 200px 或橫幅 8 成（取小者），不得擠成窄欄（標題 ${Math.round(fest.title.width)}／摘要 ${Math.round(fest.banner.width)}）`);
       assert.ok(fest.titleText.length >= 2, `${tag} 第 8 項：任務標題應可讀（實際「${fest.titleText}」）`);

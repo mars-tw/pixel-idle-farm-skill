@@ -52,7 +52,9 @@ async function setup(page, base) {
 
 function titleMeasure() {
   const box = document.querySelector('#questDock');
-  const step = box && box.querySelector('.world-objective-title .qp-step');
+  const folded = box && /quest-(?:auto-)?collapsed|quest-target-collapsed/.test(box.className);
+  // R69 同步：手機收合規格是「標題或摘要＋進度＋主要按鈕」，摘要取代隱藏的舊標題節點。
+  const step = box && (folded ? box.querySelector('.r69a-collapsed-summary') : null) || (box && box.querySelector('.world-objective-title .qp-step'));
   if (!step) return { ok: false, reason: 'no-step', dock: box ? box.textContent.trim().slice(0, 80) : '' };
   const r = step.getBoundingClientRect(), cs = getComputedStyle(step);
   return {
@@ -87,6 +89,9 @@ function titleMeasure() {
       /* ---- 第 7 項：標題永遠在 ---- */
       await page.waitForFunction(() => !document.querySelector('#toast-zone > .toast') && !document.querySelector('#worldDialogue:not([hidden])'), null, { timeout: 15000 }).catch(() => {});
       await page.waitForTimeout(300);
+      // R63/R69 手機預設收合；先明確展開，才能依序驗證展開、收合與再次展開三態。
+      const startsFolded = await page.evaluate(() => /quest-(?:auto-)?collapsed|quest-target-collapsed/.test(document.querySelector('#questDock')?.className || ''));
+      if (startsFolded) { await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(250); }
       let t = await page.evaluate(titleMeasure);
       assert.ok(t.ok, `${tag} 展開時標題應可見：${JSON.stringify(t)}`);
       await page.locator('[data-audit="quest-collapse"]').click(); await page.waitForTimeout(250);

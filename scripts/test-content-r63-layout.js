@@ -180,22 +180,27 @@ const HELP = `
         eval(src);
         const dock = document.querySelector('#questDock');
         const banner = dock.querySelector('.r61a-festival-banner');
+        const now = dock.querySelector('.r69a-festival-now');
+        // R69 同步：收合時祭典摘要在「現在做」列；展開時才量完整舊橫幅。
+        const summary = banner && vis(banner) ? banner : (now && vis(now) ? now : null);
         const pick = (sel) => { const e = document.querySelector(sel); return e && vis(e) ? ro(e) : null; };
         return {
-          ih: innerHeight, dock: ro(dock), banner: banner ? ro(banner) : null,
-          bannerText: banner ? banner.textContent.trim() : '',
-          bannerLines: banner ? [...banner.getClientRects()].filter((r) => r.height > 0).length : 0,
+          ih: innerHeight, dock: ro(dock), banner: summary ? ro(summary) : null,
+          bannerText: summary ? summary.innerText.trim() : '', expandedBanner: !!(banner && vis(banner)),
+          bannerLines: summary ? [...summary.getClientRects()].filter((r) => r.height > 0).length : 0,
+          compactText: (() => { const e = dock.querySelector('.r69a-collapsed-summary'); return e && vis(e) ? { ...ro(e), lines: [...e.getClientRects()].filter((r) => r.width > 0 && r.height > 0).length } : null; })(),
           sun: pick('#sunChip'), seed: pick('#seedHud'), seedMore: pick('#seedHud .seed.more'),
           arrow: pick('#objectiveArrow'), collapse: pick("#questDock [data-audit='quest-collapse']"),
         };
       }, HELP);
       assert.ok(fest.banner, `${tag} 第 5 項：收穫祭進行中應有橫幅`);
-      assert.match(fest.bannerText, /收穫祭進行中/, `${tag} 第 5 項：橫幅應寫收穫祭進行中`);
+      assert.match(fest.bannerText, fest.expandedBanner ? /收穫祭進行中/ : /祭典：|祭典 \d+\/3/, `${tag} 第 5 項：展開應顯示收穫祭名稱，收合應顯示祭典摘要`);
       assert.ok(fest.banner.left >= fest.dock.left - 1 && fest.banner.right <= fest.dock.right + 1, `${tag} 第 5 項：橫幅應併入任務卡內、不另疊一張`);
       if (view.mobile) {
         const limit = view.h > view.w ? 0.18 : 0.25;
         assert.ok(fest.dock.height <= fest.ih * limit + 1, `${tag} 第 5 項：有收穫祭時任務卡高 ${Math.round(fest.dock.height)} 超過 ${(limit * 100)}%`);
-        assert.ok(fest.banner.height <= 34, `${tag} 第 5 項：收穫祭橫幅應只有一行（高 ${Math.round(fest.banner.height)}）`);
+        // R69 同步：整列含 44px 主要按鈕，不能再用舊橫幅 34px 高判斷；改驗摘要文字本身確實單行。
+        assert.ok(fest.compactText && fest.compactText.lines === 1 && fest.compactText.height <= 24, `${tag} 第 5 項：收穫祭摘要文字應只有一行（${fest.compactText ? fest.compactText.lines : 0} 行、高 ${fest.compactText ? Math.round(fest.compactText.height) : 0}）`);
       }
       if (fest.sun && fest.seedMore) assert.equal(inter(fest.sun, fest.seedMore), 0, `${tag} 第 6 項：陽光標籤不應蓋住「全部」鈕`);
       if (fest.sun && fest.seed) assert.equal(inter(fest.sun, fest.seed), 0, `${tag} 第 6 項：陽光標籤不應蓋住種子欄`);

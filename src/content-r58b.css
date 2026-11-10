@@ -791,3 +791,41 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
 }
 /* R69B：訂單需求改成完整一句後，需求文字可換行完整顯示，不截斷、不超出卡片。 */
 .side-pane[data-pane="orders"] .o-wants .w { white-space: normal !important; overflow-wrap: anywhere; line-height: 1.4; }
+
+/* R69 整合修正：收合摘要與完整「現在做」分開，避免把完整祭典目標塞進手機單行。 */
+#questDock .r69a-collapsed-summary { display:none; }
+#questDock .r69a-expanded-summary { display:inline; }
+#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r69a-collapsed-summary { display:inline; }
+#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r69a-expanded-summary { display:none; }
+#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) small { display:none !important; }
+
+@media (min-width:860px) {
+  /* R69 規格：桌面收合仍保留標題／進度和主要按鈕，不能只剩進度或按鈕。 */
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) {
+    grid-template-columns:minmax(108px,.8fr) minmax(0,1.2fr) !important;
+    grid-template-rows:auto;
+    min-height:52px !important; height:52px !important; max-height:52px !important;
+  }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-objective-head,.r68a-objective-head) {
+    display:flex !important; grid-column:1; grid-row:1; width:100%; min-height:28px;
+    padding-right:0 !important;
+  }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) {
+    grid-column:2 !important; grid-row:1; width:100%; min-width:0;
+  }
+}
+
+@media (max-width:859px) {
+  /* 手機收合固定一行：摘要（含進度）＋主要按鈕；完整內容只在展開時出現。 */
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-objective-head,.r68a-objective-head,.r68a-festival-summary,.r67a-task-list,.r68a-requirements,.r69a-main-row) { display:none !important; }
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now) { display:grid !important; }
+  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now {
+    grid-template-columns:minmax(0,1fr) auto !important;
+  }
+  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now > span {
+    display:block !important; min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+  }
+  #questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-now-action {
+    width:auto !important;
+  }
+}

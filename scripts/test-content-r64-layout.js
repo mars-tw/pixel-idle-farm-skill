@@ -115,6 +115,8 @@ const HELP = `
           routes: routes ? ro(routes) : null,
           next: next ? { text: next.textContent.trim(), r: ro(next) } : null,
           collapsed: box.classList.contains('quest-collapsed') || box.classList.contains('quest-auto-collapsed') || box.classList.contains('quest-target-collapsed'),
+          // R69 同步：整行是扣除卡片內距與 44px 收合鈕後的可用內容列，不再拿含控制區的外框寬硬比 85%。
+          nextAvailableWidth: (() => { const cs = getComputedStyle(box), collapse = box.querySelector('[data-audit="quest-collapse"]'), br = box.getBoundingClientRect(), nr = next && next.getBoundingClientRect(); return nr ? br.right - parseFloat(cs.paddingRight) - (collapse ? collapse.getBoundingClientRect().width + 6 : 0) - nr.left : 0; })(),
         };
       }, HELP);
       assert.ok(dock.title, `${tag} 應有任務卡標題`);
@@ -127,7 +129,7 @@ const HELP = `
         assert.ok(dock.next, `${tag} 第 8 項：應有現在做`);
         if (dock.collapsed) assert.equal(dock.routes.height, 0, `${tag} 第 8 項：收合時第三層清單應完整收起`);
         else assert.ok(dock.next.r.bottom <= dock.routes.top + 2, `${tag} 第 8 項：現在做應在三件清單上方（現在做底 ${Math.round(dock.next.r.bottom)}／清單頂 ${Math.round(dock.routes.top)}）`);
-        assert.ok(dock.next.r.width >= dock.dock.width * 0.85, `${tag} 第 8 項：主線下一步應整行寬（${Math.round(dock.next.r.width)}／卡寬 ${Math.round(dock.dock.width)}）`);
+        assert.ok(dock.next.r.width >= dock.nextAvailableWidth - 2, `${tag} 第 8 項：主線下一步應填滿扣除收合鈕後的內容列（${Math.round(dock.next.r.width)}／可用 ${Math.round(dock.nextAvailableWidth)}）`);
         assert.ok(dock.next.r.left >= dock.dock.left - 1 && dock.next.r.right <= dock.dock.right + 1, `${tag} 第 8 項：主線下一步不可超出任務卡`);
         console.log(`OK ${tag} 第 8 項：桌面標題完整「${dock.title.text}」、「現在做」整行在三件清單上方`);
       } else {
