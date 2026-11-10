@@ -3322,9 +3322,32 @@
     state.camera.followPlayer = false;
     spawnRing(tileId, true);
     updateCamera(true);
+    if (typeof setTimeout === "function") {
+      setTimeout(() => nudgeFocusedTileFromQuestDock(tileId), 220);
+      setTimeout(() => nudgeFocusedTileFromQuestDock(tileId), 380);
+    }
     // No residual camera toast over the crops.
     scheduleSave();
     return true;
+  }
+  function nudgeFocusedTileFromQuestDock(tileId) {
+    if (window.innerWidth < 860 || !worldEl) return;
+    const dock = $("questDock"), target = tileElOf(tileId), scene = $("mapScene");
+    if (!dock || !target || !scene || dock.hidden) return;
+    const d = dock.getBoundingClientRect(), t = target.getBoundingClientRect();
+    if (!(t.left < d.right + 8 && t.right > d.left - 8 && t.top < d.bottom + 8 && t.bottom > d.top - 8)) return;
+    const dx = d.right + 12 - t.left, dy = d.bottom + 12 - t.top;
+    if (mapViewMode() === "natural" && !window.FarmWorld) {
+      if (dx <= dy) scene.scrollLeft = Math.max(0, scene.scrollLeft - dx); else scene.scrollTop = Math.max(0, scene.scrollTop - dy);
+      return;
+    }
+    const scale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1;
+    if (dx <= dy) state.camera.x = (state.camera.x || 0) + dx / (scale || 1); else state.camera.y = (state.camera.y || 0) + dy / (scale || 1);
+    worldEl.style.transition = "none";
+    worldEl.style.transform = `translate(${Math.round(state.camera.x || 0)}px,${Math.round(state.camera.y || 0)}px)`;
+    void worldEl.offsetWidth;
+    worldEl.style.transition = "";
+    syncFloatingLabels();
   }
   function positionPlayer(animate) {
     const pl = $("player"); if (!pl) return;
@@ -3384,10 +3407,22 @@
     if (!tile) tile = G.getTileById(state, state.player.tileId);
     if (!tile) return;
     const px0 = (tile.x + 0.5) * TILE, py0 = (tile.y + 0.5) * TILE;
+    const desktopQuestDock = window.innerWidth >= 860 ? $("questDock") : null;
+    const questDockRect = desktopQuestDock && !desktopQuestDock.hidden && getComputedStyle(desktopQuestDock).display !== "none" ? desktopQuestDock.getBoundingClientRect() : null;
+    const sceneRect = scene.getBoundingClientRect();
+    const avoidDesktopQuestDock = (cx, cy) => {
+      if (!questDockRect || !questDockRect.width || !questDockRect.height) return { x: cx, y: cy };
+      const rect = { left: sceneRect.left + px0 - TILE / 2 + cx, right: sceneRect.left + px0 + TILE / 2 + cx, top: sceneRect.top + py0 - TILE / 2 + cy, bottom: sceneRect.top + py0 + TILE / 2 + cy };
+      if (rect.left >= questDockRect.right + 8 || rect.top >= questDockRect.bottom + 8 || rect.right <= questDockRect.left - 8 || rect.bottom <= questDockRect.top - 8) return { x: cx, y: cy };
+      const shiftRight = questDockRect.right + 12 - rect.left;
+      const shiftDown = questDockRect.bottom + 12 - rect.top;
+      return shiftRight <= shiftDown ? { x: cx + shiftRight, y: cy } : { x: cx, y: cy + shiftDown };
+    };
     if (mapViewMode() === "natural" && !window.FarmWorld) {
       const maxX = Math.max(0, worldW - vw), maxY = Math.max(0, worldH - vh);
-      const left = Math.min(maxX, Math.max(0, px0 - vw / 2));
-      const top = Math.min(maxY, Math.max(0, py0 - vh / 2));
+      const centered = avoidDesktopQuestDock(vw / 2 - px0, vh / 2 - py0);
+      const left = Math.min(maxX, Math.max(0, -centered.x));
+      const top = Math.min(maxY, Math.max(0, -centered.y));
       state.camera.x = -left; state.camera.y = -top;
       if (!animate) scene.scrollTo(left, top);
       else scene.scrollTo({ left, top, behavior: "smooth" });
@@ -3397,6 +3432,7 @@
       return;
     }
     let camX = vw / 2 - px0, camY = vh / 2 - py0;
+    ({ x: camX, y: camY } = avoidDesktopQuestDock(camX, camY));
     if (window.FarmWorld && mapViewMode() === "natural") {
       const fringe = TILE * 4;
       camX = Math.min(fringe, Math.max(vw - worldW - fringe, camX));

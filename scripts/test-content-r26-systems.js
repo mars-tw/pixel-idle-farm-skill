@@ -84,7 +84,7 @@ test('新存檔九張主線卡的步驟文字與按鈕動作永遠指向同一�
     assert.equal(A.claim(state, id, now).ok, true);
   }
   assert.equal(A.summary(state, now).claimed, 9);
-  assert.match(world, /<span class="qp-step">第 \$\{q\.chapter\} 章・\$\{esc\(q\.name\)\}<\/span>/);
+  assert.match(world, /<span class="r71a-chapter-name">第 \$\{q\.chapter\} 章・\$\{esc\(q\.chapterName\)\}<\/span><span class="r71a-task-name">任務：\$\{esc\(q\.name\)\}<\/span>/);
   assert.doesNotMatch(world.slice(world.indexOf('box.innerHTML = `<div class="world-objective-title">'), world.indexOf('const choiceOpen =')), /本章已交付/);
   assert.match(ui, /data-audit="story-chapter-progress"/);
   assert.doesNotMatch(world, /物品備齊，交給鎮民/);
