@@ -1164,6 +1164,11 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
 .r75a-rack-choices small { font-size: 11px; font-weight: 700; color: #76551c; }
 .r75a-rack-line { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .r75a-rack-item { width: 36px; height: 36px; flex: 0 0 auto; object-fit: contain; image-rendering: pixelated; }
+.r75a-rack-stage { position: relative; width: min(200px, 60%); margin: 8px auto; }
+.r75a-rack-stage > .r75a-rack-art { width: 100%; margin: 0; }
+.r75a-rack-load { position: absolute; left: 50%; top: 23%; width: 52%; display: flex; justify-content: center; transform: translate(-50%, -50%); pointer-events: none; }
+.r75a-rack-load > .r75a-rack-item { width: 40%; height: auto; margin: 0 -5%; }
+.r75a-rack-load > .r75a-rack-item:nth-child(2) { transform: translateY(18%); }
 .r75a-rack-time { font-size: 18px; font-weight: 900; text-align: center; }
 .r75a-rack-note { font-size: 12px; color: #6a4a1d; }
 .r75a-rack-sun { font-weight: 700; color: #6a4a1d; }
@@ -1180,6 +1185,8 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
 @media (max-height: 500px) and (orientation: landscape) {
   .r75a-rack-panel { max-height: calc(100dvh - 12px); padding: 10px; }
   .r75a-rack-art { width: 88px; margin: 2px auto; }
+  .r75a-rack-stage { width: 88px; margin: 2px auto; }
+  .r75a-rack-stage > .r75a-rack-art { width: 100%; margin: 0; }
   .r75a-sun-preview { font-size: 11px; border-width: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {

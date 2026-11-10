@@ -286,9 +286,11 @@
     const dried = status.itemId ? DRIED[status.itemId] : null;
     /* 曬架圖是通用的，旁邊補上這一批乾貨的圖示，玩家才看得出架上曬的是哪一種。 */
     const item = dried ? `<img class="r75a-rack-item" src="${dried.icon}${versionQuery()}" alt="">` : "";
+    /* 曬乾中與可收：空架上直接鋪這一批乾貨的圖，不再用通用的滿架圖（曬小麥時看起來像別的東西）。 */
+    const loaded = dried ? `<div class="r75a-rack-stage">${art("drying_rack_empty.png", "鋪著" + dried.name + "的曬架")}<span class="r75a-rack-load" aria-hidden="true">${item}${item}${item}</span></div>` : art("drying_rack_full.png", "鋪滿作物的曬架");
     if (locked) panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + "<p>等級 2 開放。到時放上 2 份作物、用掉 1 點陽光，30 秒後就能收下日曬乾貨。</p>";
-    else if (status.ready) panel.innerHTML = head + art("drying_rack_full.png", "鋪滿作物的曬架") + `<p class="r75a-rack-line">${item}<span>${dried ? dried.name : "乾貨"}曬好了。</span></p><button type="button" class="r75a-rack-collect" data-collect>收下${dried ? dried.name : "乾貨"}</button>`;
-    else if (!status.empty) panel.innerHTML = head + art("drying_rack_full.png", "鋪滿作物的曬架") + `<p class="r75a-rack-line">${item}<span>${cropName(status.cropId)}正在曬成${dried ? dried.name : "乾貨"}。</span></p><p class="r75a-rack-time" data-rack-time>還要 ${Math.ceil(status.remainingMs / 1000)} 秒</p><p class="r75a-rack-note">不用守著。曬好了，地圖上的曬架會寫「可收」。</p>`;
+    else if (status.ready) panel.innerHTML = head + loaded + `<p class="r75a-rack-line">${item}<span>${dried ? dried.name : "乾貨"}曬好了。</span></p><button type="button" class="r75a-rack-collect" data-collect>收下${dried ? dried.name : "乾貨"}</button>`;
+    else if (!status.empty) panel.innerHTML = head + loaded + `<p class="r75a-rack-line">${item}<span>${cropName(status.cropId)}正在曬成${dried ? dried.name : "乾貨"}。</span></p><p class="r75a-rack-time" data-rack-time>還要 ${Math.ceil(status.remainingMs / 1000)} 秒</p><p class="r75a-rack-note">不用守著。曬好了，地圖上的曬架會寫「可收」。</p>`;
     else panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + `<p>放上 2 份作物、用掉 1 點陽光，30 秒後收下 1 份日曬乾貨。乾貨的賣價是 1 份作物的 3 倍。</p><p class="r75a-rack-sun">蓄光瓶：陽光 ${amount} 點${amount < 1 ? "。先到光裡種、澆、收，接 1 點陽光再來。" : ""}</p><div class="r75a-rack-choices">${Object.values(DRIED).map(function (d) {
       const have = state.storage.items[d.cropId] || 0, lack = Math.max(0, 2 - have);
       return `<button type="button" data-dry="${d.cropId}" ${lack || amount < 1 ? "disabled" : ""}><img src="${d.icon}${versionQuery()}" alt=""><span>${cropName(d.cropId)} → ${d.name}<small>${lack ? `倉庫 ${have} 份・還差 ${lack} 份` : `倉庫 ${have} 份`}</small></span></button>`;
