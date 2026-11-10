@@ -16,6 +16,10 @@
   const BASE_SCORE = 10;
   const COMBO_STEP = 1;
   const COMBO_CAP = 6;
+  /* R76B：第 12 項——代幣每場 3 枚，用代幣答對只拿一半分。 */
+  const TOKENS_PER_SESSION = 3;
+  const TOKEN_SCORE_RATE = 0.5;
+  const TOKEN_RULE_TEXT = "每場有 3 枚叫賣代幣，用完就不能再用代幣遞沒貨的東西；用代幣答對只拿一半分。";
   const CUSTOMERS = [
     { id: "mayor", name: "鎮長葛瑞", art: "customer-mayor.png" },
     { id: "elder", name: "老農班伯", art: "customer-elder.png" },
@@ -183,9 +187,17 @@
     const source = stocked.length && random() < STOCK_DEMAND_RATE ? stocked : rows;
     const tastes = [...new Set(source.flatMap((row) => row.tastes))].filter((taste) => source.some((row) => row.tastes.includes(taste)));
     let demand;
-    if (tastes.length && random() < 0.4) {
-      const taste = pick(random, tastes);
-      demand = { kind: "taste", taste, label: "想吃" + (TASTE_LABEL[taste] || "甜的") };
+    /* R76B：第 12 項——只說口味或用途的顧客提高到六成以上，並新增一次要兩樣的顧客。 */
+    if (tastes.length && random() < 0.65) {
+      if (tastes.length >= 2 && random() < 0.35) {
+        const first = pick(random, tastes);
+        const rest = tastes.filter((taste) => taste !== first);
+        const second = pick(random, rest);
+        demand = { kind: "pair", tastes: [first, second], remaining: [first, second], label: "要一樣" + (TASTE_LABEL[first] || "甜的") + "、一樣" + (TASTE_LABEL[second] || "清爽的") };
+      } else {
+        const taste = pick(random, tastes);
+        demand = { kind: "taste", taste, label: "想吃" + (TASTE_LABEL[taste] || "甜的") };
+      }
     } else {
       const row = pick(random, source);
       demand = { kind: "item", itemId: row.id, label: "我要" + row.name };
@@ -197,7 +209,21 @@
     const row = session.pool.find((item) => item.id === itemId);
     if (!row) return false;
     const demand = session.customer.demand;
-    return demand.kind === "item" ? demand.itemId === itemId : row.tastes.includes(demand.taste);
+    if (demand.kind === "item") return demand.itemId === itemId;
+    if (demand.kind === "pair") return (demand.remaining || demand.tastes || []).some((taste) => row.tastes.includes(taste));
+    return row.tastes.includes(demand.taste);
+  }
+  function lossSummary(session) {
+    const counts = { tasteWrong: qty(session && session.tasteWrong), itemWrong: qty(session && session.itemWrong), timeouts: qty(session && session.timeouts), tokenUses: qty(session && session.tokenUses) };
+    const candidates = [
+      { id: "tasteWrong", label: "口味猜錯", count: counts.tasteWrong },
+      { id: "itemWrong", label: "拿錯東西", count: counts.itemWrong },
+      { id: "timeouts", label: "讓顧客等太久", count: counts.timeouts },
+      { id: "tokenUses", label: "缺貨用代幣", count: counts.tokenUses },
+    ];
+    const primary = candidates.slice().sort((a, b) => b.count - a.count)[0];
+    const text = primary && primary.count > 0 ? primary.label + " " + primary.count + " 次" : "沒有明顯失分";
+    return { counts, primary: primary && primary.count > 0 ? primary : null, text, display: "主要失分：" + text };
   }
   function spawnNext(state, session, now, rng) {
     // R74B（第 4 項）：新顧客出現就清除上一位的回饋，不讓舊訊息留到下一位。
@@ -218,7 +244,7 @@
     const session = {
       roundKey: info.roundKey, startedAt: t, endsAt: t + DURATION_MS,
       score: 0, combo: 0, bestCombo: 0, served: 0, missed: 0, spawned: 0,
-      tokenUses: 0, feedback: null,
+      tokenUses: 0, tokensLeft: TOKENS_PER_SESSION, tasteWrong: 0, itemWrong: 0, timeouts: 0, feedback: null,
       mode: totalStock(state, pool) <= 0 ? "token" : "stock",
       pool, customer: null, finished: false, result: null, rng: typeof rng === "function" ? rng : Math.random,
     };
@@ -265,9 +291,10 @@
       if (festival) { festival.medals = Math.min(999, qty(festival.medals) + granted.medals); if (granted.goldenFlag) festival.decorations = Math.min(999, qty(festival.decorations) + 1); }
     }
     const reward = rewardForStars(stars);
+    const loss = lossSummary(session);
     const result = {
       ok: true, finished: true, score: session.score, stars, served: session.served, missed: session.missed,
-      bestCombo: session.bestCombo, mode: session.mode, tokenUses: qty(session.tokenUses), reward, granted, upgraded,
+      bestCombo: session.bestCombo, mode: session.mode, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), tokensPerSession: TOKENS_PER_SESSION, loss, mainLoss: loss.display, reward, granted, upgraded,
       goldenFlag: !!state.adventure.r72b.goldenFlag,
       message: stars === 0 ? (granted.coins > 0 ? "沒拿到星星也沒關係，這次已經很棒了，保底 5 金先收下，下次多答對幾位就能拿到星星。" : "沒拿到星星也沒關係，這次已經很棒了，下次多答對幾位就能拿到星星。") : upgraded ? `拿到 ${stars} 顆星，獎勵已補到這一場的最高紀錄。` : "這一場的獎勵已經照先前最高星領過了，這次不重複給。",
     };
@@ -276,6 +303,9 @@
     return result;
   }
   function leaveCustomer(state, session, now, reason) {
+    if (reason === "timeout") session.timeouts = qty(session.timeouts) + 1;
+    else if (session.customer && session.customer.demand && session.customer.demand.kind === "item") session.itemWrong = qty(session.itemWrong) + 1;
+    else session.tasteWrong = qty(session.tasteWrong) + 1;
     session.combo = 0; session.missed += 1;
     spawnNext(state, session, at(now), session.rng); session.spawned += 1;
     // R74B（第 4 項）：答錯或逾時的即時回饋，給顧客卡飄字用；下一位再離開時會被清除換新。
@@ -292,19 +322,41 @@
     const row = session.pool.find((item) => item.id === itemId);
     if (!row) return { ok: false, reason: "unknown_item", message: "這件東西不在已解鎖的叫賣清單裡。" };
     if (!matchesDemand(session, itemId)) { const left = leaveCustomer(state, session, t, "wrong_item"); return { ...left, message: "這不是顧客想要的，他先去逛逛別攤了。" }; }
-    // R73B（第 4 項）：逐項判斷——這一格有貨就扣背包，沒貨才用代幣，不影響其他格。
+    /* R76B：第 12 項——逐項判斷有貨扣背包、沒貨用代幣；代幣每場 3 枚，用完就遞不出沒貨的東西。 */
     const usesToken = stockOf(state, row) <= 0;
+    if (usesToken && qty(session.tokensLeft) <= 0) return { ok: false, reason: "token_empty", message: "這一場的 3 枚叫賣代幣用完了，這一樣沒貨就遞不出去了。", tokenUses: qty(session.tokenUses), tokensLeft: 0 };
     if (!usesToken) consumeOne(state, row);
+    const demand = session.customer.demand;
+    const isPair = demand.kind === "pair";
+    const matchedTaste = isPair ? (demand.remaining || demand.tastes || []).find((taste) => row.tastes.includes(taste)) : null;
+    const fullGained = BASE_SCORE + Math.min(COMBO_CAP, session.combo * COMBO_STEP);
+    let gained = fullGained;
+    let partial = false;
+    if (isPair) {
+      demand.remaining = (demand.remaining || demand.tastes || []).filter((taste) => taste !== matchedTaste);
+      demand.got = (demand.got || []).concat(matchedTaste ? [matchedTaste] : []);
+      partial = demand.remaining.length > 0;
+      gained = partial ? Math.ceil(fullGained / 2) : fullGained - Math.ceil(fullGained / 2) + Math.ceil(fullGained / 2);
+      if (!partial) gained = fullGained;
+      else gained = Math.ceil(fullGained / 2);
+      if (partial && demand.pairFirstGained == null) demand.pairFirstGained = gained;
+      if (!partial && demand.pairFirstGained != null) { gained = fullGained - demand.pairFirstGained; delete demand.pairFirstGained; }
+    }
+    if (usesToken) gained = Math.max(1, Math.floor(gained * TOKEN_SCORE_RATE));
+    session.score += gained;
+    if (usesToken) { session.tokenUses = qty(session.tokenUses) + 1; session.tokensLeft = Math.max(0, qty(session.tokensLeft) - 1); }
+    if (partial) {
+      demand.label = "還要一樣" + (TASTE_LABEL[demand.remaining[0]] || "清爽的");
+      session.feedback = { kind: "good", gained, text: "+" + gained + " 分", spawned: session.spawned };
+      syncMode(state, session);
+      return { ok: true, partial: true, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), feedback: session.feedback, customer: session.customer, message: usesToken ? "先對了一樣，這一樣用叫賣代幣結算，只拿一半分，還差一樣。" : "先對了一樣，還差一樣。" };
+    }
     session.combo += 1; session.bestCombo = Math.max(session.bestCombo, session.combo);
-    const gained = BASE_SCORE + Math.min(COMBO_CAP, (session.combo - 1) * COMBO_STEP);
-    session.score += gained; session.served += 1;
-    // R74B（第 4 項）：代幣結算次數累計，分數列顯示「代幣 N」。
-    if (usesToken) session.tokenUses = qty(session.tokenUses) + 1;
+    session.served += 1;
     spawnNext(state, session, t, session.rng); session.spawned += 1;
-    // R74B（第 4 項）：答對的即時回饋（加分飄字），下一位顧客離開或答對時會換掉。
     session.feedback = { kind: "good", gained, text: "+" + gained + " 分", spawned: session.spawned };
     syncMode(state, session);
-    return { ok: true, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, tokenUses: qty(session.tokenUses), feedback: session.feedback, customer: session.customer, message: usesToken ? "答對了，這一樣背包沒貨，用叫賣代幣結算，沒有消耗背包。" : "答對了，顧客開心地收下了。" };
+    return { ok: true, partial: false, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), feedback: session.feedback, customer: session.customer, message: usesToken ? "答對了，這一樣背包沒貨，用叫賣代幣結算，只拿一半分，沒有消耗背包。" : "答對了，顧客開心地收下了。" };
   }
   function tickSession(state, session, now) {
     const t = at(now);
@@ -338,7 +390,7 @@
       const view = statusFor(state, Date.now());
       shell(`<h2 class="r72b-title">擺攤叫賣</h2>
         <p class="r72b-desc">一場一分鐘。顧客會說想要的作物、料理或口味，點符合的東西遞給他。連續答對會多給分，答錯或等太久，顧客就會先離開。</p>
-        <p class="r72b-desc">每一格自己算：有貨就扣背包，沒貨的那一格才用叫賣代幣結算，只算分、不消耗背包。每一場收穫祭可以玩兩次，獎勵照最高的那一場補齊。</p>
+        <p class="r72b-desc">每一格自己算：有貨就扣背包，沒貨的那一格才用叫賣代幣結算，不消耗背包。${TOKEN_RULE_TEXT}每一場收穫祭可以玩兩次，獎勵照最高的那一場補齊。有些顧客一次要兩樣，兩樣都對才算答對一位，對一樣先拿一半分。</p>
         <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
         ${view.goldenFlag ? `<p class="r72b-owned"><img src="${ART_BASE}golden-flag.png${versionQuery}" alt="">你已經有金色攤位旗了。</p>` : `<p class="r72b-desc">拿到三顆星，就能把限定的金色攤位旗帶回家。</p>`}
         <p class="r72b-status">這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分${view.bestStars ? `・最高 ${view.bestStars} 顆星` : ""}</p>
@@ -376,17 +428,17 @@
       const buttons = session.pool.map((row) => {
         const card = itemCard(state, row);
         const kind = row.kind === "meal" ? "料理" : row.kind === "product" ? "產品" : row.kind === "forage" ? "採集" : "作物";
-        const count = card.usesToken ? "沒貨，用代幣" : `背包有 ${card.stock} 份`;
-        // R74B（第 4 項）：無口味物品不顯示任何非口味標籤，沒有口味就不渲染標籤。
+        const tokenEmpty = card.usesToken && qty(session.tokensLeft) <= 0;
+        const count = card.usesToken ? (tokenEmpty ? "沒貨，代幣用完了" : "沒貨，用代幣（只拿一半分）") : `背包有 ${card.stock} 份`;
         const chips = card.tasteLabels.length ? card.tasteLabels.map((label) => `<span class="r73b-taste">${esc(label)}</span>`).join("") : "";
-        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・${count}</small><span class="r73b-tastes">${chips}</span></span></button>`;
+        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || tokenEmpty ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・${count}</small><span class="r73b-tastes">${chips}</span></span></button>`;
       }).join("");
       // R74B（第 4 項）：回饋改放顧客卡上的短動畫與加分飄字；回饋列只留操作提示，
       // 新顧客出現時 session.feedback 已在 spawnNext 清除，不會留上一位的訊息。
       const feedback = session.feedback;
       const floatHtml = feedback ? `<span class="r74b-float r74b-float-${esc(feedback.kind)}" data-r74b-feedback="${esc(feedback.kind)}">${esc(feedback.kind === "good" ? "+" + feedback.gained + " 分" : (feedback.text || "不是這一樣"))}</span>` : "";
       shell(`<div class="r72b-head"><h2 class="r72b-title">擺攤叫賣</h2><span class="r72b-clock" data-r72b-clock>剩 ${remain} 秒</span></div>
-        <div class="r72b-score"><span>分數 <b>${session.score}</b></span><span>連續答對 <b>${session.combo}</b> 次</span><span data-r74b-tokens>代幣 <b>${qty(session.tokenUses)}</b></span></div>
+        <div class="r72b-score"><span>分數 <b>${session.score}</b></span><span>連續答對 <b>${session.combo}</b> 次</span><span data-r74b-tokens>代幣已用 <b>${qty(session.tokenUses)}</b>・剩 <b>${qty(session.tokensLeft)}</b> 枚</span></div>
         <div class="r72b-customer${feedback ? " r74b-customer-" + esc(feedback.kind) : ""}"><img class="r72b-portrait" src="${ART_BASE}${esc(customer.art)}${versionQuery}" alt="${esc(customer.npcName)}">
           <div><b>${esc(customer.npcName)}</b><p class="r72b-bubble">${esc(customer.demand.label)}</p><small data-r72b-wait>這位顧客還等 ${Math.max(0, Math.ceil((customer.expiresAt - Date.now()) / 1000))} 秒</small></div>${floatHtml}</div>
         <p class="r72b-feedback" role="status">點下面符合的東西，遞給顧客。</p>
@@ -410,6 +462,7 @@
         <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
         ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
         <p class="r72b-status">${result.score} 分・答對 ${result.served} 位・錯過 ${result.missed} 位・最高連續答對 ${result.bestCombo} 次</p>
+        <p class="r76b-loss" data-r76b-loss>${esc(result.mainLoss || (result.loss && result.loss.display) || "主要失分：沒有明顯失分")}・代幣用了 ${qty(result.tokenUses)} 次（每場 ${result.tokensPerSession || TOKENS_PER_SESSION} 枚，用代幣答對只拿一半分）</p>
         <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
         <p class="r73b-advice" data-r73b-advice>${esc(result.advice || adviceFor(result))}</p>
         <p class="r72b-status">${esc(grantedText)}這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分</p>
@@ -426,9 +479,9 @@
 
   const FestivalStallR72 = {
     DURATION_MS, CUSTOMER_TIMEOUT_MS, CUSTOMER_ARRIVE_MS, MAX_ATTEMPTS_PER_ROUND, BASE_SCORE, CUSTOMERS,
-    TASTE_LABEL, TASTE_CHIP, STAR_THRESHOLDS, STOCK_DEMAND_RATE,
+    TASTE_LABEL, TASTE_CHIP, STAR_THRESHOLDS, STOCK_DEMAND_RATE, TOKENS_PER_SESSION, TOKEN_SCORE_RATE, TOKEN_RULE_TEXT,
     ensure, festivalInfo, statusFor, unlockedItems, stockOf, totalStock, stockedItems,
-    tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, adviceFor,
+    tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, adviceFor, lossSummary,
     makeCustomer, matchesDemand, startSession, serve, tickSession, finishSession,
     starsForScore, rewardForStars, open,
   };

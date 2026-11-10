@@ -23,13 +23,13 @@
   const CHOICE_DEFS = [
     { storyId: "mayor_welcome", npcId: "mayor", npcName: "鎮長葛瑞", question: "第一格種下去以前，想先從哪裡開始？", options: {
       farm: { answer: "我先去種田", effectId: "mayor_daily_seed", effectText: "農舍門口多一袋打開的小麥種子，每天送 1 包小麥種子。" },
-      town: { answer: "先聽鎮長說鎮上的事", effectId: "mayor_quest_coins", effectText: "鎮長每日委託的金幣多一成，委託卡上會寫明原因。" },
+      town: { answer: "先聽你講鎮上的事", effectId: "mayor_quest_coins", effectText: "鎮長每日委託的金幣多一成，委託卡上會寫明原因。" },
     } },
-    { storyId: "elder_wheat", npcId: "elder", npcName: "老農班伯", question: "新麥想先賣，還是先留種？", options: {
+    { storyId: "elder_wheat", npcId: "elder", npcName: "老農班伯", question: "你想先賣，還是先留種？", options: {
       sell: { answer: "先賣一小袋", effectId: "elder_order_coins", effectText: "老農班伯的河畔委託金幣多一成。" },
       seed: { answer: "先留一包種子", effectId: "elder_advice_seed", effectText: "每天向老農班伯請教時，多拿 1 包當季種子。" },
     } },
-    { storyId: "merchant_hello", npcId: "merchant", npcName: "蘿拉", question: "想把牌子擺得醒目，還是先問客人喜歡什麼？", options: {
+    { storyId: "merchant_hello", npcId: "merchant", npcName: "蘿拉", question: "你想把牌子擺得醒目，還是先問客人喜歡什麼？", options: {
       sign: { answer: "先把農場牌掛起來", effectId: "merchant_order_coins", effectText: "農場入口立起一塊招牌，蘿拉的河畔委託金幣多一成。" },
       listen: { answer: "先聽客人想買什麼", effectId: "merchant_two_specials", effectText: "蘿拉的今日特價從一樣變兩樣。" },
     } },
@@ -270,8 +270,9 @@
     const saved = storyChoicesOf(state)[def.storyId];
     if (!isObject(saved) || !def.options[saved.choiceId]) return null;
     const opt = def.options[saved.choiceId];
+    const follow = isObject(state.r76story) && isObject(state.r76story.seen) && isObject(state.r76story.seen[def.npcId]) ? state.r76story.seen[def.npcId] : null;
     return { storyId: def.storyId, npcId: def.npcId, npcName: def.npcName, question: def.question, choiceId: saved.choiceId,
-      answer: opt.answer, effectId: opt.effectId, effectText: opt.effectText, at: saved.at || 0 };
+      answer: opt.answer, effectId: opt.effectId, effectText: opt.effectText, at: saved.at || 0, followupSummary: follow ? String(follow.summary || "") : "" };
   }
   function hasEffect(state, effectId) {
     return CHOICE_DEFS.some((def) => {
@@ -504,7 +505,7 @@
     const deals = hasEffect(state, "merchant_two_specials") ? merchantDeals(state, Date.now()) : [];
     const second = deals.length > 1 ? deals[1] : null;
     return '<section class="r75b-choices" data-r75b-choices aria-label="我做過的選擇"><div class="story-kicker">我做過的選擇</div>'
-      + (rows.length ? rows.map((row) => '<article class="r75b-choice-card" data-r75b-choice="' + esc(row.effectId) + '"><h3>' + esc(row.npcName) + '</h3><p class="r75b-choice-q">當時問：「' + esc(row.question) + "」</p><p class=\"r75b-choice-a\">我的回答：" + esc(row.answer) + "</p><p class=\"r75b-choice-e\">現在的影響：" + esc(row.effectText) + "</p></article>").join("") : '<p class="r75b-choice-empty">還沒做過開場選擇，先去跟鎮長、老農班伯和蘿拉聊聊。</p>')
+      + (rows.length ? rows.map((row) => '<article class="r75b-choice-card" data-r75b-choice="' + esc(row.effectId) + '"><h3>' + esc(row.npcName) + '</h3><p class="r75b-choice-q">當時問：「' + esc(row.question) + "」</p><p class=\"r75b-choice-a\">我的回答：" + esc(row.answer) + "</p><p class=\"r75b-choice-e\">現在的影響：" + esc(row.effectText) + "</p>" + (row.followupSummary ? '<p class="r76b-choice-follow" data-r76b-followup="' + esc(row.npcId) + '">後來：' + esc(row.followupSummary) + "</p>" : "") + "</article>").join("") : '<p class="r75b-choice-empty">還沒做過開場選擇，先去跟鎮長、老農班伯和蘿拉聊聊。</p>')
       + (second ? '<div class="r75b-choice-card" data-r75b-second-deal><h3>蘿拉的第二樣特價</h3><p class="r75b-choice-e">今天第二樣特價：' + esc(second.cropName) + "種子 " + esc(second.specialPrice) + " 金。</p><button type=\"button\" class=\"r75b-act\" data-r75b-buy-second>買第二樣特價種子</button></div>" : "")
       + "</section>";
   }
