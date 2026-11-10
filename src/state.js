@@ -7,6 +7,7 @@
   const C = (typeof module !== "undefined" && module.exports)
     ? require("./config.js")
     : root;
+  const Sunplay = (typeof module !== "undefined" && module.exports) ? require("./sunplay-r75.js") : root.FarmSunplay;
 
   // 建立空農地陣列
   function makePlots(n) {
@@ -435,6 +436,7 @@
       collections: {},            // { [collectibleId]: true }
       daily: { day: null, stamps: 0 },
       heirloom: { started: false, sunWheat: 0, delivered: false, choice: null, deliveredAt: 0 },
+      r75Sunplay: { sunlight: 0, mirrorLevel: 0, bottleLevel: 0, firstRefracted: false, firstCaught: false, firstRipened: false, rack: { cropId: null, itemId: null, startedAt: 0, readyAt: 0, ready: false } },
       settings: { smartAssistant: true, smartAssistantCollapsed: true, offlineSummary: true, soundEnabled: true, soundVolume: 0.55, performanceMode: "auto", textSize: "medium", mapViewMode: "fit" },
       lastOfflineSummary: null,
       // ===== Stage 10：NPC 重複委託（依 npcId 為 key，同一時間每位 NPC 最多一張進行中）=====
@@ -554,6 +556,7 @@
     merged.interaction.pendingPath = [];
     configureWorld(merged);
     merged.player = sanitizePlayer(def.player, merged.player, merged.map, merged.flags);
+    if (Sunplay) Sunplay.normalize(merged);
     merged.version = C.GAME.version;
     return merged;
   }

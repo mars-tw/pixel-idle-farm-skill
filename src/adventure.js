@@ -6,6 +6,7 @@
 (function (root) {
   "use strict";
   const C = typeof module !== "undefined" && module.exports ? require("./config.js") : (root.CONFIG || root);
+  const Sunplay = typeof module !== "undefined" && module.exports ? require("./sunplay-r75.js") : root.FarmSunplay;
   const VERSION = 2;
   const COUNT_CAP = 1000000;
   const EVENT_CAP = 100;
@@ -467,8 +468,16 @@
     if (ready.length) return { action: "harvest", target: "field", tileId: ready[0].id, count: ready.length, text: `田裡有 ${ready.length} 格可以收成，點一下收成。`, actionLabel: "去收成" };
     if (!claimed(a, "c1_first_harvest")) {
       if (wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", actionLabel: "帶去交付" };
-      const growing = (state.plots || []).some((plot) => plot && plot.cropId === "wheat");
-      return growing ? { action: "tend", target: "field", tileId: null, text: "小麥正在長，先澆水，再去跟蘿拉打招呼。", actionLabel: "去澆水" } : { action: "plant", target: "field", tileId: null, text: "先種下小麥；教學送的種子可種滿三格。", actionLabel: "去種小麥" };
+      const wheatIndex = (state.plots || []).findIndex((plot) => plot && plot.cropId === "wheat");
+      const growing = wheatIndex >= 0;
+      if (growing && Sunplay) {
+        Sunplay.normalize(state); const sun = state.sun || {}; const t = at(state, now); const lightPlots = t >= (sun.startsAt || 0) && t < (sun.endsAt || 0) ? sun.plots || [] : t < (sun.previewAt || 0) ? sun.previewPlots || [] : [];
+        if (!state.r75Sunplay.firstRefracted && lightPlots.length && !lightPlots.includes(wheatIndex)) return { action: "refract", target: "field", tileId: null, plotIndex: wheatIndex, text: "光落在旁邊，點你的小麥把光折過來。", actionLabel: "把光折過來" };
+        if (state.r75Sunplay.firstRefracted && state.r75Sunplay.sunlight < 1) return { action: "tend", target: "field", tileId: null, plotIndex: wheatIndex, text: "光已經折到小麥上，趁光還在澆水，接住第一點陽光。", actionLabel: "在光裡澆水" };
+        if (state.r75Sunplay.sunlight >= 2 && !state.r75Sunplay.firstRipened) return { action: "ripen", target: "field", tileId: null, plotIndex: wheatIndex, text: "蓄光瓶有 2 點陽光了，點小麥使用晨光催熟。", actionLabel: "用晨光催熟" };
+        if (state.r75Sunplay.sunlight === 1) return { action: "catch_sun", target: "field", tileId: null, plotIndex: wheatIndex, text: "第二道光會在 15 秒內到，再在光裡照料一次，湊滿 2 點陽光。", actionLabel: "等光來照料" };
+      }
+      return growing ? { action: "tend", target: "field", tileId: null, text: "小麥正在長，先澆水。", actionLabel: "去澆水" } : { action: "plant", target: "field", tileId: null, text: "先種下第一格小麥，接著跟著光走。", actionLabel: "去種小麥" };
     }
     if (!claimed(a, "c1_first_meal")) {
       if (bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", actionLabel: "吃麥餅" };
@@ -1359,7 +1368,8 @@
     const crops = Object.entries((state.storage && state.storage.items) || {}).filter(([id, count]) => C.CROPS[id] && qty(count) > 0).map(([id, count]) => ({ id, cropId: id, kind: "crop", name: C.CROPS[id].name, icon: C.CROPS[id].emoji || "🌱", quantity: qty(count), season: C.CROPS[id].season || "四季", quality: false }));
     const qualityCrops = Object.entries((state.storage && state.storage.quality) || {}).filter(([id, count]) => C.CROPS[id] && qty(count) > 0).map(([id, count]) => ({ id: "quality:" + id, cropId: id, kind: "crop", name: "優質" + C.CROPS[id].name, icon: "✨", quantity: qty(count), season: C.CROPS[id].season || "四季", quality: true }));
     const meals = RECIPES.filter((r) => qty(state.adventure.meals[r.id]) > 0).map((r) => ({ id: r.id, kind: "meal", name: r.name, icon: r.icon || "🍽️", quantity: qty(state.adventure.meals[r.id]), season: "料理" }));
-    return crops.concat(qualityCrops, meals);
+    const dried = Sunplay ? Object.entries((state.storage && state.storage.items) || {}).filter(([id, count]) => Sunplay.driedDef(id) && qty(count) > 0).map(([id, count]) => { const def = Sunplay.driedDef(id); return { id, driedCropId: def.cropId, kind: "dried", name: def.name, icon: "☀", quantity: qty(count), season: "日曬乾貨" }; }) : [];
+    return crops.concat(qualityCrops, meals, dried);
   }
   function judgeFestivalEntry(state, selectedIds, now) {
     const status = festivalStatus(state, now);
@@ -1377,7 +1387,8 @@
     const seasonal = chosen.some((row) => row.kind === "crop" && (row.season === currentSeason || row.season === "四季"));
     const hasMeal = chosen.some((row) => row.kind === "meal");
     const quality = chosen.some((row) => row.quality);
-    const judgingPoints = (diverse ? 1 : 0) + (seasonal ? 1 : 0) + (hasMeal ? 1 : 0) + (quality ? 1 : 0);
+    const hasDried = chosen.some((row) => row.kind === "dried");
+    const judgingPoints = (diverse ? 1 : 0) + (seasonal ? 1 : 0) + (hasMeal ? 1 : 0) + (quality ? 1 : 0) + (hasDried ? 1 : 0);
     const stars = judgingPoints >= 3 ? 3 : judgingPoints >= 2 ? 2 : 1;
     for (const [id, count] of Object.entries(used)) { const row = entries.find((item) => item.id === id); const target = row.kind === "meal" ? state.adventure.meals : row.quality ? state.storage.quality : state.storage.items; const targetId = row.cropId || id; target[targetId] -= count; if (target[targetId] === 0 && row.kind === "crop") delete target[targetId]; }
     const coins = stars === 1 ? 8 : stars === 2 ? 24 : 50; grant(state, reward(coins, 0));
@@ -1385,9 +1396,9 @@
     if (stars === 3) f.festivalRecipe = true;
     const rewardText = stars === 1 ? "8 金" : stars === 2 ? "24 金與豐收花環裝飾 1 件" : "50 金、專屬豐收花環裝飾 1 件，並學會專屬配方「河畔豐收拼盤」";
     const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，這桌已經很有農場的樣子了。」" : "鎮長葛瑞說：「當季收成和料理都照顧到了，這就是今晚最完整的一桌！」";
-    const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, row.quality ? "優質作物 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
+    const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, row.kind === "dried" ? "日曬乾貨 +1" : null, row.quality ? "優質作物 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
     const tip = !diverse ? "差一顆星的話，可以換成三種不同品項。" : !seasonal ? `差一顆星的話，可以換成${currentSeason}季作物。` : !hasMeal ? "差一顆星的話，可以換上一道料理。" : "三項加分都拿到了，下次可換不同當季作物試試。";
-    f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, scoreSources: { diverse, seasonal, hasMeal, quality }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
+    f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, scoreSources: { diverse, seasonal, hasMeal, quality, hasDried }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
     return ok(`${stars} 顆星！${mayorLine}`, copy(f.judging));
   }
   function takeFestivalSettlement(state, now) {

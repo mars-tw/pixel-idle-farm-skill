@@ -817,7 +817,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${window.FarmSunplay ? `<small class="r75a-light-trait">${escapeHtml(window.FarmSunplay.traitInfo(c.id).icon + " " + window.FarmSunplay.traitInfo(c.id).name + "：" + window.FarmSunplay.traitInfo(c.id).text)}</small>` : ""}${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.id === "carrot" && state.level >= c.unlockLevel ? "開墾取得" : `Lv${c.unlockLevel}`}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
@@ -2668,6 +2668,7 @@
         <div class="jd-row"><b>來源</b><span>${entry.source || entry.sourceHint || "農場"}</span></div>
         <div class="jd-row"><b>季節</b><span>${entry.season || "全年"}</span></div>
         <div class="jd-row"><b>用途</b><span>${(entry.usage || []).join("／") || "收藏"}</span></div>
+        ${entry.lightTrait ? `<div class="jd-row r75a-journal-light"><b>光性</b><span>${escapeHtml(entry.lightTrait.icon + " " + entry.lightTrait.name + "：" + entry.lightTrait.text)}</span></div>` : ""}
         ${entry.flavor ? `<div class="jd-row jd-flavor" data-audit="journal-flavor"><b>手札</b><span>${entry.flavor}</span></div>` : ""}
         <div class="jd-row"><b>首次發現</b><span data-audit="journal-first-seen">${fmtDate(entry.firstDiscoveredAt)}</span></div>
       </div>`;
@@ -3876,7 +3877,9 @@
     if (tile.plotIndex >= active) return "未開墾・待解鎖";
     const plot = state.plots[tile.plotIndex];
     const sunlit = !!(G.isSunlit && G.isSunlit(state, tile.plotIndex, now()));
-    const sunSuffix = sunlit ? "\n在光裡：生長加速・收成 +1" : ""; // R59B：陽光說明分到第二行，標籤不溢出
+    const lightInfo = plot && plot.cropId && window.FarmSunplay ? window.FarmSunplay.traitInfo(plot.cropId) : null;
+    const sunEffect = lightInfo && lightInfo.id === "sun" ? "在光裡：生長加速・收成 +1" : "在光裡：生長加速";
+    const sunSuffix = sunlit ? `\n${sunEffect}${lightInfo ? "・" + lightInfo.icon + " " + lightInfo.name + "・" + lightInfo.text : ""}` : lightInfo ? `\n${lightInfo.icon} ${lightInfo.name}・${lightInfo.text}` : "";
     if (!plot || !plot.cropId) return "空地・可種植" + sunSuffix;
     const crop = window.CROPS[plot.cropId];
     const name = crop ? crop.name : "作物";

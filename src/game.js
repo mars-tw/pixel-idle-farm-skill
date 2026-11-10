@@ -11,6 +11,7 @@
     : root;
   const Daily = (typeof module !== "undefined" && module.exports) ? require("./daily.js") : root.FarmDaily;
   const Heirloom = (typeof module !== "undefined" && module.exports) ? require("./heirloom.js") : root.FarmHeirloom;
+  const Sunplay = (typeof module !== "undefined" && module.exports) ? require("./sunplay-r75.js") : root.FarmSunplay;
   const {
     GAME, CROPS, UPGRADES, ORDER_RARITY, ORDER_STREAK_BONUS, ORDER_STREAK_CAP,
     SEASONS, SEASON_DURATION_MS, SEASON_UNLOCK_LEVEL, SEASON_ORDER_BIAS, SEASON_EVENTS,
@@ -26,6 +27,7 @@
   // ---------- 工具 ----------
   function rngInt(rng, min, max) { return min + Math.floor((rng || Math.random)() * (max - min + 1)); }
   function rngPick(rng, arr) { return arr[Math.floor((rng || Math.random)() * arr.length)]; }
+  function itemDefinition(id) { return getItemDef(id) || (Sunplay && Sunplay.driedDef(id)); }
 
   // ---------- 解鎖 / 成長倍率 ----------
   function unlockedCrops(state) {
@@ -58,7 +60,7 @@
     return Object.keys(C.FORAGE_ITEMS || {}).filter((id) => (collected[id] || 0) > 0);
   }
   function availableOrderItems(state) {
-    return unlockedCrops(state).concat(unlockedProducts(state), unlockedForageItems(state));
+    return unlockedCrops(state).concat(unlockedProducts(state), unlockedForageItems(state), Sunplay ? Sunplay.driedItemIds(state) : []);
   }
   // 成長時間倍率：肥沃土壤升級 × 天氣（rain 加速）
   // R58：料理增益（純讀取 adventure.r58.buffs，不建立新存檔欄位）
@@ -185,7 +187,8 @@
   // ---------- R79 招牌玩法：陽光光斑 ----------
   // 光斑只在主動遊玩時出現（離線不累積），落在 1–2 格田上；在光裡種、澆、收各有加成，每格每道光只算一次。
   const SUNPATCH = {
-    firstDelayMs: 4000,      // 種下第一株後多久出現第一道光
+    /* R75A：種下第一株後立即預告，8 秒後落光。 */
+    firstDelayMs: 8000,
     intervalMs: 40000,       // 兩道光之間
     sunnyIntervalMs: 28000,  // 晴朗天氣更常出現
     durationMs: 16000,       // 每道光停留時間
@@ -209,6 +212,7 @@
     sun.introduced = !!sun.introduced;
     if (!state.stats) state.stats = {};
     if (!Number.isFinite(state.stats.sunCatches) || state.stats.sunCatches < 0) state.stats.sunCatches = 0;
+    if (Sunplay) Sunplay.normalize(state);
     return sun;
   }
   function sunpatchActive(state, now) {
@@ -229,6 +233,10 @@
       durationMs: sun.durationMs || SUNPATCH.durationMs,
       nextInMs: !active && sun.nextAt ? Math.max(0, sun.nextAt - now) : 0,
       catches: (state.stats && state.stats.sunCatches) || 0,
+      preview: !active && Array.isArray(sun.previewPlots) && sun.previewPlots.length > 0 && now < (sun.previewAt || 0),
+      previewPlots: !active && now < (sun.previewAt || 0) ? sun.previewPlots.slice() : [],
+      previewInMs: !active && now < (sun.previewAt || 0) ? sun.previewAt - now : 0,
+      refractionsLeft: Sunplay ? Math.max(0, Sunplay.mirrorLimit(state) - (sun.refractions || 0)) : 0,
     };
   }
   // 挑選光斑落點：可收成 > 生長中且未澆 > 已澆生長中 > 空地；同分隨機。
@@ -252,28 +260,47 @@
     const sun = ensureSunState(state);
     const random = typeof rng === "function" ? rng : Math.random;
     const out = { spawned: false, expired: false, first: false };
-    if (sun.plots.length && sun.endsAt && now >= sun.endsAt) { sun.plots = []; sun.used = []; out.expired = true; }
+    if (sun.plots.length && sun.plots.every((i) => (sun.used || []).includes(i))) {
+      sun.plots = []; sun.used = []; sun.endsAt = now; sun.nextAt = now + 15000; out.expired = true;
+    }
+    if (sun.plots.length && sun.endsAt && now >= sun.endsAt) {
+      if (Sunplay) Sunplay.settleBeam(state, sun.plots.filter((i) => !(sun.used || []).includes(i)));
+      sun.plots = []; sun.used = []; out.expired = true;
+    }
     if (sunpatchActive(state, now)) return out;
     const planted = (state.plots || []).some((p) => p && p.cropId) || ((state.stats && state.stats.plantCount) || 0) > 0;
     if (!planted) return out;
     if (!sun.nextAt) { sun.nextAt = now + SUNPATCH.firstDelayMs; return out; }
     // 離線回來：nextAt 遠在過去也只補一道光，不會連續觸發。
-    if (now < sun.nextAt) return out;
+    const previewMs = Sunplay ? Sunplay.PREVIEW_MS : 0;
+    if (now < sun.nextAt - previewMs) return out;
     const weather = currentWeather(state, now);
     const interval = weather === "sunny" ? SUNPATCH.sunnyIntervalMs : SUNPATCH.intervalMs;
-    if (SUNPATCH.blockedWeather[weather]) { sun.nextAt = now + Math.round(interval / 2); return out; }
-    const plots = pickSunPlots(state, now, random);
+    if (SUNPATCH.blockedWeather[weather]) { sun.previewPlots = []; sun.previewAt = 0; sun.nextAt = now + Math.round(interval / 2); return out; }
+    if (!sun.previewPlots.length) {
+      let planned = pickSunPlots(state, now, random);
+      const firstWheat = (state.stats && state.stats.plantCount) === 1 ? (state.plots || []).findIndex((p) => p && p.cropId === "wheat") : -1;
+      if (!(sun.spawned || 0) && firstWheat >= 0) {
+        const emptyNeighbor = [firstWheat - 1, firstWheat + 1].find((i) => i >= 0 && i < activePlotCount(state) && state.plots[i] && !state.plots[i].cropId);
+        if (emptyNeighbor != null) planned = [emptyNeighbor];
+      }
+      sun.previewPlots = planned; sun.previewAt = sun.nextAt; sun.refractions = 0; sun.refractionLimit = Sunplay ? Sunplay.mirrorLimit(state) : 1;
+      out.previewed = true;
+    }
+    if (now < sun.nextAt) return out;
+    const plots = sun.previewPlots.slice();
     if (!plots.length) { sun.nextAt = now + interval; return out; }
     const dur = sun.spawned ? SUNPATCH.durationMs : SUNPATCH.firstDurationMs; sun.spawned = (sun.spawned || 0) + 1;
-    sun.plots = plots; sun.used = []; sun.startsAt = now; sun.endsAt = now + dur; sun.durationMs = dur;
-    sun.nextAt = now + dur + interval;
+    sun.plots = plots; sun.previewPlots = []; sun.previewAt = 0; sun.used = []; sun.startsAt = now; sun.endsAt = now + dur; sun.durationMs = dur;
+    sun.nextAt = now + dur + ((sun.spawned || 0) === 1 ? Math.min(interval, 15000) : interval);
     out.spawned = true;
     if (!sun.introduced) { sun.introduced = true; out.first = true; }
     return out;
   }
   function markSunUsed(state, plotIndex) {
-    state.sun.used.push(plotIndex);
+    if (!state.sun.used.includes(plotIndex)) state.sun.used.push(plotIndex);
     state.stats.sunCatches = (state.stats.sunCatches || 0) + 1;
+    if (Sunplay) Sunplay.catchSun(state, plotIndex);
   }
   // 種／澆在光裡：把種植時間往前推，等同立刻長快一段。
   function sunBoostGrowth(state, plotIndex, now) {
@@ -603,7 +630,8 @@
     return !!(seen && Array.isArray(seen[npcId]) && seen[npcId].includes(1));
   }
   function sellUnitValue(state, itemId, now) {
-    const def = getItemDef(itemId); // 作物或動物產品
+    /* 作物、動物產品或日曬乾貨共用直售入口。 */
+    const def = itemDefinition(itemId);
     const seasonMul = def && def.season && state.level >= (SEASON_UNLOCK_LEVEL || 6) && def.season === currentSeason(state, now) ? 1.15 + buildingSeasonalBonus(state) : 1;
     const r64bMul = r64bStoryBenefit(state, "merchant") ? 1.05 : 1; // R64B：蘿拉第 2 段故事——市集收購價多 5%
     return Math.max(1, Math.round((def ? def.sellValue : 0) * seasonMul * sellMultiplier(state, now) * r64bMul));
@@ -632,6 +660,7 @@
     if (freeSeed) seedPacks[cropId]--; else state.coins -= cost;
     if (chosenCare === "compost") state.materials.compost--;
     plot.cropId = cropId;
+    if (Sunplay) Sunplay.resetPlot(plot);
     if (chosenCare) plot.careMode = chosenCare; else delete plot.careMode;
     delete plot.wateredAt;
     const r65TutorialHeadStart = cropId === "wheat"
@@ -657,10 +686,17 @@
     const sunlit = isSunlit(state, plotIndex, now);
     const mealBonus = mealFlatBonus(state, "harvest", now);
     const care = FARM_CARE[plot.careMode] || null;
-    const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0) + mealBonus + (care && care.yieldBonus || 0);
+    const lightEffect = Sunplay ? Sunplay.harvestEffects(state, plot, rng, sunlit) : { yieldBonus: sunlit ? SUNPATCH.harvestBonus : 0, quality: false, sunlight: 0 };
+    const qty = crop.yield + (lightEffect.yieldBonus || 0) + mealBonus + (care && care.yieldBonus || 0);
     const xp = crop.xp + (sunlit ? SUNPATCH.xpBonus : 0);
-    const quality = !!(care && care.qualityChance && (rng === undefined ? Math.random() : rng()) < care.qualityChance);
-    const { added, lost } = quality ? addQualityToStorage(state, crop.id, qty) : addToStorage(state, crop.id, qty);
+    const quality = !!(lightEffect.quality || (care && care.qualityChance && (rng === undefined ? Math.random() : rng()) < care.qualityChance));
+    let added, lost;
+    if (lightEffect.guaranteedQuality) {
+      const premium = addQualityToStorage(state, crop.id, 1); const normal = addToStorage(state, crop.id, Math.max(0, qty - 1));
+      added = premium.added + normal.added; lost = premium.lost + normal.lost;
+    } else {
+      const stored = quality ? addQualityToStorage(state, crop.id, qty) : addToStorage(state, crop.id, qty); added = stored.added; lost = stored.lost;
+    }
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
     if (Daily && added > 0) Daily.record(state, "harvest", added, now);
     if (Heirloom) Heirloom.recordHarvest(state, crop.id, added, sunlit || plot.sunGrown === true);
@@ -673,14 +709,17 @@
       const packs = state.adventure.r58.r59.seedPacks = state.adventure.r58.r59.seedPacks || {};
       packs[crop.id] = Math.min(99, (packs[crop.id] || 0) + care.seedBack);
     }
+    if (Sunplay && lightEffect.sunlight) Sunplay.addSunlight(state, lightEffect.sunlight);
     plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown; delete plot.careMode;
+    delete plot.r75SunHits; delete plot.r75ShadeEligible; delete plot.r75SunOver;
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled, quality, careMode: care && care.id, seedBack: care && care.seedBack || 0,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: farmNextStepText(state, now, "把 2 份小麥交給老農班伯。") };
-    if (sunlit) out.sun = { kind: "harvest", bonus: SUNPATCH.harvestBonus, xpBonus: SUNPATCH.xpBonus };
+    if (sunlit || lightEffect.yieldBonus) out.sun = { kind: "harvest", bonus: lightEffect.yieldBonus || 0, xpBonus: sunlit ? SUNPATCH.xpBonus : 0 };
+    if (lightEffect.source) out.lightTrait = lightEffect;
     if (mealBonus) out.meal = { kind: "harvest", bonus: mealBonus };
     return out;
   }
@@ -794,7 +833,7 @@
     const npc = (C.NPCS || {})[npcId] || { name: "鎮民", title: "委託人" };
     const copy = ORDER_COPY[npcId] || ORDER_COPY.mayor;
     const firstId = Object.keys(order.wants || {})[0];
-    const firstDef = getItemDef(firstId) || { name: firstId || "物資" };
+    const firstDef = itemDefinition(firstId) || { name: firstId || "物資" };
     const qty = firstId ? order.wants[firstId] : 0;
     const itemText = firstId ? `${firstDef.name} x${qty}` : "物資";
     return {
@@ -814,7 +853,7 @@
   function makeBeginnerOrder(template, now) {
     const firstId = Object.keys(template.wants)[0];
     const qty = template.wants[firstId];
-    const def = getItemDef(firstId);
+    const def = itemDefinition(firstId);
     return {
       id: template.id, wants: Object.assign({}, template.wants), rarity: "common",
       // 新手單採固定單價，避免固定加成讓大單的每份報酬反而較低。
@@ -845,12 +884,13 @@
         guard++;
       } while (chosen.includes(itemId) && guard < 10);
       chosen.push(itemId);
-      const [mn, mx] = ORDER_QTY[itemId] || [2, 5];
+      const dryOrder = !!(Sunplay && Sunplay.driedDef(itemId));
+      const [mn, mx] = dryOrder ? [1, 1] : (ORDER_QTY[itemId] || [2, 5]);
       const qty = rngInt(rng, mn, mx);
       wants[itemId] = (wants[itemId] || 0) + qty;
-      const def = getItemDef(itemId);
+      const def = itemDefinition(itemId);
       // 每個品項先定出固定單價再乘數量，避免整單四捨五入造成大單單價倒掛。
-      contractCoins += Math.max(1, Math.round((def ? def.sellValue : 0) * rarity.payMult)) * qty;
+      contractCoins += Math.max(1, Math.round((def ? def.sellValue : 0) * rarity.payMult * (dryOrder ? 1.3 : 1))) * qty;
       baseXp += (CROPS[itemId] ? (CROPS[itemId].orderXp || CROPS[itemId].xp) : Math.round((def ? def.sellValue : 0) * 0.6)) * qty;
     }
     const id = "order_" + idSeed;
@@ -1054,7 +1094,7 @@
     const row = orderAllocationFor(state, order.id) || orderAllocation(state, [order])[0];
     const item = row && row.items ? row.items[itemId] : null;
     if (!item) return "缺少作物";
-    const def = itemNames && itemNames[itemId] ? itemNames[itemId] : getItemDef(itemId);
+    const def = itemNames && itemNames[itemId] ? itemNames[itemId] : itemDefinition(itemId);
     const name = def ? def.name : itemId;
     if (!item.missing) return `這張要 ${item.required} 份${name}；手上有 ${item.stock} 份，夠交這張了`;
     const priorOrders = Math.max(0, item.priorReserved - item.storyReserve);
@@ -1105,7 +1145,7 @@
       const have = Math.max(0, (state.storage && state.storage.items && state.storage.items[itemId]) || 0);
       const remaining = Math.max(0, have - qty);
       const reserve = mainStoryReserve(state, itemId);
-      const def = getItemDef(itemId) || { name: itemId };
+      const def = itemDefinition(itemId) || { name: itemId };
       return { itemId, itemName: def.name, remaining, storyNeed: reserve, risky: reserve > remaining };
     });
     const relevant = parts.find((part) => part.storyNeed > 0) || parts[0] || { remaining: 0, storyNeed: 0, risky: false };
@@ -1121,7 +1161,7 @@
   function orderMissingText(state, order) {
     const missing = Object.entries(order.wants || {}).map(([itemId, qty]) => {
       const short = Math.max(0, qty - ((state.storage && state.storage.items[itemId]) || 0));
-      const def = getItemDef(itemId) || { name: itemId };
+      const def = itemDefinition(itemId) || { name: itemId };
       return short > 0 ? `${def.name} ×${short}` : "";
     }).filter(Boolean);
     return missing.length ? `還缺${missing.join("、")}` : "交付";
@@ -1287,7 +1327,7 @@
     ids.forEach((id) => {
       const delta = ((next.items || {})[id] || 0) - ((prev.items || {})[id] || 0);
       if (!delta) return;
-      const def = getItemDef(id) || { name: id };
+      const def = itemDefinition(id) || { name: id };
       itemParts.push(`${delta > 0 ? "+" : "－"}${Math.abs(delta)} ${def.name}`);
     });
     if (itemParts.length) events.push({ target: "storage", text: itemParts.join("、"), changes: itemParts.length });
@@ -2191,7 +2231,7 @@
     const req = (state.npcRequests || {})[npcId]; // 純讀取，委託狀態的初始化交給 generate/fulfill/decline/migrate
     if (req) {
       const itemId = Object.keys(req.wants)[0];
-      const itemName = (getItemDef(itemId) || {}).name || itemId;
+      const itemName = (itemDefinition(itemId) || {}).name || itemId;
       const canDeliver = canFulfillNpcRequest(state, npcId);
       line = (req.flavorOffer || npcFlavorLine(cfg && cfg.flavorOffer, req.createdAt) || "……").replace("{item}", itemName + " x" + req.wants[itemId]);
       request = { id: req.id, wants: req.wants, rewardCoins: req.rewardCoins, rewardXp: req.rewardXp,
@@ -2419,7 +2459,7 @@
     return "尚未發現來源";
   }
   function itemUsageSummary(itemId) {
-    const def = getItemDef(itemId);
+    const def = itemDefinition(itemId);
     const usage = [];
     if (def && def.sellValue != null) usage.push(`直售 ${def.sellValue} 金`);
     if (CROPS[itemId] || (C.FORAGE_ITEMS || {})[itemId] || PRODUCTS[itemId]) usage.push("市集訂單");
@@ -2444,6 +2484,7 @@
       season: c.season || "全年",
       sellValue: c.sellValue,
       usage: itemUsageSummary(c.id),
+      lightTrait: Sunplay ? Sunplay.traitInfo(c.id) : null,
       flavor: c.flavor || "", // R71：祖母手札；空字串＝該品項尚無手札，UI 不顯示該列
       firstDiscoveredAt: firstDiscoveredAt(state, c.id),
     }));
@@ -2676,7 +2717,7 @@
   }
   function wantsText(wants) {
     return Object.entries(wants || {}).map(([id, qty]) => {
-      const def = getItemDef(id) || { name: id };
+      const def = itemDefinition(id) || { name: id };
       return `${def.name}×${qty}`;
     }).join("、");
   }
