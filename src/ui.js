@@ -4995,6 +4995,8 @@
     }
     try { if (nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
     action.textContent = busy ? "收成中" : targetLabel;
+    // R71B：右下互動鈕裝不下完整「交談・人名」時，省略「交談・」前綴只留人名，不截成半個名字（完整文字仍保留在 title）。
+    if (!busy && targetLabel.startsWith("交談・") && action.scrollWidth > action.clientWidth + 1) action.textContent = targetLabel.slice(3);
     action.title = busy ? "正在收成" : targetLabel; // R68B（第 6 項）：浮動按鈕文字省略時保留完整說明
     action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
     if (typeof action.setAttribute === "function") {

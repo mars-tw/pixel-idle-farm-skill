@@ -298,7 +298,7 @@
       btn.type = "button"; btn.className = "r66b-map-node";
       Object.assign(btn.dataset, dataset || {});
       btn.setAttribute("aria-label", label);
-      const size = Math.round(tileSize * 1.08);
+      const size = Math.min(Math.round(tileSize * 1.08), Math.floor(tileSize * 1.5)); // R71B：設施圖寬度不超過一格半
       btn.style.cssText = `left:${Math.round((tile.x + 0.5) * tileSize)}px;top:${Math.round((tile.y + 1) * tileSize)}px;width:${size}px;height:${size}px;z-index:${Math.round((tile.y + 1) * tileSize) + 2};`;
       btn.innerHTML = `<img src="${esc(art)}?v=content-r70-20261110-1" alt="" draggable="false">`;
       btn.onclick = (ev) => { ev.stopPropagation(); onClick(); };
