@@ -1,0 +1,62 @@
+{
+  "model": "muse-wonder-1.0 via muse.image_generation",
+  "tool": "muse.image_generation",
+  "generated": "2026-11-10",
+  "background": "pure magenta #FF00FF generated then chroma-key removed, trimmed, nearest-neighbour downscale 1/4",
+  "files": [
+    {
+      "file": "customer-mayor.png",
+      "size": [
+        172,
+        316
+      ],
+      "sha256": "2266509d2445b0632fcecda907a18b03e0c16724c5eeb8f6285732243e3d22bf",
+      "bytes": 79561
+    },
+    {
+      "file": "customer-elder.png",
+      "size": [
+        282,
+        292
+      ],
+      "sha256": "f748abd4081cf1a872c6349db74c9853771cbda148b5a2bed0de47ab62fc5a3c",
+      "bytes": 117823
+    },
+    {
+      "file": "customer-merchant.png",
+      "size": [
+        177,
+        284
+      ],
+      "sha256": "a32d0c801e26b0e83908d1e4db0a765bffbb88f37ec5ca63e7bc28fa3cb16d7d",
+      "bytes": 77488
+    },
+    {
+      "file": "customer-child.png",
+      "size": [
+        210,
+        266
+      ],
+      "sha256": "54fa0bcc0aa25d9335e37064679dfa58ac4c911cd842c62e47383d24981b390f",
+      "bytes": 69859
+    },
+    {
+      "file": "golden-flag.png",
+      "size": [
+        233,
+        278
+      ],
+      "sha256": "4da2e7e2d0e0abbcaeda6aaba4acb68fd95099ec58b7c274c617bfe316638444",
+      "bytes": 62850
+    },
+    {
+      "file": "stall-token.png",
+      "size": [
+        270,
+        266
+      ],
+      "sha256": "af8c38567019b47a97d8079b5e04f82b8684ddb5388392b37951d16a31981d1d",
+      "bytes": 64131
+    }
+  ]
+}
