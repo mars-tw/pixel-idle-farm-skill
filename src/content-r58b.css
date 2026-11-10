@@ -973,3 +973,29 @@ img[src*="content-r70/"] { image-rendering: pixelated; }
   html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now > span > :is(b, small) { display: none !important; }
   html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now .r69a-collapsed-summary { display: inline !important; font-weight: 800; color: #5a3a12; }
 }
+
+/* R71B（第 5 項）：手機直式任務卡展開上限改為畫面高 32%，超出在卡內捲動，不再占到四成。 */
+@media (max-width: 859px) and (orientation: portrait) {
+  #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed),
+  #questDock[data-quest="early_free_choice"]:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) {
+    max-height: 32dvh !important; overflow-y: auto !important; overflow-x: hidden !important;
+  }
+}
+
+/* R71B（第 5 項）：祭典收合列只留一段摘要（兩段以「｜」分隔，world-ui.js 產生），完整祭典目標在收合時不另顯示成第二段；展開後照常顯示。 */
+#questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) :is(.r67a-now, .r68a-now).r69a-festival-now > span > :is(b, small) { display: none !important; }
+#questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) :is(.r67a-now, .r68a-now).r69a-festival-now .r69a-collapsed-summary { display: inline !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) :is(.r68a-festival-summary, .r61a-festival-banner) .r65b-festival-compact { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* R71B（第 5 項）：右下互動鈕最小寬度可完整容納「交談・老農班伯」；真的裝不下時由 ui.js 省略「交談・」前綴只留人名，不截成半個名字。 */
+@media (max-width: 859px), (any-pointer: coarse) and (max-height: 480px) {
+  #actionA { min-width: 172px !important; max-width: min(72vw, 220px) !important; padding-left: 14px !important; padding-right: 14px !important; box-sizing: border-box !important; white-space: nowrap !important; }
+}
+
+/* R71B（第 6 項）：中期設施圖顯示寬度不超過一格半（--tile-size 由 ui.js 設定），且相鄰物件名牌層級高於設施圖，不被設施圖蓋住。 */
+.r66b-map-node { max-width: calc(var(--tile-size, 72px) * 1.5) !important; max-height: calc(var(--tile-size, 72px) * 1.5) !important; min-width: min(44px, calc(var(--tile-size, 72px) * 1.5)) !important; box-sizing: border-box; }
+.r66b-map-node img { max-width: 100% !important; }
+.world-site-label { z-index: 9700 !important; }
+.npc-nameplate-near, .npc-footname { z-index: 9700 !important; }
+.qmarker .npc-nameplate { z-index: 9700 !important; }
+.tile-state-label { z-index: 9700 !important; }

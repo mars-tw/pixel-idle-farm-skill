@@ -3,7 +3,7 @@
    4 已修好的釣台／野餐桌／花園改用修好外觀、移除「待修」、換成「已修好」標示與完成小徽章；
    5 1366×600 任務卡收合不露半截內容、桌面主線下一步文字不被「收合」鈕蓋住、彈窗開啟時任務卡不留無底浮字；
    6 390×844 頂部標誌完整、資源列可讀；844×390 上方任務列＋下方工具列合計不超過畫面高 35%；
-   7 手機收穫祭收合卡一行顯示「祭典 2/3・剩 8 分」、三個小目標展開才看；右下互動鈕寫出「互動・祭典攤位」；
+   7 手機收穫祭收合卡一行顯示「祭典 2/3｜剩 8 分」、三個小目標展開才看；右下互動鈕寫出「互動・祭典攤位」；
    8 新存檔下方不再有孤立白色小方塊（場景動作列只剩被隱藏的鈕時整列收起）。
    四種尺寸：1366×768、1366×600、390×844、844×390。
    本機沙箱改走 route 攔截與系統 Chrome（比照 R25／R64）。 */
@@ -276,7 +276,7 @@ async function launchBrowser() {
           return { ih: innerHeight, dock: ro(dock), banner: summary && vis(summary) ? ro(summary) : null, bannerText: summary && vis(summary) ? summary.innerText.trim() : '', bannerFull: dock.textContent.trim() };
         }, HELP);
         assert.ok(fest.banner, `${tag} 第 7 項：收穫祭進行中應有橫幅`);
-        assert.match(fest.bannerText, /祭典 2\/3・剩 8 分/, `${tag} 第 7 項：收合時應一行顯示「祭典 2/3・剩 8 分」（實際「${fest.bannerText}」）`);
+        assert.match(fest.bannerText, /祭典 2\/3｜剩 8 分/, `${tag} 第 7 項：收合時應一行顯示「祭典 2/3｜剩 8 分」（實際「${fest.bannerText}」）`);
         assert.doesNotMatch(fest.bannerText, /收成 3 份番茄/, `${tag} 第 7 項：收合時三個小目標應先收起（實際「${fest.bannerText}」）`);
         assert.ok(fest.banner.height <= 34, `${tag} 第 7 項：收合時祭典資訊應只有一行（高 ${Math.round(fest.banner.height)}）`);
         assert.ok(fest.dock.height <= fest.ih * 0.18 + 1, `${tag} 第 7 項：收合任務卡高 ${Math.round(fest.dock.height)} 不應超過畫面 18%`);
