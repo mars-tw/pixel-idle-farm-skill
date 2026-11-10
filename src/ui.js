@@ -433,12 +433,16 @@
       if (plot && plot.cropId && G.getCropProgress(state, plot, t).ready) readyPlots.push(i);
     }
     worldEl.querySelectorAll(".r68a-ready-badge").forEach((node) => { if (!readyPlots.includes(Number(node.dataset.plotIndex))) node.remove(); });
+    /* 選取中的田格剛成熟：標籤與動作列只在點選或落光時重畫，這裡補畫一次，否則「可收成」標示旁還留著「種滿再澆水」。 */
+    let selectedJustRipened = false;
     for (const i of readyPlots) {
       const tile = state.map.tiles.find((row) => row.plotIndex === i); if (!tile) continue;
       let badge = worldEl.querySelector(`.r68a-ready-badge[data-plot-index="${i}"]`);
+      if (!badge && tile.id === selectedTileId) selectedJustRipened = true;
       if (!badge) { badge = document.createElement("button"); badge.type = "button"; badge.className = "r68a-ready-badge"; badge.dataset.audit = "r68a-ready-badge"; badge.dataset.plotIndex = String(i); badge.dataset.tileId = tile.id; badge.textContent = "可收成"; badge.title = "可收成，點一下收成"; badge.onclick = (event) => { event.stopPropagation(); setTool("hand"); clickTile(tile.id); }; worldEl.appendChild(badge); }
       badge.style.left = pxv((tile.x + .5) * TILE); badge.style.top = pxv((tile.y + 1.08) * TILE); badge.style.zIndex = String(Math.round((tile.y + 2) * TILE + 8));
     }
+    if (selectedJustRipened) renderSceneActionsForSelection();
     const scene = $("mapScene");
     if (scene && scene.dataset.sun !== (st.active ? "on" : "off")) scene.dataset.sun = st.active ? "on" : "off";
     const playerTile=G.getTileById(state,state.player.tileId);
