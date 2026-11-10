@@ -841,10 +841,10 @@ html body #questDock .r68a-objective-head > span:not(.qp-step), html body #quest
   html body #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) .r69a-collapsed-summary { display: none !important; }
 }
 /* 提示訊息出現時任務卡照舊暫時收成一行（R28）：「現在做」只留主要按鈕並移到標題列右側，不露出被裁半截的框。 */
-html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) { position: absolute !important; top: 4px; right: 56px; width: auto !important; display: flex !important; margin: 0; padding: 0; border: 0; background: none; }
-html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }
-html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head, .r67a-objective-head) { padding-right: 150px; box-sizing: border-box; }
-html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > .r68a-requirements { visibility: hidden; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) { position: absolute !important; top: 4px; right: 56px; width: auto !important; display: flex !important; margin: 0; padding: 0; border: 0; background: none; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head, .r67a-objective-head) { padding-right: 150px; box-sizing: border-box; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > .r68a-requirements { visibility: hidden; }
 
 /* R70A：收合、收穫祭收合與建造模式暫時收合統一為一行；左欄可省略，進度與主要按鈕固定保留。 */
 html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed),
@@ -956,3 +956,20 @@ html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-
 .r63a-festival-stall img { width: 56px !important; }
 .r70-judge-art { display: block; width: 168px; max-width: 60%; height: auto; margin: 0 auto 6px; image-rendering: pixelated; }
 img[src*="content-r70/"] { image-rendering: pixelated; }
+/* R70 整合：桌面開著側邊面板（手札、鄰居）時，主線／祭典任務卡排成一行：標題＋進度在左、主要按鈕在右，不再只剩一顆按鈕或露出半截按鈕。 */
+@media (min-width: 860px) {
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 8px; height: 52px !important; max-height: 52px !important; padding: 4px 52px 4px 12px !important; box-sizing: border-box; overflow: hidden !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) > .r68a-objective-head { display: flex !important; flex: 1 1 auto; min-width: 0; margin: 0; padding: 0 !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]):has(.r69a-festival-now) > .r68a-objective-head { display: none !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) > :is(.r68a-festival-summary, .r68a-requirements) { display: none !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now { display: flex !important; position: static !important; flex: 0 0 auto; width: auto !important; margin: 0; padding: 0 !important; border: 0 !important; background: none !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now > span { display: none !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now-action { width: auto !important; min-height: 40px; max-width: 160px; padding: 4px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+/* R70 整合：收穫祭時（標題列被祭典規則收起）改在按鈕左邊顯示「祭典 n/3・剩 m 分」摘要。 */
+@media (min-width: 860px) {
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now { flex: 1 1 auto; min-width: 0; gap: 8px; align-items: center; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now > span { display: block !important; flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now > span > :is(b, small) { display: none !important; }
+  html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now .r69a-collapsed-summary { display: inline !important; font-weight: 800; color: #5a3a12; }
+}

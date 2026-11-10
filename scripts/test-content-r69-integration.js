@@ -59,6 +59,14 @@ async function launchBrowser(){
       assert.ok(r.now,'應有「現在做」列'); assert.ok(r.now[1]<=r.dock[1]+1||r.ov==='visible',`提示出現時「現在做」不可被卡片裁成半截：${JSON.stringify(r)}`);
       assert.ok(r.now[1]-r.now[0]>=30,`「現在做」列應完整顯示：${JSON.stringify(r)}`);
       assert.deepEqual(errors,[]); await ctx.close(); console.log('OK 提示出現時不裁切'); }
+    // 4) R70 整合：桌面開著手札時，第 4 章與收穫祭任務卡排成一行：文字（標題或祭典摘要）＋有字的主要按鈕，皆完整在卡內
+    for (const fest of [false, true]) { const {ctx,page,errors}=await open({w:1366,h:768});
+      await page.evaluate((fest)=>{const s=window.__farm.state(),A=window.AdventureAPI,now=Date.now();A.ensure(s,now);A.quests(s,now).filter(q=>q.chapter<=3).forEach(q=>s.adventure.claimed[q.id]=true);A.ensure(s,now);if(fest){const f=s.adventure.r61.festival;f.unlocked=true;f.nextAt=now-1;f.endsAt=0;A.festivalStatus(s,now);}window.__farm.refresh();window.FarmWorld.refresh(s);},fest);
+      await page.waitForTimeout(500); await closeDialogue(page); await page.evaluate(()=>window.FarmWorld.openPanel('story')); await page.waitForTimeout(700);
+      const r=await page.evaluate(()=>{const q=document.querySelector('#questDock'),qr=q.getBoundingClientRect();const vis=e=>e&&getComputedStyle(e).display!=='none'&&e.getBoundingClientRect().width>0;const btn=[...q.querySelectorAll('button')].find(b=>!b.classList.contains('quest-collapse-btn')&&vis(b));const txt=[...q.querySelectorAll('.qp-step, .r69a-collapsed-summary')].find(vis);const br=btn&&btn.getBoundingClientRect(),tr=txt&&txt.getBoundingClientRect();return {btn:btn&&btn.textContent.trim(),txt:txt&&txt.textContent.trim(),btnIn:!!br&&br.top>=qr.top-1&&br.bottom<=qr.bottom+1,txtIn:!!tr&&tr.top>=qr.top-1&&tr.bottom<=qr.bottom+1,overlap:br&&tr?Math.max(0,Math.min(br.right,tr.right)-Math.max(br.left,tr.left)):0};});
+      const tag=fest?'收穫祭':'第 4 章';
+      assert.ok(r.btn&&r.btnIn,`${tag}：開手札時主要按鈕要有字且完整在卡內：${JSON.stringify(r)}`); assert.ok(r.txt&&r.txtIn,`${tag}：開手札時要看得到標題或祭典摘要：${JSON.stringify(r)}`); assert.ok(r.overlap<=1,`${tag}：按鈕不可蓋住文字：${JSON.stringify(r)}`);
+      assert.deepEqual(errors,[]); await ctx.close(); console.log('OK 開手札時任務卡一行：'+tag); }
     console.log('VERIFIED content R69 integration');
   } finally { await browser.close(); if(server) server.close(); fs.rmSync(TMP,{recursive:true,force:true}); }
 })().catch(e=>{console.error(e);process.exit(1);});
