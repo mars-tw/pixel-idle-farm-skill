@@ -1,0 +1,224 @@
+{
+  "model": "muse-wonder-1.0 via muse.image_generation",
+  "tool": "muse.image_generation",
+  "generated": "2026-11-10",
+  "background": "pure magenta #FF00FF generated then chroma-key removed, sliced from 5x2 meal sheet and 7x2 item sheet, downscaled to 32x32",
+  "files": [
+    {
+      "file": "item-rustic_bread.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "0a1e3ed180f817313c118f66e8509aca2832096e751fbd7216d932c312ebc7a2",
+      "bytes": 2036
+    },
+    {
+      "file": "item-baked_carrot.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "0e5dc3a2174264e4adcdc6a0919abb4ef87ec2a1a54b6a05556f91c86af937bd",
+      "bytes": 2437
+    },
+    {
+      "file": "item-wheat_carrot_pancake.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "638add44c84775035ec63d10659d4f3f2a6ecd09af08aede0e492dec3db1fe08",
+      "bytes": 2517
+    },
+    {
+      "file": "item-carrot_wheat_stew.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "ba2127a6d6671041f0f01350301ae8e17f58ff6fbbd6de843b0d319727c97592",
+      "bytes": 2367
+    },
+    {
+      "file": "item-bamber_rain_soup.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "3a0bc1aafec45daf0f44e0aad3005c7f876dc02af741361c79a1ea79c92d141b",
+      "bytes": 2249
+    },
+    {
+      "file": "item-tomato_harvest_stew.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "bd3643ade7fb0f3dd58b49ae6e8dcd492920752e22d407d36929e4624bd37218",
+      "bytes": 2160
+    },
+    {
+      "file": "item-strawberry_market_tart.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "8da5390861816749008c93367e860f0f7563910dc3f7b76c1027301b453bb805",
+      "bytes": 2139
+    },
+    {
+      "file": "item-carrot_trail_soup.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "94c9e6f0f089ffb51364a8c5bd47138f1a24c0cf0859cd7e8e0784496f24cecf",
+      "bytes": 2116
+    },
+    {
+      "file": "item-riverside_harvest_platter.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6e9ee718545a96095d2e203002d6209dbace84c12eac45b65e9e1af9d6d2372f",
+      "bytes": 2201
+    },
+    {
+      "file": "item-mint_tea.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "b9203a0c09ffbc17580b86129f6753bdd1c53872b9fb17a269f769e210c788b9",
+      "bytes": 2116
+    },
+    {
+      "file": "item-egg.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "2d531c7bd291e9235a8051298ffa5a897af04e7666c51645e4203894028a3119",
+      "bytes": 1683
+    },
+    {
+      "file": "item-milk.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "4bd878ed690a2e49cce59d93e563a011339bb5f00f119f758e1cf2c40050de35",
+      "bytes": 1174
+    },
+    {
+      "file": "item-wool.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "7cb25e617fca62762f959d22d97c9be3bb01a4060e5ab5cef98b629aeb1d2e8a",
+      "bytes": 2354
+    },
+    {
+      "file": "item-honey.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "640378efe8426686cea605c062b85e300925b698ec08a3b4df19db2adeb57495",
+      "bytes": 2114
+    },
+    {
+      "file": "item-duck_egg.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "7d7295a0467b70c8c50343be950ff1fd72b231beecf845a7c7382b601ae3f90d",
+      "bytes": 1804
+    },
+    {
+      "file": "item-forest_herb.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "fb471a653290136ab1d31970bf60000b1f196db40b957c1fadcf6d558ee5a6f9",
+      "bytes": 1788
+    },
+    {
+      "file": "item-glow_mushroom.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "87098547c0a1860f1ce505a47147e703d0e1c856247a06bba6c224989e1bd2df",
+      "bytes": 2023
+    },
+    {
+      "file": "item-wild_berry.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "06c567dd8094f6324511440ac7977509dd0cb67929c98a58b0500a35170cdf36",
+      "bytes": 1942
+    },
+    {
+      "file": "item-river_mint.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "233f6c93dc2898c4bd2f22a102fff2383951de7826342581be65fec3d21fa14a",
+      "bytes": 2145
+    },
+    {
+      "file": "item-fallen_branch.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "2f0af7e10defb1d6374bd0c7cb654bd7491143e938cd73f1bde1712fb14cf027",
+      "bytes": 2213
+    },
+    {
+      "file": "item-mooncap_spore.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "cefb3b7ab0f825bb96bc3ce8cbe36db630b53c8742a471b99b9c172e5b6e8d02",
+      "bytes": 1883
+    },
+    {
+      "file": "item-amber_resin.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "899292f460ca6a267c5268eb386f093f57258db41564c2026e2c3307c0893001",
+      "bytes": 2074
+    },
+    {
+      "file": "item-forest_chestnut.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "e26856bbfcf760437abd2508cf1b1a214af3e9596734361559348c685a74d9ec",
+      "bytes": 2402
+    },
+    {
+      "file": "item-frost_cherry.png",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "c8e568204a6be5e7f7b0bcf16d4125f8f69f7c5e56106424ca193fc5d66d4bd2",
+      "bytes": 2280
+    }
+  ]
+}
