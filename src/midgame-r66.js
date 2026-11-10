@@ -146,6 +146,11 @@
     const pool = Object.values(C.CROPS || {}).filter((c) => c.unlockLevel <= (state.level || 1)).map((c) => c.id);
     return pool.length ? pool : ["wheat"];
   }
+  /* R75B：先聽鎮長說鎮上的事，鎮長每日委託金幣多一成，卡上寫明原因。 */
+  function r75bStoryChoice(state, storyId) {
+    const choices = state && state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.r60 && state.adventure.r58.r59.r60.storyChoices;
+    return choices && choices[storyId] ? choices[storyId].choiceId : null;
+  }
   function mayorQuest(state, now) {
     ensure(state, now);
     const b = state.adventure.r66b;
@@ -155,12 +160,16 @@
       const cropId = pool[dayNumber(now) % pool.length];
       const qty = 2 + (dayNumber(now) % 2);
       const sell = (C.CROPS[cropId] && C.CROPS[cropId].sellValue) || 1;
-      b.mayorQuest = { day: today, cropId, qty, rewardCoins: qty * sell * 3 + 12, rewardXp: 6, claimed: false };
+      b.mayorQuest = { day: today, cropId, qty, baseRewardCoins: qty * sell * 3 + 12, rewardCoins: qty * sell * 3 + 12, rewardXp: 6, claimed: false };
     }
     const q = b.mayorQuest;
+    const baseRewardCoins = Number.isFinite(q.baseRewardCoins) ? q.baseRewardCoins : q.rewardCoins;
+    q.baseRewardCoins = baseRewardCoins;
+    const bonusApplied = r75bStoryChoice(state, "mayor_welcome") === "town";
+    q.rewardCoins = bonusApplied ? Math.round(baseRewardCoins * 1.1) : baseRewardCoins;
     const have = (state.storage && state.storage.items && state.storage.items[q.cropId]) || 0;
     return { npcId: "mayor", name: "鎮長葛瑞", title: "鎮公所委託", day: q.day, cropId: q.cropId, cropName: itemNameOf(q.cropId),
-      qty: q.qty, have, rewardCoins: q.rewardCoins, rewardXp: q.rewardXp, claimed: !!q.claimed, canDeliver: !q.claimed && have >= q.qty };
+      qty: q.qty, have, rewardCoins: q.rewardCoins, baseRewardCoins, bonusApplied, bonusText: bonusApplied ? "因為你先聽鎮長說鎮上的事，這份委託的金幣多一成。" : "", rewardXp: q.rewardXp, claimed: !!q.claimed, canDeliver: !q.claimed && have >= q.qty };
   }
   function deliverMayorQuest(state, now) {
     const q = mayorQuest(state, now);
@@ -186,6 +195,17 @@
       active: !!buff, mul: buff ? buff.mul : 0.9, until: buff ? buff.until : 0,
       text: "今天作物成長時間縮短一成" };
   }
+  /* R75B：先留一包種子，每天請教班伯時多拿 1 包當季種子。 */
+  function r75bSeasonalCropId(state) {
+    const seasonId = state && state.season && state.season.id;
+    const crops = Object.values(C.CROPS || {});
+    const seasonal = crops.filter((crop) => crop.season && crop.season === seasonId);
+    if (!seasonal.length) return "wheat";
+    const level = (state && state.level) || 1;
+    const unlocked = seasonal.filter((crop) => (crop.unlockLevel || 1) <= level);
+    const pool = (unlocked.length ? unlocked : seasonal).slice().sort((x, y) => (x.unlockLevel || 1) - (y.unlockLevel || 1));
+    return pool[0].id;
+  }
   function askElderAdvice(state, now) {
     now = Number.isFinite(now) ? now : Date.now();
     const info = elderAdvice(state, now);
@@ -193,8 +213,17 @@
     const until = (dayNumber(now) + 1) * DAY_MS;
     state.adventure.r66b.elderAdvice = { day: info.day, at: now };
     state.adventure.r66b.adviceBuff = { until, mul: 0.9, source: "elder_advice" };
-    return { ok: true, mul: 0.9, until, message: "班伯指點了幾招，今天作物長得快一些，成長時間縮短一成。" };
+    let seasonalSeed = null;
+    if (r75bStoryChoice(state, "elder_wheat") === "seed") {
+      if (A && A.ensure) A.ensure(state, now);
+      const cropId = r75bSeasonalCropId(state);
+      const packs = state.adventure.r58.r59.seedPacks;
+      packs[cropId] = Math.min(99, (packs[cropId] || 0) + 1);
+      seasonalSeed = { cropId, cropName: itemNameOf(cropId), qty: 1 };
+    }
+    return { ok: true, mul: 0.9, until, seasonalSeed, message: "班伯指點了幾招，今天作物長得快一些，成長時間縮短一成。" + (seasonalSeed ? "因為你先留了一包種子，班伯多給你 1 包" + seasonalSeed.cropName + "種子。" : "") };
   }
+  /* R75B：先聽客人想買什麼，蘿拉今日特價從一樣變兩樣（deals[0] 是原本那樣，deals[1] 是多出來的）。 */
   function merchantSpecial(state, now) {
     ensure(state, now);
     const b = state.adventure.r66b;
@@ -204,22 +233,42 @@
       const discounted = all.filter((id) => C.CROPS[id] && C.CROPS[id].seedCost >= 2);
       const pool = discounted.length ? discounted : all;
       const cropId = pool[(dayNumber(now) + 1) % pool.length];
-      b.merchantDeal = { day: today, cropId, bought: 0 };
+      b.merchantDeal = { day: today, cropId, cropId2: null, bought: 0, bought2: 0 };
     }
-    const crop = C.CROPS[b.merchantDeal.cropId];
-    const normalPrice = crop ? crop.seedCost : 1;
-    return { npcId: "merchant", name: "商人蘿拉", title: "今日特價", day: today, cropId: b.merchantDeal.cropId,
-      cropName: itemNameOf(b.merchantDeal.cropId), normalPrice, specialPrice: Math.max(1, Math.floor(normalPrice / 2)), packsPerBuy: normalPrice < 2 ? 2 : 1, bought: b.merchantDeal.bought || 0 }; // R66 整合：原價 1 金的種子無法再打折，改成買一送一
+    const dealOf = (cropId) => {
+      const crop = C.CROPS[cropId];
+      const normalPrice = crop ? crop.seedCost : 1;
+      return { cropId, cropName: itemNameOf(cropId), normalPrice, specialPrice: Math.max(1, Math.floor(normalPrice / 2)), packsPerBuy: normalPrice < 2 ? 2 : 1 };
+    };
+    const twoSpecials = r75bStoryChoice(state, "merchant_hello") === "listen";
+    if (twoSpecials && !b.merchantDeal.cropId2) {
+      const all = unlockedCropPool(state);
+      const discounted = all.filter((id) => C.CROPS[id] && C.CROPS[id].seedCost >= 2);
+      let pool = (discounted.length ? discounted : all).filter((id) => id !== b.merchantDeal.cropId);
+      if (!pool.length) pool = all.filter((id) => id !== b.merchantDeal.cropId);
+      b.merchantDeal.cropId2 = pool.length ? pool[(dayNumber(now) + 2) % pool.length] : b.merchantDeal.cropId;
+    }
+    if (!twoSpecials) b.merchantDeal.cropId2 = b.merchantDeal.cropId2 && b.merchantDeal.day === today ? b.merchantDeal.cropId2 : null;
+    const primary = dealOf(b.merchantDeal.cropId);
+    const deals = [Object.assign({}, primary, { bought: b.merchantDeal.bought || 0 })];
+    if (twoSpecials && b.merchantDeal.cropId2) deals.push(Object.assign({}, dealOf(b.merchantDeal.cropId2), { bought: b.merchantDeal.bought2 || 0 }));
+    return { npcId: "merchant", name: "商人蘿拉", title: "今日特價", day: today, cropId: primary.cropId,
+      cropName: primary.cropName, normalPrice: primary.normalPrice, specialPrice: primary.specialPrice, packsPerBuy: primary.packsPerBuy, bought: b.merchantDeal.bought || 0,
+      cropId2: deals.length > 1 ? deals[1].cropId : null, deals, twoSpecials };
   }
-  function buyMerchantSpecial(state, now) {
+  function buyMerchantSpecial(state, now, cropId, dealIndex) {
     now = Number.isFinite(now) ? now : Date.now();
-    const deal = merchantSpecial(state, now);
+    const view = merchantSpecial(state, now);
+    const deal = Number.isInteger(dealIndex) && view.deals[dealIndex] ? view.deals[dealIndex] : cropId ? view.deals.find((row) => row.cropId === cropId) : view.deals[0];
+    if (!deal) return { ok: false, reason: "unknown", message: "找不到這樣特價。" };
     if ((state.coins || 0) < deal.specialPrice) return { ok: false, reason: "cost", message: `金幣不足，特價種子需要 ${deal.specialPrice} 金。` };
     state.coins -= deal.specialPrice;
     if (A && A.ensure) A.ensure(state, now);
     const packs = state.adventure.r58.r59.seedPacks;
     packs[deal.cropId] = Math.min(99, (packs[deal.cropId] || 0) + (deal.packsPerBuy || 1));
-    state.adventure.r66b.merchantDeal.bought = (state.adventure.r66b.merchantDeal.bought || 0) + 1;
+    if (Number.isInteger(dealIndex) && dealIndex > 0) state.adventure.r66b.merchantDeal.bought2 = (state.adventure.r66b.merchantDeal.bought2 || 0) + 1;
+    else if (deal.cropId === view.cropId) state.adventure.r66b.merchantDeal.bought = (state.adventure.r66b.merchantDeal.bought || 0) + 1;
+    else state.adventure.r66b.merchantDeal.bought2 = (state.adventure.r66b.merchantDeal.bought2 || 0) + 1;
     return { ok: true, cropId: deal.cropId, cropName: deal.cropName, price: deal.specialPrice, seedPacks: packs[deal.cropId],
       message: `用特價 ${deal.specialPrice} 金買了 ${deal.packsPerBuy || 1} 包${deal.cropName}種子，種的時候會先用種子包。` };
   }
@@ -254,9 +303,9 @@
   function neighborPanel(state, now) {
     const mayor = mayorQuest(state, now), advice = elderAdvice(state, now), deal = merchantSpecial(state, now), treasure = treasureInfo(state, now);
     return [
-      { npcId: "mayor", name: mayor.name, title: mayor.title, detail: `今天想收 ${mayor.qty} 份${mayor.cropName}，你有 ${mayor.have} 份。完成給 ${mayor.rewardCoins} 金，比一般訂單划算。`, actionLabel: mayor.claimed ? "今天已交付" : "交付委託", canAct: mayor.canDeliver, done: mayor.claimed },
+      { npcId: "mayor", name: mayor.name, title: mayor.title, detail: `今天想收 ${mayor.qty} 份${mayor.cropName}，你有 ${mayor.have} 份。完成給 ${mayor.rewardCoins} 金，比一般訂單划算。${mayor.bonusText || ""}`, actionLabel: mayor.claimed ? "今天已交付" : "交付委託", canAct: mayor.canDeliver, done: mayor.claimed },
       { npcId: "elder", name: advice.name, title: advice.title, detail: advice.active ? "今天的指點生效中，作物成長時間縮短一成。" : "每天可以請教一次，今天還沒請教。", actionLabel: advice.askedToday ? "今天請教過了" : "請教種田", canAct: !advice.askedToday, done: advice.askedToday },
-      { npcId: "merchant", name: deal.name, title: deal.title, detail: deal.packsPerBuy > 1 ? `今天${deal.cropName}種子買一送一：${deal.specialPrice} 金拿 ${deal.packsPerBuy} 包，今天已買 ${deal.bought} 次。` : `今天${deal.cropName}種子特價 ${deal.specialPrice} 金（原價 ${deal.normalPrice} 金），今天已買 ${deal.bought} 包。`, actionLabel: "買特價種子", canAct: (state.coins || 0) >= deal.specialPrice, done: false },
+      { npcId: "merchant", name: deal.name, title: deal.title, detail: (deal.deals && deal.deals.length > 1 ? `今天有兩樣特價：${deal.deals.map((row) => `${row.cropName}種子 ${row.specialPrice} 金`).join("、")}，第一樣今天已買 ${deal.bought} 次，第二樣可以在手札的「我做過的選擇」裡買。` : deal.packsPerBuy > 1 ? `今天${deal.cropName}種子買一送一：${deal.specialPrice} 金拿 ${deal.packsPerBuy} 包，今天已買 ${deal.bought} 次。` : `今天${deal.cropName}種子特價 ${deal.specialPrice} 金（原價 ${deal.normalPrice} 金），今天已買 ${deal.bought} 包。`), actionLabel: "買特價種子", canAct: (state.coins || 0) >= deal.specialPrice, done: false },
       { npcId: "child", name: treasure.name, title: treasure.title, detail: treasure.found ? "今天的寶藏找到了，明天圖圖會再藏一個。" : "圖圖在地圖某處藏了小土堆，找到有小禮物。", actionLabel: treasure.found ? "今天找到了" : "去找寶藏", canAct: !treasure.found, done: treasure.found, tileId: treasure.tileId },
     ];
   }
