@@ -1356,9 +1356,10 @@
   function festivalEntries(state, now) {
     const status = festivalStatus(state, now);
     if (!status.active) return [];
-    const crops = Object.entries((state.storage && state.storage.items) || {}).filter(([id, count]) => C.CROPS[id] && qty(count) > 0).map(([id, count]) => ({ id, kind: "crop", name: C.CROPS[id].name, icon: C.CROPS[id].emoji || "🌱", quantity: qty(count), season: C.CROPS[id].season || "四季" }));
+    const crops = Object.entries((state.storage && state.storage.items) || {}).filter(([id, count]) => C.CROPS[id] && qty(count) > 0).map(([id, count]) => ({ id, cropId: id, kind: "crop", name: C.CROPS[id].name, icon: C.CROPS[id].emoji || "🌱", quantity: qty(count), season: C.CROPS[id].season || "四季", quality: false }));
+    const qualityCrops = Object.entries((state.storage && state.storage.quality) || {}).filter(([id, count]) => C.CROPS[id] && qty(count) > 0).map(([id, count]) => ({ id: "quality:" + id, cropId: id, kind: "crop", name: "優質" + C.CROPS[id].name, icon: "✨", quantity: qty(count), season: C.CROPS[id].season || "四季", quality: true }));
     const meals = RECIPES.filter((r) => qty(state.adventure.meals[r.id]) > 0).map((r) => ({ id: r.id, kind: "meal", name: r.name, icon: r.icon || "🍽️", quantity: qty(state.adventure.meals[r.id]), season: "料理" }));
-    return crops.concat(meals);
+    return crops.concat(qualityCrops, meals);
   }
   function judgeFestivalEntry(state, selectedIds, now) {
     const status = festivalStatus(state, now);
@@ -1375,17 +1376,18 @@
     const diverse = new Set(selectedIds).size === 3;
     const seasonal = chosen.some((row) => row.kind === "crop" && (row.season === currentSeason || row.season === "四季"));
     const hasMeal = chosen.some((row) => row.kind === "meal");
-    const judgingPoints = (diverse ? 1 : 0) + (seasonal ? 1 : 0) + (hasMeal ? 1 : 0);
+    const quality = chosen.some((row) => row.quality);
+    const judgingPoints = (diverse ? 1 : 0) + (seasonal ? 1 : 0) + (hasMeal ? 1 : 0) + (quality ? 1 : 0);
     const stars = judgingPoints >= 3 ? 3 : judgingPoints >= 2 ? 2 : 1;
-    for (const [id, count] of Object.entries(used)) { const row = entries.find((item) => item.id === id); const target = row.kind === "meal" ? state.adventure.meals : state.storage.items; target[id] -= count; if (target[id] === 0 && row.kind === "crop") delete target[id]; }
+    for (const [id, count] of Object.entries(used)) { const row = entries.find((item) => item.id === id); const target = row.kind === "meal" ? state.adventure.meals : row.quality ? state.storage.quality : state.storage.items; const targetId = row.cropId || id; target[targetId] -= count; if (target[targetId] === 0 && row.kind === "crop") delete target[targetId]; }
     const coins = stars === 1 ? 8 : stars === 2 ? 24 : 50; grant(state, reward(coins, 0));
     if (stars >= 2) f.decorations = Math.min(999, f.decorations + 1);
     if (stars === 3) f.festivalRecipe = true;
     const rewardText = stars === 1 ? "8 金" : stars === 2 ? "24 金與豐收花環裝飾 1 件" : "50 金、專屬豐收花環裝飾 1 件，並學會專屬配方「河畔豐收拼盤」";
     const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，這桌已經很有農場的樣子了。」" : "鎮長葛瑞說：「當季收成和料理都照顧到了，這就是今晚最完整的一桌！」";
-    const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
+    const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, row.quality ? "優質作物 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
     const tip = !diverse ? "差一顆星的話，可以換成三種不同品項。" : !seasonal ? `差一顆星的話，可以換成${currentSeason}季作物。` : !hasMeal ? "差一顆星的話，可以換上一道料理。" : "三項加分都拿到了，下次可換不同當季作物試試。";
-    f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, scoreSources: { diverse, seasonal, hasMeal }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
+    f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, scoreSources: { diverse, seasonal, hasMeal, quality }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
     return ok(`${stars} 顆星！${mayorLine} 獲得${rewardText}。`, copy(f.judging));
   }
   function takeFestivalSettlement(state, now) {

@@ -403,9 +403,10 @@
       xp: 0,
       level: 1,
       selectedSeed: "wheat",
+      selectedCare: "water",
       gender: "f",                             // Stage 6：主角性別（f=Miri / m=Kai），可在設定切換
       useSprites: true,
-      storage: { items: {} },                 // { cropId/productId: qty }
+      storage: { items: {}, quality: {} },    // 一般品項與 R72A 優質作物分開保存
       plots: makePlots(C.GAME.maxPlots),      // 預建 maxPlots，soil 磚 1:1 對應；activePlotCount 控可用數
       upgrades: { plotCount: 0, growthSpeed: 0, sellBonus: 0, storageLevel: 0, helperLevel: 0 },
       orders: [],
@@ -448,8 +449,10 @@
     const def = defaultState(state.lastSeenAt || Date.now());
     const merged = Object.assign({}, def, state);
     // 深層補齊巢狀物件
-    merged.storage = Object.assign({ items: {} }, state.storage);
+    merged.storage = Object.assign({ items: {}, quality: {} }, state.storage);
     merged.storage.items = Object.assign({}, state.storage && state.storage.items);
+    merged.storage.quality = Object.assign({}, state.storage && state.storage.quality);
+    merged.selectedCare = ["water", "compost", "natural"].includes(state.selectedCare) ? state.selectedCare : "water";
     merged.upgrades = Object.assign({}, def.upgrades, state.upgrades);
     for (const key of Object.keys(C.UPGRADES || {})) {
       const max = Array.isArray(C.UPGRADES[key].levels) ? C.UPGRADES[key].levels.length : 0;
@@ -483,6 +486,10 @@
     for (const [id, qty] of Object.entries(merged.storage.items || {})) {
       if (!Number.isFinite(qty) || qty <= 0) delete merged.storage.items[id];
       else merged.storage.items[id] = Math.floor(qty);
+    }
+    for (const [id, qty] of Object.entries(merged.storage.quality || {})) {
+      if (!C.CROPS[id] || !Number.isFinite(qty) || qty <= 0) delete merged.storage.quality[id];
+      else merged.storage.quality[id] = Math.floor(qty);
     }
     merged.flags = Object.assign({ bridgeRepaired: false, eventsClaimed: {}, seasonEventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false, unlocksSeen: { seeds: 1, upgrades: 1 } }, state.flags);
     merged.flags.eventsClaimed = Object.assign({}, state.flags && state.flags.eventsClaimed);

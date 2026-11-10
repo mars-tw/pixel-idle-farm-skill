@@ -22,6 +22,7 @@
 
   let state = null;
   let selectedSeed = "wheat";
+  let selectedCare = "water";
   let selectedLetterId = null;
   let spritesReady = false;
   let lastOrderSig = "";
@@ -772,7 +773,7 @@
     const mats = state.materials || {};
     const held = Object.keys(window.MATERIALS).filter((k) => (mats[k] || 0) > 0);
     const detail = held.map((k) => `${window.MATERIALS[k].name} ${mats[k]}`).join("・");
-    return `<div class="res mat" title="材料：${detail}" aria-label="木料 ${mats.wood || 0} 份，石材 ${mats.stone || 0} 份${detail ? "；" + detail : ""}"><span class="ic">🧰</span><span class="material-name">🪵 木料 ${mats.wood || 0}</span><span class="material-sep">・</span><span class="material-name">🪨 石材 ${mats.stone || 0}</span></div>`;
+    return `<div class="res mat" title="材料：${detail}" aria-label="木料 ${mats.wood || 0} 份，石材 ${mats.stone || 0} 份，堆肥 ${mats.compost || 0} 份"><span class="ic">🧰</span><span class="material-name">🪵 木料 ${mats.wood || 0}</span><span class="material-sep">・</span><span class="material-name">🪨 石材 ${mats.stone || 0}</span><span class="material-sep">・</span><span class="material-name">🍂 堆肥 ${mats.compost || 0}</span></div>`;
   }
 
   // ---------- 種子選擇 ----------
@@ -808,7 +809,7 @@
     const unlocked = G.isCropUnlocked(state, c.id);
     const el = document.createElement("div");
     const inSeason = seasonUnlocked && c.season && c.season === sId;
-    const seasonBadge = c.season ? `<span class="seed-season ${inSeason ? "active" : ""}">${inSeason ? "x1.15" : escapeHtml(c.season)}</span>` : "";
+    const seasonBadge = c.season ? `<span class="seed-season ${inSeason ? "active" : ""}">${inSeason ? "當季・快 15%" : escapeHtml(c.season) + "季・慢 15%"}</span>` : "";
     el.className = "seed" + (selectedSeed === c.id && unlocked ? " sel" : "") + (unlocked ? "" : " locked");
     el.dataset.seedId = c.id;
     el.title = c.name;
@@ -838,6 +839,11 @@
     const quick = document.createElement("div");
     quick.className = "seed-quickbar";
     quickIds.slice(0, 5).forEach((id) => quick.appendChild(seedChip(window.CROPS[id], seasonUnlocked, sId, true, newSeedIds.has(id))));
+    const care = document.createElement("div");
+    care.className = "r72a-care-picker";
+    care.ariaLabel = "選擇照顧方式";
+    care.innerHTML = Object.values(G.FARM_CARE || {}).map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span>${mode.icon}</span>${mode.name}</button>`).join("");
+    care.querySelectorAll("[data-care]").forEach((button) => button.onclick = () => { selectedCare = button.dataset.care; state.selectedCare = selectedCare; renderSeeds(); scheduleSave(); });
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
     more.title = "全部種子";
@@ -858,6 +864,7 @@
     };
     quick.appendChild(more);
     row.appendChild(quick);
+    row.appendChild(care);
 
     if (seedDrawerOpen) {
       const drawer = document.createElement("div");
@@ -1164,9 +1171,10 @@
 
     // hand（預設）：種植 / 收成
     if (!plot.cropId) {
-      const r = G.plant(state, i, selectedSeed, t);
+      const r = G.plant(state, i, selectedSeed, t, selectedCare);
       if (!r.ok) {
         if (r.reason === "no_coins") toast("🪙 金幣不足，先賣點作物");
+        else if (r.reason === "no_compost") toast("🍂 堆肥不足，換一種照顧方式吧");
         else if (r.reason === "locked_crop") toast("🔒 此作物尚未解鎖");
         return;
       }
@@ -1244,7 +1252,8 @@
     }));
     visibleOrders.forEach((o) => {
       const rarity = window.ORDER_RARITY[o.rarity];
-      const pay = G.orderPayout(state, o, now());
+      const qualityBonus = G.orderQualityBonus ? G.orderQualityBonus(state, o) : 0;
+      const pay = G.orderPayout(state, o, now(), qualityBonus);
       const can = allocationById[o.id] ? allocationById[o.id].ready : G.canFulfill(state, o);
       const narrative = G.orderNarrative ? G.orderNarrative(state, o) : null;
       const storyImpact = G.orderStoryImpact ? G.orderStoryImpact(state, o) : null;
@@ -1273,7 +1282,7 @@
           ${sharedHtml ? "" : `<div class="o-flavor">${narrative.offer}</div>`}` : ""}
           <div class="o-wants">${wantsHtml}</div>
           ${sharedHtml}
-          <div class="o-reward">🪙 ${fmtNum(pay.coins)}${pay.coins > o.rewardCoins ? `<small class="o-bonus">（含加成 +${fmtNum(pay.coins - o.rewardCoins)}）</small>` : ""} · <span class="xp">⭐ ${pay.xp}</span></div>
+          <div class="o-reward">🪙 ${fmtNum(pay.coins)}${pay.coins > o.rewardCoins ? `<small class="o-bonus">（含加成 +${fmtNum(pay.coins - o.rewardCoins)}）</small>` : ""} · <span class="xp">⭐ ${pay.xp}</span><small class="r72a-quality-premium" data-audit="quality-premium">✨ 交優質可多拿 ${fmtNum(Math.round(o.rewardCoins * 0.5))} 金${qualityBonus ? `・現有 +${fmtNum(qualityBonus)}` : ""}</small></div>
           <div class="o-meta">${o.firstBatch ? "首批不限時" : `${rarity.label} · ⏳ ${fmtOrderCountdown(Math.max(0, o.expiresAt - now()))}`}</div>
           ${storyImpact && storyImpact.storyNeed > 0 && can ? `<div class="o-story-impact${storyImpact.risky ? " risky" : ""}" data-audit="order-story-impact">${escapeHtml(storyImpact.text)}</div>` : ""}
           ${G.orderPriorityAdvice && G.orderPriorityAdvice(state, o) ? `<div class="o-story-impact" data-audit="order-priority-advice">${escapeHtml(G.orderPriorityAdvice(state, o))}</div>` : ""}
@@ -3048,7 +3057,11 @@
         const el = hasFrame
           ? addObjectPx(obDyn, sheet, frame, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * 0.92, "crop", -2, "crop")
           : addEmojiObjectPx(obDyn, prog.stage <= 1 ? "🌱" : crop.emoji, (tile.x + 0.5) * TILE, (tile.y + 1) * TILE, TILE * (prog.ready ? 0.8 : 0.68), "crop", -2, "crop");
-        if (el) { el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; el.classList.toggle('sun-grown',plot.sunGrown===true); el.classList.toggle('sunlit-crop',!!(G.isSunlit && G.isSunlit(state,tile.plotIndex,t))); }
+        if (el) {
+          el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; el.classList.toggle('sun-grown',plot.sunGrown===true); el.classList.toggle('sunlit-crop',!!(G.isSunlit && G.isSunlit(state,tile.plotIndex,t)));
+          const mode = G.FARM_CARE && G.FARM_CARE[plot.careMode];
+          if (mode) { const badge = document.createElement("span"); badge.className = "r72a-plot-care"; badge.textContent = mode.icon; badge.title = mode.name; badge.setAttribute("aria-label", mode.name); el.appendChild(badge); }
+        }
         if (prog.ready) {
           cropMatureCue("map:" + tile.plotIndex, tile.id, el);
           addDot((tile.x + 0.5) * TILE, tile.y * TILE + 2, "ready-crop");
@@ -4430,9 +4443,9 @@
     const t = now();
     const face = state.player.facing;
     if (action === "plant") {
-      const r = G.plant(state, tile.plotIndex, selectedSeed, t);
+      const r = G.plant(state, tile.plotIndex, selectedSeed, t, selectedCare);
       if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) sunCatchFx(tileId, r.sun); afterChange(true); }
-      else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
+      else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "no_compost" ? "🍂 堆肥不足，換一種照顧方式吧" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       if (quickHarvestTarget === tileId) {
         const crop = window.CROPS[state.plots[tile.plotIndex].cropId];
@@ -4442,7 +4455,7 @@
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
-        toast("🧺 收成 " + r.added + " " + crop.name + (r.sun ? "（陽光 +" + r.sun.bonus + "）" : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } enqueueResultFeedback(r); afterChange(true); }
+        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 1 包種子" : "") + (r.sun ? "（陽光 +" + r.sun.bonus + "）" : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } enqueueResultFeedback(r); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧☀ 在陽光裡澆水，長得更快" : "💧 澆水變濕土加速"); afterChange(false); }
@@ -5295,6 +5308,7 @@
     setupErrorRecovery();
     setupVisibilityLifecycle();
     selectedSeed = state.selectedSeed && window.CROPS[state.selectedSeed] ? state.selectedSeed : "wheat";
+    selectedCare = G.FARM_CARE && G.FARM_CARE[state.selectedCare] ? state.selectedCare : "water";
 
     // 舊作物 sheet 僅供隱藏相容農場格（主地圖作物改用 atlas）
     document.documentElement.style.setProperty("--crop-sheet", `url(${ASSETS.crops})`);

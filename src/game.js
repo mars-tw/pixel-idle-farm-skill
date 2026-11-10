@@ -141,12 +141,28 @@
     const c = CROPS[cropId];
     return Math.max(1000, Math.floor(c.growMs * growthMultiplier(state, now)));
   }
+  const FARM_CARE = {
+    water: { id: "water", name: "勤澆水", icon: "💧", growMul: 0.75 },
+    compost: { id: "compost", name: "施堆肥", icon: "🍂", yieldBonus: 1, qualityChance: 0.30 },
+    natural: { id: "natural", name: "放著長", icon: "🌿", growMul: 1.20, seedBack: 1 },
+  };
+  function cropSeasonMultiplier(state, cropId, now) {
+    const crop = CROPS[cropId];
+    if (!crop || !crop.season) return 1;
+    return crop.season === currentSeason(state, now) ? 0.85 : 1.15;
+  }
+  function plotGrowMs(state, plot, now) {
+    let growMs = effectiveGrowMs(state, plot.cropId, now) * cropSeasonMultiplier(state, plot.cropId, now);
+    const care = FARM_CARE[plot.careMode];
+    if (care && care.growMul) growMs *= care.growMul;
+    if (isWet(plot) && plot.careMode !== "water") growMs *= MOISTURE_MUL;
+    return Math.max(1000, Math.floor(growMs));
+  }
   // 此格本輪是否為濕土（澆水時間 >= 本輪種植時間）
   function isWet(plot) { return !!plot.cropId && (plot.wateredAt || 0) >= plot.plantedAt; }
   function getCropProgress(state, plot, now) {
     if (!plot.cropId) return { ready: false, ratio: 0, remainingMs: 0, stage: 0, wet: false };
-    let growMs = effectiveGrowMs(state, plot.cropId, now);
-    if (isWet(plot)) growMs = Math.max(1000, Math.floor(growMs * MOISTURE_MUL)); // 濕土加速
+    const growMs = plotGrowMs(state, plot, now);
     const elapsed = Math.max(0, now - plot.plantedAt);
     const ratio = Math.min(1, elapsed / growMs);
     const ready = elapsed >= growMs;
@@ -289,13 +305,21 @@
     return cap;
   }
   function storageUsed(state) {
-    return Object.values(state.storage.items).reduce((s, n) => s + (n || 0), 0);
+    return Object.values(state.storage.items).reduce((s, n) => s + (n || 0), 0)
+      + Object.values(state.storage.quality || {}).reduce((s, n) => s + (n || 0), 0);
   }
   function addToStorage(state, cropId, qty) {
     const cap = storageCapacity(state);
     const free = Math.max(0, cap - storageUsed(state));
     const added = Math.min(qty, free);
     if (added > 0) state.storage.items[cropId] = (state.storage.items[cropId] || 0) + added;
+    return { added, lost: qty - added };
+  }
+  function addQualityToStorage(state, cropId, qty) {
+    if (!state.storage.quality) state.storage.quality = {};
+    const free = Math.max(0, storageCapacity(state) - storageUsed(state));
+    const added = Math.min(qty, free);
+    if (added > 0) state.storage.quality[cropId] = (state.storage.quality[cropId] || 0) + added;
     return { added, lost: qty - added };
   }
   function ensureDiscoveryState(state) {
@@ -590,30 +614,39 @@
     const lv = state.upgrades.plotCount;
     return lv > 0 ? UPGRADES.plotCount.levels[lv - 1].value : GAME.startPlots;
   }
-  function plant(state, plotIndex, cropId, now) {
+  function plant(state, plotIndex, cropId, now, careMode) {
     const plot = state.plots[plotIndex];
     if (!plot) return { ok: false, reason: "no_plot" };
     if (plotIndex >= activePlotCount(state)) return { ok: false, reason: "locked_plot" };
     if (plot.cropId) return { ok: false, reason: "occupied" };
+    if (!CROPS[cropId]) return { ok: false, reason: "unknown_crop" };
+    const explicitCare = careMode !== undefined;
+    const chosenCare = explicitCare && FARM_CARE[careMode] ? careMode : null;
+    if (explicitCare && !chosenCare) return { ok: false, reason: "unknown_care" };
+    if (chosenCare === "compost" && (!state.materials || (state.materials.compost || 0) < 1)) return { ok: false, reason: "no_compost" };
     const cost = CROPS[cropId].seedCost;
     const seedPacks = state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.seedPacks;
     const freeSeed = seedPacks && (seedPacks[cropId] || 0) > 0;
     if (!freeSeed && !isCropUnlocked(state, cropId)) return { ok: false, reason: "locked_crop" };
     if (!freeSeed && state.coins < cost) return { ok: false, reason: "no_coins" };
     if (freeSeed) seedPacks[cropId]--; else state.coins -= cost;
+    if (chosenCare === "compost") state.materials.compost--;
     plot.cropId = cropId;
+    if (chosenCare) plot.careMode = chosenCare; else delete plot.careMode;
+    delete plot.wateredAt;
     const r65TutorialHeadStart = cropId === "wheat"
       && state.stats.plantCount < 3
       && ["plant_wheat", "first_water", "first_harvest"].includes(state.story && state.story.questId)
       && !(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
-    plot.plantedAt = now - (r65TutorialHeadStart ? 5000 : 0);
-    delete plot.wateredAt;
+    plot.plantedAt = now;
+    if (r65TutorialHeadStart) plot.plantedAt = now - Math.max(5000, plotGrowMs(state, plot, now) - 10000);
     delete plot.sunGrown;
     state.stats.plantCount++;
     const sun = sunBoostGrowth(state, plotIndex, now);
-    return sun ? { ok: true, sun, usedSeedPack: freeSeed } : { ok: true, usedSeedPack: freeSeed };
+    const care = chosenCare ? FARM_CARE[chosenCare] : null;
+    return sun ? { ok: true, sun, usedSeedPack: freeSeed, careMode: chosenCare, care } : { ok: true, usedSeedPack: freeSeed, careMode: chosenCare, care };
   }
-  function harvest(state, plotIndex, now) {
+  function harvest(state, plotIndex, now, rng) {
     const plot = state.plots[plotIndex];
     if (!plot || !plot.cropId) return { ok: false, reason: "empty" };
     const prog = getCropProgress(state, plot, now);
@@ -623,18 +656,27 @@
     ensureSunState(state);
     const sunlit = isSunlit(state, plotIndex, now);
     const mealBonus = mealFlatBonus(state, "harvest", now);
-    const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0) + mealBonus;
+    const care = FARM_CARE[plot.careMode] || null;
+    const qty = crop.yield + (sunlit ? SUNPATCH.harvestBonus : 0) + mealBonus + (care && care.yieldBonus || 0);
     const xp = crop.xp + (sunlit ? SUNPATCH.xpBonus : 0);
-    const { added, lost } = addToStorage(state, crop.id, qty);
+    const quality = !!(care && care.qualityChance && (rng === undefined ? Math.random() : rng()) < care.qualityChance);
+    const { added, lost } = quality ? addQualityToStorage(state, crop.id, qty) : addToStorage(state, crop.id, qty);
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
     if (Daily && added > 0) Daily.record(state, "harvest", added, now);
     if (Heirloom) Heirloom.recordHarvest(state, crop.id, added, sunlit || plot.sunGrown === true);
     if (added > 0) recordDiscovery(state, crop.id, now);
     const leveled = addXp(state, xp);
-    plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown;
+    if (care && care.seedBack) {
+      state.adventure = state.adventure || {};
+      state.adventure.r58 = state.adventure.r58 || {};
+      state.adventure.r58.r59 = state.adventure.r58.r59 || {};
+      const packs = state.adventure.r58.r59.seedPacks = state.adventure.r58.r59.seedPacks || {};
+      packs[crop.id] = Math.min(99, (packs[crop.id] || 0) + care.seedBack);
+    }
+    plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown; delete plot.careMode;
     if (sunlit) markSunUsed(state, plotIndex);
     checkAchievements(state);
-    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled,
+    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled, quality, careMode: care && care.id, seedBack: care && care.seedBack || 0,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: farmNextStepText(state, now, "把 2 份小麥交給老農班伯。") };
@@ -964,17 +1006,24 @@
     return state.orders;
   }
   function canFulfill(state, order) {
-    return Object.entries(order.wants).every(([cropId, qty]) => (state.storage.items[cropId] || 0) >= qty);
+    return Object.entries(order.wants).every(([cropId, qty]) => (state.storage.items[cropId] || 0) + ((state.storage.quality || {})[cropId] || 0) >= qty);
+  }
+  function orderQualityBonus(state, order) {
+    const total = Object.values(order.wants || {}).reduce((sum, qty) => sum + qty, 0);
+    if (!total) return 0;
+    const quality = Object.entries(order.wants || {}).reduce((sum, [id, qty]) => sum + Math.min(qty, ((state.storage || {}).quality || {})[id] || 0), 0);
+    return Math.round(order.rewardCoins * 0.5 * quality / total);
   }
   // R36：訂單共用同一份庫存時，依面板（state.orders）順序保留物品。
   function orderAllocation(state, orders) {
     const remaining = Object.assign({}, (state.storage && state.storage.items) || {});
+    for (const [id, qty] of Object.entries((state.storage && state.storage.quality) || {})) remaining[id] = (remaining[id] || 0) + qty;
     const storyReserved = {};
     for (const itemId of Object.keys(remaining)) { storyReserved[itemId] = Math.min(remaining[itemId] || 0, mainStoryReserve(state, itemId)); remaining[itemId] = Math.max(0, (remaining[itemId] || 0) - storyReserved[itemId]); }
     return (orders || state.orders || []).map((order) => {
       const missing = {}, items = {};
       for (const [itemId, qty] of Object.entries(order.wants || {})) {
-        const stock = Math.max(0, ((state.storage && state.storage.items) || {})[itemId] || 0);
+        const stock = Math.max(0, (((state.storage && state.storage.items) || {})[itemId] || 0) + (((state.storage && state.storage.quality) || {})[itemId] || 0));
         const available = Math.max(0, remaining[itemId] || 0);
         const priorReserved = Math.max(0, stock - available), storyReserve = storyReserved[itemId] || 0;
         const short = Math.max(0, qty - available);
@@ -1084,13 +1133,13 @@
   }
   // 刻意設計：訂單是固定契約價（rewardCoins/rewardXp 在生成當下就定了），不吃天氣 sellMul——
   // 天氣只影響「直售」（sellMultiplier）。避免訂單獎勵隨天氣忽高忽低，讓訂單成為穩定的收益來源。
-  function orderPayout(state, order, now) {
+  function orderPayout(state, order, now, qualityBonus) {
     const streakMul = 1 + Math.min(ORDER_STREAK_CAP, state.orderStreak * ORDER_STREAK_BONUS);
     const sellLv = state.upgrades.sellBonus;
     const sellBonus = sellLv > 0 ? UPGRADES.sellBonus.levels[sellLv - 1].value : 0;
-    const coins = Math.round(order.rewardCoins * (1 + sellBonus + achievementBonus(state)) * streakMul * (1 + mealOrderBonus(state, now)));
+    const coins = Math.round((order.rewardCoins + (qualityBonus || 0)) * (1 + sellBonus + achievementBonus(state)) * streakMul * (1 + mealOrderBonus(state, now)));
     const xp = Math.round(order.rewardXp * streakMul);
-    return { coins, xp, streakMul };
+    return { coins, xp, streakMul, qualityBonus: qualityBonus || 0 };
   }
   function fulfillOrder(state, orderId, now, rng) {
     const idx = state.orders.findIndex((o) => o.id === orderId);
@@ -1099,14 +1148,20 @@
     const allocation = orderAllocationFor(state, orderId);
     if (!allocation || !allocation.ready) return { ok: false, reason: "reserved", missing: allocation ? allocation.missing : {} };
     const beforeLevel = state.level || 1;
-    // 扣作物
+    let qualityUsed = 0;
+    const qualityBonus = orderQualityBonus(state, order);
+    // 優質作物先交，剩餘數量再由一般作物補足。
     for (const [cropId, qty] of Object.entries(order.wants)) {
-      state.storage.items[cropId] -= qty;
+      const qHave = ((state.storage.quality || {})[cropId] || 0), qUse = Math.min(qty, qHave), normalUse = qty - qUse;
+      qualityUsed += qUse;
+      if (qUse) { state.storage.quality[cropId] -= qUse; if (state.storage.quality[cropId] <= 0) delete state.storage.quality[cropId]; }
+      state.storage.items[cropId] = (state.storage.items[cropId] || 0) - normalUse;
       if (state.storage.items[cropId] <= 0) delete state.storage.items[cropId];
       if (isQualityItem(cropId)) state.stats.qualitySold = (state.stats.qualitySold || 0) + qty;
     }
     state.orderStreak++;
-    const pay = orderPayout(state, order, now);
+    const pay = orderPayout(state, order, now, qualityBonus);
+    state.stats.qualitySold = (state.stats.qualitySold || 0) + qualityUsed;
     state.coins += pay.coins;
     state.stats.totalCoinsEarned += pay.coins;
     addXp(state, pay.xp);
@@ -1127,7 +1182,7 @@
     checkAchievements(state);
     const milestones = [];
     if ((state.level || 1) > beforeLevel) milestones.push(milestoneCard("level_up", { level: state.level, state, now }));
-    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, story, milestones,
+    return { ok: true, coins: pay.coins, xp: pay.xp, streakMul: pay.streakMul, qualityBonus: pay.qualityBonus, qualityUsed, story, milestones,
       feedback: [{ kind: "order", target: "coins", text: `+${pay.coins} 金`, amount: pay.coins }],
       settlement: { kind: "order", coins: pay.coins, xp: pay.xp, next: farmNextStepText(state, now, "查看新訂單，或把收益投入農場升級。") } };
   }
@@ -2886,13 +2941,13 @@
     quickHarvestStatus,
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, buildingMaxLevel, buildingLevel, buildingLevelData, buildingEffect,
-    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, isWet, waterPlot,
-    getCropProgress, storageCapacity, storageUsed, addToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
+    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, isWet, waterPlot,
+    getCropProgress, storageCapacity, storageUsed, addToStorage, addQualityToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,
     orderNarrative,
     seasonOrderBias, seasonOrderBiasToast, seasonBiasItems, seasonCycleId, seasonEventStatus, claimSeasonEvent,
-    makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderAllocation, orderAllocationFor, orderAllocationText, orderItemStatusText, mainStoryReserve, orderConsumesStoryReserve, orderStoryImpact, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
+    makeOrder, refreshOrders, previewMarketOrders, marketPreviewAction, canFulfill, orderQualityBonus, orderAllocation, orderAllocationFor, orderAllocationText, orderItemStatusText, mainStoryReserve, orderConsumesStoryReserve, orderStoryImpact, orderMissingText, orderLockText, orderPayout, fulfillOrder, trashOrder,
     upgradeMaxLevel, nextUpgrade, canBuyUpgrade, upgradeShortfall, upgradeCardInfo, buyUpgrade, resourceSnapshot, resourceDeltaEvents, helperFlags, orderPriorityAdvice,
     currentWeather, updateWeather, runHelperOnline, applyOffline,
     farmSeason, farmActionSuggestions, offlineForageRefreshes,
