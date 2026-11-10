@@ -10,9 +10,9 @@
   const DAY_MS = 24 * 60 * 60 * 1000;
 
   const FACILITIES = {
-    r66_beehive: { type: "r66_beehive", name: "蜂箱", unlockLevel: 2, costCoins: 40, intervalMs: 3 * 60 * 1000, itemId: "honey", itemName: "蜂蜜", art: "assets/generated/content-r66/beehive.svg", produceText: "每 3 分鐘產 1 份蜂蜜" },
-    r66_herb_garden: { type: "r66_herb_garden", name: "香草小圃", unlockLevel: 2, costCoins: 35, intervalMs: 4 * 60 * 1000, itemId: "river_mint", itemName: "薄荷", art: "assets/generated/content-r66/herb-garden.svg", produceText: "每 4 分鐘產 1 份薄荷" },
-    r66_feed_trough: { type: "r66_feed_trough", name: "雞舍餵食槽", unlockLevel: 2, costCoins: 45, intervalMs: 0, itemId: "egg", itemName: "雞蛋", art: "assets/generated/content-r66/feed-trough.svg", produceText: "每次收雞蛋多 1 顆" },
+    r66_beehive: { type: "r66_beehive", name: "蜂箱", unlockLevel: 2, costCoins: 40, intervalMs: 3 * 60 * 1000, itemId: "honey", itemName: "蜂蜜", art: "assets/generated/content-r70/beehive.png", produceText: "每 3 分鐘產 1 份蜂蜜" },
+    r66_herb_garden: { type: "r66_herb_garden", name: "香草小圃", unlockLevel: 2, costCoins: 35, intervalMs: 4 * 60 * 1000, itemId: "river_mint", itemName: "薄荷", art: "assets/generated/content-r70/herb-garden.png", produceText: "每 4 分鐘產 1 份薄荷" },
+    r66_feed_trough: { type: "r66_feed_trough", name: "雞舍餵食槽", unlockLevel: 2, costCoins: 45, intervalMs: 0, itemId: "egg", itemName: "雞蛋", art: "assets/generated/content-r70/feed-trough.png", produceText: "每次收雞蛋多 1 顆" },
   };
   const FACILITY_ORDER = ["r66_beehive", "r66_herb_garden", "r66_feed_trough"];
   const TREASURE_TILES = ["t6_8", "t12_5", "t9_6", "t13_8", "t5_5", "t11_9", "t15_5", "t7_10"];

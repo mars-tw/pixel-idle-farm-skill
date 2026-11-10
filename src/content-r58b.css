@@ -845,3 +845,7 @@ html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-
 html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }
 html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head, .r67a-objective-head) { padding-right: 150px; box-sizing: border-box; }
 html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > .r68a-requirements { visibility: hidden; }
+/* R70B：MUSE 精緻像素圖（蜂箱、香草小圃、餵食槽、彩旗、燈籠架、祭典攤位、評比桌）的顯示尺寸與像素銳利度。 */
+.r63a-festival-stall img { width: 56px !important; }
+.r70-judge-art { display: block; width: 168px; max-width: 60%; height: auto; margin: 0 auto 6px; image-rendering: pixelated; }
+img[src*="content-r70/"] { image-rendering: pixelated; }
