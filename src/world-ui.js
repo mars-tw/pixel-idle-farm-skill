@@ -372,7 +372,8 @@
     // R75 整合：光還沒落下時也先預告「幾秒後落下、手鏡還能折幾次」，玩家才來得及決定要不要折光。
     const coming = sun && !sun.active && sun.preview ? (sun.previewPlots || []).filter((i) => i < active) : [];
     let chip = el("sunChip");
-    if (!plots.length && !coming.length) { if (chip) chip.hidden = true; return; }
+    /* 建造選單開著時收起陽光標籤，否則會蓋在第一張建造卡上。 */
+    if ((!plots.length && !coming.length) || document.querySelector("#buildWheel:not([hidden])")) { if (chip) chip.hidden = true; return; }
     if (!chip) {
       chip = document.createElement("button"); chip.type = "button"; chip.id = "sunChip"; chip.className = "sun-chip"; chip.dataset.audit = "sun-chip";
       chip.onclick = () => { const cur = current; const st = cur && window.sunpatchStatus ? window.sunpatchStatus(cur, Date.now()) : null; const idx = st && (st.active ? st.plots && st.plots[0] : st.previewPlots && st.previewPlots[0]); const tile = cur && cur.map && cur.map.tiles.find((t) => t.plotIndex === idx); if (tile && farm() && farm().focusTile) farm().focusTile(tile.id); };

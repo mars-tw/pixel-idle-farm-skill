@@ -403,7 +403,7 @@
       btn.dataset.r66bBuild = row.type;
       btn.disabled = row.built || !row.canBuild;
       btn.title = `${row.name}・${row.costCoins} 金・${row.produceText}`;
-      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r75-20261110-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small>${row.costCoins} 金<br>${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</small></span>`;
+      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r75-20261110-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small><span class="bw-costs">${row.costCoins} 金</span><span class="bw-status">${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</span></small></span>`;
       btn.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = row.type;

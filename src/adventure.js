@@ -485,7 +485,9 @@
       const lit = activeLight.length ? activeLight : previewLight; const litCrops = cropped.filter((tile) => lit.includes(tile.plotIndex));
       if (!sunplay.firstRefracted && lit.length && !litCrops.length && cropped.length) {
         const target = dry[0] || growing[0] || cropped[0];
-        if (Sunplay.canRefract(state, target.plotIndex, t)) return field("refract", target, activeLight.length ? `光落在空田上。拿祖母的手鏡，把光折到你的${cropName(target)}上。` : `光快落在空田上了。拿祖母的手鏡，先把光折到你的${cropName(target)}上。`, "把光折過來");
+        /* 作物已經熟了還叫玩家折光，要講清楚為什麼：在光裡收成才接得到陽光，所以先別收。 */
+        const ripe = ready.includes(target);
+        if (Sunplay.canRefract(state, target.plotIndex, t)) return field("refract", target, ripe ? `${cropName(target)}熟了，先別收。拿祖母的手鏡把光折過來，在光裡收成多接 1 點陽光。` : activeLight.length ? `光落在空田上。拿祖母的手鏡，把光折到你的${cropName(target)}上。` : `光快落在空田上了。拿祖母的手鏡，先把光折到你的${cropName(target)}上。`, "把光折過來");
       }
       if (activeLight.length && litCrops.length) {
         const ripe = litCrops.find((tile) => ready.includes(tile));

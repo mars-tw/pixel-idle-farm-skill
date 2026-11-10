@@ -3747,7 +3747,6 @@
     }
   }
   function buildCostHtml(def) { return Object.entries(def.cost || {}).map(([k, v]) => `<span class="bw-cost">${escapeHtml(k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k))}</span>`).join("、"); }
-  function buildCostHtml(def) { return Object.entries(def.cost || {}).map(([k, v]) => `<span class="bw-cost">${escapeHtml(k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k))}</span>`).join("、"); }
   function buildCostText(def) {
     return Object.entries(def.cost || {}).map(([k, v]) => k === "coins" ? v + " 金" : v + " " + ((window.MATERIALS[k] && window.MATERIALS[k].name) || k)).join("、");
   }
@@ -3799,7 +3798,7 @@
       b.disabled = !status.enabled;
       b.title = `${def.name}・${buildCostText(def)}・${status.text}`;
       const effect = (def.levels && def.levels[0] && def.levels[0].effectLabel) || def.desc || ""; // R47：建造卡寫出效果，不再盲買
-      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}${effect ? `<em class="bw-effect">${escapeHtml(effect)}</em>` : ""}<small>${buildCostHtml(def)}<br>${escapeHtml(status.text)}</small></span>`;
+      b.innerHTML = `<span class="bw-ic">${def.emoji}</span><span class="bw-t">${escapeHtml(def.name)}${effect ? `<em class="bw-effect">${escapeHtml(effect)}</em>` : ""}<small><span class="bw-costs">${buildCostHtml(def)}</span><span class="bw-status">${escapeHtml(status.text)}</span></small></span>`;
       b.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = type;
@@ -3811,6 +3810,13 @@
     box.hidden = false;
     box.style.left = "50%";
     placeBuildCatalog(box); avoidPlayerForBuild(box);
+    /* R75：避開任務卡往下移之後重算高度，選單下緣不伸到工具列後面或畫面外（內容可捲）。 */
+    if (typeof box.getBoundingClientRect === "function") {
+      const br = box.getBoundingClientRect(); const dock = $("farmDock"); const dr = dock && typeof dock.getBoundingClientRect === "function" ? dock.getBoundingClientRect() : null;
+      const limit = Math.min(window.innerHeight - 8, dr && dr.height && dr.top > br.top + 120 && dr.left < br.right && dr.right > br.left ? dr.top - 8 : Infinity);
+      /* 中期設施的卡片是稍後才補進來的，這裡不能量當下的高度，直接把上限壓到可用空間。 */
+      const cap = Math.max(120, Math.floor(limit - br.top)); if (!(parseFloat(box.style.maxHeight) <= cap)) box.style.maxHeight = cap + "px";
+    }
     /* R28：面板內已有「選一個建物」提示，浮動提示不重複顯示。 */
   }
   function buildOptionsForTile(tile) {
