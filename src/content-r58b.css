@@ -829,3 +829,14 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
     width:auto !important;
   }
 }
+/* R69 整合（最後一層，壓過歷代規則）：
+   1) 標題列：章節名稱可縮短加省略號，進度數字固定在後面，兩者不重疊。
+   2) 桌面收合：標題列已顯示「名稱＋進度」，收合摘要不再重複一次。
+   3) 提示訊息出現時不再把任務卡壓成 52px（舊 R28 規則），避免卡內出現半截空框；卡片在左上角，不會擋到提示。 */
+html body #questDock .r68a-objective-head, html body #questDock .r67a-objective-head { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+html body #questDock .r68a-objective-head > .qp-step, html body #questDock .r67a-objective-head > .qp-step { flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: static !important; }
+html body #questDock .r68a-objective-head > span:not(.qp-step), html body #questDock .r67a-objective-head [data-audit="quest-progress"] { flex: 0 0 auto; position: static !important; white-space: nowrap; }
+@media (min-width: 860px) {
+  html body #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) .r69a-collapsed-summary { display: none !important; }
+}
+html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) { max-height: none !important; overflow: visible !important; }
