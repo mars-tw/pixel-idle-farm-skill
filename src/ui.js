@@ -509,7 +509,9 @@
       scheduleSave();
     }
     syncSunBeams(t);
-    if (r.spawned || r.expired) renderSceneActionsForSelection();
+    if (r.spawned || r.expired || r.previewed) renderSceneActionsForSelection();
+    /* 預告圈亮起、光落下或散掉的當下就重畫任務卡，不等每 750ms 一次的例行更新，免得田上已經亮圈、任務卡還寫著「等第一道光落下」。 */
+    if ((r.spawned || r.expired || r.previewed) && window.FarmWorld && window.FarmWorld.renderObjective) window.FarmWorld.renderObjective(state);
   }
   function waterSplashFx(tileId) {
     const c = tileCenter(tileId);
@@ -3923,6 +3925,8 @@
     if (prog.ready) return name + "・可收成";
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
+    /* 光快落在這一格：任務卡教的是「等光到了再澆水」，標籤跟著講同一件事，不再寫「種滿再澆水」。 */
+    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return name + "・" + `已種 ${planted}／3 格` + "\n光快落在這格了・等光到了再澆水";
     return name + "・" + (planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水");
   }
   function renderTileStateLabel(tile) {
