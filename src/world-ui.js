@@ -100,6 +100,17 @@
   const npcTile = (id) => current.map.tiles.find((t) => t.npc === id);
   const stationTile = (id) => current.map.tiles.find((t) => t.station === id);
   const homeTile = () => current.map.tiles.find((t) => t.structureId === "farmhouse");
+  /* 走去農舍要挑走得到的牆邊：農舍佔 3×2 格，左上角那格旁邊站著鎮長、上方被屋頂擋住，
+     拿那格當目的地永遠找不到路（「前往灶台」「做一份」「享用」都會卡在「先走完這段路」）。 */
+  const homeDoorTile = () => {
+    const from = current.player && current.player.tileId; let best = null, steps = Infinity;
+    for (const t of current.map.tiles) {
+      if (t.structureId !== "farmhouse") continue;
+      const plan = typeof window.pathToAdjacent === "function" ? window.pathToAdjacent(current, from, t.id) : null;
+      if (plan && plan.path.length < steps) { best = t; steps = plan.path.length; }
+    }
+    return best || homeTile();
+  };
   const siteTileId = (id) => (current.adventure.siteTiles || {})[id] || (window.WORLD_PROJECT_SITES || {})[id] || sites[id].tileId;
 
   // Record only successful mutations. Reading NPC dialogue is not a talk event.
@@ -267,7 +278,8 @@
         ${festivalFocus && nextFarm ? `<div class="r69a-main-row">主線：${esc(nextFarm.text)}</div>` : ""}
         ${early.complete ? '<button type="button" class="r66a-daily-claim" data-r66a-claim>領取今日三件事獎勵</button>' : ""}
         `;
-      box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => goEarlyGoal(button.dataset.earlyGoal); });
+      // R75 整合：「現在做」按鈕上的字來自 nextFarmStep，按下去就做同一個動作（原本一律走 goEarlyGoal，字寫折光、實際卻去種田）。
+      box.querySelectorAll("[data-early-goal]").forEach((button) => { button.onclick = () => { if (A.nextFarmStep && A.nextFarmStep(current || s, Date.now())) goNextFarmStep(); else goEarlyGoal(button.dataset.earlyGoal); }; });
       box.querySelectorAll("[data-r69a-festival-go]").forEach((button) => { button.onclick = () => goFestivalGoal(button.dataset.r69aFestivalGo); });
       const dailyButton = box.querySelector("[data-r66a-daily]"); if (dailyButton) { dailyButton.disabled = early.chosen && !early.canSwap; dailyButton.onclick = () => {
         const picked = new Set(early.goals.map((goal) => goal.id));
@@ -357,16 +369,21 @@
     const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
     const plots = sun && sun.active ? sun.plots.filter((i) => i < active) : [];
+    // R75 整合：光還沒落下時也先預告「幾秒後落下、手鏡還能折幾次」，玩家才來得及決定要不要折光。
+    const coming = sun && !sun.active && sun.preview ? (sun.previewPlots || []).filter((i) => i < active) : [];
     let chip = el("sunChip");
-    if (!plots.length) { if (chip) chip.hidden = true; return; }
+    if (!plots.length && !coming.length) { if (chip) chip.hidden = true; return; }
     if (!chip) {
       chip = document.createElement("button"); chip.type = "button"; chip.id = "sunChip"; chip.className = "sun-chip"; chip.dataset.audit = "sun-chip";
-      chip.onclick = () => { const cur = current; const st = cur && window.sunpatchStatus ? window.sunpatchStatus(cur, Date.now()) : null; const idx = st && st.plots && st.plots[0]; const tile = cur && cur.map && cur.map.tiles.find((t) => t.plotIndex === idx); if (tile && farm() && farm().focusTile) farm().focusTile(tile.id); };
+      chip.onclick = () => { const cur = current; const st = cur && window.sunpatchStatus ? window.sunpatchStatus(cur, Date.now()) : null; const idx = st && (st.active ? st.plots && st.plots[0] : st.previewPlots && st.previewPlots[0]); const tile = cur && cur.map && cur.map.tiles.find((t) => t.plotIndex === idx); if (tile && farm() && farm().focusTile) farm().focusTile(tile.id); };
       document.body.appendChild(chip);
     }
     chip.hidden = false;
-    chip.textContent = `☀ 陽光照在 ${plots.length} 格田・剩 ${Math.ceil(sun.remainingMs / 1000)} 秒`;
-    chip.setAttribute("aria-label", chip.textContent + "，點一下看受光的田");
+    const mirror = sun.refractionsLeft > 0 ? `・手鏡可折 ${sun.refractionsLeft} 次` : "";
+    const chipText = plots.length ? `☀ 陽光照在 ${plots.length} 格田・剩 ${Math.ceil(sun.remainingMs / 1000)} 秒` : `☀ 光 ${Math.max(1, Math.ceil(sun.previewInMs / 1000))} 秒後落下${mirror}`;
+    if (chip.textContent !== chipText) chip.textContent = chipText;
+    chip.dataset.sunState = plots.length ? "active" : "preview";
+    chip.setAttribute("aria-label", chipText + (plots.length ? "，點一下看受光的田" : "，點一下看光要落在哪"));
     const dock = el("questDock"); const r = dock && dock.getBoundingClientRect ? dock.getBoundingClientRect() : null;
     if (r && r.height) { const right = r.right + 8 + 230 < window.innerWidth; chip.style.left = Math.round(right ? r.right + 8 : r.left) + "px"; chip.style.top = Math.round(right ? r.top + 4 : r.bottom + 6) + "px"; // R42：優先放在任務卡右側，避免疊到種子欄
       // R63B（第 6 項）：陽光標籤改放任務卡下方時，不得蓋住種子欄（含「全部」鈕）
@@ -387,6 +404,7 @@
       const useful = sun.plots.some((i) => i < active && s.plots[i]);
       if (useful) return { kind: "sun", text: `☀ 陽光 ${Math.ceil(sun.remainingMs / 1000)} 秒・光裡種澆收有加成` };
     }
+    if (sun && !sun.active && sun.preview && (sun.previewPlots || []).some((i) => i < active)) return { kind: "sun", text: `☀ 光 ${Math.max(1, Math.ceil(sun.previewInMs / 1000))} 秒後落下${sun.refractionsLeft > 0 ? `・手鏡還能折 ${sun.refractionsLeft} 次` : ""}` };
     if (!row || !(row.type === "harvest" || (row.consume && window.CROPS[row.id]))) return null;
     let soonest = Infinity, anyReady = false;
     for (let i = 0; i < Math.min(active, s.plots.length); i++) {
@@ -584,17 +602,33 @@
     if (neighbor && farm()) { closePanels(); farm().setTool("hand"); farm().clickTile(neighbor.id); }
   }
   function goNextFarmStep() {
-    const step = A.nextFarmStep(current, Date.now()); if (!step || !farm()) return;
-    if (step.tileId && farm().focusTile) farm().focusTile(step.tileId);
+    const now = Date.now(); const step = A.nextFarmStep(current, now); if (!step || !farm()) return;
+    /* 灶台在農舍裡：cook／eat 帶的格子是野餐桌那格，鏡頭別往那邊帶，讓它跟著人走回農舍。 */
+    if (step.tileId && farm().focusTile && step.action !== "cook" && step.action !== "eat") farm().focusTile(step.tileId);
     if (step.action === "harvest" && step.tileId) { closePanels(); farm().setTool("hand"); farm().clickTile(step.tileId); return; }
     if (step.action === "deliver") { const q = A.quests(current, Date.now()).find((row) => row.id === "c1_first_harvest"); if (q) goQuest(q); return; }
     if (step.action === "cook" || step.action === "eat") { visitKitchen(); return; }
     if (step.action === "explore") { visitSite("fishing_dock"); return; }
+    // R75 整合：折光與催熟直接在任務卡上完成；等光時把鏡頭帶到光要落下的那一格。
+    const sunplay = window.FarmSunplay;
+    if (step.action === "refract" && sunplay) {
+      closePanels(); const result = sunplay.refract(current, step.plotIndex, now);
+      if (!result.ok) { notify(step.text); return; }
+      notify("光折過來了。之後先點一格田，再按「把光折到這裡」，光照哪一格由你決定。"); afterSunAction();
+      if (sunplay.playBeam) sunplay.playBeam(current, result.from, result.to); /* 重畫地圖之後才放光束，免得被清掉 */
+      return;
+    }
+    if (step.action === "ripen" && sunplay) {
+      closePanels(); const result = sunplay.ripen(current, step.plotIndex, now);
+      notify(result.ok ? "用掉 2 點陽光，這一格立刻成熟了，可以收成。" : step.text); if (result.ok) afterSunAction(); return;
+    }
+    if (step.action === "catch_sun" || step.action === "wait") { closePanels(); notify(step.text); return; }
     const tiles = (current.map && current.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < (window.activePlotCount ? window.activePlotCount(current) : 6));
-    const target = step.action === "tend" ? tiles.find((tile) => { const p = current.plots[tile.plotIndex]; return p && p.cropId && (p.wateredAt || 0) < p.plantedAt; }) : tiles.find((tile) => !current.plots[tile.plotIndex].cropId);
+    const target = (step.tileId && tiles.find((tile) => tile.id === step.tileId)) || (step.action === "tend" ? tiles.find((tile) => { const p = current.plots[tile.plotIndex]; return p && p.cropId && (p.wateredAt || 0) < p.plantedAt; }) : tiles.find((tile) => !current.plots[tile.plotIndex].cropId));
     if (!target) { notify(step.text); return; }
     closePanels(); farm().setTool(step.action === "tend" ? "water" : "hand"); if (step.action === "plant" && farm().selectSeed) farm().selectSeed("wheat"); farm().clickTile(target.id);
   }
+  function afterSunAction() { if (farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; if (farm().refresh) farm().refresh(); }
   function claimQuest(q) {
     const target = npcTile(q.npcId);
     if (!target) return;
@@ -727,7 +761,7 @@
     }; });
   }
   function visitKitchen() {
-    const target = homeTile();
+    const target = homeDoorTile();
     if (!farm().travelAndDo(target.id, "collect", openKitchen)) notify("先走完這段路，再回農舍。");
   }
   function visitAnimals() {
@@ -745,12 +779,12 @@
     box.querySelector("#kitchenNeighbors").onclick = () => window.ContentR1.openNeighbors(current);
     box.querySelectorAll("[data-cook]").forEach((b) => { b.onclick = () => {
       farm().closeModal("worldModal");
-      const target = homeTile();
+      const target = homeDoorTile();
       if (!farm().travelAndDo(target.id, "collect", () => { const r = A.cook(current, b.dataset.cook, Date.now()); notify(r.message); refresh(current); openKitchen(); })) notify("先走完這段路，再烹調。");
     }; });
     box.querySelectorAll("[data-eat]").forEach((b) => { b.onclick = () => {
       farm().closeModal("worldModal");
-      const target = homeTile();
+      const target = homeDoorTile();
       if (!farm().travelAndDo(target.id, "collect", () => { const r = A.eatMeal(current, b.dataset.eat, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); refresh(current); openKitchen(); })) notify("先走完這段路，再享用。");
     }; });
   }

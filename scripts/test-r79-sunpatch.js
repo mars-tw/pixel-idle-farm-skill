@@ -145,6 +145,23 @@ check("晴朗天氣間隔較短", () => {
   assert.equal(s.sun.nextAt - start, (G.SUNPATCH.firstDurationMs || G.SUNPATCH.durationMs) + 15000);
 });
 
+check("第二道光之後照天氣算間隔：豔陽 28 秒、其他 40 秒", () => {
+  assert.ok(G.SUNPATCH.sunnyIntervalMs < G.SUNPATCH.intervalMs);
+  for (const [w, gap] of [["sunny", G.SUNPATCH.sunnyIntervalMs], ["clear", G.SUNPATCH.intervalMs]]) {
+    const s = fresh();
+    s.level = 10;
+    G.plant(s, 0, "wheat", T0);
+    G.updateSunpatch(s, T0, fixed(0.5));
+    s.weather = { id: w, untilMs: T0 + 10 * 60000 };
+    const first = T0 + G.SUNPATCH.firstDelayMs;
+    assert.equal(G.updateSunpatch(s, first, fixed(0.5)).spawned, true, w);
+    const second = s.sun.nextAt;
+    G.updateSunpatch(s, first + G.SUNPATCH.firstDurationMs, fixed(0.5));
+    assert.equal(G.updateSunpatch(s, second, fixed(0.5)).spawned, true, w);
+    assert.equal(s.sun.nextAt - second, G.SUNPATCH.durationMs + gap, w);
+  }
+});
+
 check("離線很久回來只補一道光，不會連續觸發", () => {
   const s = fresh();
   G.plant(s, 0, "wheat", T0);

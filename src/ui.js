@@ -768,6 +768,7 @@
       <div class="res storage" title="背包：${used} 份／${cap} 份" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")}<span class="res-name">背包</span> ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
       ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
+      ${window.FarmSunplay && window.FarmSunplay.jarChipHtml ? window.FarmSunplay.jarChipHtml(state) : ""}
       ${buffHtml}
       ${matChips()}`;
   }
@@ -1539,6 +1540,35 @@
       }
       if (!firstChapterComplete && key !== upgradeKeys[firstActionable]) futureBody.appendChild(el); else box.appendChild(el);
     });
+    // R75 整合：手鏡與蓄光瓶的升級跟其他升級卡同一種畫法（原本每 250ms 硬塞一塊在最前面，把「再顯示 N 項」擠出首屏）。
+    // 玩家折過光或接過陽光才出現；第一章沒走完時收進「之後的目標」，買得起的排到其他長期目標前面。
+    const sunplay = window.FarmSunplay, sunOwn = state.r75Sunplay || {};
+    if (sunplay && sunplay.upgradeCards && (sunOwn.firstRefracted || sunOwn.firstCaught || sunOwn.mirrorLevel || sunOwn.bottleLevel)) {
+      sunplay.upgradeCards(state).forEach((card) => {
+        const el = document.createElement("div");
+        el.className = "up r75a-up";
+        el.dataset.affordability = card.affordability;
+        el.dataset.r75aUpgrade = card.id;
+        el.innerHTML = `
+        <div class="u-ic"><img src="${card.icon}${window.FARM_VERSION_QUERY || ""}" alt=""></div>
+        <div class="u-body">
+          <div class="u-name">${escapeHtml(card.name)}</div>
+          <div class="u-desc">${escapeHtml(card.effect)}・${escapeHtml(card.status)}</div>
+        </div>
+        ${card.done ? `<span class="u-maxed">✓ 已完成</span>` : `<div class="u-action"><button class="btn buy small" ${card.canBuy ? "" : "disabled"}>${escapeHtml(card.buttonText)}</button></div>`}`;
+        if (!card.done) {
+          el.querySelector("button").onclick = () => {
+            const r = card.buy();
+            if (r.ok) { levelUpFx(el); playSound("level"); afterChange(true); renderUpgrades(); }
+            else toast(r.reason === "coins" ? "🪙 金幣不足" : r.reason === "level" ? `等級 ${card.level} 才能升級` : "已經升級過了");
+          };
+        }
+        const parent = futureBody || box;
+        const anchor = card.canBuy ? Array.from(parent.children).find((node) => node.classList.contains("up") && node.dataset.affordability !== "affordable") : null;
+        if (anchor) parent.insertBefore(el, anchor); else parent.appendChild(el);
+      });
+      if (futureDetails) futureDetails.querySelector("summary").textContent = `之後的目標（${futureBody.children.length}）`;
+    }
     if (futureDetails) box.appendChild(futureDetails);
     renderBuildingUpgrades();
     if (newUpgrades.length && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "upgrades"); scheduleSave(); }
@@ -3836,6 +3866,7 @@
     plant: ["🌱", "種植"], harvest: ["✂", "收成"], water: ["💧", "澆水"], clear: ["⛏", "清除"],
     build: ["🏗", "建造"], collect: ["🧺", "收集"], use: ["●", "使用"], deliver: ["✓", "交付"],
     sell: ["🪙", "賣出"], talk: ["…", "交談"],
+    refract: ["☀", "把光折到這裡"], ripen: ["☀", "催熟・用 2 點陽光"],
   };
   function tileReadyCrop(tile) {
     if (!tile || tile.plotIndex == null || tile.plotIndex >= G.activePlotCount(state)) return false;
@@ -3913,8 +3944,10 @@
     const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile); renderSeeds();
     const toolActions = { hand: ["plant", "harvest"], water: ["water"], build: ["build"], clear: ["clear"], inspect: [] }[currentTool()] || [];
     const actions = sceneActionsForTile(tile);
-    if (!tile || !actions.length) { hideSceneActions(); return; }
-    if (tile && tile.plotIndex != null) { const filtered = actions.filter((a) => toolActions.includes(a.action)); actions.splice(0, actions.length, ...filtered.slice(0, 1)); if (!actions.length) { hideSceneActions(); return; } }
+    // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「把光折到這裡」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
+    const sunActions = tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && window.FarmSunplay && window.FarmSunplay.plotActions ? window.FarmSunplay.plotActions(state, tile.plotIndex, now()) : [];
+    if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(); return; }
+    if (tile && tile.plotIndex != null) { const filtered = actions.filter((a) => toolActions.includes(a.action)); actions.splice(0, actions.length, ...filtered.slice(0, 1), ...sunActions); if (!actions.length) { hideSceneActions(); return; } }
     bar.innerHTML = "";
     actions.forEach((entry) => {
       const meta = SCENE_ACTION_META[entry.action] || ["●", entry.action];
@@ -3925,7 +3958,7 @@
       b.disabled = entry.enabled === false;
       b.title = meta[1];
       b.setAttribute("aria-label", meta[1]);
-      const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png'}[entry.action];
+      const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png',refract:'content-r75/sun_mirror.png',ripen:'content-r75/sun_jar.png'}[entry.action];
       b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${meta[1]}</span>`;
       b.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); runSceneAction(entry.action, tile.id); };
       bar.appendChild(b);
@@ -3940,6 +3973,8 @@
   function runSceneAction(action, tileId) {
     const tile = G.getTileById(state, tileId); if (!tile) return;
     hideBuildWheel(); hideObjectBubble(); clearTouchFarmPreview(false);
+    // R75 整合：折光與催熟不用走過去，手鏡與蓄光瓶帶在身上，按了就生效。
+    if (action === "refract" || action === "ripen") { if (window.FarmSunplay && window.FarmSunplay.runPlotAction) window.FarmSunplay.runPlotAction(action, tile.plotIndex); return; }
     if (action === "build") { showBuildWheel(tile); return; }
     if (action === "deliver") { deliverOrderAtBoard(tile); return; }
     if (action === "sell") { sellAtStorage(tile); return; }
@@ -5470,6 +5505,7 @@
       playerTileId: () => state.player.tileId,
       playerAction: () => state.player.action,
       refreshResources: () => renderResBar(),
+      renderSceneActions: () => renderSceneActionsForSelection(),
       refresh: () => { renderToolbar(); renderResBar(); renderSeeds(); renderOrders(); renderUpgrades(); renderStory(); renderQuestDock(); renderSmartAssistant(true); renderJournal(); syncHud(); buildMap(); updateFarm(now()); renderTileContext(); updateMailBadges(); },
       openLetters: () => openLettersModal(),
       clickTile: (id) => handleMapClick(id),

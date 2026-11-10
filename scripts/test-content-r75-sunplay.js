@@ -41,9 +41,76 @@ test("曬架耗 2 份與 1 點，30 秒產出，乾貨直售三倍且訂單池�
 });
 function globalSell(id) { return require("../src/config.js").CROPS[id].sellValue; }
 
-test("下一步包含折光與催熟，舊存檔補安全預設", () => {
+test("下一步包含折光、等光與催熟，舊存檔補安全預設", () => {
   const old = State.migrate({ version: 1, lastSeenAt: 1000, storage: { items: {} }, upgrades: {}, stats: {}, flags: {} }); assert.equal(old.r75Sunplay.sunlight, 0); assert.equal(old.r75Sunplay.mirrorLevel, 0); assert.equal(old.r75Sunplay.rack.cropId, null);
-  const s = fresh(); s.coins = 99; Game.plant(s, 0, "wheat", 1000); s.sun.previewPlots = [1]; s.sun.previewAt = 9000; assert.equal(Adventure.nextFarmStep(s, 2000).action, "refract"); Sun.refract(s, 0, 2000); assert.equal(Adventure.nextFarmStep(s, 2001).action, "tend"); Sun.addSunlight(s, 2); assert.equal(Adventure.nextFarmStep(s, 2002).action, "ripen");
+  const s = fresh(); s.coins = 99; Game.plant(s, 0, "wheat", 1000); s.sun.previewPlots = [1]; s.sun.previewAt = 9000; s.sun.nextAt = 9000; assert.equal(Adventure.nextFarmStep(s, 2000).action, "refract"); Sun.refract(s, 0, 2000);
+  /* R75 整合時規則改了：光折過去之後還沒落下，下一步是「等光」。原本這裡直接回「去澆水」，玩家照做就會在光到之前把水澆掉，接不到第一點陽光。 */
+  const hold = Adventure.nextFarmStep(s, 2001); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光到了再澆水/);
+  assert.equal(Game.updateSunpatch(s, 9000, () => 0).spawned, true);
+  const lit = Adventure.nextFarmStep(s, 9001); assert.equal(lit.action, "tend"); assert.equal(lit.sunlit, true); assert.equal(lit.plotIndex, 0);
+  assert.equal(Game.waterPlot(s, 0, 9001).ok, true); assert.equal(Sun.sunlight(s), 1); assert.equal(s.r75Sunplay.firstCaught, true);
+  /* 在光裡澆過水的那格長得快，接著就能收；收成再接 1 點，湊滿 2 點才提示催熟另一格。 */
+  Game.plant(s, 1, "wheat", 9001); const reap = Adventure.nextFarmStep(s, 9002); assert.equal(reap.action, "harvest"); assert.equal(reap.plotIndex, 0); assert.equal(Game.harvest(s, 0, 9002).ok, true); assert.equal(Sun.sunlight(s), 2);
+  const ripen = Adventure.nextFarmStep(s, 9003); assert.equal(ripen.action, "ripen"); assert.equal(ripen.plotIndex, 1);
+});
+
+test("光快落在已經熟的作物上：先留著等光，光到了才叫玩家收", () => {
+  const s = fresh(); ready(s, 0, "wheat", 1000); s.sun.previewPlots = [0]; s.sun.previewAt = 9000; s.sun.nextAt = 9000;
+  const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光到了再收成/);
+  Game.plant(s, 1, "wheat", 2000); s.plots[1].plantedAt = 2000 - Game.plotGrowMs(s, s.plots[1], 2000) - 1; const other = Adventure.nextFarmStep(s, 2001); assert.equal(other.action, "harvest"); assert.equal(other.plotIndex, 1, "光還沒到時先收別格");
+  assert.equal(Game.harvest(s, 1, 2002).ok, true); assert.equal(Game.updateSunpatch(s, 9000, () => 0).spawned, true);
+  const lit = Adventure.nextFarmStep(s, 9001); assert.equal(lit.action, "harvest"); assert.equal(lit.sunlit, true); assert.equal(lit.plotIndex, 0);
+});
+
+/* 照「下一步」一路做到底，回傳每一步的動作（連續相同的只記一次；光裡做的加 *）。成熟時間用遊戲本身的算法，跟瀏覽器一致。 */
+function followSteps(waterFirst) {
+  const had = Object.prototype.hasOwnProperty.call(global, "window"), saved = global.window; global.window = { getCropProgress: Game.getCropProgress };
+  try {
+    const T0 = 1794172800000; let now = T0; const s = State.defaultState(T0); Sun.normalize(s); assert.equal(Adventure.ensure(s, T0).ok, true); Adventure.record(s, { type: "talk", npcId: "mayor" }, now);
+    const seq = []; const done = (r, step) => assert.equal(r.ok, true, `${step.action} 做不成：${JSON.stringify(r)}`);
+    for (let i = 0; i < 200; i++) {
+      if (!(waterFirst && i === 1)) Game.updateSunpatch(s, now, () => 0.5);
+      const step = Adventure.nextFarmStep(s, now); const name = step.action + (step.sunlit ? "*" : ""); if (seq[seq.length - 1] !== name) seq.push(name);
+      if (step.action === "explore") return { seq, state: s, ms: now - T0 };
+      if (step.action === "catch_sun" || step.action === "wait") { now += 250; continue; }
+      if (step.action === "plant") { done(Game.plant(s, step.plotIndex, "wheat", now), step); Adventure.record(s, { type: "plant", cropId: "wheat" }, now); if (!s.adventure.claimed.c1_homecoming) done(Adventure.finishTutorial(s, now), step); if (!waterFirst) { Game.updateSunpatch(s, now, () => 0.5); Game.updateSunpatch(s, now + 1, () => 0.5); } }
+      else if (step.action === "refract") done(Sun.refract(s, step.plotIndex, now), step);
+      else if (step.action === "tend") { done(Game.waterPlot(s, step.plotIndex, now), step); Adventure.record(s, { type: "water" }, now); }
+      else if (step.action === "harvest") { const r = Game.harvest(s, step.plotIndex, now); done(r, step); Adventure.record(s, { type: "harvest", cropId: r.cropId, count: r.added }, now); }
+      else if (step.action === "ripen") done(Sun.ripen(s, step.plotIndex, now), step);
+      else if (step.action === "deliver") { Adventure.record(s, { type: "talk", npcId: "elder" }, now); done(Adventure.claim(s, "c1_first_harvest", now), step); }
+      else if (step.action === "cook") done(Adventure.cook(s, "rustic_bread", now), step);
+      else if (step.action === "eat") done(Adventure.eatMeal(s, "rustic_bread", now), step);
+      else assert.fail(`沒見過的下一步：${step.action}`);
+      now += 500;
+    }
+    assert.fail(`走了 200 步還沒走完：${seq.join(" → ")}`);
+  } finally { if (had) global.window = saved; else delete global.window; }
+}
+
+test("新存檔照下一步走：種下 → 折光 → 種完種子包 → 等光 → 光裡澆水 → 收成 → 催熟 → 交付 → 第一餐", () => {
+  const run = followSteps(false);
+  assert.deepEqual(run.seq.slice(0, 12), ["plant", "refract", "plant", "tend", "catch_sun", "tend*", "harvest", "ripen", "harvest", "deliver", "cook", "eat"]);
+  /* 吃完之後，第三格小麥可能剛好熟了，先收掉再去河邊，這是正常的。 */
+  assert.deepEqual(run.seq.slice(12).filter((x) => x !== "harvest"), ["explore"]);
+  assert.equal(run.state.r75Sunplay.firstRefracted, true); assert.equal(run.state.r75Sunplay.firstCaught, true); assert.equal(run.state.r75Sunplay.firstRipened, true); assert.equal(run.state.adventure.claimed.c1_first_meal, true);
+  assert.ok(run.ms <= 60000, `照提示走，第一餐要在一分鐘內吃到（不含走路），實際 ${run.ms}ms`);
+});
+
+test("新存檔先澆水、沒折到光也走得完，一樣接得到陽光並學到催熟", () => {
+  const run = followSteps(true);
+  assert.equal(run.seq[0], "plant"); assert.equal(run.seq[1], "tend"); assert.ok(run.seq.includes("tend*") || run.seq.includes("harvest*"), run.seq.join(" → ")); assert.ok(run.seq.includes("ripen"), run.seq.join(" → "));
+  assert.deepEqual(run.seq.filter((x) => ["deliver", "cook", "eat", "explore"].includes(x)), ["deliver", "cook", "eat", "explore"]); assert.equal(run.state.r75Sunplay.firstCaught, true);
+});
+
+test("介面用的資料：蓄光瓶籤、升級卡、田格動作", () => {
+  const s = fresh(); assert.equal(Sun.jarChipHtml(s), "", "還沒接過陽光時不顯示蓄光瓶"); Sun.addSunlight(s, 1); assert.match(Sun.jarChipHtml(s), /陽光 1\/5/);
+  s.level = 2; s.coins = 50; let cards = Sun.upgradeCards(s); assert.deepEqual(cards.map((c) => c.id), ["mirror", "bottle"]); assert.equal(cards[0].locked, true); assert.equal(cards[0].canBuy, false); assert.match(cards[0].buttonText, /等級 3/);
+  s.level = 4; cards = Sun.upgradeCards(s); assert.equal(cards[0].canBuy, false); assert.equal(cards[0].short, 10); assert.equal(cards[0].affordability, "near"); assert.equal(cards[1].affordability, "long-term");
+  s.coins = 60; cards = Sun.upgradeCards(s); assert.equal(cards[0].canBuy, true); assert.equal(cards[0].buy().ok, true); assert.equal(s.coins, 0); assert.equal(Sun.upgradeCards(s)[0].done, true);
+  const p = fresh(); p.coins = 99; Game.plant(p, 0, "wheat", 1000); assert.deepEqual(Sun.plotActions(p, 0, 2000), [], "沒有光也沒有陽光時不多按鈕");
+  p.sun.previewPlots = [1]; p.sun.previewAt = 9000; p.sun.nextAt = 9000; assert.deepEqual(Sun.plotActions(p, 0, 2000).map((a) => a.action), ["refract"]); assert.deepEqual(Sun.plotActions(p, 1, 2000), [], "光本來就要落在這格時不用折");
+  Sun.addSunlight(p, 2); assert.deepEqual(Sun.plotActions(p, 0, 2000).map((a) => a.action), ["refract", "ripen"]); assert.deepEqual(Sun.plotActions(p, 2, 2000).map((a) => a.action), ["refract"], "空田不能催熟");
 });
 
 console.log(`VERIFIED R75A sunplay ${passed} tests`);

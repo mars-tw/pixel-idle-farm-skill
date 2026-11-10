@@ -128,59 +128,196 @@
   function rackStatus(state, now) { const rack = updateRack(state, now); return Object.assign({}, rack, { empty: !rack.cropId, remainingMs: rack.cropId ? Math.max(0, rack.readyAt - now) : 0 }); }
   function festivalBonus(itemId) { return DRIED[itemId] ? { points: 1, source: "日曬乾貨 +1" } : { points: 0, source: "" }; }
 
-  function initUI() {
-    if (typeof document === "undefined") return;
-    const tick = function () {
-      const farm = root.__farm; const state = farm && farm.state && farm.state(); if (!state) return;
-      normalize(state); renderHud(state); renderOverlays(state, Date.now());
+  /* ---------- 瀏覽器介面（R75 整合重做）----------
+   * 原本右上角的浮動三顆鈕被資源列蓋住、田邊泡泡每 250ms 重建又被田格標籤蓋住、
+   * 升級卡硬塞進升級面板，把「再顯示 N 項」擠出首屏。現在改成：
+   *   蓄光瓶＝資源列裡的一枚籤（ui.js renderResBar 呼叫 jarChipHtml）
+   *   手鏡／蓄光瓶升級＝升級清單裡的兩張卡（ui.js renderUpgrades 呼叫 upgradeCards）
+   *   折光／催熟＝點田格後動作列上的按鈕（ui.js renderSceneActionsForSelection 呼叫 plotActions）
+   *   曬架＝農舍旁的地圖物件，點它開曬架面板 */
+  function versionQuery() { return root.FARM_VERSION_QUERY || ""; }
+  function farmApi() { return root.__farm || null; }
+  function liveState() { const farm = farmApi(); return farm && farm.state ? farm.state() : null; }
+  function toast(text) { const farm = farmApi(); if (farm && farm.toast) farm.toast(text); }
+  function cropName(cropId) { return (C.CROPS[cropId] || {}).name || "作物"; }
+  function saveRefresh() { const farm = farmApi(); if (farm && farm.safeSaveNow) farm.safeSaveNow(); if (farm && farm.refresh) farm.refresh(); tick(); }
+
+  /* 蓄光瓶：接過第一點陽光才出現，新玩家一開始不會多看到一個不懂的數字。 */
+  function jarVisible(state) { normalize(state); return state.r75Sunplay.sunlight > 0 || state.r75Sunplay.firstCaught; }
+  function jarChipHtml(state) {
+    if (!jarVisible(state)) return "";
+    const amount = sunlight(state), cap = bottleCapacity(state);
+    return `<div class="res r75a-jar-chip" data-audit="r75a-jar" title="蓄光瓶：在光裡種、澆、收會接到陽光。2 點可以催熟一格，1 點可以開曬架。" aria-label="蓄光瓶，陽光 ${amount}／${cap}"><img src="assets/generated/content-r75/sun_jar.png${versionQuery()}" alt=""><span class="sub">陽光 ${amount}/${cap}</span></div>`;
+  }
+  let jarSignature = "";
+  function syncJarChip(state) {
+    const signature = jarVisible(state) ? sunlight(state) + "/" + bottleCapacity(state) : "";
+    if (signature === jarSignature) return; jarSignature = signature;
+    const farm = farmApi(); if (farm && farm.refreshResources) farm.refreshResources();
+  }
+
+  /* 升級清單用的兩張卡：只回資料，畫法跟其他升級卡一致，由 ui.js 負責。 */
+  function upgradeCards(state) {
+    normalize(state); const level = state.level || 1, coins = state.coins || 0, own = state.r75Sunplay;
+    const card = function (id, name, icon, effect, needLevel, cost, done, buy) {
+      const locked = level < needLevel, short = Math.max(0, cost - coins);
+      return { id, name, icon: "assets/generated/content-r75/" + icon, effect, level: needLevel, cost, done, locked, short, canBuy: !done && !locked && !short,
+        status: done ? "已完成" : locked ? `等級 ${needLevel} 解鎖` : short ? "差一點" : "現在買得起",
+        buttonText: locked ? `等級 ${needLevel} 解鎖` : short ? `${cost} 金（還差 ${short}）` : `${cost} 金`,
+        affordability: done ? "maxed" : locked ? "long-term" : short ? (short <= 18 ? "near" : "long-term") : "affordable",
+        buy: function () { return buy(state); } };
     };
-    setInterval(tick, 250); if (document.readyState !== "loading") tick(); else document.addEventListener("DOMContentLoaded", tick, { once: true });
+    return [
+      card("mirror", "磨亮手鏡", "sun_mirror.png", "每道光可以折 2 次", 3, 60, !!own.mirrorLevel, buyMirror),
+      card("bottle", "大一點的蓄光瓶", "sun_jar.png", "陽光上限提高到 8 點", 4, 90, !!own.bottleLevel, buyBottle),
+    ];
   }
-  function ensureNode(id, className, parent) { let node = document.getElementById(id); if (!node) { node = document.createElement("div"); node.id = id; node.className = className; (parent || document.body).appendChild(node); } return node; }
-  function saveRefresh() { if (root.__farm && root.__farm.safeSaveNow) root.__farm.safeSaveNow(); if (root.__farm && root.__farm.refresh) root.__farm.refresh(); }
-  let hudSignature = "";
-  function renderHud(state) {
-    const cap = bottleCapacity(state); const box = ensureNode("r75aSunHud", "r75a-sun-hud"); const rack = rackStatus(state, Date.now());
-    const signature = [sunlight(state), cap, mirrorLimit(state), integer(state.sun.refractions, 0), rack.empty, rack.ready, state.level, state.coins, state.r75Sunplay.mirrorLevel, state.r75Sunplay.bottleLevel].join("|");
-    if (signature === hudSignature && document.getElementById("r75aUpgrades")) return; hudSignature = signature;
-    box.innerHTML = `<button type="button" class="r75a-mirror" aria-label="祖母的手鏡"><img src="assets/generated/content-r75/sun_mirror.png${root.FARM_VERSION_QUERY || ""}" alt=""><span>這道光還能折 ${Math.max(0, mirrorLimit(state) - integer(state.sun.refractions, 0))} 次</span></button><button type="button" class="r75a-jar" aria-label="蓄光瓶，目前 ${sunlight(state)}/${cap}"><img src="assets/generated/content-r75/sun_jar.png${root.FARM_VERSION_QUERY || ""}" alt=""><b>${sunlight(state)}/${cap}</b></button><button type="button" class="r75a-rack-open"><img src="assets/generated/content-r75/${rack.empty ? "drying_rack_empty.png" : "drying_rack_full.png"}${root.FARM_VERSION_QUERY || ""}" alt="">${rack.ready ? "可收" : "曬架"}</button>`;
-    box.querySelector(".r75a-rack-open").onclick = function () { openRack(state); };
-    renderUpgradeCards(state);
+
+  /* 點田格後的動作列：光可以折到這一格、或蓄光瓶夠催熟時，各多一顆鈕。 */
+  function canRipen(state, plotIndex, now) {
+    normalize(state); const plot = (state.plots || [])[plotIndex]; if (!plot || !plot.cropId || sunlight(state) < 2) return false;
+    const progress = typeof root.getCropProgress === "function" ? root.getCropProgress(state, plot, now) : null; return !(progress && progress.ready);
   }
-  function renderUpgradeCards(state) {
-    const upgrades = document.getElementById("upgrades"); if (!upgrades) return;
-    let wrap = document.getElementById("r75aUpgrades"); if (!wrap) { wrap = document.createElement("section"); wrap.id = "r75aUpgrades"; wrap.className = "up r75a-upgrades"; upgrades.prepend(wrap); }
-    wrap.innerHTML = `<article class="r75a-upgrade"><div class="u-main"><b>磨亮手鏡</b><span>等級 3・每道光可折 2 次</span></div><button type="button" ${state.r75Sunplay.mirrorLevel || state.level < 3 || state.coins < 60 ? "disabled" : ""}>${state.r75Sunplay.mirrorLevel ? "已完成" : "60 金"}</button></article><article class="r75a-upgrade"><div class="u-main"><b>大一點的蓄光瓶</b><span>等級 4・上限提高到 8 點</span></div><button type="button" ${state.r75Sunplay.bottleLevel || state.level < 4 || state.coins < 90 ? "disabled" : ""}>${state.r75Sunplay.bottleLevel ? "已完成" : "90 金"}</button></article>`;
-    const buttons = wrap.querySelectorAll("button"); buttons[0].onclick = function () { buyMirror(state); saveRefresh(); }; buttons[1].onclick = function () { buyBottle(state); saveRefresh(); };
+  function plotActions(state, plotIndex, now) {
+    const actions = []; if (!Number.isInteger(plotIndex)) return actions;
+    if (canRefract(state, plotIndex, now)) actions.push({ action: "refract", enabled: true });
+    if (canRipen(state, plotIndex, now)) actions.push({ action: "ripen", enabled: true });
+    return actions;
   }
+  function runPlotAction(action, plotIndex) {
+    const state = liveState(); if (!state) return { ok: false, reason: "state" }; const now = Date.now(); let result;
+    if (action === "refract") {
+      result = refract(state, plotIndex, now);
+      toast(!result.ok ? "現在沒有光可以折，等下一道光的預告。" : result.remaining > 0 ? `光折過來了，這道光還能再折 ${result.remaining} 次。` : result.active ? "光折過來了。趁光還在，在這一格澆水或收成。" : "光會落在這一格。等光到了再澆水或收成。");
+    } else if (action === "ripen") {
+      result = ripen(state, plotIndex, now);
+      toast(result.ok ? "用掉 2 點陽光，這一格立刻成熟了，可以收成。" : result.reason === "sunlight" ? "陽光不足 2 點，先到光裡照料作物接一些。" : result.reason === "ready" ? "這一格已經成熟，直接收成就好。" : "這一格沒有作物。");
+    } else return { ok: false, reason: "action" };
+    if (result.ok) { saveRefresh(); if (action === "refract") playBeam(state, result.from, result.to); }
+    return result;
+  }
+  let actionSignature = "";
+  function syncPlotActions(state, now) {
+    const farm = farmApi(); if (!farm || !farm.renderSceneActions) return;
+    const id = state.interaction && state.interaction.selectedTileId; const tile = id && state.map ? state.map.tiles.find((t) => t.id === id) : null;
+    const names = tile && tile.plotIndex != null ? plotActions(state, tile.plotIndex, now).map((a) => a.action).join(",") : "";
+    const signature = names ? tile.id + "|" + names : "";
+    if (signature === actionSignature) return; actionSignature = signature; farm.renderSceneActions();
+  }
+
   function tilePoint(state, plotIndex) {
     const tile = state.map && state.map.tiles.find((t) => t.plotIndex === plotIndex); if (!tile) return null;
     const node = document.querySelector(`.gtile[data-tile-id="${tile.id}"]`);
     return { tile, left: node ? node.offsetLeft : tile.x * 48, top: node ? node.offsetTop : tile.y * 48, size: node ? node.offsetWidth : 48 };
   }
-  function renderOverlays(state, now) {
-    const world = document.getElementById("mapWorld"); if (!world) return; const sun = state.sun || {}; const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
+  /* 折光的那一下：一道光從原本的格子掃到新格子，落點亮一下。 */
+  function playBeam(state, from, to) {
+    if (typeof document === "undefined") return; const world = document.getElementById("mapWorld"); if (!world) return;
+    const start = tilePoint(state, Array.isArray(from) ? from[0] : from), end = tilePoint(state, to); if (!end) return;
+    const endX = end.left + end.size / 2, endY = end.top + end.size / 2;
+    const flash = document.createElement("div"); flash.className = "r75a-beam-flash"; flash.setAttribute("aria-hidden", "true");
+    flash.style.cssText = `left:${endX}px;top:${endY}px;width:${end.size}px;height:${end.size}px`; world.appendChild(flash); setTimeout(function () { flash.remove(); }, 900);
+    if (!start) return; const startX = start.left + start.size / 2, startY = start.top + start.size / 2;
+    const beam = document.createElement("div"); beam.className = "r75a-beam"; beam.setAttribute("aria-hidden", "true");
+    beam.style.cssText = `left:${startX}px;top:${startY}px;width:${Math.round(Math.hypot(endX - startX, endY - startY))}px;transform:rotate(${Math.atan2(endY - startY, endX - startX).toFixed(4)}rad)`;
+    world.appendChild(beam); setTimeout(function () { beam.remove(); }, 700);
+  }
+  /* 預告圈：光落下前先在田上亮起，寫著還有幾秒。 */
+  function renderPreview(state, now) {
+    const world = document.getElementById("mapWorld"); if (!world) return; const sun = state.sun || {};
+    const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
     const preview = !active && now < (sun.previewAt || 0) ? sun.previewPlots || [] : []; const wanted = new Set(preview);
     world.querySelectorAll(".r75a-sun-preview").forEach((n) => { if (!wanted.has(Number(n.dataset.plotIndex))) n.remove(); });
-    preview.forEach((i) => { const p = tilePoint(state, i); if (!p) return; let n = world.querySelector(`.r75a-sun-preview[data-plot-index="${i}"]`); if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(i); world.appendChild(n); } n.style.left = p.left + "px"; n.style.top = p.top + "px"; n.style.width = p.size + "px"; n.style.height = p.size + "px"; n.textContent = `☀ ${Math.max(0, Math.ceil((sun.previewAt - now) / 1000))} 秒後`; });
-    const selected = state.interaction && state.interaction.selectedTileId && state.map.tiles.find((t) => t.id === state.interaction.selectedTileId);
-    let action = document.getElementById("r75aPlotAction"); if (action) action.remove();
-    if (!selected || selected.plotIndex == null) return; const i = selected.plotIndex; const plot = state.plots[i]; const canMove = canRefract(state, i, now); const canRipe = plot && plot.cropId && sunlight(state) >= 2 && !(root.getCropProgress && root.getCropProgress(state, plot, now).ready);
-    if (!canMove && !canRipe) return; action = document.createElement("div"); action.id = "r75aPlotAction"; action.className = "r75a-plot-action";
-    if (canMove) { const b = document.createElement("button"); b.type = "button"; b.textContent = "把光折到這裡"; b.onclick = function () { refract(state, i, Date.now()); saveRefresh(); }; action.appendChild(b); }
-    if (canRipe) { const b = document.createElement("button"); b.type = "button"; b.textContent = "催熟（用 2 點陽光）"; b.onclick = function () { ripen(state, i, Date.now()); saveRefresh(); }; action.appendChild(b); }
-    const point = tilePoint(state, i); world.appendChild(action); action.style.left = (point ? point.left + point.size / 2 : (selected.x + 0.5) * 48) + "px"; action.style.top = (point ? point.top - 8 : selected.y * 48 - 8) + "px";
-  }
-  function openRack(state) {
-    let panel = document.getElementById("r75aRackPanel"); if (panel) panel.remove(); panel = ensureNode("r75aRackPanel", "r75a-rack-panel"); const status = rackStatus(state, Date.now());
-    if (status.empty) panel.innerHTML = `<div class="r75a-rack-head"><b>農舍曬架</b><button type="button" data-close>關閉</button></div><p>放入 2 份作物和 1 點陽光，30 秒後收成日曬乾貨。</p><div class="r75a-rack-choices">${Object.values(DRIED).map((d) => `<button type="button" data-dry="${d.cropId}"><img src="${d.icon}${root.FARM_VERSION_QUERY || ""}" alt="">${C.CROPS[d.cropId].name} 2 份</button>`).join("")}</div>`;
-    else panel.innerHTML = `<div class="r75a-rack-head"><b>農舍曬架</b><button type="button" data-close>關閉</button></div><img class="r75a-rack-art" src="assets/generated/content-r75/drying_rack_full.png${root.FARM_VERSION_QUERY || ""}" alt="鋪滿作物的曬架"><p>${status.ready ? "已曬好，可以收了。" : `還要 ${Math.ceil(status.remainingMs / 1000)} 秒`}</p><button type="button" data-collect ${status.ready ? "" : "disabled"}>收下日曬乾貨</button>`;
-    panel.querySelector("[data-close]").onclick = function () { panel.remove(); };
-    panel.querySelectorAll("[data-dry]").forEach((b) => { b.onclick = function () { const r = startDrying(state, b.dataset.dry, Date.now()); if (!r.ok) root.alert && root.alert(r.reason === "items" ? "作物不足 2 份。" : r.reason === "sunlight" ? "陽光不足 1 點。" : "曬架正在使用。 "); else { saveRefresh(); openRack(state); } }; });
-    const collect = panel.querySelector("[data-collect]"); if (collect) collect.onclick = function () { collectDrying(state, Date.now()); saveRefresh(); openRack(state); };
+    const text = `☀ ${Math.max(1, Math.ceil(((sun.previewAt || 0) - now) / 1000))} 秒`;
+    preview.forEach((i) => {
+      const p = tilePoint(state, i); if (!p) return; let n = world.querySelector(`.r75a-sun-preview[data-plot-index="${i}"]`);
+      if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(i); n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
+      const box = p.left + "|" + p.top + "|" + p.size;
+      if (n.dataset.box !== box) { n.dataset.box = box; n.style.left = p.left + "px"; n.style.top = p.top + "px"; n.style.width = p.size + "px"; n.style.height = p.size + "px"; }
+      if (n.textContent !== text) n.textContent = text;
+    });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, catchSun, canRefract, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, collectDrying, rackStatus, festivalBonus };
+  /* 曬架立在農舍右邊那格草地；那格被玩家蓋了建物，就靠回農舍牆角，不擋建物。 */
+  function rackSpot(state) {
+    const tiles = (state.map && state.map.tiles) || []; const house = (C.STRUCTURES || []).find((s) => s.id === "farmhouse") || { x: 11, y: 4, w: 3, h: 2 };
+    const right = house.x + house.w - 1, bottom = house.y + house.h - 1; const side = tiles.find((t) => t.x === right + 1 && t.y === bottom);
+    const free = side && side.terrain === "grass" && !side.object && !side.buildingId && !side.station && !side.npc && !side.structureId && !side.blocked && !side.event && !side.forage && !side.adventureSite;
+    return free ? { x: right + 1.5, y: bottom + 1 } : { x: right + 1, y: bottom + 1 };
+  }
+  function rackLabel(state, status) { return status.empty ? "曬架" : status.ready ? "曬架・可收" : `曬架・${Math.ceil(status.remainingMs / 1000)} 秒`; }
+  function paintRack(state, now) {
+    const world = document.getElementById("mapWorld"); if (!world || !state.map || !world.offsetWidth) return;
+    const spot = rackSpot(state), status = rackStatus(state, now), tileSize = Math.max(24, Math.round(world.offsetWidth / state.map.width));
+    let node = document.getElementById("r75aRackNode");
+    if (!node || node.parentNode !== world) {
+      if (node) node.remove(); node = document.createElement("button"); node.type = "button"; node.id = "r75aRackNode"; node.className = "r75a-map-node"; node.dataset.audit = "r75a-rack";
+      node.innerHTML = '<img alt="" draggable="false"><span></span>'; node.onclick = function (event) { event.stopPropagation(); openRack(); }; world.appendChild(node);
+    }
+    const size = Math.round(tileSize * 1.3), left = Math.round(spot.x * tileSize), top = Math.round(spot.y * tileSize), box = left + "|" + top + "|" + size;
+    if (node.dataset.box !== box) { node.dataset.box = box; node.style.cssText = `left:${left}px;top:${top}px;width:${size}px;height:${size}px;z-index:${top + 3}`; }
+    const art = status.empty ? "drying_rack_empty.png" : "drying_rack_full.png";
+    if (node.dataset.art !== art) { node.dataset.art = art; node.querySelector("img").src = "assets/generated/content-r75/" + art + versionQuery(); }
+    const label = rackLabel(state, status), span = node.querySelector("span");
+    if (span.textContent !== label) { span.textContent = label; node.setAttribute("aria-label", status.empty ? "農舍旁的曬架，點一下打開" : status.ready ? "曬架上的乾貨曬好了，點一下收下" : "曬架正在曬作物，" + label.split("・")[1]); }
+    node.dataset.rackState = status.empty ? "empty" : status.ready ? "ready" : "drying";
+  }
+
+  /* 曬架面板 */
+  let rackPanelMode = "";
+  function closeRack() { const overlay = typeof document !== "undefined" && document.getElementById("r75aRackOverlay"); if (overlay) overlay.remove(); rackPanelMode = ""; }
+  function openRack() {
+    const state = liveState(); if (!state || typeof document === "undefined") return; normalize(state); closeRack();
+    const overlay = document.createElement("div"); overlay.id = "r75aRackOverlay"; overlay.className = "r75a-rack-overlay";
+    overlay.innerHTML = '<div id="r75aRackPanel" class="r75a-rack-panel" role="dialog" aria-modal="true" aria-label="農舍曬架"></div>';
+    overlay.addEventListener("click", function (event) { if (event.target === overlay) closeRack(); });
+    document.body.appendChild(overlay); renderRackPanel(state, Date.now());
+    const close = overlay.querySelector("[data-close]"); if (close && close.focus) close.focus();
+  }
+  function renderRackPanel(state, now) {
+    const panel = typeof document !== "undefined" && document.getElementById("r75aRackPanel"); if (!panel) return;
+    const status = rackStatus(state, now), amount = sunlight(state), locked = (state.level || 1) < 2;
+    const mode = locked ? "locked" : status.ready ? "ready" : !status.empty ? "drying" : "empty|" + amount + "|" + Object.values(DRIED).map((d) => Math.min(2, state.storage.items[d.cropId] || 0)).join(",");
+    if (mode === rackPanelMode) {
+      const time = panel.querySelector("[data-rack-time]"), text = `還要 ${Math.ceil(status.remainingMs / 1000)} 秒`; if (time && time.textContent !== text) time.textContent = text; return;
+    }
+    rackPanelMode = mode; const art = function (file, alt) { return `<img class="r75a-rack-art" src="assets/generated/content-r75/${file}${versionQuery()}" alt="${alt}">`; };
+    const head = '<div class="r75a-rack-head"><b>農舍曬架</b><button type="button" data-close aria-label="關閉曬架">關閉</button></div>';
+    const dried = status.itemId ? DRIED[status.itemId] : null;
+    if (locked) panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + "<p>等級 2 開放。到時放上 2 份作物、用掉 1 點陽光，30 秒後就能收下日曬乾貨。</p>";
+    else if (status.ready) panel.innerHTML = head + art("drying_rack_full.png", "鋪滿作物的曬架") + `<p>${dried ? dried.name : "乾貨"}曬好了。</p><button type="button" class="r75a-rack-collect" data-collect>收下${dried ? dried.name : "乾貨"}</button>`;
+    else if (!status.empty) panel.innerHTML = head + art("drying_rack_full.png", "鋪滿作物的曬架") + `<p>${cropName(status.cropId)}正在曬成${dried ? dried.name : "乾貨"}。</p><p class="r75a-rack-time" data-rack-time>還要 ${Math.ceil(status.remainingMs / 1000)} 秒</p><p class="r75a-rack-note">不用守著。曬好了，地圖上的曬架會寫「可收」。</p>`;
+    else panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + `<p>放上 2 份作物、用掉 1 點陽光，30 秒後收下 1 份日曬乾貨。乾貨的賣價是 1 份作物的 3 倍。</p><p class="r75a-rack-sun">蓄光瓶：陽光 ${amount} 點${amount < 1 ? "。先到光裡種、澆、收，接 1 點陽光再來。" : ""}</p><div class="r75a-rack-choices">${Object.values(DRIED).map(function (d) {
+      const have = state.storage.items[d.cropId] || 0, lack = Math.max(0, 2 - have);
+      return `<button type="button" data-dry="${d.cropId}" ${lack || amount < 1 ? "disabled" : ""}><img src="${d.icon}${versionQuery()}" alt=""><span>${cropName(d.cropId)} → ${d.name}<small>${lack ? `倉庫 ${have} 份・還差 ${lack} 份` : `倉庫 ${have} 份`}</small></span></button>`;
+    }).join("")}</div>`;
+    panel.querySelector("[data-close]").onclick = closeRack;
+    panel.querySelectorAll("[data-dry]").forEach(function (button) {
+      button.onclick = function () {
+        const result = startDrying(state, button.dataset.dry, Date.now());
+        if (!result.ok) { toast(result.reason === "items" ? "作物不足 2 份。" : result.reason === "sunlight" ? "陽光不足 1 點。" : result.reason === "busy" ? "曬架正在使用。" : "這種作物不能曬。"); return; }
+        toast(`${cropName(button.dataset.dry)}放上曬架了，30 秒後回來收。`); saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now());
+      };
+    });
+    const collect = panel.querySelector("[data-collect]");
+    if (collect) collect.onclick = function () {
+      const result = collectDrying(state, Date.now()); if (!result.ok) return;
+      toast(`收下 1 份${(DRIED[result.itemId] || {}).name || "乾貨"}，放進倉庫了。`); saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now());
+    };
+  }
+
+  function tick() {
+    const state = liveState(); if (!state || typeof document === "undefined") return;
+    normalize(state); const now = Date.now();
+    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now);
+  }
+  function initUI() {
+    if (typeof document === "undefined") return;
+    setInterval(tick, 250); if (document.readyState !== "loading") tick(); else document.addEventListener("DOMContentLoaded", tick, { once: true });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
+  }
+
+  const API = { PREVIEW_MS, DRYING_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, catchSun, canRefract, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, collectDrying, rackStatus, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, openRack, closeRack };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

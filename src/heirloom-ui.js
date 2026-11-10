@@ -8,13 +8,21 @@
     const wheat = plots.filter((t) => s.plots[t.plotIndex].cropId === "wheat");
     const ripe = wheat.find((t) => window.getCropProgress(s,s.plots[t.plotIndex],now).ready);
     if (h.ready) return { kind:"deliver", title:"第一份餐籃，送給誰？", detail:"替葛瑞留兩份小麥。送到門邊，或邀他一起坐下。", label:"裝好餐籃", target:null };
+    /* R75 整合：祖母手記的第一道光也教折光。光落在空田時，先用手鏡把光折到小麥上；
+       光快落在熟麥上時先別收，等光到了再收才算陽光小麥。 */
+    const next = h.sunWheat < 2 && window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(s, now) : null;
+    const mirror = next && next.action === "refract" ? wheat.find((t) => t.id === next.tileId) : null;
+    if (mirror) return { kind:"refract", title:"拿祖母的手鏡折光", detail:next.text, label:next.actionLabel, target:mirror };
+    const pending = sun.previewPlots || [];
+    if (ripe && h.sunWheat < 2 && pending.includes(ripe.plotIndex) && s.plots[ripe.plotIndex].sunGrown !== true) return { kind:"wait", title:"光快落在麥穗上了", detail:"先別收。等光落下再收成，這一株才算陽光小麥。", label:"看看這株小麥", target:ripe };
     if (ripe) return { kind:"harvest", title:"把這束陽光收進餐籃", detail:"小麥成熟了。收成後，留下兩份給葛瑞。", label:"走近收成", target:ripe };
     const lit = plots.find((t) => sun.plots.includes(t.plotIndex) && (!s.plots[t.plotIndex].cropId || (s.plots[t.plotIndex].cropId === "wheat" && !window.getCropProgress(s,s.plots[t.plotIndex],now).wet)));
     if (lit && h.sunWheat < 2) return { kind:s.plots[lit.plotIndex].cropId ? "water" : "plant", title:"光落在這裡", detail:`光斑還有 ${Math.ceil(sun.remainingMs/1000)} 秒。在光裡${s.plots[lit.plotIndex].cropId ? "澆水" : "種小麥"}，這株的收穫會記進餐籃。`, label:s.plots[lit.plotIndex].cropId ? "去光裡澆水" : "在光裡播種", target:lit };
     const growing = wheat[0];
     if (growing) {
       const p = s.plots[growing.plotIndex], progress = window.getCropProgress(s,p,now);
-      return { kind:"wait", title:p.sunGrown === true ? "陽光已經留在麥穗裡" : "等第一道光落下", detail:p.sunGrown === true ? `再等約 ${Math.ceil(progress.remainingMs/1000)} 秒成熟。光散了，這株仍記得你在光裡的照料。` : `種下後約四秒會出現光斑。看見光，再去澆水；錯過會再來。`, label:"看看這株小麥", target:growing };
+      if (p.sunGrown !== true && pending.includes(growing.plotIndex)) return { kind:"wait", title:"光快落在這株小麥上了", detail:progress.wet ? "水已經澆了。等光落下、小麥熟了，趁光收成。" : "先別澆水。等光落下再澆，才接得住陽光。", label:"看看這株小麥", target:growing };
+      return { kind:"wait", title:p.sunGrown === true ? "陽光已經留在麥穗裡" : "等第一道光落下", detail:p.sunGrown === true ? `再等約 ${Math.ceil(progress.remainingMs/1000)} 秒成熟。光散了，這株仍記得你在光裡的照料。` : `光落下前，田上會先亮起預告圈。看見光落下，再去澆水；錯過會再來。`, label:"看看這株小麥", target:growing };
     }
     const empty = plots.find((t) => !s.plots[t.plotIndex].cropId);
     return { kind:"plant", title:"先種一株，等光來", detail:h.sunWheat >= 2 ? "陽光收成已記下。倉庫還要留兩份小麥，才裝得成餐籃。" : "種一株小麥，留著水，等光落下再澆。餐籃不用等換日。", label:"種第一株小麥", target:empty };
@@ -23,6 +31,13 @@
     H.start(s);
     const q = step(s);
     if (q.kind === "deliver") { window.DailyUI.openHeirloom(); return; }
+    if (q.kind === "refract") {
+      const r = window.FarmSunplay.refract(s, q.target.plotIndex, Date.now());
+      farm().focusTile(q.target.id);
+      farm().toast(r.ok ? "光折過來了。之後先點一格田，再按「把光折到這裡」，光照哪一格由你決定。" : q.detail);
+      if (r.ok) { farm().safeSaveNow(); signature = ""; farm().refresh(); if (window.FarmSunplay.playBeam) window.FarmSunplay.playBeam(s, r.from, r.to); } /* 重畫地圖之後才放光束，免得被清掉 */
+      return;
+    }
     if (!q.target) { farm().toast("先收成田裡的作物，騰一格來種小麥。"); return; }
     farm().setTool(q.kind === "water" ? "water" : "hand");
     if (q.kind === "plant") farm().selectSeed("wheat");

@@ -1132,13 +1132,54 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
 .r73b-taste { word-break: keep-all; }
 
 /* R75A：追光、蓄光瓶與曬架 */
-.r75a-sun-hud{position:fixed;right:max(10px,env(safe-area-inset-right));top:max(72px,env(safe-area-inset-top));z-index:980;display:flex;gap:6px;align-items:center;padding:5px;border:2px solid #8b622f;border-radius:14px;background:#fff7d8ee;box-shadow:0 3px 12px #402b1880}
-.r75a-sun-hud button{min-width:44px;min-height:44px;border:1px solid #a87935;border-radius:10px;background:#fffaf0;color:#4d3219;font-weight:900}.r75a-sun-hud img{width:34px;height:34px;object-fit:contain;vertical-align:middle}.r75a-mirror{display:flex;align-items:center;gap:4px;max-width:190px}.r75a-mirror span{font-size:12px;line-height:1.2}.r75a-jar{position:relative}.r75a-jar b{display:block;font-size:12px}
-.r75a-sun-preview{position:absolute;width:48px;height:48px;display:grid;place-items:center;text-align:center;border:3px solid #ffe070;border-radius:50%;background:#fff6a433;color:#5d4212;font-size:11px;font-weight:900;pointer-events:none;animation:r75aPulse 1s ease-in-out infinite alternate}@keyframes r75aPulse{to{box-shadow:0 0 18px 6px #ffe57099}}
-.r75a-plot-action{position:absolute;z-index:1200;display:flex;gap:5px;transform:translate(-50%,-100%)}.r75a-plot-action button,.r75a-rack-panel button,.r75a-upgrade button{min-height:44px;min-width:44px;border:2px solid #7b5529;border-radius:9px;background:#fff3bc;color:#432c16;font-weight:900}
-.r75a-rack-panel{position:fixed;z-index:1600;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:16px;border:3px solid #775126;border-radius:16px;background:#fff9e7;box-shadow:0 10px 40px #24180c99;color:#3d2917}.r75a-rack-head{display:flex;justify-content:space-between;align-items:center}.r75a-rack-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.r75a-rack-choices button{display:flex;align-items:center;gap:6px}.r75a-rack-choices img{width:32px;height:32px;image-rendering:pixelated}.r75a-rack-art{display:block;width:min(280px,100%);margin:8px auto}.r75a-light-trait{display:block;white-space:normal;font-size:10px;line-height:1.25;color:#6a4a1d}.r75a-upgrades{display:grid;gap:7px;margin-top:7px}.r75a-upgrade{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px;border:1.5px solid #c9a86a;border-radius:9px;background:#fff8df}.r75a-upgrade .u-main{display:grid;gap:3px}.r75a-upgrade .u-main span{font-size:12px}
-@media(max-width:600px){.r75a-sun-hud{top:auto;bottom:calc(var(--fixed-bottom-inset,64px) + 8px);right:6px}.r75a-mirror{max-width:146px}.r75a-mirror span{font-size:10px}.r75a-rack-choices{grid-template-columns:1fr}.r75a-plot-action{max-width:calc(100vw - 20px);flex-wrap:wrap;justify-content:center}}
-@media(max-height:500px) and (orientation:landscape){.r75a-sun-hud{top:6px;bottom:auto}.r75a-mirror span{display:none}.r75a-rack-panel{max-height:calc(100dvh - 12px);padding:10px}.r75a-rack-choices{grid-template-columns:repeat(4,minmax(0,1fr))}.r75a-rack-choices button{font-size:11px}}
+/* R75 整合：蓄光瓶改成資源列裡的一枚籤、曬架改成農舍旁的地圖物件、折光與催熟改放動作列；原本的浮動 HUD 與田邊泡泡已移除。 */
+.r75a-jar-chip img { width: 20px; height: 20px; object-fit: contain; image-rendering: pixelated; flex: 0 0 auto; }
+.r75a-jar-chip .sub { white-space: nowrap; }
+.r75a-sun-preview { position: absolute; z-index: 9500; display: grid; place-items: center; box-sizing: border-box; text-align: center; border: 3px dashed #ffe070; border-radius: 50%; background: rgba(255, 246, 164, 0.28); color: #4d3508; font-size: 13px; font-weight: 900; text-shadow: 0 1px 0 #fff8d0, 0 0 4px #fff8d0; pointer-events: none; animation: r75aPulse 1s ease-in-out infinite alternate; }
+@keyframes r75aPulse { to { box-shadow: 0 0 18px 6px rgba(255, 229, 112, 0.6); } }
+.r75a-beam { position: absolute; z-index: 9600; height: 6px; margin-top: -3px; transform-origin: 0 50%; border-radius: 3px; background: linear-gradient(to right, rgba(255, 244, 170, 0.2), #fff3a0 35%, #ffffff); box-shadow: 0 0 10px 3px rgba(255, 226, 96, 0.75); pointer-events: none; animation: r75aBeam 0.7s ease-out forwards; }
+@keyframes r75aBeam { 0% { clip-path: inset(-14px 100% -14px 0); opacity: 1; } 55% { clip-path: inset(-14px 0 -14px 0); opacity: 1; } 100% { clip-path: inset(-14px 0 -14px 0); opacity: 0; } }
+.r75a-beam-flash { position: absolute; z-index: 9601; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 233, 120, 0.55) 45%, rgba(255, 233, 120, 0) 70%); pointer-events: none; animation: r75aFlash 0.9s ease-out forwards; }
+@keyframes r75aFlash { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0; } }
+.r75a-map-node { position: absolute; transform: translate(-50%, -100%); padding: 0; border: none; background: none; cursor: pointer; min-width: 44px; min-height: 44px; }
+.r75a-map-node img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+.r75a-map-node span { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; color: #3d2c17; background: rgba(255, 248, 232, 0.92); border-radius: 4px; padding: 1px 4px; pointer-events: none; }
+.r75a-map-node[data-rack-state="ready"] span { background: #ffe27a; color: #4a3200; box-shadow: 0 0 0 1px #8a6d00; }
+.r75a-rack-overlay { position: fixed; inset: 0; z-index: 99990; display: flex; align-items: center; justify-content: center; padding: 12px; background: rgba(43, 32, 18, 0.55); box-sizing: border-box; }
+.r75a-rack-panel { width: min(420px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; box-sizing: border-box; padding: 16px; border: 3px solid #775126; border-radius: 12px; background: #fff9e7; box-shadow: 0 10px 40px rgba(36, 24, 12, 0.6); color: #3d2917; }
+.r75a-rack-panel p { margin: 6px 0; line-height: 1.5; }
+.r75a-rack-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.r75a-rack-head b { font-size: 17px; }
+.r75a-rack-panel button { min-height: 44px; min-width: 44px; padding: 6px 12px; border: 2px solid #7b5529; border-radius: 9px; background: #fff3bc; color: #432c16; font-weight: 900; font-family: inherit; cursor: pointer; }
+.r75a-rack-panel button:disabled { opacity: 0.6; cursor: not-allowed; background: #efe6cf; }
+.r75a-rack-art { display: block; width: min(200px, 60%); margin: 8px auto; image-rendering: pixelated; }
+.r75a-rack-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.r75a-rack-choices button { display: flex; align-items: center; gap: 6px; padding: 6px 8px; text-align: left; }
+.r75a-rack-choices img { width: 32px; height: 32px; flex: 0 0 auto; image-rendering: pixelated; }
+.r75a-rack-choices span { display: grid; gap: 2px; min-width: 0; font-size: 13px; line-height: 1.3; }
+.r75a-rack-choices small { font-size: 11px; font-weight: 700; color: #76551c; }
+.r75a-rack-time { font-size: 18px; font-weight: 900; text-align: center; }
+.r75a-rack-note { font-size: 12px; color: #6a4a1d; }
+.r75a-rack-sun { font-weight: 700; color: #6a4a1d; }
+.r75a-rack-collect { display: block; width: 100%; margin-top: 8px; padding: 10px 12px; font-size: 15px; background: #ffd95e; }
+.r75a-light-trait { display: block; white-space: normal; font-size: 10px; line-height: 1.25; color: #6a4a1d; }
+.r75a-up .u-ic img { width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; }
+.scene-action-btn[data-action="refract"] img, .scene-action-btn[data-action="ripen"] img { object-fit: contain; }
+.scene-action-btn[data-action="refract"] .sab-t, .scene-action-btn[data-action="ripen"] .sab-t { max-width: 96px; }
+@media (max-width: 600px) {
+  .r75a-rack-choices { grid-template-columns: 1fr; }
+  .r75a-sun-preview { font-size: 11px; border-width: 2px; }
+  .r75a-map-node span { font-size: 10px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .r75a-rack-panel { max-height: calc(100dvh - 12px); padding: 10px; }
+  .r75a-rack-art { width: 88px; margin: 2px auto; }
+  .r75a-sun-preview { font-size: 11px; border-width: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .r75a-sun-preview, .r75a-beam, .r75a-beam-flash { animation: none; }
+  .r75a-beam-flash { opacity: 0.8; }
+}
 /* R75B：第 7～8 項——灶台看火候小遊戲、料理成果徽章、手札「我做過的選擇」、地圖上的招牌與種子袋。 */
 .r75b-pot-thumb { width: 44px; height: 44px; object-fit: contain; float: right; }
 .r75b-grade-line { margin: 4px 0; color: #76551c; font-weight: 700; }
@@ -1166,3 +1207,7 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
   .r75b-fire-pointer { transition: none; }
   .r75b-cook-pot { animation: none; }
 }
+/* R75 整合：提示或對話出現時任務卡收成一行。祖母手記卡是舊式結構，要改回橫排，
+   不然標題被擠成 0 高、按鈕被切掉一半。 */
+body:has(#toast-zone > .toast) #questDock:has(> .world-chapter),
+body:has(#worldDialogue:not([hidden])) #questDock:has(> .world-chapter) { flex-direction: row; align-items: center; }

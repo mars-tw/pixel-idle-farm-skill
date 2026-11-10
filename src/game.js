@@ -668,7 +668,8 @@
       && ["plant_wheat", "first_water", "first_harvest"].includes(state.story && state.story.questId)
       && !(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest);
     plot.plantedAt = now;
-    if (r65TutorialHeadStart) plot.plantedAt = now - Math.max(5000, plotGrowMs(state, plot, now) - 10000);
+    // R75：第一道光要 8 秒才落下，教學小麥改成剛好 10 秒成熟（原本最少先長 5 秒，會比光早熟，追光教學被收成蓋過）。
+    if (r65TutorialHeadStart) plot.plantedAt = now - Math.max(0, plotGrowMs(state, plot, now) - 10000);
     delete plot.sunGrown;
     state.stats.plantCount++;
     const sun = sunBoostGrowth(state, plotIndex, now);

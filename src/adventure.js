@@ -452,8 +452,9 @@
     return result;
   }
 
+  function activePlotTotal(state) { return state.upgrades && state.upgrades.plotCount > 0 && C.UPGRADES && C.UPGRADES.plotCount ? C.UPGRADES.plotCount.levels[state.upgrades.plotCount - 1].value : C.GAME.startPlots; }
   function readyHarvestPlots(state, now) {
-    const t = at(state, now); const active = state.upgrades && state.upgrades.plotCount > 0 && C.UPGRADES && C.UPGRADES.plotCount ? C.UPGRADES.plotCount.levels[state.upgrades.plotCount - 1].value : C.GAME.startPlots;
+    const t = at(state, now); const active = activePlotTotal(state);
     return (state.map && state.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < active).filter((tile) => {
       const plot = state.plots && state.plots[tile.plotIndex]; if (!plot || !plot.cropId || !C.CROPS[plot.cropId]) return false; if (typeof window !== "undefined" && typeof window.getCropProgress === "function") return !!window.getCropProgress(state, plot, t).ready; // R65 整合：成熟判斷以遊戲本身為準，避免任務卡說可收成、田上還在倒數
       let growMs = C.CROPS[plot.cropId].growMs; const growth = state.adventure && state.adventure.r58 && state.adventure.r58.buffs && state.adventure.r58.buffs.growth;
@@ -462,29 +463,65 @@
       return t - plot.plantedAt >= growMs;
     });
   }
+  // R75 整合：開場的下一步跟著光走——折光 → 光裡照料 → 等光時先把種子包種完 → 收成 → 催熟 → 交付。
+  // 文字裡不放會跳動的秒數（任務卡靠文字判斷要不要重畫），倒數交給任務卡提示列與陽光標籤。
   function nextFarmStep(state, now) {
     if (!ensure(state, now).ok) return { action: "wait", target: null, tileId: null, text: "先回到農場看看。", actionLabel: "回到農場" };
-    const a = state.adventure; const ready = readyHarvestPlots(state, now); const wheat = ((state.storage || {}).items || {}).wheat || 0; const bread = (a.meals || {}).rustic_bread || 0;
-    if (ready.length) return { action: "harvest", target: "field", tileId: ready[0].id, count: ready.length, text: `田裡有 ${ready.length} 格可以收成，點一下收成。`, actionLabel: "去收成" };
-    if (!claimed(a, "c1_first_harvest")) {
-      if (wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", actionLabel: "帶去交付" };
-      const wheatIndex = (state.plots || []).findIndex((plot) => plot && plot.cropId === "wheat");
-      const growing = wheatIndex >= 0;
-      if (growing && Sunplay) {
-        Sunplay.normalize(state); const sun = state.sun || {}; const t = at(state, now); const lightPlots = t >= (sun.startsAt || 0) && t < (sun.endsAt || 0) ? sun.plots || [] : t < (sun.previewAt || 0) ? sun.previewPlots || [] : [];
-        if (!state.r75Sunplay.firstRefracted && lightPlots.length && !lightPlots.includes(wheatIndex)) return { action: "refract", target: "field", tileId: null, plotIndex: wheatIndex, text: "光落在旁邊，點你的小麥把光折過來。", actionLabel: "把光折過來" };
-        if (state.r75Sunplay.firstRefracted && state.r75Sunplay.sunlight < 1) return { action: "tend", target: "field", tileId: null, plotIndex: wheatIndex, text: "光已經折到小麥上，趁光還在澆水，接住第一點陽光。", actionLabel: "在光裡澆水" };
-        if (state.r75Sunplay.sunlight >= 2 && !state.r75Sunplay.firstRipened) return { action: "ripen", target: "field", tileId: null, plotIndex: wheatIndex, text: "蓄光瓶有 2 點陽光了，點小麥使用晨光催熟。", actionLabel: "用晨光催熟" };
-        if (state.r75Sunplay.sunlight === 1) return { action: "catch_sun", target: "field", tileId: null, plotIndex: wheatIndex, text: "第二道光會在 15 秒內到，再在光裡照料一次，湊滿 2 點陽光。", actionLabel: "等光來照料" };
+    const a = state.adventure; const t = at(state, now); const ready = readyHarvestPlots(state, now); const wheat = ((state.storage || {}).items || {}).wheat || 0; const bread = (a.meals || {}).rustic_bread || 0;
+    const active = activePlotTotal(state); const plotOf = (tile) => (state.plots || [])[tile.plotIndex];
+    const tiles = (state.map && state.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < active && plotOf(tile));
+    const cropped = tiles.filter((tile) => plotOf(tile).cropId && C.CROPS[plotOf(tile).cropId]);
+    const growing = cropped.filter((tile) => !ready.includes(tile));
+    const dry = growing.filter((tile) => (plotOf(tile).wateredAt || 0) < plotOf(tile).plantedAt);
+    const empty = tiles.filter((tile) => !plotOf(tile).cropId);
+    const packs = qty((((a.r58 || {}).r59 || {}).seedPacks || {}).wheat);
+    const cropName = (tile) => C.CROPS[plotOf(tile).cropId].name;
+    const field = (action, tile, text, actionLabel, extra) => Object.assign({ action, target: "field", tileId: tile ? tile.id : null, plotIndex: tile ? tile.plotIndex : null, text, actionLabel }, extra || {});
+    const mealDone = claimed(a, "c1_first_meal"); const sunplay = Sunplay && !mealDone ? Sunplay.normalize(state).r75Sunplay : null; let litGrowing = null, lightOn = false;
+    if (sunplay) {
+      const sun = state.sun || {}; const used = sun.used || [];
+      const activeLight = t >= (sun.startsAt || 0) && t < (sun.endsAt || 0) ? (sun.plots || []).filter((i) => !used.includes(i)) : [];
+      const previewLight = !activeLight.length && t < (sun.previewAt || 0) ? sun.previewPlots || [] : [];
+      const lit = activeLight.length ? activeLight : previewLight; const litCrops = cropped.filter((tile) => lit.includes(tile.plotIndex));
+      if (!sunplay.firstRefracted && lit.length && !litCrops.length && cropped.length) {
+        const target = dry[0] || growing[0] || cropped[0];
+        if (Sunplay.canRefract(state, target.plotIndex, t)) return field("refract", target, activeLight.length ? `光落在空田上。拿祖母的手鏡，把光折到你的${cropName(target)}上。` : `光快落在空田上了。拿祖母的手鏡，先把光折到你的${cropName(target)}上。`, "把光折過來");
       }
-      return growing ? { action: "tend", target: "field", tileId: null, text: "小麥正在長，先澆水。", actionLabel: "去澆水" } : { action: "plant", target: "field", tileId: null, text: "先種下第一格小麥，接著跟著光走。", actionLabel: "去種小麥" };
+      if (activeLight.length && litCrops.length) {
+        const ripe = litCrops.find((tile) => ready.includes(tile));
+        if (ripe) return field("harvest", ripe, `光正照著，田裡有 ${ready.length} 格可以收成，點一下收成，多接 1 點陽光。`, "在光裡收成", { count: ready.length, sunlit: true });
+        const thirsty = litCrops.find((tile) => dry.includes(tile));
+        if (thirsty) return field("tend", thirsty, `光到了！趁光還在替${cropName(thirsty)}澆水，接住${sunplay.firstCaught ? "" : "第一點"}陽光。`, "在光裡澆水", { sunlit: true });
+      }
+      /* 光快落在有作物的格子上：那一格留到光到了再收成或澆水，這幾秒先做別格的事。
+         已經熟的也先留著——不然玩家會在光到之前把它收掉，光就落在空田上。 */
+      const hold = previewLight.length ? litCrops.find((tile) => ready.includes(tile)) || litCrops.find((tile) => dry.includes(tile)) : null;
+      if (hold) {
+        if (empty.length && packs > 0) return field("plant", empty[0], `等光落下的這幾秒，把剩下的 ${packs} 包小麥種子也種下。`, "去種小麥");
+        const other = dry.find((tile) => !lit.includes(tile.plotIndex));
+        if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水");
+        const otherReady = ready.filter((tile) => !lit.includes(tile.plotIndex));
+        if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", { count: otherReady.length });
+        return field("catch_sun", hold, `光快落在${cropName(hold)}上了。${ready.includes(hold) ? "等光到了再收成，多接 1 點陽光。" : "等光到了再澆水，才接得住陽光。"}`, "看光落在哪");
+      }
+      litGrowing = growing.find((tile) => lit.includes(tile.plotIndex)) || null; lightOn = activeLight.length > 0;
     }
-    if (!claimed(a, "c1_first_meal")) {
-      if (bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", actionLabel: "吃麥餅" };
-      if (wheat >= 2) return { action: "cook", target: "kitchen", tileId: "t10_10", text: "食材已齊，前往農舍灶台做農家麥餅。", actionLabel: "前往灶台" };
-      return { action: "plant", target: "field", tileId: null, text: `回家的第一餐還差 ${Math.max(0, 2 - wheat)} 份小麥，先種下小麥。`, actionLabel: "去種小麥" };
+    if (ready.length) return field("harvest", ready[0], `田裡有 ${ready.length} 格可以收成，點一下收成。`, "去收成", { count: ready.length });
+    if (sunplay && sunplay.sunlight >= 2 && !sunplay.firstRipened && growing.length) {
+      const target = growing.slice().sort((x, y) => plotOf(y).plantedAt - plotOf(x).plantedAt)[0];
+      return field("ripen", target, `蓄光瓶有 ${sunplay.sunlight} 點陽光。用掉 2 點，讓還在長的${cropName(target)}立刻成熟。`, "用陽光催熟");
     }
-    return { action: "explore", target: "fishing_dock", tileId: null, text: "第一餐吃完了，去河邊看看釣台。", actionLabel: "去河邊看看" };
+    const harvestDone = claimed(a, "c1_first_harvest");
+    if (!harvestDone && wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", actionLabel: "帶去交付" };
+    if (harvestDone && !mealDone && bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", actionLabel: "吃麥餅" };
+    if (harvestDone && !mealDone && wheat >= 2) return { action: "cook", target: "kitchen", tileId: "t10_10", text: "食材已齊，前往農舍灶台做農家麥餅。", actionLabel: "前往灶台" };
+    if (mealDone) return { action: "explore", target: "fishing_dock", tileId: null, text: "第一餐吃完了，去河邊看看釣台。", actionLabel: "去河邊看看" };
+    if (dry.length) return field("tend", dry[0], `${cropName(dry[0])}正在長，先澆水，長得更快。`, "去澆水");
+    const mealNeed = `回家的第一餐還差 ${Math.max(0, 2 - wheat)} 份小麥`;
+    if (empty.length && packs > 0 && cropped.length) return field("plant", empty[0], `把剩下的 ${packs} 包小麥種子也種下，幾格一起照顧。`, "去種小麥");
+    if (!growing.length) return field("plant", empty[0] || null, harvestDone ? `${mealNeed}，先種下小麥。` : "先種下第一格小麥，接著跟著光走。", "去種小麥");
+    if (litGrowing) return field("wait", litGrowing, `${lightOn ? "光正照著" : "光快落在"}${cropName(litGrowing)}${lightOn ? "" : "上了"}，熟了就趁光收成，多接 1 點陽光。`, "看看田裡");
+    return field("wait", growing[0], harvestDone ? `${mealNeed}，等田裡的${cropName(growing[0])}成熟。` : `${cropName(growing[0])}正在長，成熟了就來收。`, "看看田裡");
   }
 
   function earlyGoals(state, now) {
