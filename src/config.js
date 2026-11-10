@@ -392,7 +392,7 @@ function itemSellValue(id) { const d = getItemDef(id); return d ? d.sellValue : 
 
 // ===== MVP2：建材（清障礙取得，用於蓋建築/加成；存 state.materials）=====
 const MATERIALS = {
-  wood:    { id: "wood",    name: "木材", emoji: "🪵" },
+  wood:    { id: "wood",    name: "木料", emoji: "🪵" },
   stone:   { id: "stone",   name: "石材", emoji: "🪨" },
   compost: { id: "compost", name: "堆肥", emoji: "🍂" },
   feather: { id: "feather", name: "烏鴉羽毛", emoji: "🪶" },
@@ -410,9 +410,9 @@ const TERRAIN = {
 // ===== MVP2：障礙物（可清除 → 取建材 + 釋出草地）=====
 const OBSTACLES = {
   rock:  { id: "rock",  name: "巨石", emoji: "🪨", clearCost: 12, grants: { stone: 2 },   tall: false, desc: "清除得石材，釋出草地" },
-  stump: { id: "stump", name: "樹樁", emoji: "🪵", clearCost: 8,  grants: { wood: 2 },    tall: false, desc: "清除得木材，釋出草地" },
+  stump: { id: "stump", name: "樹樁", emoji: "🪵", clearCost: 8,  grants: { wood: 2 },    tall: false, desc: "清除得木料，釋出草地" },
   bush:  { id: "bush",  name: "灌木", emoji: "🌿", clearCost: 10, grants: { compost: 3 }, tall: false, desc: "清除得堆肥，釋出草地" },
-  tree:  { id: "tree",  name: "大樹", emoji: "🌳", clearCost: 18, grants: { wood: 4 },    tall: true,  desc: "高大會遮擋；清除得木材，釋出草地" },
+  tree:  { id: "tree",  name: "大樹", emoji: "🌳", clearCost: 18, grants: { wood: 4 },    tall: true,  desc: "高大會遮擋；清除得木料，釋出草地" },
 };
 
 // ===== MVP2：建築（生產模組，蓋在草地，影響經濟/進度）=====
@@ -810,11 +810,11 @@ const QUESTS = {
     desc: "把 2 份小麥交給老農班伯，完成第一章的主線交付。", next: "clear_old_path",
     objective: "elder_wheat", marker: { kind: "npc", type: "elder" } },
   clear_old_path:    { id: "clear_old_path", title: "清開荒地舊路",
-    desc: "用清除工具清掉擋路的樹樁，取得修橋用木材並打通南邊。", next: "repair_bridge",
+    desc: "用清除工具清掉擋路的樹樁，取得修橋用木料並打通南邊。", next: "repair_bridge",
     objective: "clear", marker: { kind: "obstacle", object: "stump" }, chapter: 1 },
   // ===== 第二章：世界可探索（Stage 5）=====
   repair_bridge:     { id: "repair_bridge", title: "修復東邊斷橋",
-    desc: "依任務 Dock 的材料清單清除大樹與巨石，湊齊木材 6、石頭 4 後走到斷橋修復。", next: "explore_new_area",
+    desc: "依任務列的材料清單清除大樹與巨石，湊齊木料 6、石頭 4 後走到斷橋修復。", next: "explore_new_area",
     objective: "repair_bridge", marker: { kind: "bridge" }, chapter: 2 },
   explore_new_area:  { id: "explore_new_area", title: "探索東林空地",
     desc: "過橋走到東林古樹，看看封鎖已久的東邊有什麼。", next: "discover_east_forage",

@@ -2,7 +2,7 @@
 (function(){
  'use strict';const A=window.AdventureAPI,R=window.ContentR1;
  const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const rewardText=r=>[r.coins?`${r.coins} 金幣`:'',r.xp?`${r.xp} 經驗`:'',...Object.entries(r.materials||{}).map(([id,n])=>`${n} 份${id==='wood'?'木材':id}`)].filter(Boolean).join('、')||'共同回話';
+ const rewardText=r=>[r.coins?`${r.coins} 金幣`:'',r.xp?`${r.xp} 經驗`:'',...Object.entries(r.materials||{}).map(([id,n])=>`${n} 份${id==='wood'?'木料':id}`)].filter(Boolean).join('、')||'共同回話';
  const token=()=>globalThis.crypto?.randomUUID?.()||`meal-${Date.now()}-${Math.random().toString(36).slice(2)}`;
  function history(model){return model.records.map((r,i)=>`<article><strong>${i+1}．${esc(r.response)}</strong><small>${r.completionMode==='once'?'一次配好':'補餐後完成'}・${new Date(r.at).toLocaleString('zh-TW')}</small></article>`).join('')||'<p>還沒有完成的雙人訂單。</p>';}
  function showResult(state,result,order,pairing){

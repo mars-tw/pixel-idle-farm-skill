@@ -17,7 +17,7 @@ assert.deepEqual(firstChapter.map((q) => q.name), ["種下第一格", "老農班
 
 const ui = fs.readFileSync("src/ui.js", "utf8");
 const world = fs.readFileSync("src/world-ui.js", "utf8");
-assert.match(ui, /prog\.ready \? "可收成，點一下收成"/, "田邊泡泡的成熟文字由 getCropProgress.ready 決定");
+assert.match(ui, /if \(prog\.ready\) return name \+ "・可收成";/, "田邊泡泡的成熟文字由 getCropProgress.ready 決定，且成熟時只顯示可收成");
 assert.match(world, /data-r71a-shared-crop="true"/);
 assert.match(world, /（與祭典共用）/);
 assert.match(world, /chapterTaskLabel\(q\)/, "任務卡與手札共用章名／任務名組字函式");

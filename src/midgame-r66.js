@@ -300,7 +300,7 @@
       btn.setAttribute("aria-label", label);
       const size = Math.min(Math.round(tileSize * 1.08), Math.floor(tileSize * 1.5)); // R71B：設施圖寬度不超過一格半
       btn.style.cssText = `left:${Math.round((tile.x + 0.5) * tileSize)}px;top:${Math.round((tile.y + 1) * tileSize)}px;width:${size}px;height:${size}px;z-index:${Math.round((tile.y + 1) * tileSize) + 2};`;
-      btn.innerHTML = `<img src="${esc(art)}?v=content-r73-20261110-1" alt="" draggable="false">`;
+      btn.innerHTML = `<img src="${esc(art)}?v=content-r73-20261110-1" alt="" draggable="false">${dataset && dataset.r66bFacility ? `<span class="r74a-facility-name">${esc(label.split("，")[0])}</span>` : ""}`;
       btn.onclick = (ev) => { ev.stopPropagation(); onClick(); };
       world.appendChild(btn);
       return btn;
