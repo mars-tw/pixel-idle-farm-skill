@@ -1003,3 +1003,33 @@ img[src*="content-r70/"] { image-rendering: pixelated; }
 .npc-nameplate-near, .npc-footname { z-index: 9700 !important; }
 .qmarker .npc-nameplate { z-index: 9700 !important; }
 .tile-state-label { z-index: 9700 !important; }
+
+/* R72B（第 5～6 項）：收穫祭擺攤叫賣小遊戲。木攤與奶油紙配色，不用表情符號當主要圖像。 */
+#festivalStallR72 { margin: 8px 0; background: #7a4a21; color: #fff3cf; border: 2px solid #4d2f14; }
+.r72b-overlay { position: fixed; inset: 0; z-index: 21000; display: grid; place-items: center; padding: 14px; background: rgba(43, 32, 16, .62); }
+.r72b-card { position: relative; width: min(560px, 100%); max-height: min(92dvh, 760px); overflow-y: auto; padding: 20px; border: 3px solid #7a4a21; border-radius: 8px; background: #fff8df; color: #3a2c1a; box-shadow: 0 12px 32px rgba(30, 18, 4, .35); }
+.r72b-close { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; border: 2px solid #7a4a21; border-radius: 6px; background: #f4e5b8; color: #4d2f14; font-size: 22px; font-weight: 900; cursor: pointer; }
+.r72b-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-right: 44px; }
+.r72b-title { font-size: 22px; font-weight: 950; color: #5a3410; }
+.r72b-clock { flex: 0 0 auto; padding: 4px 10px; border: 2px solid #b96f1e; border-radius: 999px; background: #ffe1a1; font-weight: 950; }
+.r72b-desc { margin-top: 8px; font-size: 14px; line-height: 1.55; color: #5f503a; }
+.r72b-status { margin-top: 10px; font-weight: 900; color: #7a4a12; }
+.r72b-feedback { margin-top: 10px; min-height: 24px; font-weight: 900; color: #285b1d; }
+.r72b-primary, .r72b-secondary { min-height: 48px; padding: 10px 18px; border-radius: 8px; font: inherit; font-weight: 950; cursor: pointer; }
+.r72b-primary { margin-top: 14px; border: 2px solid #4d2f14; background: #e89b2d; color: #3d2200; }
+.r72b-primary:disabled { opacity: .5; cursor: not-allowed; }
+.r72b-secondary { margin-top: 14px; border: 2px solid #7a4a21; background: #fffdf4; color: #5a3410; }
+.r72b-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.r72b-score { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 10px; padding: 8px 10px; border: 2px solid #d8b96a; border-radius: 8px; background: #fff0bd; font-weight: 850; }
+.r72b-customer { display: flex; gap: 14px; align-items: center; margin-top: 14px; padding: 10px; border: 2px solid #a9763f; border-radius: 8px; background: #fdf1cf; }
+.r72b-portrait { width: 92px; height: 110px; object-fit: contain; object-position: bottom; image-rendering: pixelated; }
+.r72b-bubble { margin-top: 4px; padding: 8px 10px; border: 2px solid #7a4a21; border-radius: 8px; background: #fffdf4; font-size: 18px; font-weight: 950; }
+.r72b-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; margin-top: 10px; }
+.r72b-item { min-height: 56px; padding: 8px; border: 2px solid #8a6a35; border-radius: 8px; background: #fffdf4; color: #3a2c1a; font: inherit; cursor: pointer; text-align: left; }
+.r72b-item b { display: block; font-size: 15px; }
+.r72b-item small { color: #7a6a52; font-weight: 800; }
+.r72b-token, .r72b-owned { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 900; color: #7a4a12; }
+.r72b-token img, .r72b-owned img { width: 36px; height: 36px; object-fit: contain; image-rendering: pixelated; }
+.r72b-stars { margin-top: 8px; font-size: 34px; letter-spacing: 4px; color: #d98a12; }
+.r72b-flag { display: block; width: 120px; height: 132px; object-fit: contain; margin: 6px auto; image-rendering: pixelated; }
+@media (max-width: 520px) { .r72b-card { padding: 14px; } .r72b-portrait { width: 72px; height: 88px; } .r72b-bubble { font-size: 16px; } }
