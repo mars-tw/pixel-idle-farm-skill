@@ -1094,3 +1094,22 @@ body:has(.npc-bubble .r60a-story-choices) .seed-hud { visibility: hidden !import
 .r73b-item[data-r73b-mode="token"] { border-style: dashed; }
 .r73b-thresholds { margin-top: 10px; padding: 8px 10px; border: 2px solid #d8b96a; border-radius: 8px; background: #fff0bd; font-weight: 900; color: #7a4a12; }
 .r73b-advice { margin-top: 10px; font-size: 14px; line-height: 1.55; font-weight: 850; color: #285b1d; }
+
+/* R74B（第 4 項）：擺攤叫賣顧客卡回饋飄字與短動畫、商品卡文字不碎行。沿用既有木框奶油紙配色，不新增色系。 */
+.r72b-customer { position: relative; }
+.r74b-float { position: absolute; right: 12px; top: 8px; padding: 3px 9px; border: 2px solid #7a4a21; border-radius: 999px; font-size: 15px; font-weight: 950; pointer-events: none; animation: r74b-float-up 0.9s ease-out forwards; }
+.r74b-float-good { background: #e8f4d8; color: #285b1d; }
+.r74b-float-bad { background: #fde8e0; color: #8a2f1a; }
+.r74b-customer-good { animation: r74b-customer-pop 0.35s ease-out; }
+.r74b-customer-bad { animation: r74b-customer-shake 0.3s ease-out; }
+@keyframes r74b-float-up { 0% { opacity: 0; transform: translateY(6px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-18px); } }
+@keyframes r74b-customer-pop { 0% { transform: scale(1); } 40% { transform: scale(1.02); } 100% { transform: scale(1); } }
+@keyframes r74b-customer-shake { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) {
+  .r74b-float, .r74b-customer-good, .r74b-customer-bad { animation: none; }
+  .r74b-float { opacity: 1; }
+}
+.r72b-items { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
+.r73b-item-main b, .r73b-item-main small { white-space: nowrap; word-break: keep-all; overflow-wrap: normal; }
+.r73b-item-main small { font-size: 11px; }
+.r73b-taste { word-break: keep-all; }
