@@ -164,7 +164,7 @@ test("7 手札「我做過的選擇」：列出回答與持續影響，還沒選
   let rows = K.choiceEffects(st);
   assert.equal(rows.length, 1);
   assert.equal(rows[0].npcName, "鎮長葛瑞");
-  assert.equal(rows[0].answer, "先聽鎮長說鎮上的事");
+  assert.equal(rows[0].answer, "先聽你講鎮上的事"); /* R76B 同步：手札回答改與對話選項同一份字 */
   assert.match(rows[0].effectText, /多一成/);
   st.adventure.claimed.c1_first_harvest = true;
   st.adventure.claimed.c1_homecoming = true;

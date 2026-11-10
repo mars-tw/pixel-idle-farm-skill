@@ -118,7 +118,7 @@ test("代幣模式：背包全空自動開啟、答對只算分不消耗", () =>
   assert.equal(s.mode, "token");
   forceItemDemand(s, "wheat", T0);
   const r = F.serve(st, s, "wheat", T0 + 1000);
-  assert.equal(r.ok, true); assert.equal(s.score, 10); assert.deepEqual(st.storage.items, {});
+  assert.equal(r.ok, true); assert.equal(s.score, 5); assert.deepEqual(st.storage.items, {}); /* R76B 同步：用代幣答對只拿一半分（10 的一半） */
 });
 
 test("庫存用完自動切代幣模式，不會卡住", () => {

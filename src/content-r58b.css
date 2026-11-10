@@ -1237,3 +1237,27 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
    不然標題被擠成 0 高、按鈕被切掉一半。 */
 body:has(#toast-zone > .toast) #questDock:has(> .world-chapter),
 body:has(#worldDialogue:not([hidden])) #questDock:has(> .world-chapter) { flex-direction: row; align-items: center; }
+/* R76B：開場選擇與回訪對話框、鄰居頭像、評比明細、擺攤失分與任務卡收合 */
+.r76b-dialogue { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: flex-end; justify-content: center; padding: 12px 12px 84px; box-sizing: border-box; background: rgba(43, 28, 12, 0.28); }
+.r76b-dialogue-card { width: min(560px, 100%); max-height: calc(100dvh - 110px); overflow-y: auto; box-sizing: border-box; padding: 14px; border: 2px solid #8a541c; border-radius: 10px; background: #fff8e8; color: #3d2c17; }
+.r76b-dialogue-head, .r76b-story-head, .r76b-neighbor-head { display: flex; align-items: center; gap: 10px; }
+.r76b-portrait { width: 64px; height: 64px; flex: 0 0 64px; object-fit: cover; border-radius: 8px; image-rendering: auto; }
+.r76b-dialogue-line { margin: 10px 0 6px; line-height: 1.6; overflow-wrap: anywhere; }
+.r76b-dialogue-step { margin: 4px 0; font-size: 12px; color: #7a5c33; }
+.r76b-dialogue-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.r76b-dialogue-actions button, .r76b-choice { min-width: 44px; min-height: 44px; padding: 10px 14px; border: 2px solid #8a541c; border-radius: 9px; background: #ffd978; color: #4d3010; font: inherit; font-weight: 700; cursor: pointer; }
+.r76b-choice-list { display: grid; gap: 8px; margin-top: 10px; }
+.r76b-choice { display: grid; gap: 2px; text-align: left; background: #fff3cf; }
+.r76b-choice small { font-weight: 400; line-height: 1.45; }
+.r76b-story-head { margin-bottom: 8px; }
+.r61b-footer button { min-width: 44px; min-height: 44px; }
+.r76b-neighbor-head .r61b-name { margin: 0; }
+.r76b-judge-breakdown { margin: 8px 0; padding-left: 20px; line-height: 1.6; }
+.r76b-judge-total, .r76b-loss { line-height: 1.55; overflow-wrap: anywhere; }
+.r76b-choice-follow { line-height: 1.55; }
+#questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) .r69a-collapsed-summary { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; overflow-wrap: anywhere; line-height: 1.35; }
+#questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) .r69a-collapsed-summary { font-size: 12px; }
+@media (max-width: 859px) {
+  .r76b-dialogue { padding-bottom: 76px; }
+  .r76b-dialogue-card { max-height: calc(100dvh - 96px); }
+}

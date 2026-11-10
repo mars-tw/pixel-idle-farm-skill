@@ -1447,8 +1447,10 @@
     const rewardText = stars === 1 ? "8 金" : stars === 2 ? "24 金與豐收花環裝飾 1 件" : "50 金、專屬豐收花環裝飾 1 件，並學會專屬配方「河畔豐收拼盤」";
     const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，這桌已經很有農場的樣子了。」" : "鎮長葛瑞說：「當季收成和料理都照顧到了，這就是今晚最完整的一桌！」";
     const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, row.kind === "dried" ? "日曬乾貨 +1" : null, row.quality ? "優質作物 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
-    const tip = !diverse ? "差一顆星的話，可以換成三種不同品項。" : !seasonal ? `差一顆星的話，可以換成${currentSeason}季作物。` : !hasMeal ? "差一顆星的話，可以換上一道料理。" : "三項加分都拿到了，下次可換不同當季作物試試。";
-    f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, scoreSources: { diverse, seasonal, hasMeal, quality, hasDried }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
+    const breakdown = [{ id: "diverse", label: "種類不同", got: diverse }, { id: "seasonal", label: "當季作物", got: seasonal }, { id: "hasMeal", label: "有料理", got: hasMeal }, { id: "quality", label: "優質作物", got: quality }, { id: "hasDried", label: "日曬乾貨", got: hasDried }];
+    const missingLabels = breakdown.filter((row) => !row.got).map((row) => row.label);
+    const tip = stars >= 3 ? "五項裡已經拿到 " + judgingPoints + " 分，下次可以換不同的當季作物再試一次。" : judgingPoints === 2 ? "再補這一項就三星：" + missingLabels[0] + "。還沒拿到的有：" + missingLabels.join("、") + "。" : "還沒拿到的有：" + missingLabels.join("、") + "，補上其中一項，分數就會往上加。" + (!diverse ? "也可以換成三種不同品項試試。" : "");
+    f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, breakdown, totalScore: judgingPoints, maxScore: 5, scoreSources: { diverse, seasonal, hasMeal, quality, hasDried }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
     return ok(`${stars} 顆星！${mayorLine}`, copy(f.judging));
   }
   function takeFestivalSettlement(state, now) {

@@ -4385,6 +4385,23 @@
         if (chk.ok) G.generateNpcRequest(state, tile.npc, now(), Math.random);
       }
       const storyChoice = window.AdventureAPI && window.AdventureAPI.mainStoryChoice ? (window.AdventureAPI.mainStoryChoice(state, tile.npc, now()) || (tile.npc === "merchant" && window.AdventureAPI.r61MarketChoice ? window.AdventureAPI.r61MarketChoice(state, now()) : null)) : null;
+      /* R76B：第 8、9 項——開場選擇改逐句對話框，回訪對白優先播出，不再被固定台詞蓋掉。 */
+      if (storyChoice && storyChoice.available && storyChoice.id !== "c4_market_flag" && window.StoryR76 && window.StoryR76.openOpeningChoice) {
+        if (window.AdventureAPI) window.AdventureAPI.record(state, { type: "talk", npcId: tile.npc }, now());
+        window.StoryR76.openOpeningChoice(state, tile.npc, storyChoice, { onResolve: (result) => { if (result && result.message) toast(result.message); afterChange(true); } });
+        playAction("use", state.player.facing);
+        return;
+      }
+      if (window.StoryR76 && window.StoryR76.noteTalk) {
+        const followDue = window.StoryR76.noteTalk(state, tile.npc, now());
+        if (followDue && window.StoryR76.openFollowup) {
+          if (window.AdventureAPI) window.AdventureAPI.record(state, { type: "talk", npcId: tile.npc }, now());
+          window.StoryR76.openFollowup(state, tile.npc, {});
+          playAction("use", state.player.facing);
+          afterChange(true);
+          return;
+        }
+      }
       const recall = window.AdventureAPI && window.AdventureAPI.mainStoryRecall ? (tile.npc === "merchant" && window.AdventureAPI.r61MarketRecall && window.AdventureAPI.r61MarketRecall(state, now()) || window.AdventureAPI.mainStoryRecall(state, tile.npc, now())) : "";
       const d = G.npcDialogue(state, tile.npc, npcLineIdx[tile.npc] || 0);
       if (storyChoice && storyChoice.available) { d.line = storyChoice.lines.join(" "); d.storyChoice = storyChoice; }

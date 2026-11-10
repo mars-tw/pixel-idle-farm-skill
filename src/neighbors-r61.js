@@ -7,6 +7,8 @@
   const DAY_MS = 24 * 60 * 60 * 1000;
   const STORY_AT = [1, 3, 5]; // 好感到 1、3、5 各解鎖一段
 
+  /* R76B：第 10 項——鄰居頭像（與 story-r76.js 同一份路徑）。 */
+  const PORTRAITS = { mayor: "assets/generated/r84/grey-0.png", elder: "assets/generated/content-r76/portrait-elder.png", merchant: "assets/generated/content-r76/portrait-merchant.png", child: "assets/generated/content-r76/portrait-child.png" };
   const PEOPLE = [
     { id: "mayor", name: "鎮長葛瑞", short: "葛瑞" },
     { id: "merchant", name: "商人蘿拉", short: "蘿拉" },
@@ -351,7 +353,7 @@
     });
   }
 
-  const NeighborsR61 = { PEOPLE, STORIES, LOVED, CLUES, DISLIKED, DISLIKED_LINES, BENEFITS, GIFT_LINES, GIFTS, STORY_AT, ensure, favorOf, benefitUnlocked, benefitOf, sortPersonalQuests, giftOptions, canGiftToday, giveGift, storyState, pendingStory, nextStoryProgress, markStorySeen, journalData, displayName };
+  const NeighborsR61 = { PEOPLE, PORTRAITS, STORIES, LOVED, CLUES, DISLIKED, DISLIKED_LINES, BENEFITS, GIFT_LINES, GIFTS, STORY_AT, ensure, favorOf, benefitUnlocked, benefitOf, sortPersonalQuests, giftOptions, canGiftToday, giveGift, storyState, pendingStory, nextStoryProgress, markStorySeen, journalData, displayName };
   root.NeighborsR61 = NeighborsR61;
   if (typeof module !== "undefined" && module.exports) module.exports = NeighborsR61;
 
@@ -405,7 +407,7 @@
     if (!story.unlocked) { if (farm() && farm().toast) farm().toast(`好感還差 ${story.need - favorOf(state, npcId)}，之後再來聽這段吧。`); return; }
     let step = 0;
     const box = root.FarmWorld.contentModal(`${person.name}・${story.title}`,
-      `<div class="r61b-story" data-r61b-story="${npcId}-${index}"><p class="r61b-story-line" data-r61b-line></p><p class="r61b-story-step" data-r61b-step></p></div>`,
+      `<div class="r61b-story r76b-story" data-r61b-story="${npcId}-${index}"><div class="r76b-story-head"><img class="r76b-portrait" src="${PORTRAITS[npcId] || ""}" alt="${esc(person.name)}" width="64" height="64"><b>${esc(person.name)}</b></div><p class="r61b-story-line" data-r61b-line></p><p class="r61b-story-step" data-r61b-step></p></div>`,
       "");
     box.classList.add("r61b-modal");
     wireNeighborClose(state, box);
@@ -462,7 +464,7 @@
     return `<section class="r61b-neighbors" data-r61b-neighbors aria-label="鄰居好感">
       <div class="story-kicker">🏡 鄰居好感</div>
       ${rows.map((d) => `<article class="r61b-card" data-r61b-neighbor="${d.id}">
-        <h3 class="r61b-name">${esc(d.name)}</h3>
+        <div class="r76b-neighbor-head"><img class="r76b-portrait" src="${PORTRAITS[d.id] || ""}" alt="${esc(d.name)}" width="64" height="64"><h3 class="r61b-name">${esc(d.name)}</h3></div>
         <p class="r61b-hearts" data-r61b-favor="${d.favor}">好感 ${d.hearts}（${d.favor}）</p>
         <p class="r61b-next">${d.allUnlocked ? "三段故事都聽過了" : `下一段故事：好感 ${d.nextNeed} 解鎖，還差 ${d.remaining}`}</p>
         <p class="r61b-loved">喜歡的禮物：${d.lovedRevealed.length ? d.lovedRevealed.map((x) => esc(x.name)).join("、") : `線索：${esc(d.clue)}`}${d.lovedRevealed.length && d.lovedHiddenCount ? `（還有 ${d.lovedHiddenCount} 樣沒發現）` : ""}</p>
