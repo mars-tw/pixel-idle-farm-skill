@@ -973,3 +973,7 @@ img[src*="content-r70/"] { image-rendering: pixelated; }
   html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now > span > :is(b, small) { display: none !important; }
   html body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_choice"]) .r68a-now.r69a-festival-now .r69a-collapsed-summary { display: inline !important; font-weight: 800; color: #5a3a12; }
 }
+/* R71A：章名與任務名分層，桌面／手札共用同一組文字階層。 */
+.r71a-chapter-name,
+.r71a-task-name { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.r71a-task-name { font-size: .92em; font-weight: 800; opacity: .86; }

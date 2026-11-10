@@ -156,6 +156,16 @@
     counts.forage = Math.max(counts.forage, total(s.adventure.byTarget.forage));
   }
   function rowsOf(q) { return (q.objectives || []).concat(q.requirements || []); }
+  function chapterTaskLabel(q) {
+    if (!q) return "";
+    return `第 ${q.chapter} 章・${q.chapterName}｜任務：${q.name}`;
+  }
+  function sharedFestivalCrop(row, festivalGoal) {
+    return !!(row && festivalGoal && festivalGoal.id === "tomato" && row.source === "inventory" && row.id === festivalGoal.cropId);
+  }
+  function requirementText(row, festivalGoal) {
+    return `${row.name} ${Math.min(row.current, row.required)}/${row.required}${sharedFestivalCrop(row, festivalGoal) ? "（與祭典共用）" : ""}`;
+  }
   function targetFor(q) {
     if (!q) return null;
     if (q.canClaim) return npcTile(q.npcId);
@@ -282,11 +292,12 @@
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
     const requirementRows = q ? rowsOf(q) : [];
-    const fullTitle = q ? `第 ${q.chapter} 章・${q.name} ${progressText}` : "繼續經營農場";
-    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step">第 ${q.chapter} 章・${esc(q.name)}</span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+    const fullTitle = q ? `${chapterTaskLabel(q)} ${progressText}` : "繼續經營農場";
+    const hasSharedFestivalCrop = requirementRows.some((row) => sharedFestivalCrop(row, festivalGoal));
+    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(q.name)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       ${festivalHtml}
       ${festivalFocus ? `<section class="r68a-now r69a-festival-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small title="${esc(festivalFocus.text)}">${esc(festivalFocus.text)}</small></span><button type="button" class="r68a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : `<section class="r68a-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(fullTitle)}</span><small title="${esc(step)}">${esc(step)}</small></span><button type="button" class="r68a-now-action r63-primary" ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "data-choice-open" : "data-world-go"}>${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "選擇下一步" : q ? esc(guide.actionLabel) : "繼續經營"}</button></section>`}
-      <div class="r68a-requirements" data-audit="r68a-requirements">${festivalFocus ? `<span class="r69a-main-row">主線：${esc(step)}</span>` : ""}${requirementRows.length ? requirementRows.map((row) => `<span title="${esc(`${row.name} ${Math.min(row.current, row.required)}/${row.required}`)}">${row.complete ? "✓" : "○"} ${esc(row.name)} ${Math.min(row.current, row.required)}/${row.required}</span>`).join("") : "<span>✓ 可以自由經營農場</span>"}</div>`;
+      <div class="r68a-requirements" data-audit="r68a-requirements">${festivalFocus && !hasSharedFestivalCrop ? `<span class="r69a-main-row">主線：${esc(step)}</span>` : ""}${requirementRows.length ? requirementRows.map((row) => { const text = requirementText(row, festivalGoal); return `<span${sharedFestivalCrop(row, festivalGoal) ? ' data-r71a-shared-crop="true"' : ""} title="${esc(text)}">${row.complete ? "✓" : "○"} ${esc(text)}</span>`; }).join("") : "<span>✓ 可以自由經營農場</span>"}</div>`;
     const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
     const chooseFirstRoute = (button) => {
       const status = A.firstChoiceStatus(s);
@@ -440,7 +451,7 @@
     const r58evt = A.randomEvents ? A.randomEvents(current, Date.now()) : { active: null };
     const buffs = A.activeBuffs ? A.activeBuffs(current, Date.now()) : null;
     const mainId = (A.summary(current, Date.now()).currentQuest || {}).id;
-    const panelList = list.map((row) => row.id === mainId ? { id: row.id, chapter: row.chapter, name: row.name, status: row.status } : row);
+      const panelList = list.map((row) => row.id === mainId ? { id: row.id, chapter: row.chapter, chapterName: row.chapterName, name: row.name, status: row.status } : row);
     const sig = JSON.stringify([panelList, projects, commissions, current.adventure.neighbors, current.adventure.gathering, personal, permanent, r58evt, buffs && Math.floor(buffs.growthRemainingMs / 30000), buffs && Math.floor(buffs.orderRemainingMs / 30000)]);
     if (sig !== lastPanels) {
       lastPanels = sig;
@@ -448,7 +459,7 @@
       const availability = A.storyPanelAvailability(current);
       const currentMain = A.summary(current, Date.now()).currentQuest;
       const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main && q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : null; const rows = rowsOf(q); const action = mainStep ? mainStep.actionLabel : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
-        <div class="world-chapter r68a-card-head" title="第 ${q.chapter} 章・${esc(q.name)} ${progress}"><b>第 ${q.chapter} 章・${esc(q.name)}</b><span>${progress}</span></div>
+        <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(q.name)}</span></b><span>${progress}</span></div>
         <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : q.description)}">${esc(mainStep ? mainStep.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}>${esc(action)}</button>` : ""}</div>
         <div class="adventure-meta r68a-card-requirements">${rows.map((r) => `<span title="${esc(`${r.name} ${Math.min(r.current, r.required)}/${r.required}`)}">${r.complete ? "✓" : "○"} ${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}${q.status !== "claimed" && q.status !== "locked" ? `<span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span>` : ""}</div></article>`; };
       panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
