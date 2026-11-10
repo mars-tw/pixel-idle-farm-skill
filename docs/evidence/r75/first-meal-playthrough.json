@@ -1,0 +1,87 @@
+{
+  "version": "0.1.98",
+  "cacheVersion": "content-r75-20261110-1",
+  "date": "2026-11-10",
+  "method": "無頭 Chromium 開新存檔，只按畫面上的按鈕（任務卡、對話選項、灶台、看火候的添柴與掀蓋），用真實經過時間；沒有預先給作物、沒有跳過生長、沒有改存檔。這是自動化腳本的實測，不是真人測試，也不是 iOS 實機結果。",
+  "routes": [
+    {
+      "route": "桌機 1366x768，開場按「去見鎮長葛瑞」",
+      "secondsToFirstMeal": 64,
+      "pageErrors": 0,
+      "milestonesSeconds": {
+        "mirrorPrompt": 4.7,
+        "firstSunlightCaught": 14.2,
+        "firstHarvest": 15.6,
+        "basketDelivered": 21.9,
+        "fireGameStart": 50.2,
+        "fireGameEnd": 62.1
+      },
+      "stepsSeen": [
+        "plant",
+        "refract",
+        "catch_sun",
+        "tend(光裡)",
+        "harvest",
+        "deliver",
+        "ripen",
+        "cook",
+        "eat",
+        "explore"
+      ],
+      "questsDone": "c1_homecoming,c1_first_harvest,c1_first_meal"
+    },
+    {
+      "route": "手機 390x844（觸控），開場按「去見鎮長葛瑞」",
+      "secondsToFirstMeal": 80,
+      "pageErrors": 0,
+      "milestonesSeconds": {
+        "mirrorPrompt": 4.6,
+        "firstSunlightCaught": 13.9,
+        "firstHarvest": 15.2,
+        "basketDelivered": 20.9,
+        "fireGameStart": 66.4,
+        "fireGameEnd": 78.2
+      },
+      "stepsSeen": [
+        "plant",
+        "refract",
+        "catch_sun",
+        "tend(光裡)",
+        "harvest",
+        "deliver",
+        "ripen",
+        "tend",
+        "wait",
+        "cook",
+        "eat",
+        "explore"
+      ],
+      "questsDone": "c1_homecoming,c1_first_harvest,c1_first_meal"
+    },
+    {
+      "route": "桌機 1366x768，開場按「稍後再看便箋」",
+      "secondsToFirstMeal": 45,
+      "pageErrors": 0,
+      "milestonesSeconds": {
+        "mirrorPrompt": 7.4,
+        "firstSunlightCaught": 16.2,
+        "firstHarvest": 17.6,
+        "basketDelivered": null,
+        "fireGameStart": 30.8,
+        "fireGameEnd": 42.5
+      },
+      "stepsSeen": [
+        "plant",
+        "refract",
+        "tend",
+        "harvest",
+        "ripen",
+        "deliver",
+        "cook",
+        "eat",
+        "explore"
+      ],
+      "questsDone": "c1_homecoming,c1_first_harvest,c1_first_meal"
+    }
+  ]
+}

@@ -157,7 +157,7 @@ test("6 接線：好處接到既有函式、版本不動、CSS 標 R64B", () => 
   const css = fs.readFileSync("src/content-r58b.css", "utf8");
   assert.match(css, /R64B（第 5、6、7 項）/, "新 CSS 要標 R64B");
   const index = fs.readFileSync("index.html", "utf8");
-  assert.match(index, /content-r74-20261110-1/, "不可改版本字串");
+  assert.match(index, /content-r75-20261110-1/, "不可改版本字串");
 });
 
 console.log(`VERIFIED content R64 neighbors (${passed}/6)`);

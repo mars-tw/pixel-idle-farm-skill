@@ -1195,6 +1195,13 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
 .r75b-cook-status, .r75b-cook-time, .r75b-cook-hint { margin: 6px 0; }
 .r75b-cook-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .r75b-cook-actions button { flex: 1 1 120px; min-width: 44px; min-height: 44px; padding: 10px 12px; }
+/* R75 整合：看火候的按鈕用遊戲裡的暖色按鈕，不留瀏覽器預設灰鈕。添柴、掀蓋是主要操作用實色，跳過鈕用淡色。 */
+.r75b-cook-actions button, .r75b-start-cook { border: 2px solid #8a541c; border-radius: 9px; background: #ffd978; color: #4d3010; font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 2px 0 #b9812f; }
+.r75b-cook-actions button:active, .r75b-start-cook:active { transform: translateY(1px); box-shadow: 0 1px 0 #b9812f; }
+.r75b-cook-actions [data-r75b-direct] { background: #fff3cf; font-weight: 700; box-shadow: none; white-space: nowrap; }
+.r75b-cook-actions button:disabled, .r75b-start-cook:disabled { opacity: 0.55; cursor: default; box-shadow: none; }
+.r75b-cook-close { border: 2px solid #8a541c; border-radius: 9px; background: #fff3cf; color: #4d3010; cursor: pointer; }
+.r75b-start-cook { padding: 8px 14px; margin-right: 8px; }
 .r75b-choices { margin-top: 12px; }
 .r75b-choice-card { border: 1px solid #d8c9a6; border-radius: 8px; padding: 10px; margin: 8px 0; background: #fffdf4; }
 .r75b-choice-card h3 { margin: 0 0 6px; }

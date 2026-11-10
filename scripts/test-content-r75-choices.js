@@ -202,11 +202,11 @@ test("8 舊存檔：已經選過的載入後自動補上對應影響", () => {
 test("9 快取與載入：新程式與兩張美術有進清單，版本字串不變", () => {
   const index = fs.readFileSync("index.html", "utf8");
   const sw = fs.readFileSync("sw.js", "utf8");
-  assert.match(index, /src\/cooking-r75\.js\?v=content-r74-20261110-1/, "index 要載入新程式且不改版本");
+  assert.match(index, /src\/cooking-r75\.js\?v=content-r75-20261110-1/, "index 要載入新程式且不改版本");
   assert.match(sw, /cooking-r75\.js/, "sw 快取要有新程式");
   assert.match(sw, /content-r75\/cooking_pot\.png/, "sw 快取要有鐵鍋圖");
   assert.match(sw, /content-r75\/farm_sign\.png/, "sw 快取要有招牌圖");
-  assert.match(sw, /CACHE_VERSION = "content-r74-20261110-1"/, "版本字串不可改");
+  assert.match(sw, /CACHE_VERSION = "content-r75-20261110-1"/, "版本字串不可改");
 });
 
 console.log("VERIFIED content R75B choices (" + passed + " tests)");

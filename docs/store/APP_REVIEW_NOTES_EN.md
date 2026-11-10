@@ -1,31 +1,40 @@
 # App Review Notes — draft only
 
-Status: PREPARED. These notes describe local web build `r81-20261015-1` / package `0.1.15`. The existing native-kit snapshot has NOT been rebuilt with this change. Do not attach these notes to an older binary.
+> 中文說明：這份是給 Apple 審查員看的英文操作說明草稿，內容對應 [DIFFERENTIATION.md](DIFFERENTIATION.md) 的「新玩家的前三分鐘」。狀態：只準備，沒有送出；新的原生 build 做好之前不要附在任何送審版本上。
 
-No account, purchase, advertisement or remote service is required to play. All gameplay and the two narrative choices are available to ordinary players; there is no reviewer-only content.
+Status: PREPARED. These notes describe local web build `content-r75-20261110-1` / package `0.1.98`. The native-kit snapshot still contains an older web build (`content-r58-20261109-1`) and has NOT been rebuilt with this change. Do not attach these notes to an older binary.
+
+No account, purchase, advertisement or remote service is required to play. All gameplay described here is available to ordinary players; there is no reviewer-only content or mode.
 
 ## First three minutes
 
-1. On a fresh launch, tap **做第一份陽光餐籃** (Make the first sunlight basket).
-2. Follow the gold task card. Tap **種第一株小麥** to walk to a plot and sow wheat. About four seconds after planting, a sunlight patch appears on the fields.
-3. When the task says **去光裡澆水**, tap it to walk into range and water the sunlit wheat. Growth advances immediately. The crop remembers this sunlight care even after the patch fades. If a patch lands on an empty field, **在光裡播種** also works.
-4. Once ripe, tap **走近收成**. This uses the actual walking and frame-based harvest animation; inventory is awarded at the action frame.
-5. Tap **裝好餐籃**. Choose **留在門邊** (Leave it at the doorstep) or **一起坐下** (Sit together). The character walks to Gary; two wheat are consumed when delivery settles. A different grandmother's note and Gary's reply appear for each choice.
-6. Tap **返回農場** to continue the larger restoration story. Revisit the earned note through **日誌 → 陽光餐籃**. Reopening the app preserves the choice and does not allow a duplicate delivery.
+1. On a fresh launch, tap **去見鎮長葛瑞** (Go and meet Mayor Gary) on the opening note. The gold task card asks you to tap **種第一株小麥** (Plant the first wheat); the character walks to a plot and sows it.
+2. A pulsing ring appears on the field. It is a forecast: sunlight will land on that plot about eight seconds later. If the ring is on an empty plot, the task card changes to **拿祖母的手鏡折光** (Use Grandma's hand mirror). Tap **把光折過來** (Bend the light over here) and the ring moves onto your wheat. Each beam can be redirected once (twice after the mirror upgrade at level 3).
+3. When the light lands, tap **去光裡澆水** (Water in the light). Tending a crop inside the light catches one point of sunlight, stored in the sun jar shown at the top of the screen.
+4. Wheat is a sun-loving crop, so tending it in the light yields one extra wheat. Tap **走近收成** (Walk over and harvest), then **裝好餐籃** (Pack the basket) and choose **留在門邊** (Leave it at the doorstep) or **一起坐下** (Sit together). Each choice leaves a different note from Grandma and a different reply from Gary.
+5. Once the jar holds 2 points, the task card offers **用陽光催熟** (Ripen with sunlight): spend 2 sunlight to ripen one growing plot instantly. It then sends you back to the farmhouse stove. Cooking is a 12-second fire-tending game: **添柴** (Add wood) raises the heat, **掀蓋** (Lift the lid) lowers it; keeping the needle inside the gold zone gives a better dish (three grades). **直接做（家常）** skips the mini-game and gives the basic grade. Eating the first flatbread completes chapter 1.
 
-The sunlight patch lasts about 16 seconds. Missing one does not lock progress; another appears later. The first basket has no daily reset or consecutive-login requirement. Existing daily tasks and the notes unlocked at three and seven stamps remain separate.
+Players who tap **稍後再看便箋** (Read the note later) on the opening screen skip the basket step but are still taught the mirror, ripening and the stove.
 
-The three-minute route is tested using real input and real elapsed time in headless Chromium, without granting crops, skipping growth or injecting story progress. See the local evidence report for the measured duration. This is not a claim about real-user beta testing or iOS device performance.
+Missing a beam never locks progress; another one is forecast later. Nothing in this route depends on a daily reset or consecutive logins.
+
+Beyond the first session: crops have three light traits (sun-loving, half-sun, shade-tolerant) that reward different handling of the light; stored sunlight also powers a drying rack that turns crops into dried goods worth three times the raw crop; the three early story choices each leave a permanent difference on the farm, listed in the journal under **我做過的選擇** (Choices I made).
+
+The route above was measured with an automated script in headless Chromium using real input and real elapsed time, on a new save, without granting crops, skipping growth or editing the save: 64 s (desktop), 80 s (phone layout), 45 s (skip path) to the first meal, no page errors. See `docs/evidence/r75/first-meal-playthrough.json`. A script taps faster than a person. This is not a claim about real-user beta testing or iOS device performance.
 
 ## Material changes and limits
 
-This revision connects the transient sunlight mechanic to a first-session recipe, actual inventory consumption, a choice of delivery, a permanent narrative outcome and a changed NPC reply. Series cross-promotion links and generator-style product slogans have been removed from the game UI. The game's farm world, crop/character atlas and music remain the existing farm assets; dedicated basket-carrying and note illustrations are still missing.
+Since the 15 October review the core loop changed from "wait for a random sun patch and react" to "see where the light will land, redirect it, decide which crop should receive it, and spend the stored sunlight". Cooking changed from a single tap to a short skill-based step, and the early story choices now have lasting effects. Earlier rounds in the same period added care methods per plot, crop seasons, chapters 4–5, a repeatable harvest festival with a 60-second market-stall mini-game, and neighbour friendship stories.
 
-This is a complete farming game with an independently playable farming/restoration loop, rather than a content pack for an action or transport-education title. Shared standard Capacitor packaging is disclosed in `SHARED_ASSETS_AUDIT.md`. We do not claim that having different genres alone resolves Guidelines 4.3 or 4.2.6.
+Test-only hooks are removed outside local development addresses (`file://`, `localhost`, `127.0.0.1`), including inside the native wrappers. The URL parameter `?swtest` remains; it only has an effect in automated browsers and does nothing for players.
+
+This is a complete farming game with an independently playable loop, not a content pack for an action or transport-education title. Shared packaging is disclosed in `SHARED_ASSETS_AUDIT.md`: the Capacitor wrapper and our own `native-host.js` are shared with other apps on the same account; the 15 October audit found no byte-identical game files, and that audit has not been re-run for this build. We do not claim that being a different genre alone resolves Guidelines 4.3 or 4.2.6.
+
+Known gaps in this build: no dedicated basket-carrying animation; the drying rack uses a generic icon.
 
 ## Facts that must be supplied before submission
 
-- The content provider, account owner, ownership/licensing evidence, and whether any client/partner commissioned the app must be confirmed by the owner. This repository does not establish those facts.
-- Actual TestFlight/beta participation, dated feedback and the changes made in response. Automated checks are not beta-user feedback.
+- The content provider, account owner, ownership/licensing evidence, and whether any client or partner commissioned the app must be confirmed by the owner. This repository does not establish those facts.
+- Actual TestFlight/beta participation, dated feedback and the changes made in response. There is none on record today. Automated checks are not beta-user feedback.
 - A new native build containing this revision, on-device iPhone/iPad video, Safari validation, the final privacy policy URL and the actual App Privacy / Play Data safety forms.
 - Final decision on whether this app should be submitted, combined or retained as a web/Google Play product. No resubmission or store message was sent in this round.
