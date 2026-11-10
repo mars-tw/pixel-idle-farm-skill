@@ -1113,6 +1113,10 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
 }
 #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .world-objective-title .qp-step { display: grid !important; grid-template-rows: auto auto; min-height: 2.35em; overflow: visible !important; }
 #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r71a-task-name { display: block !important; line-height: 1.15; }
+/* R75：「今日三件事」標題只有一行，不需要留兩行高度；桌面收合時原本會超出卡片，標題上緣被裁掉。 */
+@media (min-width: 860px) {
+  #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r67a-objective-head .qp-step { min-height: 0; }
+}
 @media (max-width: 680px) {
   .r74a-care-popover { width: min(330px, calc(100vw - 24px)); }
 }
