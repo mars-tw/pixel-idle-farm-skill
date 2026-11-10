@@ -23,6 +23,9 @@
   let state = null;
   let selectedSeed = "wheat";
   let selectedCare = "water";
+  let carePopoverPlotIndex = null;
+  let carePopoverTileId = null;
+  let carePopoverTimer = null;
   let selectedLetterId = null;
   let spritesReady = false;
   let lastOrderSig = "";
@@ -852,7 +855,25 @@
     };
     const modes = Object.values(G.FARM_CARE || {});
     care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect" data-care-effect role="status">${careEffectText(G.FARM_CARE && G.FARM_CARE[selectedCare])}</div>`;
-    care.querySelectorAll("[data-care]").forEach((button) => button.onclick = (event) => { event.preventDefault(); event.stopPropagation(); selectedCare = button.dataset.care; state.selectedCare = selectedCare; renderSeeds(); scheduleSave(); });
+    care.querySelectorAll("[data-care]").forEach((button) => button.onclick = (event) => {
+      event.preventDefault(); event.stopPropagation();
+      const nextCare = button.dataset.care;
+      const plot = carePopoverPlotIndex != null ? state.plots[carePopoverPlotIndex] : null;
+      if (plot && plot.cropId) {
+        if (nextCare === "compost" && plot.careMode !== "compost") {
+          const compost = Math.max(0, Number(state.materials && state.materials.compost) || 0);
+          if (!compost) {
+            selectedCare = "water"; state.selectedCare = "water"; plot.careMode = "water";
+            toast("🍂 堆肥不足，已改用勤澆水");
+            renderSeeds(); scheduleSave(); return;
+          }
+          state.materials.compost = compost - 1;
+        }
+        plot.careMode = nextCare;
+      }
+      selectedCare = nextCare; state.selectedCare = nextCare;
+      renderSeeds(); scheduleSave();
+    });
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
     more.title = "全部種子";
@@ -873,9 +894,9 @@
     };
     quick.appendChild(more);
     row.appendChild(quick);
-    const careTile = selectedTileId ? G.getTileById(state, selectedTileId) : null;
+    const careTile = carePopoverTileId ? G.getTileById(state, carePopoverTileId) : null;
     const carePlot = careTile && careTile.plotIndex != null ? state.plots[careTile.plotIndex] : null;
-    if (careTile && careTile.plotIndex != null && careTile.plotIndex < G.activePlotCount(state) && (!carePlot || !carePlot.cropId) && currentTool() === "hand") {
+    if (careTile && careTile.plotIndex === carePopoverPlotIndex && careTile.plotIndex < G.activePlotCount(state) && carePlot && carePlot.cropId && currentTool() === "hand") {
       const scene = $("mapScene");
       if (scene) {
         care.dataset.tileId = careTile.id;
@@ -891,6 +912,24 @@
       row.appendChild(drawer);
     }
     if (newSeedIds.size && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "seeds"); scheduleSave(); }
+  }
+  function clearCarePopover() {
+    if (carePopoverTimer) clearTimeout(carePopoverTimer);
+    carePopoverTimer = null; carePopoverPlotIndex = null; carePopoverTileId = null;
+    const care = typeof document.querySelector === "function" ? document.querySelector(".r74a-care-popover") : null;
+    if (care) care.remove();
+  }
+  function showCarePopover(tileId, plotIndex) {
+    if (carePopoverTimer) clearTimeout(carePopoverTimer);
+    carePopoverTileId = tileId; carePopoverPlotIndex = plotIndex;
+    renderSeeds();
+    carePopoverTimer = setTimeout(() => { clearCarePopover(); }, 4000);
+  }
+  function plantingCareMode() {
+    if (selectedCare !== "compost" || Math.max(0, Number(state.materials && state.materials.compost) || 0) > 0) return selectedCare;
+    selectedCare = "water"; state.selectedCare = "water";
+    toast("🍂 堆肥不足，已改用勤澆水");
+    return "water";
   }
 
   // ---------- 側欄分頁 ----------
@@ -1189,7 +1228,7 @@
 
     // hand（預設）：種植 / 收成
     if (!plot.cropId) {
-      const r = G.plant(state, i, selectedSeed, t, selectedCare);
+      const r = G.plant(state, i, selectedSeed, t, plantingCareMode());
       if (!r.ok) {
         if (r.reason === "no_coins") toast("🪙 金幣不足，先賣點作物");
         else if (r.reason === "no_compost") toast("🍂 堆肥不足，換一種照顧方式吧");
@@ -4087,11 +4126,8 @@
     if (!window.FarmWorld) switchTab("tile");
     renderSceneActionsForSelection();
     if (tool === "inspect") { updateMap(now()); inspectTile(tile); return; }
-    // R74A：第一次點空田只進入播種準備，讓玩家先在田旁選照顧方式；
-    // 真正播種由場景動作鈕確認，避免桌機一點就直接種下而來不及選。
-    if (tool === "hand" && tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && !(state.plots[tile.plotIndex] && state.plots[tile.plotIndex].cropId)) {
-      clearTouchFarmPreview(false); spawnRing(tileId, true); updateMap(now()); return;
-    }
+    // R74A follow-up：空田維持一鍵播種；照顧方式面板在播種完成後短暫出現。
+    if (carePopoverTileId && carePopoverTileId !== tileId) clearCarePopover();
 
     // 站點：任何工具點站點都走過去 + 播站點動作 + 觸發效果
     if (tile.station) { if (isTouch) { spawnRing(tile.id, true); updateMap(now()); return; } useStation(tile); updateMap(now()); return; }
@@ -4116,7 +4152,9 @@
     if (act.invalid) { clearTouchFarmPreview(false); toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
     if (act.action) {
       if (act.action === "build") { clearTouchFarmPreview(false); showBuildWheel(tile); updateMap(now()); return; }
-      if (isTouch && tile.plotIndex != null) { clearTouchFarmPreview(false); spawnRing(tileId, true); renderSceneActionsForSelection(); updateMap(now()); return; }
+      if (isTouch && tile.plotIndex != null) {
+        if (act.action !== "plant" && act.action !== "harvest") { clearTouchFarmPreview(false); spawnRing(tileId, true); renderSceneActionsForSelection(); updateMap(now()); return; }
+      }
       clearTouchFarmPreview(false);
       spawnRing(tileId, true); moveAndAct(tileId, act.action); updateMap(now()); return;
     }
@@ -4471,8 +4509,8 @@
     const t = now();
     const face = state.player.facing;
     if (action === "plant") {
-      const r = G.plant(state, tile.plotIndex, selectedSeed, t, selectedCare);
-      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) sunCatchFx(tileId, r.sun); afterChange(true); }
+      const r = G.plant(state, tile.plotIndex, selectedSeed, t, plantingCareMode());
+      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) sunCatchFx(tileId, r.sun); afterChange(true); showCarePopover(tileId, tile.plotIndex); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "no_compost" ? "🍂 堆肥不足，換一種照顧方式吧" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       if (quickHarvestTarget === tileId) {
