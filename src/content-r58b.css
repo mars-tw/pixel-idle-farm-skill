@@ -1003,3 +1003,17 @@ img[src*="content-r70/"] { image-rendering: pixelated; }
 .npc-nameplate-near, .npc-footname { z-index: 9700 !important; }
 .qmarker .npc-nameplate { z-index: 9700 !important; }
 .tile-state-label { z-index: 9700 !important; }
+
+/* R72A：照顧方式、田格狀態與優質作物加價。 */
+.r72a-care-picker { display: flex; align-items: stretch; gap: 4px; padding: 2px 4px; border-left: 1px solid rgba(91, 69, 38, .22); }
+.r72a-care { min-height: 34px; padding: 3px 7px; border: 1px solid #bfa775; border-radius: 9px; background: #fffaf0; color: #493b25; font: 700 11px/1.15 inherit; white-space: nowrap; cursor: pointer; }
+.r72a-care span { display: block; font-size: 14px; }
+.r72a-care.sel { border-color: #527d3d; background: #e8f4d8; box-shadow: inset 0 0 0 1px #527d3d; }
+.r72a-care:disabled { opacity: .48; cursor: not-allowed; }
+.r72a-plot-care { position: absolute; right: -5px; top: -7px; z-index: 4; display: grid; place-items: center; width: 20px; height: 20px; border: 2px solid #fff8df; border-radius: 50%; background: #4d6a39; font-size: 12px; line-height: 1; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .45)); }
+.r72a-quality-premium { margin-left: 6px; padding: 2px 5px; border-radius: 6px; background: #fff4bf; color: #684c00; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.r72a-quality-stock { border-color: #e0ad35 !important; background: linear-gradient(135deg, #fffdf2, #fff2bd) !important; }
+@media (max-width: 680px) {
+  .r72a-care-picker { width: 100%; order: 3; border-left: 0; border-top: 1px solid rgba(91, 69, 38, .22); }
+  .r72a-care { flex: 1 1 0; }
+}

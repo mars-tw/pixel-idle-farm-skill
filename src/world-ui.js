@@ -755,14 +755,15 @@
     }; });
   }
   function openMarket() {
-    const items = Object.entries(current.storage.items).filter(([, qty]) => qty > 0);
+    const items = Object.entries(current.storage.items).filter(([, qty]) => qty > 0).map(([id, qty]) => ({ id, qty, quality: false }))
+      .concat(Object.entries(current.storage.quality || {}).filter(([, qty]) => qty > 0).map(([id, qty]) => ({ id, qty, quality: true })));
     const q = A.summary(current, Date.now()).currentQuest;
     const needs = (q && q.requirements) || [];
     const box = modal("蘿拉的市集", `<p class="project-desc">先留好鎮民要的物品。缺建材時，也可以用收成換木料和石材。</p>
-      ${items.map(([id, qty]) => {
+      ${items.map(({ id, qty, quality }) => {
         const def = window.getItemDef(id), reserved = needs.filter((r) => r.id === id).reduce((n, r) => n + r.required, 0);
-        const sale = Math.max(0, qty - reserved);
-        return `<div class="recipe-row"><h3>${esc(def ? def.name : id)}・${qty} 份</h3><p class="project-desc">${reserved ? `替目前委託保留 ${reserved} 份。` : "沒有目前委託預留。"}</p><button data-sell="${esc(id)}" ${sale > 0 ? "" : "disabled"}>出售多餘 ${sale} 份</button></div>`;
+        const sale = Math.max(0, qty - (quality ? 0 : reserved));
+        return `<div class="recipe-row ${quality ? "r72a-quality-stock" : ""}"><h3>${quality ? "✨ 優質" : ""}${esc(def ? def.name : id)}・${qty} 份</h3><p class="project-desc">${quality ? "交訂單可按優質比例加價。" : reserved ? `替目前委託保留 ${reserved} 份。` : "沒有目前委託預留。"}</p>${quality ? "" : `<button data-sell="${esc(id)}" ${sale > 0 ? "" : "disabled"}>出售多餘 ${sale} 份</button>`}</div>`;
       }).join("") || '<p class="project-desc">籃子是空的。下一批作物收好再來。</p>'}
       <div class="recipe-row"><h3>建材行</h3><label class="project-desc" for="worldMaterialQty">數量 <select id="worldMaterialQty"><option value="1">1 份</option><option value="5">5 份</option><option value="10">10 份</option></select></label><br><button data-buy-material="wood">木料 1 份・6 金</button> <button data-buy-material="stone">石材 1 份・8 金</button></div>`);
     const atMarket = (effect) => {
