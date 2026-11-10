@@ -836,7 +836,10 @@ body:has(.side-panel.world-panel-open) #questDock:not([data-quest="early_free_ch
 html body #questDock .r68a-objective-head, html body #questDock .r67a-objective-head { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
 html body #questDock .r68a-objective-head > .qp-step, html body #questDock .r67a-objective-head > .qp-step { flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: static !important; }
 html body #questDock .r68a-objective-head > span:not(.qp-step), html body #questDock .r67a-objective-head [data-audit="quest-progress"] { flex: 0 0 auto; position: static !important; white-space: nowrap; }
+/* 桌面收合：標題列已有「名稱＋進度」，一般的收合摘要（同樣文字）不再重複；收穫祭摘要（祭典 n/3・剩 m 分）保留。 */
 @media (min-width: 860px) {
-  html body #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) .r69a-collapsed-summary { display: none !important; }
+  html body #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) .r69a-collapsed-summary { display: none !important; }
 }
-html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) { max-height: none !important; overflow: visible !important; }
+/* 提示訊息出現時任務卡照舊暫時收成一行（R28）：「現在做」只留主要按鈕並移到標題列右側，不露出被裁半截的框。 */
+html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) { position: absolute !important; top: 4px; right: 56px; width: auto !important; display: flex !important; margin: 0; padding: 0; border: 0; background: none; }
+html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }

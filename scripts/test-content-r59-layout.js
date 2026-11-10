@@ -54,7 +54,7 @@ function titleMeasure() {
   const box = document.querySelector('#questDock');
   const folded = box && /quest-(?:auto-)?collapsed|quest-target-collapsed/.test(box.className);
   // R69 同步：手機收合規格是「標題或摘要＋進度＋主要按鈕」，摘要取代隱藏的舊標題節點。
-  const step = box && (folded ? box.querySelector('.r69a-collapsed-summary') : null) || (box && box.querySelector('.world-objective-title .qp-step'));
+  const sum = box && folded ? box.querySelector('.r69a-collapsed-summary') : null; const step = (sum && getComputedStyle(sum).display !== 'none' && sum.getBoundingClientRect().width > 0 ? sum : null) || (box && box.querySelector('.world-objective-title .qp-step')); // R69 整合：桌面收合時一般摘要與標題列重複，只留標題列；摘要或標題列任一可見即可
   if (!step) return { ok: false, reason: 'no-step', dock: box ? box.textContent.trim().slice(0, 80) : '' };
   const r = step.getBoundingClientRect(), cs = getComputedStyle(step);
   return {
