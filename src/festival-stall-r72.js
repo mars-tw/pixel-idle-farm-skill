@@ -166,7 +166,7 @@
     spawnNext(state, session, t, session.rng); session.spawned = 1;
     return { ok: true, session, message: session.mode === "token" ? "背包裡的貨不夠，這場改用叫賣代幣，不會消耗背包。" : "擺攤叫賣開始，點背包裡符合的東西遞給顧客。" };
   }
-  function starsForScore(score) { const s = qty(score); return s >= 320 ? 3 : s >= 180 ? 2 : s >= 80 ? 1 : 0; }
+  function starsForScore(score) { const s = qty(score); return s >= 240 ? 3 : s >= 140 ? 2 : s >= 60 ? 1 : 0; /* R72 整合：實機一分鐘答對 7 位約 74 分，原 80 分門檻太嚴，下修為 60／140／240 */ }
   function rewardForStars(stars) {
     if (stars >= 3) return { stars: 3, coins: 60, medals: 1, goldenFlag: true };
     if (stars === 2) return { stars: 2, coins: 30, medals: 1, goldenFlag: false };
@@ -327,7 +327,7 @@
       const stars = "★".repeat(result.stars) + "☆".repeat(Math.max(0, 3 - result.stars));
       const grantedText = result.granted && (result.granted.coins || result.granted.medals || result.granted.goldenFlag)
         ? `這次補給：金幣 ${result.granted.coins} 枚${result.granted.medals ? `、祭典獎章 ${result.granted.medals} 枚` : ""}${result.granted.goldenFlag ? "、金色攤位旗" : ""}。`
-        : "這次沒有新的獎勵，先前已經照最高星領過了。";
+        : result.stars > 0 ? "這次沒有新的獎勵，先前已經照最高星領過了。" : "這次沒拿到星星，所以沒有獎勵；多答對幾位顧客就有。";
       shell(`<h2 class="r72b-title">這一場結算</h2>
         <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
         ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}

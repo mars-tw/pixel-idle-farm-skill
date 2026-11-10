@@ -136,10 +136,10 @@ test("庫存用完自動切代幣模式，不會卡住", () => {
 });
 
 test("星等門檻與獎勵：邊界分數、三星才有金色攤位旗", () => {
-  assert.equal(F.starsForScore(0), 0); assert.equal(F.starsForScore(79), 0);
-  assert.equal(F.starsForScore(80), 1); assert.equal(F.starsForScore(179), 1);
-  assert.equal(F.starsForScore(180), 2); assert.equal(F.starsForScore(319), 2);
-  assert.equal(F.starsForScore(320), 3);
+  assert.equal(F.starsForScore(0), 0); assert.equal(F.starsForScore(59), 0);
+  assert.equal(F.starsForScore(60), 1); assert.equal(F.starsForScore(139), 1); // R72 整合同步：實機試玩後門檻下修為 60／140／240
+  assert.equal(F.starsForScore(140), 2); assert.equal(F.starsForScore(239), 2);
+  assert.equal(F.starsForScore(240), 3);
   assert.deepEqual(F.rewardForStars(1), { stars: 1, coins: 12, medals: 0, goldenFlag: false });
   assert.deepEqual(F.rewardForStars(2), { stars: 2, coins: 30, medals: 1, goldenFlag: false });
   assert.deepEqual(F.rewardForStars(3), { stars: 3, coins: 60, medals: 1, goldenFlag: true });
