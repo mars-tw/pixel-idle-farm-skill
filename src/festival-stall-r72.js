@@ -23,13 +23,36 @@
     { id: "child", name: "圖圖", art: "customer-child.png" },
   ];
   const TASTE_LABEL = { sweet: "甜的", sour: "酸酸的", fresh: "清爽的", warm: "熱熱的" };
+  // R73B（第 3 項）：口味標籤短字，商品卡上直接顯示，玩家一眼可推口味題答案。
+  const TASTE_CHIP = { sweet: "甜", sour: "酸", fresh: "清爽", warm: "熱熱的" };
   const TASTES_BY_BASE = {
     strawberry: ["sweet"], grapes: ["sweet"], melon: ["sweet"], sweet_potato: ["sweet"],
     corn: ["sweet"], carrot: ["sweet"], honey: ["sweet"], pumpkin: ["sweet"],
+    sunflower: ["sweet"], amber_resin: ["sweet"],
     wild_berry: ["sour"], tomato: ["sour"], frost_cherry: ["sour"],
     river_mint: ["fresh"], radish: ["fresh"], pea: ["fresh"], winter_kale: ["fresh"], bell_pepper: ["fresh"],
-    wheat: ["warm"], potato: ["warm"],
+    forest_herb: ["fresh"], milk: ["fresh", "sweet"],
+    wheat: ["warm"], potato: ["warm"], egg: ["warm"], duck_egg: ["warm"],
+    glow_mushroom: ["warm"], mooncap_spore: ["warm"], forest_chestnut: ["warm"],
   };
+  // R73B（第 5 項）：星等門檻，開始畫面與結算共用同一份數字。
+  const STAR_THRESHOLDS = [
+    { stars: 1, score: 60 },
+    { stars: 2, score: 140 },
+    { stars: 3, score: 240 },
+  ];
+  function starThresholdText() {
+    return "一顆星 " + STAR_THRESHOLDS[0].score + " 分・二顆星 " + STAR_THRESHOLDS[1].score + " 分・三顆星 " + STAR_THRESHOLDS[2].score + " 分";
+  }
+  // R73B（第 5 項）：結算只留一句改善建議。
+  function adviceFor(result) {
+    const score = qty(result && result.score);
+    const stars = qty(result && result.stars);
+    if (stars >= 3) return "這場已經拿到三顆星，下次保持連續答對、別讓顧客等太久，就能穩穩守住。";
+    const next = STAR_THRESHOLDS.find((row) => score < row.score);
+    const gap = next ? next.score - score : 0;
+    return "再多 " + gap + " 分就能拿到" + (next ? next.stars : 3) + "顆星，連續答對可以多拿分，別讓顧客等太久。";
+  }
   const TASTES_BY_MEAL = {
     rustic_bread: ["warm"], baked_carrot: ["warm", "sweet"], wheat_carrot_pancake: ["warm", "sweet"],
     carrot_wheat_stew: ["warm"], bamber_rain_soup: ["warm"], tomato_harvest_stew: ["warm", "sour"],
@@ -40,6 +63,17 @@
   function tastesOf(id, kind) {
     if (kind === "meal") return (TASTES_BY_MEAL[id] || ["warm"]).slice();
     return (TASTES_BY_BASE[baseId(id)] || []).slice();
+  }
+  // R73B（第 3 項）：物品像素圖示。作物沿用既有 r66 原生像素圖，
+  // 產品／採集／料理沿用 content-r73 補產生的像素圖（見該目錄 manifest）。
+  function iconFor(id, kind) {
+    const base = baseId(id);
+    if (kind === "crop" || (C.CROPS && C.CROPS[base])) return "assets/generated/r66/native/crop_" + base + "-32.png";
+    return "assets/generated/content-r73/item-" + base + ".png";
+  }
+  function tasteLabelsOf(row) {
+    const tastes = row && Array.isArray(row.tastes) ? row.tastes : tastesOf(row && row.id, row && row.kind);
+    return tastes.map((taste) => TASTE_CHIP[taste] || TASTE_LABEL[taste] || taste);
   }
   function qty(value) { const n = Math.floor(Number(value) || 0); return n > 0 ? n : 0; }
   function at(now) { return Number.isFinite(now) ? now : Date.now(); }
@@ -91,7 +125,7 @@
   function unlockedItems(state) {
     ensure(state, Date.now());
     const rows = []; const seen = new Set();
-    const add = (id, kind, name) => { if (!id || seen.has(id) || !name) return; seen.add(id); rows.push({ id, kind, name, tastes: tastesOf(id, kind) }); };
+    const add = (id, kind, name) => { if (!id || seen.has(id) || !name) return; seen.add(id); const row = { id, kind, name, tastes: tastesOf(id, kind) }; row.icon = iconFor(id, kind); row.tasteLabels = tasteLabelsOf(row); rows.push(row); };
     const cropIds = G && G.unlockedCrops ? G.unlockedCrops(state)
       : Object.values(C.CROPS || {}).filter((c) => (c.unlockLevel || 1) <= (state.level || 1)).map((c) => c.id);
     for (const id of cropIds) { const def = C.CROPS[id]; if (def) add(id, "crop", def.name); }
@@ -108,15 +142,29 @@
     return qty(state.storage && state.storage.items && state.storage.items[row.id]);
   }
   function totalStock(state, pool) { return (pool || []).reduce((sum, row) => sum + stockOf(state, row), 0); }
+  // R73B（第 4 項）：背包／代幣改為逐項判斷——這一格有貨就用背包、沒貨才用代幣，
+  // 不再因某一格沒貨就把整場切成代幣結算。
+  function itemMode(state, row) { return stockOf(state, row) > 0 ? "stock" : "token"; }
+  function itemCard(state, row) {
+    if (!row) return null;
+    const stock = stockOf(state, row);
+    const mode = stock > 0 ? "stock" : "token";
+    return {
+      id: row.id, kind: row.kind, name: row.name, stock, mode, usesToken: mode === "token",
+      tastes: (row.tastes || []).slice(), tasteLabels: tasteLabelsOf(row),
+      icon: row.icon || iconFor(row.id, row.kind),
+    };
+  }
   function consumeOne(state, row) {
     if (row.kind === "meal") { if (qty(state.adventure.meals[row.id]) > 0) state.adventure.meals[row.id] -= 1; return; }
     if (!state.storage) state.storage = { items: {} };
     if (!state.storage.items) state.storage.items = {};
     if (qty(state.storage.items[row.id]) > 0) { state.storage.items[row.id] -= 1; if (state.storage.items[row.id] <= 0) delete state.storage.items[row.id]; }
   }
+  // R73B（第 4 項）：session.mode 只保留作整場尚有存貨的概覽（相容舊紀錄），
+  // 實際扣貨與否一律由 serve 依該物品當下存貨逐項決定，不再整場切換。
   function syncMode(state, session) {
-    if (session.mode === "token") return session.mode;
-    if (totalStock(state, session.pool) <= 0) session.mode = "token";
+    session.mode = totalStock(state, session.pool) <= 0 ? "token" : "stock";
     return session.mode;
   }
 
@@ -164,7 +212,7 @@
       pool, customer: null, finished: false, result: null, rng: typeof rng === "function" ? rng : Math.random,
     };
     spawnNext(state, session, t, session.rng); session.spawned = 1;
-    return { ok: true, session, message: session.mode === "token" ? "背包裡的貨不夠，這場改用叫賣代幣，不會消耗背包。" : "擺攤叫賣開始，點背包裡符合的東西遞給顧客。" };
+    return { ok: true, session, message: "擺攤叫賣開始，點符合的東西遞給顧客；沒貨的那一樣會用叫賣代幣結算。" };
   }
   function starsForScore(score) { const s = qty(score); return s >= 240 ? 3 : s >= 140 ? 2 : s >= 60 ? 1 : 0; /* R72 整合：實機一分鐘答對 7 位約 74 分，原 80 分門檻太嚴，下修為 60／140／240 */ }
   function rewardForStars(stars) {
@@ -205,6 +253,7 @@
       goldenFlag: !!state.adventure.r72b.goldenFlag,
       message: stars === 0 ? "這次還差一點，多答對幾位顧客就能拿到星星。" : upgraded ? `拿到 ${stars} 顆星，獎勵已補到這一場的最高紀錄。` : "這一場的獎勵已經照先前最高星領過了，這次不重複給。",
     };
+    result.advice = adviceFor(result);
     session.result = result;
     return result;
   }
@@ -223,17 +272,15 @@
     const row = session.pool.find((item) => item.id === itemId);
     if (!row) return { ok: false, reason: "unknown_item", message: "這件東西不在已解鎖的叫賣清單裡。" };
     if (!matchesDemand(session, itemId)) { const left = leaveCustomer(state, session, t, "wrong_item"); return { ...left, message: "這不是顧客想要的，他先去逛逛別攤了。" }; }
-    syncMode(state, session);
-    if (session.mode === "stock") {
-      if (stockOf(state, row) <= 0) { session.mode = "token"; }
-      else consumeOne(state, row);
-    }
+    // R73B（第 4 項）：逐項判斷——這一格有貨就扣背包，沒貨才用代幣，不影響其他格。
+    const usesToken = stockOf(state, row) <= 0;
+    if (!usesToken) consumeOne(state, row);
     session.combo += 1; session.bestCombo = Math.max(session.bestCombo, session.combo);
     const gained = BASE_SCORE + Math.min(COMBO_CAP, (session.combo - 1) * COMBO_STEP);
     session.score += gained; session.served += 1;
     spawnNext(state, session, t, session.rng); session.spawned += 1;
     syncMode(state, session);
-    return { ok: true, gained, score: session.score, combo: session.combo, mode: session.mode, customer: session.customer, message: session.mode === "token" ? "答對了，這次用叫賣代幣結算，沒有消耗背包。" : "答對了，顧客開心地收下了。" };
+    return { ok: true, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, customer: session.customer, message: usesToken ? "答對了，這一樣背包沒貨，用叫賣代幣結算，沒有消耗背包。" : "答對了，顧客開心地收下了。" };
   }
   function tickSession(state, session, now) {
     const t = at(now);
@@ -266,8 +313,9 @@
     function renderStart(message) {
       const view = statusFor(state, Date.now());
       shell(`<h2 class="r72b-title">擺攤叫賣</h2>
-        <p class="r72b-desc">一場一分鐘。顧客會說想要的作物、料理或口味，點背包裡符合的東西遞給他。連續答對會多給分，答錯或等太久，顧客就會先離開。</p>
-        <p class="r72b-desc">背包裡的貨不夠時，會改用叫賣代幣結算，只算分、不消耗背包。每一場收穫祭可以玩兩次，獎勵照最高的那一場補齊。</p>
+        <p class="r72b-desc">一場一分鐘。顧客會說想要的作物、料理或口味，點符合的東西遞給他。連續答對會多給分，答錯或等太久，顧客就會先離開。</p>
+        <p class="r72b-desc">每一格自己算：有貨就扣背包，沒貨的那一格才用叫賣代幣結算，只算分、不消耗背包。每一場收穫祭可以玩兩次，獎勵照最高的那一場補齊。</p>
+        <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
         ${view.goldenFlag ? `<p class="r72b-owned"><img src="${ART_BASE}golden-flag.png${versionQuery}" alt="">你已經有金色攤位旗了。</p>` : `<p class="r72b-desc">拿到三顆星，就能把限定的金色攤位旗帶回家。</p>`}
         <p class="r72b-status">這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分${view.bestStars ? `・最高 ${view.bestStars} 顆星` : ""}</p>
         ${message ? `<p class="r72b-feedback" role="status">${esc(message)}</p>` : ""}
@@ -277,6 +325,8 @@
         const started = startSession(state, Date.now());
         if (!started.ok) { renderStart(started.message); notify(started.message); return; }
         session = started.session; lastMessage = started.message; save();
+        // R73B（第 5 項）：開始叫賣時關閉祭典攤位視窗，避免視窗疊在一起。
+        if (typeof options.onStart === "function") options.onStart();
         renderGame();
         timer = setInterval(() => {
           const ticked = tickSession(state, session, Date.now());
@@ -300,14 +350,14 @@
       const remain = Math.max(0, Math.ceil((session.endsAt - Date.now()) / 1000));
       const arriving = customer.readyAt && Date.now() < customer.readyAt;
       const buttons = session.pool.map((row) => {
-        const stock = stockOf(state, row);
+        const card = itemCard(state, row);
         const kind = row.kind === "meal" ? "料理" : row.kind === "product" ? "產品" : row.kind === "forage" ? "採集" : "作物";
-        const count = session.mode === "token" ? "用代幣結算" : stock > 0 ? `背包有 ${stock} 份` : "沒貨了，可用代幣";
-        return `<button type="button" class="r72b-item" data-r72b-item="${esc(row.id)}" ${arriving ? "disabled" : ""}><b>${esc(row.name)}</b><small>${kind}・${count}</small></button>`;
+        const count = card.usesToken ? "沒貨，用代幣" : `背包有 ${card.stock} 份`;
+        const chips = card.tasteLabels.length ? card.tasteLabels.map((label) => `<span class="r73b-taste">${esc(label)}</span>`).join("") : `<span class="r73b-taste r73b-taste-none">生活用品</span>`;
+        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・${count}</small><span class="r73b-tastes">${chips}</span></span></button>`;
       }).join("");
       shell(`<div class="r72b-head"><h2 class="r72b-title">擺攤叫賣</h2><span class="r72b-clock" data-r72b-clock>剩 ${remain} 秒</span></div>
-        <div class="r72b-score"><span>分數 <b>${session.score}</b></span><span>連續答對 <b>${session.combo}</b> 次</span><span>${session.mode === "token" ? "代幣模式" : "背包模式"}</span></div>
-        ${session.mode === "token" ? `<p class="r72b-token"><img src="${ART_BASE}stall-token.png${versionQuery}" alt="">現在用叫賣代幣結算，只算分，不消耗背包。</p>` : ""}
+        <div class="r72b-score"><span>分數 <b>${session.score}</b></span><span>連續答對 <b>${session.combo}</b> 次</span></div>
         <div class="r72b-customer"><img class="r72b-portrait" src="${ART_BASE}${esc(customer.art)}${versionQuery}" alt="${esc(customer.npcName)}">
           <div><b>${esc(customer.npcName)}</b><p class="r72b-bubble">${esc(customer.demand.label)}</p><small data-r72b-wait>這位顧客還等 ${Math.max(0, Math.ceil((customer.expiresAt - Date.now()) / 1000))} 秒</small></div></div>
         <p class="r72b-feedback" role="status">${esc(lastMessage || "點下面符合的東西，遞給顧客。")}</p>
@@ -332,11 +382,12 @@
         <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
         ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
         <p class="r72b-status">${result.score} 分・答對 ${result.served} 位・錯過 ${result.missed} 位・最高連續答對 ${result.bestCombo} 次</p>
-        <p class="r72b-desc">${esc(result.message)}</p><p class="r72b-desc">${esc(grantedText)}</p>
-        <p class="r72b-status">這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分</p>
+        <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
+        <p class="r73b-advice" data-r73b-advice>${esc(result.advice || adviceFor(result))}</p>
+        <p class="r72b-status">${esc(grantedText)}這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分</p>
         <div class="r72b-actions"><button type="button" class="r72b-primary" data-r72b-again ${view.canPlay ? "" : "disabled"}>再玩一次</button><button type="button" class="r72b-secondary" data-r72b-done>回到攤位</button></div>`);
       const again = overlay.querySelector("[data-r72b-again]"); if (again) again.onclick = () => renderStart("");
-      const done = overlay.querySelector("[data-r72b-done]"); if (done) done.onclick = close;
+      const done = overlay.querySelector("[data-r72b-done]"); if (done) done.onclick = () => { if (typeof options.onReturnToStall === "function") options.onReturnToStall(); close(); };
       notify(result.message);
     }
     const view = statusFor(state, Date.now());
@@ -347,7 +398,9 @@
 
   const FestivalStallR72 = {
     DURATION_MS, CUSTOMER_TIMEOUT_MS, CUSTOMER_ARRIVE_MS, MAX_ATTEMPTS_PER_ROUND, BASE_SCORE, CUSTOMERS,
+    TASTE_LABEL, TASTE_CHIP, STAR_THRESHOLDS,
     ensure, festivalInfo, statusFor, unlockedItems, stockOf, totalStock,
+    tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, adviceFor,
     makeCustomer, matchesDemand, startSession, serve, tickSession, finishSession,
     starsForScore, rewardForStars, open,
   };

@@ -1046,3 +1046,15 @@ img[src*="content-r70/"] { image-rendering: pixelated; }
 .r72b-stars { margin-top: 8px; font-size: 34px; letter-spacing: 4px; color: #d98a12; }
 .r72b-flag { display: block; width: 120px; height: 132px; object-fit: contain; margin: 6px auto; image-rendering: pixelated; }
 @media (max-width: 520px) { .r72b-card { padding: 14px; } .r72b-portrait { width: 72px; height: 88px; } .r72b-bubble { font-size: 16px; } }
+
+/* R73B（第 3～5 項）：商品卡物品圖示與口味標籤、星等門檻與一句建議。沿用既有木框奶油紙配色，不新增色系。 */
+.r73b-item { display: flex; align-items: center; gap: 8px; }
+.r73b-item-icon { flex: 0 0 auto; width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; }
+.r73b-item-main { display: block; min-width: 0; }
+.r73b-item-main small { display: block; }
+.r73b-tastes { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.r73b-taste { padding: 1px 6px; border: 1px solid #b96f1e; border-radius: 999px; background: #ffe1a1; color: #5a3410; font-size: 11px; font-weight: 900; white-space: nowrap; }
+.r73b-taste-none { border-color: #8a6a35; background: #f4e5b8; color: #7a6a52; }
+.r73b-item[data-r73b-mode="token"] { border-style: dashed; }
+.r73b-thresholds { margin-top: 10px; padding: 8px 10px; border: 2px solid #d8b96a; border-radius: 8px; background: #fff0bd; font-weight: 900; color: #7a4a12; }
+.r73b-advice { margin-top: 10px; font-size: 14px; line-height: 1.55; font-weight: 850; color: #285b1d; }
