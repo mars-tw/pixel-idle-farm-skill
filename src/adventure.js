@@ -1009,6 +1009,15 @@
     { id: "elder_supper", name: "老農班伯的灶邊晚餐", npcId: "elder", wantsCatch: 1, wantsMeals: { rustic_bread: 1 }, reward: reward(14, 3, { wood: 2 }) },
     { id: "child_tea", name: "圖圖的野餐茶", npcId: "child", wantsMeals: { mint_tea: 1 }, reward: reward(12, 3) },
   ];
+  /* R75B：開場選擇讓老農班伯與蘿拉的河畔委託金幣多一成（先賣一小袋、先掛農場牌）。 */
+  function r75bCommissionBonus(state, c) {
+    const choices = state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.r60 && state.adventure.r58.r59.r60.storyChoices;
+    const elder = choices && choices.elder_wheat && choices.elder_wheat.choiceId === "sell";
+    const merchant = choices && choices.merchant_hello && choices.merchant_hello.choiceId === "sign";
+    if (c.npcId === "elder" && elder) return { rate: 0.1, text: "因為你先賣了一小袋新麥，老農班伯的委託金幣多一成。" };
+    if (c.npcId === "merchant" && merchant) return { rate: 0.1, text: "因為你先掛起農場牌，蘿拉的委託金幣多一成。" };
+    return { rate: 0, text: "" };
+  }
   function commissions(state, now) {
     if (!ensure(state, now).ok) return [];
     const a = state.adventure;
@@ -1019,7 +1028,9 @@
       const unlocked = restored(a, "fishing_dock") && (c.id !== "child_tea" || restored(a, "picnic_table"));
       const rows = questRequirements(state, c);
       const done = a.commissions.completed.includes(c.id);
-      return Object.assign(copy(c), { unlocked, completed: done, requirements: rows, canClaim: unlocked && !done && rows.every((r) => r.complete), refreshAt: (a.commissions.cycle + 1) * 300000 });
+      const bonus = r75bCommissionBonus(state, c);
+      const reward = bonus.rate ? Object.assign(copy(c.reward), { coins: Math.round((c.reward.coins || 0) * (1 + bonus.rate)) }) : copy(c.reward);
+      return Object.assign(copy(c), { reward, choiceBonusRate: bonus.rate, choiceBonusText: bonus.text, unlocked, completed: done, requirements: rows, canClaim: unlocked && !done && rows.every((r) => r.complete), refreshAt: (a.commissions.cycle + 1) * 300000 });
     });
   }
   function deliverCommission(state, id, now) {

@@ -1139,3 +1139,30 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
 .r75a-rack-panel{position:fixed;z-index:1600;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:16px;border:3px solid #775126;border-radius:16px;background:#fff9e7;box-shadow:0 10px 40px #24180c99;color:#3d2917}.r75a-rack-head{display:flex;justify-content:space-between;align-items:center}.r75a-rack-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.r75a-rack-choices button{display:flex;align-items:center;gap:6px}.r75a-rack-choices img{width:32px;height:32px;image-rendering:pixelated}.r75a-rack-art{display:block;width:min(280px,100%);margin:8px auto}.r75a-light-trait{display:block;white-space:normal;font-size:10px;line-height:1.25;color:#6a4a1d}.r75a-upgrades{display:grid;gap:7px;margin-top:7px}.r75a-upgrade{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px;border:1.5px solid #c9a86a;border-radius:9px;background:#fff8df}.r75a-upgrade .u-main{display:grid;gap:3px}.r75a-upgrade .u-main span{font-size:12px}
 @media(max-width:600px){.r75a-sun-hud{top:auto;bottom:calc(var(--fixed-bottom-inset,64px) + 8px);right:6px}.r75a-mirror{max-width:146px}.r75a-mirror span{font-size:10px}.r75a-rack-choices{grid-template-columns:1fr}.r75a-plot-action{max-width:calc(100vw - 20px);flex-wrap:wrap;justify-content:center}}
 @media(max-height:500px) and (orientation:landscape){.r75a-sun-hud{top:6px;bottom:auto}.r75a-mirror span{display:none}.r75a-rack-panel{max-height:calc(100dvh - 12px);padding:10px}.r75a-rack-choices{grid-template-columns:repeat(4,minmax(0,1fr))}.r75a-rack-choices button{font-size:11px}}
+/* R75B：第 7～8 項——灶台看火候小遊戲、料理成果徽章、手札「我做過的選擇」、地圖上的招牌與種子袋。 */
+.r75b-pot-thumb { width: 44px; height: 44px; object-fit: contain; float: right; }
+.r75b-grade-line { margin: 4px 0; color: #76551c; font-weight: 700; }
+.r75b-start-cook { min-height: 44px; }
+.r75b-cook-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 12px; background: rgba(43, 32, 18, 0.55); box-sizing: border-box; }
+.r75b-cook-card { position: relative; width: min(430px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; box-sizing: border-box; border: 2px solid #7a4a21; border-radius: 8px; background: #fff8e8; color: #3d2c17; padding: 16px; }
+.r75b-cook-card h3 { margin: 0 44px 8px 0; }
+.r75b-cook-pot { display: block; width: 120px; height: 120px; object-fit: contain; margin: 0 auto; }
+.r75b-cook-close { position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; font-size: 22px; line-height: 1; }
+.r75b-fire-track { position: relative; height: 30px; margin: 14px 0 8px; border: 2px solid #7a4a21; border-radius: 6px; background: linear-gradient(to right, #7fb2d9, #f2d38a, #d95f43); overflow: hidden; }
+.r75b-fire-gold { position: absolute; top: 0; bottom: 0; left: 42%; width: 26%; background: rgba(255, 215, 64, 0.55); border-left: 2px solid #8a6d00; border-right: 2px solid #8a6d00; box-sizing: border-box; }
+.r75b-fire-pointer { position: absolute; top: 2px; bottom: 2px; width: 6px; margin-left: -3px; background: #2b1c0d; border-radius: 3px; }
+.r75b-cook-status, .r75b-cook-time, .r75b-cook-hint { margin: 6px 0; }
+.r75b-cook-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.r75b-cook-actions button { flex: 1 1 120px; min-width: 44px; min-height: 44px; padding: 10px 12px; }
+.r75b-choices { margin-top: 12px; }
+.r75b-choice-card { border: 1px solid #d8c9a6; border-radius: 8px; padding: 10px; margin: 8px 0; background: #fffdf4; }
+.r75b-choice-card h3 { margin: 0 0 6px; }
+.r75b-choice-card p { margin: 4px 0; overflow-wrap: anywhere; }
+.r75b-act { min-width: 44px; min-height: 44px; padding: 8px 12px; }
+.r75b-map-node { position: absolute; transform: translate(-50%, -100%); padding: 0; border: none; background: none; cursor: pointer; min-width: 44px; min-height: 44px; }
+.r75b-map-node img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+.r75b-map-node span { display: block; font-size: 11px; font-weight: 700; color: #3d2c17; background: rgba(255, 248, 232, 0.92); border-radius: 4px; padding: 1px 4px; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .r75b-fire-pointer { transition: none; }
+  .r75b-cook-pot { animation: none; }
+}
