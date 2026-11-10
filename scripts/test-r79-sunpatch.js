@@ -29,7 +29,7 @@ check("沒有種過作物時不會出現光斑", () => {
   assert.equal(G.sunpatchActive(s, T0 + 120000), false);
 });
 
-check("種下第一株後約 4 秒出現第一道光，且只第一次標記 first", () => {
+check("種下第一株後先預告 8 秒再出現第一道光，且只第一次標記 first", () => {
   const s = fresh();
   assert.equal(G.plant(s, 0, "wheat", T0).ok, true);
   assert.equal(G.updateSunpatch(s, T0, fixed(0.5)).spawned, false);
@@ -38,7 +38,7 @@ check("種下第一株後約 4 秒出現第一道光，且只第一次標記 fir
   assert.equal(r.spawned, true);
   assert.equal(r.first, true);
   assert.equal(G.sunpatchActive(s, T0 + G.SUNPATCH.firstDelayMs + 1), true);
-  assert.ok(s.sun.plots.includes(0), "優先照在有作物的田上");
+  assert.ok(!s.sun.plots.includes(0), "R75 教學第一道光故意落在第一株隔壁空田");
   assert.ok(s.sun.plots.length >= 1 && s.sun.plots.length <= G.SUNPATCH.maxPlots);
 });
 
@@ -51,8 +51,8 @@ check("光斑 16 秒後消失，間隔後再出現，第二次不再標記 first
   const end = start + (G.SUNPATCH.firstDurationMs || G.SUNPATCH.durationMs); // R51：第一道光配合教學停較久，之後恢復 16 秒
   assert.equal(G.updateSunpatch(s, end, fixed(0.5)).expired, true);
   assert.equal(G.sunpatchActive(s, end), false);
-  assert.equal(G.updateSunpatch(s, end + G.SUNPATCH.intervalMs - 1, fixed(0.5)).spawned, false);
-  const again = G.updateSunpatch(s, end + G.SUNPATCH.intervalMs, fixed(0.5));
+  assert.equal(G.updateSunpatch(s, end + 15000 - 1, fixed(0.5)).spawned, false);
+  const again = G.updateSunpatch(s, end + 15000, fixed(0.5));
   assert.equal(again.spawned, true);
   assert.equal(again.first, false);
 });
@@ -141,7 +141,8 @@ check("晴朗天氣間隔較短", () => {
   s.weather = { id: "sunny", untilMs: T0 + 10 * 60000 };
   const start = T0 + G.SUNPATCH.firstDelayMs;
   G.updateSunpatch(s, start, fixed(0.5));
-  assert.equal(s.sun.nextAt - start, (G.SUNPATCH.firstDurationMs || G.SUNPATCH.durationMs) + G.SUNPATCH.sunnyIntervalMs); // R51：第一道光時長
+  /* R75A：教學第二道光在 15 秒內到。 */
+  assert.equal(s.sun.nextAt - start, (G.SUNPATCH.firstDurationMs || G.SUNPATCH.durationMs) + 15000);
 });
 
 check("離線很久回來只補一道光，不會連續觸發", () => {
