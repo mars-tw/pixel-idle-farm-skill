@@ -32,7 +32,7 @@
     wild_berry: ["sour"], tomato: ["sour"], frost_cherry: ["sour"],
     river_mint: ["fresh"], radish: ["fresh"], pea: ["fresh"], winter_kale: ["fresh"], bell_pepper: ["fresh"],
     forest_herb: ["fresh"], milk: ["fresh", "sweet"],
-    wheat: ["warm"], potato: ["warm"], egg: ["warm"], duck_egg: ["warm"],
+    /* R73 整合：生小麥不算熱食，不給口味標籤（只能用「我要小麥」指名） */ potato: ["warm"], egg: ["warm"], duck_egg: ["warm"],
     glow_mushroom: ["warm"], mooncap_spore: ["warm"], forest_chestnut: ["warm"],
   };
   // R73B（第 5 項）：星等門檻，開始畫面與結算共用同一份數字。

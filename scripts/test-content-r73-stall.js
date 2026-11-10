@@ -67,7 +67,9 @@ test("口味標籤：甜、酸、清爽、熱熱的在代表品項上一眼可�
   assert.ok(byId.strawberry.tasteLabels.includes("甜"), "草莓要標甜");
   assert.ok(byId.tomato.tasteLabels.includes("酸"), "番茄要標酸");
   assert.ok(byId.radish.tasteLabels.includes("清爽"), "櫻桃蘿蔔要標清爽");
-  assert.ok(byId.wheat.tasteLabels.includes("熱熱的"), "小麥要標熱熱的");
+  // R73 整合同步：評審指出生小麥標「熱熱的」不合理，改為不給口味；「熱熱的」由料理（例如農家麥餅）代表
+  assert.deepEqual(byId.wheat.tasteLabels, [], "生小麥不給口味標籤");
+  assert.ok(F.tasteLabelsOf({ id: "rustic_bread", kind: "meal", tastes: F.tastesOf("rustic_bread", "meal") }).includes("熱熱的"), "農家麥餅要標熱熱的");
   assert.deepEqual(F.tasteLabelsOf({ id: "mint_tea", kind: "meal", tastes: F.tastesOf("mint_tea", "meal") }), ["清爽"]);
   const js = fs.readFileSync("src/festival-stall-r72.js", "utf8");
   assert.match(js, /r73b-taste/, "商品卡要渲染口味標籤");
