@@ -843,3 +843,5 @@ html body #questDock .r68a-objective-head > span:not(.qp-step), html body #quest
 /* 提示訊息出現時任務卡照舊暫時收成一行（R28）：「現在做」只留主要按鈕並移到標題列右側，不露出被裁半截的框。 */
 html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) { position: absolute !important; top: 4px; right: 56px; width: auto !important; display: flex !important; margin: 0; padding: 0; border: 0; background: none; }
 html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }
+html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head, .r67a-objective-head) { padding-right: 150px; box-sizing: border-box; }
+html body:has(#toast-zone > .toast) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > .r68a-requirements { visibility: hidden; }
