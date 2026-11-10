@@ -271,8 +271,9 @@ async function launchBrowser() {
         const fest = await page.evaluate((src) => {
           eval(src);
           const dock = document.querySelector('#questDock');
-          const banner = dock.querySelector('.r61a-festival-banner');
-          return { ih: innerHeight, dock: ro(dock), banner: banner ? ro(banner) : null, bannerText: banner ? banner.innerText.trim() : '', bannerFull: banner ? banner.textContent.trim() : '' };
+          // R69 同步：手機收合摘要移到「現在做」的一行；舊橫幅保留給展開全文，不能用隱藏節點的 innerText 判斷收合內容。
+          const summary = dock.querySelector('.r69a-festival-now .r69a-collapsed-summary');
+          return { ih: innerHeight, dock: ro(dock), banner: summary && vis(summary) ? ro(summary) : null, bannerText: summary && vis(summary) ? summary.innerText.trim() : '', bannerFull: dock.textContent.trim() };
         }, HELP);
         assert.ok(fest.banner, `${tag} 第 7 項：收穫祭進行中應有橫幅`);
         assert.match(fest.bannerText, /祭典 2\/3・剩 8 分/, `${tag} 第 7 項：收合時應一行顯示「祭典 2/3・剩 8 分」（實際「${fest.bannerText}」）`);
