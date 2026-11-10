@@ -162,7 +162,7 @@
       goals: [goal("harvest", 2, "收成老農班伯的開市小麥", "wheat")], reward: reward(16, 6, { wood: 4, stone: 4 }) },
     { id: "c1_first_meal", chapter: 1, name: "回家的第一餐", npcId: "elder", description: "在農舍灶台做一份農家麥餅，替回家的第一天備好晚餐。", target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: {},
       goals: [goal("cook", 1, "烤一份農家麥餅", "rustic_bread")], reward: reward(20, 4, { wood: 6 }, { fishingRod: true }) },
-    { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木材、兩份石材修好釣台，再試試老農班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
+    { id: "c2_fishing_dock", chapter: 2, name: "河邊有個落腳處", npcId: "elder", description: "用四份木料、兩份石材修好釣台，再試試老農班伯的魚竿。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: {},
       goals: [goal("restore", 1, "修好河畔釣台", "fishing_dock")], reward: reward(16, 4) },
     { id: "c2_river_basket", chapter: 2, name: "河風裡的提籃", npcId: "merchant", description: "釣兩尾魚，採一份溪畔薄荷。蘿拉收一尾魚和薄荷，替野餐桌備好木料。", target: { kind: "river", id: "fishing_dock", tileId: "t2_9" }, wants: { river_mint: 1 }, wantsCatch: 1,
       goals: [goal("fish", 2, "釣兩尾魚"), goal("forage", 1, "採一份溪畔薄荷", "river_mint")], reward: reward(24, 6, { wood: 6 }) },
@@ -605,7 +605,7 @@
     const milestone = (type, data) => typeof root.milestoneCard === "function" ? root.milestoneCard(type, data) :
       type === "market_open" ? { kind: "milestone", type, title: "市集開放", earned: "16 金與修繕建材", unlocked: "市集訂單與出貨看板", next: "照任務列去灶台做晚餐；訂單看板之後隨時可以接單。" } :
       type === "chapter_one" ? { kind: "milestone", type, title: "第一章完成", earned: "農場重新有了第一批收成", unlocked: "河畔復興與下一章故事", next: "前往河邊，看看等待修復的設施。" } :
-      { kind: "milestone", type, title: `升到 Lv ${data.level}`, earned: `Lv ${data.level}・新的作物與農場能力`, unlocked: "新的作物與農場能力", next: data.actionLabel || "繼續目前任務" };
+      { kind: "milestone", type, title: `升到 Lv ${data.level}`, earned: `農場等級提升到 ${data.level} 級`, unlocked: "新的作物與農場能力", next: data.actionLabel || "繼續目前任務" };
     const milestones = [];
     if (id === "c1_first_harvest") milestones.push(milestone("market_open"));
     if (id === "c1_first_meal") milestones.push(milestone("chapter_one"));
@@ -1388,7 +1388,7 @@
     const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, row.quality ? "優質作物 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
     const tip = !diverse ? "差一顆星的話，可以換成三種不同品項。" : !seasonal ? `差一顆星的話，可以換成${currentSeason}季作物。` : !hasMeal ? "差一顆星的話，可以換上一道料理。" : "三項加分都拿到了，下次可換不同當季作物試試。";
     f.judging = { roundAt: f.startsAt, stars, selected: selectedIds.slice(), details, tip, scoreSources: { diverse, seasonal, hasMeal, quality }, reward: { coins, decorations: stars >= 2 ? 1 : 0, recipe: stars === 3 ? "riverside_harvest_platter" : null }, rewardText, mayorLine };
-    return ok(`${stars} 顆星！${mayorLine} 獲得${rewardText}。`, copy(f.judging));
+    return ok(`${stars} 顆星！${mayorLine}`, copy(f.judging));
   }
   function takeFestivalSettlement(state, now) {
     festivalStatus(state, now); const f = state.adventure.r61.festival;

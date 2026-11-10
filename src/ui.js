@@ -821,6 +821,8 @@
   }
   function renderSeeds() {
     const row = $("seedRow"); if (!row) return;
+    const oldCare = typeof document.querySelector === "function" ? document.querySelector(".r74a-care-popover") : null;
+    if (oldCare) oldCare.remove();
     row.innerHTML = "";
     const crops = Object.values(window.CROPS);
     const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
@@ -840,7 +842,7 @@
     quick.className = "seed-quickbar";
     quickIds.slice(0, 5).forEach((id) => quick.appendChild(seedChip(window.CROPS[id], seasonUnlocked, sId, true, newSeedIds.has(id))));
     const care = document.createElement("div");
-    care.className = "r72a-care-picker";
+    care.className = "r72a-care-picker r74a-care-popover";
     care.ariaLabel = "選擇照顧方式";
     const careEffectText = (mode) => {
       if (!mode) return "";
@@ -850,7 +852,7 @@
     };
     const modes = Object.values(G.FARM_CARE || {});
     care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect" data-care-effect role="status">${careEffectText(G.FARM_CARE && G.FARM_CARE[selectedCare])}</div>`;
-    care.querySelectorAll("[data-care]").forEach((button) => button.onclick = () => { selectedCare = button.dataset.care; state.selectedCare = selectedCare; renderSeeds(); scheduleSave(); });
+    care.querySelectorAll("[data-care]").forEach((button) => button.onclick = (event) => { event.preventDefault(); event.stopPropagation(); selectedCare = button.dataset.care; state.selectedCare = selectedCare; renderSeeds(); scheduleSave(); });
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
     more.title = "全部種子";
@@ -871,7 +873,16 @@
     };
     quick.appendChild(more);
     row.appendChild(quick);
-    row.appendChild(care);
+    const careTile = selectedTileId ? G.getTileById(state, selectedTileId) : null;
+    const carePlot = careTile && careTile.plotIndex != null ? state.plots[careTile.plotIndex] : null;
+    if (careTile && careTile.plotIndex != null && careTile.plotIndex < G.activePlotCount(state) && (!carePlot || !carePlot.cropId) && currentTool() === "hand") {
+      const scene = $("mapScene");
+      if (scene) {
+        care.dataset.tileId = careTile.id;
+        scene.appendChild(care);
+        placeSceneOverlay(care, tileViewportPoint(careTile.id, .05));
+      }
+    }
 
     if (seedDrawerOpen) {
       const drawer = document.createElement("div");
@@ -1740,7 +1751,7 @@
   function bridgeMaterialRowsHtml(compact) {
     if (!G.bridgeMaterialStatus) return "";
     const st = G.bridgeMaterialStatus(state);
-    const names = { wood: "木材", stone: "石頭" };
+    const names = { wood: "木料", stone: "石頭" };
     const rows = Object.keys(st.cost).map((k) => {
       const ready = (st.missing[k] || 0) <= 0;
       const src = (st.sources[k] || []).map((s) => window.OBSTACLES[s.object].name).filter((v, i, arr) => arr.indexOf(v) === i).join("、");
@@ -1768,7 +1779,7 @@
   function eastDeepCostRowsHtml(compact) {
     if (!G.eastDeepStatus) return "";
     const st = G.eastDeepStatus(state);
-    const label = { coins: "金幣", wood: "木材", stone: "石頭", compost: "堆肥" };
+    const label = { coins: "金幣", wood: "木料", stone: "石頭", compost: "堆肥" };
     const icon = { coins: "🪙" };
     const rows = Object.keys(st.cost).map((k) => {
       const have = st.have[k] || 0;
@@ -3543,6 +3554,7 @@
   function hideSceneActions() {
     const el = $("sceneActionBar"); if (!el) return;
     el.hidden = true; el.innerHTML = "";
+    const care = typeof document.querySelector === "function" ? document.querySelector(".r74a-care-popover") : null; if (care) care.remove();
   }
   let buildPreviewEl = null;
   function clearBuildPreview() { if (buildPreviewEl) { buildPreviewEl.hidden = true; delete buildPreviewEl.dataset.tileId; delete buildPreviewEl.dataset.state; } }
@@ -3638,7 +3650,7 @@
       clampBox();
     }
     // Fixed quest / thumb HUD can cover an otherwise viewport-clamped bubble.
-    if (window.FarmWorld && el.id === "objectBubble") {
+    if (window.FarmWorld && (el.id === "objectBubble" || (el.classList && el.classList.contains("r74a-care-popover")))) {
       const r = el.getBoundingClientRect();
       const blocks = [...document.querySelectorAll("#farmDock, #farmMenu, #questDock, .seed-hud, header, .toolbar, .tool-bar, .side-tabs, #worldMinimap, #mobileControls button")]
         .filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden")
@@ -3824,13 +3836,17 @@
     const active = G.activePlotCount(state);
     if (tile.plotIndex >= active) return "未開墾・待解鎖";
     const plot = state.plots[tile.plotIndex];
-    const sunSuffix = (G.isSunlit && G.isSunlit(state, tile.plotIndex, now())) ? "\n在光裡：生長加速・收成 +1" : ""; // R59B：陽光說明分到第二行，標籤不溢出
+    const sunlit = !!(G.isSunlit && G.isSunlit(state, tile.plotIndex, now()));
+    const sunSuffix = sunlit ? "\n在光裡：生長加速・收成 +1" : ""; // R59B：陽光說明分到第二行，標籤不溢出
     if (!plot || !plot.cropId) return "空地・可種植" + sunSuffix;
     const crop = window.CROPS[plot.cropId];
     const name = crop ? crop.name : "作物";
     const prog = G.getCropProgress(state, plot, now());
-    const planted = state.plots.filter((row) => row && row.cropId).length;
-    return name + "・" + (prog.ready ? "可收成，點一下收成" : prog.wet ? "已澆水" : planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水") + sunSuffix;
+    const planted = state.map.tiles.filter((row) => row.plotIndex != null && row.plotIndex < active && state.plots[row.plotIndex] && state.plots[row.plotIndex].cropId).length;
+    if (prog.ready) return name + "・可收成";
+    if (prog.wet) return name + "・已澆水" + sunSuffix;
+    if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
+    return name + "・" + (planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水");
   }
   function renderTileStateLabel(tile) {
     let label = $("tileStateLabel");
@@ -3852,7 +3868,7 @@
   }
   function renderSceneActionsForSelection() {
     const bar = $("sceneActionBar"); if (!bar) return;
-    const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile);
+    const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile); renderSeeds();
     const toolActions = { hand: ["plant", "harvest"], water: ["water"], build: ["build"], clear: ["clear"], inspect: [] }[currentTool()] || [];
     const actions = sceneActionsForTile(tile);
     if (!tile || !actions.length) { hideSceneActions(); return; }
@@ -4071,6 +4087,11 @@
     if (!window.FarmWorld) switchTab("tile");
     renderSceneActionsForSelection();
     if (tool === "inspect") { updateMap(now()); inspectTile(tile); return; }
+    // R74A：第一次點空田只進入播種準備，讓玩家先在田旁選照顧方式；
+    // 真正播種由場景動作鈕確認，避免桌機一點就直接種下而來不及選。
+    if (tool === "hand" && tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && !(state.plots[tile.plotIndex] && state.plots[tile.plotIndex].cropId)) {
+      clearTouchFarmPreview(false); spawnRing(tileId, true); updateMap(now()); return;
+    }
 
     // 站點：任何工具點站點都走過去 + 播站點動作 + 觸發效果
     if (tile.station) { if (isTouch) { spawnRing(tile.id, true); updateMap(now()); return; } useStation(tile); updateMap(now()); return; }
@@ -4172,7 +4193,7 @@
       const chk = G.canRepairBridge(state);
       if (!chk.ok) {
         if (chk.reason === "chapter") toast(window.FarmWorld ? "先把第一餐帶給老農班伯，再來修橋。" : "⛓️ 先完成序章任務（清開舊路 6/6）才能修橋");
-        else if (chk.reason === "materials") toast("🪵 修橋材料不足，跟著任務 Dock 清大樹與巨石");
+        else if (chk.reason === "materials") toast("🪵 修橋材料不足，跟著任務列清大樹與巨石");
         else toast("目前無法修橋");
         spawnRing(tile.id, false); renderTileContext(); renderQuestDock(); return;
       }
@@ -4380,7 +4401,7 @@
     } else if (tile.station) { const s = window.STATIONS[tile.station]; toast("🏷️ " + s.name + "・" + s.desc); }
     else if (tile.structureId) { const s = G.structureAt(state, tile.id); toast("🏠 " + (s ? s.name : "建築") + "・點一下走過去互動"); }
     else if (tile.npc) { const n = window.NPCS[tile.npc]; toast("🧑 " + n.name + "・" + n.title + "・走過去交談"); }
-    else if (tile.bridge) { toast(state.flags.bridgeRepaired ? "🌉 木橋・通往東林空地" : "🌉 斷橋・走過去用木材石頭修復"); }
+    else if (tile.bridge) { toast(state.flags.bridgeRepaired ? "🌉 木橋・通往東林空地" : "🌉 斷橋・走過去用木料石頭修復"); }
     else if (tile.event) { const ev = window.EVENTS[tile.event]; toast("🌳 " + ev.name + "・" + ev.desc); }
     else if (tile.forage) {
       const node = (window.FORAGE_NODES || []).find((n) => n.id === tile.forage);
