@@ -216,10 +216,11 @@ async function measureDialogue(page) {
         const widths = tiles.slice(0, 8).map((e) => ro(e).width);
         return { text: label ? label.textContent.trim() : '', sel: selEl ? ro(selEl) : null, tile: tileEl ? ro(tileEl) : null, widths };
       }, { src: HELP, tid: tileId });
-      assert(sel.text.includes('在光裡：生長加速・收成 +1'), `${tag} 選取受光格提示應說明在光裡（實際「${sel.text}」）`);
+      /* R76A：選取田格改顯示這株目前的光性收成結果，不再只寫通用加速。 */
+      assert(sel.text.includes('喜光・照過光了：收成多 1 份'), `${tag} 選取受光格提示應說明實際收成結果（實際「${sel.text}」）`);
       assert(sel.sel && sel.tile, `${tag} 應有選取格`);
       assert(Math.abs(sel.sel.width - sel.tile.width) <= 2, `${tag} 選取框寬 ${Math.round(sel.sel.width)} 應等於一格寬 ${Math.round(sel.tile.width)}（±2px）`);
-      console.log(`OK 第 7＋10 項 ${tag}：受光格邊框／太陽／${sun.secs} 秒進度條齊全、近白 ${white.toFixed(2)}% < 3%、提示「在光裡」、選取框寬 ${Math.round(sel.sel.width)} ≈ 一格 ${Math.round(sel.tile.width)}`);
+      console.log(`OK 第 7＋10 項 ${tag}：受光格邊框／太陽／${sun.secs} 秒進度條齊全、近白 ${white.toFixed(2)}% < 3%、提示實際光性成果、選取框寬 ${Math.round(sel.sel.width)} ≈ 一格 ${Math.round(sel.tile.width)}`);
       await ctx.close();
     }
 

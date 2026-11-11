@@ -189,6 +189,17 @@
     const mult = GRADES[grade] ? GRADES[grade].durationMult : 1;
     return Math.round((Number.isFinite(baseMs) ? baseMs : 0) * mult);
   }
+  function durationText(ms) {
+    const seconds = Math.max(0, Math.round((ms || 0) / 1000));
+    const minutes = Math.floor(seconds / 60); const rest = seconds % 60;
+    return minutes && rest ? `${minutes} 分 ${rest} 秒` : minutes ? `${minutes} 分鐘` : `${rest} 秒`;
+  }
+  function gradeEffectText(recipe, grade) {
+    if (!recipe || !recipe.effect) return grade === "perfect" ? "分享給鄰居好感多 1" : "適合分享給鄰居";
+    const base = recipe.effect.durationMs || 0; const actual = scaledDurationMs(base, grade);
+    const effect = String(recipe.effect.summary || recipe.effect.label || "料理效果").replace(/。$/, "");
+    return `${effect}・${durationText(base)} → ${durationText(actual)}${grade === "perfect" ? "・分享給鄰居好感多 1" : ""}`;
+  }
 
   function eatMeal(state, recipeId, now) {
     if (!originalEat) return { ok: false, reason: "no_adventure", message: "餐籃還沒準備好。" };
@@ -214,6 +225,9 @@
     result.grade = grade;
     result.gradeLabel = GRADES[grade].label;
     result.durationMult = mult;
+    result.durationMs = scaledDurationMs(recipe.effect.durationMs || 0, grade);
+    result.durationText = durationText(result.durationMs);
+    result.message = `${recipe.name}・${result.gradeLabel}，效果持續 ${result.durationText}。${result.message}`;
     return result;
   }
 
@@ -354,7 +368,7 @@
   }
 
   const CookingR75 = { DURATION_MS, GOLD_MIN, GOLD_MAX, START_HEAT, GRADES, GRADE_ORDER, CHOICE_DEFS,
-    ensure, createFireSession, gradeForRatio, scaledDurationMs,
+    ensure, createFireSession, gradeForRatio, scaledDurationMs, durationText, gradeEffectText,
     mealGrades, bestStockGrade, cookWithGrade, cookDirect, finishFireSession, eatMeal, shareBestMeal, noteSharedMeal,
     selectedChoice, choiceEffects, hasEffect, orderCoinBonusRate, mayorQuestBonusRate, boostedCoins,
     farmSignVisible, seedBagVisible, seasonalCropId, elderAdviceSeed, dailyPerks, merchantDeals, buyMerchantDeal };
@@ -406,7 +420,9 @@
       const badge = document.createElement("p");
       badge.className = "r75b-grade-line";
       badge.setAttribute("data-r75b-grade", recipeId);
-      badge.textContent = info.bestEver ? "最高成果：" + info.bestEverLabel + "・餐籃裡 家常 " + info.home + "、好吃 " + info.tasty + "、絕品 " + info.perfect : "還沒做過，做好後會記下最高成果。";
+      const recipe = recipeOf(state, recipeId);
+      const durations = recipe && recipe.effect ? GRADE_ORDER.map((grade) => `${GRADES[grade].label} ${durationText(scaledDurationMs(recipe.effect.durationMs, grade))}`).join("・") : "家常／好吃／絕品皆可分享";
+      badge.textContent = (info.bestEver ? "最高成果：" + info.bestEverLabel + "・餐籃裡 家常 " + info.home + "、好吃 " + info.tasty + "、絕品 " + info.perfect : "還沒做過") + "・" + durations;
       cookBtn.before(badge);
       const start = document.createElement("button");
       start.type = "button";
@@ -417,11 +433,12 @@
       start.onclick = () => openFireGame(state, recipeId);
       cookBtn.before(start);
       const pot = document.createElement("img");
-      pot.className = "r75b-pot-thumb";
-      pot.src = "assets/generated/content-r75/cooking_pot.png" + versionQuery();
-      pot.alt = "";
-      pot.setAttribute("aria-hidden", "true");
+      pot.className = "r75b-pot-thumb r76a-recipe-thumb";
+      pot.src = "assets/generated/content-r73/item-" + recipeId + ".png" + versionQuery();
+      pot.alt = recipe ? recipe.name : "料理";
       row.prepend(pot);
+      const eat = row.querySelector("[data-eat]");
+      if (eat && recipe && recipe.effect) { const grade = info.bestInStock || "home"; eat.textContent = `享用${GRADES[grade].label}・${durationText(scaledDurationMs(recipe.effect.durationMs, grade))}`; }
     });
   }
 
@@ -437,7 +454,7 @@
     overlay.innerHTML = '<div class="r75b-cook-card">'
       + '<button type="button" class="r75b-cook-close" data-r75b-close aria-label="關閉看火候畫面">×</button>'
       + "<h3>看火候・" + esc(recipe.name) + "</h3>"
-      + '<img class="r75b-cook-pot" src="assets/generated/content-r75/cooking_pot.png' + esc(versionQuery()) + '" alt="灶上的鐵鍋">'
+      + '<img class="r75b-cook-pot" src="assets/generated/content-r73/item-' + esc(recipeId) + '.png' + esc(versionQuery()) + '" alt="鍋裡的' + esc(recipe.name) + '">'
       + '<div class="r75b-fire-track" aria-hidden="true"><div class="r75b-fire-gold"></div><div class="r75b-fire-pointer"></div></div>'
       + '<p class="r75b-cook-status" data-r75b-status>把指針留在金色區間，火會慢慢變小。</p>'
       + '<p class="r75b-cook-time" data-r75b-time>還剩 12 秒</p>'
@@ -468,11 +485,12 @@
     }
     function finishCook(gradeOverride) {
       if (closed) return;
+      const snap = session.snapshot();
       close();
       const result = gradeOverride ? cookWithGrade(state, recipeId, gradeOverride, Date.now()) : finishFireSession(state, recipeId, session, Date.now());
-      toast(result.message);
-      if (result.ok) persist(state);
-      if (root.FarmWorld && typeof root.FarmWorld.openKitchen === "function") root.FarmWorld.openKitchen();
+      if (!result.ok) { toast(result.message); if (root.FarmWorld && typeof root.FarmWorld.openKitchen === "function") root.FarmWorld.openKitchen(); return; }
+      persist(state);
+      showCookResultCard(state, recipeId, result, snap);
     }
     function frame(nowMs) {
       if (closed) return;
@@ -496,6 +514,23 @@
     document.addEventListener("keydown", onKey, true);
     render(session.snapshot());
     raf = requestAnimationFrame(frame);
+  }
+
+  function showCookResultCard(state, recipeId, result, snap) {
+    const recipe = recipeOf(state, recipeId) || { name: result.meal && result.meal.name || "料理" };
+    const grade = result.grade || "home"; const ratio = Math.max(0, Math.min(1, Number(snap && snap.ratio) || 0));
+    const overlay = document.createElement("div"); overlay.className = "r75b-cook-overlay r76a-result-overlay"; overlay.setAttribute("role", "dialog"); overlay.setAttribute("aria-modal", "true"); overlay.setAttribute("aria-label", recipe.name + "料理成果");
+    overlay.innerHTML = '<article class="r75b-cook-card r76a-result-card" data-r76a-cook-result>'
+      + '<img class="r76a-result-image" src="assets/generated/content-r73/item-' + esc(recipeId) + '.png' + esc(versionQuery()) + '" alt="' + esc(recipe.name) + '">'
+      + '<p class="r76a-grade-badge" data-grade="' + esc(grade) + '">' + esc(GRADES[grade].label) + '</p>'
+      + '<h3>' + esc(recipe.name) + '做好了</h3>'
+      + '<p>火候剛好 ' + Math.round(ratio * 100) + '%</p>'
+      + '<p class="r76a-result-effect">' + esc(gradeEffectText(recipe, grade)) + '</p>'
+      + '<div class="r76a-result-actions"><button type="button" data-r76a-eat' + (recipe.effect ? '' : ' disabled') + '>現在吃</button><button type="button" data-r76a-keep>先放餐籃</button></div></article>';
+    document.body.appendChild(overlay);
+    const finish = () => { overlay.remove(); persist(state); if (root.FarmWorld && typeof root.FarmWorld.openKitchen === "function") root.FarmWorld.openKitchen(); };
+    const eat = overlay.querySelector("[data-r76a-eat]"); if (eat && recipe.effect) eat.onclick = () => { const eaten = eatMeal(state, recipeId, Date.now()); toast(eaten.message); finish(); };
+    overlay.querySelector("[data-r76a-keep]").onclick = finish;
   }
 
   /* 手札：我做過的選擇（還沒選的不列） */

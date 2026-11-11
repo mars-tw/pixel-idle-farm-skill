@@ -300,7 +300,7 @@
   function markSunUsed(state, plotIndex) {
     if (!state.sun.used.includes(plotIndex)) state.sun.used.push(plotIndex);
     state.stats.sunCatches = (state.stats.sunCatches || 0) + 1;
-    if (Sunplay) Sunplay.catchSun(state, plotIndex);
+    return Sunplay ? Sunplay.catchSun(state, plotIndex) : { gained: 0, exposure: null };
   }
   // 種／澆在光裡：把種植時間往前推，等同立刻長快一段。
   function sunBoostGrowth(state, plotIndex, now) {
@@ -314,9 +314,9 @@
     const wet = isWet(plot);
     plot.plantedAt -= boostMs;
     if (wet && (plot.wateredAt || 0) < plot.plantedAt) plot.wateredAt = plot.plantedAt;
-    markSunUsed(state, plotIndex);
+    const caught = markSunUsed(state, plotIndex);
     plot.sunGrown = true;
-    return { kind: "growth", boostMs };
+    return { kind: "growth", boostMs, sunlight: caught.gained || 0, bottleFull: !(caught.gained > 0) };
   }
 
   // ---------- 倉庫 ----------
@@ -710,16 +710,16 @@
       const packs = state.adventure.r58.r59.seedPacks = state.adventure.r58.r59.seedPacks || {};
       packs[crop.id] = Math.min(99, (packs[crop.id] || 0) + care.seedBack);
     }
-    if (Sunplay && lightEffect.sunlight) Sunplay.addSunlight(state, lightEffect.sunlight);
+    const traitSunlight = Sunplay && lightEffect.sunlight ? Sunplay.addSunlight(state, lightEffect.sunlight) : 0;
     plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown; delete plot.careMode;
     delete plot.r75SunHits; delete plot.r75ShadeEligible; delete plot.r75SunOver;
-    if (sunlit) markSunUsed(state, plotIndex);
+    const caughtSunlight = sunlit ? (markSunUsed(state, plotIndex).gained || 0) : 0;
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled, quality, careMode: care && care.id, seedBack: care && care.seedBack || 0,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: farmNextStepText(state, now, "把 2 份小麥交給老農班伯。") };
-    if (sunlit || lightEffect.yieldBonus) out.sun = { kind: "harvest", bonus: lightEffect.yieldBonus || 0, xpBonus: sunlit ? SUNPATCH.xpBonus : 0 };
+    if (sunlit || lightEffect.yieldBonus || lightEffect.source) out.sun = { kind: "harvest", bonus: lightEffect.yieldBonus || 0, sunlight: traitSunlight + caughtSunlight, bottleFull: sunlit && traitSunlight + caughtSunlight === 0, xpBonus: sunlit ? SUNPATCH.xpBonus : 0, source: lightEffect.source || "" };
     if (lightEffect.source) out.lightTrait = lightEffect;
     if (mealBonus) out.meal = { kind: "harvest", bonus: mealBonus };
     return out;
@@ -2577,13 +2577,12 @@
     if (type === "level_up") {
       const level = data.level || 2;
       const names = levelUnlocks(level).map((entry) => entry.name);
-      const unlockText = data.unlocked || (names.length ? names.join("、") : "新的農場能力");
+      const unlockText = data.unlocked || (names.length ? names.join("、") : "這一級沒有新增項目");
       let guideApi = root.AdventureAPI;
       if (!guideApi && data.state && typeof module !== "undefined" && module.exports) guideApi = require("./adventure.js");
       const guide = data.state && guideApi && guideApi.guide ? guideApi.guide(data.state, data.now) : null;
-      const next = data.state && guideApi && guideApi.nextFarmStep && !((data.state.adventure || {}).claimed || {}).c1_first_meal
-        ? guideApi.nextFarmStep(data.state, data.now) : null;
-      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `Lv ${level}・${unlockText}`, unlocked: unlockText, next: (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
+      const next = data.state && guideApi && guideApi.nextFarmStep ? guideApi.nextFarmStep(data.state, data.now) : null;
+      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `農場等級提升到 Lv ${level}`, unlocked: unlockText, next: (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
     }
     return null;
   }
@@ -2604,7 +2603,16 @@
     Object.values(BUILDINGS || {}).forEach((building) => {
       if (building.unlockLevel === level) rows.push({ id: building.id, name: building.name, kind: "upgrade" });
     });
-    return rows;
+    const extras = {
+      2: [{ id: "drying_rack", name: "農舍曬架：用 2 份作物與 1 點陽光製作乾貨", kind: "feature" }],
+      3: [{ id: "sun_mirror_upgrade", name: "磨亮手鏡：每道光可折 2 次", kind: "feature" }],
+      4: [{ id: "sun_bottle_upgrade", name: "大蓄光瓶：陽光上限可升到 8 點", kind: "feature" }],
+      5: [{ id: "weather", name: "天氣變化", kind: "feature" }],
+      6: [{ id: "seasons", name: "四季輪替與當季成長加速", kind: "feature" }],
+    };
+    rows.push(...(extras[level] || []));
+    const seen = new Set();
+    return rows.filter((entry) => { const key = entry.name; if (seen.has(key)) return false; seen.add(key); return true; });
   }
   function unseenLevelUnlocks(state, surface) {
     const seen = state && state.flags && state.flags.unlocksSeen && Number(state.flags.unlocksSeen[surface]) || 1;

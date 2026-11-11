@@ -138,11 +138,12 @@ const HELP = `
         return { logo: logo ? { r: ro(logo), complete: logo.complete, nw: logo.naturalWidth } : null, res, leaves, vw: innerWidth };
       }, HELP);
       assert(hdr.logo && hdr.logo.complete && hdr.logo.r.left >= 0 && hdr.logo.r.right <= hdr.vw, `${tag} 標誌未完整顯示：${JSON.stringify(hdr.logo)}`);
-      assert.equal(hdr.res.length, 4, `${tag} 資源列應有金幣、等級、背包、材料四項，實際 ${hdr.res.length}`);
+      /* R76A：季節從新存檔起常駐，因此手機資源列由四項增為五項。 */
+      assert.equal(hdr.res.length, 5, `${tag} 資源列應有金幣、等級、背包、季節、材料五項，實際 ${hdr.res.length}`);
       assert(new Set(hdr.res.map((x) => Math.round(x.r.top))).size === 1, `${tag} 資源列不是一列：${JSON.stringify(hdr.res.map((x) => Math.round(x.r.top)))}`);
       for (const x of hdr.res) assert(x.r.left >= 0 && x.r.right <= hdr.vw && x.sw <= x.cw + 1, `${tag} 資源「${x.t}」超出畫面或被截斷：${JSON.stringify(x)}`);
       for (const x of hdr.leaves) if (x.t) assert(x.sw <= x.cw + 1, `${tag} 資源子文字「${x.t}」被截斷：${x.sw}>${x.cw}`);
-      console.log(`OK 第 7 項 ${tag} 標誌完整（寬 ${Math.round(hdr.logo.r.width)}px）、資源四項一列不超出畫面`);
+      console.log(`OK 第 7 項 ${tag} 標誌完整（寬 ${Math.round(hdr.logo.r.width)}px）、資源五項一列不超出畫面`);
       // 第 8 項：訂單面板（無「再顯示」）應有漸層提示，捲到底消失；升級面板有「再顯示」時不得同時出現
       // R55 整合：A 線把市集預告縮成一張後，訂單面板不一定可捲動；改為依序找第一個可捲動且沒有「再顯示」的面板驗證提示
       const measurePane = (src) => {
@@ -203,10 +204,10 @@ const HELP = `
         return { logo: logo ? { r: ro(logo), complete: logo.complete } : null, res, vw: innerWidth };
       }, HELP);
       assert(hdr.logo && hdr.logo.complete && hdr.logo.r.right <= hdr.vw, `${tag} 標誌未完整顯示`);
-      assert.equal(hdr.res.length, 4, `${tag} 資源列應有四項`);
+      assert.equal(hdr.res.length, 5, `${tag} 資源列應有含季節的五項`);
       assert(new Set(hdr.res.map((x) => Math.round(x.r.top))).size === 1, `${tag} 資源列不是一列`);
       for (const x of hdr.res) assert(x.r.right <= hdr.vw && x.sw <= x.cw + 1, `${tag} 資源「${x.t}」超出或被截斷`);
-      console.log(`OK 第 7 項 ${tag} 標誌完整、資源四項一列不超出畫面`);
+      console.log(`OK 第 7 項 ${tag} 標誌完整、資源五項一列不超出畫面`);
       // 種子卡：先照主線談完開場（ claimed 第一關）走到播種步驟，種子列才會展開
       await page.evaluate(() => { const s = window.__farm.state(); if (s.adventure.byTarget) s.adventure.byTarget.talk = { mayor: 1 }; if (s.adventure.counts) { s.adventure.counts.plant = 0; s.adventure.counts.water = 0; } if (s.stats) { s.stats.plantCount = 0; s.stats.waterCount = 0; } (s.plots || []).forEach((p) => { if (p) { p.cropId = null; delete p.plantedAt; delete p.wateredAt; } }); window.__farm.refresh(); });
       await page.waitForTimeout(900);

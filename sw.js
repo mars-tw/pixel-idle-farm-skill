@@ -67,6 +67,7 @@ const CORE_ASSETS = [
   versioned("./src/content-r58b.css"),
   versioned("./src/sunplay-r75.js"),
   ...["sun_mirror.png", "sun_jar.png", "drying_rack_empty.png", "drying_rack_full.png", "item-sun_wheat.png", "item-sun_carrot.png", "item-sun_tomato.png", "item-sun_strawberry.png"].map((name) => versioned("./assets/generated/content-r75/" + name)),
+  ...["rustic_bread", "baked_carrot", "mint_tea", "wheat_carrot_pancake", "carrot_wheat_stew", "bamber_rain_soup", "tomato_harvest_stew", "strawberry_market_tart", "carrot_trail_soup", "riverside_harvest_platter"].map((id) => versioned("./assets/generated/content-r73/item-" + id + ".png")),
   versioned("./src/content-r49-art.css"),
   versioned("./assets/generated/r49/grass-36.png"),
   versioned("./assets/generated/r49/path-36.png"),

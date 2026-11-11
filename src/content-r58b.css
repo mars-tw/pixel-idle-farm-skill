@@ -1237,3 +1237,32 @@ body:has(.npc-bubble .r60a-story-choices) .r74a-care-popover { display: none !im
    不然標題被擠成 0 高、按鈕被切掉一半。 */
 body:has(#toast-zone > .toast) #questDock:has(> .world-chapter),
 body:has(#worldDialogue:not([hidden])) #questDock:has(> .world-chapter) { flex-direction: row; align-items: center; }
+
+/* R76A：追光結果、料理成果卡、季節標籤與單格提示去重。 */
+.r40-sun-icon, .r40-sun-secs::before, .r75a-sun-preview::before { font-family: Arial, "Noto Sans Symbols 2", sans-serif; }
+.r75a-sun-preview::before { content: "☀"; margin-right: 3px; }
+.r76a-recipe-thumb { width: 48px; height: 48px; image-rendering: pixelated; }
+.r76a-result-card { text-align: center; }
+.r76a-result-image { display: block; width: 96px; height: 96px; object-fit: contain; image-rendering: pixelated; margin: 0 auto 8px; }
+.r76a-grade-badge { display: inline-block; min-width: 72px; margin: 0 auto 8px; padding: 5px 12px; border: 2px solid #8a541c; border-radius: 999px; background: #ffe08a; font-weight: 900; }
+.r76a-grade-badge[data-grade="perfect"] { background: #fff3a6; box-shadow: 0 0 0 3px rgba(255, 202, 45, 0.25); }
+.r76a-result-effect { line-height: 1.5; }
+.r76a-result-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.r76a-result-actions button { min-width: 44px; min-height: 44px; border: 2px solid #8a541c; border-radius: 9px; background: #ffd978; color: #4d3010; font: inherit; font-weight: 800; }
+.r76a-result-actions button:disabled { opacity: 0.5; }
+.res.season .season-chip span { white-space: nowrap; }
+html.primary-coarse .r75b-cook-hint { display: none; }
+@media (max-width: 420px) and (orientation: portrait) {
+  header .farm-logo, .title .farm-logo { width: 128px; max-width: 128px; }
+  header .res-bar, #resBar { flex-wrap: nowrap !important; gap: 2px; }
+  #resBar .res { padding-left: 2px; padding-right: 2px; }
+  #resBar .res .ui-icon, #resBar .res > .ic { display: none; }
+  #resBar .res.season { max-width: 84px; font-size: 9px; gap: 1px; }
+  #resBar .res.season .ic { display: none; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .r76a-result-card { display: grid; grid-template-columns: 76px 1fr; column-gap: 10px; align-items: center; text-align: left; padding: 10px; }
+  .r76a-result-image { grid-row: 1 / span 4; width: 72px; height: 72px; margin: 0; }
+  .r76a-result-card h3, .r76a-result-card p { margin: 2px 0; }
+  .r76a-result-actions { grid-column: 1 / -1; }
+}
