@@ -1,8 +1,8 @@
 # App Review Notes — draft only
 
-> 中文說明：這份是給 Apple 審查員看的英文操作說明草稿，內容對應 [DIFFERENTIATION.md](DIFFERENTIATION.md) 的「新玩家的前三分鐘」。狀態：只準備，沒有送出；新的原生 build 做好之前不要附在任何送審版本上。
+> 中文說明：這份是給 Apple 審查員看的英文操作說明草稿，內容對應 [DIFFERENTIATION.md](DIFFERENTIATION.md) 的「新玩家的前三分鐘」。狀態：只準備，沒有送出。內容對應原生 1.0.1 (8) 這一版，iOS 安裝檔還沒建置、上傳；不要附在更舊的版本上。
 
-Status: PREPARED. These notes describe local web build `content-r76-20261111-1` / package `0.1.99`. The native-kit snapshot still contains an older web build (`content-r58-20261109-1`) and has NOT been rebuilt with this change. Do not attach these notes to an older binary.
+Status: PREPARED. These notes describe web build `content-r76-20261111-1` / package `0.1.99`, packaged locally on 11 November as native version 1.0.1 (8) from commit `23106b5`. The Android AAB/APK for build 8 is signed and verified locally. The iOS source bundle is prepared, but the IPA has NOT been built, signed or uploaded yet. Do not attach these notes to an older binary.
 
 No account, purchase, advertisement or remote service is required to play. All gameplay described here is available to ordinary players; there is no reviewer-only content or mode.
 
@@ -36,5 +36,5 @@ Known gaps in this build: no dedicated basket-carrying animation; the drying rac
 
 - The content provider, account owner, ownership/licensing evidence, and whether any client or partner commissioned the app must be confirmed by the owner. This repository does not establish those facts.
 - Actual TestFlight/beta participation, dated feedback and the changes made in response. There is none on record today. Automated checks are not beta-user feedback.
-- A new native build containing this revision, on-device iPhone/iPad video, Safari validation, the final privacy policy URL and the actual App Privacy / Play Data safety forms.
-- Final decision on whether this app should be submitted, combined or retained as a web/Google Play product. No resubmission or store message was sent in this round.
+- The iOS build 1.0.1 (8) still has to be built, signed and uploaded (the source bundle is ready; the Android build 8 is signed locally but not uploaded). Also outstanding: on-device iPhone/iPad video, Safari validation, the final privacy policy URL and the actual App Privacy / Play Data safety forms.
+- The account owner said on 11 November that the app can go to review. Nothing has been uploaded, changed on the store page, or sent to Apple or Google yet; each of those steps waits for the owner to confirm the exact content.
