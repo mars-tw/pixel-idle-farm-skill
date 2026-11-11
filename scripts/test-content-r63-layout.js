@@ -264,25 +264,36 @@ const HELP = `
           window.__farm.setTool('hand');
           window.__farm.clickTile(mayor.id);
         });
-        await page.waitForFunction(() => !!document.querySelector('.npc-bubble .r60a-story-choices button'), null, { timeout: 20000 });
+        /* R76B 同步：開場二選一改成逐句對話框（.r76b-dialogue），不再用鄰居頭上的泡泡。
+           原本驗「泡泡出現時交談鈕收起」，現在驗「對話框開著時交談鈕點不到（收起或被對話框蓋住）」。 */
+        await page.waitForFunction(() => !!document.querySelector('.r76b-dialogue'), null, { timeout: 20000 });
+        for (let i = 0; i < 8 && !(await page.locator('.r76b-dialogue [data-r76b-choice]').count()); i++) {
+          await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+          await page.waitForTimeout(250);
+        }
+        await page.waitForFunction(() => !!document.querySelector('.r76b-dialogue [data-r76b-choice]'), null, { timeout: 8000 });
         await page.waitForTimeout(700);
         const during = await page.evaluate((src) => {
           eval(src);
+          const reachable = (el) => { if (!el || !vis(el)) return false; const r = el.getBoundingClientRect(); const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !(top && top.closest('.r76b-dialogue')); };
           const a = document.querySelector('#actionA');
-          const talkBtns = [...document.querySelectorAll('.scene-action-bar [data-action="talk"]')].filter(vis);
-          return { actionAVisible: a ? vis(a) : false, actionAText: a ? a.textContent.trim() : '', talkVisible: talkBtns.length };
+          const talkBtns = [...document.querySelectorAll('.scene-action-bar [data-action="talk"]')].filter(reachable);
+          return { actionAVisible: reachable(a), actionAText: a ? a.textContent.trim() : '', talkVisible: talkBtns.length, oldBubble: !!document.querySelector('.npc-bubble .r60a-story-choices') };
         }, HELP);
-        assert.equal(during.actionAVisible, false, `${tag} 第 8 項：二選一泡泡出現時「交談」鈕應收起（文字「${during.actionAText}」）`);
-        assert.equal(during.talkVisible, 0, `${tag} 第 8 項：中央交談鈕應收起`);
-        await page.locator('.npc-bubble .r60a-story-choices button').first().click({ timeout: 8000 });
-        await page.waitForFunction(() => !document.querySelector('.npc-bubble'), null, { timeout: 8000 });
+        assert.equal(during.oldBubble, false, `${tag} 第 8 項：開場二選一不應再同時出現舊的泡泡選項`);
+        assert.equal(during.actionAVisible, false, `${tag} 第 8 項：二選一對話框開著時「交談」鈕應點不到（文字「${during.actionAText}」）`);
+        assert.equal(during.talkVisible, 0, `${tag} 第 8 項：中央交談鈕應點不到`);
+        await page.locator('.r76b-dialogue [data-r76b-choice]').first().click({ timeout: 8000 });
+        await page.waitForFunction(() => !document.querySelector('.r76b-dialogue [data-r76b-choice]') && !!document.querySelector('.r76b-dialogue [data-r76b-next]'), null, { timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+        await page.waitForFunction(() => !document.querySelector('.r76b-dialogue'), null, { timeout: 8000 });
         await page.waitForTimeout(600);
         const after = await page.evaluate((src) => {
           eval(src);
           const a = document.querySelector('#actionA');
-          return { forcedHidden: a ? getComputedStyle(a).display === 'none' && !a.classList.contains('r32-interact-hidden') : false, bubbleGone: !document.querySelector('.npc-bubble .r60a-story-choices') };
+          return { forcedHidden: a ? getComputedStyle(a).display === 'none' && !a.classList.contains('r32-interact-hidden') : false, bubbleGone: !document.querySelector('.r76b-dialogue') && !document.querySelector('.npc-bubble .r60a-story-choices') };
         }, HELP);
-        assert.equal(after.bubbleGone, true, `${tag} 第 8 項：選完泡泡應關閉`);
+        assert.equal(after.bubbleGone, true, `${tag} 第 8 項：選完對話框應關閉`);
         assert.equal(after.forcedHidden, false, `${tag} 第 8 項：選完後交談鈕應恢復（不應再被泡泡規則藏起）`);
         assert.deepEqual(errors8, [], `${tag} 第 8 項頁面錯誤`);
         console.log(`OK ${tag} 第 8 項：二選一出現時交談鈕收起、選完恢復`);

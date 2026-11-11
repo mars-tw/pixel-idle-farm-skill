@@ -159,7 +159,7 @@
     card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
     card.innerHTML = data.kind === "milestone"
       ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span><span>新解鎖：${escapeHtml(data.unlocked)}</span><span>下一步：${escapeHtml(data.next)}</span>`
-      : `${data.sunBonus ? `陽光 +${data.sunBonus}・` : ""}獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
+      : `${data.sunYield ? `在光裡多收 ${data.sunYield} 份・` : ""}${data.sunlight ? `陽光 +${data.sunlight}・` : ""}獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
     function close() {
@@ -182,7 +182,8 @@
   function enqueueResultFeedback(result) {
     if (!result) return;
     (result.feedback || []).forEach(showActionFeedback);
-    if (result.sun && result.sun.kind === "harvest" && result.settlement) result.settlement.sunBonus = result.sun.bonus || 1;
+    /* R76 整合：結算卡把「多收幾份」和「入瓶的陽光」分開寫，沒有的就不寫，不再出現分不清是哪一種的「陽光 +1」。 */
+    if (result.sun && result.sun.kind === "harvest" && result.settlement) { result.settlement.sunYield = result.sun.bonus || 0; result.settlement.sunlight = result.sun.sunlight || 0; }
     if (result.settlement) enqueueSettlement(result.settlement);
     (result.milestones || []).forEach(enqueueSettlement);
   }

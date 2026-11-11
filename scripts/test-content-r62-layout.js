@@ -176,7 +176,8 @@ const HELP = `
           pill: secs ? ro(secs) : null,
         };
       }, { src: HELP, tid: tileIds.planted });
-      assert.match(labelCheck.text, /在光裡：生長加速/, `${tag} 第 6 項：選取受光作物的標籤應照常說明陽光效果（實際「${labelCheck.text}」）`);
+      /* R76A 同步：受光格標籤不再寫籠統的「在光裡：生長加速」，改寫這株作物實際會得到的光性成果。 */
+      assert.match(labelCheck.text, /喜光・照過光了：收成多 1 份/, `${tag} 第 6 項：選取受光作物的標籤應說明這次照光的實際成果（實際「${labelCheck.text}」）`);
       assert.ok(labelCheck.label && labelCheck.pill, `${tag} 第 6 項：作物標籤與陽光倒數應同時存在`);
       assert.equal(((a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)))(labelCheck.label, labelCheck.pill), 0, `${tag} 第 6 項：作物標籤不應跟陽光倒數重疊`);
       console.log(`OK ${tag} 第 6 項：陽光標示為淡黃底「☀ ${sun.planted.secsText}」、跟作物標示不重疊、空土格只有陽光標示`);
@@ -296,12 +297,19 @@ const HELP = `
           window.__farm.setTool('hand');
           window.__farm.clickTile(mayor.id);
         });
-        await page.waitForFunction(() => !!document.querySelector('.npc-bubble .r60a-story-choices button'), null, { timeout: 20000 });
+        /* R76B 同步：開場二選一改成逐句對話框（.r76b-dialogue），先把台詞聽完才出現選項；
+           要驗的事不變——兩個選項不被名牌擋、文字完整、真的點得到。 */
+        await page.waitForFunction(() => !!document.querySelector('.r76b-dialogue'), null, { timeout: 20000 });
+        for (let i = 0; i < 8 && !(await page.locator('.r76b-dialogue [data-r76b-choice]').count()); i++) {
+          await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+          await page.waitForTimeout(250);
+        }
+        await page.waitForFunction(() => !!document.querySelector('.r76b-dialogue [data-r76b-choice]'), null, { timeout: 8000 });
         await page.waitForTimeout(700);
         const bubble = await page.evaluate((src) => {
           eval(src);
-          const box = document.querySelector('.npc-bubble');
-          const btns = [...box.querySelectorAll('.r60a-story-choices button')].map((b) => {
+          const box = document.querySelector('.r76b-dialogue');
+          const btns = [...box.querySelectorAll('[data-r76b-choice]')].map((b) => {
             const r = ro(b);
             const hitEl = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
             return {
@@ -311,8 +319,18 @@ const HELP = `
               textFits: b.scrollWidth <= b.clientWidth + 1 && b.scrollHeight <= b.clientHeight + 2,
             };
           });
+          /* 對話框現在是蓋滿畫面的一層，名牌留在底下的世界層，位置重疊不代表壓住；
+             改成在每個選項上取 5×3 個點，任何一點最上層不是選項本身（被名牌或別的東西蓋到）就算被壓。 */
           const plates = [...document.querySelectorAll('.npc-nameplate-near, .qmarker .npc-nameplate, .npc-footname')].filter(vis).map(ro);
-          const plateHit = btns.filter((b) => plates.some((p) => inter(b.rect, p) > 0)).length;
+          const plateHit = [...box.querySelectorAll('[data-r76b-choice]')].filter((b) => {
+            const r = b.getBoundingClientRect();
+            for (let ix = 0; ix < 5; ix++) for (let iy = 0; iy < 3; iy++) {
+              const x = r.left + 5 + (r.width - 10) * ix / 4, y = r.top + 5 + (r.height - 10) * iy / 2;
+              const top = document.elementFromPoint(x, y);
+              if (!(top && (top === b || b.contains(top)))) return true;
+            }
+            return false;
+          }).length;
           return { z: getComputedStyle(box).zIndex, btns, plateHit, plateCount: plates.length };
         }, HELP);
         assert.equal(bubble.btns.length, 2, `${tag} 第 7 項：二選一泡泡應有兩個選項（實際 ${bubble.btns.length}）`);
@@ -323,8 +341,10 @@ const HELP = `
           assert.equal(b.textFits, true, `${tag} 第 7 項：選項「${b.text}」文字應完整可讀`);
         }
         assert.equal(bubble.plateHit, 0, `${tag} 第 7 項：不應有名牌壓住選項（有名牌重疊的選項 ${bubble.plateHit} 個）`);
-        await page.locator('.npc-bubble .r60a-story-choices button').first().click({ timeout: 8000 });
-        await page.waitForFunction(() => !document.querySelector('.npc-bubble'), null, { timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-choice]').first().click({ timeout: 8000 });
+        await page.waitForFunction(() => !document.querySelector('.r76b-dialogue [data-r76b-choice]') && !!document.querySelector('.r76b-dialogue [data-r76b-next]'), null, { timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+        await page.waitForFunction(() => !document.querySelector('.r76b-dialogue') && !document.querySelector('.npc-bubble .r60a-story-choices'), null, { timeout: 8000 });
         assert.deepEqual(errors7, [], `${tag} 第 7 項頁面錯誤`);
         console.log(`OK ${tag} 第 7 項：兩個選項都不被名牌擋、文字完整、真的點得到（點完泡泡關閉）`);
         await ctx7.close();
