@@ -136,17 +136,13 @@ function lastLineInfo() {
       }
       console.log(`OK ${tag} 第 8 項：三項標題各一行、說明分開且最後一行至少兩字`);
 
-      /* ---- 第 7 項：手機收成只有一個主要入口 ---- */
+      /* ---- 第 7 項：手機收成只有一個主要入口 ----
+         R76 整合（規則改了，測試同步，沒有放寬）：任務卡叫玩家把某一格留著等光時，那一格不再把「收成」當建議動作——
+         田上寫「先別收」、中央不出收成鈕、右下互動鈕寫「等光」。這一段原本沒有固定光的狀態，
+         量到的其實是「先別收」的畫面，靠右下互動鈕寫「收成・小麥田」湊成一個入口；那正是 R76 修掉的矛盾。
+         現在把光的狀態固定住，兩種情境各驗一次：等光那一格收成入口 0 個；沒有光要等時仍然恰好 1 個、文字單行（原規則不變）。 */
       if (view.mobile) {
-        await page.evaluate(() => {
-          const s = window.__farm.state(), now = Date.now();
-          const p = s.plots[0]; p.cropId = 'wheat'; p.plantedAt = now - 3600000; p.wateredAt = now - 3600000;
-          window.__farm.refresh(); window.FarmWorld.refresh(s);
-          const tile = s.map.tiles.find((t) => t.plotIndex === 0);
-          window.__farm.clickTile(tile.id);
-        });
-        await page.waitForTimeout(700);
-        const q7 = await page.evaluate(() => {
+        const measureHarvest = () => page.evaluate(() => {
           const vis = (el) => { if (!el) return false; const cs = getComputedStyle(el); const r = el.getBoundingClientRect(); return cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 0 && r.height > 0; };
           const textLines = (el) => { const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); const tops = new Set(); let n; while ((n = walker.nextNode())) { if (!n.textContent.trim()) continue; const rng = document.createRange(); rng.selectNodeContents(n); [...rng.getClientRects()].filter((r) => r.height > 0).forEach((r) => tops.add(Math.round(r.top))); } return tops.size; };
           const sceneBtn = document.querySelector('#sceneActionBar button[data-action="harvest"]');
@@ -154,8 +150,61 @@ function lastLineInfo() {
           const thumbIsHarvest = !!(thumb && (thumb.dataset.harvest === 'ready' || /收成/.test(thumb.textContent)));
           const scene = sceneBtn && vis(sceneBtn) ? { text: sceneBtn.textContent.trim(), lines: textLines(sceneBtn) } : null;
           const thumbRow = thumb && thumbIsHarvest && vis(thumb) ? { text: thumb.textContent.trim(), lines: textLines(thumb) } : null;
-          return { scene, thumb: thumbRow, count: (scene ? 1 : 0) + (thumbRow ? 1 : 0) };
+          const label = document.querySelector('[data-audit="tile-state-label"]');
+          const step = window.AdventureAPI.nextFarmStep(window.__farm.state(), Date.now()) || {};
+          return {
+            scene, thumb: thumbRow, count: (scene ? 1 : 0) + (thumbRow ? 1 : 0),
+            label: label && !label.hidden ? label.textContent.trim() : null,
+            thumbShown: thumb && vis(thumb) ? { text: thumb.textContent.trim(), lines: textLines(thumb) } : null,
+            step: { action: step.action, plotIndex: step.plotIndex, holdPlotIndex: step.holdPlotIndex },
+          };
         });
+        const stepHoldsPlot0 = (step) => step.holdPlotIndex === 0 || (step.plotIndex === 0 && (step.action === 'catch_sun' || step.action === 'refract'));
+
+        // 7a：光快落在這一格，任務卡叫玩家先別收 → 沒有收成入口
+        await page.evaluate(() => {
+          const s = window.__farm.state(), now = Date.now();
+          window.__r60Player = { tileId: s.player.tileId, x: s.player.x, y: s.player.y, facing: s.player.facing };
+          const p = s.plots[0]; p.cropId = 'wheat'; p.plantedAt = now - 3600000; p.wateredAt = now - 3600000;
+          Object.assign(s.sun, { plots: [], used: [], startsAt: 0, endsAt: 0, previewPlots: [0], previewAt: now + 60000, nextAt: now + 60000 });
+          window.__farm.refresh(); window.FarmWorld.refresh(s);
+          const tile = s.map.tiles.find((t) => t.plotIndex === 0);
+          /* 直接點成熟田仍然會走過去收（刻意留的逃生口）。這裡只要選取那一格看畫面寫什麼，點完立刻取消走路。 */
+          window.__farm.clickTile(tile.id); window.__farm.cancelJourney();
+        });
+        await page.waitForTimeout(300);
+        const held = await measureHarvest();
+        assert.ok(stepHoldsPlot0(held.step), `${tag} 第 7 項（等光）：任務卡應把第 1 格留著等光，實際 ${JSON.stringify(held.step)}`);
+        assert.match(String(held.label), /^小麥・先別收/, `${tag} 第 7 項（等光）：田上標籤應寫「先別收」，實際「${held.label}」`);
+        assert.equal(held.count, 0, `${tag} 第 7 項（等光）：留著等光的那一格不應有收成主按鈕，實際 ${JSON.stringify(held)}`);
+        // 站到那一格旁邊、面向它：右下互動鈕寫「等光」，不寫「收成」
+        await page.evaluate(() => {
+          const s = window.__farm.state();
+          const tile = s.map.tiles.find((t) => t.plotIndex === 0);
+          const adj = s.map.tiles.find((t) => t.x === tile.x && t.y === tile.y + 1) || s.map.tiles.find((t) => t.x === tile.x + 1 && t.y === tile.y);
+          Object.assign(s.player, { tileId: adj.id, x: adj.x, y: adj.y, facing: window.facingTo(adj, tile) });
+          window.__farm.cancelJourney(); window.__farm.refresh();
+        });
+        await page.waitForTimeout(500);
+        const facing = await measureHarvest();
+        assert.ok(stepHoldsPlot0(facing.step), `${tag} 第 7 項（等光）：站到田邊後任務卡仍應把第 1 格留著等光，實際 ${JSON.stringify(facing.step)}`);
+        assert.equal(facing.count, 0, `${tag} 第 7 項（等光）：面向留著等光的那一格時不應有收成主按鈕，實際 ${JSON.stringify(facing)}`);
+        assert.ok(facing.thumbShown && /^等光・/.test(facing.thumbShown.text), `${tag} 第 7 項（等光）：右下互動鈕應寫「等光・…」，實際 ${JSON.stringify(facing.thumbShown)}`);
+        assert.equal(facing.thumbShown.lines, 1, `${tag} 第 7 項（等光）：右下互動鈕「${facing.thumbShown.text}」文字應只有一行，實際 ${facing.thumbShown.lines}`);
+        console.log(`OK ${tag} 第 7 項（等光）：田上「${held.label.split('\n')[0]}」、沒有收成主按鈕、右下互動鈕「${facing.thumbShown.text}」`);
+
+        // 7b：沒有光要等 → 收成主按鈕恰好一個（原規則）
+        await page.evaluate(() => {
+          const s = window.__farm.state(), now = Date.now();
+          Object.assign(s.player, window.__r60Player); delete window.__r60Player;
+          Object.assign(s.sun, { plots: [], used: [], startsAt: 0, endsAt: 0, previewPlots: [], previewAt: 0, nextAt: now + 600000 });
+          window.__farm.cancelJourney(); window.__farm.refresh(); window.FarmWorld.refresh(s);
+          const tile = s.map.tiles.find((t) => t.plotIndex === 0);
+          window.__farm.clickTile(tile.id);
+        });
+        await page.waitForTimeout(700);
+        const q7 = await measureHarvest();
+        assert.ok(q7.step.action === 'harvest' && !stepHoldsPlot0(q7.step), `${tag} 第 7 項：沒有光要等時任務卡應直接叫玩家收成，實際 ${JSON.stringify(q7.step)}`);
         assert.equal(q7.count, 1, `${tag} 第 7 項：可見的收成主按鈕應只有一個，實際 ${JSON.stringify(q7)}`);
         const kept = q7.scene || q7.thumb;
         assert.equal(kept.lines, 1, `${tag} 第 7 項：保留的收成按鈕「${kept.text}」文字應只有一行，實際 ${kept.lines}`);
