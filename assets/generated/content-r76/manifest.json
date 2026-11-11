@@ -2,8 +2,8 @@
   "model": "muse-wonder-1.0 via muse.image_generation",
   "tool": "muse.image_generation（原圖）＋ Pillow 裁切縮放",
   "generated": "2026-11-11",
-  "background": "沿用 content-r72 已去背的顧客圖，裁出頭肩範圍後縮成 160×160",
-  "note": "班伯、蘿拉、圖圖的對話頭像。不是新生成的圖：由 R72 擺攤顧客圖裁切，讓對話裡的臉與擺攤時看到的是同一個人。鎮長沿用 assets/generated/r84/grey-*.png。",
+  "background": "頭像：沿用 content-r72 已去背的顧客圖，裁出頭肩範圍後縮成 160×160。追光手冊封面與印章：純洋紅 #FF00FF 產生後去背，裁到內容、補成正方形，封面縮成 96×96、印章縮成 76×76",
+  "note": "班伯、蘿拉、圖圖的對話頭像不是新生成的圖：由 R72 擺攤顧客圖裁切，讓對話裡的臉與擺攤時看到的是同一個人。鎮長沿用 assets/generated/r84/grey-*.png。追光手冊的封面與六枚印章是本輪用 muse.image_generation 新生成的圖（OpenAI gpt-image-2 額度用盡，改用 MUSE）。",
   "files": [
     {
       "file": "portrait-elder.png",
@@ -52,6 +52,76 @@
         210,
         210
       ]
+    },
+    {
+      "file": "sunbook_cover.png",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "97c0a17e27e9c347ed9ce256efbabd5796b30c20d811dabae6bdfa7a1ebc6da9",
+      "bytes": 10628,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+    },
+    {
+      "file": "stamp_lit.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "4335f692e7ac20fd647a6cf6e580f0f557b0f288f0986560e38831a11f761a41",
+      "bytes": 10530,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+    },
+    {
+      "file": "stamp_trait_sun.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "eb329585a37849acedbad8625c7dd37052e44fe179a7d3761ceffbca73b22e5c",
+      "bytes": 11745,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+    },
+    {
+      "file": "stamp_trait_partial.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "643b79b3748acf80a286caa3519a95ee40158813d4a10d4b04bcd6747c9197fe",
+      "bytes": 8637,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+    },
+    {
+      "file": "stamp_trait_shade.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "b3f7b7b4cb1de41e73bd5b82d0e49cc0a59e045227f98b8eb173dba5e663978b",
+      "bytes": 10535,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+    },
+    {
+      "file": "stamp_dried.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "0f08cd760e23dc77be74684ac166078ed004ef437c3d45aa30e89485774b76f5",
+      "bytes": 10923,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+    },
+    {
+      "file": "stamp_perfect.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "f41dd6ccbe608e6e15d983e9dbc38d8270e2eeaeb1703d734343bb18c20d50ad",
+      "bytes": 10760,
+      "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
     }
   ]
 }

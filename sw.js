@@ -1,4 +1,4 @@
-const CACHE_VERSION = "content-r75-20261110-1";
+const CACHE_VERSION = "content-r76-20261111-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -385,6 +385,7 @@ const CORE_ASSETS = [
   versioned("./assets/generated/content-r76/portrait-elder.png"),
   versioned("./assets/generated/content-r76/portrait-merchant.png"),
   versioned("./assets/generated/content-r76/portrait-child.png"),
+  ...["sunbook_cover.png", "stamp_lit.png", "stamp_trait_sun.png", "stamp_trait_partial.png", "stamp_trait_shade.png", "stamp_dried.png", "stamp_perfect.png"].map((name) => versioned("./assets/generated/content-r76/" + name)),
   versioned("./assets/generated/content-r75/cooking_pot.png"),
   versioned("./assets/generated/content-r75/farm_sign.png"),
   versioned("./assets/generated/content-r72/manifest.json"),

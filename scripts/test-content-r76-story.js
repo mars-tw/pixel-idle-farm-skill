@@ -115,10 +115,10 @@ test("5 鄰居故事與手札頭像：四位都有 64 顯示的頭像檔", () =>
 test("6 載入與快取：story-r76 有進 index 與 sw，三張新頭像有進 sw，版本字串不變", () => {
   const index = fs.readFileSync("index.html", "utf8");
   const sw = fs.readFileSync("sw.js", "utf8");
-  assert.match(index, /src\/story-r76\.js\?v=content-r75-20261110-1/);
+  assert.match(index, /src\/story-r76\.js\?v=content-r76-20261111-1/);
   assert.match(sw, /story-r76\.js/);
   for (const f of ["portrait-elder.png", "portrait-merchant.png", "portrait-child.png"]) assert.match(sw, new RegExp("content-r76/" + f));
-  assert.match(sw, /CACHE_VERSION = "content-r75-20261110-1"/);
+  assert.match(sw, /CACHE_VERSION = "content-r76-20261111-1"/);
 });
 
 console.log("VERIFIED content R76B story (" + passed + " tests)");

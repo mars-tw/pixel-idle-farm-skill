@@ -368,4 +368,22 @@ test("接線：頁面與離線快取都有載入手冊，樣式標了 R76C，驗
   assert.doesNotMatch(src, /\+0/);
 });
 
+test("印章與封面有專用圖：每一格都對得到檔案，離線快取也有收", () => {
+  const sw = fs.readFileSync(path.join(__dirname, "..", "sw.js"), "utf8");
+  const dir = path.join(__dirname, "..", "assets", "generated", "content-r76");
+  const manifest = JSON.parse(fs.readFileSync(path.join(dir, "manifest.json"), "utf8"));
+  const listed = manifest.files.map((f) => f.file);
+  const all = fresh(30), seen = new Set();
+  for (const row of Book.rows(all)) for (const cell of row.cells) {
+    assert.match(cell.icon, /^assets\/generated\/content-r76\/stamp_[a-z_]+\.png$/, row.cropId + "・" + cell.id + " 要有印章圖");
+    seen.add(path.basename(cell.icon));
+  }
+  assert.deepEqual([...seen].sort(), ["stamp_dried.png", "stamp_lit.png", "stamp_perfect.png", "stamp_trait_partial.png", "stamp_trait_shade.png", "stamp_trait_sun.png"]);
+  for (const name of [...seen, "sunbook_cover.png"]) {
+    assert.ok(fs.existsSync(path.join(dir, name)), name + " 檔案要在");
+    assert.ok(sw.includes('"' + name + '"'), name + " 要在離線快取清單");
+    assert.ok(listed.includes(name), name + " 要記在 manifest");
+  }
+});
+
 console.log("VERIFIED content R76C sunbook (" + passed + " 項)");

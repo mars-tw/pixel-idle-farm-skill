@@ -1,5 +1,5 @@
 'use strict';
-/* R25 B線版面量測：開場下方空白、對話不遮底部工具列、手機 HUD 單行、
+/* R25 B線版面量測：開場下方空白、對話不遮底部工具列、手機 HUD 不超過兩行、
    任務 NPC 名牌、田格五種狀態。用 playwright 開本機伺服器實際量測，結束關閉伺服器。 */
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -112,7 +112,7 @@ async function measureDialogue(page) {
       await ctx.close();
     }
 
-    // 7+8+9：對話不遮工具列、手機 HUD 單行、任務 NPC 名牌
+    // 7+8+9：對話不遮工具列、手機 HUD 不超過兩行、任務 NPC 名牌
     for (const [w, h] of [[390, 844], [844, 390], [1366, 600]]) {
       const { ctx, page } = await newPage(browser, intercepted, w, h);
       await closeOpening(page);
@@ -123,10 +123,12 @@ async function measureDialogue(page) {
           const tops = [...new Set([...res.children].map((c) => Math.round(c.getBoundingClientRect().top)))];
           return { tops, matChips: document.querySelectorAll('#resBar .res.mat').length, level: (document.querySelector('#resBar .res.level') || {}).textContent || '' };
         });
-        assert.equal(hud.tops.length, 1, `390×844 資源列應只有一行，實際 ${hud.tops.length} 行`);
+        /* R76 整合：規則由「只有一行」改成「最多兩行」，與 test-content-r55-layout.js 第 7 項同步。
+           直式手機一行排不下五格，硬擠會把季節那格的字切掉，現在讓它自然換到第二行。 */
+        assert(hud.tops.length <= 2, `390×844 資源列最多兩行，實際 ${hud.tops.length} 行`);
         assert.equal(hud.matChips, 1, '390×844 多種建材應收合成一格');
         assert(/Lv\s*\d+/.test(hud.level), '等級應顯示數字（Lv N）');
-        console.log('OK 手機 HUD 390×844 資源列單行、建材一格、等級有數字');
+        console.log(`OK 手機 HUD 390×844 資源列 ${hud.tops.length} 行（上限兩行）、建材一格、等級有數字`);
       }
       const plate = await page.evaluate(() => {
         const s = __farm.state(); const mayor = s.map.tiles.find((t) => t.npc === 'mayor');

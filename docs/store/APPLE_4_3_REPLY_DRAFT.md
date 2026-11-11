@@ -1,6 +1,6 @@
 # 回覆 Apple 4.3／4.2.6 的草稿
 
-日期：2026-11-10。對應版本：0.1.98／`content-r75-20261110-1`（本機網頁版）。
+日期：2026-11-11。對應版本：0.1.99／`content-r76-20261111-1`（本機網頁版）。
 狀態：PREPARED。只寫成檔案，**沒有送出，也沒有回覆 Apple**。
 
 ## 使用前先看
@@ -16,13 +16,13 @@
 
 中文：
 
-陽光農場是單人農場遊戲。田上有一道會移動的光，落下前 8 秒會先亮預告圈。玩家拿祖母留下的手鏡把光折到自己選的那一格，在光裡種、澆、收，接到的陽光存進蓄光瓶。存下來的陽光可以催熟一格作物，或拿去曬架把收成曬成乾貨。作物分喜光、半日照、耐陰三種，該不該照光要自己判斷。收成後回農舍灶台顧火做料理，再把料理分給鎮上四位鄰居，推進五章主線。
+陽光農場是單人農場遊戲。田上有一道會移動的光，落下前 8 秒會先亮預告圈。玩家拿祖母留下的手鏡把光折到自己選的那一格，在光裡種、澆、收，接到的陽光存進蓄光瓶。存下來的陽光可以催熟一格作物，或拿去曬架把收成曬成乾貨。作物分喜光、半日照、耐陰三種，該不該照光要自己判斷。收成後回農舍灶台顧火做料理，再把料理分給鎮上四位鄰居，推進五章主線。開場對鎮長、班伯、蘿拉的回答各留下一個一直有效的差異，他們之後會回頭提起。在光裡做到的事會蓋進「追光手冊」，集滿 3、6、10、15 枚印章各領一份獎勵，其中三份是永久加成。
 
 遊戲不用註冊帳號，沒有廣告，沒有內購，進度存在裝置上。
 
 English:
 
-Sunny Farm is a single-player farming game. A beam of sunlight moves across the field, and a ring marks where it will land eight seconds in advance. The player uses a hand mirror to redirect the beam to a plot of their choice, then plants, waters or harvests inside the light to collect sunlight into a jar. Stored sunlight can ripen a plot instantly or power a drying rack that turns crops into dried goods. Crops have three light traits (sun-loving, half-sun, shade-tolerant), so the player has to decide which plot should receive each beam. After harvest the player tends a stove fire to cook, shares meals with four neighbours, and progresses through a five-chapter story.
+Sunny Farm is a single-player farming game. A beam of sunlight moves across the field, and a ring marks where it will land eight seconds in advance. The player uses a hand mirror to redirect the beam to a plot of their choice, then plants, waters or harvests inside the light to collect sunlight into a jar. Stored sunlight can ripen a plot instantly or power a drying rack that turns crops into dried goods. Crops have three light traits (sun-loving, half-sun, shade-tolerant), so the player has to decide which plot should receive each beam. After harvest the player tends a stove fire to cook, shares meals with four neighbours, and progresses through a five-chapter story. The answers the player gives early on to three townspeople (the mayor, the old farmer and the merchant) each leave a lasting difference on the farm, and each of them refers back to that answer later. What the player achieves in the light is stamped into a sun-chasing handbook; collecting 3, 6, 10 and 15 stamps each unlocks a reward, three of which are permanent upgrades.
 
 The app requires no account, shows no advertising, has no in-app purchases, and stores progress on the device.
 
@@ -158,7 +158,7 @@ English:
 
 這些沒補齊之前，這份草稿不能送：
 
-1. 新的原生 build。原生包裝裡的遊戲副本停在 `content-r58-20261109-1`，這一版的折光、曬架、看火候都還不在裡面。回覆裡描述的玩法要和審查員實際拿到的 build 一致。
+1. 新的原生 build。原生包裝裡的遊戲副本停在 `content-r58-20261109-1`，這一版的折光、曬架、看火候、鄰居回訪和追光手冊都還不在裡面。回覆裡描述的玩法要和審查員實際拿到的 build 一致。
 2. iPhone／iPad 實機驗證與一段實機錄影。這一版只在電腦上的 Chromium 驗過。
 3. 真人測試紀錄（第 4 題）。
 4. 帳號擁有人的決定與權利說明（第 6、9 題）。
@@ -169,3 +169,5 @@ English:
 ## 文案回讀（mode 2）
 
 這份是新寫的，沒有沿用舊句。寫的時候守住的幾件事：每個數字都對得到遊戲程式或稽核檔；沒有真人回饋就直接寫沒有；專案答不出來的題目留給帳號擁有人，不替他編答案。
+
+11 月 11 日隨 R76 更新三處：最上面的版本行、第 1 題中英文各補兩句（開場回答的回訪、追光手冊），以及「送出前還缺什麼」第 1 項補上這兩樣也還不在原生 build 裡。其他題目沒有動。

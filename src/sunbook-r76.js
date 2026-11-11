@@ -135,10 +135,14 @@
     if (stampId === "perfect") { const recipe = recipesUsing(state, cropId)[0]; return "在灶台煮用到" + name + "的料理" + (recipe ? "（像是" + recipe.name + "）" : "") + "，把火候顧到絕品。"; }
     return "";
   }
+  /* 印章與封面的專用圖（R76，MUSE 出圖後去背縮小），放在 content-r76。 */
+  const ART_DIR = "assets/generated/content-r76/";
+  const COVER_ART = ART_DIR + "sunbook_cover.png";
   function iconFor(cropId, stampId) {
-    if (stampId === "lit") return "assets/generated/content-r75/sun_jar.png";
-    if (stampId === "dried") { const dried = driedFor(cropId); return dried ? dried.icon : ""; }
-    if (stampId === "perfect") return "assets/generated/content-r75/cooking_pot.png";
+    if (stampId === "lit") return ART_DIR + "stamp_lit.png";
+    if (stampId === "trait") { const kind = traitOf(cropId); return kind === "sun" || kind === "partial" || kind === "shade" ? ART_DIR + "stamp_trait_" + kind + ".png" : ""; }
+    if (stampId === "dried") return ART_DIR + "stamp_dried.png";
+    if (stampId === "perfect") return ART_DIR + "stamp_perfect.png";
     return "";
   }
 
@@ -350,8 +354,9 @@
   function art(path) { return esc(path + versionQuery()); }
 
   function sealHtml(cell) {
-    if (!cell.got) return '<span class="r76c-seal is-empty" aria-hidden="true"></span>';
-    if (cell.icon) return '<span class="r76c-seal is-got" aria-hidden="true"><img src="' + art(cell.icon) + '" alt=""></span>';
+    /* 還沒蓋的格子放一枚淡淡的灰章，看得出這一格要集的是哪一枚。 */
+    if (!cell.got) return '<span class="r76c-seal is-empty" aria-hidden="true">' + (cell.icon ? '<img src="' + art(cell.icon) + '" alt="">' : "") + "</span>";
+    if (cell.icon) return '<span class="r76c-seal is-got has-art" aria-hidden="true"><img src="' + art(cell.icon) + '" alt=""></span>';
     return '<span class="r76c-seal is-got" aria-hidden="true"><span class="r76c-glyph">' + esc(cell.glyph || "✓") + "</span></span>";
   }
   function bookHtml(state) {
@@ -390,7 +395,7 @@
         + "</li>";
     }).join("");
     return '<section class="r76c-book" data-r76c-sunbook aria-label="追光手冊"><details class="r76c-fold"' + (sum.folded ? "" : " open") + ">"
-      + '<summary class="r76c-sum"><img class="r76c-sum-icon" src="' + art("assets/generated/content-r75/sun_jar.png") + '" alt="">'
+      + '<summary class="r76c-sum"><img class="r76c-sum-icon" src="' + art(COVER_ART) + '" alt="">'
       + '<span class="r76c-sum-text"><b class="r76c-sum-title">追光手冊</b><span class="r76c-sum-count" data-r76c-count>已蓋 ' + sum.got + "／" + sum.total + " 枚</span></span>"
       + (sum.claimable.length ? '<span class="r76c-sum-flag" data-r76c-flag>有獎勵可領</span>' : "")
       + '<span class="r76c-sum-arrow" aria-hidden="true"></span></summary>'
@@ -550,8 +555,9 @@
     let milestone = 0, first = false;
     list.forEach(function (e) { if (e.milestone > milestone) milestone = e.milestone; if (e.first) first = true; });
     const note = milestone ? "集滿 " + milestone + " 枚了，到追光手冊領獎勵。" : first ? "手札的圖鑑頁最上面多了一本追光手冊，集章可以換獎勵。" : "";
+    const latest = list[list.length - 1] || {};
     node.innerHTML = '<button type="button" class="r76c-card-main" data-r76c-card-close title="點一下關閉">'
-      + '<img src="' + art("assets/generated/content-r75/sun_jar.png") + '" alt="">'
+      + '<img src="' + art(iconFor(latest.cropId, latest.stampId) || COVER_ART) + '" alt="">'
       + '<span class="r76c-card-text">' + lines
       + (extra > 0 ? '<span class="r76c-card-more">另外還有 ' + extra + " 枚新印章。</span>" : "")
       + (note ? '<span class="r76c-card-note">' + esc(note) + "</span>" : "") + "</span></button>"
