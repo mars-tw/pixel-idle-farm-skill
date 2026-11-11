@@ -49,6 +49,14 @@ function readyInLight(s, cropId, hits) {
   assert.notEqual(card.earned, card.unlocked); assert.match(card.unlocked, /季節|四季/); assert.equal(card.next, require("../src/adventure.js").nextFarmStep(state, T).text);
   assert.match(Game.levelUnlocks(2).map((x) => x.name).join("、"), /曬架/); assert.match(Game.levelUnlocks(3).map((x) => x.name).join("、"), /手鏡/); assert.match(Game.levelUnlocks(4).map((x) => x.name).join("、"), /蓄光瓶/); assert.match(Game.levelUnlocks(5).map((x) => x.name).join("、"), /天氣/);
 }
+{
+  /* R76 整合：吃完第一餐之後，升級卡的下一步讀目前的主線任務，不再每次升級都叫人去河邊看釣台。 */
+  const A = require("../src/adventure.js"); const state = fresh(); A.ensure(state, T);
+  A.quests(state, T).filter((q) => q.chapter <= 3).forEach((q) => { state.adventure.claimed[q.id] = true; }); A.ensure(state, T);
+  const quest = A.summary(state, T).currentQuest; assert.ok(quest && quest.chapter === 4, "前三章完成後應在第 4 章");
+  const card = Game.milestoneCard("level_up", { level: 4, state, now: T });
+  assert.doesNotMatch(card.next, /釣台/); assert.ok(card.next.startsWith(quest.name), card.next); assert.match(card.next, /\d+\/\d+/);
+}
 const ui = fs.readFileSync("src/ui.js", "utf8");
 assert.doesNotMatch(ui, /陽光 \+" \+ r\.sun\.bonus/); assert.doesNotMatch(ui, /toast\("🎉 升/); assert.match(ui, /Lv 6 起換季/); assert.match(ui, /harvestRemainingMs/); assert.match(ui, /forageRemainingMs/);
 console.log("VERIFIED content R76A feedback");

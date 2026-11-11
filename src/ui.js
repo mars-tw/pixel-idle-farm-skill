@@ -786,6 +786,8 @@
     const nextSeason = (window.SEASONS || [])[((window.SEASONS || []).findIndex((row) => row.id === sId) + 1) % Math.max(1, (window.SEASONS || []).length)] || season;
     const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
     const seasonText = seasonUnlocked ? `${sId}・再 ${seasonLeft} 換${nextSeason.id}` : `${sId}・Lv 6 起換季`;
+    /* R76 整合：手機直式放不下整句，改顯示短版（季節名＋剩餘時間），整句留在長按提示與桌機。 */
+    const seasonShort = seasonUnlocked ? `${sId} ${seasonLeft}` : `${sId}季`;
     const mealBuffs = window.AdventureAPI && window.AdventureAPI.activeBuffs ? window.AdventureAPI.activeBuffs(state, now()) : null;
     const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 ${mealBuffs.growthPct || 25}%"><span class="ic">🍞</span><span class="sub">${mealBuffs.growthMeal || "料理"}・成長快 ${mealBuffs.growthPct || 25}%・剩 ${fmtBuffCountdown(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 ${mealBuffs.orderPct || 20}%"><span class="ic">🥘</span><span class="sub">${mealBuffs.orderMeal || "料理"}・訂單 +${mealBuffs.orderPct || 20}%・剩 ${fmtBuffCountdown(mealBuffs.orderRemainingMs)}</span></div>` : ""}${mealBuffs.harvestRemainingMs > 0 ? `<div class="res r59-buff-chip" title="每次收成多 ${mealBuffs.harvestBonus} 份"><span class="ic">🧺</span><span class="sub">${mealBuffs.harvestMeal || "料理"}・收成 +${mealBuffs.harvestBonus}・剩 ${fmtBuffCountdown(mealBuffs.harvestRemainingMs)}</span></div>` : ""}${mealBuffs.forageRemainingMs > 0 ? `<div class="res r59-buff-chip" title="每個採集點多 ${mealBuffs.forageBonus} 份"><span class="ic">🌿</span><span class="sub">${mealBuffs.forageMeal || "料理"}・採集 +${mealBuffs.forageBonus}・剩 ${fmtBuffCountdown(mealBuffs.forageRemainingMs)}</span></div>` : ""}` : "";
     $("resBar").innerHTML = `
@@ -796,7 +798,7 @@
       </div>
       <div class="res storage" title="背包：${used} 份／${cap} 份" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")}<span class="res-name">背包</span> ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
-      <div class="res season" title="${seasonText}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${seasonText}</span></span></div>
+      <div class="res season" title="${seasonText}" aria-label="${seasonText}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span class="r76-season-full">${seasonText}</span><span class="r76-season-short" aria-hidden="true">${seasonShort}</span></span></div>
       ${window.FarmSunplay && window.FarmSunplay.jarChipHtml ? window.FarmSunplay.jarChipHtml(state) : ""}
       ${buffHtml}
       ${matChips()}`;

@@ -1276,14 +1276,18 @@ body:has(#worldDialogue:not([hidden])) #questDock:has(> .world-chapter) { flex-d
 .r76a-result-actions button:disabled { opacity: 0.5; }
 .res.season .season-chip span { white-space: nowrap; }
 html.primary-coarse .r75b-cook-hint { display: none; }
+/* R76 整合：手機直式的資源列不再硬擠成一行（字會被切掉）；季節籤改顯示短版。 */
+.res.season .r76-season-short { display: none; }
 @media (max-width: 420px) and (orientation: portrait) {
-  header .farm-logo, .title .farm-logo { width: 128px; max-width: 128px; }
-  header .res-bar, #resBar { flex-wrap: nowrap !important; gap: 2px; }
-  #resBar .res { padding-left: 2px; padding-right: 2px; }
-  #resBar .res .ui-icon, #resBar .res > .ic { display: none; }
-  #resBar .res.season { max-width: 84px; font-size: 9px; gap: 1px; }
-  #resBar .res.season .ic { display: none; }
+  #resBar .res.season .r76-season-full { display: none; }
+  #resBar .res.season .r76-season-short { display: inline; }
 }
+/* R76 整合：手機的任務卡收合列實際走 flex（max-width:859px 那條優先度比 R70A 的格線高），
+   主要按鈕字一長（例如「前往商人 蘿拉」）就被擠到「展開」底下。照 R70A 原意：左欄可省略，主要按鈕不縮。 */
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r68a-now,.r67a-now):not(.r69a-festival-now) { flex: 0 0 auto !important; margin: 0 6px 0 0 !important; }
+/* 按鈕右邊原本留 56px 給疊在上面的「展開」；現在兩顆並排，不用再留，省下的寬度還給左邊的任務名。 */
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r68a-now,.r67a-now):not(.r69a-festival-now) > :is(.r68a-now-action,.r67a-now-action) { padding: 4px 10px !important; justify-content: center !important; }
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r68a-objective-head,.r67a-objective-head) { flex: 1 1 0 !important; width: auto !important; min-width: 0 !important; }
 @media (max-height: 480px) and (orientation: landscape) {
   .r76a-result-card { display: grid; grid-template-columns: 76px 1fr; column-gap: 10px; align-items: center; text-align: left; padding: 10px; }
   .r76a-result-image { grid-row: 1 / span 4; width: 72px; height: 72px; margin: 0; }

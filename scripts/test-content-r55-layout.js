@@ -135,15 +135,22 @@ const HELP = `
         const logo = document.querySelector('.farm-logo');
         const res = [...document.querySelectorAll('#resBar .res')].filter(vis).map((e) => ({ t: e.textContent.trim().slice(0, 16), r: ro(e), sw: e.scrollWidth, cw: e.clientWidth }));
         const leaves = [...document.querySelectorAll('#resBar .res *')].filter((e) => e.children.length === 0 && vis(e)).map((e) => ({ t: (e.textContent || '').trim().slice(0, 16), sw: e.scrollWidth, cw: e.clientWidth }));
-        return { logo: logo ? { r: ro(logo), complete: logo.complete, nw: logo.naturalWidth } : null, res, leaves, vw: innerWidth };
+        const bar = document.querySelector('#resBar'), dock = document.querySelector('#questDock');
+        return { logo: logo ? { r: ro(logo), complete: logo.complete, nw: logo.naturalWidth } : null, res, leaves, vw: innerWidth, bar: bar ? ro(bar) : null, dock: vis(dock) ? ro(dock) : null };
       }, HELP);
       assert(hdr.logo && hdr.logo.complete && hdr.logo.r.left >= 0 && hdr.logo.r.right <= hdr.vw, `${tag} 標誌未完整顯示：${JSON.stringify(hdr.logo)}`);
       /* R76A：季節從新存檔起常駐，因此手機資源列由四項增為五項。 */
       assert.equal(hdr.res.length, 5, `${tag} 資源列應有金幣、等級、背包、季節、材料五項，實際 ${hdr.res.length}`);
-      assert(new Set(hdr.res.map((x) => Math.round(x.r.top))).size === 1, `${tag} 資源列不是一列：${JSON.stringify(hdr.res.map((x) => Math.round(x.r.top)))}`);
+      /* R76 整合：規則由「一列」改成「最多兩列」。五項合計約 297px，標誌右邊只剩 242px，一列排不下；
+         R76A 原本靠隱藏圖示＋9px 字硬擠成一列，Lv 6 之後季節那格的字會被切掉。
+         現在讓它自然換行，改守：最多兩列、金幣／等級／背包留在第一列、不得切字、不得壓到任務卡。 */
+      const resRows = [...new Set(hdr.res.map((x) => Math.round(x.r.top)))].sort((a, b) => a - b);
+      assert(resRows.length <= 2, `${tag} 資源列超過兩列：${JSON.stringify(hdr.res.map((x) => Math.round(x.r.top)))}`);
+      assert(hdr.res.slice(0, 3).every((x) => Math.round(x.r.top) === resRows[0]), `${tag} 金幣、等級、背包應留在第一列：${JSON.stringify(hdr.res.map((x) => [x.t, Math.round(x.r.top)]))}`);
       for (const x of hdr.res) assert(x.r.left >= 0 && x.r.right <= hdr.vw && x.sw <= x.cw + 1, `${tag} 資源「${x.t}」超出畫面或被截斷：${JSON.stringify(x)}`);
       for (const x of hdr.leaves) if (x.t) assert(x.sw <= x.cw + 1, `${tag} 資源子文字「${x.t}」被截斷：${x.sw}>${x.cw}`);
-      console.log(`OK 第 7 項 ${tag} 標誌完整（寬 ${Math.round(hdr.logo.r.width)}px）、資源五項一列不超出畫面`);
+      if (hdr.bar && hdr.dock) assert(hdr.dock.top >= hdr.bar.bottom - 1, `${tag} 任務卡被資源列壓到：資源列底 ${Math.round(hdr.bar.bottom)}、任務卡頂 ${Math.round(hdr.dock.top)}`);
+      console.log(`OK 第 7 項 ${tag} 標誌完整（寬 ${Math.round(hdr.logo.r.width)}px）、資源五項 ${resRows.length} 列不超出畫面也不切字`);
       // 第 8 項：訂單面板（無「再顯示」）應有漸層提示，捲到底消失；升級面板有「再顯示」時不得同時出現
       // R55 整合：A 線把市集預告縮成一張後，訂單面板不一定可捲動；改為依序找第一個可捲動且沒有「再顯示」的面板驗證提示
       const measurePane = (src) => {

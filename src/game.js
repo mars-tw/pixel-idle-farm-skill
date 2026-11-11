@@ -2582,7 +2582,15 @@
       if (!guideApi && data.state && typeof module !== "undefined" && module.exports) guideApi = require("./adventure.js");
       const guide = data.state && guideApi && guideApi.guide ? guideApi.guide(data.state, data.now) : null;
       const next = data.state && guideApi && guideApi.nextFarmStep ? guideApi.nextFarmStep(data.state, data.now) : null;
-      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `農場等級提升到 Lv ${level}`, unlocked: unlockText, next: (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
+      /* R76 整合：第一餐之後 nextFarmStep 只剩「去河邊看看釣台」這一句，之後每次升級都指向釣台；
+         吃完第一餐後改讀目前的主線任務，跟任務卡說同一件事。 */
+      let questNext = "";
+      if (data.state && guideApi && guideApi.summary && (((data.state.adventure || {}).claimed || {}).c1_first_meal)) {
+        const view = guideApi.summary(data.state, data.now); const quest = view && view.ok !== false ? view.currentQuest : null;
+        if (quest && guide && guide.stepText) questNext = `${quest.name}（${guide.stepText}）`;
+        else if (view && view.ok !== false && !quest) questNext = "主線都完成了，照自己的步調經營農場。";
+      }
+      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `農場等級提升到 Lv ${level}`, unlocked: unlockText, next: questNext || (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
     }
     return null;
   }
