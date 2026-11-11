@@ -734,9 +734,10 @@
   }
 
   // Thumb action: a reachable, fully storable harvest; sunlight first, then distance.
-  function quickHarvestStatus(state, now) {
+  // skipPlotIndex：任務卡叫玩家留著等光的那一格（田上寫「先別收」），快速收成不算它；不傳就照舊全部算。
+  function quickHarvestStatus(state, now, skipPlotIndex) {
     const room = storageCapacity(state) - storageUsed(state);
-    const ready = state.map.tiles.filter((t) => t.plotIndex != null && t.plotIndex < activePlotCount(state)
+    const ready = state.map.tiles.filter((t) => t.plotIndex != null && t.plotIndex < activePlotCount(state) && t.plotIndex !== skipPlotIndex
       && state.plots[t.plotIndex].cropId && getCropProgress(state, state.plots[t.plotIndex], now).ready);
     const candidates = ready.filter((t) => room >= CROPS[state.plots[t.plotIndex].cropId].yield + (isSunlit(state, t.plotIndex, now) ? SUNPATCH.harvestBonus : 0));
     candidates.sort((a, b) => Number(isSunlit(state, b.plotIndex, now)) - Number(isSunlit(state, a.plotIndex, now))
