@@ -152,6 +152,7 @@
     state.adventure.r75b.grades[recipeId][g] += 1;
     const prev = state.adventure.r75b.best[recipeId];
     if (!prev || gradeRank(g) > gradeRank(prev)) state.adventure.r75b.best[recipeId] = g;
+    if (g === "perfect" && typeof CookingR75.onPerfect === "function") CookingR75.onPerfect(state, recipeId); /* R76C 追光手冊：煮成絕品蓋章 */
     return g;
   }
   function takeBestFromStock(state, recipeId) {
