@@ -42,7 +42,10 @@ test('A2 Lv 2 里程碑的獲得具體，下一步等於任務列行動', () => 
   state.level = 2;
   const guide = A.guide(state, T);
   const card = G.milestoneCard('level_up', { level: 2, state, now: T });
-  assert.match(card.earned, /^Lv 2・.*胡蘿蔔種子/);
+  /* R76A：獲得只寫等級，新解鎖另列完整項目，兩欄不再重複同一串。 */
+  assert.equal(card.earned, "農場等級提升到 Lv 2");
+  assert.match(card.unlocked, /胡蘿蔔種子/);
+  assert.notEqual(card.earned, card.unlocked);
   assert.equal(card.next, A.nextFarmStep(state, T).text);
   assert.doesNotMatch(card.earned, /新的農場等級/);
 });

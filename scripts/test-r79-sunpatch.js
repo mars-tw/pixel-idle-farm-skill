@@ -72,7 +72,9 @@ check("在光裡收成多 1 份、多 2 經驗，統計 +1，同一格不能重�
   assert.equal(r.ok, true);
   assert.equal(r.added, C.CROPS.wheat.yield + 1);
   assert.equal(s.xp - xpBefore, C.CROPS.wheat.xp + 2);
-  assert.deepEqual(r.sun, { kind: "harvest", bonus: 1, xpBonus: 2 });
+  /* R76A：收成結果新增實際入瓶陽光、瓶滿狀態與光性來源，舊三欄仍維持。 */
+  assert.equal(r.sun.kind, "harvest"); assert.equal(r.sun.bonus, 1); assert.equal(r.sun.xpBonus, 2);
+  assert.equal(r.sun.sunlight, 2); assert.equal(r.sun.bottleFull, false); assert.equal(r.sun.source, "喜光豐收");
   assert.equal(s.stats.sunCatches, 1);
   assert.equal(G.isSunlit(s, 0, t), false, "這一格已用過這道光");
   G.plant(s, 0, "wheat", t);

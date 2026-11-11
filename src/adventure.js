@@ -711,10 +711,11 @@
     if (state.adventure.meals[id] >= MEAL_CAP) return fail("meals_full", "這道料理已經備得夠多了。");
     const rows = recipeRequirements(state, r.ingredients);
     if (!rows.every((need) => need.complete)) return fail("missing_resources", "料理食材還沒備齊。", { requirements: rows });
+    const firstCook = Object.values(state.adventure.meals || {}).every((qty) => !qty);
     consume(state, rows);
     state.adventure.meals[id]++;
     record(state, { type: "cook", recipeId: id }, now);
-    return ok(r.name + "做好了。趁熱吃下去，才算完成回家的第一餐。", { meal: { id, name: r.name, qty: 1 }, quantity: state.adventure.meals[id], consumed: copy(r.ingredients), storyAdvance: null });
+    return ok(r.name + "做好了。" + (firstCook ? "這是回家後做的第一份料理。" : "已放進餐籃。"), { meal: { id, name: r.name, qty: 1 }, quantity: state.adventure.meals[id], consumed: copy(r.ingredients), storyAdvance: null, firstCook });
   }
   function fish(state, now, rng) {
     const init = ensure(state, now); if (!init.ok) return init;

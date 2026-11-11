@@ -79,9 +79,22 @@
     const effect = { yieldBonus: 0, guaranteedQuality: false, qualityBonusChance: 0, sunlight: 0, source: "" };
     if (kind === "sun" && (plot.sunGrown === true || hits > 0)) { effect.yieldBonus = 1; effect.sunlight = 1; effect.source = "喜光豐收"; }
     if (kind === "partial" && hits === 1) { effect.guaranteedQuality = true; effect.source = "半日照優質"; }
+    if (kind === "partial" && hits > 1) effect.source = "半日照曬過頭";
     if (kind === "shade" && hits === 0 && plot.r75ShadeEligible !== false) { effect.qualityBonusChance = 0.35; effect.source = "陰涼熟成"; }
     effect.quality = effect.guaranteedQuality || (effect.qualityBonusChance > 0 && (typeof rng === "function" ? rng() : Math.random()) < effect.qualityBonusChance);
     return effect;
+  }
+  function harvestPreview(state, plot, exposedNow) {
+    if (!plot || !plot.cropId) return { text: "", effect: null };
+    const info = traitInfo(plot.cropId);
+    const hits = integer(plot.r75SunHits, 0) + (exposedNow ? 1 : 0);
+    const effect = harvestEffects(state, plot, function () { return 0; }, exposedNow);
+    let text = `${info.icon} ${info.name}`;
+    if (info.id === "sun") text += (plot.sunGrown === true || hits > 0) ? "・照過光了：收成多 1 份" : "・還沒照到：照到光會多收 1 份";
+    else if (info.id === "partial") text += hits === 0 ? "・還沒照到：再照 1 次有優質" : hits === 1 ? "・照 1 次：收成保證 1 份優質" : `・照 ${hits} 次：曬過頭`;
+    else if (info.id === "shade") text += hits === 0 && plot.r75ShadeEligible !== false ? "・還沒照到：保持陰涼整批優質" : "・照過光了：陰涼加成失效";
+    else text += "・沒有特殊光性";
+    return { text, effect, hits };
   }
   function catchSun(state, plotIndex) { const exposure = recordExposure(state, plotIndex); const gained = addSunlight(state, 1); return { gained, exposure }; }
   function canRefract(state, targetIndex, now) {
@@ -147,7 +160,7 @@
   function jarChipHtml(state) {
     if (!jarVisible(state)) return "";
     const amount = sunlight(state), cap = bottleCapacity(state);
-    return `<div class="res r75a-jar-chip" data-audit="r75a-jar" title="蓄光瓶：在光裡種、澆、收會接到陽光。2 點可以催熟一格，1 點可以開曬架。" aria-label="蓄光瓶，陽光 ${amount}／${cap}"><img src="assets/generated/content-r75/sun_jar.png${versionQuery()}" alt=""><span class="sub">陽光 ${amount}/${cap}</span></div>`;
+    return `<div class="res r75a-jar-chip" data-audit="r75a-jar" title="蓄光瓶：在光裡種、澆、收會接到陽光。2 點可以催熟一格，1 點可以開曬架。" aria-label="蓄光瓶，陽光 ${amount}/${cap}"><img src="assets/generated/content-r75/sun_jar.png${versionQuery()}" alt=""><span class="sub">陽光 ${amount}/${cap}</span></div>`;
   }
   let jarSignature = "";
   function syncJarChip(state) {
@@ -228,7 +241,7 @@
     const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
     const preview = !active && now < (sun.previewAt || 0) ? sun.previewPlots || [] : []; const wanted = new Set(preview);
     world.querySelectorAll(".r75a-sun-preview").forEach((n) => { if (!wanted.has(Number(n.dataset.plotIndex))) n.remove(); });
-    const text = `☀ ${Math.max(1, Math.ceil(((sun.previewAt || 0) - now) / 1000))} 秒`;
+    const text = `${Math.max(1, Math.ceil(((sun.previewAt || 0) - now) / 1000))} 秒`;
     preview.forEach((i) => {
       const p = tilePoint(state, i); if (!p) return; let n = world.querySelector(`.r75a-sun-preview[data-plot-index="${i}"]`);
       if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(i); n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
@@ -321,7 +334,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, catchSun, canRefract, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, collectDrying, rackStatus, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, openRack, closeRack };
+  const API = { PREVIEW_MS, DRYING_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, harvestPreview, catchSun, canRefract, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, collectDrying, rackStatus, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, openRack, closeRack };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

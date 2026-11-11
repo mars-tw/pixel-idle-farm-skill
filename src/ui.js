@@ -142,6 +142,7 @@
   const feedbackQueue = G.createFeedbackQueue ? G.createFeedbackQueue() : null;
   const settlementQueue = [];
   let settlementVisible = false;
+  let seasonWarningUntil = 0;
   let closeActiveSettlement = null;
   // R37：結算／里程碑卡顯示時，玩家點其他地方（例如打開訂單）就先收起卡片，不攔截操作
   document.addEventListener("pointerdown", (event) => { if (closeActiveSettlement && !(event.target && event.target.closest && event.target.closest(".settlement-card"))) closeActiveSettlement(); }, true);
@@ -417,11 +418,29 @@
     if (!sun) return;
     const c = tileCenter(tileId);
     screenBurst(c.x, c.y, ["\u2728", "\u2600\ufe0f", "\u2728"], { count: 6, distance: 42, className: "sun-particle" });
-    floatText(c.x, c.y - 116, sun.kind === "harvest" ? "陽光豐收 +" + (sun.bonus || 1) : "陽光催芽", "#ffe680");
+    const resultText = sun.kind === "harvest" ? sunHarvestResultText(sun, "") : sunGrowthResultText(sun);
+    floatText(c.x, c.y - 116, resultText, "#ffe680");
     playSound("sun");
     const beam = worldEl && worldEl.querySelector('.sun-beam[data-tile-id="' + tileId + '"]');
     if (beam) { beam.classList.add("caught"); }
     sunSig = "";
+  }
+  function fmtBoostTime(ms) { return fmtTime(Math.max(0, Math.round(ms || 0))); }
+  function sunGrowthResultText(sun) {
+    const parts = [`快了 ${fmtBoostTime(sun && sun.boostMs)}`];
+    if (sun && sun.sunlight > 0) parts.push(`陽光 +${sun.sunlight}`);
+    else if (sun && sun.bottleFull) parts.push("蓄光瓶滿了，這點陽光沒接到");
+    return parts.join("・");
+  }
+  function sunHarvestResultText(sun, cropName) {
+    const parts = [];
+    if (sun && sun.source === "喜光豐收" && sun.bonus > 0) parts.push(`${cropName || "作物"}多 ${sun.bonus} 份`);
+    else if (sun && sun.source === "半日照優質") parts.push("日照剛好：1 份優質");
+    else if (sun && sun.source === "半日照曬過頭") parts.push("曬過頭了，這次沒有加成");
+    else if (sun && sun.source === "陰涼熟成") parts.push("陰涼熟成：整批優質");
+    if (sun && sun.sunlight > 0) parts.push(`陽光 +${sun.sunlight}`);
+    else if (sun && sun.bottleFull) parts.push("蓄光瓶滿了，這點陽光沒接到");
+    return parts.length ? `在光裡收成：${parts.join("・")}` : "在光裡收成";
   }
   function syncSunBeams(t) {
     if (!worldEl || !G.sunpatchStatus || !state.map) return;
@@ -432,14 +451,15 @@
       const plot = state.plots && state.plots[i];
       if (plot && plot.cropId && G.getCropProgress(state, plot, t).ready) readyPlots.push(i);
     }
-    worldEl.querySelectorAll(".r68a-ready-badge").forEach((node) => { if (!readyPlots.includes(Number(node.dataset.plotIndex))) node.remove(); });
+    worldEl.querySelectorAll(".r68a-ready-badge").forEach((node) => { if (!readyPlots.includes(Number(node.dataset.plotIndex)) || node.dataset.tileId === selectedTileId) node.remove(); });
     /* 選取中的田格剛成熟：標籤與動作列只在點選或落光時重畫，這裡補畫一次，否則「可收成」標示旁還留著「種滿再澆水」。 */
     let selectedJustRipened = false;
     for (const i of readyPlots) {
       const tile = state.map.tiles.find((row) => row.plotIndex === i); if (!tile) continue;
       let badge = worldEl.querySelector(`.r68a-ready-badge[data-plot-index="${i}"]`);
       if (!badge && tile.id === selectedTileId) selectedJustRipened = true;
-      if (!badge) { badge = document.createElement("button"); badge.type = "button"; badge.className = "r68a-ready-badge"; badge.dataset.audit = "r68a-ready-badge"; badge.dataset.plotIndex = String(i); badge.dataset.tileId = tile.id; badge.textContent = "可收成"; badge.title = "可收成，點一下收成"; badge.onclick = (event) => { event.stopPropagation(); setTool("hand"); clickTile(tile.id); }; worldEl.appendChild(badge); }
+      if (!badge && tile.id !== selectedTileId) { badge = document.createElement("button"); badge.type = "button"; badge.className = "r68a-ready-badge"; badge.dataset.audit = "r68a-ready-badge"; badge.dataset.plotIndex = String(i); badge.dataset.tileId = tile.id; badge.textContent = "可收成"; badge.title = "可收成，點一下收成"; badge.onclick = (event) => { event.stopPropagation(); setTool("hand"); clickTile(tile.id); }; worldEl.appendChild(badge); }
+      if (!badge) continue;
       badge.style.left = pxv((tile.x + .5) * TILE); badge.style.top = pxv((tile.y + 1.08) * TILE); badge.style.zIndex = String(Math.round((tile.y + 2) * TILE + 8));
     }
     if (selectedJustRipened) renderSceneActionsForSelection();
@@ -460,7 +480,7 @@
         m = document.createElement("div");
         m.className = "r40-sun-tile"; m.dataset.audit = "r40-sun-tile"; m.dataset.plotIndex = String(i); m.dataset.tileId = tile.id;
         m.setAttribute("aria-hidden", "true");
-        m.innerHTML = '<span class="r40-sun-icon">☀</span><span class="r40-sun-secs"></span><span class="r40-sun-bar"><i></i></span>';
+        m.innerHTML = '<span class="r40-sun-icon" aria-hidden="true">☀</span><span class="r40-sun-secs"></span><span class="r40-sun-bar"><i></i></span>';
         worldEl.appendChild(m);
       }
       m.style.left = pxv(tile.x * TILE); m.style.top = pxv(tile.y * TILE);
@@ -762,9 +782,11 @@
     const seasonUnlocked = state.level >= (window.SEASON_UNLOCK_LEVEL || 6);
     const sId = G.currentSeason ? G.currentSeason(state, now()) : "春";
     const season = (window.SEASONS || []).find((s) => s.id === sId) || { id: sId, name: sId, icon: "🌱" };
+    const nextSeason = (window.SEASONS || [])[((window.SEASONS || []).findIndex((row) => row.id === sId) + 1) % Math.max(1, (window.SEASONS || []).length)] || season;
     const seasonLeft = seasonUnlocked && state.season && state.season.untilMs ? fmtTime(Math.max(0, state.season.untilMs - now())) : "";
+    const seasonText = seasonUnlocked ? `${sId}・再 ${seasonLeft} 換${nextSeason.id}` : `${sId}・Lv 6 起換季`;
     const mealBuffs = window.AdventureAPI && window.AdventureAPI.activeBuffs ? window.AdventureAPI.activeBuffs(state, now()) : null;
-    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 25%"><span class="ic">🍞</span><span class="sub">${mealBuffs.growthMeal || "料理"}・成長 +${mealBuffs.growthPct || 25}%・${fmtBuffCountdown(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 20%"><span class="ic">🥘</span><span class="sub">${mealBuffs.orderMeal || "料理"}・訂單 +${mealBuffs.orderPct || 20}%・${fmtBuffCountdown(mealBuffs.orderRemainingMs)}</span></div>` : ""}` : "";
+    const buffHtml = mealBuffs ? `${mealBuffs.growthRemainingMs > 0 ? `<div class="res r59-buff-chip" title="作物成長時間縮短 ${mealBuffs.growthPct || 25}%"><span class="ic">🍞</span><span class="sub">${mealBuffs.growthMeal || "料理"}・成長快 ${mealBuffs.growthPct || 25}%・剩 ${fmtBuffCountdown(mealBuffs.growthRemainingMs)}</span></div>` : ""}${mealBuffs.orderRemainingMs > 0 ? `<div class="res r59-buff-chip" title="訂單金幣收入提高 ${mealBuffs.orderPct || 20}%"><span class="ic">🥘</span><span class="sub">${mealBuffs.orderMeal || "料理"}・訂單 +${mealBuffs.orderPct || 20}%・剩 ${fmtBuffCountdown(mealBuffs.orderRemainingMs)}</span></div>` : ""}${mealBuffs.harvestRemainingMs > 0 ? `<div class="res r59-buff-chip" title="每次收成多 ${mealBuffs.harvestBonus} 份"><span class="ic">🧺</span><span class="sub">${mealBuffs.harvestMeal || "料理"}・收成 +${mealBuffs.harvestBonus}・剩 ${fmtBuffCountdown(mealBuffs.harvestRemainingMs)}</span></div>` : ""}${mealBuffs.forageRemainingMs > 0 ? `<div class="res r59-buff-chip" title="每個採集點多 ${mealBuffs.forageBonus} 份"><span class="ic">🌿</span><span class="sub">${mealBuffs.forageMeal || "料理"}・採集 +${mealBuffs.forageBonus}・剩 ${fmtBuffCountdown(mealBuffs.forageRemainingMs)}</span></div>` : ""}` : "";
     $("resBar").innerHTML = `
       <div class="res coins">${uiIcon("system_coin")} ${fmtNum(state.coins)}</div>
       <div class="res level">${uiIcon("system_xp")}
@@ -773,7 +795,7 @@
       </div>
       <div class="res storage" title="背包：${used} 份／${cap} 份" aria-label="背包 ${used} 份，容量 ${cap}${used > cap ? '，待整理 ' + (used - cap) + ' 份' : ''}">${uiIcon("system_storage")}<span class="res-name">背包</span> ${Math.min(used, cap)}<span class="sub">/${cap}${used > cap ? '・另存 ' + (used - cap) + ' 份待整理' : ''}</span></div>
       ${weatherUnlocked ? `<div class="res weather" title="${w.name}"><span class="ic">${w.icon}</span><span class="sub">${w.name}</span></div>` : ""}
-      ${seasonUnlocked ? `<div class="res season" title="${season.name}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${season.name}</span><small>${seasonLeft}</small></span></div>` : ""}
+      <div class="res season" title="${seasonText}"><span class="ic">${season.icon}</span><span class="sub season-chip"><span>${seasonText}</span></span></div>
       ${window.FarmSunplay && window.FarmSunplay.jarChipHtml ? window.FarmSunplay.jarChipHtml(state) : ""}
       ${buffHtml}
       ${matChips()}`;
@@ -819,7 +841,7 @@
     const unlocked = G.isCropUnlocked(state, c.id);
     const el = document.createElement("div");
     const inSeason = seasonUnlocked && c.season && c.season === sId;
-    const seasonBadge = c.season ? `<span class="seed-season ${inSeason ? "active" : ""}">${inSeason ? "當季・快 15%" : escapeHtml(c.season) + "季・慢 15%"}</span>` : "";
+    const seasonBadge = c.season ? `<span class="seed-season ${inSeason || !seasonUnlocked && c.season === "春" ? "active" : ""}">${(inSeason || !seasonUnlocked && c.season === "春") ? "當季・快 15%" : escapeHtml(c.season) + "季・慢 15%"}</span>` : "";
     el.className = "seed" + (selectedSeed === c.id && unlocked ? " sel" : "") + (unlocked ? "" : " locked");
     el.dataset.seedId = c.id;
     el.title = c.name;
@@ -1256,7 +1278,7 @@
         playSound("harvest"); playSound("coin"); screenBurst(cx, cy, [crop.emoji], { count: Math.min(12, 5 + r.added), distance: 58 }); flyCoinsToHud(cx, cy, 4); harvestComboText(cx, cy);
         floatText(cx, cy, "+" + r.added + " " + crop.emoji, "#dff5c8");
         if (r.lost > 0) toast("📦 倉庫滿了，損失 " + r.lost + " " + crop.name);
-        if (r.leveled > 0) { levelUpFx(plotEls[i]); playSound("level"); toast("🎉 升到 Lv " + state.level + "！"); }
+        if (r.leveled > 0) { levelUpFx(plotEls[i]); playSound("level"); }
         afterChange(true);
       }
     }
@@ -3921,14 +3943,17 @@
     const plot = state.plots[tile.plotIndex];
     const sunlit = !!(G.isSunlit && G.isSunlit(state, tile.plotIndex, now()));
     const lightInfo = plot && plot.cropId && window.FarmSunplay ? window.FarmSunplay.traitInfo(plot.cropId) : null;
+    const lightPreview = plot && plot.cropId && window.FarmSunplay && window.FarmSunplay.harvestPreview ? window.FarmSunplay.harvestPreview(state, plot, sunlit).text : "";
     const sunEffect = lightInfo && lightInfo.id === "sun" ? "在光裡：生長加速・收成 +1" : "在光裡：生長加速";
-    const sunSuffix = sunlit ? `\n${sunEffect}${lightInfo ? "・" + lightInfo.icon + " " + lightInfo.name + "・" + lightInfo.text : ""}` : lightInfo ? `\n${lightInfo.icon} ${lightInfo.name}・${lightInfo.text}` : "";
+    const sunSuffix = lightPreview ? `\n${lightPreview}` : sunlit ? `\n${sunEffect}` : "";
     if (!plot || !plot.cropId) return "空地・可種植" + sunSuffix;
     const crop = window.CROPS[plot.cropId];
     const name = crop ? crop.name : "作物";
     const prog = G.getCropProgress(state, plot, now());
     const planted = state.map.tiles.filter((row) => row.plotIndex != null && row.plotIndex < active && state.plots[row.plotIndex] && state.plots[row.plotIndex].cropId).length;
-    if (prog.ready) return name + "・可收成";
+    const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null;
+    const heldForLight = nextStep && nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract");
+    if (prog.ready) return name + (heldForLight ? "・先別收" : "・可收成") + sunSuffix;
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
     /* 光快落在這一格：任務卡教的是「等光到了再澆水」，標籤跟著講同一件事，不再寫「種滿再澆水」。 */
@@ -3961,7 +3986,7 @@
     // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「把光折到這裡」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
     const sunActions = tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && window.FarmSunplay && window.FarmSunplay.plotActions ? window.FarmSunplay.plotActions(state, tile.plotIndex, now()) : [];
     if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(); return; }
-    if (tile && tile.plotIndex != null) { const filtered = actions.filter((a) => toolActions.includes(a.action)); actions.splice(0, actions.length, ...filtered.slice(0, 1), ...sunActions); if (!actions.length) { hideSceneActions(); return; } }
+    if (tile && tile.plotIndex != null) { const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null; const heldForLight = nextStep && nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract"); const filtered = actions.filter((a) => toolActions.includes(a.action) && !(heldForLight && a.action === "harvest")); actions.splice(0, actions.length, ...filtered.slice(0, 1), ...sunActions); if (!actions.length) { hideSceneActions(); return; } }
     bar.innerHTML = "";
     actions.forEach((entry) => {
       const meta = SCENE_ACTION_META[entry.action] || ["●", entry.action];
@@ -4579,7 +4604,7 @@
     const face = state.player.facing;
     if (action === "plant") {
       const r = G.plant(state, tile.plotIndex, selectedSeed, t, plantingCareMode());
-      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) sunCatchFx(tileId, r.sun); afterChange(true); showCarePopover(tileId, tile.plotIndex); }
+      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) { sunCatchFx(tileId, r.sun); toast("🌱 在光裡種下：" + sunGrowthResultText(r.sun)); } afterChange(true); showCarePopover(tileId, tile.plotIndex); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "no_compost" ? "🍂 堆肥不足，換一種照顧方式吧" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       if (quickHarvestTarget === tileId) {
@@ -4590,10 +4615,10 @@
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
-        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 1 包種子" : "") + (r.sun ? "（陽光 +" + r.sun.bonus + "）" : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); toast("🎉 升 Lv " + state.level); } enqueueResultFeedback(r); afterChange(true); }
+        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 1 包種子" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } enqueueResultFeedback(r); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
-      if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧☀ 在陽光裡澆水，長得更快" : "💧 澆水變濕土加速"); afterChange(false); }
+      if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧 在光裡澆水：" + sunGrowthResultText(r.sun) : "💧 澆水變濕土加速"); afterChange(false); }
     } else if (action === "clear") {
       const r = G.clearObstacle(state, tileId);
       if (r.ok) { if (!animationStarted) playAction("hoe", face); playSound("ui"); spawnVfx(tileId, "soil_dust"); G.advanceStory(state, "clear"); toast("⛏️ 清除 " + window.OBSTACLES[r.cleared].name + "，得建材"); afterChange(true); buildStaticObjects(); paintGround(); renderTileContext(); }
@@ -5338,6 +5363,15 @@
     const t = now();
     const weatherChanged = G.updateWeather(state, t);
     const seasonChanged = G.updateSeason ? G.updateSeason(state, t) : false;
+    if (state.level >= (window.SEASON_UNLOCK_LEVEL || 6) && state.season && state.season.untilMs) {
+      const remaining = state.season.untilMs - t;
+      if (remaining > 0 && remaining <= 60000 && seasonWarningUntil !== state.season.untilMs) {
+        seasonWarningUntil = state.season.untilMs;
+        const sid = G.currentSeason ? G.currentSeason(state, t) : state.season.id;
+        const list = window.SEASONS || []; const index = list.findIndex((row) => row.id === sid); const next = list[(index + 1) % Math.max(1, list.length)];
+        if (next) toast(`再 ${fmtTime(remaining)} 換${next.name}。`);
+      }
+    }
     if (seasonChanged) {
       const sid = G.currentSeason ? G.currentSeason(state, t) : (state.season && state.season.id);
       seasonTransitionFx(sid);

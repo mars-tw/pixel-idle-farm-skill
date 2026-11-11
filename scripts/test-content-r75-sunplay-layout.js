@@ -57,7 +57,8 @@ const overlap = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.le
       assert.ok(hud.chip.width > 0 && hud.chip.left >= -1 && hud.chip.right <= w + 1 && hud.chip.top >= -1 && hud.chip.bottom <= h + 1, `${tag} 蓄光瓶籤要在畫面內 ${JSON.stringify(hud.chip)}`);
       for (let i = 0; i < hud.chips.length; i++) for (let j = i + 1; j < hud.chips.length; j++) assert.ok(overlap(hud.chips[i].box, hud.chips[j].box) < 4, `${tag} 資源列的籤不可互相重疊：${hud.chips[i].cls}／${hud.chips[j].cls}`);
       assert.ok(hud.docScroll <= 1, `${tag} 加了蓄光瓶籤後頁面不可出現橫向捲動（多出 ${hud.docScroll}px）`);
-      assert.match(hud.previewText, /^☀ \d+ 秒$/, `${tag} 預告圈要寫還有幾秒`);
+      /* R76A：太陽改由一般字型的 ::before 畫，避免像素字型變形；節點文字只留倒數。 */
+      assert.match(hud.previewText, /^\d+ 秒$/, `${tag} 預告圈要寫還有幾秒`);
       assert.ok(Math.abs(hud.preview.left - hud.tile.left) <= 2 && Math.abs(hud.preview.top - hud.tile.top) <= 2 && Math.abs(hud.preview.width - hud.tile.width) <= 2, `${tag} 預告圈要蓋在那一格田上 ${JSON.stringify([hud.preview, hud.tile])}`);
       assert.ok(hud.rack.width >= 44 && hud.rack.height >= 44, `${tag} 曬架命中區至少 44px ${JSON.stringify(hud.rack)}`);
       assert.equal(hud.rackLabel, "曬架", `${tag} 空曬架的標籤`); assert.equal(hud.rackState, "empty"); assert.equal(hud.rackInWorld, true, `${tag} 曬架要在地圖範圍內`);
