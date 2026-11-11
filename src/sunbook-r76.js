@@ -462,7 +462,8 @@
    * 自己一張卡，不擠進一般提示列。位置每次都重算：排在頂欄、任務卡、種子籤的下面，
    * 碰到下方工具列或手機操作鍵就縮短，幾秒後自己收掉，也可以點掉。 */
   let cardTimer = 0, cardWatch = 0, cardWait = 0, cardFrame = 0, cardQueue = [], cardShown = [];
-  const BLOCKERS = ".r75b-cook-overlay, .r75a-rack-overlay, .r76b-dialogue, .modal.show";
+  /* 升級卡、結算卡跟小卡都排在右上角，同時出來會疊在一起（小卡整張蓋住升級卡）；它們 2.5 秒就收，小卡排在後面等。 */
+  const BLOCKERS = ".r75b-cook-overlay, .r75a-rack-overlay, .r76b-dialogue, .modal.show, #toast-zone .settlement-card";
   function blocked() { return !!document.querySelector(BLOCKERS); }
   function cardNode() {
     let node = document.getElementById("r76cStampCard");

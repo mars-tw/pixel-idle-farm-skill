@@ -499,11 +499,13 @@
          已經熟的也先留著——不然玩家會在光到之前把它收掉，光就落在空田上。 */
       const hold = previewLight.length ? litCrops.find((tile) => ready.includes(tile)) || litCrops.find((tile) => dry.includes(tile)) : null;
       if (hold) {
-        if (empty.length && packs > 0) return field("plant", empty[0], `等光落下的這幾秒，把剩下的 ${packs} 包小麥種子也種下。`, "去種小麥");
+        /* 這幾秒叫玩家先做別格的事，也把「留著等光」的那一格帶出去：田上標籤與動作鈕才會跟著寫「先別收」，不會任務卡說去種、田上卻寫可收成。 */
+        const held = { holdPlotIndex: hold.plotIndex };
+        if (empty.length && packs > 0) return field("plant", empty[0], `等光落下的這幾秒，把剩下的 ${packs} 包小麥種子也種下。`, "去種小麥", held);
         const other = dry.find((tile) => !lit.includes(tile.plotIndex));
-        if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水");
+        if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水", held);
         const otherReady = ready.filter((tile) => !lit.includes(tile.plotIndex));
-        if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", { count: otherReady.length });
+        if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", { count: otherReady.length, holdPlotIndex: hold.plotIndex });
         return field("catch_sun", hold, `光快落在${cropName(hold)}上了。${ready.includes(hold) ? "等光到了再收成，多接 1 點陽光。" : "等光到了再澆水，才接得住陽光。"}`, "看光落在哪");
       }
       litGrowing = growing.find((tile) => lit.includes(tile.plotIndex)) || null; lightOn = activeLight.length > 0;

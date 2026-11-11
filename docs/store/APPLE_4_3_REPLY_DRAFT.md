@@ -100,7 +100,8 @@ The farm has its own complete loop (light, planting, processing, cooking, neighb
 沒有共用的部分：
 
 - 遊戲本身的程式與素材。10 月 15 日把本作 332 個檔案和同帳號 13 款逐位元比對，沒有任何相同檔案；長度超過 90 字元的 CSS 規則也沒有相同的。
-- 這次比對是 10 月 15 日做的，範圍是原始碼與素材，沒有檢查簽章後的二進位檔，也還沒有對現在這一版重跑。細節在 [SHARED_ASSETS_AUDIT.md](SHARED_ASSETS_AUDIT.md)。
+- 11 月 11 日對現在這一版重比了一次：本作 906 個檔案，對上手邊還有原始檔的 8 款共 2,369 個檔案，結果一樣，沒有相同檔案，也沒有相同的 CSS 規則。10 月那 13 款裡有 6 款的原始檔已經不在這台電腦上，這 6 款沒有重比。
+- 兩次比對的範圍都是原始碼與素材，沒有檢查簽章後的二進位檔。細節在 [SHARED_ASSETS_AUDIT.md](SHARED_ASSETS_AUDIT.md)。
 
 我們沒有靠改名或混淆程式碼來降低相似度。
 
@@ -116,7 +117,8 @@ Yes, in part. Shared:
 Not shared:
 
 - The game's own code and assets. On 15 October we compared this game's 332 source and asset files byte-for-byte against 13 other titles on the account and found no identical file, and no identical CSS rule longer than 90 characters.
-- That comparison covered source and assets only, did not inspect signed binaries, and has not yet been re-run for the current build.
+- On 11 November we repeated the comparison for the current version: 906 files of this game against 2,369 files from the 8 titles whose source we still have locally, with the same result (no identical file, no identical CSS rule). Six of the 13 titles from October were not re-compared because their source is no longer on this machine.
+- Both comparisons covered source and assets only and did not inspect signed binaries.
 
 We have not renamed files or obfuscated code to reduce similarity.
 
@@ -131,7 +133,7 @@ We have not renamed files or obfuscated code to reduce similarity.
 - 美術主要用 AI 圖像工具產生（OpenAI 的圖像生成工具，以及 MUSE 的圖像生成），再用專案裡的腳本去背、裁切、定色盤後才放進遊戲。背景音樂用 ACE-Step 在本機產生。每一批的工具、提示詞與檔案雜湊記在 [CREDITS.md](../../CREDITS.md) 和各素材資料夾的 manifest。
 - 操作音效是程式即時合成的，沒有音效檔。
 
-（需作者補充：`CREDITS.md` 有三處寫到「既有 Kenney／OpenGameArt 授權條目保留」，但文件裡找不到對應的素材條目。送出前要確認遊戲裡到底有沒有這兩個來源的素材，有就補上檔名與授權。）
+- 沒有用第三方素材包。11 月 11 日查過 `assets/` 的全部資料夾、整個 repo 的檔名與 git 歷史，沒有 Kenney、OpenGameArt 或其他素材包的檔案。`CREDITS.md` 之前有三句提到這兩個名字，是沿用的套話，已經刪掉，查核方式寫在該文件的「第三方素材包查核」一節。
 
 English:
 
@@ -142,7 +144,7 @@ No purchased template and no app-generation service. The game is written in plai
 - Most artwork was produced with AI image tools (OpenAI image generation and MUSE image generation) and then cut out, cropped and palette-reduced by scripts in the project before use. The background music was generated locally with ACE-Step. Tools, prompts and file hashes are recorded per batch in the project's credits and asset manifests.
 - Sound effects are synthesised at runtime; there are no sound files.
 
-(Owner to confirm before sending: whether any Kenney or OpenGameArt assets are actually included, and if so list them with their licences.)
+- No third-party asset packs. On 11 November we checked every folder under `assets/`, all file names in the repository and the git history, and found no files from Kenney, OpenGameArt or any other asset pack.
 
 ## 第 9 題：是不是替別人做的
 
@@ -162,8 +164,8 @@ English:
 2. iPhone／iPad 實機驗證與一段實機錄影。這一版只在電腦上的 Chromium 驗過。
 3. 真人測試紀錄（第 4 題）。
 4. 帳號擁有人的決定與權利說明（第 6、9 題）。
-5. Kenney／OpenGameArt 素材確認（第 8 題）。
-6. 對現在這一版重跑共用稽核（第 7 題）。
+5. ~~Kenney／OpenGameArt 素材確認（第 8 題）。~~ 11 月 11 日查完，遊戲沒有用這兩個來源的素材，第 8 題已補上。
+6. ~~對現在這一版重跑共用稽核（第 7 題）。~~ 11 月 11 日重跑完，結果寫進第 7 題。有 6 款的原始檔不在本機，沒有重比，回覆裡照實寫了。
 7. 對照 Apple 原信，確認題目和這裡轉述的一致。
 
 ## 文案回讀（mode 2）

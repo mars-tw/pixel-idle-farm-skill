@@ -57,7 +57,11 @@ test("下一步包含折光、等光與催熟，舊存檔補安全預設", () =>
 test("光快落在已經熟的作物上：先留著等光，光到了才叫玩家收", () => {
   const s = fresh(); ready(s, 0, "wheat", 1000); s.sun.previewPlots = [0]; s.sun.previewAt = 9000; s.sun.nextAt = 9000;
   const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光到了再收成/);
-  Game.plant(s, 1, "wheat", 2000); s.plots[1].plantedAt = 2000 - Game.plotGrowMs(s, s.plots[1], 2000) - 1; const other = Adventure.nextFarmStep(s, 2001); assert.equal(other.action, "harvest"); assert.equal(other.plotIndex, 1, "光還沒到時先收別格");
+  /* R76 整合：手上還有種子包時，這幾秒先叫玩家去種別格；等光的那一格要一起帶出去，田上才會寫「先別收」、收成鈕先收起來（原本手機上任務卡說去種小麥、田上卻寫可收成）。 */
+  s.adventure.r58.r59.seedPacks.wheat = 2;
+  const sow = Adventure.nextFarmStep(s, 2000); assert.equal(sow.action, "plant"); assert.notEqual(sow.plotIndex, 0, "種的是別格，不是等光的那一格"); assert.equal(sow.holdPlotIndex, 0, "去種別格時，等光的那一格仍標成留著"); s.adventure.r58.r59.seedPacks.wheat = 0;
+  const uiSrc = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8"); assert.equal((uiSrc.match(/nextStep\.holdPlotIndex === tile\.plotIndex/g) || []).length, 2, "田上標籤與動作鈕都要認得留著等光的那一格");
+  Game.plant(s, 1, "wheat", 2000); s.plots[1].plantedAt = 2000 - Game.plotGrowMs(s, s.plots[1], 2000) - 1; const other = Adventure.nextFarmStep(s, 2001); assert.equal(other.action, "harvest"); assert.equal(other.plotIndex, 1, "光還沒到時先收別格"); assert.equal(other.holdPlotIndex, 0, "先收別格時，等光的那一格仍標成留著");
   assert.equal(Game.harvest(s, 1, 2002).ok, true); assert.equal(Game.updateSunpatch(s, 9000, () => 0).spawned, true);
   const lit = Adventure.nextFarmStep(s, 9001); assert.equal(lit.action, "harvest"); assert.equal(lit.sunlit, true); assert.equal(lit.plotIndex, 0);
 });

@@ -66,12 +66,19 @@ const AROUND = { header: "header", quest: "#questDock", seed: "#seedHud", chip: 
 
 /* 小卡的共同檢查：在畫面裡、不蓋住任務卡、陽光標籤、地點標籤與上下工具列、內容沒被裁掉、按鈕夠大而且點得到。 */
 async function checkCard(page, tag, w, h, label, wantOpenButton) {
-  /* 等兩格畫面再量：量到的是玩家真的看到的那一格，不是版面正在挪動的瞬間。 */
-  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
-  const m = await measure(page, Object.assign({ card: "#r76cStampCard", main: "[data-r76c-card-close]", open: "[data-r76c-card-open]" }, AROUND));
+  /* 等兩格畫面再量：量到的是玩家真的看到的那一格，不是版面正在挪動的瞬間。
+     量測是另一次呼叫，有時會落在兩格之間：任務卡剛被別的計時器往下推、小卡要到下一格才跟著讓開（實測這種狀態只有 3～7 毫秒，還沒畫到螢幕上）。
+     所以量到重疊時等下一格再量一次；連續三次都疊著才算真的蓋住，規則本身（重疊 0）沒有變。 */
+  const NEAR = ["header", "quest", "seed", "chip", "place", "dock", "pad", "act", "toast"];
+  let m = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+    m = await measure(page, Object.assign({ card: "#r76cStampCard", main: "[data-r76c-card-close]", open: "[data-r76c-card-open]" }, AROUND));
+    if (!m.card || NEAR.every((key) => overlap(m.card, m[key]) === 0)) break;
+  }
   assert.ok(m.card, `${tag} ${label}：小卡看得到`);
   assert.ok(inside(m.card, w, h), `${tag} ${label}：小卡不出界 ${JSON.stringify(m.card)}`);
-  for (const key of ["header", "quest", "seed", "chip", "place", "dock", "pad", "act", "toast"]) assert.equal(overlap(m.card, m[key]), 0, `${tag} ${label}：小卡不蓋住 ${AROUND[key]}`);
+  for (const key of NEAR) assert.equal(overlap(m.card, m[key]), 0, `${tag} ${label}：小卡不蓋住 ${AROUND[key]}`);
   if (m.panel && m.panel.left - m.card.width >= 24) assert.equal(overlap(m.card, m.panel), 0, `${tag} ${label}：面板左邊放得下時，小卡不蓋住面板`);
   assert.ok(m.card.clipY <= 1 && m.card.clipX <= 1, `${tag} ${label}：小卡內容沒被裁掉 ${JSON.stringify(m.card)}`);
   assert.ok(m.main && m.main.width >= 44 && m.main.height >= 44 && m.main.hit, `${tag} ${label}：小卡點得掉，命中區至少 44px`);
@@ -92,6 +99,9 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
         AdventureAPI.ensure(s, now); s.adventure.claimed.c1_first_harvest = true; AdventureAPI.ensure(s, now);
         s.level = 5; s.xp = CONFIG.xpForLevel(5); s.coins = 500; s.upgrades.plotCount = 1; s.storage.items = { wheat: 8 }; s.storage.quality = {};
         delete s.sunbook; FarmSunplay.normalize(s);
+        /* 這份存檔當成已經看過「第一道陽光」的教學：不然鎮長那句對白會在載入後十幾秒自己跳出來，
+           對白開著時右上角的提示會先等它，領獎那句提示就量不到。這裡只測手冊版面，不測那段教學。 */
+        s.sun.introduced = true;
         __farm.refresh(); FarmWorld.refresh(s);
       });
       assert.equal(await page.evaluate(() => typeof FarmSunbook === "object" && FarmSunplay.__r76cSunbook === true && CookingR75.__r76cSunbook === true), true, `${tag} 手冊有接上追光與料理`);
@@ -116,7 +126,8 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       /* 二、展開：進度條、四份獎勵、每種作物一列。 */
       await page.locator(".r76c-sum").click();
       await page.waitForFunction(() => document.querySelector(".r76c-fold").open);
-      assert.equal(await page.evaluate(() => __farm.state().sunbook.folded), false, `${tag} 展開狀態有記下來`);
+      /* 瀏覽器是在展開之後的下一拍才通知頁面（toggle 事件），所以等它記下來再往下；兩秒內沒記下來就算失敗。 */
+      await page.waitForFunction(() => __farm.state().sunbook.folded === false, null, { timeout: 2000 }).catch(() => assert.fail(`${tag} 展開狀態有記下來`));
       const b = await page.evaluate(() => {
         const box = (n) => { const r = n.getBoundingClientRect(); return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };
         const body = document.querySelector(".side-panel.world-panel-open .side-body"), book = document.querySelector("[data-r76c-sunbook]"), bar = document.querySelector(".r76c-bar");
@@ -186,9 +197,16 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       await page.locator("[data-r76c-card-close]").click();
       await page.waitForFunction(cardHidden);
 
-      /* 五、第二枚章：不再提示，只有一句話，幾秒後自己消失。 */
+      /* 五、第二枚章：不再提示，只有一句話，幾秒後自己消失。
+         收成同時升級時，升級卡也排在右上角：升級卡還在的時候小卡先等，升級卡收掉才出來，兩張不疊在一起。 */
+      await page.evaluate(() => __farm.enqueueSettlement({ kind: "milestone", title: "升到 Lv 6", earned: "金幣 30", unlocked: "草莓", next: "去種草莓" }));
+      await page.waitForFunction(() => document.querySelector("#toast-zone .milestone-card"), null, { timeout: 3000 });
       assert.ok(await harvest("carrot", false, 1) > 0);
+      await page.waitForTimeout(900);
+      assert.equal(await page.evaluate(() => !!document.querySelector("#toast-zone .milestone-card")), true, `${tag} 升級卡還在`);
+      assert.equal(await page.evaluate(cardHidden), true, `${tag} 升級卡還在時小卡不出來`);
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
+      assert.equal(await page.evaluate(() => { const n = document.querySelector("#toast-zone .settlement-card"); return n ? n.textContent.replace(/\s+/g, " ").trim() : ""; }), "", `${tag} 小卡出來時升級卡已經收掉`);
       const d = await checkCard(page, tag, w, h, "第二枚章", false);
       assert.match(d.card.text, new RegExp(`^追光手冊：胡蘿蔔・光性達成（2／${TOTAL}）$`), `${tag} 之後的小卡只有一句話`);
       await page.waitForFunction(cardHidden, null, { timeout: 8000 });

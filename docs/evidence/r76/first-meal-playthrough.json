@@ -1,0 +1,115 @@
+{
+  "version": "0.1.99",
+  "cacheVersion": "content-r76-20261111-1",
+  "date": "2026-11-11",
+  "method": "無頭 Chromium 開新存檔，只按畫面上的按鈕（任務卡、鄰居對白與選項、灶台、看火候的添柴與掀蓋、料理成果卡的「現在吃」），用真實經過時間；沒有預先給作物、沒有跳過生長、沒有改存檔。這是自動化腳本的實測，不是真人測試，也不是 iOS 實機結果。",
+  "routes": [
+    {
+      "route": "桌機 1366x768，開場按「去見鎮長葛瑞」",
+      "reachedFirstMeal": true,
+      "secondsToFirstMeal": 69,
+      "pageErrors": 0,
+      "milestonesSeconds": {
+        "firstDialogue": 25.6,
+        "mirrorPrompt": 4.9,
+        "firstSunlightCaught": 14.3,
+        "firstHarvest": 49.9,
+        "basketDelivered": 22.3,
+        "fireGameStart": 54.2,
+        "fireGameEnd": 66,
+        "resultCard": 66
+      },
+      "dialoguesSeen": [
+        "mayor"
+      ],
+      "stepsSeen": [
+        "plant",
+        "refract",
+        "catch_sun",
+        "tend",
+        "harvest",
+        "deliver",
+        "ripen",
+        "cook",
+        "eat",
+        "explore"
+      ],
+      "questsDone": "c1_homecoming,c1_first_harvest,c1_first_meal",
+      "notes": []
+    },
+    {
+      "route": "手機 390x844（觸控），開場按「去見鎮長葛瑞」",
+      "reachedFirstMeal": true,
+      "secondsToFirstMeal": 63,
+      "pageErrors": 0,
+      "milestonesSeconds": {
+        "firstDialogue": 30.6,
+        "mirrorPrompt": 4.7,
+        "firstSunlightCaught": 14.7,
+        "firstHarvest": 48.2,
+        "basketDelivered": 22.2,
+        "fireGameStart": 49.2,
+        "fireGameEnd": 60.9,
+        "resultCard": 60.9
+      },
+      "dialoguesSeen": [
+        "mayor"
+      ],
+      "stepsSeen": [
+        "plant",
+        "refract",
+        "catch_sun",
+        "tend(光裡)",
+        "harvest",
+        "deliver",
+        "ripen",
+        "cook",
+        "eat",
+        "explore"
+      ],
+      "questsDone": "c1_homecoming,c1_first_harvest,c1_first_meal",
+      "notes": [
+        "23.7s 找不到任務卡按鈕",
+        "25.2s 找不到任務卡按鈕",
+        "26.2s 找不到任務卡按鈕",
+        "27.3s 找不到任務卡按鈕",
+        "28.3s 找不到任務卡按鈕"
+      ]
+    },
+    {
+      "route": "桌機 1366x768，開場按「稍後再看便箋」",
+      "reachedFirstMeal": true,
+      "secondsToFirstMeal": 62,
+      "pageErrors": 0,
+      "milestonesSeconds": {
+        "firstDialogue": 3,
+        "mirrorPrompt": 12.2,
+        "firstSunlightCaught": 22.4,
+        "firstHarvest": 42.5,
+        "basketDelivered": null,
+        "fireGameStart": 46.8,
+        "fireGameEnd": 58.5,
+        "resultCard": 58.5
+      },
+      "dialoguesSeen": [
+        "mayor"
+      ],
+      "stepsSeen": [
+        "plant",
+        "refract",
+        "tend",
+        "tend(光裡)",
+        "harvest",
+        "ripen",
+        "catch_sun",
+        "harvest(光裡)",
+        "deliver",
+        "cook",
+        "eat",
+        "explore"
+      ],
+      "questsDone": "c1_homecoming,c1_first_harvest,c1_first_meal",
+      "notes": []
+    }
+  ]
+}

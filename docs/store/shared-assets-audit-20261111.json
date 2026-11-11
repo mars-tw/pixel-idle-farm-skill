@@ -1,0 +1,3732 @@
+{
+  "date": "2026-11-11T02:55:52.122Z",
+  "scope": "read-only; tracked runtime/source/assets by extension; excluded dirs: docs,scripts,references,node_modules,build,dist,android,ios,.git,artifacts,output,coverage,.claude,tools,test,tests,.github,.vscode",
+  "ownFiles": 906,
+  "ownCssRules": 1684,
+  "apps": [
+    {
+      "app": "Crackveil Vanguard",
+      "folder": "rift-survivors",
+      "mode": "git",
+      "files": 267,
+      "cssRules": 4,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "dfdd61a4140c421cc2ef84679d67d2471c2b08e137cf9a5dfee5bedb6564adfb"
+    },
+    {
+      "app": "灰燼護航（原生包裝裡的網頁副本）",
+      "folder": "game-store-publisher/native-kit/apps/ashes-convoy/web",
+      "mode": "walk",
+      "files": 110,
+      "cssRules": 174,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "242d4f59d43433ebe3394850b85abb90ebb8e6dc1c3c2a45aae890653f711b69"
+    },
+    {
+      "app": "無盡塔防",
+      "folder": "tower-defense-skill",
+      "mode": "git",
+      "files": 190,
+      "cssRules": 386,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "dcc55cae4bed80723c2436bd7fc7dbfd35bf545901711a74850d11c1ce27d732"
+    },
+    {
+      "app": "裂潮卡牌",
+      "folder": "web-card-game-skill",
+      "mode": "git",
+      "files": 326,
+      "cssRules": 1214,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "f7c74dd0d979a906f5c60a0369954df683903222257607ce16282d8cc6e1f9d5"
+    },
+    {
+      "app": "七期：斷鏈行動",
+      "folder": "seven-district-reckoning",
+      "mode": "git",
+      "files": 760,
+      "cssRules": 90,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "40df1c6bfe121aeebee6e51edb55bea35aa0e72158181d6c1c42a1ff8f6c5f65"
+    },
+    {
+      "app": "Rift Forge 3D",
+      "folder": "rift-forge-3d",
+      "mode": "git",
+      "files": 11,
+      "cssRules": 0,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "3451e383f43141e6a7b8b329b3755071de74cff23addcb488215ab14c0854ffb"
+    },
+    {
+      "app": "島嶼交通學院",
+      "folder": "taiwan-island-drive",
+      "mode": "git",
+      "files": 506,
+      "cssRules": 1957,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "060a5150087e03cd23279db20d9625c98237b532441f55c85b95c9e2ee9ee3a7"
+    },
+    {
+      "app": "燼途：最後一站（10 月清單沒有）",
+      "folder": "emberline-last-haven",
+      "mode": "git",
+      "files": 199,
+      "cssRules": 321,
+      "exactDuplicates": 0,
+      "cssDuplicates": 0,
+      "inventorySHA256": "9abb6f4fd5e1cb7381a8fdc478f4041e4bcea4eb109a3f88396150917dfe3e89"
+    }
+  ],
+  "exactDuplicates": [],
+  "cssDuplicates": [],
+  "missingFolders": [
+    "storm-apocalypse",
+    "village-siege",
+    "taiwan-train-math",
+    "廣告遊戲專案",
+    "island-flight-school",
+    "taiwan-train-school"
+  ],
+  "nativeHost": {
+    "62b5d205324d95578a79dbead4b0f60cf15415e0929f9e81edbf3cffb0fd8e25": [
+      "ashes-convoy/web/native-host.js",
+      "pixel-idle-farm-skill/web/native-host.js",
+      "tower-defense-skill/web/native-host.js",
+      "web-card-game-skill/web/native-host.js"
+    ]
+  },
+  "ownInventory": [
+    {
+      "file": "art-config-rpg-v2.json",
+      "sha256": "c0d624d7e2beb07f384db00009730a68896481f0984eb205d27859cf42cda2d8"
+    },
+    {
+      "file": "art-config-rpg-v3.json",
+      "sha256": "00e40d9764d7ee293f9a8614d16e76fc4bfc7b4c2439e36af19fd5aa9d0e265e"
+    },
+    {
+      "file": "art-config-rpg-v4.json",
+      "sha256": "8a1fbd211633cfa8d5eee712673ce6f73d790132cd37741b2e43d6c883ddaf9e"
+    },
+    {
+      "file": "art-config.json",
+      "sha256": "e35a91d650ca392d620557492731bc7ea474934c161d991d245fad51eff22dae"
+    },
+    {
+      "file": "assets/audio/r79-sunny-farm-loop.m4a",
+      "sha256": "8d092f3fd72257b93ccedd16fb83735931d3f353a8c7fdfddd1061b2b0f654a6"
+    },
+    {
+      "file": "assets/audio/r79-sunny-farm-loop.ogg",
+      "sha256": "d62766713e76c625dbf3377b3263696b0c9e468aa2d94757d06224411293c531"
+    },
+    {
+      "file": "assets/brand/app-icon-1024.png",
+      "sha256": "a5210bbf7da026027271d919ccb8a16957df920c6d61a3339f0cd95ca1cd737e"
+    },
+    {
+      "file": "assets/brand/app-icon-180.png",
+      "sha256": "b45b746aafac2788d19f791e1d2d8ffb4c3e57b12fcc9e6d55ea504a019430bb"
+    },
+    {
+      "file": "assets/brand/app-icon-192.png",
+      "sha256": "c43e7484588ed7adbbcf4d723aca98b5c97c73c29c3585accaa988e72b74eac5"
+    },
+    {
+      "file": "assets/brand/app-icon-32.png",
+      "sha256": "21f2a2a8b9991b897c70689e1fd5813a1bd4e74557775bb10ab2f355c6914a23"
+    },
+    {
+      "file": "assets/brand/app-icon-512.png",
+      "sha256": "817ce395f3f74c3a9f394097919bf8915ed83a48a54c2b7dc7ba8e0b8c6b7c97"
+    },
+    {
+      "file": "assets/brand/app-icon-64.png",
+      "sha256": "2370d7eb353915ee6a3ab75fff43f45f4ed43c4dbe3ca5e5932bcb3464806c72"
+    },
+    {
+      "file": "assets/brand/manifest.json",
+      "sha256": "cdf3f3b06cc7350e999b6049997a18f8927f0100f2a9ec845e780ee79d4a3b20"
+    },
+    {
+      "file": "assets/cover.png",
+      "sha256": "6a024a42ef84db782e8e0980bdba1e1e404b14ff4047c506232d56486519aa34"
+    },
+    {
+      "file": "assets/generated/characters/miri-rowan-farm-actions-cutout.png",
+      "sha256": "6fe29cce14a6f4dcf80c6e38a383dbc6779b390a7d9745166105bc958a8488de"
+    },
+    {
+      "file": "assets/generated/characters/miri-rowan-farm-actions.png",
+      "sha256": "32dddc9cb32ea3e9b52d1428b53f9630a1da5b9216d2106ddc46f27ec5545d4f"
+    },
+    {
+      "file": "assets/generated/characters/miri-rowan-turnaround.png",
+      "sha256": "1e0bfb45d63eba90000270a7ad5393e0a3ec0cbbc54332059739d3d6e9360768"
+    },
+    {
+      "file": "assets/generated/characters/miri-rowan-walk-cycle-cutout.png",
+      "sha256": "174858e0b9f3b4599da719800d127d185f36fac137090d8fa95f5fc0557001fa"
+    },
+    {
+      "file": "assets/generated/characters/miri-rowan-walk-cycle.png",
+      "sha256": "64e25464ea67619d2fe95cba302773e30bc6f03d3f801dcf4895e0e10580cc0f"
+    },
+    {
+      "file": "assets/generated/content-r1/bobber.png",
+      "sha256": "2ce98cf2f78205ec531729a1775582b042eb22bb2419c6f1cbe2a6bbb34abfb5"
+    },
+    {
+      "file": "assets/generated/content-r1/child.webp",
+      "sha256": "458c22c482af545bc20744b45ca943a9b139ea1cb29fec578a55dcd8f71f5b15"
+    },
+    {
+      "file": "assets/generated/content-r1/elder.webp",
+      "sha256": "f0ee82154a207497032c1a84c301c43b5699e241b56ba64cbc28f62acfb2468f"
+    },
+    {
+      "file": "assets/generated/content-r1/manifest.json",
+      "sha256": "cef1f3a1493373171e8f7f503e0f1ed127742e9d0a72c0c4ae3326dc88d9b828"
+    },
+    {
+      "file": "assets/generated/content-r1/merchant.webp",
+      "sha256": "47c36d843b53aa5f0eca48651dc35017f922d737f0ef7c1b668cd78bde9710e2"
+    },
+    {
+      "file": "assets/generated/content-r1/pond.webp",
+      "sha256": "1643cdc0816a56a5d3a5b85b1f09f1a51afdfbefa73ad931cc3780aef8b066cd"
+    },
+    {
+      "file": "assets/generated/content-r1/water.webp",
+      "sha256": "df49b833d2546253e386b6e2c4eaf723a4525c6e58ea965f618e567af8961dd3"
+    },
+    {
+      "file": "assets/generated/content-r10/basket.png",
+      "sha256": "0b0c5d5d5a1cb9e0d9212dbc49ec5e22b7c6d3b543e5c3b90fa7499a8c92a3e6"
+    },
+    {
+      "file": "assets/generated/content-r10/cup.png",
+      "sha256": "0c85d9aa3b4f1dc22eb944824e4590f4fc2fdb39e668f0e4069971ed0b96c5d1"
+    },
+    {
+      "file": "assets/generated/content-r10/hot.png",
+      "sha256": "e9c84d1638ca65ac2f08dceee5c1baa1418fa121bc3740745fc393768bf3bc06"
+    },
+    {
+      "file": "assets/generated/content-r10/manifest.json",
+      "sha256": "d8b262cc51f7adeaf8ed9c9b076c467b49c87827eb0a2d1a0c41c79543449faa"
+    },
+    {
+      "file": "assets/generated/content-r10/mayor.png",
+      "sha256": "e39b3609bd1dd51b33a04d592564a82db77f8b6324af83fae8afab6ed8120f3f"
+    },
+    {
+      "file": "assets/generated/content-r10/river_carp-0.png",
+      "sha256": "355bbc9ac504b5ac8a9b207a17a3a0ee1c6f5e41df098a98c242fcc0beea554b"
+    },
+    {
+      "file": "assets/generated/content-r10/river_carp-1.png",
+      "sha256": "ec98374694456eb3eaff2c162a023937a2f12c68cb182f92a56684d4216089e9"
+    },
+    {
+      "file": "assets/generated/content-r10/river_carp-2.png",
+      "sha256": "f0ef071e5eba2568f5f8ddb3a3cd7e02e5f63d92baff612ded25abe8baaad762"
+    },
+    {
+      "file": "assets/generated/content-r10/river_perch-0.png",
+      "sha256": "4ddaa699e0acaec2a4c4c0c7c54d8716707575abd8cf2e27773c9530d17f58b1"
+    },
+    {
+      "file": "assets/generated/content-r10/river_perch-1.png",
+      "sha256": "c6a9de7d073401ae9ad9190ddb29a423afa73b448c147596bb9a79feeaf532f2"
+    },
+    {
+      "file": "assets/generated/content-r10/river_perch-2.png",
+      "sha256": "1f5395a44058edf69c13b7171b7f847e589e7a066c75389c4e0f6d977f605a9c"
+    },
+    {
+      "file": "assets/generated/content-r10/silver_dace-0.png",
+      "sha256": "2737a007a301b5afef24554c3501fa45b84caa4f5629b2cae84679179817f834"
+    },
+    {
+      "file": "assets/generated/content-r10/silver_dace-1.png",
+      "sha256": "6bb8211ce0698ddd6ea9008f66dd467aed8e9bfb5df14355517a9df82909d72f"
+    },
+    {
+      "file": "assets/generated/content-r10/silver_dace-2.png",
+      "sha256": "4cee08bbfb5117020802251e6bad0741725add198d2caecae2e2a4bd3830c055"
+    },
+    {
+      "file": "assets/generated/content-r10/sour.png",
+      "sha256": "65f5af5b5f9dfab4e2b785baf0eb05b2272b52851c5e66e835a05207d486187c"
+    },
+    {
+      "file": "assets/generated/content-r10/sweet.png",
+      "sha256": "1fa589b80442afabcbc09015460d34d511ead3331af7c922a113c709edf7023d"
+    },
+    {
+      "file": "assets/generated/content-r10/table.png",
+      "sha256": "a439aaff075960642718d79ddeffd2df8067ba78caf1d41a97171193d00188ac"
+    },
+    {
+      "file": "assets/generated/content-r11/basket.png",
+      "sha256": "81c39e2f900e6d85953354dd4af539fd5fbcc5b0f97449bdea986b5fc9492925"
+    },
+    {
+      "file": "assets/generated/content-r11/manifest.json",
+      "sha256": "633c5e5a9d3aa46d08c6c262bf4f8efb96142abb15ab4127898b81bd3c587a0b"
+    },
+    {
+      "file": "assets/generated/content-r11/river_carp-2.png",
+      "sha256": "3a0684f5c933c51d7d539769e484a583add4a1d1be4eabff407ab9dbcb73ce08"
+    },
+    {
+      "file": "assets/generated/content-r11/table.png",
+      "sha256": "5739b71c4ee74c51fde8b91bcb7b94f1fbbf6c22711a1fcced62ca57d6205078"
+    },
+    {
+      "file": "assets/generated/content-r12/manifest.json",
+      "sha256": "e4e8058de6564454e0dc3cb161440e924858de7a93b440e06f29630268360748"
+    },
+    {
+      "file": "assets/generated/content-r12/peck-0.png",
+      "sha256": "3488891720880f9bda664ad7b10d483bf77acba4f82f5b1de76e613ba0f5d10b"
+    },
+    {
+      "file": "assets/generated/content-r12/peck-1.png",
+      "sha256": "509f4dfa0be419250327dcd93ade958631586ea28a768d2a5d20733290b04e33"
+    },
+    {
+      "file": "assets/generated/content-r12/peck-2.png",
+      "sha256": "a92e1136dde80bcc85c3f925c00bf301e9419a3c9b9a3a0bfd546d72cbaa2f14"
+    },
+    {
+      "file": "assets/generated/content-r12/serve-lift.png",
+      "sha256": "9f48d2f652ea69a659b51dc2342e7bb5a8767a8bc69e8d94c7e9fa854e46bbb4"
+    },
+    {
+      "file": "assets/generated/content-r12/serve-push.png",
+      "sha256": "ea5251ad073fd7082d7f54642620a8f2049b039ba69fb0a7fa99db70a6b9798f"
+    },
+    {
+      "file": "assets/generated/content-r12/serve-rest.png",
+      "sha256": "d74a28b001062ca9454731a00a2a05981a2bec4a289566e7d4ad690a6a621d51"
+    },
+    {
+      "file": "assets/generated/content-r12/wake-0.png",
+      "sha256": "498793c2be9bdfa94fe8f774462fdbeecbce7a1c9532e383acefc47ad1ec71c9"
+    },
+    {
+      "file": "assets/generated/content-r12/wake-1.png",
+      "sha256": "96921d6693684677a1b107fa137a7b5a9fef7da50cf41893c327fc51e26b4015"
+    },
+    {
+      "file": "assets/generated/content-r12/wake-2.png",
+      "sha256": "122c698396254b47a617425c6667ba56be0fc76c561d922b96d4078cc16bab81"
+    },
+    {
+      "file": "assets/generated/content-r12/wide-0.png",
+      "sha256": "df78fdaa8d4ede6986323bfe1d7f6a75346ce931d45500242d9e21817e909f3f"
+    },
+    {
+      "file": "assets/generated/content-r12/wide-1.png",
+      "sha256": "33c4b6b2fbbb50c82678fbc465e65ebfeb9527364b210272e500902c5f3d2d2a"
+    },
+    {
+      "file": "assets/generated/content-r12/wide-2.png",
+      "sha256": "84e2893382eac290e927c4b861a9988cc34b90cd2f9f95f18d3e31c1e3da5eff"
+    },
+    {
+      "file": "assets/generated/content-r13/creek.png",
+      "sha256": "2f4f0e32f7a68dae551554571939b288b82c15da1b228fffe0a2f20cd2846539"
+    },
+    {
+      "file": "assets/generated/content-r13/fishing-0.png",
+      "sha256": "43931bf4794c77a68596dd8dc7ee90442a0410c9e068800da4394e3969978393"
+    },
+    {
+      "file": "assets/generated/content-r13/fishing-1.png",
+      "sha256": "b3c4b072fddee453cac4dc3f0e5da9908ce44dfa7e6834eed30ded2005cb9e48"
+    },
+    {
+      "file": "assets/generated/content-r13/fishing-2.png",
+      "sha256": "3cc236fd78845a5d5e6d94f88aeaef220b93fadc977ff1f14149989c296fa542"
+    },
+    {
+      "file": "assets/generated/content-r13/manifest.json",
+      "sha256": "802215bef3854e2fc750328de95c74b35427882fbb2c63680445e4c049723f12"
+    },
+    {
+      "file": "assets/generated/content-r13/river_carp-color.png",
+      "sha256": "fed8eca0257f7e35c656af32e421e9ddb88e98f211d3effa994acfa633f708c2"
+    },
+    {
+      "file": "assets/generated/content-r13/river_carp-shadow.png",
+      "sha256": "2b43e8a073699fdaaccaa7ee589cd0896fe283f395ae6b2253da569e683453a7"
+    },
+    {
+      "file": "assets/generated/content-r13/river_perch-color.png",
+      "sha256": "5d00057261911414b3e9666c8aa92bc0c105211e82e4106e953fe28264056900"
+    },
+    {
+      "file": "assets/generated/content-r13/river_perch-shadow.png",
+      "sha256": "a0f8198436ab59ff1aded4ea550e59debd656daf19331a86bd2a69154ba3f027"
+    },
+    {
+      "file": "assets/generated/content-r13/silver_dace-color.png",
+      "sha256": "46093c846df49a962d49fd977b19d7ef2d23b31695d6ae0cdeabef21be0a8b5e"
+    },
+    {
+      "file": "assets/generated/content-r13/silver_dace-shadow.png",
+      "sha256": "e6dd7610433049f6b9acb32e740c2cf8f2180188497c5321f6b793e6fe4816b0"
+    },
+    {
+      "file": "assets/generated/content-r13/wait-child.png",
+      "sha256": "85af82d97888484d991718e9f6a7c89e3ed57d2269fe58081c45fc7d2a1a6b5d"
+    },
+    {
+      "file": "assets/generated/content-r13/wait-elder.png",
+      "sha256": "a3c14f590484e075729d28bff4a95a5ff8940e4a32bd4267a63faa6ed07b6441"
+    },
+    {
+      "file": "assets/generated/content-r13/wait-merchant.png",
+      "sha256": "24f9af192b2dd92b7fdb490418f77d78ee470a1c549aba50e071bcafa853c7f0"
+    },
+    {
+      "file": "assets/generated/content-r15/hold-player.png",
+      "sha256": "b1b2aa9f7ca246c1d4de8467385bed215a30d9962e9c12efad3ed5e5bd9839cc"
+    },
+    {
+      "file": "assets/generated/content-r15/idle-player.png",
+      "sha256": "42cca2afc77dd1a4461f02663579f65d5efcb605c6d3b3be1c08431da86cb544"
+    },
+    {
+      "file": "assets/generated/content-r15/manifest.json",
+      "sha256": "57e4ac45eea25a6b1b8ec48c10a65d71833bcd11593a9b9c54b73dc4104c48d1"
+    },
+    {
+      "file": "assets/generated/content-r15/reach-player.png",
+      "sha256": "dd0cb53bdde55a7fd8dc0702316fdfe0a93835ccc48cd85e7dbabf07f16cc0ba"
+    },
+    {
+      "file": "assets/generated/content-r15/wide-1.png",
+      "sha256": "baeb0b3c56c9cf829d0b04ffdfc9774fab3af52220626177d533fae75221459a"
+    },
+    {
+      "file": "assets/generated/content-r16/manifest.json",
+      "sha256": "b22287c3355a4055929026865bf0e739b06137df85bd8bf89f3aaee80e88556c"
+    },
+    {
+      "file": "assets/generated/content-r16/sharing-bowl.png",
+      "sha256": "162a8bb08c283e6b734bc63326bd9142985d5488202c8a049db2230c8b90553d"
+    },
+    {
+      "file": "assets/generated/content-r18/manifest.json",
+      "sha256": "20eee4fa28f0bc182a05614bf370f7cb636021534160bd24dfea5aa96d54faea"
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-0.png",
+      "sha256": "8caafe350880d8c9a40e0d1bae51e2b124c75ac88718ab94867d518429d17651"
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-1.png",
+      "sha256": "fa252aaa829bc5c3faf6448309f31b8e7d0b06023979f091c7a907e57d358edd"
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-2.png",
+      "sha256": "141ddfaf833dea63d7caa5b1a03b115f286ae907d0bc602af41e4b7f1c5aa027"
+    },
+    {
+      "file": "assets/generated/content-r18/river_carp-3.png",
+      "sha256": "e4cacfc3aa192a6e9ad6dc8c93675ceb72da99234349a6d815cfbeb24a5186e2"
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-0.png",
+      "sha256": "d5ae476f07575e6bd8e7369b2aa4f22f06f347418d602dab47c5da72262a60da"
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-1.png",
+      "sha256": "8fa4228c39888af4bda0d8b1701f13a0a5054e2325bbad08a33a4826a13e79cb"
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-2.png",
+      "sha256": "2963a582c5b32617198c437a0fba2cec02347c1e641b71a8501490a5d2a508bc"
+    },
+    {
+      "file": "assets/generated/content-r18/river_perch-3.png",
+      "sha256": "1a896f36a7bc402a65e273c9f47a142265d955ade2576ed50e53a9fcfc42db30"
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-0.png",
+      "sha256": "caeb40426551b4620c6e9283af044fde7cb6191ee467620afb4f33508f047a93"
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-1.png",
+      "sha256": "7cef3aad2c58f1bcd694869b4f4e64e43e0226c8a51207a2658dc95a1b87d9b5"
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-2.png",
+      "sha256": "5e09c71b6b2db87e7ba442dbbd1d1c7371c45efb6d8226104a8d2a44a7374f84"
+    },
+    {
+      "file": "assets/generated/content-r18/silver_dace-3.png",
+      "sha256": "39477f7c3ef32c5219d6d319aa45c31421e2179cb30740539669c5b1f27f39e0"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-child.png",
+      "sha256": "3c6db18c57e01e266695d55d26b39482a33f7b9be934f7da2b6d1cfdd665653a"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-elder.png",
+      "sha256": "a8b56adc3e81b18af06cf995ce76d79e6eb0e4f78beaa729ef639564a2da7a3d"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-merchant.png",
+      "sha256": "6e1d26e128c1fb8212c99b7918ac331ef399094c9808ded624d8903582ac2e96"
+    },
+    {
+      "file": "assets/generated/content-r19/hold-player.png",
+      "sha256": "68fa089830244b81770f5ce00753fc94bec762158d022ae5fe0338dc8114ab07"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-child.png",
+      "sha256": "96e71f236b82023a1bd7bc1e6a4c9df2842adec28564ce08da08a9895e52eba1"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-elder.png",
+      "sha256": "8c0e7bc51dc573557c76d5e03ab3879428535e9c68f5562479984c290706c572"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-merchant.png",
+      "sha256": "8bec1ee1756ab4b29e355cc536947491fe26a0b02c0957193bba2fe7f16ec2b3"
+    },
+    {
+      "file": "assets/generated/content-r19/idle-player.png",
+      "sha256": "da38462202d156ae694613ab2f96cfd0c7ca9aa7684a9ae8849dda836faf0cdd"
+    },
+    {
+      "file": "assets/generated/content-r19/manifest.json",
+      "sha256": "485591773642282a485d51d0b44c700df90b2f265131ddb4e9f18dfbdb5d91d2"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-child.png",
+      "sha256": "51bc22a25a574eb558dd3a9f6d5014073ade4d9a4908d91135b737ce0a29d391"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-elder.png",
+      "sha256": "2a39b13d6f9f082b8324c086b4e0af76836b7925a17f2fe2e0c6a5d3c1b2f121"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-merchant.png",
+      "sha256": "92791ece22bfeac5be601bff9804270cbb5305b17d7b0a33272e808107b5567a"
+    },
+    {
+      "file": "assets/generated/content-r19/reach-player.png",
+      "sha256": "d02c1cfbbb4d0370f7e3ea80bf62eff9ec5d9f4d00c1eb0353204ff99a040f7b"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-0.png",
+      "sha256": "75770b09e4aa7b6375bf8a9734e4ffc857bdf900c7e7392b3a4f5ad234ea13cb"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-1.png",
+      "sha256": "943e8a32cdd8f22ac749c60dc11e56d54c547b1eda7a74f9078b6f072b700615"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-2.png",
+      "sha256": "9172c82181a8ccd38dd257b0cc988bdbe701d0339e2db12e773c733ba551744a"
+    },
+    {
+      "file": "assets/generated/content-r19/river_carp-3.png",
+      "sha256": "9370f5643b94b4fcfc1c34140b9df12f0945f5cb54940d58805fa4f2048990ce"
+    },
+    {
+      "file": "assets/generated/content-r2/child.webp",
+      "sha256": "95030c4a55525fa461e9f7ee4b054b781ac9e63499e88055c605cf2fc2f99cc2"
+    },
+    {
+      "file": "assets/generated/content-r2/elder.webp",
+      "sha256": "2f5b78c6e92e9bad3b28e02a738a67a018038a88049fd38764d1193033eeb27c"
+    },
+    {
+      "file": "assets/generated/content-r2/manifest.json",
+      "sha256": "6d7d3e66e87d3fa490d00736ce8e764536d79acbf9a3da4b7bc0452c7e818780"
+    },
+    {
+      "file": "assets/generated/content-r2/merchant.webp",
+      "sha256": "7a253caefd1ace50f2c83e23ca559af76e061dae7ae5aff4d058d58753f3d7b4"
+    },
+    {
+      "file": "assets/generated/content-r2/river_carp.webp",
+      "sha256": "5075ab28c25abef7ba1e4e7519f5995f47a44fe1d04e00b57e66cc0b797d72f6"
+    },
+    {
+      "file": "assets/generated/content-r2/river_perch.webp",
+      "sha256": "1e3a7b772b3665f654ec8ed53862002d5a1bb0fe3a2f8d6bce0199ccd448adfa"
+    },
+    {
+      "file": "assets/generated/content-r2/silver_dace.webp",
+      "sha256": "525fb21306b5d54242fbc16bc3a133c3a30d0d5ea873c417e41245fd3e9fa00f"
+    },
+    {
+      "file": "assets/generated/content-r3/child.webp",
+      "sha256": "187a37f75c2f0b6d498b502f528584eb38ad5588c35183941ce63102ce66f6b1"
+    },
+    {
+      "file": "assets/generated/content-r3/elder.webp",
+      "sha256": "34d5f1a3b6d002d4fbd3634ddff9707794bb0304bff93b9d23e840712a37a2d7"
+    },
+    {
+      "file": "assets/generated/content-r3/manifest.json",
+      "sha256": "f5a6c9362dd6063a64160b0c37db27666e05759f330955a0eefada03d650ef29"
+    },
+    {
+      "file": "assets/generated/content-r3/merchant.webp",
+      "sha256": "ca48041cbaf260352842fb4b3d25574ef8f22ae6426d75e634563524817bf3ec"
+    },
+    {
+      "file": "assets/generated/content-r4/basket.webp",
+      "sha256": "9fad80054279a376bbbddb92f29f21adc7a923872d85f6d362abdae49259e4dc"
+    },
+    {
+      "file": "assets/generated/content-r4/child.webp",
+      "sha256": "a0066bfa3ecde444973f297f9377716dfafe7044f5dd2e41f83cd0cc18e5e5a6"
+    },
+    {
+      "file": "assets/generated/content-r4/manifest.json",
+      "sha256": "5e15c1239bca26ac587f03f62e7e78a165c67258c8ee258869dafded3d2fcc1e"
+    },
+    {
+      "file": "assets/generated/content-r5/elder.webp",
+      "sha256": "1ea8e40c33cb4cf9960c9d3211d3282a3649c57fecb6977b679fa0dddc976e72"
+    },
+    {
+      "file": "assets/generated/content-r5/manifest.json",
+      "sha256": "f8cb05ddec662e0f58cb6470d4f787b792e7b6cf7d46be10cd5c1e139460eb9a"
+    },
+    {
+      "file": "assets/generated/content-r5/merchant.webp",
+      "sha256": "87bd733db40ebadd31d60e477330d2c3a585a15f49bbcf7c92ad9db4bf9bd14f"
+    },
+    {
+      "file": "assets/generated/content-r6/basket-hot.png",
+      "sha256": "3ce31c673fc1c6cfa54a4e0a8c1c1ebe0ac7b72f590afa575742c6dcea46e3c2"
+    },
+    {
+      "file": "assets/generated/content-r6/basket-plain.png",
+      "sha256": "aac5f88c6f2f27c5220269b8807679e690bb0f720b85573c043515e28815b22e"
+    },
+    {
+      "file": "assets/generated/content-r6/basket-sour.png",
+      "sha256": "d3b0509fd33f9e08a5e43556aa78d4b50de4d262b3c5cdeadb0ffb6e0b28ab64"
+    },
+    {
+      "file": "assets/generated/content-r6/basket-sweet.png",
+      "sha256": "dc35e33795d6e40a0981e59189a4860726d7710a467bcad2fa051f32deefa18b"
+    },
+    {
+      "file": "assets/generated/content-r6/gathering.webp",
+      "sha256": "d2d500fc1629e70c8cf436e97396f70f3d3bcd2211a0196339c539fd92f25256"
+    },
+    {
+      "file": "assets/generated/content-r6/manifest.json",
+      "sha256": "4d2a46b6de0fd060e0c9329d748b7753dcf013614e7d4560ccec04100e07b691"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-child-0.png",
+      "sha256": "150c59968baadcc63095992c34aff14c90e5d302da87533a900ae2fb294ec1e4"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-child-1.png",
+      "sha256": "16b090cb2aeeaf0257e6aaeeb6732ae91c9bd843e49915ea2182d90a18080bdf"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-child-2.png",
+      "sha256": "26110e4c0578a93f2f3df5134207b3239dd0ecd5872374c3201dd7a7db317a27"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-elder-0.png",
+      "sha256": "03ecfe1f958bd685ce64b1b96aaa66647b9447b4b2b967f2799da40a06cb5ace"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-elder-1.png",
+      "sha256": "d02fcb33366719da1f39ce7f42b106c582d39e2216155fe210e465b0b551c547"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-elder-2.png",
+      "sha256": "1471d65e8028eed57002104763649fbd571ce71f85ee5ef43ae539d8c41c8743"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-merchant-0.png",
+      "sha256": "50ae39d508808a05282ef7e6378c5727d9e26ded937f6d1b8cc15bfaa9bfe29c"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-merchant-1.png",
+      "sha256": "8697da47e59d3ce250c1f13165abd7dabf91406f21df073703ef95edff4b4131"
+    },
+    {
+      "file": "assets/generated/content-r6/receive-merchant-2.png",
+      "sha256": "8bf415137079f54013911ed17cb18f35bf81e3696b2969aaac5ddb83acc72c89"
+    },
+    {
+      "file": "assets/generated/content-r6/token-child.png",
+      "sha256": "77f8f893d0c945b5750a2a72f781f077bc579de6934352df6a93c33ec7742eaf"
+    },
+    {
+      "file": "assets/generated/content-r6/token-elder.png",
+      "sha256": "c816f54d7d33c5e120fadc25cd8ff837205c14a4e3e8d84105cf8cd533822601"
+    },
+    {
+      "file": "assets/generated/content-r6/token-merchant.png",
+      "sha256": "1402cf6e7e5d765e32bdf107b2dbbcab98614403129595c08aac0697feebddab"
+    },
+    {
+      "file": "assets/generated/content-r63/bunting.svg",
+      "sha256": "d02c49b6e6220ea145a7201b159821afcbdedfe3b5af721dfa5cd338b0437341"
+    },
+    {
+      "file": "assets/generated/content-r63/lanterns.svg",
+      "sha256": "acb5c07d7d6d39e1059891ac7fa8a7d32009dcdc61936823a3b2655899bcd8dc"
+    },
+    {
+      "file": "assets/generated/content-r63/stall.svg",
+      "sha256": "670ab97169d8db242b28c7e7c0e0035164f7614819adf58c7d28ebcf06ac5654"
+    },
+    {
+      "file": "assets/generated/content-r66/beehive.svg",
+      "sha256": "32d666bf74e8b2ab37f8673015b34586b2e2c70e7798eaf2f9ad3c3f8134996f"
+    },
+    {
+      "file": "assets/generated/content-r66/feed-trough.svg",
+      "sha256": "4fa8ae16f2660a183c4030bd02423495190a3c52b405800d3b562b4004288a3d"
+    },
+    {
+      "file": "assets/generated/content-r66/herb-garden.svg",
+      "sha256": "997a76c6e1671082e0fe6a84f66f53c936b794816fc2e4b63c47641a71977cef"
+    },
+    {
+      "file": "assets/generated/content-r66/treasure.svg",
+      "sha256": "166ad7cad4632474fd2e050ac19c8eb441643763faed7dbe4c06ee3a2e517f48"
+    },
+    {
+      "file": "assets/generated/content-r7/eat-child.png",
+      "sha256": "8d19867d97bfb44b4554433e754107dc32920c58fca78f89b755b8bb9282f770"
+    },
+    {
+      "file": "assets/generated/content-r7/eat-elder.png",
+      "sha256": "d0da646b3a8683a59dfccf45e776e3f30a3ce549ff69decd59b4a22f403c6015"
+    },
+    {
+      "file": "assets/generated/content-r7/eat-merchant.png",
+      "sha256": "3bc126bf56c239d170eb6acf8554ef9e68ee0ae96c3f1e9ce16719d3d5af15dc"
+    },
+    {
+      "file": "assets/generated/content-r7/idle-child.png",
+      "sha256": "9539061afaba7498b20e0955536b1e5b0555d36c34fb62d86c5db0a55bc4beaa"
+    },
+    {
+      "file": "assets/generated/content-r7/idle-elder.png",
+      "sha256": "cb43e8a49fdcf9d2bbdc736a8ab7708af39266abb452153b2d21314cc9192d1e"
+    },
+    {
+      "file": "assets/generated/content-r7/idle-merchant.png",
+      "sha256": "3c01e92efb248c698dd474107fdfd071042b101c4a5c4191bcb3cc4d4a496274"
+    },
+    {
+      "file": "assets/generated/content-r7/manifest.json",
+      "sha256": "f1b16e21cc8c9c014a799b0d814e93ef7bbb3f76ea5a2bd9f9280a672c6e7d06"
+    },
+    {
+      "file": "assets/generated/content-r7/quiet-water.webp",
+      "sha256": "378cdde084f19a0f1420394c34ecd03b5943807d5fa5956d149b312b318ea2f4"
+    },
+    {
+      "file": "assets/generated/content-r7/reach-child.png",
+      "sha256": "7eba657f80569d43623c3b77c0fef8b724d8c289b10b5ef9110a53565af60ecd"
+    },
+    {
+      "file": "assets/generated/content-r7/reach-elder.png",
+      "sha256": "b5cf6a2ed4e5bc323afe28edca0ecf40694d9d613311cf1692a98065fafc2a28"
+    },
+    {
+      "file": "assets/generated/content-r7/reach-merchant.png",
+      "sha256": "80c604ff1ff45392117a0df9ce9fadc190d1c5f4e58c9d68a6a4c5d839f77a50"
+    },
+    {
+      "file": "assets/generated/content-r7/sit-child.png",
+      "sha256": "4af7d4e0358b88b5d1409b0047cce3743db96969115f26cf0ae48e7241d8e9e6"
+    },
+    {
+      "file": "assets/generated/content-r7/sit-elder.png",
+      "sha256": "b2c407c2eb68b0cd4d46030f563c3d2168232a0eadf71d11759e45a13e09eff3"
+    },
+    {
+      "file": "assets/generated/content-r7/sit-merchant.png",
+      "sha256": "eebdf9e6cceb375cf6dfd70d47af2da3701f018c7586e10ad2ac362e0c7e22da"
+    },
+    {
+      "file": "assets/generated/content-r7/trace-flower.png",
+      "sha256": "07ecd4a9696d772c552d318785ba44aa4c6faee9f2b492ca82af105bd3fec2da"
+    },
+    {
+      "file": "assets/generated/content-r70/beehive.png",
+      "sha256": "10f0e53f64df4f86f36a1bc696d64aae4cf0a40c57adc39739cf651957dd1b3a"
+    },
+    {
+      "file": "assets/generated/content-r70/bunting.png",
+      "sha256": "58777a860dfbb0cafe3aa4123be986d276568536e2d48b6dcab6b92bb805063d"
+    },
+    {
+      "file": "assets/generated/content-r70/feed-trough.png",
+      "sha256": "c606592a5333c2397e145fcb0070083499ce4641bbd0b7e90b2538b0a9672912"
+    },
+    {
+      "file": "assets/generated/content-r70/festival-stall.png",
+      "sha256": "e3f6589049e56741fc9cb7c6f83bb65a9a26bbb36c748291e7b4f6cf909576c3"
+    },
+    {
+      "file": "assets/generated/content-r70/herb-garden.png",
+      "sha256": "31c30c9db588855b03fb0dea5a84fd95dc62938e019d46fc9d66f1f5dcb30390"
+    },
+    {
+      "file": "assets/generated/content-r70/judge-table.png",
+      "sha256": "74db8e23ad0ae3211e55a21a2ae1cd6f71fbf9d9f0609eda2a08e388c799fc6f"
+    },
+    {
+      "file": "assets/generated/content-r70/lantern-post.png",
+      "sha256": "c0e52337e188c24d9f697ce4d265d274f31b04844fa075c063418ed2c3231a99"
+    },
+    {
+      "file": "assets/generated/content-r70/manifest.json",
+      "sha256": "707f96b82c752e80374482947a4934570d97a078ebe276bf971ce26578b23239"
+    },
+    {
+      "file": "assets/generated/content-r72/customer-child.png",
+      "sha256": "54fa0bcc0aa25d9335e37064679dfa58ac4c911cd842c62e47383d24981b390f"
+    },
+    {
+      "file": "assets/generated/content-r72/customer-elder.png",
+      "sha256": "f748abd4081cf1a872c6349db74c9853771cbda148b5a2bed0de47ab62fc5a3c"
+    },
+    {
+      "file": "assets/generated/content-r72/customer-mayor.png",
+      "sha256": "2266509d2445b0632fcecda907a18b03e0c16724c5eeb8f6285732243e3d22bf"
+    },
+    {
+      "file": "assets/generated/content-r72/customer-merchant.png",
+      "sha256": "a32d0c801e26b0e83908d1e4db0a765bffbb88f37ec5ca63e7bc28fa3cb16d7d"
+    },
+    {
+      "file": "assets/generated/content-r72/golden-flag.png",
+      "sha256": "4da2e7e2d0e0abbcaeda6aaba4acb68fd95099ec58b7c274c617bfe316638444"
+    },
+    {
+      "file": "assets/generated/content-r72/manifest.json",
+      "sha256": "1dee9160a9d6d35e3a89fba1b2d21bf755654344c54c3ecb8246754367ee7217"
+    },
+    {
+      "file": "assets/generated/content-r72/stall-token.png",
+      "sha256": "af8c38567019b47a97d8079b5e04f82b8684ddb5388392b37951d16a31981d1d"
+    },
+    {
+      "file": "assets/generated/content-r73/item-amber_resin.png",
+      "sha256": "899292f460ca6a267c5268eb386f093f57258db41564c2026e2c3307c0893001"
+    },
+    {
+      "file": "assets/generated/content-r73/item-baked_carrot.png",
+      "sha256": "0e5dc3a2174264e4adcdc6a0919abb4ef87ec2a1a54b6a05556f91c86af937bd"
+    },
+    {
+      "file": "assets/generated/content-r73/item-bamber_rain_soup.png",
+      "sha256": "3a0bc1aafec45daf0f44e0aad3005c7f876dc02af741361c79a1ea79c92d141b"
+    },
+    {
+      "file": "assets/generated/content-r73/item-carrot_trail_soup.png",
+      "sha256": "94c9e6f0f089ffb51364a8c5bd47138f1a24c0cf0859cd7e8e0784496f24cecf"
+    },
+    {
+      "file": "assets/generated/content-r73/item-carrot_wheat_stew.png",
+      "sha256": "ba2127a6d6671041f0f01350301ae8e17f58ff6fbbd6de843b0d319727c97592"
+    },
+    {
+      "file": "assets/generated/content-r73/item-duck_egg.png",
+      "sha256": "7d7295a0467b70c8c50343be950ff1fd72b231beecf845a7c7382b601ae3f90d"
+    },
+    {
+      "file": "assets/generated/content-r73/item-egg.png",
+      "sha256": "2d531c7bd291e9235a8051298ffa5a897af04e7666c51645e4203894028a3119"
+    },
+    {
+      "file": "assets/generated/content-r73/item-fallen_branch.png",
+      "sha256": "2f0af7e10defb1d6374bd0c7cb654bd7491143e938cd73f1bde1712fb14cf027"
+    },
+    {
+      "file": "assets/generated/content-r73/item-forest_chestnut.png",
+      "sha256": "e26856bbfcf760437abd2508cf1b1a214af3e9596734361559348c685a74d9ec"
+    },
+    {
+      "file": "assets/generated/content-r73/item-forest_herb.png",
+      "sha256": "fb471a653290136ab1d31970bf60000b1f196db40b957c1fadcf6d558ee5a6f9"
+    },
+    {
+      "file": "assets/generated/content-r73/item-frost_cherry.png",
+      "sha256": "c8e568204a6be5e7f7b0bcf16d4125f8f69f7c5e56106424ca193fc5d66d4bd2"
+    },
+    {
+      "file": "assets/generated/content-r73/item-glow_mushroom.png",
+      "sha256": "87098547c0a1860f1ce505a47147e703d0e1c856247a06bba6c224989e1bd2df"
+    },
+    {
+      "file": "assets/generated/content-r73/item-honey.png",
+      "sha256": "640378efe8426686cea605c062b85e300925b698ec08a3b4df19db2adeb57495"
+    },
+    {
+      "file": "assets/generated/content-r73/item-milk.png",
+      "sha256": "4bd878ed690a2e49cce59d93e563a011339bb5f00f119f758e1cf2c40050de35"
+    },
+    {
+      "file": "assets/generated/content-r73/item-mint_tea.png",
+      "sha256": "b9203a0c09ffbc17580b86129f6753bdd1c53872b9fb17a269f769e210c788b9"
+    },
+    {
+      "file": "assets/generated/content-r73/item-mooncap_spore.png",
+      "sha256": "cefb3b7ab0f825bb96bc3ce8cbe36db630b53c8742a471b99b9c172e5b6e8d02"
+    },
+    {
+      "file": "assets/generated/content-r73/item-river_mint.png",
+      "sha256": "233f6c93dc2898c4bd2f22a102fff2383951de7826342581be65fec3d21fa14a"
+    },
+    {
+      "file": "assets/generated/content-r73/item-riverside_harvest_platter.png",
+      "sha256": "6e9ee718545a96095d2e203002d6209dbace84c12eac45b65e9e1af9d6d2372f"
+    },
+    {
+      "file": "assets/generated/content-r73/item-rustic_bread.png",
+      "sha256": "0a1e3ed180f817313c118f66e8509aca2832096e751fbd7216d932c312ebc7a2"
+    },
+    {
+      "file": "assets/generated/content-r73/item-strawberry_market_tart.png",
+      "sha256": "8da5390861816749008c93367e860f0f7563910dc3f7b76c1027301b453bb805"
+    },
+    {
+      "file": "assets/generated/content-r73/item-tomato_harvest_stew.png",
+      "sha256": "bd3643ade7fb0f3dd58b49ae6e8dcd492920752e22d407d36929e4624bd37218"
+    },
+    {
+      "file": "assets/generated/content-r73/item-wheat_carrot_pancake.png",
+      "sha256": "638add44c84775035ec63d10659d4f3f2a6ecd09af08aede0e492dec3db1fe08"
+    },
+    {
+      "file": "assets/generated/content-r73/item-wild_berry.png",
+      "sha256": "06c567dd8094f6324511440ac7977509dd0cb67929c98a58b0500a35170cdf36"
+    },
+    {
+      "file": "assets/generated/content-r73/item-wool.png",
+      "sha256": "7cb25e617fca62762f959d22d97c9be3bb01a4060e5ab5cef98b629aeb1d2e8a"
+    },
+    {
+      "file": "assets/generated/content-r73/manifest.json",
+      "sha256": "bece39540471b73c80a63b4ac02558a788425df827c3c6bd8ee6dbb26997eb56"
+    },
+    {
+      "file": "assets/generated/content-r75/cooking_pot.png",
+      "sha256": "fc8eee6366bff7ac16b3e07006029c81ac66e954dc9ef37742eb1250fac6c3f0"
+    },
+    {
+      "file": "assets/generated/content-r75/drying_rack_empty.png",
+      "sha256": "86985db875268864953b7161dd9686b9e941fb0ea26869039955f79717ddf9d2"
+    },
+    {
+      "file": "assets/generated/content-r75/drying_rack_full.png",
+      "sha256": "cc9180330a3b10a4e72fb625b8226062e69e992e9554ba1933cce264d597c196"
+    },
+    {
+      "file": "assets/generated/content-r75/farm_sign.png",
+      "sha256": "52a6a7cbb4892a009f1025d035bf65e0abd5bec48f632e5d353c3db24d9f1ad7"
+    },
+    {
+      "file": "assets/generated/content-r75/item-sun_carrot.png",
+      "sha256": "579eeeb1456177a5a5fc06e18c2dc6c019576f8d873edef8b953f5232e865fef"
+    },
+    {
+      "file": "assets/generated/content-r75/item-sun_strawberry.png",
+      "sha256": "5c3d997bc0a85c520120f9869c2182c82450665f43e0ff95e37ca3d3ea1b12f5"
+    },
+    {
+      "file": "assets/generated/content-r75/item-sun_tomato.png",
+      "sha256": "435ad182b74d411ec35406278553208935aefa7281dd1cccbaa29f3609b1ded4"
+    },
+    {
+      "file": "assets/generated/content-r75/item-sun_wheat.png",
+      "sha256": "683bb249404c2db0a238183c53d6ae612a024a07e0684accd428a63532a1beff"
+    },
+    {
+      "file": "assets/generated/content-r75/manifest.json",
+      "sha256": "7ab8df67ce24465210119da359e649da60fdabe48f43601df5bf55fa8fc5f138"
+    },
+    {
+      "file": "assets/generated/content-r75/sun_jar.png",
+      "sha256": "705cafce0fef7423c3f99a64671f39c315cf8d1ecc399b13e05e727d24c1462a"
+    },
+    {
+      "file": "assets/generated/content-r75/sun_mirror.png",
+      "sha256": "e27980a78a00c6b63ea686c56cfc0bf898a4f6d92f3afa053cf6a41394956d14"
+    },
+    {
+      "file": "assets/generated/content-r76/manifest.json",
+      "sha256": "987fb31e099203e9473718462616929c64cd92f6965a26b750321977e1f6bb49"
+    },
+    {
+      "file": "assets/generated/content-r76/portrait-child.png",
+      "sha256": "b4f04752e4f58724ac35110827e6b2373ad9111c79c8cbca45b44264b5bebf14"
+    },
+    {
+      "file": "assets/generated/content-r76/portrait-elder.png",
+      "sha256": "83f2385695705124cae4dde621e494a306ed35d101c15fb38bebd97c590213ce"
+    },
+    {
+      "file": "assets/generated/content-r76/portrait-merchant.png",
+      "sha256": "c8928b5a59692f52f4d9a9a65019bf73ed9a0e3d66bca039f7c39e466312e806"
+    },
+    {
+      "file": "assets/generated/content-r76/stamp_dried.png",
+      "sha256": "0f08cd760e23dc77be74684ac166078ed004ef437c3d45aa30e89485774b76f5"
+    },
+    {
+      "file": "assets/generated/content-r76/stamp_lit.png",
+      "sha256": "4335f692e7ac20fd647a6cf6e580f0f557b0f288f0986560e38831a11f761a41"
+    },
+    {
+      "file": "assets/generated/content-r76/stamp_perfect.png",
+      "sha256": "f41dd6ccbe608e6e15d983e9dbc38d8270e2eeaeb1703d734343bb18c20d50ad"
+    },
+    {
+      "file": "assets/generated/content-r76/stamp_trait_partial.png",
+      "sha256": "643b79b3748acf80a286caa3519a95ee40158813d4a10d4b04bcd6747c9197fe"
+    },
+    {
+      "file": "assets/generated/content-r76/stamp_trait_shade.png",
+      "sha256": "b3f7b7b4cb1de41e73bd5b82d0e49cc0a59e045227f98b8eb173dba5e663978b"
+    },
+    {
+      "file": "assets/generated/content-r76/stamp_trait_sun.png",
+      "sha256": "eb329585a37849acedbad8625c7dd37052e44fe179a7d3761ceffbca73b22e5c"
+    },
+    {
+      "file": "assets/generated/content-r76/sunbook_cover.png",
+      "sha256": "97c0a17e27e9c347ed9ce256efbabd5796b30c20d811dabae6bdfa7a1ebc6da9"
+    },
+    {
+      "file": "assets/generated/content-r8/gesture-child.png",
+      "sha256": "5fc59c6b29a700d6971a439de8f023b6893cdb3c2cfa9d3dff7badfe86740715"
+    },
+    {
+      "file": "assets/generated/content-r8/gesture-elder.png",
+      "sha256": "e2a291e0bc4c58414df3621c8786518b4efcfa12f50877e8ce2d6cc5953df691"
+    },
+    {
+      "file": "assets/generated/content-r8/gesture-merchant.png",
+      "sha256": "5017d89c10b54e0127aef1f8cd82a2bd9d8aed0cf85cce9e21bc48cf755449d0"
+    },
+    {
+      "file": "assets/generated/content-r8/manifest.json",
+      "sha256": "b491143636402661c162ca1a698ba649eb275a9d8cfac87ff0a28f0d250f2937"
+    },
+    {
+      "file": "assets/generated/content-r8/river_carp-0.png",
+      "sha256": "d5378600899e36d15b6cd56e202d9c884d5e11ae32300295c4baf64d022a6d6a"
+    },
+    {
+      "file": "assets/generated/content-r8/river_carp-1.png",
+      "sha256": "cea296ea804b12f5da6548677ffaa8e8dbfe7759ade3fe421d5b3093744893cf"
+    },
+    {
+      "file": "assets/generated/content-r8/river_carp-2.png",
+      "sha256": "2eaf3a082df1009005519668672cfe4a482c45c52aa3ded5be92b9ee8ff80ea4"
+    },
+    {
+      "file": "assets/generated/content-r8/river_carp-3.png",
+      "sha256": "fed8eca0257f7e35c656af32e421e9ddb88e98f211d3effa994acfa633f708c2"
+    },
+    {
+      "file": "assets/generated/content-r8/river_perch-0.png",
+      "sha256": "2a235a5ad8b917e290496d73f0ac11f44cc2c55a50772c90d618d86e2f770550"
+    },
+    {
+      "file": "assets/generated/content-r8/river_perch-1.png",
+      "sha256": "c848dd4670b74a8509be3ab85e37858e6fcba34dbbc68dd23624027e8f17b9e5"
+    },
+    {
+      "file": "assets/generated/content-r8/river_perch-2.png",
+      "sha256": "25c2b2ae57af23163c097d3554862f3a04653d0554f7a0d18ecdfed9d2789e83"
+    },
+    {
+      "file": "assets/generated/content-r8/river_perch-3.png",
+      "sha256": "5d00057261911414b3e9666c8aa92bc0c105211e82e4106e953fe28264056900"
+    },
+    {
+      "file": "assets/generated/content-r8/silver_dace-0.png",
+      "sha256": "6ac5bc967d4386a8ac1ab8e5779be6bc2c7fd38de8117f6e6c5e6c76a9db863b"
+    },
+    {
+      "file": "assets/generated/content-r8/silver_dace-1.png",
+      "sha256": "ecbb1f274c614b8864efe223ee932f1442a188e1ff10ba83a7e0119a7cbb1003"
+    },
+    {
+      "file": "assets/generated/content-r8/silver_dace-2.png",
+      "sha256": "90de3d337dfd9d53b824d57c935468492e3d72903b1091ddb599fb2996d2f7c5"
+    },
+    {
+      "file": "assets/generated/content-r8/silver_dace-3.png",
+      "sha256": "46093c846df49a962d49fd977b19d7ef2d23b31695d6ae0cdeabef21be0a8b5e"
+    },
+    {
+      "file": "assets/generated/content-r8/token-child.png",
+      "sha256": "7a3c6ebae61ad85d2fd839dc14224b9ad9dfc41a7db6df7e437be2742e2c0803"
+    },
+    {
+      "file": "assets/generated/content-r8/token-elder.png",
+      "sha256": "28da028d29290a3a33a815b0e870de92ce2f950b8a54943128719ef6e22715dd"
+    },
+    {
+      "file": "assets/generated/content-r8/token-merchant.png",
+      "sha256": "ae634d3f67c9c68851091d42245f448fa8816e356c84b34df0cb631b5cf02b51"
+    },
+    {
+      "file": "assets/generated/content-r9/hold-child.png",
+      "sha256": "e1ece5087221d69cff5a18343c2230c470bb9c5c3c9b90326e4990428a7367b9"
+    },
+    {
+      "file": "assets/generated/content-r9/hold-elder.png",
+      "sha256": "5d6a38601aec7f62bdb3e29f6a2db11748762d24ad71c0b0baa863d2b3664849"
+    },
+    {
+      "file": "assets/generated/content-r9/hold-merchant.png",
+      "sha256": "1021868ec032ebeb350ee1a25275dbb33f4d85616db2268744a6f994c88855f2"
+    },
+    {
+      "file": "assets/generated/content-r9/hold-player.png",
+      "sha256": "c47cd5f859b14a1dc3371e5f60d05030e4daee80b90adf6dd7c0fa1e6ff872b4"
+    },
+    {
+      "file": "assets/generated/content-r9/idle-child.png",
+      "sha256": "14fb6568bb2167b9fc574061d9603003bb0e68e950f7d3c333898cf425ecfb3f"
+    },
+    {
+      "file": "assets/generated/content-r9/idle-elder.png",
+      "sha256": "4b6a4be393d19a82b72a0de6e33916f76373557e1c81e24fd747ec8f4469f99a"
+    },
+    {
+      "file": "assets/generated/content-r9/idle-merchant.png",
+      "sha256": "54e8a772213f6aff4a5d861bd99f44f515db92a0c1434d0f4b484df264e56539"
+    },
+    {
+      "file": "assets/generated/content-r9/idle-player.png",
+      "sha256": "8a35d7226a1a72ee3fe3e928d23a6ae8eaf2021f1044030d982cf0f0b27d1acf"
+    },
+    {
+      "file": "assets/generated/content-r9/manifest.json",
+      "sha256": "58b5eaa705fab0668236ae7493c6595e46a187d6efcb84e593acab86cdf389ab"
+    },
+    {
+      "file": "assets/generated/content-r9/offer-child.png",
+      "sha256": "482c149de98b9558070d73168dd5082b74dacf95f3df49e8e3b79ea438331c53"
+    },
+    {
+      "file": "assets/generated/content-r9/offer-elder.png",
+      "sha256": "f1bf625ea85c9a583d8c22ffe1faafd65cf94cdd5d097f050207de322b83483e"
+    },
+    {
+      "file": "assets/generated/content-r9/offer-merchant.png",
+      "sha256": "a6cc12f84ed42670fe3f6b593bd22c3159bf30a97f15e4cc77b5769363a6bb30"
+    },
+    {
+      "file": "assets/generated/content-r9/offer-player.png",
+      "sha256": "f0d23015855681fc4eeedcfbdabfe7b9d7a9d193f9ead11062dd9548dc5c5101"
+    },
+    {
+      "file": "assets/generated/content-r9/reach-child.png",
+      "sha256": "f294db95423f0098363814773560529cd390d509638bfe7170f001713039cd39"
+    },
+    {
+      "file": "assets/generated/content-r9/reach-elder.png",
+      "sha256": "9c354daccb0282991f2501aea84ef10a5138da1a20e62dfbdca4aa51310ccc55"
+    },
+    {
+      "file": "assets/generated/content-r9/reach-merchant.png",
+      "sha256": "2d8b04dc6994e22dbb3b56fd8ae234ba606d6029b58c546782a328022543f8ae"
+    },
+    {
+      "file": "assets/generated/content-r9/reach-player.png",
+      "sha256": "67c3107cf131e86162ec075eaf6430b6d5c00bce3c9c5b90de48eb0eb830e029"
+    },
+    {
+      "file": "assets/generated/content-r9/sip-child.png",
+      "sha256": "7d85e657e8c1a9d1d0f026060b3175bf1c3d6eca11659a059baf7e2c1455f5b8"
+    },
+    {
+      "file": "assets/generated/content-r9/sip-elder.png",
+      "sha256": "c48baf35e04aff0994dd120d0a4e96bf174135425f26df188f83883f49d4c6c6"
+    },
+    {
+      "file": "assets/generated/content-r9/sip-merchant.png",
+      "sha256": "3668145864a0806903583bb6dc8a9797f6600b6888170558559563facadb058d"
+    },
+    {
+      "file": "assets/generated/content-r9/sip-player.png",
+      "sha256": "aa916573a4f22e4de4352e8dabb9e16cee0aae7fb72c4762fdfdeb535bf24627"
+    },
+    {
+      "file": "assets/generated/content-r9/sit-child.png",
+      "sha256": "85af82d97888484d991718e9f6a7c89e3ed57d2269fe58081c45fc7d2a1a6b5d"
+    },
+    {
+      "file": "assets/generated/content-r9/sit-elder.png",
+      "sha256": "a3c14f590484e075729d28bff4a95a5ff8940e4a32bd4267a63faa6ed07b6441"
+    },
+    {
+      "file": "assets/generated/content-r9/sit-merchant.png",
+      "sha256": "24f9af192b2dd92b7fdb490418f77d78ee470a1c549aba50e071bcafa853c7f0"
+    },
+    {
+      "file": "assets/generated/content-r9/sit-player.png",
+      "sha256": "2896dfd60b2578d01b9f20b8d708b04750f476b22386c00ca5f89ddcc1b0f720"
+    },
+    {
+      "file": "assets/generated/crop-growth.png",
+      "sha256": "adcd6137d7b61a841a72099cd2035078903e4ec5f4b5f2bdf138fdeec07ab479"
+    },
+    {
+      "file": "assets/generated/farm-actors-buildings.png",
+      "sha256": "c0d40a5a37053c7e1492ed04d6e256c073428a33fce03639acf8588d853bfead"
+    },
+    {
+      "file": "assets/generated/r35/manifest.json",
+      "sha256": "f2cd0d4bec463972bab12c2e19caa88c1aefd3b55fc4888142eb8edc5f4ce122"
+    },
+    {
+      "file": "assets/generated/r35/pond-480.png",
+      "sha256": "16b28d9e27bf836539aa09107bcc949cc5fbffec530639c19cbb04b1daaf81e1"
+    },
+    {
+      "file": "assets/generated/r49/grass-36.png",
+      "sha256": "a3a968dbcf365b5371f1514f25dabe566e3abbdfb29f8f95622ffaa4e67046a2"
+    },
+    {
+      "file": "assets/generated/r49/manifest.json",
+      "sha256": "5a5b57345b3ce680426176f700cc90b7979b170909a8a92b21a043159ba931ef"
+    },
+    {
+      "file": "assets/generated/r49/note-64.png",
+      "sha256": "c7ff8ac9c250cdd28d40cddd4ac6458be9ee2106523fbdd4a4112a1b69802459"
+    },
+    {
+      "file": "assets/generated/r49/path-36.png",
+      "sha256": "2b0c6586e35ee89113cdb954df599b3af1356075ace0311a09c391f5a659fe10"
+    },
+    {
+      "file": "assets/generated/r49/tool_build-64.png",
+      "sha256": "234cc2e4249b0e60fb6ce804989bf4ce5ed88b7fc927647bfaca128a4ab62f98"
+    },
+    {
+      "file": "assets/generated/r49/tool_clear-64.png",
+      "sha256": "2478d07421f9eaf7dbe5efe50f254a4668adae343d9a25c847cb174e6f207129"
+    },
+    {
+      "file": "assets/generated/r49/tool_inspect-64.png",
+      "sha256": "14509f193acbbb1270f18e23e29e4004443ef667ae7a1da82760f1db23388603"
+    },
+    {
+      "file": "assets/generated/r49/tool_plant-64.png",
+      "sha256": "876a648e27796dc42c18b710b4f4842c42756497df3d2cc18b5008f2e3b250e5"
+    },
+    {
+      "file": "assets/generated/r49/tool_water-64.png",
+      "sha256": "dae17b69700a149a1d64f122bf79ebb1f28b5b92b49957a9147fe7b1307d984c"
+    },
+    {
+      "file": "assets/generated/r49/welcome-px-1024.png",
+      "sha256": "dbee492cf3b7ac93bca29685868d2486149be7a707dca85c6643cd0e96782fff"
+    },
+    {
+      "file": "assets/generated/r49/welcome-px-512.png",
+      "sha256": "071956e9d90074ea13d291501132a979adae0a1cbd38e340af04d1b9ae5c47ec"
+    },
+    {
+      "file": "assets/generated/r66/manifest.json",
+      "sha256": "72ee2440ffe561051c7b4177b20a37c54f5abd68324716cc0a25c6187071bf9d"
+    },
+    {
+      "file": "assets/generated/r66/masks/assistant_alert-mask.png",
+      "sha256": "1dede96d4f5176e1d0b2aca8292461c8947527de837fea8dd504ea217a0336a9"
+    },
+    {
+      "file": "assets/generated/r66/masks/assistant_idle-mask.png",
+      "sha256": "749f7abaa63f142d93e796ccd0422c06ba5663e35aee697cb944634d8bf4e5ce"
+    },
+    {
+      "file": "assets/generated/r66/masks/assistant_tip-mask.png",
+      "sha256": "d625ba374e7633e8c9c266555da73f40cad798cb805fca8023b5ca1dc715e213"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_bell_pepper-mask.png",
+      "sha256": "5ad9fc4d4c2f1ce1d34f5320064e68db3c91e9840dee97709eeaea54f6359811"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_carrot-mask.png",
+      "sha256": "0c37ca8a343fb4841132757c4b92e8eceb5c71fbd1ed70ddb32894d37e9572c6"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_corn-mask.png",
+      "sha256": "faea9cd3fd346c58242af4f662088e8b48b14025f6f396fa915001b4632dd9e8"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_grapes-mask.png",
+      "sha256": "b8c8835a1193aaea925bfc0c65be8541a19d6ecaef5af1b1bed341a0f9b8531d"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_melon-mask.png",
+      "sha256": "885381b11f85e227c154f7dd074b3760822e726ba90a8c545d8f20790a0a6095"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_pea-mask.png",
+      "sha256": "f6263bfb88ec7804f5d84c9411cc374b90c22c3af4a9104c4a6498617b709858"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_potato-mask.png",
+      "sha256": "616f1baba599efe0ae7186f11ffc947a9b6aad9468cfb75969bfab51eb230b5a"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_pumpkin-mask.png",
+      "sha256": "92389a30f7a4fae3f02345bf5e9a1194062758120dd06e0a66b3e230fef9379d"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_radish-mask.png",
+      "sha256": "058082c695910ed85f88dd18bc397e38551be7be8c3bf2dffa02f9e14d5b0f78"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_strawberry-mask.png",
+      "sha256": "eac5ac41d87a0e1de35899e95a0420a52be162a6fe1619b9bbe569295e4c417b"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_sunflower-mask.png",
+      "sha256": "226c03b380e2b0c7cdc1ac2aa2202807dcab5df4474735bcb017c8302f2dc6c1"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_sweet_potato-mask.png",
+      "sha256": "0be9937dffca183d46e730ec86e40de5e0dee6055a037c36763651c8f01d4ae7"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_tomato-mask.png",
+      "sha256": "97968ef086d43f884a2bdc7ba7a48f50b9abb10cc933046d7833220ba0948be2"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_wheat-mask.png",
+      "sha256": "6be0d4d78f9b2870d787c55afbc12e3cd53f6b6dbdfdb30a69f7ae4df935a693"
+    },
+    {
+      "file": "assets/generated/r66/masks/crop_winter_kale-mask.png",
+      "sha256": "17b7d4adc5ea7b7b9d63c029c8f04c401edc9487e4bab5afa5d2aa1b904a6cca"
+    },
+    {
+      "file": "assets/generated/r66/masks/system_coin-mask.png",
+      "sha256": "7e4fc17e8c51a87ab3a373340e314fa761a43b79df1d0b7844937dd0eb02ab60"
+    },
+    {
+      "file": "assets/generated/r66/masks/system_help-mask.png",
+      "sha256": "03c08d5c61bca7a8be8a6ba73d51ce765f47f00359decd89698874a15298d3bd"
+    },
+    {
+      "file": "assets/generated/r66/masks/system_reset-mask.png",
+      "sha256": "b4a566aa9c023ab2a3ef3292b134aa67b4b19b847d4e63e05932099f393525fe"
+    },
+    {
+      "file": "assets/generated/r66/masks/system_settings-mask.png",
+      "sha256": "ff8f3f97a6425d7114cefe99f190e3b82730341b890924a0b3a027d7f0498065"
+    },
+    {
+      "file": "assets/generated/r66/masks/system_storage-mask.png",
+      "sha256": "7c568ec5128083cbc32cbc6f32ab42c256979b94fc2b669745c08f993dc19806"
+    },
+    {
+      "file": "assets/generated/r66/masks/system_xp-mask.png",
+      "sha256": "5015b86286690e08353dc819b3896014855ee222775a6dd5f6c84c2e3c5f8028"
+    },
+    {
+      "file": "assets/generated/r66/masks/tab_journal-mask.png",
+      "sha256": "05ad97900fc4f34f4bff82241689733f11687704ed2763c6eb1cf684829a6b67"
+    },
+    {
+      "file": "assets/generated/r66/masks/tab_orders-mask.png",
+      "sha256": "278800e1be6c273e23cf046c2f87868aa037f9726d3ff051508e49c9a99c17d5"
+    },
+    {
+      "file": "assets/generated/r66/masks/tab_story-mask.png",
+      "sha256": "e3aaa63a60ed1e2aa5f0e2a071ef1a7304fcee60eb0d03e07d926deabcbe6241"
+    },
+    {
+      "file": "assets/generated/r66/masks/tab_tile-mask.png",
+      "sha256": "ea092e93780f0eb7b4ee48181b50e7d81000a1d49a5ba5d3a22cb32e3cf95942"
+    },
+    {
+      "file": "assets/generated/r66/masks/tab_upgrades-mask.png",
+      "sha256": "45594219dc341b7ad823501487cb33a668dd8c89f5fda66a37c74fea914966d9"
+    },
+    {
+      "file": "assets/generated/r66/masks/tool_build-mask.png",
+      "sha256": "d35bd0b955ade4371566d427d9a90c0020ad76bbc2aa5572834e9e046f935f7c"
+    },
+    {
+      "file": "assets/generated/r66/masks/tool_clear-mask.png",
+      "sha256": "f61455932e6037399552fc9d30571df9b9fe925d24e24573b2459758c09030a0"
+    },
+    {
+      "file": "assets/generated/r66/masks/tool_harvest-mask.png",
+      "sha256": "27ff4035861301832602c29ccb2ac702babf7f563b94f8aa801faed13e2d1bee"
+    },
+    {
+      "file": "assets/generated/r66/masks/tool_inspect-mask.png",
+      "sha256": "3e428c633447a74c919bd05008ad6b35b32a0b08553b51bf6f96733141036e21"
+    },
+    {
+      "file": "assets/generated/r66/masks/tool_plant-mask.png",
+      "sha256": "2655ba40885715a74ddc4505226a06af9038f9f64dbe2618aa8a4228a6694f74"
+    },
+    {
+      "file": "assets/generated/r66/masks/tool_water-mask.png",
+      "sha256": "da1e2676ef26038da35ba8c898c50ae39af4e51fe406df92e692da7abf61e215"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/assistant_alert.png",
+      "sha256": "414a08054b4e6f81aae47df98506f9e6c71d2714b03cd89763d80bc9f18b3e27"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/assistant_idle.png",
+      "sha256": "7a7341dc8441d75d792969277c9460980da2248093da994fed1cfeaccc3aea05"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/assistant_tip.png",
+      "sha256": "86ffae85bbd560e98658775c0206f9d8aaabb87053caabf4af5c8d29b198caf9"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_bell_pepper.png",
+      "sha256": "01a038688e4f59c852b306fe5dbcfeee78cdf2f7c00f8897d7d553043ad4c69f"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_carrot.png",
+      "sha256": "478b70cba72dd65f0877328ab33b631fb16ed70de0429ec282148792e52ca769"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_corn.png",
+      "sha256": "7e81178f59f40594bec4416966858b4004c1e91477ae559bab6101078c27c3a7"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_grapes.png",
+      "sha256": "29eb79dbd58665accc3589f9e8f3021b995c9f4cd4ae02c6b3bdd646027c2c4e"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_melon.png",
+      "sha256": "f98a4fc80a19062b0631b3c1dc407bbac895536c443359f5cec1aafc427de123"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_pea.png",
+      "sha256": "7422841dc4563ee63f5ea7f9f306ff5327b8b0fdb764b8e0343b442737d6aed6"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_potato.png",
+      "sha256": "fecf0718ecc8c03bceadc856417ba1c1d5d90ccc79bd52d3645326f262e55704"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_pumpkin.png",
+      "sha256": "fa4cb598c83f961e95e9deffd245053eea19a8aff3cf236081adaca8c43977a7"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_radish.png",
+      "sha256": "e13d1230a778715bca362e20f4ded55abde33d9f0064d6dd88435a2429f96635"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_strawberry.png",
+      "sha256": "ab44020af47f14b45f6cd0fca6a84093a77242006350cbe820e42eda187c43e9"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_sunflower.png",
+      "sha256": "fd1f00aad7ec904cf5617eb7675029ea60165f8b1cab275a95ae8e3cba2b84ab"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_sweet_potato.png",
+      "sha256": "7b40b3fe2780247f4c73731f324fe5939417edd716ce3b088afec63da361d9c9"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_tomato.png",
+      "sha256": "989d6cfadcc0adf265281921231156fc85ec4420d1e0317aacc3bf444bcace84"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_wheat.png",
+      "sha256": "db32c7f72d9f0114014466aea48bac26099b0c60fb948ed5ffd45c3cf2f13f4c"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/crop_winter_kale.png",
+      "sha256": "67c78bb26b0beaeda44633ac70115db8fc9e57c733572abefc0162c64b4d210d"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/system_coin.png",
+      "sha256": "ca4225950db0000546dccabdccc78497e5c2986efcacfe05b9907046b2f0d34a"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/system_help.png",
+      "sha256": "f90a4d22b10bb04df767c4099ee0a0f9e38f94c18ec87d4f6a5ce00b5c53c110"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/system_reset.png",
+      "sha256": "fbec0b6d72fe4e26369efe8e4d0596357fef10e713a87be5c99eeefe516ffe33"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/system_settings.png",
+      "sha256": "8d8ba6736d2099c6e8106039f92d8df48e2439bc09a6a85f4ea23d3cdc774378"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/system_storage.png",
+      "sha256": "933629f53dd0184cf4cd40c6f338e250a6e591d732f725f732e2ecb301352b48"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/system_xp.png",
+      "sha256": "873aa27e5716c66e0b2e5656b8a96d6beebcf46707af591511275ee5eb58dc14"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tab_journal.png",
+      "sha256": "3a847473bdad63cc1f2643f12d876be162bd585fcb265c66f36026acac436f2d"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tab_orders.png",
+      "sha256": "a85346b27929cce5c9b67b380840823a4e082b5821875612fb62151c44cf379d"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tab_story.png",
+      "sha256": "6cd19865d429b656f38088f317f1092da9877923949927793acb90da3dbb06bd"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tab_tile.png",
+      "sha256": "ae52d435f9a85236065eba0aab4f7444c8e5f73e7bd728219db4b854f04a9a82"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tab_upgrades.png",
+      "sha256": "5eef3ef33c79518920ecc37ef19a4fe3c46c64f678b3638648f8d2a5aa413d4f"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tool_build.png",
+      "sha256": "0a938d63a92666e9e14f568e147c1ae7d71116986f5083361e1c32482f07cbaf"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tool_clear.png",
+      "sha256": "08db124316a301e4e06a1c341551f03db6625be373c7fd016e68af46d0a03e3b"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tool_harvest.png",
+      "sha256": "43e60920b8236dcec659b935753e0b6570611bae0a9a1a934be31d7cf4bbe72c"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tool_inspect.png",
+      "sha256": "2abb2d2f4d674ada1114cfa7fe8735a3dd26d1273d5a835663bdc02acf01ef7f"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tool_plant.png",
+      "sha256": "6e5c124df18a2d12db890a0642c69eebd465162bb2287f92ae92a8a8ea246b26"
+    },
+    {
+      "file": "assets/generated/r66/masters_opaque/tool_water.png",
+      "sha256": "310b64cb81b666ee85419d6bd8204e0052c0c03f828ffcdfe9e85a065590573e"
+    },
+    {
+      "file": "assets/generated/r66/native/assistant_alert-64.png",
+      "sha256": "cd15e142cea378146f178c60735644fde31608fb2d31086c75a602d3aed94ac3"
+    },
+    {
+      "file": "assets/generated/r66/native/assistant_idle-64.png",
+      "sha256": "0dd37a4b8e349dc11ba2454012e53ff4e741f78785255b1dbd65d6218f6a8b03"
+    },
+    {
+      "file": "assets/generated/r66/native/assistant_tip-64.png",
+      "sha256": "01b6524b92a129fd3b04589ba9d6c890bc36c1595203349cb6870e39a8efc54d"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_bell_pepper-32.png",
+      "sha256": "7df985e9b9ccf5ee47d6dd88a5cd2a079dac429324d1b3ea7590697064be365d"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_carrot-32.png",
+      "sha256": "76c0ff15dc87e1b6535154b02df3a0fb8ea3479b4539fc8d248d136b15e77eb7"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_corn-32.png",
+      "sha256": "2d4a32114daf4ff02a294d3be238bb9886ced3b2b9205f3e7d1149f11ecb5fd9"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_grapes-32.png",
+      "sha256": "a84cb9b88139376de2a30c076904521fe8cabc568e9903fed05c4e3c817452a0"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_melon-32.png",
+      "sha256": "2f7fc407bc681ed5d2b63f87f4a6574cffe6aa47019075a8a6e033e4351f985d"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_pea-32.png",
+      "sha256": "81c5a73f5c4dbcfee8e53e33d89c7e7d4c0e93eb1cfa2ca4a027c63f359435c2"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_potato-32.png",
+      "sha256": "d7e74de1e34485b311fc2c4d6ab63aaa2e84d0853b77104ecce53fbd7da9335a"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_pumpkin-32.png",
+      "sha256": "cc28b1631b18b229dc50bbe4544bc85b255e4358454ab809e82220ed7795a426"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_radish-32.png",
+      "sha256": "e27864af4098c0e9beeba503da5b7e409cc51ac76e2399570973c9f4301b8574"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_strawberry-32.png",
+      "sha256": "249ffdf7a3446c5e3b1c25923e775b204d639db768ec94965b7e652f8bbc432a"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_sunflower-32.png",
+      "sha256": "e9284e4f8783d111bc06b97389fb31664f96e0a3c6e769d3036dc9ae37537307"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_sweet_potato-32.png",
+      "sha256": "eab90510e8cc37c81d217f03fa1920c2d584aae8f93cb2369d1e01773d4b3c01"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_tomato-32.png",
+      "sha256": "48d95fd9f63fbad1e78bb90bc22afc5a4da113c44df58e057807ba2c138a39a4"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_wheat-32.png",
+      "sha256": "8a22d11b3d9a0157dc8b4c15caf56f2a2ce956a8921cba6b5a8d3c5797d20227"
+    },
+    {
+      "file": "assets/generated/r66/native/crop_winter_kale-32.png",
+      "sha256": "86aa59eed842dff22715e6763bd56c746fe52f6dc64575bfeb6ddc2f992e1ed8"
+    },
+    {
+      "file": "assets/generated/r66/native/system_coin-32.png",
+      "sha256": "6c47602a01a60ee90db61097f54d46dc82d49f467c67bfd958dfde85eef34144"
+    },
+    {
+      "file": "assets/generated/r66/native/system_help-32.png",
+      "sha256": "3f51c720000a3ffcd3ecfd6d5f6e1f44f7da704b4948e826d39a1e50ba224ba9"
+    },
+    {
+      "file": "assets/generated/r66/native/system_reset-32.png",
+      "sha256": "fd060af9a13e302a3aeb00a2cad1782f9379d402918049a4c784defe52f0010b"
+    },
+    {
+      "file": "assets/generated/r66/native/system_settings-32.png",
+      "sha256": "f247964df719cfeb812be5d43fa0230d1de3ba98d12cf875ce4dd0d976f2d9cd"
+    },
+    {
+      "file": "assets/generated/r66/native/system_storage-32.png",
+      "sha256": "d0c5e40f0eb4743f68d889916b4ca73650978f7cb9b7609f8d7b17650f6d7974"
+    },
+    {
+      "file": "assets/generated/r66/native/system_xp-32.png",
+      "sha256": "183e5ef8a81cdc7cab46250f7001cee95266fbb8f5e322ab5f6b6986990d54ba"
+    },
+    {
+      "file": "assets/generated/r66/native/tab_journal-32.png",
+      "sha256": "b6d7f6a13f3f6d0e972c53a5c665eb1ec3bb39020d90af447c907b8ed6cc90c5"
+    },
+    {
+      "file": "assets/generated/r66/native/tab_orders-32.png",
+      "sha256": "fb670dd61dc19d7453e91f4ba3f98b651293a2072ad8074922ca2ffaa9c2de30"
+    },
+    {
+      "file": "assets/generated/r66/native/tab_story-32.png",
+      "sha256": "bd36ad5628ee8ce3410fd6988e8fc5f770ff97961ef29c1d44a3190d3fbaccb4"
+    },
+    {
+      "file": "assets/generated/r66/native/tab_tile-32.png",
+      "sha256": "def5daab99ecf7527dcd9c0ff6256f20ee84e09b4b8b96a52c485d6dc011658b"
+    },
+    {
+      "file": "assets/generated/r66/native/tab_upgrades-32.png",
+      "sha256": "7ee130a604d8cab04ee2b65d18fca392f6a8434a182f530b90666d4319dd4055"
+    },
+    {
+      "file": "assets/generated/r66/native/tool_build-32.png",
+      "sha256": "230e583533823b41980c04d95fa059cf8ddf182e733fe0fcfdf1252077e8979a"
+    },
+    {
+      "file": "assets/generated/r66/native/tool_clear-32.png",
+      "sha256": "399f87f549825a2e60aa38383b6c506cee1756a260f1eff1a180077606fae3e3"
+    },
+    {
+      "file": "assets/generated/r66/native/tool_harvest-32.png",
+      "sha256": "c8518ac4b31f031c842ad319709064adf9c73b3b90cca0f8b59acbd5df74b445"
+    },
+    {
+      "file": "assets/generated/r66/native/tool_inspect-32.png",
+      "sha256": "0b27e5122eb3bc1bbe16e0b97485b199d7b5aac398cc4787c4d6a9415d095641"
+    },
+    {
+      "file": "assets/generated/r66/native/tool_plant-32.png",
+      "sha256": "fc2e016fbbbba09fa5c7f964734e434549664dd979dfe0727c77074bfb498810"
+    },
+    {
+      "file": "assets/generated/r66/native/tool_water-32.png",
+      "sha256": "61b9c5e0c95f1882be09c49873364e82b2ebed9b214833c229380c5eab6b97c4"
+    },
+    {
+      "file": "assets/generated/r66/rgba/assistant_alert.png",
+      "sha256": "75dde5cc4f6eb78da0baf39ede8a28357f0ea67c02517f3bfb82769ae48073b8"
+    },
+    {
+      "file": "assets/generated/r66/rgba/assistant_idle.png",
+      "sha256": "9111a1683e02514fe063c52c9373e930e42d79f38970a1f38dcf46d73bd3e5b6"
+    },
+    {
+      "file": "assets/generated/r66/rgba/assistant_tip.png",
+      "sha256": "d8b6832aa6b657db6bda03e47886a9f71f5375c89567374a8e884d70d482cc26"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_bell_pepper.png",
+      "sha256": "69e64a5a19a00a43007b4a56c3dd78b5daa568c9a8e99f76afbdd014060be94e"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_carrot.png",
+      "sha256": "bf41abefd283bb6e6b7ee4bc099992120d47e90b13c9b5ca79a910242db050ac"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_corn.png",
+      "sha256": "0a4badbfedb438ae4c0da16713753bd46045ab2ab2e77a17756aa5b26cc9c892"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_grapes.png",
+      "sha256": "2d2fdcbbcdffe6e758aa0a91f14092570d01f830d96671c2afa6818e2922e406"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_melon.png",
+      "sha256": "f832c417a714c2c7d9b5ca13edf1235b9bd4a34b11c52252c43624bbc7ed4152"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_pea.png",
+      "sha256": "08f5d742faa70c9bf3fc46a2356fa45c90d954f3c330e7d715b0fa34e00d3ffa"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_potato.png",
+      "sha256": "43be491664e2061189d431d050eb3554ff8b748387ea5bbe0782c7fabe34fe47"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_pumpkin.png",
+      "sha256": "2bfe6b525ac96cc22fcd71ca1eec659b63b57cd1a5b85c72c0fbf374c60cb5ff"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_radish.png",
+      "sha256": "17fc0da41ecc9af36dd6e63468593a5c6df701a82ce8551abc9f5b236c01477a"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_strawberry.png",
+      "sha256": "e551a5cd1bbca3d62f7b2488cd694de3046c45c93943213097ddc2b7bfbb966c"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_sunflower.png",
+      "sha256": "93c7838f43b2924d67f3bec68b95ae704202be30747bd2bcb6cbb044f7b646ec"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_sweet_potato.png",
+      "sha256": "946284516f2b1d4dcf06397b798c08fab477146f22fec291fb69ceea716e14f6"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_tomato.png",
+      "sha256": "737919e76a6a926a9967dc5f58192e708f0c223883dbcd8dbcc19ead7308297e"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_wheat.png",
+      "sha256": "873585dc243018b09e2259a7e493d72d617114f912acdb92a5b8ed5f7b873a9e"
+    },
+    {
+      "file": "assets/generated/r66/rgba/crop_winter_kale.png",
+      "sha256": "4e20170addaac4cb52bb2834d140f72feaa88db40b714b89b5ba40b9c7bd87ae"
+    },
+    {
+      "file": "assets/generated/r66/rgba/system_coin.png",
+      "sha256": "6f8fe128e1eefb3c9ca136c000d4c601eeaa2bc39a3f0fcfbfae975f5ee3135e"
+    },
+    {
+      "file": "assets/generated/r66/rgba/system_help.png",
+      "sha256": "df239f888b677d93c926e8cd6c1206f2398fbb3bbdc6cf056ab91b1852b57978"
+    },
+    {
+      "file": "assets/generated/r66/rgba/system_reset.png",
+      "sha256": "bf7df9058e07ee646e9009219e696051284a32fcc6d67748509232d3e24f860c"
+    },
+    {
+      "file": "assets/generated/r66/rgba/system_settings.png",
+      "sha256": "d654e01f364143d7e718ca545cfdcaede167f045245e21f4dc764930dc8493a6"
+    },
+    {
+      "file": "assets/generated/r66/rgba/system_storage.png",
+      "sha256": "eb9ca3fa3377edd55f3eacfa23a4f4924778cac1a3828ccc8f35aca891c59bb8"
+    },
+    {
+      "file": "assets/generated/r66/rgba/system_xp.png",
+      "sha256": "69e1984e89c0407b91a7835a8fe78aa9122d4c8f683f970b7105671b285f1992"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tab_journal.png",
+      "sha256": "7d497d359fb0e7e911e8e3d4ebf97d745576f67635a66863840bc21177692884"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tab_orders.png",
+      "sha256": "0558032631afb087c2327fd91b7841221936e6d52d008565285410a1699f5808"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tab_story.png",
+      "sha256": "886b7141982a1163d407cfc3c51be0c5d118865b7e680a265a9123a8bd3815b0"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tab_tile.png",
+      "sha256": "28eaa12c2af4d8cef7d22632c0c21f63068f10ec0acf976035673d16b9985275"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tab_upgrades.png",
+      "sha256": "0abd2d0283ab079e1d757826f4c3b9d8860d488e95d9d7b6d22e90dd36114e40"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tool_build.png",
+      "sha256": "64fb92383d9ebd2f20174d2d9e311b43d1ebbc9fff0d32c0bae71c5147a2d8d3"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tool_clear.png",
+      "sha256": "8c4411346ff6f09629ae93bd66d6ad6ec612bb970eab1451d906acf095de511b"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tool_harvest.png",
+      "sha256": "214b7d3d5dc3f7717d76e9fcf0b168c8473c4c8e7333f5ac9b892fd343dc160d"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tool_inspect.png",
+      "sha256": "91bb022d4916a3aaf2285d8f711a24644f76bd5b965e3dd874909a5f638321af"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tool_plant.png",
+      "sha256": "31c99d6b58ca9991e32e241ebf344bb53281d6d6c7fe8d1936f6972c99679d53"
+    },
+    {
+      "file": "assets/generated/r66/rgba/tool_water.png",
+      "sha256": "f658e5a7332d52d416daa89dff97cf3b1b00b8df935c441268356efba3778fe5"
+    },
+    {
+      "file": "assets/generated/r66/source/assistant_alert.png",
+      "sha256": "28a5f0fe4ff1a230fe323cc96d152d86e52ed9aac3fa711288df82340430648e"
+    },
+    {
+      "file": "assets/generated/r66/source/assistant_idle.png",
+      "sha256": "21bdd43fa6ba6500c88031b481b8eb47aadcf87662ebd8f43701de96247c8e48"
+    },
+    {
+      "file": "assets/generated/r66/source/assistant_tip.png",
+      "sha256": "f8bc36ec56439970f721261d097ef2cee489fb7352c68bf316c820a9d59f8641"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_bell_pepper.png",
+      "sha256": "0dd3cad3363b7d0cfe53b56ea81fe792f3830033708f778a96a251080101aef6"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_carrot.png",
+      "sha256": "7182e2e5fa2b3d93181410e4bd92cb841bfd25354ee0893f54b57fe1a6805cc5"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_corn.png",
+      "sha256": "f6b9093ed7e8306597668ef52ac1a6b9bc98feec998b18eccc48d90e538f05ea"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_grapes.png",
+      "sha256": "609af30d2c0c441fb091663ab3003195d6c30789903fe886e26d1561d9455458"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_melon.png",
+      "sha256": "6470c0d3f149a45f59ddb50757e9cf540223abaa7924ee8faf8fe0f1f7a7f5d0"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_pea.png",
+      "sha256": "6db12726ae6e7386d6ebc33241748fe1947ca9e67433ec156a0152e058db7401"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_potato.png",
+      "sha256": "ff6fe041c977fa273de670a3551b570c0ace5e2f9cefff0641373ba8888be840"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_pumpkin.png",
+      "sha256": "270af9b1d62cb0bc9c6d5793413f093800616a9379d7dbe6ac46c0596a574943"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_radish.png",
+      "sha256": "09c8a978f1050c12968d6740387233dd62a9f1aac7ff03448834b36b748c2480"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_strawberry.png",
+      "sha256": "57956a58a545f6457b8898e139f07fd60a115d29e7b4c6971a4f8a33fc0795d3"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_sunflower.png",
+      "sha256": "39907428093c8172da3f8f4880abdbce9d693d6518e3652b9da92fb8d1ce8352"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_sweet_potato.png",
+      "sha256": "c1dda50f7199174b8ca1e97f07fec06cf27728a898b764ff95b9293bee4ffbec"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_tomato.png",
+      "sha256": "4d9c0c9444a3def2d6095f85da8ce3559050f36e915305e61f5f4d851d5aea30"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_wheat.png",
+      "sha256": "5925bfa95840af8adbbb91b95bc2f81808d97bfe6008c855633f90ded8c5ee69"
+    },
+    {
+      "file": "assets/generated/r66/source/crop_winter_kale.png",
+      "sha256": "d2a9c2ad3bb32c2caaae30251057791706a6e5c991416a285b540e1b044aee07"
+    },
+    {
+      "file": "assets/generated/r66/source/system_coin.png",
+      "sha256": "20fac2e8a7bc280db3660dd147cd4c641d0e099e34896909ffdd78c36ec97ba3"
+    },
+    {
+      "file": "assets/generated/r66/source/system_help.png",
+      "sha256": "7bf2ddab90947211b293e6b58e4a35cc456d2fcef05750e4dc181f319d5eca2e"
+    },
+    {
+      "file": "assets/generated/r66/source/system_reset.png",
+      "sha256": "9703cfe08277a7443db16f039a96e332fde599d0fde3c1ee777bba804902a7d5"
+    },
+    {
+      "file": "assets/generated/r66/source/system_settings.png",
+      "sha256": "5c7b014d04ab15f8a8e85adf207d2009c2777a63cb0d4e0a2ea22654c0bbe257"
+    },
+    {
+      "file": "assets/generated/r66/source/system_storage.png",
+      "sha256": "acf9ca042dcd4f03034ef81a85f9ed5dfb597f5c92c082acdf493b7238b8eae8"
+    },
+    {
+      "file": "assets/generated/r66/source/system_xp.png",
+      "sha256": "fd34962a0583a9f5e3f5cac1650594921a14f4cde10862d043a46a2c95df73ad"
+    },
+    {
+      "file": "assets/generated/r66/source/tab_journal.png",
+      "sha256": "ed5aea71d72c23fba593e5265771704f767468baedf3c045cb0ea1639d9c354e"
+    },
+    {
+      "file": "assets/generated/r66/source/tab_orders.png",
+      "sha256": "f7dd8a34518ac3f1f908ee1a4bf2c28a4cf598d50a1f08a778a6c37561f0b3e5"
+    },
+    {
+      "file": "assets/generated/r66/source/tab_story.png",
+      "sha256": "796e0e32b1fb90daff954ba2a93fe0222a430d08916df2aabc66a9fc45211657"
+    },
+    {
+      "file": "assets/generated/r66/source/tab_tile.png",
+      "sha256": "227eaf9c6d9ba49d19120cbee87cf4023a1be38f267ab218595bb115905a3383"
+    },
+    {
+      "file": "assets/generated/r66/source/tab_upgrades.png",
+      "sha256": "aacab75881badfa5b825d78d1a7f3d26f6f890968e9c4f5402e2551de7b2b702"
+    },
+    {
+      "file": "assets/generated/r66/source/tool_build.png",
+      "sha256": "1c5589d844bbea08e7bfdac5a9dc0a2ac6489c01d6ee602f4ba9cc995485423d"
+    },
+    {
+      "file": "assets/generated/r66/source/tool_clear.png",
+      "sha256": "7da9a4dc1311f8d22905fd911fbb833942de8d63d636d7cfc1161a13dfff0926"
+    },
+    {
+      "file": "assets/generated/r66/source/tool_harvest.png",
+      "sha256": "400ae04c584898388ca52a0cbc6e7610fc212c7aac2cc59ca9faea1f7fb87ac0"
+    },
+    {
+      "file": "assets/generated/r66/source/tool_inspect.png",
+      "sha256": "20cff6934d391604e9200faf757aa8f1ab3840e9445e61496163e99331198a7f"
+    },
+    {
+      "file": "assets/generated/r66/source/tool_plant.png",
+      "sha256": "7e5c0687c34da519ccc2cffd7dff1d091f43a661ce62995b2be99ed97820ffe4"
+    },
+    {
+      "file": "assets/generated/r66/source/tool_water.png",
+      "sha256": "78d279c040405820dcbc729e97a2bf309974ce762dc6afb094e6ab9803899e8a"
+    },
+    {
+      "file": "assets/generated/r66/ui-icons-32.json",
+      "sha256": "1395c109acaa06fadd2fb2cc7a226a393744a33de9311c40bd1663f2c9c7dd94"
+    },
+    {
+      "file": "assets/generated/r66/ui-icons-32.png",
+      "sha256": "89315b2f696644c79b50d2554fc3f3280a9f5d2ab8eb6be0fffc930e718f4ad3"
+    },
+    {
+      "file": "assets/generated/r68/activity-panel-high.png",
+      "sha256": "c772fbfc49b4166f4670a87fc2642e01eb905c77c3ee54de813f3f1344a00ad8"
+    },
+    {
+      "file": "assets/generated/r68/activity-panel-low.png",
+      "sha256": "efe3dacda89ce166e2dc9fceb83f7945ab78cc66fe38532d7202ca6e5bfad051"
+    },
+    {
+      "file": "assets/generated/r68/activity-panel-med.png",
+      "sha256": "e100dd7f4275e2d869d0731e13ec1e2d00258eabd07c5c41f3cca2c30c583604"
+    },
+    {
+      "file": "assets/generated/r68/loading-autumn-high.png",
+      "sha256": "56d75371a4eb8f6d2274d828afa393605f4079161bb0e1b0dc1cb3789ee81c0f"
+    },
+    {
+      "file": "assets/generated/r68/loading-autumn-low.png",
+      "sha256": "bae800a8a972ab41373e7a123d1f34be44af0ccd646808c17ce32bb03b33862c"
+    },
+    {
+      "file": "assets/generated/r68/loading-autumn-med.png",
+      "sha256": "961675fc21dbb04c4ff27bcb4e1b4208a2dd84cbf7e9451e8b1d22b1eb6571fe"
+    },
+    {
+      "file": "assets/generated/r68/loading-spring-high.png",
+      "sha256": "8c6373c4027275dcb69b0d3892b17736e5b1832d36ac210f79e6682b404dccdc"
+    },
+    {
+      "file": "assets/generated/r68/loading-spring-low.png",
+      "sha256": "7b001bb982339bfd141b91217fe9baf58f28a3112b192f27c9abcf8229a51901"
+    },
+    {
+      "file": "assets/generated/r68/loading-spring-med.png",
+      "sha256": "1ff5a60ecc7bf7628f0e25ca9b342af37c159d5ceaafb594291383fa06c3c579"
+    },
+    {
+      "file": "assets/generated/r68/loading-summer-high.png",
+      "sha256": "e226121d06f4155ae9041b1f82bc388530eb67b2a8d82078a96b35b4b0c217cd"
+    },
+    {
+      "file": "assets/generated/r68/loading-summer-low.png",
+      "sha256": "dd952edd00b3459f1bcc8bc7e3d171b79c5f5e81e093744970475b53637c9352"
+    },
+    {
+      "file": "assets/generated/r68/loading-summer-med.png",
+      "sha256": "0c46dfa1e08afd234a9c7dd5865378482fffd5738a15a9a86b4474d64dad6e4e"
+    },
+    {
+      "file": "assets/generated/r68/loading-winter-high.png",
+      "sha256": "ee1876fea3634bfd085c946feb9b2ac0eb17f8d6a6159ad53bd1dd3e2e1b78b2"
+    },
+    {
+      "file": "assets/generated/r68/loading-winter-low.png",
+      "sha256": "c557e0d0f99c22594b2788c63f24ba929cb4b7b526a4c62018cad62921d1c89d"
+    },
+    {
+      "file": "assets/generated/r68/loading-winter-med.png",
+      "sha256": "8b5c061614dbbbb5f89d5e94f7c14b961efcca807ff2eee3678c16ef4c34a30d"
+    },
+    {
+      "file": "assets/generated/r68/manifest.json",
+      "sha256": "2a95c2315fe847317285aa2a76c6b97f8d3e292171a78d5d9799accb8eda6e15"
+    },
+    {
+      "file": "assets/generated/r76/fishing_dock_broken.png",
+      "sha256": "b85bbcd881cbc35b3fe84d01c00e5f4045501731fbb27025b5d148e764a76c2c"
+    },
+    {
+      "file": "assets/generated/r76/fishing_dock_repaired.png",
+      "sha256": "ef30e1a261db9980b61787d1aadde02ef47b814b023c9db3997f6e41a57ea9b3"
+    },
+    {
+      "file": "assets/generated/r76/manifest.json",
+      "sha256": "b8eeb8ded40ba387e70f3ed3455f52b56f3bb00bb6764f4aeada4f53fddb685d"
+    },
+    {
+      "file": "assets/generated/r76/picnic_table_broken.png",
+      "sha256": "dc4f3fae6b3c9fa491f012624065a0147dfc77c0e0a988a4fbf69ffed3472664"
+    },
+    {
+      "file": "assets/generated/r76/picnic_table_repaired.png",
+      "sha256": "c1ebef6ee82477d8696f4eb3f4fc970bd57864e01583833a0904e5baf2f474ac"
+    },
+    {
+      "file": "assets/generated/r76/prompts.json",
+      "sha256": "3b2c00814219b78aa2be336cd2b3c01e9f5d813ef9adefc84fefbcfbf6600cc2"
+    },
+    {
+      "file": "assets/generated/r76/source/fishing-dock-broken.png",
+      "sha256": "4703290a6b5974209924cd70da34b045050fb151b34f67e27c50370f05fd0013"
+    },
+    {
+      "file": "assets/generated/r76/source/fishing-dock.png",
+      "sha256": "6e3f88ce6c06c160ca3fc2abc3e84d2104410bb61368717778ab92e1f0c41392"
+    },
+    {
+      "file": "assets/generated/r76/source/picnic-table-broken.png",
+      "sha256": "c5681d9f0ad00b6f25c98ebdcb17b44507109b7959d54b1870f13aa70de1b22d"
+    },
+    {
+      "file": "assets/generated/r76/source/picnic-table.png",
+      "sha256": "7f5a90c5de1047a291e9e15f3354f45d3ed77217d6bf81765923f0a9758d3954"
+    },
+    {
+      "file": "assets/generated/r76/world-projects-96.json",
+      "sha256": "a889e149c5d04746917ddaf2cd682124ec19e458eb6e4c0f7b8a9bbb67add607"
+    },
+    {
+      "file": "assets/generated/r76/world-projects-96.png",
+      "sha256": "78e609f003a19ed73a698e353db3515d8f5ad2246fdf51e815afad8d6caffe9b"
+    },
+    {
+      "file": "assets/generated/r82/app-icon-192.png",
+      "sha256": "47ea310f33ae589455f804de9b584cf3737feef29b156e01ed3ca9f31a0e9a1d"
+    },
+    {
+      "file": "assets/generated/r82/app-icon-48.png",
+      "sha256": "bc8edc0d3e77a349f418e409960df07085b8d083d17615afd8215e541b3434d1"
+    },
+    {
+      "file": "assets/generated/r82/app-icon-512.png",
+      "sha256": "2cf5569874926ec64de78919073af850dbc69ae3413f3bec95b8584954eaceb4"
+    },
+    {
+      "file": "assets/generated/r82/basket-32.png",
+      "sha256": "73355aed97616d5e691f758213181697d00259ea994fdebe7a378337d5dae062"
+    },
+    {
+      "file": "assets/generated/r82/farmer-96.png",
+      "sha256": "990c41d1fd103ca9c58cd1dd687a08caa2a93cb60cacd22506c05967e83316cf"
+    },
+    {
+      "file": "assets/generated/r82/farmer-face-64.png",
+      "sha256": "7c1b030453c536266116b99dce089e5df85aab6e5e3943f7af786f38688be58d"
+    },
+    {
+      "file": "assets/generated/r82/icons-128.png",
+      "sha256": "8a8d759cc78689fc1c69ecb7d56ad74bea3cdd46558b9364fb30d03b5a9c635a"
+    },
+    {
+      "file": "assets/generated/r82/logo-320.png",
+      "sha256": "c69d4d4deb03888b645daa89e870d27145219d46384ed62becf335ea348ca26a"
+    },
+    {
+      "file": "assets/generated/r82/manifest.json",
+      "sha256": "034b2ab6401f1bb302c610c941882f9a62869531e2d9d2456459eba902ce2d2b"
+    },
+    {
+      "file": "assets/generated/r82/note-32.png",
+      "sha256": "a16ce78e16ee26a9ed01103ddd41111b1100355e213f1b79b839c06beb2bee9d"
+    },
+    {
+      "file": "assets/generated/r82/paper-192.png",
+      "sha256": "f2aa3b9094c5c4aac7ed2bce59f452ee65e2d136265012c33c0ca63336a62b76"
+    },
+    {
+      "file": "assets/generated/r82/seed-32.png",
+      "sha256": "cd79eda1172e5db8f0075b6cbff03dd371c660d799ff591122d73e3597ac1ab0"
+    },
+    {
+      "file": "assets/generated/r82/stamp-32.png",
+      "sha256": "2959b5da8b5a1476d8f3c308d7e5502cc5c742a2a762a1d575254e6d8ea5ffa5"
+    },
+    {
+      "file": "assets/generated/r82/sun-32.png",
+      "sha256": "20faf073475399d30595a70c05b7d63e7ad9792975cee951a62b8a3a9d6dd048"
+    },
+    {
+      "file": "assets/generated/r82/tea-32.png",
+      "sha256": "b71d44b0e0abe32bcce3e262b19fb1be3f0aa5fa27af147f68e250c97fad9e7a"
+    },
+    {
+      "file": "assets/generated/r82/water-32.png",
+      "sha256": "b089f5cf5977bf8a0a481c5c7910974b599081c8675ac3911f6fe556bcea1955"
+    },
+    {
+      "file": "assets/generated/r82/welcome-384.webp",
+      "sha256": "575c98d2a8651575c834c666b7e691e901060e1e05ccbea8536cd2ba6dd3f1a8"
+    },
+    {
+      "file": "assets/generated/r82/wheat-32.png",
+      "sha256": "73b1f9f436f201f237e3e739e10a627bd2e9d1ac305d3dd4d02e7c87df81ca28"
+    },
+    {
+      "file": "assets/generated/r83/actions.png",
+      "sha256": "c617a2efee7604a3c2c9c407e649b7d648dcd4a72b28d5596eee1880d7a59754"
+    },
+    {
+      "file": "assets/generated/r83/app-icon-192.png",
+      "sha256": "856fcb5dc996f69dd220db5f1f9676c51e7f0ff8877270042b69ac0ce6f4f32f"
+    },
+    {
+      "file": "assets/generated/r83/app-icon-512.png",
+      "sha256": "70c6a10f87f2122d6bbc745feab0af7b58e6042bfd37610bb854787c8176a4eb"
+    },
+    {
+      "file": "assets/generated/r83/app-icon-64.png",
+      "sha256": "30accd56070cdb87578626b8aaf363e88f14d706e78999116f46efd004468d82"
+    },
+    {
+      "file": "assets/generated/r83/atlas.json",
+      "sha256": "2d99238b767981999ddcffc88b55cb6ece8cff50ea871b748e60a2812e1c496e"
+    },
+    {
+      "file": "assets/generated/r83/basket-32.png",
+      "sha256": "bd44988c4cbca0686900274a501a3c796c2fb2115017e29532555a593631d24d"
+    },
+    {
+      "file": "assets/generated/r83/basket-384.webp",
+      "sha256": "afe29fe3fe331094fd79a88a5328394d43163673c06f6e511ab1cb1e4a390cfa"
+    },
+    {
+      "file": "assets/generated/r83/crops.png",
+      "sha256": "afe89bd69eb309358cb796e18825fb7540e7cd01e28130ad43423a9cb5bd3347"
+    },
+    {
+      "file": "assets/generated/r83/cropslate.png",
+      "sha256": "2da967d32328d1c49839d8d2cd708f9978a648bab1d9c9195a7ae760b6aaf6f6"
+    },
+    {
+      "file": "assets/generated/r83/cropsseason.png",
+      "sha256": "c2385cd743aeda1a8300869d2d65888ce7c948ddf39cf5dae63a9ba608a8f04d"
+    },
+    {
+      "file": "assets/generated/r83/door-r82.webp",
+      "sha256": "a406d512c852cf0dfa881a6c3c1b533b9c4533533fdbd70eaea0d42018ae59f3"
+    },
+    {
+      "file": "assets/generated/r83/farmer-face-64.png",
+      "sha256": "d0d031d219b0f1740ca2a2c12bf239a42623ce8be923190a7a7dc0400f541e6f"
+    },
+    {
+      "file": "assets/generated/r83/farming-actions.png",
+      "sha256": "d9cde0defd6845ea3114f4d832681e383b0a3ad359bb962959be79001daf0bb8"
+    },
+    {
+      "file": "assets/generated/r83/grandma-0.png",
+      "sha256": "28f74db8f8afcdd061fce6461896de804afccedc5ecb72043690c0726544fad4"
+    },
+    {
+      "file": "assets/generated/r83/grandma-1.png",
+      "sha256": "33c34f2d1ab254f64a4df97b4ca8feff4b8b3e467263c1cd5cb0d73d48021578"
+    },
+    {
+      "file": "assets/generated/r83/grandma-2.png",
+      "sha256": "a40e3db7573c5b411e352b8fdeb8cc23fa40daaddbc2f3067a3c037cad20e08c"
+    },
+    {
+      "file": "assets/generated/r83/grey-0.png",
+      "sha256": "123000d6e48448f2f290a06d531f9481b683d9d7e07944b0c1fac974738c306e"
+    },
+    {
+      "file": "assets/generated/r83/grey-1.png",
+      "sha256": "00c34928649b94c8c05c7aa1170e997910804980344f40e8bad1dcb88a3da76e"
+    },
+    {
+      "file": "assets/generated/r83/grey-2.png",
+      "sha256": "4c8ee8ac73f0004e7f724bae2018fab29f09bdd72f6919ad94a2261aa1be3871"
+    },
+    {
+      "file": "assets/generated/r83/icons.png",
+      "sha256": "9c4f002df85d364fd0cb92fa5943685623a5f4726eab9f7f8d37804a86b5b54e"
+    },
+    {
+      "file": "assets/generated/r83/logo-320.png",
+      "sha256": "dbda632d8fde810d3aa2c85045b929a260371d753e94009269d3e69a9332adf0"
+    },
+    {
+      "file": "assets/generated/r83/manifest.json",
+      "sha256": "3c3076511463f28217ee5515ea5a590333726b536845331c2ec36e3ef1f0cd85"
+    },
+    {
+      "file": "assets/generated/r83/note-32.png",
+      "sha256": "1a0b848ca397a7570e436207bb58065266b674f20c1e210b2d19f6ecdafc33e2"
+    },
+    {
+      "file": "assets/generated/r83/npcs.png",
+      "sha256": "78c2712564f22f9fec2616f578c485911ea6519ad81a285a696ba042616dc116"
+    },
+    {
+      "file": "assets/generated/r83/panel-192.png",
+      "sha256": "932d07f2b335f3d95da79ee95fdade5254444fdc1cfd7c3a9933a8fc3f11effd"
+    },
+    {
+      "file": "assets/generated/r83/paper-128.png",
+      "sha256": "e3236912d0af84858db3d7142a86d32cb8c97ab887d6095c4164e75608c7763c"
+    },
+    {
+      "file": "assets/generated/r83/portraits.png",
+      "sha256": "212b67e1509238841af24eae8f7f1f5dc61ec6bfed15253ceca0336c5f0907b0"
+    },
+    {
+      "file": "assets/generated/r83/seed-32.png",
+      "sha256": "6b31058f90fb9c76a731920ab42ce9bcbd788e0d8424462e7b4e8adc4090f17b"
+    },
+    {
+      "file": "assets/generated/r83/stamp-32.png",
+      "sha256": "dc26d83d2d832e9b42ae651b30a29bfe9d147e6019147a3a4cf5f576afe6cba2"
+    },
+    {
+      "file": "assets/generated/r83/sun-32.png",
+      "sha256": "d8e7bcd040e9e38ecbd884dc06a9652600a729381bc96121fb1e1c40de938aec"
+    },
+    {
+      "file": "assets/generated/r83/table-r82.webp",
+      "sha256": "ae847f62b32a12044b1e4f8c4607f5577b90eca5a2b04f57126e77478713a85d"
+    },
+    {
+      "file": "assets/generated/r83/tea-32.png",
+      "sha256": "de5a2c0d650060ba1ca2a2f3aef6b63ab99a041c520049d0ee568761a709a401"
+    },
+    {
+      "file": "assets/generated/r83/tend.png",
+      "sha256": "e88a982d1f81da55673bc0f46b1d4d53eb997f13fec79673e9a0c997108102a9"
+    },
+    {
+      "file": "assets/generated/r83/terrain.png",
+      "sha256": "b331bfe6f0153cb0910f0d64f23fcc205fdde9deae09015b842a1265f626bb17"
+    },
+    {
+      "file": "assets/generated/r83/walk.png",
+      "sha256": "c417dee2b7dd39dc187477f67898b4596cf4e0775269857fbf3d7c30e77980c1"
+    },
+    {
+      "file": "assets/generated/r83/water-32.png",
+      "sha256": "3bb54f7b2986a9e399c7dcd51df474dac5877e1f1de4e6dc61db60699ccfc0f6"
+    },
+    {
+      "file": "assets/generated/r83/welcome-384.webp",
+      "sha256": "a0d5d41e356380e92936a71dc97788a94e649675a4fce5a448ef7dee9fed795b"
+    },
+    {
+      "file": "assets/generated/r83/wheat-32.png",
+      "sha256": "eca19b3628327297b207c8f0714470dc6b7834e0541a79d84b5d743aeedaa24b"
+    },
+    {
+      "file": "assets/generated/r83/world.png",
+      "sha256": "269cd290b334d806b51361c516ef158358724388aa5762ef41a06c73fbf0d214"
+    },
+    {
+      "file": "assets/generated/r84/app-icon-192.png",
+      "sha256": "b24ce87f1192330a0ea64b0d0d4e1409edc1dac2a219955d680d1460fe80b13d"
+    },
+    {
+      "file": "assets/generated/r84/app-icon-512.png",
+      "sha256": "e183375126b6a2d19c5865d260ae47a024b144d646f0ef8aa0082b145b8db2f9"
+    },
+    {
+      "file": "assets/generated/r84/app-icon-64.png",
+      "sha256": "98eea325f7a548ed769b427275edb689be3c47777608ad11fd31c900837d7ff7"
+    },
+    {
+      "file": "assets/generated/r84/atlas.json",
+      "sha256": "c8e1d8bc69a9d55af76519a1dbad02cba8e86ae1bfeb494a8841aa65bc67e346"
+    },
+    {
+      "file": "assets/generated/r84/basket-32.png",
+      "sha256": "7c87546c3a743ff2843dffde155cc7666011b2b38ca7e061326ad255477d1d01"
+    },
+    {
+      "file": "assets/generated/r84/cups-32.png",
+      "sha256": "fbb060000cbaceb7a8eb5e368434d440da136fd01cd58cf8e624b39d017cc94a"
+    },
+    {
+      "file": "assets/generated/r84/doorstep-result.webp",
+      "sha256": "fea8dbb4d3f6ed3638c58c285ff9ad8e3b8b7030ca49bd61a6a18b7721f8f37c"
+    },
+    {
+      "file": "assets/generated/r84/face-32.png",
+      "sha256": "8265b877e75110b0ec374a489bd8bd0a1aa447d20fb8ae9e5e4cb0eb1cf07217"
+    },
+    {
+      "file": "assets/generated/r84/grandma-0.png",
+      "sha256": "b4923c1c4821fa312c5ef4c2233be7f97655d2eb9de5353aef0d05fcfdf406a6"
+    },
+    {
+      "file": "assets/generated/r84/grandma-1.png",
+      "sha256": "17440d6f0f9f67b47fdbe637f14906c9bb31398aa8bc87b616410c5de307c3d0"
+    },
+    {
+      "file": "assets/generated/r84/grandma-2.png",
+      "sha256": "9956fd61c31a333ee822f20b140523d90ff5e83492d19a3c762730ee696ffea8"
+    },
+    {
+      "file": "assets/generated/r84/grey-0.png",
+      "sha256": "2834f8dd2c60f0f36ad47712bb0a866992b49a14755f31a60e0aa67ef29630a2"
+    },
+    {
+      "file": "assets/generated/r84/grey-1.png",
+      "sha256": "5a86a68494b210e25250e9ce08c8f83469a42207c7a8b36cc7a067b18066bf9e"
+    },
+    {
+      "file": "assets/generated/r84/grey-2.png",
+      "sha256": "29b1da33d6fff38a0bc36b14db3d76791fbccc9cfc587939f5de2a1e9dd02a4d"
+    },
+    {
+      "file": "assets/generated/r84/keepsakes.png",
+      "sha256": "f768fc669dc85948076facedea70156b9e4d55b97a5fcfef5dc2ae6563cb93c2"
+    },
+    {
+      "file": "assets/generated/r84/logo-320.png",
+      "sha256": "3540541b64c144ff8358e0585201781bbc8668eb1d19421cd4ace46d98caf2ca"
+    },
+    {
+      "file": "assets/generated/r84/manifest.json",
+      "sha256": "c06e72fc34afdaaa03b2baed714d84bc479953edf78287616f80fa4ea21c83c6"
+    },
+    {
+      "file": "assets/generated/r84/menu-32.png",
+      "sha256": "c4d098c01e52ddbcbc6a0a90a1d8eb3b92d0a98a6351b0e836a0e8251a1869e6"
+    },
+    {
+      "file": "assets/generated/r84/miri-0.png",
+      "sha256": "7a239bd700456a92fc0f51a67019eec63993c5c9b61f8ad9cbe5f9ee3410356c"
+    },
+    {
+      "file": "assets/generated/r84/miri-1.png",
+      "sha256": "06466cc90073272335d3d7106d0b593c4fd33c74102f9bcda64348b0dcccb320"
+    },
+    {
+      "file": "assets/generated/r84/miri-2.png",
+      "sha256": "f6402a4ee6908cf575c9aab7cf4eb2202bcb624535841914ea1056c52dc7c1e7"
+    },
+    {
+      "file": "assets/generated/r84/note-32.png",
+      "sha256": "dfe81c0fb781f72293a1dd86e58809529406edca267b2a461fc7e98b4c83e23e"
+    },
+    {
+      "file": "assets/generated/r84/panel-192.png",
+      "sha256": "7ab0e229cedb62ca5ea2c7b2fcbc0d55f2621ec9c618430c80bb8b133af1dbb3"
+    },
+    {
+      "file": "assets/generated/r84/paper-128.png",
+      "sha256": "5f06349843f65a7a0279f116c6c1c67e34cb09abb5af456d2bcd3fca7df66f49"
+    },
+    {
+      "file": "assets/generated/r84/sun-32.png",
+      "sha256": "07e28cf222df753a40bbadf2a3939dc9b8f4da6e2b7afa6de6895b958ee98be5"
+    },
+    {
+      "file": "assets/generated/r84/table-result.webp",
+      "sha256": "49b73cb7728ca686f2405400a0996dad959398d19994405b338c3d69656d598a"
+    },
+    {
+      "file": "assets/generated/r84/terrain.png",
+      "sha256": "84ca69429c7eaceaa8fd0676c4c502c5a5a1c8eac2c226678fa730183b214961"
+    },
+    {
+      "file": "assets/generated/r84/water-32.png",
+      "sha256": "4860e90b82c6fdb27beeaa298ef2393008b021b0ff79647de4188e4d209aa50c"
+    },
+    {
+      "file": "assets/generated/r84/wheat-32.png",
+      "sha256": "4a747c7c6d63ff355ede2f84e62da0603ca9c55073f8d4b11ef05da902155b5f"
+    },
+    {
+      "file": "assets/generated/r85/actions.png",
+      "sha256": "8abd4db0b4369c440c756fe0627be3eb1831b66210e93f68d9c3a155f50d3251"
+    },
+    {
+      "file": "assets/generated/r85/album-128.png",
+      "sha256": "7faafb9bebe6a46f7b35735511e84b9183acdbdc394d7135ab161994ce910ff4"
+    },
+    {
+      "file": "assets/generated/r85/app-icon-192.png",
+      "sha256": "26d7a424e64d1ecc5e6cde7c6115af9a9128031d64cb768fc7222e95b0e047e8"
+    },
+    {
+      "file": "assets/generated/r85/app-icon-512.png",
+      "sha256": "475dd30d7d8e123dd7a89af7cce59bb5d5650a50c98473cb4c8f73d9f423432b"
+    },
+    {
+      "file": "assets/generated/r85/app-icon-64.png",
+      "sha256": "31b22729db179be871a1cf56c8d0db9564f01c7bdb28e52100e78d2d60b3612e"
+    },
+    {
+      "file": "assets/generated/r85/atlas.json",
+      "sha256": "e415f7a798102f45489e11882e150c53237e8136a7ed835f7535c109e6d7d9d8"
+    },
+    {
+      "file": "assets/generated/r85/basket-32.png",
+      "sha256": "076515a152ae92d67585c1a39e7d297e4a2a7f2d0f9df0bcb52f56c1edb3e73c"
+    },
+    {
+      "file": "assets/generated/r85/basket-384.webp",
+      "sha256": "f974e15a3bff7155f5f5b41d1ba244b914474a5e250dc6f238e3a16e6a1a85a2"
+    },
+    {
+      "file": "assets/generated/r85/bow-32.png",
+      "sha256": "e38845a39734c98690e716a4adad828d38802d2cd5afb44ab4cf823a7c50a66a"
+    },
+    {
+      "file": "assets/generated/r85/cups-32.png",
+      "sha256": "b84861962b969456cb222b749f4117d95cf69c404ad813cf39b6a2d706bc090c"
+    },
+    {
+      "file": "assets/generated/r85/doorstep-result-384.webp",
+      "sha256": "5c89e7f42039d497d912c200d28b96e20dd4f78afb06489fee1091b67f0be0c8"
+    },
+    {
+      "file": "assets/generated/r85/farming-actions.png",
+      "sha256": "592b6cf48b7f4ea16a96b8fca0c3a8828ea5a5fbdd34ae9db033532d186c5267"
+    },
+    {
+      "file": "assets/generated/r85/keepsakes.png",
+      "sha256": "fd167b632a51b4573ef266da971ef6591330e5ed1cb391fac327cadeca439d05"
+    },
+    {
+      "file": "assets/generated/r85/logo-320.png",
+      "sha256": "15a358c9bf5edd41566ef3fe18eafa54ed5a5c67e88c44afb5aea06e097c38dc"
+    },
+    {
+      "file": "assets/generated/r85/manifest.json",
+      "sha256": "10844b02630ee680e58640b6caad901fcd48816f62ae76ccc6a00acc6df93fdc"
+    },
+    {
+      "file": "assets/generated/r85/miri-0.png",
+      "sha256": "4f4145deab1b041fbc033e3c4e6a26e3eaaeeb516da2447cb4f0d4100cc0f5f3"
+    },
+    {
+      "file": "assets/generated/r85/miri-1.png",
+      "sha256": "04ece36a4407ce22d39ed34b2dd5846bef17e1bebbde313e706533a23567d257"
+    },
+    {
+      "file": "assets/generated/r85/miri-2.png",
+      "sha256": "11ffaed5f9b6e859825b85bc827b272ad550be19b2b879e0818180ef20b1c3e5"
+    },
+    {
+      "file": "assets/generated/r85/note-32.png",
+      "sha256": "16e2504f5e67e45e964881162e9f1c8304857e30b3f3c6be408d9e6d1daa1a82"
+    },
+    {
+      "file": "assets/generated/r85/paper-128.png",
+      "sha256": "5fa2229866f445e517d4d92d63458b1d8985faa15cd512a5877933b4d69d9ef6"
+    },
+    {
+      "file": "assets/generated/r85/stamp-32.png",
+      "sha256": "05b40c9f22f49b90f5755a415684d29df6afcd2054618c5385916a975d9f3593"
+    },
+    {
+      "file": "assets/generated/r85/sun-32.png",
+      "sha256": "4dff431b1cae19148337b80f307558663a28e00b6cc0f151035bddae9d251664"
+    },
+    {
+      "file": "assets/generated/r85/table-result-384.webp",
+      "sha256": "c209d7f11baf06f951b37ff5d685bddfb58fdbc5b399aef7b1616717c862c66d"
+    },
+    {
+      "file": "assets/generated/r85/terrain.png",
+      "sha256": "d027a39ebfc79d79ee7cb32dbe6899f16c1eae916d6e2b50d078a8db4a1ddc5c"
+    },
+    {
+      "file": "assets/generated/r85/walk.png",
+      "sha256": "c4b59ca37d3da91c2629eb12a074324605fdd1c108996ad634bc712e575a0341"
+    },
+    {
+      "file": "assets/generated/r85/water-32.png",
+      "sha256": "928706464ca4ac99788a34a4cc9bcfec25a092916e9b891f0b6ffec7014e3781"
+    },
+    {
+      "file": "assets/generated/r85/welcome-384.webp",
+      "sha256": "41a0c77162d0296c061efc4c1e3c8d4a867efda99478690d3377ba67155d33ff"
+    },
+    {
+      "file": "assets/generated/r85/wheat-32.png",
+      "sha256": "1e5ab97dde7dc1049fae0f68abd840d856278becc15e7d94d5e4984bee5c7245"
+    },
+    {
+      "file": "assets/generated/r86/actions.png",
+      "sha256": "601d537600d8cbfc858682d3deeede2386b802d15876f62f592d9c8695cb9b2e"
+    },
+    {
+      "file": "assets/generated/r86/app-icon-192.png",
+      "sha256": "acdde06db7284adc8b6cfc346b0c96eda2c81d4c1bf1d059f894d3e695d98def"
+    },
+    {
+      "file": "assets/generated/r86/app-icon-512.png",
+      "sha256": "8cf7f947ce04f94115190b0f3d1af76506e2c48fa98d7425074973c879457cf8"
+    },
+    {
+      "file": "assets/generated/r86/app-icon-64.png",
+      "sha256": "15452b1e9d73237cdf11780640bdb1c5f64d49755e35010218c299339d940aa6"
+    },
+    {
+      "file": "assets/generated/r86/atlas.json",
+      "sha256": "885ae4dc974cbc66787fd2e6db9bf1fc57079d11529013af103c83ad809ede05"
+    },
+    {
+      "file": "assets/generated/r86/binding-8.png",
+      "sha256": "000fb065c40eb2519fb62d4ab8bcde73452f2cd9f0df50a43011564994b5d0d6"
+    },
+    {
+      "file": "assets/generated/r86/canopy-shadow-128.png",
+      "sha256": "78806169e5b90253ef032afa661a1408a46428e837141614cb32204ef2dd3a02"
+    },
+    {
+      "file": "assets/generated/r86/drop-16.png",
+      "sha256": "90c9c89cfd07bbba66d396cbbd39aab7c1dd90aa4792b193ad24bef51cdc3012"
+    },
+    {
+      "file": "assets/generated/r86/farming-actions.png",
+      "sha256": "87118cfa2694ed363d0c53ba11de20586e697c758d8b58c51c5c0a95a903917f"
+    },
+    {
+      "file": "assets/generated/r86/leaf-ground-128.png",
+      "sha256": "ff1b180d2d3d22bde43cd1fb41e1ca3d3370fb11433b390141c732e51b5d44dd"
+    },
+    {
+      "file": "assets/generated/r86/leaf-light-128.png",
+      "sha256": "1a392fef004545ceffbfd7a42f6b3cda1f45093f05d0b54e01ee614f3c37ca83"
+    },
+    {
+      "file": "assets/generated/r86/logo-320.png",
+      "sha256": "0812fbeb260be44184fd4d33b8b5db8f35ecf1de2ad4cc8b88453545b79e3e5c"
+    },
+    {
+      "file": "assets/generated/r86/manifest.json",
+      "sha256": "5c22b1ef1561a40def0c1fd527114044280cf1cb346adced97a0353ee408463e"
+    },
+    {
+      "file": "assets/generated/r86/miri-0.png",
+      "sha256": "9c2442b120719055748665364056b9c6a5ee553e733c25c31422baad7f8ebd56"
+    },
+    {
+      "file": "assets/generated/r86/miri-1.png",
+      "sha256": "c9c0bcefd47deb2df910cb197dd90f1e8c41978a82e858b1fa4a394d689155e2"
+    },
+    {
+      "file": "assets/generated/r86/miri-2.png",
+      "sha256": "699d0e88bc6fa7c9baf120f09aa15af5ca0d8343868273e96669e547e8c41360"
+    },
+    {
+      "file": "assets/generated/r86/paper-128.png",
+      "sha256": "b3390e9b70e9dbdddcc0e0bf1d5c851a6ec76756fe8a4a9e42b19b3019784780"
+    },
+    {
+      "file": "assets/generated/r86/stamp-basket-32.png",
+      "sha256": "e84fe9669029e04475be6476630c5ea366b4facd634399a01d1ab8447f531707"
+    },
+    {
+      "file": "assets/generated/r86/stamp-harvest-32.png",
+      "sha256": "37cd78c54fe42b8312b9fa0e402d04ed09ee3664671c0ee219f85a85aec58334"
+    },
+    {
+      "file": "assets/generated/r86/stamp-water-32.png",
+      "sha256": "66468bd3eb67b89bdca04d9d7f733592e156e188d7c4a58414f9b546906e668b"
+    },
+    {
+      "file": "assets/generated/r86/walk.png",
+      "sha256": "1594c77ec8f18a6a3411a23f62336eb38fc46335350b61ef9370bde5c96da03e"
+    },
+    {
+      "file": "assets/generated/r87/actions.png",
+      "sha256": "bd6cd4911520e1b13b5dd8d1d9b74ef97c4e1612fed96f5cfa888b11064ebb3c"
+    },
+    {
+      "file": "assets/generated/r87/app-icon-192.png",
+      "sha256": "87f8ecf084b519410e5715352e51c6b56088d0ef125be6e03aaee30bcb5e27a7"
+    },
+    {
+      "file": "assets/generated/r87/app-icon-512.png",
+      "sha256": "142eca7ceb00f34aa642e8df159bddfba01c8f7aed416bbc45a75e0ccf545aae"
+    },
+    {
+      "file": "assets/generated/r87/app-icon-64.png",
+      "sha256": "7161328cb3a11eb3d708c9e01551e7712140da0142909d576a8ef08e0f13a25e"
+    },
+    {
+      "file": "assets/generated/r87/apple-tree.png",
+      "sha256": "2fff5b5b8215576adc246af787a7fce243892308cc08e7e24a0d2dbb19820866"
+    },
+    {
+      "file": "assets/generated/r87/atlas.json",
+      "sha256": "6e033c60ed3965a8cb4d8bc82c48f9f6993bc4a36ad91b7b9342afaee7d50f9f"
+    },
+    {
+      "file": "assets/generated/r87/basket-32.png",
+      "sha256": "c13021efe3e8ed862f338521939e61c4d956b8f6a35896a050d3c242601de42a"
+    },
+    {
+      "file": "assets/generated/r87/binding-8.png",
+      "sha256": "6ba996ac06e3f93c2173354314cabf1567cfba90628002dc14181dcd1df5a177"
+    },
+    {
+      "file": "assets/generated/r87/canopy-shadow.png",
+      "sha256": "764a4a2096bb12527c2ec9c792de1e8a24d0c73f7b8b5bfe5ce607339fadc455"
+    },
+    {
+      "file": "assets/generated/r87/farming-actions.png",
+      "sha256": "bd6cd4911520e1b13b5dd8d1d9b74ef97c4e1612fed96f5cfa888b11064ebb3c"
+    },
+    {
+      "file": "assets/generated/r87/hat-32.png",
+      "sha256": "3fa78acc6d98d1182adfb882c4e139093daf7aabbd691ef0c30c726c8aa22310"
+    },
+    {
+      "file": "assets/generated/r87/leaf-ground.png",
+      "sha256": "cda9058409019431cbdc3a989229a779e1581c0b21770430621827ad27ef94b1"
+    },
+    {
+      "file": "assets/generated/r87/leaf-light.png",
+      "sha256": "e8554473936f10aeaae18e8d66c324d2c5297a8534bd2de35f744138e681e9bf"
+    },
+    {
+      "file": "assets/generated/r87/logo-320.png",
+      "sha256": "c5a4b70f81e466d5d0c2f67bdc882ba777efc5ff59f2f725e3bb77515590f9ad"
+    },
+    {
+      "file": "assets/generated/r87/manifest.json",
+      "sha256": "6460642525c509ea95a90777348dd4809bc8359c8cbddf0f23961b801cedf891"
+    },
+    {
+      "file": "assets/generated/r87/miri-0.png",
+      "sha256": "876b013a4e1bfd30a2427851bbf141e79db4b2b5dda7972eeb8ac404b9005e56"
+    },
+    {
+      "file": "assets/generated/r87/miri-1.png",
+      "sha256": "9d6ca66c92843e0040b9235c17fa3609bebd379025084d80d706c9591b83a3bb"
+    },
+    {
+      "file": "assets/generated/r87/miri-2.png",
+      "sha256": "fae45d80776953829823a73200bcd95cd67477e662bfdc29b1830a6191bec476"
+    },
+    {
+      "file": "assets/generated/r87/note-32.png",
+      "sha256": "c43eb6c236b92d109dc95ab81a42571f353b5fcc9220f35175063c172b991ae2"
+    },
+    {
+      "file": "assets/generated/r87/paper-128.png",
+      "sha256": "ae565eee860c5a324608914f756e5dfc6bb7fea6485b29e9ce2bdacaed8e4984"
+    },
+    {
+      "file": "assets/generated/r87/sprout-32.png",
+      "sha256": "2b7912cd37e1fb54441e94d149ec990368a856a313d39cab527767e87836c539"
+    },
+    {
+      "file": "assets/generated/r87/terrain.png",
+      "sha256": "1796383ae744139d73819c0161a89de53aa8d1867497eab615dfc59757004de7"
+    },
+    {
+      "file": "assets/generated/r87/walk.png",
+      "sha256": "048040ebf202e150d3229212507debe5d03e59a6befad2fd6dd80a581d266950"
+    },
+    {
+      "file": "assets/generated/r87/water-32.png",
+      "sha256": "3546c2abbb3ba7895d9fe4b6b8a521489c173c04e8a12384e077df4f97967d60"
+    },
+    {
+      "file": "assets/generated/r87/wheat-32.png",
+      "sha256": "26d5734625247c95ab07edd688d65a5ffa4018fa5e3c8589e6baa694cc242fa7"
+    },
+    {
+      "file": "assets/generated/r88/album-256.png",
+      "sha256": "20b3ad665847a484ad732523b50445c6d32910bd7b062446a813b6fc566ae09f"
+    },
+    {
+      "file": "assets/generated/r88/app-icon-192.png",
+      "sha256": "b335e2ffd1663190a0fa8c8f14196a28383b6e2fcea4181d071dae5c6d3ff278"
+    },
+    {
+      "file": "assets/generated/r88/app-icon-512.png",
+      "sha256": "28fdf332ffa01469f2edd14d7f2b0d6bfcfc38b349e514a09a21a17f784ba4f9"
+    },
+    {
+      "file": "assets/generated/r88/app-icon-64.png",
+      "sha256": "3f1ac4a441321f21702d0cfb7f4db45a7a69216f1aa92d96691bc609bb122bc2"
+    },
+    {
+      "file": "assets/generated/r88/atlas.json",
+      "sha256": "6a9bfd68b3c9ad6c1698c80e8cd4e1f6802de5642a2afd3d56808878687aaf28"
+    },
+    {
+      "file": "assets/generated/r88/basket-32.png",
+      "sha256": "f09da03ef1624c348122ad2a93dd87755414d6ae34c9b987af6c7a965e1293d4"
+    },
+    {
+      "file": "assets/generated/r88/basket-512.webp",
+      "sha256": "cfc98985b958342f4a906139e0b7d1c3d4c11f18f18ac1f2af0739d42260f38a"
+    },
+    {
+      "file": "assets/generated/r88/binding-8.png",
+      "sha256": "711e763d61e4c90ed05205e12f1adc7eb86e8bed4667c07b2fbb2464d96eaab6"
+    },
+    {
+      "file": "assets/generated/r88/bucket-64.png",
+      "sha256": "3eec9ec606cb6e1363dcf092914654989ea3b1885ced418da0c4fa554e578cad"
+    },
+    {
+      "file": "assets/generated/r88/canopy-shadow.png",
+      "sha256": "63c751c8ce8f167fc15e80fd3c3bcf2429d964ed27f54cee442c7814001785b6"
+    },
+    {
+      "file": "assets/generated/r88/doorstep-result-512.webp",
+      "sha256": "083ee358263100a528e9fd9d1594175e0d3ae85d456706bfc3ba9eb684f76ca7"
+    },
+    {
+      "file": "assets/generated/r88/farming-actions.png",
+      "sha256": "3e1070d87234297370eb9258b964aae8a4a3a08276e2f850b57985f8e9d85fc8"
+    },
+    {
+      "file": "assets/generated/r88/fence-64.png",
+      "sha256": "fb323593363157f5178d2cd0b4c113e5d7d395a0f58ef5b86d7abb4b1739ed18"
+    },
+    {
+      "file": "assets/generated/r88/flowers-64.png",
+      "sha256": "e3b232d84cd0d607fcbb9a17bf8173a63356464a8aef0e77d41a1371dbb72705"
+    },
+    {
+      "file": "assets/generated/r88/garden-384.webp",
+      "sha256": "f14c3b0fbadb9df43594f47731c23285f10601ba1019f2ed8d455461339cf10b"
+    },
+    {
+      "file": "assets/generated/r88/grass-32.png",
+      "sha256": "59ce399448cae9b8a62a511314f1ae50caf450f83521d2ae37e11013a9ab5ea1"
+    },
+    {
+      "file": "assets/generated/r88/hat-32.png",
+      "sha256": "607c6934b4baa5713d7cfc3ec3b5abd281daea9754086365bae9ba0a8a22b7b3"
+    },
+    {
+      "file": "assets/generated/r88/leaf-light.png",
+      "sha256": "6e64d82c8800162079ba3e21dceb9e8edb025ec9cf3d4ad27da4e6bdad43658c"
+    },
+    {
+      "file": "assets/generated/r88/logo-320.png",
+      "sha256": "eb9b024f3d63a8e55265c8f8dc7ac7bc0c9c6f38659539d764805711fe5249c6"
+    },
+    {
+      "file": "assets/generated/r88/manifest.json",
+      "sha256": "3b0b85cf023385efb668c23410dac2f7f9ee6de0173cd9fdb435af44b492f3c3"
+    },
+    {
+      "file": "assets/generated/r88/miri-0.png",
+      "sha256": "a71a4442e4daa75dbe61ec920be6bb5d2a9e96e52f5633fedb0e9a495c10c5b1"
+    },
+    {
+      "file": "assets/generated/r88/miri-1.png",
+      "sha256": "78d48d876d4786773198628d06c4277f5efd49561cef5e62bffebfec7a176d8c"
+    },
+    {
+      "file": "assets/generated/r88/miri-2.png",
+      "sha256": "4b6e4b4f5944500d96bd51953eb401043359392fa0cee96c1d89acc3e0d777d4"
+    },
+    {
+      "file": "assets/generated/r88/note-32.png",
+      "sha256": "d0a3cd4eaa0c82a061dc229e79596953b584f1e372512318db613462ae910cbc"
+    },
+    {
+      "file": "assets/generated/r88/paper-128.png",
+      "sha256": "8728e7050450997814c3a716b90fac130a77d4a295dc9892a47e08daf9a49a21"
+    },
+    {
+      "file": "assets/generated/r88/path-32.png",
+      "sha256": "bdd13adbec71ca82e5d0192daac41c4ea92dbddcb372b28e2c86f990893e6c2b"
+    },
+    {
+      "file": "assets/generated/r88/soil-dry-64.png",
+      "sha256": "dbf8c9bda254ba5f5d06ea4b0a4eeb9a888f79be2dc9a08dede23071bf4e5b8d"
+    },
+    {
+      "file": "assets/generated/r88/soil-moist-64.png",
+      "sha256": "ace2c3531debd3e834ee97e6bd6d3925d4ef05b480d5eed84ffe6e49374b5c2a"
+    },
+    {
+      "file": "assets/generated/r88/soil-wet-64.png",
+      "sha256": "25bc9b1f35438530861e4bd660296b376c94539196516d1a0a242b5816e6e368"
+    },
+    {
+      "file": "assets/generated/r88/sprout-32.png",
+      "sha256": "67419029b4feacbe8f80cace1fb6de7e27fad3b0b0cd22af44f982b935f4aa65"
+    },
+    {
+      "file": "assets/generated/r88/table-result-512.webp",
+      "sha256": "6b25a92f5f3f029ebf8cee25c2f4939c4a5d2a897364848176c0b77a425da4fe"
+    },
+    {
+      "file": "assets/generated/r88/walk.png",
+      "sha256": "7410735e804df75d0dae041fb00752a548725036daac54d7de21cc9c021fa1a3"
+    },
+    {
+      "file": "assets/generated/r88/water-32.png",
+      "sha256": "9d4a167f03cb983a58d7004ccaa1e679e321acaf71e3e77bc7eb6e66707be489"
+    },
+    {
+      "file": "assets/generated/r88/welcome-512.webp",
+      "sha256": "e0a12932b0c2b2cca35d87bf08a519a5a1c2f56c256d0798c1084ab6165fefb4"
+    },
+    {
+      "file": "assets/generated/r88/wheat-32.png",
+      "sha256": "27e98d239d3f3a23d5c8f4580d2b8de22b62877f6f9de714ad8004d7548fc78f"
+    },
+    {
+      "file": "assets/generated/r89/app-icon-192.png",
+      "sha256": "3691eb870ec467d7d41ad516050a56fc1ca01bd4c99316f08b390eec183dbfdd"
+    },
+    {
+      "file": "assets/generated/r89/app-icon-512.png",
+      "sha256": "c88c33e83cd56496fc05240b3721a53195109bc21c70bf0b96f2f779e76b012d"
+    },
+    {
+      "file": "assets/generated/r89/app-icon-64.png",
+      "sha256": "fc4aa3594d5ce46347444f64d5efbafe2a096dfe0bac6786a66bf49723039d66"
+    },
+    {
+      "file": "assets/generated/r89/atlas.json",
+      "sha256": "9496c3dd129a90bb4f2e4ef5722b9fa5d9aecc5e086b045545b2aabae2522ef4"
+    },
+    {
+      "file": "assets/generated/r89/basket-32.png",
+      "sha256": "3f259e983dc2332f40a674376a2806ceae45f826f13e138c98790b4b51ec19f9"
+    },
+    {
+      "file": "assets/generated/r89/binding-8.png",
+      "sha256": "7d042af845e9148ceff16805fa6ca0ab7da1ac0c61079280e63bb2312ef415e4"
+    },
+    {
+      "file": "assets/generated/r89/canopy-shadow.png",
+      "sha256": "63c751c8ce8f167fc15e80fd3c3bcf2429d964ed27f54cee442c7814001785b6"
+    },
+    {
+      "file": "assets/generated/r89/chair-detail-256.webp",
+      "sha256": "07b9e34048d2182baadabed765d9164d9366d9648a60dc3c625b297fe7359f45"
+    },
+    {
+      "file": "assets/generated/r89/creel-0.png",
+      "sha256": "995c900b38af2e800f95c8049eae344a695d8cb552a805565856f794508ca958"
+    },
+    {
+      "file": "assets/generated/r89/creel-1.png",
+      "sha256": "89842c2b7bf02b13e6bba1f6d178f8921d4c7c26b4b52a84c43247cf6fdf7738"
+    },
+    {
+      "file": "assets/generated/r89/creel-2.png",
+      "sha256": "e76a034442f79d7f6c153a3ae796b95db5de0a368c6e75ef4e01b49bff01151c"
+    },
+    {
+      "file": "assets/generated/r89/farming-actions.png",
+      "sha256": "025a6f5e683f5bdb98ed20e61d231cc6806d653b1855478fc7cba7fbebe71684"
+    },
+    {
+      "file": "assets/generated/r89/garden-1536.webp",
+      "sha256": "20c61750afa45dcab3d959680f622f250c21dc61aa03787c24d49036305f2360"
+    },
+    {
+      "file": "assets/generated/r89/grey-2.png",
+      "sha256": "6a593965fc8d26dfe606c4b34ffce632da522343ce18a6d8788a826b476727c8"
+    },
+    {
+      "file": "assets/generated/r89/hat-32.png",
+      "sha256": "a25a32f6cb5e056f1dfdbf89508f11d1866bee252fdb81e8a6390a48cb0a8620"
+    },
+    {
+      "file": "assets/generated/r89/leaf-light.png",
+      "sha256": "56cc2c31ceff64c80fb11f13348e57e60343fe92f72f11140eea0dbe361ff980"
+    },
+    {
+      "file": "assets/generated/r89/logo-320.png",
+      "sha256": "70cb4246354d283083bf1697be23410a81457a538acc73d25d63309943d19ba8"
+    },
+    {
+      "file": "assets/generated/r89/manifest.json",
+      "sha256": "5f37b9bacdc75662cbb2f1c2f5d21e0c01f9489169363f565516fd9f8dc01b7c"
+    },
+    {
+      "file": "assets/generated/r89/miri-0.png",
+      "sha256": "fdb6820f11dce6f74f8261c39f1911ed6564f06284c0f6e6bb1956346edf41da"
+    },
+    {
+      "file": "assets/generated/r89/miri-1.png",
+      "sha256": "4f1cc1ffb28924dba4ba90c38150005236c6832c3f60bf05fa225aab3d25cdc5"
+    },
+    {
+      "file": "assets/generated/r89/miri-2.png",
+      "sha256": "0988defc0156eee70c3e832b8cb93062b918dabf72b009feb191e746b507b95b"
+    },
+    {
+      "file": "assets/generated/r89/note-32.png",
+      "sha256": "f8d5acea58df3f73c06f6f50e31f8b5b0b8f8aaa4bc4f97c642b4512388b3a3f"
+    },
+    {
+      "file": "assets/generated/r89/paper-128.png",
+      "sha256": "4601a257ca39c279b9ab36b0531bea99d062eb9d4e5a24c1bd7399814bb3e0f3"
+    },
+    {
+      "file": "assets/generated/r89/sprout-32.png",
+      "sha256": "c9b30766b4285401cd7fe91d4c7dd212ba9a044fde916c2e2ad539bbca24979d"
+    },
+    {
+      "file": "assets/generated/r89/sunshaft-384.png",
+      "sha256": "ba2033afb9e4052a6e301fbd936797b0f2e258437ea54f6e0d191d32a3e6a23e"
+    },
+    {
+      "file": "assets/generated/r89/table-result-512.webp",
+      "sha256": "6ef8e501f2868fc29ff6e647a915d1a5a329f25ddb2f4959cd6efb2a4474efa5"
+    },
+    {
+      "file": "assets/generated/r89/walk.png",
+      "sha256": "1552217b0f21436d42b0ef2fc2156852ad4fd99ce166115515fedb92a4a6fd5a"
+    },
+    {
+      "file": "assets/generated/r89/water-32.png",
+      "sha256": "c93fb19dfe5b5369f7358d2162567f7068455afbe178bf6ad841fb3523bc5439"
+    },
+    {
+      "file": "assets/generated/r89/wheat-32.png",
+      "sha256": "0f85eddfd0d1baab8beabbaa5d768089fac1d149c583518c298f41f353642005"
+    },
+    {
+      "file": "assets/generated/r89/wheat-grow-48.png",
+      "sha256": "69677d62787237d44ce6825f1b103de63638f1ac9868b888ea10d8919825d572"
+    },
+    {
+      "file": "assets/generated/r89/wheat-ripe-48.png",
+      "sha256": "ca5c966610b19e1aabb9eb4234e1f8fc794e3c8cd60178a3533b296a5714a0d8"
+    },
+    {
+      "file": "assets/generated/r89/wheat-sprout-48.png",
+      "sha256": "e69617edcb1ee4f98a9b53affe3e5db6b4e24876bd97f50f5bdf3e0920cd4890"
+    },
+    {
+      "file": "assets/generated/terrain-tileset.png",
+      "sha256": "4fe358d862a250e47d10a1b5d9a1657816589c0e05d7d7d4c331955e2468da51"
+    },
+    {
+      "file": "assets/generated/ui-icons.png",
+      "sha256": "646b12215a69111e95c292195cd24e1fa8bfbb80cd9cf44fc9edc6545104af23"
+    },
+    {
+      "file": "assets/generated/v2/animals-48.json",
+      "sha256": "57e3357b28a03f91b4a72d8889b5e671b2b1e9ce9bd39672a3439836b3c7fb4c"
+    },
+    {
+      "file": "assets/generated/v2/animals-48.png",
+      "sha256": "a122f990e62ed5506ae1197daba6fb5a41a1ee0ae12f39ffe8e9aacfab4e5270"
+    },
+    {
+      "file": "assets/generated/v2/buildings-props.json",
+      "sha256": "811bdedf4c0a121fa87136651070fe82845276ef3ff48bd214d7af0c4704b09e"
+    },
+    {
+      "file": "assets/generated/v2/buildings-props.png",
+      "sha256": "d78166f656e264f6f7f4ff0f6979e4cd7180401ba30271156b9b6a7d5cdaf72f"
+    },
+    {
+      "file": "assets/generated/v2/crops-32.json",
+      "sha256": "ac44312612ee8d74c24c38d92546bfb19395ff8ff43d8ab6239653012757edef"
+    },
+    {
+      "file": "assets/generated/v2/crops-32.png",
+      "sha256": "d8a0ae139b4f4c8b72ac994a0482a15f495821aae083f0b400904758b5e5ca2f"
+    },
+    {
+      "file": "assets/generated/v2/manifest.json",
+      "sha256": "b744eb38ffbacaa46404d7aea9448374fd319cb0d556ce6b6e146c17f1ca174c"
+    },
+    {
+      "file": "assets/generated/v2/miri-actions-48x64.json",
+      "sha256": "345fe73c593cae53a3214fb10e53479c665bf016d2ebeade0ce1259b4766c5bb"
+    },
+    {
+      "file": "assets/generated/v2/miri-actions-48x64.png",
+      "sha256": "18ba6ee2b202d99505e21ee97168ea87c7604c6fa5af2239218a6a06f01a7b42"
+    },
+    {
+      "file": "assets/generated/v2/miri-walk-48x64.json",
+      "sha256": "16bb90bb42295adff02f7581441dff735debc6bb384fb5615d61f64d3b2bc950"
+    },
+    {
+      "file": "assets/generated/v2/miri-walk-48x64.png",
+      "sha256": "d1433268735e7cfe75480297b58780b859ddc815dbb2158cc908f121269e3626"
+    },
+    {
+      "file": "assets/generated/v2/terrain-tiles-32.json",
+      "sha256": "00c187f2b13cc819b35923b8390466a285c3c39efc6262e52db2fac59b71d9b6"
+    },
+    {
+      "file": "assets/generated/v2/terrain-tiles-32.png",
+      "sha256": "f10aebde3c46bdba530f4b1943a8068cd17755fb8d46e288fe2d91c23b16f20e"
+    },
+    {
+      "file": "assets/generated/v3/action-vfx-32.json",
+      "sha256": "6d84c138b89d316afa48d31d56854b27b0bdcc0998701575cdb5dda46ff2c07a"
+    },
+    {
+      "file": "assets/generated/v3/action-vfx-32.png",
+      "sha256": "fff073352f264b716de43a344bf20b6403fddbbf483ddc6e0bb08905deb3d94c"
+    },
+    {
+      "file": "assets/generated/v3/crops-32.json",
+      "sha256": "6b132777b159236ed731fdc2a403246c1d85f2b9cd3c4c59cb8d4a3b6cd5d41f"
+    },
+    {
+      "file": "assets/generated/v3/crops-32.png",
+      "sha256": "b775cc51466319d8ea8475716548ff32d3899d639a39dfcf6b9a6be8aa12ce0f"
+    },
+    {
+      "file": "assets/generated/v3/manifest.json",
+      "sha256": "da56d5d9e4a55a9e68d9db90094368826ee50a9526fa6cad9394f8f54f89cfe5"
+    },
+    {
+      "file": "assets/generated/v3/miri-actions-48x64.json",
+      "sha256": "12d8988d5df1c0ffc11e6ce7274266becf0fbb842f1ebbde83d6bdd7cd611415"
+    },
+    {
+      "file": "assets/generated/v3/miri-actions-48x64.png",
+      "sha256": "9f7a3215f8bc3697c96a975f462370ce5f7c07736da16cbfdcc6f48ef3aa2442"
+    },
+    {
+      "file": "assets/generated/v3/miri-walk-48x64.json",
+      "sha256": "0a9ae0d961229b5d71690ea7226ab2c832901e9d1733ebbf3f90e04d764c89e8"
+    },
+    {
+      "file": "assets/generated/v3/miri-walk-48x64.png",
+      "sha256": "30c2fd8aaa68e2594c06f465e19ca52c1b356f372fbc195c1ffb699ce0ef19e6"
+    },
+    {
+      "file": "assets/generated/v3/props-stations.json",
+      "sha256": "9fd304d463e98fb039880aad4dc30b0a36ed0012d0ff96fd00a45e8a6d1c28f1"
+    },
+    {
+      "file": "assets/generated/v3/props-stations.png",
+      "sha256": "df0fc4d1474131391ae8cb6478380d32efb0e75fd3bdb049df5eda2eeda7bc39"
+    },
+    {
+      "file": "assets/generated/v3/source/action-vfx-32.png",
+      "sha256": "3a91389db0e1606af949b36486162b29f59712c7d2f3a664e2ad2f2a96a7582b"
+    },
+    {
+      "file": "assets/generated/v3/source/crops-32.png",
+      "sha256": "8f218970266ab925c9d90b1b93199c254f64c5d11f7aeee05861de4d38fae15c"
+    },
+    {
+      "file": "assets/generated/v3/source/miri-actions-48x64.png",
+      "sha256": "f8efaa1e024350b5522d6703d54e14371a7c60775684619f7e4ef16552fd8e02"
+    },
+    {
+      "file": "assets/generated/v3/source/miri-walk-48x64.png",
+      "sha256": "209296a105bae49e72bee2888181132eb9bba9fd52699c0ff320e4dfcb5b54e7"
+    },
+    {
+      "file": "assets/generated/v3/source/props-stations.png",
+      "sha256": "f56e3e0a6e21c34fae81a5a8f69bc79984c0e889858dd4f5ac5d8cc18249c4dc"
+    },
+    {
+      "file": "assets/generated/v3/source/terrain-organic-32.png",
+      "sha256": "1556ae03b80ae697d69f74be4594ac1b7d2695c9028e3558231de63aa05f1f81"
+    },
+    {
+      "file": "assets/generated/v3/terrain-organic-32.json",
+      "sha256": "c2ab53d4709fe3073d54442c69a474b5b151518b1f65d37033001eafb892f029"
+    },
+    {
+      "file": "assets/generated/v3/terrain-organic-32.png",
+      "sha256": "c3d910e7d28e67ad961b002aa1e5b83c18ee1e1821747c154ee7d8a30fd33e16"
+    },
+    {
+      "file": "assets/generated/v4/animal-care-props-64.json",
+      "sha256": "493f8b9b0d98f158e08a84b0ec8c9956786a12e9070b946a4be58768cc56191c"
+    },
+    {
+      "file": "assets/generated/v4/animal-care-props-64.png",
+      "sha256": "f29830f4609235abb98b1f662b206c7c922d1136823257c691ea21a0ee56a21a"
+    },
+    {
+      "file": "assets/generated/v4/animal-care-vfx-32.json",
+      "sha256": "bb2e09e8b329873e44d8d4c0f8db8f9f24ec51b554d8626eb9d731ae3156fe6c"
+    },
+    {
+      "file": "assets/generated/v4/animal-care-vfx-32.png",
+      "sha256": "d3631c811d7495b61966cbc8c81c90a61315949e67b7b1908abb858aa6b5b526"
+    },
+    {
+      "file": "assets/generated/v4/animal-products-quality-32.json",
+      "sha256": "2254177755aff9297516dc05b1ba67c290b6b4b0706d0e0e2d0e34ad099e8e29"
+    },
+    {
+      "file": "assets/generated/v4/animal-products-quality-32.png",
+      "sha256": "c246f3a2381ac3bb5e532a22090274569a17796bfcf0306ac72c2f94cfa8f6e3"
+    },
+    {
+      "file": "assets/generated/v4/animal-status-icons-32.json",
+      "sha256": "282d39f5b933677b8d26616c55adae5b509e73e1beff84d3954099dce4a31cb1"
+    },
+    {
+      "file": "assets/generated/v4/animal-status-icons-32.png",
+      "sha256": "41465444310500cf7393ece7b83760af977ebbac5fb652cc260a1a9d5117438d"
+    },
+    {
+      "file": "assets/generated/v4/animals-48.json",
+      "sha256": "9b4f7a2b165a29ba2bba8863cc56d85f25519ed3183ee92c43410e8f9b04509b"
+    },
+    {
+      "file": "assets/generated/v4/animals-48.png",
+      "sha256": "b2710c0ca61c0ab8eb7b29db83db8db03b6358828346c075d9b4f24b099a476e"
+    },
+    {
+      "file": "assets/generated/v4/animals-care-48.json",
+      "sha256": "b1439675fdd003b41542ddbfccacf90561cabfb565d30c2a89d033769c99fa3d"
+    },
+    {
+      "file": "assets/generated/v4/animals-care-48.png",
+      "sha256": "ad0dd2e4324ace82885ab5ed0751fbb43bd50d0f218308bfa7192e0f137102cb"
+    },
+    {
+      "file": "assets/generated/v4/animals-duck-48.json",
+      "sha256": "5800be898b204896ea1a886e88f1f16696431987d1f38dd8aad1fd4f333e978b"
+    },
+    {
+      "file": "assets/generated/v4/animals-duck-48.png",
+      "sha256": "4bdf0cd92db7f50b19537f921804342f27e954ba6a1e6123af3181b4d9fa1e5d"
+    },
+    {
+      "file": "assets/generated/v4/buildings.json",
+      "sha256": "fab857e8a6fc7ac0a15090f120a9db9dfba884a503df58fba10ffaefe5a92b3f"
+    },
+    {
+      "file": "assets/generated/v4/buildings.png",
+      "sha256": "78880d4678228596d306542da62f45bc9dde1b0dd814390cc176a032545996bb"
+    },
+    {
+      "file": "assets/generated/v4/crops-48.json",
+      "sha256": "5455f41a0dc57a0dccd0b131fd20168ab7bb45a03de1110708d29f8b745bc2e3"
+    },
+    {
+      "file": "assets/generated/v4/crops-48.png",
+      "sha256": "ae7939af88dfce705a3c3114c95ba5530c890e910ce05f3d7b37e090defcb75e"
+    },
+    {
+      "file": "assets/generated/v4/crops2-48.json",
+      "sha256": "772eb6c04f9d675e5e5c5825d2fb9e48e29c76fd11077b957097f287b08aa1df"
+    },
+    {
+      "file": "assets/generated/v4/crops2-48.png",
+      "sha256": "2399ae5cda188b13b706d4eb255397029a11c673283baed948d768d810ccc2a9"
+    },
+    {
+      "file": "assets/generated/v4/crops3-48.json",
+      "sha256": "0a371881d9d7c9fa41954200d68ef976bd21b279fb62888d1ad575f16c8d4a5a"
+    },
+    {
+      "file": "assets/generated/v4/crops3-48.png",
+      "sha256": "d3f957b0d102c253b30db1310782575d4b034aeddcf81eccca89fc8164162b78"
+    },
+    {
+      "file": "assets/generated/v4/crops4-48.json",
+      "sha256": "279830ac5dc6946761d1bb8573fbaa9637a2dea6f0e27f930581c4d8e3677aab"
+    },
+    {
+      "file": "assets/generated/v4/crops4-48.png",
+      "sha256": "1cc6823bf9b7e0f5ff1e72f22b1f99cbf3b8d4b09f7ca6ce0fe6fbd07fdd3544"
+    },
+    {
+      "file": "assets/generated/v4/duck-egg-quality-32.json",
+      "sha256": "aa3f3d30e8db4db357e19360b942e9cdb7c9613ec027a38c33ea6f46a0e8c336"
+    },
+    {
+      "file": "assets/generated/v4/duck-egg-quality-32.png",
+      "sha256": "42671c36c30b923a4ca02bacdab402e70db2e4a91a2afbdf16af892c5fda03dc"
+    },
+    {
+      "file": "assets/generated/v4/manifest.json",
+      "sha256": "100105ccab4619cbe645304be2a7e26f9187ba626834240b422f1faba0b28b71"
+    },
+    {
+      "file": "assets/generated/v4/max-actions-48x64.json",
+      "sha256": "2db949de7b739aa4075970997a871715b3e9e8462eafd1eb485466f47d9c541f"
+    },
+    {
+      "file": "assets/generated/v4/max-actions-48x64.png",
+      "sha256": "f803877fe644109b6655ec3970d48aa64ad57c1d0a0b92d4e23c0d64cbf00e0e"
+    },
+    {
+      "file": "assets/generated/v4/max-walk-48x64.json",
+      "sha256": "6edbc8ed3bca67e7881bff1ec2d1c0b105c1725553aaf07c1638ea96888375f6"
+    },
+    {
+      "file": "assets/generated/v4/max-walk-48x64.png",
+      "sha256": "706ffa6a27dd28af907802a720a33e92416ee8f5431db0dcf0c6297f68324f3d"
+    },
+    {
+      "file": "assets/generated/v4/miri-actions-48x64.json",
+      "sha256": "0a87eb6c1b13c77be6aae89f7a4d8902d17c941f447052c04c010edcf6f3dfd5"
+    },
+    {
+      "file": "assets/generated/v4/miri-actions-48x64.png",
+      "sha256": "dea148ae344f38a37284f7b7cfe7958fd5f9e76daf6ad79baab4e08e29e625dd"
+    },
+    {
+      "file": "assets/generated/v4/miri-walk-48x64.json",
+      "sha256": "d1d67c091cec2e904ced336b77b199eeb0236b220b1c365136f08a700c781290"
+    },
+    {
+      "file": "assets/generated/v4/miri-walk-48x64.png",
+      "sha256": "1618d1c26787db38f69b21e91245575357b705c11852d48e9cd66edc47fd70f3"
+    },
+    {
+      "file": "assets/generated/v4/npcs-48x64.json",
+      "sha256": "f1a02b03c3a50690b08c6a8d73879c3b199555082274b17451e9bd1d70949d8e"
+    },
+    {
+      "file": "assets/generated/v4/npcs-48x64.png",
+      "sha256": "03498c964e5bffda1ebd46bdb57377873dcd0d384b8cecf75b423659b1dad0ca"
+    },
+    {
+      "file": "assets/generated/v4/source/animal-care-props-64.png",
+      "sha256": "badf7d2737a7d319052fc77f0a789d169b0444d24510c2dd5d1d39c3f388c4e5"
+    },
+    {
+      "file": "assets/generated/v4/source/animal-care-vfx-32.png",
+      "sha256": "5b1e7e7f95d34d319a6890db60711c589b3e456c7b9c5ca5dce3b1e4e7b46e68"
+    },
+    {
+      "file": "assets/generated/v4/source/animal-products-quality-32.png",
+      "sha256": "093d37c021985b7760f75689d2aaf8526b660dd5802e26203725b5a8ec81a550"
+    },
+    {
+      "file": "assets/generated/v4/source/animal-status-icons-32.png",
+      "sha256": "16a1fbc92253502d0a09b049aeb709aedc1da48868e584a6d149774f11c38bc8"
+    },
+    {
+      "file": "assets/generated/v4/source/animals-32x32.png",
+      "sha256": "c1f40ddb74fc77c39b8a83e7d140804d5519c0935efec05ee20e80e97652195f"
+    },
+    {
+      "file": "assets/generated/v4/source/animals-care-48.png",
+      "sha256": "f04b89a43ff89567feac7f9f8e8752b8a87b312589007672f91c7122cee63143"
+    },
+    {
+      "file": "assets/generated/v4/source/animals-duck-48.png",
+      "sha256": "31f5e0bda85bf0fece855757b2f0e9e979940c83590163760506f199bb1f8fe0"
+    },
+    {
+      "file": "assets/generated/v4/source/buildings.png",
+      "sha256": "3a9d69c53ebbebe7a49ad26b1a97df32bcf56c1224e903f841c106dc4271f6d4"
+    },
+    {
+      "file": "assets/generated/v4/source/crops-48x48.png",
+      "sha256": "2f479932b0d214bdcf504809f6a78554386218df89aaa2029cfe8f76b6252bf9"
+    },
+    {
+      "file": "assets/generated/v4/source/crops2-48x48.png",
+      "sha256": "9c1665725bbec07da649c21bc3d0bb5c67951abdf3841626674dafee49b41264"
+    },
+    {
+      "file": "assets/generated/v4/source/crops3-48x48.png",
+      "sha256": "d1111a592b72ffc653df8f32d31c425396481d7be1c147a34b530b0fb1351ae1"
+    },
+    {
+      "file": "assets/generated/v4/source/crops4-48x48.png",
+      "sha256": "ece48f7bbb4ed149c706b5cc7bc4daa41a6214e44f12c4c5b51aef09964d1820"
+    },
+    {
+      "file": "assets/generated/v4/source/duck-egg-quality-32.png",
+      "sha256": "f00af3e171f8300cea83751f8d317170c54f07a3e3fd3307a01146c41d07e962"
+    },
+    {
+      "file": "assets/generated/v4/source/max-actions-a.png",
+      "sha256": "7b58029c1a9aa98ae0f592a669e4a8441c0f1cd89f01c4cc73d96d683fb362d1"
+    },
+    {
+      "file": "assets/generated/v4/source/max-actions-b.png",
+      "sha256": "95d0ba9eb81cc461c101796cede32c3590b9be5ee7e7c77930e58429fbff0a5e"
+    },
+    {
+      "file": "assets/generated/v4/source/max-walk-48x64.png",
+      "sha256": "649038ea9157c350861a181819c55576f8b56175633353cb95ba9b99cdde334e"
+    },
+    {
+      "file": "assets/generated/v4/source/miri-actions-a.png",
+      "sha256": "d3710c7b093def11bb0e526b8d2fedcf4b0112657f393f26b56db6981260af2f"
+    },
+    {
+      "file": "assets/generated/v4/source/miri-actions-b.png",
+      "sha256": "8d669436803df93b6dbdd38c4df09468c494e47460aa111271c918c14b70651f"
+    },
+    {
+      "file": "assets/generated/v4/source/miri-walk-48x64.png",
+      "sha256": "a165f428fd904d05503666ac0c33be905c2382ae061cfe254bba9d03381fe158"
+    },
+    {
+      "file": "assets/generated/v4/source/npcs-48x64.png",
+      "sha256": "e36cc51fb9f5237a7e15be53eed055f31719256d21a4941adf902daf427c6c10"
+    },
+    {
+      "file": "assets/generated/v4/source/structures-nature.png",
+      "sha256": "84982f2bfbff5c65a4f37634ead3a10ab4a121e48ed1db08d097799b984cf26f"
+    },
+    {
+      "file": "assets/generated/v4/structures-nature.json",
+      "sha256": "27ee668e5ea4b41a3d64dc8d3f2a190286f1d6c6d3607c78a40375778ddc0bae"
+    },
+    {
+      "file": "assets/generated/v4/structures-nature.png",
+      "sha256": "082fc2415fe32c82f7620dc6f29b4ff5a268b1e66a2d293be9c31a0bc8e11818"
+    },
+    {
+      "file": "assets/generated/v4/terrain-organic-32.json",
+      "sha256": "2984d00437eb475435b91479b9a9f680de94707e2920c7b26e1456ba2d711ba1"
+    },
+    {
+      "file": "assets/generated/v4/terrain-organic-32.png",
+      "sha256": "8461dd97e5dde4c73fda60addfa760ba1b652e0025015a14d3a39c8274c1873d"
+    },
+    {
+      "file": "assets/heirloom/doorstep-r82.webp",
+      "sha256": "aaa8598db33c209250e438e1b06255d6b95d51f2a9d5cc08fd94a91907fb4bd5"
+    },
+    {
+      "file": "assets/heirloom/manifest.json",
+      "sha256": "a428876917e0156a0ab8a1d2906d6ea7f69fd5d24323a79542eed1e365ca4b36"
+    },
+    {
+      "file": "assets/heirloom/r83/doorstep-r82.webp",
+      "sha256": "a406d512c852cf0dfa881a6c3c1b533b9c4533533fdbd70eaea0d42018ae59f3"
+    },
+    {
+      "file": "assets/heirloom/r83/table-r82.webp",
+      "sha256": "ae847f62b32a12044b1e4f8c4607f5577b90eca5a2b04f57126e77478713a85d"
+    },
+    {
+      "file": "assets/heirloom/r84/doorstep-result.webp",
+      "sha256": "fea8dbb4d3f6ed3638c58c285ff9ad8e3b8b7030ca49bd61a6a18b7721f8f37c"
+    },
+    {
+      "file": "assets/heirloom/r84/table-result.webp",
+      "sha256": "49b73cb7728ca686f2405400a0996dad959398d19994405b338c3d69656d598a"
+    },
+    {
+      "file": "assets/heirloom/table-r82.webp",
+      "sha256": "53cca880036cd40531d966d7f80cafe1536c27648017a965bb6b8061c0ec7366"
+    },
+    {
+      "file": "assets/icons/icon-192.png",
+      "sha256": "33de24307c65b252dfcc45ddabc908af28b5cf82a4de6a48727bc720e0d279ed"
+    },
+    {
+      "file": "assets/icons/icon-512.png",
+      "sha256": "a7b6dd2090b01d17176bc6c20d4644cbe69f2de5b6d9fa515ac0809d4d00ec2e"
+    },
+    {
+      "file": "assets/manifest.json",
+      "sha256": "e4fe7b6035eaa80b0519e72c072b8815488fd2a99e28eeac6e58bf6899a724f1"
+    },
+    {
+      "file": "index.html",
+      "sha256": "5b581ed934a19b1224e4b5fbf7882a64e7f2ff8c00ae1b95d35939215579293f"
+    },
+    {
+      "file": "manifest.webmanifest",
+      "sha256": "f7519856d0e4247a9acf447c9780046a651eeb8917d69502d3e0239b74e4c8e7"
+    },
+    {
+      "file": "offline.html",
+      "sha256": "0d889830a5f3eca0fa71f2476c0228099cf1a73c284667a7961d81e5bba128b0"
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "ede97c3ce176266fbecedcff936e6ae57e801f96ae4e5c9739d838a49b4511a4"
+    },
+    {
+      "file": "package.json",
+      "sha256": "7a63cf115c50dbc58c4f947e2a82f96441ee60ca9035b5915cdb2a123c1ac2dc"
+    },
+    {
+      "file": "src/adventure.js",
+      "sha256": "fa4e66f60613a21f15d9e9f3570c08a40998ca8f8a251aef54ad74990a46268d"
+    },
+    {
+      "file": "src/art-r82.css",
+      "sha256": "5b2dac3fc3c376431c4052d6b71ab1a416739f2f556bfe419eb986c244d1c06b"
+    },
+    {
+      "file": "src/art-r83.css",
+      "sha256": "b286e4c4833134678f7d1296143cf2f2bbd5e457d25e915bb3ed34ebab50fc12"
+    },
+    {
+      "file": "src/art-r84.css",
+      "sha256": "38a57ce5fb2db37caee2b1530e9727520f91ab17a4b3d61d56bc104b14a6e1e5"
+    },
+    {
+      "file": "src/art-r84.js",
+      "sha256": "e772d21fc78d095aa689a68ab72a206356c4ed7a0849c8341303271c21d2018a"
+    },
+    {
+      "file": "src/art-r85.css",
+      "sha256": "422d265e731b362859691f5b1b02bae27a28b2773fc3691d761246d7927e114e"
+    },
+    {
+      "file": "src/art-r86.css",
+      "sha256": "bdc27aeabe17b8b81d6a7a8ac6cc51a4dd22af1027f8575047f613ed3fa335b4"
+    },
+    {
+      "file": "src/art-r87.css",
+      "sha256": "c308473a5ef84ec5f1cc1c911d98988b5c99e74feb0f73fa98205f542c7309a9"
+    },
+    {
+      "file": "src/art-r88.css",
+      "sha256": "188722148a97ca85ecac1af0c20e6e9828d5c2c6e4d3d58f2cec89852b26e11b"
+    },
+    {
+      "file": "src/art-r89.css",
+      "sha256": "711fe548a295a0e06080f2d31a36c1b4595507c860c87629b5a7351fb2f59f21"
+    },
+    {
+      "file": "src/atlas.js",
+      "sha256": "64d2be1371e036cd008c93d3f33fd2023c123e65aff42fc8acb1ecdce128eb05"
+    },
+    {
+      "file": "src/config.js",
+      "sha256": "d8e60e894bf8d0f93c1d0b33ed19aadf69306041e0411b61ebf2b5a6d14345d7"
+    },
+    {
+      "file": "src/content-r1.css",
+      "sha256": "edc056cfaab4459de4ba2ab921f019a7defccd32bf23bcc18217eb5d18cbd1ca"
+    },
+    {
+      "file": "src/content-r1.js",
+      "sha256": "73b165b991f5c5fa4c1c3d32d3ee15a39c6c18156bd58b818230cf33521cf6ca"
+    },
+    {
+      "file": "src/content-r10.css",
+      "sha256": "99414e9eed8b8e77084dfb559dcf45808520ff168b5477bfe566c4bac346b811"
+    },
+    {
+      "file": "src/content-r11.css",
+      "sha256": "b88bf4e4097d4da6528b2fa7a020a6e72d540b0323af70006e0def77c5a2e9f9"
+    },
+    {
+      "file": "src/content-r12.css",
+      "sha256": "a475b31eea3154e9e050b154fc7245452b92b0d2a51841bc45235db8080d5846"
+    },
+    {
+      "file": "src/content-r13.css",
+      "sha256": "74a3048d200ac694e8d174cd71776de224df3ed400340f3f23e0eeac82ed3bc5"
+    },
+    {
+      "file": "src/content-r14.css",
+      "sha256": "04d8619e5a21deff2280fc93c7ec5d382088b79c3cbd857944377d4660f9580d"
+    },
+    {
+      "file": "src/content-r15.css",
+      "sha256": "da7de27edfdaad1b2dce3520f8f86eed7bf7c4db2db9d249f45dcbba067d0754"
+    },
+    {
+      "file": "src/content-r16.css",
+      "sha256": "306b4d397a85094503aa260fcdca6bdfe9d998053edb768187d00aaf9f596767"
+    },
+    {
+      "file": "src/content-r16.js",
+      "sha256": "8fb9567da2ca0b5fb81bd08fe114e31c69b768bac63b21838cbfba5ad67b4c36"
+    },
+    {
+      "file": "src/content-r17.css",
+      "sha256": "c56fe760adaffbd03bf6237536bd2562233c568db093640b77177a59b8c2ad6f"
+    },
+    {
+      "file": "src/content-r17.js",
+      "sha256": "f551c8ad524be7bb13bf88357e166bf420558e13ec7467889eda86c1ccfb6773"
+    },
+    {
+      "file": "src/content-r21.css",
+      "sha256": "0fcd67e9c6fea7244b85f38277513931786f0070fb8566e50f10e2fe7f0dc49f"
+    },
+    {
+      "file": "src/content-r22.css",
+      "sha256": "dac764d15e1b0f49104403946e02040fc447f38e12e25877d0f55135511c28ca"
+    },
+    {
+      "file": "src/content-r23.css",
+      "sha256": "28b3bed7ab15838fbb6b8f1f7c881ccc3c55317db4402b8e581e3cb7d3cf67ff"
+    },
+    {
+      "file": "src/content-r23.js",
+      "sha256": "7f6db838369610fcb26652d0cacbd62127056d43491b80bc3db98fbbff9ec037"
+    },
+    {
+      "file": "src/content-r24.css",
+      "sha256": "c288476b5fc8eee4cdc99b0d1811dac0d0bddd36311490410868ecb7eb833776"
+    },
+    {
+      "file": "src/content-r24.js",
+      "sha256": "27f224e7c4e00d21a81ac6cffb31f31267c2ea9bc88840d3882b87792456f2b0"
+    },
+    {
+      "file": "src/content-r26.css",
+      "sha256": "f5ff23aa4541f9270db9ed5b239ff1909a0be1d1434d2d279938881eb3ec9e44"
+    },
+    {
+      "file": "src/content-r27.css",
+      "sha256": "7c57bfd5568489ac0d571574f06750c50501c4a95f8c288c22a837ed189780cd"
+    },
+    {
+      "file": "src/content-r28.css",
+      "sha256": "4a67c9ab6aa2ba200a9d2e19e91c3bd80bb20f768b312c22864a62e9675d6d6f"
+    },
+    {
+      "file": "src/content-r29.css",
+      "sha256": "7b475b2808dc76f40987b75933e6b6c5415c2ef3d7b5dca0b838fc650b767a29"
+    },
+    {
+      "file": "src/content-r30.css",
+      "sha256": "0fa9bf067ec038279db1b6d0fef7f6ed9419a72b3c2aebdd86e25a622e8ffad7"
+    },
+    {
+      "file": "src/content-r31.css",
+      "sha256": "b6d97fe2869473046a2ca74be529ae6e7de75210291628897dc73fd3d7856436"
+    },
+    {
+      "file": "src/content-r34.css",
+      "sha256": "5c2b4e56664c4facdc0a7ba15af11eebeb68923f86c4ad29c58fa4c568b49826"
+    },
+    {
+      "file": "src/content-r35.css",
+      "sha256": "81cd719ef97555568a3f7f37afdd492167b85bba8e5c0241928d6b18af1cfed7"
+    },
+    {
+      "file": "src/content-r36b.css",
+      "sha256": "3a2dfdbe1f4aadaace19498ccb8d3f964757d2b946c7957a2691734d036258a3"
+    },
+    {
+      "file": "src/content-r37a.css",
+      "sha256": "7b0743dbd6c9ed4f343afabefc8ded060ea2232a1d3ecb03cffcc268cae3b27e"
+    },
+    {
+      "file": "src/content-r37b.css",
+      "sha256": "119bdb7ebf274639d32fa14a046670877f8c48877aaeccbcaf7ff84f4a013570"
+    },
+    {
+      "file": "src/content-r38b.css",
+      "sha256": "382e03a34b739ee274a097dbe4d928dbd5f3d75bb639e7474c2ff500dfc1bc7e"
+    },
+    {
+      "file": "src/content-r39b.css",
+      "sha256": "5f746615592d93aeb806cb3906759930ed317ca96b21ea7c4190bc3e5420dffb"
+    },
+    {
+      "file": "src/content-r40a.css",
+      "sha256": "d73d1b9cd298f8b8f94adde126720599545cac909a58917077d9a4c5749c06f5"
+    },
+    {
+      "file": "src/content-r40b.css",
+      "sha256": "078a4cc6a18fb1671bdad571d6c14173b1e017c66fa1488e41e541890350c348"
+    },
+    {
+      "file": "src/content-r41.css",
+      "sha256": "0237e44eb3ad7c40f2ae4fde9abf37721fa50b3ce53cae30d2ca89a5d36fe8bb"
+    },
+    {
+      "file": "src/content-r42.css",
+      "sha256": "75ecd29e2a783d5dde49484313006f8439eb096223d5977467b33fb79fb1ccf1"
+    },
+    {
+      "file": "src/content-r49-art.css",
+      "sha256": "dfaa0105462f961105e3b480a9669757a2e30979b361ee51c62c45bf4cefbe9f"
+    },
+    {
+      "file": "src/content-r55a.css",
+      "sha256": "17e9cdd7f96e8bb88e0c3b0f44632ae5b2810ace4e4a4287b96b15cdcf750619"
+    },
+    {
+      "file": "src/content-r55b.css",
+      "sha256": "aadfbdb996405ff86208ab4e08ef6aa95f3bccf81bd4e359604cf26047e207d2"
+    },
+    {
+      "file": "src/content-r58b.css",
+      "sha256": "c426ff3623071b86dae382107aea6c1377a8aa947a08c5d2c029e3a1df2f232e"
+    },
+    {
+      "file": "src/content-r6.css",
+      "sha256": "12ca3c410f1959fc92fdbf38fb9449bd4c4ccaab1f664052f316722904d0aacc"
+    },
+    {
+      "file": "src/content-r6.js",
+      "sha256": "dbbdfe637a29f4cb794a391a86dfd7487406aa6c3b1dfb4142663c19883da51b"
+    },
+    {
+      "file": "src/content-r8.css",
+      "sha256": "af83f47b736c4ca458dede8c2928d75ae7607e44d123ac793c8f19368c119ee0"
+    },
+    {
+      "file": "src/content-r8.js",
+      "sha256": "eedfa17541c6947d1c06219a97625800ff651253c4e1c1edc54f7ed5cab1c945"
+    },
+    {
+      "file": "src/content-r9.css",
+      "sha256": "e6ce56f49319014312e2159775a6da78b83e85c75ea4bc979b0326f93df8a8ab"
+    },
+    {
+      "file": "src/cooking-r75.js",
+      "sha256": "51d76e659027a009f7672a767636f6176fdd8cc9ceaef373c8e14d1a83b66937"
+    },
+    {
+      "file": "src/daily-ui.js",
+      "sha256": "1c2c7843e5262c06e56cd7de0cf6955c65e3d2dbabc0481848bfb40e6ec97dd6"
+    },
+    {
+      "file": "src/daily.js",
+      "sha256": "79acdba29f42f3ad57b84020919fa253ce3d2404d175459cae7a4f392ed8812b"
+    },
+    {
+      "file": "src/festival-stall-r72.js",
+      "sha256": "bbcf7fa2f442c569fa8c694a712a333ec7fe9337ea0270fb60ef294046e69d9b"
+    },
+    {
+      "file": "src/game.js",
+      "sha256": "3bdd952b6c321e2e7ab5d011f5de9a4a651b5d217025f85d2910d2c56305e6b8"
+    },
+    {
+      "file": "src/heirloom-ui.js",
+      "sha256": "3acb436886ab02e421523313c7d48acb26eef47424b7f22f67f9333cba5d4a68"
+    },
+    {
+      "file": "src/heirloom.js",
+      "sha256": "2a3fc8882b855b23fc37c50d65e884be4a3665d05fe46cbeedad622cdc6e3aee"
+    },
+    {
+      "file": "src/midgame-r66.js",
+      "sha256": "9ba31a2ba3f178addf06a80c10db6c77080dd10b65275b0dccfee4ec45a69915"
+    },
+    {
+      "file": "src/neighbors-r61.js",
+      "sha256": "e226c69b2381c51b1a03ceb517e19ab478c97f16c9ddc19a1b5ee92615232f63"
+    },
+    {
+      "file": "src/state.js",
+      "sha256": "a593df4ddbb779e0be3429526c5e1ea4c9e7a6d4626451cd700f4c24f09f7132"
+    },
+    {
+      "file": "src/story-r76.js",
+      "sha256": "4a449b94afd25c88388bd59e149fabb881f5bf809b1143342ae94196004eb250"
+    },
+    {
+      "file": "src/sunbook-r76.js",
+      "sha256": "8a668e84b5c5b7c335797d610675c30585d36b32575a564e3c3c6007c593adf0"
+    },
+    {
+      "file": "src/sunplay-r75.js",
+      "sha256": "9a3b93be2d39ea4f69f994df9d04ac007f8dbe3707e3a457cbb97ffb9136809e"
+    },
+    {
+      "file": "src/ui.js",
+      "sha256": "49b38c2d17b4611436b5d06635a12720d9aebd45ef2d7d836ef7048d13aa31a6"
+    },
+    {
+      "file": "src/world-ui.js",
+      "sha256": "10b73ebeda954c4acfe5147f488b7c6bd8f389b8c0c18bffd03944a4f6ddcf26"
+    },
+    {
+      "file": "src/world.css",
+      "sha256": "a38ac1875dc01bb9c75cd92854d5a50150b1469941462f680cba953aedd50fb4"
+    },
+    {
+      "file": "sw.js",
+      "sha256": "2939f249e56c0ceaa71f13e1d9ae0087faf329eb7600f92ae4d8effd2a1cbc22"
+    }
+  ]
+}

@@ -3955,7 +3955,7 @@
     const prog = G.getCropProgress(state, plot, now());
     const planted = state.map.tiles.filter((row) => row.plotIndex != null && row.plotIndex < active && state.plots[row.plotIndex] && state.plots[row.plotIndex].cropId).length;
     const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null;
-    const heldForLight = nextStep && nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract");
+    const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex);
     if (prog.ready) return name + (heldForLight ? "・先別收" : "・可收成") + sunSuffix;
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
@@ -3989,7 +3989,7 @@
     // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「把光折到這裡」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
     const sunActions = tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && window.FarmSunplay && window.FarmSunplay.plotActions ? window.FarmSunplay.plotActions(state, tile.plotIndex, now()) : [];
     if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(); return; }
-    if (tile && tile.plotIndex != null) { const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null; const heldForLight = nextStep && nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract"); const filtered = actions.filter((a) => toolActions.includes(a.action) && !(heldForLight && a.action === "harvest")); actions.splice(0, actions.length, ...filtered.slice(0, 1), ...sunActions); if (!actions.length) { hideSceneActions(); return; } }
+    if (tile && tile.plotIndex != null) { const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null; const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex); const filtered = actions.filter((a) => toolActions.includes(a.action) && !(heldForLight && a.action === "harvest")); actions.splice(0, actions.length, ...filtered.slice(0, 1), ...sunActions); if (!actions.length) { hideSceneActions(); return; } }
     bar.innerHTML = "";
     actions.forEach((entry) => {
       const meta = SCENE_ACTION_META[entry.action] || ["●", entry.action];
