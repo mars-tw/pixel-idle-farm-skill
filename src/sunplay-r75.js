@@ -24,11 +24,13 @@
   };
 
   function integer(value, fallback) { return Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback; }
+  /* R76C 追光手冊：集章里程碑給的永久加成（蓄光瓶容量、手鏡折光次數），存在 state.sunbook.bonus。 */
+  function sunbookBonus(state, key, max) { const bonus = state && state.sunbook && state.sunbook.bonus; const n = bonus ? Math.floor(bonus[key]) : 0; return n > 0 ? Math.min(max, n) : 0; }
   function normalize(state) {
     if (!state || typeof state !== "object") return state;
     const old = state.r75Sunplay && typeof state.r75Sunplay === "object" ? state.r75Sunplay : {};
     state.r75Sunplay = {
-      sunlight: Math.min(integer(old.bottleLevel, 0) > 0 ? 8 : 5, integer(old.sunlight, 0)),
+      sunlight: Math.min((integer(old.bottleLevel, 0) > 0 ? 8 : 5) + sunbookBonus(state, "jar", 2), integer(old.sunlight, 0)),
       mirrorLevel: integer(old.mirrorLevel, 0) > 0 ? 1 : 0,
       bottleLevel: integer(old.bottleLevel, 0) > 0 ? 1 : 0,
       firstRefracted: !!old.firstRefracted,
@@ -51,8 +53,8 @@
     return { cropId: typeof rack.cropId === "string" ? rack.cropId : null, itemId: typeof rack.itemId === "string" ? rack.itemId : null,
       startedAt: integer(rack.startedAt, 0), readyAt: integer(rack.readyAt, 0), ready: !!rack.ready };
   }
-  function bottleCapacity(state) { normalize(state); return state.r75Sunplay.bottleLevel ? 8 : 5; }
-  function mirrorLimit(state) { return state && state.r75Sunplay && state.r75Sunplay.mirrorLevel ? 2 : 1; }
+  function bottleCapacity(state) { normalize(state); return (state.r75Sunplay.bottleLevel ? 8 : 5) + sunbookBonus(state, "jar", 2); }
+  function mirrorLimit(state) { return (state && state.r75Sunplay && state.r75Sunplay.mirrorLevel ? 2 : 1) + sunbookBonus(state, "mirror", 1); }
   function sunlight(state) { normalize(state); return state.r75Sunplay.sunlight; }
   function addSunlight(state, amount) {
     normalize(state); const before = state.r75Sunplay.sunlight; const cap = bottleCapacity(state);
@@ -136,6 +138,7 @@
   function updateRack(state, now) { normalize(state); const rack = state.r75Sunplay.rack; if (rack.cropId && now >= rack.readyAt) rack.ready = true; return rack; }
   function collectDrying(state, now) {
     const rack = updateRack(state, now); if (!rack.cropId || !rack.ready) return { ok: false, reason: rack.cropId ? "not_ready" : "empty" };
+    if (typeof API.onDried === "function") API.onDried(state, rack.itemId); /* R76C 追光手冊：曬成乾貨蓋章 */
     state.storage.items[rack.itemId] = (state.storage.items[rack.itemId] || 0) + 1; const itemId = rack.itemId; state.r75Sunplay.rack = normalizeRack(null); return { ok: true, itemId, quantity: 1 };
   }
   function rackStatus(state, now) { const rack = updateRack(state, now); return Object.assign({}, rack, { empty: !rack.cropId, remainingMs: rack.cropId ? Math.max(0, rack.readyAt - now) : 0 }); }
@@ -181,8 +184,8 @@
         buy: function () { return buy(state); } };
     };
     return [
-      card("mirror", "磨亮手鏡", "sun_mirror.png", "每道光可以折 2 次", 3, 60, !!own.mirrorLevel, buyMirror),
-      card("bottle", "大一點的蓄光瓶", "sun_jar.png", "陽光上限提高到 8 點", 4, 90, !!own.bottleLevel, buyBottle),
+      card("mirror", "磨亮手鏡", "sun_mirror.png", "每道光可以折 " + (2 + sunbookBonus(state, "mirror", 1)) + " 次", 3, 60, !!own.mirrorLevel, buyMirror),
+      card("bottle", "大一點的蓄光瓶", "sun_jar.png", "陽光上限提高到 " + (8 + sunbookBonus(state, "jar", 2)) + " 點", 4, 90, !!own.bottleLevel, buyBottle),
     ];
   }
 
