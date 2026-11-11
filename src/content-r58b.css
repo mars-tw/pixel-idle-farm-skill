@@ -1260,6 +1260,7 @@ body:has(#worldDialogue:not([hidden])) #questDock:has(> .world-chapter) { flex-d
 @media (max-width: 859px) {
   .r76b-dialogue { padding-bottom: 76px; }
   .r76b-dialogue-card { max-height: calc(100dvh - 96px); }
+}
 
 /* R76A：追光結果、料理成果卡、季節標籤與單格提示去重。 */
 .r40-sun-icon, .r40-sun-secs::before, .r75a-sun-preview::before { font-family: Arial, "Noto Sans Symbols 2", sans-serif; }
