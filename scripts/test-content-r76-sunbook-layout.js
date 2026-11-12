@@ -116,7 +116,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       assert.ok(inside(a.sum, w, h) && a.sum.top >= a.panel.top - 0.5 && a.sum.bottom <= a.panel.bottom + 0.5, `${tag} 打開圖鑑就看得到手冊入口，不用捲`);
       assert.ok(a.sum.hit, `${tag} 手冊入口沒被別的東西蓋住`);
       assert.ok(a.sum.clipX <= 1, `${tag} 手冊入口文字沒被裁掉`);
-      assert.equal(a.title.text, "追光手冊"); assert.equal(a.count.text, `已蓋 0／${TOTAL} 枚`);
+      assert.equal(a.title.text, "追光手冊"); assert.equal(a.count.text, "已蓋 0 枚・再 3 枚領：金幣 120、陽光 1 點、蓄光瓶永久多裝 1 點"); /* R77C 同步：標題改為已蓋枚數＋差幾枚領什麼，不再用已解鎖格數當分母 */
       assert.ok(a.close && a.close.width >= 44 && a.close.height >= 44 && inside(a.close, w, h) && a.close.hit, `${tag} 面板關閉鈕看得到、點得到 ${JSON.stringify(a.close)}`);
       assert.equal(overlap(a.sum, a.close), 0, `${tag} 手冊入口和關閉鈕不重疊`);
       assert.equal(await page.evaluate(() => document.querySelector(".r76c-fold").open), false, `${tag} 一開始是收起來的，不把圖鑑往下擠`);
@@ -185,7 +185,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       assert.ok(await harvest("radish", true, 0) > 0);
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
       const c = await checkCard(page, tag, w, h, "第一枚章", true);
-      assert.match(c.card.text, new RegExp(`追光手冊：櫻桃蘿蔔・光裡收成（1／${TOTAL}）`), `${tag} 小卡文字`);
+      assert.match(c.card.text, new RegExp(`追光手冊：櫻桃蘿蔔・光裡收成（1／15）`), `${tag} 小卡文字`); /* R77C 同步：小卡分母統一 15 */
       assert.match(c.card.text, /手札的圖鑑頁最上面多了一本追光手冊/, `${tag} 第一次拿章要提示手冊在哪`);
       assert.doesNotMatch(c.card.text, /\+0/);
       /* 「陽光照在幾格田」的標籤跟小卡同時出現時，小卡要讓開它。 */
@@ -208,7 +208,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
       assert.equal(await page.evaluate(() => { const n = document.querySelector("#toast-zone .settlement-card"); return n ? n.textContent.replace(/\s+/g, " ").trim() : ""; }), "", `${tag} 小卡出來時升級卡已經收掉`);
       const d = await checkCard(page, tag, w, h, "第二枚章", false);
-      assert.match(d.card.text, new RegExp(`^追光手冊：胡蘿蔔・光性達成（2／${TOTAL}）$`), `${tag} 之後的小卡只有一句話`);
+      assert.match(d.card.text, new RegExp(`^追光手冊：胡蘿蔔・光性達成（2／15）再 1 枚領：金幣 120、陽光 1 點、蓄光瓶永久多裝 1 點$`), `${tag} 之後的小卡寫印章與差幾枚領什麼`); /* R77C 同步：分母統一 15 且小卡多寫差額 */
       await page.waitForFunction(cardHidden, null, { timeout: 8000 });
 
       /* 六、料理成果卡開著時，小卡先等著，不跟它搶位置；成果卡關掉才出來。 */
@@ -232,7 +232,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       }
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
       const e = await checkCard(page, tag, w, h, "集滿 3 枚", true);
-      assert.match(e.card.text, new RegExp(`追光手冊：小麥・煮成絕品（3／${TOTAL}）`)); assert.match(e.card.text, /集滿 3 枚了，到追光手冊領獎勵。/);
+      assert.match(e.card.text, new RegExp(`追光手冊：小麥・煮成絕品（3／15）`)); assert.match(e.card.text, /集滿 3 枚了，到追光手冊領獎勵。/); /* R77C 同步：小卡分母統一 15 */
       await shot(page, tag, "4-milestone-card");
 
       /* 七、從小卡打開手冊，領第一份獎勵。 */
@@ -243,7 +243,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       const f = await measure(page, Object.assign({ sum: ".r76c-sum", close: ".side-panel.world-panel-open .world-close", flag: "[data-r76c-flag]", count: "[data-r76c-count]" }, AROUND));
       assert.ok(f.sum && f.sum.hit && f.sum.top >= f.panel.top - 0.5, `${tag} 打開後手冊標題就在眼前`);
       assert.ok(f.close && f.close.hit && inside(f.close, w, h), `${tag} 打開後面板關閉鈕看得到`);
-      assert.equal(f.count.text, `已蓋 3／${TOTAL} 枚`); assert.equal(f.flag.text, "有獎勵可領"); assert.ok(f.sum.clipX <= 1, `${tag} 多了「有獎勵可領」標題列也沒被擠壞`);
+      assert.equal(f.count.text, "已蓋 3 枚・有獎勵可以領了"); assert.equal(f.flag.text, "有獎勵可領"); assert.ok(f.sum.clipX <= 1, `${tag} 多了「有獎勵可領」標題列也沒被擠壞`); /* R77C 同步：標題改為已蓋枚數與領獎提示 */
       const claim = page.locator('[data-r76c-claim="3"]');
       await claim.scrollIntoViewIfNeeded();
       const g = await measure(page, Object.assign({ claim: '[data-r76c-claim="3"]' }, AROUND));
@@ -274,7 +274,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       assert.deepEqual(back.claimed, ["3"]); assert.equal(back.hinted, true); assert.equal(back.folded, false); assert.equal(back.cap, before.cap + 1); assert.deepEqual(back.counts, { got: 3, total: TOTAL });
       await page.evaluate(() => FarmWorld.openPanel("journal"));
       await page.waitForSelector("[data-r76c-sunbook]");
-      assert.equal(await page.evaluate(() => document.querySelector("[data-r76c-count]").textContent), `已蓋 3／${TOTAL} 枚`);
+      assert.match(await page.evaluate(() => document.querySelector("[data-r76c-count]").textContent), /^已蓋 3 枚・再 3 枚領：金幣 240、/, "重新載入後標題要寫差幾枚領什麼"); /* R77C 同步：3 枚獎勵已領，標題改指下一份 */
       assert.equal(await page.evaluate(() => !!document.querySelector('[data-r76c-claim="3"]')), false, `${tag} 重新載入後不能再領一次`);
 
       assert.deepEqual(errors, [], `${tag} 頁面錯誤`);
