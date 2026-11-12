@@ -98,7 +98,7 @@ We list these as the developer's own decisions, not as beta feedback.
 
 要照實說的有兩件事：
 
-- 退件當時，這款 App 在商店上的名稱是「阿軒割割陽光農場開源遊戲世界」，前後的字樣和帳號裡其他 App 相同（待確認：其他 App 的商店名稱是否都帶同樣的字樣），看起來像同一套。那只是命名方式。這次送出時名稱會改成遊戲自己的標題（待確認：新名稱，帳號擁有人 11 月 12 日同意改名，還沒選定）。
+- 退件當時，這款 App 在商店上的名稱是「阿軒割割陽光農場開源遊戲世界」。前面是開發者的暱稱，後面的「開源遊戲世界」讀起來像一整套作品的總稱。11 月 12 日查過帳號裡另外 9 個 App 現在的商店名稱，沒有一個帶這兩串字，所以它不是各款共用的命名方式，但名稱本身容易讓人以為是系列。這次送出時名稱會改成遊戲自己的標題（待確認：新名稱，帳號擁有人 11 月 12 日同意改名，還沒選定）。
 - 這些作品的原生包裝方式相同，這一點在第 7 題說明。我們也知道類型不同不等於符合 4.3。
 
 English:
@@ -107,7 +107,7 @@ The game itself is standalone. It shares no account, progress, currency or chara
 
 Two things we want to state plainly:
 
-- When it was rejected, the app's store name carried a prefix and suffix that we also used on our other apps, which made them look like a set. That was a naming convention only. For this submission the store name has been changed to the game's own title, [NEW NAME — to be filled in once confirmed].
+- When it was rejected, the app's store name put the developer's nickname in front of the title and ended with words meaning "open-source game world", which reads like the name of a collection. None of the other nine apps on the account carries either phrase in its store name (checked on 12 November), so it was not a shared naming scheme, but the name itself could suggest a series. For this submission the store name has been changed to the game's own title, [NEW NAME — to be filled in once confirmed].
 - The apps use the same native wrapper, which we disclose under question 7. We understand that being a different genre does not by itself satisfy Guideline 4.3.
 
 ## 第 6 題：能不能用內購、功能擴充或新增內容的方式放進另一個 App
@@ -217,8 +217,8 @@ No. The game was made by the account holder personally, using the AI tools descr
 9. 審查備註要含 Apple 10 月 8 日要的六點：實機錄影、用途與對象、主要功能怎麼用、用到的外部服務（含 AI）、地區差異、權利說明。現有的備註草稿只有版本說明。
 10. 商店截圖要是實際遊玩畫面（Apple 10 月 8 日提醒過）。現有的上傳工具只收 CI 模擬器拍的開場畫面，要補上能拍到實際玩法的做法。
 11. 商店名稱。帳號擁有人同意改，新名稱還沒選定。遊戲自己的標題是「陽光農場：籃底的手記」。遊戲內 `src/config.js:797` 的任務標題「回到阿軒割割陽光農場」要不要一起改，也要決定。第 5 題英文版的 [NEW NAME] 等名稱定了再填。
-12. 第 5 題說「前後字樣和帳號裡其他 App 相同」，送出前要查過其他 App 的商店名稱再留這一句。
-13. 第 2 題的對象說法，要和 App Store 上的年齡分級、是否勾選兒童類別對得起來。這兩項還沒查。
+12. ~~第 5 題說「前後字樣和帳號裡其他 App 相同」，送出前要查過其他 App 的商店名稱再留這一句。~~ 11 月 12 日用 App Store Connect API 唯讀查過：帳號裡共 10 個 App，只有陽光農場的商店名稱帶「阿軒割割」和「開源遊戲世界」，另外 9 個都沒有。原本那一句不對，第 5 題已改寫。查到的是當天的名稱，10 月退件時其他 App 叫什麼沒有紀錄。
+13. ~~第 2 題的對象說法，要和 App Store 上的年齡分級、是否勾選兒童類別對得起來。~~ 11 月 12 日同一次查詢：年齡分級 4+，主要類別是遊戲，沒有次要類別，沒有放在兒童類別（年齡層欄位是空的）。第 2 題寫「休閒玩家，也適合家人一起玩」對得起來；回覆和商店文字都不要寫成兒童專用。
 14. 第 4 題新增的兩項開發者意見（換圖示、多做內容）是依帳號擁有人在開發期間的指示整理的，送出前請帳號擁有人看過。
 15. 第 8 題新增「原始碼以 MIT 授權公開在 GitHub」這一句（11 月 12 日查過 repo 是公開的、授權是 MIT）。要不要寫進回覆，請帳號擁有人決定。
 16. (9) 上傳後重試 TestFlight 外部測試。送審前如果收到外部測試者的回饋，補進第 4 題。
@@ -247,7 +247,7 @@ No. The game was made by the account holder personally, using the AI tools descr
 - 第 2 題：原本寫「沒有定位成兒童專用」，和 10 月兩次回覆的「家庭取向、年紀小的由家長陪同」對不上。改成和 10 月一致，拿掉那一句。
 - 第 3 題：Apple 問的是和現有 App 比的缺口。原本只有一段，改成三段：常見做法和我們的差別、三個刻意的選擇、沒做過市場調查所以不說是唯一。
 - 第 4 題：Apple 要「回饋做進正式版的例子」。補上舉不出外部測試者的例子，以及帳號擁有人自己提過、已經做進去的兩項意見。這兩項取自帳號擁有人在開發期間的指示，沒有另外編。
-- 第 5 題：補上商店名稱帶系列字樣這件事和改名，並寫明 App 裡沒有打開其他作品的入口（11 月 12 日查過程式）。
+- 第 5 題：補上商店名稱帶系列字樣這件事和改名，並寫明 App 裡沒有打開其他作品的入口（11 月 12 日查過程式）。同一天稍晚查了帳號裡 10 個 App 的商店名稱，原本寫的「前後字樣和其他 App 相同」不對（另外 9 個都沒有那兩串字），中英文都改成查到的實際情況。
 - 第 6 題：開頭加一句對著原題回答（技術上放得進去，但為什麼不這樣做）。帳號擁有人的決定那一段沒有動。
 - 第 7 題：只改標題，內容沒有動。
 - 第 8 題：整題重寫。原本答的是有沒有用模板，Apple 問的是和第三方 App 有沒有共用程式或內容庫。原有的事實（Capacitor、沒有引擎、沒有模板、沒有素材包、AI 工具清單）都保留，換了排列，另外新增 MIT 公開原始碼這一句。
