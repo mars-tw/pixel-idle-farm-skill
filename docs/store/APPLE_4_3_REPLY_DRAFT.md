@@ -1,16 +1,17 @@
 # 回覆 Apple 4.3／4.2.6 的草稿
 
-日期：2026-11-11。對應版本：0.1.99／`content-r76-20261111-1`（本機網頁版；同日已在本機包成原生 1.0.1 (8)，iOS 安裝檔尚未建置、上傳）。
+日期：2026-11-11，11 月 12 日補上帳號擁有人的答覆。對應版本：0.1.99／`content-r76-20261111-1`（本機網頁版；同日已在本機包成原生 1.0.1 (8)，iOS 安裝檔尚未建置、上傳）。
 狀態：PREPARED。只寫成檔案，**沒有送出，也沒有回覆 Apple**。
+11 月 12 日帳號擁有人決定：1.0.1 (8) 不送，等下一輪內容做完、重新包成 1.0.1 (9) 再送。下面的玩法敘述寫的還是 (8) 這一版，(9) 包好後要逐句再對一次。
 
 ## 使用前先看
 
 - 下面九題是依 10 月 15 日退件當時的工作紀錄轉述的，手上沒有 Apple 原信的逐字內容。使用前請對照 Apple 原信，題目有出入就以原信為準。
-- Apple 當時要求在有重大改變之前不要重送。要不要回、什麼時候回、陽光農場要獨立送還是合併，都由帳號擁有人決定。帳號擁有人 11 月 11 日表示可以送審；回覆內容和下面的空格仍要先經帳號擁有人確認。
+- Apple 當時要求在有重大改變之前不要重送。要不要回、什麼時候回、陽光農場要獨立送還是合併，都由帳號擁有人決定。帳號擁有人 11 月 11 日表示可以送審，11 月 12 日回答了第 4、6、9 題，已寫進下面。整份回覆送出前仍要給帳號擁有人看過。
 - 標了「（需作者補充：…）」的地方只有帳號擁有人答得出來。這些空著就不要送。
 - 每一題先放中文（給老闆看），再放英文（要貼給 Apple 的版本）。兩邊內容一致。
 - 這份只談陽光農場（Apple ID 6819987687，`tw.mars.pixelidlefarm`）。同一次被退的其他 11 款要各自回答。
-- 送出前還要先補齊的東西列在最後一節。這份回覆描述的是 1.0.1 (8) 這一版的玩法；審查員拿到的要是這一版，內容才對得上。
+- 送出前還要先補齊的東西列在最後一節。這份回覆目前描述的是 1.0.1 (8) 的玩法，實際要送的是 1.0.1 (9)。審查員拿到哪一版，回覆就要寫哪一版，內容才對得上。
 
 ## 第 1 題：這個 App 做什麼
 
@@ -50,15 +51,15 @@ It offers an offline farm that gives progress in sessions of a few minutes. Inst
 
 中文：
 
-照實說：**目前沒有真人外部測試者的回饋。** TestFlight 第 7 版（內容是 0.1.81）放在外部測試群組，但外部測試審查的送出失敗（回應 422），所以沒有任何外部測試者的回饋紀錄。到今天為止的檢查都是開發者自己做的，加上自動化測試。自動化測試不是使用者回饋，我們不會這樣稱呼它。
+照實說：**目前沒有外部測試者的回饋。** TestFlight 第 7 版（內容是 0.1.81）放在外部測試群組，但外部測試審查的送出失敗（回應 422），所以沒有任何外部測試者的回饋紀錄。
 
-（需作者補充：有沒有找過認識的人實際試玩？幾個人、哪幾天、說了什麼、因此改了什麼。沒有就寫沒有。）
+實際玩過的人是帳號擁有人本人，也就是這款遊戲的開發者（11 月 12 日帳號擁有人確認）。除此之外沒有其他人試玩的紀錄。其餘的檢查是自動化測試。自動化測試不是使用者回饋，我們不會這樣稱呼它。
 
 English:
 
-To be direct: we have no feedback from external beta testers yet. TestFlight build 7 (content version 0.1.81) was added to an external group, but the external beta review submission did not go through, so we have no record of any external tester feedback. Testing so far consists of the developer's own play sessions and an automated regression suite. We do not describe automated checks as user feedback.
+To be direct: we have no feedback from external beta testers yet. TestFlight build 7 (content version 0.1.81) was added to an external group, but the external beta review submission did not go through, so we have no record of any external tester feedback.
 
-(Owner to add before sending: whether anyone outside the developer has play-tested the game, with dates, what they said and what changed as a result. If none, say none.)
+The only person who has play-tested the game is the account holder, who is also its developer. We have no record of anyone else playing it. The remaining checks are an automated regression suite, and we do not describe automated checks as user feedback.
 
 ## 第 5 題：是不是系列作、和帳號裡其他 App 差在哪
 
@@ -78,13 +79,13 @@ It is not part of a series. The other apps on the account are action, tower-defe
 
 農場有自己一整套循環（追光、種植、加工、料理、鄰居故事），和帳號裡的動作或教育作品沒有共用的進度、角色或貨幣，硬放進另一個 App 會變成兩個互不相干的遊戲共用一個圖示。遊戲本身沒有內購，也沒有打算用內購切分內容。
 
-（需作者補充：帳號擁有人的決定。維持獨立上架、併入其他 App，或撤回只留網頁版與 Google Play，三選一，並寫下理由。）
+帳號擁有人的決定（11 月 12 日）：這次先以獨立 App 送審，理由如上。如果審查後 Apple 仍認為它應該和帳號裡的其他 App 合併，帳號擁有人願意照做。
 
 English:
 
 The farm has its own complete loop (light, planting, processing, cooking, neighbour stories) and shares no progress, characters or currency with the action or education titles on the account. Combining them would place unrelated games behind one icon. The game has no in-app purchases and we do not plan to split its content into purchases.
 
-(Owner to add before sending: the account holder's decision — keep as a standalone app, combine, or withdraw from the App Store — and the reason.)
+The account holder's decision: we are submitting Sunny Farm as a standalone app for the reasons above. If App Review still considers that it should be combined with another app on the account, the account holder is willing to do so.
 
 ## 第 7 題：有沒有和其他 App 共用程式、框架或素材
 
@@ -150,20 +151,20 @@ No purchased template and no app-generation service. The game is written in plai
 
 中文：
 
-（需作者補充：這款是不是受客戶或合作對象委託製作？內容的權利屬於誰？開發者帳號的持有人和內容提供者是不是同一人？有沒有可以附上的證明文件。這一題專案裡的檔案回答不了，只能由帳號擁有人本人回答。）
+不是替別人做的。這款遊戲是帳號擁有人本人用 AI 工具做的（11 月 12 日帳號擁有人確認），沒有客戶或合作對象委託，內容提供者和開發者帳號的持有人是同一方。除了第 7、8 題列出的開源包裝工具和 AI 工具以外，沒有用別人的程式或素材。
 
 English:
 
-(Owner to answer: whether the app was commissioned by a client or partner, who owns the content, whether the account holder and the content provider are the same party, and what documentation can be provided. Nothing in the project repository establishes these facts.)
+No. The game was made by the account holder personally, using the AI tools described under question 8. It was not commissioned by a client or partner, and the account holder and the content provider are the same party. Apart from the open-source wrapper and the AI tools listed under questions 7 and 8, no third-party code or assets are used.
 
 ## 送出前還缺什麼
 
 這些沒補齊之前，這份草稿不能送：
 
-1. 新的原生 build 上傳。11 月 11 日已在本機把這一版包成 1.0.1 (8)，折光、曬架、看火候、鄰居回訪和追光手冊都在裡面；Android 安裝檔簽好、驗過，iOS 原始碼包備妥，但 IPA 還沒建置、簽章、上傳。回覆裡描述的玩法要和審查員實際拿到的 build 一致。
+1. 新的原生 build 上傳。帳號擁有人 11 月 12 日決定等 1.0.1 (9) 再送：下一輪內容整合完才打包，現在還沒有 (9) 的安裝檔。11 月 11 日在本機包好的 1.0.1 (8) 不送。(9) 包好後，第 1、3 題的玩法敘述要照 (9) 的實際內容重對一次。
 2. iPhone／iPad 實機驗證與一段實機錄影。這一版只在電腦上的 Chromium 驗過。
-3. 真人測試紀錄（第 4 題）。
-4. 帳號擁有人的決定與權利說明（第 6、9 題）。
+3. ~~真人測試紀錄（第 4 題）。~~ 11 月 12 日帳號擁有人回答：本人玩過。已寫進第 4 題，沒有寫成多人測試。
+4. ~~帳號擁有人的決定與權利說明（第 6、9 題）。~~ 11 月 12 日帳號擁有人回答：可以合併；遊戲是本人和 AI 做的，沒有用別人的東西。已寫進第 6、9 題。這兩題的寫法是依這兩句話整理的，送出前請帳號擁有人看過，尤其是「先獨立送、Apple 要求才合併」和「帳號持有人與內容提供者是同一方」這兩句。
 5. ~~Kenney／OpenGameArt 素材確認（第 8 題）。~~ 11 月 11 日查完，遊戲沒有用這兩個來源的素材，第 8 題已補上。
 6. ~~對現在這一版重跑共用稽核（第 7 題）。~~ 11 月 11 日重跑完，結果寫進第 7 題。有 6 款的原始檔不在本機，沒有重比，回覆裡照實寫了。
 7. 對照 Apple 原信，確認題目和這裡轉述的一致。
@@ -175,3 +176,13 @@ English:
 11 月 11 日隨 R76 更新三處：最上面的版本行、第 1 題中英文各補兩句（開場回答的回訪、追光手冊），以及「送出前還缺什麼」第 1 項補上這兩樣也還不在原生 build 裡。其他題目沒有動。
 
 同日隨 1.0.1 (8) 在本機打包完成再更新四處：最上面的版本行、「使用前先看」第 2 條和第 6 條、「送出前還缺什麼」第 1 項，都改成實際狀態（本機已打包、iOS 安裝檔還沒建置上傳、尚未送出任何東西）。九題的回答沒有動。
+
+11 月 12 日依帳號擁有人的答覆改了九處：
+
+- 最上面加一行、「使用前先看」第 2 條和第 6 條、「送出前還缺什麼」第 1 項：改成「等 1.0.1 (9) 再送」。
+- 「送出前還缺什麼」第 3、4 項：劃掉，註明答覆日期和寫進了哪一題。
+- 第 4 題：原本留空格問有沒有人試玩。帳號擁有人回答本人玩過，所以寫成「實際玩過的人是帳號擁有人本人，沒有其他人試玩的紀錄」。沒有加人數、日期或回饋內容，因為答覆裡沒有。
+- 第 6 題：原本留空格等決定。帳號擁有人回答可以合併，又決定這次照樣送審，所以寫成「先以獨立 App 送，Apple 仍要求合併就照做」。
+- 第 9 題：原本整題留空。帳號擁有人回答是自己和 AI 做的、沒有用別人的東西，所以寫成「不是受委託，帳號持有人和內容提供者是同一方」，並註明開源包裝工具與 AI 工具已在第 7、8 題列出。
+
+保真回讀：Apple ID、bundle 名稱、版本號、檔案數字和三個連結都沒有動。
