@@ -1,8 +1,8 @@
 # 回覆 Apple 4.3／4.2.6 的草稿
 
 日期：2026-11-11 起草，11 月 12 日補上帳號擁有人的答覆，同日對照 Apple 原信把九題重寫一次。對應版本：0.1.99／`content-r76-20261111-1`（本機網頁版；同日已在本機包成原生 1.0.1 (8)，iOS 安裝檔尚未建置、上傳）。
-狀態：PREPARED。只寫成檔案，**沒有送出，也沒有回覆 Apple**。
-11 月 12 日帳號擁有人決定：1.0.1 (8) 不送，等下一輪內容做完、重新包成 1.0.1 (9) 再送。下面的玩法敘述寫的還是 (8) 這一版，(9) 包好後要逐句再對一次。
+狀態：EXECUTED（11 月 13 日）。帳號擁有人 11 月 13 日授權「自己決定、不要再問」後，已隨 1.0.1 (9) 的新送審案送出：送審案 `c66bac38-8687-4db3-9666-ff87a752da9c`，台灣時間 11 月 13 日下午 3:33 送出，讀回狀態「等待審查」（WAITING_FOR_REVIEW），掛的是 build 9。審查備註放九題摘要（英文 3,933 字元），九題英文全文做成附件 `guideline-4.3-answers-1.0.1-9.pdf`（附件狀態 COMPLETE）。第 1 題英文在送出前補上 (9) 的新內容（後續委託、折光預覽、第 4 章兩種做法）。
+11 月 12 日帳號擁有人決定：1.0.1 (8) 不送，等下一輪內容做完、重新包成 1.0.1 (9) 再送。(9) 的來源提交是 `0e8024c`（content-r77-20261113-1）。
 
 ## 使用前先看
 
@@ -203,6 +203,15 @@ English:
 No. The game was made by the account holder personally, using the AI tools described under question 8. It was not commissioned by a client or partner. The content, the concept and the branding all come from the account holder, so the content provider and the holder of this developer account are the same party. Apart from the open-source wrapper and the AI tools listed under questions 7 and 8, no third-party code or assets are used.
 
 ## 送出前還缺什麼
+
+11 月 13 日送出時的實際情況（下面原清單保留作紀錄）：
+
+- 第 1 項：已完成。1.0.1 (9) 由雲端簽章（GitHub Actions run 43383708060）、上傳、Apple 處理為 VALID，掛到 1.0.1 版。
+- 第 2 項：**沒有做到**。手上沒有 (9) 的實機錄影，審查備註第 7 段照實寫「這次沒有新的實機錄影，10 月那段是 build 4、不沿用，需要時再提供」。這是送出時最大的缺口，Apple 可能因此再要求補資料。
+- 第 8、9 項：已完成，審查備註含 10 月 8 日要的六點與九題摘要，全文是附件。
+- 第 10 項：已完成。iPhone（1320×2868）與 iPad（2064×2752）各換上 8 張實際遊玩畫面，由網頁版在對應尺寸實拍，不是原生 App 截圖。
+- 第 11 項：已完成。商店名稱「陽光農場：籃底的手記」存檔成功（沒有被別人用掉），副標「拿手鏡折光，追著光種田」；手機桌面名稱改成「陽光農場」。
+- 第 16 項：第 9 版已加入外部測試群組「MARS Games Testers」，但送 TestFlight 測試審查連兩次回 422（Apple 只說「請稍後再試」），還沒通過。測試資訊與測試審查備註都查過是齊的，測試審查備註原本寫的是別款遊戲的內容，已改成陽光農場的說明。
 
 這些沒補齊之前，這份草稿不能送：
 
