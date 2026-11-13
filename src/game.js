@@ -172,6 +172,44 @@
     const stage = ready ? 4 : Math.min(3, Math.floor(ratio * 4));
     return { ready, ratio, remainingMs: Math.max(0, growMs - elapsed), stage, wet: isWet(plot) };
   }
+  /* R77A 第 3 項：三種照顧方式換到「這一株」身上各是幾秒成熟、收幾份。
+   * 秒數用 plotGrowMs（季節、天氣、料理效果、澆水都在裡面），份數用跟 harvest 同一條算式（作物產量＋光性＋料理＋照顧方式），不另寫一份規則。 */
+  function careDurationText(ms) {
+    const sec = Math.max(0, Math.ceil((Number(ms) || 0) / 1000));
+    if (sec <= 60) return `${sec} 秒`;
+    const minutes = Math.floor(sec / 60), rest = sec % 60;
+    return rest ? `${minutes} 分 ${rest} 秒` : `${minutes} 分鐘`;
+  }
+  function careChanceText(chance) {
+    const tenth = Math.max(0, Math.min(10, Math.round((Number(chance) || 0) * 10)));
+    return ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"][tenth] + "成";
+  }
+  function careForecast(state, plotIndex, now) {
+    const plot = state && Array.isArray(state.plots) ? state.plots[plotIndex] : null;
+    const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
+    if (!crop) return { ok: false, rows: [] };
+    const t = Number.isFinite(now) ? now : Date.now();
+    const sunlit = isSunlit(state, plotIndex, t);
+    const light = Sunplay ? Sunplay.harvestEffects(state, plot, function () { return 1; }, sunlit) : { yieldBonus: sunlit ? SUNPATCH.harvestBonus : 0 };
+    const baseQty = crop.yield + (light.yieldBonus || 0) + mealFlatBonus(state, "harvest", t);
+    const compostHave = Math.max(0, Math.floor(Number(state.materials && state.materials.compost) || 0));
+    const rows = Object.keys(FARM_CARE).map((id) => {
+      const care = FARM_CARE[id];
+      const growMs = plotGrowMs(state, Object.assign({}, plot, { careMode: id }), t);
+      const remainingMs = Math.max(0, plot.plantedAt + growMs - t);
+      const qty = baseQty + (care.yieldBonus || 0);
+      const applied = plot.careMode === id;
+      const compostCost = id === "compost" && !applied ? 1 : 0;
+      const timeText = remainingMs > 0 ? `約 ${careDurationText(remainingMs)}` : "現在就能收";
+      let text = `${care.name}：${timeText}${id === "water" && remainingMs > 0 ? "成熟" : ""}・收 ${qty} 份`;
+      if (care.qualityChance) text += `，${careChanceText(care.qualityChance)}機率優質`;
+      if (id === "compost") text += applied ? "（堆肥已經施了）" : compostHave >= compostCost ? `（用 ${compostCost} 份堆肥，現有 ${compostHave}）` : `（要 ${compostCost} 份堆肥，現在沒有）`;
+      if (care.seedBack) text += `，帶回 ${care.seedBack} 包種子`;
+      return { id, name: care.name, growMs, remainingMs, seconds: Math.ceil(remainingMs / 1000), timeText, qty, qualityChance: care.qualityChance || 0,
+        seedBack: care.seedBack || 0, compostCost, compostHave, available: compostHave >= compostCost, selected: applied, text };
+    });
+    return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, selected: plot.careMode || "", rows };
+  }
   // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
   function waterPlot(state, plotIndex, now) {
     const plot = state.plots[plotIndex];
@@ -2654,6 +2692,11 @@
         const crop = CROPS[plot.cropId];
         return `收成・${crop ? crop.name : "作物"}田`;
       }
+      /* R77A 第 5 項：面前是開墾好的田時，把接下來按下去會做的事寫出來（空田＝種植、還沒澆水＝澆水），不再只寫「互動」。 */
+      if (tile.plotIndex < activePlotCount(state)) {
+        if (!plot || !plot.cropId) return "種植・空田";
+        if (!isWet(plot)) { const crop = CROPS[plot.cropId]; return `澆水・${crop ? crop.name : "作物"}田`; }
+      }
     }
     if (tile.npc) { const npc = (C.NPCS || {})[tile.npc]; return `交談・${npc ? npc.name : "鎮民"}`; }
     if (tile.station) { const station = (C.STATIONS || {})[tile.station]; return `使用・${station ? station.name : "設施"}`; }
@@ -3000,7 +3043,7 @@
     quickHarvestStatus,
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, buildingMaxLevel, buildingLevel, buildingLevelData, buildingEffect,
-    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, isWet, waterPlot,
+    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, careForecast, careDurationText, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, addQualityToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,

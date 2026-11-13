@@ -47,30 +47,77 @@
     return "home";
   }
 
+  /* R77A 第 6 項：三種火性。金色區在哪裡、火掉多快各不相同；等級門檻（七成絕品、四成好吃）不變。
+   * 沒指定火性（createFireSession 不傳 fire）時跟原本完全一樣：金色區 42～68、起始火力 55、每秒掉 5.2。
+   * zones 依 fromMs 由小到大排，時間到了金色區就換到下一段。 */
+  const DEFAULT_FIRE = { id: "", label: "", startHeat: START_HEAT, decayPerSec: DECAY_PER_SEC, zones: [{ fromMs: 0, min: GOLD_MIN, max: GOLD_MAX }] };
+  const FIRE_KINDS = {
+    gentle: { id: "gentle", label: "文火", startHeat: 35, decayPerSec: 3.2, zones: [{ fromMs: 0, min: 26, max: 44 }] },
+    strong: { id: "strong", label: "大火", startHeat: 74, decayPerSec: 8.5, zones: [{ fromMs: 0, min: 62, max: 86 }] },
+    shift: { id: "shift", label: "先大後小", startHeat: 72, decayPerSec: 5.2, zones: [{ fromMs: 0, min: 60, max: 84 }, { fromMs: 6000, min: 30, max: 52 }] },
+  };
+  /* 10 道料理各用哪一種火：烤的、煎的用大火；茶和湯用文火；燉鍋、塔、拼盤先大後小。 */
+  const RECIPE_FIRE = {
+    rustic_bread: "strong", baked_carrot: "strong", wheat_carrot_pancake: "strong",
+    mint_tea: "gentle", bamber_rain_soup: "gentle", carrot_trail_soup: "gentle",
+    carrot_wheat_stew: "shift", tomato_harvest_stew: "shift", strawberry_market_tart: "shift", riverside_harvest_platter: "shift",
+  };
+  function fireKindOf(recipeId) { return FIRE_KINDS[RECIPE_FIRE[recipeId]] || null; }
+  function fireZoneAt(fire, elapsedMs) {
+    const zones = (fire && fire.zones) || DEFAULT_FIRE.zones;
+    let zone = zones[0];
+    for (const row of zones) if (elapsedMs >= row.fromMs) zone = row;
+    return zone;
+  }
+  function fireNextZone(fire, elapsedMs) { return ((fire && fire.zones) || []).find((row) => row.fromMs > elapsedMs) || null; }
+  /* 火性的一句話說明：由 zones 與每秒掉多少算出來，不另外寫死。 */
+  function fireHintText(kind) {
+    const fire = typeof kind === "string" ? FIRE_KINDS[kind] : kind;
+    if (!fire || !fire.zones || !fire.zones.length) return "";
+    const first = fire.zones[0], second = fire.zones[1];
+    if (second) return `第 ${Math.round(second.fromMs / 1000)} 秒金色區從${second.max < first.max ? "高移到低" : "低移到高"}`;
+    const mid = (first.min + first.max) / 2, defaultMid = (GOLD_MIN + GOLD_MAX) / 2;
+    const place = mid < defaultMid ? "金色區低" : "金色區高";
+    const width = (first.max - first.min) < (GOLD_MAX - GOLD_MIN) - 4 ? "而窄" : "";
+    const speed = fire.decayPerSec < DECAY_PER_SEC ? "火掉得慢" : fire.decayPerSec > DECAY_PER_SEC ? "火掉得快" : "火掉得跟平常一樣";
+    return `${place}${width}，${speed}`;
+  }
+  function fireLabelText(recipeId) { const fire = fireKindOf(recipeId); return fire ? `${fire.label}：${fireHintText(fire)}` : ""; }
+
   /* 火候小遊戲的一局：指針就是火力，火會慢慢變小，添柴加一段、掀蓋降一段。 */
   function createFireSession(options) {
     const opts = isObject(options) ? options : {};
     const durationMs = Number.isFinite(opts.durationMs) && opts.durationMs > 0 ? Math.floor(opts.durationMs) : DURATION_MS;
-    let heat = clampHeat(Number.isFinite(opts.startHeat) ? opts.startHeat : START_HEAT);
+    const fire = (typeof opts.fire === "string" ? FIRE_KINDS[opts.fire] : isObject(opts.fire) && Array.isArray(opts.fire.zones) && opts.fire.zones.length ? opts.fire : null) || DEFAULT_FIRE;
+    const decayPerSec = Number.isFinite(fire.decayPerSec) && fire.decayPerSec > 0 ? fire.decayPerSec : DECAY_PER_SEC;
+    let heat = clampHeat(Number.isFinite(opts.startHeat) ? opts.startHeat : Number.isFinite(fire.startHeat) ? fire.startHeat : START_HEAT);
     let elapsedMs = 0;
     let inZoneMs = 0;
     let finished = false;
     const reducedMotion = opts.reducedMotion === true;
     function snapshot() {
       const ratio = durationMs > 0 ? inZoneMs / durationMs : 0;
-      return { heat, elapsedMs, inZoneMs, durationMs, remainingMs: Math.max(0, durationMs - elapsedMs), ratio, inGold: heat >= GOLD_MIN && heat <= GOLD_MAX, finished, reducedMotion, grade: finished ? gradeForRatio(ratio) : null };
+      const zone = fireZoneAt(fire, elapsedMs), next = fireNextZone(fire, elapsedMs);
+      return { heat, elapsedMs, inZoneMs, durationMs, remainingMs: Math.max(0, durationMs - elapsedMs), ratio, inGold: heat >= zone.min && heat <= zone.max, finished, reducedMotion, grade: finished ? gradeForRatio(ratio) : null,
+        fire: fire.id || "", fireLabel: fire.label || "", goldMin: zone.min, goldMax: zone.max, decayPerSec,
+        nextZone: next ? { min: next.min, max: next.max, inMs: Math.max(0, next.fromMs - elapsedMs) } : null };
     }
     return {
       tick(dtMs) {
         if (finished) return snapshot();
         let dt = Number.isFinite(dtMs) && dtMs > 0 ? dtMs : 0;
         dt = Math.min(dt, Math.max(0, durationMs - elapsedMs));
-        if (dt > 0) {
-          heat = clampHeat(heat - (dt / 1000) * DECAY_PER_SEC);
-          elapsedMs += dt;
-          if (heat >= GOLD_MIN && heat <= GOLD_MAX) inZoneMs += dt;
-          if (elapsedMs >= durationMs) { elapsedMs = durationMs; finished = true; }
+        /* 一步跨過金色區換位置的時間點時拆成兩段算，前半段用舊位置、後半段用新位置。 */
+        while (dt > 0) {
+          const zone = fireZoneAt(fire, elapsedMs), next = fireNextZone(fire, elapsedMs);
+          const toNext = next ? next.fromMs - elapsedMs : Infinity;
+          const step = Math.min(dt, toNext);
+          heat = clampHeat(heat - (step / 1000) * decayPerSec);
+          elapsedMs = next && step === toNext ? next.fromMs : elapsedMs + step;
+          if (heat >= zone.min && heat <= zone.max) inZoneMs += step;
+          dt -= step;
         }
+        if (elapsedMs >= durationMs) { elapsedMs = durationMs; finished = true; }
         return snapshot();
       },
       addWood() { if (!finished) heat = clampHeat(heat + STEP_HEAT); return snapshot(); },
@@ -370,6 +417,7 @@
   }
 
   const CookingR75 = { DURATION_MS, GOLD_MIN, GOLD_MAX, START_HEAT, GRADES, GRADE_ORDER, CHOICE_DEFS,
+    FIRE_KINDS, RECIPE_FIRE, fireKindOf, fireHintText, fireLabelText,
     ensure, createFireSession, gradeForRatio, scaledDurationMs, durationText, gradeEffectText,
     mealGrades, bestStockGrade, cookWithGrade, cookDirect, finishFireSession, eatMeal, shareBestMeal, noteSharedMeal,
     selectedChoice, choiceEffects, hasEffect, orderCoinBonusRate, mayorQuestBonusRate, boostedCoins,
@@ -426,6 +474,9 @@
       const durations = recipe && recipe.effect ? GRADE_ORDER.map((grade) => `${GRADES[grade].label} ${durationText(scaledDurationMs(recipe.effect.durationMs, grade))}`).join("・") : "家常／好吃／絕品皆可分享";
       badge.textContent = (info.bestEver ? "最高成果：" + info.bestEverLabel + "・餐籃裡 家常 " + info.home + "、好吃 " + info.tasty + "、絕品 " + info.perfect : "還沒做過") + "・" + durations;
       cookBtn.before(badge);
+      /* R77A 第 6 項：灶台清單寫出這道料理是哪一種火。 */
+      const fireText = fireLabelText(recipeId);
+      if (fireText) { const fireLine = document.createElement("p"); fireLine.className = "r77a-fire-line"; fireLine.setAttribute("data-r77a-fire-line", recipeId); fireLine.setAttribute("data-r77a-fire", RECIPE_FIRE[recipeId]); fireLine.textContent = "火性・" + fireText; cookBtn.before(fireLine); }
       const start = document.createElement("button");
       start.type = "button";
       start.className = "r75b-start-cook";
@@ -448,7 +499,9 @@
     const recipe = recipeOf(state, recipeId) || { name: "這道料理" };
     document.querySelectorAll(".r75b-cook-overlay").forEach((node) => node.remove());
     const reduced = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const session = createFireSession({ reducedMotion: reduced });
+    const fire = fireKindOf(recipeId);
+    const session = createFireSession({ reducedMotion: reduced, fire: fire ? fire.id : undefined });
+    const firstSnap = session.snapshot();
     const overlay = document.createElement("div");
     overlay.className = "r75b-cook-overlay" + (reduced ? " r75b-reduced" : "");
     overlay.setAttribute("role", "dialog");
@@ -456,19 +509,22 @@
     overlay.innerHTML = '<div class="r75b-cook-card">'
       + '<button type="button" class="r75b-cook-close" data-r75b-close aria-label="關閉看火候畫面">×</button>'
       + "<h3>看火候・" + esc(recipe.name) + "</h3>"
+      + (fire ? '<p class="r77a-fire-kind" data-r77a-fire="' + esc(fire.id) + '"><b>' + esc(fire.label) + "</b>：" + esc(fireHintText(fire)) + "</p>" : "")
       + '<img class="r75b-cook-pot" src="assets/generated/content-r73/item-' + esc(recipeId) + '.png' + esc(versionQuery()) + '" alt="鍋裡的' + esc(recipe.name) + '">'
-      + '<div class="r75b-fire-track" aria-hidden="true"><div class="r75b-fire-gold"></div><div class="r75b-fire-pointer"></div></div>'
+      + '<div class="r75b-fire-track" aria-hidden="true"><div class="r77a-fire-next" hidden></div><div class="r75b-fire-gold"></div><div class="r75b-fire-pointer"></div></div>'
       + '<p class="r75b-cook-status" data-r75b-status>把指針留在金色區間，火會慢慢變小。</p>'
-      + '<p class="r75b-cook-time" data-r75b-time>還剩 12 秒</p>'
+      + '<p class="r75b-cook-time" data-r75b-time>還剩 ' + Math.ceil(firstSnap.remainingMs / 1000) + ' 秒</p>'
       + '<div class="r75b-cook-actions">'
-      + '<button type="button" data-r75b-wood>添柴</button>'
-      + '<button type="button" data-r75b-vent>掀蓋</button>'
+      + '<button type="button" data-r75b-wood>添柴・火變大</button>'
+      + '<button type="button" data-r75b-vent>掀蓋・火變小</button>'
       + '<button type="button" data-r75b-direct>直接做（家常）</button>'
       + "</div>"
       + '<p class="r75b-cook-hint">空白鍵添柴、Enter 鍵掀蓋，滑鼠和觸控也可以按。</p>'
       + "</div>";
     document.body.appendChild(overlay);
     const pointer = overlay.querySelector(".r75b-fire-pointer");
+    const track = overlay.querySelector(".r75b-fire-track");
+    const nextGhost = overlay.querySelector(".r77a-fire-next");
     const status = overlay.querySelector("[data-r75b-status]");
     const timeLabel = overlay.querySelector("[data-r75b-time]");
     let raf = 0;
@@ -477,7 +533,16 @@
     function render(snap) {
       pointer.style.left = snap.heat + "%";
       timeLabel.textContent = "還剩 " + Math.ceil(snap.remainingMs / 1000) + " 秒";
-      status.textContent = snap.inGold ? "剛好，火候穩穩的。" : snap.heat < GOLD_MIN ? "火變小了，按添柴加熱。" : "火太大了，按掀蓋降一點。";
+      /* R77A 第 6 項：金色區的位置由這一局的火性決定，寫進 CSS 變數；沒有火性時就是原本的 42～68。 */
+      track.style.setProperty("--r77a-gold-left", snap.goldMin + "%");
+      track.style.setProperty("--r77a-gold-width", (snap.goldMax - snap.goldMin) + "%");
+      track.dataset.goldMin = String(snap.goldMin); track.dataset.goldMax = String(snap.goldMax);
+      if (nextGhost) {
+        nextGhost.hidden = !snap.nextZone;
+        if (snap.nextZone) { nextGhost.style.left = snap.nextZone.min + "%"; nextGhost.style.width = (snap.nextZone.max - snap.nextZone.min) + "%"; }
+      }
+      const moving = snap.nextZone && snap.nextZone.inMs <= 3000 ? "再 " + Math.ceil(snap.nextZone.inMs / 1000) + " 秒金色區要" + (snap.nextZone.max < snap.goldMax ? "往左移，準備掀蓋。" : "往右移，準備添柴。") : "";
+      status.textContent = moving || (snap.inGold ? "剛好，火候穩穩的。" : snap.heat < snap.goldMin ? "火變小了，按添柴加熱。" : "火太大了，按掀蓋降一點。");
     }
     function close() {
       closed = true;

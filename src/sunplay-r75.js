@@ -6,6 +6,8 @@
   const C = (typeof module !== "undefined" && module.exports) ? require("./config.js") : root;
   const PREVIEW_MS = 8000;
   const DRYING_MS = 30000;
+  /* R77A 第 4 項：曬到一半（第 15 秒）起有 10 秒可以翻面，翻了多收 1 份；錯過照常曬好、不扣。 */
+  const FLIP_WINDOW_MS = 10000;
   const TRAITS = {
     wheat: "sun", tomato: "sun", corn: "sun", sunflower: "sun", melon: "sun",
     carrot: "partial", potato: "partial", pumpkin: "partial", strawberry: "shade",
@@ -51,7 +53,9 @@
   function normalizeRack(rack) {
     rack = rack && typeof rack === "object" ? rack : {};
     return { cropId: typeof rack.cropId === "string" ? rack.cropId : null, itemId: typeof rack.itemId === "string" ? rack.itemId : null,
-      startedAt: integer(rack.startedAt, 0), readyAt: integer(rack.readyAt, 0), ready: !!rack.ready };
+      startedAt: integer(rack.startedAt, 0), readyAt: integer(rack.readyAt, 0), ready: !!rack.ready,
+      /* R77A：翻面的時間點（0＝沒翻）。跟著存檔走，重新載入後接續。 */
+      flippedAt: typeof rack.cropId === "string" ? integer(rack.flippedAt, 0) : 0 };
   }
   function bottleCapacity(state) { normalize(state); return (state.r75Sunplay.bottleLevel ? 8 : 5) + sunbookBonus(state, "jar", 2); }
   function mirrorLimit(state) { return (state && state.r75Sunplay && state.r75Sunplay.mirrorLevel ? 2 : 1) + sunbookBonus(state, "mirror", 1); }
@@ -99,12 +103,42 @@
     return { text, effect, hits };
   }
   function catchSun(state, plotIndex) { const exposure = recordExposure(state, plotIndex); const gained = addSunlight(state, 1); return { gained, exposure }; }
-  function canRefract(state, targetIndex, now) {
-    normalize(state); const sun = state.sun || {}; const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0) && (sun.plots || []).length;
-    const preview = !active && now < (sun.previewAt || 0) && (sun.previewPlots || []).length;
-    const activePlots = active ? sun.plots : sun.previewPlots;
+  /* R77A 第 1 項：能不能折、為什麼不能折，都由這一個函式判斷；canRefract、折光前的預覽、動作列按鈕共用同一份規則。
+   * reason：""＝可以折、"none"＝現在沒有光也沒有預告、"plot"＝不是開墾好的田、"lit"＝這格本來就會照到、"used"＝這道光的次數用完了。 */
+  function refractCheck(state, targetIndex, now) {
+    normalize(state); const sun = state.sun || {}; const active = !!(now >= (sun.startsAt || 0) && now < (sun.endsAt || 0) && (sun.plots || []).length);
+    const preview = !active && !!(now < (sun.previewAt || 0) && (sun.previewPlots || []).length);
+    const plots = active ? sun.plots : preview ? sun.previewPlots : [];
     const activeCount = typeof root.activePlotCount === "function" ? root.activePlotCount(state) : ((state.upgrades || {}).plotCount > 0 && C.UPGRADES ? C.UPGRADES.plotCount.levels[state.upgrades.plotCount - 1].value : C.GAME.startPlots);
-    return !!((active || preview) && Number.isInteger(targetIndex) && targetIndex >= 0 && targetIndex < activeCount && !activePlots.includes(targetIndex) && sun.refractions < mirrorLimit(state));
+    const limit = mirrorLimit(state), remaining = Math.max(0, limit - sun.refractions);
+    const inField = Number.isInteger(targetIndex) && targetIndex >= 0 && targetIndex < activeCount;
+    const reason = !(active || preview) ? "none" : !inField ? "plot" : plots.includes(targetIndex) ? "lit" : remaining <= 0 ? "used" : "";
+    return { ok: !reason, reason, active, preview, remaining, limit, from: plots.slice(), spent: reason === "lit" && active && (sun.used || []).includes(targetIndex) };
+  }
+  function canRefract(state, targetIndex, now) { return refractCheck(state, targetIndex, now).ok; }
+  /* 折光之前先寫出折過去會怎樣。份數與陽光全部取自 harvestEffects（跟實際收成同一套），這裡只把「照到」與「沒照到」的差別寫成一句話。
+   * yieldGain／sunlightGain＝這一格照到光之後，收成比現在多出來的份數與陽光（不含在光裡親手收成另外接到的那 1 點）。 */
+  function refractPreview(state, targetIndex, now) {
+    const check = refractCheck(state, targetIndex, now);
+    const out = { can: check.ok, reason: check.reason, remaining: check.remaining, limit: check.limit, active: check.active, from: check.from, to: targetIndex,
+      yieldGain: 0, sunlightGain: 0, qualityChange: "", text: "", buttonText: "" };
+    if (check.reason === "none" || check.reason === "plot") return out;
+    if (check.reason === "lit") { out.spent = check.spent; out.text = check.spent ? "這道光在這格已經用過了" : "這格本來就會照到光，不用折"; return out; }
+    if (check.reason === "used") { out.text = "這道光已經折過了，等下一道光"; return out; }
+    out.buttonText = `手鏡還能折 ${check.remaining} 次`;
+    const plot = (state.plots || [])[targetIndex];
+    if (!plot || !plot.cropId) { out.text = "折過來：這格會照到光，在光裡種下去長得快"; return out; }
+    const one = function () { return 1; };
+    const before = harvestEffects(state, plot, one, false), after = harvestEffects(state, plot, one, true);
+    out.yieldGain = after.yieldBonus - before.yieldBonus; out.sunlightGain = after.sunlight - before.sunlight;
+    const info = traitInfo(plot.cropId), who = info.id === "neutral" ? cropName(plot.cropId) : `${cropName(plot.cropId)}（${info.name}）`;
+    const gains = []; if (out.yieldGain > 0) gains.push(`收成多 ${out.yieldGain} 份`); if (out.sunlightGain > 0) gains.push(`陽光 +${out.sunlightGain}`);
+    if (gains.length) out.text = `折過來：${who}會照到光，${gains.join("・")}`;
+    else if (!before.guaranteedQuality && after.guaranteedQuality) { out.qualityChange = "gain"; out.text = `折過來：${who}會照到剛好 1 次，收成保證 1 份優質`; }
+    else if (before.guaranteedQuality && !after.guaranteedQuality) { out.qualityChange = "lose"; out.text = `折過來：${who}會照到第 2 次，曬過頭，保證優質就沒了`; }
+    else if (before.qualityBonusChance > 0 && !(after.qualityBonusChance > 0)) { out.qualityChange = "lose"; out.text = `折過來：${who}會照到光，陰涼的優質加成就沒了`; }
+    else out.text = `折過來：${who}會照到光，收成跟現在一樣`;
+    return out;
   }
   function refract(state, targetIndex, now) {
     if (!canRefract(state, targetIndex, now)) return { ok: false, reason: "unavailable" };
@@ -132,16 +166,33 @@
     if (!entry) return { ok: false, reason: "crop" }; if (rack.cropId) return { ok: false, reason: "busy" };
     if ((state.storage.items[cropId] || 0) < 2) return { ok: false, reason: "items" }; if (!spendSunlight(state, 1)) return { ok: false, reason: "sunlight" };
     state.storage.items[cropId] -= 2; if (!state.storage.items[cropId]) delete state.storage.items[cropId];
-    state.r75Sunplay.rack = { cropId, itemId: entry.id, startedAt: now, readyAt: now + DRYING_MS, ready: false };
+    state.r75Sunplay.rack = { cropId, itemId: entry.id, startedAt: now, readyAt: now + DRYING_MS, ready: false, flippedAt: 0 };
     return { ok: true, readyAt: now + DRYING_MS, itemId: entry.id };
   }
   function updateRack(state, now) { normalize(state); const rack = state.r75Sunplay.rack; if (rack.cropId && now >= rack.readyAt) rack.ready = true; return rack; }
+  /* R77A 第 4 項：翻面。時間窗從曬到一半開始，最長 FLIP_WINDOW_MS，不會超過曬好的時間。
+   * flipState：none＝空架、early＝還沒到一半、open＝現在可以翻、done＝翻過了、missed＝錯過了（照常曬好、不扣）。 */
+  function flipWindow(rack) { const from = rack.startedAt + Math.floor(Math.max(0, rack.readyAt - rack.startedAt) / 2); return { from, until: Math.min(rack.readyAt, from + FLIP_WINDOW_MS) }; }
+  function flipState(rack, now) {
+    if (!rack || !rack.cropId) return "none"; if (rack.flippedAt > 0) return "done"; if (rack.ready || now >= rack.readyAt) return "missed";
+    const win = flipWindow(rack); return now < win.from ? "early" : now < win.until ? "open" : "missed";
+  }
+  function flipRack(state, now) {
+    const rack = updateRack(state, now), flip = flipState(rack, now);
+    if (flip !== "open") return { ok: false, reason: flip === "none" ? "empty" : flip === "done" ? "flipped" : rack.ready ? "ready" : flip };
+    rack.flippedAt = Math.max(1, Math.floor(now)); return { ok: true, itemId: rack.itemId, quantity: 2 };
+  }
   function collectDrying(state, now) {
     const rack = updateRack(state, now); if (!rack.cropId || !rack.ready) return { ok: false, reason: rack.cropId ? "not_ready" : "empty" };
-    if (typeof API.onDried === "function") API.onDried(state, rack.itemId); /* R76C 追光手冊：曬成乾貨蓋章 */
-    state.storage.items[rack.itemId] = (state.storage.items[rack.itemId] || 0) + 1; const itemId = rack.itemId; state.r75Sunplay.rack = normalizeRack(null); return { ok: true, itemId, quantity: 1 };
+    if (typeof API.onDried === "function") API.onDried(state, rack.itemId); /* R76C 追光手冊：曬成乾貨蓋章（翻不翻面都只蓋一次，取得條件不變） */
+    const quantity = rack.flippedAt > 0 ? 2 : 1; /* R77A：翻過面多 1 份 */
+    state.storage.items[rack.itemId] = (state.storage.items[rack.itemId] || 0) + quantity; const itemId = rack.itemId; state.r75Sunplay.rack = normalizeRack(null); return { ok: true, itemId, quantity };
   }
-  function rackStatus(state, now) { const rack = updateRack(state, now); return Object.assign({}, rack, { empty: !rack.cropId, remainingMs: rack.cropId ? Math.max(0, rack.readyAt - now) : 0 }); }
+  function rackStatus(state, now) {
+    const rack = updateRack(state, now), flip = flipState(rack, now);
+    return Object.assign({}, rack, { empty: !rack.cropId, remainingMs: rack.cropId ? Math.max(0, rack.readyAt - now) : 0,
+      flip, flipRemainingMs: flip === "open" ? Math.max(0, flipWindow(rack).until - now) : 0, quantity: rack.cropId ? (rack.flippedAt > 0 ? 2 : 1) : 0 });
+  }
   function festivalBonus(itemId) { return DRIED[itemId] ? { points: 1, source: "日曬乾貨 +1" } : { points: 0, source: "" }; }
 
   /* ---------- 瀏覽器介面（R75 整合重做）----------
@@ -216,9 +267,27 @@
   function syncPlotActions(state, now) {
     const farm = farmApi(); if (!farm || !farm.renderSceneActions) return;
     const id = state.interaction && state.interaction.selectedTileId; const tile = id && state.map ? state.map.tiles.find((t) => t.id === id) : null;
-    const names = tile && tile.plotIndex != null ? plotActions(state, tile.plotIndex, now).map((a) => a.action).join(",") : "";
-    const signature = names ? tile.id + "|" + names : "";
+    const isPlot = !!(tile && tile.plotIndex != null);
+    const names = isPlot ? plotActions(state, tile.plotIndex, now).map((a) => a.action).join(",") : "";
+    /* R77A：折光的原因與剩餘次數寫在標籤與按鈕上，這些變了也要重畫一次（沒有光、不是田的時候不算，免得白白重畫）。 */
+    const check = isPlot ? refractCheck(state, tile.plotIndex, now) : null;
+    const note = check && check.reason !== "none" && check.reason !== "plot" ? [check.reason, check.remaining, check.active ? 1 : 0, check.spent ? 1 : 0].join("/") : "";
+    const signature = names || note ? tile.id + "|" + names + "|" + note : "";
     if (signature === actionSignature) return; actionSignature = signature; farm.renderSceneActions();
+  }
+  /* R77A 第 1 項：選到可以折光的格子時，先在那一格畫一塊淡色光斑（還沒折，只是先看到光會落在哪）。
+   * 能不能折只問 refractCheck，跟動作列的「把光折到這裡」是同一個判斷，所以有光斑就一定有那顆鈕。 */
+  function refractGhostPlot(state, now) {
+    const id = state && state.interaction && state.interaction.selectedTileId; const tile = id && state.map ? state.map.tiles.find((t) => t.id === id) : null;
+    return tile && tile.plotIndex != null && refractCheck(state, tile.plotIndex, now).ok ? tile.plotIndex : null;
+  }
+  function syncRefractGhost(state, now) {
+    if (typeof document === "undefined") return; const world = document.getElementById("mapWorld"); if (!world) return;
+    const want = refractGhostPlot(state, now), point = want == null ? null : tilePoint(state, want); let node = world.querySelector(".r77a-refract-ghost");
+    if (!point) { if (node) node.remove(); return; }
+    if (!node) { node = document.createElement("div"); node.className = "r77a-refract-ghost"; node.dataset.audit = "r77a-refract-ghost"; node.setAttribute("aria-hidden", "true"); world.appendChild(node); }
+    const box = want + "|" + point.left + "|" + point.top + "|" + point.size;
+    if (node.dataset.box !== box) { node.dataset.box = box; node.dataset.plotIndex = String(want); node.style.left = point.left + "px"; node.style.top = point.top + "px"; node.style.width = point.size + "px"; node.style.height = point.size + "px"; }
   }
 
   function tilePoint(state, plotIndex) {
@@ -261,22 +330,69 @@
     const free = side && side.terrain === "grass" && !side.object && !side.buildingId && !side.station && !side.npc && !side.structureId && !side.blocked && !side.event && !side.forage && !side.adventureSite;
     return free ? { x: right + 1.5, y: bottom + 1 } : { x: right + 1, y: bottom + 1 };
   }
-  function rackLabel(state, status) { return status.empty ? "曬架" : status.ready ? "曬架・可收" : `曬架・${Math.ceil(status.remainingMs / 1000)} 秒`; }
+  /* R77A 第 4 項：可以翻面的那 10 秒寫「還要 N 秒・可以翻面」，翻過寫「翻過了・還要 N 秒」；還沒到一半或錯過了維持原本的「曬架・N 秒」。 */
+  function rackLabel(state, status) {
+    if (status.empty) return "曬架"; if (status.ready) return "曬架・可收"; const left = Math.ceil(status.remainingMs / 1000);
+    return status.flip === "open" ? `還要 ${left} 秒・可以翻面` : status.flip === "done" ? `翻過了・還要 ${left} 秒` : `曬架・${left} 秒`;
+  }
+  function rackTimeText(status) {
+    const left = Math.ceil(status.remainingMs / 1000);
+    return status.flip === "open" ? `還要 ${left} 秒・可以翻面` : status.flip === "done" ? `翻過了・還要 ${left} 秒` : `還要 ${left} 秒`;
+  }
+  function rackAria(status) {
+    if (status.empty) return "農舍旁的曬架，點一下打開"; if (status.ready) return "曬架上的乾貨曬好了，點一下收下"; const left = Math.ceil(status.remainingMs / 1000);
+    return status.flip === "open" ? `曬架可以翻面了，點一下翻面，還要 ${left} 秒曬好` : status.flip === "done" ? `曬架翻過面了，還要 ${left} 秒曬好` : `曬架正在曬作物，${left} 秒`;
+  }
+  /* 翻面與收下：曬架節點、曬架面板、右下互動鈕三個入口都走這兩個函式，提示文字與存檔只寫一份。 */
+  function flipNow(state) {
+    const result = flipRack(state, Date.now());
+    toast(result.ok ? "翻面了，曬好會多收 1 份。" : result.reason === "early" ? "還沒曬到一半，等一下再翻。" : result.reason === "flipped" ? "這一批已經翻過了。" : result.reason === "empty" ? "曬架上沒有東西。" : result.reason === "ready" ? "已經曬好了，直接收下就好。" : "這次來不及翻了，照常曬好，不會少。");
+    if (result.ok) { saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now()); }
+    return result;
+  }
+  function collectNow(state) {
+    const result = collectDrying(state, Date.now()); if (!result.ok) return result;
+    toast(`收下 ${result.quantity} 份${(DRIED[result.itemId] || {}).name || "乾貨"}，放進倉庫了。`); saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now()); return result;
+  }
+  /* 右下互動鈕：站在曬架旁（曬架那一格與周圍一圈）而且現在可以翻面或可以收，才回傳要做的事；其他時候回 null，互動鈕照原本的規則。 */
+  function rackNear(state) {
+    const player = state && state.player; if (!player || !state.map) return false; const spot = rackSpot(state);
+    return Math.abs(player.x + 0.5 - spot.x) <= 1.5 && Math.abs(player.y + 0.5 - (spot.y - 0.5)) <= 1.5;
+  }
+  function rackInteraction(state, now) {
+    if (!rackNear(state)) return null; const status = rackStatus(state, now);
+    if (status.flip === "open") return { action: "flip", label: "翻面・曬架" };
+    if (status.ready) return { action: "collect", label: "收乾貨・曬架" };
+    return null;
+  }
+  function runRackInteraction() {
+    const state = liveState(); if (!state) return { ok: false, reason: "state" }; const hit = rackInteraction(state, Date.now());
+    if (!hit) return { ok: false, reason: "none" };
+    return hit.action === "flip" ? flipNow(state) : collectNow(state);
+  }
+  let flipAnnounced = 0;
+  function announceFlip(status) {
+    if (status.flip !== "open" || flipAnnounced === status.startedAt) return; flipAnnounced = status.startedAt;
+    toast(`曬架曬到一半了，${Math.round(FLIP_WINDOW_MS / 1000)} 秒內翻個面，多收 1 份。`);
+  }
   function paintRack(state, now) {
     const world = document.getElementById("mapWorld"); if (!world || !state.map || !world.offsetWidth) return;
     const spot = rackSpot(state), status = rackStatus(state, now), tileSize = Math.max(24, Math.round(world.offsetWidth / state.map.width));
     let node = document.getElementById("r75aRackNode");
     if (!node || node.parentNode !== world) {
       if (node) node.remove(); node = document.createElement("button"); node.type = "button"; node.id = "r75aRackNode"; node.className = "r75a-map-node"; node.dataset.audit = "r75a-rack";
-      node.innerHTML = '<img alt="" draggable="false"><span></span>'; node.onclick = function (event) { event.stopPropagation(); openRack(); }; world.appendChild(node);
+      /* R77A：可以翻面的那 10 秒，點曬架就直接翻面（不用先開面板）；其他時候照舊打開面板。 */
+      node.innerHTML = '<img alt="" draggable="false"><span></span>'; node.onclick = function (event) { event.stopPropagation(); const live = liveState(); if (live && rackStatus(live, Date.now()).flip === "open") flipNow(live); else openRack(); }; world.appendChild(node);
     }
     const size = Math.round(tileSize * 1.3), left = Math.round(spot.x * tileSize), top = Math.round(spot.y * tileSize), box = left + "|" + top + "|" + size;
     if (node.dataset.box !== box) { node.dataset.box = box; node.style.cssText = `left:${left}px;top:${top}px;width:${size}px;height:${size}px;z-index:${top + 3}`; }
     const art = status.empty ? "drying_rack_empty.png" : "drying_rack_full.png";
     if (node.dataset.art !== art) { node.dataset.art = art; node.querySelector("img").src = "assets/generated/content-r75/" + art + versionQuery(); }
     const label = rackLabel(state, status), span = node.querySelector("span");
-    if (span.textContent !== label) { span.textContent = label; node.setAttribute("aria-label", status.empty ? "農舍旁的曬架，點一下打開" : status.ready ? "曬架上的乾貨曬好了，點一下收下" : "曬架正在曬作物，" + label.split("・")[1]); }
+    if (span.textContent !== label) { span.textContent = label; node.setAttribute("aria-label", rackAria(status)); }
     node.dataset.rackState = status.empty ? "empty" : status.ready ? "ready" : "drying";
+    if (node.dataset.rackFlip !== status.flip) node.dataset.rackFlip = status.flip;
+    announceFlip(status);
   }
 
   /* 曬架面板 */
@@ -293,9 +409,10 @@
   function renderRackPanel(state, now) {
     const panel = typeof document !== "undefined" && document.getElementById("r75aRackPanel"); if (!panel) return;
     const status = rackStatus(state, now), amount = sunlight(state), locked = (state.level || 1) < 2;
-    const mode = locked ? "locked" : status.ready ? "ready" : !status.empty ? "drying" : "empty|" + amount + "|" + Object.values(DRIED).map((d) => Math.min(2, state.storage.items[d.cropId] || 0)).join(",");
+    /* R77A：翻面的四個階段各是一種畫面（按鈕出現、消失、說明換句），階段變了才重畫，其餘時候只更新秒數。 */
+    const mode = locked ? "locked" : status.ready ? "ready|" + status.quantity : !status.empty ? "drying|" + status.flip : "empty|" + amount + "|" + Object.values(DRIED).map((d) => Math.min(2, state.storage.items[d.cropId] || 0)).join(",");
     if (mode === rackPanelMode) {
-      const time = panel.querySelector("[data-rack-time]"), text = `還要 ${Math.ceil(status.remainingMs / 1000)} 秒`; if (time && time.textContent !== text) time.textContent = text; return;
+      const time = panel.querySelector("[data-rack-time]"), text = rackTimeText(status); if (time && time.textContent !== text) time.textContent = text; return;
     }
     rackPanelMode = mode; const art = function (file, alt) { return `<img class="r75a-rack-art" src="assets/generated/content-r75/${file}${versionQuery()}" alt="${alt}">`; };
     const head = '<div class="r75a-rack-head"><b>農舍曬架</b><button type="button" data-close aria-label="關閉曬架">關閉</button></div>';
@@ -305,9 +422,13 @@
     /* 曬乾中與可收：空架上直接鋪這一批乾貨的圖，不再用通用的滿架圖（曬小麥時看起來像別的東西）。 */
     const loaded = dried ? `<div class="r75a-rack-stage">${art("drying_rack_empty.png", "鋪著" + dried.name + "的曬架")}<span class="r75a-rack-load" aria-hidden="true">${item}${item}${item}</span></div>` : art("drying_rack_full.png", "鋪滿作物的曬架");
     if (locked) panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + "<p>等級 2 開放。到時放上 2 份作物、用掉 1 點陽光，30 秒後就能收下日曬乾貨。</p>";
-    else if (status.ready) panel.innerHTML = head + loaded + `<p class="r75a-rack-line">${item}<span>${dried ? dried.name : "乾貨"}曬好了。</span></p><button type="button" class="r75a-rack-collect" data-collect>收下${dried ? dried.name : "乾貨"}</button>`;
-    else if (!status.empty) panel.innerHTML = head + loaded + `<p class="r75a-rack-line">${item}<span>${cropName(status.cropId)}正在曬成${dried ? dried.name : "乾貨"}。</span></p><p class="r75a-rack-time" data-rack-time>還要 ${Math.ceil(status.remainingMs / 1000)} 秒</p><p class="r75a-rack-note">不用守著。曬好了，地圖上的曬架會寫「可收」。</p>`;
-    else panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + `<p>放上 2 份作物、用掉 1 點陽光，30 秒後收下 1 份日曬乾貨。乾貨的賣價是 1 份作物的 3 倍。</p><p class="r75a-rack-sun">蓄光瓶：陽光 ${amount} 點${amount < 1 ? "。先到光裡種、澆、收，接 1 點陽光再來。" : ""}</p><div class="r75a-rack-choices">${Object.values(DRIED).map(function (d) {
+    else if (status.ready) panel.innerHTML = head + loaded + `<p class="r75a-rack-line">${item}<span>${dried ? dried.name : "乾貨"}曬好了${status.quantity > 1 ? "，翻過面多 1 份" : ""}。</span></p><button type="button" class="r75a-rack-collect" data-collect>收下 ${status.quantity} 份${dried ? dried.name : "乾貨"}</button>`;
+    else if (!status.empty) {
+      const flipNote = status.flip === "open" ? "現在翻面，收的時候多 1 份。來不及翻也照常曬好，不會少。" : status.flip === "done" ? "翻過了，曬好會收到 2 份。曬好了，地圖上的曬架會寫「可收」。" : status.flip === "missed" ? "這次沒翻到，照常曬好、收 1 份。曬好了，地圖上的曬架會寫「可收」。" : "曬到一半可以翻面，翻了多收 1 份；不翻也照常曬好。";
+      const flipButton = status.flip === "open" ? '<button type="button" class="r75a-rack-collect r77a-rack-flip" data-flip>翻面・多收 1 份</button>' : "";
+      panel.innerHTML = head + loaded + `<p class="r75a-rack-line">${item}<span>${cropName(status.cropId)}正在曬成${dried ? dried.name : "乾貨"}。</span></p><p class="r75a-rack-time" data-rack-time>${rackTimeText(status)}</p>${flipButton}<p class="r75a-rack-note">${flipNote}</p>`;
+    }
+    else panel.innerHTML = head + art("drying_rack_empty.png", "空的曬架") + `<p>放上 2 份作物、用掉 1 點陽光，30 秒後收下 1 份日曬乾貨；曬到一半翻個面，多收 1 份。乾貨的賣價是 1 份作物的 3 倍。</p><p class="r75a-rack-sun">蓄光瓶：陽光 ${amount} 點${amount < 1 ? "。先到光裡種、澆、收，接 1 點陽光再來。" : ""}</p><div class="r75a-rack-choices">${Object.values(DRIED).map(function (d) {
       const have = state.storage.items[d.cropId] || 0, lack = Math.max(0, 2 - have);
       return `<button type="button" data-dry="${d.cropId}" ${lack || amount < 1 ? "disabled" : ""}><img src="${d.icon}${versionQuery()}" alt=""><span>${cropName(d.cropId)} → ${d.name}<small>${lack ? `倉庫 ${have} 份・還差 ${lack} 份` : `倉庫 ${have} 份`}</small></span></button>`;
     }).join("")}</div>`;
@@ -316,20 +437,19 @@
       button.onclick = function () {
         const result = startDrying(state, button.dataset.dry, Date.now());
         if (!result.ok) { toast(result.reason === "items" ? "作物不足 2 份。" : result.reason === "sunlight" ? "陽光不足 1 點。" : result.reason === "busy" ? "曬架正在使用。" : "這種作物不能曬。"); return; }
-        toast(`${cropName(button.dataset.dry)}放上曬架了，30 秒後回來收。`); saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now());
+        toast(`${cropName(button.dataset.dry)}放上曬架了，30 秒後曬好；曬到一半記得翻面。`); saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now());
       };
     });
     const collect = panel.querySelector("[data-collect]");
-    if (collect) collect.onclick = function () {
-      const result = collectDrying(state, Date.now()); if (!result.ok) return;
-      toast(`收下 1 份${(DRIED[result.itemId] || {}).name || "乾貨"}，放進倉庫了。`); saveRefresh(); rackPanelMode = ""; renderRackPanel(state, Date.now());
-    };
+    if (collect) collect.onclick = function () { collectNow(state); };
+    const flip = panel.querySelector("[data-flip]");
+    if (flip) flip.onclick = function () { flipNow(state); };
   }
 
   function tick() {
     const state = liveState(); if (!state || typeof document === "undefined") return;
     normalize(state); const now = Date.now();
-    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now);
+    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now); syncRefractGhost(state, now);
   }
   function initUI() {
     if (typeof document === "undefined") return;
@@ -337,7 +457,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, harvestPreview, catchSun, canRefract, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, collectDrying, rackStatus, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, openRack, closeRack };
+  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };
