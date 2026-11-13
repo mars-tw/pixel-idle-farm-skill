@@ -1056,9 +1056,17 @@
     const choices = state.adventure && state.adventure.r58 && state.adventure.r58.r59 && state.adventure.r58.r59.r60 && state.adventure.r58.r59.r60.storyChoices;
     const elder = choices && choices.elder_wheat && choices.elder_wheat.choiceId === "sell";
     const merchant = choices && choices.merchant_hello && choices.merchant_hello.choiceId === "sign";
-    if (c.npcId === "elder" && elder) return { rate: 0.1, text: "因為你先賣了一小袋新麥，老農班伯的委託金幣多一成。" };
-    if (c.npcId === "merchant" && merchant) return { rate: 0.1, text: "因為你先掛起農場牌，蘿拉的委託金幣多一成。" };
+    if (c.npcId === "elder" && elder) return r77Upgraded(state, "elder") ? { rate: 0.2, text: "你做完了「第一筆生意」，老農班伯的委託金幣從多一成變成多兩成。" } : { rate: 0.1, text: "因為你先賣了一小袋新麥，老農班伯的委託金幣多一成。" };
+    if (c.npcId === "merchant" && merchant) return r77Upgraded(state, "merchant") ? { rate: 0.2, text: "你做完了「招牌」，蘿拉的委託金幣從多一成變成多兩成。" } : { rate: 0.1, text: "因為你先掛起農場牌，蘿拉的委託金幣多一成。" };
     return { rate: 0, text: "" };
+  }
+  /* R77B：後續委託三步做完，開場選擇的長期加成升一級（資料在 state.adventure.r77，由 choices-r77.js 維護）。 */
+  function r77Upgraded(state, npcId) {
+    const a = state && state.adventure;
+    const q = a && object(a.r77) && object(a.r77.quests) ? a.r77.quests[npcId] : null;
+    const storyId = { mayor: "mayor_welcome", elder: "elder_wheat", merchant: "merchant_hello" }[npcId];
+    const saved = a && a.r58 && a.r58.r59 && a.r58.r59.r60 && a.r58.r59.r60.storyChoices ? a.r58.r59.r60.storyChoices[storyId] : null;
+    return !!(object(q) && q.upgraded === true && q.step >= 3 && saved && saved.choiceId === q.choiceId);
   }
   function commissions(state, now) {
     if (!ensure(state, now).ok) return [];
@@ -1481,7 +1489,7 @@
     };
   }
   const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, quests, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
-    mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal };
+    mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal, r77Upgraded };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -1365,3 +1365,32 @@ html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-
 .r76c-card.is-compact { flex-direction: row; align-items: center; }
 .r76c-card.is-compact .r76c-card-main { flex: 1 1 auto; width: auto; min-width: 0; }
 .r76c-card.is-compact .r76c-card-open { white-space: nowrap; }
+
+/* ---------- R77B：開場選擇的後續委託（手札三步與進度、招牌選色、河畔委託卡的加成字樣、地圖招牌濾色） ---------- */
+.r77b-quest { margin-top: 8px; padding: 8px; border: 1px dashed #c9b27c; border-radius: 8px; background: #fff8e2; }
+.r77b-quest-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0 0 4px; font-size: 13px; font-weight: 900; color: #4d3010; }
+.r77b-quest-count { font-size: 12px; font-weight: 800; color: #7a5a1c; }
+.r77b-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.r77b-step { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 6px 8px; border-radius: 7px; background: #fffdf4; border: 1px solid #e3d5b2; font-size: 12px; line-height: 1.4; }
+.r77b-step.is-current { border-color: #94bd68; background: #f1f9e8; }
+.r77b-step.is-done { color: #6a6a5a; background: #f4f1e6; }
+.r77b-step-name { flex: 1 1 160px; min-width: 0; font-weight: 800; overflow-wrap: anywhere; }
+.r77b-play { flex: 0 0 auto; padding: 1px 6px; border-radius: 999px; background: #ffe9b0; color: #6b4310; font-size: 11px; font-weight: 800; }
+.r77b-progress { flex: 0 0 auto; font-weight: 900; color: #285b1d; }
+.r77b-where { flex: 1 1 100%; min-width: 0; color: #5c4a2a; overflow-wrap: anywhere; }
+.r77b-act { min-width: 44px; min-height: 44px; padding: 6px 12px; border: 1.5px solid #94bd68; border-radius: 8px; background: #e7f5dd; color: #285b1d; font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
+.r77b-act:disabled { opacity: .6; cursor: default; }
+.r77b-colors { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px; }
+.r77b-color { display: inline-flex; align-items: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 6px 12px; border: 2px solid #c9b27c; border-radius: 9px; background: #fffdf4; color: #4d3010; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+.r77b-color[aria-pressed="true"] { border-color: #285b1d; box-shadow: 0 0 0 2px #cfe8b8; }
+.r77b-swatch { display: inline-block; width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(0, 0, 0, .25); }
+.r77b-upgrade, .r77b-after, .r77b-hint, .r77b-bonus { margin: 6px 0 0; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+.r77b-upgrade { font-weight: 900; color: #285b1d; }
+.r77b-after { color: #5c3d12; }
+.r77b-hint { color: #6a5230; }
+.r77b-bonus { font-weight: 800; color: #7a4a12; }
+.r77b-extra { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 6px; }
+.r77b-extra p { flex: 1 1 160px; min-width: 0; margin: 0; font-size: 12px; overflow-wrap: anywhere; }
+.r75b-map-node[data-r77b-sign-color="red"] img { filter: hue-rotate(-28deg) saturate(1.5); }
+.r75b-map-node[data-r77b-sign-color="blue"] img { filter: hue-rotate(170deg) saturate(1.2); }
+.r75b-map-node[data-r77b-sign-color="green"] img { filter: hue-rotate(70deg) saturate(1.2); }

@@ -34,6 +34,18 @@
       listen: { answer: "先聽客人想買什麼", effectId: "merchant_two_specials", effectText: "蘿拉的今日特價從一樣變兩樣。" },
     } },
   ];
+  /* R77B：後續委託三步做完後，手札「現在的影響」改寫成升級後的內容（判斷放在冒險模組，這裡只查詢）。 */
+  const R77_UPGRADED_TEXT = {
+    mayor_daily_seed: "農舍門口的種子袋每天送 2 包種子：1 包小麥，再加 1 包當季作物。",
+    mayor_quest_coins: "鎮長每日委託的金幣從多一成變成多兩成，每天還可以換一次委託。",
+    elder_order_coins: "老農班伯的河畔委託金幣從多一成變成多兩成。",
+    elder_advice_seed: "每天向老農班伯請教時，多拿的當季種子從 1 包變成 2 包。",
+    merchant_order_coins: "蘿拉的河畔委託金幣從多一成變成多兩成，地圖上的招牌換成你選的顏色。",
+    merchant_two_specials: "蘿拉的今日特價從兩樣變成三樣。",
+  };
+  function r77Upgraded(state, npcId) {
+    return !!(A && typeof A.r77Upgraded === "function" && A.r77Upgraded(state, npcId));
+  }
 
   function isObject(value) { return !!value && typeof value === "object" && !Array.isArray(value); }
   function clampHeat(value) { return Math.max(0, Math.min(100, Number.isFinite(value) ? value : START_HEAT)); }
@@ -286,8 +298,9 @@
     if (!isObject(saved) || !def.options[saved.choiceId]) return null;
     const opt = def.options[saved.choiceId];
     const follow = isObject(state.r76story) && isObject(state.r76story.seen) && isObject(state.r76story.seen[def.npcId]) ? state.r76story.seen[def.npcId] : null;
+    const upgraded = r77Upgraded(state, def.npcId);
     return { storyId: def.storyId, npcId: def.npcId, npcName: def.npcName, question: def.question, choiceId: saved.choiceId,
-      answer: opt.answer, effectId: opt.effectId, effectText: opt.effectText, at: saved.at || 0, followupSummary: follow ? String(follow.summary || "") : "" };
+      answer: opt.answer, effectId: opt.effectId, effectText: upgraded && R77_UPGRADED_TEXT[opt.effectId] ? R77_UPGRADED_TEXT[opt.effectId] : opt.effectText, upgraded, at: saved.at || 0, followupSummary: follow ? String(follow.summary || "") : "" };
   }
   function hasEffect(state, effectId) {
     return CHOICE_DEFS.some((def) => {
@@ -302,11 +315,11 @@
       .map((row) => Object.assign({}, row, { active: true }));
   }
   function orderCoinBonusRate(state, npcId) {
-    if (npcId === "elder" && hasEffect(state, "elder_order_coins")) return 0.1;
-    if (npcId === "merchant" && hasEffect(state, "merchant_order_coins")) return 0.1;
+    if (npcId === "elder" && hasEffect(state, "elder_order_coins")) return r77Upgraded(state, "elder") ? 0.2 : 0.1;
+    if (npcId === "merchant" && hasEffect(state, "merchant_order_coins")) return r77Upgraded(state, "merchant") ? 0.2 : 0.1;
     return 0;
   }
-  function mayorQuestBonusRate(state) { return hasEffect(state, "mayor_quest_coins") ? 0.1 : 0; }
+  function mayorQuestBonusRate(state) { return hasEffect(state, "mayor_quest_coins") ? (r77Upgraded(state, "mayor") ? 0.2 : 0.1) : 0; }
   function boostedCoins(baseCoins, rate) {
     const base = Number.isFinite(baseCoins) ? baseCoins : 0;
     return Math.round(base * (1 + (Number.isFinite(rate) ? rate : 0)));
@@ -328,7 +341,7 @@
     if (!hasEffect(state, "elder_advice_seed")) return null;
     const cropId = seasonalCropId(state);
     const def = (C.CROPS || {})[cropId];
-    return { cropId, cropName: def ? def.name : cropId, qty: 1 };
+    return { cropId, cropName: def ? def.name : cropId, qty: r77Upgraded(state, "elder") ? 2 : 1 };
   }
 
   /* 每天的持續好處：鎮長種田路線每天送 1 包小麥種子，同一天不重複送。 */
@@ -346,6 +359,17 @@
       daily.mayorSeedDay = today;
       daily.mayorSeedAt = t;
       claimed.push({ id: "mayor_wheat_seed", cropId: "wheat", cropName: "小麥", qty: 1, text: "農舍門口的種子袋今天送了 1 包小麥種子。" });
+    }
+    /* R77B：做完「晨耕」之後，種子袋每天多送 1 包當季作物的種子（另記日期，同一天不重複送）。 */
+    if (hasEffect(state, "mayor_daily_seed") && r77Upgraded(state, "mayor") && daily.mayorSeed2Day !== today) {
+      if (A && typeof A.ensure === "function") A.ensure(state, t);
+      const packs2 = state.adventure.r58.r59.seedPacks;
+      const cropId2 = seasonalCropId(state);
+      const def2 = (C.CROPS || {})[cropId2];
+      const cropName2 = def2 ? def2.name : cropId2;
+      packs2[cropId2] = Math.min(99, (packs2[cropId2] || 0) + 1);
+      daily.mayorSeed2Day = today;
+      claimed.push({ id: "mayor_season_seed", cropId: cropId2, cropName: cropName2, qty: 1, text: "做完「晨耕」之後，種子袋今天多送了 1 包" + cropName2 + "種子。" });
     }
     return { ok: true, day: today, claimed, seedBagVisible: seedBagVisible(state), farmSignVisible: farmSignVisible(state) };
   }
@@ -535,13 +559,17 @@
     overlay.querySelector("[data-r76a-keep]").onclick = finish;
   }
 
+  /* R77B：每張選擇卡底下接後續委託的三個步驟與進度（內容由 choices-r77.js 提供，沒載入就不顯示）。 */
+  function r77CardHtml(state, npcId) {
+    try { return root.ChoicesR77 && typeof root.ChoicesR77.cardHtml === "function" ? root.ChoicesR77.cardHtml(state, npcId) : ""; } catch (_) { return ""; }
+  }
   /* 手札：我做過的選擇（還沒選的不列） */
   function choicesSectionHtml(state) {
     const rows = choiceEffects(state);
     const deals = hasEffect(state, "merchant_two_specials") ? merchantDeals(state, Date.now()) : [];
     const second = deals.length > 1 ? deals[1] : null;
     return '<section class="r75b-choices" data-r75b-choices aria-label="我做過的選擇"><div class="story-kicker">我做過的選擇</div>'
-      + (rows.length ? rows.map((row) => '<article class="r75b-choice-card" data-r75b-choice="' + esc(row.effectId) + '"><h3>' + esc(row.npcName) + '</h3><p class="r75b-choice-q">當時問：「' + esc(row.question) + "」</p><p class=\"r75b-choice-a\">我的回答：" + esc(row.answer) + "</p><p class=\"r75b-choice-e\">現在的影響：" + esc(row.effectText) + "</p>" + (row.followupSummary ? '<p class="r76b-choice-follow" data-r76b-followup="' + esc(row.npcId) + '">後來：' + esc(row.followupSummary) + "</p>" : "") + "</article>").join("") : '<p class="r75b-choice-empty">還沒做過開場選擇，先去跟鎮長、老農班伯和蘿拉聊聊。</p>')
+      + (rows.length ? rows.map((row) => '<article class="r75b-choice-card" data-r75b-choice="' + esc(row.effectId) + '"><h3>' + esc(row.npcName) + '</h3><p class="r75b-choice-q">當時問：「' + esc(row.question) + "」</p><p class=\"r75b-choice-a\">我的回答：" + esc(row.answer) + "</p><p class=\"r75b-choice-e\">現在的影響：" + esc(row.effectText) + "</p>" + (row.followupSummary ? '<p class="r76b-choice-follow" data-r76b-followup="' + esc(row.npcId) + '">後來：' + esc(row.followupSummary) + "</p>" : "") + r77CardHtml(state, row.npcId) + "</article>").join("") : '<p class="r75b-choice-empty">還沒做過開場選擇，先去跟鎮長、老農班伯和蘿拉聊聊。</p>')
       + (second ? '<div class="r75b-choice-card" data-r75b-second-deal><h3>蘿拉的第二樣特價</h3><p class="r75b-choice-e">今天第二樣特價：' + esc(second.cropName) + "種子 " + esc(second.specialPrice) + " 金。</p><button type=\"button\" class=\"r75b-act\" data-r75b-buy-second>買第二樣特價種子</button></div>" : "")
       + "</section>";
   }
@@ -560,6 +588,7 @@
       host.innerHTML = choicesSectionHtml(state);
       const section = host.firstElementChild;
       panel.appendChild(section);
+      try { if (root.ChoicesR77 && typeof root.ChoicesR77.bind === "function") root.ChoicesR77.bind(section, state); } catch (_) { /* 後續委託接線失敗不擋手札 */ }
       const buy = section.querySelector("[data-r75b-buy-second]");
       if (buy) buy.onclick = () => {
         const dealsNow = merchantDeals(state, Date.now());
@@ -594,8 +623,10 @@
       btn.onclick = (event) => { event.stopPropagation(); toast(label); };
       world.appendChild(btn);
     };
-    if (farmSignVisible(state)) addNode("shop", "assets/generated/content-r75/farm_sign.png", "農場招牌", { r75bSign: "farm_sign" });
-    if (seedBagVisible(state)) addNode("farmhouse", "assets/generated/r83/seed-32.png", "門口的種子袋，每天送 1 包小麥種子", { r75bSeedBag: "wheat_seed" });
+    /* R77B：做完後續委託後，招牌帶上選的顏色、種子袋的說明改成每天 2 包（沒載入 choices-r77.js 就維持原樣）。 */
+    const r77 = root.ChoicesR77 || null;
+    if (farmSignVisible(state)) addNode("shop", "assets/generated/content-r75/farm_sign.png", r77 && r77.signLabel ? r77.signLabel(state) : "農場招牌", Object.assign({ r75bSign: "farm_sign" }, r77 && r77.signDataset ? r77.signDataset(state) : null));
+    if (seedBagVisible(state)) addNode("farmhouse", "assets/generated/r83/seed-32.png", r77 && r77.seedBagLabel ? r77.seedBagLabel(state) : "門口的種子袋，每天送 1 包小麥種子", { r75bSeedBag: "wheat_seed" });
   }
   if (root.FarmWorld && !root.FarmWorld.__r75bPaintWrapped) {
     const originalPaint = root.FarmWorld.paintWorld;
