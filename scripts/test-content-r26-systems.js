@@ -24,7 +24,7 @@ test('升級面板只有一個標題關閉入口，買不起時顯示還差 X �
   const pane = html.slice(start, html.indexOf('<div class="side-pane sel" data-pane="story">', start));
   assert.equal((pane.match(/class="pane-head"/g) || []).length, 1);
   assert.match(pane, /class="building-upgrades-head">已放置建物/);
-  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金（還差 \$\{fmtNum\(shortfall\)\}）/);
+  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金<small class="u-short-note">（還差 \$\{fmtNum\(shortfall\)\}）<\/small>/); /* R77D 同步：差額改放第二行小字，價格與差額不再擠成多行；按鈕文字內容不變 */
   assert.match(ui, /buildingCostShortfall/);
   assert.match(ui, /const visibleUpgrades = upgradeKeys/);
   assert.doesNotMatch(ui, /appendListMore\(box, "upgrades"/);

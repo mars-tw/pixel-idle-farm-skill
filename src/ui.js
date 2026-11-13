@@ -1572,7 +1572,7 @@
           <div class="u-desc">${escapeHtml(cardInfo.effect)}・${bandLabel}${nextStep ? `<br><span class="u-next">下一步：${escapeHtml(nextStep)}</span>` : ""}</div>
         </div>
         ${next
-          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">留種提醒</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金（還差 ${fmtNum(shortfall)}）`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">提醒：升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，買一輪種子要 ${fmtNum(cardInfo.roundSeedCost)} 金；仍可開墾。</div>` : ""}`
+          ? `<div class="u-action"><button class="btn ${cardInfo.reserveRisk ? "ghost" : "buy"} small" ${G.canBuyUpgrade(state, key) ? "" : "disabled"}>${G.canBuyUpgrade(state, key) ? (cardInfo.reserveRisk ? `${fmtNum(next.cost)} 金<small class="u-confirm-note">留種提醒</small>` : `${fmtNum(next.cost)} 金`) : `${fmtNum(next.cost)} 金<small class="u-short-note">（還差 ${fmtNum(shortfall)}）</small>`}</button></div>${cardInfo.reserveRisk ? `<div class="u-next u-spend-all" data-audit="upgrade-spend-all">提醒：升級後剩 ${fmtNum(Math.max(0, state.coins - next.cost))} 金，買一輪種子要 ${fmtNum(cardInfo.roundSeedCost)} 金；仍可開墾。</div>` : ""}`
           : `<span class="u-maxed">✓ 滿級</span>`}`;
       if (next) {
         el.querySelector("button").onclick = () => {

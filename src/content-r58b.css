@@ -1465,3 +1465,5 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 .r75b-map-node[data-r77b-sign-color="red"] img { filter: hue-rotate(-28deg) saturate(1.5); }
 .r75b-map-node[data-r77b-sign-color="blue"] img { filter: hue-rotate(170deg) saturate(1.2); }
 .r75b-map-node[data-r77b-sign-color="green"] img { filter: hue-rotate(70deg) saturate(1.2); }
+/* R77D：升級卡價格按鈕——差額放第二行小字，「300 金（還差 41）」不再被拆成三四行。 */
+.u-action .btn .u-short-note { display: block; font-size: 10px; line-height: 1.15; font-weight: 600; opacity: .85; white-space: nowrap; }

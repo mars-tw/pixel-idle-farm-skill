@@ -83,7 +83,7 @@ test('成熟格、背包名稱、升級實價與設定目前狀態皆有明確�
   assert.match(world, /田裡有 \$\{readyCount\} 格可以收成/);
   assert.match(ui, /class="res-name">背包<\/span>/);
   assert.match(ui, /title="背包：\$\{used\} 份／\$\{cap\} 份/);
-  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金（還差 \$\{fmtNum\(shortfall\)\}）/);
+  assert.match(ui, /\$\{fmtNum\(next\.cost\)\} 金<small class="u-short-note">（還差 \$\{fmtNum\(shortfall\)\}）<\/small>/); /* R77D 同步：差額改放第二行小字，價格與差額不再擠成多行；按鈕文字內容不變 */
   assert.match(ui, /目前：\$\{enabled \? "開" : "關"\}/);
   assert.doesNotMatch(ui.slice(ui.indexOf('function settingRowHtml'), ui.indexOf('function soundVolumeHtml')), />\$\{enabled \? "開啟" : "關閉"\}<\/button>/);
 });
