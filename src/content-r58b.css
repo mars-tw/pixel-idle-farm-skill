@@ -1365,3 +1365,52 @@ html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-
 .r76c-card.is-compact { flex-direction: row; align-items: center; }
 .r76c-card.is-compact .r76c-card-main { flex: 1 1 auto; width: auto; min-width: 0; }
 .r76c-card.is-compact .r76c-card-open { white-space: nowrap; }
+
+/* R77A：追光本體看得懂、有事顧（第 1～6 項）。光效全部用暖色漸層畫，不新增圖檔。 */
+/* R77A 第 1 項：折光之前先看到結果——選到可以折光的格子時，那一格先畫一塊淡色的預覽光斑（比預告圈、田上標籤都低一層）。 */
+.r77a-refract-ghost { position: absolute; z-index: 9400; box-sizing: border-box; pointer-events: none; border: 2px dashed rgba(255, 196, 64, .9); border-radius: 10px; background: radial-gradient(ellipse at 50% 55%, rgba(255, 226, 120, .34), rgba(255, 208, 92, .16) 60%, rgba(255, 208, 92, 0) 78%); }
+.tile-state-label .r77a-refract-note { color: #8a4b00; }
+.scene-action-btn .r77a-refract-left { display: block; font-size: 10px; font-weight: 700; line-height: 1.2; white-space: nowrap; color: #7a4a12; }
+/* R77A 第 2 項：光落下來要像光——斜射光柱、地面亮斑、光剛落下時由圈心往整格擴散一次；都畫在作物底下，不把作物洗白。 */
+.sun-beam .r77a-sun-shaft { position: absolute; inset: 0; pointer-events: none; clip-path: polygon(4% 0, 24% 0, 79% 81%, 33% 81%); background: linear-gradient(135deg, rgba(255, 226, 140, .34) 0%, rgba(255, 214, 110, .2) 60%, rgba(255, 200, 92, 0) 100%); }
+.sun-beam .r77a-sun-spot { position: absolute; left: 30%; top: 50%; width: 50%; height: 32%; border-radius: 50%; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, rgba(255, 228, 130, .5), rgba(255, 210, 96, .22) 55%, rgba(255, 210, 96, 0) 75%); }
+.sun-beam .r77a-sun-spread { position: absolute; left: 32.73%; top: 25%; width: 45.45%; height: 55.56%; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(255, 236, 150, .7), rgba(255, 214, 100, .35) 60%, rgba(255, 214, 100, 0) 72%); animation: r77aSunSpread .7s ease-out both; }
+@keyframes r77aSunSpread { 0% { transform: scale(.15); opacity: .95; border-radius: 50%; } 70% { transform: scale(1.12); opacity: .7; border-radius: 22%; } 100% { transform: scale(1.2); opacity: 0; border-radius: 12%; } }
+/* 照著的作物只加強邊緣的亮線，本體亮度維持 1.08 不再往上加。 */
+.sunlit-crop, .ob.crop.sunlit-crop { filter: brightness(1.08) saturate(1.06) drop-shadow(1px -1px 0 rgba(255, 220, 120, .85)) drop-shadow(-1px 0 0 rgba(255, 232, 150, .6)) !important; }
+/* 光要走之前 3 秒變淡提醒：只變淡、不閃；倒數秒數那一塊照常清楚。 */
+.sun-beam.r77a-sun-fading { opacity: .45 !important; transition: opacity .6s ease; }
+.r40-sun-tile.r77a-sun-fading { border-style: dashed; border-color: rgba(255, 157, 27, .5); background: rgba(255, 176, 32, .06); box-shadow: inset 0 0 0 2px rgba(255, 226, 140, .45); }
+/* 低效能模式：只留靜態亮斑，不播擴散、不畫光柱、不做漸變。 */
+html[data-performance-tier="low"] .sun-beam .r77a-sun-spread, html.perf-low .sun-beam .r77a-sun-spread,
+html[data-performance-tier="low"] .sun-beam .r77a-sun-shaft, html.perf-low .sun-beam .r77a-sun-shaft { display: none; }
+html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-beam.r77a-sun-fading { transition: none; }
+/* R77A 第 3 項：照顧方式三行實際數字，現在選的那一行有底色。 */
+.r73a-care-effect.r77a-care-rows { display: grid; gap: 2px; text-align: left; }
+.r77a-care-row { display: block; padding: 1px 4px; border-radius: 6px; font-size: 10.5px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.r77a-care-row.sel { background: #e8f4d8; color: #2f4d1f; font-weight: 800; box-shadow: inset 0 0 0 1px #527d3d; }
+/* R77A 第 4 項：曬架可以翻面的那 10 秒，地圖上的名牌換成亮底；翻過了換成綠底。 */
+.r75a-map-node[data-rack-flip="open"] span { background: #ffe27a; color: #4a3200; box-shadow: 0 0 0 2px #c8791a; }
+.r75a-map-node[data-rack-flip="done"] span { background: #e8f4d8; color: #2f5a1c; }
+.r75a-rack-panel .r77a-rack-flip { background: #ffcf64; box-shadow: 0 2px 0 #b9812f; }
+/* R77A 第 6 項：看火候的金色區位置由程式寫進 CSS 變數（預設值跟原本一樣是 42%～68%）；「先大後小」先用虛線框標出下一段金色區。 */
+.r75b-fire-gold { left: var(--r77a-gold-left, 42%); width: var(--r77a-gold-width, 26%); transition: left .5s ease, width .5s ease; }
+.r77a-fire-next { position: absolute; top: 0; bottom: 0; box-sizing: border-box; border: 2px dashed rgba(138, 109, 0, .75); background: rgba(255, 215, 64, .18); pointer-events: none; }
+.r77a-fire-next[hidden] { display: none; }
+.r77a-fire-kind { margin: 6px 0 0; font-size: 13px; line-height: 1.4; color: #6a4a1d; }
+.r77a-fire-kind b { color: #8a2f14; }
+.r77a-fire-line { margin: 2px 0; font-size: 12px; font-weight: 700; color: #76551c; }
+/* 三顆按鈕排一列時各約 126px，「直接做（家常）」原本會被切掉 2px；左右內距收窄一點讓字完整。 */
+.r75b-cook-actions button { padding-left: 8px; padding-right: 8px; }
+@media (max-width: 420px) {
+  .r77a-care-row { font-size: 10px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .r75b-cook-pot { width: 72px; height: 72px; }
+  .r77a-fire-kind { margin-top: 2px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sun-beam .r77a-sun-spread { display: none; }
+  .sun-beam.r77a-sun-fading { transition: none; }
+  .r75b-fire-gold { transition: none; }
+}

@@ -473,6 +473,9 @@
     const sunSecs = Math.max(0, Math.ceil((st.remainingMs || 0) / 1000));
     const sunPct = st.durationMs ? Math.max(0, Math.min(100, (st.remainingMs || 0) / st.durationMs * 100)) : 0;
     const wantSun = st.active ? st.plots : [];
+    /* R77A 第 2 項：光要走之前 3 秒變淡提醒（只換樣式、不閃爍）；倒數秒數那一塊維持清楚可讀。 */
+    const sunFading = !!(st.active && (st.remainingMs || 0) > 0 && st.remainingMs <= 3000);
+    worldEl.querySelectorAll(".sun-beam:not(.caught)").forEach((n) => { n.classList.toggle("r77a-sun-fading", sunFading); });
     worldEl.querySelectorAll(".r40-sun-tile").forEach((n) => { if (!wantSun.includes(Number(n.dataset.plotIndex))) n.remove(); });
     for (const i of wantSun) {
       const tile = state.map.tiles.find((x) => x.plotIndex === i); if (!tile) continue;
@@ -492,6 +495,7 @@
       m.classList.toggle("r68a-crop-ready", ready);
       m.dataset.cropReady = ready ? "true" : "false";
       m.dataset.remainingSeconds = String(sunSecs);
+      m.classList.toggle("r77a-sun-fading", sunFading);
       const secsEl = m.querySelector(".r40-sun-secs"); if (secsEl) secsEl.textContent = sunSecs + " 秒";
       const fill = m.querySelector(".r40-sun-bar i"); if (fill) fill.style.width = sunPct.toFixed(1) + "%";
     }
@@ -514,7 +518,12 @@
       b.style.setProperty("--sun-left", (st.remainingMs / 1000).toFixed(2) + "s");
       b.style.setProperty("--sun-total", (st.durationMs / 1000).toFixed(2) + "s");
       b.style.setProperty("--sun-progress", (1 - st.remainingMs / st.durationMs).toFixed(3));
-      b.innerHTML = '<i class="sun-ray"></i><i class="sun-pool"></i><i class="sun-mote m1"></i><i class="sun-mote m2"></i><i class="sun-mote m3"></i><b class="sun-timer"><i></i></b>';
+      /* R77A 第 2 項：斜射光柱＋地面亮斑；光剛落下（預告圈倒數結束）那一刻多一層由圈心往整格擴散的光，只播一次。
+         視窗縮放等原因重畫光束時不再重播擴散。低效能模式由 CSS 改成靜態亮斑。 */
+      const sunFresh = t - (Number(state.sun.startsAt) || 0) < 1500;
+      b.dataset.r77aFresh = sunFresh ? "1" : "0";
+      b.classList.toggle("r77a-sun-fading", sunFading);
+      b.innerHTML = '<i class="sun-ray"></i><i class="sun-pool"></i><i class="r77a-sun-shaft"></i><i class="r77a-sun-spot"></i>' + (sunFresh ? '<i class="r77a-sun-spread"></i>' : '') + '<i class="sun-mote m1"></i><i class="sun-mote m2"></i><i class="sun-mote m3"></i><b class="sun-timer"><i></i></b>';
       worldEl.appendChild(b);
     }
   }
@@ -886,7 +895,15 @@
       return "放著長：生長時間增加 20%，收成帶回 1 包種子";
     };
     const modes = Object.values(G.FARM_CARE || {});
-    care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect" data-care-effect role="status">${careEffectText(G.FARM_CARE && G.FARM_CARE[selectedCare])}</div>`;
+    /* R77A 第 3 項：彈窗開在某一株上時，三種照顧方式各寫這一株的實際秒數與份數（G.careForecast 用 plotGrowMs 與收成公式算，季節、天氣、料理、光都算在內）；
+       沒有指到哪一株（只是在種子列選預設照顧方式）時維持原本那一句說明。 */
+    const careForecast = carePopoverPlotIndex != null && G.careForecast ? G.careForecast(state, carePopoverPlotIndex, now()) : null;
+    const careRows = careForecast && careForecast.ok ? careForecast.rows : [];
+    const careSelected = careForecast && careForecast.ok && careForecast.selected ? careForecast.selected : selectedCare;
+    const careEffectHtml = careRows.length
+      ? careRows.map((row) => `<span class="r77a-care-row${row.id === careSelected ? " sel" : ""}" data-care-row="${row.id}" data-care-seconds="${row.seconds}" data-care-qty="${row.qty}">${escapeHtml(row.text)}</span>`).join("")
+      : careEffectText(G.FARM_CARE && G.FARM_CARE[selectedCare]);
+    care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect${careRows.length ? " r77a-care-rows" : ""}" data-care-effect role="status">${careEffectHtml}</div>`;
     care.querySelectorAll("[data-care]").forEach((button) => button.onclick = (event) => {
       event.preventDefault(); event.stopPropagation();
       const nextCare = button.dataset.care;
@@ -955,7 +972,8 @@
     if (carePopoverTimer) clearTimeout(carePopoverTimer);
     carePopoverTileId = tileId; carePopoverPlotIndex = plotIndex;
     renderSeeds();
-    carePopoverTimer = setTimeout(() => { clearCarePopover(); }, 4000);
+    /* R77A：彈窗現在有三行實際數字要看，停留時間由 4 秒拉長到 6.5 秒。 */
+    carePopoverTimer = setTimeout(() => { clearCarePopover(); }, 6500);
   }
   function plantingCareMode() {
     if (selectedCare !== "compost" || Math.max(0, Number(state.materials && state.materials.compost) || 0) > 0) return selectedCare;
@@ -3577,7 +3595,7 @@
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
     if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
-    window.ContentR6?.fitMapLabels(); syncFloatingLabels(); } function syncFloatingLabels() { try { const hud2 = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar"].flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const worldScale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1; worldEl.querySelectorAll(".ob-bar, .ob-dot-ready-crop, .tile-state-label").forEach((lab) => { let r = lab.getBoundingClientRect(); if (lab.classList.contains("tile-state-label")) { /* R75：標籤多了光性說明變高，鏡頭停好後原位仍撞到任務卡等 HUD 時也改掛田格下方（下方同樣被擋就維持原樣；鏡頭還在移動時不判斷，等 240ms 後那次同步）。 */ const hitsHud = (b) => hud2.some((h) => b.left < h.right && b.right > h.left && b.top < h.bottom && b.bottom > h.top); const downTop = r.bottom + (TILE + 12) * worldScale; const downFree = !hitsHud({ left: r.left, right: r.right, top: downTop, bottom: downTop + r.height }) && downTop + r.height <= window.innerHeight - 4; let camMoving = false; try { const tm = /translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(worldEl.style.transform || ""); const cm = tm ? new DOMMatrixReadOnly(getComputedStyle(worldEl).transform) : null; camMoving = !!cm && (Math.abs(cm.m41 - Number(tm[1])) > 0.5 || Math.abs(cm.m42 - Number(tm[2])) > 0.5); } catch (e) { camMoving = false; } if (lab.dataset.labelBelow !== "true" && (r.top < 4 || (!camMoving && hitsHud(r) && downFree)) && Number.isFinite(parseFloat(lab.style.top))) { lab.dataset.labelBelow = "true"; lab.dataset.labelTop = lab.style.top; lab.classList.add("tile-state-label-below"); lab.style.top = (parseFloat(lab.style.top) + TILE + 12) + "px"; let r2 = lab.getBoundingClientRect(); let need = 4; for (const hd of hud2) { if (r2.left < hd.right && r2.right > hd.left && r2.top < hd.bottom && r2.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } let shift = TILE + 12; if (r2.top < need) { const dy = (need - r2.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; shift += dy; } lab.dataset.labelShift = String(shift); } else if (lab.dataset.labelBelow === "true") { const upBottom = r.top - (parseFloat(lab.dataset.labelShift) || (TILE + 12)) * worldScale; if (upBottom - r.height >= 4 && !hitsHud({ left: r.left, right: r.right, top: upBottom - r.height, bottom: upBottom })) { lab.classList.remove("tile-state-label-below"); if (lab.dataset.labelTop) lab.style.top = lab.dataset.labelTop; delete lab.dataset.labelBelow; delete lab.dataset.labelTop; delete lab.dataset.labelShift; } else { let need = 4; for (const hd of hud2) { if (r.left < hd.right && r.right > hd.left && r.top < hd.bottom && r.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } if (r.top < need && Number.isFinite(parseFloat(lab.style.top))) { const dy = (need - r.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; lab.dataset.labelShift = String((parseFloat(lab.dataset.labelShift) || (TILE + 12)) + dy); } } } r = lab.getBoundingClientRect(); } const hit = hud2.some((h) => r.left < h.right && r.right > h.left && r.top < h.bottom && r.bottom > h.top); lab.style.visibility = hit ? "hidden" : ""; lab.dataset.hudHidden = hit ? "true" : "false"; }); } catch (e) {}
+    window.ContentR6?.fitMapLabels(); syncFloatingLabels(); } function syncFloatingLabels() { try { const hud2 = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar"].flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const worldScale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1; worldEl.querySelectorAll(".ob-bar, .ob-dot-ready-crop, .tile-state-label").forEach((lab) => { let r = lab.getBoundingClientRect(); if (lab.classList.contains("tile-state-label")) { /* R75：標籤多了光性說明變高，鏡頭停好後原位仍撞到任務卡等 HUD 時也改掛田格下方（下方同樣被擋就維持原樣；鏡頭還在移動時不判斷，等 240ms 後那次同步）。 */ const hitsHud = (b) => hud2.some((h) => b.left < h.right && b.right > h.left && b.top < h.bottom && b.bottom > h.top); const downTop = r.bottom + (TILE + 12) * worldScale; const downFree = !hitsHud({ left: r.left, right: r.right, top: downTop, bottom: downTop + r.height }) && downTop + r.height <= window.innerHeight - 4; let camMoving = false; try { const tm = /translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(worldEl.style.transform || ""); const cm = tm ? new DOMMatrixReadOnly(getComputedStyle(worldEl).transform) : null; camMoving = !!cm && (Math.abs(cm.m41 - Number(tm[1])) > 0.5 || Math.abs(cm.m42 - Number(tm[2])) > 0.5); } catch (e) { camMoving = false; } if (lab.dataset.labelBelow !== "true" && (r.top < 4 || (!camMoving && hitsHud(r) && downFree)) && Number.isFinite(parseFloat(lab.style.top))) { lab.dataset.labelBelow = "true"; lab.dataset.labelTop = lab.style.top; lab.classList.add("tile-state-label-below"); lab.style.top = (parseFloat(lab.style.top) + TILE + 12) + "px"; let r2 = lab.getBoundingClientRect(); let need = 4; for (const hd of hud2) { if (r2.left < hd.right && r2.right > hd.left && r2.top < hd.bottom && r2.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } let shift = TILE + 12; if (r2.top < need) { const dy = (need - r2.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; shift += dy; } lab.dataset.labelShift = String(shift); } else if (lab.dataset.labelBelow === "true") { const upBottom = r.top - (parseFloat(lab.dataset.labelShift) || (TILE + 12)) * worldScale; if (upBottom - r.height >= 4 && !hitsHud({ left: r.left, right: r.right, top: upBottom - r.height, bottom: upBottom })) { lab.classList.remove("tile-state-label-below"); if (lab.dataset.labelTop) lab.style.top = lab.dataset.labelTop; delete lab.dataset.labelBelow; delete lab.dataset.labelTop; delete lab.dataset.labelShift; } else { let need = 4; for (const hd of hud2) { if (r.left < hd.right && r.right > hd.left && r.top < hd.bottom && r.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } if (r.top < need && Number.isFinite(parseFloat(lab.style.top))) { const dy = (need - r.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; lab.dataset.labelShift = String((parseFloat(lab.dataset.labelShift) || (TILE + 12)) + dy); } } } /* R77A：改掛田格下方時若蓋到田格動作列（折光、澆水鈕），整張標籤往左或往右移到動作列旁邊（不出畫面、不撞 HUD；兩邊都放不下就維持原位）；標籤回到上方或重畫時移回原位。 */ if (lab.dataset.labelBelow === "true" && Number.isFinite(parseFloat(lab.style.left))) { const baseLeft = lab.dataset.labelLeft != null ? parseFloat(lab.dataset.labelLeft) : parseFloat(lab.style.left); const cur = lab.getBoundingClientRect(), off = (parseFloat(lab.style.left) - baseLeft) * (worldScale || 1); const base = { left: cur.left - off, right: cur.right - off, top: cur.top, bottom: cur.bottom }; const sab = document.getElementById("sceneActionBar"), sabRect = sab && !sab.hidden ? sab.getBoundingClientRect() : null; let dx = 0; if (sabRect && sabRect.width > 0 && base.left < sabRect.right && base.right > sabRect.left && base.top < sabRect.bottom && base.bottom > sabRect.top) { const side = [sabRect.right + 6 - base.left, sabRect.left - 6 - base.right].filter((d) => base.left + d >= 4 && base.right + d <= window.innerWidth - 4 && !hitsHud({ left: base.left + d, right: base.right + d, top: base.top, bottom: base.bottom })).sort((a, b) => Math.abs(a) - Math.abs(b)); if (side.length) dx = side[0]; } if (dx) { lab.dataset.labelLeft = String(baseLeft); lab.style.left = (baseLeft + dx / (worldScale || 1)) + "px"; } else if (lab.dataset.labelLeft != null) { lab.style.left = baseLeft + "px"; delete lab.dataset.labelLeft; } } else if (lab.dataset.labelLeft != null) { lab.style.left = lab.dataset.labelLeft + "px"; delete lab.dataset.labelLeft; } r = lab.getBoundingClientRect(); } const hit = hud2.some((h) => r.left < h.right && r.right > h.left && r.top < h.bottom && r.bottom > h.top); lab.style.visibility = hit ? "hidden" : ""; lab.dataset.hudHidden = hit ? "true" : "false"; }); } catch (e) {}
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
@@ -3963,6 +3981,16 @@
     if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return name + "・" + `已種 ${planted}／3 格` + "\n光快落在這格了・等光到了再澆水";
     return name + "・" + (planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水");
   }
+  /* R77A 第 1 項：這一格的折光說明。「這格本來就會照到」只在標籤還沒講到光的時候才補，免得同一件事寫兩次。 */
+  function refractNoteForTile(tile, labelText) {
+    try {
+      if (!tile || tile.plotIndex == null || tile.plotIndex >= G.activePlotCount(state) || !window.FarmSunplay || !window.FarmSunplay.refractPreview) return "";
+      const preview = window.FarmSunplay.refractPreview(state, tile.plotIndex, now());
+      if (!preview.text) return "";
+      if (preview.reason === "lit" && (G.isSunlit(state, tile.plotIndex, now()) || String(labelText || "").indexOf("光快落在這格了") >= 0)) return "";
+      return preview.text;
+    } catch (e) { return ""; }
+  }
   function renderTileStateLabel(tile) {
     let label = $("tileStateLabel");
     const text = tileStateLabelText(tile);
@@ -3974,9 +4002,12 @@
       world.appendChild(label);
     }
     label.textContent = text;
+    /* R77A 第 1 項：折光之前先寫出折過來會怎樣；不能折也寫原因。句子全部來自 FarmSunplay.refractPreview（跟動作列的折光鈕同一份規則）。 */
+    const refractNote = refractNoteForTile(tile, text);
+    if (refractNote) { const note = document.createElement("span"); note.className = "r77a-refract-note"; note.dataset.audit = "r77a-refract-note"; note.textContent = "\n" + refractNote; label.appendChild(note); }
     label.dataset.tileId = tile.id;
     label.classList.remove("tile-state-label-below");
-    delete label.dataset.labelBelow; delete label.dataset.labelTop; delete label.dataset.labelShift;
+    delete label.dataset.labelBelow; delete label.dataset.labelTop; delete label.dataset.labelShift; delete label.dataset.labelLeft;
     label.style.left = ((tile.x + 0.5) * TILE) + "px";
     label.style.top = (tile.y * TILE - 6) + "px";
     label.hidden = false;
@@ -4002,6 +4033,16 @@
       b.setAttribute("aria-label", meta[1]);
       const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png',refract:'content-r75/sun_mirror.png',ripen:'content-r75/sun_jar.png'}[entry.action];
       b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${meta[1]}</span>`;
+      /* R77A 第 1 項：折光鈕多一行「手鏡還能折 N 次」，完整的結果寫進按鈕說明。 */
+      if (entry.action === "refract" && window.FarmSunplay && window.FarmSunplay.refractPreview) {
+        const preview = window.FarmSunplay.refractPreview(state, tile.plotIndex, now());
+        if (preview.buttonText) {
+          const sub = document.createElement("small"); sub.className = "r77a-refract-left"; sub.dataset.audit = "r77a-refract-left"; sub.textContent = preview.buttonText;
+          const textNode = b.querySelector(".sab-t"); if (textNode) textNode.appendChild(sub);
+          const full = `${meta[1]}・${preview.buttonText}${preview.text ? "。" + preview.text : ""}`;
+          b.title = full; b.setAttribute("aria-label", full);
+        }
+      }
       b.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); runSceneAction(entry.action, tile.id); };
       bar.appendChild(b);
     });
@@ -5143,6 +5184,17 @@
   function quickHarvestNow() { return G.quickHarvestStatus(state, now(), lightHoldPlotIndex()); }
   function heldReadyTile(tile) { return !!(tile && tile.plotIndex != null && tileReadyCrop(tile) && tile.plotIndex === lightHoldPlotIndex()); }
   function interactLabelFor(tile) { const label = G.interactionLabelForTile(state, tile, now()); return heldReadyTile(tile) ? label.replace(/^收成・/, "等光・") : label; }
+  /* R77A 第 5 項：站在曬架旁、現在可以翻面或乾貨曬好了，右下互動鈕寫「翻面・曬架」「收乾貨・曬架」，按下去就做那件事。
+     翻面只有 10 秒，所以排在收成前面；收乾貨不急，有成熟的田要收時先讓給收成。祭典攤位仍照原本的規則優先。 */
+  function rackThumbTarget(harvestCount) {
+    try {
+      const rack = window.FarmSunplay && window.FarmSunplay.rackInteraction ? window.FarmSunplay.rackInteraction(state, now()) : null;
+      if (!rack) return null;
+      if (rack.action !== "flip" && harvestCount > 0) return null;
+      if (nearFestivalStall()) return null;
+      return rack;
+    } catch (e) { return null; }
+  }
   function activateFacingTile() {
     if (hasOpenModal()) return;
     const tile = facingTile();
@@ -5156,16 +5208,28 @@
     if (actions.length) runSceneAction(actions[0].action, tile.id);
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
     else if (tile.id === festivalStallTileId()) { const stallBtn = document.querySelector("[data-festival-stall]"); if (stallBtn && !stallBtn.disabled) stallBtn.click(); else handleMapClick(tile.id, "direct"); }
-    else toast(blockedReason(tile));
+    else {
+      /* R77A 第 5 項：面前那格沒事可做、互動鈕寫的是旁邊那一格的事（跟 updateQuickHarvest 同一個找法）時，按下去就做旁邊那一格，
+         不再只跳「這裡不能做」。只接互動鈕上寫得出名字的事（種植、澆水、交談、使用、採集）；清除與建造要花錢或要選項目，不代按。 */
+      const pt = G.getTileById(state, state.player.tileId);
+      const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length) : null;
+      const nearLabel = near ? interactLabelFor(near) : "互動";
+      const nearAction = near && nearLabel !== "互動" ? sceneActionsForTile(near).find((a) => a.action !== "build" && a.action !== "clear" && a.enabled !== false) : null;
+      if (near && nearLabel.startsWith("等光・")) toast("光快落在這格了，等光到了再收成，多接 1 點陽光。");
+      else if (nearAction) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); runSceneAction(nearAction.action, near.id); }
+      else toast(blockedReason(tile));
+    }
   }
-  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (G.quickHarvestStatus && quickHarvestNow().count > 0) return true; } catch (e) {} const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} try { if (nearFestivalStall()) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
+  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (G.quickHarvestStatus && quickHarvestNow().count > 0) return true; } catch (e) {} if (rackThumbTarget(0)) return true; const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} try { if (nearFestivalStall()) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
     const action = $("actionA");
     if (!action || !G.quickHarvestStatus) return;
     if (quickHarvestTarget && !moveTimer && state.player.action === "idle") quickHarvestTarget = null;
     const st = quickHarvestNow();
     const busy = !!quickHarvestTarget;
+    const rack = rackThumbTarget(st.count);
     let targetLabel = "互動";
-    if (st.count && st.tileId) targetLabel = G.interactionLabelForTile ? G.interactionLabelForTile(state, G.getTileById(state, st.tileId), now()) : "收成・成熟作物";
+    if (rack) targetLabel = rack.label;
+    else if (st.count && st.tileId) targetLabel = G.interactionLabelForTile ? G.interactionLabelForTile(state, G.getTileById(state, st.tileId), now()) : "收成・成熟作物";
     else {
       const facing = facingTile();
       if (facing && G.interactionLabelForTile) targetLabel = interactLabelFor(facing);
@@ -5180,15 +5244,18 @@
     // R71B：右下互動鈕裝不下完整「交談・人名」時，省略「交談・」前綴只留人名，不截成半個名字（完整文字仍保留在 title）。
     if (!busy && targetLabel.startsWith("交談・") && action.scrollWidth > action.clientWidth + 1) action.textContent = targetLabel.slice(3);
     action.title = busy ? "正在收成" : targetLabel; // R68B（第 6 項）：浮動按鈕文字省略時保留完整說明
-    action.dataset.harvest = busy ? "busy" : st.count ? "ready" : "idle";
+    action.dataset.harvest = busy ? "busy" : st.count && !rack ? "ready" : "idle";
+    action.dataset.rack = !busy && rack ? rack.action : "";
     if (typeof action.setAttribute === "function") {
-      action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count ? `${targetLabel}，共有 ${st.count} 格成熟` : targetLabel);
+      action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count && !rack ? `${targetLabel}，共有 ${st.count} 格成熟` : targetLabel);
       action.setAttribute("aria-disabled", String(busy)); updateInteractVisibility();
     }
   }
   function activateThumbAction() {
     if (hasOpenModal() || quickHarvestTarget) return;
     const st = G.quickHarvestStatus ? quickHarvestNow() : { count: 0 };
+    /* R77A：互動鈕寫著「翻面・曬架」「收乾貨・曬架」時，按下去就是翻面或收下（跟曬架節點、曬架面板走同一個函式）。 */
+    if (rackThumbTarget(st.count)) { window.FarmSunplay.runRackInteraction(); updateQuickHarvest(); return; }
     if (!st.count) { activateFacingTile(); return; }
     if (!st.tileId) { toast(st.noRoom ? "倉庫空間不足，先交付餐籃或賣出一些作物。" : "成熟的田地暫時走不到，先清開路。"); return; }
     quickHarvestTarget = st.tileId;
