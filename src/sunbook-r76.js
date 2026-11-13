@@ -567,7 +567,8 @@
     const note = milestone ? "集滿 " + milestone + " 枚了，到追光手冊領獎勵。" : first ? "手札的圖鑑頁最上面多了一本追光手冊，集章可以換獎勵。" : "";
     const latest = list[list.length - 1] || {};
     /* R77C 第 15 項：小卡也寫再幾枚領什麼。 */
-    const nextNote = !milestone && latest.nextRemaining > 0 && latest.nextRewardText ? "再 " + latest.nextRemaining + " 枚領：" + latest.nextRewardText : "";
+    /* R77 整合：矮螢幕（手機橫式）一次只留一段說明；第一次拿章時「手冊在哪」比「再幾枚領什麼」要緊，差額改到手冊標題看。 */
+    const nextNote = !milestone && !(compact && note) && latest.nextRemaining > 0 && latest.nextRewardText ? "再 " + latest.nextRemaining + " 枚領：" + latest.nextRewardText : "";
     node.innerHTML = '<button type="button" class="r76c-card-main" data-r76c-card-close title="點一下關閉">'
       + '<img src="' + art(iconFor(latest.cropId, latest.stampId) || COVER_ART) + '" alt="">'
       + '<span class="r76c-card-text">' + lines

@@ -1,5 +1,5 @@
 {
-  "model": "無新生成圖（裁切自 content-r72 既有顧客圖）",
+  "model": "無新生成圖：裁切自 content-r72 顧客圖（原圖由 muse-wonder-1.0 via muse.image_generation 生成）",
   "tool": "Pillow 裁切縮放（LANCZOS）",
   "generated": "2026-11-13",
   "background": "沿用 content-r72 已去背的顧客圖，裁出頭肩範圍後縮成 160×160",

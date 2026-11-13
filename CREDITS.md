@@ -149,3 +149,15 @@
 
 - `assets/generated/r35/pond-480.png`：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high）以洋紅底生成 3 張候選，選第 1 張，洋紅色鍵去背後縮成 480 px，顯示為 3×3 格的自然池塘（土岸、石頭、草叢、睡蓮），取代格子拼成的直角藍色方塊。提示詞與雜湊見 [assets/generated/r35/manifest.json](assets/generated/r35/manifest.json)。
 - `assets/generated/r49/`（開場插圖 welcome-px-512／1024、地面 grass-36、小徑 path-36、工具與日誌圖示 *-64）：OpenAI `gpt-image-2-2026-04-21`（images/generations，quality high）各生成 2 張候選後選 1 張。插圖裁成 2:1 後縮成 256×128 再以最近鄰放大（R50 統一像素顆粒）；草地與小徑取中央區塊縮成 36 px 並做無縫化、畫面上 2 倍顯示；圖示以洋紅底生成、色鍵去背後縮成 64 px。取代原本被放大的整張地面底圖（黃色光斑易與陽光加成混淆、像素比角色粗）、繪本風開場插圖與舊工具圖示。提示詞、處理步驟與雜湊見 [assets/generated/r49/manifest.json](assets/generated/r49/manifest.json)。
+
+## MUSE 生成的美術（2026-11-10～11-13）
+
+OpenAI `gpt-image-2` 額度用盡後，R70 起的新圖改用 MUSE（`muse.image_generation`，模型 `muse-wonder-1.0`）生成，再去背、裁切、縮放。各資料夾的 `manifest.json` 記有檔名、尺寸、sha256 與來源。
+
+- `assets/generated/content-r70/`（7 張）：蜂箱、香草小圃、雞舍餵食槽、收穫祭彩旗、燈籠架、祭典攤位、評比桌。
+- `assets/generated/content-r72/`（6 張）：擺攤顧客（鎮長、班伯、蘿拉、圖圖）、金色攤位旗、叫賣代幣。
+- `assets/generated/content-r73/`（24 張）：料理與物品圖示。
+- `assets/generated/content-r75/`（10 張）：手鏡、蓄光瓶、曬架（空、滿）、農場招牌、灶台鍋、四種乾貨。
+- `assets/generated/content-r76/`：追光手冊封面與六枚印章是 MUSE 新生成的圖；班伯、蘿拉、圖圖的對話頭像由 content-r72 顧客圖裁切縮放。
+- `assets/generated/content-r77/portrait-mayor.png`：鎮長的對話頭像，由 content-r72 顧客圖裁切縮放，不是新生成的圖。米莉的新頭像缺件（MUSE 與 OpenAI 額度都用盡，沒有產出），沿用 `assets/generated/r84/miri-0.png`。
+- R77 的招牌換色用現有 `content-r75/farm_sign.png` 加 CSS 濾色，沒有新圖。

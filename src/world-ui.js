@@ -172,6 +172,8 @@
     return `第 ${q.chapter} 章・${q.chapterName}｜任務：${q.name}`;
   }
   function sharedFestivalCrop(row, festivalGoal) {
+    /* R77 整合：兩條路都要同一種祭典作物時，只在第一條路標「與祭典共用」（R71 規則：共用作物只標一行）。 */
+    if (row && row.route === "alt" && row.sharedAlsoInMain) return false;
     return !!(row && festivalGoal && festivalGoal.id === "tomato" && row.source === "inventory" && row.id === festivalGoal.cropId);
   }
   function requirementText(row, festivalGoal) {
@@ -181,7 +183,8 @@
   function questRowsAll(q) {
     const base = rowsOf(q);
     if (!q || !Array.isArray(q.altRequirements) || !q.altRequirements.length) return base;
-    return base.concat([{ routeLabel: true, name: "兩種做法擇一", current: 0, required: 0, complete: false }], q.altRequirements);
+    const mainKeys = new Set(base.map((row) => row.source + ":" + row.id));
+    return base.concat([{ routeLabel: true, name: "兩種做法擇一", current: 0, required: 0, complete: false }], q.altRequirements.map((row) => mainKeys.has(row.source + ":" + row.id) ? Object.assign({}, row, { sharedAlsoInMain: true }) : row));
   }
   function targetFor(q) {
     if (!q) return null;
