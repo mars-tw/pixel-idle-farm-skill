@@ -359,7 +359,8 @@
   function finishSession(state, session, now) {
     if (!session || session.finished && session.result) return session ? session.result : { ok: false, reason: "no_session", message: "還沒有開始叫賣。" };
     ensure(state, at(now));
-    if (session.customer && session.currentRecord) finishRecord(session, "時間到", "這一場結束時還沒招待完。");
+    /* R77 整合：最後一位還在攤前就結束的客人另外計數，結算上「答對＋錯過＋還沒招待完」對得上客人總數。 */
+    if (session.customer && session.currentRecord) { finishRecord(session, "時間到", "這一場結束時還沒招待完。"); session.unfinished = qty(session.unfinished) + 1; }
     session.finished = true; session.customer = null;
     const stars = starsForScore(session.score);
     /* R77C 第 12 項：賣得最好的一樣與這一場成績，留給評比口碑與晚宴對白用。 */
@@ -397,7 +398,7 @@
     const reward = rewardForStars(stars);
     const loss = lossSummary(session);
     const result = {
-      ok: true, finished: true, score: session.score, stars, served: session.served, missed: session.missed,
+      ok: true, finished: true, score: session.score, stars, served: session.served, missed: session.missed, unfinished: qty(session.unfinished),
       bestCombo: session.bestCombo, mode: session.mode, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), tokensPerSession: TOKENS_PER_SESSION, loss, mainLoss: loss.display, reward, granted, upgraded,
       goldenFlag: !!state.adventure.r72b.goldenFlag,
       customers: JSON.parse(JSON.stringify(session.customers || [])), bestSeller: bestSeller ? Object.assign({}, bestSeller) : null, soldOut: !!session.soldOut,
@@ -609,7 +610,7 @@
         <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
         ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
         ${result.soldOut ? `<p class="r72b-feedback" data-r77c-sold-out role="status">${esc(SOLD_OUT_TEXT)}</p>` : ""}
-        <p class="r72b-status">${result.score} 分・答對 ${result.served} 位・錯過 ${result.missed} 位・最高連續答對 ${result.bestCombo} 次</p>
+        <p class="r72b-status">${result.score} 分・答對 ${result.served} 位・錯過 ${result.missed} 位${result.unfinished ? `・還沒招待完 ${result.unfinished} 位` : ""}・最高連續答對 ${result.bestCombo} 次</p>
         <p class="r76b-loss" data-r76b-loss>${esc(result.mainLoss || (result.loss && result.loss.display) || "主要失分：沒有明顯失分")}・代幣用了 ${qty(result.tokenUses)} 次（每場 ${result.tokensPerSession || TOKENS_PER_SESSION} 枚，用代幣答對只拿一半分）</p>
         <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
         <p class="r73b-advice" data-r73b-advice>${esc(result.advice || adviceFor(result))}</p>

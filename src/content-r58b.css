@@ -1469,3 +1469,7 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 .u-action .btn .u-short-note { display: block; font-size: 10px; line-height: 1.15; font-weight: 600; opacity: .85; white-space: nowrap; }
 /* R77D：看火候「直接做（家常）」不換行，寬度至少容得下整串字；440px 寬的大螢幕 iPhone 原本切掉 3px。放不下就換到下一列。 */
 .r75b-cook-actions [data-r75b-direct] { flex: 1 0 auto; }
+/* R77D：擺攤前的配貨清單很長時，「開始叫賣」固定在視窗底部，第一屏就看得到（評審第 65、73 張）。 */
+.r72b-card > .r72b-primary[data-r72b-start] { position: sticky; bottom: 0; z-index: 2; width: 100%; box-shadow: 0 -8px 14px rgba(255, 248, 223, .95); }
+/* R77D：看火候的料理圖是 32×32 像素圖，原本平滑放大到 120px 會糊（評審第 39、42、58～60 張）。改成整數 4 倍、最近鄰放大。 */
+.r75b-cook-pot { width: 128px; height: 128px; image-rendering: pixelated; }
