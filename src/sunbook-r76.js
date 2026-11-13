@@ -163,8 +163,12 @@
     book.hinted = true;
     let milestone = 0;
     for (const m of MILESTONES) if (!book.claimed[m.count] && before < m.count && now.got >= m.count) milestone = m.count;
+    /* R77C 第 15 項：畫面上看到的分母統一用里程碑的 15 枚，不再跟已解鎖格數混用。 */
+    const nextMile = MILESTONES.filter(function (m) { return !book.claimed[m.count] && m.count > now.got; })[0] || null;
     events.push({ state: state, cropId: cropId, stampId: stampId, cropName: cropName(cropId), stampName: STAMPS[stampId].name, got: now.got, total: now.total,
-      text: "追光手冊：" + cropName(cropId) + "・" + STAMPS[stampId].name + "（" + now.got + "／" + now.total + "）", first: first, milestone: milestone });
+      displayGot: Math.min(now.got, LAST_COUNT), displayTotal: LAST_COUNT,
+      nextCount: nextMile ? nextMile.count : 0, nextRemaining: nextMile ? nextMile.count - now.got : 0, nextRewardText: nextMile ? rewardParts(state, nextMile).join("、") : "",
+      text: "追光手冊：" + cropName(cropId) + "・" + STAMPS[stampId].name + "（" + Math.min(now.got, LAST_COUNT) + "／" + LAST_COUNT + "）", first: first, milestone: milestone });
     if (events.length > 40) events.shift();
     return true;
   }
@@ -334,7 +338,7 @@
   }
   function sync(state) { flush(); return normalize(state); }
 
-  const API = { STAMPS: STAMPS, STAMP_ORDER: STAMP_ORDER, MILESTONES: MILESTONES, normalize: normalize, slotIds: slotIds, rows: rows, counts: counts, summary: summary,
+  const API = { STAMPS: STAMPS, STAMP_ORDER: STAMP_ORDER, MILESTONES: MILESTONES, LAST_COUNT: LAST_COUNT, normalize: normalize, slotIds: slotIds, rows: rows, counts: counts, summary: summary,
     claim: claim, sync: sync, takeEvents: takeEvents, noteDried: noteDried, notePerfect: notePerfect, hintFor: hintFor, install: install };
   install();
   if (isNode) { module.exports = API; return; }
@@ -366,6 +370,11 @@
     if (sum.claimable.length) nextText = "有獎勵可以領了，按下面的「領取」。";
     else if (sum.next) nextText = "再蓋 " + sum.next.remaining + " 枚，就能領「集滿 " + sum.next.count + " 枚」的獎勵。";
     else nextText = "四份獎勵都領完了，剩下的印章可以慢慢蓋。";
+    /* R77C 第 15 項：打開第一屏最上面就寫差幾枚、領什麼。 */
+    const nextMileRow = sum.next ? sum.milestones.filter(function (m) { return m.count === sum.next.count; })[0] : null;
+    const topText = sum.claimable.length ? "已蓋 " + sum.got + " 枚・有獎勵可以領了"
+      : nextMileRow ? "已蓋 " + sum.got + " 枚・再 " + sum.next.remaining + " 枚領：" + nextMileRow.rewardText
+        : "已蓋 " + sum.got + " 枚・獎勵都領完了";
     const miles = sum.milestones.map(function (m) {
       const cls = m.claimed ? "is-claimed" : m.claimable ? "is-ready" : "is-wait";
       const detail = m.claimed ? "拿到：" + m.gotText : m.rewardText;
@@ -396,10 +405,10 @@
     }).join("");
     return '<section class="r76c-book" data-r76c-sunbook aria-label="追光手冊"><details class="r76c-fold"' + (sum.folded ? "" : " open") + ">"
       + '<summary class="r76c-sum"><img class="r76c-sum-icon" src="' + art(COVER_ART) + '" alt="">'
-      + '<span class="r76c-sum-text"><b class="r76c-sum-title">追光手冊</b><span class="r76c-sum-count" data-r76c-count>已蓋 ' + sum.got + "／" + sum.total + " 枚</span></span>"
+      + '<span class="r76c-sum-text"><b class="r76c-sum-title">追光手冊</b><span class="r76c-sum-count" data-r76c-count>' + esc(topText) + "</span></span>"
       + (sum.claimable.length ? '<span class="r76c-sum-flag" data-r76c-flag>有獎勵可領</span>' : "")
       + '<span class="r76c-sum-arrow" aria-hidden="true"></span></summary>'
-      + '<div class="r76c-body"><p class="r76c-lead">在光裡收成、順著作物的光性種、曬成乾貨、煮出絕品，各蓋一枚章。集滿 3、6、10、15 枚都有獎勵。</p>'
+      + '<div class="r76c-body"><p class="r77c-sunbook-top" data-r77c-sunbook-top>' + esc(topText) + '</p><p class="r76c-lead">在光裡收成、順著作物的光性種、曬成乾貨、煮出絕品，各蓋一枚章。集滿 3、6、10、15 枚都有獎勵。</p>'
       + '<div class="r76c-progress"><div class="r76c-bar" role="progressbar" aria-label="集章進度" aria-valuemin="0" aria-valuemax="' + LAST_COUNT + '" aria-valuenow="' + shown + '"><span class="r76c-bar-fill" style="width:' + percent + '%"></span></div>'
       + '<div class="r76c-ticks" aria-hidden="true">' + ticks + "</div>"
       + '<p class="r76c-next" data-r76c-next>' + esc(nextText) + "</p></div>"
@@ -557,10 +566,13 @@
     list.forEach(function (e) { if (e.milestone > milestone) milestone = e.milestone; if (e.first) first = true; });
     const note = milestone ? "集滿 " + milestone + " 枚了，到追光手冊領獎勵。" : first ? "手札的圖鑑頁最上面多了一本追光手冊，集章可以換獎勵。" : "";
     const latest = list[list.length - 1] || {};
+    /* R77C 第 15 項：小卡也寫再幾枚領什麼。 */
+    const nextNote = !milestone && latest.nextRemaining > 0 && latest.nextRewardText ? "再 " + latest.nextRemaining + " 枚領：" + latest.nextRewardText : "";
     node.innerHTML = '<button type="button" class="r76c-card-main" data-r76c-card-close title="點一下關閉">'
       + '<img src="' + art(iconFor(latest.cropId, latest.stampId) || COVER_ART) + '" alt="">'
       + '<span class="r76c-card-text">' + lines
       + (extra > 0 ? '<span class="r76c-card-more">另外還有 ' + extra + " 枚新印章。</span>" : "")
+      + (nextNote ? '<span class="r76c-card-note r77c-card-next" data-r77c-card-next>' + esc(nextNote) + "</span>" : "")
       + (note ? '<span class="r76c-card-note">' + esc(note) + "</span>" : "") + "</span></button>"
       + (note ? '<button type="button" class="r76c-card-open" data-r76c-card-open>打開手冊</button>' : "");
     node.classList.toggle("is-compact", compact);

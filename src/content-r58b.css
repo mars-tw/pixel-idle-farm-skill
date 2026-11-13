@@ -1365,3 +1365,27 @@ html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-
 .r76c-card.is-compact { flex-direction: row; align-items: center; }
 .r76c-card.is-compact .r76c-card-main { flex: 1 1 auto; width: auto; min-width: 0; }
 .r76c-card.is-compact .r76c-card-open { white-space: nowrap; }
+
+/* R77C：擺攤擺出清單、逐客結算、任務卡第二條路、評比口碑與手冊第一屏 */
+.r77c-stall-plan { margin: 10px 0; padding: 10px; border: 1px solid #d8c9a6; border-radius: 8px; background: #fffaf0; }
+.r77c-stall-plan h3 { margin: 0 0 6px; font-size: 15px; color: #4a3a22; }
+.r77c-stall-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.r77c-stall-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; padding: 6px 8px; border: 1px solid #e6d9b8; border-radius: 8px; background: #fffef8; }
+.r77c-stall-name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.r77c-stall-name b { color: #4a3a22; font-size: 14px; }
+.r77c-stall-name small { color: #6a5230; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+.r77c-stepper { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+.r77c-step { width: 44px; height: 44px; min-width: 44px; min-height: 44px; border: 2px solid #8a541c; border-radius: 8px; background: #ffd978; color: #4d3010; font-size: 18px; font-weight: 900; cursor: pointer; }
+.r77c-qty { min-width: 64px; text-align: center; color: #4a3a22; font-size: 13px; font-weight: 800; white-space: nowrap; }
+.r77c-customers { margin: 10px 0; padding: 8px 10px; border: 1px solid #d8c9a6; border-radius: 8px; background: #fffaf0; }
+.r77c-customers summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; color: #4a3a22; font-weight: 900; }
+.r77c-customers ul { display: grid; gap: 6px; margin: 6px 0 2px; padding: 0; list-style: none; }
+.r77c-customer-row { display: flex; flex-direction: column; gap: 2px; padding: 6px 8px; border: 1px solid #e6d9b8; border-radius: 8px; background: #fffef8; color: #5b4526; font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+.r77c-route-label { font-weight: 900; color: #8a541c; }
+.r77c-stall-reputation { color: #7a4a12; font-weight: 800; line-height: 1.5; overflow-wrap: anywhere; }
+.r77c-sunbook-top { margin: 0 0 8px; color: #4a3a22; font-size: 14px; font-weight: 900; line-height: 1.5; overflow-wrap: anywhere; }
+.r77c-card-next { font-weight: 800; }
+@media (max-width: 480px) {
+  .r77c-stall-row { flex-wrap: wrap; }
+  .r77c-stepper { margin-left: auto; }
+}
