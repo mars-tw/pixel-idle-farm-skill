@@ -1467,3 +1467,5 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 .r75b-map-node[data-r77b-sign-color="green"] img { filter: hue-rotate(70deg) saturate(1.2); }
 /* R77D：升級卡價格按鈕——差額放第二行小字，「300 金（還差 41）」不再被拆成三四行。 */
 .u-action .btn .u-short-note { display: block; font-size: 10px; line-height: 1.15; font-weight: 600; opacity: .85; white-space: nowrap; }
+/* R77D：看火候「直接做（家常）」不換行，寬度至少容得下整串字；440px 寬的大螢幕 iPhone 原本切掉 3px。放不下就換到下一列。 */
+.r75b-cook-actions [data-r75b-direct] { flex: 1 0 auto; }
