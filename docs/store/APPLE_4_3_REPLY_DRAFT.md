@@ -98,7 +98,7 @@ We list these as the developer's own decisions, not as beta feedback.
 
 要照實說的有兩件事：
 
-- 退件當時，這款 App 在商店上的名稱是「阿軒割割陽光農場開源遊戲世界」。前面是開發者的暱稱，後面的「開源遊戲世界」讀起來像一整套作品的總稱。11 月 12 日查過帳號裡另外 9 個 App 現在的商店名稱，沒有一個帶這兩串字，所以它不是各款共用的命名方式，但名稱本身容易讓人以為是系列。這次送出時名稱會改成遊戲自己的標題（待確認：新名稱，帳號擁有人 11 月 12 日同意改名，還沒選定）。
+- 退件當時，這款 App 在商店上的名稱是「阿軒割割陽光農場開源遊戲世界」。前面是開發者的暱稱，後面的「開源遊戲世界」讀起來像一整套作品的總稱。11 月 12 日查過帳號裡另外 9 個 App 現在的商店名稱，沒有一個帶這兩串字，所以它不是各款共用的命名方式，但名稱本身容易讓人以為是系列。這次送出時名稱改成遊戲自己的標題「陽光農場：籃底的手記」，和 App 裡顯示的標題相同。
 - 這些作品的原生包裝方式相同，這一點在第 7 題說明。我們也知道類型不同不等於符合 4.3。
 
 English:
@@ -107,7 +107,7 @@ The game itself is standalone. It shares no account, progress, currency or chara
 
 Two things we want to state plainly:
 
-- When it was rejected, the app's store name put the developer's nickname in front of the title and ended with words meaning "open-source game world", which reads like the name of a collection. None of the other nine apps on the account carries either phrase in its store name (checked on 12 November), so it was not a shared naming scheme, but the name itself could suggest a series. For this submission the store name has been changed to the game's own title, [NEW NAME — to be filled in once confirmed].
+- When it was rejected, the app's store name put the developer's nickname in front of the title and ended with words meaning "open-source game world", which reads like the name of a collection. None of the other nine apps on the account carries either phrase in its store name (checked on 12 November), so it was not a shared naming scheme, but the name itself could suggest a series. For this submission the store name has been changed to the game's own title, 「陽光農場：籃底的手記」 ("Sunny Farm: Notes from the Bottom of the Basket"), which is the same title shown inside the app.
 - The apps use the same native wrapper, which we disclose under question 7. We understand that being a different genre does not by itself satisfy Guideline 4.3.
 
 ## 第 6 題：能不能用內購、功能擴充或新增內容的方式放進另一個 App
@@ -209,18 +209,18 @@ No. The game was made by the account holder personally, using the AI tools descr
 1. 新的原生 build 上傳。帳號擁有人 11 月 12 日決定等 1.0.1 (9) 再送：下一輪內容整合完才打包，現在還沒有 (9) 的安裝檔。11 月 11 日在本機包好的 1.0.1 (8) 不送。(9) 包好後，第 1、3 題的玩法敘述要照 (9) 的實際內容重對一次。
 2. iPhone／iPad 實機驗證與一段實機錄影。這一版只在電腦上的 Chromium 驗過。10 月交給 Apple 的那段錄影是 1.0.1 (4)，不能沿用。
 3. ~~真人測試紀錄（第 4 題）。~~ 11 月 12 日帳號擁有人回答：本人玩過。已寫進第 4 題，沒有寫成多人測試。
-4. ~~帳號擁有人的決定與權利說明（第 6、9 題）。~~ 11 月 12 日帳號擁有人回答：可以合併；遊戲是本人和 AI 做的，沒有用別人的東西。已寫進第 6、9 題。這兩題的寫法是依這兩句話整理的，送出前請帳號擁有人看過，尤其是「先獨立送、Apple 要求才合併」和「帳號持有人與內容提供者是同一方」這兩句。
+4. ~~帳號擁有人的決定與權利說明（第 6、9 題）。~~ 11 月 12 日帳號擁有人回答：可以合併；遊戲是本人和 AI 做的，沒有用別人的東西。已寫進第 6、9 題。這兩題的寫法是依這兩句話整理的。11 月 13 日帳號擁有人授權由我們決定，「先獨立送、Apple 要求才合併」和「帳號持有人與內容提供者是同一方」照現在的寫法保留。
 5. ~~Kenney／OpenGameArt 素材確認（第 8 題）。~~ 11 月 11 日查完，遊戲沒有用這兩個來源的素材，第 8 題已補上。
 6. ~~對現在這一版重跑共用稽核（第 7 題）。~~ 11 月 11 日重跑完，結果寫進第 7 題。有 6 款的原始檔不在本機，沒有重比，回覆裡照實寫了。
 7. ~~對照 Apple 原信，確認題目和這裡轉述的一致。~~ 11 月 12 日對完，九題已照原題重寫。
-8. 交的方式。目前是「重大改變後重送」，九題答案放新送審案的審查備註或附件。帳號擁有人還沒有明說同意這個做法。
+8. ~~交的方式。~~ 11 月 13 日帳號擁有人回覆「已經說可以了，不要再問，自己決定」。決定：走「重大改變後重送」，審查備註放摘要（4000 字元內），九題全文做成附件。
 9. 審查備註要含 Apple 10 月 8 日要的六點：實機錄影、用途與對象、主要功能怎麼用、用到的外部服務（含 AI）、地區差異、權利說明。現有的備註草稿只有版本說明。
 10. 商店截圖要是實際遊玩畫面（Apple 10 月 8 日提醒過）。現有的上傳工具只收 CI 模擬器拍的開場畫面，要補上能拍到實際玩法的做法。
-11. 商店名稱。帳號擁有人同意改，新名稱還沒選定。遊戲自己的標題是「陽光農場：籃底的手記」。遊戲內 `src/config.js:797` 的任務標題「回到阿軒割割陽光農場」要不要一起改，也要決定。第 5 題英文版的 [NEW NAME] 等名稱定了再填。
+11. ~~商店名稱。~~ 11 月 13 日依帳號擁有人授權決定：名稱「陽光農場：籃底的手記」（和 App 內標題相同），副標「拿手鏡折光，追著光種田」。遊戲內 `src/config.js:797` 的任務標題「回到阿軒割割陽光農場」在 R77 整合時一起改成「回到陽光農場」。名稱是否已被別人用掉，要到 App Store Connect 存檔時才知道；被擋就改用備案「陽光農場：追光手記」。
 12. ~~第 5 題說「前後字樣和帳號裡其他 App 相同」，送出前要查過其他 App 的商店名稱再留這一句。~~ 11 月 12 日用 App Store Connect API 唯讀查過：帳號裡共 10 個 App，只有陽光農場的商店名稱帶「阿軒割割」和「開源遊戲世界」，另外 9 個都沒有。原本那一句不對，第 5 題已改寫。查到的是當天的名稱，10 月退件時其他 App 叫什麼沒有紀錄。
 13. ~~第 2 題的對象說法，要和 App Store 上的年齡分級、是否勾選兒童類別對得起來。~~ 11 月 12 日同一次查詢：年齡分級 4+，主要類別是遊戲，沒有次要類別，沒有放在兒童類別（年齡層欄位是空的）。第 2 題寫「休閒玩家，也適合家人一起玩」對得起來；回覆和商店文字都不要寫成兒童專用。
-14. 第 4 題新增的兩項開發者意見（換圖示、多做內容）是依帳號擁有人在開發期間的指示整理的，送出前請帳號擁有人看過。
-15. 第 8 題新增「原始碼以 MIT 授權公開在 GitHub」這一句（11 月 12 日查過 repo 是公開的、授權是 MIT）。要不要寫進回覆，請帳號擁有人決定。
+14. ~~第 4 題新增的兩項開發者意見。~~ 11 月 13 日依帳號擁有人授權保留：兩項都是帳號擁有人開發期間實際下過的指示，原文照實寫成「開發者自己的意見，不是外部測試回饋」。
+15. ~~第 8 題「原始碼以 MIT 授權公開在 GitHub」。~~ 11 月 13 日依帳號擁有人授權保留：這是查得到的事實（repo 公開、授權 MIT），寫出來可以說明內容的出處就是帳號擁有人本人。
 16. (9) 上傳後重試 TestFlight 外部測試。送審前如果收到外部測試者的回饋，補進第 4 題。
 
 ## 文案回讀（mode 2）
