@@ -8,7 +8,7 @@
   const STORY_AT = [1, 3, 5]; // 好感到 1、3、5 各解鎖一段
 
   /* R76B：第 10 項——鄰居頭像（與 story-r76.js 同一份路徑）。 */
-  const PORTRAITS = { mayor: "assets/generated/r84/grey-0.png", elder: "assets/generated/content-r76/portrait-elder.png", merchant: "assets/generated/content-r76/portrait-merchant.png", child: "assets/generated/content-r76/portrait-child.png" };
+  const PORTRAITS = { mayor: "assets/generated/content-r77/portrait-mayor.png", elder: "assets/generated/content-r76/portrait-elder.png", merchant: "assets/generated/content-r76/portrait-merchant.png", child: "assets/generated/content-r76/portrait-child.png" };
   const PEOPLE = [
     { id: "mayor", name: "鎮長葛瑞", short: "葛瑞" },
     { id: "merchant", name: "商人蘿拉", short: "蘿拉" },

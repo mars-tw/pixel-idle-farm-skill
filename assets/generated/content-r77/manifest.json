@@ -1,0 +1,32 @@
+{
+  "model": "無新生成圖（裁切自 content-r72 既有顧客圖）",
+  "tool": "Pillow 裁切縮放（LANCZOS）",
+  "generated": "2026-11-13",
+  "background": "沿用 content-r72 已去背的顧客圖，裁出頭肩範圍後縮成 160×160",
+  "note": "R77 頭像畫風統一：鎮長的對話頭像原本沿用 assets/generated/r84/grey-0.png（較細的插畫式像素），改成由 R72 擺攤顧客圖裁切，和班伯、蘿拉、圖圖（content-r76）同一種畫法，對話裡的臉也和擺攤時看到的是同一個人。米莉頭像缺件：本輪要新畫，但 MUSE（muse.image_generation）回報訂閱額度用盡（到 2026-11-16 才恢復），OpenAI gpt-image-2 回報沒有額度（insufficient_quota），兩邊都沒有產出，所以米莉仍沿用 assets/generated/r84/miri-0.png。歡迎流程（src/world-ui.js）裡鎮長的 grey-0／1／2 三種表情與祖母頭像也還是 r84 的畫法，這一輪沒有換。",
+  "missing": [
+    {
+      "file": "portrait-miri.png",
+      "reason": "MUSE 額度用盡（2026-11-16 恢復）、OpenAI gpt-image-2 無額度，未產出",
+      "fallback": "assets/generated/r84/miri-0.png"
+    }
+  ],
+  "files": [
+    {
+      "file": "portrait-mayor.png",
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "439d703b097724b4c74a2583638a3ec2878216aadd64017e768d887d0f35ab33",
+      "bytes": 35347,
+      "source": "assets/generated/content-r72/customer-mayor.png",
+      "crop": [
+        0,
+        0,
+        172,
+        172
+      ]
+    }
+  ]
+}

@@ -151,11 +151,11 @@ test("8 圖圖的寶藏：藏在地圖某格、找錯不給、找到給小禮物
 
 test("9 接線：新檔掛進首頁與快取、素材存在、CSS 標 R66B、版本不動、不碰 A 線", () => {
   const index = fs.readFileSync("index.html", "utf8");
-  assert.match(index, /src\/midgame-r66\.js\?v=content-r76-20261111-1/, "首頁要載入新模組且不換版本");
+  assert.match(index, /src\/midgame-r66\.js\?v=content-r77-20261113-1/, "首頁要載入新模組且不換版本");
   assert.ok(index.indexOf("src/midgame-r66.js") > index.indexOf("src/neighbors-r61.js"), "要在鄰居模組之後載入");
   const sw = fs.readFileSync("sw.js", "utf8");
   assert.match(sw, /versioned\("\.\/src\/midgame-r66\.js"\)/, "快取清單要有新模組");
-  assert.match(sw, /CACHE_VERSION = "content-r76-20261111-1"/, "不可改快取版本");
+  assert.match(sw, /CACHE_VERSION = "content-r77-20261113-1"/, "不可改快取版本");
   for (const art of ["beehive.svg", "herb-garden.svg", "feed-trough.svg", "treasure.svg"]) {
     assert.ok(fs.existsSync("assets/generated/content-r66/" + art), art + " 要存在");
     assert.match(sw, new RegExp("content-r66/" + art.replace(".", "\\.")), art + " 要進快取清單");

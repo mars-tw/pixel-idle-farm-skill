@@ -794,7 +794,7 @@ const NPC_SIDE_QUESTS = {
 
 // ===== 故事任務（地圖驅動：信箱/告示觸發、目標在地圖上有標記）=====
 const QUESTS = {
-  intro_reopen_farm: { id: "intro_reopen_farm", title: "回到阿軒割割陽光農場",
+  intro_reopen_farm: { id: "intro_reopen_farm", title: "回到陽光農場",
     desc: "先走到告示牌或信箱，看看開源農場的第一張任務。", next: "plant_wheat",
     trigger: "read_sign", marker: { kind: "station", type: "sign" } },
   plant_wheat:       { id: "plant_wheat", title: "種下第一批小麥",

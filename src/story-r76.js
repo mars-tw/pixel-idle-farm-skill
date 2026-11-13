@@ -6,7 +6,7 @@
   const A = isNode ? require("./adventure.js") : (root.AdventureAPI || null);
 
   const PORTRAITS = {
-    mayor: "assets/generated/r84/grey-0.png",
+    mayor: "assets/generated/content-r77/portrait-mayor.png",
     elder: "assets/generated/content-r76/portrait-elder.png",
     merchant: "assets/generated/content-r76/portrait-merchant.png",
     child: "assets/generated/content-r76/portrait-child.png",
