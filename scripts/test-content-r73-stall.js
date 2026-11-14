@@ -110,16 +110,16 @@ test("逐項判斷：有貨扣背包、沒貨用代幣，代幣那格不影響�
 test("介面不再寫整場模式：不出現整場模式字樣，逐格標示沒貨用代幣", () => {
   const js = fs.readFileSync("src/festival-stall-r72.js", "utf8");
   assert.doesNotMatch(js, /代幣模式|背包模式/, "頂部不得再寫整場模式");
-  assert.match(js, /沒貨，用代幣/, "只有沒貨的那一格標用代幣");
+  assert.match(js, /用代幣・只拿一半分/, "只有缺貨題能用代幣，並寫明只拿一半分");
   assert.match(js, /data-r73b-mode/, "每一格要帶自己的模式");
 });
 
-test("星等門檻：開始與結算都顯示 60／140／240，數字與 starsForScore 一致", () => {
-  assert.deepEqual(F.STAR_THRESHOLDS, [{ stars: 1, score: 60 }, { stars: 2, score: 140 }, { stars: 3, score: 240 }]);
-  assert.equal(F.starsForScore(59), 0); assert.equal(F.starsForScore(60), 1);
-  assert.equal(F.starsForScore(139), 1); assert.equal(F.starsForScore(140), 2);
-  assert.equal(F.starsForScore(239), 2); assert.equal(F.starsForScore(240), 3);
-  assert.match(F.starThresholdText(), /60/); assert.match(F.starThresholdText(), /140/); assert.match(F.starThresholdText(), /240/);
+test("星等門檻：開始與結算都顯示 50／120／200，數字與 starsForScore 一致", () => {
+  assert.deepEqual(F.STAR_THRESHOLDS, [{ stars: 1, score: 50 }, { stars: 2, score: 120 }, { stars: 3, score: 200 }]);
+  assert.equal(F.starsForScore(49), 0); assert.equal(F.starsForScore(50), 1);
+  assert.equal(F.starsForScore(119), 1); assert.equal(F.starsForScore(120), 2);
+  assert.equal(F.starsForScore(199), 2); assert.equal(F.starsForScore(200), 3);
+  assert.match(F.starThresholdText(), /50/); assert.match(F.starThresholdText(), /120/); assert.match(F.starThresholdText(), /200/);
   const js = fs.readFileSync("src/festival-stall-r72.js", "utf8");
   const startSeg = js.slice(js.indexOf("function renderStart"), js.indexOf("function renderClock"));
   const resultSeg = js.slice(js.indexOf("function renderResult"));
@@ -128,11 +128,11 @@ test("星等門檻：開始與結算都顯示 60／140／240，數字與 starsFo
 });
 
 test("結算只留一句建議：advice 恰一句，結算畫面只有一個建議段落", () => {
-  for (const score of [0, 59, 60, 100, 139, 140, 200, 239, 240, 300]) {
+  for (const score of [0, 49, 50, 100, 119, 120, 160, 199, 200, 300]) {
     const advice = F.adviceFor({ score, stars: F.starsForScore(score) });
     assert.equal((advice.match(/。/g) || []).length, 1, "建議只能一句：" + advice);
   }
-  assert.match(F.adviceFor({ score: 100, stars: 1 }), /再多 40 分就能拿到2顆星/);
+  assert.match(F.adviceFor({ score: 100, stars: 1 }), /再多 20 分就能拿到2顆星/);
   const st = freshFestival(1); st.storage.items = { wheat: 99 };
   const s = F.startSession(st, T0, seeded(74)).session; s.score = 100;
   const result = F.finishSession(st, s, T0 + 60000);

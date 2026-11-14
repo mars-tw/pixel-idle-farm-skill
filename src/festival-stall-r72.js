@@ -17,15 +17,24 @@
   const BASE_SCORE = 10;
   const COMBO_STEP = 1;
   const COMBO_CAP = 6;
+  const HOT_SCORE_BONUS = 4;
+  const THREE_STAR_COMBO = 10;
+  const THREE_STAR_HOT_SERVED = 3;
   /* R76B：第 12 項——代幣每場 3 枚，用代幣答對只拿一半分。 */
   const TOKENS_PER_SESSION = 3;
   const TOKEN_SCORE_RATE = 0.5;
-  const TOKEN_RULE_TEXT = "每場有 3 枚叫賣代幣，用完就不能再用代幣遞沒貨的東西；用代幣答對只拿一半分。";
+  const TOKEN_RULE_TEXT = "每場有 3 枚叫賣代幣，全場最多出一題缺貨題；用代幣答對只拿一半分。";
   const CUSTOMERS = [
     { id: "mayor", name: "鎮長葛瑞", art: "customer-mayor.png" },
     { id: "elder", name: "老農班伯", art: "customer-elder.png" },
     { id: "merchant", name: "蘿拉", art: "customer-merchant.png" },
     { id: "child", name: "圖圖", art: "customer-child.png" },
+  ];
+  /* R78A：三種客人決定題型與耐心；角色外觀仍從既有四位祭典客人抽。 */
+  const CUSTOMER_TYPES = [
+    { id: "rush", label: "趕時間", timeoutMs: 6000 },
+    { id: "taste", label: "只說口味", timeoutMs: CUSTOMER_TIMEOUT_MS },
+    { id: "regular", label: "老主顧", timeoutMs: CUSTOMER_TIMEOUT_MS },
   ];
   const TASTE_LABEL = { sweet: "甜的", sour: "酸酸的", fresh: "清爽的", warm: "熱熱的" };
   // R73B（第 3 項）：口味標籤短字，商品卡上直接顯示，玩家一眼可推口味題答案。
@@ -42,20 +51,21 @@
   };
   // R73B（第 5 項）：星等門檻，開始畫面與結算共用同一份數字。
   const STAR_THRESHOLDS = [
-    { stars: 1, score: 60 },
-    { stars: 2, score: 140 },
-    { stars: 3, score: 240 },
+    { stars: 1, score: 50 },
+    { stars: 2, score: 120 },
+    { stars: 3, score: 200 },
   ];
   function starThresholdText() {
-    return "一顆星 " + STAR_THRESHOLDS[0].score + " 分・二顆星 " + STAR_THRESHOLDS[1].score + " 分・三顆星 " + STAR_THRESHOLDS[2].score + " 分";
+    return "一顆星 " + STAR_THRESHOLDS[0].score + " 分・二顆星 " + STAR_THRESHOLDS[1].score + " 分・三顆星 " + STAR_THRESHOLDS[2].score + " 分（三星還要連續答對 " + THREE_STAR_COMBO + " 位、接到 " + THREE_STAR_HOT_SERVED + " 位熱門需求）";
   }
   // R73B（第 5 項）：結算只留一句改善建議。
   function adviceFor(result) {
     const score = qty(result && result.score);
     const stars = qty(result && result.stars);
     if (stars >= 3) return "這場已經拿到三顆星，下次保持連續答對、別讓顧客等太久，就能穩穩守住。";
-    const next = STAR_THRESHOLDS.find((row) => score < row.score);
-    const gap = next ? next.score - score : 0;
+    if (stars === 2 && score >= STAR_THRESHOLDS[2].score) return "分數夠了，再連續答對 " + THREE_STAR_COMBO + " 位並接到 " + THREE_STAR_HOT_SERVED + " 位熱門需求，就能拿到三顆星。";
+    const next = STAR_THRESHOLDS.find((row) => row.stars > stars);
+    const gap = next ? Math.max(0, next.score - score) : 0;
     return "再多 " + gap + " 分就能拿到" + (next ? next.stars : 3) + "顆星，連續答對可以多拿分，別讓顧客等太久。";
   }
   const TASTES_BY_MEAL = {
@@ -83,6 +93,15 @@
   function qty(value) { const n = Math.floor(Number(value) || 0); return n > 0 ? n : 0; }
   function at(now) { return Number.isFinite(now) ? now : Date.now(); }
   function pick(rng, rows) { return rows[Math.min(rows.length - 1, Math.floor((rng || Math.random)() * rows.length))]; }
+  function weightedPick(rng, rows, weightOf) {
+    if (!rows || !rows.length) return null;
+    const weights = rows.map((row) => Math.max(0, Number(weightOf(row)) || 0));
+    const total = weights.reduce((sum, weight) => sum + weight, 0);
+    if (total <= 0) return pick(rng, rows);
+    let cursor = (rng || Math.random)() * total;
+    for (let i = 0; i < rows.length; i++) { cursor -= weights[i]; if (cursor < 0) return rows[i]; }
+    return rows[rows.length - 1];
+  }
 
   function ensure(state, now) {
     if (!state || typeof state !== "object") return { ok: false, reason: "no_state", message: "還沒有農場紀錄。" };
@@ -199,6 +218,29 @@
         reserveText: reserved > 0 ? "留 " + reserved + " 份給" + reserveFor.map((r) => r.label).join("、") : "沒有委託等著用" };
     }).filter((row) => row.stock > 0);
   }
+  function defaultStallQty(row) { return Math.max(0, qty(row && row.stock) - qty(row && row.reserved)); }
+  /* R78A：熱門表只由玩家目前有機會擺出的品項產生。固定亂數會得到完全相同的排序。 */
+  function marketPreview(state, pool, rng) {
+    const random = typeof rng === "function" ? rng : Math.random;
+    const source = (Array.isArray(pool) ? pool : unlockedItems(state)).filter((row) => stockOf(state, row) > 0 || qty(row.stallQty) > 0);
+    const remaining = source.slice(); const chosen = [];
+    while (remaining.length && chosen.length < 3) {
+      const row = pick(random, remaining); chosen.push(row); remaining.splice(remaining.indexOf(row), 1);
+    }
+    const hotItems = chosen.map((row, index) => ({
+      id: row.id, name: row.name, kind: row.kind, rank: index + 1,
+      weight: 4 - index, scoreBonus: HOT_SCORE_BONUS,
+      label: row.name + "（熱門加 " + HOT_SCORE_BONUS + " 分）",
+    }));
+    return { hotItems, labels: hotItems.map((row) => row.label) };
+  }
+  function marketItem(market, row) { return market && Array.isArray(market.hotItems) ? market.hotItems.find((hot) => hot.id === row.id) || null : null; }
+  function marketWeight(market, row) { const hot = marketItem(market, row); return hot ? Math.max(2, 6 - hot.rank) : 1; }
+  function offeredRows(state, rows, session) {
+    if (session && Array.isArray(session.offeredIds)) return rows.filter((row) => session.offeredIds.includes(row.id));
+    return rows.filter((row) => stockOf(state, row) > 0);
+  }
+  function totalStallStock(state, session) { return offeredRows(state, session.pool || [], session).reduce((sum, row) => sum + stallStockOf(state, session, row), 0); }
   function stallStockOf(state, session, row) {
     if (!row) return 0;
     if (session && session.allotment) return Math.min(qty(session.allotment[row.id]), stockOf(state, row));
@@ -207,7 +249,8 @@
   /* R77C 第 9 項：這一張單現在答不答得出來。兩樣單兩邊分開算，同一份貨不能當兩份。 */
   function demandAnswerable(state, pool, demand, session, tokensLeft) {
     if (!demand) return false;
-    const rows = Array.isArray(pool) ? pool : [];
+    const sourceRows = Array.isArray(pool) ? pool : [];
+    const rows = session && Array.isArray(session.offeredIds) ? sourceRows.filter((row) => session.offeredIds.includes(row.id)) : sourceRows;
     const tokens = Number.isFinite(tokensLeft) ? qty(tokensLeft) : TOKENS_PER_SESSION;
     const avail = (row) => stallStockOf(state, session, row);
     if (demand.kind === "item") { const row = rows.find((r) => r.id === demand.itemId); return !!row && (avail(row) > 0 || tokens > 0); }
@@ -234,9 +277,7 @@
     return session.mode;
   }
 
-  // R74B（第 4 項）：背包有貨時，顧客需求至少 70% 要能用有貨物品滿足。
-  // 作法是 80% 的需求直接從有貨清單出題（含口味題，只挑有貨物品有的口味），
-  // 其餘才從全部已解鎖清單出題；沒貨時維持原本從全部清單出題。
+  /* R78A：保留舊常數與查詢函式供既有測試／外部掛點讀取；實際出題改為只讀本場擺出且尚有貨的清單。 */
   const STOCK_DEMAND_RATE = 0.8;
   function stockedItems(state, rows) { return (rows || []).filter((row) => stockOf(state, row) > 0); }
   function makeCustomer(state, pool, now, rng, opts) {
@@ -247,34 +288,42 @@
     const sessionLike = options.session || (options.allotment ? options : null);
     const tokensLeft = Number.isFinite(options.tokensLeft) ? options.tokensLeft : sessionLike && Number.isFinite(sessionLike.tokensLeft) ? sessionLike.tokensLeft : TOKENS_PER_SESSION;
     const person = pick(random, CUSTOMERS);
-    const genDemand = () => {
-      const stocked = sessionLike && sessionLike.allotment ? rows.filter((row) => stallStockOf(state, sessionLike, row) > 0) : stockedItems(state, rows);
-      const source = stocked.length && random() < STOCK_DEMAND_RATE ? stocked : rows;
-      const tastes = [...new Set(source.flatMap((row) => row.tastes))].filter((taste) => source.some((row) => row.tastes.includes(taste)));
-      /* R76B：第 12 項——只說口味或用途的顧客提高到六成以上，並新增一次要兩樣的顧客。 */
-      if (tastes.length && random() < 0.65) {
-        if (tastes.length >= 2 && random() < 0.35) {
-          const first = pick(random, tastes);
-          const rest = tastes.filter((taste) => taste !== first);
-          const second = pick(random, rest);
-          return { kind: "pair", tastes: [first, second], remaining: [first, second], label: "要一樣" + (TASTE_LABEL[first] || "甜的") + "、一樣" + (TASTE_LABEL[second] || "清爽的") };
-        }
-        const taste = pick(random, tastes);
-        return { kind: "taste", taste, label: "想吃" + (TASTE_LABEL[taste] || "甜的") };
+    const type = pick(random, CUSTOMER_TYPES);
+    const eligible = sessionLike && Array.isArray(sessionLike.offeredIds) ? rows.filter((row) => sessionLike.offeredIds.includes(row.id)) : rows;
+    const stocked = eligible.filter((row) => stallStockOf(state, sessionLike, row) > 0);
+    const shortage = stocked.length === 0;
+    if (!eligible.length || shortage && (qty(tokensLeft) <= 0 || sessionLike && qty(sessionLike.stockoutQuestions) >= 1)) return null;
+    const source = shortage ? eligible : stocked;
+    const chooseRow = () => weightedPick(random, source, (row) => marketWeight(sessionLike && sessionLike.market, row));
+    let row = chooseRow();
+    if (!row) return null;
+    let demand = null; let hot = !!marketItem(sessionLike && sessionLike.market, row);
+    if (type.id === "regular" || !row.tastes.length) {
+      demand = { kind: "item", itemId: row.id, label: "我要" + row.name };
+    } else if (type.id === "taste" && random() < 0.35) {
+      const first = pick(random, row.tastes);
+      const secondRows = source.filter((candidate) => candidate.tastes.some((taste) => taste !== first));
+      const secondRow = weightedPick(random, secondRows, (candidate) => marketWeight(sessionLike && sessionLike.market, candidate));
+      if (secondRow) {
+        const second = pick(random, secondRow.tastes.filter((taste) => taste !== first));
+        hot = hot || !!marketItem(sessionLike && sessionLike.market, secondRow);
+        demand = { kind: "pair", tastes: [first, second], remaining: [first, second], label: "要一樣" + (TASTE_LABEL[first] || "甜的") + "、一樣" + (TASTE_LABEL[second] || "清爽的") };
       }
-      const row = pick(random, source);
-      return { kind: "item", itemId: row.id, label: "我要" + row.name };
-    };
-    /* R77C 第 9 項：抽到答不出的單就重抽；都抽不到時改出一定答得出的單，真的沒貨也沒代幣就不出單。 */
-    let demand = null;
-    for (let i = 0; i < 10; i++) { const cand = genDemand(); if (demandAnswerable(state, rows, cand, sessionLike, tokensLeft)) { demand = cand; break; } }
-    if (!demand) {
-      const stockedRow = rows.find((row) => stallStockOf(state, sessionLike, row) > 0);
-      if (stockedRow) demand = { kind: "item", itemId: stockedRow.id, label: "我要" + stockedRow.name };
-      else if (qty(tokensLeft) > 0) demand = { kind: "item", itemId: rows[0].id, label: "我要" + rows[0].name };
-      else return null;
     }
-    return { npcId: person.id, npcName: person.name, art: person.art, demand, startedAt: at(now), readyAt: at(now) + CUSTOMER_ARRIVE_MS, expiresAt: at(now) + CUSTOMER_ARRIVE_MS + CUSTOMER_TIMEOUT_MS };
+    if (!demand) {
+      const taste = pick(random, row.tastes);
+      demand = taste ? { kind: "taste", taste, label: "想吃" + (TASTE_LABEL[taste] || "甜的") } : { kind: "item", itemId: row.id, label: "我要" + row.name };
+    }
+    demand.hot = hot; demand.shortage = shortage;
+    if (!demandAnswerable(state, rows, demand, sessionLike, tokensLeft)) {
+      row = source.find((candidate) => stallStockOf(state, sessionLike, candidate) > 0) || source[0];
+      if (!row) return null;
+      demand = { kind: "item", itemId: row.id, label: "我要" + row.name, hot: !!marketItem(sessionLike && sessionLike.market, row), shortage };
+    }
+    if (shortage && sessionLike) sessionLike.stockoutQuestions = qty(sessionLike.stockoutQuestions) + 1;
+    const tags = [type.label]; if (demand.hot) tags.push("熱門加 " + HOT_SCORE_BONUS + " 分");
+    const timeout = type.timeoutMs || CUSTOMER_TIMEOUT_MS;
+    return { npcId: person.id, npcName: person.name, art: person.art, typeId: type.id, typeLabel: type.label, tags: tags.slice(0, 2), demand, startedAt: at(now), readyAt: at(now) + CUSTOMER_ARRIVE_MS, expiresAt: at(now) + CUSTOMER_ARRIVE_MS + timeout };
   }
   function matchesDemand(session, itemId) {
     if (!session || !session.customer) return false;
@@ -301,7 +350,7 @@
   function beginRecord(session) {
     if (!session.customer) { session.currentRecord = null; return null; }
     const d = session.customer.demand || {};
-    const rec = { npcId: session.customer.npcId, npcName: session.customer.npcName, want: d.label || "", given: [], givenNames: [], gained: 0, outcome: "招待中", diff: "" };
+    const rec = { npcId: session.customer.npcId, npcName: session.customer.npcName, typeId: session.customer.typeId || "", tags: (session.customer.tags || []).slice(0, 2), want: d.label || "", given: [], givenNames: [], gained: 0, hot: false, outcome: "招待中", diff: "" };
     if (!Array.isArray(session.customers)) session.customers = [];
     session.customers.push(rec); session.currentRecord = rec;
     return rec;
@@ -328,8 +377,6 @@
     if (record.attemptsUsed >= MAX_ATTEMPTS_PER_ROUND) return { ok: false, reason: "attempts_exhausted", message: "這一場已經玩過兩次了，等下一場收穫祭再來擺攤。" };
     const pool = unlockedItems(state);
     if (!pool.length) return { ok: false, reason: "no_items", message: "還沒有已解鎖的作物或料理可以叫賣。" };
-    record.attemptsUsed += 1;
-    state.adventure.r72b.totalPlays += 1;
     const opts = options || {};
     let allotment = null, reserve = null;
     if (opts.allotment && typeof opts.allotment === "object") {
@@ -337,18 +384,35 @@
       for (const row of pool) allotment[row.id] = Math.min(stockOf(state, row), qty(opts.allotment[row.id]));
       reserve = Array.isArray(opts.reservePlan) ? opts.reservePlan : reservePlan(state, t, pool);
     }
+    const offeredIds = pool.filter((row) => allotment ? qty(allotment[row.id]) > 0 : stockOf(state, row) > 0).map((row) => row.id);
+    const marketRows = pool.filter((row) => offeredIds.includes(row.id));
+    const market = opts.market && Array.isArray(opts.market.hotItems) ? JSON.parse(JSON.stringify(opts.market)) : marketPreview(state, marketRows, typeof rng === "function" ? rng : Math.random);
+    const initialStock = pool.reduce((sum, row) => sum + (allotment ? qty(allotment[row.id]) : stockOf(state, row)), 0);
+    if (!offeredIds.length || initialStock <= 0) return { ok: false, reason: "no_supply", message: "至少擺一份貨，客人才知道今天能點什麼。" };
+    record.attemptsUsed += 1;
+    state.adventure.r72b.totalPlays += 1;
     const session = {
       roundKey: info.roundKey, startedAt: t, endsAt: t + DURATION_MS,
       score: 0, combo: 0, bestCombo: 0, served: 0, missed: 0, spawned: 0,
-      tokenUses: 0, tokensLeft: TOKENS_PER_SESSION, tasteWrong: 0, itemWrong: 0, timeouts: 0, feedback: null,
+      wrong: 0, tokenUses: 0, tokensLeft: TOKENS_PER_SESSION, stockoutQuestions: 0, hotServed: 0,
+      tasteWrong: 0, itemWrong: 0, timeouts: 0, feedback: null,
       mode: totalStock(state, pool) <= 0 ? "token" : "stock",
       pool, customer: null, finished: false, result: null, rng: typeof rng === "function" ? rng : Math.random,
-      allotment, reservePlan: reserve, customers: [], currentRecord: null,
+      allotment, reservePlan: reserve, offeredIds, initialStock, market, customers: [], currentRecord: null,
     };
-    spawnNext(state, session, t, session.rng); session.spawned = 1;
+    spawnNext(state, session, t, session.rng); session.spawned = session.customer ? 1 : 0;
+    if (!session.customer) soldOutFinish(state, session, t);
     return { ok: true, session, message: "擺攤叫賣開始，點符合的東西遞給顧客；沒貨的那一樣會用叫賣代幣結算。" };
   }
-  function starsForScore(score) { const s = qty(score); return s >= 240 ? 3 : s >= 140 ? 2 : s >= 60 ? 1 : 0; /* R72 整合：實機一分鐘答對 7 位約 74 分，原 80 分門檻太嚴，下修為 60／140／240 */ }
+  function starsForScore(score) { const s = qty(score); return s >= STAR_THRESHOLDS[2].score ? 3 : s >= STAR_THRESHOLDS[1].score ? 2 : s >= STAR_THRESHOLDS[0].score ? 1 : 0; }
+  function starsForSession(session) {
+    let stars = starsForScore(session && session.score);
+    const perfect = qty(session && session.served) > 0 && qty(session && session.wrong) === 0 && qty(session && session.timeouts) === 0;
+    if (perfect) stars = Math.max(stars, 1);
+    if (perfect && qty(session && session.initialStock) >= 40 && qty(session && session.served) >= 10) stars = Math.max(stars, 2);
+    if (stars >= 3 && (qty(session && session.bestCombo) < THREE_STAR_COMBO || qty(session && session.hotServed) < THREE_STAR_HOT_SERVED)) stars = 2;
+    return stars;
+  }
   function rewardForStars(stars) {
     if (stars >= 3) return { stars: 3, coins: 60, medals: 1, goldenFlag: true };
     if (stars === 2) return { stars: 2, coins: 30, medals: 1, goldenFlag: false };
@@ -362,7 +426,7 @@
     /* R77 整合：最後一位還在攤前就結束的客人另外計數，結算上「答對＋錯過＋還沒招待完」對得上客人總數。 */
     if (session.customer && session.currentRecord) { finishRecord(session, "時間到", "這一場結束時還沒招待完。"); session.unfinished = qty(session.unfinished) + 1; }
     session.finished = true; session.customer = null;
-    const stars = starsForScore(session.score);
+    const stars = starsForSession(session);
     /* R77C 第 12 項：賣得最好的一樣與這一場成績，留給評比口碑與晚宴對白用。 */
     const soldCounts = {};
     for (const rec of session.customers || []) for (const g of rec.given || []) { soldCounts[g.id] = soldCounts[g.id] || { id: g.id, name: g.name, count: 0 }; soldCounts[g.id].count += 1; }
@@ -397,9 +461,15 @@
     }
     const reward = rewardForStars(stars);
     const loss = lossSummary(session);
+    const wrong = qty(session.wrong); const timedOut = qty(session.timeouts); const notReached = qty(session.unfinished);
+    const customerTotal = qty(session.served) + wrong + timedOut + notReached;
+    const endReason = session.endReason || (at(now) >= session.endsAt ? "time_up" : qty(session.tokensLeft) <= 0 ? "token_empty" : "sold_out");
+    const endReasonText = endReason === "time_up" ? "時間到，這一場結束。" : endReason === "token_empty" ? "代幣用完，攤上也沒有能接的貨，這一場結束。" : "擺出的貨賣完，這一場結束。";
     const result = {
-      ok: true, finished: true, score: session.score, stars, served: session.served, missed: session.missed, unfinished: qty(session.unfinished),
+      ok: true, finished: true, startedAt: session.startedAt, endedAt: at(now), endReason, endReasonText,
+      score: session.score, stars, served: session.served, missed: session.missed, wrong, timedOut, notReached, customerTotal, unfinished: notReached,
       bestCombo: session.bestCombo, mode: session.mode, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), tokensPerSession: TOKENS_PER_SESSION, loss, mainLoss: loss.display, reward, granted, upgraded,
+      hotServed: qty(session.hotServed), stockoutQuestions: qty(session.stockoutQuestions),
       goldenFlag: !!state.adventure.r72b.goldenFlag,
       customers: JSON.parse(JSON.stringify(session.customers || [])), bestSeller: bestSeller ? Object.assign({}, bestSeller) : null, soldOut: !!session.soldOut,
       message: stars === 0 ? (granted.coins > 0 ? "沒拿到星星也沒關係，這次已經很棒了，保底 5 金先收下，下次多答對幾位就能拿到星星。" : "沒拿到星星也沒關係，這次已經很棒了，下次多答對幾位就能拿到星星。") : upgraded ? `拿到 ${stars} 顆星，獎勵已補到這一場的最高紀錄。` : "這一場的獎勵已經照先前最高星領過了，這次不重複給。",
@@ -409,11 +479,13 @@
     return result;
   }
   /* R77C 第 9 項補：擺出的貨和代幣都用完時不會再有答得出的單，直接收攤結算，不讓畫面空等到時間到。 */
-  const SOLD_OUT_TEXT = "擺出去的貨賣完了，代幣也用完了，這一場提早收攤結算。";
+  const SOLD_OUT_TEXT = "擺出去的貨賣完了，這一場提早收攤結算。";
+  const TOKEN_EMPTY_TEXT = "代幣用完，攤上也沒有能接的貨，這一場提早收攤結算。";
   function soldOutFinish(state, session, now) {
     session.soldOut = true;
+    session.endReason = qty(session.tokensLeft) <= 0 ? "token_empty" : "sold_out";
     const result = finishSession(state, session, now);
-    return { ok: false, reason: "sold_out", soldOut: true, message: SOLD_OUT_TEXT, result };
+    return { ok: false, reason: session.endReason, soldOut: true, message: session.endReason === "token_empty" ? TOKEN_EMPTY_TEXT : SOLD_OUT_TEXT, result };
   }
   function leaveCustomer(state, session, now, reason) {
     if (session.currentRecord) {
@@ -422,8 +494,8 @@
       finishRecord(session, reason === "timeout" ? "等太久先離開" : "拿錯先離開", missing);
     }
     if (reason === "timeout") session.timeouts = qty(session.timeouts) + 1;
-    else if (session.customer && session.customer.demand && session.customer.demand.kind === "item") session.itemWrong = qty(session.itemWrong) + 1;
-    else session.tasteWrong = qty(session.tasteWrong) + 1;
+    else if (session.customer && session.customer.demand && session.customer.demand.kind === "item") { session.itemWrong = qty(session.itemWrong) + 1; session.wrong = qty(session.wrong) + 1; }
+    else { session.tasteWrong = qty(session.tasteWrong) + 1; session.wrong = qty(session.wrong) + 1; }
     session.combo = 0; session.missed += 1;
     spawnNext(state, session, at(now), session.rng); session.spawned += 1;
     // R74B（第 4 項）：答錯或逾時的即時回饋，給顧客卡飄字用；下一位再離開時會被清除換新。
@@ -433,7 +505,7 @@
   function serve(state, session, itemId, now) {
     const t = at(now);
     if (!session || session.finished) return { ok: false, reason: "not_playing", message: "這一場叫賣已經結束了。" };
-    if (t >= session.endsAt) { const result = finishSession(state, session, t); return { ok: false, reason: "time_up", message: "一分鐘到了，先結算這一場。", result }; }
+    if (t >= session.endsAt) { session.endReason = "time_up"; const result = finishSession(state, session, t); return { ok: false, reason: "time_up", message: "一分鐘到了，先結算這一場。", result }; }
     if (!session.customer) spawnNext(state, session, t, session.rng);
     if (!session.customer) return soldOutFinish(state, session, t);
     if (session.customer.readyAt && t < session.customer.readyAt) return { ok: false, reason: "arriving", message: "顧客還在走近攤位，等他站好再遞。" };
@@ -449,7 +521,8 @@
     const demand = session.customer.demand;
     const isPair = demand.kind === "pair";
     const matchedTaste = isPair ? (demand.remaining || demand.tastes || []).find((taste) => row.tastes.includes(taste)) : null;
-    const fullGained = BASE_SCORE + Math.min(COMBO_CAP, session.combo * COMBO_STEP);
+    const hotSale = !!marketItem(session.market, row);
+    const fullGained = BASE_SCORE + Math.min(COMBO_CAP, session.combo * COMBO_STEP) + (hotSale ? HOT_SCORE_BONUS : 0);
     let gained = fullGained;
     let partial = false;
     if (isPair) {
@@ -464,7 +537,7 @@
     }
     if (usesToken) gained = Math.max(1, Math.floor(gained * TOKEN_SCORE_RATE));
     session.score += gained;
-    if (session.currentRecord) { session.currentRecord.given.push({ id: row.id, name: row.name, via: usesToken ? "token" : "stock", gained }); session.currentRecord.gained += gained; if (usesToken) session.currentRecord.diff = "有一樣用代幣遞，只拿一半分"; }
+    if (session.currentRecord) { session.currentRecord.given.push({ id: row.id, name: row.name, via: usesToken ? "token" : "stock", gained }); session.currentRecord.gained += gained; session.currentRecord.hot = session.currentRecord.hot || hotSale; if (usesToken) session.currentRecord.diff = "有一樣用代幣遞，只拿一半分"; }
     if (usesToken) { session.tokenUses = qty(session.tokenUses) + 1; session.tokensLeft = Math.max(0, qty(session.tokensLeft) - 1); }
     if (partial) {
       demand.label = "還要一樣" + (TASTE_LABEL[demand.remaining[0]] || "清爽的");
@@ -474,17 +547,18 @@
     }
     session.combo += 1; session.bestCombo = Math.max(session.bestCombo, session.combo);
     session.served += 1;
-    finishRecord(session, "答對", session.currentRecord && session.currentRecord.diff ? session.currentRecord.diff : "都對上了");
+    const completedRecord = finishRecord(session, "答對", session.currentRecord && session.currentRecord.diff ? session.currentRecord.diff : "都對上了");
+    if (completedRecord && completedRecord.hot) session.hotServed = qty(session.hotServed) + 1;
     spawnNext(state, session, t, session.rng); session.spawned += 1;
     session.feedback = { kind: "good", gained, text: "+" + gained + " 分", spawned: session.spawned };
     syncMode(state, session);
-    if (!session.customer) { const closed = soldOutFinish(state, session, t); return { ok: true, partial: false, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), feedback: session.feedback, customer: null, soldOut: true, result: closed.result, message: SOLD_OUT_TEXT }; }
+    if (!session.customer) { const closed = soldOutFinish(state, session, t); return { ok: true, partial: false, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), feedback: session.feedback, customer: null, soldOut: true, result: closed.result, message: closed.message }; }
     return { ok: true, partial: false, gained, score: session.score, combo: session.combo, mode: usesToken ? "token" : "stock", usesToken, tokenUses: qty(session.tokenUses), tokensLeft: qty(session.tokensLeft), feedback: session.feedback, customer: session.customer, message: usesToken ? "答對了，這一樣背包沒貨，用叫賣代幣結算，只拿一半分，沒有消耗背包。" : "答對了，顧客開心地收下了。" };
   }
   function tickSession(state, session, now) {
     const t = at(now);
     if (!session || session.finished) return { finished: !!(session && session.finished), timedOut: false };
-    if (t >= session.endsAt) { const result = finishSession(state, session, t); return { finished: true, timedOut: false, result }; }
+    if (t >= session.endsAt) { session.endReason = "time_up"; const result = finishSession(state, session, t); return { finished: true, timedOut: false, result }; }
     if (!session.customer) { const closed = soldOutFinish(state, session, t); return { finished: true, timedOut: false, soldOut: true, result: closed.result }; }
     if (session.customer && t >= session.customer.expiresAt) { leaveCustomer(state, session, t, "timeout"); return { finished: false, timedOut: true, customer: session.customer }; }
     return { finished: false, timedOut: false };
@@ -506,18 +580,24 @@
     document.body.appendChild(overlay);
     let session = null; let timer = 0; let lastMessage = "";
     /* R77C 第 10 項：開攤前「今天擺出去的貨」草稿，預設扣掉留給委託的量。 */
-    let stallPlanCache = null; let stallDraft = null;
+    let stallPlanCache = null; let stallDraft = null; let marketCache = null;
     function stallPlan() {
-      if (!stallPlanCache) { stallPlanCache = reservePlan(state, Date.now()); stallDraft = {}; for (const row of stallPlanCache) stallDraft[row.id] = row.stallQty; }
+      if (!stallPlanCache) {
+        stallPlanCache = reservePlan(state, Date.now()); stallDraft = {};
+        for (const row of stallPlanCache) stallDraft[row.id] = defaultStallQty(row);
+        const poolById = new Map(unlockedItems(state).map((row) => [row.id, row]));
+        marketCache = marketPreview(state, stallPlanCache.map((row) => poolById.get(row.id)).filter(Boolean), Math.random);
+      }
       return stallPlanCache;
     }
+    function stallTotal() { stallPlan(); return Object.values(stallDraft || {}).reduce((sum, n) => sum + qty(n), 0); }
     /* 開攤前先講清楚這一場最多能招待幾位：擺出的份數加上代幣，用完就收攤。 */
     function stallTotalText() {
       stallPlan();
-      const total = Object.values(stallDraft || {}).reduce((sum, n) => sum + qty(n), 0);
+      const total = stallTotal();
       return total > 0
-        ? "一共擺出 " + total + " 份，加上 " + TOKENS_PER_SESSION + " 枚代幣。擺出的貨和代幣都用完，這一場就提早收攤。"
-        : "這一場沒有擺出任何貨，只能靠 " + TOKENS_PER_SESSION + " 枚代幣招待，用完就收攤。想多招待幾位，就多擺幾份出去。";
+        ? "一共擺出 " + total + " 份。另有 " + TOKENS_PER_SESSION + " 枚代幣，只在全場唯一一題缺貨題使用。"
+        : "這一場沒有擺出任何貨，至少擺一份才能開始叫賣。";
     }
     function close() { if (timer) clearInterval(timer); timer = 0; overlay.remove(); if (typeof options.onClose === "function") options.onClose(); }
     function shell(inner) {
@@ -526,25 +606,29 @@
     }
     function renderStart(message) {
       const view = statusFor(state, Date.now());
+      stallPlan();
+      const marketHtml = marketCache && marketCache.hotItems.length ? marketCache.hotItems.map((hot) => `<span class="r78a-hot">${esc(hot.label)}</span>`).join("") : `<span class="r78a-hot">先擺貨，客人才知道能點什麼</span>`;
+      const canStart = view.canPlay && stallTotal() > 0;
       shell(`<h2 class="r72b-title">擺攤叫賣</h2>
-        <p class="r72b-desc">一場一分鐘。顧客會說想要的作物、料理或口味，點符合的東西遞給他。連續答對會多給分，答錯或等太久，顧客就會先離開。</p>
-        <p class="r72b-desc">每一格自己算：有貨就扣背包，沒貨的那一格才用叫賣代幣結算，不消耗背包。${TOKEN_RULE_TEXT}每一場收穫祭可以玩兩次，獎勵照最高的那一場補齊。有些顧客一次要兩樣，兩樣都對才算答對一位，對一樣先拿一半分。</p>
+        <section class="r78a-market" data-r78a-market><h3>今天客人愛什麼</h3><div class="r78a-hot-list">${marketHtml}</div><p>熱門品項比較常被點，遞對時再加 ${HOT_SCORE_BONUS} 分。</p></section>
         <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
         ${view.goldenFlag ? `<p class="r72b-owned"><img src="${ART_BASE}golden-flag.png${versionQuery}" alt="">你已經有金色攤位旗了。</p>` : `<p class="r72b-desc">拿到三顆星，就能把限定的金色攤位旗帶回家。</p>`}
         <p class="r72b-status">這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分${view.bestStars ? `・最高 ${view.bestStars} 顆星` : ""}</p>
         ${message ? `<p class="r72b-feedback" role="status">${esc(message)}</p>` : ""}
-        <section class="r77c-stall-plan" data-r77c-stall-plan><h3>今天擺出去的貨</h3><p class="r72b-desc">先決定要擺多少出去，擺攤只賣這裡寫的量。預設已經把委託要用的量留下來，要改就按加減。</p><p class="r72b-desc r77c-stall-total" data-r77c-stall-total>${esc(stallTotalText())}</p><ul class="r77c-stall-list">${stallPlan().map((row) => `<li class="r77c-stall-row" data-r77c-stall-row="${esc(row.id)}"><span class="r77c-stall-name"><b>${esc(row.name)}</b><small>背包有 ${row.stock} 份・${esc(row.reserveText)}</small></span><span class="r77c-stepper"><button type="button" class="r77c-step" data-r77c-minus="${esc(row.id)}" aria-label="少擺一份${esc(row.name)}">－</button><span class="r77c-qty" data-r77c-qty="${esc(row.id)}">擺 ${stallDraft[row.id]} 份</span><button type="button" class="r77c-step" data-r77c-plus="${esc(row.id)}" aria-label="多擺一份${esc(row.name)}">＋</button></span></li>`).join("") || `<li class="r77c-stall-row"><span class="r77c-stall-name"><b>背包還沒有貨</b><small>這一場只能靠叫賣代幣答題。</small></span></li>`}</ul></section>
-        <button type="button" class="r72b-primary" data-r72b-start ${view.canPlay ? "" : "disabled"}>${view.canPlay ? "開始叫賣（一分鐘）" : "這一場已經玩完兩次"}</button>`);
+        <section class="r77c-stall-plan" data-r77c-stall-plan><h3>今天擺出去的貨</h3><p class="r72b-desc">預設已把其他委託要用的量留下；客人只會點這裡有擺的貨。</p><p class="r72b-desc r77c-stall-total" data-r77c-stall-total>${esc(stallTotalText())}</p><ul class="r77c-stall-list">${stallPlan().map((row) => `<li class="r77c-stall-row" data-r77c-stall-row="${esc(row.id)}"><span class="r77c-stall-name"><b>${esc(row.name)}</b><small>背包 ${row.stock} 份・${esc(row.reserveText)}</small></span><span class="r77c-stepper"><button type="button" class="r77c-step" data-r77c-minus="${esc(row.id)}" aria-label="少擺一份${esc(row.name)}">－</button><span class="r77c-qty" data-r77c-qty="${esc(row.id)}">擺 ${stallDraft[row.id]} 份</span><button type="button" class="r77c-step" data-r77c-plus="${esc(row.id)}" aria-label="多擺一份${esc(row.name)}">＋</button></span></li>`).join("") || `<li class="r77c-stall-row"><span class="r77c-stall-name"><b>背包還沒有貨</b><small>先準備至少一份貨再開攤。</small></span></li>`}</ul></section>
+        <details class="r78a-rules"><summary>玩法與代幣規則</summary><p>一場一分鐘。連續答對會加分；每場最多一題缺貨題，可以用代幣作答但只拿一半分。${esc(TOKEN_RULE_TEXT)}</p></details>
+        <button type="button" class="r72b-primary" data-r72b-start ${canStart ? "" : "disabled"}>${!view.canPlay ? "這一場已經玩完兩次" : stallTotal() <= 0 ? "至少擺一份才能開始" : "開始叫賣（一分鐘）"}</button>`);
       overlay.querySelectorAll("[data-r77c-minus],[data-r77c-plus]").forEach((button) => { button.onclick = () => {
         const id = button.dataset.r77cMinus || button.dataset.r77cPlus; const row = stallPlan().find((r) => r.id === id); if (!row) return;
         const delta = button.dataset.r77cMinus ? -1 : 1;
         stallDraft[id] = Math.max(0, Math.min(row.stock, qty(stallDraft[id]) + delta));
         const qtyNode = overlay.querySelector(`[data-r77c-qty="${id}"]`); if (qtyNode) qtyNode.textContent = "擺 " + stallDraft[id] + " 份";
         const totalNode = overlay.querySelector("[data-r77c-stall-total]"); if (totalNode) totalNode.textContent = stallTotalText();
+        const startNode = overlay.querySelector("[data-r72b-start]"); if (startNode && view.canPlay) { startNode.disabled = stallTotal() <= 0; startNode.textContent = startNode.disabled ? "至少擺一份才能開始" : "開始叫賣（一分鐘）"; }
       }; });
       const start = overlay.querySelector("[data-r72b-start]");
       if (start) start.onclick = () => {
-        const started = startSession(state, Date.now(), undefined, { allotment: Object.assign({}, stallDraft || {}), reservePlan: stallPlanCache });
+        const started = startSession(state, Date.now(), undefined, { allotment: Object.assign({}, stallDraft || {}), reservePlan: stallPlanCache, market: marketCache });
         if (!started.ok) { renderStart(started.message); notify(started.message); return; }
         session = started.session; lastMessage = started.message; save();
         // R73B（第 5 項）：開始叫賣時關閉祭典攤位視窗，避免視窗疊在一起。
@@ -571,15 +655,16 @@
       const customer = session.customer;
       const remain = Math.max(0, Math.ceil((session.endsAt - Date.now()) / 1000));
       const arriving = customer.readyAt && Date.now() < customer.readyAt;
-      const buttons = session.pool.map((row) => {
+      const visibleRows = Array.isArray(session.offeredIds) ? session.pool.filter((row) => session.offeredIds.includes(row.id)) : session.pool;
+      const buttons = visibleRows.map((row) => {
         const card = itemCard(state, row);
         const kind = row.kind === "meal" ? "料理" : row.kind === "product" ? "產品" : row.kind === "forage" ? "採集" : "作物";
         const stallLeft = stallStockOf(state, session, row);
-        const effectiveToken = session.allotment ? stallLeft <= 0 : card.usesToken;
-        const tokenEmpty = effectiveToken && qty(session.tokensLeft) <= 0;
-        const count = session.allotment ? (stallLeft > 0 ? `擺出還剩 ${stallLeft} 份` : tokenEmpty ? "擺出的賣完了，代幣也用完了" : "擺出的賣完了，用代幣（只拿一半分）") : card.usesToken ? (tokenEmpty ? "沒貨，代幣用完了" : "沒貨，用代幣（只拿一半分）") : `背包有 ${card.stock} 份`;
+        const canToken = stallLeft <= 0 && qty(session.tokensLeft) > 0 && customer.demand && customer.demand.shortage && matchesDemand(session, row.id);
+        const cardState = stallLeft > 0 ? "stock" : canToken ? "token" : "soldout";
+        const count = cardState === "stock" ? `有貨・還剩 ${stallLeft} 份` : cardState === "token" ? "用代幣・只拿一半分" : "賣完";
         const chips = card.tasteLabels.length ? card.tasteLabels.map((label) => `<span class="r73b-taste">${esc(label)}</span>`).join("") : "";
-        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || tokenEmpty ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・${count}</small><span class="r73b-tastes">${chips}</span></span></button>`;
+        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r78a-card-state="${cardState}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || cardState === "soldout" ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・${count}</small><span class="r73b-tastes">${chips}</span></span></button>`;
       }).join("");
       // R74B（第 4 項）：回饋改放顧客卡上的短動畫與加分飄字；回饋列只留操作提示，
       // 新顧客出現時 session.feedback 已在 spawnNext 清除，不會留上一位的訊息。
@@ -588,7 +673,7 @@
       shell(`<div class="r72b-head"><h2 class="r72b-title">擺攤叫賣</h2><span class="r72b-clock" data-r72b-clock>剩 ${remain} 秒</span></div>
         <div class="r72b-score"><span>分數 <b>${session.score}</b></span><span>連續答對 <b>${session.combo}</b> 次</span><span data-r74b-tokens>代幣已用 <b>${qty(session.tokenUses)}</b>・剩 <b>${qty(session.tokensLeft)}</b> 枚</span></div>
         <div class="r72b-customer${feedback ? " r74b-customer-" + esc(feedback.kind) : ""}"><img class="r72b-portrait" src="${ART_BASE}${esc(customer.art)}${versionQuery}" alt="${esc(customer.npcName)}">
-          <div><b>${esc(customer.npcName)}</b><p class="r72b-bubble">${esc(customer.demand.label)}</p><small data-r72b-wait>這位顧客還等 ${Math.max(0, Math.ceil((customer.expiresAt - Date.now()) / 1000))} 秒</small></div>${floatHtml}</div>
+          <div><b>${esc(customer.npcName)}</b><div class="r78a-customer-tags" data-r78a-customer-tags>${(customer.tags || []).slice(0, 2).map((tag) => `<span>${esc(tag)}</span>`).join("")}</div><p class="r72b-bubble">${esc(customer.demand.label)}</p><small data-r72b-wait>這位顧客還等 ${Math.max(0, Math.ceil((customer.expiresAt - Date.now()) / 1000))} 秒</small></div>${floatHtml}</div>
         <p class="r72b-feedback" role="status">點下面符合的東西，遞給顧客。</p>
         <div class="r72b-items">${buttons}</div>
         <p class="r72b-desc">中途離開不會結算，剛才用掉的次數也不會退回。</p>`);
@@ -607,19 +692,20 @@
         ? `這次補給：金幣 ${result.granted.coins} 枚${result.granted.medals ? `、祭典獎章 ${result.granted.medals} 枚` : ""}${result.granted.goldenFlag ? "、金色攤位旗" : ""}。`
         : result.stars > 0 ? "這次沒有新的獎勵，先前已經照最高星領過了。" : "這一場的保底 5 金已經領過了，下一場再接再厲。";
       shell(`<h2 class="r72b-title">這一場結算</h2>
+        <p class="r78a-end-reason" data-r78a-end-reason role="status">結束原因：${esc(result.endReasonText)}</p>
         <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
         ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
-        ${result.soldOut ? `<p class="r72b-feedback" data-r77c-sold-out role="status">${esc(SOLD_OUT_TEXT)}</p>` : ""}
-        <p class="r72b-status">${result.score} 分・答對 ${result.served} 位・錯過 ${result.missed} 位${result.unfinished ? `・還沒招待完 ${result.unfinished} 位` : ""}・最高連續答對 ${result.bestCombo} 次</p>
+        ${result.soldOut ? `<span data-r77c-sold-out hidden>${esc(SOLD_OUT_TEXT)}</span>` : ""}
+        <p class="r72b-status" data-r78a-counts>${result.score} 分・答對 ${result.served} 位・答錯 ${qty(result.wrong)} 位・錯過 ${qty(result.timedOut)} 位・沒輪到 ${qty(result.notReached)} 位・共 ${qty(result.customerTotal)} 位・最高連續答對 ${result.bestCombo} 次</p>
         <p class="r76b-loss" data-r76b-loss>${esc(result.mainLoss || (result.loss && result.loss.display) || "主要失分：沒有明顯失分")}・代幣用了 ${qty(result.tokenUses)} 次（每場 ${result.tokensPerSession || TOKENS_PER_SESSION} 枚，用代幣答對只拿一半分）</p>
         <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
         <p class="r73b-advice" data-r73b-advice>${esc(result.advice || adviceFor(result))}</p>
         <p class="r72b-status">${esc(grantedText)}這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分</p>
-        <details class="r77c-customers" data-r77c-customers><summary>這一場的客人（${(result.customers || []).length} 位）</summary><ul>${(result.customers || []).map((rec) => `<li class="r77c-customer-row"><b>${esc(rec.npcName)}</b><span>想要：${esc(rec.want)}</span><span>你給了：${esc((rec.givenNames || []).join("、") || "沒有給")}</span><span>${esc(rec.outcome)}・${qty(rec.gained)} 分${rec.diff ? "・" + esc(rec.diff) : ""}</span></li>`).join("") || "<li>這一場還沒有客人紀錄。</li>"}</ul></details>
+        <details class="r77c-customers" data-r77c-customers><summary>這一場的客人（${qty(result.customerTotal)} 位）</summary><ul>${(result.customers || []).map((rec) => `<li class="r77c-customer-row"><b>${esc(rec.npcName)}</b><span>想要：${esc(rec.want)}</span><span>你給了：${esc((rec.givenNames || []).join("、") || "沒有給")}</span><span>${esc(rec.outcome)}・${qty(rec.gained)} 分${rec.diff ? "・" + esc(rec.diff) : ""}</span></li>`).join("") || "<li>這一場還沒有客人紀錄。</li>"}</ul></details>
         ${result.bestSeller ? `<p class="r72b-status" data-r77c-best-seller>這一場賣得最好：${esc(result.bestSeller.name)}（${qty(result.bestSeller.count)} 份）</p>` : ""}
         <div class="r72b-actions"><button type="button" class="r72b-primary" data-r72b-again ${view.canPlay ? "" : "disabled"}>再玩一次</button><button type="button" class="r72b-secondary" data-r72b-done>回到攤位</button></div>`);
       /* 再玩一次時重算擺出清單：上一場賣掉的貨已經不在背包裡。 */
-      const again = overlay.querySelector("[data-r72b-again]"); if (again) again.onclick = () => { stallPlanCache = null; renderStart(""); };
+      const again = overlay.querySelector("[data-r72b-again]"); if (again) again.onclick = () => { stallPlanCache = null; marketCache = null; renderStart(""); };
       const done = overlay.querySelector("[data-r72b-done]"); if (done) done.onclick = () => { if (typeof options.onReturnToStall === "function") options.onReturnToStall(); close(); };
       notify(result.message);
     }
@@ -630,13 +716,13 @@
   }
 
   const FestivalStallR72 = {
-    DURATION_MS, CUSTOMER_TIMEOUT_MS, CUSTOMER_ARRIVE_MS, MAX_ATTEMPTS_PER_ROUND, BASE_SCORE, CUSTOMERS,
+    DURATION_MS, CUSTOMER_TIMEOUT_MS, CUSTOMER_ARRIVE_MS, MAX_ATTEMPTS_PER_ROUND, BASE_SCORE, HOT_SCORE_BONUS, CUSTOMERS, CUSTOMER_TYPES,
     TASTE_LABEL, TASTE_CHIP, STAR_THRESHOLDS, STOCK_DEMAND_RATE, TOKENS_PER_SESSION, TOKEN_SCORE_RATE, TOKEN_RULE_TEXT,
     ensure, festivalInfo, statusFor, unlockedItems, stockOf, totalStock, stockedItems,
-    reservePlan, stallStockOf, demandAnswerable,
+    reservePlan, defaultStallQty, marketPreview, marketItem, stallStockOf, demandAnswerable,
     tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, adviceFor, lossSummary,
     makeCustomer, matchesDemand, startSession, serve, tickSession, finishSession,
-    starsForScore, rewardForStars, open,
+    starsForScore, starsForSession, rewardForStars, open,
   };
   if (typeof window !== "undefined") window.FestivalStallR72 = FestivalStallR72;
   if (typeof module !== "undefined" && module.exports) module.exports = FestivalStallR72;

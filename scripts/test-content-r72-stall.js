@@ -57,6 +57,7 @@ test("計分：答對 +10、連擊每多一次 +1（封頂 +6），顧客走近�
   const started = F.startSession(st, T0, seeded(7));
   assert.equal(started.ok, true); assert.equal(started.session.mode, "stock");
   const s = started.session;
+  s.market = { hotItems: [] };
   forceItemDemand(s, "wheat", T0);
   let r = F.serve(st, s, "wheat", T0 + 1000);
   assert.equal(r.ok, true); assert.equal(r.gained, 10); assert.equal(s.score, 10); assert.equal(s.combo, 1);
@@ -89,6 +90,7 @@ test("答錯：不給分、連擊歸零、顧客離開且不消耗物品", () =>
 test("逾時：顧客離開、連擊歸零、不給分；60 秒到自動結算", () => {
   const st = freshFestival(1); st.storage.items = { wheat: 9 };
   const s = F.startSession(st, T0, seeded(5)).session;
+  s.market = { hotItems: [] };
   forceItemDemand(s, "wheat", T0);
   F.serve(st, s, "wheat", T0 + 1000); assert.equal(s.combo, 1);
   forceItemDemand(s, "wheat", T0 + 1000);
@@ -111,11 +113,11 @@ test("需求只出已解鎖物品，口味需求一定有物品可滿足", () =>
   }
 });
 
-test("代幣模式：背包全空自動開啟、答對只算分不消耗", () => {
-  const st = freshFestival(1);
-  assert.deepEqual(st.storage.items, {});
+test("缺貨題：擺出的貨剛賣完可用一次代幣，答對只算一半分且不消耗背包", () => {
+  const st = freshFestival(1); st.storage.items = { wheat: 1 };
   const s = F.startSession(st, T0, seeded(11)).session;
-  assert.equal(s.mode, "token");
+  s.market = { hotItems: [] }; st.storage.items = {}; s.allotment = { wheat: 0 };
+  assert.equal(F.stallStockOf(st, s, s.pool.find((row) => row.id === "wheat")), 0);
   forceItemDemand(s, "wheat", T0);
   const r = F.serve(st, s, "wheat", T0 + 1000);
   assert.equal(r.ok, true); assert.equal(s.score, 5); assert.deepEqual(st.storage.items, {}); /* R76B 同步：用代幣答對只拿一半分（10 的一半） */
@@ -136,10 +138,10 @@ test("庫存用完自動切代幣模式，不會卡住", () => {
 });
 
 test("星等門檻與獎勵：邊界分數、三星才有金色攤位旗", () => {
-  assert.equal(F.starsForScore(0), 0); assert.equal(F.starsForScore(59), 0);
-  assert.equal(F.starsForScore(60), 1); assert.equal(F.starsForScore(139), 1); // R72 整合同步：實機試玩後門檻下修為 60／140／240
-  assert.equal(F.starsForScore(140), 2); assert.equal(F.starsForScore(239), 2);
-  assert.equal(F.starsForScore(240), 3);
+  assert.equal(F.starsForScore(0), 0); assert.equal(F.starsForScore(49), 0);
+  assert.equal(F.starsForScore(50), 1); assert.equal(F.starsForScore(119), 1); /* R78A 同步：供需與熱門加分重做後門檻改為 50／120／200 */
+  assert.equal(F.starsForScore(120), 2); assert.equal(F.starsForScore(199), 2);
+  assert.equal(F.starsForScore(200), 3);
   assert.deepEqual(F.rewardForStars(1), { stars: 1, coins: 12, medals: 0, goldenFlag: false });
   assert.deepEqual(F.rewardForStars(2), { stars: 2, coins: 30, medals: 1, goldenFlag: false });
   assert.deepEqual(F.rewardForStars(3), { stars: 3, coins: 60, medals: 1, goldenFlag: true });
@@ -152,6 +154,7 @@ test("結算只補到最高星差額：同分重玩不重複給獎、三星給�
   assert.equal(f1.stars, 1); assert.equal(f1.granted.coins, 12); assert.equal(st.coins, 112);
   assert.equal(F.statusFor(st, T0).bestScore, 90);
   const s2 = F.startSession(st, T0, seeded(22)).session; s2.score = 330;
+  s2.bestCombo = 10; s2.hotServed = 3;
   const medalsBefore = st.adventure.r61.festival.medals;
   const f2 = F.finishSession(st, s2, T0 + 60000);
   assert.equal(f2.stars, 3); assert.equal(f2.granted.coins, 48, "只補 60-12");

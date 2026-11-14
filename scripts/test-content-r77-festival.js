@@ -92,8 +92,9 @@ test("10 保留量：預設留給委託、寫明留給誰，擺攤只賣擺出�
   /* 玩家自己把擺出量改成 0，那一樣就只能用代幣，不會動到庫存。 */
   const st2 = festivalState(3);
   st2.storage.items = { wheat: 4 };
-  const s2 = F.startSession(st2, T0, seeded(772), { allotment: { wheat: 0 } }).session;
-  assert.equal(F.stallStockOf(st2, s2, s2.pool.find((r) => r.id === "wheat")), 0);
+  const refused = F.startSession(st2, T0, seeded(772), { allotment: { wheat: 0 } });
+  assert.equal(refused.ok, false); assert.equal(refused.reason, "no_supply", "什麼都沒擺就不能靠未擺的貨開攤");
+  assert.equal(st2.storage.items.wheat, 4, "拒絕開攤不能動到庫存");
 });
 
 test("11 結算逐位客人：要什麼、給了什麼、得幾分、差在哪，總分對得上", () => {
@@ -187,14 +188,12 @@ test("9b 擺出的貨和代幣都用完就提早收攤結算，不會卡著等�
   /* 收攤以後再遞、再計時都不可以出錯。 */
   assert.doesNotThrow(() => F.serve(st, s, "wheat", now + 100));
   assert.doesNotThrow(() => F.tickSession(st, s, now + 200));
-  /* 什麼都沒擺：只靠 3 枚代幣，招待完就收攤。 */
+  /* 什麼都沒擺：不產生未擺品項的代幣題，直接擋下開攤。 */
   const st2 = festivalState(8);
   st2.storage.items = { wheat: 5 };
   const none = {}; for (const row of F.unlockedItems(st2)) none[row.id] = 0;
-  const s2 = F.startSession(st2, T0, seeded(777), { allotment: none }).session;
-  let now2 = T0, guard2 = 0;
-  while (s2.customer && guard2++ < 50) { now2 = Math.max(now2, s2.customer.readyAt); F.serve(st2, s2, pickFor(st2, s2), now2); now2 += 100; }
-  assert.equal(s2.finished, true, "代幣用完就收攤");
+  const denied = F.startSession(st2, T0, seeded(777), { allotment: none });
+  assert.equal(denied.ok, false); assert.equal(denied.reason, "no_supply");
   assert.equal(st2.storage.items.wheat, 5, "沒擺出去的庫存不能動");
   const src = fs.readFileSync("src/festival-stall-r72.js", "utf8");
   assert.match(src, /data-r77c-sold-out/, "結算畫面要寫明提早收攤");

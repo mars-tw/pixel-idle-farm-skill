@@ -127,7 +127,7 @@ test("0 星保底 5 金：金額、只給一次、鼓勵語氣", () => {
 });
 
 test("結算只留一句建議（含 0 星）", () => {
-  for (const score of [0, 30, 59, 60, 100, 240]) {
+  for (const score of [0, 30, 49, 50, 100, 200]) {
     const advice = F.adviceFor({ score, stars: F.starsForScore(score) });
     assert.equal((advice.match(/。/g) || []).length, 1, "建議只能一句：" + advice);
   }

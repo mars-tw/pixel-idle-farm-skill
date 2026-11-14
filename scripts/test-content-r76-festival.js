@@ -64,6 +64,7 @@ test("3 兩樣單：對一樣給一半、兩樣都對才算答對一位", () => 
   const st = freshFestival(8);
   st.storage.items = { strawberry: 5, radish: 5, carrot: 5, tomato: 5 };
   const s = F.startSession(st, T0, seeded(7)).session;
+  s.market = { hotItems: [] };
   const sweetRow = s.pool.find((row) => row.tastes.includes("sweet") && F.stockOf(st, row) > 0);
   const freshRow = s.pool.find((row) => row.tastes.includes("fresh") && row.id !== sweetRow.id && F.stockOf(st, row) > 0) || s.pool.find((row) => row.tastes.includes("fresh") && F.stockOf(st, row) > 0);
   assert.ok(sweetRow && freshRow, "測試池要有甜與清爽物品");
@@ -88,7 +89,9 @@ test("4 代幣每場 3 枚、用完遞不出沒貨的東西、用代幣答對只
   assert.match(src, /只拿一半分/, "按鈕小字要寫只拿一半分");
   assert.match(src, /data-r76b-loss/, "結算要寫代幣與失分");
   const st = freshFestival(1);
+  st.storage.items = { wheat: 1 };
   const s = F.startSession(st, T0, seeded(11)).session;
+  s.market = { hotItems: [] }; st.storage.items = {};
   assert.equal(s.tokensLeft, 3);
   forceDemand(s, { kind: "item", itemId: "wheat", label: "我要小麥" }, T0);
   const r = F.serve(st, s, "wheat", T0 + 1000);
