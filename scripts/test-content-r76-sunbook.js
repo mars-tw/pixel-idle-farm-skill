@@ -230,7 +230,9 @@ test("里程碑 3、6、10、15 枚：獎勵入帳、畫面寫得出拿到什麼
   const s = kitchen(fresh(4)); s.coins = 100;
   const before = Book.summary(s);
   assert.deepEqual(before.milestones.map((m) => m.count), [3, 6, 10, 15]);
-  assert.ok(before.milestones.every((m) => m.rewardText.length > 6 && /金幣/.test(m.rewardText) && !m.claimed && !m.claimable));
+  assert.ok(before.milestones.every((m) => m.rewardText.length > 6 && !m.claimed && !m.claimable));
+  assert.doesNotMatch(before.milestones[0].rewardText, /金幣/, "R78C：3 枚改成非金幣獎勵");
+  assert.ok(before.milestones.slice(1).every((m) => /金幣/.test(m.rewardText)));
   assert.deepEqual(before.next, { count: 3, remaining: 3 });
   assert.deepEqual(Book.claim(s, 3, T), { ok: false, reason: "not_yet", remaining: 3 }); assert.equal(s.coins, 100);
   assert.equal(Book.claim(s, 4, T).reason, "unknown");
@@ -245,10 +247,10 @@ test("里程碑 3、6、10、15 枚：獎勵入帳、畫面寫得出拿到什麼
   Sun.addSunlight(s, 99); assert.equal(Sun.sunlight(s), 5); assert.equal(Sun.bottleCapacity(s), 5);
   const coins3 = s.coins, earned3 = s.stats.totalCoinsEarned || 0;
   const got3 = Book.claim(s, 3, T);
-  assert.equal(got3.ok, true); assert.equal(s.coins, coins3 + 120); assert.equal(s.stats.totalCoinsEarned, earned3 + 120);
+  assert.equal(got3.ok, true); assert.equal(s.coins, coins3); assert.equal(s.stats.totalCoinsEarned || 0, earned3);
   assert.equal(Sun.bottleCapacity(s), 6, "蓄光瓶永久多裝 1 點"); assert.equal(Sun.sunlight(s), 6, "送的 1 點陽光裝得下");
-  assert.equal(got3.text, "金幣 120、陽光 1 點、蓄光瓶永久多裝 1 點");
-  assert.equal(Book.claim(s, 3, T + 1).reason, "claimed"); assert.equal(s.coins, coins3 + 120, "領過不重複領");
+  assert.equal(got3.text, "陽光 1 點、蓄光瓶永久多裝 1 點");
+  assert.equal(Book.claim(s, 3, T + 1).reason, "claimed"); assert.equal(s.coins, coins3, "領過不重複領");
   Sun.normalize(s); assert.equal(Sun.sunlight(s), 6, "重新整理存檔不會把多出來的陽光削掉");
   const after3 = Book.summary(s).milestones[0];
   assert.equal(after3.claimed, true); assert.equal(after3.gotText, got3.text);
@@ -322,7 +324,7 @@ test("舊存檔：補一本空白手冊，不回溯以前的紀錄，壞資料�
   assert.equal(old.sunbook, undefined, "讀檔本身不動這個欄位");
   kitchen(old); Cooking.ensure(old); old.adventure.r75b.best.rustic_bread = "perfect";
   assert.doesNotThrow(() => Book.normalize(old));
-  assert.deepEqual(old.sunbook, { stamps: {}, claimed: {}, bonus: { jar: 0, mirror: 0 }, hinted: false, folded: true });
+  assert.deepEqual(old.sunbook, { stamps: {}, claimed: {}, bonus: { jar: 0, mirror: 0 }, hinted: false, folded: false });
   assert.equal(Book.counts(old).got, 0, "以前收過、曬過、煮過的都不補蓋"); assert.ok(Book.counts(old).total > 0);
   assert.deepEqual(Book.takeEvents(old), []);
   assert.equal(Sun.bottleCapacity(old), 5); assert.equal(Sun.mirrorLimit(old), 1);

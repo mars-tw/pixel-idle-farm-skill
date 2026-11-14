@@ -1,4 +1,4 @@
-/* R77B：第 7～8 項——六種開場回答各接一條三步的後續委託。
+/* R77B／R78C：六種開場回答各接一條三步的角色事件。
    - 回訪對白（story-r76.js）播完後，對方多交代一件事；手札「我做過的選擇」那張卡底下列出三個步驟、去哪裡做與進度。
    - 每條至少用到兩種玩法（追光、料理、曬架、鄰居委託、市集）；第三步做完，當初那個長期加成升一級，真的作用在數字上。
    - 第 8 項：兩套回訪只留 R76 對話框那一套；AdventureAPI.mainStoryRecall 遇到有 R76 回訪的選擇就不再補一句固定台詞。
@@ -36,72 +36,109 @@
   const COMMISSION_NPC = { river_market: "merchant", elder_supper: "elder", child_tea: "child" };
   const DRIED_FALLBACK = ["sun_wheat", "sun_carrot", "sun_tomato", "sun_strawberry"];
 
-  /* 六條後續委託。step.event：由遊戲事件推進；step.act：在手札按鈕交付（兩者都有就任一種都算）。
-     文字裡的 {natural} 換成照顧方式「放著長」的現行名稱、{color} 換成選的招牌顏色。 */
+  const ROUTE_ART = {
+    seed: "assets/generated/r83/seed-32.png", note: "assets/generated/r83/note-32.png",
+    basket: "assets/generated/r83/basket-32.png", wheat: "assets/generated/r83/wheat-32.png",
+    sign: "assets/generated/content-r75/farm_sign.png", stamp: "assets/generated/r83/stamp-32.png",
+  };
+
+  /* R78C：每條路線先有角色專屬的現場事件，再由玩家做一次會留下紀錄的決定。
+     decision 的兩個結果給不同物品；完成後 marker.doneLabel 會留在地圖上。 */
   const QUESTS = {
     "mayor:farm": {
       id: "morning_field", name: "晨耕", npcId: "mayor", choiceId: "farm",
+      intro: ["鎮長葛瑞沒有叫你等到明天。", "他把一張田格草圖塞進種子籃：「先種田的人，今天就該看見第一個改變。」"],
+      marker: { anchor: "station:sign", art: ROUTE_ART.seed, earlyLabel: "鎮長放在田邊的晨耕種子籃", doneLabel: "晨耕種子籃・{decision}" },
       steps: [
-        { title: "在光裡收成 3 次", where: "農田：等陽光照到已經熟的那一格，再去收成。", play: "sun", event: "sun_harvest", need: 3 },
-        { title: "到曬架曬好並收下 1 批乾貨", where: "農舍旁的曬架：放上 2 份作物、用掉 1 點陽光，曬好以後收下來，四種乾貨都算。", play: "rack", event: "dried", need: 1 },
-        { title: "帶 1 份日曬乾貨給鎮長葛瑞", where: "倉庫裡有日曬乾貨時，在這張卡按「把乾貨交給鎮長」。", play: "rack", act: "give_dried", actLabel: "把乾貨交給鎮長", need: 1 },
+        { title: "到田邊看鎮長畫的晨耕草圖", where: "手札裡打開這段田邊對話。", act: "scene", actLabel: "看晨耕草圖", need: 1, lines: ["鎮長指著草圖上的兩個角落。", "「一邊適合留種，一邊適合曬穀。這個農場先長成哪個樣子，由你決定。」"] },
+        { title: "決定種子籃先裝什麼", where: "選留種小包，或選一瓶早晨收下的陽光。", act: "decision", need: 1, options: [
+          { id: "seed", label: "留種小包", result: "籃裡放進小麥種子 2 包", reward: { seedPacks: { wheat: 2 } } },
+          { id: "sun", label: "晨光小瓶", result: "蓄光瓶裝進陽光 2 點", reward: { sunlight: 2 } },
+        ] },
+        { title: "帶 1 份日曬乾貨給鎮長", where: "倉庫備好日曬乾貨後，在這裡交給鎮長。", play: "rack", act: "give_dried", actLabel: "把乾貨交給鎮長", need: 1 },
       ],
-      brief: ["對了，還有一件事想麻煩你。", "趁那道光還在的時候多收幾次，再到曬架曬一批乾貨帶來給我看看。", "三件事都做完，門口那袋種子我每天多放一包當季的。"],
-      upgradeText: "門口的種子袋從每天 1 包變成每天 2 包，第二包是當季作物。",
-      afterText: "鎮長收下那份乾貨，說聞起來都是太陽的味道；從那天起，門口的種子袋每天多一包當季的種子。",
+      brief: ["田邊的種子籃已經擺好了。", "先看草圖、決定籃裡裝什麼，再帶一份乾貨給我。", "做完以後，種子籃每天都能親手翻一次。"],
+      upgradeText: "田邊留下晨耕種子籃；每天可翻一次，領 1 包當季種子與 1 點陽光。",
+      afterText: "鎮長收下乾貨，田邊的種子籃也照我的決定留了下來。",
+      daily: { id: "field_basket", label: "翻今天的晨耕種子籃", result: "拿到 1 包當季種子與 1 點陽光", reward: { seasonalSeed: 1, sunlight: 1 } },
     },
     "mayor:town": {
       id: "town_news", name: "鎮上的事", npcId: "mayor", choiceId: "town",
+      intro: ["鎮長葛瑞當場攤開兩張空白公告。", "「一張貼鎮口，一張送河邊。你先替農場選一個說話的地方。」"],
+      marker: { anchor: "station:mailbox", art: ROUTE_ART.note, earlyLabel: "鎮長的新公告草稿", doneLabel: "農場公告・{decision}" },
       steps: [
-        { title: "和四位鄰居各說一次話", where: "地圖上找鎮長葛瑞、老農班伯、蘿拉和圖圖，各說一次話。", play: "", event: "talk", ids: TALK_NPCS, distinct: true, need: 4 },
-        { title: "完成 2 次鎮長的委託", where: "手札「鄰居專屬互動」裡的鎮公所委託（一天一張）；鎮長開口向你要東西時交給他也算。", play: "order", event: "mayor_order", need: 2 },
-        { title: "帶一道自己做的料理去回報鎮長", where: "到農舍灶台做一道料理，再在這張卡按「把料理端給鎮長」。", play: "cook", act: "meal", actNpc: "mayor", actLabel: "把料理端給鎮長", need: 1 },
+        { title: "和鎮長一起讀兩張公告草稿", where: "手札裡打開鎮長的公告對話。", act: "scene", actLabel: "讀公告草稿", need: 1, lines: ["第一張寫著農場重新開門，第二張畫了通往河邊的箭頭。", "鎮長問：「你要先讓人記住農場，還是先把人帶去河邊？」"] },
+        { title: "決定公告先貼哪裡", where: "選鎮口公告，或河邊路標。", act: "decision", need: 1, options: [
+          { id: "town_gate", label: "貼在鎮口", result: "鎮長給 18 金作為公告工錢", reward: { coins: 18 } },
+          { id: "river_path", label: "送到河邊", result: "修路剩下的木料 2 份交給你", reward: { materials: { wood: 2 } } },
+        ] },
+        { title: "帶一道料理，和鎮長交換鎮上消息", where: "在灶台做好料理後，回這裡端給鎮長。", play: "cook", act: "meal", actNpc: "mayor", actLabel: "端料理去聽消息", need: 1 },
       ],
-      brief: ["既然你想多認識鎮上，我再託你一件事。", "去跟班伯、蘿拉和圖圖都打聲招呼，再幫我跑兩趟委託。", "忙完帶一道你做的菜來，我們邊吃邊聊，之後我的委託酬勞再往上加。"],
+      brief: ["公告草稿已經壓在信箱旁。", "讀完後選一個先貼的地方，再帶一道料理來交換消息。", "做完以後，不合手的鎮長委託每天能換一張。"],
       upgradeText: "鎮長每日委託的金幣從多一成變成多兩成，每天還可以換一次委託。",
-      afterText: "我帶著自己做的菜去找鎮長，把鎮上四個人的近況都說了一遍；他說以後委託的酬勞再加一成，不合手的委託每天還能換一張。",
+      afterText: "我帶料理去找鎮長，公告也照選的地方貼好；不合手的鎮長委託每天能換一張。",
     },
     "elder:sell": {
       id: "first_deal", name: "第一筆生意", npcId: "elder", choiceId: "sell",
+      intro: ["老農班伯立刻把一只舊秤放到市集木箱旁。", "「要學做生意，就先看秤怎麼說實話。」"],
+      marker: { anchor: "station:storage", art: ROUTE_ART.basket, earlyLabel: "班伯借來的試賣秤", doneLabel: "第一筆生意木箱・{decision}" },
       steps: [
-        { title: "在市集賣出 3 種不同的作物", where: "蘿拉的市集或倉庫賣出：三種不同的作物各賣一次就算，乾貨和料理不算。", play: "market", event: "sold", distinct: true, need: 3 },
-        { title: "完成 2 次老農班伯的委託", where: "河畔委託「老農班伯的灶邊晚餐」（修好河畔釣台後開放）、送鄰居餐籃給班伯，或班伯開口要東西時交給他，都算。", play: "order", event: "elder_order", need: 2 },
-        { title: "找老農班伯算帳", where: "地圖上找老農班伯說話。", play: "", event: "talk", ids: ["elder"], need: 1 },
+        { title: "和班伯在舊秤旁試秤一袋麥", where: "手札裡打開班伯的試賣對話。", act: "scene", actLabel: "跟班伯試秤", need: 1, lines: ["班伯把秤砣往左挪一格，又往右挪回來。", "「價錢不是越高越好。第一袋貨要替你帶回客人，還是先帶回現金？」"] },
+        { title: "決定第一袋貨怎麼賣", where: "選現金成交，或留一份鄰里試吃。", act: "decision", need: 1, options: [
+          { id: "cash", label: "現金成交", result: "班伯替你談到 24 金", reward: { coins: 24 } },
+          { id: "sample", label: "鄰里試吃", result: "換回胡蘿蔔種子 3 包", reward: { seedPacks: { carrot: 3 } } },
+        ] },
+        { title: "把第一筆帳記進木箱上的帳簿", where: "回到手札，讓班伯陪你把這筆帳收尾。", act: "scene_close", actLabel: "和班伯記帳", need: 1, lines: ["班伯在帳簿最上面寫下日期。", "「記住客人怎麼來，比只記今天賺多少更有用。」"] },
       ],
-      brief: ["賣東西這回事，一袋是運氣，三樣才是生意。", "去市集賣三種不一樣的作物，再幫我跑兩趟委託。", "都做完再來找我，我教你把帳算清楚，往後我的委託也多算你一成。"],
+      brief: ["舊秤已經放到市集木箱旁。", "跟班伯試秤、決定第一袋貨怎麼賣，再把帳記好。", "以後每天都能問一次今日行情。"],
       upgradeText: "老農班伯的河畔委託金幣從多一成變成多兩成。",
-      afterText: "班伯拿樹枝在地上陪我把帳算了一遍，說三種作物都賣得出去才叫生意；之後他託我的委託，酬勞從多一成變成多兩成。",
+      afterText: "班伯陪我把第一筆帳寫好，市集木箱旁一直留著那只舊秤。",
+      daily: { id: "market_price", label: "問班伯今天的行情", result: "班伯替你談到今日行情 8 金", reward: { coins: 8 } },
     },
     "elder:seed": {
       id: "keep_seed", name: "留種", npcId: "elder", choiceId: "seed",
+      intro: ["老農班伯把兩只小木盤擺到田邊，一盤深色、一盤飽滿。", "「留種不是把剩下的收起來，是先想下一輪要什麼。」"],
+      marker: { anchor: "station:well", art: ROUTE_ART.wheat, earlyLabel: "班伯的兩只選種盤", doneLabel: "留種木盤・{decision}" },
       steps: [
-        { title: "用「{natural}」收成 2 次", where: "農田：播種時把照顧方式選成「{natural}」，等作物熟了再收成。", play: "", event: "natural_harvest", need: 2 },
-        { title: "到曬架曬好並收下 1 批乾貨", where: "農舍旁的曬架：放上 2 份作物、用掉 1 點陽光，曬好以後收下來，四種乾貨都算。", play: "rack", event: "dried", need: 1 },
-        { title: "帶 2 包種子和 1 道料理給班伯", where: "用「{natural}」收成會退回種子包，料理在農舍灶台做；備齊後在這張卡按「把種子和料理帶給班伯」。", play: "cook", act: "seed_meal", actLabel: "把種子和料理帶給班伯", need: 1 },
+        { title: "聽班伯比較兩只選種盤", where: "手札裡打開班伯的選種課。", act: "scene", actLabel: "聽選種課", need: 1, lines: ["班伯捏起一顆深色種子，又拿起一顆飽滿的。", "「深色的耐放，飽滿的長得快。你這一季要哪一種？」"] },
+        { title: "替下一季選一盤種", where: "選耐放的一盤，或長得快的一盤。", act: "decision", need: 1, options: [
+          { id: "sturdy", label: "耐放種", result: "拿到小麥種子 3 包", reward: { seedPacks: { wheat: 3 } } },
+          { id: "quick", label: "快長種", result: "拿到堆肥 2 份", reward: { materials: { compost: 2 } } },
+        ] },
+        { title: "帶 2 包種子和 1 道料理給班伯", where: "備齊種子包和料理後，回這裡完成選種。", play: "cook", act: "seed_meal", actLabel: "把種子和料理帶給班伯", need: 1 },
       ],
-      brief: ["留種不是把種子收進袋子就好。", "先用「{natural}」收成兩次，再到曬架曬一批乾貨，看看什麼叫曬得透。", "然後帶兩包種子和一道菜來，我邊吃邊教你認種，以後每天多給你一包。"],
+      brief: ["兩只選種盤已經擺到田邊。", "先聽班伯比較，再替下一季選一盤；最後帶種子和料理來。", "做完以後，每天可以向班伯領一次選種包。"],
       upgradeText: "每天向老農班伯請教時，多拿的當季種子從 1 包變成 2 包。",
       afterText: "班伯一邊吃我帶去的菜，一邊教我看種子的顏色和飽不飽滿；現在每天向他請教，他都多塞兩包當季種子給我。",
+      daily: { id: "seed_lesson", label: "向班伯領今天的選種包", result: "拿到當季種子 2 包", reward: { seasonalSeed: 2 } },
     },
     "merchant:sign": {
       id: "farm_sign", name: "招牌", npcId: "merchant", choiceId: "sign", colorStep: true,
+      intro: ["蘿拉把三塊漆色樣板靠在還沒釘牢的農場牌下。", "「牌子不是裝飾。客人看見哪個顏色，就會記住哪種心情。」"],
+      marker: { anchor: "structure:shop", art: ROUTE_ART.sign, earlyLabel: "蘿拉靠在市集旁的招牌色樣", doneLabel: "農場招牌・{color}" },
       steps: [
-        { title: "備齊 2 份木料交給蘿拉", where: "蘿拉的市集裡有「建材行」，木料一份 6 金；備齊後在這張卡按「把木料交給蘿拉」。", play: "market", act: "wood", actLabel: "把木料交給蘿拉", need: 2 },
-        { title: "做一道料理分給蘿拉", where: "到農舍灶台做一道料理，在這張卡按「把料理分給蘿拉」；送鄰居餐籃給她也算。", play: "cook", event: "meal_merchant", act: "meal", actNpc: "merchant", actLabel: "把料理分給蘿拉", need: 1 },
+        { title: "和蘿拉比較三塊招牌色樣", where: "手札裡打開招牌色樣對話。", act: "scene", actLabel: "看招牌色樣", need: 1, lines: ["蘿拉把三塊色樣排到陽光下。", "「紅色讓人想到甜果，藍色像河風，綠色則像剛冒芽。選色也會決定我送你的開張小禮。」"] },
+        { title: "備齊 2 份木料把招牌釘牢", where: "市集建材行有木料；備齊後在這裡交給蘿拉。", play: "market", act: "wood", actLabel: "把木料交給蘿拉", need: 2 },
         { title: "替招牌選一個顏色", where: "就在這張卡上，三種顏色選一種。", play: "", act: "color", need: 1 },
       ],
-      brief: ["牌子掛上去了，可是風一吹就晃，顏色也還是木頭色。", "幫我備兩份木料把它釘牢，再做一道菜來，我們邊吃邊挑顏色。", "顏色讓你選；招牌漆好以後，我的委託再多算你一成。"],
+      brief: ["三塊色樣已經靠在市集旁。", "先比較顏色，再用兩份木料釘牢；最後選色。", "三種顏色各有不同的開張小禮。"],
       upgradeText: "蘿拉的河畔委託金幣從多一成變成多兩成，地圖上的招牌換成你選的顏色。",
       afterText: "蘿拉把招牌釘牢，照我選的{color}重新漆過；她說遠遠就認得出是我家的貨，委託的酬勞從多一成變成多兩成。",
+      daily: { id: "sign_care", label: "擦亮今天的農場招牌", result: "從招牌下找到木料 1 份", reward: { materials: { wood: 1 } } },
     },
     "merchant:listen": {
       id: "customer_words", name: "客人的話", npcId: "merchant", choiceId: "listen",
+      intro: ["蘿拉沒有先談價錢，而是在攤前多放了兩張客人留言卡。", "「願意先聽，就讓客人今天先留下話。」"],
+      marker: { anchor: "structure:shop", art: ROUTE_ART.stamp, earlyLabel: "市集攤前的客人留言卡", doneLabel: "客人口味牌・{decision}" },
       steps: [
-        { title: "完成 2 次蘿拉的委託", where: "河畔委託「蘿拉的河鮮籃」（修好河畔釣台後開放）、送鄰居餐籃給蘿拉，或蘿拉開口要東西時交給她，都算。", play: "order", event: "merchant_order", need: 2 },
-        { title: "帶 1 份她今天特價的作物給蘿拉", where: "蘿拉的市集：把她今天特價的那種作物賣 1 份給她，或備好後在這張卡按「把特價作物交給蘿拉」。", play: "market", event: "sold_special", act: "special_crop", actLabel: "把特價作物交給蘿拉", need: 1 },
-        { title: "聽蘿拉轉述客人的話", where: "地圖上找蘿拉說話。", play: "", event: "talk", ids: ["merchant"], need: 1 },
+        { title: "和蘿拉讀今天的兩張留言卡", where: "手札裡打開客人留言對話。", act: "scene", actLabel: "讀客人留言", need: 1, lines: ["一張留言想要甜一點的點心，另一張想帶清爽的作物去河邊。", "蘿拉說：「不能兩邊都先做。你要我先替哪一桌留貨？」"] },
+        { title: "決定先回哪一種客人", where: "選甜口味，或清爽口味。", act: "decision", need: 1, options: [
+          { id: "sweet", label: "先回甜口味", result: "蘿拉給草莓種子 2 包試種", reward: { seedPacks: { strawberry: 2 } } },
+          { id: "fresh", label: "先回清爽口味", result: "蘿拉給胡蘿蔔種子 3 包試種", reward: { seedPacks: { carrot: 3 } } },
+        ] },
+        { title: "帶 1 份今天特價的作物給蘿拉", where: "備好今天特價的作物後，在這裡交給蘿拉。", play: "market", act: "special_crop", actLabel: "把特價作物交給蘿拉", need: 1 },
       ],
-      brief: ["你肯先聽客人說話，那我再託你一件事。", "幫我跑兩趟委託，再帶一份我今天特價的那種作物來，我想讓客人看看實際種出來的樣子。", "忙完來找我，我把客人說的話一句一句轉給你聽，特價也替你多留一樣。"],
+      brief: ["兩張留言卡已經放到攤前。", "先讀留言、決定回哪一桌，再帶一份今天特價的作物來。", "做完以後，今日特價會多留第三樣。"],
       upgradeText: "蘿拉的今日特價從兩樣變成三樣。",
       afterText: "蘿拉把客人的話一句一句轉給我聽：有人誇上次的作物新鮮，也有人問下次能不能多留幾份；她說以後每天替我多留一樣特價。",
     },
@@ -142,6 +179,12 @@
     q.seen = Array.isArray(q.seen) ? Array.from(new Set(q.seen.filter((v) => typeof v === "string" && v))).slice(0, 12) : [];
     q.doneAt = Array.isArray(q.doneAt) ? q.doneAt.filter((v) => Number.isFinite(v) && v >= 0).slice(0, 3) : [];
     q.color = colorDef(q.color) ? q.color : "";
+    q.introSeen = q.introSeen === true;
+    q.briefSeen = q.briefSeen === true;
+    q.decision = typeof q.decision === "string" && def.steps.some((step) => Array.isArray(step.options) && step.options.some((o) => o.id === q.decision)) ? q.decision : "";
+    q.decisionText = typeof q.decisionText === "string" ? q.decisionText.slice(0, 120) : "";
+    q.decisionReward = typeof q.decisionReward === "string" ? q.decisionReward.slice(0, 120) : "";
+    q.decisionAt = Number.isFinite(q.decisionAt) && q.decisionAt > 0 ? q.decisionAt : 0;
     q.upgraded = q.step >= 3;
     q.rewardedAt = Number.isFinite(q.rewardedAt) && q.rewardedAt > 0 ? q.rewardedAt : 0;
     const step = def.steps[q.step];
@@ -153,7 +196,7 @@
     const a = state.adventure;
     if (!isObj(a.r77)) a.r77 = {};
     const r = a.r77;
-    r.version = 1;
+    r.version = 2;
     if (!isObj(r.quests)) r.quests = {};
     if (!isObj(r.daily)) r.daily = {};
     if (typeof r.daily.mayorSwapDay !== "string") r.daily.mayorSwapDay = "";
@@ -182,7 +225,7 @@
   function pendingNotes() { return notes.slice(); }
   function setListener(fn) { listener = typeof fn === "function" ? fn : null; }
 
-  /* 看過 R76 回訪的開場選擇，補上後續委託（舊存檔載入時也走這裡）。 */
+  /* R78C：開場回答一落定就開始角色事件；舊存檔載入時也立即補上，不再等隔天回訪。 */
   function sync(state, now, opts) {
     const r = ensure(state);
     if (!r) return [];
@@ -191,16 +234,16 @@
     for (const npcId of NPC_ORDER) {
       if (r.quests[npcId]) continue;
       const choiceId = savedChoice(state, npcId);
-      if (!choiceId || !followupSeen(state, npcId, choiceId)) continue;
-      r.quests[npcId] = { choiceId, startedAt: t, step: 0, count: 0, seen: [], doneAt: [], upgraded: false, color: "", rewardedAt: 0 };
+      if (!choiceId) continue;
+      r.quests[npcId] = { choiceId, startedAt: t, step: 0, count: 0, seen: [], doneAt: [], upgraded: false, color: "", introSeen: false, briefSeen: false, decision: "", decisionText: "", decisionReward: "", decisionAt: 0, rewardedAt: 0 };
       started.push(npcId);
     }
     if (started.length && !(opts && opts.silent)) {
       if (started.length === 1) {
         const def = questDef(started[0], r.quests[started[0]].choiceId);
-        pushNote(NPC_NAMES[started[0]] + "多交代了一件事：後續委託「" + def.name + "」開始了，三個步驟寫在手札「我做過的選擇」。");
+        pushNote(NPC_NAMES[started[0]] + "現在就改變了農場：角色事件「" + def.name + "」開始，三個步驟寫在手札「我做過的選擇」。");
       } else {
-        pushNote(started.map((id) => NPC_NAMES[id]).join("、") + "都多交代了一件事：" + started.map((id) => "「" + questDef(id, r.quests[id].choiceId).name + "」").join("、") + "這幾條後續委託開始了，步驟寫在手札「我做過的選擇」。");
+        pushNote(started.map((id) => NPC_NAMES[id]).join("、") + "的選擇事件已經開始：" + started.map((id) => "「" + questDef(id, r.quests[id].choiceId).name + "」").join("、") + "，步驟寫在手札「我做過的選擇」。");
       }
     }
     if (started.length) emit("change");
@@ -209,8 +252,10 @@
   /* R76 回訪剛播完：開始後續委託，並把這次交談算進去（ui.js 是先記交談再開回訪）。 */
   function onFollowupSeen(state, npcId, now) {
     const started = sync(state, now);
-    if (!started.includes(npcId)) return false;
-    dispatch(state, ["talk"], npcId, now, npcId);
+    const r = ensure(state), q = r && r.quests[npcId];
+    if (!q || q.briefSeen) return false;
+    q.briefSeen = true;
+    emit("change");
     return true;
   }
 
@@ -324,6 +369,43 @@
     }
     return n - left;
   }
+  function addSeedPacks(state, plan) {
+    const packs = seedPacksOf(state);
+    for (const id of Object.keys(plan || {})) packs[id] = Math.min(99, Math.max(0, packs[id] || 0) + Math.max(0, Math.floor(plan[id] || 0)));
+  }
+  function seasonalCropId(state) {
+    if (K && typeof K.seasonalCropId === "function") return K.seasonalCropId(state);
+    const level = Number.isFinite(state.level) ? state.level : 1;
+    const season = state.season && state.season.id;
+    const ids = Object.keys(C.CROPS || {}).filter((id) => (C.CROPS[id].unlockLevel || 1) <= level && (!C.CROPS[id].season || C.CROPS[id].season === season));
+    return ids[ids.length - 1] || "wheat";
+  }
+  function rewardText(reward, state) {
+    const parts = [];
+    if (reward && reward.coins) parts.push(reward.coins + " 金");
+    for (const id of Object.keys((reward && reward.materials) || {})) parts.push(cropName(id) === id && C.MATERIALS && C.MATERIALS[id] ? C.MATERIALS[id].name + " " + reward.materials[id] + " 份" : id + " " + reward.materials[id] + " 份");
+    for (const id of Object.keys((reward && reward.seedPacks) || {})) parts.push(cropName(id) + "種子 " + reward.seedPacks[id] + " 包");
+    for (const id of Object.keys((reward && reward.items) || {})) parts.push(cropName(id) + " " + reward.items[id] + " 份");
+    if (reward && reward.seasonalSeed) parts.push(cropName(seasonalCropId(state)) + "種子 " + reward.seasonalSeed + " 包");
+    if (reward && reward.sunlight) parts.push("陽光 " + reward.sunlight + " 點");
+    return parts.join("、");
+  }
+  function grantChoiceReward(state, reward) {
+    if (!isObj(reward)) return "";
+    if (reward.coins) {
+      state.coins = Math.max(0, Number.isFinite(state.coins) ? state.coins : 0) + reward.coins;
+      if (!isObj(state.stats)) state.stats = {};
+      state.stats.totalCoinsEarned = Math.max(0, Number.isFinite(state.stats.totalCoinsEarned) ? state.stats.totalCoinsEarned : 0) + reward.coins;
+    }
+    if (!isObj(state.materials)) state.materials = {};
+    for (const id of Object.keys(reward.materials || {})) state.materials[id] = Math.max(0, state.materials[id] || 0) + reward.materials[id];
+    const items = storageItems(state);
+    for (const id of Object.keys(reward.items || {})) items[id] = Math.max(0, items[id] || 0) + reward.items[id];
+    addSeedPacks(state, reward.seedPacks || {});
+    if (reward.seasonalSeed) addSeedPacks(state, { [seasonalCropId(state)]: reward.seasonalSeed });
+    if (reward.sunlight && Sunplay && typeof Sunplay.addSunlight === "function") Sunplay.addSunlight(state, reward.sunlight);
+    return rewardText(reward, state);
+  }
   function shareMeal(state, npcId, t) {
     const meals = mealsOf(state);
     const recipeId = Object.keys(meals).filter((id) => (meals[id] || 0) >= 1).sort((x, y) => meals[y] - meals[x])[0];
@@ -360,6 +442,24 @@
     if (!step.act) return fail("not_here", "這一步不用在手札按，去哪裡做：" + fill(step.where, q));
     const done = () => { completeStep(state, npcId, t); emit("change"); return { ok: true, npcId, step: q.step, message: lastNote() }; };
     const items = storageItems(state);
+    if (step.act === "scene" || step.act === "scene_close") {
+      q.introSeen = true;
+      q.sceneLines = Array.isArray(step.lines) ? step.lines.slice(0, 4) : [];
+      const lines = q.sceneLines;
+      completeStep(state, npcId, t);
+      emit("change");
+      return { ok: true, npcId, step: q.step, lines, message: lines.join(" ") };
+    }
+    if (step.act === "decision") {
+      const option = (step.options || []).find((row) => row.id === arg);
+      if (!option) return fail("pick_decision", "先選一個做法；兩個結果拿到的東西不同。");
+      if (q.decision) return fail("already_decided", "這次已經選了「" + q.decisionText + "」，手札會一直記著。");
+      const got = grantChoiceReward(state, option.reward || {});
+      q.decision = option.id; q.decisionText = option.label; q.decisionReward = got || option.result; q.decisionAt = t;
+      completeStep(state, npcId, t);
+      emit("change");
+      return { ok: true, npcId, step: q.step, decision: option.id, rewardText: q.decisionReward, message: "你選了「" + option.label + "」；" + option.result + "。" };
+    }
     if (step.act === "give_dried") {
       const id = driedIds().filter((d) => (items[d] || 0) >= 1).sort((x, y) => (items[y] || 0) - (items[x] || 0))[0];
       if (!id) return fail("missing_dried", "倉庫裡沒有日曬乾貨，先到曬架曬一批。");
@@ -400,6 +500,9 @@
       const c = colorDef(arg);
       if (!c) return fail("pick_color", "先從三種顏色裡選一種。");
       q.color = c.id;
+      q.decision = c.id; q.decisionText = c.name;
+      const gift = c.id === "red" ? { seedPacks: { strawberry: 2 } } : c.id === "blue" ? { sunlight: 2 } : { materials: { compost: 2 } };
+      q.decisionReward = grantChoiceReward(state, gift); q.decisionAt = t;
       return done();
     }
     return fail("unknown_step", "這一步還不能在這裡做。");
@@ -408,6 +511,21 @@
   /* ---------- 升級後才有的動作 ---------- */
   function dayKeyOf(t) { return M && typeof M.dayKey === "function" ? M.dayKey(t) : new Date(t).toISOString().slice(0, 10); }
   function upgraded(state, npcId) { return !!(A && typeof A.r77Upgraded === "function" && A.r77Upgraded(state, npcId)); }
+  function dailyInfo(state, npcId, now) {
+    const t = nowOf(now), r = ensure(state), q = r && r.quests[npcId], def = q ? questDef(npcId, q.choiceId) : null;
+    if (!q || q.step < 3 || !def || !def.daily) return { eligible: false, can: false };
+    const key = "route:" + def.daily.id, today = dayKeyOf(t), used = r.daily[key] === today;
+    return { eligible: true, can: !used, used, today, key, label: def.daily.label, result: def.daily.result };
+  }
+  function takeDaily(state, npcId, now) {
+    const info = dailyInfo(state, npcId, now), r = ensure(state), q = r && r.quests[npcId], def = q ? questDef(npcId, q.choiceId) : null;
+    if (!info.eligible || !def || !def.daily) return fail("locked", "先完成這條角色事件，地圖上的新互動才會留下來。");
+    if (!info.can) return fail("daily_limit", "今天已經互動過了，明天再來。");
+    const got = grantChoiceReward(state, def.daily.reward || {});
+    r.daily[info.key] = info.today;
+    emit("change");
+    return { ok: true, npcId, rewardText: got, message: def.daily.result + "。" };
+  }
   function mayorSwapInfo(state, now) {
     const t = nowOf(now);
     const r = ensure(state);
@@ -490,10 +608,12 @@
       index: i + 1, title: fill(step.title, q), where: whereOf(state, step, q, t), play: step.play || "", playName: PLAY_NAMES[step.play] || "",
       status: i < q.step ? "done" : i === q.step ? "current" : "todo", progress: stepProgress(state, def, q, i, t),
       act: i === q.step ? step.act || "" : "", actLabel: i === q.step && step.act && step.act !== "color" ? step.actLabel : "",
+      options: i === q.step && step.act === "decision" ? (step.options || []).map((option) => ({ id: option.id, label: option.label, result: option.result })) : [],
     }));
     return { npcId, choiceId, name: def.name, status: q.step >= 3 ? "done" : "active", stepsDone: q.step, steps, upgraded: q.step >= 3,
       upgradeText: def.upgradeText, afterText: q.step >= 3 ? fill(def.afterText, q) : "", color: q.color, colorStep: !!def.colorStep,
-      plays: playsOf(def), rewardCoins: REWARD_COINS, rewardXp: REWARD_XP };
+      decision: q.decision, decisionText: q.decisionText, decisionReward: q.decisionReward,
+      daily: dailyInfo(state, npcId, t), plays: playsOf(def), rewardCoins: REWARD_COINS, rewardXp: REWARD_XP };
   }
   function cardHtml(state, npcId, now) {
     const t = nowOf(now);
@@ -508,11 +628,14 @@
         + '<span class="r77b-progress">' + esc(s.progress) + "</span>"
         + (s.status !== "done" ? '<span class="r77b-where">去哪裡做：' + esc(s.where) + "</span>" : "")
         + (s.actLabel ? '<button type="button" class="r77b-act" data-r77b-act="' + esc(npcId) + '">' + esc(s.actLabel) + "</button>" : "")
+        + (s.options && s.options.length ? '<div class="r78c-decisions" data-r78c-decisions>' + s.options.map((option) => '<button type="button" class="r77b-act r78c-decision" data-r78c-decision="' + esc(option.id) + '" data-r78c-npc="' + esc(npcId) + '"><b>' + esc(option.label) + '</b><small>' + esc(option.result) + '</small></button>').join("") + "</div>" : "")
         + "</li>").join("") + "</ol>";
     if (v.colorStep && (v.status === "done" || (v.steps[2] && v.steps[2].status === "current"))) {
       html += '<div class="r77b-colors" data-r77b-colors role="group" aria-label="招牌顏色">' + SIGN_COLORS.map((c) => '<button type="button" class="r77b-color" data-r77b-color="' + c.id + '" aria-pressed="' + (v.color === c.id ? "true" : "false") + '"><i class="r77b-swatch" style="background:' + c.swatch + '"></i>' + esc(c.name) + "</button>").join("") + "</div>";
     }
-    if (v.upgraded) html += '<p class="r77b-upgrade" data-r77b-upgrade>加成升一級：' + esc(v.upgradeText) + "</p>";
+    if (v.decisionText) html += '<p class="r78c-decision-record" data-r78c-decision-record>我選了：<b>' + esc(v.decisionText) + '</b>・拿到：' + esc(v.decisionReward) + "</p>";
+    if (v.upgraded) html += '<p class="r77b-upgrade" data-r77b-upgrade>永久改變（已含原本加成）：' + esc(v.upgradeText) + "</p>";
+    if (v.upgraded && v.daily && v.daily.eligible) html += '<div class="r77b-extra r78c-daily"><p>' + esc(v.daily.result) + '</p><button type="button" class="r77b-act" data-r78c-daily="' + esc(npcId) + '"' + (v.daily.can ? "" : " disabled") + '>' + esc(v.daily.can ? v.daily.label : "今天已互動") + "</button></div>";
     if (v.upgraded && npcId === "mayor" && v.choiceId === "town") {
       const info = mayorSwapInfo(state, t);
       if (info.eligible) {
@@ -538,6 +661,28 @@
   function signDataset(state) { const c = signColor(state); return c ? { r77bSignColor: c } : null; }
   function seedBagLabel(state) {
     return savedChoice(state, "mayor") === "farm" && upgraded(state, "mayor") ? "門口的種子袋，每天送 2 包種子：小麥和當季作物各 1 包" : "門口的種子袋，每天送 1 包小麥種子";
+  }
+  function sceneStates(state) {
+    const r = ensure(state);
+    if (!r) return [];
+    const choiceRows = NPC_ORDER.map((npcId) => {
+      const q = r.quests[npcId], def = q ? questDef(npcId, q.choiceId) : null;
+      if (!q || !def || !def.marker) return null;
+      const decision = q.decisionText || "等待你的決定";
+      const label = fill(q.step >= 3 ? def.marker.doneLabel : def.marker.earlyLabel, q).replace(/\{decision\}/g, decision);
+      return { npcId, choiceId: q.choiceId, done: q.step >= 3, decision: q.decision, label, marker: Object.assign({}, def.marker) };
+    }).filter(Boolean);
+    const a = state.adventure, routes = a && a.r61 && a.r61.world && a.r61.world.c4Routes;
+    const c4Markers = {
+      c4_market_expansion: { anchor: "structure:shop", art: ROUTE_ART.basket, primary: "市集鮮貨桌", alt: "市集耐放貨架" },
+      c4_tasting_stall: { anchor: "structure:shop", art: ROUTE_ART.stamp, primary: "草莓試吃記號", alt: "日曬拼盤牌" },
+      c4_notice_bench: { anchor: "station:sign", art: ROUTE_ART.note, primary: "石木公告長椅", alt: "追光坐墊長椅" },
+    };
+    const chapterRows = Object.keys(c4Markers).filter((id) => routes && (routes[id] === "primary" || routes[id] === "alt")).map((id) => {
+      const route = routes[id], marker = c4Markers[id];
+      return { npcId: id, choiceId: route, done: true, decision: route, label: marker[route], marker: { anchor: marker.anchor, art: marker.art } };
+    });
+    return choiceRows.concat(chapterRows);
   }
 
   /* ---------- 接上既有函式（每個只包一次） ---------- */
@@ -612,6 +757,30 @@
       });
     });
     if (A) {
+      wrapMethod(A, "resolveMainStoryChoice", (orig) => function (state, npcId, choiceId, now) {
+        const result = orig.apply(this, arguments);
+        if (!result || !result.ok) return result;
+        try {
+          sync(state, nowOf(now), { silent: true });
+          const r = ensure(state), q = r && r.quests[npcId], def = q ? questDef(npcId, q.choiceId) : null;
+          if (q && def) {
+            q.introSeen = true;
+            q.sceneState = "early";
+            result.r78cIntro = def.intro.slice();
+            result.r78cScene = def.marker.earlyLabel;
+            pushNote("你的回答立刻改變了農場：" + def.marker.earlyLabel + "出現在地圖上。");
+            if (typeof document !== "undefined" && R && typeof R.openDialogue === "function") {
+              let waits = 0;
+              const showIntro = () => {
+                if (document.querySelector(".r76b-dialogue") && waits++ < 80) { setTimeout(showIntro, 120); return; }
+                try { R.openDialogue(state, npcId, def.intro.slice(), {}); } catch (_) { /* 對白打不開仍保留狀態與場景 */ }
+              };
+              setTimeout(showIntro, 0);
+            }
+          }
+        } catch (_) { /* 選擇本身已成功，不讓角色事件接線擋住 */ }
+        return result;
+      });
       wrapMethod(A, "record", (orig) => function (state, event, now) {
         const r = orig.apply(this, arguments);
         const e = typeof event === "string" ? { type: event } : event;
@@ -649,9 +818,9 @@
 
   const ChoicesR77 = { QUESTS, SIGN_COLORS, PLAY_NAMES, NPC_NAMES, REWARD_COINS, REWARD_XP, TALK_GAP_MS,
     questDef, playsOf, naturalName, ensure, sync, savedChoice, followupSeen, onFollowupSeen, dispatch,
-    noteHarvest, noteSold, noteTalk, noteOrder, noteDried, act, swapMayorQuest, mayorSwapInfo, thirdDeal,
+    noteHarvest, noteSold, noteTalk, noteOrder, noteDried, act, swapMayorQuest, mayorSwapInfo, dailyInfo, takeDaily, thirdDeal,
     questView, cardHtml, bind: function () {}, signColor, signLabel, signDataset, seedBagLabel,
-    takeNotes, pendingNotes, setListener, install, hookDried };
+    sceneStates, takeNotes, pendingNotes, setListener, install, hookDried };
   root.ChoicesR77 = ChoicesR77;
   if (isNode) module.exports = ChoicesR77;
   if (typeof document === "undefined") return;
@@ -755,7 +924,9 @@
 
   function afterAction(state, r) {
     if (!r || !r.ok) { toast(r && r.message); return; }
-    if (!pendingNotes().length && r.message) toast(r.message);
+    if (Array.isArray(r.lines) && r.lines.length && root.StoryR76 && typeof root.StoryR76.openDialogue === "function") {
+      try { root.StoryR76.openDialogue(state, r.npcId, r.lines, {}); } catch (_) { if (r.message) toast(r.message); }
+    } else if (!pendingNotes().length && r.message) toast(r.message);
     dirty = true;
     flush();
   }
@@ -767,6 +938,8 @@
       const box = btn.closest("[data-r77b-quest]");
       return act(state, box ? box.dataset.r77bQuest : "merchant", Date.now(), btn.dataset.r77bColor);
     }));
+    section.querySelectorAll("[data-r78c-decision]").forEach((btn) => on(btn, () => act(state, btn.dataset.r78cNpc, Date.now(), btn.dataset.r78cDecision)));
+    section.querySelectorAll("[data-r78c-daily]").forEach((btn) => on(btn, () => takeDaily(state, btn.dataset.r78cDaily, Date.now())));
     section.querySelectorAll("[data-r77b-swap]").forEach((btn) => on(btn, () => swapMayorQuest(state, Date.now())));
     section.querySelectorAll("[data-r77b-buy-third]").forEach((btn) => on(btn, () => {
       const d = thirdDeal(state, Date.now());
@@ -776,6 +949,69 @@
   }
   ChoicesR77.bind = bindBrowser;
 
+  function anchorTile(state, spec) {
+    const pair = String(spec || "").split(":"), kind = pair[0], id = pair[1];
+    const tiles = state && state.map && Array.isArray(state.map.tiles) ? state.map.tiles : [];
+    return kind === "structure" ? tiles.find((tile) => tile.structureId === id)
+      : kind === "station" ? tiles.find((tile) => tile.station === id)
+        : kind === "npc" ? tiles.find((tile) => tile.npc === id) : null;
+  }
+  function paintScenes(state) {
+    const world = document.getElementById("mapWorld");
+    if (!world || !state || !state.map) return;
+    const states = sceneStates(state), signature = JSON.stringify(states.map((row) => [row.npcId, row.choiceId, row.done, row.decision, row.label]));
+    if (world.dataset.r78cScenes === signature && world.querySelectorAll(".r78c-scene-change").length === states.length) return;
+    world.querySelectorAll(".r78c-scene-change").forEach((node) => node.remove());
+    const size = Math.max(24, Math.round(world.offsetWidth / Math.max(1, state.map.width || 24)));
+    states.forEach((row, index) => {
+      const tile = anchorTile(state, row.marker.anchor);
+      if (!tile) return;
+      const node = document.createElement("button");
+      node.type = "button"; node.className = "r78c-scene-change" + (row.done ? " is-done" : " is-early");
+      node.dataset.r78cRoute = row.npcId + ":" + row.choiceId; node.dataset.r78cDone = row.done ? "1" : "0";
+      node.setAttribute("aria-label", row.label); node.title = row.label;
+      const px = Math.max(32, Math.min(48, Math.round(size * .64)));
+      node.style.cssText = "left:" + Math.round((tile.x + .18 + index * .12) * size) + "px;top:" + Math.round((tile.y + .42) * size) + "px;width:" + px + "px;height:" + px + "px;z-index:" + (Math.round((tile.y + 2) * size) + 6) + ";";
+      node.innerHTML = '<img src="' + esc(row.marker.art) + '" alt="" draggable="false"><span>' + esc(row.label) + "</span>";
+      node.onclick = (event) => { event.stopPropagation(); toast(row.label); };
+      world.appendChild(node);
+    });
+    world.dataset.r78cScenes = signature;
+  }
+  function routeRewardLabel(reward, state) {
+    if (!reward) return "";
+    const parts = rewardText(reward, state).split("、").filter(Boolean);
+    if (reward.xp) parts.push(reward.xp + " 點經驗");
+    return parts.join("、");
+  }
+  function paintChapterRoutes(state) {
+    if (!A || typeof A.quests !== "function") return;
+    let list = [];
+    try { list = A.quests(state, Date.now()).filter((q) => q.chapter === 4 && q.hasAltRoute); } catch (_) { return; }
+    list.forEach((q) => {
+      const card = document.querySelector('#adventurePanel [data-quest="' + q.id + '"]');
+      const box = card && card.querySelector(".r68a-card-requirements");
+      if (!box) return;
+      const names = q.routeNames || { primary: "做法甲", alt: "做法乙" };
+      const chosen = q.chosenRoute;
+      const make = (route, rows) => {
+        const selected = chosen === route;
+        const receipt = selected && q.routeReceipt && q.routeReceipt.length ? q.routeReceipt : null;
+        const display = receipt || rows;
+        const lines = display.map((row) => '<li>' + (receipt || row.complete ? "✓ " : "○ ") + esc(row.name) + " " + (receipt ? row.required + "/" + row.required : Math.min(row.current, row.required) + "/" + row.required) + "</li>").join("");
+        const reward = q.routeRewards && q.routeRewards[route] ? q.routeRewards[route] : q.reward;
+        const consequence = q.routeConsequences && q.routeConsequences[route] ? q.routeConsequences[route] : "";
+        return '<section class="r78c-route is-' + route + (selected ? " is-chosen" : "") + '" data-r78c-route="' + route + '"><h4>' + esc(names[route]) + (selected ? '<b data-r78c-chosen>已走這條</b>' : "") + '</h4><ul>' + lines + '</ul><p>報酬：' + esc(routeRewardLabel(reward, state)) + '</p><small>' + esc(consequence) + "</small></section>";
+      };
+      const signature = JSON.stringify([q.id, q.status, q.chosenRoute, q.requirements, q.altRequirements, q.routeReceipt]);
+      if (box.dataset.r78cSignature === signature) return;
+      box.classList.add("r78c-route-grid");
+      box.innerHTML = make("primary", q.objectives.concat(q.requirements)) + make("alt", q.altRequirements)
+        + (chosen ? '<p class="r78c-route-result">手札記錄：' + esc(names[chosen]) + '。' + esc(q.routeConsequence || "") + "</p>" : '<p class="r78c-route-result">不用先按選擇；實際交付哪套材料，就走哪一條。</p>');
+      box.dataset.r78cSignature = signature;
+    });
+  }
+
   function tick() {
     hookDried();
     hookFollowup();
@@ -784,15 +1020,22 @@
     if (!state || !isObj(state.adventure)) return;
     try { sync(state, Date.now()); } catch (_) { /* 補委託失敗下次再試 */ }
     try { paintSign(state); } catch (_) { /* 招牌字樣失敗不擋 */ }
+    try { paintScenes(state); } catch (_) { /* 場景變化失敗不擋主流程 */ }
+    try { paintChapterRoutes(state); } catch (_) { /* 第四章兩欄顯示失敗不擋主流程 */ }
     try { paintBonus(state); } catch (_) { /* 加成字樣失敗不擋 */ }
     if (pendingNotes().length || dirty) scheduleFlush();
   }
   install();
   hookFollowup();
-  const start = () => { tick(); setInterval(tick, 700); };
+  const start = () => {
+    root.addEventListener("farm-panel-rendered", () => { const state = browserState(); if (state) paintChapterRoutes(state); });
+    tick(); setInterval(tick, 700);
+  };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();
   ChoicesR77.paintSign = paintSign;
+  ChoicesR77.paintScenes = paintScenes;
+  ChoicesR77.paintChapterRoutes = paintChapterRoutes;
   ChoicesR77.paintBonus = paintBonus;
   ChoicesR77.flush = flush;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -25,9 +25,9 @@
     dried: { id: "dried", name: "曬成乾貨" },
     perfect: { id: "perfect", name: "煮成絕品" },
   };
-  /* 里程碑獎勵：都給金幣，再加一樣跟追光有關的東西。容量與折光次數是永久加成。 */
+  /* R78C：第一份改為非金幣獎勵，不再用 120 金壓過 Lv 2 經濟；舊存檔已領的 120 金仍照實保留。 */
   const MILESTONES = [
-    { count: 3, coins: 120, sunlight: 1, jar: 1 },
+    { count: 3, coins: 0, sunlight: 1, jar: 1 },
     { count: 6, coins: 240, seedPacks: 6 },
     { count: 10, coins: 400, mirror: 1 },
     { count: 15, coins: 800, jar: 1, fillJar: true },
@@ -94,7 +94,7 @@
       for (const cropId of cropIds()) { const n = whole(oldSeeds[cropId]); if (n) seeds[cropId] = n; }
       claimed[m.count] = { at: whole(rec.at), coins: whole(rec.coins), sunlight: whole(rec.sunlight), jar: m.jar || 0, mirror: m.mirror || 0, seeds: seeds };
     }
-    const book = { stamps: stamps, claimed: claimed, bonus: bonusFrom(claimed), hinted: !!old.hinted, folded: old.folded !== false };
+    const book = { stamps: stamps, claimed: claimed, bonus: bonusFrom(claimed), hinted: !!old.hinted, folded: old.folded === true };
     state.sunbook = book;
     if (cleaned) cleaned.add(book);
     return state;
@@ -367,14 +367,14 @@
     const sum = summary(state), list = rows(state);
     const shown = Math.min(LAST_COUNT, sum.got), percent = Math.round(shown / LAST_COUNT * 1000) / 10;
     let nextText = "";
-    if (sum.claimable.length) nextText = "有獎勵可以領了，按下面的「領取」。";
-    else if (sum.next) nextText = "再蓋 " + sum.next.remaining + " 枚，就能領「集滿 " + sum.next.count + " 枚」的獎勵。";
+    if (sum.claimable.length) nextText = "有獎勵可以領了，打開下方里程碑領取。";
+    else if (sum.next) {
+      const target = sum.milestones.filter(function (m) { return m.count === sum.next.count; })[0];
+      nextText = "再蓋 " + sum.next.remaining + " 枚可領：" + (target ? target.rewardText : "下一份里程碑獎勵");
+    }
     else nextText = "四份獎勵都領完了，剩下的印章可以慢慢蓋。";
-    /* R77C 第 15 項：打開第一屏最上面就寫差幾枚、領什麼。 */
-    const nextMileRow = sum.next ? sum.milestones.filter(function (m) { return m.count === sum.next.count; })[0] : null;
-    const topText = sum.claimable.length ? "已蓋 " + sum.got + " 枚・有獎勵可以領了"
-      : nextMileRow ? "已蓋 " + sum.got + " 枚・再 " + sum.next.remaining + " 枚領：" + nextMileRow.rewardText
-        : "已蓋 " + sum.got + " 枚・獎勵都領完了";
+    /* R78C：摘要只報已蓋枚數；「再幾枚領什麼」全頁只在進度區出現一次。 */
+    const topText = "已蓋 " + sum.got + " 枚";
     const miles = sum.milestones.map(function (m) {
       const cls = m.claimed ? "is-claimed" : m.claimable ? "is-ready" : "is-wait";
       const detail = m.claimed ? "拿到：" + m.gotText : m.rewardText;
@@ -400,7 +400,7 @@
         + (row.traitName ? '<span class="r76c-trait">' + esc(row.traitName) + "</span>" : "")
         + '<span class="r76c-row-count">' + row.got + "／" + row.total + "</span></div>"
         + '<ul class="r76c-cells">' + cells + "</ul>"
-        + (hints ? '<ul class="r76c-hints">' + hints + "</ul>" : '<p class="r76c-row-done">這一列蓋滿了。</p>')
+        + (hints ? '<details class="r78c-row-help"><summary>怎麼拿還缺的印章</summary><ul class="r76c-hints">' + hints + "</ul></details>" : '<p class="r76c-row-done">這一列蓋滿了。</p>')
         + "</li>";
     }).join("");
     return '<section class="r76c-book" data-r76c-sunbook aria-label="追光手冊"><details class="r76c-fold"' + (sum.folded ? "" : " open") + ">"
@@ -408,12 +408,12 @@
       + '<span class="r76c-sum-text"><b class="r76c-sum-title">追光手冊</b><span class="r76c-sum-count" data-r76c-count>' + esc(topText) + "</span></span>"
       + (sum.claimable.length ? '<span class="r76c-sum-flag" data-r76c-flag>有獎勵可領</span>' : "")
       + '<span class="r76c-sum-arrow" aria-hidden="true"></span></summary>'
-      + '<div class="r76c-body"><p class="r77c-sunbook-top" data-r77c-sunbook-top>' + esc(topText) + '</p><p class="r76c-lead">在光裡收成、順著作物的光性種、曬成乾貨、煮出絕品，各蓋一枚章。集滿 3、6、10、15 枚都有獎勵。</p>'
+      + '<div class="r76c-body"><p class="r76c-lead">每種作物的印章格都在這裡；點「怎麼拿」才展開詳細提示。</p>'
+      + '<ul class="r76c-rows r78c-first-stamps" data-r78c-first-stamps>' + cropRows + "</ul>"
       + '<div class="r76c-progress"><div class="r76c-bar" role="progressbar" aria-label="集章進度" aria-valuemin="0" aria-valuemax="' + LAST_COUNT + '" aria-valuenow="' + shown + '"><span class="r76c-bar-fill" style="width:' + percent + '%"></span></div>'
       + '<div class="r76c-ticks" aria-hidden="true">' + ticks + "</div>"
       + '<p class="r76c-next" data-r76c-next>' + esc(nextText) + "</p></div>"
-      + '<ul class="r76c-miles">' + miles + "</ul>"
-      + '<ul class="r76c-rows">' + cropRows + "</ul>"
+      + '<details class="r78c-mile-fold"' + (sum.claimable.length || sum.milestones.some(function (m) { return m.claimed; }) ? " open" : "") + '><summary>里程碑獎勵</summary><ul class="r76c-miles">' + miles + "</ul></details>"
       + (sum.lockedCrops > 0 ? '<p class="r76c-more">還有 ' + sum.lockedCrops + " 種作物沒解鎖，解鎖以後各多一列。</p>" : "")
       + "</div></details></section>";
   }

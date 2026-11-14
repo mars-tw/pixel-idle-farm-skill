@@ -110,25 +110,28 @@ function insideX(box, w) { return !!box && box.left >= -1 && box.right <= w + 1;
         return { left: r.left, right: r.right, panelLeft: pr.left, panelRight: pr.right, text: el.textContent.replace(/\s+/g, " ").trim() };
       });
       assert.ok(card, `${tag} 第 4 章任務卡看得到`);
-      assert.match(card.text, /兩種做法擇一/, `${tag} 任務卡要寫兩種做法擇一：${card.text}`);
-      assert.match(card.text, /或：任何乾貨/, `${tag} 第二條路要逐項寫出來：${card.text}`);
+      assert.match(card.text, /做法甲・鮮貨桌/, `${tag} 任務卡要有做法甲：${card.text}`);
+      assert.match(card.text, /做法乙・耐放貨架.*任何乾貨/, `${tag} 任務卡要有做法乙與各自進度：${card.text}`);
+      assert.doesNotMatch(card.text, /兩種做法擇一/, `${tag} 不再把兩種做法塞成清單一列`);
       assert.ok(card.left >= card.panelLeft - 1 && card.right <= card.panelRight + 1, `${tag} 任務卡不出面板`);
 
       /* 四、手冊第一屏：打開就知道差多少。 */
       await page.evaluate(() => FarmWorld.openPanel("journal"));
       await page.waitForSelector("[data-r76c-sunbook]", { timeout: 8000 });
-      await page.locator(".r76c-sum").click();
-      await page.waitForSelector("[data-r77c-sunbook-top]", { timeout: 8000 });
+      await page.evaluate(() => { const d = document.querySelector(".r76c-fold"); if (d && !d.open) document.querySelector(".r76c-sum").click(); });
+      await page.waitForSelector("[data-r78c-first-stamps]", { timeout: 8000 });
       const top = await page.evaluate(() => {
-        const n = document.querySelector("[data-r77c-sunbook-top]"), r = n.getBoundingClientRect();
+        const n = document.querySelector("[data-r78c-first-stamps]"), r = n.getBoundingClientRect(), next = document.querySelector("[data-r76c-next]");
         const panel = document.querySelector(".side-panel.world-panel-open .side-body"), pr = panel ? panel.getBoundingClientRect() : { left: 0, right: innerWidth };
         const bar = document.querySelector(".r76c-bar");
-        return { left: r.left, right: r.right, panelLeft: pr.left, panelRight: pr.right, text: n.textContent, barMax: bar ? bar.getAttribute("aria-valuemax") : null, barTop: bar ? bar.getBoundingClientRect().top : 0, topY: r.top };
+        return { left: r.left, right: r.right, panelLeft: pr.left, panelRight: pr.right, rows: n.querySelectorAll("[data-r76c-row]").length, text: next ? next.textContent : "", repeats: (document.querySelector("[data-r76c-sunbook]").textContent.match(/再蓋 \d+ 枚可領/g) || []).length, barMax: bar ? bar.getAttribute("aria-valuemax") : null, barTop: bar ? bar.getBoundingClientRect().top : 0, topY: r.top };
       });
-      assert.match(top.text, /已蓋 \d+ 枚・(再 \d+ 枚領：|有獎勵可以領了|獎勵都領完了)/, `${tag} 手冊第一行要寫差幾枚領什麼：${top.text}`);
+      assert.ok(top.rows >= 1, `${tag} 第一屏先看得到作物印章格`);
+      assert.match(top.text, /(再蓋 \d+ 枚可領：|有獎勵可以領了|四份獎勵都領完了)/, `${tag} 進度區寫一次差幾枚領什麼：${top.text}`);
+      assert.ok(top.repeats <= 1, `${tag} 同一句差額提示不重複`);
       assert.equal(top.barMax, "15", `${tag} 進度條分母要是 15`);
-      assert.ok(top.topY <= top.barTop, `${tag} 差額那一行要在進度條上面`);
-      assert.ok(top.left >= top.panelLeft - 1 && top.right <= top.panelRight + 1, `${tag} 手冊第一行不出面板`);
+      assert.ok(top.topY <= top.barTop, `${tag} 印章格要排在進度條前面`);
+      assert.ok(top.left >= top.panelLeft - 1 && top.right <= top.panelRight + 1, `${tag} 印章格不出面板`);
 
       assert.deepEqual(errors, [], `${tag} 頁面錯誤：` + errors.join(";"));
       await ctx.close();

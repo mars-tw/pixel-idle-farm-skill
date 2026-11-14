@@ -1,5 +1,5 @@
 "use strict";
-/* R77C 第 15 項：追光手冊打開就知道差多少——分母一致、第一屏寫差幾枚領什麼、小卡也寫。 */
+/* R77C／R78C：分母一致、第一屏先看印章格，差幾枚領什麼全頁只寫一次。 */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const State = require("../src/state.js");
@@ -19,14 +19,16 @@ test("分母一致：里程碑上限 15 就是畫面上的分母，已解鎖格�
   assert.equal(Book.LAST_COUNT, 15);
   assert.deepEqual(Book.MILESTONES.map((m) => m.count), [3, 6, 10, 15]);
   const src = fs.readFileSync("src/sunbook-r76.js", "utf8");
-  assert.match(src, /data-r77c-sunbook-top/, "手冊第一屏要有差額那一行");
-  assert.match(src, /已蓋 .* 枚・再 .* 枚領：/, "第一行要寫已蓋幾枚、再幾枚領什麼");
+  assert.match(src, /data-r78c-first-stamps/, "手冊第一屏要先有各作物印章格");
+  assert.match(src, /再蓋 " \+ sum\.next\.remaining \+ " 枚可領：/, "進度區只寫一次再幾枚領什麼");
+  assert.doesNotMatch(src, /data-r77c-sunbook-top/, "不再把同一句差額提示重複放到內文頂端");
   assert.doesNotMatch(src, /已蓋 ' \+ sum\.got \+ "／" \+ sum\.total/, "標題不要再用已解鎖格數當分母");
   const s = fresh(1);
   const sum = Book.summary(s);
   assert.equal(sum.got, 0);
   assert.deepEqual(sum.next, { count: 3, remaining: 3 }, "下一份是集滿 3 枚、還差 3 枚");
-  assert.match(sum.milestones[0].rewardText, /金幣 120/, "下一份的獎勵內容要寫得出來");
+  assert.match(sum.milestones[0].rewardText, /陽光 1 點.*蓄光瓶/, "第一份改為追光玩法獎勵");
+  assert.doesNotMatch(sum.milestones[0].rewardText, /金幣/, "第一份不再壓過二級經濟");
 });
 
 test("差幾枚與獎勵正確：蓋到第 1 枚後，還差 2 枚領第一份", () => {
@@ -42,7 +44,7 @@ test("差幾枚與獎勵正確：蓋到第 1 枚後，還差 2 枚領第一份",
   assert.match(e.text, /（1／15）/, "小卡文字分母要是 15：" + e.text);
   assert.equal(e.nextRemaining, 2, "還差 2 枚");
   assert.equal(e.nextCount, 3);
-  assert.match(e.nextRewardText, /金幣 120/, "要寫下一份領什麼：" + e.nextRewardText);
+  assert.match(e.nextRewardText, /陽光 1 點.*蓄光瓶/, "要寫下一份領什麼：" + e.nextRewardText);
   const sum = Book.summary(s);
   assert.deepEqual(sum.next, { count: 3, remaining: 2 });
 });

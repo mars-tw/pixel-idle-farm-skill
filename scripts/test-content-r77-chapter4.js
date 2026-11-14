@@ -37,38 +37,38 @@ test("13 章名與文字不再綁秋天", () => {
 
 test("14a 把市集撐大一點：第一條路（番茄、草莓、木料）", () => {
   const st = base();
-  Object.assign(st.storage.items, { tomato: 3, strawberry: 2, sun_wheat: 2 });
-  st.materials.wood = 2;
+  Object.assign(st.storage.items, { tomato: 3, strawberry: 2, sun_wheat: 3 });
+  st.materials.wood = 2; st.materials.stone = 2;
   const q = quest(st, "c4_market_expansion");
   assert.equal(q.hasAltRoute, true, "任務要帶第二條路");
-  assert.ok(q.altRequirements.some((r) => r.source === "driedAny" && r.required === 2), "第二條路要用 2 份乾貨代替草莓");
+  assert.ok(q.altRequirements.some((r) => r.source === "driedAny" && r.required === 3), "第二條路要用 3 份乾貨做耐放貨架");
   assert.equal(q.canClaim, true);
   const r = A.claim(st, "c4_market_expansion", T0);
   assert.equal(r.ok, true, JSON.stringify(r));
   assert.equal(r.claimRoute, "primary", "兩條都齊時先用第一條");
   assert.equal(st.storage.items.strawberry || 0, 0, "草莓要被收走（原本 2 份交出去）");
-  assert.equal(st.storage.items.sun_wheat, 2, "第一條路不要動到乾貨");
+  assert.equal(st.storage.items.sun_wheat, 3, "第一條路不要動到乾貨");
   assert.equal(st.materials.wood, 0);
+  assert.equal(st.materials.stone, 2, "第一條路不要動到第二條的石材");
 });
 
-test("14b 把市集撐大一點：第二條路用乾貨代替草莓，只扣這一條", () => {
+test("14b 把市集撐大一點：第二條路用乾貨與石材搭耐放貨架，只扣這一條", () => {
   const st = base();
-  Object.assign(st.storage.items, { tomato: 3, sun_tomato: 1, sun_wheat: 1 });
-  st.materials.wood = 2;
+  Object.assign(st.storage.items, { sun_tomato: 2, sun_wheat: 1 });
+  st.materials.stone = 2;
   const q = quest(st, "c4_market_expansion");
   assert.equal(q.canClaim, true, "沒有草莓、靠乾貨也要能交付");
   assert.equal(q.claimRoute, "alt");
   const r = A.claim(st, "c4_market_expansion", T0);
   assert.equal(r.ok, true, JSON.stringify(r));
   assert.equal(r.claimRoute, "alt");
-  assert.equal(st.storage.items.tomato || 0, 0);
   assert.equal((st.storage.items.sun_tomato || 0) + (st.storage.items.sun_wheat || 0), 0, "2 份乾貨要被收走");
-  assert.equal(st.materials.wood, 0);
+  assert.equal(st.materials.stone, 0); assert.equal(st.materials.wood, 1, "耐放貨架退回木料 1 份");
 });
 
 test("14c 蘿拉的試吃攤：第二條路用任何一道好吃以上的料理代替指定料理", () => {
   const st = base(); unlockBefore(st, "c4_tasting_stall");
-  Object.assign(st.storage.items, { carrot: 2, tomato: 2 });
+  Object.assign(st.storage.items, { sun_wheat: 2 });
   st.adventure.meals.rustic_bread = 1;
   if (!st.adventure.r75b) st.adventure.r75b = {};
   st.adventure.r75b.grades = { rustic_bread: { home: 0, tasty: 1, perfect: 0 } };
@@ -79,10 +79,10 @@ test("14c 蘿拉的試吃攤：第二條路用任何一道好吃以上的料理�
   assert.equal(r.ok, true, JSON.stringify(r));
   assert.equal(st.adventure.meals.rustic_bread, 0, "好吃料理要被收走一份");
   assert.equal(st.adventure.r75b.grades.rustic_bread.tasty, 0, "等級紀錄也要跟著扣");
-  assert.equal(st.storage.items.carrot || 0, 0); assert.equal(st.storage.items.tomato || 0, 0);
+  assert.equal(st.storage.items.sun_wheat || 0, 0, "日曬拼盤要收走 2 份乾貨");
   /* 家常等級不算：只有家常時第二條路不成立。 */
   const st2 = base(); unlockBefore(st2, "c4_tasting_stall");
-  Object.assign(st2.storage.items, { carrot: 2, tomato: 2 });
+  Object.assign(st2.storage.items, { sun_wheat: 2 });
   st2.adventure.meals.rustic_bread = 1;
   st2.adventure.r75b = { grades: { rustic_bread: { home: 1, tasty: 0, perfect: 0 } } };
   assert.equal(quest(st2, "c4_tasting_stall").canClaim, false, "家常料理不能代替");
@@ -90,7 +90,7 @@ test("14c 蘿拉的試吃攤：第二條路用任何一道好吃以上的料理�
 
 test("14d 蘿拉的試吃攤：第一條路照舊（做草莓市集塔）", () => {
   const st = base(); unlockBefore(st, "c4_tasting_stall");
-  Object.assign(st.storage.items, { carrot: 2, tomato: 2 });
+  Object.assign(st.storage.items, { carrot: 2 });
   st.adventure.meals.strawberry_market_tart = 1;
   st.adventure.byTarget.cook.strawberry_market_tart = 1;
   const r = A.claim(st, "c4_tasting_stall", T0);
@@ -99,10 +99,9 @@ test("14d 蘿拉的試吃攤：第一條路照舊（做草莓市集塔）", () =
   assert.equal(st.adventure.meals.strawberry_market_tart, 0);
 });
 
-test("14e 公告欄旁的長椅：第二條路用 6 枚印章代替石材，印章不消耗", () => {
+test("14e 公告欄旁的長椅：第二條路用 6 枚印章與 2 份乾貨做坐墊，印章不消耗", () => {
   const st = base(); unlockBefore(st, "c4_notice_bench");
-  st.materials.wood = 4;
-  st.adventure.meals.tomato_harvest_stew = 1;
+  st.storage.items.sun_wheat = 2;
   st.sunbook = { stamps: { wheat: { lit: 1, trait: 1, dried: 1, perfect: 1 }, carrot: { lit: 1, trait: 1 } }, claimed: {}, bonus: { jar: 0, mirror: 0 }, hinted: true, folded: true };
   assert.equal(A.sunbookStampCount(st), 6);
   const q = quest(st, "c4_notice_bench");
@@ -110,12 +109,12 @@ test("14e 公告欄旁的長椅：第二條路用 6 枚印章代替石材，印�
   assert.equal(q.claimRoute, "alt");
   const r = A.claim(st, "c4_notice_bench", T0);
   assert.equal(r.ok, true, JSON.stringify(r));
-  assert.equal(st.materials.wood, 0, "木料照扣");
-  assert.equal(st.adventure.meals.tomato_harvest_stew, 0, "燉鍋照扣");
+  assert.equal(st.storage.items.sun_wheat || 0, 0, "乾貨做成防潮坐墊");
+  assert.equal(st.materials.wood, 2, "追光坐墊路線退回木料 2 份");
   assert.equal(A.sunbookStampCount(st), 6, "印章只是證明，不可以被收走");
   /* 印章不夠時第二條路不成立。 */
   const st2 = base(); unlockBefore(st2, "c4_notice_bench");
-  st2.materials.wood = 4; st2.adventure.meals.tomato_harvest_stew = 1;
+  st2.storage.items.sun_wheat = 2;
   st2.sunbook = { stamps: { wheat: { lit: 1 } }, claimed: {}, bonus: { jar: 0, mirror: 0 }, hinted: true, folded: true };
   assert.equal(quest(st2, "c4_notice_bench").canClaim, false, "印章只有 1 枚又沒石材時不能交付");
 });
@@ -130,16 +129,16 @@ test("14f 公告欄旁的長椅：第一條路照舊（木料、石材、燉鍋�
   assert.equal(st.materials.stone, 0);
 });
 
-test("14g 任務卡看得到兩種做法與各自進度", () => {
-  const world = fs.readFileSync("src/world-ui.js", "utf8");
-  assert.match(world, /兩種做法擇一/, "任務卡要寫兩種做法擇一");
-  assert.match(world, /data-r77c-route-label/, "任務卡要有第二條路的標示");
-  assert.match(world, /或：/, "第二條路的每一項要寫「或：」");
+test("14g 任務卡看得到做法甲與做法乙兩欄及各自進度", () => {
+  const choices = fs.readFileSync("src/choices-r77.js", "utf8");
+  assert.match(choices, /paintChapterRoutes/, "任務卡要改成兩欄");
+  assert.match(choices, /r78c-route-grid/, "任務卡要有做法甲與做法乙的欄位");
+  assert.match(choices, /data-r78c-chosen/, "完成後要標出走了哪一條");
   const st = base();
   Object.assign(st.storage.items, { tomato: 1, sun_wheat: 1 });
   const q = quest(st, "c4_market_expansion");
   const dried = q.altRequirements.find((r) => r.source === "driedAny");
-  assert.equal(dried.current, 1); assert.equal(dried.required, 2, "第二條路進度要分開算");
+  assert.equal(dried.current, 1); assert.equal(dried.required, 3, "第二條路進度要分開算");
 });
 
 test("14h 好吃料理以餐籃現量為準：等級紀錄多出來的不算，交付後餐籃不會變負數", () => {
@@ -151,7 +150,7 @@ test("14h 好吃料理以餐籃現量為準：等級紀錄多出來的不算，�
   st.adventure.meals.rustic_bread = 1;
   assert.equal(A.gradedMealCount(st), 1, "餐籃只有 1 份時最多算 1 份");
   const st2 = base(); unlockBefore(st2, "c4_tasting_stall");
-  Object.assign(st2.storage.items, { carrot: 2, tomato: 2 });
+  Object.assign(st2.storage.items, { sun_wheat: 2 });
   st2.adventure.meals.rustic_bread = 1;
   st2.adventure.r75b = Object.assign(st2.adventure.r75b || {}, { grades: { rustic_bread: { home: 0, tasty: 0, perfect: 3 } } });
   const r = A.claim(st2, "c4_tasting_stall", T0);

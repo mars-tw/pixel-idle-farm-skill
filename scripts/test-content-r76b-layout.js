@@ -42,6 +42,9 @@ function box(r) { return { left: r.left, right: r.right, top: r.top, bottom: r.b
       await press('[data-r76b-choice="farm"]');
       await page.waitForFunction(() => /種子拿去/.test(document.querySelector(".r76b-dialogue-line")?.textContent || ""), null, { timeout: 8000 });
       await press("[data-r76b-next]");
+      await page.waitForFunction(() => /沒有叫你等到明天/.test(document.querySelector(".r76b-dialogue-line")?.textContent || ""), null, { timeout: 8000 });
+      await press("[data-r76b-next]"); await press("[data-r76b-next]");
+      await page.waitForFunction(() => !document.querySelector(".r76b-dialogue"), null, { timeout: 8000 });
 
       /* 手札鄰居頭像與故事面板 */
       await page.evaluate(() => { const s = __farm.state(); NeighborsR61.ensure(s, Date.now()); s.adventure.r58.favor.child = 5; __farm.refresh(); });

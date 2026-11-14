@@ -344,6 +344,9 @@ const HELP = `
         await page.locator('.r76b-dialogue [data-r76b-choice]').first().click({ timeout: 8000 });
         await page.waitForFunction(() => !document.querySelector('.r76b-dialogue [data-r76b-choice]') && !!document.querySelector('.r76b-dialogue [data-r76b-next]'), null, { timeout: 8000 });
         await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+        await page.waitForFunction(() => /沒有叫你等到明天|當場攤開兩張空白公告/.test(document.querySelector('.r76b-dialogue [data-r76b-line]')?.textContent || ''), null, { timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
         await page.waitForFunction(() => !document.querySelector('.r76b-dialogue') && !document.querySelector('.npc-bubble .r60a-story-choices'), null, { timeout: 8000 });
         assert.deepEqual(errors7, [], `${tag} 第 7 項頁面錯誤`);
         console.log(`OK ${tag} 第 7 項：兩個選項都不被名牌擋、文字完整、真的點得到（點完泡泡關閉）`);

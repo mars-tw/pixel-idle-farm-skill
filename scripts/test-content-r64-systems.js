@@ -35,7 +35,7 @@ test("3 鎮長第一次二選一有種田與鎮上故事，結果寫日誌並有
 test("4 收穫祭為十分鐘，三種星等、獎勵、每場一次與三星配方都成立", () => {
   const one = festivalState(); one.storage.items.wheat = 3; assert.equal(A.festivalStatus(one, T0).remainingMs, 600000); assert.equal(ok(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 1)).stars, 1); assert.equal(one.coins, S.defaultState(T0).coins + 8); assert.equal(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 2).reason, "already_judged"); // R65：拉開一至三星獎勵。
   const two = festivalState(); Object.assign(two.storage.items, { wheat: 1, carrot: 1, tomato: 1 }); const twoResult = ok(A.judgeFestivalEntry(two, ["wheat", "carrot", "tomato"], T0 + 1)); assert.equal(twoResult.stars, 2); assert.equal(twoResult.reward.decorations, 1);
-  const three = festivalState(); Object.assign(three.storage.items, { radish: 1, carrot: 1 }); three.adventure.meals.rustic_bread = 1; const threeResult = ok(A.judgeFestivalEntry(three, ["radish", "carrot", "rustic_bread"], T0 + 1)); assert.equal(threeResult.stars, 3); assert.equal(threeResult.reward.recipe, "riverside_harvest_platter"); assert.equal(A.recipes(three).find((r) => r.id === "riverside_harvest_platter").unlocked, true);
+  const three = festivalState(); Object.assign(three.storage.items, { carrot: 1 }); three.storage.quality.wheat = 1; three.adventure.meals.rustic_bread = 1; const threeResult = ok(A.judgeFestivalEntry(three, ["quality:wheat", "carrot", "rustic_bread"], T0 + 1)); assert.equal(threeResult.stars, 3); assert.equal(threeResult.reward.recipe, "riverside_harvest_platter"); assert.equal(A.recipes(three).find((r) => r.id === "riverside_harvest_platter").unlocked, true);
 });
 
 test("5 逾時結算列完成數、星等、獎勵、下場時間，未全完成也給五金", () => {
