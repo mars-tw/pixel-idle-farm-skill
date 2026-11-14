@@ -44,9 +44,9 @@ test("4 今日三件事分別是種田、修建、社交", () => {
 
 test("5 作物評比列三樣明細、加分來源、補星提示與拉開獎勵", () => {
   const one = festivalState(); one.storage.items.wheat = 3; const oneResult = ok(A.judgeFestivalEntry(one, ["wheat", "wheat", "wheat"], T0 + 1));
-  assert.equal(oneResult.details.length, 3); assert.match(oneResult.tip, /三種不同品項/); assert.equal(oneResult.reward.coins, 8);
-  const three = festivalState(); Object.assign(three.storage.items, { radish: 1, carrot: 1 }); three.adventure.meals.rustic_bread = 1; const result = ok(A.judgeFestivalEntry(three, ["radish", "carrot", "rustic_bread"], T0 + 1));
-  assert.equal(result.stars, 3); assert.ok(result.details.some((row) => row.sources.includes("料理 +1"))); assert.match(result.rewardText, /50 金.*專屬.*河畔豐收拼盤/); assert.match(fs.readFileSync("src/world-ui.js", "utf8"), /result\.details.*result\.tip.*result\.rewardText/);
+  assert.equal(oneResult.details.length, 3); assert.match(oneResult.tip, /種類不同/); assert.equal(oneResult.reward.coins, 8);
+  const three = festivalState(); Object.assign(three.storage.items, { carrot: 1 }); three.storage.quality.wheat = 1; three.adventure.meals.rustic_bread = 1; const result = ok(A.judgeFestivalEntry(three, ["quality:wheat", "carrot", "rustic_bread"], T0 + 1));
+  assert.equal(result.stars, 3); assert.ok(result.details.some((row) => row.sources.includes("有料理 +1"))); assert.match(result.rewardText, /50 金.*專屬.*河畔豐收拼盤/); assert.match(fs.readFileSync("src/world-ui.js", "utf8"), /result\.details.*result\.tip.*result\.rewardText/);
 });
 
 test("6 整合：成熟以遊戲判斷為準、第 4 章起手札不用前期下一步、三件事不重複收成提示", () => {

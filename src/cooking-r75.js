@@ -36,12 +36,12 @@
   ];
   /* R77B：後續委託三步做完後，手札「現在的影響」改寫成升級後的內容（判斷放在冒險模組，這裡只查詢）。 */
   const R77_UPGRADED_TEXT = {
-    mayor_daily_seed: "農舍門口的種子袋每天送 2 包種子：1 包小麥，再加 1 包當季作物。",
+    mayor_daily_seed: "原本每天送種子的效果照常；晨耕完成後，田邊另有每天可親手翻一次的種子籃。",
     mayor_quest_coins: "鎮長每日委託的金幣從多一成變成多兩成，每天還可以換一次委託。",
-    elder_order_coins: "老農班伯的河畔委託金幣從多一成變成多兩成。",
-    elder_advice_seed: "每天向老農班伯請教時，多拿的當季種子從 1 包變成 2 包。",
-    merchant_order_coins: "蘿拉的河畔委託金幣從多一成變成多兩成，地圖上的招牌換成你選的顏色。",
-    merchant_two_specials: "蘿拉的今日特價從兩樣變成三樣。",
+    elder_order_coins: "原本的委託金幣加成照常；第一筆生意完成後，每天可問一次行情。",
+    elder_advice_seed: "原本每天多拿種子的效果照常；留種完成後，每天可親手領一次選種包。",
+    merchant_order_coins: "原本的委託金幣加成照常；招牌會留下選色，每天還可擦亮一次。",
+    merchant_two_specials: "原本的兩樣特價照常；客人的話完成後增加第三樣，口味牌也留在地圖上。",
   };
   function r77Upgraded(state, npcId) {
     return !!(A && typeof A.r77Upgraded === "function" && A.r77Upgraded(state, npcId));

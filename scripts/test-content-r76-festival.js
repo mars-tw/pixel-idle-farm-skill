@@ -22,7 +22,7 @@ function festivalState() {
 function freshFestival(level) { const st = festivalState(); st.level = level || 3; F.ensure(st, T0); return st; }
 function forceDemand(session, demand, now) { session.customer = { npcId: "mayor", npcName: "鎮長葛瑞", demand, startedAt: now, readyAt: now, expiresAt: now + F.CUSTOMER_TIMEOUT_MS }; }
 
-test("1 評比五分項逐項列出、總分 N／5、星等門檻與再補一項就三星", () => {
+test("1 評比五分項逐項列出、總分 N／5、三星門檻四分並點名缺項", () => {
   const st = festivalState();
   Object.assign(st.storage.items, { radish: 1, carrot: 1 });
   st.adventure.meals.rustic_bread = 1;
@@ -34,11 +34,11 @@ test("1 評比五分項逐項列出、總分 N／5、星等門檻與再補一項
   assert.equal(r.maxScore, 5);
   const b = R.festivalBreakdown(r);
   assert.equal(b.total, r.totalScore); assert.equal(b.max, 5);
-  assert.match(b.thresholdText, /三星要 3 分/);
+  assert.match(b.thresholdText, /三星要 4 分/);
   const two = festivalState(); Object.assign(two.storage.items, { wheat: 1, carrot: 1, tomato: 1 });
   const r2 = A.judgeFestivalEntry(two, ["wheat", "carrot", "tomato"], T0 + 1);
   assert.equal(r2.ok, true, JSON.stringify(r2));
-  if (r2.totalScore === 2) assert.match(r2.tip, /再補這一項就三星/);
+  if (r2.totalScore < 4) assert.match(r2.tip, /三星要四項.*下次先補/);
   assert.ok(r2.breakdown.some((row) => !row.got), "要有留空的分項");
   const world = fs.readFileSync("src/world-ui.js", "utf8");
   assert.match(world, /data-r76b-judge-breakdown/);

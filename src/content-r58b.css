@@ -1490,6 +1490,42 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 /* R78 分隔 */
 
 /* ===== R78C（選擇改變農場世界）開始：這條線的新規則只寫在這兩行註解之間 ===== */
+.r78c-decisions { flex: 1 1 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.r78c-decision { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-width: 0; text-align: left; }
+.r78c-decision b, .r78c-decision small { max-width: 100%; overflow-wrap: anywhere; }
+.r78c-decision small { display: block; margin-top: 2px; color: #5d4a2b; font-size: 11px; line-height: 1.35; }
+.r78c-decision-record { margin: 7px 0 0; padding: 6px 8px; border-left: 4px solid #d4872d; border-radius: 4px; background: #fff0c9; color: #553512; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+.r78c-daily { padding: 7px; border: 1px solid #9abb72; border-radius: 8px; background: #f2f9e9; }
+.r78c-scene-change { position: absolute; transform: translate(-50%, -100%); display: flex; align-items: center; justify-content: center; padding: 3px; border: 2px solid #9b6a2f; border-radius: 10px; background: #fff5cf; box-shadow: 0 2px 0 rgba(77, 48, 16, .35); cursor: pointer; }
+.r78c-scene-change.is-done { border-color: #4f7d31; background: #eef8d8; }
+.r78c-scene-change img { width: 26px; height: 26px; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+.r78c-scene-change span { position: absolute; left: 50%; top: calc(100% + 2px); transform: translateX(-50%); width: max-content; max-width: 150px; padding: 2px 5px; border: 1px solid #8e7041; border-radius: 5px; background: rgba(255, 250, 230, .96); color: #4d3010; font-size: 10px; font-weight: 900; line-height: 1.25; text-align: center; overflow-wrap: anywhere; pointer-events: none; }
+.r78c-route-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px !important; align-items: stretch; }
+.r78c-route { min-width: 0; padding: 8px; border: 2px solid #d9c8a2; border-radius: 9px; background: #fffdf4; }
+.r78c-route.is-chosen { border-color: #5f8f3c; background: #eef8df; }
+.r78c-route h4 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 0 0 5px; color: #4d3010; font-size: 13px; }
+.r78c-route h4 b { padding: 1px 6px; border-radius: 999px; background: #5f8f3c; color: #fff; font-size: 10px; }
+.r78c-route ul { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; }
+.r78c-route li, .r78c-route p, .r78c-route small { display: block; margin: 0; color: #58462b; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+.r78c-route p { margin-top: 6px; font-weight: 900; color: #285b1d; }
+.r78c-route-result { grid-column: 1 / -1; margin: 0; padding: 6px 8px; border-radius: 7px; background: #fff0c9; color: #5a3a13; font-size: 12px; font-weight: 800; line-height: 1.4; }
+.r78c-first-stamps { margin-bottom: 10px !important; }
+.r78c-first-stamps .r76c-row { padding: 6px; }
+.r78c-first-stamps .r76c-row-head { margin-bottom: 4px; }
+.r78c-row-help { margin-top: 5px; }
+.r78c-row-help > summary, .r78c-mile-fold > summary { min-height: 32px; display: flex; align-items: center; color: #6a4a12; font-size: 12px; font-weight: 800; cursor: pointer; }
+.r78c-mile-fold { margin-top: 8px; }
+.r78c-mile-fold > .r76c-miles { margin-top: 6px; }
+#worldModal:has(.r76b-judge-total) .modal-body { padding-bottom: 32px; scroll-padding-bottom: 32px; }
+#worldModal:has(.r76b-judge-total) .modal-body > p:last-child { margin-bottom: 10px; }
+@media (max-width: 430px) {
+  .r78c-scene-change span { max-width: 110px; font-size: 9px; }
+  .r78c-route-grid { gap: 6px !important; }
+  .r78c-route { padding: 6px; }
+  .r78c-route li, .r78c-route p, .r78c-route small { font-size: 11px; }
+  .r76c-body { padding: 8px; }
+  .r78c-first-stamps { gap: 6px; }
+}
 /* ===== R78C 結束 ===== */
 
 /* R78 分隔：三條線各寫各的區段，不要寫到別的區段。 */

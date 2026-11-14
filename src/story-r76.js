@@ -119,15 +119,15 @@
       for (const saved of judging.breakdown) { const row = rows.find((r) => r.id === saved.id); if (row) row.got = !!saved.got; }
     }
     const total = rows.filter((r) => r.got).length;
-    const stars = judging && Number.isFinite(judging.stars) ? judging.stars : (total >= 3 ? 3 : total >= 2 ? 2 : 1);
+    const stars = judging && Number.isFinite(judging.stars) ? judging.stars : (total >= 4 ? 3 : total >= 2 ? 2 : 1);
     const missing = rows.filter((r) => !r.got).map((r) => r.label);
-    return { rows, total, max: 5, stars, missing, nextForThree: total === 2 && missing.length ? missing[0] : null, thresholdText: "一星要 1 分、二星要 2 分、三星要 3 分，滿分 5 分" };
+    return { rows, total, max: 5, stars, missing, nextForThree: total < 4 ? missing.slice(0, Math.max(1, 4 - total)) : [], thresholdText: "一星要 1 分、二星要 2 分、三星要 4 分，滿分 5 分" };
   }
   function festivalTip(judging) {
     const b = festivalBreakdown(judging);
-    if (b.stars >= 3) return "五項裡已經拿到 " + b.total + " 分，下次可以換不同的當季作物再試一次。";
-    if (b.nextForThree) return "再補這一項就三星：" + b.nextForThree + "。還沒拿到的有：" + b.missing.join("、") + "。";
-    return "還沒拿到的有：" + b.missing.join("、") + "，補上其中一項，分數就會往上加。";
+    if (b.total >= 5) return "五項全拿到了；下次可換別的作物組合挑戰同樣的滿分。";
+    if (b.stars >= 3) return "三星已到手；下次直接補「" + b.missing[0] + "」就能拿滿五項。";
+    return "三星要四項，還差 " + Math.max(0, 4 - b.total) + " 項；下次先補「" + b.nextForThree.join("」和「") + "」。";
   }
 
   function isDuplicateQuestRow(mainText, rows) {

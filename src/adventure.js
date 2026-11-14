@@ -177,9 +177,9 @@
       wantsMeals: { rustic_bread: 1, baked_carrot: 1, mint_tea: 1 }, wantsCatch: 2,
       goals: [goal("talk", 1, "找圖圖交談", "child"), goal("restore", 1, "修好河畔釣台", "fishing_dock"), goal("restore", 1, "修好野餐桌", "picnic_table"), goal("restore", 1, "整理花園", "garden")],
       reward: reward(24, 12, {}, { collectible: "picnic_memory", guestbook: true }) },
-    { id: "c4_market_expansion", chapter: 4, name: "把市集撐大一點", npcId: "merchant", description: "蘿拉想把市集往外多擺兩張桌。帶番茄、草莓和木料來，讓她先把位置留好；或用 2 份乾貨代替草莓。兩種做法擇一。", opening: ["商人蘿拉拿捲尺在攤前比了又比。", "「貨多，再擠下去，客人只看得到別人的後腦勺。」", "她用鞋尖在地上劃出兩張桌的位置。", "「番茄 3 份、草莓 2 份，再加 2 份木料。你備貨，我把市集撐大。草莓不夠的話，拿 2 份乾貨來代替也可以。」"], completion: ["蘿拉把新桌腳踩穩，才退後看了一眼。", "「這樣才像市集，不是大家排隊等撞肩膀。」", "她把一面橘紅小旗交給你。", "「掛哪邊你決定。位置不同，客人記住的故事也不同。」"], target: { kind: "npc", id: "merchant" }, wants: { tomato: 3, strawberry: 2 }, wantsMaterials: { wood: 2 }, altWants: { tomato: 3 }, altWantsMaterials: { wood: 2 }, altDriedAny: 2, goals: [], reward: reward(30, 8) },
-    { id: "c4_tasting_stall", chapter: 4, name: "蘿拉的試吃攤", npcId: "merchant", description: "做一份草莓市集塔，再帶胡蘿蔔和番茄替試吃盤添顏色；或用任何一道好吃以上的料理代替草莓市集塔。兩種做法擇一。", opening: ["蘿拉把空盤一字排開，連角度都一樣。", "「別只說好吃，先讓香味把人拉過來。」", "她指了指最前面的空盤。", "「一份草莓市集塔，再帶 2 份胡蘿蔔、2 份番茄。今天要讓客人真的停下腳步。手邊有別道好吃以上的料理，拿那道來代替小塔也可以。」"], completion: ["第一塊小塔才切開，圖圖已經踮著腳看。", "蘿拉沒急著招呼，只把盤子往前推了一點。", "「看吧，香味比我喊十遍都管用。」", "她在攤布角落繡上一顆小草莓，留作下次開攤的記號。"], target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: { carrot: 2, tomato: 2 }, wantsMeals: { strawberry_market_tart: 1 }, altWants: { carrot: 2, tomato: 2 }, altGradedMealAny: 1, goals: [goal("cook", 1, "做一份草莓市集塔", "strawberry_market_tart")], reward: reward(36, 10) },
-    { id: "c4_notice_bench", chapter: 4, name: "公告欄旁的長椅", npcId: "mayor", description: "鎮長要修好公告欄旁的長椅。帶木料、石材和番茄豐收燉鍋，讓修椅子的人有頓熱飯；或用追光手冊 6 枚印章代替石材，印章不會被收走。兩種做法擇一。", opening: ["鎮長葛瑞扶住歪掉的椅背，木板立刻吱了一聲。", "「這張椅子聽過不少消息，也該讓它喘口氣了。」", "他把鬆掉的釘子收進掌心。", "「4 份木料、2 份石材，再帶一鍋熱食。修完以前，誰都別坐下試膽。石材不夠的話，你追光手冊裡有 6 枚印章也行，印章不會收走。」"], completion: ["鎮長把最後一顆釘子敲平，自己先坐了一下。", "長椅沒再出聲，他才滿意地拍拍旁邊的位置。", "「穩了。以後看公告不用站著看到腿麻。」", "「你那鍋熱食也救了大家，老農班伯剛才還問能不能再添一碗。」"], target: { kind: "npc", id: "mayor" }, wantsMaterials: { wood: 4, stone: 2 }, wantsMeals: { tomato_harvest_stew: 1 }, altWantsMaterials: { wood: 4 }, altWantsMeals: { tomato_harvest_stew: 1 }, altSunbookStamps: 6, goals: [], reward: reward(42, 12) },
+    { id: "c4_market_expansion", chapter: 4, name: "把市集撐大一點", npcId: "merchant", description: "做法甲用新鮮番茄、草莓和木料搭鮮貨桌；做法乙用日曬乾貨與石材搭耐放貨架。備齊哪套，就直接交哪套。", opening: ["商人蘿拉拿捲尺在攤前比了又比。", "「貨多，再擠下去，客人只看得到別人的後腦勺。」", "她畫出兩張完全不同的圖：一張是鮮貨桌，一張是耐放貨架。", "「你實際帶來哪套材料，市集就長成哪個樣子。」"], completion: ["蘿拉把新桌腳踩穩，才退後看了一眼。", "「這樣才像市集，不是大家排隊等撞肩膀。」", "她把最後一面小旗掛好，市集也留下了你真正交付的做法。"], target: { kind: "npc", id: "merchant" }, wants: { tomato: 3, strawberry: 2 }, wantsMaterials: { wood: 2 }, altWantsMaterials: { stone: 2 }, altDriedAny: 3, routeNames: { primary: "做法甲・鮮貨桌", alt: "做法乙・耐放貨架" }, routeConsequences: { primary: "市集多一張鮮貨桌，報酬較高。", alt: "市集多一座耐放貨架，並退回 1 份木料。" }, routeRewards: { primary: reward(36, 8), alt: reward(24, 8, { wood: 1 }) }, goals: [], reward: reward(30, 8) },
+    { id: "c4_tasting_stall", chapter: 4, name: "蘿拉的試吃攤", npcId: "merchant", description: "做法甲端草莓市集塔與胡蘿蔔；做法乙端一道好吃以上的料理與 2 份日曬乾貨。備齊哪套，就直接交哪套。", opening: ["蘿拉把空盤一字排開，連角度都一樣。", "「別只說好吃，先讓香味把人拉過來。」", "她把甜點盤和日曬拼盤分到桌子兩邊。", "「你端來哪一套，今天的試吃攤就講哪一個故事。」"], completion: ["第一盤才切開，圖圖已經踮著腳看。", "蘿拉沒急著招呼，只把盤子往前推了一點。", "「看吧，香味比我喊十遍都管用。」", "攤布角落留下了這次實際交付的試吃記號。"], target: { kind: "station", id: "kitchen", tileId: "t10_10" }, wants: { carrot: 2 }, wantsMeals: { strawberry_market_tart: 1 }, altDriedAny: 2, altGradedMealAny: 1, routeNames: { primary: "做法甲・甜點試吃", alt: "做法乙・日曬拼盤" }, routeConsequences: { primary: "攤布繡上草莓記號，報酬較高。", alt: "攤布掛上日曬牌，並拿到堆肥 1 份。" }, routeRewards: { primary: reward(42, 10), alt: reward(28, 10, { compost: 1 }) }, goals: [goal("cook", 1, "做一份草莓市集塔", "strawberry_market_tart")], reward: reward(36, 10) },
+    { id: "c4_notice_bench", chapter: 4, name: "公告欄旁的長椅", npcId: "mayor", description: "做法甲用木料、石材與熱食整修；做法乙出示 6 枚追光印章，再交 2 份乾貨做成防潮坐墊。備齊哪套，就直接交哪套。", opening: ["鎮長葛瑞扶住歪掉的椅背，木板立刻吱了一聲。", "「這張椅子聽過不少消息，也該讓它喘口氣了。」", "他放下傳統修繕圖，又拿出一張防潮坐墊圖。", "「石木整修，或追光印章加乾貨坐墊；你帶來哪套，我們就做哪套。」"], completion: ["鎮長檢查最後一個接縫，自己先坐了一下。", "長椅沒再出聲，他才滿意地拍拍旁邊的位置。", "「穩了。以後看公告不用站著看到腿麻。」", "公告旁也留下這次真正完成的做法。"], target: { kind: "npc", id: "mayor" }, wantsMaterials: { wood: 4, stone: 2 }, wantsMeals: { tomato_harvest_stew: 1 }, altDriedAny: 2, altSunbookStamps: 6, routeNames: { primary: "做法甲・石木整修", alt: "做法乙・追光坐墊" }, routeConsequences: { primary: "長椅換上石木椅腳，報酬較高。", alt: "長椅多一張防潮坐墊，並退回木料 2 份。" }, routeRewards: { primary: reward(42, 12), alt: reward(30, 12, { wood: 2 }) }, goals: [], reward: reward(42, 12) },
     { id: "c5_festival_tables", chapter: 5, name: "河畔先擺好桌", npcId: "mayor", description: "替河畔收穫祭備妥桌面：木料、胡蘿蔔與番茄缺一不可。", opening: ["鎮長把河畔空地分成一格一格，走三步就停下來看。", "「桌子不能擋路，端菜的人也不能踩進草叢。」", "他把配置圖轉向你。", "「帶 5 份木料、3 份胡蘿蔔和 3 份番茄來，我們先把桌子擺穩。」"], completion: ["最後一張桌子落地，河風正好從桌與桌之間穿過。", "鎮長沿著通道走一遍，沒有碰倒任何椅子。", "「可以。今晚大家端著熱湯，也走得安穩。」"], target: { kind: "river", id: "picnic_table", tileId: "t10_10" }, wants: { carrot: 3, tomato: 3 }, wantsMaterials: { wood: 5 }, goals: [], reward: reward(40, 10) },
     { id: "c5_invite_neighbors", chapter: 5, name: "把大家請到河邊", npcId: "child", description: "親口邀請鎮長、老農班伯、蘿拉和圖圖，再準備一份胡蘿蔔田埂濃湯。", opening: ["圖圖抱著四張邀請卡，跑得紙角都翹了。", "「我畫了河、桌子，還有一個超大的湯碗！」", "他把卡片分給你一半。", "「你去找大家說，我來檢查路上的箭頭。少一個人，晚餐就少一個故事。」"], completion: ["圖圖把四張回覆排在桌上，一張不少。", "「鎮長葛瑞會帶燈，老農班伯說他帶大湯杓，蘿拉要帶乾淨盤子。」", "他把自己的卡片塞進口袋。", "「我當然也會來。我還要坐最看得到河的位置。」"], target: { kind: "npc", id: "child" }, wantsMeals: { carrot_trail_soup: 1 }, goals: [goal("talk", 1, "邀請鎮長葛瑞", "mayor"), goal("talk", 1, "邀請老農班伯", "elder"), goal("talk", 1, "邀請蘿拉", "merchant"), goal("talk", 1, "邀請圖圖", "child")], reward: reward(44, 12) },
     { id: "c5_festival_dinner", chapter: 5, name: "河畔收穫祭晚餐", npcId: "merchant", description: "把三道料理端上河畔長桌，跟四位鄰居一起吃完收穫祭晚餐。", opening: ["夕陽碰到河面時，蘿拉已經把盤子排好。", "老農班伯提著湯杓，鎮長在掛燈，圖圖則忙著替每張椅子取名字。", "蘿拉看了看你的餐籃。", "「番茄燉鍋、草莓市集塔、胡蘿蔔濃湯。三道都到，我們就開飯。」"], completion: ["燈一盞一盞亮起來，河面把每個人的笑聲推得很遠。", "老農班伯把最後一勺燉鍋分完，蘿拉難得沒去算還剩幾個盤子。", "圖圖舉起杯子喊：「下次也要辦，而且我要畫新的邀請卡！」", "鎮長望向你說：「農場不只重新開門了。今晚，它把整個鎮都請上了桌。」", "收穫祭會每隔 20 分鐘再開一次；每次有 10 分鐘完成三個小目標，還能到祭典攤位參加作物評比。"], target: { kind: "river", id: "picnic_table", tileId: "t10_10" }, wantsMeals: { tomato_harvest_stew: 1, strawberry_market_tart: 1, carrot_trail_soup: 1 }, goals: [goal("talk", 1, "請四位鄰居到場", "mayor"), goal("talk", 1, "請四位鄰居到場", "elder"), goal("talk", 1, "請四位鄰居到場", "merchant"), goal("talk", 1, "請四位鄰居到場", "child")], reward: reward(60, 18) },
@@ -275,7 +275,7 @@
     return rows;
   }
   function questRouteStatus(state, q, a) {
-    const primary = questRequirements(state, q);
+    const primary = questRequirements(state, q).map((row) => Object.assign(row, { route: "primary" }));
     const alt = altQuestRequirements(state, q);
     const goalsDone = q.goals.every((g) => goalCount(a, g) >= g.count);
     const primaryReady = goalsDone && primary.every((r) => r.complete);
@@ -364,6 +364,9 @@
       if (rec.status === "claimed" || rec.rewardGranted === true) a.claimed[q.id] = true;
       rec.readyAt = Number.isSafeInteger(rec.readyAt) && rec.readyAt >= 0 ? rec.readyAt : rec.status === "ready" ? now : null;
       rec.claimedAt = Number.isSafeInteger(rec.claimedAt) && rec.claimedAt >= 0 ? rec.claimedAt : claimed(a, q.id) ? now : null;
+      rec.claimRoute = rec.claimRoute === "primary" || rec.claimRoute === "alt" ? rec.claimRoute : null;
+      rec.routeConsequence = typeof rec.routeConsequence === "string" ? rec.routeConsequence.slice(0, 180) : "";
+      rec.routeReceipt = Array.isArray(rec.routeReceipt) ? rec.routeReceipt.filter((row) => object(row) && typeof row.name === "string" && Number.isFinite(row.required)).slice(0, 8).map((row) => ({ name: row.name.slice(0, 80), required: qty(row.required), consume: row.consume !== false })) : [];
       a.quests[q.id] = rec;
     }
     // R58 state: random events, neighbor favor/personal quests, and meal buffs.
@@ -411,7 +414,8 @@
     const dailySelected = [...new Set((Array.isArray(dailyRaw.selected) ? dailyRaw.selected : []).filter((id) => R66_DAILY_CANDIDATES.some((row) => row.id === id)))];
     a.r61 = {
       marketFlagChoice: validChoice ? { id: validChoice.id, at: qty(validChoice.at, Number.MAX_SAFE_INTEGER), journal: String(validChoice.journal || "").slice(0, 180) } : null,
-      world: { marketFlag: r61raw.world && ["gate", "stall"].includes(r61raw.world.marketFlag) ? r61raw.world.marketFlag : null, tastingMark: !!(r61raw.world && r61raw.world.tastingMark), noticeBench: !!(r61raw.world && r61raw.world.noticeBench), festivalTables: !!(r61raw.world && r61raw.world.festivalTables) },
+      world: { marketFlag: r61raw.world && ["gate", "stall"].includes(r61raw.world.marketFlag) ? r61raw.world.marketFlag : null, tastingMark: !!(r61raw.world && r61raw.world.tastingMark), noticeBench: !!(r61raw.world && r61raw.world.noticeBench), festivalTables: !!(r61raw.world && r61raw.world.festivalTables),
+        c4Routes: object(r61raw.world && r61raw.world.c4Routes) ? Object.fromEntries(Object.entries(r61raw.world.c4Routes).filter(([id, route]) => QUESTS.some((q) => q.id === id && q.chapter === 4) && (route === "primary" || route === "alt"))) : {} },
       festival: {
         unlocked: festivalRaw.unlocked === true || claimed(a, "c5_festival_dinner"),
         startsAt: qty(festivalRaw.startsAt, Number.MAX_SAFE_INTEGER),
@@ -623,9 +627,10 @@
       const objectives = q.goals.map((g) => ({ type: g.type, id: g.id, name: g.name, current: goalCount(a, g), required: g.count, complete: goalCount(a, g) >= g.count, consume: false }));
       const route = questRouteStatus(state, q, a);
       const needs = route.primary;
+      const rec = a.quests[q.id];
       return Object.assign(copy(q), { chapterName: CHAPTERS[q.chapter - 1].name, previousId: index ? QUESTS[index - 1].id : null, nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null,
         status: a.quests[q.id].status, readyAt: a.quests[q.id].readyAt, claimedAt: a.quests[q.id].claimedAt, objectives, requirements: needs,
-        altRequirements: route.alt, hasAltRoute: route.alt.length > 0, claimRoute: route.claimRoute,
+        altRequirements: route.alt, hasAltRoute: route.alt.length > 0, claimRoute: route.claimRoute, chosenRoute: rec.claimRoute, routeReceipt: copy(rec.routeReceipt || []), routeConsequence: rec.routeConsequence || "",
         canClaim: !claimed(a, q.id) && unlockedQuest(a, index) && route.canClaim });
     });
   }
@@ -686,13 +691,18 @@
       return fail("missing_resources", "要交付的物品還沒備齊。", { requirements: route.primary.concat(route.alt) });
     }
     const rows = route.claimRoute === "alt" ? route.alt : route.primary;
+    const actualReward = q.routeRewards && q.routeRewards[route.claimRoute] ? q.routeRewards[route.claimRoute] : q.reward;
+    const routeConsequence = q.routeConsequences && q.routeConsequences[route.claimRoute] ? q.routeConsequences[route.claimRoute] : "";
+    a.quests[id].routeReceipt = rows.map((row) => ({ name: row.name, required: row.required, consume: row.consume !== false }));
+    a.quests[id].routeConsequence = routeConsequence;
     consume(state, rows);
     a.quests[id].claimRoute = route.claimRoute;
     a.claimed[id] = true;
     a.quests[id].status = "claimed";
     a.quests[id].rewardGranted = true;
     a.quests[id].claimedAt = at(state, now);
-    grant(state, q.reward);
+    grant(state, actualReward);
+    if (q.chapter === 4) a.r61.world.c4Routes[id] = route.claimRoute;
     if (id === "c4_tasting_stall") a.r61.world.tastingMark = true;
     if (id === "c4_notice_bench") a.r61.world.noticeBench = true;
     if (id === "c5_festival_tables") a.r61.world.festivalTables = true;
@@ -713,9 +723,9 @@
     /* R77C 第 12 項：晚宴對白提到擺攤賣得最好的那一樣。 */
     const bestSeller = state.adventure.r72b && state.adventure.r72b.lastBestSeller;
     const dinnerLine = id === "c5_festival_dinner" && bestSeller && bestSeller.name ? "晚宴上，蘿拉還提起你攤上賣得最好的" + bestSeller.name + "，大家都說那一味最搶手。" : "";
-    return ok("「" + q.name + "」完成了。", { id, reward: copy(q.reward), claimRoute: route.claimRoute, dinnerLine, nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null,
+    return ok("「" + q.name + "」完成了。" + (routeConsequence ? routeConsequence : ""), { id, reward: copy(actualReward), claimRoute: route.claimRoute, routeConsequence, dinnerLine, nextId: QUESTS[index + 1] ? QUESTS[index + 1].id : null,
       milestones,
-      settlement: { kind: "quest", coins: q.reward.coins || 0, xp: q.reward.xp || 0,
+      settlement: { kind: "quest", coins: actualReward.coins || 0, xp: actualReward.xp || 0,
         next: id === "c1_first_harvest" ? nextFarmStep(state, now).text : (QUESTS[index + 1] ? "繼續進行「" + QUESTS[index + 1].name + "」。" : "繼續經營陽光農場。") } });
   }
   function projects(state) {
@@ -1503,17 +1513,33 @@
     const quality = chosen.some((row) => row.quality);
     const hasDried = chosen.some((row) => row.kind === "dried");
     const judgingPoints = (diverse ? 1 : 0) + (seasonal ? 1 : 0) + (hasMeal ? 1 : 0) + (quality ? 1 : 0) + (hasDried ? 1 : 0);
-    const stars = judgingPoints >= 3 ? 3 : judgingPoints >= 2 ? 2 : 1;
+    const stars = judgingPoints >= 4 ? 3 : judgingPoints >= 2 ? 2 : 1;
     for (const [id, count] of Object.entries(used)) { const row = entries.find((item) => item.id === id); const target = row.kind === "meal" ? state.adventure.meals : row.quality ? state.storage.quality : state.storage.items; const targetId = row.cropId || id; target[targetId] -= count; if (target[targetId] === 0 && row.kind === "crop") delete target[targetId]; }
-    const coins = stars === 1 ? 8 : stars === 2 ? 24 : 50; grant(state, reward(coins, 0));
+    const baseCoins = stars === 1 ? 8 : stars === 2 ? 24 : 50;
+    const qualityBonus = quality ? 8 : 0, driedBonus = hasDried ? 8 : 0;
+    const coins = baseCoins + qualityBonus + driedBonus; grant(state, reward(coins, 0));
     if (stars >= 2) f.decorations = Math.min(999, f.decorations + 1);
     if (stars === 3) f.festivalRecipe = true;
-    const rewardText = stars === 1 ? "8 金" : stars === 2 ? "24 金與豐收花環裝飾 1 件" : "50 金、專屬豐收花環裝飾 1 件，並學會專屬配方「河畔豐收拼盤」";
-    const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，這桌已經很有農場的樣子了。」" : "鎮長葛瑞說：「當季收成和料理都照顧到了，這就是今晚最完整的一桌！」";
-    const details = chosen.map((row) => ({ id: row.id, name: row.name, sources: [row.kind === "crop" && (row.season === currentSeason || row.season === "四季") ? "當季作物 +1" : null, row.kind === "meal" ? "料理 +1" : null, row.kind === "dried" ? "日曬乾貨 +1" : null, row.quality ? "優質作物 +1" : null, diverse ? "種類不同 +1" : null].filter(Boolean) }));
+    const rewardBaseText = stars === 1 ? "8 金" : stars === 2 ? "24 金與豐收花環裝飾 1 件" : "50 金、專屬豐收花環裝飾 1 件，並學會專屬配方「河畔豐收拼盤」";
+    const bonusText = [quality ? "優質作物加獎 8 金" : "", hasDried ? "日曬乾貨加獎 8 金" : ""].filter(Boolean);
+    const rewardText = rewardBaseText + (bonusText.length ? "；" + bonusText.join("、") : "");
+    const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，再補齊兩項就是三星。」" : "鎮長葛瑞說：「至少四項都照顧到了，這就是今晚的三星桌！」";
+    const credited = new Set();
+    const details = chosen.map((row) => {
+      const sources = [];
+      const take = (id, label, yes) => { if (yes && !credited.has(id)) { credited.add(id); sources.push(label + " +1"); } };
+      take("seasonal", "當季作物", row.kind === "crop" && (row.season === currentSeason || row.season === "四季"));
+      take("hasMeal", "有料理", row.kind === "meal");
+      take("quality", "優質作物", row.quality);
+      take("hasDried", "日曬乾貨", row.kind === "dried");
+      return { id: row.id, name: row.name, sources };
+    });
+    if (diverse && details.length) details[0].sources.unshift("種類不同 +1（整桌只算一次）");
     const breakdown = [{ id: "diverse", label: "種類不同", got: diverse }, { id: "seasonal", label: "當季作物", got: seasonal }, { id: "hasMeal", label: "有料理", got: hasMeal }, { id: "quality", label: "優質作物", got: quality }, { id: "hasDried", label: "日曬乾貨", got: hasDried }];
     const missingLabels = breakdown.filter((row) => !row.got).map((row) => row.label);
-    const tip = stars >= 3 ? "五項裡已經拿到 " + judgingPoints + " 分，下次可以換不同的當季作物再試一次。" : judgingPoints === 2 ? "再補這一項就三星：" + missingLabels[0] + "。還沒拿到的有：" + missingLabels.join("、") + "。" : "還沒拿到的有：" + missingLabels.join("、") + "，補上其中一項，分數就會往上加。" + (!diverse ? "也可以換成三種不同品項試試。" : "");
+    const tip = judgingPoints >= 5 ? "五項全拿到了；下次可換別的作物組合挑戰同樣的滿分。"
+      : stars >= 3 ? "三星已到手；下次直接補「" + missingLabels[0] + "」就能拿滿五項。"
+        : "三星要四項，還差 " + Math.max(0, 4 - judgingPoints) + " 項；下次先補「" + missingLabels.slice(0, Math.max(1, 4 - judgingPoints)).join("」和「") + "」。";
     /* R77C 第 12 項：這一場擺攤 2 星以上，評比多一行攤位口碑；五個分項與總分算法不變。 */
     const stallRound = state.adventure.r72b && state.adventure.r72b.rounds && state.adventure.r72b.rounds[String(f.startsAt)];
     const stallStars = Math.max(qty(stallRound && stallRound.stallStars), qty(stallRound && stallRound.bestStars));

@@ -34,24 +34,21 @@ function measure(page, selector) {
       await page.waitForTimeout(600);
       assert.equal(await page.evaluate(() => !!(window.ChoicesR77 && ChoicesR77.cardHtml && AdventureAPI.mainStoryRecall.__r77b)), true, `${tag} 後續委託模組要載入並接上`);
 
-      /* 選「先聽鎮上的事」，回訪對白播完後鎮長多交代一件事 */
-      const followLines = await page.evaluate(() => {
+      /* R78C：選「先聽鎮上的事」後，鎮長當場攤開公告，不等隔天回訪。 */
+      const introLines = await page.evaluate(() => {
         const s = __farm.state(), now = Date.now();
         AdventureAPI.ensure(s, now);
-        const r = AdventureAPI.resolveMainStoryChoice(s, "mayor", "town", now - 10 * 60 * 1000);
+        const r = AdventureAPI.resolveMainStoryChoice(s, "mayor", "town", now);
         if (!r.ok) throw new Error("選擇失敗 " + JSON.stringify(r));
-        StoryR76.openFollowup(s, "mayor", {});
-        return StoryR76.FOLLOWUPS["mayor:town"].lines.length;
+        return r.r78cIntro.length;
       });
-      await page.waitForFunction(() => document.querySelector(".r76b-dialogue [data-r76b-next]"), null, { timeout: 8000 });
-      for (let i = 0; i < followLines; i++) await press("[data-r76b-next]");
-      await page.waitForFunction(() => /既然你想多認識鎮上/.test(document.querySelector(".r76b-dialogue [data-r76b-line]")?.textContent || ""), null, { timeout: 8000 });
+      await page.waitForFunction(() => /沒有叫你等到明天|當場攤開兩張空白公告/.test(document.querySelector(".r76b-dialogue [data-r76b-line]")?.textContent || ""), null, { timeout: 8000 });
       const brief = await page.evaluate(() => { const c = document.querySelector(".r76b-dialogue-card").getBoundingClientRect(), b = document.querySelector("[data-r76b-next]").getBoundingClientRect(); return { card: { left: c.left, right: c.right, top: c.top, bottom: c.bottom }, btn: { w: b.width, h: b.height } }; });
-      assert.ok(brief.card.left >= 0 && brief.card.right <= w && brief.card.top >= 0 && brief.card.bottom <= h, `${tag} 交代對話框不出界 ${JSON.stringify(brief.card)}`);
-      assert.ok(brief.btn.w >= 44 && brief.btn.h >= 44, `${tag} 交代對話框按鈕至少 44px`);
-      for (let i = 0; i < 3; i++) await press("[data-r76b-next]");
+      assert.ok(brief.card.left >= 0 && brief.card.right <= w && brief.card.top >= 0 && brief.card.bottom <= h, `${tag} 即時事件對話框不出界 ${JSON.stringify(brief.card)}`);
+      assert.ok(brief.btn.w >= 44 && brief.btn.h >= 44, `${tag} 即時事件對話框按鈕至少 44px`);
+      for (let i = 0; i < introLines; i++) await press("[data-r76b-next]");
       await page.waitForFunction(() => !document.querySelector(".r76b-dialogue"), null, { timeout: 8000 });
-      await page.waitForFunction(() => /多交代了一件事/.test(document.querySelector("#toast-zone")?.textContent || ""), null, { timeout: 8000 });
+      await page.waitForFunction(() => /選擇事件|立刻改變/.test(document.querySelector("#toast-zone")?.textContent || ""), null, { timeout: 8000 });
       const recall = await page.evaluate(() => { const s = __farm.state(), t = Date.now() + 10 * 60 * 1000; return { now: AdventureAPI.mainStoryRecall(s, "mayor", t), orig: AdventureAPI.__r77bOrigMainStoryRecall(s, "mayor", t), status: ChoicesR77.questView(s, "mayor", Date.now()).status }; });
       assert.equal(recall.status, "active", `${tag} 回訪播完後委託開始`);
       assert.ok(recall.orig, `${tag} 原本那套固定回訪台詞存在`);
@@ -66,12 +63,10 @@ function measure(page, selector) {
         s.adventure.claimed.c1_homecoming = true;
         AdventureAPI.ensure(s, now);
         if (!AdventureAPI.resolveMainStoryChoice(s, "merchant", "sign", now).ok) throw new Error("蘿拉選擇失敗");
-        StoryR76.markFollowupSeen(s, "merchant", now);
-        ChoicesR77.onFollowupSeen(s, "merchant", now);
+        ChoicesR77.act(s, "merchant", now);
         s.materials.wood = 2;
-        if (!ChoicesR77.act(s, "merchant", now).ok) throw new Error("木料交不出去");
-        s.adventure.meals.rustic_bread = 1;
-        if (!ChoicesR77.act(s, "merchant", now + 1).ok) throw new Error("料理交不出去");
+        if (!ChoicesR77.act(s, "merchant", now + 1).ok) throw new Error("木料交不出去");
+        document.querySelectorAll(".r76b-dialogue").forEach((node) => node.remove());
         ChoicesR77.takeNotes();
         s.adventure.projects.fishing_dock = { restored: true, restoredAt: now };
         AdventureAPI.ensure(s, now);
@@ -79,6 +74,7 @@ function measure(page, selector) {
         __farm.refresh();
         FarmWorld.refresh(s);
       });
+      for (let i = 0; i < 3; i++) { await page.waitForTimeout(160); await page.evaluate(() => document.querySelectorAll(".r76b-dialogue").forEach((node) => node.remove())); }
       await page.waitForFunction(() => !document.querySelector("#toast-zone > *"), null, { timeout: 8000 }).catch(() => {});
       await page.evaluate(() => { FarmWorld.openPanel("journal"); CookingR75.injectChoices(__farm.state()); });
       await page.waitForFunction(() => document.querySelectorAll('[data-r77b-quest="merchant"] [data-r77b-color]').length === 3, null, { timeout: 8000 });
@@ -94,15 +90,15 @@ function measure(page, selector) {
       assert.equal(mayor.state, "active", `${tag} 鎮長的後續委託進行中`);
       assert.match(mayor.title, /鎮上的事.*已完成 0\/3 步/, `${tag} 標題寫出委託名稱與幾步`);
       assert.equal(mayor.steps.length, 3, `${tag} 三個步驟都列出來`);
-      assert.equal(mayor.steps[0].progress, "進度 1/4", `${tag} 回訪那次交談算進度`);
+      assert.equal(mayor.steps[0].progress, "進度 0/1", `${tag} 第一個角色場景還沒在手札打開`);
       for (const s of mayor.steps) {
         assert.match(s.progress, /\d+\/\d+/, `${tag} 每一步都有幾分之幾`);
         assert.match(s.where, /去哪裡做：/, `${tag} 每一步寫去哪裡做`);
         assert.ok(s.width > 0 && s.height > 0 && s.left >= 0 && s.right <= w + 0.5, `${tag} 步驟不出界 ${JSON.stringify(s)}`);
       }
       assert.ok(mayor.box.left >= 0 && mayor.box.right <= w + 0.5 && mayor.overflow <= 1, `${tag} 委託卡不出界、不橫向捲動`);
-      const elderHint = await page.evaluate(() => document.querySelector('[data-r77b-quest="elder"][data-r77b-state="waiting"] .r77b-hint')?.textContent || "");
-      assert.match(elderHint, /還有一件事要交代/, `${tag} 還沒回訪的寫出要再去找他聊`);
+      const elderState = await page.evaluate(() => document.querySelector('[data-r77b-quest="elder"]')?.dataset.r77bState || "");
+      assert.equal(elderState, "active", `${tag} 班伯的事件不用等隔天就開始`);
 
       /* 招牌選色：三個選項至少 44px、不出界、不被工具列蓋住、點得到 */
       await page.evaluate(() => document.querySelector('[data-r77b-quest="merchant"] [data-r77b-colors]').scrollIntoView({ block: "center" }));
@@ -128,7 +124,7 @@ function measure(page, selector) {
       assert.match(done.after, /^再後來：/, `${tag} 全部做完手札多一行「再後來」`);
       assert.match(done.after, /莓果紅/, `${tag} 「再後來」寫出選的顏色`);
       assert.match(done.upgrade, /多兩成/, `${tag} 手札寫出加成升級`);
-      assert.match(done.effect, /多兩成/, `${tag} 「現在的影響」改成升級後的內容`);
+      assert.match(done.effect, /委託金幣加成照常.*每天還可擦亮一次/, `${tag} 「現在的影響」寫清原加成與新互動`);
       assert.equal(done.pressed, "true", `${tag} 選中的顏色有標示`);
       await page.waitForFunction(() => { const n = document.querySelector('.r75b-map-node[data-r75b-sign][data-r77b-sign-color="red"]'); return n && /hue-rotate/.test(getComputedStyle(n.querySelector("img")).filter); }, null, { timeout: 8000 });
       const sign = await page.evaluate(() => { const n = document.querySelector('.r75b-map-node[data-r75b-sign]'); return { count: document.querySelectorAll('[data-r75b-sign="farm_sign"]').length, label: n.getAttribute("aria-label") }; });

@@ -286,6 +286,9 @@ const HELP = `
         await page.locator('.r76b-dialogue [data-r76b-choice]').first().click({ timeout: 8000 });
         await page.waitForFunction(() => !document.querySelector('.r76b-dialogue [data-r76b-choice]') && !!document.querySelector('.r76b-dialogue [data-r76b-next]'), null, { timeout: 8000 });
         await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+        await page.waitForFunction(() => /沒有叫你等到明天|當場攤開兩張空白公告/.test(document.querySelector('.r76b-dialogue [data-r76b-line]')?.textContent || ''), null, { timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
+        await page.locator('.r76b-dialogue [data-r76b-next]').first().click({ timeout: 8000 });
         await page.waitForFunction(() => !document.querySelector('.r76b-dialogue'), null, { timeout: 8000 });
         await page.waitForTimeout(600);
         const after = await page.evaluate((src) => {
