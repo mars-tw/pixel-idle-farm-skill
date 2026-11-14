@@ -443,6 +443,9 @@
           const f = farm();
           if (result.ok && f && f.refresh) { try { f.refresh(); } catch (_) { /* 重畫失敗不影響已入帳的獎勵 */ } }
           inject(state);
+          /* R78 整合：印章格移到最上面後，重畫會把里程碑那一列推出畫面；領完把剛領的那一列捲回來。 */
+          const mile = document.querySelector('[data-r76c-mile="' + Number(button.getAttribute("data-r76c-claim")) + '"]');
+          if (mile && mile.scrollIntoView) mile.scrollIntoView({ block: "nearest" });
         }, 0);
       });
     });
