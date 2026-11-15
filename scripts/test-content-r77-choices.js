@@ -310,7 +310,9 @@ test("客人的話（先聽客人想買什麼）：讀留言 → 選甜或清爽
   assert.equal(buy.ok, true, JSON.stringify(buy));
   assert.equal(c1 - st.coins, third.specialPrice, "第三樣照特價扣錢");
   assert.equal(st.adventure.r58.r59.seedPacks[third.cropId], p0 + third.packsPerBuy, "第三樣的種子包實際入帳");
-  assert.match(Q.cardHtml(st, "merchant", day2), /data-r77b-buy-third/);
+  /* R79C 同步：第三樣特價改到地圖上的口味牌旁邊買，手札只寫今天第三樣是什麼，再給「帶我去」。 */
+  assert.match(Q.cardHtml(st, "merchant", day2), /data-r77b-third/);
+  assert.match(Q.cardHtml(st, "merchant", day2), /data-r79c-go="merchant"/);
   assert.match(M.neighborPanel(st, day2).find((d) => d.npcId === "merchant").detail, /三樣/);
 });
 
@@ -342,7 +344,9 @@ test("手札卡：三步、目前場景按鈕、兩個決定與結果紀錄", ()
   assert.match(html, /已完成 0\/3 步/);
   assert.equal((html.match(/data-r77b-step="/g) || []).length, 3);
   assert.equal((html.match(/去哪裡做：/g) || []).length, 3);
-  assert.equal((html.match(/data-r77b-act="mayor"/g) || []).length, 1);
+  /* R79C 同步：手札不再有直接完成步驟的按鈕，改成一顆「帶我去」走到地圖上的公告草稿旁邊做。 */
+  assert.equal((html.match(/data-r77b-act="mayor"/g) || []).length, 0);
+  assert.equal((html.match(/data-r79c-go="mayor"/g) || []).length, 1);
   assert.match(html, /讀公告草稿/);
   Q.act(st, "mayor", at + 100);
   const html2 = Q.cardHtml(st, "mayor", at + 200);

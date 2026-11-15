@@ -1560,7 +1560,7 @@
     const rewardBaseText = stars === 1 ? "8 金" : stars === 2 ? "24 金與豐收花環裝飾 1 件" : "50 金、專屬豐收花環裝飾 1 件，並學會專屬配方「河畔豐收拼盤」";
     const bonusText = [quality ? "優質作物加獎 8 金" : "", hasDried ? "日曬乾貨加獎 8 金" : ""].filter(Boolean);
     const rewardText = rewardBaseText + (bonusText.length ? "；" + bonusText.join("、") : "");
-    const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，再補齊兩項就是三星。」" : "鎮長葛瑞說：「至少四項都照顧到了，這就是今晚的三星桌！」";
+    const mayorLine = stars === 1 ? "鎮長葛瑞說：「肯把收成端上桌，就是收穫祭的第一步。」" : stars === 2 ? "鎮長葛瑞說：「三樣滋味各有個性，再補 " + Math.max(1, 4 - judgingPoints) + " 項就是三星。」" /* R79C：跟下次提示的「還差 N 項」用同一個數字 */ : "鎮長葛瑞說：「至少四項都照顧到了，這就是今晚的三星桌！」";
     const credited = new Set();
     const details = chosen.map((row) => {
       const sources = [];
