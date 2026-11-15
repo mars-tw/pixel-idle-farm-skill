@@ -1493,6 +1493,8 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 .r72b-item[data-r78a-card-state] .r73b-item-main { min-width: 0; max-width: 100%; overflow: hidden; }
 .r72b-item[data-r78a-card-state] .r73b-item-main small { max-width: 100%; white-space: normal; overflow-wrap: anywhere; line-height: 1.25; }
 .r78a-end-reason { margin: 8px 0 0; padding: 7px 9px; border-left: 4px solid #b96f1e; background: #fff0bd; color: #5a3410; font-weight: 900; line-height: 1.4; overflow-wrap: anywhere; }
+/* R78 整合：靠「沒答錯、沒錯過」保底拿到的星，星星下面寫一句原因。 */
+.r78a-star-floor { margin: 4px 0 0; color: #5a3410; font-weight: 900; line-height: 1.4; overflow-wrap: anywhere; }
 @media (max-width: 520px) {
   .r78a-market { padding: 7px 8px; }
   .r78a-hot { font-size: 11px; }

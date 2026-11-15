@@ -20,6 +20,9 @@
   const HOT_SCORE_BONUS = 4;
   const THREE_STAR_COMBO = 10;
   const THREE_STAR_HOT_SERVED = 3;
+  /* R78 整合：沒答錯也沒錯過客人的保底兩顆星條件，門檻文字與判星共用同一份數字。 */
+  const PERFECT_TWO_STAR_STOCK = 40;
+  const PERFECT_TWO_STAR_SERVED = 10;
   /* R76B：第 12 項——代幣每場 3 枚，用代幣答對只拿一半分。 */
   const TOKENS_PER_SESSION = 3;
   const TOKEN_SCORE_RATE = 0.5;
@@ -56,7 +59,16 @@
     { stars: 3, score: 200 },
   ];
   function starThresholdText() {
-    return "一顆星 " + STAR_THRESHOLDS[0].score + " 分・二顆星 " + STAR_THRESHOLDS[1].score + " 分・三顆星 " + STAR_THRESHOLDS[2].score + " 分（三星還要連續答對 " + THREE_STAR_COMBO + " 位、接到 " + THREE_STAR_HOT_SERVED + " 位熱門需求）";
+    return "一顆星 " + STAR_THRESHOLDS[0].score + " 分・二顆星 " + STAR_THRESHOLDS[1].score + " 分・三顆星 " + STAR_THRESHOLDS[2].score + " 分（三星還要連續答對 " + THREE_STAR_COMBO + " 位、接到 " + THREE_STAR_HOT_SERVED + " 位熱門需求）。" + STAR_FLOOR_RULE_TEXT;
+  }
+  /* R78 整合：評審看到 49 分、45 分也有一顆星，畫面卻只寫「一顆星 50 分」，像是算錯。
+     保底規則寫進門檻那一行；真的靠保底拿到星的那一場，星星下面再寫一句原因。 */
+  const STAR_FLOOR_RULE_TEXT = "沒有答錯、也沒有錯過客人，分數沒到也至少一顆星；同時擺了 " + PERFECT_TWO_STAR_STOCK + " 份以上、答對 " + PERFECT_TWO_STAR_SERVED + " 位以上，至少兩顆星。";
+  function starFloorText(result) {
+    const stars = qty(result && result.stars), score = qty(result && result.score);
+    if (stars <= starsForScore(score)) return "";
+    if (stars >= 2) return "分數沒到 " + STAR_THRESHOLDS[1].score + " 分，但這一場擺了 " + PERFECT_TWO_STAR_STOCK + " 份以上、答對 " + PERFECT_TWO_STAR_SERVED + " 位以上，沒有答錯、也沒有錯過客人，所以有兩顆星。";
+    return "分數沒到 " + STAR_THRESHOLDS[0].score + " 分，但這一場沒有答錯、也沒有錯過客人，所以有一顆星。";
   }
   // R73B（第 5 項）：結算只留一句改善建議。
   function adviceFor(result) {
@@ -409,7 +421,7 @@
     let stars = starsForScore(session && session.score);
     const perfect = qty(session && session.served) > 0 && qty(session && session.wrong) === 0 && qty(session && session.timeouts) === 0;
     if (perfect) stars = Math.max(stars, 1);
-    if (perfect && qty(session && session.initialStock) >= 40 && qty(session && session.served) >= 10) stars = Math.max(stars, 2);
+    if (perfect && qty(session && session.initialStock) >= PERFECT_TWO_STAR_STOCK && qty(session && session.served) >= PERFECT_TWO_STAR_SERVED) stars = Math.max(stars, 2);
     if (stars >= 3 && (qty(session && session.bestCombo) < THREE_STAR_COMBO || qty(session && session.hotServed) < THREE_STAR_HOT_SERVED)) stars = 2;
     return stars;
   }
@@ -475,6 +487,7 @@
       message: stars === 0 ? (granted.coins > 0 ? "沒拿到星星也沒關係，這次已經很棒了，保底 5 金先收下，下次多答對幾位就能拿到星星。" : "沒拿到星星也沒關係，這次已經很棒了，下次多答對幾位就能拿到星星。") : upgraded ? `拿到 ${stars} 顆星，獎勵已補到這一場的最高紀錄。` : "這一場的獎勵已經照先前最高星領過了，這次不重複給。",
     };
     result.advice = adviceFor(result);
+    result.starFloorText = starFloorText(result);
     session.result = result;
     return result;
   }
@@ -694,6 +707,7 @@
       shell(`<h2 class="r72b-title">這一場結算</h2>
         <p class="r78a-end-reason" data-r78a-end-reason role="status">結束原因：${esc(result.endReasonText)}</p>
         <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
+        ${starFloorText(result) ? `<p class="r78a-star-floor" data-r78a-star-floor>${esc(starFloorText(result))}</p>` : ""}
         ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
         ${result.soldOut ? `<span data-r77c-sold-out hidden>${esc(SOLD_OUT_TEXT)}</span>` : ""}
         <p class="r72b-status" data-r78a-counts>${result.score} 分・答對 ${result.served} 位・答錯 ${qty(result.wrong)} 位・錯過 ${qty(result.timedOut)} 位・沒輪到 ${qty(result.notReached)} 位・共 ${qty(result.customerTotal)} 位・最高連續答對 ${result.bestCombo} 次</p>
@@ -720,7 +734,7 @@
     TASTE_LABEL, TASTE_CHIP, STAR_THRESHOLDS, STOCK_DEMAND_RATE, TOKENS_PER_SESSION, TOKEN_SCORE_RATE, TOKEN_RULE_TEXT,
     ensure, festivalInfo, statusFor, unlockedItems, stockOf, totalStock, stockedItems,
     reservePlan, defaultStallQty, marketPreview, marketItem, stallStockOf, demandAnswerable,
-    tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, adviceFor, lossSummary,
+    tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, starFloorText, adviceFor, lossSummary,
     makeCustomer, matchesDemand, startSession, serve, tickSession, finishSession,
     starsForScore, starsForSession, rewardForStars, open,
   };

@@ -139,6 +139,41 @@ test("專攻熱門與多樣少量都能拿星；三星必須同時有長連擊�
   assert.equal(F.finishSession(high, highSession, highSession.endsAt).stars, 3);
 });
 
+test("星等邊界與保底原因：分數沒到門檻卻有星的那一場，結算寫得出為什麼", () => {
+  /* 評審看到 49 分、45 分也是一顆星，畫面只寫「一顆星 50 分」。規則不變，補上說明。 */
+  function finish(score, patch) {
+    const state = festivalState(8); state.storage.items = { wheat: 12 };
+    const session = F.startSession(state, T0, seeded(7830 + score)).session;
+    Object.assign(session, { score, served: 3, wrong: 0, timeouts: 0 }, patch || {});
+    return F.finishSession(state, session, session.endsAt);
+  }
+  // 有答錯：只看分數，45、49 分沒有星，50 分一顆，119 分一顆，120 分兩顆。
+  for (const [score, stars] of [[45, 0], [49, 0], [50, 1], [119, 1], [120, 2]]) {
+    const result = finish(score, { wrong: 1 });
+    assert.equal(result.stars, stars, score + " 分、答錯 1 位");
+    assert.equal(result.starFloorText, "", score + " 分照分數判星，不需要保底說明");
+  }
+  // 200 分還要連續答對與熱門成交才有三顆星。
+  assert.equal(finish(200, { wrong: 1, bestCombo: 10, hotServed: 3 }).stars, 3);
+  assert.equal(finish(200, { wrong: 1, bestCombo: 2, hotServed: 0 }).stars, 2);
+  // 沒答錯也沒錯過：45、49 分保底一顆星，而且寫出原因；50 分以上不寫。
+  for (const score of [45, 49]) {
+    const result = finish(score);
+    assert.equal(result.stars, 1, score + " 分全對不漏客保底一顆星");
+    assert.match(result.starFloorText, /沒到 50 分/); assert.match(result.starFloorText, /沒有答錯、也沒有錯過客人/); assert.match(result.starFloorText, /一顆星/);
+  }
+  assert.equal(finish(50).starFloorText, "");
+  // 錯過一位就不算保底。
+  assert.equal(finish(45, { timeouts: 1 }).stars, 0);
+  // 擺 40 份以上、答對 10 位以上的保底兩顆星也寫原因。
+  const two = finish(90, { served: 10, initialStock: 40 });
+  assert.equal(two.stars, 2); assert.match(two.starFloorText, /沒到 120 分/); assert.match(two.starFloorText, /兩顆星/);
+  // 門檻那一行（開始畫面與結算共用）寫明保底規則，結算有掛點。
+  assert.match(F.starThresholdText(), /沒有答錯、也沒有錯過客人，分數沒到也至少一顆星/);
+  assert.match(F.starThresholdText(), /擺了 40 份以上、答對 10 位以上，至少兩顆星/);
+  assert.match(fs.readFileSync("src/festival-stall-r72.js", "utf8"), /data-r78a-star-floor/);
+});
+
 test("配貨預設永遠等於背包減保留，玩家尚未調整不會多一份", () => {
   const state = festivalState(8);
   state.storage.items = { wheat: 12, carrot: 12, tomato: 12, strawberry: 12 };
