@@ -1864,3 +1864,15 @@ body:has(#worldDialogue:not([hidden])) #mapScene .seed-hud, body:has(#worldDialo
 html.perf-low #weatherLayer.fog::before { background: radial-gradient(240px 90px at 20% 26%, rgba(246, 248, 240, .26), transparent 70%), radial-gradient(260px 100px at 80% 70%, rgba(246, 248, 240, .22), transparent 70%); animation: none; }
 @media (prefers-reduced-motion: reduce) { #weatherLayer.fog::before { animation: none; } }
 /* ===== R79C 結束 ===== */
+/* ===== R79 整合開始 ===== */
+/* 擺攤商品卡：「有貨・還剩 N 份」整段不拆行，手機兩欄時只會在「作物・」後面換行，不會把「份」單獨掉到下一行。 */
+.r72b-item .r73b-item-main small .r79a-count { white-space: nowrap; }
+/* 等光取捨的兩顆動作鈕：原本文字寬度上限 56px，結果說明被擠成三行、按鈕變高頂到底部提示。
+   只放寬帶結果說明的按鈕，讓「2 份＋6 金，趕得上收購」一行放得下。 */
+#sceneActionBar .scene-action-btn:has(.r79b-action-detail) .sab-t { max-width: 156px; white-space: normal; }
+#sceneActionBar .scene-action-btn:has(.r79b-action-detail) .r79b-action-detail { white-space: nowrap; font-size: 11px; }
+/* 桌機：取捨按鈕出現時，底部那一條提示往上讓一格，不蓋到按鈕（手機直式提示本來就在按鈕下方；矮視窗提示在左上）。 */
+@media (min-width: 700px) and (min-height: 601px) {
+  body:has(#sceneActionBar .r79b-action-detail) #toast-zone:not(:has(.milestone-card)) { bottom: 184px; }
+}
+/* ===== R79 整合結束 ===== */

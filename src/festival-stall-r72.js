@@ -393,7 +393,8 @@
     let text = primary && primary.count > 0 ? primary.label + "，少了約 " + primary.points + " 分" : "沒有明顯失分";
     if (counts.tasteWrong > 0) { primary = { id: "tasteWrong", label: "口味猜錯", count: counts.tasteWrong, points: missedPoints }; text = "口味猜錯 " + counts.tasteWrong + " 次"; }
     else if (counts.itemWrong > 0) { primary = { id: "itemWrong", label: "拿錯東西", count: counts.itemWrong, points: missedPoints }; text = "拿錯東西 " + counts.itemWrong + " 次"; }
-    return { counts, primary: primary && primary.count > 0 ? primary : null, text, display: "主要失分：差最多是" + text };
+    const hasLoss = !!(primary && primary.count > 0);
+    return { counts, primary: hasLoss ? primary : null, text, display: hasLoss ? "主要失分：差最多是" + text : "主要失分：" + text };
   }
   /* R77C 第 11 項：每一位客人一筆紀錄，結算逐位對得上總分。 */
   function beginRecord(session, customer) {
@@ -762,7 +763,7 @@
       stallPlan();
       const total = stallTotal();
       return total > 0
-        ? "一共擺出 " + total + " 份。另有 " + TOKENS_PER_SESSION + " 枚代幣，只在全場唯一一題缺貨題使用。"
+        ? "一共擺出 " + total + " 份。客人要的貨賣完時，可以用代幣遞（共 " + TOKENS_PER_SESSION + " 枚，只拿一半分）。"
         : "這一場沒有擺出任何貨，至少擺一份才能開始叫賣。";
     }
     function close() { if (timer) clearInterval(timer); timer = 0; overlay.remove(); if (typeof options.onClose === "function") options.onClose(); }
@@ -840,7 +841,7 @@
         const count = cardState === "stock" ? `有貨・還剩 ${stallLeft} 份` : cardState === "token" ? "用代幣・只拿一半分" : "賣完";
         const chips = card.tasteLabels.length ? card.tasteLabels.map((label) => `<span class="r73b-taste">${esc(label)}</span>`).join("") : "";
         const isSubstitute = substituteMatch(state, session, row.id, customer);
-        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r78a-card-state="${cardState}" data-r79a-substitute="${isSubstitute ? "true" : "false"}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || cardState === "soldout" ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・${count}${isSubstitute ? "・可替代" : ""}</small><span class="r73b-tastes">${chips}</span></span></button>`;
+        return `<button type="button" class="r72b-item r73b-item" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r78a-card-state="${cardState}" data-r79a-substitute="${isSubstitute ? "true" : "false"}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || cardState === "soldout" ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main"><b>${esc(row.name)}</b><small>${kind}・<span class="r79a-count">${count}</span>${isSubstitute ? "・可替代" : ""}</small><span class="r73b-tastes">${chips}</span></span></button>`;
       }).join("");
       // R74B（第 4 項）：回饋改放顧客卡上的短動畫與加分飄字；回饋列只留操作提示，
       // 新顧客出現時 session.feedback 已在 spawnNext 清除，不會留上一位的訊息。
