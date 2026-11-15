@@ -122,9 +122,32 @@
     return { text, effect, hits, outcome };
   }
   function catchSun(state, plotIndex) { const exposure = recordExposure(state, plotIndex); const gained = addSunlight(state, 1); return { gained, exposure }; }
-  /* R78B：光的倒數只有這一個算法。預告圈、提示條、田上標籤都用它，同一拍更新，不會一邊寫 1 秒一邊寫 2 秒。 */
+  /* R80B：秒數不只共用算法，也共用同一拍的快照。遊戲主迴圈每次刷新先呼叫
+     refreshLightCountdown；田上標籤、動作框、任務卡與頂部倒數在下一拍前都讀同一個整數，
+     不會因各自呼叫 Date.now() 剛好跨過秒界而出現 1／2 秒。WeakMap 不會寫進存檔。 */
+  const lightCountdownSnapshots = typeof WeakMap === "function" ? new WeakMap() : null;
   function secondsLeft(ms) { return Math.max(1, Math.ceil((Number(ms) || 0) / 1000)); }
-  function lightSecondsText(sun, now) { return `${secondsLeft(((sun && sun.previewAt) || 0) - now)} 秒`; }
+  function lightCountdownTarget(sun, now) {
+    if (!sun) return { phase: "preview", at: 0 };
+    const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
+    return active ? { phase: "active", at: sun.endsAt || 0 } : { phase: "preview", at: sun.previewAt || 0 };
+  }
+  function refreshLightCountdown(sun, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const target = lightCountdownTarget(sun, t);
+    const snap = { phase: target.phase, at: target.at, refreshedAt: t, seconds: secondsLeft(target.at - t) };
+    if (lightCountdownSnapshots && sun && typeof sun === "object") lightCountdownSnapshots.set(sun, snap);
+    return snap;
+  }
+  function lightCountdown(sun, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const target = lightCountdownTarget(sun, t);
+    const cached = lightCountdownSnapshots && sun && typeof sun === "object" ? lightCountdownSnapshots.get(sun) : null;
+    return cached && cached.phase === target.phase && cached.at === target.at && t - cached.refreshedAt < 1250
+      ? cached : refreshLightCountdown(sun, t);
+  }
+  function lightSecondsLeft(sun, now) { return lightCountdown(sun, now).seconds; }
+  function lightSecondsText(sun, now) { return `${lightSecondsLeft(sun, now)} 秒`; }
   /* R78B 第 5 項：一次只有一個主要互動層，全部照這一條規則排，不在每個面板各寫一次。
      主要層（對話框、對話、料理、曬架、側邊面板、選單、建造）開著時：任務卡收起、提示卡全部排隊、光的提示條先收。
      沒有主要層時：提示卡照 FOCUS_CARDS 的順序只出一張，其餘排隊。 */
@@ -141,9 +164,9 @@
   function refractToastText(result) {
     if (!result || !result.ok) return "現在沒有光可以折，等下一道光的預告。";
     if (result.remaining > 0) return `光折過來了，這道光還能再折 ${result.remaining} 次。`;
-    return result.active ? "光折過來了。趁光還在，在這一格澆水或收成。" : "光會落在這一格。等光到了再澆水或收成。";
+    return result.active ? "光折過來了。趁光還在，在這一格澆水或收成。" : "光會落在這一格。光到了再澆水或收成。";
   }
-  function staleLightText(text, light) { return !!(light && light.active) && /光會落在這一格|等光到了再|光快落在/.test(String(text || "")); }
+  function staleLightText(text, light) { return !!(light && light.active) && /光會落在這一格|光到了再|光快落在/.test(String(text || "")); }
   /* R78B 第 6 項：光裡收成的大字，數字直接取收成結果。 */
   function harvestPopText(out) {
     const sun = out && out.sun; if (!sun || sun.kind !== "harvest") return [];
@@ -330,10 +353,11 @@
     if (signature === actionSignature) return; actionSignature = signature; farm.renderSceneActions();
   }
   /* R77A 第 1 項：選到可以折光的格子時，先在那一格畫一塊淡色光斑（還沒折，只是先看到光會落在哪）。
-   * 能不能折只問 refractCheck，跟動作列的「折到這格」是同一個判斷，所以有光斑就一定有那顆鈕。 */
+   * 能不能折只問 refractCheck，跟動作列的「把光折到這裡」是同一個判斷，所以有光斑就一定有那顆鈕。 */
   function refractGhostPlot(state, now) {
     const id = state && state.interaction && state.interaction.selectedTileId; const tile = id && state.map ? state.map.tiles.find((t) => t.id === id) : null;
-    return tile && tile.plotIndex != null && refractCheck(state, tile.plotIndex, now).ok ? tile.plotIndex : null;
+    const firstLessonDone = !!(state && ((state.flags && state.flags.r79FirstLightHarvest === true) || (state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest)));
+    return firstLessonDone && tile && tile.plotIndex != null && refractCheck(state, tile.plotIndex, now).ok ? tile.plotIndex : null;
   }
   function syncRefractGhost(state, now) {
     if (typeof document === "undefined") return; const world = document.getElementById("mapWorld"); if (!world) return;
@@ -525,7 +549,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, harvestPopText };
+  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, harvestPopText };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

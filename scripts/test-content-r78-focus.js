@@ -37,7 +37,7 @@ test("4a 小麥已經熟、光快到了：主要按鈕不寫「去種小麥」�
   const step = A.nextFarmStep(s, T + 1000);
   assert.notEqual(step.actionLabel, "去種小麥", "田上寫先別收的時候，任務卡不能叫玩家去種小麥");
   assert.equal(step.action, "catch_sun"); assert.equal(step.plotIndex, 0); assert.equal(step.holdPlotIndex, 0, "等光的那一格要帶出去，田上才會寫先別收");
-  assert.equal(step.actionLabel, "等光再收"); assert.match(step.text, /等光到了再收成/);
+  assert.equal(step.actionLabel, "等光再收"); assert.match(step.text, /等光再收/);
   assert.doesNotMatch(step.text, /\d+ 秒/, "任務卡文字不放會跳動的秒數");
   /* 沒有光的預告時，熟了就是去收。 */
   const plain = fresh(); grow(plain, 0, "wheat", T); plain.adventure.r58.r59.seedPacks.wheat = 2;
@@ -195,7 +195,7 @@ test("2 等光還是現在收：兩個數字都從規則算出來", () => {
   const waitBefore = sunlightOf(waitState); const waitOut = Game.harvest(waitState, 0, T + 5001, () => 1);
   assert.equal(waitOut.added, choice.waitQty, "等光再收的份數"); assert.equal(sunlightOf(waitState) - waitBefore, choice.waitSunlight, "等光再收拿到的陽光");
   assert.ok(choice.waitQty > choice.nowQty, "等光要真的比較多"); assert.ok(choice.waitSunlight > choice.nowSunlight);
-  assert.equal(choice.nowText, `現在收：${choice.nowQty} 份`); assert.equal(choice.waitText, `等光再收：${choice.waitQty} 份＋陽光 ${choice.waitSunlight}`);
+  assert.equal(choice.nowText, `現在收：${choice.nowQty} 份`); assert.equal(choice.waitText, `等光再收：${choice.waitQty} 份＋陽光 ${choice.waitSunlight}（可催熟 1 格）`);
   /* 蓄光瓶快滿時，陽光的數字跟著少，不寫拿不到的量。 */
   const full = clone(s); Sun.addSunlight(full, Sun.bottleCapacity(full)); const fullChoice = Game.lightHarvestChoice(full, 0, at);
   assert.equal(fullChoice.waitSunlight, 0); assert.equal(fullChoice.waitText, `等光再收：${fullChoice.waitQty} 份`);
@@ -216,13 +216,13 @@ test("2b 光已經落下後，不再留「光會落在這一格」「等光到�
   const sunSrc = read("src/sunplay-r75.js");
   assert.match(sunSrc, /r78bRefractNote/, "折光後的提示要看光到了沒");
   const s = fresh(); s.coins = 99; s.stats.plantCount = 9; Game.plant(s, 0, "wheat", T);
-  assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: false }), "光會落在這一格。等光到了再澆水或收成。");
+  assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: false }), "光會落在這一格。光到了再澆水或收成。");
   assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: true }), "光折過來了。趁光還在，在這一格澆水或收成。");
   assert.doesNotMatch(Sun.refractToastText({ ok: true, remaining: 0, active: true }), /光會落在|等光到了再/);
   /* 預告期間折光的提示只留到光落下為止。 */
-  assert.equal(Sun.staleLightText("光會落在這一格。等光到了再澆水或收成。", { active: true }), true);
-  assert.equal(Sun.staleLightText("光快落在這格了，等光到了再收成，多接 1 點陽光。", { active: true }), true);
-  assert.equal(Sun.staleLightText("光會落在這一格。等光到了再澆水或收成。", { active: false }), false);
+  assert.equal(Sun.staleLightText("光會落在這一格。光到了再澆水或收成。", { active: true }), true);
+  assert.equal(Sun.staleLightText("光快落在這格了，光到了再收成，多接 1 點陽光。", { active: true }), true);
+  assert.equal(Sun.staleLightText("光會落在這一格。光到了再澆水或收成。", { active: false }), false);
   assert.equal(Sun.staleLightText("光折過來了。趁光還在，在這一格澆水或收成。", { active: true }), false);
 });
 
@@ -246,7 +246,7 @@ test("7 右下互動鈕：面前是長著作物的田時不寫「種植・空田
   assert.match(ui, /r78bFacingCropLabel/, "面前的田有作物時用它自己的狀態當按鈕文字");
   const s = fresh(); s.coins = 99; Game.plant(s, 0, "wheat", T); s.plots[0].wateredAt = T + 1;
   const tile = s.map.tiles.find((t) => t.plotIndex === 0);
-  assert.equal(Game.facingPlotLabel(s, tile, T + 2), "生長中・小麥田");
+  assert.equal(Game.facingPlotLabel(s, tile, T + 2), "看看田裡");
   const emptyTile = s.map.tiles.find((t) => t.plotIndex === 1);
   assert.equal(Game.facingPlotLabel(s, emptyTile, T + 2), "", "空田交給原本的種植字樣");
 });

@@ -34,7 +34,7 @@ const overlap=(a,b)=>{if(!a||!b)return 0;const w=Math.min(a.right,b.right)-Math.
       assert.ok(first.label.split("\n").length<=2,`${tag} 田邊標籤最多兩行`);
       assert.equal(first.plots.some(p=>overlap(first.labelBox,p)>1),false,`${tag} 田邊標籤不蓋田（標籤 ${JSON.stringify(first.labelBox)}；田 ${JSON.stringify(first.plots)}）`);
       assert.equal(first.actionText,"等光再收",`${tag} 右下大按鈕跟選中的熟田一致`);
-      if(isMobile) assert.match(first.note,/按了會等 \d+ 秒，光到自動收/,`${tag} 等光按鈕下方寫明結果`);
+      if(isMobile) assert.match(first.note,/按下後等 \d+ 秒，光到會自動收成/,`${tag} 等光按鈕下方寫明結果`);
 
       await page.evaluate(()=>__farm.enqueueSettlement({kind:"first_harvest",coins:0,xp:3,next:"把 2 份小麥交給老農班伯。"})); await page.waitForTimeout(100);
       const settlement=await page.evaluate(()=>{const n=document.querySelector("#toast-zone .settlement-card"),r=n&&n.getBoundingClientRect();return n?{text:n.textContent,box:{left:r.left,top:r.top,right:r.right,bottom:r.bottom}}:null;});

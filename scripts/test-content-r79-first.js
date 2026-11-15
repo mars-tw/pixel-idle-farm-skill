@@ -25,7 +25,7 @@ test("1 陽光與份數由同一份收成結果產生", () => {
 
 test("2 第一次只教等光，按下後光到自動收", () => {
   const s = fresh(); ready(s, 0); preview(s, 0, 7);
-  const queued = Game.queueLightHarvest(s, 0, T); assert.equal(queued.ok, true); assert.match(queued.choice.helpText, /按了會等 7 秒，光到自動收/);
+  const queued = Game.queueLightHarvest(s, 0, T); assert.equal(queued.ok, true); assert.match(queued.choice.helpText, /按下後等 7 秒，光到會自動收成/);
   assert.match(read("src/world-ui.js"), /step\.action === "catch_sun"[\s\S]*queueLightHarvest/, "任務卡的唯一入口也會排入自動收成");
   assert.equal(Game.updateSunpatch(s, T + 7000, () => 0).spawned, true);
   const out = Game.harvest(s, 0, T + 7001, () => 1);
@@ -39,7 +39,7 @@ test("3 第二輪班伯早市兩邊各有一項較好", () => {
   assert.match(choice.nowText, /趕得上|班伯早市/); assert.match(choice.waitText, /沒有獎金/);
   const nowState = clone(base), waitState = clone(base), nowCoins = nowState.coins, waitCoins = waitState.coins;
   const nowOut = Game.harvest(nowState, 0, T + 1, () => 1);
-  assert.equal(nowOut.added, choice.nowQty); assert.equal(nowOut.marketBonus, 6); assert.equal(nowState.coins - nowCoins, 6);
+  assert.equal(nowOut.added, choice.nowQty); assert.equal(nowOut.marketBonus, 14); assert.equal(nowState.coins - nowCoins, 14);
   assert.equal(Game.queueLightHarvest(waitState, 0, T).ok, true); assert.equal(Game.updateSunpatch(waitState, T + 7000, () => 0).spawned, true);
   const waitOut = Game.harvest(waitState, 0, T + 7001, () => 1);
   assert.equal(waitOut.added, choice.waitQty); assert.equal(waitOut.marketBonus, 0); assert.equal(waitState.coins - waitCoins, 0);
