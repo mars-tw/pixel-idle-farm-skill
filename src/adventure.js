@@ -574,14 +574,21 @@
       if (hold) {
         /* 這幾秒叫玩家先做別格的事，也把「留著等光」的那一格帶出去：田上標籤與動作鈕才會跟著寫「先別收」，不會任務卡說去種、田上卻寫可收成。 */
         const held = { holdPlotIndex: hold.plotIndex };
+        const queued = state.flags && state.flags.r79WaitHarvest && state.flags.r79WaitHarvest.plotIndex === hold.plotIndex ? state.flags.r79WaitHarvest : null;
         /* R78B：等光的那一格已經熟了，就只講「等光再收」這一件事。原本這裡叫玩家去種小麥，田上卻寫先別收，兩邊對不起來。 */
         const holdRipe = ready.includes(hold);
-        if (!holdRipe && empty.length && packs > 0) return field("plant", empty[0], `等光落下的這幾秒，把剩下的 ${packs} 包小麥種子也種下。`, "去種小麥", held);
-        const other = holdRipe ? null : dry.find((tile) => !lit.includes(tile.plotIndex));
+        /* R80B：教學後玩家選了「等光再收」就不再自動收。等待的幾秒把一件別格農事交給任務卡，
+           但 holdPlotIndex 仍保留，快速收成不會誤收這一格。 */
+        const canDoOther = !holdRipe || (queued && !queued.autoHarvest);
+        if (canDoOther && empty.length && packs > 0) return field("plant", empty[0], `已選等光再收。光還沒到，先把剩下的 ${packs} 包小麥種子種下。`, "去種小麥", held);
+        const other = canDoOther ? dry.find((tile) => !lit.includes(tile.plotIndex)) : null;
         if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水", held);
         const otherReady = ready.filter((tile) => !lit.includes(tile.plotIndex));
         if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", { count: otherReady.length, holdPlotIndex: hold.plotIndex });
-        return field("catch_sun", hold, `光快落在${cropName(hold)}上了。${holdRipe ? `等光到了再收成：${lightHarvestReward(hold)}。` : "等光到了再澆水，才接得住陽光。"}`, holdRipe ? "等光再收" : "看光落在哪", holdRipe ? held : null);
+        return field("catch_sun", hold, queued && !queued.autoHarvest
+          ? `已選等光再收。光到了要自己收成：${lightHarvestReward(hold)}。`
+          : `光快落在${cropName(hold)}上了。${holdRipe ? `等光再收：${lightHarvestReward(hold)}。` : "光到了再澆水，才接得住陽光。"}`,
+        holdRipe ? (queued && !queued.autoHarvest ? "看看田裡" : "等光再收") : "看光落在哪", holdRipe ? held : null);
       }
       litGrowing = growing.find((tile) => lit.includes(tile.plotIndex)) || null; lightOn = activeLight.length > 0;
     }

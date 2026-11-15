@@ -249,7 +249,7 @@
     try { updateSunChip(s); } catch (e) {}
     try { markNextPlot(s); } catch (e) {}
     try { if (unstickWaterStep(s)) return renderObjective(s); } catch (e) {}
-    if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { lastObjective = ""; syncSeedHudTop(); return true; }
+    if (window.HeirloomUI && window.HeirloomUI.renderObjective(s, box)) { r80bNormalizeHeirloomObjective(box); lastObjective = ""; syncSeedHudTop(); return true; }
     const summary = A.summary(s, Date.now());
     const q = summary.currentQuest;
     const guide = A.guide(s, Date.now());
@@ -262,10 +262,17 @@
        所以番茄還沒種時寫「去種番茄」、全部齊了寫「去回報」，不會寫成去找人，也不會回頭叫玩家去種已經有的東西。 */
     const farmNow = A.nextFarmStep ? A.nextFarmStep(s, Date.now()) : null;
     /* R78B 第 1 項：光只來幾秒。光的這一步（折光、等光再收、在光裡收成或澆水）先佔住「現在做」，任務卡按鈕、田上標籤、提示條講同一件事；光過了才換回原本的任務步驟。 */
-    const lightStep = farmNow && !farmNow.questAware && (farmNow.action === "refract" || farmNow.action === "catch_sun" || farmNow.sunlit === true) ? farmNow : null;
+    const waitingSideStep = !!(farmNow && farmNow.holdPlotIndex != null && s.flags && s.flags.r79WaitHarvest && s.flags.r79WaitHarvest.plotIndex === farmNow.holdPlotIndex && !s.flags.r79WaitHarvest.autoHarvest);
+    const lightStep = farmNow && !farmNow.questAware && (farmNow.action === "refract" || farmNow.action === "catch_sun" || farmNow.sunlit === true || waitingSideStep) ? farmNow : null;
     const questStep = q && farmNow && ((farmNow.questAware && farmNow.questId === q.id) || lightStep) ? farmNow : null;
+    const queuedLight = window.lightHarvestQueue ? window.lightHarvestQueue(s) : null;
+    const lightChoice = farmNow && farmNow.plotIndex != null && window.lightHarvestChoice ? window.lightHarvestChoice(s, farmNow.plotIndex, Date.now()) : null;
+    const lightChoiceOpen = !!(lightChoice && lightChoice.ok && lightChoice.hasTradeoff && !(queuedLight && queuedLight.plotIndex === farmNow.plotIndex));
+    const farmActionShown = r80bFieldActionShown(farmNow);
+    const farmNowText = lightChoiceOpen ? "早市到了，請在田邊選一個。" : farmNow ? farmNow.text : "";
+    const farmTaskName = lightChoiceOpen ? "早市收成取捨" : farmNow && farmNow.actionLabel ? farmNow.actionLabel : "目前任務";
     const festivalCrop = festivalGoal && festivalGoal.id === "tomato" ? festivalCropStep(s, festivalGoal) : null;
-    const festivalFocus = questStep && questStep.action === "report" ? null : festivalGoal ? {
+    const festivalFocus = questStep && (questStep.action === "report" || (q && q.chapter >= 4)) ? null : festivalGoal ? {
       text: `祭典：${festivalGoal.name}（${festivalGoal.current}/${festivalGoal.required}）`,
       action: festivalCrop ? festivalCrop.label : festivalGoal.id === "tomato" ? "去種番茄" : festivalGoal.id === "cook" ? "去做料理" : "去找鄰居",
       id: festivalGoal.id,
@@ -279,7 +286,7 @@
     const hint = objectiveHint(s, unfinished);
     const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
-    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, hint && hint.hold, choiceRoutes, early, festival.active, festival.completed, festival.canComplete, festival.goals, festivalTime, farmNow && [farmNow.action, farmNow.text, farmNow.actionLabel, farmNow.tileId], festivalCrop && festivalCrop.label]);
+    const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, hint && hint.hold, choiceRoutes, early, festival.active, festival.completed, festival.canComplete, festival.goals, festivalTime, farmNow && [farmNow.action, farmNowText, farmTaskName, farmNow.tileId], farmActionShown, lightChoiceOpen, queuedLight && [queuedLight.plotIndex, queuedLight.autoHarvest], festivalCrop && festivalCrop.label]);
     if (sig === lastObjective) {
       syncSeedHudTop();
       paintHint(box.querySelector(".world-objective-hint"), hint);
@@ -293,8 +300,12 @@
       if (document.body) document.body.dataset.questStep = "choice";
       const nextFarm = A.nextFarmStep ? A.nextFarmStep(s, Date.now()) : null;
       const nextGoal = !early.goals.find((goal) => goal.id === "harvest" && !goal.complete) && early.nextStep ? "meal" : "harvest";
-      box.innerHTML = `<div class="world-objective-title r67a-objective-head"><span><span class="qp-step">今日三件事</span> <span data-audit="quest-progress">${early.goals.filter((goal) => goal.complete).length}/3</span></span><button type="button" class="r66a-daily-pick" data-r66a-daily>${early.chosen ? (early.canSwap ? "換一件" : "今天已換過") : "從五件中挑三件"}</button></div>${festivalHtml}
-        ${festivalFocus ? `<section class="r67a-now r69a-festival-now" data-audit="r67a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small>${esc(festivalFocus.text)}</small></span><button type="button" class="r67a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : nextFarm ? `<section class="r67a-now" data-audit="r67a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">今日三件事 ${early.goals.filter((goal) => goal.complete).length}/3</span><small>${esc(nextFarm.text)}</small>${hint && (hint.kind === "wait" || hint.kind === "sun") ? `<em class="world-objective-hint r67-now-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</em>` : ""}</span><button type="button" class="r67a-now-action r63-primary" data-early-goal="${nextGoal}" data-r78b-step="${esc(nextFarm.action)}">${esc(nextFarm.actionLabel)}</button></section>` : ""}
+      const earlyProgress = `${early.goals.filter((goal) => goal.complete).length}/3`;
+      const earlyAction = farmActionShown
+        ? `<span class="r67a-now-action r80b-now-copy" data-r80b-task-copy data-r78b-step="${esc(nextFarm && nextFarm.action || "field")}">${esc(nextFarm && nextFarm.actionLabel || "請在田邊操作")}</span>`
+        : nextFarm ? `<button type="button" class="r67a-now-action r63-primary" data-early-goal="${nextGoal}" data-r78b-step="${esc(nextFarm.action)}">${esc(nextFarm.actionLabel)}</button>` : "";
+      box.innerHTML = `<div class="world-objective-title r67a-objective-head r80b-objective-head"><span class="qp-step"><span class="r80b-objective-source">今日三件事</span><span class="r80b-objective-task">${esc(farmTaskName)}</span></span><span data-audit="quest-progress">${earlyProgress}</span><button type="button" class="r66a-daily-pick" data-r66a-daily>${early.chosen ? (early.canSwap ? "換一件" : "今天已換過") : "從五件中挑三件"}</button></div>${festivalHtml}
+        ${festivalFocus ? `<section class="r67a-now r69a-festival-now" data-audit="r67a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small>${esc(festivalFocus.text)}</small></span><button type="button" class="r67a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : nextFarm ? `<section class="r67a-now" data-audit="r67a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">今日三件事 ${early.goals.filter((goal) => goal.complete).length}/3</span><small>${esc(farmNowText)}</small>${hint && (hint.kind === "wait" || hint.kind === "sun") ? `<em class="world-objective-hint r67-now-hint" data-hint="${esc(hint.kind)}">${esc(hint.text)}</em>` : ""}</span>${earlyAction}</section>` : ""}
         <div class="world-objective-routes r67a-task-list" data-audit="early-free-goals">${early.goals.map((goal) => `<div class="world-objective-route r67a-task${goal.complete ? " tracked" : ""}" data-early-task="${esc(goal.id)}"><b>${goal.complete ? "✓ " : "○ "}${esc(goal.name)}</b><small>${/* R75：這一項的說明若和上面「現在做」是同一句，就不再重寫一次，只留獎勵。 */ goal.detail && !(nextFarm && goal.detail === nextFarm.text) ? `${esc(goal.detail)}・` : ""}獎勵：${esc(goal.rewardText)}</small></div>`).join("")}</div>
         ${festivalFocus && nextFarm && nextFarm.text !== festivalFocus.text && !(window.StoryR76 && window.StoryR76.isDuplicateQuestRow && window.StoryR76.isDuplicateQuestRow(nextFarm.text, [{ name: festivalGoal ? festivalGoal.name : "", text: festivalFocus.text }])) ? `<div class="r69a-main-row">主線：${esc(nextFarm.text)}</div>` : ""}
         ${early.complete ? '<button type="button" class="r66a-daily-claim" data-r66a-claim>領取今日三件事獎勵</button>' : ""}
@@ -316,7 +327,7 @@
       return true;
     }
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
-    const nowText = questStep ? questStep.text : step;
+    const nowText = questStep ? farmNowText : step;
     const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
     const progressStep = activeGoal && activeGoal.name ? `${q && q.chapter >= 4 ? q.name + "・" : ""}${activeGoal.name}` : "";
@@ -325,17 +336,23 @@
     box.dataset.quest = q ? q.id : "picnic_complete";
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
-    box.dataset.targetId = target ? target.id : "";
+    box.dataset.targetId = questStep && questStep.tileId ? questStep.tileId : target ? target.id : "";
     const requirementRows = q ? questRowsAll(q) : [];
     const taskName = q ? (activeGoal && activeGoal.name ? activeGoal.name : q.canClaim ? `找${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}回報` : q.name) : "";
-    const fullTitle = q ? `第 ${q.chapter} 章・${q.chapterName}｜任務：${taskName} ${progressText}` : "繼續經營農場";
+    const shownTaskName = festivalFocus && festivalGoal ? festivalGoal.name : lightStep ? farmTaskName : taskName;
+    const fullTitle = q ? `第 ${q.chapter} 章・${q.chapterName}｜任務：${shownTaskName} ${progressText}` : "繼續經營農場";
     const hasSharedFestivalCrop = requirementRows.some((row) => sharedFestivalCrop(row, festivalGoal));
     /* R76B：第 13 項——主線列與需求列說同一件事時只留需求列。 */
     const mainRowDuplicate = hasSharedFestivalCrop || (window.StoryR76 && window.StoryR76.isDuplicateQuestRow ? window.StoryR76.isDuplicateQuestRow(step, requirementRows.map((row) => ({ name: row.name, text: requirementText(row, festivalGoal) }))) : false);
-    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(taskName)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+    const routeChoiceOpen = choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes);
+    const standardAction = farmActionShown && questStep
+      ? `<span class="r68a-now-action r80b-now-copy" data-r80b-task-copy data-r78b-step="${esc(questStep.action)}">${esc(questStep.actionLabel)}</span>`
+      : `<button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${routeChoiceOpen ? "data-choice-open" : "data-world-go"}>${routeChoiceOpen ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button>`;
+    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name r80b-objective-source">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name r80b-objective-task">任務：${esc(shownTaskName)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       ${festivalHtml}
-      ${festivalFocus ? `<section class="r68a-now r69a-festival-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small title="${esc(festivalFocus.text)}">${esc(festivalFocus.text)}</small></span><button type="button" class="r68a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : `<section class="r68a-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(fullTitle)}</span><small title="${esc(nowText)}">${esc(nowText)}</small>${hint && hint.hold ? `<em class="world-objective-hint r67-now-hint" data-hint="sun">${esc(hint.text)}</em>` : ""}</span><button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "data-choice-open" : "data-world-go"}>${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button></section>`}
+      ${festivalFocus ? `<section class="r68a-now r69a-festival-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small title="${esc(festivalFocus.text)}">${esc(festivalFocus.text)}</small></span><button type="button" class="r68a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : `<section class="r68a-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(fullTitle)}</span><small title="${esc(nowText)}">${esc(nowText)}</small>${hint && hint.hold ? `<em class="world-objective-hint r67-now-hint" data-hint="sun">${esc(hint.text)}</em>` : ""}</span>${standardAction}</section>`}
       <div class="r68a-requirements" data-audit="r68a-requirements">${festivalFocus && !mainRowDuplicate ? `<span class="r69a-main-row">主線：${esc(nowText)}</span>` : ""}${requirementRows.length ? requirementRows.map((row) => { if (row.routeLabel) return `<span class="r77c-route-label" data-r77c-route-label>${esc(row.name)}</span>`; const text = requirementText(row, festivalGoal); return `<span${sharedFestivalCrop(row, festivalGoal) ? ' data-r71a-shared-crop="true"' : ""} title="${esc(text)}">${row.complete ? "✓" : "○"} ${esc(text)}</span>`; }).join("") : "<span>✓ 可以自由經營農場</span>"}</div>`;
+    box.querySelector(".r68a-objective-head")?.classList.add("r80b-objective-head"); /* data-world-go 由 standardAction 依目前步驟放入。 */
     const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
     const chooseFirstRoute = (button) => {
       const status = A.firstChoiceStatus(s);
@@ -410,8 +427,8 @@
     chip.hidden = false;
     const mirror = sun.refractionsLeft > 0 ? `・手鏡可折 ${sun.refractionsLeft} 次` : "";
     /* R78B：「光還有幾秒」只算一次（FarmSunplay.lightSecondsText），提示條、預告圈、田上標籤寫的是同一個數字；秒數那一段掛 data-r78b-light-secs，每一拍一起更新。 */
-    const lightSecs = plots.length ? "" : lightSecondsLabel(s, now);
-    const chipText = plots.length ? `☀ 陽光照在 ${plots.length} 格田・剩 ${Math.ceil(sun.remainingMs / 1000)} 秒` : `☀ 光 ${lightSecs}後落下${mirror}`;
+    const lightSecs = lightSecondsLabel(s, now);
+    const chipText = plots.length ? `☀ 陽光照在 ${plots.length} 格田・剩 ${lightSecs}` : `☀ 光 ${lightSecs}後落下${mirror}`;
     if (chip.textContent !== chipText || !!chip.querySelector("[data-r78b-light-secs]") !== !plots.length) { if (plots.length) chip.textContent = chipText; else chip.innerHTML = `☀ 光 <span data-r78b-light-secs>${esc(lightSecs)}</span>後落下${esc(mirror)}`; }
     chip.dataset.sunState = plots.length ? "active" : "preview";
     chip.setAttribute("aria-label", chipText + (plots.length ? "，點一下看受光的田" : "，點一下看光要落在哪"));
@@ -423,6 +440,32 @@
     }
   }
   function lightSecondsLabel(s, now) { const sp = window.FarmSunplay; return sp && sp.lightSecondsText ? sp.lightSecondsText(s.sun || {}, now) : ""; }
+  function r80bFieldActionShown(step) {
+    if (!step || step.target !== "field" || !step.tileId) return false;
+    const bar = el("sceneActionBar"); if (!bar || bar.hidden || typeof bar.querySelector !== "function") return false;
+    const selected = current && current.interaction && current.interaction.selectedTileId;
+    if (selected && selected !== step.tileId && step.holdPlotIndex == null) return false;
+    const action = ({ plant: "plant", tend: "water", harvest: "harvest", refract: "refract", ripen: "ripen", catch_sun: "wait_light" })[step.action];
+    const button = action && bar.querySelector(`[data-action="${action}"]`);
+    return !!(button && !button.hidden && button.getBoundingClientRect && button.getBoundingClientRect().width > 0);
+  }
+  function r80bNormalizeHeirloomObjective(box) {
+    if (!box) return;
+    const head = box.querySelector(".world-chapter"), task = box.querySelector(".world-objective-title"), detail = box.querySelector(".world-objective-detail"), button = box.querySelector(".world-objective-bottom button");
+    if (head) {
+      head.classList.add("r80b-objective-head", "r80b-heirloom-head");
+      const title = head.firstElementChild, raw = title && title.textContent ? title.textContent.trim() : "";
+      if (title && !title.querySelector(".r80b-objective-source")) {
+        const parts = raw.split("・"), source = parts.shift() || "祖母手記", name = parts.join("・") || (task && task.textContent.trim()) || "目前任務";
+        title.innerHTML = `<span class="r80b-objective-source">${esc(source)}</span><span class="r80b-objective-task">${esc(name)}</span>`;
+      }
+      const progress = head.lastElementChild; if (progress && progress !== title) progress.dataset.audit = "quest-progress";
+    }
+    if (task) task.classList.add("r80b-heirloom-task");
+    if (detail) detail.textContent = detail.textContent.replaceAll("等光落下再澆", "光到了再澆水").replaceAll("等光落下、小麥熟了", "光到了、小麥熟了");
+    const step = A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null;
+    if (button) button.hidden = r80bFieldActionShown(step);
+  }
   /* R78B：任務卡上的提示句。寫著「光幾秒後落下」時留下句型（data-r78b-light-tpl），秒數跟其他地方同一拍更新。 */
   function paintHint(node, hint) {
     if (!node || !hint) return; if (node.textContent !== hint.text) node.textContent = hint.text;
@@ -436,7 +479,7 @@
     /* R78B 第 2 項：任務卡叫玩家把熟了的那一格留著等光時，提示直接寫「等幾秒，光到再收」；秒數跟預告圈、田上標籤同一拍。 */
     if (next && next.action === "catch_sun" && next.holdPlotIndex != null) {
       const choice = window.lightHarvestChoice ? window.lightHarvestChoice(s, next.holdPlotIndex, now) : null;
-      if (choice && choice.ok) return { kind: "sun", hold: true, text: choice.hasTradeoff ? choice.text : choice.tutorialText };
+      if (choice && choice.ok) return r80bFieldActionShown(next) ? null : { kind: "sun", hold: true, text: choice.hasTradeoff ? "請在田邊選一個。" : choice.tutorialText };
       return { kind: "sun", hold: true, text: `☀ 等 ${lightSecondsLabel(s, now)}，光到再收`, tpl: "☀ 等 {秒}，光到再收" };
     }
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
@@ -445,7 +488,7 @@
     const sun = window.sunpatchStatus ? window.sunpatchStatus(s, now) : null;
     if (sun && sun.active && sun.plots.length) {
       const useful = sun.plots.some((i) => i < active && s.plots[i]);
-      if (useful) return { kind: "sun", text: `☀ 陽光 ${Math.ceil(sun.remainingMs / 1000)} 秒・光裡種澆收有加成` };
+      if (useful) return { kind: "sun", text: `☀ 陽光 ${lightSecondsLabel(s, now)}・光裡種、澆、收有加成` };
     }
     if (sun && !sun.active && sun.preview && (sun.previewPlots || []).some((i) => i < active)) { const tail = `後落下${sun.refractionsLeft > 0 ? `・手鏡還能折 ${sun.refractionsLeft} 次` : ""}`; return { kind: "sun", text: `☀ 光 ${lightSecondsLabel(s, now)}${tail}`, tpl: `☀ 光 {秒}${tail}` }; }
     if (!row || !(row.type === "harvest" || (row.consume && window.CROPS[row.id]))) return null;
@@ -697,7 +740,7 @@
     if (step.action === "refract" && sunplay) {
       closePanels(); const result = sunplay.refract(current, step.plotIndex, now);
       if (!result.ok) { notify(step.text); return; }
-      notify("光折過來了。第一次光裡收成後，點一格田再按「折到這格」，就能決定光照哪裡。"); afterSunAction();
+      notify("光折過來了。第一次光裡收成後，點一格田再按「把光折到這裡」，就能決定光照哪裡。"); afterSunAction();
       if (sunplay.playBeam) sunplay.playBeam(current, result.from, result.to); /* 重畫地圖之後才放光束，免得被清掉 */
       return;
     }
@@ -1112,6 +1155,7 @@
     if (!r.height) return;
     const top = Math.ceil(r.bottom + 10) + "px";
     if (document.documentElement.style.getPropertyValue("--world-seed-top") !== top) document.documentElement.style.setProperty("--world-seed-top", top);
+    if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-objective-rendered"));
   }
   function rectOverlap(a, b) { return Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)); }
   function ensureTargetVisible() {
@@ -1126,6 +1170,11 @@
     const plotNodes = [...document.querySelectorAll(".gtile.farm-plot")];
     const targetIsPlot = !!document.querySelector('.gtile.farm-plot[data-tile-id="' + tid + '"]'); // R38 整合：只有目標是田時，才把其他田格也列入避讓
     const plotRects = targetIsPlot ? plotNodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0) : [];
+    const farmStep = targetIsPlot && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null;
+    const lightDecision = !!(farmStep && farmStep.tileId === tid && (farmStep.action === "refract" || farmStep.action === "catch_sun" || farmStep.sunlit === true));
+    /* R80B：光的田格決定先把任務卡收成一列，實際鏡頭只做最小位移；不要沿用一般任務的
+       focusTile 置中，否則農舍旁的曬架與整片農場會被推出畫面。 */
+    if (lightDecision) { if (dock) dock.classList.add("quest-target-collapsed"); syncSeedHudTop(); return; }
     const coveredBy = (box) => { if (!box) return 0; const r = box.getBoundingClientRect(); if (!r.width || !r.height) return 0; return Math.max.apply(null, rects.concat(plotRects).map((t) => rectOverlap(t, r)).concat([0])); };
     /* R37：plotRects 已併入 coveredBy，任務列與種子欄對任何田格重疊都會觸發避讓。 */
     // R58：「今日三件事」是玩家要自己挑的清單，不因目標被蓋到而收掉（否則手機上三個目標全看不到）。

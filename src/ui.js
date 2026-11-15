@@ -146,6 +146,11 @@
   let settlementVisible = false;
   let seasonWarningUntil = 0;
   let closeActiveSettlement = null;
+  function r80bCarePopoverVisible() {
+    const care = typeof document.querySelector === "function" ? document.querySelector(".r74a-care-popover") : null;
+    if (!care || care.hidden || !care.getClientRects || !care.getClientRects().length) return false;
+    const style = getComputedStyle(care); return style.display !== "none" && style.visibility !== "hidden";
+  }
   // R37：結算／里程碑卡顯示時，玩家點其他地方（例如打開訂單）就先收起卡片，不攔截操作
   document.addEventListener("pointerdown", (event) => { if (closeActiveSettlement && !(event.target && event.target.closest && event.target.closest(".settlement-card"))) closeActiveSettlement(); }, true);
   function showNextSettlement() {
@@ -213,6 +218,8 @@
   function showNextToast() {
     const zone = $("toast-zone");
     if (!zone || normalToastVisible || settlementVisible || (zone.children && zone.children.length) || !normalToastQueue.length) return;
+    /* R80B：一般底部提示先排隊，等照顧彈窗與光的田上倒數收掉再顯示，避免把選項或秒數蓋住。 */
+    if (r80bCarePopoverVisible()) return;
     const msg = normalToastQueue.shift();
     normalToastVisible = true;
     const t = document.createElement("div");
@@ -540,6 +547,7 @@
   function updateSunpatchTick(t) {
     if (!G.updateSunpatch || !state) return;
     const r = G.updateSunpatch(state, t);
+    if (window.FarmSunplay && window.FarmSunplay.refreshLightCountdown) window.FarmSunplay.refreshLightCountdown(state.sun || {}, t);
     if (r.spawned) {
       playSound("sunrise");
       if (r.first) {
@@ -549,13 +557,13 @@
       scheduleSave();
     }
     const queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
-    if (queued && G.isSunlit(state, queued.plotIndex, t)) {
+    if (queued && queued.autoHarvest && G.isSunlit(state, queued.plotIndex, t)) {
       const tile = state.map.tiles.find((row) => row.plotIndex === queued.plotIndex);
       const result = tile ? G.harvest(state, queued.plotIndex, t) : { ok: false };
       if (result.ok) {
         spawnVfx(tile.id, "harvest_pop"); G.advanceStory(state, "harvest");
         const crop = window.CROPS[result.cropId]; cropHarvestFx(tile.id, crop, result.added); playSound("harvest"); if (result.sun) sunCatchFx(tile.id, result.sun);
-        toast(`光到了，自動收下 ${result.added} 份${crop.name}${result.lightChoice && result.lightChoice.hasTradeoff ? "；收購已結束，沒有獎金" : ""}。`);
+        toast(`光到了，自動收下 ${result.added} 份${crop.name}。`);
         enqueueResultFeedback(result); afterChange(true);
       } else if (G.clearLightHarvestQueue) G.clearLightHarvestQueue(state);
     }
@@ -1158,10 +1166,10 @@
     if (!plot || !plot.cropId) return "種植・空田";
     const choice = r78bChoiceFor(tile), queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
     if (G.getCropProgress(state, plot, now()).ready) {
-      if (queued && queued.plotIndex === tile.plotIndex) return "等光中";
+      if (queued && queued.plotIndex === tile.plotIndex) return G.isSunlit && G.isSunlit(state, tile.plotIndex, now()) ? `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田` : queued.autoHarvest ? "等光中" : "已選等光";
       return choice && choice.ok && !choice.hasTradeoff ? "等光再收" : `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田`;
     }
-    return r78bFacingCropLabel(tile) || "生長中";
+    return "看看田裡";
   }
   function r79bSyncActionNote(tile) {
     const host = $("mobileControls"); if (!host) return;
@@ -1208,12 +1216,32 @@
         pop.appendChild(row);
       });
       const place = (pt) => {
-        const vw = window.innerWidth || 0;
-        pop.style.left = Math.round(vw ? Math.max(84, Math.min(vw - 84, pt.x)) : pt.x) + "px";
-        pop.style.top = Math.round(pt.y - (pt.h || c.h || 64) / 2 - 10) + "px";
-        const head = r78bBox(document.querySelector("header")), own = r78bBox(pop);
-        const minTop = (head ? head.bottom : 0) + 6;
-        if (own && own.top < minTop) pop.style.top = Math.round(parseFloat(pop.style.top) + (minTop - own.top)) + "px";
+        const vw = window.innerWidth || 0, vh = window.innerHeight || 0, tileW = pt.w || c.w || 64, tileH = pt.h || c.h || 64;
+        const own0 = r78bBox(pop); if (!own0) return;
+        const hud = ["header", "#questDock", ".seed-hud", "#worldMinimap", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip"]
+          .flatMap((sel, priority) => [...document.querySelectorAll(sel)].map((node) => ({ node, priority }))).filter((row) => row.node !== pop && !row.node.hidden && getComputedStyle(row.node).display !== "none" && getComputedStyle(row.node).visibility !== "hidden")
+          .map((row) => ({ box: r78bBox(row.node), critical: row.priority < 2 })).filter((row) => row.box);
+        const halfW = own0.width / 2, maxTop = Math.max(4, vh - own0.height - 4);
+        const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
+        const criticalBottom = hud.filter((row) => row.critical).reduce((bottom, row) => Math.max(bottom, row.box.bottom), 0);
+        const candidates = [
+          { side: "above", x: pt.x, y: pt.y - tileH / 2 - own0.height - 10 },
+          { side: "right", x: pt.x + tileW / 2 + halfW + 10, y: pt.y - own0.height / 2 },
+          { side: "below", x: pt.x, y: pt.y + tileH / 2 + 10 },
+          { side: "left", x: pt.x - tileW / 2 - halfW - 10, y: pt.y - own0.height / 2 },
+          { side: "safe-below", x: pt.x, y: criticalBottom + 8 },
+        ].map((row) => {
+          const x = clamp(row.x, halfW + 4, Math.max(halfW + 4, vw - halfW - 4)), y = clamp(row.y, 4, maxTop);
+          const box = { left: x - halfW, right: x + halfW, top: y, bottom: y + own0.height };
+          const areas = hud.map((h) => ({ critical: h.critical, area: Math.max(0, Math.min(box.right, h.box.right) - Math.max(box.left, h.box.left)) * Math.max(0, Math.min(box.bottom, h.box.bottom) - Math.max(box.top, h.box.top)) }));
+          const criticalOverlap = areas.filter((h) => h.critical).reduce((sum, h) => sum + h.area, 0);
+          const overlap = areas.reduce((sum, h) => sum + h.area, 0);
+          return Object.assign(row, { x, y, overlap, criticalOverlap });
+        }).sort((a, b) => a.criticalOverlap - b.criticalOverlap || a.overlap - b.overlap);
+        const best = candidates[0];
+        pop.dataset.side = best.side;
+        pop.style.left = Math.round(best.x) + "px";
+        pop.style.top = Math.round(best.y) + "px";
       };
       document.body.appendChild(pop);
       place(c);
@@ -1288,6 +1316,8 @@
       const label = $("tileStateLabel");
       const labelTile = label && !label.hidden && label.dataset.tileId ? G.getTileById(state, label.dataset.tileId) : null;
       if (labelTile && r78bLabelKeyFor(labelTile, tileStateLabelText(labelTile)) !== r78bLabelKey) { renderTileStateLabel(labelTile); syncFloatingLabels(); }
+      if (state) r80bKeepDecisionVisible(now());
+      if (!r80bCarePopoverVisible()) showNextToast();
     } catch (e) {}
   }
   function plantingCareMode() {
@@ -1343,7 +1373,7 @@
       if (!btn) {
         btn = document.createElement("button");
         btn.type = "button"; btn.className = "quest-collapse-btn"; btn.dataset.audit = "quest-collapse";
-        btn.onclick = (ev) => { ev.stopPropagation(); const shown = !questDockCollapsed && !box.classList.contains("quest-auto-collapsed"); questDockUserToggled = true; questDockCollapsed = shown; box.classList.remove("quest-auto-collapsed"); ensure(); }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed"); ensure(); };
+        btn.onclick = (ev) => { ev.stopPropagation(); const shown = !questDockCollapsed && !box.classList.contains("quest-auto-collapsed"); questDockUserToggled = true; questDockCollapsed = shown; box.classList.remove("quest-auto-collapsed"); if (!shown) box.classList.remove("r80b-decision-compact"); ensure(); }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed", "r80b-decision-compact"); ensure(); };
         box.appendChild(btn);
       }
       // R58：自動收合時按鈕也寫「展開」，一按就展開（原本寫「收合」且要按兩次）。
@@ -1470,13 +1500,21 @@
     return false;
   }
   function setTool(t, options) {
+    const seedBeforeBuild = t === "build" && $("seedHud") && $("seedHud").getBoundingClientRect ? $("seedHud").getBoundingClientRect().top : null;
     clearTouchFarmPreview(); hideBuildWheel(); hideObjectBubble();
     state.interaction.tool = t;
     if (!(options && options.automatic)) manualToolStepKey = currentToolStep().key;
     if (t !== "build") state.interaction.buildType = null;
     renderToolbar(); renderQuestDock(); renderSceneActionsForSelection();
     $("farmHint").innerHTML = uiIcon(TOOL_UI_ICONS[t]) + escapeHtml(t === "build" ? "建造工具" : window.TOOLS[t].desc);
-    if (t === "build") showBuildCatalog();
+    if (t === "build") {
+      showBuildCatalog();
+      const seed = $("seedHud"), after = seed && seed.getBoundingClientRect ? seed.getBoundingClientRect().top : null;
+      if (Number.isFinite(seedBeforeBuild) && Number.isFinite(after) && Math.abs(after - seedBeforeBuild) > 1) {
+        const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--world-seed-top")) || after;
+        document.documentElement.style.setProperty("--world-seed-top", Math.round(current + seedBeforeBuild - after) + "px");
+      }
+    }
     scheduleSave();
   }
   function renderToolbar() {
@@ -3797,6 +3835,102 @@
     scheduleSave();
     return true;
   }
+  /* R80B：跟某一格田有關的決定存在多久，鏡頭就保住那一格多久。這裡不產生提示、不存檔，
+     只延長既有 camera focus；決定消失後仍回到原本的玩家跟隨。 */
+  let r80bDecisionFocusKey = "", r80bDecisionCameraHeld = false;
+  function r80bDecisionTarget(t) {
+    try {
+      const step = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, t) : null;
+      const queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
+      let plotIndex = null, phase = "";
+      if (queued && !queued.autoHarvest && G.isSunlit && G.isSunlit(state, queued.plotIndex, t)) { plotIndex = queued.plotIndex; phase = "manual-harvest"; }
+      else if (step && step.action === "refract" && step.plotIndex != null) { plotIndex = step.plotIndex; phase = "refract"; }
+      else if (step && step.action === "catch_sun" && step.plotIndex != null && !(queued && queued.plotIndex === step.plotIndex)) { plotIndex = step.plotIndex; phase = "harvest-choice"; }
+      const tile = plotIndex == null ? null : (state.map && state.map.tiles || []).find((row) => row.plotIndex === plotIndex);
+      return tile ? { tile, plotIndex, phase } : null;
+    } catch (e) { return null; }
+  }
+  function r80bNudgeDecisionTile(targetBox, hudBoxes, view) {
+    if (!targetBox || !worldEl) return false;
+    const xs = [0], ys = [0];
+    if (view) {
+      if (targetBox.left < view.left + 4) xs.push(view.left + 4 - targetBox.left);
+      if (targetBox.right > view.right - 4) xs.push(view.right - 4 - targetBox.right);
+      if (targetBox.top < view.top + 4) ys.push(view.top + 4 - targetBox.top);
+      if (targetBox.bottom > view.bottom - 4) ys.push(view.bottom - 4 - targetBox.bottom);
+    }
+    hudBoxes.forEach((hud) => {
+      xs.push(hud.right + 32 - targetBox.left, hud.left - 32 - targetBox.right);
+      ys.push(hud.bottom + 32 - targetBox.top, hud.top - 32 - targetBox.bottom);
+    });
+    let best = null;
+    for (const x of xs) for (const y of ys) {
+      const box = { left: targetBox.left + x, right: targetBox.right + x, top: targetBox.top + y, bottom: targetBox.bottom + y };
+      const outside = view ? Math.max(0, view.left + 4 - box.left) + Math.max(0, box.right - view.right + 4) + Math.max(0, view.top + 4 - box.top) + Math.max(0, box.bottom - view.bottom + 4) : 0;
+      const overlap = hudBoxes.reduce((sum, hud) => sum + Math.max(0, Math.min(box.right, hud.right) - Math.max(box.left, hud.left)) * Math.max(0, Math.min(box.bottom, hud.bottom) - Math.max(box.top, hud.top)), 0);
+      const distance = Math.abs(y) + Math.abs(x) * (window.innerWidth >= 860 ? 1.35 : 1);
+      const score = outside * 1000000000 + overlap * 100000 + distance;
+      if (!best || score < best.score) best = { x, y, score };
+    }
+    const dx = best ? best.x : 0, dy = best ? best.y : 0;
+    if (!dx && !dy) return false;
+    const scale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1;
+    let x = (state.camera && state.camera.x || 0) + dx / (scale || 1), y = (state.camera && state.camera.y || 0) + dy / (scale || 1);
+    const scene = $("mapScene"), fringe = TILE * 4;
+    if (scene && mapViewMode() === "natural") {
+      x = Math.min(fringe, Math.max(scene.clientWidth - state.map.width * TILE - fringe, x));
+      y = Math.min(fringe, Math.max(scene.clientHeight - state.map.height * TILE - fringe, y));
+    }
+    if (!state.camera) state.camera = {};
+    state.camera.x = x; state.camera.y = y;
+    worldEl.style.transition = "none";
+    worldEl.style.transform = `translate(${Math.round(x)}px,${Math.round(y)}px)`;
+    void worldEl.offsetWidth; worldEl.style.transition = ""; syncFloatingLabels();
+    return true;
+  }
+  function r80bKeepDecisionVisible(t) {
+    const target = r80bDecisionTarget(t), dock = $("questDock");
+    if (!target) {
+      r80bDecisionFocusKey = "";
+      if (document.documentElement) delete document.documentElement.dataset.r80Decision;
+      if (r80bDecisionCameraHeld) { r80bDecisionCameraHeld = false; if (state.camera) state.camera.followPlayer = true; updateCamera(false); }
+      if (dock) dock.classList.remove("r80b-decision-compact");
+      return;
+    }
+    if (document.documentElement) document.documentElement.dataset.r80Decision = target.phase;
+    const sunChip = $("sunChip");
+    if (sunChip && window.innerWidth >= 860) {
+      const head = r78bBox(document.querySelector("header"));
+      sunChip.style.left = Math.max(8, window.innerWidth - (sunChip.offsetWidth || 210) - 12) + "px";
+      sunChip.style.top = Math.round((head ? head.bottom : 80) + 8) + "px";
+    }
+    if (dock) {
+      const userExpanded = questDockUserToggled && !questDockCollapsed && !dock.classList.contains("quest-auto-collapsed");
+      const keepDailyGoals = dock.dataset.quest === "early_free_choice";
+      dock.classList.toggle("r80b-decision-compact", !userExpanded && !keepDailyGoals);
+    }
+    const key = `${target.phase}|${target.tile.id}|${(state.sun && (state.sun.previewAt || state.sun.startsAt)) || 0}`;
+    const changed = key !== r80bDecisionFocusKey;
+    if (state.camera && state.camera.focusTileId) { clearCameraFocus(); updateCamera(false); }
+    if (!state.camera) state.camera = {};
+    r80bDecisionCameraHeld = true;
+    if (changed) {
+      r80bDecisionFocusKey = key;
+      selectedTileId = target.tile.id;
+      if (!state.interaction) state.interaction = {};
+      state.interaction.selectedTileId = target.tile.id;
+      renderTileContext();
+      renderSceneActionsForSelection();
+    }
+    const targetBox = r78bBox(tileElOf(target.tile.id));
+    if (!targetBox) return;
+    const hudBoxes = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip"]
+      .flatMap((sel) => [...document.querySelectorAll(sel)]).filter((node) => !node.hidden && getComputedStyle(node).display !== "none" && getComputedStyle(node).visibility !== "hidden").map(r78bBox).filter(Boolean);
+    const view = r78bSceneBox();
+    const outside = !targetBox || !view || targetBox.left < view.left || targetBox.right > view.right || targetBox.top < view.top || targetBox.bottom > view.bottom;
+    const covered = targetBox && hudBoxes.some((box) => r78bHit(targetBox, box, 2));
+    if (outside || covered) r80bNudgeDecisionTile(targetBox, hudBoxes, view);
+  }
   function nudgeFocusedTileFromQuestDock(tileId) {
     if (window.innerWidth < 860 || !worldEl) return;
     const dock = $("questDock"), target = tileElOf(tileId), scene = $("mapScene");
@@ -3864,6 +3998,10 @@
     const scene = $("mapScene"); if (!scene) return;
     const vw = scene.clientWidth, vh = scene.clientHeight;
     const worldW = state.map.width * TILE, worldH = state.map.height * TILE;
+    if (r80bDecisionCameraHeld && state.camera && !state.camera.focusTileId) {
+      worldEl.style.transform = "translate(" + Math.round(state.camera.x || 0) + "px," + Math.round(state.camera.y || 0) + "px)";
+      syncFloatingLabels(); return;
+    }
     let tile = null;
     // Sitting at the farm table is a held view; return to player follow when leaving it.
     if (state.camera && state.camera.focusTileId && (now() < (state.camera.focusUntil || 0) || document.body.dataset.reunion === 'true' || document.body.dataset.handover === 'true')) {
@@ -3908,11 +4046,11 @@
       camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
       camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
     }
-    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#worldDialogue:not([hidden])"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 4; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } } state.camera.x = camX; state.camera.y = camY;
+    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip", "#worldDialogue:not([hidden])"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 6; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } } state.camera.x = camX; state.camera.y = camY;
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
     if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
-    window.ContentR6?.fitMapLabels(); syncFloatingLabels(); } function syncFloatingLabels() { try { const hud2 = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar"].flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const worldScale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1; worldEl.querySelectorAll(".ob-bar, .ob-dot-ready-crop, .tile-state-label").forEach((lab) => { let r = lab.getBoundingClientRect(); if (lab.classList.contains("tile-state-label")) { /* R75：標籤多了光性說明變高，鏡頭停好後原位仍撞到任務卡等 HUD 時也改掛田格下方（下方同樣被擋就維持原樣；鏡頭還在移動時不判斷，等 240ms 後那次同步）。 */ const hitsHud = (b) => hud2.some((h) => b.left < h.right && b.right > h.left && b.top < h.bottom && b.bottom > h.top); const downTop = r.bottom + (TILE + 12) * worldScale; const downFree = !hitsHud({ left: r.left, right: r.right, top: downTop, bottom: downTop + r.height }) && downTop + r.height <= window.innerHeight - 4; let camMoving = false; try { const tm = /translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(worldEl.style.transform || ""); const cm = tm ? new DOMMatrixReadOnly(getComputedStyle(worldEl).transform) : null; camMoving = !!cm && (Math.abs(cm.m41 - Number(tm[1])) > 0.5 || Math.abs(cm.m42 - Number(tm[2])) > 0.5); } catch (e) { camMoving = false; } if (lab.dataset.labelBelow !== "true" && (r.top < 4 || (!camMoving && hitsHud(r) && downFree)) && Number.isFinite(parseFloat(lab.style.top))) { lab.dataset.labelBelow = "true"; lab.dataset.labelTop = lab.style.top; lab.classList.add("tile-state-label-below"); lab.style.top = (parseFloat(lab.style.top) + TILE + 12) + "px"; let r2 = lab.getBoundingClientRect(); let need = 4; for (const hd of hud2) { if (r2.left < hd.right && r2.right > hd.left && r2.top < hd.bottom && r2.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } let shift = TILE + 12; if (r2.top < need) { const dy = (need - r2.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; shift += dy; } lab.dataset.labelShift = String(shift); } else if (lab.dataset.labelBelow === "true") { const upBottom = r.top - (parseFloat(lab.dataset.labelShift) || (TILE + 12)) * worldScale; if (upBottom - r.height >= 4 && !hitsHud({ left: r.left, right: r.right, top: upBottom - r.height, bottom: upBottom })) { lab.classList.remove("tile-state-label-below"); if (lab.dataset.labelTop) lab.style.top = lab.dataset.labelTop; delete lab.dataset.labelBelow; delete lab.dataset.labelTop; delete lab.dataset.labelShift; } else { let need = 4; for (const hd of hud2) { if (r.left < hd.right && r.right > hd.left && r.top < hd.bottom && r.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } if (r.top < need && Number.isFinite(parseFloat(lab.style.top))) { const dy = (need - r.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; lab.dataset.labelShift = String((parseFloat(lab.dataset.labelShift) || (TILE + 12)) + dy); } } } /* R77A：改掛田格下方時若蓋到田格動作列（折光、澆水鈕），整張標籤往左或往右移到動作列旁邊（不出畫面、不撞 HUD；兩邊都放不下就維持原位）；標籤回到上方或重畫時移回原位。 */ if (lab.dataset.labelBelow === "true" && Number.isFinite(parseFloat(lab.style.left))) { const baseLeft = lab.dataset.labelLeft != null ? parseFloat(lab.dataset.labelLeft) : parseFloat(lab.style.left); const cur = lab.getBoundingClientRect(), off = (parseFloat(lab.style.left) - baseLeft) * (worldScale || 1); const base = { left: cur.left - off, right: cur.right - off, top: cur.top, bottom: cur.bottom }; const sab = document.getElementById("sceneActionBar"), sabRect = sab && !sab.hidden ? sab.getBoundingClientRect() : null; let dx = 0; if (sabRect && sabRect.width > 0 && base.left < sabRect.right && base.right > sabRect.left && base.top < sabRect.bottom && base.bottom > sabRect.top) { const side = [sabRect.right + 6 - base.left, sabRect.left - 6 - base.right].filter((d) => base.left + d >= 4 && base.right + d <= window.innerWidth - 4 && !hitsHud({ left: base.left + d, right: base.right + d, top: base.top, bottom: base.bottom })).sort((a, b) => Math.abs(a) - Math.abs(b)); if (side.length) dx = side[0]; } if (dx) { lab.dataset.labelLeft = String(baseLeft); lab.style.left = (baseLeft + dx / (worldScale || 1)) + "px"; } else if (lab.dataset.labelLeft != null) { lab.style.left = baseLeft + "px"; delete lab.dataset.labelLeft; } } else if (lab.dataset.labelLeft != null) { lab.style.left = lab.dataset.labelLeft + "px"; delete lab.dataset.labelLeft; } r = lab.getBoundingClientRect(); } const hit = hud2.some((h) => r.left < h.right && r.right > h.left && r.top < h.bottom && r.bottom > h.top); lab.style.visibility = hit ? "hidden" : ""; lab.dataset.hudHidden = hit ? "true" : "false"; }); } catch (e) {}
+    window.ContentR6?.fitMapLabels(); syncFloatingLabels(); } function syncFloatingLabels() { try { const hud2 = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".sun-chip"].flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const worldScale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1; worldEl.querySelectorAll(".ob-bar, .ob-dot-ready-crop, .tile-state-label").forEach((lab) => { let r = lab.getBoundingClientRect(); if (lab.classList.contains("tile-state-label")) { /* R75：標籤多了光性說明變高，鏡頭停好後原位仍撞到任務卡等 HUD 時也改掛田格下方（下方同樣被擋就維持原樣；鏡頭還在移動時不判斷，等 240ms 後那次同步）。 */ const hitsHud = (b) => hud2.some((h) => b.left < h.right && b.right > h.left && b.top < h.bottom && b.bottom > h.top); const downTop = r.bottom + (TILE + 12) * worldScale; const downFree = !hitsHud({ left: r.left, right: r.right, top: downTop, bottom: downTop + r.height }) && downTop + r.height <= window.innerHeight - 4; let camMoving = false; try { const tm = /translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(worldEl.style.transform || ""); const cm = tm ? new DOMMatrixReadOnly(getComputedStyle(worldEl).transform) : null; camMoving = !!cm && (Math.abs(cm.m41 - Number(tm[1])) > 0.5 || Math.abs(cm.m42 - Number(tm[2])) > 0.5); } catch (e) { camMoving = false; } if (lab.dataset.labelBelow !== "true" && (r.top < 4 || (!camMoving && hitsHud(r) && downFree)) && Number.isFinite(parseFloat(lab.style.top))) { lab.dataset.labelBelow = "true"; lab.dataset.labelTop = lab.style.top; lab.classList.add("tile-state-label-below"); lab.style.top = (parseFloat(lab.style.top) + TILE + 12) + "px"; let r2 = lab.getBoundingClientRect(); let need = 4; for (const hd of hud2) { if (r2.left < hd.right && r2.right > hd.left && r2.top < hd.bottom && r2.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } let shift = TILE + 12; if (r2.top < need) { const dy = (need - r2.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; shift += dy; } lab.dataset.labelShift = String(shift); } else if (lab.dataset.labelBelow === "true") { const upBottom = r.top - (parseFloat(lab.dataset.labelShift) || (TILE + 12)) * worldScale; if (upBottom - r.height >= 4 && !hitsHud({ left: r.left, right: r.right, top: upBottom - r.height, bottom: upBottom })) { lab.classList.remove("tile-state-label-below"); if (lab.dataset.labelTop) lab.style.top = lab.dataset.labelTop; delete lab.dataset.labelBelow; delete lab.dataset.labelTop; delete lab.dataset.labelShift; } else { let need = 4; for (const hd of hud2) { if (r.left < hd.right && r.right > hd.left && r.top < hd.bottom && r.bottom > hd.top) need = Math.max(need, hd.bottom + 4); } if (r.top < need && Number.isFinite(parseFloat(lab.style.top))) { const dy = (need - r.top) / (worldScale || 1); lab.style.top = (parseFloat(lab.style.top) + dy) + "px"; lab.dataset.labelShift = String((parseFloat(lab.dataset.labelShift) || (TILE + 12)) + dy); } } } /* R77A：改掛田格下方時若蓋到田格動作列（折光、澆水鈕），整張標籤往左或往右移到動作列旁邊（不出畫面、不撞 HUD；兩邊都放不下就維持原位）；標籤回到上方或重畫時移回原位。 */ if (lab.dataset.labelBelow === "true" && Number.isFinite(parseFloat(lab.style.left))) { const baseLeft = lab.dataset.labelLeft != null ? parseFloat(lab.dataset.labelLeft) : parseFloat(lab.style.left); const cur = lab.getBoundingClientRect(), off = (parseFloat(lab.style.left) - baseLeft) * (worldScale || 1); const base = { left: cur.left - off, right: cur.right - off, top: cur.top, bottom: cur.bottom }; const sab = document.getElementById("sceneActionBar"), sabRect = sab && !sab.hidden ? sab.getBoundingClientRect() : null; let dx = 0; if (sabRect && sabRect.width > 0 && base.left < sabRect.right && base.right > sabRect.left && base.top < sabRect.bottom && base.bottom > sabRect.top) { const side = [sabRect.right + 6 - base.left, sabRect.left - 6 - base.right].filter((d) => base.left + d >= 4 && base.right + d <= window.innerWidth - 4 && !hitsHud({ left: base.left + d, right: base.right + d, top: base.top, bottom: base.bottom })).sort((a, b) => Math.abs(a) - Math.abs(b)); if (side.length) dx = side[0]; } if (dx) { lab.dataset.labelLeft = String(baseLeft); lab.style.left = (baseLeft + dx / (worldScale || 1)) + "px"; } else if (lab.dataset.labelLeft != null) { lab.style.left = baseLeft + "px"; delete lab.dataset.labelLeft; } } else if (lab.dataset.labelLeft != null) { lab.style.left = lab.dataset.labelLeft + "px"; delete lab.dataset.labelLeft; } r = lab.getBoundingClientRect(); } const hit = hud2.some((h) => r.left < h.right && r.right > h.left && r.top < h.bottom && r.bottom > h.top); lab.style.visibility = hit ? "hidden" : ""; lab.dataset.hudHidden = hit ? "true" : "false"; }); } catch (e) {}
   }
   function walkPath(path, onArrive) {
     if (moveTimer) { clearTimeout(moveTimer); moveTimer = null; }
@@ -4238,7 +4376,7 @@
     plant: ["🌱", "種植"], harvest: ["✂", "收成"], water: ["💧", "澆水"], clear: ["⛏", "清除"],
     build: ["🏗", "建造"], collect: ["🧺", "收集"], use: ["●", "使用"], deliver: ["✓", "交付"],
     sell: ["🪙", "賣出"], talk: ["…", "交談"],
-    refract: ["☀", "折到這格"], ripen: ["☀", "催熟・用 2 點陽光"], wait_light: ["☀", "等光再收"],
+    refract: ["☀", "把光折到這裡"], ripen: ["☀", "催熟・用 2 點陽光"], wait_light: ["☀", "等光再收"],
   };
   function tileReadyCrop(tile) {
     if (!tile || tile.plotIndex == null || tile.plotIndex >= G.activePlotCount(state)) return false;
@@ -4302,7 +4440,7 @@
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
     /* 光快落在這一格：任務卡教的是「等光到了再澆水」，標籤跟著講同一件事，不再寫「種滿再澆水」。 */
     if (nextForPlot && nextStep.action === "refract") return `折光・${name}` + sunSuffix;
-    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return `等光再澆水・${name}` + "\n光快落在這格了";
+    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return `光到了再澆水・${name}` + "\n光快落在這格了";
     return name + "・" + (planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水");
   }
   /* R77A 第 1 項：這一格的折光說明。「這格本來就會照到」只在標籤還沒講到光的時候才補，免得同一件事寫兩次。 */
@@ -4344,13 +4482,17 @@
     const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile); renderSeeds();
     const toolActions = { hand: ["plant", "harvest"], water: ["water"], build: ["build"], clear: ["clear"], inspect: [] }[currentTool()] || [];
     const actions = sceneActionsForTile(tile);
-    // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「折到這格」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
+    // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「把光折到這裡」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
     const sunActions = tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && window.FarmSunplay && window.FarmSunplay.plotActions ? window.FarmSunplay.plotActions(state, tile.plotIndex, now()) : [];
     if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(); return; }
     const lightChoice = tile && tile.plotIndex != null ? r78bChoiceFor(tile) : null;
     const queuedLight = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
     if (tile && tile.plotIndex != null) {
       const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null;
+      /* R80B：第一次折光只由任務卡教學鈕執行；田邊先不混入澆水等另一顆動作，
+         也不建立「把光折到這裡」預覽。第一次光裡收成後才交回一般田格動作列。 */
+      const firstRefractLesson = nextStep && nextStep.action === "refract" && nextStep.plotIndex === tile.plotIndex && !sunActions.some((row) => row.action === "refract");
+      if (firstRefractLesson) { hideSceneActions(); return; }
       const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex);
       let filtered = actions.filter((a) => toolActions.includes(a.action));
       if (lightChoice && lightChoice.ok) {
@@ -4372,8 +4514,12 @@
       b.setAttribute("aria-label", meta[1]);
       const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png',refract:'content-r75/sun_mirror.png',ripen:'content-r75/sun_jar.png'}[entry.action];
       let actionLabel = meta[1], actionDetail = "";
-      if (lightChoice && lightChoice.ok && entry.action === "harvest") { actionLabel = "現在收"; actionDetail = `${lightChoice.nowQty} 份＋${lightChoice.nowCoins} 金，趕得上收購`; }
-      if (lightChoice && lightChoice.ok && entry.action === "wait_light") { actionLabel = queuedLight && queuedLight.plotIndex === tile.plotIndex ? "等光中" : "等光再收"; actionDetail = lightChoice.hasTradeoff ? `${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}，沒有獎金` : lightChoice.helpText; }
+      if (lightChoice && lightChoice.ok && entry.action === "harvest") { actionLabel = "現在收"; actionDetail = `${lightChoice.nowQty} 份＋${lightChoice.nowCoins} 金；訂單每份 ${lightChoice.orderUnitCoins} 金`; }
+      if (lightChoice && lightChoice.ok && entry.action === "wait_light") {
+        const selectedWait = queuedLight && queuedLight.plotIndex === tile.plotIndex;
+        actionLabel = selectedWait ? (queuedLight.autoHarvest ? "等光中" : "已選等光") : "等光再收";
+        actionDetail = lightChoice.hasTradeoff ? `${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}，${lightChoice.sunlightUseText}` : lightChoice.helpText;
+      }
       b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${actionLabel}${actionDetail ? `<small class="r79b-action-detail">${actionDetail}</small>` : ""}</span>`;
       if (actionDetail) { b.dataset.r79bTradeoff = entry.action; b.title = `${actionLabel}・${actionDetail}`; b.setAttribute("aria-label", b.title); }
       /* R77A 第 1 項：折光鈕多一行「手鏡還能折 N 次」，完整的結果寫進按鈕說明。 */
@@ -5602,6 +5748,14 @@
     }
     try { if (!selectedPlot && nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
     r79bSyncActionNote(rack ? null : selectedPlot);
+    const sceneBar = $("sceneActionBar");
+    const sceneButtons = sceneBar && !sceneBar.hidden ? [...sceneBar.querySelectorAll("button:not([disabled])")] : [];
+    let facingSelected = false; try { const facing = facingTile(); facingSelected = !!(selectedPlot && facing && facing.id === selectedPlot.id); } catch (e) {}
+    const selectedChoice = selectedPlot ? r78bChoiceFor(selectedPlot) : null;
+    const thumbOwnsWait = !!(facingSelected && selectedChoice && selectedChoice.ok && !selectedChoice.hasTradeoff && sceneButtons.length === 1 && sceneButtons[0].dataset.action === "wait_light");
+    if (sceneBar) sceneBar.dataset.r80bYieldToThumb = thumbOwnsWait ? "true" : "false";
+    const plotActionShown = !!(selectedPlot && sceneButtons.length && !thumbOwnsWait);
+    action.dataset.r80bDuplicate = plotActionShown ? "true" : "false";
     action.textContent = busy ? "收成中" : targetLabel;
     // R71B：右下互動鈕裝不下完整「交談・人名」時，省略「交談・」前綴只留人名，不截成半個名字（完整文字仍保留在 title）。
     if (!busy && targetLabel.startsWith("交談・") && action.scrollWidth > action.clientWidth + 1) action.textContent = targetLabel.slice(3);
@@ -5866,6 +6020,7 @@
     }
     if (typeof window.requestAnimationFrame !== "function") tickPlayer(t);
     if (window.FarmWorld) window.FarmWorld.tick(state, t);
+    r80bKeepDecisionVisible(t);
     updateQuickHarvest();
   }
 
@@ -6011,6 +6166,8 @@
     setupPanelScrollHint();
     setupQuestDockCollapse();
     setInterval(r78bFocusTick, 250);
+    setInterval(() => { try { if (state) r80bKeepDecisionVisible(now()); } catch (e) {} }, 250);
+    window.addEventListener("farm-objective-rendered", () => { try { if (state) r80bKeepDecisionVisible(now()); } catch (e) {} });
     startPerformanceMonitor();
     setupPwa();
 

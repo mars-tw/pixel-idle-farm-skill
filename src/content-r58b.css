@@ -1876,3 +1876,55 @@ html.perf-low #weatherLayer.fog::before { background: radial-gradient(240px 90px
   body:has(#sceneActionBar .r79b-action-detail) #toast-zone:not(:has(.milestone-card)) { bottom: 184px; }
 }
 /* ===== R79 整合結束 ===== */
+
+/* ===== R80B（一個動作一顆鈕、同拍秒數、決定時看得到田）開始 ===== */
+/* 標題列固定為「來源／任務名／進度」三件事；祖母手記沿用自己的 DOM，也套同一個兩行節奏。 */
+.r80b-objective-head { align-items: center; }
+.r80b-objective-head .qp-step,
+.r80b-heirloom-head > span:first-child { min-width: 0; display: grid; grid-template-rows: auto auto; gap: 1px; }
+.r80b-objective-source { display: block; color: #6b421b; font-size: 11px; font-weight: 850; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.r80b-objective-task { display: block; color: #3f2a13; font-size: 13px; font-weight: 950; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.r80b-heirloom-task { margin-top: 3px; font-size: 13px; font-weight: 950; }
+.r80b-now-copy { align-self: center; min-height: 32px; display: inline-flex; align-items: center; padding: 4px 9px; border: 1px solid #b89455; border-radius: 7px; background: #fff8df; color: #5b421f; font-size: 11px; font-weight: 900; white-space: nowrap; }
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r68a-now,.r67a-now):not(.r69a-festival-now) > .r80b-now-copy,
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r68a-now,.r67a-now):not(.r69a-festival-now) > .r80b-now-copy,
+html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r68a-now,.r67a-now):not(.r69a-festival-now) > span.r80b-now-copy,
+html body:has(#buildWheel:not([hidden])) #questDock#questDock > :is(.r68a-now,.r67a-now):not(.r69a-festival-now) > .r80b-now-copy { display: inline-flex !important; }
+
+/* 田邊動作列已出現時，右下大鈕不再放第二顆同功能按鈕；沒有可按動作的成長中田仍寫「看看田裡」。 */
+#actionA[data-r80b-duplicate="true"] { visibility: hidden !important; pointer-events: none !important; }
+#sceneActionBar[data-r80b-yield-to-thumb="true"] { visibility: hidden !important; pointer-events: none !important; }
+html[data-r80-decision] #mapScene .seed-hud { visibility: hidden !important; pointer-events: none !important; }
+
+/* 早市兩邊同寬，不以預設焦點或寬度暗示答案。 */
+#sceneActionBar:has([data-r79b-tradeoff]) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(620px, calc(100vw - 24px)); }
+#sceneActionBar [data-r79b-tradeoff] { width: 100%; min-width: 0; justify-content: center; }
+#sceneActionBar [data-r79b-tradeoff] .sab-t { max-width: none !important; }
+#sceneActionBar [data-r79b-tradeoff] .r79b-action-detail { white-space: normal; }
+
+/* 做田格決定時任務卡只留標題與一句「現在做」，把地圖空間還給目標田。 */
+#questDock.r80b-decision-compact :is(.r67a-task-list, .r68a-requirements, .r69a-main-row, .r68a-festival-summary) { display: none !important; }
+#questDock.r80b-decision-compact { max-height: 104px !important; overflow: hidden !important; }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) { min-height: 34px; }
+
+/* 折光入口統一叫「把光折到這裡」；第一輪尚未收過陽光小麥時，JS 根本不建立這塊預覽。 */
+.r77a-refract-ghost::after { content: "把光折到這裡"; }
+
+/* 收成大字可改到田的左右兩側，左右放置時取消原本只為上方位置預留的外距。 */
+.r78b-sun-pop[data-side="left"], .r78b-sun-pop[data-side="right"] { margin-top: 0; }
+body:has(.r75a-sun-preview) #toast-zone:not(:has(.settlement-card)):not(:has(.milestone-card)) { left: 12px; right: auto; transform: none; }
+
+@media (max-width: 859px), (max-height: 500px) {
+  #questDock.r80b-decision-compact { max-height: 74px !important; }
+  #questDock.r80b-decision-compact .r80b-objective-source { font-size: 10px; }
+  #questDock.r80b-decision-compact .r80b-objective-task { font-size: 12px; }
+  #sceneActionBar:has([data-r79b-tradeoff]) { width: min(520px, calc(100vw - 16px)); gap: 6px; }
+  #sceneActionBar [data-r79b-tradeoff] { padding-left: 7px; padding-right: 7px; }
+}
+@media (min-width: 860px) {
+  #questDock.r80b-decision-compact { width: min(224px, calc(100vw - 40px)) !important; }
+}
+@media (max-height: 480px) and (min-width: 700px) {
+  #toast-zone:has(.settlement-card):not(:has(.milestone-card)) { left: 8px !important; right: auto !important; }
+}
+/* ===== R80B 結束 ===== */

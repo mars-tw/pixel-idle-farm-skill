@@ -45,7 +45,7 @@ test("下一步包含折光、等光與催熟，舊存檔補安全預設", () =>
   const old = State.migrate({ version: 1, lastSeenAt: 1000, storage: { items: {} }, upgrades: {}, stats: {}, flags: {} }); assert.equal(old.r75Sunplay.sunlight, 0); assert.equal(old.r75Sunplay.mirrorLevel, 0); assert.equal(old.r75Sunplay.rack.cropId, null);
   const s = fresh(); s.coins = 99; Game.plant(s, 0, "wheat", 1000); s.sun.previewPlots = [1]; s.sun.previewAt = 9000; s.sun.nextAt = 9000; assert.equal(Adventure.nextFarmStep(s, 2000).action, "refract"); Sun.refract(s, 0, 2000);
   /* R75 整合時規則改了：光折過去之後還沒落下，下一步是「等光」。原本這裡直接回「去澆水」，玩家照做就會在光到之前把水澆掉，接不到第一點陽光。 */
-  const hold = Adventure.nextFarmStep(s, 2001); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光到了再澆水/);
+  const hold = Adventure.nextFarmStep(s, 2001); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /光到了再澆水/);
   assert.equal(Game.updateSunpatch(s, 9000, () => 0).spawned, true);
   const lit = Adventure.nextFarmStep(s, 9001); assert.equal(lit.action, "tend"); assert.equal(lit.sunlit, true); assert.equal(lit.plotIndex, 0);
   assert.equal(Game.waterPlot(s, 0, 9001).ok, true); assert.equal(Sun.sunlight(s), 1); assert.equal(s.r75Sunplay.firstCaught, true);
@@ -56,7 +56,7 @@ test("下一步包含折光、等光與催熟，舊存檔補安全預設", () =>
 
 test("光快落在已經熟的作物上：先留著等光，光到了才叫玩家收", () => {
   const s = fresh(); ready(s, 0, "wheat", 1000); s.sun.previewPlots = [0]; s.sun.previewAt = 9000; s.sun.nextAt = 9000;
-  const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光到了再收成/);
+  const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光再收/);
   /* R76 整合：手上還有種子包時，這幾秒先叫玩家去種別格；等光的那一格要一起帶出去，田上才會寫「先別收」、收成鈕先收起來（原本手機上任務卡說去種小麥、田上卻寫可收成）。 */
   s.adventure.r58.r59.seedPacks.wheat = 2;
   /* R78B 規則改了：等光的那一格已經熟了，就只講「等光再收」，不再叫玩家去種小麥（任務卡寫去種小麥、田上寫先別收對不起來）；等光的那一格照樣帶出去。 */
