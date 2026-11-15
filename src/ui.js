@@ -430,7 +430,7 @@
     const resultText = sun.kind === "harvest" ? sunHarvestResultText(sun, "") : sunGrowthResultText(sun);
     /* R78B 第 6 項：光裡收成改跳「多 1 份」「陽光 +N」兩行大字（FarmSunplay.harvestPopText 從這次收成的結果組出來）；光裡種下、或大字放不出來時維持原本那一行。 */
     const popLines = sun.kind === "harvest" && window.FarmSunplay && window.FarmSunplay.harvestPopText ? window.FarmSunplay.harvestPopText({ sun }) : [];
-    if (!(popLines.length && r78bSunPop(c, popLines))) floatText(c.x, c.y - 116, resultText, "#ffe680");
+    if (!(popLines.length && r78bSunPop(Object.assign({ tileId }, c), popLines))) floatText(c.x, c.y - 116, resultText, "#ffe680");
     playSound("sun");
     const beam = worldEl && worldEl.querySelector('.sun-beam[data-tile-id="' + tileId + '"]');
     if (beam) { beam.classList.add("caught"); }
@@ -1207,13 +1207,30 @@
         row.textContent = line;
         pop.appendChild(row);
       });
-      const vw = window.innerWidth || 0;
-      pop.style.left = Math.round(vw ? Math.max(84, Math.min(vw - 84, c.x)) : c.x) + "px";
-      pop.style.top = Math.round(c.y - (c.h || 64) / 2 - 10) + "px";
+      const place = (pt) => {
+        const vw = window.innerWidth || 0;
+        pop.style.left = Math.round(vw ? Math.max(84, Math.min(vw - 84, pt.x)) : pt.x) + "px";
+        pop.style.top = Math.round(pt.y - (pt.h || c.h || 64) / 2 - 10) + "px";
+        const head = r78bBox(document.querySelector("header")), own = r78bBox(pop);
+        const minTop = (head ? head.bottom : 0) + 6;
+        if (own && own.top < minTop) pop.style.top = Math.round(parseFloat(pop.style.top) + (minTop - own.top)) + "px";
+      };
       document.body.appendChild(pop);
-      const head = r78bBox(document.querySelector("header")), own = r78bBox(pop);
-      const minTop = (head ? head.bottom : 0) + 6;
-      if (own && own.top < minTop) pop.style.top = Math.round(parseFloat(pop.style.top) + (minTop - own.top)) + "px";
+      place(c);
+      /* R79 整合：收成後鏡頭還會繼續捲向玩家，大字原本固定在收成當下的螢幕位置，田移走了字還留在原地；
+         顯示的 1.8 秒內每一格畫面都重新對準那塊田。 */
+      if (c.tileId && typeof window.requestAnimationFrame === "function") {
+        const until = Date.now() + 1800;
+        const follow = () => {
+          if (!pop.isConnected || Date.now() > until) return;
+          /* 田格重繪的那一格畫面暫時找不到元素時先不動（elementCenter 找不到會退回畫面中央）。 */
+          const el = tileElOf(c.tileId);
+          const pt = el ? elementCenter(el) : null;
+          if (pt && Number.isFinite(pt.x) && Number.isFinite(pt.y)) place(pt);
+          window.requestAnimationFrame(follow);
+        };
+        window.requestAnimationFrame(follow);
+      }
       setTimeout(() => { pop.remove(); }, 1800);
       return true;
     } catch (e) { return false; }

@@ -592,6 +592,9 @@
       return field("ripen", target, `蓄光瓶有 ${sunplay.sunlight} 點陽光。用掉 2 點，讓還在長的${cropName(target)}立刻成熟。`, "用陽光催熟");
     }
     const harvestDone = claimed(a, "c1_first_harvest");
+    /* R79 整合：第一個任務「找鎮長葛瑞交談」還沒做完時，班伯的開市任務還沒開，先帶玩家去找鎮長。
+       原本小麥一湊滿 2 份就叫玩家交給班伯，任務卡與驚嘆號卻都指向鎮長，三處講不同的人。 */
+    if (!harvestDone && wheat >= 2 && !claimed(a, "c1_homecoming")) return { action: "report", target: "mayor", questId: "c1_homecoming", tileId: null, text: "小麥收好了。先去找鎮長葛瑞打聲招呼，他會告訴你這 2 份要交給誰。", actionLabel: "前往交談" };
     if (!harvestDone && wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", actionLabel: "帶去交付" };
     if (harvestDone && !mealDone && bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", actionLabel: "吃麥餅" };
     if (harvestDone && !mealDone && wheat >= 2) return { action: "cook", target: "kitchen", tileId: "t10_10", text: "食材已齊，前往農舍灶台做農家麥餅。", actionLabel: "前往灶台" };

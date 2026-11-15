@@ -70,4 +70,14 @@ test("6 第一次收成後三處都指向老農班伯", () => {
   const world = read("src/world-ui.js"); assert.match(world, /result\.settlement\.kind === "first_harvest"/); assert.match(world, /const taskName = q \? \(activeGoal/);
 });
 
+test("6b 還沒找鎮長就收成時，下一步、任務卡、驚嘆號都指向鎮長（R79 整合）", () => {
+  const s = fresh(); A.ensure(s, T);
+  assert.equal(A.record(s, { type: "harvest", cropId: "wheat", count: 3 }, T + 1).ok, true);
+  s.storage.items.wheat = 3;
+  const next = A.nextFarmStep(s, T + 2), current = A.summary(s, T + 2).currentQuest;
+  assert.equal(current.id, "c1_homecoming"); assert.equal(current.npcId, "mayor");
+  assert.equal(next.action, "report"); assert.equal(next.target, "mayor"); assert.equal(next.questId, "c1_homecoming");
+  assert.doesNotMatch(next.text, /班伯/, "還沒找鎮長時，下一步不得叫玩家去找班伯");
+});
+
 if (!process.exitCode) console.log(`R79B first-minute rules: ${passed} passed`);
