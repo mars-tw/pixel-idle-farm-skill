@@ -80,7 +80,7 @@
   const LEGACY_TOUCH_CLICK_WINDOW_MS = 350;
   const ORDER_TRASH_CONFIRM_MS = 5000;
   const SAVE_BACKUP_SUFFIX = "_backup_r31";
-  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r77-20261113-1";
+  const PWA_CACHE_VERSION = window.FARM_CACHE_VERSION || "content-r78-20261115-1";
   const PWA_AUTO_RELOAD_WINDOW_MS = 15000;
   const PWA_AUTO_RELOAD_SESSION_KEY = "pixelFarmPwaAutoReloaded";
 
@@ -860,7 +860,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn">種子 ${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${window.FarmSunplay ? `<small class="r75a-light-trait">${escapeHtml(window.FarmSunplay.traitInfo(c.id).icon + " " + window.FarmSunplay.traitInfo(c.id).name + "：" + window.FarmSunplay.traitInfo(c.id).text)}</small>` : ""}${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn"><span class="r78-seed-prefix">種子 </span>${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${window.FarmSunplay ? `<small class="r75a-light-trait"><b>${escapeHtml(window.FarmSunplay.traitInfo(c.id).icon + " " + window.FarmSunplay.traitInfo(c.id).name)}</b><span class="r78-trait-text">${escapeHtml("：" + window.FarmSunplay.traitInfo(c.id).text)}</span></small>` : ""}${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.id === "carrot" && state.level >= c.unlockLevel ? "開墾取得" : `Lv${c.unlockLevel}`}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;

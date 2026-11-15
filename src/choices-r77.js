@@ -961,20 +961,40 @@
     if (!world || !state || !state.map) return;
     const states = sceneStates(state), signature = JSON.stringify(states.map((row) => [row.npcId, row.choiceId, row.done, row.decision, row.label]));
     if (world.dataset.r78cScenes === signature && world.querySelectorAll(".r78c-scene-change").length === states.length) return;
-    world.querySelectorAll(".r78c-scene-change").forEach((node) => node.remove());
+    world.querySelectorAll(".r78c-scene-change, .r78c-scene-label").forEach((node) => node.remove());
     const size = Math.max(24, Math.round(world.offsetWidth / Math.max(1, state.map.width || 24)));
-    states.forEach((row, index) => {
+    /* R78 整合：物件放在錨點旁邊的地上（腳底對齊錨點的底邊），不蓋住告示牌、信箱本體，前後遮擋跟地圖其他東西一樣用腳底位置排。
+       站點放左邊，水井左邊是釣魚棧橋所以放右邊；市集攤是兩格高的建築，從攤子左邊沿著攤前往右排（左邊那格是訂單看板）。
+       同一個錨點有好幾樣時一樣一樣往外排，名牌往下錯開不互疊。 */
+    const RIGHT_SIDE = { "station:well": true }, seen = {}, labelShift = {};
+    states.forEach((row) => {
       const tile = anchorTile(state, row.marker.anchor);
       if (!tile) return;
+      const key = row.marker.anchor, n = seen[key] || 0; seen[key] = n + 1;
       const node = document.createElement("button");
       node.type = "button"; node.className = "r78c-scene-change" + (row.done ? " is-done" : " is-early");
       node.dataset.r78cRoute = row.npcId + ":" + row.choiceId; node.dataset.r78cDone = row.done ? "1" : "0";
       node.setAttribute("aria-label", row.label); node.title = row.label;
       const px = Math.max(32, Math.min(48, Math.round(size * .64)));
-      node.style.cssText = "left:" + Math.round((tile.x + .18 + index * .12) * size) + "px;top:" + Math.round((tile.y + .42) * size) + "px;width:" + px + "px;height:" + px + "px;z-index:" + (Math.round((tile.y + 2) * size) + 6) + ";";
-      node.innerHTML = '<img src="' + esc(row.marker.art) + '" alt="" draggable="false"><span>' + esc(row.label) + "</span>";
+      let col, foot;
+      if (tile.structureId && key.indexOf("structure:") === 0) {
+        const body = state.map.tiles.filter((t) => t.structureId === tile.structureId);
+        col = Math.min.apply(null, body.map((t) => t.x)) - .2 + n * .72;
+        foot = Math.max.apply(null, body.map((t) => t.y)) + 1.06;
+      } else {
+        col = RIGHT_SIDE[key] ? tile.x + 1.2 + n * .72 : tile.x - .2 - n * .72;
+        foot = tile.y + 1;
+      }
+      node.style.cssText = "left:" + Math.round(col * size) + "px;top:" + Math.round(foot * size) + "px;width:" + px + "px;height:" + px + "px;z-index:" + (Math.round(foot * size) + 3) + ";";
+      node.innerHTML = '<img src="' + esc(row.marker.art) + '" alt="" draggable="false">';
       node.onclick = (event) => { event.stopPropagation(); toast(row.label); };
       world.appendChild(node);
+      /* 名牌另外放一層在最上面：市集攤前面那一排會被農舍屋頂蓋到，名牌不能跟著物件一起被遮。 */
+      const tag = document.createElement("span"), shift = labelShift[key] || 0;
+      tag.className = "r78c-scene-label" + (row.done ? " is-done" : ""); tag.dataset.r78cRoute = node.dataset.r78cRoute; tag.textContent = row.label;
+      tag.style.cssText = "left:" + Math.round(col * size) + "px;top:" + (Math.round(foot * size) + 4 + shift) + "px;";
+      world.appendChild(tag);
+      labelShift[key] = shift + (tag.offsetHeight || 17) + 2;
     });
     world.dataset.r78cScenes = signature;
   }

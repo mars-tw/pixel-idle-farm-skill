@@ -1613,10 +1613,12 @@ html[data-performance-tier="low"] .r77a-refract-ghost, html.perf-low .r77a-refra
 .r78c-decision small { display: block; margin-top: 2px; color: #5d4a2b; font-size: 11px; line-height: 1.35; }
 .r78c-decision-record { margin: 7px 0 0; padding: 6px 8px; border-left: 4px solid #d4872d; border-radius: 4px; background: #fff0c9; color: #553512; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
 .r78c-daily { padding: 7px; border: 1px solid #9abb72; border-radius: 8px; background: #f2f9e9; }
-.r78c-scene-change { position: absolute; transform: translate(-50%, -100%); display: flex; align-items: center; justify-content: center; padding: 3px; border: 2px solid #9b6a2f; border-radius: 10px; background: #fff5cf; box-shadow: 0 2px 0 rgba(77, 48, 16, .35); cursor: pointer; }
-.r78c-scene-change.is-done { border-color: #4f7d31; background: #eef8d8; }
-.r78c-scene-change img { width: 26px; height: 26px; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
-.r78c-scene-change span { position: absolute; left: 50%; top: calc(100% + 2px); transform: translateX(-50%); width: max-content; max-width: 150px; padding: 2px 5px; border: 1px solid #8e7041; border-radius: 5px; background: rgba(255, 250, 230, .96); color: #4d3010; font-size: 10px; font-weight: 900; line-height: 1.25; text-align: center; overflow-wrap: anywhere; pointer-events: none; }
+/* R78 整合：原本是一個方框圖示蓋在告示牌上，像介面按鈕不像農場裡的東西。改成直接把物件放在錨點旁邊的地上（有腳下影子、沒有框），名牌用地圖上其他名牌的樣子。 */
+.r78c-scene-change { position: absolute; transform: translate(-50%, -100%); display: flex; align-items: flex-end; justify-content: center; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; cursor: pointer; }
+.r78c-scene-change::before { content: ""; position: absolute; left: 50%; bottom: -3px; width: 72%; height: 7px; transform: translateX(-50%); border-radius: 50%; background: rgba(38, 28, 10, .32); pointer-events: none; }
+.r78c-scene-change img { position: relative; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; pointer-events: none; filter: drop-shadow(0 1px 0 rgba(60, 38, 12, .55)); }
+.r78c-scene-label { position: absolute; z-index: 9700; transform: translateX(-50%); width: max-content; max-width: 150px; padding: 2px 6px; border-radius: 3px; background: rgba(32, 55, 42, .82); color: #f7ffe7; font-size: 10px; font-weight: 700; line-height: 1.25; text-align: center; overflow-wrap: anywhere; pointer-events: none; }
+.r78c-scene-label.is-done { border-left: 3px solid #a6d86a; }
 .r78c-route-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px !important; align-items: stretch; }
 .r78c-route { min-width: 0; padding: 8px; border: 2px solid #d9c8a2; border-radius: 9px; background: #fffdf4; }
 .r78c-route.is-chosen { border-color: #5f8f3c; background: #eef8df; }
@@ -1636,7 +1638,7 @@ html[data-performance-tier="low"] .r77a-refract-ghost, html.perf-low .r77a-refra
 #worldModal:has(.r76b-judge-total) .modal-body { padding-bottom: 32px; scroll-padding-bottom: 32px; }
 #worldModal:has(.r76b-judge-total) .modal-body > p:last-child { margin-bottom: 10px; }
 @media (max-width: 430px) {
-  .r78c-scene-change span { max-width: 110px; font-size: 9px; }
+  .r78c-scene-label { max-width: 110px; font-size: 9px; }
   .r78c-route-grid { gap: 6px !important; }
   .r78c-route { padding: 6px; }
   .r78c-route li, .r78c-route p, .r78c-route small { font-size: 11px; }
@@ -1644,6 +1646,29 @@ html[data-performance-tier="low"] .r77a-refract-ghost, html.perf-low .r77a-refra
   .r78c-first-stamps { gap: 6px; }
 }
 /* ===== R78C 結束 ===== */
+
+/* ===== R78 整合開始 ===== */
+/* 種子卡的光性說明：手機直式的種子卡只有 48px 寬，整句說明會被擠成一兩個字一行，所以窄卡只留「☀ 喜光」這個短標，整句在田上標籤與照顧彈窗看得到。 */
+.r75a-light-trait b { font-weight: 900; }
+@media (max-width: 420px) {
+  #mapScene .seed:not(.more) .r75a-light-trait { text-align: center; white-space: nowrap; font-size: 9px; }
+  #mapScene .seed:not(.more) .r75a-light-trait .r78-trait-text { display: none; }
+  /* 48px 的窄卡放不下「種子 小麥」五個字，圖示已經是種子，窄卡只留作物名。 */
+  #mapScene .seed:not(.more) .sn .r78-seed-prefix { display: none; }
+  #mapScene .seed:not(.more) .sn { font-size: 11px; }
+}
+/* 橫式手機（R36 的規矩：任務列在左、種子欄在右，同一列同高 48px）。種子卡加了光性那一行以後長成 248×88，塞不進這一列，左半還被任務列蓋住，只露出「小麥」「金」。這裡把種子卡壓成一橫列：圖示、作物名、價錢、光性短標，整欄縮到任務列右邊的空位裡。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  #mapScene .seed-hud { width: auto; max-width: 230px; }
+  #mapScene .seed-row { width: auto; }
+  #mapScene .seed:not(.more) { flex-direction: row; align-items: center; gap: 5px; width: auto; min-width: 0; max-width: 178px; height: 44px; min-height: 0; padding: 2px 7px; }
+  #mapScene .seed:not(.more) .se, #mapScene .seed:not(.more) .se .ui-icon { flex: 0 0 auto; width: 26px; height: 26px; }
+  #mapScene .seed:not(.more) .sn .r78-seed-prefix, #mapScene .seed:not(.more) .r75a-light-trait .r78-trait-text { display: none; }
+  #mapScene .seed:not(.more) .r75a-light-trait { white-space: nowrap; }
+}
+/* 重逢過場時地圖名牌都收起來，跟著選擇出現的物件與名牌也一起收。 */
+body[data-reunion] .r78c-scene-change, body[data-reunion] .r78c-scene-label { visibility: hidden !important; }
+/* ===== R78 整合結束 ===== */
 
 /* R78 分隔：三條線各寫各的區段，不要寫到別的區段。 */
 /* R78 分隔 */
