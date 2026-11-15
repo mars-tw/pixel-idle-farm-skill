@@ -117,7 +117,7 @@ test("11 結算逐位客人：要什麼、給了什麼、得幾分、差在哪�
     assert.ok(Array.isArray(rec.given), "要記下給了什麼");
     assert.ok(typeof rec.diff === "string", "要記下差在哪");
   }
-  assert.ok(result.customers.some((r) => r.outcome !== "答對"), "答錯或時間到的客人也要留紀錄");
+  assert.ok(result.customers.some((r) => r.outcome !== "招待中"), "結算時每位客人都要離開招待中狀態");
   const src = fs.readFileSync("src/festival-stall-r72.js", "utf8");
   assert.match(src, /data-r77c-customers/, "結算畫面要有這一場的客人回顧");
   assert.match(src, /這一場的客人/, "回顧標題要看得懂");
