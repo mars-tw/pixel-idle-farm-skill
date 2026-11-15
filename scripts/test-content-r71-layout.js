@@ -8,7 +8,7 @@ async function serve(){const s=http.createServer((req,res)=>{const u=new URL(req
 async function launch(){try{return await chromium.launch({headless:true,args:["--no-sandbox"]})}catch(_){}return chromium.launch({headless:true,args:["--no-sandbox"],executablePath:"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"})}
 (async()=>{const server=await serve(),browser=await launch();try{const page=await browser.newPage({viewport:{width:1366,height:768}}),errors=[];page.on("pageerror",e=>errors.push(String(e)));await page.goto(ORIGIN);await page.waitForFunction(()=>window.__farm&&!document.querySelector("#startupLoading"),null,{timeout:30000});await page.evaluate(()=>document.querySelector("#worldBegin")?.click());
   const title=await page.evaluate(()=>({dock:[...document.querySelectorAll("#questDock .r71a-chapter-name,#questDock .r71a-task-name")].map(e=>e.textContent.trim()),quest:document.querySelector("#questDock")?.dataset.quest}));
-  assert.deepEqual(title.dock,["第 1 章・回家與第一餐","任務：種下第一格"]);
+  assert.deepEqual(title.dock,["第 1 章・回家與第一餐","任務：找鎮長葛瑞交談"]);
   await page.evaluate(()=>window.FarmWorld.openPanel("story"));await page.waitForTimeout(100);
   const journal=await page.evaluate(()=>[...document.querySelectorAll("[data-r63a-main-story] .r71a-chapter-name,[data-r63a-main-story] .r71a-task-name")].map(e=>e.textContent.trim()));
   assert.deepEqual(journal,title.dock,"任務卡與手札同時顯示相同章名及任務名");

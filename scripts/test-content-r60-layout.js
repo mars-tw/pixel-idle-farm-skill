@@ -175,7 +175,7 @@ function lastLineInfo() {
         await page.waitForTimeout(300);
         const held = await measureHarvest();
         assert.ok(stepHoldsPlot0(held.step), `${tag} 第 7 項（等光）：任務卡應把第 1 格留著等光，實際 ${JSON.stringify(held.step)}`);
-        assert.match(String(held.label), /^小麥・先別收/, `${tag} 第 7 項（等光）：田上標籤應寫「先別收」，實際「${held.label}」`);
+        assert.match(String(held.label), /^等光再收・小麥/, `${tag} 第 7 項（等光）：田上標籤應寫「等光再收」，實際「${held.label}」`);
         assert.equal(held.count, 0, `${tag} 第 7 項（等光）：留著等光的那一格不應有收成主按鈕，實際 ${JSON.stringify(held)}`);
         // 站到那一格旁邊、面向它：右下互動鈕寫「等光」，不寫「收成」
         await page.evaluate(() => {
@@ -189,7 +189,7 @@ function lastLineInfo() {
         const facing = await measureHarvest();
         assert.ok(stepHoldsPlot0(facing.step), `${tag} 第 7 項（等光）：站到田邊後任務卡仍應把第 1 格留著等光，實際 ${JSON.stringify(facing.step)}`);
         assert.equal(facing.count, 0, `${tag} 第 7 項（等光）：面向留著等光的那一格時不應有收成主按鈕，實際 ${JSON.stringify(facing)}`);
-        assert.ok(facing.thumbShown && /^等光・/.test(facing.thumbShown.text), `${tag} 第 7 項（等光）：右下互動鈕應寫「等光・…」，實際 ${JSON.stringify(facing.thumbShown)}`);
+        assert.ok(facing.thumbShown && /^等光再收$/.test(facing.thumbShown.text), `${tag} 第 7 項（等光）：右下互動鈕應寫「等光再收」，實際 ${JSON.stringify(facing.thumbShown)}`);
         assert.equal(facing.thumbShown.lines, 1, `${tag} 第 7 項（等光）：右下互動鈕「${facing.thumbShown.text}」文字應只有一行，實際 ${facing.thumbShown.lines}`);
         console.log(`OK ${tag} 第 7 項（等光）：田上「${held.label.split('\n')[0]}」、沒有收成主按鈕、右下互動鈕「${facing.thumbShown.text}」`);
 

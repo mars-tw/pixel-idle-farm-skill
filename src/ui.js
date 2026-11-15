@@ -135,10 +135,12 @@
       return "已記錄";
     }
   }
-  // R79：同一句 2.5 秒內不重複；最多同時 3 則（最舊的先收）。
-  const TOAST_DEDUPE_MS = 2500, TOAST_MAX = 3;
+  // R79B：同一句 2.5 秒內不重複；底部深色提示一次只顯示一條，其餘依序排隊。
+  const TOAST_DEDUPE_MS = 2500;
   const recentToasts = new Map();
   const pendingToasts = new Set();
+  const normalToastQueue = [];
+  let normalToastVisible = false;
   const feedbackQueue = G.createFeedbackQueue ? G.createFeedbackQueue() : null;
   const settlementQueue = [];
   let settlementVisible = false;
@@ -148,10 +150,11 @@
   document.addEventListener("pointerdown", (event) => { if (closeActiveSettlement && !(event.target && event.target.closest && event.target.closest(".settlement-card"))) closeActiveSettlement(); }, true);
   function showNextSettlement() {
     if (settlementVisible) return;
-    const data = feedbackQueue ? feedbackQueue.next() : settlementQueue.shift();
-    if (!data) return;
     const zone = $("toast-zone");
     if (!zone) { settlementVisible = false; return; }
+    if (zone.children && zone.children.length) return;
+    const data = feedbackQueue ? feedbackQueue.next() : settlementQueue.shift();
+    if (!data) return;
     settlementVisible = true;
     const card = document.createElement("button");
     card.type = "button";
@@ -159,7 +162,7 @@
     card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
     card.innerHTML = data.kind === "milestone"
       ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span><span>新解鎖：${escapeHtml(data.unlocked)}</span><span>下一步：${escapeHtml(data.next)}</span>`
-      : `獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
+      : `${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).length ? `獲得 ${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).join("・")}・` : ""}下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
     function close() {
@@ -170,12 +173,17 @@
       card.remove();
       if (feedbackQueue) feedbackQueue.close();
       showNextSettlement();
+      showNextToast();
     }
     card.onclick = close;
     closeActiveSettlement = close;
   }
   function enqueueSettlement(data) {
     if (!data || !data.next) return;
+    /* 結算是較高優先的提示；收掉尚未顯示的短訊息，避免排隊一路拖到下一次操作。 */
+    normalToastQueue.length = 0;
+    const zone = $("toast-zone"), normal = zone && zone.querySelector(".toast:not(.settlement-card)");
+    if (normal) { normal.remove(); normalToastVisible = false; }
     if (feedbackQueue) feedbackQueue.push(data); else settlementQueue.push(data);
     showNextSettlement();
   }
@@ -199,17 +207,18 @@
     if (last && at - last < TOAST_DEDUPE_MS) return;
     recentToasts.set(key, at);
     if (recentToasts.size > 24) for (const [k, v] of recentToasts) if (at - v >= TOAST_DEDUPE_MS) recentToasts.delete(k);
-    while (zone.children && zone.children.length >= TOAST_MAX) {
-      const first = zone.firstElementChild || zone.children[0];
-      if (!first || typeof first.remove !== "function") break;
-      const before = zone.children.length;
-      first.remove();
-      if (zone.children.length === before) break;
-    }
+    normalToastQueue.push(key);
+    showNextToast();
+  }
+  function showNextToast() {
+    const zone = $("toast-zone");
+    if (!zone || normalToastVisible || settlementVisible || (zone.children && zone.children.length) || !normalToastQueue.length) return;
+    const msg = normalToastQueue.shift();
+    normalToastVisible = true;
     const t = document.createElement("div");
     t.className = "toast"; t.textContent = msg;
     zone.appendChild(t);
-    setTimeout(() => t.remove(), 2100);
+    setTimeout(() => { t.remove(); normalToastVisible = false; showNextSettlement(); showNextToast(); }, 2100);
   }
   function floatText(x, y, text, color) {
     if (!shouldUseJuiceFx()) return;
@@ -539,6 +548,17 @@
       }
       scheduleSave();
     }
+    const queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
+    if (queued && G.isSunlit(state, queued.plotIndex, t)) {
+      const tile = state.map.tiles.find((row) => row.plotIndex === queued.plotIndex);
+      const result = tile ? G.harvest(state, queued.plotIndex, t) : { ok: false };
+      if (result.ok) {
+        spawnVfx(tile.id, "harvest_pop"); G.advanceStory(state, "harvest");
+        const crop = window.CROPS[result.cropId]; cropHarvestFx(tile.id, crop, result.added); playSound("harvest"); if (result.sun) sunCatchFx(tile.id, result.sun);
+        toast(`光到了，自動收下 ${result.added} 份${crop.name}${result.lightChoice && result.lightChoice.hasTradeoff ? "；收購已結束，沒有獎金" : ""}。`);
+        enqueueResultFeedback(result); afterChange(true);
+      } else if (G.clearLightHarvestQueue) G.clearLightHarvestQueue(state);
+    }
     syncSunBeams(t);
     if (r.spawned || r.expired || r.previewed) renderSceneActionsForSelection();
     /* 預告圈亮起、光落下或散掉的當下就重畫任務卡，不等每 750ms 一次的例行更新，免得田上已經亮圈、任務卡還寫著「等第一道光落下」。 */
@@ -784,9 +804,10 @@
     const cap = G.storageCapacity(state), used = G.storageUsed(state);
     const lvXp = window.LEVEL_XP[state.level - 1] || 0;
     const nextXp = window.LEVEL_XP[state.level] != null ? window.LEVEL_XP[state.level] : null;
-    const xpInLv = state.xp - lvXp;
+    /* 舊存檔若帶入負值或低於本級門檻，顯示從 0 起，不把損壞狀態畫成負經驗。 */
+    const xpInLv = Math.max(0, (Number(state.xp) || 0) - lvXp);
     const xpNeed = nextXp != null ? nextXp - lvXp : 1;
-    const xpPct = nextXp != null ? Math.min(100, (xpInLv / xpNeed) * 100) : 100;
+    const xpPct = nextXp != null ? Math.max(0, Math.min(100, (xpInLv / xpNeed) * 100)) : 100;
     const wId = G.currentWeather(state, now());
     const w = window.WEATHER[wId];
     const weatherUnlocked = state.level >= window.WEATHER_UNLOCK_LEVEL;
@@ -859,7 +880,7 @@
     el.dataset.seedId = c.id;
     el.title = c.name;
     el.innerHTML = unlocked
-      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn"><span class="r78-seed-prefix">種子 </span>${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${window.FarmSunplay ? `<small class="r75a-light-trait"><b>${escapeHtml(window.FarmSunplay.traitInfo(c.id).icon + " " + window.FarmSunplay.traitInfo(c.id).name)}</b><span class="r78-trait-text">${escapeHtml("：" + window.FarmSunplay.traitInfo(c.id).text)}</span></small>` : ""}${compact ? "" : seasonBadge}`
+      ? `<span class="se">${uiIcon("crop_" + c.id)}</span><span class="sn"><span class="r78-seed-prefix">種子 </span>${escapeHtml(c.name)}${isNew ? '<em class="new-unlock-badge">新</em>' : ''}</span><span class="sc">${c.seedCost} 金</span>${window.FarmSunplay ? `<small class="r75a-light-trait"><b>${escapeHtml(window.FarmSunplay.traitInfo(c.id).icon + " " + window.FarmSunplay.traitInfo(c.id).name)}</b><span class="r78-trait-text">${escapeHtml("：" + (window.FarmSunplay.traitText ? window.FarmSunplay.traitText(state, c.id) : window.FarmSunplay.traitInfo(c.id).text))}</span></small>` : ""}${compact ? "" : seasonBadge}`
       : `<span class="se">?</span><span class="sn">${escapeHtml(c.name)}</span><span class="sc">${c.id === "carrot" && state.level >= c.unlockLevel ? "開墾取得" : `Lv${c.unlockLevel}`}</span>${compact ? "" : seasonBadge}`;
     if (unlocked) el.onclick = () => chooseSeed(c.id);
     return el;
@@ -1041,6 +1062,20 @@
       const free = (L, T, blockers) => { const box = { left: L, top: T, right: L + own.width, bottom: T + own.height }; return !blockers.some((b) => r78bHit(box, b, 4)); };
       /* 放不下時的退讓順序：先讓出田上標籤與場景動作鈕（彈窗開著那幾秒先選照顧方式），再不行才蓋到別格田；被點的那格、預告圈、光的提示條永遠不蓋。 */
       const tiers = [must.concat(field, hud), must.concat(field, core), must.concat(hud), must.concat(dock), must];
+      /* R79B：手機直式的六格田下方仍有完整空帶時，先把彈窗放到整片田的下方；避免寬彈窗橫跨第二排田。 */
+      const fieldBottom = Math.max(tileBox.bottom, ...field.map((box) => box.bottom));
+      const belowT = fieldBottom + 8, belowL = Math.min(maxL, Math.max(minL, cx - own.width / 2));
+      const portraitBottomLimit = (window.innerHeight || view.bottom) - 78 - own.height;
+      if (window.innerWidth <= 620 && belowT <= portraitBottomLimit) {
+        care.style.left = Math.round((parseFloat(care.style.left) || 0) + belowL - own.left) + "px";
+        care.style.top = Math.round((parseFloat(care.style.top) || 0) + belowT - own.top) + "px";
+        care.dataset.r78bPlaced = "true"; return true;
+      }
+      if (window.innerWidth <= 620 && belowT <= maxT && free(belowL, belowT, tiers[0])) {
+        care.style.left = Math.round((parseFloat(care.style.left) || 0) + belowL - own.left) + "px";
+        care.style.top = Math.round((parseFloat(care.style.top) || 0) + belowT - own.top) + "px";
+        care.dataset.r78bPlaced = "true"; return true;
+      }
       if (own.left >= minL - 1 && own.left <= maxL + 1 && own.top >= minT - 1 && own.top <= maxT + 1 && free(own.left, own.top, tiers[0])) return true;
       const xs = [], ys = [];
       for (let L = minL; L <= maxL; L += 12) xs.push(L);
@@ -1098,9 +1133,11 @@
       /* R78 整合：兩個選項各包成一段不斷行的字，放不下時只在「｜」那裡換行，不會只剩一個數字掉到下一行。 */
       const half = (nodes) => { const s = document.createElement("span"); s.className = "r78b-wait-half"; nodes.forEach((n) => s.appendChild(typeof n === "string" ? document.createTextNode(n) : n)); return s; };
       row.appendChild(document.createTextNode("\n"));
-      row.appendChild(half([choice.nowText]));
-      row.appendChild(document.createTextNode("｜"));
-      row.appendChild(half(["等 ", secs, choice.waitText.replace(/^等 \d+ 秒/, "")]));
+      if (choice.hasTradeoff) {
+        row.appendChild(half([choice.nowText]));
+        row.appendChild(document.createTextNode("｜"));
+        row.appendChild(half(["等 ", secs, choice.waitText.replace(/^等光再收：/, "再收：")]));
+      } else row.appendChild(half(["等 ", secs, `，光到了再收：${choice.waitQty} 份＋陽光 ${choice.waitSunlight}（現在收只有 ${choice.nowQty} 份）`]));
       label.textContent = String(text).split("\n")[0];
       label.appendChild(row);
       return true;
@@ -1110,6 +1147,30 @@
      看不到的田也不拿來當按鈕文字。按下去做的事跟按鈕上的字用同一個判斷。 */
   function r78bFacingCropLabel(tile) {
     try { return tile && G.facingPlotLabel ? G.facingPlotLabel(state, tile, now()) : ""; } catch (e) { return ""; }
+  }
+  function r79bSelectedPlotTile() {
+    const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null;
+    return tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) ? tile : null;
+  }
+  function r79bSelectedPlotLabel(tile) {
+    if (!tile) return "";
+    const plot = state.plots[tile.plotIndex];
+    if (!plot || !plot.cropId) return "種植・空田";
+    const choice = r78bChoiceFor(tile), queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
+    if (G.getCropProgress(state, plot, now()).ready) {
+      if (queued && queued.plotIndex === tile.plotIndex) return "等光中";
+      return choice && choice.ok && !choice.hasTradeoff ? "等光再收" : `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田`;
+    }
+    return r78bFacingCropLabel(tile) || "生長中";
+  }
+  function r79bSyncActionNote(tile) {
+    const host = $("mobileControls"); if (!host) return;
+    let note = $("r79bActionNote");
+    const choice = tile ? r78bChoiceFor(tile) : null;
+    const text = choice && choice.ok && !choice.hasTradeoff ? choice.helpText : "";
+    if (!text) { if (note) note.hidden = true; return; }
+    if (!note) { note = document.createElement("div"); note.id = "r79bActionNote"; note.className = "r79b-action-note"; note.dataset.audit = "r79b-action-note"; host.appendChild(note); }
+    note.textContent = text; note.hidden = false;
   }
   function r78bOwnCropTile(facing) {
     try {
@@ -4158,7 +4219,7 @@
     plant: ["🌱", "種植"], harvest: ["✂", "收成"], water: ["💧", "澆水"], clear: ["⛏", "清除"],
     build: ["🏗", "建造"], collect: ["🧺", "收集"], use: ["●", "使用"], deliver: ["✓", "交付"],
     sell: ["🪙", "賣出"], talk: ["…", "交談"],
-    refract: ["☀", "把光折到這裡"], ripen: ["☀", "催熟・用 2 點陽光"],
+    refract: ["☀", "折到這格"], ripen: ["☀", "催熟・用 2 點陽光"], wait_light: ["☀", "等光再收"],
   };
   function tileReadyCrop(tile) {
     if (!tile || tile.plotIndex == null || tile.plotIndex >= G.activePlotCount(state)) return false;
@@ -4202,7 +4263,7 @@
     const sunlit = !!(G.isSunlit && G.isSunlit(state, tile.plotIndex, now()));
     const lightInfo = plot && plot.cropId && window.FarmSunplay ? window.FarmSunplay.traitInfo(plot.cropId) : null;
     const lightPreview = plot && plot.cropId && window.FarmSunplay && window.FarmSunplay.harvestPreview ? window.FarmSunplay.harvestPreview(state, plot, sunlit).text : "";
-    const sunEffect = lightInfo && lightInfo.id === "sun" ? "在光裡：生長加速・收成 +1" : "在光裡：生長加速";
+    const sunEffect = lightInfo && lightInfo.id === "sun" ? "在光裡：生長加速・收成多 1 份＋陽光 2" : "在光裡：生長加速";
     /* R78B：光快落在這一格時，標籤不再寫「還沒照到」（下面折光說明會接著寫「這格本來就會照到光」，兩句打架），改成講同一件事。 */
     const lightSoon = !sunlit && !!(plot && plot.cropId) && !!(G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex));
     const lightLine = !lightSoon || lightPreview.indexOf("・還沒照到：") < 0 ? lightPreview
@@ -4216,11 +4277,13 @@
     const planted = state.map.tiles.filter((row) => row.plotIndex != null && row.plotIndex < active && state.plots[row.plotIndex] && state.plots[row.plotIndex].cropId).length;
     const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null;
     const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex);
-    if (prog.ready) return name + (heldForLight ? "・先別收" : "・可收成") + sunSuffix;
+    const nextForPlot = nextStep && (nextStep.plotIndex === tile.plotIndex || nextStep.holdPlotIndex === tile.plotIndex);
+    if (prog.ready) return (nextForPlot && nextStep.action === "refract" ? `折光・${name}` : heldForLight ? `等光再收・${name}` : `${name}・可收成`) + sunSuffix;
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
     /* 光快落在這一格：任務卡教的是「等光到了再澆水」，標籤跟著講同一件事，不再寫「種滿再澆水」。 */
-    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return name + "・" + `已種 ${planted}／3 格` + "\n光快落在這格了・等光到了再澆水";
+    if (nextForPlot && nextStep.action === "refract") return `折光・${name}` + sunSuffix;
+    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return `等光再澆水・${name}` + "\n光快落在這格了";
     return name + "・" + (planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水");
   }
   /* R77A 第 1 項：這一格的折光說明。「這格本來就會照到」只在標籤還沒講到光的時候才補，免得同一件事寫兩次。 */
@@ -4249,7 +4312,7 @@
     r78bLabelKey = r78bLabelKeyFor(tile, text);
     const waitChoice = r78bWaitChoiceRow(label, tile, text);
     const refractNote = waitChoice ? "" : refractNoteForTile(tile, text);
-    if (refractNote) { const note = document.createElement("span"); note.className = "r77a-refract-note"; note.dataset.audit = "r77a-refract-note"; note.textContent = "\n" + refractNote; label.appendChild(note); }
+    if (refractNote) { label.textContent = String(text).split("\n")[0]; const note = document.createElement("span"); note.className = "r77a-refract-note"; note.dataset.audit = "r77a-refract-note"; note.textContent = "\n" + refractNote; label.appendChild(note); }
     label.dataset.tileId = tile.id;
     label.classList.remove("tile-state-label-below");
     delete label.dataset.labelBelow; delete label.dataset.labelTop; delete label.dataset.labelShift; delete label.dataset.labelLeft;
@@ -4262,10 +4325,22 @@
     const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile); renderSeeds();
     const toolActions = { hand: ["plant", "harvest"], water: ["water"], build: ["build"], clear: ["clear"], inspect: [] }[currentTool()] || [];
     const actions = sceneActionsForTile(tile);
-    // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「把光折到這裡」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
+    // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「折到這格」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
     const sunActions = tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && window.FarmSunplay && window.FarmSunplay.plotActions ? window.FarmSunplay.plotActions(state, tile.plotIndex, now()) : [];
     if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(); return; }
-    if (tile && tile.plotIndex != null) { const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null; const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex); const filtered = actions.filter((a) => toolActions.includes(a.action) && !(heldForLight && a.action === "harvest")); actions.splice(0, actions.length, ...filtered.slice(0, 1), ...sunActions); if (!actions.length) { hideSceneActions(); return; } }
+    const lightChoice = tile && tile.plotIndex != null ? r78bChoiceFor(tile) : null;
+    const queuedLight = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
+    if (tile && tile.plotIndex != null) {
+      const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null;
+      const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex);
+      let filtered = actions.filter((a) => toolActions.includes(a.action));
+      if (lightChoice && lightChoice.ok) {
+        if (!lightChoice.hasTradeoff) filtered = filtered.filter((a) => a.action !== "harvest");
+        filtered = filtered.slice(0, 1);
+        filtered.push({ action: "wait_light", enabled: !(queuedLight && queuedLight.plotIndex === tile.plotIndex) });
+      } else filtered = filtered.filter((a) => !(heldForLight && a.action === "harvest")).slice(0, 1);
+      actions.splice(0, actions.length, ...filtered, ...sunActions); if (!actions.length) { hideSceneActions(); return; }
+    }
     bar.innerHTML = "";
     actions.forEach((entry) => {
       const meta = SCENE_ACTION_META[entry.action] || ["●", entry.action];
@@ -4277,7 +4352,11 @@
       b.title = meta[1];
       b.setAttribute("aria-label", meta[1]);
       const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png',refract:'content-r75/sun_mirror.png',ripen:'content-r75/sun_jar.png'}[entry.action];
-      b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${meta[1]}</span>`;
+      let actionLabel = meta[1], actionDetail = "";
+      if (lightChoice && lightChoice.ok && entry.action === "harvest") { actionLabel = "現在收"; actionDetail = `${lightChoice.nowQty} 份＋${lightChoice.nowCoins} 金，趕得上收購`; }
+      if (lightChoice && lightChoice.ok && entry.action === "wait_light") { actionLabel = queuedLight && queuedLight.plotIndex === tile.plotIndex ? "等光中" : "等光再收"; actionDetail = lightChoice.hasTradeoff ? `${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}，沒有獎金` : lightChoice.helpText; }
+      b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${actionLabel}${actionDetail ? `<small class="r79b-action-detail">${actionDetail}</small>` : ""}</span>`;
+      if (actionDetail) { b.dataset.r79bTradeoff = entry.action; b.title = `${actionLabel}・${actionDetail}`; b.setAttribute("aria-label", b.title); }
       /* R77A 第 1 項：折光鈕多一行「手鏡還能折 N 次」，完整的結果寫進按鈕說明。 */
       if (entry.action === "refract" && window.FarmSunplay && window.FarmSunplay.refractPreview) {
         const preview = window.FarmSunplay.refractPreview(state, tile.plotIndex, now());
@@ -4302,6 +4381,12 @@
     const tile = G.getTileById(state, tileId); if (!tile) return;
     hideBuildWheel(); hideObjectBubble(); clearTouchFarmPreview(false);
     // R75 整合：折光與催熟不用走過去，手鏡與蓄光瓶帶在身上，按了就生效。
+    if (action === "wait_light") {
+      const result = G.queueLightHarvest ? G.queueLightHarvest(state, tile.plotIndex, now()) : { ok: false };
+      toast(result.ok ? result.choice.helpText : "這道光已經不能等了，直接收成吧。");
+      if (result.ok) { scheduleSave(); renderSceneActionsForSelection(); updateQuickHarvest(); }
+      return;
+    }
     if (action === "refract" || action === "ripen") { if (window.FarmSunplay && window.FarmSunplay.runPlotAction) window.FarmSunplay.runPlotAction(action, tile.plotIndex); return; }
     if (action === "build") { showBuildWheel(tile); return; }
     if (action === "deliver") { deliverOrderAtBoard(tile); return; }
@@ -4904,7 +4989,7 @@
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
-        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 " + r.seedBack + " 包種子" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } enqueueResultFeedback(r); afterChange(true); }
+        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 " + r.seedBack + " 包種子" : "") + (r.marketBonus ? "・趕上收購，多得 " + r.marketBonus + " 金" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } enqueueResultFeedback(r); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧 在光裡澆水：" + sunGrowthResultText(r.sun) : "💧 澆水變濕土加速"); afterChange(false); }
@@ -5449,7 +5534,7 @@
     state.interaction.selectedTileId = tile.id;
     renderTileContext();
     renderSceneActionsForSelection();
-    if (heldReadyTile(tile)) { toast("光快落在這格了，等光到了再收成，多接 1 點陽光。"); return; }
+    if (heldReadyTile(tile)) { const choice = r78bChoiceFor(tile); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光到了再收成。"); return; }
     const actions = sceneActionsForTile(tile);
     if (actions.length) runSceneAction(actions[0].action, tile.id);
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
@@ -5466,20 +5551,22 @@
       const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length && r78bPlotInSight(row)) : null;
       const nearLabel = near ? interactLabelFor(near) : "互動";
       const nearAction = near && nearLabel !== "互動" ? sceneActionsForTile(near).find((a) => a.action !== "build" && a.action !== "clear" && a.enabled !== false) : null;
-      if (near && nearLabel.startsWith("等光・")) toast("光快落在這格了，等光到了再收成，多接 1 點陽光。");
+      if (near && nearLabel.startsWith("等光・")) { const choice = r78bChoiceFor(near); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光到了再收成。"); }
       else if (nearAction) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); runSceneAction(nearAction.action, near.id); }
       else toast(blockedReason(tile));
     }
   }
-  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (G.quickHarvestStatus && quickHarvestNow().count > 0) return true; } catch (e) {} if (rackThumbTarget(0)) return true; const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} try { if (nearFestivalStall()) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
+  function applyShowDpad() { const on = !!(state && state.settings && state.settings.showDpad === true); document.documentElement.classList.toggle("show-dpad", on); const mc = $("mobileControls"); if (mc) mc.dataset.dpad = on ? "on" : "off"; updateInteractVisibility(); } function hasInteractTarget() { if (!state || !state.player) return false; try { if (r79bSelectedPlotTile()) return true; } catch (e) {} try { if (G.quickHarvestStatus && quickHarvestNow().count > 0) return true; } catch (e) {} if (rackThumbTarget(0)) return true; const pt = G.getTileById(state, state.player.tileId); if (!pt) return false; const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]]; for (const [dx, dy] of dirs) { const t = G.getTileXY(state, pt.x + dx, pt.y + dy); if (t && sceneActionsForTile(t).length) return true; } try { const f = facingTile(); if (f && sceneActionsForTile(f).length) return true; } catch (e) {} try { if (nearFestivalStall()) return true; } catch (e) {} return false; } function updateInteractVisibility() { const a = $("actionA"); if (!a) return; const show = hasInteractTarget(); a.classList.toggle("r32-interact-hidden", !show); a.dataset.interactVisible = show ? "true" : "false"; if (!show) a.setAttribute && a.setAttribute("aria-hidden", "true"); else a.removeAttribute && a.removeAttribute("aria-hidden"); } function updateQuickHarvest() {
     const action = $("actionA");
     if (!action || !G.quickHarvestStatus) return;
     if (quickHarvestTarget && !moveTimer && state.player.action === "idle") quickHarvestTarget = null;
     const st = quickHarvestNow();
     const busy = !!quickHarvestTarget;
     const rack = rackThumbTarget(st.count);
+    const selectedPlot = r79bSelectedPlotTile();
     let targetLabel = "互動";
     if (rack) targetLabel = rack.label;
+    else if (selectedPlot) targetLabel = r79bSelectedPlotLabel(selectedPlot);
     else if (st.count && st.tileId) targetLabel = G.interactionLabelForTile ? G.interactionLabelForTile(state, G.getTileById(state, st.tileId), now()) : "收成・成熟作物";
     else {
       const facing = facingTile();
@@ -5494,7 +5581,8 @@
       }
       else if (!r78bPlotInSight(facing)) targetLabel = "互動";
     }
-    try { if (nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
+    try { if (!selectedPlot && nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
+    r79bSyncActionNote(rack ? null : selectedPlot);
     action.textContent = busy ? "收成中" : targetLabel;
     // R71B：右下互動鈕裝不下完整「交談・人名」時，省略「交談・」前綴只留人名，不截成半個名字（完整文字仍保留在 title）。
     if (!busy && targetLabel.startsWith("交談・") && action.scrollWidth > action.clientWidth + 1) action.textContent = targetLabel.slice(3);
@@ -5509,8 +5597,20 @@
   function activateThumbAction() {
     if (hasOpenModal() || quickHarvestTarget) return;
     const st = G.quickHarvestStatus ? quickHarvestNow() : { count: 0 };
-    /* R77A：互動鈕寫著「翻面・曬架」「收乾貨・曬架」時，按下去就是翻面或收下（跟曬架節點、曬架面板走同一個函式）。 */
+    /* 翻面只有短暫時窗，維持原本優先於舊選取田格。 */
     if (rackThumbTarget(st.count)) { window.FarmSunplay.runRackInteraction(); updateQuickHarvest(); return; }
+    const selectedPlot = r79bSelectedPlotTile();
+    if (selectedPlot) {
+      const plot = state.plots[selectedPlot.plotIndex], ready = !!(plot && plot.cropId && G.getCropProgress(state, plot, now()).ready);
+      const choice = ready ? r78bChoiceFor(selectedPlot) : null, queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
+      if (queued && queued.plotIndex === selectedPlot.plotIndex) { toast(queued.choice.helpText); return; }
+      if (ready && choice && choice.ok && !choice.hasTradeoff) { runSceneAction("wait_light", selectedPlot.id); return; }
+      if (ready) { quickHarvestTarget = selectedPlot.id; moveAndAct(selectedPlot.id, "harvest"); updateQuickHarvest(); return; }
+      if (plot && plot.cropId) { r78bGrowingToast(selectedPlot); return; }
+      const plant = sceneActionsForTile(selectedPlot).find((entry) => entry.action === "plant");
+      if (plant) { runSceneAction("plant", selectedPlot.id); return; }
+    }
+    /* R77A：互動鈕寫著「翻面・曬架」「收乾貨・曬架」時，按下去就是翻面或收下（跟曬架節點、曬架面板走同一個函式）。 */
     if (!st.count) { activateFacingTile(); return; }
     if (!st.tileId) { toast(st.noRoom ? "倉庫空間不足，先交付餐籃或賣出一些作物。" : "成熟的田地暫時走不到，先清開路。"); return; }
     quickHarvestTarget = st.tileId;

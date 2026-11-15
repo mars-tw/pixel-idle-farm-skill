@@ -230,8 +230,17 @@
     if (packs <= 0 && (Number(state.coins) || 0) < crop.seedCost * 2) return { ok: true, best: "natural", need: "seeds", text: `種子用完了，金幣也不夠再買：放著長會帶回 ${FARM_CARE.natural.seedBack} 包種子。` };
     return { ok: true, best: "water", need: "none", text: "手上沒有急單：想早點收選勤澆水，想省種子選放著長。" };
   }
-  /* R78B 第 2 項：光快落在已經熟的那一格——「現在收」與「等光再收」各拿到幾份、幾點陽光、還要等幾秒，全部照收成那一條算式算。
-     光已經落下、光不在這一格、還沒熟，都回傳 ok:false，畫面就不再留等光的字。 */
+  const R79_EARLY_MARKET_COINS = 6;
+  function harvestedTotal(state) { return Object.values((state && state.stats && state.stats.harvested) || {}).reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0); }
+  function lightDecisionKind(state) {
+    if (harvestedTotal(state) <= 0) return "tutorial";
+    const flags = (state && state.flags) || {}, count = Math.max(0, Number(flags.r79LightChoiceCount) || 0);
+    const beam = Math.max(0, Number(state && state.sun && state.sun.spawned) || 0), last = Math.max(0, Number(flags.r79LightChoiceLastBeam) || 0);
+    if (count === 0) return "market";
+    return beam > 0 && beam - last >= 3 ? "order" : "plain";
+  }
+  /* R79B：光快落在已熟的那一格時，份數、陽光、等待秒數與限時獎金集中在這一個回傳值。
+     第一輪只有教學；第二輪是老農班伯早市，之後每隔三道光再出現一次限時收購。 */
   function lightHarvestChoice(state, plotIndex, now) {
     const plot = state && Array.isArray(state.plots) ? state.plots[plotIndex] : null; const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
     if (!crop || !Sunplay) return { ok: false };
@@ -241,20 +250,47 @@
     if (!getCropProgress(state, plot, t).ready) return { ok: false };
     const care = FARM_CARE[plot.careMode] || null; const base = crop.yield + mealFlatBonus(state, "harvest", t) + (care && care.yieldBonus || 0);
     const pure = function () { return 1; };
-    const nowEff = Sunplay.harvestEffects(state, plot, pure, false), waitEff = Sunplay.harvestEffects(state, plot, pure, true);
-    const room = Math.max(0, Sunplay.bottleCapacity(state) - Sunplay.sunlight(state));
-    const nowQty = base + (nowEff.yieldBonus || 0), waitQty = base + (waitEff.yieldBonus || 0);
-    /* 等光再收：作物光性給的陽光，加上在光裡收成接住的 1 點；蓄光瓶裝不下的不算。 */
-    const nowSunlight = Math.min(room, nowEff.sunlight || 0), waitSunlight = Math.min(room, (waitEff.sunlight || 0) + 1);
+    const nowOut = Sunplay.harvestOutcome(state, plot, { rng: pure, exposedNow: false, caughtSunlight: 0, baseQty: base });
+    const waitOut = Sunplay.harvestOutcome(state, plot, { rng: pure, exposedNow: true, caughtSunlight: 1, baseQty: base });
+    const nowQty = nowOut.quantity, waitQty = waitOut.quantity;
+    const nowSunlight = nowOut.sunlightTotal, waitSunlight = waitOut.sunlightTotal;
     const waitMs = Math.max(0, sun.previewAt - t), seconds = Sunplay.secondsLeft(waitMs);
-    const nowText = `現在收 ${nowQty} 份` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "");
-    const waitText = `等 ${seconds} 秒收 ${waitQty} 份` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}` : "");
-    return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, nowQty, waitQty, nowSunlight, waitSunlight, waitMs, seconds, nowText, waitText, text: nowText + "｜" + waitText };
+    const kind = lightDecisionKind(state), hasTradeoff = kind === "market" || kind === "order";
+    const nowCoins = hasTradeoff ? R79_EARLY_MARKET_COINS : 0;
+    const nowText = `現在收：${nowQty} 份` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "") + (nowCoins > 0 ? `＋${kind === "market" ? "老農班伯早市" : "限時收購"} ${nowCoins} 金` : "");
+    const waitText = `等光再收：${waitQty} 份` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}` : "") + (hasTradeoff ? "・收購結束，沒有獎金" : "");
+    const tutorialText = `等 ${seconds} 秒，光到了再收：${waitQty} 份＋陽光 ${waitSunlight}（現在收只有 ${nowQty} 份）`;
+    const helpText = `按了會等 ${seconds} 秒，光到自動收`;
+    return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, kind, hasTradeoff, nowQty, waitQty, nowSunlight, waitSunlight,
+      nowCoins, waitCoins: 0, waitMs, seconds, nowText, waitText, tutorialText, helpText, text: hasTradeoff ? nowText + "｜" + waitText : tutorialText };
   }
-  /* R78B：右下互動鈕面前是長著作物的田時，用這一格自己的狀態當字樣（原本會借旁邊空田的「種植・空田」）。空田、熟了的田交給原本的字樣。 */
+  function queueLightHarvest(state, plotIndex, now) {
+    const choice = lightHarvestChoice(state, plotIndex, now); if (!choice.ok) return { ok: false, reason: "unavailable" };
+    if (!state.flags) state.flags = {};
+    state.flags.r79WaitHarvest = { plotIndex, cropId: choice.cropId, previewAt: (state.sun && state.sun.previewAt) || 0, queuedAt: Number.isFinite(now) ? now : Date.now(), choice };
+    return { ok: true, choice };
+  }
+  function lightHarvestQueue(state) {
+    const queued = state && state.flags && state.flags.r79WaitHarvest;
+    if (!queued || !Number.isInteger(queued.plotIndex)) return null;
+    const plot = state.plots && state.plots[queued.plotIndex];
+    if (!plot || plot.cropId !== queued.cropId) { delete state.flags.r79WaitHarvest; return null; }
+    return queued;
+  }
+  function clearLightHarvestQueue(state) { if (state && state.flags) delete state.flags.r79WaitHarvest; }
+  function recordLightHarvestChoice(state, choice, waited) {
+    if (!choice || !choice.hasTradeoff) return;
+    if (!state.flags) state.flags = {};
+    state.flags.r79LightChoiceCount = Math.max(0, Number(state.flags.r79LightChoiceCount) || 0) + 1;
+    state.flags.r79LightChoiceLastBeam = Math.max(0, Number(state.sun && state.sun.spawned) || 0);
+    state.flags.r79LightChoiceLastResult = waited ? "wait" : "now";
+  }
+  /* R79B：右下互動鈕直接讀選中田的狀態，成熟、成長中都不再借相鄰空田的文字。 */
   function facingPlotLabel(state, tile, now) {
     const plot = tile && tile.plotIndex != null && state && Array.isArray(state.plots) ? state.plots[tile.plotIndex] : null; const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
-    if (!crop || getCropProgress(state, plot, Number.isFinite(now) ? now : Date.now()).ready) return "";
+    if (!crop) return "";
+    const t = Number.isFinite(now) ? now : Date.now();
+    if (getCropProgress(state, plot, t).ready) return lightHarvestChoice(state, tile.plotIndex, t).ok ? "等光再收" : `收成・${crop.name}田`;
     return `生長中・${crop.name}田`;
   }
   // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
@@ -450,7 +486,8 @@
 
   // ---------- 等級 / XP / 成就 ----------
   function addXp(state, amount) {
-    state.xp += amount;
+    /* 舊擷取存檔可能把目前等級門檻扣了兩次，留下負 xp；規則層先夾到 0，HUD 再夾一次，畫面與後續升級都不會倒退。 */
+    state.xp = Math.max(0, (Number(state.xp) || 0) + (Number(amount) || 0));
     const before = state.level;
     state.level = levelFromXp(state.xp);
     if (before < 2 && state.level >= 2 && Array.isArray(state.orders) && state.orders.length) { ensureLv2OrderVariety(state, Date.now()); promoteOrderVariety(state); } // R68 整合：Lv 1 開張的第一批訂單在升到 Lv 2 時也換出第二種，不必等空出訂單格
@@ -770,6 +807,10 @@
     const firstHarvest = !Object.values(state.stats.harvested || {}).some((count) => count > 0);
     ensureSunState(state);
     const sunlit = isSunlit(state, plotIndex, now);
+    const queuedLight = lightHarvestQueue(state);
+    const waitedForLight = !!(sunlit && queuedLight && queuedLight.plotIndex === plotIndex && queuedLight.cropId === plot.cropId);
+    const liveChoice = !sunlit ? lightHarvestChoice(state, plotIndex, now) : { ok: false };
+    const resolvedChoice = waitedForLight ? queuedLight.choice : liveChoice.ok ? liveChoice : null;
     const mealBonus = mealFlatBonus(state, "harvest", now);
     const care = FARM_CARE[plot.careMode] || null;
     const lightEffect = Sunplay ? Sunplay.harvestEffects(state, plot, rng, sunlit) : { yieldBonus: sunlit ? SUNPATCH.harvestBonus : 0, quality: false, sunlight: 0 };
@@ -799,10 +840,16 @@
     plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown; delete plot.careMode;
     delete plot.r75SunHits; delete plot.r75ShadeEligible; delete plot.r75SunOver;
     const caughtSunlight = sunlit ? (markSunUsed(state, plotIndex).gained || 0) : 0;
+    const marketBonus = resolvedChoice && resolvedChoice.hasTradeoff && !waitedForLight ? resolvedChoice.nowCoins : 0;
+    if (marketBonus > 0) { state.coins += marketBonus; state.stats.totalCoinsEarned = (state.stats.totalCoinsEarned || 0) + marketBonus; }
+    if (queuedLight && queuedLight.plotIndex === plotIndex) clearLightHarvestQueue(state);
+    recordLightHarvestChoice(state, resolvedChoice, waitedForLight);
+    if (sunlit) { if (!state.flags) state.flags = {}; state.flags.r79FirstLightHarvest = true; }
     /* R78B：收過第一次，第二輪種植才介紹三種照顧方式。 */
     if (state.flags && added > 0) state.flags.r78CareIntro = true;
     checkAchievements(state);
-    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled, quality, careMode: care && care.id, seedBack: care && care.seedBack || 0,
+    const out = { ok: true, cropId: crop.id, added, lost, xp, leveled, quality, careMode: care && care.id, seedBack: care && care.seedBack || 0, marketBonus,
+      lightChoice: resolvedChoice ? { kind: resolvedChoice.kind, waited: waitedForLight, hasTradeoff: resolvedChoice.hasTradeoff, nowCoins: resolvedChoice.nowCoins } : null,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
     if (leveled > 0) out.milestones = [milestoneCard("level_up", { level: state.level, state, now })];
     if (firstHarvest && added > 0) out.settlement = { kind: "first_harvest", coins: 0, xp, next: farmNextStepText(state, now, "把 2 份小麥交給老農班伯。") };
@@ -3092,7 +3139,8 @@
     quickHarvestStatus,
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, buildingMaxLevel, buildingLevel, buildingLevelData, buildingEffect,
-    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, careForecast, careDurationText, careIntroOpen, firstRoundCare, careAdvice, lightHarvestChoice, facingPlotLabel, isWet, waterPlot,
+    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, careForecast, careDurationText, careIntroOpen, firstRoundCare, careAdvice,
+    lightHarvestChoice, queueLightHarvest, lightHarvestQueue, clearLightHarvestQueue, facingPlotLabel, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, addQualityToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,

@@ -88,7 +88,7 @@ const BOX = "const box = (n) => { const r = n.getBoundingClientRect(); return { 
           btn: box(btn), left: box(left), leftText: left.textContent.trim(), clip: t.scrollWidth - t.clientWidth, leftClip: left.scrollWidth - left.clientWidth, title: btn.title,
           bar: [...document.querySelectorAll("#sceneActionBar .scene-action-btn")].map(box) };`), tiles.tile0);
       assert.equal(ghost.labelTile, tiles.tile0, `${tag} 標籤是選的那一格`);
-      assert.equal(ghost.note, "折過來：小麥（喜光）會照到光，收成多 1 份・陽光 +1", `${tag} 標籤寫折過來的結果`);
+      assert.equal(ghost.note, "折過來：小麥（喜光）會照到光，收成多 1 份・光裡收成得陽光 2", `${tag} 標籤寫折過來的結果`);
       assert.ok(Math.abs(ghost.ghost.left - ghost.tile.left) <= 3 && Math.abs(ghost.ghost.top - ghost.tile.top) <= 3 && Math.abs(ghost.ghost.width - ghost.tile.width) <= 3, `${tag} 預覽光斑蓋在那一格上 ${JSON.stringify([ghost.ghost, ghost.tile])}`);
       assert.ok(overlap(ghost.ghost, ghost.label) < 4, `${tag} 預覽光斑與標籤不可重疊 ${JSON.stringify([ghost.ghost, ghost.label])}`);
       if (ghost.ring) assert.ok(overlap(ghost.ghost, ghost.ring) < 4, `${tag} 預覽光斑不可壓在原本的預告圈上`);
@@ -98,7 +98,7 @@ const BOX = "const box = (n) => { const r = n.getBoundingClientRect(); return { 
       assert.ok(ghost.btn.width >= 44 && ghost.btn.height >= 44 && inView(ghost.btn, w, h), `${tag} 折光鈕至少 44px 且在畫面內 ${JSON.stringify(ghost.btn)}`);
       assert.ok(ghost.left.left >= ghost.btn.left - 1 && ghost.left.right <= ghost.btn.right + 1 && ghost.left.bottom <= ghost.btn.bottom + 1, `${tag} 「手鏡還能折」那行要在按鈕裡 ${JSON.stringify([ghost.left, ghost.btn])}`);
       assert.ok(ghost.clip <= 1 && ghost.leftClip <= 1, `${tag} 折光鈕的字不可被切掉`);
-      assert.match(ghost.title, /^把光折到這裡・手鏡還能折 1 次。折過來：/, `${tag} 按鈕說明寫完整結果`);
+      assert.match(ghost.title, /^折到這格・手鏡還能折 1 次。折過來：/, `${tag} 按鈕說明寫完整結果`);
       await page.locator('#sceneActionBar [data-action="refract"]').click();
       await page.waitForFunction(() => !document.querySelector(".r77a-refract-ghost") && document.querySelector('.r75a-sun-preview[data-plot-index="0"]'), null, { timeout: 4000 });
       assert.deepEqual(await page.evaluate(() => __farm.state().sun.previewPlots), [0], `${tag} 折完光改落在選的那一格，預覽光斑收掉`);

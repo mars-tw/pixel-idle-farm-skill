@@ -1743,3 +1743,32 @@ body[data-reunion] .r78c-scene-change, body[data-reunion] .r78c-scene-label { vi
 /* R78 分隔：三條線各寫各的區段，不要寫到別的區段。 */
 /* R78 分隔 */
 /* R78 分隔 */
+
+/* ===== R79B（第一分鐘一套數字、一個入口）開始 ===== */
+/* 等光選項把結果直接寫在動作列內；只補結果字級，不改共用按鈕外觀。 */
+.scene-action-bar .r79b-action-detail { display: block; margin-top: 2px; color: #5d4a2b; font-size: 10px; font-weight: 800; line-height: 1.25; white-space: normal; }
+.r79b-action-note { position: fixed; z-index: 9904; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(70px + env(safe-area-inset-bottom, 0px)); width: min(220px, calc(100vw - 24px)); padding: 3px 7px; border: 1px solid #8b5e34; background: #fff3c4; color: #4a3200; font-size: 11px; font-weight: 900; line-height: 1.3; text-align: center; pointer-events: none; }
+.r79b-action-note[hidden] { display: none !important; }
+body:has(.r74a-care-popover) :is(#actionA, .r79b-action-note) { visibility: hidden !important; }
+/* 田邊標籤只保留「現在做什麼」與一行結果，數字和單位不拆開。 */
+.tile-state-label { max-width: min(200px, calc(100vw - 16px)); line-height: 1.3; }
+.tile-state-label:has(.r78b-wait-choice) { max-width: min(300px, calc(100vw - 16px)); }
+.tile-state-label .r78b-wait-half { white-space: nowrap; }
+@media (max-width: 620px) {
+  .tile-state-label { max-width: min(200px, calc(100vw - 12px)); font-size: 10px; }
+  .tile-state-label:has(.r78b-wait-choice) { max-width: min(290px, calc(100vw - 12px)); }
+  .r79b-action-note { right: 10px; bottom: calc(68px + env(safe-area-inset-bottom, 0px)); max-width: 220px; }
+}
+/* 矮視窗把唯一一條提示／結算移到任務卡下方的左側空地，不壓田與右下互動鈕。 */
+@media (max-height: 600px) and (min-width: 700px) {
+  #toast-zone:not(:has(.milestone-card)), #toast-zone:has(.settlement-card):not(:has(.milestone-card)) { left: 12px !important; right: auto !important; top: 118px !important; bottom: auto !important; transform: none !important; align-items: flex-start; }
+  #toast-zone > .toast { width: min(220px, 26vw); max-width: 220px; box-sizing: border-box; padding: 6px 10px; border-radius: 10px; font-size: 11px; line-height: 1.35; text-align: left; }
+  #toast-zone > .settlement-card { display: block; min-width: 0; }
+  .tile-state-label:has(.r78b-wait-choice) { max-width: min(360px, calc(100vw - 24px)); }
+  .tile-state-label.tile-state-label-below { transform: translate(82%, 0); }
+  .r79b-action-note { bottom: 64px; }
+}
+@media (max-height: 480px) and (min-width: 700px) {
+  #toast-zone:not(:has(.milestone-card)), #toast-zone:has(.settlement-card):not(:has(.milestone-card)) { left: auto !important; right: 8px !important; }
+}
+/* ===== R79B 結束 ===== */

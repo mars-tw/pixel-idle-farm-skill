@@ -51,7 +51,7 @@ test("折光預覽：小麥（喜光）寫的份數與陽光，跟真的折過�
   const p = Sun.refractPreview(s, 0, T + 1000);
   assert.equal(JSON.stringify(s), before, "預覽不改存檔");
   assert.equal(p.can, true); assert.equal(p.reason, "");
-  assert.equal(p.text, "折過來：小麥（喜光）會照到光，收成多 1 份・陽光 +1");
+  assert.equal(p.text, "折過來：小麥（喜光）會照到光，收成多 1 份・光裡收成得陽光 2");
   assert.equal(p.buttonText, "手鏡還能折 1 次");
   assert.deepEqual([p.yieldGain, p.sunlightGain, p.to], [1, 1, 0]); assert.deepEqual(p.from, [1]);
   noLatin(p.text, "預覽"); noLatin(p.buttonText, "按鈕");
@@ -76,7 +76,7 @@ test("折光預覽：胡蘿蔔（半日照）剛好 1 次得優質、第 2 次�
   /* 胡蘿蔔要開墾過一次才買得到種子。 */
   const s = fresh(2); s.upgrades.plotCount = 1; plantReady(s, 0, "carrot"); preview(s, [1]);
   const gain = Sun.refractPreview(s, 0, T + 1000);
-  assert.equal(gain.text, "折過來：胡蘿蔔（半日照）會照到剛好 1 次，收成保證 1 份優質");
+  assert.equal(gain.text, "折過來：胡蘿蔔（半日照）會照到光，照到剛好 1 次，收成保證 1 份優質・光裡收成得陽光 1");
   assert.equal(gain.qualityChange, "gain"); assert.equal(gain.yieldGain, 0);
   const base = clone(s); const baseOut = Game.harvest(base, 0, landAndSettle(base) + 1, () => 1);
   const lit = clone(s); Sun.refract(lit, 0, T + 1000); const litOut = Game.harvest(lit, 0, landAndSettle(lit) + 1, () => 1);
@@ -85,7 +85,7 @@ test("折光預覽：胡蘿蔔（半日照）剛好 1 次得優質、第 2 次�
 
   const once = fresh(2); once.upgrades.plotCount = 1; plantReady(once, 0, "carrot"); Sun.recordExposure(once, 0); preview(once, [1]);
   const lose = Sun.refractPreview(once, 0, T + 1000);
-  assert.equal(lose.text, "折過來：胡蘿蔔（半日照）會照到第 2 次，曬過頭，保證優質就沒了");
+  assert.equal(lose.text, "折過來：胡蘿蔔（半日照）會照到光，照到第 2 次，曬過頭，保證優質就沒了・光裡收成得陽光 1");
   assert.equal(lose.qualityChange, "lose");
   const keep = clone(once); const keepOut = Game.harvest(keep, 0, landAndSettle(keep) + 1, () => 1);
   const over = clone(once); Sun.refract(over, 0, T + 1000); const overOut = Game.harvest(over, 0, landAndSettle(over) + 1, () => 1);
@@ -95,7 +95,7 @@ test("折光預覽：胡蘿蔔（半日照）剛好 1 次得優質、第 2 次�
 test("折光預覽：草莓（耐陰）照到會失去陰涼加成；一般作物寫收成跟現在一樣；空田寫在光裡種", () => {
   const s = fresh(4); plantReady(s, 0, "strawberry"); preview(s, [1]);
   const p = Sun.refractPreview(s, 0, T + 1000);
-  assert.equal(p.text, "折過來：草莓（耐陰）會照到光，陰涼的優質加成就沒了"); assert.equal(p.qualityChange, "lose");
+  assert.equal(p.text, "折過來：草莓（耐陰）會照到光，陰涼的優質加成就沒了・光裡收成得陽光 1"); assert.equal(p.qualityChange, "lose");
   const base = clone(s); const baseOut = Game.harvest(base, 0, landAndSettle(base) + 1, () => 0.2);
   const lit = clone(s); Sun.refract(lit, 0, T + 1000); const litOut = Game.harvest(lit, 0, landAndSettle(lit) + 1, () => 0.2);
   assert.equal(baseOut.quality, true); assert.equal(litOut.quality, false);
@@ -103,7 +103,7 @@ test("折光預覽：草莓（耐陰）照到會失去陰涼加成；一般作�
   const r = fresh(5); plantReady(r, 0, "radish"); preview(r, [1]);
   const plain = Sun.refractPreview(r, 0, T + 1000);
   assert.equal(Sun.trait("radish"), "neutral");
-  assert.equal(plain.text, `折過來：${C.CROPS.radish.name}會照到光，收成跟現在一樣`);
+  assert.equal(plain.text, `折過來：${C.CROPS.radish.name}會照到光，收成跟現在一樣・光裡收成得陽光 1`);
   const rBase = clone(r); const rBaseOut = Game.harvest(rBase, 0, landAndSettle(rBase) + 1, () => 1);
   const rLit = clone(r); Sun.refract(rLit, 0, T + 1000); const rLitOut = Game.harvest(rLit, 0, landAndSettle(rLit) + 1, () => 1);
   assert.equal(rLitOut.added, rBaseOut.added); assert.equal(rLitOut.quality, rBaseOut.quality);
@@ -306,7 +306,7 @@ test("右下互動鈕：站在曬架旁，可以翻面寫「翻面・曬架」�
   const ui = fs.readFileSync(path.join(ROOT, "src/ui.js"), "utf8");
   assert.ok(ui.includes("action.dataset.rack = !busy && rack ? rack.action"), "互動鈕標出曬架動作");
   assert.ok(ui.includes("window.FarmSunplay.runRackInteraction()"), "互動鈕按下去走曬架同一個函式");
-  assert.equal(ui.split("nextStep.holdPlotIndex === tile.plotIndex").length - 1, 2, "R75 釘點不變");
+  assert.equal(ui.split("nextStep.holdPlotIndex === tile.plotIndex").length - 1, 3, "R79B 三個選取面都認得等光田");
   assert.equal(ui.split("G.quickHarvestStatus(state, now())").length - 1, 0, "R75 釘點不變");
   const css = fs.readFileSync(path.join(ROOT, "src/content-r58b.css"), "utf8").split(/\r?\n/);
   assert.match(css[191], /#actionA/, "手機中央有收成鈕時藏右下鈕的規則還在原位");

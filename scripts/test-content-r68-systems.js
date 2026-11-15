@@ -19,7 +19,7 @@ test("成熟作物永遠先於陽光倒數與其他動作", () => {
   const step = A.nextFarmStep(state, T0);
   assert.equal(step.action, "harvest");
   assert.equal(step.tileId, state.map.tiles.find((tile) => tile.plotIndex === 0).id);
-  assert.match(step.text, /可以收成，點一下收成/);
+  assert.match(step.text, /點一下收成：多收 1 份＋陽光 2/);
 });
 
 test("收成結算的下一步直接等於 nextFarmStep", () => {

@@ -72,7 +72,7 @@ test("A3 結算卡共用單一 FIFO 佇列，一次只顯示一張", () => {
   assert.match(ui, /if \(feedbackQueue\) feedbackQueue\.close\(\)/);
   assert.match(ui, /setTimeout\(close, 2500\)/);
   assert.match(ui, /card\.onclick = close/);
-  assert.match(ui, /獲得 \$\{data\.coins \|\| 0\} 金・\$\{data\.xp \|\| 0\} 經驗・下一步：/);
+  assert.match(ui, /data\.coins > 0[\s\S]*data\.xp > 0[\s\S]*filter\(Boolean\)[\s\S]*下一步：/);
 });
 
 test("A4 任務卡一般與收合摘要都含目前子目標進度", () => {
