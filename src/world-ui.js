@@ -134,6 +134,12 @@
         A.record(args[0], hooks[name](args[0], args, result), Date.now());
         const tutorial = A.finishTutorial && A.finishTutorial(args[0], Date.now());
         if (tutorial && tutorial.ok) notify(tutorial.message);
+        /* R79B：收成結果原本在任務事件入帳前就寫好「下一步」，所以仍會指回鎮長。
+           等事件與教學結算完成後再讀一次，提示、任務卡與地圖驚嘆號便會一起指向真正的下一位。 */
+        if (result.settlement && result.settlement.kind === "first_harvest" && A.nextFarmStep) {
+          const next = A.nextFarmStep(args[0], Date.now());
+          if (next && next.text) result.settlement.next = next.text;
+        }
       }
       return result;
     };
@@ -321,11 +327,12 @@
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
     box.dataset.targetId = target ? target.id : "";
     const requirementRows = q ? questRowsAll(q) : [];
-    const fullTitle = q ? `${chapterTaskLabel(q)} ${progressText}` : "繼續經營農場";
+    const taskName = q ? (activeGoal && activeGoal.name ? activeGoal.name : q.canClaim ? `找${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}回報` : q.name) : "";
+    const fullTitle = q ? `第 ${q.chapter} 章・${q.chapterName}｜任務：${taskName} ${progressText}` : "繼續經營農場";
     const hasSharedFestivalCrop = requirementRows.some((row) => sharedFestivalCrop(row, festivalGoal));
     /* R76B：第 13 項——主線列與需求列說同一件事時只留需求列。 */
     const mainRowDuplicate = hasSharedFestivalCrop || (window.StoryR76 && window.StoryR76.isDuplicateQuestRow ? window.StoryR76.isDuplicateQuestRow(step, requirementRows.map((row) => ({ name: row.name, text: requirementText(row, festivalGoal) }))) : false);
-    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(q.name)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(taskName)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       ${festivalHtml}
       ${festivalFocus ? `<section class="r68a-now r69a-festival-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small title="${esc(festivalFocus.text)}">${esc(festivalFocus.text)}</small></span><button type="button" class="r68a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : `<section class="r68a-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(fullTitle)}</span><small title="${esc(nowText)}">${esc(nowText)}</small>${hint && hint.hold ? `<em class="world-objective-hint r67-now-hint" data-hint="sun">${esc(hint.text)}</em>` : ""}</span><button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "data-choice-open" : "data-world-go"}>${choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes) ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button></section>`}
       <div class="r68a-requirements" data-audit="r68a-requirements">${festivalFocus && !mainRowDuplicate ? `<span class="r69a-main-row">主線：${esc(nowText)}</span>` : ""}${requirementRows.length ? requirementRows.map((row) => { if (row.routeLabel) return `<span class="r77c-route-label" data-r77c-route-label>${esc(row.name)}</span>`; const text = requirementText(row, festivalGoal); return `<span${sharedFestivalCrop(row, festivalGoal) ? ' data-r71a-shared-crop="true"' : ""} title="${esc(text)}">${row.complete ? "✓" : "○"} ${esc(text)}</span>`; }).join("") : "<span>✓ 可以自由經營農場</span>"}</div>`;
@@ -427,7 +434,11 @@
     const next = A.nextFarmStep ? A.nextFarmStep(s, now) : null;
     if (next && next.action === "harvest") return { kind: "ready", text: next.text, tileId: next.tileId };
     /* R78B 第 2 項：任務卡叫玩家把熟了的那一格留著等光時，提示直接寫「等幾秒，光到再收」；秒數跟預告圈、田上標籤同一拍。 */
-    if (next && next.action === "catch_sun" && next.holdPlotIndex != null) return { kind: "sun", hold: true, text: `☀ 等 ${lightSecondsLabel(s, now)}，光到再收`, tpl: "☀ 等 {秒}，光到再收" };
+    if (next && next.action === "catch_sun" && next.holdPlotIndex != null) {
+      const choice = window.lightHarvestChoice ? window.lightHarvestChoice(s, next.holdPlotIndex, now) : null;
+      if (choice && choice.ok) return { kind: "sun", hold: true, text: choice.hasTradeoff ? choice.text : choice.tutorialText };
+      return { kind: "sun", hold: true, text: `☀ 等 ${lightSecondsLabel(s, now)}，光到再收`, tpl: "☀ 等 {秒}，光到再收" };
+    }
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
     const readyCount = (s.plots || []).slice(0, active).filter((p) => p && p.cropId && window.getCropProgress(s, p, now).ready).length;
     if (readyCount > 0) return { kind: "ready", text: `田裡有 ${readyCount} 格可以收成，先收成。` };
@@ -486,6 +497,8 @@
     lastMainStory = signature;
     const small = card.querySelector(".r68a-card-now small");
     if (small) { small.textContent = text; small.title = text; }
+    const taskName = card.querySelector(".r71a-task-name"), firstOpen = rows.find((row) => !row.complete);
+    if (taskName) taskName.textContent = `任務：${firstOpen ? firstOpen.name : q.name}`;
     const button = card.querySelector("[data-quest-go]");
     if (button) { button.textContent = action; button.toggleAttribute("data-main-next", !!mainStep); button.onclick = () => mainStep ? goNextFarmStep() : goQuest(q); }
     card.querySelectorAll(".r68a-card-requirements span").forEach((node, i) => { const row = rows[i]; if (row) { node.textContent = `${row.complete ? "✓" : "○"} ${row.name} ${Math.min(row.current, row.required)}/${row.required}`; node.title = `${row.name} ${Math.min(row.current, row.required)}/${row.required}`; } });
@@ -508,8 +521,8 @@
       lastMainStory = "";
       const availability = A.storyPanelAvailability(current);
       const currentMain = A.summary(current, Date.now()).currentQuest;
-      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main && q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : null; const rows = rowsOf(q); const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
-        <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(q.name)}</span></b><span>${progress}</span></div>
+      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main && q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : null; const rows = rowsOf(q); const cardTaskName = main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
+        <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(cardTaskName)}</span></b><span>${progress}</span></div>
         <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : q.description)}">${esc(mainStep ? mainStep.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}>${esc(action)}</button>` : ""}</div>
         <div class="adventure-meta r68a-card-requirements">${displayRows.map((r) => r.routeLabel ? `<span class="r77c-route-label" data-r77c-route-label>${esc(r.name)}</span>` : `<span title="${esc(`${r.route === "alt" ? "或：" : ""}${r.name} ${Math.min(r.current, r.required)}/${r.required}`)}">${r.complete ? "✓" : "○"} ${r.route === "alt" ? "或：" : ""}${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}${q.status !== "claimed" && q.status !== "locked" ? `<span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span>` : ""}</div></article>`; };
       panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
@@ -670,7 +683,7 @@
     if (step.action === "refract" && sunplay) {
       closePanels(); const result = sunplay.refract(current, step.plotIndex, now);
       if (!result.ok) { notify(step.text); return; }
-      notify("光折過來了。之後先點一格田，再按「把光折到這裡」，光照哪一格由你決定。"); afterSunAction();
+      notify("光折過來了。第一次光裡收成後，點一格田再按「折到這格」，就能決定光照哪裡。"); afterSunAction();
       if (sunplay.playBeam) sunplay.playBeam(current, result.from, result.to); /* 重畫地圖之後才放光束，免得被清掉 */
       return;
     }
@@ -678,7 +691,11 @@
       closePanels(); const result = sunplay.ripen(current, step.plotIndex, now);
       notify(result.ok ? "用掉 2 點陽光，這一格立刻成熟了，走過去收吧。" : step.text); if (result.ok) afterSunAction(); return;
     }
-    if (step.action === "catch_sun" || step.action === "wait") { closePanels(); notify(step.text); return; }
+    if (step.action === "catch_sun") {
+      closePanels(); const result = window.queueLightHarvest ? window.queueLightHarvest(current, step.plotIndex, now) : { ok: false };
+      notify(result.ok ? result.choice.helpText : step.text); if (result.ok) afterSunAction(); return;
+    }
+    if (step.action === "wait") { closePanels(); notify(step.text); return; }
     const tiles = (current.map && current.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < (window.activePlotCount ? window.activePlotCount(current) : 6));
     const target = (step.tileId && tiles.find((tile) => tile.id === step.tileId)) || (step.action === "tend" ? tiles.find((tile) => { const p = current.plots[tile.plotIndex]; return p && p.cropId && (p.wateredAt || 0) < p.plantedAt; }) : tiles.find((tile) => !current.plots[tile.plotIndex].cropId));
     if (!target) { notify(step.text); return; }

@@ -248,7 +248,7 @@ const INTERSECT_JS = `
       });
       await page.waitForTimeout(250);
       const sunLabel = await page.evaluate(() => { const label = document.querySelector('[data-audit="tile-state-label"]'); return label && !label.hidden ? label.textContent.trim() : null; });
-      assert.match(String(sunLabel), /^小麥・已種 [0-2]／3 格\s+光快落在這格了・等光到了再澆水$/, `${w}×${h} 光快落在這格時標籤應提示等光到了再澆水，實際「${sunLabel}」`);
+      assert.match(String(sunLabel), /^等光再澆水・小麥\s+光快落在這格了$/, `${w}×${h} 光快落在這格時標籤應提示等光到了再澆水，實際「${sunLabel}」`);
       console.log(`OK 單格 ${w}×${h} 光快落下時標籤改寫「等光到了再澆水」`);
       await page.evaluate(() => { const s = window.__farm.state(); Object.assign(s.sun, { previewPlots: [], previewAt: 0, nextAt: Date.now() + 600000 }); });
       await page.evaluate(() => { const s = window.__farm.state(); s.plots[0].cropId = null; window.__farm.cancelJourney(); window.__farm.setTool('hand'); window.__farm.refresh(); });

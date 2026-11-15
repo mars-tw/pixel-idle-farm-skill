@@ -13,7 +13,7 @@
     carrot: "partial", potato: "partial", pumpkin: "partial", strawberry: "shade",
   };
   const TRAIT_INFO = {
-    sun: { icon: "☀", name: "喜光", text: "在光裡照料，收成多 1 份並多得 1 點陽光。" },
+    sun: { icon: "☀", name: "喜光", text: "光裡收成會多 1 份，並把陽光收進蓄光瓶。" },
     partial: { icon: "◐", name: "半日照", text: "生長時照到剛好一次，收成保證 1 份優質；第二次起曬過頭。" },
     shade: { icon: "☂", name: "耐陰", text: "全程沒照光，收成時優質機率增加 35%。" },
     neutral: { icon: "◇", name: "一般", text: "沒有特殊光性。" },
@@ -90,17 +90,36 @@
     effect.quality = effect.guaranteedQuality || (effect.qualityBonusChance > 0 && (typeof rng === "function" ? rng() : Math.random()) < effect.qualityBonusChance);
     return effect;
   }
+  /* R79B：收成份數與陽光只在這裡合成一次。baseQty 由 game.js 傳入（已含料理與照顧方式），
+     caughtSunlight 是玩家在光裡親手收成接住的 1 點；瓶子剩餘空間也在這裡扣，所有畫面因此拿到實際總數。 */
+  function harvestOutcome(state, plot, options) {
+    const opts = options || {}, effect = harvestEffects(state, plot, opts.rng, opts.exposedNow === true);
+    const baseQty = Math.max(0, integer(opts.baseQty, 0));
+    const room = Math.max(0, bottleCapacity(state) - sunlight(state));
+    const traitSunlight = Math.max(0, integer(effect.sunlight, 0));
+    const caughtSunlight = Math.max(0, integer(opts.caughtSunlight, 0));
+    const sunlightTotal = Math.min(room, traitSunlight + caughtSunlight);
+    return { effect, quantity: baseQty + Math.max(0, integer(effect.yieldBonus, 0)), yieldBonus: effect.yieldBonus || 0,
+      traitSunlight: Math.min(room, traitSunlight), caughtSunlight: Math.min(Math.max(0, room - traitSunlight), caughtSunlight), sunlightTotal, room };
+  }
+  function traitText(state, cropId) {
+    const info = traitInfo(cropId); if (info.id !== "sun") return info.text;
+    const out = harvestOutcome(state, { cropId }, { exposedNow: true, caughtSunlight: 1 });
+    return `光裡收成多 ${Math.max(0, out.yieldBonus)} 份＋陽光 ${Math.max(0, out.sunlightTotal)}`;
+  }
   function harvestPreview(state, plot, exposedNow) {
     if (!plot || !plot.cropId) return { text: "", effect: null };
     const info = traitInfo(plot.cropId);
     const hits = integer(plot.r75SunHits, 0) + (exposedNow ? 1 : 0);
-    const effect = harvestEffects(state, plot, function () { return 0; }, exposedNow);
+    const outcome = harvestOutcome(state, plot, { rng: function () { return 0; }, exposedNow, caughtSunlight: exposedNow ? 1 : 0 });
+    const litOutcome = harvestOutcome(state, plot, { rng: function () { return 0; }, exposedNow: true, caughtSunlight: 1 });
+    const effect = outcome.effect;
     let text = `${info.icon} ${info.name}`;
-    if (info.id === "sun") text += (plot.sunGrown === true || hits > 0) ? "・照過光了：收成多 1 份" : "・還沒照到：照到光會多收 1 份";
+    if (info.id === "sun") text += (plot.sunGrown === true || hits > 0) ? `・照過光了：收成多 ${effect.yieldBonus} 份＋陽光 ${outcome.sunlightTotal}` : `・還沒照到：光裡收成多 ${litOutcome.yieldBonus} 份＋陽光 ${litOutcome.sunlightTotal}`;
     else if (info.id === "partial") text += hits === 0 ? "・還沒照到：再照 1 次有優質" : hits === 1 ? "・照 1 次：收成保證 1 份優質" : `・照 ${hits} 次：曬過頭`;
     else if (info.id === "shade") text += hits === 0 && plot.r75ShadeEligible !== false ? "・還沒照到：保持陰涼整批優質" : "・照過光了：陰涼加成失效";
     else text += "・沒有特殊光性";
-    return { text, effect, hits };
+    return { text, effect, hits, outcome };
   }
   function catchSun(state, plotIndex) { const exposure = recordExposure(state, plotIndex); const gained = addSunlight(state, 1); return { gained, exposure }; }
   /* R78B：光的倒數只有這一個算法。預告圈、提示條、田上標籤都用它，同一拍更新，不會一邊寫 1 秒一邊寫 2 秒。 */
@@ -149,7 +168,7 @@
   function refractPreview(state, targetIndex, now) {
     const check = refractCheck(state, targetIndex, now);
     const out = { can: check.ok, reason: check.reason, remaining: check.remaining, limit: check.limit, active: check.active, from: check.from, to: targetIndex,
-      yieldGain: 0, sunlightGain: 0, qualityChange: "", text: "", buttonText: "" };
+      yieldGain: 0, sunlightGain: 0, sunlightTotal: 0, qualityChange: "", text: "", buttonText: "" };
     if (check.reason === "none" || check.reason === "plot") return out;
     if (check.reason === "lit") { out.spent = check.spent; out.text = check.spent ? "這道光在這格已經用過了" : "這格本來就會照到光，不用折"; return out; }
     if (check.reason === "used") { out.text = "這道光已經折過了，等下一道光"; return out; }
@@ -157,15 +176,18 @@
     const plot = (state.plots || [])[targetIndex];
     if (!plot || !plot.cropId) { out.text = "折過來：這格會照到光，在光裡種下去長得快"; return out; }
     const one = function () { return 1; };
-    const before = harvestEffects(state, plot, one, false), after = harvestEffects(state, plot, one, true);
-    out.yieldGain = after.yieldBonus - before.yieldBonus; out.sunlightGain = after.sunlight - before.sunlight;
+    const beforeOutcome = harvestOutcome(state, plot, { rng: one, exposedNow: false, caughtSunlight: 0 });
+    const afterOutcome = harvestOutcome(state, plot, { rng: one, exposedNow: true, caughtSunlight: 1 });
+    const before = beforeOutcome.effect, after = afterOutcome.effect;
+    out.yieldGain = after.yieldBonus - before.yieldBonus; out.sunlightGain = after.sunlight - before.sunlight; out.sunlightTotal = afterOutcome.sunlightTotal;
     const info = traitInfo(plot.cropId), who = info.id === "neutral" ? cropName(plot.cropId) : `${cropName(plot.cropId)}（${info.name}）`;
-    const gains = []; if (out.yieldGain > 0) gains.push(`收成多 ${out.yieldGain} 份`); if (out.sunlightGain > 0) gains.push(`陽光 +${out.sunlightGain}`);
-    if (gains.length) out.text = `折過來：${who}會照到光，${gains.join("・")}`;
-    else if (!before.guaranteedQuality && after.guaranteedQuality) { out.qualityChange = "gain"; out.text = `折過來：${who}會照到剛好 1 次，收成保證 1 份優質`; }
-    else if (before.guaranteedQuality && !after.guaranteedQuality) { out.qualityChange = "lose"; out.text = `折過來：${who}會照到第 2 次，曬過頭，保證優質就沒了`; }
-    else if (before.qualityBonusChance > 0 && !(after.qualityBonusChance > 0)) { out.qualityChange = "lose"; out.text = `折過來：${who}會照到光，陰涼的優質加成就沒了`; }
-    else out.text = `折過來：${who}會照到光，收成跟現在一樣`;
+    let effectText = "收成跟現在一樣";
+    if (!before.guaranteedQuality && after.guaranteedQuality) { out.qualityChange = "gain"; effectText = "照到剛好 1 次，收成保證 1 份優質"; }
+    else if (before.guaranteedQuality && !after.guaranteedQuality) { out.qualityChange = "lose"; effectText = "照到第 2 次，曬過頭，保證優質就沒了"; }
+    else if (before.qualityBonusChance > 0 && !(after.qualityBonusChance > 0)) { out.qualityChange = "lose"; effectText = "陰涼的優質加成就沒了"; }
+    else if (out.yieldGain > 0) effectText = `收成多 ${out.yieldGain} 份`;
+    if (out.sunlightTotal > 0) effectText += `・光裡收成得陽光 ${out.sunlightTotal}`;
+    out.text = `折過來：${who}會照到光，${effectText}`;
     return out;
   }
   function refract(state, targetIndex, now) {
@@ -275,7 +297,9 @@
   }
   function plotActions(state, plotIndex, now) {
     const actions = []; if (!Number.isInteger(plotIndex)) return actions;
-    if (canRefract(state, plotIndex, now)) actions.push({ action: "refract", enabled: true });
+    /* 第一次光裡收成完成前，折光只從任務卡進入；完成後才在選中的田上留下唯一入口。 */
+    const firstLessonDone = !!(state && ((state.flags && state.flags.r79FirstLightHarvest === true) || (state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest)));
+    if (firstLessonDone && canRefract(state, plotIndex, now)) actions.push({ action: "refract", enabled: true });
     if (canRipen(state, plotIndex, now)) actions.push({ action: "ripen", enabled: true });
     return actions;
   }
@@ -306,7 +330,7 @@
     if (signature === actionSignature) return; actionSignature = signature; farm.renderSceneActions();
   }
   /* R77A 第 1 項：選到可以折光的格子時，先在那一格畫一塊淡色光斑（還沒折，只是先看到光會落在哪）。
-   * 能不能折只問 refractCheck，跟動作列的「把光折到這裡」是同一個判斷，所以有光斑就一定有那顆鈕。 */
+   * 能不能折只問 refractCheck，跟動作列的「折到這格」是同一個判斷，所以有光斑就一定有那顆鈕。 */
   function refractGhostPlot(state, now) {
     const id = state && state.interaction && state.interaction.selectedTileId; const tile = id && state.map ? state.map.tiles.find((t) => t.id === id) : null;
     return tile && tile.plotIndex != null && refractCheck(state, tile.plotIndex, now).ok ? tile.plotIndex : null;
@@ -501,7 +525,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, harvestPopText };
+  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, harvestPopText };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

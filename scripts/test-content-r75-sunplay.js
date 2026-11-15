@@ -61,11 +61,11 @@ test("光快落在已經熟的作物上：先留著等光，光到了才叫玩�
   s.adventure.r58.r59.seedPacks.wheat = 2;
   /* R78B 規則改了：等光的那一格已經熟了，就只講「等光再收」，不再叫玩家去種小麥（任務卡寫去種小麥、田上寫先別收對不起來）；等光的那一格照樣帶出去。 */
   const sow = Adventure.nextFarmStep(s, 2000); assert.equal(sow.action, "catch_sun"); assert.equal(sow.plotIndex, 0, "熟了的那一格等光再收，不叫玩家去種別格"); assert.equal(sow.holdPlotIndex, 0, "等光的那一格仍標成留著"); s.adventure.r58.r59.seedPacks.wheat = 0;
-  const uiSrc = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8"); assert.equal((uiSrc.match(/nextStep\.holdPlotIndex === tile\.plotIndex/g) || []).length, 2, "田上標籤與動作鈕都要認得留著等光的那一格");
+  const uiSrc = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8"); assert.equal((uiSrc.match(/nextStep\.holdPlotIndex === tile\.plotIndex/g) || []).length, 3, "田上標籤、動作鈕與選中田都要認得留著等光的那一格");
   Game.plant(s, 1, "wheat", 2000); s.plots[1].plantedAt = 2000 - Game.plotGrowMs(s, s.plots[1], 2000) - 1; const other = Adventure.nextFarmStep(s, 2001); assert.equal(other.action, "harvest"); assert.equal(other.plotIndex, 1, "光還沒到時先收別格"); assert.equal(other.holdPlotIndex, 0, "先收別格時，等光的那一格仍標成留著");
   /* R76 整合：右下互動鈕（快速收成）原本照樣寫「收成・小麥田」並走去收等光的那一格。現在快速收成不算那一格，只帶玩家去收別格；面前只剩那一格時按鈕改寫「等光」，按下去只提醒。 */
   assert.equal(Game.quickHarvestStatus(s, 2001).count, 2, "不傳要跳過的格子時照舊全部算"); const quick = Game.quickHarvestStatus(s, 2001, other.holdPlotIndex); assert.equal(quick.count, 1, "快速收成不算等光的那一格"); assert.equal(s.map.tiles.find((t) => t.id === quick.tileId).plotIndex, 1, "快速收成帶去的是別格");
-  assert.equal((uiSrc.match(/G\.quickHarvestStatus\(state, now\(\)\)/g) || []).length, 0, "右下互動鈕一律用會跳過等光那一格的版本"); assert.match(uiSrc, /if \(heldReadyTile\(tile\)\) \{ toast\("光快落在這格了，等光到了再收成/, "面前是等光的那一格時只提醒、不收"); assert.match(uiSrc, /heldReadyTile\(tile\) \? label\.replace\(\/\^收成・\/, "等光・"\)/, "按鈕文字跟田上標籤講同一件事");
+  assert.equal((uiSrc.match(/G\.quickHarvestStatus\(state, now\(\)\)/g) || []).length, 0, "右下互動鈕一律用會跳過等光那一格的版本"); assert.match(uiSrc, /if \(heldReadyTile\(tile\)\) \{ const choice = r78bChoiceFor\(tile\)/, "面前是等光的那一格時只提醒、不收"); assert.match(uiSrc, /heldReadyTile\(tile\) \? label\.replace\(\/\^收成・\/, "等光・"\)/, "按鈕文字跟田上標籤講同一件事");
   assert.equal(Game.harvest(s, 1, 2002).ok, true); assert.equal(Game.updateSunpatch(s, 9000, () => 0).spawned, true);
   const lit = Adventure.nextFarmStep(s, 9001); assert.equal(lit.action, "harvest"); assert.equal(lit.sunlit, true); assert.equal(lit.plotIndex, 0);
 });
@@ -117,8 +117,8 @@ test("介面用的資料：蓄光瓶籤、升級卡、田格動作", () => {
   s.level = 4; cards = Sun.upgradeCards(s); assert.equal(cards[0].canBuy, false); assert.equal(cards[0].short, 10); assert.equal(cards[0].affordability, "near"); assert.equal(cards[1].affordability, "long-term");
   s.coins = 60; cards = Sun.upgradeCards(s); assert.equal(cards[0].canBuy, true); assert.equal(cards[0].buy().ok, true); assert.equal(s.coins, 0); assert.equal(Sun.upgradeCards(s)[0].done, true);
   const p = fresh(); p.coins = 99; Game.plant(p, 0, "wheat", 1000); assert.deepEqual(Sun.plotActions(p, 0, 2000), [], "沒有光也沒有陽光時不多按鈕");
-  p.sun.previewPlots = [1]; p.sun.previewAt = 9000; p.sun.nextAt = 9000; assert.deepEqual(Sun.plotActions(p, 0, 2000).map((a) => a.action), ["refract"]); assert.deepEqual(Sun.plotActions(p, 1, 2000), [], "光本來就要落在這格時不用折");
-  Sun.addSunlight(p, 2); assert.deepEqual(Sun.plotActions(p, 0, 2000).map((a) => a.action), ["refract", "ripen"]); assert.deepEqual(Sun.plotActions(p, 2, 2000).map((a) => a.action), ["refract"], "空田不能催熟");
+  p.sun.previewPlots = [1]; p.sun.previewAt = 9000; p.sun.nextAt = 9000; assert.deepEqual(Sun.plotActions(p, 0, 2000).map((a) => a.action), []); assert.deepEqual(Sun.plotActions(p, 1, 2000), [], "光本來就要落在這格時不用折");
+  Sun.addSunlight(p, 2); assert.deepEqual(Sun.plotActions(p, 0, 2000).map((a) => a.action), ["ripen"]); assert.deepEqual(Sun.plotActions(p, 2, 2000).map((a) => a.action), [], "空田不能催熟");
 });
 
 console.log(`VERIFIED R75A sunplay ${passed} tests`);

@@ -56,7 +56,7 @@ test("4b 材料是 0 時寫去種或去收，不寫去找人；材料齊了寫�
   assert.doesNotMatch(sow.actionLabel, /^前往/, "番茄 0/3 還沒種，不能叫玩家去找蘿拉"); assert.match(sow.text, /番茄/);
   /* 番茄種了還在長：先澆水，澆過了就等，不叫玩家去找人。 */
   Game.plant(s, 0, "tomato", T, "water");
-  const tend = A.nextFarmStep(s, T + 10); assert.equal(tend.questAware, true); assert.equal(tend.action, "tend"); assert.equal(tend.plotIndex, 0); assert.equal(tend.actionLabel, "去澆水");
+  const tend = A.nextFarmStep(s, T + 10); assert.equal(tend.questAware, true); assert.equal(tend.action, "tend"); assert.equal(tend.plotIndex, 0); assert.equal(tend.actionLabel, "去照顧番茄");
   s.plots[0].wateredAt = T + 20;
   const wait = A.nextFarmStep(s, T + 30); assert.equal(wait.action, "wait"); assert.doesNotMatch(wait.actionLabel, /^前往|去種/); assert.match(wait.text, /番茄/);
   /* 番茄熟了：去收番茄。 */
@@ -195,10 +195,10 @@ test("2 等光還是現在收：兩個數字都從規則算出來", () => {
   const waitBefore = sunlightOf(waitState); const waitOut = Game.harvest(waitState, 0, T + 5001, () => 1);
   assert.equal(waitOut.added, choice.waitQty, "等光再收的份數"); assert.equal(sunlightOf(waitState) - waitBefore, choice.waitSunlight, "等光再收拿到的陽光");
   assert.ok(choice.waitQty > choice.nowQty, "等光要真的比較多"); assert.ok(choice.waitSunlight > choice.nowSunlight);
-  assert.equal(choice.nowText, `現在收 ${choice.nowQty} 份`); assert.equal(choice.waitText, `等 ${choice.seconds} 秒收 ${choice.waitQty} 份＋陽光 ${choice.waitSunlight}`);
+  assert.equal(choice.nowText, `現在收：${choice.nowQty} 份`); assert.equal(choice.waitText, `等光再收：${choice.waitQty} 份＋陽光 ${choice.waitSunlight}`);
   /* 蓄光瓶快滿時，陽光的數字跟著少，不寫拿不到的量。 */
   const full = clone(s); Sun.addSunlight(full, Sun.bottleCapacity(full)); const fullChoice = Game.lightHarvestChoice(full, 0, at);
-  assert.equal(fullChoice.waitSunlight, 0); assert.equal(fullChoice.waitText, `等 ${fullChoice.seconds} 秒收 ${fullChoice.waitQty} 份`);
+  assert.equal(fullChoice.waitSunlight, 0); assert.equal(fullChoice.waitText, `等光再收：${fullChoice.waitQty} 份`);
   /* 施堆肥的那一格兩邊都多 1 份。 */
   const rich = fresh(); rich.materials.compost = 2; grow(rich, 0, "wheat", T, "compost"); rich.sun.previewPlots = [0]; rich.sun.previewAt = T + 5000; rich.sun.nextAt = T + 5000;
   const richChoice = Game.lightHarvestChoice(rich, 0, at); assert.equal(richChoice.nowQty, choice.nowQty + 1); assert.equal(richChoice.waitQty, choice.waitQty + 1);
@@ -209,7 +209,7 @@ test("2 等光還是現在收：兩個數字都從規則算出來", () => {
   assert.equal(Game.lightHarvestChoice(young, 0, at).ok, false);
   const ui = read("src/ui.js");
   assert.match(ui, /G\.lightHarvestChoice\(/, "田上標籤用算出來的數字"); assert.match(ui, /r78b-wait-choice/);
-  assert.match(ui, /if \(prog\.ready\) return name \+ \(heldForLight \? "・先別收" : "・可收成"\) \+ sunSuffix;/, "原本那一行寫法不動");
+  assert.match(ui, /heldForLight \? `等光再收・\$\{name\}` : `\$\{name\}・可收成`/, "成熟田的第一行跟下一步同步");
 });
 
 test("2b 光已經落下後，不再留「光會落在這一格」「等光到了再…」", () => {

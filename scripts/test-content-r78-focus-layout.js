@@ -113,19 +113,19 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
       /* 三個地方各自每秒更新，等它們落在同一秒再讀（秒數不同就會等到逾時而失敗）。 */
       await page.waitForFunction(() => {
         const d = __r78t.snap(), nums = [];
-        const a = /等 (\d+) 秒收/.exec(d.wait); if (!a) return false; nums.push(a[1]);
+        const a = /等 (\d+) 秒/.exec(d.wait); if (!a) return false; nums.push(a[1]);
         const b = /光 (\d+) 秒後落下/.exec(d.chipText); if (b) nums.push(b[1]);
         const c = /等 (\d+) 秒/.exec(d.hint); if (c) nums.push(c[1]);
         return nums.length >= 2 && nums.every((n) => n === nums[0]);
       }, null, { timeout: 4000 }).catch(() => { throw new Error(`${tag} 熟田等光：田上標籤、提示條、任務卡要寫同一個秒數`); });
       d = await snap(page);
-      assert.match(d.label, /^小麥・先別收/, `${tag} 熟田等光：標籤第一行`);
-      const choice = /^現在收 (\d+) 份｜等 (\d+) 秒收 (\d+) 份＋陽光 (\d+)$/.exec(d.wait);
+      assert.match(d.label, /^等光再收・小麥/, `${tag} 熟田等光：標籤第一行`);
+      const choice = /^等 (\d+) 秒，光到了再收：(\d+) 份＋陽光 (\d+)（現在收只有 (\d+) 份）$/.exec(d.wait);
       assert.ok(choice, `${tag} 熟田等光：標籤要寫出兩個結果（看到「${d.wait}」）`);
-      assert.ok(Number(choice[3]) > Number(choice[1]), `${tag} 等光收的份數要比現在收多`);
-      assert.ok(Number(choice[2]) >= 1 && Number(choice[2]) <= 7, `${tag} 等的秒數是算出來的`);
+      assert.ok(Number(choice[2]) > Number(choice[4]), `${tag} 等光收的份數要比現在收多`);
+      assert.ok(Number(choice[1]) >= 1 && Number(choice[1]) <= 7, `${tag} 等的秒數是算出來的`);
       sameStep(d, tag, "熟田等光", "等光再收");
-      if (d.hint) assert.match(d.hint, /等 \d+ 秒，光到再收/, `${tag} 任務卡直接寫「等幾秒，光到再收」`);
+      if (d.hint) assert.match(d.hint, /等 \d+ 秒，光到了再收/, `${tag} 任務卡直接寫「等幾秒，光到了再收」`);
       assert.ok(d.plots[0], `${tag} 被點的那格田在畫面裡`);
 
       /* 光落下之後：過期的預告字樣不留著，按鈕換成「在光裡收成」，受光格是硬邊色塊不是整格平塗。 */
@@ -179,7 +179,7 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
       assert.equal(d.plots.length, 6, `${tag} 開場六格田`);
       if (w >= 860) d.plots.forEach((p, i) => assert.ok(inView(p, w, h), `${tag} 第 ${i + 1} 格田整格看得到`));
       /* 手機直式第 4 格本來就超出畫面右緣；在畫面裡的田一格都不能被彈窗蓋到。 */
-      d.plots.forEach((p, i) => assert.equal(ov(d.care, p), 0, `${tag} 彈窗不蓋第 ${i + 1} 格田`));
+      d.plots.forEach((p, i) => assert.equal(ov(d.care, p), 0, `${tag} 彈窗不蓋第 ${i + 1} 格田（彈窗 ${JSON.stringify(d.care)}；田 ${JSON.stringify(p)}）`));
 
       /* 提示卡一次一張、其餘排隊：升級卡進來時照顧彈窗先讓開，升級卡走了再回來。 */
       await page.evaluate(() => __farm.enqueueSettlement({ kind: "milestone", title: "升到 Lv 5", earned: "農場等級提升到 5 級", unlocked: "新的作物與農場能力", next: "去種番茄" }));

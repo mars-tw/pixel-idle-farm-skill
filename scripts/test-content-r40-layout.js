@@ -27,7 +27,7 @@ process.env.TEMP = TMP; process.env.TMP = TMP; process.env.TMPDIR = TMP;
   assert(css.includes('bottom: 96px') && css.includes('bottom: 76px'), '矮螢幕對話應放工具列上方安全區');
   assert(css.includes('.r40-sun-tile') && css.includes('.r40-sun-bar') && css.includes('.r40-sun-icon'), '受光格應有邊框、太陽圖示與進度條規則');
   assert(ui.includes('r40-sun-tile') && ui.includes('remainingSeconds'), 'ui.js 應建立受光格標記並寫入剩餘秒數');
-  assert(ui.includes('在光裡：生長加速・收成 +1'), '選取受光格提示應說明加速與收成 +1');
+  assert(ui.includes('在光裡：生長加速・收成多 1 份＋陽光 2'), '選取受光格提示應說明加速、份數與陽光總數');
   assert(css.includes('body:has(.side-panel.world-panel-open) #questDock'), '大型面板開啟時任務卡應收合');
   assert(/body:has\(\.side-panel\.world-panel-open\)[\s\S]*?\.seed-hud/.test(css), '大型面板開啟時種子欄應隱藏');
   assert(/\.gtile\.sel[\s\S]*?inset 0 0 0 3px/.test(css), '選取框應為內框、不外擴');
