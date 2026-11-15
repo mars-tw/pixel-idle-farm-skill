@@ -170,10 +170,10 @@ test("8 舊存檔（沒有 R61 欄位、進度只到早期）載入不壞", () =
 
 test("9 接線：新檔掛進首頁與快取清單、樣式標 R61B、不動任務與料理資料", () => {
   const index = fs.readFileSync("index.html", "utf8");
-  assert.match(index, /src\/neighbors-r61\.js\?v=content-r78-20261115-1/, "首頁要載入鄰居模組且不 bump 版本");
+  assert.match(index, /src\/neighbors-r61\.js\?v=content-r79-20261116-1/, "首頁要載入鄰居模組且不 bump 版本");
   const sw = fs.readFileSync("sw.js", "utf8");
   assert.match(sw, /versioned\("\.\/src\/neighbors-r61\.js"\)/, "快取清單要有鄰居模組");
-  assert.match(sw, /CACHE_VERSION = "content-r78-20261115-1"/, "不可改快取版本");
+  assert.match(sw, /CACHE_VERSION = "content-r79-20261116-1"/, "不可改快取版本");
   const css = fs.readFileSync("src/content-r58b.css", "utf8");
   assert.match(css, /R61B/, "樣式要標 R61B");
   assert.match(css, /\.r61b-neighbors/, "手札鄰居區塊要有樣式");
