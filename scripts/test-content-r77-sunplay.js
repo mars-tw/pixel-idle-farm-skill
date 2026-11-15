@@ -166,16 +166,18 @@ function checkRows(s, index, now) {
 test("照顧方式：小麥三列寫出實際秒數與份數，換成那種方式真的就是那樣", () => {
   const s = fresh(1); s.materials.compost = 2; assert.equal(Game.plant(s, 0, "wheat", T).ok, true);
   const f = checkRows(s, 0, T);
+  /* R78B 第 3 項同步：三種照顧方式拉開差距——施堆肥的生長時間從 1 倍改成 1.25 倍（多收又有機會優質，但比較慢），放著長帶回的種子從 1 包改成 2 包。 */
   assert.deepEqual(f.rows.map((r) => r.text), [
     "勤澆水：約 12 秒成熟・收 2 份",
-    "施堆肥：約 15 秒・收 3 份，三成機率優質（用 1 份堆肥，現有 2）",
-    "放著長：約 18 秒・收 2 份，帶回 1 包種子",
+    "施堆肥：約 19 秒・收 3 份，三成機率優質（用 1 份堆肥，現有 2）",
+    "放著長：約 18 秒・收 2 份，帶回 2 包種子",
   ]);
   assert.equal(f.rows[1].qualityChance, Game.FARM_CARE.compost.qualityChance);
   /* 澆過水的濕土：沒選勤澆水的兩種也會變快，數字跟著變。 */
   assert.equal(Game.waterPlot(s, 0, T).ok, true);
   const wet = checkRows(s, 0, T);
-  assert.deepEqual(wet.rows.map((r) => r.seconds), [12, 12, 14]);
+  /* R78B 第 3 項同步：施堆肥的生長時間改成 1.25 倍，濕土上從 12 秒變 15 秒；另外兩種沒變。 */
+  assert.deepEqual(wet.rows.map((r) => r.seconds), [12, 15, 14]);
   /* 堆肥已經施了、沒有堆肥，各寫各的。 */
   const applied = clone(s); applied.plots[0].careMode = "compost";
   const a = Game.careForecast(applied, 0, T).rows[1]; assert.equal(a.compostCost, 0); assert.match(a.text, /（堆肥已經施了）$/);
@@ -192,7 +194,8 @@ test("照顧方式：超過 60 秒寫成分秒；季節、料理、光都算進�
   assert.equal(Game.careDurationText(61000), "1 分 1 秒"); assert.equal(Game.careDurationText(120000), "2 分鐘");
   assert.equal(Game.careDurationText(59001), "60 秒");
   const tomato = fresh(3); assert.equal(Game.plant(tomato, 0, "tomato", T).ok, true);
-  assert.deepEqual(checkRows(tomato, 0, T).rows.map((r) => r.timeText), ["約 1 分 30 秒", "約 2 分鐘", "約 2 分 24 秒"]);
+  /* R78B 第 3 項同步：施堆肥的生長時間改成 1.25 倍，番茄從 2 分鐘變 2 分 30 秒；另外兩種沒變。 */
+  assert.deepEqual(checkRows(tomato, 0, T).rows.map((r) => r.timeText), ["約 1 分 30 秒", "約 2 分 30 秒", "約 2 分 24 秒"]);
 
   /* 季節：白蘿蔔是春天的作物，春天比夏天快，兩個都跟實際一樣。 */
   const spring = fresh(6); spring.season = { id: "春", untilMs: T + 3600000 }; assert.equal(Game.plant(spring, 0, "radish", T).ok, true);

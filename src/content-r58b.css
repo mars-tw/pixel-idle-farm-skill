@@ -1507,6 +1507,99 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 /* R78 分隔 */
 
 /* ===== R78B（第一分鐘與互動層級）開始：這條線的新規則只寫在這兩行註解之間 ===== */
+/* R78B 第 2 項：熟了而且光快到的田，標籤第二行是有數字的二選一（現在收幾份｜等幾秒收幾份＋陽光）；秒數那一小塊有底色，跟提示條、預告圈同一拍。 */
+.tile-state-label .r78b-wait-choice { color: #5a3200; font-weight: 900; }
+.tile-state-label .r78b-wait-choice b { padding: 0 3px; background: #ffe27a; color: #4a3200; font-weight: 900; box-shadow: 0 0 0 1px #b3872f; }
+/* 任務卡「現在做」底下那一句「等幾秒，光到再收」：直排字、硬邊底色，不用斜體。 */
+#questDock .r68a-now .world-objective-hint[data-hint="sun"] { display: inline-block; margin: 3px 0 0; padding: 1px 6px; border: 1px solid #c8791a; background: #ffe9a8; color: #4a3200; font-size: 12px; font-style: normal; font-weight: 800; line-height: 1.35; }
+
+/* R78B 第 3 項：照顧方式彈窗裡「這次為什麼選這個」那一行，與這次最適合的那一顆。 */
+.r74a-care-popover .r78b-care-why { margin: 3px 0 0; padding: 3px 6px; border-left: 4px solid #c8791a; background: #fff3c4; color: #4a3200; font-size: 11px; font-weight: 800; line-height: 1.35; text-align: left; overflow-wrap: anywhere; }
+.r73a-care-segments .r72a-care.r78b-care-best { box-shadow: inset 0 -3px 0 #e0a52a; }
+.r73a-care-segments .r72a-care.r78b-care-best::after { content: "★"; flex: 0 0 auto; color: #b86a00; font-size: 11px; line-height: 1; }
+/* 彈窗開著的那幾秒，「目標」箭頭先讓開，不壓在彈窗角落。 */
+body:has(.r74a-care-popover) #objectiveArrow { visibility: hidden; }
+
+/* R78B 第 5 項：一次只有一個主要互動層。記號由 ui.js 的 r78bSyncFocus 寫在 <html data-r78-focus／data-r78-card> 與 #questDock.r78b-folded，規則只寫這一處。 */
+/* 主要面板（訂單、升級、手札、對話、灶台、曬架、選單、建造）開著：照顧彈窗、集章小卡先收起。 */
+html[data-r78-focus]:not([data-r78-focus=""]) .r74a-care-popover,
+html[data-r78-focus]:not([data-r78-focus=""]) #r76cStampCard { display: none !important; }
+/* 提示卡一次一張：結算／升級卡先出，照顧彈窗第二，集章小卡排最後。 */
+html[data-r78-card="settlement"] .r74a-care-popover,
+html[data-r78-card="settlement"] #r76cStampCard,
+html[data-r78-card="care"] #r76cStampCard { display: none !important; }
+/* 任務卡收起時只留標題與「現在做」那一列，條件清單與提示句先不顯示。 */
+#questDock.r78b-folded > .r68a-requirements,
+#questDock.r78b-folded .world-objective-hint { display: none !important; }
+/* 對話框在畫面上方時，收成提示回到畫面下方原本的位置，不往上頂到資源列。 */
+body:has(#worldDialogue:is(.dialogue-flip-top, .dialogue-compact-top):not([hidden])) #toast-zone:not(:has(.milestone-card)) { top: auto !important; bottom: calc(var(--fixed-bottom-inset, 0px) + 18px) !important; }
+/* 集章小卡右上角的關閉記號：整張點一下就收（原本就會），幾秒後也會自己收進手冊。 */
+#r76cStampCard .r76c-card-main::after { content: "×"; flex: 0 0 auto; align-self: flex-start; width: 20px; height: 20px; border: 1px solid #8a541c; background: #ffe9a8; color: #4a3200; font-size: 15px; font-weight: 900; line-height: 18px; text-align: center; }
+@media (max-width: 620px) {
+  /* 手機直式：升級卡縮成三行，放在動作列與右下互動鈕之間，不壓田也不壓按鈕；右邊留給「目標」箭頭。 */
+  #toast-zone:has(.settlement-card.milestone-card) { top: auto; right: auto; left: 10px; bottom: calc(var(--fixed-bottom-inset, 0px) + 4px); transform: none; }
+  #toast-zone .settlement-card.milestone-card { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; row-gap: 1px; align-items: baseline; width: min(300px, calc(100vw - 84px)); padding: 5px 9px; }
+  #toast-zone .settlement-card.milestone-card strong { font-size: 14px; line-height: 1.25; }
+  #toast-zone .settlement-card.milestone-card span { font-size: 11px; line-height: 1.3; }
+  #toast-zone .settlement-card.milestone-card span ~ span { grid-column: 1 / -1; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  /* 手機橫式：升級卡同樣縮成三行，改放任務卡下方靠左（田在畫面中間偏右），不壓田、方向鍵與右下互動鈕。 */
+  #toast-zone:has(.settlement-card.milestone-card) { top: 118px !important; right: auto; left: 12px; bottom: auto; transform: none; }
+  #toast-zone .settlement-card.milestone-card { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; row-gap: 1px; align-items: baseline; width: min(300px, calc(100vw - 84px)); padding: 5px 9px; }
+  #toast-zone .settlement-card.milestone-card strong { font-size: 14px; line-height: 1.25; }
+  #toast-zone .settlement-card.milestone-card span { font-size: 11px; line-height: 1.3; }
+  #toast-zone .settlement-card.milestone-card span ~ span { grid-column: 1 / -1; }
+}
+@media (max-width: 859px) and (orientation: portrait) {
+  /* 手機直式開著面板時，信件、收成這類一行提示改放面板底下那一條空位，不再疊在任務卡的按鈕上。 */
+  body:has(.side-panel.world-panel-open) #toast-zone:not(:has(.milestone-card)) { top: auto !important; bottom: calc(env(safe-area-inset-bottom, 0px) + 77px) !important; }
+}
+@media (max-width: 859px) {
+  /* 手機「往下還有」：改成貼在面板底的一整條頁尾（不透明底、硬邊上框線），不再半透明浮在內文上。底色是兩階硬邊的漸層（上緣 4px 稍深），不透明。 */
+  .side-panel.world-panel-open .panel-scroll-hint.r55-scroll-hint:not([hidden]) { position: sticky !important; bottom: 0 !important; margin: 0 !important; padding: 5px 12px 6px !important; border-top: 0; background: linear-gradient(#ffedb8 0, #ffedb8 4px, #fff8df 4px, #fff8df 100%) #fff8df !important; box-shadow: 0 20px 0 20px #fff8df, 0 18px 0 20px #b08a4a; }
+  /* 字裡已經有「⌄」，後面那個重複的「▼」拿掉。 */
+  .side-panel.world-panel-open .panel-scroll-hint.r55-scroll-hint::after { content: none !important; }
+}
+
+/* R78B 第 6 項：受光格改成像素風光斑——硬邊、階梯狀亮度（由外到內五階）、整數像素；不再整格平塗，也不用柔邊光暈。 */
+.r40-sun-tile {
+  --r78b-light-a: rgba(255, 226, 120, .11); --r78b-light-b: rgba(255, 236, 150, .09); --r78b-light-c: rgba(255, 250, 200, .08);
+  box-shadow: inset 0 0 0 2px rgba(255, 226, 140, .9);
+}
+.r40-sun-tile, .r40-sun-tile.r77a-sun-fading {
+  background:
+    linear-gradient(var(--r78b-light-c), var(--r78b-light-c)) center / 24px 24px no-repeat,
+    linear-gradient(var(--r78b-light-b), var(--r78b-light-b)) center / 48px 32px no-repeat,
+    linear-gradient(var(--r78b-light-b), var(--r78b-light-b)) center / 32px 48px no-repeat,
+    linear-gradient(var(--r78b-light-a), var(--r78b-light-a)) center / 64px 48px no-repeat,
+    linear-gradient(var(--r78b-light-a), var(--r78b-light-a)) center / 48px 64px no-repeat;
+}
+.r40-sun-tile.r77a-sun-fading { --r78b-light-a: rgba(255, 226, 120, .05); --r78b-light-b: rgba(255, 236, 150, .04); --r78b-light-c: rgba(255, 250, 200, .03); }
+/* 折光預覽光斑：亮色虛線框外再包一圈深色硬邊，裡面同一款階梯光斑但更亮，底下寫「折到這格」，一眼分得出來。 */
+.r77a-refract-ghost {
+  border: 3px dashed #fff0a0; border-radius: 0;
+  box-shadow: 0 0 0 2px rgba(122, 74, 0, .75);
+  background:
+    linear-gradient(rgba(255, 250, 200, .09), rgba(255, 250, 200, .09)) center / 24px 24px no-repeat,
+    linear-gradient(rgba(255, 236, 150, .1), rgba(255, 236, 150, .1)) center / 48px 32px no-repeat,
+    linear-gradient(rgba(255, 236, 150, .1), rgba(255, 236, 150, .1)) center / 32px 48px no-repeat,
+    linear-gradient(rgba(255, 226, 120, .13), rgba(255, 226, 120, .13)) center / 64px 48px no-repeat,
+    linear-gradient(rgba(255, 226, 120, .13), rgba(255, 226, 120, .13)) center / 48px 64px no-repeat;
+  animation: r78bGhostBlink 1s steps(2, jump-none) infinite;
+}
+.r77a-refract-ghost::after { content: "折到這格"; position: absolute; left: 50%; bottom: 3px; transform: translateX(-50%); padding: 0 4px; border: 1px solid #7a4a00; background: #fff3b0; color: #4a3200; font-size: 10px; font-weight: 900; line-height: 14px; white-space: nowrap; }
+@keyframes r78bGhostBlink { 0% { opacity: 1; } 100% { opacity: .78; } }
+/* 光裡收成的大字：「多 1 份」「陽光 +N」兩塊硬邊字牌，蓋在剛收的那一格上，分三段往上跳再收掉。 */
+.r78b-sun-pop { position: fixed; z-index: 9915; display: grid; justify-items: center; gap: 2px; margin: 14px 0 0; transform: translate(-50%, 0); pointer-events: none; animation: r78bSunPop 1.8s steps(9, end) both; }
+.r78b-sun-pop-line { display: block; padding: 1px 9px; border: 2px solid #5a3200; background: #fff3b0; color: #5a3200; font-size: 20px; font-weight: 900; line-height: 1.2; white-space: nowrap; box-shadow: 2px 2px 0 #5a3200, inset 0 -3px 0 #ffd75a; text-shadow: 1px 1px 0 #ffffff; }
+.r78b-sun-pop-line.r78b-sun-pop-sun { background: #ffc233; color: #3d2400; box-shadow: 2px 2px 0 #5a3200, inset 0 -3px 0 #f09a12; text-shadow: 1px 1px 0 #ffe9a8; }
+.r78b-sun-pop-line.r78b-sun-pop-sun::before { content: "☀ "; }
+@keyframes r78bSunPop { 0% { transform: translate(-50%, 8px); opacity: 0; } 12% { transform: translate(-50%, 0); opacity: 1; } 78% { transform: translate(-50%, -4px); opacity: 1; } 100% { transform: translate(-50%, -12px); opacity: 0; } }
+/* 減少動態與低效能模式：字牌與預覽光斑不動，照樣看得到。 */
+@media (prefers-reduced-motion: reduce) { .r78b-sun-pop, .r77a-refract-ghost { animation: none; } }
+html[data-performance-tier="low"] .r78b-sun-pop, html.perf-low .r78b-sun-pop,
+html[data-performance-tier="low"] .r77a-refract-ghost, html.perf-low .r77a-refract-ghost { animation: none; }
 /* ===== R78B 結束 ===== */
 
 /* R78 分隔：三條線各寫各的區段，不要寫到別的區段。 */

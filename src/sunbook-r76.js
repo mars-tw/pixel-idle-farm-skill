@@ -475,7 +475,8 @@
    * 碰到下方工具列或手機操作鍵就縮短，幾秒後自己收掉，也可以點掉。 */
   let cardTimer = 0, cardWatch = 0, cardWait = 0, cardFrame = 0, cardQueue = [], cardShown = [];
   /* 升級卡、結算卡跟小卡都排在右上角，同時出來會疊在一起（小卡整張蓋住升級卡）；它們 2.5 秒就收，小卡排在後面等。 */
-  const BLOCKERS = ".r75b-cook-overlay, .r75a-rack-overlay, .r76b-dialogue, .modal.show, #toast-zone .settlement-card";
+  /* R78B 第 5 項：最後兩個是互動層級的掛點——照顧方式彈窗還在、或 <html data-r78-focus> 標著有主要面板開著時，集章小卡先收起來排隊。 */
+  const BLOCKERS = ".r75b-cook-overlay, .r75a-rack-overlay, .r76b-dialogue, .modal.show, #toast-zone .settlement-card, .r74a-care-popover, html[data-r78-focus]:not([data-r78-focus=\"\"]) body";
   function blocked() { return !!document.querySelector(BLOCKERS); }
   function cardNode() {
     let node = document.getElementById("r76cStampCard");

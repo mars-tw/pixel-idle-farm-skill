@@ -420,7 +420,9 @@
     const c = tileCenter(tileId);
     screenBurst(c.x, c.y, ["\u2728", "\u2600\ufe0f", "\u2728"], { count: 6, distance: 42, className: "sun-particle" });
     const resultText = sun.kind === "harvest" ? sunHarvestResultText(sun, "") : sunGrowthResultText(sun);
-    floatText(c.x, c.y - 116, resultText, "#ffe680");
+    /* R78B 第 6 項：光裡收成改跳「多 1 份」「陽光 +N」兩行大字（FarmSunplay.harvestPopText 從這次收成的結果組出來）；光裡種下、或大字放不出來時維持原本那一行。 */
+    const popLines = sun.kind === "harvest" && window.FarmSunplay && window.FarmSunplay.harvestPopText ? window.FarmSunplay.harvestPopText({ sun }) : [];
+    if (!(popLines.length && r78bSunPop(c, popLines))) floatText(c.x, c.y - 116, resultText, "#ffe680");
     playSound("sun");
     const beam = worldEl && worldEl.querySelector('.sun-beam[data-tile-id="' + tileId + '"]');
     if (beam) { beam.classList.add("caught"); }
@@ -888,12 +890,7 @@
     const care = document.createElement("div");
     care.className = "r72a-care-picker r74a-care-popover";
     care.ariaLabel = "選擇照顧方式";
-    const careEffectText = (mode) => {
-      if (!mode) return "";
-      if (mode.id === "water") return "勤澆水：生長時間縮短 25%";
-      if (mode.id === "compost") return `施堆肥：產量 +1，30% 優質，用掉 1 份堆肥（剩 ${Math.max(0, Number(state.materials && state.materials.compost) || 0)}）`;
-      return "放著長：生長時間增加 20%，收成帶回 1 包種子";
-    };
+    const careEffectText = (mode) => r78bCareSummary(mode, true);
     const modes = Object.values(G.FARM_CARE || {});
     /* R77A 第 3 項：彈窗開在某一株上時，三種照顧方式各寫這一株的實際秒數與份數（G.careForecast 用 plotGrowMs 與收成公式算，季節、天氣、料理、光都算在內）；
        沒有指到哪一株（只是在種子列選預設照顧方式）時維持原本那一句說明。 */
@@ -903,7 +900,10 @@
     const careEffectHtml = careRows.length
       ? careRows.map((row) => `<span class="r77a-care-row${row.id === careSelected ? " sel" : ""}" data-care-row="${row.id}" data-care-seconds="${row.seconds}" data-care-qty="${row.qty}">${escapeHtml(row.text)}</span>`).join("")
       : careEffectText(G.FARM_CARE && G.FARM_CARE[selectedCare]);
-    care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect${careRows.length ? " r77a-care-rows" : ""}" data-care-effect role="status">${careEffectHtml}</div>`;
+    /* R78B 第 3 項：彈窗多一行「這次為什麼選這個」，跟著手上的限時訂單、祭典、種子存量變（G.careAdvice），並在最適合的那一顆上做記號。 */
+    const careWhy = careRows.length && G.careAdvice ? G.careAdvice(state, carePopoverPlotIndex, now()) : null;
+    const careWhyHtml = careWhy && careWhy.ok ? `<div class="r78b-care-why" data-care-why="${careWhy.need}" data-care-best="${careWhy.best}" role="note">${escapeHtml(careWhy.text)}</div>` : "";
+    care.innerHTML = `<div class="r73a-care-segments" role="group" aria-label="照顧方式">${modes.map((mode) => `<button type="button" class="r72a-care ${selectedCare === mode.id ? "sel" : ""}${careWhy && careWhy.ok && careWhy.best === mode.id ? " r78b-care-best" : ""}" data-care="${mode.id}" aria-pressed="${selectedCare === mode.id ? "true" : "false"}" ${mode.id === "compost" && !(state.materials && state.materials.compost > 0) ? "disabled" : ""}><span class="r73a-care-icon" aria-hidden="true">${mode.icon}</span><span class="r73a-care-name">${mode.name}</span></button>`).join("")}</div><div class="r73a-care-effect${careRows.length ? " r77a-care-rows" : ""}" data-care-effect role="status">${careEffectHtml}</div>${careWhyHtml}`;
     care.querySelectorAll("[data-care]").forEach((button) => button.onclick = (event) => {
       event.preventDefault(); event.stopPropagation();
       const nextCare = button.dataset.care;
@@ -951,6 +951,7 @@
         care.dataset.tileId = careTile.id;
         scene.appendChild(care);
         placeSceneOverlay(care, tileViewportPoint(careTile.id, .05));
+        r78bPlaceCarePopover(care, careTile);
       }
     }
 
@@ -971,9 +972,243 @@
   function showCarePopover(tileId, plotIndex) {
     if (carePopoverTimer) clearTimeout(carePopoverTimer);
     carePopoverTileId = tileId; carePopoverPlotIndex = plotIndex;
+    /* R78B 第 3 項：被點的那一格沒有整格在畫面裡（被底下那一排或畫面邊緣切到）時，先把鏡頭帶過去，彈窗才有地方貼著它。 */
+    if (!r78bTileOnScreen(tileId, true)) focusCameraOnTile(tileId);
     renderSeeds();
     /* R77A：彈窗現在有三行實際數字要看，停留時間由 4 秒拉長到 6.5 秒。 */
     carePopoverTimer = setTimeout(() => { clearCarePopover(); }, 6500);
+  }
+  /* R78B：三種照顧方式的說明只從 G.FARM_CARE 的數值組出來，彈窗與田上的小徽章共用，數值改了兩邊一起變。 */
+  function r78bCareSummary(mode, withStock) {
+    if (!mode) return "";
+    const parts = [];
+    const mul = Number(mode.growMul) || 1;
+    if (mul !== 1) parts.push(`生長時間${mul < 1 ? "縮短" : "增加"} ${Math.round(Math.abs(1 - mul) * 100)}%`);
+    if (mode.yieldBonus) parts.push(`產量 +${mode.yieldBonus}`);
+    if (mode.qualityChance) parts.push(`${Math.round(mode.qualityChance * 100)}% 優質`);
+    if (withStock && mode.id === "compost") parts.push(`用掉 1 份堆肥（剩 ${Math.max(0, Number(state.materials && state.materials.compost) || 0)}）`);
+    if (mode.seedBack) parts.push(`收成帶回 ${mode.seedBack} 包種子`);
+    return mode.name + "：" + parts.join("，");
+  }
+  /* R78B：量畫面上的方框。量不到（元素不在畫面上、或測試用的假畫面）就回 null，呼叫的地方一律當成「不用處理」。 */
+  function r78bBox(el) {
+    try {
+      if (!el || typeof el.getBoundingClientRect !== "function") return null;
+      const r = el.getBoundingClientRect();
+      if (!r || !(r.width > 0) || !(r.height > 0)) return null;
+      return { left: r.left, top: r.top, right: r.left + r.width, bottom: r.top + r.height, width: r.width, height: r.height };
+    } catch (e) { return null; }
+  }
+  function r78bHit(a, b, gap) {
+    const g = gap || 0;
+    return !!(a && b && a.left < b.right + g && a.right > b.left - g && a.top < b.bottom + g && a.bottom > b.top - g);
+  }
+  /* 場景真正看得到的範圍：場景框與視窗的交集，底邊再扣掉固定在畫面下方的那一排。 */
+  function r78bSceneBox() {
+    try {
+      const sr = r78bBox($("mapScene"));
+      if (!sr) return null;
+      const viewW = window.innerWidth || sr.right, viewH = window.innerHeight || sr.bottom;
+      let inset = 0;
+      try { inset = Number(measureFixedBottomInset().inset) || 0; } catch (e) { inset = 0; }
+      const box = { left: Math.max(sr.left, 0), top: Math.max(sr.top, 0), right: Math.min(sr.right, viewW), bottom: Math.min(sr.bottom, viewH - inset) };
+      return box.right > box.left && box.bottom > box.top ? box : null;
+    } catch (e) { return null; }
+  }
+  function r78bTileOnScreen(tileId, whole) {
+    const view = r78bSceneBox(), box = r78bBox(tileElOf(tileId));
+    if (!view || !box) return true;
+    if (whole) return box.left >= view.left - 1 && box.right <= view.right + 1 && box.top >= view.top - 1 && box.bottom <= view.bottom + 1;
+    const cx = (box.left + box.right) / 2, cy = (box.top + box.bottom) / 2;
+    return cx >= view.left && cx <= view.right && cy >= view.top && cy <= view.bottom;
+  }
+  /* R78B 第 3 項：照顧方式彈窗貼著被點的那一格，但不蓋住那一格、光的預告圈與光的提示條；放得下時也不蓋住其他田與固定介面。
+     先看現在的位置能不能用，不行才在場景裡找離那一格最近的空位；同一個畫面每次算出來的位置都一樣，不會跳來跳去。 */
+  function r78bPlaceCarePopover(care, tile) {
+    try {
+      const view = r78bSceneBox(), own = r78bBox(care), tileBox = tile ? r78bBox(tileElOf(tile.id)) : null;
+      if (!view || !own || !tileBox) return false;
+      const shown = (n) => { try { const cs = getComputedStyle(n); return cs.visibility !== "hidden" && cs.display !== "none"; } catch (e) { return true; } };
+      const boxes = (list) => list.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => n !== care && !care.contains(n) && !n.hidden && shown(n)).map(r78bBox).filter(Boolean);
+      const must = [tileBox].concat(boxes([".r75a-sun-preview", ".r77a-refract-ghost", "#sunChip"]));
+      const active = G.activePlotCount(state);
+      const field = state.map.tiles.filter((row) => row.plotIndex != null && row.plotIndex < active && row.id !== tile.id).map((row) => r78bBox(tileElOf(row.id))).filter((b) => b && r78bHit(b, view, 0));
+      const dock = boxes(["#questDock", "#toast-zone > *"]);
+      const core = dock.concat(boxes(["header", "#farmDock", ".tool-bar", ".side-tabs", "#mobileControls button", "#actionA"]));
+      const hud = core.concat(boxes([".seed-hud", "#worldLocation", "#worldMinimap", "#sceneActionBar > *", "#tileStateLabel", "#r76cStampCard"]));
+      const minL = view.left + 6, maxL = view.right - 6 - own.width, minT = view.top + 6, maxT = view.bottom - 6 - own.height;
+      if (maxL < minL || maxT < minT) return false;
+      const cx = (tileBox.left + tileBox.right) / 2, cy = (tileBox.top + tileBox.bottom) / 2;
+      const free = (L, T, blockers) => { const box = { left: L, top: T, right: L + own.width, bottom: T + own.height }; return !blockers.some((b) => r78bHit(box, b, 4)); };
+      /* 放不下時的退讓順序：先讓出田上標籤與場景動作鈕（彈窗開著那幾秒先選照顧方式），再不行才蓋到別格田；被點的那格、預告圈、光的提示條永遠不蓋。 */
+      const tiers = [must.concat(field, hud), must.concat(field, core), must.concat(hud), must.concat(dock), must];
+      if (own.left >= minL - 1 && own.left <= maxL + 1 && own.top >= minT - 1 && own.top <= maxT + 1 && free(own.left, own.top, tiers[0])) return true;
+      const xs = [], ys = [];
+      for (let L = minL; L <= maxL; L += 12) xs.push(L);
+      xs.push(maxL, Math.min(maxL, Math.max(minL, cx - own.width / 2)));
+      for (let T = minT; T <= maxT; T += 12) ys.push(T);
+      ys.push(maxT, Math.min(maxT, Math.max(minT, tileBox.top - own.height - 8)), Math.min(maxT, Math.max(minT, tileBox.bottom + 8)));
+      let best = null;
+      for (const blockers of tiers) {
+        for (const L of xs) for (const T of ys) {
+          if (!free(L, T, blockers)) continue;
+          const dx = Math.max(L - cx, 0, cx - (L + own.width)), dy = Math.max(T - cy, 0, cy - (T + own.height));
+          const score = dx * dx + dy * dy + Math.abs(L + own.width / 2 - cx) * 0.25;
+          if (!best || score < best.score) best = { L, T, score };
+        }
+        if (best) break;
+      }
+      if (!best) return false;
+      care.style.left = Math.round((parseFloat(care.style.left) || 0) + best.L - own.left) + "px";
+      care.style.top = Math.round((parseFloat(care.style.top) || 0) + best.T - own.top) + "px";
+      care.dataset.r78bPlaced = "true";
+      return true;
+    } catch (e) { return false; }
+  }
+  /* 彈窗開著的那幾秒，三行「約幾秒」跟著時間往下數，不會停在剛種下去那一刻的數字（別處寫 11 秒、這裡還寫 12 秒）。 */
+  function r78bRefreshCareRows(care) {
+    const forecast = carePopoverPlotIndex != null && G.careForecast ? G.careForecast(state, carePopoverPlotIndex, now()) : null;
+    if (!forecast || !forecast.ok) return;
+    forecast.rows.forEach((row) => {
+      const node = care.querySelector('[data-care-row="' + row.id + '"]');
+      if (!node) return;
+      if (node.textContent !== row.text) node.textContent = row.text;
+      if (node.dataset.careSeconds !== String(row.seconds)) node.dataset.careSeconds = String(row.seconds);
+    });
+  }
+  /* R78B 第 2 項：熟了、光又快落在這一格時，標籤直接寫出兩個結果讓玩家選——現在收幾份、等幾秒收幾份加多少陽光。
+     數字都從規則那一支算出來；秒數跟預告圈、提示條同一拍更新。光一落下這一行就拿掉。 */
+  var r78bLabelKey = "";
+  function r78bChoiceFor(tile) {
+    try { return tile && tile.plotIndex != null && G.lightHarvestChoice ? G.lightHarvestChoice(state, tile.plotIndex, now()) : null; } catch (e) { return null; }
+  }
+  function r78bLabelKeyFor(tile, text) {
+    const choice = r78bChoiceFor(tile);
+    return tile.id + "|" + text + "|" + (choice && choice.ok ? choice.nowText + "|" + choice.waitText.replace(/^等 \d+ 秒/, "") : "");
+  }
+  function r78bWaitChoiceRow(label, tile, text) {
+    const choice = r78bChoiceFor(tile);
+    if (!choice || !choice.ok || !label) return false;
+    try {
+      const row = document.createElement("span");
+      row.className = "r78b-wait-choice";
+      row.dataset.audit = "r78b-wait-choice";
+      const secs = document.createElement("b");
+      secs.setAttribute("data-r78b-light-secs", "");
+      secs.textContent = choice.seconds + " 秒";
+      row.appendChild(document.createTextNode("\n" + choice.nowText + "｜等 "));
+      row.appendChild(secs);
+      row.appendChild(document.createTextNode(choice.waitText.replace(/^等 \d+ 秒/, "")));
+      label.textContent = String(text).split("\n")[0];
+      label.appendChild(row);
+      return true;
+    } catch (e) { return false; }
+  }
+  /* R78B 第 7 項：右下互動鈕——面前（或剛點選、就在身邊）的田還在長、現在沒有事可做時，就寫它自己的狀態，不借旁邊那一格的「種植・空田」；
+     看不到的田也不拿來當按鈕文字。按下去做的事跟按鈕上的字用同一個判斷。 */
+  function r78bFacingCropLabel(tile) {
+    try { return tile && G.facingPlotLabel ? G.facingPlotLabel(state, tile, now()) : ""; } catch (e) { return ""; }
+  }
+  function r78bOwnCropTile(facing) {
+    try {
+      if (!facing) return null;
+      const idle = (tile) => !!tile && !sceneActionsForTile(tile).length && interactLabelFor(tile) === "互動" && !!r78bFacingCropLabel(tile);
+      if (idle(facing)) return facing;
+      if (sceneActionsForTile(facing).length || interactLabelFor(facing) !== "互動") return null;
+      const picked = selectedTileId ? G.getTileById(state, selectedTileId) : null;
+      const pt = G.getTileById(state, state.player.tileId);
+      return picked && pt && Math.abs(picked.x - pt.x) + Math.abs(picked.y - pt.y) === 1 && idle(picked) ? picked : null;
+    } catch (e) { return null; }
+  }
+  function r78bPlotInSight(tile) { return !tile || tile.plotIndex == null || r78bTileOnScreen(tile.id, false); }
+  function r78bGrowingToast(tile) {
+    const plot = tile && tile.plotIndex != null ? state.plots[tile.plotIndex] : null;
+    const crop = plot && plot.cropId ? window.CROPS[plot.cropId] : null;
+    if (!crop) return false;
+    const left = G.getCropProgress(state, plot, now()).remainingMs;
+    toast(`${crop.name}還在長，約 ${G.careDurationText ? G.careDurationText(left) : fmtTime(left)}後可以收。`);
+    return true;
+  }
+  /* R78B 第 6 項：光裡收成的當下，在那一格上方跳出「多 1 份」「陽光 +N」兩行大字（像素風、整數像素位移），不蓋住最上面的資源列。 */
+  function r78bSunPop(c, lines) {
+    try {
+      if (!c || !lines || !lines.length || !document.body || typeof document.createElement !== "function") return false;
+      document.querySelectorAll(".r78b-sun-pop").forEach((n) => n.remove());
+      const pop = document.createElement("div");
+      pop.className = "r78b-sun-pop";
+      pop.dataset.audit = "r78b-sun-pop";
+      pop.setAttribute("role", "status");
+      lines.forEach((line, index) => {
+        const row = document.createElement("b");
+        row.className = "r78b-sun-pop-line" + (index ? " r78b-sun-pop-sun" : "");
+        row.textContent = line;
+        pop.appendChild(row);
+      });
+      const vw = window.innerWidth || 0;
+      pop.style.left = Math.round(vw ? Math.max(84, Math.min(vw - 84, c.x)) : c.x) + "px";
+      pop.style.top = Math.round(c.y - (c.h || 64) / 2 - 10) + "px";
+      document.body.appendChild(pop);
+      const head = r78bBox(document.querySelector("header")), own = r78bBox(pop);
+      const minTop = (head ? head.bottom : 0) + 6;
+      if (own && own.top < minTop) pop.style.top = Math.round(parseFloat(pop.style.top) + (minTop - own.top)) + "px";
+      setTimeout(() => { pop.remove(); }, 1800);
+      return true;
+    } catch (e) { return false; }
+  }
+  /* R78B 第 5 項：一次只有一個主要互動層。哪些算主要層、哪些算提示卡、誰讓誰，規則集中在 FarmSunplay 的那一支函式；
+     這裡只量畫面現況，把結果寫到 <html> 的 data-r78-focus／data-r78-card 與任務卡的 r78b-folded，樣式跟著這幾個記號走，不在每個面板各寫一次。 */
+  const R78B_PRIMARY = {
+    modal: ".modal.show",
+    dialogue: "#worldDialogue:not([hidden]), .r76b-dialogue",
+    cook: ".r75b-cook-overlay",
+    rack: ".r75a-rack-overlay",
+    panel: ".side-panel.world-panel-open",
+    menu: "#farmMenu:not([hidden])",
+    build: "#buildWheel:not([hidden])",
+  };
+  const R78B_CARDS = {
+    settlement: "#toast-zone .settlement-card",
+    care: ".r74a-care-popover",
+    stamp: "#r76cStampCard:not([hidden])",
+  };
+  function r78bSyncFocus() {
+    const seen = (sel) => { try { return [...document.querySelectorAll(sel)].some((n) => !n.hidden && n.getClientRects().length > 0); } catch (e) { return false; } };
+    const there = (sel) => { try { return !!document.querySelector(sel); } catch (e) { return false; } };
+    const open = Object.keys(R78B_PRIMARY).filter((key) => seen(R78B_PRIMARY[key]));
+    const cards = Object.keys(R78B_CARDS).filter((key) => there(R78B_CARDS[key]));
+    const rule = window.FarmSunplay.focusRule({ open, cards });
+    const root = document.documentElement;
+    const primary = rule.primary || "", card = rule.card || "";
+    if (root.dataset.r78Focus !== primary) root.dataset.r78Focus = primary;
+    if (root.dataset.r78Card !== card) root.dataset.r78Card = card;
+    const dock = $("questDock"), folded = rule.questDock === "folded";
+    if (dock && dock.classList.contains("r78b-folded") !== folded) dock.classList.toggle("r78b-folded", folded);
+    /* 對話框開著時提示讓到它的上方；對話框換了位置就重量一次。對話框在畫面上半部時，提示留在原本的底部位置，不被推到資源列上或畫面外。 */
+    try {
+      const talk = document.querySelector("#worldDialogue:not([hidden])"), high = window.innerHeight || 0;
+      const box = talk && talk.getBoundingClientRect ? talk.getBoundingClientRect() : null;
+      if (box && box.height > 0 && high > 0 && root.style && root.style.setProperty) {
+        const gap = box.top + box.height / 2 < high / 2 ? "calc(var(--fixed-bottom-inset, 0px) + 18px)" : Math.round(high - box.top + 8) + "px";
+        if (root.style.getPropertyValue("--world-dialogue-top-gap") !== gap) root.style.setProperty("--world-dialogue-top-gap", gap);
+      }
+    } catch (e) { /* 量不到就沿用原本的位置 */ }
+    return rule;
+  }
+  var r78bCareHeld = false;
+  function r78bFocusTick() {
+    try {
+      const rule = r78bSyncFocus();
+      const care = document.querySelector(".r74a-care-popover");
+      const careTile = care && carePopoverTileId ? G.getTileById(state, carePopoverTileId) : null;
+      /* 照顧彈窗被結算卡排在後面時先不倒數，輪到它才開始算那 6.5 秒；主要面板開著就照原本的時間收掉，不留到之後才冒出來。 */
+      const waiting = !!careTile && !rule.primary && rule.card !== "care";
+      if (waiting) { r78bCareHeld = true; if (carePopoverTimer) { clearTimeout(carePopoverTimer); carePopoverTimer = null; } }
+      else if (r78bCareHeld) { r78bCareHeld = false; if (careTile) { if (carePopoverTimer) clearTimeout(carePopoverTimer); carePopoverTimer = setTimeout(() => { clearCarePopover(); }, 6500); } }
+      if (careTile && !waiting) { r78bRefreshCareRows(care); r78bPlaceCarePopover(care, careTile); }
+      const label = $("tileStateLabel");
+      const labelTile = label && !label.hidden && label.dataset.tileId ? G.getTileById(state, label.dataset.tileId) : null;
+      if (labelTile && r78bLabelKeyFor(labelTile, tileStateLabelText(labelTile)) !== r78bLabelKey) { renderTileStateLabel(labelTile); syncFloatingLabels(); }
+    } catch (e) {}
   }
   function plantingCareMode() {
     if (selectedCare !== "compost" || Math.max(0, Number(state.materials && state.materials.compost) || 0) > 0) return selectedCare;
@@ -1278,7 +1513,7 @@
 
     // hand（預設）：種植 / 收成
     if (!plot.cropId) {
-      const r = G.plant(state, i, selectedSeed, t, plantingCareMode());
+      const r = G.plant(state, i, selectedSeed, t, G.firstRoundCare(state) || plantingCareMode());
       if (!r.ok) {
         if (r.reason === "no_coins") toast("🪙 金幣不足，先賣點作物");
         else if (r.reason === "no_compost") toast("🍂 堆肥不足，換一種照顧方式吧");
@@ -3197,7 +3432,7 @@
         if (el) {
           el.dataset.crop = plot.cropId; el.dataset.tileId = tile.id; el.classList.toggle('sun-grown',plot.sunGrown===true); el.classList.toggle('sunlit-crop',!!(G.isSunlit && G.isSunlit(state,tile.plotIndex,t)));
           const mode = G.FARM_CARE && G.FARM_CARE[plot.careMode];
-          if (mode) { const careHint = mode.id === "water" ? "勤澆水：生長時間縮短 25%" : mode.id === "compost" ? "施堆肥：產量 +1，30% 優質" : "放著長：生長時間增加 20%，收成帶回 1 包種子"; const badge = document.createElement("span"); badge.className = "r72a-plot-care"; badge.textContent = mode.icon; badge.title = careHint; badge.dataset.careDescription = careHint; badge.setAttribute("aria-label", careHint); el.appendChild(badge); }
+          if (mode) { const careHint = r78bCareSummary(mode, false); const badge = document.createElement("span"); badge.className = "r72a-plot-care"; badge.textContent = mode.icon; badge.title = careHint; badge.dataset.careDescription = careHint; badge.setAttribute("aria-label", careHint); el.appendChild(badge); }
         }
         if (prog.ready) {
           cropMatureCue("map:" + tile.plotIndex, tile.id, el);
@@ -3966,7 +4201,12 @@
     const lightInfo = plot && plot.cropId && window.FarmSunplay ? window.FarmSunplay.traitInfo(plot.cropId) : null;
     const lightPreview = plot && plot.cropId && window.FarmSunplay && window.FarmSunplay.harvestPreview ? window.FarmSunplay.harvestPreview(state, plot, sunlit).text : "";
     const sunEffect = lightInfo && lightInfo.id === "sun" ? "在光裡：生長加速・收成 +1" : "在光裡：生長加速";
-    const sunSuffix = lightPreview ? `\n${lightPreview}` : sunlit ? `\n${sunEffect}` : "";
+    /* R78B：光快落在這一格時，標籤不再寫「還沒照到」（下面折光說明會接著寫「這格本來就會照到光」，兩句打架），改成講同一件事。 */
+    const lightSoon = !sunlit && !!(plot && plot.cropId) && !!(G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex));
+    const lightLine = !lightSoon || lightPreview.indexOf("・還沒照到：") < 0 ? lightPreview
+      : lightInfo && lightInfo.id === "shade" ? lightPreview.replace(/・還沒照到：.*$/, "・光快落在這格了：照到就沒有陰涼加成")
+      : lightPreview.replace("・還沒照到：", "・光快落在這格了：");
+    const sunSuffix = lightLine ? `\n${lightLine}` : sunlit ? `\n${sunEffect}` : "";
     if (!plot || !plot.cropId) return "空地・可種植" + sunSuffix;
     const crop = window.CROPS[plot.cropId];
     const name = crop ? crop.name : "作物";
@@ -4003,7 +4243,10 @@
     }
     label.textContent = text;
     /* R77A 第 1 項：折光之前先寫出折過來會怎樣；不能折也寫原因。句子全部來自 FarmSunplay.refractPreview（跟動作列的折光鈕同一份規則）。 */
-    const refractNote = refractNoteForTile(tile, text);
+    /* R78B 第 2 項：熟了又有光要來的那一格，改寫成有數字的二選一（現在收幾份｜等幾秒收幾份＋陽光），這時不再疊折光說明。 */
+    r78bLabelKey = r78bLabelKeyFor(tile, text);
+    const waitChoice = r78bWaitChoiceRow(label, tile, text);
+    const refractNote = waitChoice ? "" : refractNoteForTile(tile, text);
     if (refractNote) { const note = document.createElement("span"); note.className = "r77a-refract-note"; note.dataset.audit = "r77a-refract-note"; note.textContent = "\n" + refractNote; label.appendChild(note); }
     label.dataset.tileId = tile.id;
     label.classList.remove("tile-state-label-below");
@@ -4647,8 +4890,8 @@
     const t = now();
     const face = state.player.facing;
     if (action === "plant") {
-      const r = G.plant(state, tile.plotIndex, selectedSeed, t, plantingCareMode());
-      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) { sunCatchFx(tileId, r.sun); toast("🌱 在光裡種下：" + sunGrowthResultText(r.sun)); } afterChange(true); showCarePopover(tileId, tile.plotIndex); }
+      const r = G.plant(state, tile.plotIndex, selectedSeed, t, G.firstRoundCare(state) || plantingCareMode());
+      if (r.ok) { if (!animationStarted) playAction("sow", face); playSound("plant"); spawnVfx(tileId, "seed_scatter"); G.advanceStory(state, "plant"); if (r.sun) { sunCatchFx(tileId, r.sun); toast("🌱 在光裡種下：" + sunGrowthResultText(r.sun)); } afterChange(true); if (G.careIntroOpen(state)) showCarePopover(tileId, tile.plotIndex); }
       else { spawnRing(tileId, false); toast(r.reason === "no_coins" ? "🪙 金幣不足" : r.reason === "no_compost" ? "🍂 堆肥不足，換一種照顧方式吧" : r.reason === "locked_crop" ? "🔒 作物未解鎖" : "無法種植"); }
     } else if (action === "harvest") {
       if (quickHarvestTarget === tileId) {
@@ -4659,7 +4902,7 @@
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
-        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 1 包種子" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } enqueueResultFeedback(r); afterChange(true); }
+        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 " + r.seedBack + " 包種子" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } enqueueResultFeedback(r); afterChange(true); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧 在光裡澆水：" + sunGrowthResultText(r.sun) : "💧 澆水變濕土加速"); afterChange(false); }
@@ -5199,6 +5442,7 @@
     if (hasOpenModal()) return;
     const tile = facingTile();
     if (!tile) { toast("前方沒有目標"); return; }
+    const ownCrop = r78bOwnCropTile(tile);
     selectedTileId = tile.id;
     state.interaction.selectedTileId = tile.id;
     renderTileContext();
@@ -5211,8 +5455,13 @@
     else {
       /* R77A 第 5 項：面前那格沒事可做、互動鈕寫的是旁邊那一格的事（跟 updateQuickHarvest 同一個找法）時，按下去就做旁邊那一格，
          不再只跳「這裡不能做」。只接互動鈕上寫得出名字的事（種植、澆水、交談、使用、採集）；清除與建造要花錢或要選項目，不代按。 */
+      /* R78B 第 7 項：按鈕上寫的是「生長中・某某田」時，按下去就說這一格還要多久，不去代做旁邊那一格的事。 */
+      if (ownCrop && r78bPlotInSight(ownCrop)) {
+        if (ownCrop.id !== tile.id) { selectedTileId = ownCrop.id; state.interaction.selectedTileId = ownCrop.id; renderTileContext(); renderSceneActionsForSelection(); }
+        if (r78bGrowingToast(ownCrop)) return;
+      }
       const pt = G.getTileById(state, state.player.tileId);
-      const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length) : null;
+      const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length && r78bPlotInSight(row)) : null;
       const nearLabel = near ? interactLabelFor(near) : "互動";
       const nearAction = near && nearLabel !== "互動" ? sceneActionsForTile(near).find((a) => a.action !== "build" && a.action !== "clear" && a.enabled !== false) : null;
       if (near && nearLabel.startsWith("等光・")) toast("光快落在這格了，等光到了再收成，多接 1 點陽光。");
@@ -5233,11 +5482,15 @@
     else {
       const facing = facingTile();
       if (facing && G.interactionLabelForTile) targetLabel = interactLabelFor(facing);
-      if (targetLabel === "互動") {
+      /* R78B 第 7 項：面前（或剛點選、就在身邊）的田還在長，按鈕就寫它自己的狀態，不借旁邊那一格的「種植・空田」；看不到的田也不拿來當按鈕文字。 */
+      const own = targetLabel === "互動" ? r78bOwnCropTile(facing) : null;
+      if (own && r78bPlotInSight(own)) targetLabel = r78bFacingCropLabel(own);
+      else if (targetLabel === "互動") {
         const pt = G.getTileById(state, state.player.tileId);
-        const neighbor = pt && [[0,-1],[0,1],[-1,0],[1,0]].map(([dx,dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((tile) => tile && sceneActionsForTile(tile).length);
+        const neighbor = pt && [[0,-1],[0,1],[-1,0],[1,0]].map(([dx,dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((tile) => tile && sceneActionsForTile(tile).length && r78bPlotInSight(tile));
         if (neighbor && G.interactionLabelForTile) targetLabel = interactLabelFor(neighbor);
       }
+      else if (!r78bPlotInSight(facing)) targetLabel = "互動";
     }
     try { if (nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
     action.textContent = busy ? "收成中" : targetLabel;
@@ -5636,6 +5889,7 @@
     setupSideTabs();
     setupPanelScrollHint();
     setupQuestDockCollapse();
+    setInterval(r78bFocusTick, 250);
     startPerformanceMonitor();
     setupPwa();
 

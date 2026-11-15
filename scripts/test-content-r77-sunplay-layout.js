@@ -39,6 +39,8 @@ const BOX = "const box = (n) => { const r = n.getBoundingClientRect(); return { 
         const s = __farm.state(), now = Date.now();
         s.adventure.claimed.c1_first_harvest = true; AdventureAPI.ensure(s, now);
         s.level = 4; s.coins = 500; s.storage.items.wheat = 6; s.materials.compost = 3;
+        /* R78B 第 1 項同步：新存檔第一次種植不再跳照顧方式（預設勤澆水），第二輪才介紹；這裡測的是照顧彈窗的三行數字，所以先標成已經學過。 */
+        s.flags.r78CareIntro = true;
         FarmSunplay.normalize(s); s.r75Sunplay.sunlight = 3; s.r75Sunplay.firstCaught = true;
         __farm.refresh(); FarmWorld.refresh(s);
       });

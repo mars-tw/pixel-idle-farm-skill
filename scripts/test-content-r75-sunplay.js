@@ -59,7 +59,8 @@ test("光快落在已經熟的作物上：先留著等光，光到了才叫玩�
   const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光到了再收成/);
   /* R76 整合：手上還有種子包時，這幾秒先叫玩家去種別格；等光的那一格要一起帶出去，田上才會寫「先別收」、收成鈕先收起來（原本手機上任務卡說去種小麥、田上卻寫可收成）。 */
   s.adventure.r58.r59.seedPacks.wheat = 2;
-  const sow = Adventure.nextFarmStep(s, 2000); assert.equal(sow.action, "plant"); assert.notEqual(sow.plotIndex, 0, "種的是別格，不是等光的那一格"); assert.equal(sow.holdPlotIndex, 0, "去種別格時，等光的那一格仍標成留著"); s.adventure.r58.r59.seedPacks.wheat = 0;
+  /* R78B 規則改了：等光的那一格已經熟了，就只講「等光再收」，不再叫玩家去種小麥（任務卡寫去種小麥、田上寫先別收對不起來）；等光的那一格照樣帶出去。 */
+  const sow = Adventure.nextFarmStep(s, 2000); assert.equal(sow.action, "catch_sun"); assert.equal(sow.plotIndex, 0, "熟了的那一格等光再收，不叫玩家去種別格"); assert.equal(sow.holdPlotIndex, 0, "等光的那一格仍標成留著"); s.adventure.r58.r59.seedPacks.wheat = 0;
   const uiSrc = require("fs").readFileSync(require("path").join(__dirname, "../src/ui.js"), "utf8"); assert.equal((uiSrc.match(/nextStep\.holdPlotIndex === tile\.plotIndex/g) || []).length, 2, "田上標籤與動作鈕都要認得留著等光的那一格");
   Game.plant(s, 1, "wheat", 2000); s.plots[1].plantedAt = 2000 - Game.plotGrowMs(s, s.plots[1], 2000) - 1; const other = Adventure.nextFarmStep(s, 2001); assert.equal(other.action, "harvest"); assert.equal(other.plotIndex, 1, "光還沒到時先收別格"); assert.equal(other.holdPlotIndex, 0, "先收別格時，等光的那一格仍標成留著");
   /* R76 整合：右下互動鈕（快速收成）原本照樣寫「收成・小麥田」並走去收等光的那一格。現在快速收成不算那一格，只帶玩家去收別格；面前只剩那一格時按鈕改寫「等光」，按下去只提醒。 */
