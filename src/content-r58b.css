@@ -1772,3 +1772,95 @@ body:has(.r74a-care-popover) :is(#actionA, .r79b-action-note) { visibility: hidd
   #toast-zone:not(:has(.milestone-card)), #toast-zone:has(.settlement-card):not(:has(.milestone-card)) { left: auto !important; right: 8px !important; }
 }
 /* ===== R79B 結束 ===== */
+
+/* ===== R79C（選擇搬到地圖上、進度同一個來源）開始：這條線的新規則只寫在這兩行註解之間 ===== */
+/* 第 6 項：按鈕只留兩種——主要（黃底深棕邊）、次要（米底深棕框）。只換顏色與框線，不動大小與位置。
+   次要鈕的框用內陰影畫，避免多出的邊框把既有對話框的版面撐開。 */
+.r79c-go, #worldDialogue .dialogue-continue, .r66b-act, .r77b-act, .r76b-dialogue-actions [data-r76b-next] {
+  border: 2px solid #8a541c; background: #ffd978; color: #4d3010; font-weight: 900; box-shadow: 0 2px 0 #8a541c; text-decoration: none;
+}
+#worldDialogue .dialogue-close, .r76b-dialogue-actions [data-r76b-later], .r61b-gift-open, .r61b-story-btn {
+  background: #fff8e8; color: #5a3410; font-weight: 800; text-decoration: none; box-shadow: inset 0 0 0 2px #6b3f17;
+}
+.r61b-gift-open, .r61b-story-btn, .r76b-dialogue-actions [data-r76b-later] { border: 0; border-radius: 9px; }
+.r66b-act:disabled, .r61b-gift-open:disabled, .r61b-story-btn:disabled, .r77b-act:disabled { opacity: .55; box-shadow: inset 0 0 0 2px #b9a27a; background: #f3ead6; color: #7a6a52; }
+.r79c-go { min-width: 44px; min-height: 44px; padding: 6px 14px; border-radius: 9px; font: inherit; font-size: 13px; font-weight: 900; cursor: pointer; }
+
+/* 第 4 項：鎮長只有一種對話框的樣子——上方那一種換成跟下方對話框同一張卡片的配色、框線與按鈕。 */
+#worldDialogue.world-dialogue { background-color: #fff8e8; background-image: none; border-color: #8a541c; border-radius: 10px; color: #3d2c17; box-shadow: inset 0 0 0 2px #8a541c, 0 6px 18px rgba(43, 28, 12, .28); } /* 框線用內陰影，不改對話框大小 */
+#worldDialogue.world-dialogue b { color: #4d3010; }
+/* 下方對話框開著時，種子卡、工具列收起來（跟另一種對話框一樣）；任務卡照 R78B 收成標題加「現在做」一列，對話中仍按得到。 */
+body:has(.r76b-dialogue) :is(#mapScene .seed-hud, #farmDock, #mobileControls), body:has(.r76b-dialogue) :is(#mapScene .seed-hud, #farmDock, #mobileControls) * { visibility: hidden !important; pointer-events: none !important; }
+/* 上方那一種開著時：任務卡照舊收成一行（對話中仍可按它直接收成、澆水），種子卡收起來。原本的規則寫成 #mapScene:has(#worldDialogue)，對話框其實掛在 body 底下，從來沒套到。 */
+body:has(#worldDialogue:not([hidden])) #mapScene .seed-hud, body:has(#worldDialogue:not([hidden])) #mapScene .seed-hud * { visibility: hidden !important; pointer-events: none !important; }
+@media (max-height: 520px) {
+  .r76b-dialogue { padding: 8px 12px; align-items: center; }
+  .r76b-dialogue-card { max-height: calc(100dvh - 16px); padding: 10px 12px; }
+  .r76b-dialogue-line { margin: 6px 0 4px; }
+  .r76b-choice-list { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 6px; margin-top: 6px; }
+  .r76b-dialogue-actions { margin-top: 6px; }
+}
+
+/* 第 1、2 項：手札只放進度與「帶我去」；決定與顏色在手札是預覽，不是按鈕。 */
+.r77b-step .r79c-go { flex: 0 0 auto; }
+.r79c-option { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: 6px 8px; border: 2px dashed #c9b27c; border-radius: 9px; background: #fffdf4; color: #4d3010; font-size: 12px; }
+.r79c-option b { font-size: 13px; }
+.r79c-option small { display: block; margin-top: 2px; color: #5d4a2b; font-size: 11px; line-height: 1.35; overflow-wrap: anywhere; }
+.r79c-swatch-chip { display: inline-flex; align-items: center; gap: 6px; min-width: 44px; min-height: 44px; box-sizing: border-box; padding: 6px 12px; border: 2px dashed #c9b27c; border-radius: 9px; background: #fffdf4; color: #4d3010; font-size: 13px; font-weight: 800; }
+.r79c-swatch-chip[aria-current="true"] { border-style: solid; border-color: #6b3f17; box-shadow: 0 0 0 2px #ffd978; }
+.r79c-unlock { margin: 6px 0 0; padding: 5px 8px; border-radius: 6px; background: #fff0c9; color: #5a3a13; font-size: 12px; font-weight: 800; line-height: 1.45; overflow-wrap: anywhere; }
+.r79c-perks { flex-direction: column; align-items: stretch; padding: 7px; border: 1px solid #d9c8a2; border-radius: 8px; background: #fffdf4; }
+.r79c-perks > p { flex: 0 0 auto; font-weight: 900; color: #4d3010; }
+.r79c-perks ul { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.r79c-perks li { margin: 0; padding: 5px 7px; border-radius: 6px; background: #fff8e2; color: #4d3010; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+.r79c-perks li b { color: #6b3f17; }
+.r79c-perks .r79c-go { align-self: flex-start; }
+
+/* 第 2 項：同一個物件只有一塊名牌、名牌不拆行；做了決定以後底座與名牌邊條換成那個決定的顏色（新圖到之前的區分）。 */
+.r78c-scene-label { white-space: nowrap; max-width: none; }
+.r78c-scene-label.is-decided { border-left: 3px solid #f2c14e; }
+.r78c-scene-label.is-done { border-left-color: #a6d86a; }
+.r78c-scene-change.is-decided::before { width: 86%; height: 9px; }
+.r78c-scene-change[data-r79c-decision="seed"]::before, .r78c-scene-change[data-r79c-decision="sturdy"]::before, .r78c-scene-change[data-r79c-decision="cash"]::before, .r78c-scene-change[data-r79c-decision="town_gate"]::before, .r78c-scene-change[data-r79c-decision="sweet"]::before { background: rgba(122, 64, 18, .5); }
+.r78c-scene-change[data-r79c-decision="sun"]::before, .r78c-scene-change[data-r79c-decision="quick"]::before, .r78c-scene-change[data-r79c-decision="sample"]::before, .r78c-scene-change[data-r79c-decision="river_path"]::before, .r78c-scene-change[data-r79c-decision="fresh"]::before { background: rgba(40, 92, 120, .45); }
+.r78c-scene-label[data-r79c-decision="sun"], .r78c-scene-label[data-r79c-decision="quick"], .r78c-scene-label[data-r79c-decision="sample"], .r78c-scene-label[data-r79c-decision="river_path"], .r78c-scene-label[data-r79c-decision="fresh"] { border-left-color: #7fc4e6; }
+@media (max-width: 430px) { .r78c-scene-label { max-width: none; } }
+/* 圖 55：曬架名牌移到曬架上方，主角站在曬架前面時不會擋住名牌。 */
+#r75aRackNode span { bottom: auto; top: -16px; }
+
+/* 第 3 項：升級卡逐項列出解鎖的作物、設施、功能與圖示。 */
+/* 升級面板第一屏改放三個目標以後，「再顯示 N 項」排在三張卡正下方、「之後的目標」再往下，按鈕不會黏在底部壓住「之後的目標」。 */
+.side-pane[data-pane="upgrades"] #upgrades > .r32-show-more { order: 1; }
+.side-pane[data-pane="upgrades"] #upgrades > .r55-future-upgrades { order: 2; }
+.r79c-unlocks { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.r79c-unlock { display: inline-flex; align-items: center; gap: 4px; font-style: normal; font-weight: 800; }
+.r79c-unlock img { width: 20px; height: 20px; object-fit: contain; image-rendering: pixelated; }
+.r79c-unlock b { font-weight: 400; }
+
+/* 第 5 項：右側面板（手札、訂單、升級、圖鑑）捲動時標題與關閉鈕固定在上緣；標題本身維持透明底，墊在後面的是面板同色的紙。 */
+.side-panel.world-panel-open .side-pane.sel > .pane-head { position: sticky; top: -16px; z-index: 6; isolation: isolate; }
+/* 標題固定以後，捲到某一列（例如剛領的手冊獎勵）時要停在標題下面，不被標題蓋住。 */
+.side-panel.world-panel-open .side-body { scroll-padding-top: 72px; }
+.side-panel.world-panel-open .side-pane.sel > .pane-head::before { content: ""; position: absolute; z-index: -1; inset: -4px -16px -2px; background-color: var(--sun-paper, #fff6e3); background-image: var(--sun-texture, none); }
+@media (max-width: 859px) {
+  .side-panel.world-panel-open .side-pane.sel > .pane-head { top: -14px; }
+  .side-panel.world-panel-open .side-pane.sel > .pane-head::before { inset: -4px -14px -2px; }
+}
+/* 評比結果只用一種符號（✓／○），插圖縮小，不在捲動時被標題列切成只剩桌腳。 */
+.r76b-judge-breakdown { list-style: none; padding-left: 0; }
+.r70-judge-art { width: 112px; }
+
+/* 第 6 項：晨霧不再是整張地圖的水平白條——邊緣淡、中間透，再加幾團慢慢飄的霧。 */
+#weatherLayer.fog::before {
+  background:
+    radial-gradient(240px 90px at 16% 24%, rgba(246, 248, 240, .34), transparent 70%),
+    radial-gradient(280px 100px at 84% 72%, rgba(246, 248, 240, .30), transparent 70%),
+    radial-gradient(200px 80px at 62% 14%, rgba(246, 248, 240, .24), transparent 70%),
+    radial-gradient(220px 80px at 30% 88%, rgba(246, 248, 240, .26), transparent 70%);
+  animation: r79cFogDrift 16s ease-in-out infinite alternate;
+}
+#weatherLayer.fog::after { background: radial-gradient(130% 110% at 50% 50%, transparent 52%, rgba(232, 237, 226, .46) 100%); }
+@keyframes r79cFogDrift { from { background-position: -24px 0, 24px 0, 0 0, 12px 0; } to { background-position: 24px 4px, -24px -4px, 18px 2px, -12px 0; } }
+html.perf-low #weatherLayer.fog::before { background: radial-gradient(240px 90px at 20% 26%, rgba(246, 248, 240, .26), transparent 70%), radial-gradient(260px 100px at 80% 70%, rgba(246, 248, 240, .22), transparent 70%); animation: none; }
+@media (prefers-reduced-motion: reduce) { #weatherLayer.fog::before { animation: none; } }
+/* ===== R79C 結束 ===== */

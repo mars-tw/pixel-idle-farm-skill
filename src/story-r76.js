@@ -162,7 +162,7 @@
     overlay.dataset.r76bDialogue = npcId;
     document.body.appendChild(overlay);
     let step = 0;
-    let mode = "lines";
+    let mode = options && options.startMode === "choices" ? "choices" : "lines"; /* R79C：地圖物件旁的選擇可以直接從選項開始 */
     function render() {
       const portrait = portraitFor(npcId) || portraitFor(speaker);
       const head = '<div class="r76b-dialogue-head">' + (portrait ? '<img class="r76b-portrait" src="' + esc(portrait) + esc(versionQuery()) + '" alt="' + esc(speaker) + '" width="64" height="64">' : "") + "<b>" + esc(speaker) + "</b></div>";

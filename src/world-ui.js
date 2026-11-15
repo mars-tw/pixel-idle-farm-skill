@@ -482,6 +482,19 @@
     const panel = document.querySelector(".side-panel");
     if (panel) panel.classList.remove("world-panel-open");
   }
+  /* R79C 第 5 項：第 2 章以後，手札「目前主線」的「現在做」與任務卡按鈕從同一個來源拿——跟 renderObjective 一樣：
+     nextFarmStep 認得這個任務（或光正照著）就用它；沒有就用 guide 的步驟與按鈕字。第 1 章照舊跟著前期農務走。 */
+  function journalQuestStep(s, q) {
+    if (q.chapter === 1 || !A.nextFarmStep) return null;
+    const step = A.nextFarmStep(s, Date.now());
+    const light = !!step && !step.questAware && (step.action === "refract" || step.action === "catch_sun" || step.sunlit === true);
+    return step && ((step.questAware && step.questId === q.id) || light) ? step : null;
+  }
+  function journalGuide(s, q) {
+    if (q.chapter === 1) return null;
+    const guide = A.guide(s, Date.now());
+    return guide && guide.stepText ? { text: guide.stepText, action: guide.actionLabel || "前往交談" } : null;
+  }
   // R69A：手札開著時只同步「目前主線」卡的下一步；不重建整個面板，也不改變捲動位置。
   function syncMainStoryCard() {
     const card = document.querySelector("#adventurePanel [data-r63a-main-story]");
@@ -489,9 +502,10 @@
     const q = A.summary(current, Date.now()).currentQuest;
     if (!q || card.dataset.quest !== q.id) { lastPanels = ""; return; }
     const farmStep = q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null;
-    const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : null;
-    const rows = rowsOf(q), text = mainStep ? mainStep.text : q.description;
-    const action = mainStep ? mainStep.actionLabel : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]);
+    const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : journalQuestStep(current, q);
+    const guideNow = mainStep ? null : journalGuide(current, q);
+    const rows = rowsOf(q), text = mainStep ? mainStep.text : guideNow ? guideNow.text : q.description;
+    const action = mainStep ? mainStep.actionLabel : guideNow ? guideNow.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]);
     const signature = JSON.stringify([q.id, q.status, text, action, rows]);
     if (signature === lastMainStory) return;
     lastMainStory = signature;
@@ -521,9 +535,9 @@
       lastMainStory = "";
       const availability = A.storyPanelAvailability(current);
       const currentMain = A.summary(current, Date.now()).currentQuest;
-      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main && q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : null; const rows = rowsOf(q); const cardTaskName = main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
+      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main && q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : main ? journalQuestStep(current, q) : null; const mainGuide = main && !mainStep ? journalGuide(current, q) : null; const rows = rowsOf(q); const cardTaskName = main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : mainGuide ? mainGuide.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
         <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(cardTaskName)}</span></b><span>${progress}</span></div>
-        <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : q.description)}">${esc(mainStep ? mainStep.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}>${esc(action)}</button>` : ""}</div>
+        <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}">${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}>${esc(action)}</button>` : ""}</div>
         <div class="adventure-meta r68a-card-requirements">${displayRows.map((r) => r.routeLabel ? `<span class="r77c-route-label" data-r77c-route-label>${esc(r.name)}</span>` : `<span title="${esc(`${r.route === "alt" ? "或：" : ""}${r.name} ${Math.min(r.current, r.required)}/${r.required}`)}">${r.complete ? "✓" : "○"} ${r.route === "alt" ? "或：" : ""}${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}${q.status !== "claimed" && q.status !== "locked" ? `<span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span>` : ""}</div></article>`; };
       panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
         ${availability.showNeighborBasket ? `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div>` : ""}
@@ -760,9 +774,16 @@
       const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId);
     }
   }
+  /* R79C 第 4 項：後續委託在地圖上開下方對話框時，先把排隊中與開著的這一種收掉，畫面上只留一個對話框。 */
+  function hushSpeak() {
+    clearInterval(speakWaitTimer); pendingSpeak = null;
+    const box = el("worldDialogue"); if (box) box.hidden = true;
+  }
   function speak(name, text) {
     const zone = el("toast-zone");
-    const speakBlocked = () => { const z = el("toast-zone"); return !!((z && z.children && z.children.length > 0) || document.querySelector(".side-panel.world-panel-open") || document.querySelector("#farmMenu:not([hidden])") || document.querySelector(".modal.show")); }; // R37：面板開著時對話延後，不蓋過玩家剛打開的面板
+    /* R79C 第 4 項：鎮長一律叫「鎮長葛瑞」，頭像跟下方對話框同一張（戴禮帽那張）。 */
+    if (/葛瑞/.test(name) && !/鎮長/.test(name)) name = "鎮長葛瑞";
+    const speakBlocked = () => { const z = el("toast-zone"); return !!((z && z.children && z.children.length > 0) || document.querySelector(".side-panel.world-panel-open") || document.querySelector("#farmMenu:not([hidden])") || document.querySelector(".modal.show") || document.querySelector(".r76b-dialogue")); }; // R37：面板開著時對話延後，不蓋過玩家剛打開的面板
     if (speakBlocked()) {
       pendingSpeak = { name, text };
       clearInterval(speakWaitTimer);
@@ -777,8 +798,8 @@
     clearTimeout(dialogueTimer);
     let box = el("worldDialogue");
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
-    const portrait = /葛瑞/.test(name) ? (/陽光/.test(text)?'grey-1':/坐|餐籃|謝/.test(text)?'grey-2':'grey-0') : /祖母/.test(name) ? (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
-    box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/r84/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
+    const portrait = /葛瑞/.test(name) ? 'content-r77/portrait-mayor' : /祖母/.test(name) ? 'r84/' + (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
+    box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
     box.hidden = false; delete box.dataset.refocused; box.classList.remove("dialogue-flip-top", "dialogue-compact-top", "dialogue-compact-bottom"); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); const outside = sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth; placeDialogue(box, speaker); if (hit > 0 || outside) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); } const trackUntil = performance.now() + 1400; const track = () => { if (box.hidden) return; const node = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); placeDialogue(box, node); if (performance.now() < trackUntil) requestAnimationFrame(track); }; requestAnimationFrame(track); } else if (window.innerHeight <= 600) box.classList.add("dialogue-compact-top"); } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };
@@ -1187,4 +1208,5 @@
     return npcId === "mayor" && r64bClue && fallback ? fallback + " " + r64bClue : fallback;
   }
   window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal, prepareResidentPoses, requestResidentPose, residentPresentationState, disposeResidentPoseScenes };
+  window.FarmWorld.hushSpeak = hushSpeak; // R79C：開下方對話框前收掉這一種
 })();

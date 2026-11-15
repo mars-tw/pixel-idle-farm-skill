@@ -161,7 +161,7 @@
     card.className = "toast settlement-card" + (data.kind === "milestone" ? " milestone-card" : "");
     card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
     card.innerHTML = data.kind === "milestone"
-      ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span><span>新解鎖：${escapeHtml(data.unlocked)}</span><span>下一步：${escapeHtml(data.next)}</span>`
+      ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span>${Array.isArray(data.unlocks) && data.unlocks.length ? `<span class="r79c-unlocks" data-r79c-unlocks>新解鎖：${data.unlocks.map((row) => `<i class="r79c-unlock" data-kind="${escapeHtml(row.kind)}">${row.icon ? `<img src="${escapeHtml(row.icon)}${window.FARM_VERSION_QUERY || ""}" alt="" width="20" height="20">` : row.mark ? `<b aria-hidden="true">${escapeHtml(row.mark)}</b>` : ""}${escapeHtml(row.name)}</i>`).join("")}</span>` : `<span>新解鎖：${escapeHtml(data.unlocked)}</span>`}<span>下一步：${escapeHtml(data.next)}</span>`
       : `${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).length ? `獲得 ${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).join("・")}・` : ""}下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
@@ -1840,7 +1840,8 @@
       return upgradeBand(a, na) - upgradeBand(b, nb) || (na ? na.cost : Infinity) - (nb ? nb.cost : Infinity);
     });
     const firstChapterComplete = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_meal);
-    const firstActionable = Math.max(0, upgradeKeys.findIndex((key) => !!G.nextUpgrade(state, key)));
+    /* R79C 第 3 項：第一章還沒走完時，第一屏也先放三個能追的目標（各自寫效果），其餘才收進「之後的目標」。 */
+    const firstShown = upgradeKeys.filter((key) => !!G.nextUpgrade(state, key)).concat(upgradeKeys.filter((key) => !G.nextUpgrade(state, key))).slice(0, 3);
     let futureDetails = null, futureBody = null;
     if (!firstChapterComplete && upgradeKeys.length > 1) {
       futureDetails = document.createElement("details");
@@ -1885,7 +1886,7 @@
           } else if (r.reason === "no_coins") toast("🪙 金幣不足");
         };
       }
-      if (!firstChapterComplete && key !== upgradeKeys[firstActionable]) futureBody.appendChild(el); else box.appendChild(el);
+      if (!firstChapterComplete && futureBody && !firstShown.includes(key)) futureBody.appendChild(el); else box.appendChild(el);
     });
     // R75 整合：手鏡與蓄光瓶的升級跟其他升級卡同一種畫法（原本每 250ms 硬塞一塊在最前面，把「再顯示 N 項」擠出首屏）。
     // 玩家折過光或接過陽光才出現；第一章沒走完時收進「之後的目標」，買得起的排到其他長期目標前面。
@@ -1916,7 +1917,8 @@
       });
       if (futureDetails) futureDetails.querySelector("summary").textContent = `之後的目標（${futureBody.children.length}）`;
     }
-    if (futureDetails) box.appendChild(futureDetails);
+    if (futureDetails) futureDetails.querySelector("summary").textContent = `之後的目標（${futureBody.children.length}）`; // R79C：前三個已放在第一屏，數字照實際收起來的張數
+    if (futureDetails && futureBody.children.length) box.appendChild(futureDetails);
     renderBuildingUpgrades();
     if (newUpgrades.length && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "upgrades"); scheduleSave(); }
   }

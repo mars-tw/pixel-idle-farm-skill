@@ -100,10 +100,14 @@ function measure(page, selector) {
       const elderState = await page.evaluate(() => document.querySelector('[data-r77b-quest="elder"]')?.dataset.r77bState || "");
       assert.equal(elderState, "active", `${tag} 班伯的事件不用等隔天就開始`);
 
-      /* 招牌選色：三個選項至少 44px、不出界、不被工具列蓋住、點得到 */
-      await page.evaluate(() => document.querySelector('[data-r77b-quest="merchant"] [data-r77b-colors]').scrollIntoView({ block: "center" }));
+      /* 招牌選色：三個選項至少 44px、不出界、不被工具列蓋住、點得到
+         R79C 同步：選色改到地圖上的招牌色樣旁邊做——按手札「帶我去」走過去，下方對話框列出三種顏色；量測條件照舊。 */
+      await page.evaluate(() => document.querySelector('[data-r77b-quest="merchant"] [data-r79c-go="merchant"]').scrollIntoView({ block: "center" }));
       await page.waitForTimeout(150);
-      const colors = await measure(page, '[data-r77b-quest="merchant"] [data-r77b-color]');
+      await press('[data-r77b-quest="merchant"] [data-r79c-go="merchant"]');
+      await page.waitForFunction(() => document.querySelectorAll('.r76b-dialogue [data-r76b-choice]').length === 3, null, { timeout: 15000 });
+      await page.waitForTimeout(150);
+      const colors = await measure(page, '.r76b-dialogue [data-r76b-choice]');
       assert.equal(colors.items.length, 3, `${tag} 三個顏色選項`);
       for (const c of colors.items) {
         assert.ok(c.width >= 44 && c.height >= 44, `${tag} 顏色「${c.text}」至少 44px ${JSON.stringify(c)}`);
@@ -113,12 +117,13 @@ function measure(page, selector) {
         assert.equal(overlap(c, colors.act), 0, `${tag} 顏色「${c.text}」不被動作鍵蓋住`);
         assert.equal(c.hit, true, `${tag} 顏色「${c.text}」點得到`);
       }
-      await press('[data-r77b-quest="merchant"] [data-r77b-color="red"]');
+      await press('.r76b-dialogue [data-r76b-choice="red"]');
+      await press('.r76b-dialogue [data-r76b-next]'); /* R79C 同步：對話框回一句結果，按「知道了」收起 */
       await page.waitForFunction(() => document.querySelector('[data-r77b-quest="merchant"][data-r77b-state="done"]'), null, { timeout: 8000 });
       await page.waitForFunction(() => /三步都完成了/.test(document.querySelector("#toast-zone")?.textContent || ""), null, { timeout: 8000 });
       const done = await page.evaluate(() => {
         const box = document.querySelector('[data-r77b-quest="merchant"]');
-        return { after: box.querySelector("[data-r77b-after]")?.textContent || "", upgrade: box.querySelector("[data-r77b-upgrade]")?.textContent || "", pressed: box.querySelector('[data-r77b-color="red"]')?.getAttribute("aria-pressed"),
+        return { after: box.querySelector("[data-r77b-after]")?.textContent || "", upgrade: box.querySelector("[data-r77b-upgrade]")?.textContent || "", pressed: box.querySelector('[data-r77b-color="red"]')?.getAttribute("aria-current") /* R79C 同步：手札的顏色改成不可按的預覽，選中的用 aria-current 標 */,
           effect: box.closest(".r75b-choice-card")?.querySelector(".r75b-choice-e")?.textContent || "" };
       });
       assert.match(done.after, /^再後來：/, `${tag} 全部做完手札多一行「再後來」`);

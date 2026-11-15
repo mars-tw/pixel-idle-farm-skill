@@ -2725,7 +2725,7 @@
         if (quest && guide && guide.stepText) questNext = `${quest.name}（${guide.stepText}）`;
         else if (view && view.ok !== false && !quest) questNext = "主線都完成了，照自己的步調經營農場。";
       }
-      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `農場等級提升到 Lv ${level}`, unlocked: unlockText, next: questNext || (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
+      return { kind: "milestone", type, title: `升到 Lv ${level}`, earned: `農場等級提升到 Lv ${level}`, unlocked: unlockText, unlocks: levelUnlockCards(level), next: questNext || (next && next.text) || data.actionLabel || (guide && guide.actionLabel) || "繼續目前任務" };
     }
     return null;
   }
@@ -2756,6 +2756,22 @@
     rows.push(...(extras[level] || []));
     const seen = new Set();
     return rows.filter((entry) => { const key = entry.name; if (seen.has(key)) return false; seen.add(key); return true; });
+  }
+  /* R79C 第 3 項：升級卡逐項列出這一級解鎖的作物、設施、功能，各帶一個小圖示。
+     天氣與四季還沒有專屬圖示：檔名先接好（content-r79/unlock-*.png），圖到了再加進 UNLOCK_ART_READY。 */
+  const UNLOCK_ART = {
+    drying_rack: "assets/generated/content-r75/drying_rack_full.png", sun_mirror_upgrade: "assets/generated/content-r75/sun_mirror.png",
+    sun_bottle_upgrade: "assets/generated/content-r75/sun_jar.png", r66_beehive: "assets/generated/content-r66/beehive.svg",
+    r66_herb_garden: "assets/generated/content-r66/herb-garden.svg", r66_feed_trough: "assets/generated/content-r66/feed-trough.svg",
+    weather: "assets/generated/content-r79/unlock-weather.png", seasons: "assets/generated/content-r79/unlock-seasons.png",
+  };
+  const UNLOCK_ART_READY = ["drying_rack", "sun_mirror_upgrade", "sun_bottle_upgrade", "r66_beehive", "r66_herb_garden", "r66_feed_trough"];
+  function levelUnlockCards(level) {
+    return levelUnlocks(level).map((entry) => {
+      const icon = entry.kind === "seed" ? `assets/generated/r66/native/crop_${entry.id}-32.png` : UNLOCK_ART_READY.includes(entry.id) ? UNLOCK_ART[entry.id] : "";
+      const building = BUILDINGS && BUILDINGS[entry.id];
+      return { id: entry.id, name: entry.name, kind: entry.kind, icon, mark: icon ? "" : (building && building.emoji) || "" };
+    });
   }
   function unseenLevelUnlocks(state, surface) {
     const seen = state && state.flags && state.flags.unlocksSeen && Number(state.flags.unlocksSeen[surface]) || 1;
