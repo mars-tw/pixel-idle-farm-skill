@@ -95,6 +95,16 @@
     return `${place}${width}，${speed}`;
   }
   function fireLabelText(recipeId) { const fire = fireKindOf(recipeId); return fire ? `${fire.label}：${fireHintText(fire)}` : ""; }
+  /* R79A：鍋子三態與文字、圖片路徑共用同一個判斷；新圖未到時介面顯示同一份文字狀態牌。 */
+  const POT_ART = {
+    low: { id: "low", label: "火太小", file: "assets/generated/content-r79/pot-low.png" },
+    good: { id: "good", label: "火候剛好", file: "assets/generated/content-r79/pot-good.png" },
+    burn: { id: "burn", label: "快焦了", file: "assets/generated/content-r79/pot-burn.png" },
+  };
+  function potStateFor(snap) {
+    if (!snap) return POT_ART.good;
+    return snap.heat < snap.goldMin ? POT_ART.low : snap.heat > snap.goldMax ? POT_ART.burn : POT_ART.good;
+  }
 
   /* 火候小遊戲的一局：指針就是火力，火會慢慢變小，添柴加一段、掀蓋降一段。 */
   function createFireSession(options) {
@@ -442,6 +452,7 @@
 
   const CookingR75 = { DURATION_MS, GOLD_MIN, GOLD_MAX, START_HEAT, GRADES, GRADE_ORDER, CHOICE_DEFS,
     FIRE_KINDS, RECIPE_FIRE, fireKindOf, fireHintText, fireLabelText,
+    POT_ART, potStateFor,
     ensure, createFireSession, gradeForRatio, scaledDurationMs, durationText, gradeEffectText,
     mealGrades, bestStockGrade, cookWithGrade, cookDirect, finishFireSession, eatMeal, shareBestMeal, noteSharedMeal,
     selectedChoice, choiceEffects, hasEffect, orderCoinBonusRate, mayorQuestBonusRate, boostedCoins,
@@ -511,8 +522,9 @@
       cookBtn.before(start);
       const pot = document.createElement("img");
       pot.className = "r75b-pot-thumb r76a-recipe-thumb";
-      pot.src = "assets/generated/content-r73/item-" + recipeId + ".png" + versionQuery();
-      pot.alt = recipe ? recipe.name : "料理";
+      /* R79A：灶台清單先載入鍋子後備圖；小遊戲缺新三態圖時沿用同一張已載入圖片，不會閃破圖。 */
+      pot.src = "assets/generated/content-r75/cooking_pot.png" + versionQuery();
+      pot.alt = recipe ? "煮" + recipe.name + "的鍋子" : "料理鍋";
       row.prepend(pot);
       const eat = row.querySelector("[data-eat]");
       if (eat && recipe && recipe.effect) { const grade = info.bestInStock || "home"; eat.textContent = `享用${GRADES[grade].label}・${durationText(scaledDurationMs(recipe.effect.durationMs, grade))}`; }
@@ -534,8 +546,8 @@
       + '<button type="button" class="r75b-cook-close" data-r75b-close aria-label="關閉看火候畫面">×</button>'
       + "<h3>看火候・" + esc(recipe.name) + "</h3>"
       + (fire ? '<p class="r77a-fire-kind" data-r77a-fire="' + esc(fire.id) + '"><b>' + esc(fire.label) + "</b>：" + esc(fireHintText(fire)) + "</p>" : "")
-      + '<img class="r75b-cook-pot" src="assets/generated/content-r73/item-' + esc(recipeId) + '.png' + esc(versionQuery()) + '" alt="鍋裡的' + esc(recipe.name) + '">'
-      + '<div class="r75b-fire-track" aria-hidden="true"><div class="r77a-fire-next" hidden></div><div class="r75b-fire-gold"></div><div class="r75b-fire-pointer"></div></div>'
+      + '<div class="r79a-pot-state" data-r79a-pot-state><img class="r75b-cook-pot" data-r79a-pot-art data-fallback="true" src="assets/generated/content-r75/cooking_pot.png' + esc(versionQuery()) + '" alt="火候剛好的像素鍋"><span data-r79a-pot-fallback>火候剛好</span></div>'
+      + '<div class="r75b-fire-track" aria-label="分段火候條"><div class="r79a-fire-segments">' + Array.from({ length: 10 }, (_, index) => '<i data-r79a-fire-segment="' + index + '"></i>').join("") + '</div><div class="r77a-fire-next" hidden></div><div class="r75b-fire-gold"></div><div class="r75b-fire-pointer"></div></div>'
       + '<p class="r75b-cook-status" data-r75b-status>把指針留在金色區間，火會慢慢變小。</p>'
       + '<p class="r75b-cook-time" data-r75b-time>還剩 ' + Math.ceil(firstSnap.remainingMs / 1000) + ' 秒</p>'
       + '<div class="r75b-cook-actions">'
@@ -549,6 +561,9 @@
     const pointer = overlay.querySelector(".r75b-fire-pointer");
     const track = overlay.querySelector(".r75b-fire-track");
     const nextGhost = overlay.querySelector(".r77a-fire-next");
+    const potBox = overlay.querySelector("[data-r79a-pot-state]");
+    const potArt = overlay.querySelector("[data-r79a-pot-art]");
+    const potFallback = overlay.querySelector("[data-r79a-pot-fallback]");
     const status = overlay.querySelector("[data-r75b-status]");
     const timeLabel = overlay.querySelector("[data-r75b-time]");
     let raf = 0;
@@ -557,6 +572,27 @@
     function render(snap) {
       pointer.style.left = snap.heat + "%";
       timeLabel.textContent = "還剩 " + Math.ceil(snap.remainingMs / 1000) + " 秒";
+      const potState = potStateFor(snap);
+      if (potBox && potBox.dataset.state !== potState.id) {
+        potBox.dataset.state = potState.id; potBox.classList.remove("has-art");
+        if (potFallback) potFallback.textContent = potState.label;
+        if (potArt) {
+          potArt.hidden = false; potArt.dataset.fallback = "true"; potArt.alt = potState.label + "的像素鍋";
+          potArt.src = "assets/generated/content-r75/cooking_pot.png" + versionQuery();
+          if (root.Image) {
+            const wantedState = potState.id, candidate = new root.Image();
+            candidate.onload = () => {
+              if (!potBox || potBox.dataset.state !== wantedState) return;
+              potArt.dataset.fallback = "false"; potArt.src = candidate.src;
+            };
+            candidate.src = potState.file + versionQuery();
+          }
+        }
+      }
+      overlay.querySelectorAll("[data-r79a-fire-segment]").forEach((segment) => {
+        const center = (+segment.dataset.r79aFireSegment + 0.5) * 10;
+        segment.dataset.heatState = center < snap.goldMin ? "low" : center > snap.goldMax ? "burn" : "good";
+      });
       /* R77A 第 6 項：金色區的位置由這一局的火性決定，寫進 CSS 變數；沒有火性時就是原本的 42～68。 */
       track.style.setProperty("--r77a-gold-left", snap.goldMin + "%");
       track.style.setProperty("--r77a-gold-width", (snap.goldMax - snap.goldMin) + "%");
@@ -602,6 +638,10 @@
     overlay.querySelector("[data-r75b-vent]").onclick = () => render(session.vent());
     overlay.querySelector("[data-r75b-direct]").onclick = () => finishCook("home");
     overlay.querySelector("[data-r75b-close]").onclick = () => close();
+    if (potArt) {
+      potArt.onload = () => { if (potBox) potBox.classList.toggle("has-art", potArt.dataset.fallback !== "true"); };
+      potArt.onerror = () => { potArt.hidden = true; if (potBox) potBox.classList.remove("has-art"); };
+    }
     document.addEventListener("keydown", onKey, true);
     render(session.snapshot());
     raf = requestAnimationFrame(frame);

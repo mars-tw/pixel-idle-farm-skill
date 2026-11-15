@@ -1508,6 +1508,71 @@ html[data-performance-tier="low"] .sun-beam.r77a-sun-fading, html.perf-low .sun-
 /* R78 分隔 */
 /* R78 分隔 */
 
+/* ===== R79A：兩位客人排隊、攤位場景與像素火候 ===== */
+.r72b-card:has(.r79a-stall-scene) { width: min(760px, 100%); }
+.r79a-opening-rules { display: grid; gap: 5px; margin: 8px 0; }
+.r79a-opening-rules > p { margin: 0; padding: 7px 9px; border: 1px solid #d19a35; border-radius: 7px; background: #fff6d7; color: #5a3410; font-size: 12px; font-weight: 800; line-height: 1.4; }
+.r79a-opening-rules .r78a-market { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; border-width: 1px; }
+.r79a-opening-rules .r78a-hot-list { display: inline-flex; }
+.r79a-token-line { color: #6a3a0d !important; }
+.r72b-card > .r72b-primary[data-r72b-start] { position: static; width: 100%; margin: 8px 0 6px; box-shadow: 0 2px 0 #9b631e; }
+.r79a-stall-scene { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 10px; align-items: stretch; margin-top: 10px; padding: 9px; border: 3px solid #704219; border-radius: 8px; background: #c48743; }
+.r79a-booth { position: relative; display: grid; place-items: end center; min-height: 150px; border: 2px solid #533113; border-radius: 6px; background: #8b572a url("../assets/generated/content-r70/festival-stall.png") center / 104px auto no-repeat; overflow: hidden; }
+.r79a-booth img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; background: #8b572a; }
+.r79a-booth span { position: relative; z-index: 1; margin: 4px; padding: 2px 5px; border-radius: 4px; background: rgba(50, 28, 10, .86); color: #fff5cf; font-size: 10px; font-weight: 900; }
+.r79a-booth.has-art span { display: none; }
+.r79a-queue { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.r72b-customer.r79a-customer { appearance: none; display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 7px; align-items: center; min-width: 0; min-height: 150px; margin: 0; padding: 7px; border: 3px solid #a9763f; border-radius: 7px; background: #fdf1cf; color: #3a2c1a; font: inherit; text-align: left; cursor: pointer; }
+.r72b-customer.r79a-customer.is-selected { border-color: #e58d17; background: #fff7d4; box-shadow: inset 0 0 0 2px #ffe08a; }
+.r79a-customer .r72b-portrait { width: 62px; height: 82px; }
+.r79a-customer-copy { display: flex; flex-direction: column; min-width: 0; gap: 3px; }
+.r79a-customer .r72b-bubble { display: block; min-height: 42px; margin: 0; padding: 5px 6px; font-size: 13px; line-height: 1.25; overflow-wrap: anywhere; }
+.r79a-patience { display: block; height: 10px; border: 2px solid #6b451f; background: #f4d6a2; overflow: hidden; }
+.r79a-patience > i { display: block; height: 100%; background: #5f9d42; }
+.r79a-customer small { color: #6b4d24; font-size: 11px; font-weight: 800; }
+.r72b-item[data-r79a-substitute="true"] { border-color: #2f7354; box-shadow: inset 0 0 0 2px #bfe2c4; }
+.r79a-max-score { margin: 8px 0 0; padding: 7px 9px; border-left: 4px solid #d18b1f; background: #fff0bd; color: #5a3410; font-weight: 900; }
+.r79a-legacy-label { display: none; }
+.r72b-item[data-r78a-card-state] .r73b-item-main small { word-break: keep-all; overflow-wrap: normal; }
+@media (max-width: 520px) {
+  .r79a-stall-scene { grid-template-columns: 1fr; padding: 6px; }
+  .r79a-booth { min-height: 76px; background-size: 74px auto; }
+  .r79a-booth img { object-position: center; }
+  .r72b-customer.r79a-customer { grid-template-columns: 46px minmax(0, 1fr); min-height: 132px; padding: 5px; }
+  .r79a-customer .r72b-portrait { width: 46px; height: 64px; }
+  .r79a-customer .r72b-bubble { min-height: 48px; font-size: 11px; }
+  .r78a-customer-tags span { padding: 1px 4px; font-size: 9px; }
+  .r79a-opening-rules > p { padding: 5px 7px; font-size: 11px; }
+}
+/* ===== R79A 結束 ===== */
+
+/* ===== R79A：看火候三態與灶台清單 ===== */
+.r79a-pot-state { position: relative; display: grid; place-items: end center; width: 144px; height: 132px; margin: 4px auto; border: 3px solid #6a3d19; background: #3d2b20 url("../assets/generated/content-r75/cooking_pot.png") center / 104px auto no-repeat; image-rendering: pixelated; }
+.r79a-pot-state[data-state="low"] { border-color: #477695; background-color: #314a56; }
+.r79a-pot-state[data-state="good"] { border-color: #b77418; background-color: #5b371c; }
+.r79a-pot-state[data-state="burn"] { border-color: #9c3925; background-color: #4a2118; }
+.r79a-pot-state .r75b-cook-pot { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; object-fit: contain; image-rendering: pixelated; background: transparent; }
+.r79a-pot-state > span { position: relative; z-index: 1; margin: 5px; padding: 3px 8px; border: 2px solid #573414; background: #fff0bd; color: #4d3010; font-size: 13px; font-weight: 950; }
+.r79a-pot-state.has-art > span { display: none; }
+.r75b-fire-track { height: 34px; border-radius: 0; background: #5d4027; overflow: visible; }
+.r79a-fire-segments { position: absolute; inset: 3px; display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; }
+.r79a-fire-segments > i { min-width: 0; border: 1px solid #4b321d; background: #6f9fbd; }
+.r79a-fire-segments > i[data-heat-state="good"] { background: #f2c14e; }
+.r79a-fire-segments > i[data-heat-state="burn"] { background: #d95f43; }
+.r75b-fire-gold { display: block; z-index: 2; background: transparent; border: 2px solid #8a6d00; }
+.r75b-fire-pointer { z-index: 3; top: -4px; bottom: -4px; width: 8px; margin-left: -4px; border: 2px solid #fff3cf; border-radius: 0; background: #2b1c0d; box-sizing: border-box; }
+.r77a-fire-next { z-index: 2; top: -2px; bottom: -2px; background: transparent; }
+.world-modal .recipe-row[data-recipe] h3 { margin: 0 0 5px; color: #4d3010; font-size: 18px; line-height: 1.25; }
+.world-modal .recipe-row[data-recipe] > .project-desc { margin: 3px 0; font-size: 13px; line-height: 1.4; }
+.world-modal .recipe-row[data-recipe] .r75b-grade-line,
+.world-modal .recipe-row[data-recipe] .r77a-fire-line { font-size: 12px; line-height: 1.35; }
+@media (max-height: 500px) and (orientation: landscape) {
+  .r79a-pot-state { width: 82px; height: 76px; background-size: 62px auto; }
+  .r79a-pot-state .r75b-cook-pot { width: 100%; height: 100%; }
+  .r79a-pot-state > span { margin: 2px; padding: 1px 4px; font-size: 10px; }
+}
+/* ===== R79A 看火候結束 ===== */
+
 /* ===== R78B（第一分鐘與互動層級）開始：這條線的新規則只寫在這兩行註解之間 ===== */
 /* R78B 第 2 項：熟了而且光快到的田，標籤第二行是有數字的二選一（現在收幾份｜等幾秒收幾份＋陽光）；秒數那一小塊有底色，跟提示條、預告圈同一拍。 */
 .tile-state-label .r78b-wait-choice { color: #5a3200; font-weight: 900; }
