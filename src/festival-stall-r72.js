@@ -11,7 +11,7 @@
   const Midgame = isNode ? (() => { try { return require("./midgame-r66.js"); } catch (_) { return null; } })() : (root.MidgameR66 || null);
 
   const DURATION_MS = 60000;
-  const CUSTOMER_TIMEOUT_MS = 8000;
+  const CUSTOMER_TIMEOUT_MS = 10000;
   const CUSTOMER_ARRIVE_MS = 1000;
   const MAX_ATTEMPTS_PER_ROUND = 2;
   const BASE_SCORE = 10;
@@ -41,8 +41,8 @@
   /* R78A：三種客人決定題型與耐心；角色外觀仍從既有四位祭典客人抽。 */
   const CUSTOMER_TYPES = [
     { id: "rush", label: "趕時間", timeoutMs: 6000 },
-    { id: "taste", label: "只說口味", timeoutMs: CUSTOMER_TIMEOUT_MS },
-    { id: "regular", label: "老主顧", timeoutMs: CUSTOMER_TIMEOUT_MS },
+    { id: "regular", label: "一般", timeoutMs: 10000 },
+    { id: "taste", label: "只說口味", timeoutMs: 14000 },
   ];
   const TASTE_LABEL = { sweet: "甜的", sour: "酸酸的", fresh: "清爽的", warm: "熱熱的" };
   // R73B（第 3 項）：口味標籤短字，商品卡上直接顯示，玩家一眼可推口味題答案。
@@ -79,17 +79,23 @@
   function adviceFor(result) {
     const score = qty(result && result.score);
     const stars = qty(result && result.stars);
-    if (stars >= 3) return "三顆星到手了；下次照樣先顧快沒耐心的人，再把熱門需求接穩。";
-    if (qty(result && result.timedOut) > 0 || qty(result && result.notReached) > 0) return "差最多的是沒來得及招呼的客人；先點耐心快見底的那一位。";
-    if (qty(result && result.wrong) > 0) return "差最多的是拿錯貨；先看需求，再看商品口味標籤。";
-    if (qty(result && result.tokenUses) > 0) return "缺貨用代幣只拿一半分；有同口味現貨時，改推替代品可以拿七成分。";
+    const maximum = qty(result && result.maxPossibleScore);
+    const customers = result && Array.isArray(result.customers) ? result.customers : [];
+    if (score === maximum) return "最該改進：沒有失分；下次照樣先招呼趕時間的客人。";
+    const waiting = customers.filter((rec) => rec.outcome === "等太久先離開" || rec.outcome === "時間到" || rec.outcome === "沒輪到")
+      .sort((a, b) => qty(a.patienceMs) - qty(b.patienceMs))[0];
+    if (waiting) return "最該改進：下次先招呼" + waiting.npcName + "（" + (waiting.typeLabel || "趕時間") + "），別讓他等過 " + Math.ceil(qty(waiting.patienceMs) / 1000) + " 秒。";
+    const hotMiss = customers.find((rec) => qty(rec.plannedHotBonus) > qty(rec.hotBonus));
+    if (hotMiss) return "最該改進：下次先招呼" + hotMiss.npcName + "，先接住熱門需求。";
+    if (qty(result && result.wrong) > 0) return "最該改進：下次先看清客人的需求，再拿貨。";
+    if (qty(result && result.tokenUses) > 0) return "最該改進：下次先補齊現貨，別讓代幣把分數折半。";
     if (stars === 2 && score >= STAR_THRESHOLDS[2].score) {
-      if (qty(result && result.bestCombo) < THREE_STAR_COMBO) return "分數夠了，還差連續答對 " + Math.max(0, THREE_STAR_COMBO - qty(result && result.bestCombo)) + " 位。";
-      return "分數和連擊都夠了，還差 " + Math.max(0, THREE_STAR_HOT_SERVED - qty(result && result.hotServed)) + " 位熱門需求。";
+      if (qty(result && result.bestCombo) < THREE_STAR_COMBO) return "最該改進：下次先穩住連續答對，還差 " + Math.max(0, THREE_STAR_COMBO - qty(result && result.bestCombo)) + " 位。";
+      return "最該改進：下次先招呼有熱門需求的客人，還差 " + Math.max(0, THREE_STAR_HOT_SERVED - qty(result && result.hotServed)) + " 位。";
     }
     const next = STAR_THRESHOLDS.find((row) => row.stars > stars);
     const gap = next ? Math.max(0, next.score - score) : 0;
-    return "再多 " + gap + " 分就能拿到" + (next ? next.stars : 3) + "顆星；這場沒有明顯失誤，繼續維持連續答對並接熱門需求。";
+    return "最該改進：下次先守住連擊，再多 " + gap + " 分就能拿到" + (next ? next.stars : 3) + "顆星。";
   }
   const TASTES_BY_MEAL = {
     rustic_bread: ["warm"], baked_carrot: ["warm", "sweet"], wheat_carrot_pancake: ["warm", "sweet"],
@@ -181,6 +187,9 @@
     for (const id of productIds) { const def = C.getItemDef ? C.getItemDef(id) : null; if (def) add(id, "product", def.name); }
     const forageIds = G && G.unlockedForageItems ? G.unlockedForageItems(state) : [];
     for (const id of forageIds) { const def = C.getItemDef ? C.getItemDef(id) : null; if (def) add(id, "forage", def.name); }
+    if (Midgame && typeof Midgame.facilityCatalogItems === "function") {
+      for (const row of Midgame.facilityCatalogItems(state)) add(row.id, row.kind || "product", row.name);
+    }
     if (A && A.recipes) for (const recipe of A.recipes(state)) if (recipe.unlocked) add(recipe.id, "meal", recipe.name);
     return rows;
   }
@@ -247,7 +256,7 @@
     const random = typeof rng === "function" ? rng : Math.random;
     const source = (Array.isArray(pool) ? pool : unlockedItems(state)).filter((row) => stockOf(state, row) > 0 || qty(row.stallQty) > 0);
     const remaining = source.slice(); const chosen = [];
-    while (remaining.length && chosen.length < 3) {
+    while (remaining.length && chosen.length < 2) {
       const row = pick(random, remaining); chosen.push(row); remaining.splice(remaining.indexOf(row), 1);
     }
     const hotItems = chosen.map((row, index) => ({
@@ -311,17 +320,24 @@
     const sessionLike = options.session || (options.allotment ? options : null);
     const tokensLeft = Number.isFinite(options.tokensLeft) ? options.tokensLeft : sessionLike && Number.isFinite(sessionLike.tokensLeft) ? sessionLike.tokensLeft : TOKENS_PER_SESSION;
     const person = pick(random, CUSTOMERS);
-    const type = pick(random, CUSTOMER_TYPES);
+    const type = CUSTOMER_TYPES.find((row) => row.id === options.typeId) || pick(random, CUSTOMER_TYPES);
     const eligible = sessionLike && Array.isArray(sessionLike.offeredIds) ? rows.filter((row) => sessionLike.offeredIds.includes(row.id)) : rows;
     const stocked = eligible.filter((row) => stallStockOf(state, sessionLike, row) > 0);
     const shortage = stocked.length === 0;
     if (!eligible.length || shortage && (qty(tokensLeft) <= 0 || sessionLike && qty(sessionLike.stockoutQuestions) >= 1)) return null;
-    const source = shortage ? eligible : stocked;
+    let source = shortage ? eligible : stocked;
+    if (options.hotMode === "hot") {
+      const hotRows = source.filter((candidate) => !!marketItem(sessionLike && sessionLike.market, candidate));
+      if (hotRows.length) source = hotRows;
+    } else if (options.hotMode === "cold") {
+      const coldRows = source.filter((candidate) => !marketItem(sessionLike && sessionLike.market, candidate));
+      if (coldRows.length) source = coldRows;
+    }
     const chooseRow = () => weightedPick(random, source, (row) => marketWeight(sessionLike && sessionLike.market, row));
     let row = chooseRow();
     if (!row) return null;
     let demand = null; let hot = !!marketItem(sessionLike && sessionLike.market, row);
-    if (type.id === "regular" || !row.tastes.length) {
+    if (type.id === "regular" || options.itemDemand || !row.tastes.length) {
       demand = { kind: "item", itemId: row.id, label: "我要" + row.name };
     } else if (type.id === "taste" && random() < 0.35) {
       const first = pick(random, row.tastes);
@@ -379,22 +395,33 @@
   }
   function lossSummary(session) {
     const records = session && Array.isArray(session.customers) ? session.customers : [];
-    const missedPoints = records.filter((rec) => rec.outcome !== "答對" && rec.outcome !== "替代成功").reduce((sum, rec) => sum + (qty(rec.maxScore) || BASE_SCORE), 0);
-    const tokenPoints = records.reduce((sum, rec) => sum + qty(rec.tokenPenalty), 0);
-    const substitutePoints = records.reduce((sum, rec) => sum + qty(rec.substitutePenalty), 0);
-    const counts = { tasteWrong: qty(session && session.tasteWrong), itemWrong: qty(session && session.itemWrong), timeouts: qty(session && session.timeouts), tokenUses: qty(session && session.tokenUses), missedPoints, tokenPoints, substitutePoints };
-    const candidates = [
-      { id: "missed", label: "沒來得及招呼", count: counts.timeouts + qty(session && session.unfinished), points: missedPoints },
-      { id: "wrong", label: "拿錯東西或口味", count: counts.tasteWrong + counts.itemWrong, points: missedPoints },
-      { id: "tokenUses", label: "缺貨用代幣", count: counts.tokenUses, points: tokenPoints },
-      { id: "substitute", label: "改推替代品", count: records.filter((rec) => qty(rec.substitutePenalty) > 0).length, points: substitutePoints },
+    const gap = Math.max(0, qty(session && session.maxPossibleScore) - qty(session && session.score));
+    const counts = {
+      tasteWrong: qty(session && session.tasteWrong), itemWrong: qty(session && session.itemWrong),
+      timeouts: qty(session && session.timeouts), tokenUses: qty(session && session.tokenUses),
+      missedPoints: records.filter((rec) => rec.outcome !== "答對" && rec.outcome !== "替代成功").reduce((sum, rec) => sum + (qty(rec.maxScore) || BASE_SCORE), 0),
+      tokenPoints: records.reduce((sum, rec) => sum + qty(rec.tokenPenalty), 0),
+      substitutePoints: records.reduce((sum, rec) => sum + qty(rec.substitutePenalty), 0),
+    };
+    const raw = [
+      { id: "hot", label: "熱門沒接到", count: records.filter((rec) => qty(rec.plannedHotBonus) > qty(rec.hotBonus)).length, points: records.reduce((sum, rec) => sum + Math.max(0, qty(rec.plannedHotBonus) - qty(rec.hotBonus)), 0) },
+      { id: "token", label: "代幣折半", count: qty(session && session.tokenUses), points: records.reduce((sum, rec) => sum + qty(rec.tokenPenalty), 0) },
+      { id: "substitute", label: "替代品折分", count: records.filter((rec) => qty(rec.substitutePenalty) > 0).length, points: records.reduce((sum, rec) => sum + qty(rec.substitutePenalty), 0) },
+      { id: "notReached", label: "沒招呼到", count: records.filter((rec) => rec.outcome === "等太久先離開" || rec.outcome === "時間到" || rec.outcome === "沒輪到").length, points: records.filter((rec) => rec.outcome === "等太久先離開" || rec.outcome === "時間到" || rec.outcome === "沒輪到").length * BASE_SCORE },
+      { id: "tasteWrong", label: "口味猜錯 " + qty(session && session.tasteWrong) + " 次", count: qty(session && session.tasteWrong), points: qty(session && session.tasteWrong) * BASE_SCORE },
+      { id: "itemWrong", label: "拿錯東西 " + qty(session && session.itemWrong) + " 次", count: qty(session && session.itemWrong), points: qty(session && session.itemWrong) * BASE_SCORE },
     ];
-    let primary = candidates.slice().sort((a, b) => b.points - a.points || b.count - a.count)[0];
-    let text = primary && primary.count > 0 ? primary.label + "，少了約 " + primary.points + " 分" : "沒有明顯失分";
-    if (counts.tasteWrong > 0) { primary = { id: "tasteWrong", label: "口味猜錯", count: counts.tasteWrong, points: missedPoints }; text = "口味猜錯 " + counts.tasteWrong + " 次"; }
-    else if (counts.itemWrong > 0) { primary = { id: "itemWrong", label: "拿錯東西", count: counts.itemWrong, points: missedPoints }; text = "拿錯東西 " + counts.itemWrong + " 次"; }
-    const hasLoss = !!(primary && primary.count > 0);
-    return { counts, primary: hasLoss ? primary : null, text, display: hasLoss ? "主要失分：差最多是" + text : "主要失分：" + text };
+    let remaining = gap;
+    const breakdown = raw.map((row) => {
+      const points = Math.min(remaining, qty(row.points)); remaining -= points;
+      return { id: row.id, label: row.label, count: row.count, points };
+    });
+    if (remaining > 0) { breakdown.push({ id: "combo", label: "連擊中斷", count: Math.max(1, qty(session && session.missed)), points: remaining }); remaining = 0; }
+    const visible = breakdown.filter((row) => row.points > 0);
+    const primary = visible.slice().sort((a, b) => b.points - a.points || b.count - a.count)[0] || null;
+    const totalPoints = visible.reduce((sum, row) => sum + row.points, 0);
+    const text = gap === 0 ? "沒有失分" : visible.map((row) => row.label + "少 " + row.points + " 分").join("、");
+    return { gap, totalPoints, counts, breakdown: visible, primary, text, display: "主要失分：" + text };
   }
   /* R77C 第 11 項：每一位客人一筆紀錄，結算逐位對得上總分。 */
   function beginRecord(session, customer) {
@@ -402,7 +429,7 @@
     if (!target) { session.currentRecord = null; return null; }
     if (target._record) { session.currentRecord = target._record; return target._record; }
     const d = target.demand || {};
-    const rec = { queueId: target.queueId || "", npcId: target.npcId, npcName: target.npcName, typeId: target.typeId || "", tags: (target.tags || []).slice(0, 2), want: d.label || "", given: [], givenNames: [], gained: 0, baseScore: BASE_SCORE, hotBonus: 0, comboBonus: 0, tokenPenalty: 0, substitutePenalty: 0, tokenUses: 0, hot: false, outcome: "招待中", diff: "", maxScore: qty(target.maxScore) || BASE_SCORE };
+    const rec = { queueId: target.queueId || "", npcId: target.npcId, npcName: target.npcName, typeId: target.typeId || "", typeLabel: target.typeLabel || "", patienceMs: qty(target.patienceMs), tags: (target.tags || []).slice(0, 2), want: d.label || "", given: [], givenNames: [], gained: 0, baseScore: BASE_SCORE, plannedHotBonus: d.hot ? HOT_SCORE_BONUS : 0, hotBonus: 0, comboBonus: 0, tokenPenalty: 0, substitutePenalty: 0, tokenUses: 0, hot: false, outcome: "招待中", diff: "", maxScore: qty(target.maxScore) || BASE_SCORE };
     if (!Array.isArray(session.customers)) session.customers = [];
     session.customers.push(rec); target._record = rec; session.currentRecord = rec;
     return rec;
@@ -457,14 +484,31 @@
     if (session.selectedCustomerId === (customer && customer.queueId)) session.selectedCustomerId = "";
   }
   function plannedMaxScore(index, customer) {
-    /* 玩家可以用口味題挑熱門品項，因此上限以每位都遞到熱門貨計；實得分永遠不會高過這個上限。 */
-    return BASE_SCORE + Math.min(COMBO_CAP, Math.max(0, index) * COMBO_STEP) + HOT_SCORE_BONUS;
+    return BASE_SCORE + Math.min(COMBO_CAP, Math.max(0, index) * COMBO_STEP) + (customer && customer.demand && customer.demand.hot ? HOT_SCORE_BONUS : 0);
+  }
+  function demandKey(demand) {
+    if (!demand) return "";
+    if (demand.kind === "item") return "item:" + demand.itemId;
+    if (demand.kind === "pair") return "pair:" + (demand.tastes || []).slice().sort().join("+");
+    return "taste:" + (demand.taste || "");
   }
   function prepareCustomerPlan(state, session, now) {
     session.customerPlan = [];
     let maximum = 0;
+    const typeOffset = Math.floor(session.rng() * CUSTOMER_TYPES.length);
+    const typeDirection = session.rng() < 0.5 ? 1 : -1;
     for (let index = 0; index < session.customerLimit; index++) {
-      const customer = makeCustomer(state, session.pool, now, session.rng, { session, tokensLeft: session.tokensLeft });
+      const typeIndex = ((typeOffset + typeDirection * index) % CUSTOMER_TYPES.length + CUSTOMER_TYPES.length) % CUSTOMER_TYPES.length;
+      const type = CUSTOMER_TYPES[typeIndex];
+      const recentDemands = session.customerPlan.slice(-2).map((row) => demandKey(row.demand));
+      const hotMode = index % 3 === 0 ? "hot" : "cold";
+      let customer = null;
+      for (let attempt = 0; attempt < 36; attempt++) {
+        const candidate = makeCustomer(state, session.pool, now, session.rng, { session, tokensLeft: session.tokensLeft, typeId: type.id, hotMode, itemDemand: type.id === "rush" });
+        if (!candidate) break;
+        customer = candidate;
+        if (!recentDemands.includes(demandKey(candidate.demand))) break;
+      }
       if (!customer) break;
       /* R79 整合：隊伍同時有兩位，玩家可以先招呼後面那位，所以新客人避開前兩位排定的人，
          攤前不會出現兩個一模一樣的蘿拉。 */
@@ -678,7 +722,7 @@
     const demand = session.customer.demand;
     const isPair = demand.kind === "pair";
     const matchedTaste = isPair ? (demand.remaining || demand.tastes || []).find((taste) => row.tastes.includes(taste)) : null;
-    const hotSale = !!marketItem(session.market, row);
+    const hotSale = !!demand.hot;
     const fullGained = BASE_SCORE + Math.min(COMBO_CAP, session.combo * COMBO_STEP) + (hotSale ? HOT_SCORE_BONUS : 0);
     let gained = fullGained;
     let partial = false;
@@ -737,6 +781,48 @@
     if (!session.customer && session.customerPlan && session.customerPlan.length === 0) { const closed = allCustomersFinish(state, session, t); return { finished: true, timedOut: expired.length > 0, result: closed.result }; }
     return { finished: false, timedOut: expired.length > 0, customer: session.customer };
   }
+
+  /* R80A：作物評比仍由 world-ui 建立結果視窗；這裡只在結果已經產生後，
+     把可見內容收斂成三行，避免修改其他施工線共用的 world-ui.js。 */
+  function judgingSummary(judging) {
+    const sources = judging && judging.scoreSources || {};
+    const rows = [
+      { id: "diverse", label: "種類不同" }, { id: "seasonal", label: "當季作物" },
+      { id: "hasMeal", label: "有料理" }, { id: "quality", label: "優質作物" }, { id: "hasDried", label: "日曬乾貨" },
+    ].map((row) => ({ id: row.id, label: row.label, got: !!sources[row.id] }));
+    if (judging && Array.isArray(judging.breakdown)) for (const saved of judging.breakdown) { const row = rows.find((item) => item.id === saved.id); if (row) row.got = !!saved.got; }
+    const score = Number.isFinite(judging && judging.totalScore) ? judging.totalScore : rows.filter((row) => row.got).length;
+    const maximum = Number.isFinite(judging && judging.maxScore) ? judging.maxScore : 5;
+    const stars = Number.isFinite(judging && judging.stars) ? judging.stars : score >= 4 ? 3 : score >= 2 ? 2 : 1;
+    const missing = rows.filter((row) => !row.got);
+    const advice = missing.length ? "最該改進：下次先補「" + missing[0].label + "」。" : "最該改進：五項全拿到了，下次換一組參賽物。";
+    return { rows, score, maximum, stars, advice };
+  }
+  function installJudgingResultEnhancer() {
+    if (typeof document === "undefined" || document.__r80aJudgingEnhancer) return;
+    document.__r80aJudgingEnhancer = true;
+    document.addEventListener("click", (event) => {
+      const button = event.target && event.target.closest ? event.target.closest("#festivalJudge") : null;
+      if (!button) return;
+      setTimeout(() => {
+        const box = document.getElementById("worldModal");
+        const title = box && box.querySelector("#worldModalTitle");
+        const body = box && box.querySelector(".modal-body");
+        const farm = root.__farm;
+        const state = farm && typeof farm.state === "function" ? farm.state() : null;
+        const judging = state && state.adventure && state.adventure.r61 && state.adventure.r61.festival && state.adventure.r61.festival.judging;
+        if (!body || !title || title.textContent !== "作物評比結果" || !judging) return;
+        const view = judgingSummary(judging);
+        const escHtml = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+        const stars = "★".repeat(view.stars) + "☆".repeat(Math.max(0, 3 - view.stars));
+        const itemRows = (judging.details || []).map((row) => `<li><b>${escHtml(row.name)}</b>：${escHtml(row.sources && row.sources.length ? row.sources.join("、") : "本次沒有加分")}</li>`).join("");
+        const missing = view.rows.filter((row) => !row.got).map((row) => row.label);
+        const legacyTip = judging.tip || (missing.length ? "三星要四項；下次先補「" + missing.join("」和「") + "」。" : "五項全拿到了。" );
+        body.innerHTML = `<section class="r80a-result-summary" data-r80a-judge-summary><p class="r80a-result-line r80a-result-stars" aria-label="${view.stars} 顆星">星等：${stars}</p><p class="r80a-result-line">得分：${view.score}／${view.maximum}</p><p class="r80a-result-line">${escHtml(view.advice)}</p></section><div class="r80a-legacy-judge" aria-hidden="true"><p>總分 ${view.score}／${view.maximum}・一星要 1 分、二星要 2 分、三星要 4 分，滿分 5 分</p><p><b>下次提示：</b>${escHtml(legacyTip)}</p><p><b>獎勵：</b>${escHtml(judging.rewardText || "")}</p></div><details class="r80a-result-details" data-r80a-judge-details><summary>看明細</summary><p>星等門檻：一星要 1 分、二星要 2 分、三星要 4 分，滿分 5 分。</p>${judging.stallReputation ? `<p>${escHtml(judging.stallReputation.text)}</p>` : ""}<ul class="r76b-judge-breakdown">${view.rows.map((row) => `<li>${row.got ? "✓" : "○"} ${escHtml(row.label)}</li>`).join("")}</ul>${itemRows ? `<ul>${itemRows}</ul>` : ""}<p><b>獎勵：</b>${escHtml(judging.rewardText || "")}</p></details>`;
+      }, 0);
+    }, true);
+  }
+  installJudgingResultEnhancer();
 
   // ---------- 瀏覽器介面 ----------
   const ART_BASE = "assets/generated/content-r72/";
@@ -884,19 +970,25 @@
         ? `這次補給：金幣 ${result.granted.coins} 枚${result.granted.medals ? `、祭典獎章 ${result.granted.medals} 枚` : ""}${result.granted.goldenFlag ? "、金色攤位旗" : ""}。`
         : result.stars > 0 ? "這次沒有新的獎勵，先前已經照最高星領過了。" : "這一場的保底 5 金已經領過了，下一場再接再厲。";
       shell(`<h2 class="r72b-title">這一場結算</h2>
-        <p class="r78a-end-reason" data-r78a-end-reason role="status">結束原因：${esc(result.endReasonText)}</p>
-        <p class="r72b-stars" aria-label="${result.stars} 顆星">${stars}</p>
-        ${starFloorText(result) ? `<p class="r78a-star-floor" data-r78a-star-floor>${esc(starFloorText(result))}</p>` : ""}
-        ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
+        <section class="r78a-end-reason r80a-result-summary" data-r78a-end-reason data-r80a-stall-summary role="status">
+          <span class="r80a-visually-hidden">結束原因：${esc(result.endReasonText)}</span>
+          <p class="r80a-result-line r72b-stars" aria-label="${result.stars} 顆星">星等：${stars}</p>
+          <p class="r80a-result-line r79a-max-score" data-r79a-max-score>得分：${qty(result.score)}／${qty(result.maxPossibleScore)}（這一場最多可以拿 ${qty(result.maxPossibleScore)} 分）</p>
+          <p class="r80a-result-line r73b-advice" data-r73b-advice>${esc(result.advice || adviceFor(result))}</p>
+        </section>
+        <p class="r72b-status" data-r78a-counts hidden>${result.score} 分・答對 ${result.served} 位・答錯 ${qty(result.wrong)} 位・錯過 ${qty(result.timedOut)} 位・沒輪到 ${qty(result.notReached)} 位・共 ${qty(result.customerTotal)} 位・最高連續答對 ${result.bestCombo} 次</p>
         ${result.soldOut ? `<span data-r77c-sold-out hidden>${esc(SOLD_OUT_TEXT)}</span>` : ""}
-        <p class="r72b-status" data-r78a-counts>${result.score} 分・答對 ${result.served} 位・答錯 ${qty(result.wrong)} 位・錯過 ${qty(result.timedOut)} 位・沒輪到 ${qty(result.notReached)} 位・共 ${qty(result.customerTotal)} 位・最高連續答對 ${result.bestCombo} 次</p>
-        <p class="r79a-max-score" data-r79a-max-score>這一場最多可以拿 ${qty(result.maxPossibleScore)} 分；你拿到 ${qty(result.score)} 分。</p>
-        <p class="r76b-loss" data-r76b-loss>${esc(result.mainLoss || (result.loss && result.loss.display) || "主要失分：沒有明顯失分")}・代幣用了 ${qty(result.tokenUses)} 次（每場 ${result.tokensPerSession || TOKENS_PER_SESSION} 枚，用代幣答對只拿一半分）</p>
-        <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
-        <p class="r73b-advice" data-r73b-advice>${esc(result.advice || adviceFor(result))}</p>
-        <p class="r72b-status">${esc(grantedText)}這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分</p>
-        <details class="r77c-customers" data-r77c-customers open><summary>這一場的客人（${qty(result.customerTotal)} 位）</summary><ul>${(result.customers || []).map((rec) => `<li class="r77c-customer-row"><b>${esc(rec.npcName)}</b><span>需求：${esc(rec.want)}<span class="r79a-legacy-label">想要：</span></span><span>交付：${esc((rec.givenNames || []).join("、") || "沒有交付")}</span><span>基本 ${qty(rec.baseScore)} 分・熱門加分 ${qty(rec.hotBonus)} 分・連續答對加分 ${qty(rec.comboBonus)} 分・代幣少 ${qty(rec.tokenPenalty)} 分${qty(rec.substitutePenalty) ? "・替代品少 " + qty(rec.substitutePenalty) + " 分" : ""}・合計 ${qty(rec.gained)} 分</span><span>${esc(rec.outcome)}${rec.diff ? "・" + esc(rec.diff) : ""}</span></li>`).join("") || "<li>這一場沒有排到客人。</li>"}</ul></details>
-        ${result.bestSeller ? `<p class="r72b-status" data-r77c-best-seller>這一場賣得最好：${esc(result.bestSeller.name)}（${qty(result.bestSeller.count)} 份）</p>` : ""}
+        <details class="r80a-result-details r77c-customers" data-r80a-stall-details data-r77c-customers><summary>看明細（${qty(result.customerTotal)} 位）</summary>
+          <p>結束原因：${esc(result.endReasonText)}</p>
+          ${starFloorText(result) ? `<p class="r78a-star-floor" data-r78a-star-floor>${esc(starFloorText(result))}</p>` : ""}
+          ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
+          <p>${result.score} 分・答對 ${result.served} 位・答錯 ${qty(result.wrong)} 位・錯過 ${qty(result.timedOut)} 位・沒輪到 ${qty(result.notReached)} 位・共 ${qty(result.customerTotal)} 位・最高連續答對 ${result.bestCombo} 次</p>
+          <p class="r76b-loss" data-r76b-loss>${esc(result.mainLoss || (result.loss && result.loss.display) || "主要失分：沒有失分")}。代幣用了 ${qty(result.tokenUses)} 次（每場 ${result.tokensPerSession || TOKENS_PER_SESSION} 枚，用代幣答對只拿一半分）。</p>
+          <p class="r73b-thresholds" data-r73b-thresholds>星等門檻：${starThresholdText()}</p>
+          <p>${esc(grantedText)}這一場還可以玩 ${view.attemptsLeft} 次・最高分 ${view.bestScore} 分</p>
+          <section class="r80a-customer-details"><h3>逐位客人</h3><ul>${(result.customers || []).map((rec) => `<li class="r77c-customer-row"><b>${esc(rec.npcName)}</b><span>需求：${esc(rec.want)}<span class="r79a-legacy-label">想要：</span></span><span>交付：${esc((rec.givenNames || []).join("、") || "沒有交付")}</span><span>基本 ${qty(rec.baseScore)} 分・熱門加分 ${qty(rec.hotBonus)} 分・連續答對加分 ${qty(rec.comboBonus)} 分・代幣少 ${qty(rec.tokenPenalty)} 分${qty(rec.substitutePenalty) ? "・替代品少 " + qty(rec.substitutePenalty) + " 分" : ""}・合計 ${qty(rec.gained)} 分</span><span>${esc(rec.outcome)}${rec.diff ? "・" + esc(rec.diff) : ""}</span></li>`).join("") || "<li>這一場沒有排到客人。</li>"}</ul></section>
+          ${result.bestSeller ? `<p class="r72b-status" data-r77c-best-seller>這一場賣得最好：${esc(result.bestSeller.name)}（${qty(result.bestSeller.count)} 份）</p>` : ""}
+        </details>
         <div class="r72b-actions"><button type="button" class="r72b-primary" data-r72b-again ${view.canPlay ? "" : "disabled"}>再玩一次</button><button type="button" class="r72b-secondary" data-r72b-done>回到攤位</button></div>`);
       /* 再玩一次時重算擺出清單：上一場賣掉的貨已經不在背包裡。 */
       const again = overlay.querySelector("[data-r72b-again]"); if (again) again.onclick = () => { stallPlanCache = null; marketCache = null; renderStart(""); };
@@ -916,7 +1008,7 @@
     ensure, festivalInfo, statusFor, unlockedItems, stockOf, totalStock, stockedItems,
     reservePlan, defaultStallQty, marketPreview, marketItem, stallStockOf, demandAnswerable,
     tastesOf, tasteLabelsOf, iconFor, itemMode, itemCard, starThresholdText, starFloorText, adviceFor, lossSummary,
-    makeCustomer, matchesDemand, substituteMatch, demandText, queueCustomers, selectCustomer, startSession, serve, tickSession, finishSession,
+    makeCustomer, matchesDemand, substituteMatch, demandText, queueCustomers, selectCustomer, startSession, serve, tickSession, finishSession, judgingSummary,
     starsForScore, starsForSession, rewardForStars, open,
   };
   if (typeof window !== "undefined") window.FestivalStallR72 = FestivalStallR72;

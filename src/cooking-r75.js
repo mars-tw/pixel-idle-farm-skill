@@ -268,7 +268,7 @@
     if (!recipe || !recipe.effect) return grade === "perfect" ? "分享給鄰居好感多 1" : "適合分享給鄰居";
     const base = recipe.effect.durationMs || 0; const actual = scaledDurationMs(base, grade);
     const effect = String(recipe.effect.summary || recipe.effect.label || "料理效果").replace(/。$/, "");
-    return `${effect}・${durationText(base)} → ${durationText(actual)}${grade === "perfect" ? "・分享給鄰居好感多 1" : ""}`;
+    return `${effect}・效果持續 ${durationText(base)} → ${durationText(actual)}${grade === "perfect" ? "・分享給鄰居好感多 1" : ""}`;
   }
 
   function eatMeal(state, recipeId, now) {
