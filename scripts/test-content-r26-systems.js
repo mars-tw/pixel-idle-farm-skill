@@ -134,8 +134,9 @@ test('每日三項不重複首章收成與小麥交付，印章冊標示已領�
 test('開場、對話與設定文案符合 R26', () => {
   assert.match(world, /先去找鎮長葛瑞，再親手種下第一格。完成這兩步後，你可以自己決定先收成、修釣台，或去跟蘿拉打招呼。/);
   assert.match(world, /id="worldSunBegin">去見鎮長葛瑞/);
-  assert.match(world, /class="dialogue-continue">繼續 ▶<\/button>/);
-  assert.match(world, /class="dialogue-close" aria-label="略過對話"/);
+  /* R80C 同步：對話框按鈕改成跟下方對話框同一套說法（一次一句的主要鈕是「聽完了」、次要鈕「晚點再說」），只換字樣。 */
+  assert.match(world, /class="dialogue-continue">聽完了<\/button>/);
+  assert.match(world, /class="dialogue-close" aria-label="晚點再說"/);
   assert.match(ui, /<details class="settings-advanced" data-audit="settings-advanced"><summary>進階<\/summary>/);
   const settings = ui.slice(ui.indexOf('function renderSettingsPanel'), ui.indexOf('function renderSmartAssistant'));
   const advanced = settings.match(/<details class="settings-advanced"[\s\S]*?<\/details>/)?.[0] || '';

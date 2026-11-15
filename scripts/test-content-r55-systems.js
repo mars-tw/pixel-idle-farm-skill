@@ -61,8 +61,10 @@ test('市集資料仍保留三張，鎖定畫面只顯示一張範例與兩張�
   const ui = read('src/ui.js');
   assert.match(ui, /previewMarketOrders\(state, now\(\)\) : \[\]\)\.slice\(0, 1\)/);
   assert.ok(ui.includes('開放後還有 2 張。'));
-  assert.ok(ui.includes('className = "r55-future-upgrades"'));
-  assert.ok(ui.includes('之後的目標（${upgradeKeys.length - 1}）'));
+  /* R80C 同步：升級面板只留一層收合（「再顯示 N 項」），第一章沒走完時不再另外折一層「之後的目標」；改驗三個目標排前面、其餘接在同一張清單後面。 */
+  assert.ok(!ui.includes('className = "r55-future-upgrades"'));
+  assert.ok(!ui.includes('之後的目標（'));
+  assert.ok(ui.includes('if (!firstChapterComplete && !firstShown.includes(key)) laterCards.push(el); else box.appendChild(el);'));
 });
 
 test('新存檔完成老農班伯交付後至少可建造一項建物', () => {
