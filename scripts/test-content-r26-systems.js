@@ -31,7 +31,8 @@ test('升級面板只有一個標題關閉入口，買不起時顯示還差 X �
 });
 
 test('建造模式顯示已解鎖與下一項、價格、負擔狀態與放置提示', () => {
-  assert.match(ui, /if \(t === "build"\) showBuildCatalog\(\)/);
+  // R80B：切到建造模式時另外鎖住種子欄位置，這一行改寫成區塊；仍要求「切到建造就開建造清單」。
+  assert.match(ui, /if \(t === "build"\) \{?\s*showBuildCatalog\(\)/);
   assert.match(ui, /選一個建物，再點地面放置/);
   assert.match(ui, /visibleBuildingCatalogTypes\(\)\.forEach/);
   assert.match(ui, /const next = window\.BUILDING_ORDER\.find/);

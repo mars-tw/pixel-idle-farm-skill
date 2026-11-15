@@ -978,7 +978,7 @@
         </section>
         <p class="r72b-status" data-r78a-counts hidden>${result.score} 分・答對 ${result.served} 位・答錯 ${qty(result.wrong)} 位・錯過 ${qty(result.timedOut)} 位・沒輪到 ${qty(result.notReached)} 位・共 ${qty(result.customerTotal)} 位・最高連續答對 ${result.bestCombo} 次</p>
         ${result.soldOut ? `<span data-r77c-sold-out hidden>${esc(SOLD_OUT_TEXT)}</span>` : ""}
-        <details class="r80a-result-details r77c-customers" data-r80a-stall-details data-r77c-customers><summary>看明細（${qty(result.customerTotal)} 位）</summary>
+        <details class="r80a-result-details r77c-customers" data-r80a-stall-details data-r77c-customers><summary>看明細：這一場的客人（${qty(result.customerTotal)} 位）</summary>
           <p>結束原因：${esc(result.endReasonText)}</p>
           ${starFloorText(result) ? `<p class="r78a-star-floor" data-r78a-star-floor>${esc(starFloorText(result))}</p>` : ""}
           ${result.stars >= 3 ? `<img class="r72b-flag" src="${ART_BASE}golden-flag.png${versionQuery}" alt="金色攤位旗">` : ""}
