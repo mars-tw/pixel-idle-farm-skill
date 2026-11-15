@@ -85,7 +85,8 @@ test("A4 任務卡一般與收合摘要都含目前子目標進度", () => {
 test("A5 訂單倒數採中文分秒，對話關閉鍵明示略過", () => {
   const ui = source("src/ui.js"), world = source("src/world-ui.js");
   assert.match(ui, /`\$\{minutes\} 分 \$\{String\(seconds\)\.padStart\(2, "0"\)\} 秒`/);
-  assert.match(world, />× 略過<\/button>/);
-  assert.match(world, />繼續 ▶<\/button>/);
+  /* R80C 同步：關閉鍵改成跟下方對話框同一個字「晚點再說」（仍寫明是先不聽），主要鈕「聽完了」。 */
+  assert.match(world, />晚點再說<\/button>/);
+  assert.match(world, />聽完了<\/button>/);
 });
 console.log(`R30 content systems: ${passed} passed`);

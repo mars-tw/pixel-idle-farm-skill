@@ -474,6 +474,7 @@
       if (window.NeighborsR61 && current) window.NeighborsR61.injectJournal(current);
       const sec = document.querySelector("[data-r61b-neighbors]");
       if (sec && sec.scrollIntoView) sec.scrollIntoView({ block: "start" });
+      syncPaneTitles();
     };
     if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => setTimeout(jump, 30));
     else jump();
@@ -481,6 +482,52 @@
   function closePanels() {
     const panel = document.querySelector(".side-panel");
     if (panel) panel.classList.remove("world-panel-open");
+  }
+  /* R80C 第 4 項：手札分頁標題跟著內容走。圖鑑分頁裡放著追光手冊、農場圖鑑、我做過的選擇（含後續委託）、鄰居好感、鄰居互動，
+     標題改成「手札・目前捲到的那一段」，不再整頁都寫「農場圖鑑」；故事分頁的頁籤也改叫「手札」，跟標題「陽光農場手札」同一個名字。 */
+  const JOURNAL_PAGES = [["[data-r76c-sunbook]", "追光手冊"], ["[data-r66b-panel]", "鄰居互動"], ["[data-r61b-neighbors]", "鄰居好感"], ["[data-r75b-choices]", "我做過的選擇"]];
+  const TAB_LABELS = { story: ["手札", "切換到手札分頁"], journal: ["圖鑑與鄰居", "切換到圖鑑與鄰居分頁"] };
+  function paneTitleNode(head) {
+    let node = head.querySelector(".r80c-pane-title");
+    if (node) return node;
+    const text = Array.from(head.childNodes).find((n) => n.nodeType === 3 && n.textContent.trim());
+    node = document.createElement("span"); node.className = "r80c-pane-title";
+    node.textContent = text ? text.textContent.trim() : "";
+    if (text) text.replaceWith(node); else head.appendChild(node);
+    return node;
+  }
+  /* 量標題下方約一行字的那條線落在哪一段；捲到底時最後一段通常捲不到頂，改量面板中線。 */
+  function journalPageName() {
+    const pane = document.querySelector('.side-pane[data-pane="journal"]'), head = pane && pane.querySelector(".pane-head"), body = pane && pane.closest(".side-body");
+    if (!pane || !head) return "農場圖鑑";
+    const atBottom = !!body && body.scrollTop > 0 && body.scrollTop + body.clientHeight >= body.scrollHeight - 2;
+    const line = Math.max(head.getBoundingClientRect().bottom + 32, atBottom ? body.getBoundingClientRect().top + body.clientHeight / 2 : 0);
+    const rows = JOURNAL_PAGES.map(([sel, label]) => { const sec = pane.querySelector(sel); return sec ? { sec, label, r: sec.getBoundingClientRect() } : null; }).filter((row) => row && row.r.height);
+    const hit = rows.find((row) => row.r.top <= line && row.r.bottom > line);
+    if (!hit) return "農場圖鑑";
+    if (hit.label !== "我做過的選擇") return hit.label;
+    return Array.from(hit.sec.querySelectorAll(".r77b-quest")).some((n) => { const q = n.getBoundingClientRect(); return q.top <= line && q.bottom > line; }) ? "後續委託" : hit.label;
+  }
+  function syncPaneTitles() {
+    Object.keys(TAB_LABELS).forEach((key) => {
+      const tab = document.querySelector('.side-tab[data-tab="' + key + '"]'), text = tab && Array.from(tab.childNodes).find((n) => n.nodeType === 3 && n.textContent.trim());
+      if (text && text.textContent.trim() !== TAB_LABELS[key][0]) { text.textContent = TAB_LABELS[key][0] + " "; tab.setAttribute("aria-label", TAB_LABELS[key][1]); }
+    });
+    const journalHead = document.querySelector('.side-pane[data-pane="journal"] > .pane-head');
+    if (!journalHead) return;
+    const title = paneTitleNode(journalHead), page = journalPageName(), text = "手札・" + page;
+    if (title.textContent !== text) { title.textContent = text; journalHead.dataset.r80cPage = page; }
+  }
+  let paneTitleBound = false;
+  function bindPaneTitles() {
+    if (paneTitleBound) return;
+    const body = document.querySelector(".side-body");
+    if (!body) return;
+    paneTitleBound = true;
+    let raf = 0;
+    body.addEventListener("scroll", () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; syncPaneTitles(); }); }, { passive: true });
+    window.addEventListener("farm-panel-rendered", () => setTimeout(syncPaneTitles, 0));
+    setInterval(() => { if (document.querySelector(".side-panel.world-panel-open")) syncPaneTitles(); }, 600);
   }
   /* R79C 第 5 項：第 2 章以後，手札「目前主線」的「現在做」與任務卡按鈕從同一個來源拿——跟 renderObjective 一樣：
      nextFarmStep 認得這個任務（或光正照著）就用它；沒有就用 guide 的步驟與按鈕字。第 1 章照舊跟著前期農務走。 */
@@ -602,6 +649,7 @@
       if (h.querySelector(".world-close")) return;
       const b = document.createElement("button"); b.className = "world-close"; b.textContent = "×"; b.title = "關閉選單"; b.setAttribute("aria-label", "關閉選單"); b.onclick = closePanels; h.prepend(b);
     });
+    bindPaneTitles(); syncPaneTitles(); /* R80C 第 4 項 */
   }
   function goQuest(q) {
     closePanels();
@@ -799,7 +847,8 @@
     let box = el("worldDialogue");
     if (!box) { box = document.createElement("div"); box.id = "worldDialogue"; box.className = "world-dialogue"; box.setAttribute("role", "status"); document.body.appendChild(box); }
     const portrait = /葛瑞/.test(name) ? 'content-r77/portrait-mayor' : /祖母/.test(name) ? 'r84/' + (/留|回來/.test(text)?'grandma-2':/等/.test(text)?'grandma-1':'grandma-0') : null;
-    box.innerHTML = `<button class="dialogue-close" aria-label="略過對話" title="略過對話">× 略過</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">繼續 ▶</button>`;
+    /* R80C 第 5 項：按鈕跟下方對話框同一套說法——這一種一次只有一句，所以主要鈕是「聽完了」（下方那一種的最後一句也是這個字），次要鈕「晚點再說」。 */
+    box.innerHTML = `<button class="dialogue-close" aria-label="晚點再說" title="晚點再說">晚點再說</button>${portrait ? `<img class="dialogue-portrait" src="assets/generated/${portrait}.png${window.FARM_VERSION_QUERY || ''}" alt="${esc(name)}" width="64" height="64">` : ''}<b>${esc(name)}</b><p>${esc(text)}</p><button class="dialogue-continue">聽完了</button>`;
     box.hidden = false; delete box.dataset.refocused; box.classList.remove("dialogue-flip-top", "dialogue-compact-top", "dialogue-compact-bottom"); box.dataset.dialogueMode = window.innerHeight <= 600 ? "compact" : "standard"; try { const speaker = Array.from(document.querySelectorAll('[data-kind="npc"]')).find((n) => { const fn = ((window.NPCS || {})[n.dataset.npc] || {}).name || ""; return fn && (fn === name || fn.includes(name) || name.includes(fn) || fn.endsWith(name)); }); if (speaker) { const sr = speaker.getBoundingClientRect(), dr = box.getBoundingClientRect(); const hit = Math.max(0, Math.min(sr.right, dr.right) - Math.max(sr.left, dr.left)) * Math.max(0, Math.min(sr.bottom, dr.bottom) - Math.max(sr.top, dr.top)); const outside = sr.top < 0 || sr.bottom > window.innerHeight || sr.left < 0 || sr.right > window.innerWidth; placeDialogue(box, speaker); if (hit > 0 || outside) { const f = farm(); if (f && f.focusTile && speaker.dataset.tileId) f.focusTile(speaker.dataset.tileId); } const trackUntil = performance.now() + 1400; const track = () => { if (box.hidden) return; const node = document.querySelector('[data-kind="npc"][data-tile-id="' + speaker.dataset.tileId + '"]'); placeDialogue(box, node); if (performance.now() < trackUntil) requestAnimationFrame(track); }; requestAnimationFrame(track); } else if (window.innerHeight <= 600) box.classList.add("dialogue-compact-top"); } catch (e) {}
     box.querySelector(".dialogue-close").onclick = () => { box.hidden = true; };
     box.querySelector(".dialogue-continue").onclick = () => { box.hidden = true; };

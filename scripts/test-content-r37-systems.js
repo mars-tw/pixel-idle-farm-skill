@@ -78,8 +78,9 @@ test("A3 印章冊表頭不混用分母，每項都顯示目前與目標", () =>
 test("A4 對話的繼續是實心主按鈕，略過是小字次按鈕", () => {
   const css = read("src/content-r37a.css");
   const world = read("src/world-ui.js");
-  assert.match(world, /class="dialogue-close"[^>]*>× 略過<\/button>/);
-  assert.match(world, /class="dialogue-continue">繼續 ▶<\/button>/);
+  /* R80C 同步：按鈕字樣改成跟下方對話框同一套（晚點再說／聽完了）；主次按鈕的樣式規則不變。 */
+  assert.match(world, /class="dialogue-close"[^>]*>晚點再說<\/button>/);
+  assert.match(world, /class="dialogue-continue">聽完了<\/button>/);
   assert.match(css, /\.dialogue-continue[\s\S]*min-height: 42px[\s\S]*background: #5f8a45[\s\S]*color: #fffdf4/);
   assert.match(css, /\.dialogue-close[\s\S]*background: transparent[\s\S]*font-size: 11px/);
 });

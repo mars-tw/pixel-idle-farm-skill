@@ -161,7 +161,7 @@
     card.className = "toast settlement-card" + (data.kind === "milestone" ? " milestone-card" : "");
     card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
     card.innerHTML = data.kind === "milestone"
-      ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span>${Array.isArray(data.unlocks) && data.unlocks.length ? `<span class="r79c-unlocks" data-r79c-unlocks>新解鎖：${data.unlocks.map((row) => `<i class="r79c-unlock" data-kind="${escapeHtml(row.kind)}">${row.icon ? `<img src="${escapeHtml(row.icon)}${window.FARM_VERSION_QUERY || ""}" alt="" width="20" height="20">` : row.mark ? `<b aria-hidden="true">${escapeHtml(row.mark)}</b>` : ""}${escapeHtml(row.name)}</i>`).join("")}</span>` : `<span>新解鎖：${escapeHtml(data.unlocked)}</span>`}<span>下一步：${escapeHtml(data.next)}</span>`
+      ? `<strong>${escapeHtml(data.title)}</strong>${data.type === "level_up" || /^農場等級提升/.test(String(data.earned || "")) ? "" /* R80C 第 6 項：升級卡標題已寫「升到 Lv N」，不再重複一行「獲得：農場等級提升到 Lv N」 */ : `<span>獲得：${escapeHtml(data.earned)}</span>`}${Array.isArray(data.unlocks) && data.unlocks.length ? `<span class="r79c-unlocks" data-r79c-unlocks>新解鎖：${data.unlocks.map((row) => `<i class="r79c-unlock" data-kind="${escapeHtml(row.kind)}">${row.icon ? `<img src="${escapeHtml(row.icon)}${window.FARM_VERSION_QUERY || ""}" alt="" width="20" height="20">` : row.mark ? `<b aria-hidden="true">${escapeHtml(row.mark)}</b>` : ""}${escapeHtml(row.name)}</i>`).join("")}</span>` : `<span>新解鎖：${escapeHtml(data.unlocked)}</span>`}<span>下一步：${escapeHtml(data.next)}</span>`
       : `${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).length ? `獲得 ${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).join("・")}・` : ""}下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
@@ -1857,15 +1857,11 @@
       return upgradeBand(a, na) - upgradeBand(b, nb) || (na ? na.cost : Infinity) - (nb ? nb.cost : Infinity);
     });
     const firstChapterComplete = !!(state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_meal);
-    /* R79C 第 3 項：第一章還沒走完時，第一屏也先放三個能追的目標（各自寫效果），其餘才收進「之後的目標」。 */
+    /* R79C 第 3 項：第一章還沒走完時，第一屏也先放三個能追的目標（各自寫效果），其餘接在後面（R80C：同一層「再顯示 N 項」）。 */
     const firstShown = upgradeKeys.filter((key) => !!G.nextUpgrade(state, key)).concat(upgradeKeys.filter((key) => !G.nextUpgrade(state, key))).slice(0, 3);
-    let futureDetails = null, futureBody = null;
-    if (!firstChapterComplete && upgradeKeys.length > 1) {
-      futureDetails = document.createElement("details");
-      futureDetails.className = "r55-future-upgrades";
-      futureDetails.innerHTML = `<summary>之後的目標（${upgradeKeys.length - 1}）</summary><div class="r55-future-upgrades-list"></div>`;
-      futureBody = futureDetails.querySelector(".r55-future-upgrades-list");
-    }
+    /* R80C 第 6 項：升級面板只留一層收合——原本第一章沒走完時另有「之後的目標」折疊，再疊上第一屏的「再顯示 N 項」，兩層並存。
+       改成同一張清單：三個能追的目標排最前面，其餘接在後面，超出第一屏的一律收進「再顯示 N 項」。 */
+    const laterCards = [];
     const visibleUpgrades = upgradeKeys;
     visibleUpgrades.forEach((key) => {
       const def = window.UPGRADES[key];
@@ -1903,10 +1899,10 @@
           } else if (r.reason === "no_coins") toast("🪙 金幣不足");
         };
       }
-      if (!firstChapterComplete && futureBody && !firstShown.includes(key)) futureBody.appendChild(el); else box.appendChild(el);
+      if (!firstChapterComplete && !firstShown.includes(key)) laterCards.push(el); else box.appendChild(el);
     });
     // R75 整合：手鏡與蓄光瓶的升級跟其他升級卡同一種畫法（原本每 250ms 硬塞一塊在最前面，把「再顯示 N 項」擠出首屏）。
-    // 玩家折過光或接過陽光才出現；第一章沒走完時收進「之後的目標」，買得起的排到其他長期目標前面。
+    // 玩家折過光或接過陽光才出現；第一章沒走完時排在三個目標後面，買得起的排到其他長期目標前面。
     const sunplay = window.FarmSunplay, sunOwn = state.r75Sunplay || {};
     if (sunplay && sunplay.upgradeCards && (sunOwn.firstRefracted || sunOwn.firstCaught || sunOwn.mirrorLevel || sunOwn.bottleLevel)) {
       sunplay.upgradeCards(state).forEach((card) => {
@@ -1928,14 +1924,11 @@
             else toast(r.reason === "coins" ? "🪙 金幣不足" : r.reason === "level" ? `等級 ${card.level} 才能升級` : "已經升級過了");
           };
         }
-        const parent = futureBody || box;
-        const anchor = card.canBuy ? Array.from(parent.children).find((node) => node.classList.contains("up") && node.dataset.affordability !== "affordable") : null;
-        if (anchor) parent.insertBefore(el, anchor); else parent.appendChild(el);
+        const anchor = card.canBuy ? Array.from(box.children).find((node) => node.classList.contains("up") && node.dataset.affordability !== "affordable") : null;
+        if (anchor) box.insertBefore(el, anchor); else if (!firstChapterComplete) laterCards.push(el); else box.appendChild(el);
       });
-      if (futureDetails) futureDetails.querySelector("summary").textContent = `之後的目標（${futureBody.children.length}）`;
     }
-    if (futureDetails) futureDetails.querySelector("summary").textContent = `之後的目標（${futureBody.children.length}）`; // R79C：前三個已放在第一屏，數字照實際收起來的張數
-    if (futureDetails && futureBody.children.length) box.appendChild(futureDetails);
+    laterCards.forEach((el) => box.appendChild(el));
     renderBuildingUpgrades();
     if (newUpgrades.length && G.markLevelUnlocksSeen) { G.markLevelUnlocksSeen(state, "upgrades"); scheduleSave(); }
   }
@@ -6011,6 +6004,8 @@
     setupPanelScrollHint();
     setupQuestDockCollapse();
     setInterval(r78bFocusTick, 250);
+    /* R80C 第 5 項：下方對話框（含併進來的好感故事）一打開就立刻收任務卡，不等下一次 250ms 的檢查，畫面不會先閃一下展開的任務卡。 */
+    window.addEventListener("farm-dialogue-open", () => { try { r78bSyncFocus(); } catch (e) { /* 量不到就等下一次定時檢查 */ } });
     startPerformanceMonitor();
     setupPwa();
 

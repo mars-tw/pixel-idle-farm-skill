@@ -151,6 +151,9 @@
   function farm() { return root.__farm; }
   function saveNow() { const f = farm(); if (f && f.safeSaveNow) f.safeSaveNow(); if (f && f.refresh) f.refresh(); }
 
+  /* R80C 第 5 項：寫成「（……）」的是旁白（第三人稱的動作描寫），不再掛說話者的頭像與名字，改用旁白樣式；其餘照舊是那位鄰居自己說的話。 */
+  function isNarration(line) { return /^（[\s\S]*）$/.test(String(line || "").trim()); }
+  function narrationText(line) { return String(line || "").trim().replace(/^（/, "").replace(/）$/, ""); }
   function openDialogue(state, npcId, lines, options) {
     document.querySelectorAll(".r76b-dialogue").forEach((n) => n.remove());
     const def = CHOICES[npcId];
@@ -160,14 +163,27 @@
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-label", speaker + "的對話");
     overlay.dataset.r76bDialogue = npcId;
+    /* R80C 第 5 項：好感故事也用這一種下方對話框；呼叫端可以帶自己的標記（例如 data-r61b-story）與故事名稱。 */
+    if (options && options.dataset) Object.keys(options.dataset).forEach((key) => { overlay.dataset[key] = options.dataset[key]; });
     document.body.appendChild(overlay);
     let step = 0;
     let mode = options && options.startMode === "choices" ? "choices" : "lines"; /* R79C：地圖物件旁的選擇可以直接從選項開始 */
-    function render() {
+    function headFor(line) {
+      if (isNarration(line)) return '<div class="r76b-dialogue-head r80c-narration-head"><b>旁白</b></div>';
       const portrait = portraitFor(npcId) || portraitFor(speaker);
-      const head = '<div class="r76b-dialogue-head">' + (portrait ? '<img class="r76b-portrait" src="' + esc(portrait) + esc(versionQuery()) + '" alt="' + esc(speaker) + '" width="64" height="64">' : "") + "<b>" + esc(speaker) + "</b></div>";
+      const title = options && options.title ? '<small class="r80c-dialogue-title">' + esc(options.title) + "</small>" : "";
+      return '<div class="r76b-dialogue-head' + (options && options.headClass ? " " + esc(options.headClass) : "") + '">' + (portrait ? '<img class="r76b-portrait" src="' + esc(portrait) + esc(versionQuery()) + '" alt="' + esc(speaker) + '" width="64" height="64">' : "") + "<b>" + esc(speaker) + "</b>" + title + "</div>";
+    }
+    function lineHtml(line, attr) {
+      const narr = isNarration(line);
+      return '<p class="r76b-dialogue-line' + (narr ? " r80c-narration" : "") + '"' + (attr || "") + ">" + esc(narr ? narrationText(line) : line) + "</p>";
+    }
+    function render() {
+      const current = mode === "lines" ? lines[step] : mode === "choices" ? lines[lines.length - 1] : "";
+      const head = headFor(current);
+      const cardClass = "r76b-dialogue-card" + (isNarration(current) ? " is-narration" : "");
       if (mode === "lines") {
-        overlay.innerHTML = '<div class="r76b-dialogue-card">' + head + '<p class="r76b-dialogue-line" data-r76b-line>' + esc(lines[step]) + '</p><p class="r76b-dialogue-step">第 ' + (step + 1) + " 句，共 " + lines.length + ' 句</p><div class="r76b-dialogue-actions"><button type="button" data-r76b-next>' + (step >= lines.length - 1 ? "聽完了" : "下一句") + '</button><button type="button" data-r76b-later>晚點再說</button></div></div>';
+        overlay.innerHTML = '<div class="' + cardClass + '">' + head + lineHtml(lines[step], " data-r76b-line") + '<p class="r76b-dialogue-step">第 ' + (step + 1) + " 句，共 " + lines.length + ' 句</p><div class="r76b-dialogue-actions"><button type="button" data-r76b-next>' + (step >= lines.length - 1 ? "聽完了" : "下一句") + '</button><button type="button" data-r76b-later>晚點再說</button></div></div>';
         overlay.querySelector("[data-r76b-next]").onclick = () => {
           if (step < lines.length - 1) { step++; render(); return; }
           if (options && options.onLinesDone) { const nextMode = options.onLinesDone(); if (nextMode === "choices") { mode = "choices"; render(); return; } }
@@ -175,7 +191,7 @@
         };
       } else if (mode === "choices") {
         const choiceOptions = (options && options.choiceOptions) || [];
-        overlay.innerHTML = '<div class="r76b-dialogue-card">' + head + '<p class="r76b-dialogue-line">' + esc(lines[lines.length - 1]) + '</p><div class="r76b-choice-list">' + choiceOptions.map((o) => '<button type="button" class="r76b-choice" data-r76b-choice="' + esc(o.id) + '"><b>' + esc(o.label) + '</b><small>' + esc(o.immediate) + '</small><small>' + esc(o.longTerm) + "</small></button>").join("") + '</div><div class="r76b-dialogue-actions"><button type="button" data-r76b-later>晚點再說</button></div></div>';
+        overlay.innerHTML = '<div class="' + cardClass + '">' + head + lineHtml(lines[lines.length - 1]) + '<div class="r76b-choice-list">' + choiceOptions.map((o) => '<button type="button" class="r76b-choice" data-r76b-choice="' + esc(o.id) + '"><b>' + esc(o.label) + '</b><small>' + esc(o.immediate) + '</small><small>' + esc(o.longTerm) + "</small></button>").join("") + '</div><div class="r76b-dialogue-actions"><button type="button" data-r76b-later>晚點再說</button></div></div>';
         overlay.querySelectorAll("[data-r76b-choice]").forEach((btn) => { btn.onclick = () => { if (options && options.onChoice) options.onChoice(btn.dataset.r76bChoice, (reply) => { mode = "reply"; linesReply = reply; render(); }); }; });
       } else {
         overlay.innerHTML = '<div class="r76b-dialogue-card">' + head + '<p class="r76b-dialogue-line">' + esc(linesReply) + '</p><div class="r76b-dialogue-actions"><button type="button" data-r76b-next>知道了</button></div></div>';
@@ -183,10 +199,12 @@
       }
       const later = overlay.querySelector("[data-r76b-later]");
       if (later) later.onclick = () => close();
+      if (options && typeof options.onRender === "function") { try { options.onRender(overlay, { mode, step, last: step >= lines.length - 1 }); } catch (_) { /* 呼叫端補標記失敗不擋對話 */ } }
     }
     let linesReply = "";
     function close() { overlay.remove(); if (options && options.onClose) options.onClose(); }
     render();
+    try { root.dispatchEvent(new Event("farm-dialogue-open")); } catch (_) { /* 通知不到就等任務卡的定時檢查 */ }
     return { close };
   }
 

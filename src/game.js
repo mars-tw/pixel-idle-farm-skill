@@ -2768,11 +2768,13 @@
     weather: "assets/generated/content-r79/unlock-weather.png", seasons: "assets/generated/content-r79/unlock-seasons.png",
   };
   const UNLOCK_ART_READY = ["drying_rack", "sun_mirror_upgrade", "sun_bottle_upgrade", "r66_beehive", "r66_herb_garden", "r66_feed_trough"];
+  /* R80C 第 6 項：天氣、四季的專屬圖還沒到之前，先用遊戲裡本來就在用的天氣、季節符號（資源列的天氣格、換季提示用的同一組），不再空著。 */
+  const UNLOCK_MARK = { weather: (WEATHER && WEATHER.rain && WEATHER.rain.icon) || "", seasons: (SEASONS && SEASONS[0] && SEASONS[0].icon) || "" };
   function levelUnlockCards(level) {
     return levelUnlocks(level).map((entry) => {
       const icon = entry.kind === "seed" ? `assets/generated/r66/native/crop_${entry.id}-32.png` : UNLOCK_ART_READY.includes(entry.id) ? UNLOCK_ART[entry.id] : "";
       const building = BUILDINGS && BUILDINGS[entry.id];
-      return { id: entry.id, name: entry.name, kind: entry.kind, icon, mark: icon ? "" : (building && building.emoji) || "" };
+      return { id: entry.id, name: entry.name, kind: entry.kind, icon, mark: icon ? "" : (building && building.emoji) || UNLOCK_MARK[entry.id] || "" };
     });
   }
   function unseenLevelUnlocks(state, surface) {

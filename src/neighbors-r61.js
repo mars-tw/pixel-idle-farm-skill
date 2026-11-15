@@ -405,6 +405,28 @@
     const person = PEOPLE.find((p) => p.id === npcId);
     if (!story || !person) return;
     if (!story.unlocked) { if (farm() && farm().toast) farm().toast(`好感還差 ${story.need - favorOf(state, npcId)}，之後再來聽這段吧。`); return; }
+    /* R80C 第 5 項：好感故事併進下方那一種對話框（跟主線、回訪、事件同一種），按鈕一律「下一句／晚點再說」，最後一句是「聽完了」。
+       聽完照舊記進度、給禮物；按「晚點再說」回到手札的鄰居好感。下方對話框還沒載入時才退回舊的置中面板。 */
+    const S = root.StoryR76;
+    if (S && typeof S.openDialogue === "function") {
+      if (root.FarmWorld && typeof root.FarmWorld.closePanels === "function") root.FarmWorld.closePanels();
+      else { const panel = document.querySelector(".side-panel"); if (panel) panel.classList.remove("world-panel-open"); }
+      let finished = false;
+      S.openDialogue(state, npcId, story.lines.slice(), {
+        speaker: person.name, title: story.title, headClass: "r76b-story-head", dataset: { r61bStory: `${npcId}-${index}` },
+        onRender: (overlay, info) => { const next = overlay.querySelector("[data-r76b-next]"); if (next && info.mode === "lines") next.setAttribute("data-r61b-next", ""); },
+        onLinesDone: () => {
+          finished = true;
+          const result = markStorySeen(state, npcId, index, Date.now());
+          saveNow(state); injectJournal(state);
+          if (result.gift && farm() && farm().toast) farm().toast(`收到專屬禮物：${result.gift.name}。${result.gift.note}`);
+          else if (result.benefit && farm() && farm().toast) farm().toast(`聽完這段故事，獲得好處：${result.benefit.text}。`);
+          return null;
+        },
+        onClose: () => { if (!finished) returnToJournal(state, null); },
+      });
+      return;
+    }
     let step = 0;
     const box = root.FarmWorld.contentModal(`${person.name}・${story.title}`,
       `<div class="r61b-story r76b-story" data-r61b-story="${npcId}-${index}"><div class="r76b-story-head"><img class="r76b-portrait" src="${PORTRAITS[npcId] || ""}" alt="${esc(person.name)}" width="64" height="64"><b>${esc(person.name)}</b></div><p class="r61b-story-line" data-r61b-line></p><p class="r61b-story-step" data-r61b-step></p></div>`,
@@ -413,7 +435,7 @@
     wireNeighborClose(state, box);
     const card = box.querySelector(".modal-card");
     const bar = document.createElement("div"); bar.className = "content-footer r61b-footer";
-    bar.innerHTML = `<button type="button" class="content-primary" data-r61b-next>下一句</button><button type="button" class="content-secondary" data-r61b-close>先聊到這裡</button>`;
+    bar.innerHTML = `<button type="button" class="content-primary" data-r61b-next>下一句</button><button type="button" class="content-secondary" data-r61b-close>晚點再說</button>`;
     card.appendChild(bar);
     const lineEl = box.querySelector("[data-r61b-line]"), stepEl = box.querySelector("[data-r61b-step]");
     const render = () => {
