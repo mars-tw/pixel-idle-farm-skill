@@ -133,6 +133,25 @@ test("結算有最高分與逐客七欄，保底星規則仍保留原門檻", ()
   for (const text of ["這一場最多可以拿", "需求：", "交付：", "基本 ", "熱門加分", "連續答對加分", "代幣少", "合計 "]) assert.match(source, new RegExp(text));
 });
 
+test("R79 整合：同時在攤前的客人不會是同一個人；提早結束的句子寫這一場實際的人數", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const state = festivalState({ wheat: 20, carrot: 20, tomato: 20, strawberry: 20 });
+    const started = F.startSession(state, T0, seeded(seed));
+    assert.equal(started.ok, true);
+    const order = [...started.session.queue, ...started.session.customerPlan].map((row) => row.npcId);
+    // 玩家可以先招呼後面那位，所以第 i 位會跟第 i-1、i-2 位同時在攤前
+    for (let i = 1; i < order.length; i++) {
+      assert.notEqual(order[i], order[i - 1], "seed " + seed + " 第 " + (i + 1) + " 位跟前一位同一人");
+      if (i >= 2) assert.notEqual(order[i], order[i - 2], "seed " + seed + " 第 " + (i + 1) + " 位跟前兩位同一人");
+    }
+  }
+  const small = festivalState({ wheat: 3 });
+  const session = F.startSession(small, T0, seeded(11)).session;
+  assert.ok(session.plannedCustomers < F.CUSTOMER_LIMIT, "貨少時排定的客人要少於上限");
+  const source = fs.readFileSync("src/festival-stall-r72.js", "utf8");
+  assert.doesNotMatch(source, /十四位客人/, "提早結束不得寫死十四位");
+});
+
 test("看火候有低、剛好、焦三態，並接好三張新圖與文字後備", () => {
   assert.equal(Cooking.potStateFor({ heat: 20, goldMin: 30, goldMax: 50 }).id, "low");
   assert.equal(Cooking.potStateFor({ heat: 40, goldMin: 30, goldMax: 50 }).id, "good");

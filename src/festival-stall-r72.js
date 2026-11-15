@@ -466,6 +466,14 @@
     for (let index = 0; index < session.customerLimit; index++) {
       const customer = makeCustomer(state, session.pool, now, session.rng, { session, tokensLeft: session.tokensLeft });
       if (!customer) break;
+      /* R79 整合：隊伍同時有兩位，玩家可以先招呼後面那位，所以新客人避開前兩位排定的人，
+         攤前不會出現兩個一模一樣的蘿拉。 */
+      const recent = session.customerPlan.slice(-2).map((row) => row.npcId);
+      if (recent.includes(customer.npcId)) {
+        const others = CUSTOMERS.filter((row) => !recent.includes(row.id));
+        const person = others.length ? pick(session.rng, others) : null;
+        if (person) { customer.npcId = person.id; customer.npcName = person.name; customer.art = person.art; }
+      }
       customer.queueId = "r79a-customer-" + (index + 1);
       customer.maxScore = plannedMaxScore(index, customer);
       maximum += customer.maxScore;
@@ -602,7 +610,7 @@
     const wrong = qty(session.wrong); const timedOut = qty(session.timeouts); const notReached = qty(session.unfinished);
     const customerTotal = qty(session.served) + wrong + timedOut + notReached;
     const endReason = session.endReason || (at(now) >= session.endsAt ? "time_up" : qty(session.tokensLeft) <= 0 ? "token_empty" : "sold_out");
-    const endReasonText = endReason === "time_up" ? "時間到，這一場結束。" : endReason === "all_served" ? "十四位客人都招呼完了，這一場提早結束。" : endReason === "token_empty" ? "代幣用完，攤上也沒有能接的貨，這一場結束。" : "擺出的貨賣完，這一場結束。";
+    const endReasonText = endReason === "time_up" ? "時間到，這一場結束。" : endReason === "all_served" ? "這一場的 " + qty(session.plannedCustomers) + " 位客人都招呼完了，提早結束。" : endReason === "token_empty" ? "代幣用完，攤上也沒有能接的貨，這一場結束。" : "擺出的貨賣完，這一場結束。";
     const result = {
       ok: true, finished: true, startedAt: session.startedAt, endedAt: at(now), endReason, endReasonText,
       score: session.score, stars, served: session.served, missed: session.missed, wrong, timedOut, notReached, customerTotal, unfinished: notReached,
@@ -629,7 +637,7 @@
   function allCustomersFinish(state, session, now) {
     session.endReason = "all_served";
     const result = finishSession(state, session, now);
-    return { ok: true, reason: "all_served", message: "十四位客人都招呼完了，提早結算這一場。", result };
+    return { ok: true, reason: "all_served", message: "這一場的 " + qty(session.plannedCustomers) + " 位客人都招呼完了，提早結算。", result };
   }
   function leaveCustomer(state, session, now, reason, customer) {
     const target = customer || session.customer;
