@@ -77,14 +77,14 @@ test("評審配貨模擬 200 場：只點擺出的四樣，每場最多一題缺
   }
 });
 
-test("熱門與客群可固定種子重現：至少三項熱門、三種客人、每位最多兩個標籤", () => {
+test("熱門與客群可固定種子重現：熱門最多兩項、三種客人、每位最多兩個標籤", () => {
   const state = festivalState(8);
   state.storage.items = reviewAllotment();
   const pool = F.unlockedItems(state).filter((row) => Object.hasOwn(reviewAllotment(), row.id));
   const first = F.marketPreview(state, pool, seeded(7801));
   const again = F.marketPreview(state, pool, seeded(7801));
   assert.deepEqual(first, again, "同一種子要得到同一份熱門表");
-  assert.ok(first.hotItems.length >= 3, "配貨前至少看得到三項熱門");
+  assert.ok(first.hotItems.length >= 1 && first.hotItems.length <= 2, "配貨前熱門應為一至兩項");
   const session = F.startSession(state, T0, seeded(7802), { allotment: reviewAllotment(), market: first }).session;
   const types = new Set(), hot = { yes: 0, no: 0 };
   for (let i = 0; i < 240; i++) {

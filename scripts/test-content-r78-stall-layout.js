@@ -49,7 +49,7 @@ function inside(box, width, height) { return !!box && box.left >= -1 && box.righ
       });
       assert.ok(inside(first.hot, width, height), tag + " 第一屏看得到今天客人愛什麼 " + JSON.stringify(first));
       assert.ok(inside(first.start, width, height), tag + " 第一屏看得到開始叫賣 " + JSON.stringify(first));
-      assert.ok(first.hotCount >= 3, tag + " 至少三項熱門");
+      assert.ok(first.hotCount >= 1 && first.hotCount <= 2, tag + " 熱門只能有一至兩項");
       assert.match(first.hotText, /今天客人愛什麼/); assert.match(first.startText, /開始叫賣/);
 
       if (page.clock) await page.clock.install();

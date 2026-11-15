@@ -203,6 +203,8 @@
       const compostCost = id === "compost" && !applied ? 1 : 0;
       const timeText = remainingMs > 0 ? `約 ${careDurationText(remainingMs)}` : "現在就能收";
       let text = `${care.name}：${timeText}${id === "water" && remainingMs > 0 ? "成熟" : ""}・收 ${qty} 份`;
+      if (id === "compost") text += "，長得慢 25%";
+      if (id === "natural") text += "，長得慢 20%";
       if (care.qualityChance) text += `，${careChanceText(care.qualityChance)}機率優質`;
       if (id === "compost") text += applied ? "（堆肥已經施了）" : compostHave >= compostCost ? `（用 ${compostCost} 份堆肥，現有 ${compostHave}）` : `（要 ${compostCost} 份堆肥，現在沒有）`;
       if (care.seedBack) text += `，帶回 ${care.seedBack} 包種子`;

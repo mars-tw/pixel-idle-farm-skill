@@ -10,11 +10,26 @@
   const DAY_MS = 24 * 60 * 60 * 1000;
 
   const FACILITIES = {
-    r66_beehive: { type: "r66_beehive", name: "蜂箱", unlockLevel: 2, costCoins: 40, intervalMs: 3 * 60 * 1000, itemId: "honey", itemName: "蜂蜜", art: "assets/generated/content-r70/beehive.png", produceText: "每 3 分鐘產 1 份蜂蜜" },
-    r66_herb_garden: { type: "r66_herb_garden", name: "香草小圃", unlockLevel: 2, costCoins: 35, intervalMs: 4 * 60 * 1000, itemId: "river_mint", itemName: "薄荷", art: "assets/generated/content-r70/herb-garden.png", produceText: "每 4 分鐘產 1 份薄荷" },
-    r66_feed_trough: { type: "r66_feed_trough", name: "雞舍餵食槽", unlockLevel: 2, costCoins: 45, intervalMs: 0, itemId: "egg", itemName: "雞蛋", art: "assets/generated/content-r70/feed-trough.png", produceText: "每次收雞蛋多 1 顆" },
+    r66_beehive: { type: "r66_beehive", name: "蜂箱", unlockLevel: 2, costCoins: 40, intervalMs: 3 * 60 * 1000, itemId: "honey", itemName: "蜂蜜", art: "assets/generated/content-r70/beehive.png", produceText: "花圃路線每 3 分鐘產蜂蜜；果樹路線產良好蜂蜜" },
+    r66_herb_garden: { type: "r66_herb_garden", name: "香草小圃", unlockLevel: 2, costCoins: 35, intervalMs: 4 * 60 * 1000, itemId: "river_mint", itemName: "薄荷", art: "assets/generated/content-r70/herb-garden.png", produceText: "薄荷路線每 4 分鐘可收；藥草路線改收東林藥草" },
+    r66_feed_trough: { type: "r66_feed_trough", name: "雞舍餵食槽", unlockLevel: 2, costCoins: 45, intervalMs: 0, itemId: "egg", itemName: "雞蛋", art: "assets/generated/content-r70/feed-trough.png", produceText: "餵小麥時收雞蛋多 1 顆；餵菜葉可產良好雞蛋" },
   };
   const FACILITY_ORDER = ["r66_beehive", "r66_herb_garden", "r66_feed_trough"];
+  /* R80A：每座設施都能切換兩條實際產出路線。沿用既有物品圖，輸出已能進訂單、料理或祭典叫賣。 */
+  const FACILITY_ROUTES = {
+    r66_beehive: [
+      { id: "flowers", label: "花圃採蜜", action: "引蜂去花圃", intervalMs: 3 * 60 * 1000, itemId: "honey", itemName: "蜂蜜", amount: 1, kind: "product", input: {}, useText: "蜂蜜可交訂單，也能帶去祭典叫賣。" },
+      { id: "orchard", label: "果樹採蜜", action: "引蜂去果樹", intervalMs: 4 * 60 * 1000, itemId: "honey_good", itemName: "良好蜂蜜", amount: 1, kind: "product", input: {}, useText: "良好蜂蜜可交高品質訂單，也能帶去祭典叫賣。" },
+    ],
+    r66_herb_garden: [
+      { id: "mint", label: "種溪畔薄荷", action: "改種薄荷", intervalMs: 4 * 60 * 1000, itemId: "river_mint", itemName: "溪畔薄荷", amount: 1, kind: "forage", input: {}, useText: "溪畔薄荷可泡薄荷茶，也能做料理。" },
+      { id: "herb", label: "種東林藥草", action: "改種藥草", intervalMs: 5 * 60 * 1000, itemId: "forest_herb", itemName: "東林藥草", amount: 1, kind: "forage", input: {}, useText: "東林藥草會出現在鎮民訂單裡。" },
+    ],
+    r66_feed_trough: [
+      { id: "wheat", label: "餵小麥", action: "改餵小麥", intervalMs: 0, itemId: "egg", itemName: "雞蛋", amount: 1, kind: "product", input: { wheat: 1 }, useText: "收雞蛋時多 1 顆，可直接交訂單。", passive: true },
+      { id: "greens", label: "餵菜葉", action: "改餵菜葉", intervalMs: 3 * 60 * 1000, itemId: "egg_good", itemName: "優質雞蛋", amount: 1, kind: "product", input: { carrot: 1 }, useText: "優質雞蛋可交高品質訂單，也能帶去祭典叫賣。" },
+    ],
+  };
   const TREASURE_TILES = ["t6_8", "t12_5", "t9_6", "t13_8", "t5_5", "t11_9", "t15_5", "t7_10"];
   const TREASURE_REWARD_COINS = 12;
 
@@ -48,7 +63,9 @@
       if (!FACILITIES[building.type]) continue;
       const rec = b.facilities[building.id];
       if (!rec || typeof rec !== "object") {
-        b.facilities[building.id] = { type: building.type, lastCollectAt: building.builtAt || now || 0 };
+        b.facilities[building.id] = { type: building.type, routeId: FACILITY_ROUTES[building.type][0].id, lastCollectAt: building.builtAt || now || 0 };
+      } else if (!FACILITY_ROUTES[building.type].some((route) => route.id === rec.routeId)) {
+        rec.routeId = FACILITY_ROUTES[building.type][0].id;
       }
     }
     return { ok: true };
@@ -56,6 +73,13 @@
 
   // ---------- 第 5 項：三個中期設施 ----------
   function facilityDef(type) { return FACILITIES[type] || null; }
+  function facilityRoutes(type) { return (FACILITY_ROUTES[type] || []).map((route) => Object.assign({}, route, { input: Object.assign({}, route.input || {}) })); }
+  function facilityRecord(state, building) { return state && state.adventure && state.adventure.r66b && state.adventure.r66b.facilities && building ? state.adventure.r66b.facilities[building.id] || null : null; }
+  function activeRoute(state, building) {
+    const routes = building && FACILITY_ROUTES[building.type] || [];
+    const rec = facilityRecord(state, building);
+    return routes.find((route) => rec && route.id === rec.routeId) || routes[0] || null;
+  }
   function buildingOf(state, type) {
     return (state.buildings || []).find((b) => b.type === type) || null;
   }
@@ -79,18 +103,18 @@
       const messages = { bad_tile: "這塊地不能放設施，換一塊草地試試。", cost: "金幣或建材不足。", locked: "等級還不夠。", max_count: "這個設施已經建好了。" };
       return { ok: false, reason: r.reason, message: messages[r.reason] || "這裡不能建造。" };
     }
-    state.adventure.r66b.facilities[r.building.id] = { type, lastCollectAt: now };
+    state.adventure.r66b.facilities[r.building.id] = { type, routeId: FACILITY_ROUTES[type][0].id, lastCollectAt: now };
     return { ok: true, building: r.building, message: `${FACILITIES[type].name}建好了。${FACILITIES[type].produceText}。` };
   }
   function pendingOf(state, building, now) {
-    const def = building && FACILITIES[building.type];
+    const def = activeRoute(state, building);
     if (!def || !def.intervalMs) return 0;
     const rec = state.adventure.r66b.facilities[building.id] || {};
     const since = Number.isFinite(rec.lastCollectAt) ? rec.lastCollectAt : (building.builtAt || now);
     return Math.max(0, Math.floor(((Number.isFinite(now) ? now : 0) - since) / def.intervalMs));
   }
   function nextInMs(state, building, now) {
-    const def = building && FACILITIES[building.type];
+    const def = activeRoute(state, building);
     if (!def || !def.intervalMs) return 0;
     if (pendingOf(state, building, now) > 0) return 0;
     const rec = state.adventure.r66b.facilities[building.id] || {};
@@ -102,10 +126,12 @@
     return FACILITY_ORDER.map((type) => {
       const def = FACILITIES[type];
       const building = buildingOf(state, type);
+      const route = building ? activeRoute(state, building) : FACILITY_ROUTES[type][0];
       const pending = building ? pendingOf(state, building, now) : 0;
       return {
         type, name: def.name, unlockLevel: def.unlockLevel, costCoins: def.costCoins,
-        intervalMs: def.intervalMs, itemId: def.itemId, itemName: def.itemName, produceText: def.produceText,
+        intervalMs: route.intervalMs, itemId: route.itemId, itemName: route.itemName, produceText: def.produceText,
+        routeId: route.id, routeLabel: route.label, routeAction: route.action, routeUseText: route.useText, routes: facilityRoutes(type), passive: !!route.passive,
         built: !!building, buildingId: building ? building.id : null, tileId: building ? building.tileId : null,
         pending, ready: pending > 0, nextInMs: building ? nextInMs(state, building, now) : 0,
         canBuild: canBuildFacility(state, type, now).ok,
@@ -115,18 +141,51 @@
       };
     });
   }
+  function inputText(input) {
+    const rows = Object.entries(input || {}).map(([id, count]) => `${itemNameOf(id)} ${count} 份`);
+    return rows.length ? rows.join("、") : "不用材料";
+  }
+  function canChooseFacilityRoute(state, typeOrBuildingId, routeId, now) {
+    ensure(state, now);
+    const building = (state.buildings || []).find((row) => row.id === typeOrBuildingId || row.type === typeOrBuildingId) || null;
+    if (!building || !FACILITY_ROUTES[building.type]) return { ok: false, reason: "not_built", message: "這個設施還沒建好。" };
+    const route = FACILITY_ROUTES[building.type].find((row) => row.id === routeId);
+    if (!route) return { ok: false, reason: "unknown_route", message: "找不到這條生產路線。" };
+    const rec = facilityRecord(state, building);
+    if (rec && rec.routeId === route.id) return { ok: true, same: true, building, route };
+    for (const [id, count] of Object.entries(route.input || {})) {
+      const have = Math.max(0, Number(state.storage && state.storage.items && state.storage.items[id]) || 0);
+      if (have < count) return { ok: false, reason: "missing_input", message: `還差 ${count - have} 份${itemNameOf(id)}，才能改走「${route.label}」。`, building, route };
+    }
+    return { ok: true, same: false, building, route };
+  }
+  function chooseFacilityRoute(state, typeOrBuildingId, routeId, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const check = canChooseFacilityRoute(state, typeOrBuildingId, routeId, t);
+    if (!check.ok || check.same) return check.same ? { ok: true, same: true, building: check.building, route: check.route, message: `${FACILITIES[check.building.type].name}現在就是「${check.route.label}」。` } : check;
+    for (const [id, count] of Object.entries(check.route.input || {})) {
+      state.storage.items[id] -= count;
+      if (state.storage.items[id] <= 0) delete state.storage.items[id];
+    }
+    const rec = facilityRecord(state, check.building);
+    rec.routeId = check.route.id; rec.lastCollectAt = t;
+    const hasInput = Object.keys(check.route.input || {}).length > 0;
+    return { ok: true, same: false, building: check.building, route: check.route, message: `${FACILITIES[check.building.type].name}改走「${check.route.label}」，${hasInput ? "投入" + inputText(check.route.input) : "不用投入材料"}。${check.route.useText}` };
+  }
   function collectFacility(state, typeOrBuildingId, now) {
     now = Number.isFinite(now) ? now : Date.now();
     ensure(state, now);
     const building = (state.buildings || []).find((b) => b.id === typeOrBuildingId || b.type === typeOrBuildingId) || null;
     if (!building || !FACILITIES[building.type]) return { ok: false, reason: "not_built", message: "這個設施還沒建好。" };
-    const def = FACILITIES[building.type];
-    if (!def.intervalMs) return { ok: false, reason: "passive", message: `${def.name}不用收取，收雞蛋時會自動多 1 顆。` };
+    const facility = FACILITIES[building.type];
+    const def = activeRoute(state, building);
+    if (!def.intervalMs) return { ok: false, reason: "passive", message: `${facility.name}現在走「${def.label}」，收雞蛋時會自動多 1 顆。` };
     const pending = pendingOf(state, building, now);
     if (pending <= 0) return { ok: false, reason: "not_ready", message: `${def.name}還在準備，${formatDuration(nextInMs(state, building, now))}後可以收取。` };
     const rec = state.adventure.r66b.facilities[building.id];
     const since = Number.isFinite(rec.lastCollectAt) ? rec.lastCollectAt : (building.builtAt || now);
-    const addedResult = G.addToStorage ? G.addToStorage(state, def.itemId, pending) : { added: 0, lost: pending };
+    const produced = pending * (def.amount || 1);
+    const addedResult = G.addToStorage ? G.addToStorage(state, def.itemId, produced) : { added: 0, lost: produced };
     rec.lastCollectAt = since + pending * def.intervalMs;
     if (addedResult.added > 0) {
       if (!state.stats) state.stats = {};
@@ -135,10 +194,23 @@
       if (G.recordDiscovery) G.recordDiscovery(state, def.itemId, now);
     }
     return { ok: true, itemId: def.itemId, itemName: def.itemName, added: addedResult.added, lost: addedResult.lost, pending,
-      message: addedResult.added > 0 ? `收下了 ${addedResult.added} 份${def.itemName}。` : "倉庫滿了，先賣掉一些東西再來收。" };
+      routeId: def.id, routeLabel: def.label, message: addedResult.added > 0 ? `從「${def.label}」收下了 ${addedResult.added} 份${def.itemName}。${def.useText}` : "倉庫滿了，先賣掉一些東西再來收。" };
   }
   function eggBonusActive(state) {
-    return !!(state && (state.buildings || []).some((b) => b.type === "r66_feed_trough"));
+    if (!state) return false;
+    ensure(state, Date.now());
+    const building = buildingOf(state, "r66_feed_trough");
+    const route = building && activeRoute(state, building);
+    return !!(route && route.id === "wheat");
+  }
+  function facilityCatalogItems(state) {
+    ensure(state, Date.now());
+    const seen = new Set(); const rows = [];
+    for (const building of state.buildings || []) for (const route of FACILITY_ROUTES[building.type] || []) {
+      if (!route.itemId || seen.has(route.itemId)) continue;
+      seen.add(route.itemId); rows.push({ id: route.itemId, name: route.itemName, kind: route.kind || "product" });
+    }
+    return rows;
   }
 
   // ---------- 第 6 項：四位鄰居專屬互動 ----------
@@ -330,8 +402,8 @@
     ];
   }
 
-  const MidgameR66 = { FACILITIES, FACILITY_ORDER, TREASURE_TILES, TREASURE_REWARD_COINS, ensure, dayKey, formatDuration,
-    facilityDef, canBuildFacility, buildFacility, facilityStatus, pendingOf, collectFacility, eggBonusActive,
+  const MidgameR66 = { FACILITIES, FACILITY_ROUTES, FACILITY_ORDER, TREASURE_TILES, TREASURE_REWARD_COINS, ensure, dayKey, formatDuration,
+    facilityDef, facilityRoutes, activeRoute, canBuildFacility, buildFacility, facilityStatus, pendingOf, canChooseFacilityRoute, chooseFacilityRoute, collectFacility, eggBonusActive, facilityCatalogItems,
     mayorQuest, deliverMayorQuest, elderAdvice, askElderAdvice, merchantSpecial, buyMerchantSpecial,
     treasureInfo, findTreasure, neighborPanel };
   root.MidgameR66 = MidgameR66;
@@ -353,6 +425,40 @@
     tryInjectJournal(state);
   }
   function toast(message) { const f = farm(); if (f && f.toast) f.toast(message); }
+  function routeItemArt(id) {
+    const base = String(id || "").replace(/_(good|premium)$/, "");
+    return C.CROPS && C.CROPS[base] ? `assets/generated/r66/native/crop_${base}-32.png` : `assets/generated/content-r73/item-${base}.png`;
+  }
+  function openFacilityPanel(state, type, now) {
+    const old = document.querySelector(".r80a-facility-overlay"); if (old) old.remove();
+    const status = facilityStatus(state, now).find((row) => row.type === type);
+    if (!status || !status.built) return;
+    const overlay = document.createElement("div"); overlay.className = "r80a-facility-overlay"; overlay.setAttribute("role", "dialog"); overlay.setAttribute("aria-modal", "true"); overlay.setAttribute("aria-label", status.name + "生產路線");
+    const render = () => {
+      const current = facilityStatus(state, Date.now()).find((row) => row.type === type);
+      const routeCards = current.routes.map((route) => {
+        const active = route.id === current.routeId;
+        const check = canChooseFacilityRoute(state, type, route.id, Date.now());
+        const input = inputText(route.input);
+        const output = route.passive ? "收雞蛋時多 1 顆雞蛋" : `${formatDuration(route.intervalMs)}產 ${route.amount || 1} 份${route.itemName}`;
+        return `<article class="r80a-route-card${active ? " is-active" : ""}" data-r80a-route-card="${esc(route.id)}"><img src="${esc(routeItemArt(route.itemId))}?v=content-r79-20261116-1" alt=""><div><h3>${esc(route.label)}</h3><p>操作：${esc(route.action)}</p><p>投入：${esc(input)}</p><p>產出：${esc(output)}</p><small>${esc(route.useText)}</small></div><button type="button" data-r80a-route="${esc(route.id)}" ${active || !check.ok ? "disabled" : ""}>${active ? "目前路線" : check.ok ? esc(route.action) : esc(check.message)}</button></article>`;
+      }).join("");
+      const readyText = current.passive ? "這條路線不用等倒數，收雞蛋時直接生效。" : current.ready ? `已經有 ${current.pending} 份可以收。` : `${formatDuration(current.nextInMs)}後可以收${current.itemName}。`;
+      overlay.innerHTML = `<div class="r80a-facility-card"><button type="button" class="r80a-facility-close" aria-label="關閉">×</button><h2>${esc(current.name)}怎麼運作</h2><p class="r80a-active-route">目前走「${esc(current.routeLabel)}」。${esc(readyText)}</p><div class="r80a-route-grid">${routeCards}</div><div class="r80a-facility-actions"><button type="button" data-r80a-collect ${current.passive || !current.ready ? "disabled" : ""}>${current.passive ? "收蛋時自動生效" : current.ready ? `收取${esc(current.itemName)}` : "還在準備"}</button><button type="button" data-r80a-close>回到農場</button></div></div>`;
+      overlay.querySelector(".r80a-facility-close").onclick = () => overlay.remove();
+      overlay.querySelector("[data-r80a-close]").onclick = () => overlay.remove();
+      overlay.querySelectorAll("[data-r80a-route]").forEach((button) => { button.onclick = () => {
+        const result = chooseFacilityRoute(state, type, button.dataset.r80aRoute, Date.now()); toast(result.message);
+        if (result.ok) { saveAndRefresh(state); render(); }
+      }; });
+      const collect = overlay.querySelector("[data-r80a-collect]"); if (collect) collect.onclick = () => {
+        const result = collectFacility(state, type, Date.now()); toast(result.message);
+        if (result.ok) saveAndRefresh(state);
+        render();
+      };
+    };
+    render(); document.body.appendChild(overlay);
+  }
 
   // 地圖顯示：設施與寶藏疊在既有世界層上；收取標示是文字徽章，不用表情符號當地圖物件。
   function paintMidgame(state, tileSize) {
@@ -369,7 +475,7 @@
       btn.setAttribute("aria-label", label);
       const size = Math.min(Math.round(tileSize * 1.08), Math.floor(tileSize * 1.5)); // R71B：設施圖寬度不超過一格半
       btn.style.cssText = `left:${Math.round((tile.x + 0.5) * tileSize)}px;top:${Math.round((tile.y + 1) * tileSize)}px;width:${size}px;height:${size}px;z-index:${Math.round((tile.y + 1) * tileSize) + 2};`;
-      btn.innerHTML = `<img src="${esc(art)}?v=content-r79-20261116-1" alt="" draggable="false">${dataset && dataset.r66bFacility ? `<span class="r74a-facility-name">${esc(label.split("，")[0])}</span>` : ""}`;
+      btn.innerHTML = `<img src="${esc(art)}?v=content-r79-20261116-1" alt="" draggable="false">${dataset && dataset.r66bFacility ? `<span class="r74a-facility-name">${esc(label.split("，")[0])}</span><span class="r80a-facility-route">${esc(dataset.r80aRouteLabel || "尚未選路線")}</span>` : ""}`;
       btn.onclick = (ev) => { ev.stopPropagation(); onClick(); };
       world.appendChild(btn);
       return btn;
@@ -378,13 +484,8 @@
       if (!row.built) continue;
       const def = FACILITIES[row.type];
       const node = addNode(row.tileId, def.art, row.ready ? `${row.name}，可以收取 ${row.pending} 份${row.itemName}` : row.name,
-        { r66bFacility: row.type, r66bTile: row.tileId, r66bReady: row.ready ? "1" : "" },
-        () => {
-          if (row.type === "r66_feed_trough") { toast("雞舍餵食槽生效中，每次收雞蛋多 1 顆。"); return; }
-          const r = collectFacility(state, row.type, Date.now());
-          toast(r.message);
-          if (r.ok) saveAndRefresh(state);
-        });
+        { r66bFacility: row.type, r66bTile: row.tileId, r66bReady: row.ready ? "1" : "", r80aRouteLabel: row.routeLabel },
+        () => openFacilityPanel(state, row.type, Date.now()));
       if (node && row.ready) {
         const badge = document.createElement("span");
         badge.className = "r66b-ready-badge"; badge.textContent = `可收取 ${row.pending}`;
