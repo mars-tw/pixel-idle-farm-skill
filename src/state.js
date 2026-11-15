@@ -430,7 +430,7 @@
       story: { questId: C.FIRST_QUEST, completed: {}, dialogueSeen: {}, markers: [] },
       mail: { unlocked: {}, read: {}, replied: false },
       // ===== Stage 5：世界探索旗標（修橋/事件）=====
-      flags: { bridgeRepaired: false, eventsClaimed: {}, seasonEventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false, unlocksSeen: { seeds: 1, upgrades: 1 } },
+      flags: { r78CareIntro: false, bridgeRepaired: false, eventsClaimed: {}, seasonEventsClaimed: {}, forageNodes: {}, eastForageDiscovered: false, eastForageReported: false, eastDeepUnlocked: false, unlocksSeen: { seeds: 1, upgrades: 1 } },
       stats: { harvested: {}, fulfilledOrders: 0, totalCoinsEarned: 0, plantCount: 0, cleared: 0, collected: {}, qualitySold: 0, npcRequestsCompleted: 0, festivalOrders: 0, seasonsReached: {} },
       discoveries: { items: {} }, // { [itemId]: firstDiscoveredAt }
       collections: {},            // { [collectibleId]: true }
@@ -498,6 +498,8 @@
     merged.flags.seasonEventsClaimed = Object.assign({}, state.flags && state.flags.seasonEventsClaimed);
     merged.flags.forageNodes = Object.assign({}, state.flags && state.flags.forageNodes);
     merged.flags.unlocksSeen = Object.assign({ seeds: 1, upgrades: 1 }, state.flags && state.flags.unlocksSeen);
+    /* R78B：照顧方式的介紹進度。舊存檔沒有這個欄位——種過就算學過；新存檔要收過第一次才打開。 */
+    merged.flags.r78CareIntro = typeof (state.flags && state.flags.r78CareIntro) === "boolean" ? state.flags.r78CareIntro : ((state.stats && state.stats.plantCount) || 0) > 0;
     // 地圖：尺寸相符但 tiles 不完整/不合法也視為髒存檔，重建地圖綁定資料。
     if (healthyMap(state.map)) {
       merged.map = state.map;

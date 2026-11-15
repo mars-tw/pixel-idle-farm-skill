@@ -144,9 +144,10 @@
     return Math.max(1000, Math.floor(c.growMs * growthMultiplier(state, now)));
   }
   const FARM_CARE = {
+    /* R78B：三種各有取捨——勤澆水最快；施堆肥多收、有機會優質，但長得慢又要用堆肥；放著長慢一點，種 1 包回 2 包種子。 */
     water: { id: "water", name: "勤澆水", icon: "💧", growMul: 0.75 },
-    compost: { id: "compost", name: "施堆肥", icon: "🍂", yieldBonus: 1, qualityChance: 0.30 },
-    natural: { id: "natural", name: "放著長", icon: "🌿", growMul: 1.20, seedBack: 1 },
+    compost: { id: "compost", name: "施堆肥", icon: "🍂", growMul: 1.25, yieldBonus: 1, qualityChance: 0.30 },
+    natural: { id: "natural", name: "放著長", icon: "🌿", growMul: 1.20, seedBack: 2 },
   };
   function cropSeasonMultiplier(state, cropId, now) {
     const crop = CROPS[cropId];
@@ -209,6 +210,52 @@
         seedBack: care.seedBack || 0, compostCost, compostHave, available: compostHave >= compostCost, selected: applied, text };
     });
     return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, selected: plot.careMode || "", rows };
+  }
+  /* R78B 第 1 項：第一株只教「種下、光來、收成」。照顧方式的介紹進度寫在存檔（flags.r78CareIntro），收過第一次才打開；還沒打開時一律用勤澆水。 */
+  function careIntroOpen(state) { return !!(state && state.flags && state.flags.r78CareIntro === true); }
+  function firstRoundCare(state) { return careIntroOpen(state) ? null : "water"; }
+  /* R78B 第 3 項：彈窗裡那一行「這次為什麼選這個」。看限時訂單、祭典、種子與金幣，回傳這一株最適合哪一種；秒數與份數都用上面的預測，不另寫一份。 */
+  function careAdvice(state, plotIndex, now) {
+    const forecast = careForecast(state, plotIndex, now);
+    if (!forecast.ok) return { ok: false, best: null, need: "none", text: "" };
+    const t = Number.isFinite(now) ? now : Date.now(); const crop = CROPS[forecast.cropId];
+    const row = (id) => forecast.rows.find((r) => r.id === id); const water = row("water"), compost = row("compost"), natural = row("natural");
+    const have = Math.max(0, Math.floor(Number(state.storage && state.storage.items && state.storage.items[crop.id]) || 0));
+    const rush = (state.orders || []).find((o) => { const left = o && Number.isFinite(o.expiresAt) ? o.expiresAt - t : -1; return left > 0 && o.wants && (o.wants[crop.id] || 0) > have && water.remainingMs <= left && (compost.remainingMs > left || natural.remainingMs > left); });
+    if (rush) return { ok: true, best: "water", need: "rush", text: `限時訂單還差 ${rush.wants[crop.id] - have} 份${crop.name}：只有勤澆水趕得上。` };
+    const f = state.adventure && state.adventure.r61 && state.adventure.r61.festival;
+    const festival = !!(f && f.unlocked && Number.isFinite(f.endsAt) && f.endsAt > t && (f.startsAt || 0) <= t && (f.harvestCrop || "tomato") === crop.id);
+    if (festival && compost.available) return { ok: true, best: "compost", need: "quality", text: `祭典正在收${crop.name}：施堆肥多收 ${FARM_CARE.compost.yieldBonus} 份，還有${careChanceText(FARM_CARE.compost.qualityChance)}機率優質。` };
+    const packs = Math.max(0, Math.floor(Number((((((state.adventure || {}).r58 || {}).r59 || {}).seedPacks || {})[crop.id])) || 0));
+    if (packs <= 0 && (Number(state.coins) || 0) < crop.seedCost * 2) return { ok: true, best: "natural", need: "seeds", text: `種子用完了，金幣也不夠再買：放著長會帶回 ${FARM_CARE.natural.seedBack} 包種子。` };
+    return { ok: true, best: "water", need: "none", text: "手上沒有急單：想早點收選勤澆水，想省種子選放著長。" };
+  }
+  /* R78B 第 2 項：光快落在已經熟的那一格——「現在收」與「等光再收」各拿到幾份、幾點陽光、還要等幾秒，全部照收成那一條算式算。
+     光已經落下、光不在這一格、還沒熟，都回傳 ok:false，畫面就不再留等光的字。 */
+  function lightHarvestChoice(state, plotIndex, now) {
+    const plot = state && Array.isArray(state.plots) ? state.plots[plotIndex] : null; const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
+    if (!crop || !Sunplay) return { ok: false };
+    const t = Number.isFinite(now) ? now : Date.now(); const sun = state.sun || {};
+    const active = t >= (sun.startsAt || 0) && t < (sun.endsAt || 0);
+    if (active || !(t < (sun.previewAt || 0)) || !(sun.previewPlots || []).includes(plotIndex)) return { ok: false };
+    if (!getCropProgress(state, plot, t).ready) return { ok: false };
+    const care = FARM_CARE[plot.careMode] || null; const base = crop.yield + mealFlatBonus(state, "harvest", t) + (care && care.yieldBonus || 0);
+    const pure = function () { return 1; };
+    const nowEff = Sunplay.harvestEffects(state, plot, pure, false), waitEff = Sunplay.harvestEffects(state, plot, pure, true);
+    const room = Math.max(0, Sunplay.bottleCapacity(state) - Sunplay.sunlight(state));
+    const nowQty = base + (nowEff.yieldBonus || 0), waitQty = base + (waitEff.yieldBonus || 0);
+    /* 等光再收：作物光性給的陽光，加上在光裡收成接住的 1 點；蓄光瓶裝不下的不算。 */
+    const nowSunlight = Math.min(room, nowEff.sunlight || 0), waitSunlight = Math.min(room, (waitEff.sunlight || 0) + 1);
+    const waitMs = Math.max(0, sun.previewAt - t), seconds = Sunplay.secondsLeft(waitMs);
+    const nowText = `現在收 ${nowQty} 份` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "");
+    const waitText = `等 ${seconds} 秒收 ${waitQty} 份` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}` : "");
+    return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, nowQty, waitQty, nowSunlight, waitSunlight, waitMs, seconds, nowText, waitText, text: nowText + "｜" + waitText };
+  }
+  /* R78B：右下互動鈕面前是長著作物的田時，用這一格自己的狀態當字樣（原本會借旁邊空田的「種植・空田」）。空田、熟了的田交給原本的字樣。 */
+  function facingPlotLabel(state, tile, now) {
+    const plot = tile && tile.plotIndex != null && state && Array.isArray(state.plots) ? state.plots[tile.plotIndex] : null; const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
+    if (!crop || getCropProgress(state, plot, Number.isFinite(now) ? now : Date.now()).ready) return "";
+    return `生長中・${crop.name}田`;
   }
   // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
   function waterPlot(state, plotIndex, now) {
@@ -752,6 +799,8 @@
     plot.cropId = null; plot.plantedAt = 0; delete plot.wateredAt; delete plot.sunGrown; delete plot.careMode;
     delete plot.r75SunHits; delete plot.r75ShadeEligible; delete plot.r75SunOver;
     const caughtSunlight = sunlit ? (markSunUsed(state, plotIndex).gained || 0) : 0;
+    /* R78B：收過第一次，第二輪種植才介紹三種照顧方式。 */
+    if (state.flags && added > 0) state.flags.r78CareIntro = true;
     checkAchievements(state);
     const out = { ok: true, cropId: crop.id, added, lost, xp, leveled, quality, careMode: care && care.id, seedBack: care && care.seedBack || 0,
       feedback: added > 0 ? [{ kind: "harvest", target: "storage", plotIndex, text: `${crop.name} +${added}` }] : [] };
@@ -3043,7 +3092,7 @@
     quickHarvestStatus,
     rngInt, rngPick, unlockedCrops, isCropUnlocked, unlockedProducts, unlockedForageItems, availableOrderItems,
     growthMultiplier, buildingGrowthAura, buildingMaxLevel, buildingLevel, buildingLevelData, buildingEffect,
-    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, careForecast, careDurationText, isWet, waterPlot,
+    nextBuildingUpgrade, upgradeBuilding, effectiveGrowMs, cropSeasonMultiplier, plotGrowMs, FARM_CARE, careForecast, careDurationText, careIntroOpen, firstRoundCare, careAdvice, lightHarvestChoice, facingPlotLabel, isWet, waterPlot,
     getCropProgress, storageCapacity, storageUsed, addToStorage, addQualityToStorage, ensureDiscoveryState, recordDiscovery, firstDiscoveredAt, addXp,
     achievementBonus, checkAchievements, sellMultiplier, sellUnitValue, buildingSeasonalBonus, buildingOrderXpBonus,
     activePlotCount, plant, harvest, harvestAll, sellItem, sellAll,

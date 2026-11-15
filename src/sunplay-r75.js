@@ -103,6 +103,34 @@
     return { text, effect, hits };
   }
   function catchSun(state, plotIndex) { const exposure = recordExposure(state, plotIndex); const gained = addSunlight(state, 1); return { gained, exposure }; }
+  /* R78B：光的倒數只有這一個算法。預告圈、提示條、田上標籤都用它，同一拍更新，不會一邊寫 1 秒一邊寫 2 秒。 */
+  function secondsLeft(ms) { return Math.max(1, Math.ceil((Number(ms) || 0) / 1000)); }
+  function lightSecondsText(sun, now) { return `${secondsLeft(((sun && sun.previewAt) || 0) - now)} 秒`; }
+  /* R78B 第 5 項：一次只有一個主要互動層，全部照這一條規則排，不在每個面板各寫一次。
+     主要層（對話框、對話、料理、曬架、側邊面板、選單、建造）開著時：任務卡收起、提示卡全部排隊、光的提示條先收。
+     沒有主要層時：提示卡照 FOCUS_CARDS 的順序只出一張，其餘排隊。 */
+  const FOCUS_PRIMARY = ["modal", "dialogue", "cook", "rack", "panel", "menu", "build"];
+  const FOCUS_CARDS = ["settlement", "care", "stamp"];
+  function focusRule(input) {
+    const open = (input && input.open) || [], cards = (input && input.cards) || [];
+    const primary = FOCUS_PRIMARY.find((id) => open.includes(id)) || null;
+    const known = FOCUS_CARDS.filter((id) => cards.includes(id));
+    const card = primary ? null : known[0] || null;
+    return { primary, card, queued: known.filter((id) => id !== card), questDock: primary ? "folded" : "shown", hints: primary ? "hidden" : "shown" };
+  }
+  /* R78B 第 2 項：折光後的那一句提示。預告期間說「光會落在這一格」，光已經在照就說趁光還在；光落下後，預告期間的句子就過期了。 */
+  function refractToastText(result) {
+    if (!result || !result.ok) return "現在沒有光可以折，等下一道光的預告。";
+    if (result.remaining > 0) return `光折過來了，這道光還能再折 ${result.remaining} 次。`;
+    return result.active ? "光折過來了。趁光還在，在這一格澆水或收成。" : "光會落在這一格。等光到了再澆水或收成。";
+  }
+  function staleLightText(text, light) { return !!(light && light.active) && /光會落在這一格|等光到了再|光快落在/.test(String(text || "")); }
+  /* R78B 第 6 項：光裡收成的大字，數字直接取收成結果。 */
+  function harvestPopText(out) {
+    const sun = out && out.sun; if (!sun || sun.kind !== "harvest") return [];
+    const lines = []; if (sun.bonus > 0) lines.push(`多 ${sun.bonus} 份`); if (sun.sunlight > 0) lines.push(`陽光 +${sun.sunlight}`);
+    return lines;
+  }
   /* R77A 第 1 項：能不能折、為什麼不能折，都由這一個函式判斷；canRefract、折光前的預覽、動作列按鈕共用同一份規則。
    * reason：""＝可以折、"none"＝現在沒有光也沒有預告、"plot"＝不是開墾好的田、"lit"＝這格本來就會照到、"used"＝這道光的次數用完了。 */
   function refractCheck(state, targetIndex, now) {
@@ -255,7 +283,9 @@
     const state = liveState(); if (!state) return { ok: false, reason: "state" }; const now = Date.now(); let result;
     if (action === "refract") {
       result = refract(state, plotIndex, now);
-      toast(!result.ok ? "現在沒有光可以折，等下一道光的預告。" : result.remaining > 0 ? `光折過來了，這道光還能再折 ${result.remaining} 次。` : result.active ? "光折過來了。趁光還在，在這一格澆水或收成。" : "光會落在這一格。等光到了再澆水或收成。");
+      toast(refractToastText(result));
+      /* R78B：r78bRefractNote 記下「這句是預告期間說的」，光一落下就把還留在畫面上的舊句子收掉。 */
+      r78bRefractNote = result.ok && !result.active && !(result.remaining > 0) ? { plotIndex, at: now } : null;
     } else if (action === "ripen") {
       result = ripen(state, plotIndex, now);
       toast(result.ok ? "用掉 2 點陽光，這一格立刻成熟了，可以收成。" : result.reason === "sunlight" ? "陽光不足 2 點，先到光裡照料作物接一些。" : result.reason === "ready" ? "這一格已經成熟，直接收成就好。" : "這一格沒有作物。");
@@ -313,10 +343,10 @@
     const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
     const preview = !active && now < (sun.previewAt || 0) ? sun.previewPlots || [] : []; const wanted = new Set(preview);
     world.querySelectorAll(".r75a-sun-preview").forEach((n) => { if (!wanted.has(Number(n.dataset.plotIndex))) n.remove(); });
-    const text = `${Math.max(1, Math.ceil(((sun.previewAt || 0) - now) / 1000))} 秒`;
+    const text = lightSecondsText(sun, now);
     preview.forEach((i) => {
       const p = tilePoint(state, i); if (!p) return; let n = world.querySelector(`.r75a-sun-preview[data-plot-index="${i}"]`);
-      if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(i); n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
+      if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(i); n.setAttribute("data-r78b-light-secs", ""); n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
       const box = p.left + "|" + p.top + "|" + p.size;
       if (n.dataset.box !== box) { n.dataset.box = box; n.style.left = p.left + "px"; n.style.top = p.top + "px"; n.style.width = p.size + "px"; n.style.height = p.size + "px"; }
       if (n.textContent !== text) n.textContent = text;
@@ -449,7 +479,21 @@
   function tick() {
     const state = liveState(); if (!state || typeof document === "undefined") return;
     normalize(state); const now = Date.now();
-    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now); syncRefractGhost(state, now);
+    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now); syncRefractGhost(state, now); syncLightSecs(state, now);
+  }
+  /* R78B：畫面上所有寫「光還有幾秒」的地方（預告圈、提示條、田上標籤）都掛 data-r78b-light-secs，在這裡同一拍寫進同一個數字。
+     光一落下，預告期間留下的句子（光會落在這一格、等光到了再…）就從提示區收掉，不讓舊字留在畫面上。 */
+  let r78bRefractNote = null;
+  function syncLightSecs(state, now) {
+    const sun = state.sun || {}, active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
+    const pending = !active && now < (sun.previewAt || 0);
+    if (pending) {
+      const text = lightSecondsText(sun, now); document.querySelectorAll("[data-r78b-light-secs]").forEach((n) => { if (n.textContent !== text) n.textContent = text; });
+      document.querySelectorAll("[data-r78b-light-tpl]").forEach((n) => { const line = n.getAttribute("data-r78b-light-tpl").replace("{秒}", text); if (n.textContent !== line) n.textContent = line; });
+    } else document.querySelectorAll("[data-r78b-light-tpl]").forEach((n) => { n.removeAttribute("data-r78b-light-tpl"); n.textContent = ""; });
+    if (!active) return;
+    r78bRefractNote = null;
+    document.querySelectorAll("#toast-zone .toast:not(.settlement-card)").forEach((n) => { if (staleLightText(n.textContent, { active: true })) n.remove(); });
   }
   function initUI() {
     if (typeof document === "undefined") return;
@@ -457,7 +501,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack };
+  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, resetPlot, recordExposure, settleBeam, harvestEffects, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, harvestPopText };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

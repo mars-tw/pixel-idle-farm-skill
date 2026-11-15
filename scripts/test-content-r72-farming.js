@@ -37,8 +37,9 @@ function plantReady(state, index, cropId, careMode) {
   assert.equal(G.plotGrowMs(state, state.plots[2], T0), Math.floor(C.CROPS.wheat.growMs * 1.2));
   const packsBefore = state.adventure.r58.r59.seedPacks.wheat || 0;
   const natural = G.harvest(state, 2, T0, () => 0.99);
-  assert.equal(natural.seedBack, 1);
-  assert.equal(state.adventure.r58.r59.seedPacks.wheat, packsBefore + 1);
+  /* R78B 第 3 項同步：三種照顧方式拉開差距，「放著長」帶回的種子從 1 包改成 2 包（原本多等幾秒只多 1 包、種子才 1 金，幾乎沒理由選）。 */
+  assert.equal(natural.seedBack, 2);
+  assert.equal(state.adventure.r58.r59.seedPacks.wheat, packsBefore + 2);
 }
 
 // 固定亂數驗證 30% 優質機率，且優質庫存與一般庫存分開。

@@ -29,7 +29,8 @@ function grow(s, index, cropId, hits, care) {
   assert.equal(Game.plant(s, index, cropId, T).ok, true, "種得下" + cropId);
   s.plots[index].plantedAt = T - Game.plotGrowMs(s, s.plots[index], T) - 1;
   for (let i = 0; i < (hits || 0); i++) Sun.recordExposure(s, index);
-  if (care) s.plots[index].careMode = care;
+  /* R78B 第 3 項：施堆肥改成長得比較慢（1.25 倍時間），換了照顧方式要照新的時間重算，這一格才是熟的。 */
+  if (care) { s.plots[index].careMode = care; s.plots[index].plantedAt = T - Game.plotGrowMs(s, s.plots[index], T) - 1; }
 }
 function light(s, plots) { Object.assign(s.sun, { plots: plots, used: [], startsAt: T - 1, endsAt: T + 10000, durationMs: 10001 }); }
 function stamps(s, cropId) { Book.sync(s); return Object.keys(s.sunbook.stamps[cropId] || {}).sort().join(","); }
