@@ -159,7 +159,7 @@
     card.dataset.audit = data.kind === "milestone" ? "milestone-card" : "settlement-card";
     card.innerHTML = data.kind === "milestone"
       ? `<strong>${escapeHtml(data.title)}</strong><span>獲得：${escapeHtml(data.earned)}</span><span>新解鎖：${escapeHtml(data.unlocked)}</span><span>下一步：${escapeHtml(data.next)}</span>`
-      : `${data.sunYield ? `在光裡多收 ${data.sunYield} 份・` : ""}${data.sunlight ? `陽光 +${data.sunlight}・` : ""}獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
+      : `獲得 ${data.coins || 0} 金・${data.xp || 0} 經驗・下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
     let timer = setTimeout(close, 2500);
     function close() {
@@ -182,8 +182,7 @@
   function enqueueResultFeedback(result) {
     if (!result) return;
     (result.feedback || []).forEach(showActionFeedback);
-    /* R76 整合：結算卡把「多收幾份」和「入瓶的陽光」分開寫，沒有的就不寫，不再出現分不清是哪一種的「陽光 +1」。 */
-    if (result.sun && result.sun.kind === "harvest" && result.settlement) { result.settlement.sunYield = result.sun.bonus || 0; result.settlement.sunlight = result.sun.sunlight || 0; }
+    /* R78 整合：在光裡收成多幾份、入瓶幾點陽光，收成那一行提示與田上的大字已經各寫一次；結算卡只留金幣、經驗與下一步，不再把同一句重複第三次。 */
     if (result.settlement) enqueueSettlement(result.settlement);
     (result.milestones || []).forEach(enqueueSettlement);
   }
@@ -1096,9 +1095,12 @@
       const secs = document.createElement("b");
       secs.setAttribute("data-r78b-light-secs", "");
       secs.textContent = choice.seconds + " 秒";
-      row.appendChild(document.createTextNode("\n" + choice.nowText + "｜等 "));
-      row.appendChild(secs);
-      row.appendChild(document.createTextNode(choice.waitText.replace(/^等 \d+ 秒/, "")));
+      /* R78 整合：兩個選項各包成一段不斷行的字，放不下時只在「｜」那裡換行，不會只剩一個數字掉到下一行。 */
+      const half = (nodes) => { const s = document.createElement("span"); s.className = "r78b-wait-half"; nodes.forEach((n) => s.appendChild(typeof n === "string" ? document.createTextNode(n) : n)); return s; };
+      row.appendChild(document.createTextNode("\n"));
+      row.appendChild(half([choice.nowText]));
+      row.appendChild(document.createTextNode("｜"));
+      row.appendChild(half(["等 ", secs, choice.waitText.replace(/^等 \d+ 秒/, "")]));
       label.textContent = String(text).split("\n")[0];
       label.appendChild(row);
       return true;

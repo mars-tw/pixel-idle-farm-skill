@@ -1666,6 +1666,9 @@ html[data-performance-tier="low"] .r77a-refract-ghost, html.perf-low .r77a-refra
   #mapScene .seed:not(.more) .sn .r78-seed-prefix, #mapScene .seed:not(.more) .r75a-light-trait .r78-trait-text { display: none; }
   #mapScene .seed:not(.more) .r75a-light-trait { white-space: nowrap; }
 }
+/* 「現在收 2 份｜等 7 秒收 3 份＋陽光 2」這一行比一般田上標籤長，200px 放不下，最後那個數字會掉到第三行；有這一行的標籤放寬，兩個選項各自不斷行，真的放不下才在「｜」那裡換行。 */
+.tile-state-label:has(.r78b-wait-choice) { max-width: min(280px, calc(100vw - 16px)); }
+.tile-state-label .r78b-wait-choice .r78b-wait-half { display: inline-block; white-space: nowrap; }
 /* 重逢過場時地圖名牌都收起來，跟著選擇出現的物件與名牌也一起收。 */
 body[data-reunion] .r78c-scene-change, body[data-reunion] .r78c-scene-label { visibility: hidden !important; }
 /* ===== R78 整合結束 ===== */
