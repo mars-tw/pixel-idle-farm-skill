@@ -136,7 +136,9 @@ test("6 空白卡與米色殘影從來源清掉；作物評比結果有可見繼
 
 test("7 CSS 在檔尾且不改任務卡高度；次要狀態不是黃色主按鈕", () => {
   const css = read("src/content-r58b.css"), block = (css.match(/R82A（單一下一步[\s\S]*R82A 結束/) || [""])[0];
-  assert.ok(block); assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */"));
+  /* R83C 同步：R83 各線的新樣式接在 R82A 後面；R82A 之後只能是 R83 的區塊。 */
+  const r83cTail = css.slice(css.lastIndexOf("/* ===== R82A 結束 ===== */") + "/* ===== R82A 結束 ===== */".length);
+  assert.ok(block); assert.ok(!r83cTail.trim() || /^\s*\/\* ===== R83/.test(r83cTail));
   assert.match(block, /\.r82a-guidance-short \{ display: none; \}/);
   assert.match(block, /max-height: 52px !important/);
   assert.doesNotMatch(block, /150px|r82a-action-next-row/);

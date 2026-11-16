@@ -216,14 +216,14 @@ test("2b 光已經落下後，不再留「光會落在這一格」「等光到�
   const sunSrc = read("src/sunplay-r75.js");
   assert.match(sunSrc, /r78bRefractNote/, "折光後的提示要看光到了沒");
   const s = fresh(); s.coins = 99; s.stats.plantCount = 9; Game.plant(s, 0, "wheat", T);
-  assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: false }), "光會落在這一格。光到了再澆水或收成。");
-  assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: true }), "光折過來了。趁光還在，在這一格澆水或收成。");
+  assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: false }), "光會落在這一格，在光裡澆水或收成。"); /* R83C 同步：統一說法 */
+  assert.equal(Sun.refractToastText({ ok: true, remaining: 0, active: true }), "光折過來了。在光裡澆水或收成。");
   assert.doesNotMatch(Sun.refractToastText({ ok: true, remaining: 0, active: true }), /光會落在|等光到了再/);
   /* 預告期間折光的提示只留到光落下為止。 */
-  assert.equal(Sun.staleLightText("光會落在這一格。光到了再澆水或收成。", { active: true }), true);
+  assert.equal(Sun.staleLightText("光會落在這一格，在光裡澆水或收成。", { active: true }), true);
   assert.equal(Sun.staleLightText("光快落在這格了，光到了再收成，多接 1 點陽光。", { active: true }), true);
-  assert.equal(Sun.staleLightText("光會落在這一格。光到了再澆水或收成。", { active: false }), false);
-  assert.equal(Sun.staleLightText("光折過來了。趁光還在，在這一格澆水或收成。", { active: true }), false);
+  assert.equal(Sun.staleLightText("光會落在這一格，在光裡澆水或收成。", { active: false }), false);
+  assert.equal(Sun.staleLightText("光折過來了。在光裡澆水或收成。", { active: true }), false);
 });
 
 test("6 光裡收成的大字：多 1 份、陽光 +N 從收成結果來", () => {

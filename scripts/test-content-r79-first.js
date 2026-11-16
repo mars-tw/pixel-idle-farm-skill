@@ -17,7 +17,7 @@ test("1 陽光與份數由同一份收成結果產生", () => {
   const choice = Game.lightHarvestChoice(s, 0, T);
   assert.equal(choice.kind, "tutorial"); assert.equal(choice.hasTradeoff, false);
   assert.deepEqual([choice.nowQty, choice.waitQty, choice.nowSunlight, choice.waitSunlight], [2, 3, 0, 2]);
-  assert.equal(choice.tutorialText, "等 7 秒，光到了再收：3 份＋陽光 2（現在收只有 2 份）");
+  assert.equal(choice.tutorialText, "等光再收：等 7 秒，3 份＋陽光 2（現在收只有 2 份）"); /* R83C 同步：統一用「等光再收」 */
   const canonical = Sun.harvestOutcome(s, s.plots[0], { exposedNow: true, caughtSunlight: 1, baseQty: 2 });
   assert.deepEqual([canonical.quantity, canonical.sunlightTotal], [choice.waitQty, choice.waitSunlight]);
   assert.equal(Sun.traitText(s, "wheat"), "光裡收成多 1 份＋陽光 2");

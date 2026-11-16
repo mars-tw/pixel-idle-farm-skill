@@ -209,7 +209,7 @@ const INTERSECT_JS = `
         const s = window.__farm.state();
         const tile = s.map.tiles.find((t) => t.plotIndex === 0);
         s.plots[0].cropId = 'wheat'; s.plots[0].plantedAt = Date.now(); delete s.plots[0].wateredAt;
-        /* R80B：光快落在這格時標籤會改寫成「光到了再澆水」（下面另外驗）。這一段驗的是沒有光的寫法，先把預告推遠，結果才不會看當下剛好有沒有預告。 */
+        /* R80B：光快落在這格時標籤會改寫成「在光裡澆水」（R83C 統一說法；下面另外驗）。這一段驗的是沒有光的寫法，先把預告推遠，結果才不會看當下剛好有沒有預告。 */
         if (s.sun) Object.assign(s.sun, { plots: [], used: [], startsAt: 0, endsAt: 0, previewPlots: [], previewAt: 0, nextAt: Date.now() + 600000 });
         const adj = s.map.tiles.find((t) => t.x === tile.x && t.y === tile.y + 1) || s.map.tiles.find((t) => t.x === tile.x + 1 && t.y === tile.y);
         if (adj) { s.player.tileId = adj.id; s.player.x = adj.x; s.player.y = adj.y; }
@@ -239,7 +239,7 @@ const INTERSECT_JS = `
       assert.deepEqual(single.actions, ['water'], `${w}×${h} 中央浮動按鈕應與澆水工具一致且只有一顆，實際 ${JSON.stringify(single.actions)}（工具列：${single.toolbar}）`);
       await page.screenshot({ path: path.join(SHOT_DIR, `plant-highlight-${w}x${h}.png`) });
       console.log(`OK 單格 ${w}×${h} 只高亮一格、標籤「${single.label}」、中央按鈕與澆水工具一致`);
-      /* R80B：光的預告落在這一格時，標籤改寫「光到了再澆水」（任務卡教的是同一件事）。兩種寫法各驗一次，不靠當下剛好有沒有預告。 */
+      /* R80B：光的預告落在這一格時，標籤改寫「在光裡澆水」（R83C 統一說法，任務卡教的是同一件事）。兩種寫法各驗一次，不靠當下剛好有沒有預告。 */
       await page.evaluate(() => {
         const s = window.__farm.state(); const tile = s.map.tiles.find((t) => t.plotIndex === 0);
         window.__farm.cancelJourney(); delete s.plots[0].wateredAt;
@@ -249,8 +249,8 @@ const INTERSECT_JS = `
       await page.waitForTimeout(250);
       /* R81 整合同步：R81B 田上標籤只畫一行，第二行「光快落在這格了」改留在提示文字（title）。 */
       const sunLabel = await page.evaluate(() => { const label = document.querySelector('[data-audit="tile-state-label"]'); return label && !label.hidden ? label.textContent.trim() + '\n' + (label.title || '') : null; });
-      assert.match(String(sunLabel), /^光到了再澆水・小麥\n光到了再澆水・小麥・光快落在這格了$/, `${w}×${h} 光快落在這格時標籤應提示光到了再澆水，實際「${sunLabel}」`);
-      console.log(`OK 單格 ${w}×${h} 光快落下時標籤改寫「光到了再澆水」`);
+      assert.match(String(sunLabel), /^在光裡澆水・小麥\n在光裡澆水・小麥・光快落在這格了$/, `${w}×${h} 光快落在這格時標籤應提示在光裡澆水，實際「${sunLabel}」`);
+      console.log(`OK 單格 ${w}×${h} 光快落下時標籤改寫「在光裡澆水」`);
       await page.evaluate(() => { const s = window.__farm.state(); Object.assign(s.sun, { previewPlots: [], previewAt: 0, nextAt: Date.now() + 600000 }); });
       await page.evaluate(() => { const s = window.__farm.state(); s.plots[0].cropId = null; window.__farm.cancelJourney(); window.__farm.setTool('hand'); window.__farm.refresh(); });
       await page.waitForTimeout(200);

@@ -300,7 +300,7 @@
     const waitText = hasTradeoff
       ? `等光再收：${waitQty} 份${crop.name}` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}（${sunlightUseText}）` : "") + `，但錯過${missName}`
       : `等光再收：${waitQty} 份` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}（${sunlightUseText}）` : "");
-    const tutorialText = `等 ${seconds} 秒，光到了再收：${waitQty} 份＋陽光 ${waitSunlight}（現在收只有 ${nowQty} 份）`;
+    const tutorialText = `等光再收：等 ${seconds} 秒，${waitQty} 份＋陽光 ${waitSunlight}（現在收只有 ${nowQty} 份）`; /* R83C：跟田邊鈕同一種說法 */
     const helpText = kind === "tutorial" ? `按下後等 ${seconds} 秒，光到會自動收成` : "已選等光；光到了要自己收成";
     return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, kind, hasTradeoff, nowQty, waitQty, nowSunlight, waitSunlight,
       nowCoins, waitCoins: 0, orderUnitCoins, orderUnitText: unitText, sunlightUnitEquivalent, sunlightUseText, nowValueCoins, waitValueCoins, valueGapRatio,

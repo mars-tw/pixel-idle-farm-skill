@@ -164,9 +164,28 @@
   function refractToastText(result) {
     if (!result || !result.ok) return "現在沒有光可以折，等下一道光的預告。";
     if (result.remaining > 0) return `光折過來了，這道光還能再折 ${result.remaining} 次。`;
-    return result.active ? "光折過來了。趁光還在，在這一格澆水或收成。" : "光會落在這一格。光到了再澆水或收成。";
+    /* R83C 第 1 項：跟任務卡同一組說法（在光裡澆水／在光裡收成），不再寫「趁光還在」「光到了再」。 */
+    return result.active ? "光折過來了。在光裡澆水或收成。" : "光會落在這一格，在光裡澆水或收成。";
   }
-  function staleLightText(text, light) { return !!(light && light.active) && /光會落在這一格|光到了再|光快落在/.test(String(text || "")); }
+  /* R83C：「先別澆水」是預告期間的話，光落下後也算過期。 */
+  function staleLightText(text, light) { return !!(light && light.active) && /光會落在這一格|光到了再|光快落在|先別澆水/.test(String(text || "")); }
+  /* R83C 第 1 項：頂部陽光籤什麼時候提「手鏡可折 N 次」。
+     任務卡正在教折光才提；第一次光裡收成前（折光還沒交給玩家）不提；任務卡叫玩家等光、或光本來就要落在任務那一格時也不提，免得教等光時又冒出折光。 */
+  function mirrorHint(state, step, now) {
+    const sun = (state && state.sun) || {}, left = Math.max(0, mirrorLimit(state) - integer(sun.refractions, 0));
+    if (!left) return "";
+    const text = `手鏡可折 ${left} 次`;
+    if (step && step.action === "refract") return text;
+    const firstLessonDone = !!(state && ((state.flags && state.flags.r79FirstLightHarvest === true) || (state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest)));
+    if (!firstLessonDone) return "";
+    const queued = state.flags && state.flags.r79WaitHarvest;
+    if (queued && Number.isInteger(queued.plotIndex)) return "";
+    if (step && (step.action === "catch_sun" || step.holdPlotIndex != null || step.lightChoice)) return "";
+    const t = Number.isFinite(now) ? now : Date.now(), active = t >= (sun.startsAt || 0) && t < (sun.endsAt || 0);
+    const lit = active ? sun.plots || [] : t < (sun.previewAt || 0) ? sun.previewPlots || [] : [];
+    if (step && Number.isInteger(step.plotIndex) && lit.includes(step.plotIndex)) return "";
+    return text;
+  }
   /* R78B 第 6 項：光裡收成的大字，數字直接取收成結果。 */
   function harvestPopText(out) {
     const sun = out && out.sun; if (!sun || sun.kind !== "harvest") return [];
@@ -549,7 +568,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, harvestPopText };
+  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, mirrorHint, harvestPopText };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

@@ -572,11 +572,12 @@
       }
       if (activeLight.length && litCrops.length) {
         const ripe = litCrops.find((tile) => ready.includes(tile));
-        if (ripe) return field("harvest", ripe, `光正照著，點一下收成：${lightHarvestReward(ripe)}。`, "在光裡收成", `趁光收成${cropName(ripe)}`, { count: ready.length, sunlit: true });
+        /* R83C 第 1 項：講光只用「折光／等光再收／在光裡收成／在光裡澆水」這一組，不再寫「趁光」「光到了再」。 */
+        if (ripe) return field("harvest", ripe, `光正照著，點一下收成：${lightHarvestReward(ripe)}。`, "在光裡收成", `在光裡收成${cropName(ripe)}`, { count: ready.length, sunlit: true });
         const thirsty = litCrops.find((tile) => dry.includes(tile));
-        if (thirsty) return field("tend", thirsty, `光到了！趁光還在替${cropName(thirsty)}澆水，接住${sunplay.firstCaught ? "" : "第一點"}陽光。`, "在光裡澆水", `趁光澆${cropName(thirsty)}`, { sunlit: true });
+        if (thirsty) return field("tend", thirsty, `光落在${cropName(thirsty)}上了！在光裡澆水，接住${sunplay.firstCaught ? "" : "第一點"}陽光。`, "在光裡澆水", `在光裡澆水・${cropName(thirsty)}`, { sunlit: true });
       }
-      /* 光快落在有作物的格子上：那一格留到光到了再收成或澆水，這幾秒先做別格的事。
+      /* 光快落在有作物的格子上：那一格留著，等光落下在光裡收成或澆水，這幾秒先做別格的事。
          已經熟的也先留著——不然玩家會在光到之前把它收掉，光就落在空田上。 */
       const hold = previewLight.length ? litCrops.find((tile) => ready.includes(tile)) || litCrops.find((tile) => dry.includes(tile)) : null;
       if (hold) {
@@ -597,9 +598,9 @@
         const r82cChoice = holdRipe && !queued ? r82cLightChoice(state, hold.plotIndex, t) : null;
         if (r82cChoice && r82cChoice.ok && r82cChoice.hasTradeoff) return field("catch_sun", hold, `${cropName(hold)}熟了，光也快到了：現在收趕得上${r82cChoice.kind === "market" ? "早市" : "限時收購"}，等光收得比較多。到田邊選一個。`, "到田邊選一個", "到田邊選收成方式", Object.assign({ lightChoice: r82cChoice.kind }, held));
         return field("catch_sun", hold, queued && !queued.autoHarvest
-          ? `已選等光再收。光到了要自己收成：${lightHarvestReward(hold)}。`
-          : `光快落在${cropName(hold)}上了。${holdRipe ? `等光再收：${lightHarvestReward(hold)}。` : "光到了再澆水，才接得住陽光。"}`,
-        holdRipe ? (queued && !queued.autoHarvest ? "看看田裡" : "等光再收") : "看光落在哪", holdRipe ? `等光再收${cropName(hold)}` : `等光落下再澆${cropName(hold)}`, holdRipe ? held : null);
+          ? `已選等光再收。光落下後，自己在光裡收成：${lightHarvestReward(hold)}。`
+          : `光快落在${cropName(hold)}上了。${holdRipe ? `等光再收：${lightHarvestReward(hold)}。` : "先別澆水，在光裡澆水才接得住陽光。"}`,
+        holdRipe ? (queued && !queued.autoHarvest ? "看看田裡" : "等光再收") : "看光落在哪", holdRipe ? `等光再收${cropName(hold)}` : "等光，在光裡澆水", holdRipe ? held : null);
       }
       litGrowing = growing.find((tile) => lit.includes(tile.plotIndex)) || null; lightOn = activeLight.length > 0;
     }
@@ -623,7 +624,7 @@
     if (litGrowing && lightOn) return field("wait", litGrowing, `光正照著${cropName(litGrowing)}，等這株成熟再收。`, "看看田裡", `等${cropName(litGrowing)}成熟再收`);
     if (empty.length && packs > 0 && cropped.length) return field("plant", empty[0], `把剩下的 ${packs} 包小麥種子也種下，幾格一起照顧。`, "去種小麥", "去田邊種小麥");
     if (!growing.length) return field("plant", empty[0] || null, harvestDone ? `${mealNeed}，先種下小麥。` : "先種下第一格小麥，接著跟著光走。", "去種小麥", "去田邊種小麥");
-    if (litGrowing) return field("wait", litGrowing, `${lightOn ? "光正照著" : "光快落在"}${cropName(litGrowing)}${lightOn ? "" : "上了"}，熟了就趁光收成：${lightHarvestReward(litGrowing)}。`, "看看田裡", `等${cropName(litGrowing)}成熟再收`);
+    if (litGrowing) return field("wait", litGrowing, `${lightOn ? "光正照著" : "光快落在"}${cropName(litGrowing)}${lightOn ? "" : "上了"}，熟了就在光裡收成：${lightHarvestReward(litGrowing)}。`, "看看田裡", `等${cropName(litGrowing)}成熟再收`);
     return field("wait", growing[0], harvestDone ? `${mealNeed}，等田裡的${cropName(growing[0])}成熟。` : `${cropName(growing[0])}正在長，成熟了就來收。`, "看看田裡", `等${cropName(growing[0])}成熟再收`);
   }
 
@@ -664,18 +665,24 @@
     const base = nextFarmStep(state, now), mirror = base && base.action === "refract" ? wheat.find((tile) => tile.id === base.tileId) : null;
     if (mirror) return step("refract", "拿祖母的手鏡折光", base.text, base.short, base.actionLabel, mirror);
     const pending = sun.previewPlots || [];
-    if (ripe && h.sunWheat < 2 && pending.includes(ripe.plotIndex) && state.plots[ripe.plotIndex].sunGrown !== true) return step("wait", "光快落在麥穗上了", "先別收。等光落下再收成，這一株才算陽光小麥。", "等光落下再收小麥", "看看這株小麥", ripe);
+    /* R83C 第 1 項：祖母手記也照教學順序講光——折光 → 在光裡澆水 → 等光再收／在光裡收成。
+       不再寫「看見光落下，再去澆水」：第一道光會先落在空田上，要先折光，那句話會讓玩家乾等。 */
+    const refracted = !!(Sunplay && Sunplay.normalize(state).r75Sunplay.firstRefracted);
+    if (ripe && h.sunWheat < 2 && pending.includes(ripe.plotIndex) && state.plots[ripe.plotIndex].sunGrown !== true) return step("wait", "光快落在麥穗上了", "先別收，等光再收：在光裡收成，這一株才算陽光小麥。", "等光再收小麥", "看看這株小麥", ripe);
     if (ripe) return step("harvest", "把這束陽光收進餐籃", "小麥成熟了。收成後，留下兩份給鎮長葛瑞。", "去田邊收小麥", "走近收成", ripe);
     const lit = plots.find((tile) => sun.plots.includes(tile.plotIndex) && (!state.plots[tile.plotIndex].cropId || (state.plots[tile.plotIndex].cropId === "wheat" && !G.getCropProgress(state, state.plots[tile.plotIndex], now).wet)));
-    if (lit && h.sunWheat < 2) return step(state.plots[lit.plotIndex].cropId ? "water" : "plant", "光落在這裡", `光斑還有 ${Math.ceil(sun.remainingMs / 1000)} 秒。在光裡${state.plots[lit.plotIndex].cropId ? "澆水" : "種小麥"}，這株的收穫會記進餐籃。`, state.plots[lit.plotIndex].cropId ? "趁光去田邊澆小麥" : "趁光去田邊種小麥", state.plots[lit.plotIndex].cropId ? "去光裡澆水" : "在光裡播種", lit);
+    if (lit && h.sunWheat < 2) return step(state.plots[lit.plotIndex].cropId ? "water" : "plant", "光落在這裡", `光斑還有 ${Math.ceil(sun.remainingMs / 1000)} 秒。${state.plots[lit.plotIndex].cropId ? "在光裡澆水" : "在光裡種小麥"}，這株的收穫會記進餐籃。`, state.plots[lit.plotIndex].cropId ? "去田邊在光裡澆水" : "去田邊在光裡種小麥", state.plots[lit.plotIndex].cropId ? "在光裡澆水" : "在光裡播種", lit);
     const growing = wheat[0];
     if (growing) {
       const p = state.plots[growing.plotIndex], progress = G.getCropProgress(state, p, now);
-      if (p.sunGrown !== true && pending.includes(growing.plotIndex)) return step("wait", "光快落在這株小麥上了", progress.wet ? "水已經澆了。等光落下、小麥熟了，趁光收成。" : "先別澆水。等光落下再澆，才接得住陽光。", progress.wet ? "等光落下再收小麥" : "等光落下再澆小麥", "看看這株小麥", growing);
-      return step("wait", p.sunGrown === true ? "陽光已經留在麥穗裡" : "等第一道光落下", p.sunGrown === true ? `再等約 ${Math.ceil(progress.remainingMs / 1000)} 秒成熟。光散了，這株仍記得你在光裡的照料。` : "光落下前，田上會先亮起預告圈。看見光落下，再去澆水；錯過會再來。", p.sunGrown === true ? "等小麥成熟再收" : "等光落下再澆小麥", "看看這株小麥", growing);
+      if (p.sunGrown !== true && pending.includes(growing.plotIndex)) return step("wait", "光快落在這株小麥上了", progress.wet ? "水已經澆了。小麥熟了以後，在光裡收成。" : "先別澆水，在光裡澆水才接得住陽光。", progress.wet ? "等光再收小麥" : "等光，在光裡澆水", "看看這株小麥", growing);
+      const waitText = progress.wet
+        ? (refracted ? "水已經澆了。光落在這株小麥上時，熟了就在光裡收成；錯過會再來。" : "水已經澆了。預告圈亮起時，先把光折到這株小麥上，熟了在光裡收成。")
+        : (refracted ? "先別澆水。光落在這株小麥上時，在光裡澆水；錯過會再來。" : "先別澆水。預告圈亮起時，先把光折到這株小麥上，再在光裡澆水。");
+      return step("wait", p.sunGrown === true ? "陽光已經留在麥穗裡" : "等第一道光落下", p.sunGrown === true ? `再等約 ${Math.ceil(progress.remainingMs / 1000)} 秒成熟。光散了，這株仍記得你在光裡的照料。` : waitText, p.sunGrown === true ? "等小麥成熟再收" : progress.wet ? "等光再收小麥" : "等光，在光裡澆水", "看看這株小麥", growing);
     }
     const empty = plots.find((tile) => !state.plots[tile.plotIndex].cropId);
-    return step("plant", "先種一株，等光來", h.sunWheat >= 2 ? "陽光收成已記下。倉庫還要留兩份小麥，才裝得成餐籃。" : "種一株小麥，先別澆水；看見光落下，再去澆水。餐籃不用等換日。", "去田邊種小麥", "種第一株小麥", empty);
+    return step("plant", "先種一株，等光來", h.sunWheat >= 2 ? "陽光收成已記下。倉庫還要留兩份小麥，才裝得成餐籃。" : refracted ? "種一株小麥，先別澆水；光落在小麥上時，在光裡澆水。餐籃不用等換日。" : "種一株小麥，先別澆水；預告圈亮起時先把光折到小麥上，再在光裡澆水。餐籃不用等換日。", "去田邊種小麥", "種第一株小麥", empty);
   }
   function storyGuidance(state, now) {
     const S = root && root.StoryR76;
