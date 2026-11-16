@@ -2309,3 +2309,127 @@ html body:has(.modal.show) #questDock#questDock * { visibility: hidden !importan
 /* 作物評比結果一定有一顆看得到、點得到的「繼續」。 */
 .r82a-result-close { display: block; min-width: 110px; min-height: 44px; margin: 10px 0 0 auto; padding: 8px 16px; border: 2px solid #83521c; border-radius: 8px; background: #ffd978; color: #4d3010; font: inherit; font-weight: 900; cursor: pointer; }
 /* ===== R82A 結束 ===== */
+/* ===== R83A（收合任務卡不疊字、對話時不留空白卡、右下大鈕不搶目標）開始 ===== */
+/* 第 1 項：收合列只留一種文字。R82A 想在收合時藏起章節標題，但 R70A 的雙 ID 規則權重較高，標題又被畫回第 1 欄，
+   和跨滿整列的「現在做」短句疊在同一格，右側「0/1」也壓在按鈕上（圖 92、97 等）。這裡用三個 ID 收回：
+   短句與按鈕留在第 1 欄；標題列只留進度、放到第 2 欄當右側狀態；章節名與任務名不畫。祭典收合沿用 R70A 自己的摘要。
+   桌面展開時開著下方對話框或逐句對話（任務卡收成一列、52px 高），原本只剩被切掉一半的兩行標題，也改成同一列。 */
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; grid-template-rows: 44px !important;
+  align-items: center !important; gap: 6px !important; min-height: 52px !important; height: 52px !important; max-height: 52px !important;
+  padding: 4px 50px 4px 8px !important; overflow: hidden !important; box-sizing: border-box !important;
+}
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r68a-requirements,.r67a-task-list,.r68a-festival-summary,.r69a-main-row,.world-objective-routes,.r66a-daily-claim) { display: none !important; }
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) {
+  position: static !important; display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; align-items: center !important; gap: 6px !important;
+  width: 100% !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important;
+}
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) > span { display: block !important; min-width: 0 !important; white-space: nowrap !important; overflow: hidden !important; }
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) > span > :is(b,.r69a-collapsed-summary,em,.r82c-pick-note) { display: none !important; }
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) > :is(.r67a-now-action,.r68a-now-action,.r63-primary,.r80b-now-copy) {
+  grid-column: 2 !important; width: auto !important; max-width: min(44vw,180px) !important; justify-self: end !important; white-space: nowrap !important;
+}
+/* 祭典進行中又開著對話：跟祭典收合一樣只留祭典短句與按鈕，主線章節標題不畫。 */
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):has(.r69a-festival-now) > :is(.r68a-objective-head,.r67a-objective-head) { display: none !important; }
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):has(.r69a-festival-now) > .r69a-festival-now { grid-column: 1 / -1 !important; grid-row: 1 !important; }
+html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r67a-now,.r68a-now),
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r67a-now,.r68a-now) {
+  grid-column: 1 !important; grid-row: 1 !important;
+}
+html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head),
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) {
+  display: flex !important; grid-column: 2 !important; grid-row: 1 !important; flex: 0 0 auto !important;
+  width: auto !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; align-items: center !important;
+}
+html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) > :not([data-audit="quest-progress"]),
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) > :not([data-audit="quest-progress"]) { display: none !important; }
+/* 今日三件事收合時（R64：「現在做」整列要填滿；R69：收合時「今日三件事」只出現一次）：標題列不畫，
+   「現在做」整列排成「短句｜按鈕｜今日三件事 0/3」，最後那段是原本就有的收合摘要，當右側狀態用。 */
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-objective-head,
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-objective-head { display: none !important; }
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now,
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now { grid-column: 1 / -1 !important; grid-template-columns: minmax(0,1fr) auto auto !important; }
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span,
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span { display: contents !important; }
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > :is(b,em,.r82c-pick-note),
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > :is(b,em,.r82c-pick-note) { display: none !important; }
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > small,
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > small { grid-column: 1 !important; grid-row: 1 !important; min-width: 0 !important; }
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > :is(.r67a-now-action,.r63-primary,.r80b-now-copy,.r82c-pick-row),
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > :is(.r67a-now-action,.r63-primary,.r80b-now-copy,.r82c-pick-row) { grid-column: 2 !important; grid-row: 1 !important; }
+html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > .r69a-collapsed-summary,
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > .r69a-collapsed-summary {
+  display: inline-flex !important; grid-column: 3 !important; grid-row: 1 !important; align-items: center !important; justify-content: center !important;
+  min-width: 44px !important; height: 26px !important; padding: 0 8px !important; border: 1px solid #b89455 !important; border-radius: 13px !important;
+  background: #fff3d1 !important; color: #5b421f !important; font-size: 11px !important; font-weight: 900 !important; line-height: 1 !important;
+  white-space: nowrap !important; box-sizing: border-box !important;
+}
+/* 進度數字做成右側的小徽章（跟按鈕分開、等寬），一列裡一眼分得出「短句」「按鈕」「進度」三件事。 */
+html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) > [data-audit="quest-progress"],
+html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) > [data-audit="quest-progress"],
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-chapter > [data-audit="quest-progress"],
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter > [data-audit="quest-progress"] {
+  display: inline-flex !important; align-items: center !important; justify-content: center !important; min-width: 44px !important; height: 26px !important;
+  padding: 0 8px !important; border: 1px solid #b89455 !important; border-radius: 13px !important; background: #fff3d1 !important; color: #5b421f !important;
+  font-size: 12px !important; font-weight: 900 !important; line-height: 1 !important; white-space: nowrap !important; box-sizing: border-box !important;
+}
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-chapter > [data-audit="quest-progress"],
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter > [data-audit="quest-progress"] { min-width: 0 !important; padding: 0 6px !important; }
+/* 手機直式寬度不夠：右側狀態與按鈕縮一號，把寬度讓給短句，短句不裁字（進度徽章仍保留 R28 收合標題列至少 40px 寬）。 */
+@media (max-width: 520px) {
+  html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) > [data-audit="quest-progress"],
+  html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head,.r67a-objective-head) > [data-audit="quest-progress"] { min-width: 42px !important; padding: 0 6px !important; }
+  html body #questDock#questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r67a-now,.r68a-now) > :is(.r67a-now-action,.r68a-now-action,.r63-primary,.r80b-now-copy),
+  html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > :is(.r67a-now,.r68a-now) > :is(.r67a-now-action,.r68a-now-action,.r63-primary,.r80b-now-copy) { padding: 4px 8px !important; font-size: 12px !important; }
+  html body #questDock#questDock#questDock[data-quest="early_free_choice"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > .r69a-collapsed-summary,
+  html body:is(:has(#worldDialogue:not([hidden])),:has(.r76b-dialogue)):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="early_free_choice"]:not(.r80b-decision-compact):has(.r82a-guidance-short):not(:has(.r69a-festival-now)) > .r67a-now > span > .r69a-collapsed-summary { min-width: 0 !important; padding: 0 6px !important; font-size: 10px !important; }
+}
+/* 第 4 項：祖母手記卡在收合、提示或對話開著時排成一列：左邊這一步的短標題（例如「先種一株，等光來」）、中間主鈕
+   （有第二件可挑時旁邊多一顆「另一件」小鈕）、右邊 1/3。原本收合時只剩「1/3」與主鈕（圖 120）。
+   一列模式沿用 R75「標題要看得到」的規則，讀 nextGuidance 的 title；手機開手札時任務卡照舊整張收起。 */
+#questDock .r83a-heirloom-alt { display: none !important; }
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed),
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto auto !important; grid-template-rows: 44px !important;
+  align-items: center !important; column-gap: 6px !important; row-gap: 0 !important;
+  min-height: 52px !important; height: 52px !important; max-height: 52px !important;
+  padding: 4px 50px 4px 8px !important; overflow: hidden !important; box-sizing: border-box !important;
+}
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-objective-title,
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-title {
+  display: block !important; grid-column: 1 !important; grid-row: 1 !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important;
+  white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important; -webkit-line-clamp: unset !important;
+  color: #4a3212 !important; font-size: 13px !important; font-weight: 800 !important; line-height: 1.3 !important; text-align: left !important;
+}
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-objective-bottom,
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-bottom {
+  display: flex !important; grid-column: 2 !important; grid-row: 1 !important; flex-wrap: nowrap !important; align-items: center !important;
+  justify-content: flex-end !important; gap: 6px !important; width: auto !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important;
+}
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-objective-bottom > :is(span,.r82-heirloom-pick),
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-bottom > :is(span,.r82-heirloom-pick) { display: none !important; }
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-objective-bottom > :is(button[data-world-go]:not([hidden]),.r83a-heirloom-alt),
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-bottom > :is(button[data-world-go]:not([hidden]),.r83a-heirloom-alt) {
+  display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;
+  min-width: 44px !important; min-height: 44px !important; height: 44px !important; margin: 0 !important; padding: 0 8px !important;
+  white-space: nowrap !important; font-size: 12px !important; box-sizing: border-box !important;
+}
+/* 「另一件」是次要鈕：淺底深字，跟展開時的「去修釣台」同一種樣子，不搶主鈕；完整說法放在 title 與 aria-label。 */
+html body #questDock#questDock#questDock[data-quest="first_sun_basket"] .r83a-heirloom-alt { border: 2px solid #7a5524 !important; border-radius: 8px !important; background: #f3ead4 !important; color: #4a3212 !important; font-weight: 800 !important; box-shadow: none !important; cursor: pointer; }
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-chapter,
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter {
+  display: flex !important; grid-column: 3 !important; grid-row: 1 !important; align-items: center !important; width: auto !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important;
+}
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-chapter > :not([data-audit="quest-progress"]),
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter > :not([data-audit="quest-progress"]),
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.world-objective-detail,.r82c-pick-note),
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > :is(.world-objective-detail,.r82c-pick-note) { display: none !important; }
+
+/* 第 2 項：圖 114／120 的兩張空白卡，是對話時被藏起來的種子卡（.seed）。種子卡寫著 transition: all，
+   visibility 也跟著做 0.1 秒過場；對話期間種子列每次重畫都重新起跑，卡片的底色與框一直留在畫面上，裡面的字卻已經藏起來。
+   過場只留給位置與顏色，藏起來就是當下藏起來。工具列按鈕（.tool）同一種寫法，一併處理。 */
+.seed, .tool { transition-property: transform, background-color, border-color, box-shadow, color !important; }
+
+/* 第 5 項：任務卡帶玩家去某一格時，右下大鈕不寫身旁不相干的東西（由 ui.js 標記 data-r83a-off-target）。 */
+#actionA[data-r83a-off-target="true"] { visibility: hidden !important; pointer-events: none !important; }
+/* ===== R83A 結束 ===== */

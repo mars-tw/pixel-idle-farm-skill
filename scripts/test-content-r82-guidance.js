@@ -136,7 +136,7 @@ test("6 空白卡與米色殘影從來源清掉；作物評比結果有可見繼
 
 test("7 CSS 在檔尾且不改任務卡高度；次要狀態不是黃色主按鈕", () => {
   const css = read("src/content-r58b.css"), block = (css.match(/R82A（單一下一步[\s\S]*R82A 結束/) || [""])[0];
-  assert.ok(block); assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */"));
+  assert.ok(block); assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */") || /R82A 結束 ===== \*\/\s*\/\*[^\n]*R83[ABC]/.test(css)); /* R83A 同步：R83 各線依規定接在 R82A 後面 */
   assert.match(block, /\.r82a-guidance-short \{ display: none; \}/);
   assert.match(block, /max-height: 52px !important/);
   assert.doesNotMatch(block, /150px|r82a-action-next-row/);
