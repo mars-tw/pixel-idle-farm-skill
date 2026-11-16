@@ -62,11 +62,11 @@ test("5 第一次收成前沒有折光田字，完成後只用同一種說法", 
 
 test("6 任務卡與手機大鈕採單一動作規則", () => {
   const world = read("src/world-ui.js"), ui = read("src/ui.js"), css = read("src/content-r58b.css");
-  assert.match(world, /r80bFieldActionShown/); assert.match(world, /data-r80b-task-copy/); assert.match(world, /早市到了，請在田邊選一個/);
+  assert.match(world, /r80bFieldActionShown/); assert.match(world, /data-r80b-task-copy/); assert.match(world, /光快到了，請在田邊選一種收成方式/);
   assert.match(world, /r80b-objective-source/); assert.match(world, /r80b-objective-task/); assert.match(world, /data-audit="quest-progress"/);
   assert.match(ui, /dataset\.r80bDuplicate/); assert.match(css, /#actionA\[data-r80b-duplicate="true"\]/);
   const s = fresh(); assert.equal(Game.facingPlotLabel(s, s.map.tiles.find((tile) => tile.plotIndex === 0), T), "");
-  assert.equal(Game.plant(s, 0, "wheat", T, "water").ok, true); assert.equal(Game.facingPlotLabel(s, s.map.tiles.find((tile) => tile.plotIndex === 0), T), "看看田裡");
+  assert.equal(Game.plant(s, 0, "wheat", T, "water").ok, true); assert.equal(Game.facingPlotLabel(s, s.map.tiles.find((tile) => tile.plotIndex === 0), T), "生長中・小麥田");
 });
 
 if (!process.exitCode) console.log(`R80B first-minute rules: ${passed} passed`);

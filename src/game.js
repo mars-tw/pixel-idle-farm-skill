@@ -311,13 +311,13 @@
     state.flags.r79LightChoiceLastBeam = Math.max(0, Number(state.sun && state.sun.spawned) || 0);
     state.flags.r79LightChoiceLastResult = waited ? "wait" : "now";
   }
-  /* R79B：右下互動鈕直接讀選中田的狀態，成熟、成長中都不再借相鄰空田的文字。 */
+  /* R81B：右下互動鈕直接讀選中田的狀態；未成熟時明寫「生長中」，不能先顯示收成。 */
   function facingPlotLabel(state, tile, now) {
     const plot = tile && tile.plotIndex != null && state && Array.isArray(state.plots) ? state.plots[tile.plotIndex] : null; const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
     if (!crop) return "";
     const t = Number.isFinite(now) ? now : Date.now();
     if (getCropProgress(state, plot, t).ready) return lightHarvestChoice(state, tile.plotIndex, t).ok ? "等光再收" : `收成・${crop.name}田`;
-    return "看看田裡";
+    return `生長中・${crop.name}田`;
   }
   // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
   function waterPlot(state, plotIndex, now) {

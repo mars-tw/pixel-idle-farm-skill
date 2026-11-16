@@ -41,7 +41,7 @@ function install() {
       const s = __farm.state(), step = AdventureAPI.nextFarmStep(s, Date.now()), active = Game.activePlotCount(s);
       const plots = s.map.tiles.filter((t) => t.plotIndex != null && t.plotIndex < active).sort((a, b) => a.plotIndex - b.plotIndex).map((t) => box(tileEl(t.id)));
       const btn = qa("#questDock [data-r78b-step], #questDock [data-next-tile]").filter(vis)[0] || null;
-      const label = q("#tileStateLabel"), wait = q(".r78b-wait-choice"), pop = q(".r78b-sun-pop"), popLine = q(".r78b-sun-pop-line"), sunTile = q(".r40-sun-tile"), dock = q("#questDock"), chip = q("#sunChip");
+      const label = q("#tileStateLabel"), wait = q(".r78b-wait-choice"), actionDetail = q("#sceneActionBar .r79b-action-detail"), pop = q(".r78b-sun-pop"), popLine = q(".r78b-sun-pop-line"), sunTile = q(".r40-sun-tile"), dock = q("#questDock"), chip = q("#sunChip");
       return {
         step: step ? { action: step.action, label: step.actionLabel } : null,
         btn: btn ? btn.textContent.trim() : null,
@@ -50,7 +50,7 @@ function install() {
         cards: qa("#toast-zone .settlement-card, .r74a-care-popover, #r76cStampCard").filter(vis).map((n) => n.id || String(n.className)),
         care: box(q(".r74a-care-popover")), careWhy: q(".r78b-care-why") ? q(".r78b-care-why").textContent.trim() : "", careButtons: qa(".r74a-care-popover [data-care]").length,
         preview: qa(".r75a-sun-preview").map(box).filter(Boolean), chip: box(chip), chipText: vis(chip) ? chip.textContent.trim() : "",
-        label: vis(label) ? label.innerText : "", wait: wait && vis(wait) ? wait.textContent.trim() : "",
+        label: vis(label) ? label.innerText : "", wait: wait && vis(wait) ? wait.textContent.trim() : "", actionDetail: actionDetail && vis(actionDetail) ? actionDetail.textContent.trim() : "",
         hint: qa('#questDock .world-objective-hint[data-hint="sun"]').filter(vis).map((n) => n.textContent.trim())[0] || "",
         plots, header: box(q("header")), actionA: box(q("#actionA")), dialogue: box(q("#worldDialogue")),
         toasts: qa("#toast-zone > *").filter(vis).map((n) => ({ cls: String(n.className), box: box(n) })),
@@ -101,7 +101,7 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
       assert.equal(d.care0, "water", `${tag} 第一株預設勤澆水`);
       if (d.btn != null) sameStep(d, tag, "第一次種植後");
 
-      /* ── 二、熟了而且有光要來：標籤寫出兩個結果，三處寫同一個秒數，按鈕是「等光再收」 ── */
+      /* ── 二、熟了而且有光要來：數字集中在田邊動作列，按鈕是「等光再收」 ── */
       await page.evaluate(() => {
         const s = __farm.state(), now = Date.now(), p = s.plots[0];
         p.cropId = "wheat"; p.plantedAt = now - 3600000; p.wateredAt = now - 3600000;
@@ -110,14 +110,11 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
         const tile = s.map.tiles.find((t) => t.plotIndex === 0); __farm.clickTile(tile.id); __farm.cancelJourney();
       });
       await page.waitForTimeout(450);
-      /* 三個地方各自每秒更新，等它們落在同一秒再讀（秒數不同就會等到逾時而失敗）。 */
+      /* R81B：倒數與收益只留在田邊動作列。 */
       await page.waitForFunction(() => {
-        const d = __r78t.snap(), nums = [];
-        const a = /等 (\d+) 秒/.exec(d.wait); if (!a) return false; nums.push(a[1]);
-        const b = /光 (\d+) 秒後落下/.exec(d.chipText); if (b) nums.push(b[1]);
-        const c = /等 (\d+) 秒/.exec(d.hint); if (c) nums.push(c[1]);
-        return nums.length >= 2 && nums.every((n) => n === nums[0]);
-      }, null, { timeout: 4000 }).catch(() => { throw new Error(`${tag} 熟田等光：田上標籤、提示條、任務卡要寫同一個秒數`); });
+        const d = __r78t.snap();
+        return /等 \d+ 秒・\d+ 份＋陽光 \d+/.test(d.actionDetail);
+      }, null, { timeout: 4000 }).catch(() => { throw new Error(`${tag} 熟田等光：田邊動作列要寫秒數與收益`); });
       d = await snap(page);
       assert.match(d.label, /^等光再收・小麥/, `${tag} 熟田等光：標籤第一行`);
       const choice = /^等 (\d+) 秒，光到了再收：(\d+) 份＋陽光 (\d+)（現在收只有 (\d+) 份）$/.exec(d.wait);
@@ -125,7 +122,7 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
       assert.ok(Number(choice[2]) > Number(choice[4]), `${tag} 等光收的份數要比現在收多`);
       assert.ok(Number(choice[1]) >= 1 && Number(choice[1]) <= 7, `${tag} 等的秒數是算出來的`);
       sameStep(d, tag, "熟田等光", "等光再收");
-      if (d.hint) assert.match(d.hint, /等 \d+ 秒，光到了再收/, `${tag} 任務卡直接寫「等幾秒，光到了再收」`);
+      if (d.hint) assert.match(d.hint, /光快到了，先留著這格作物/, `${tag} 任務卡只留一句狀態`);
       assert.ok(d.plots[0], `${tag} 被點的那格田在畫面裡`);
 
       /* 光落下之後：過期的預告字樣不留著，按鈕換成「在光裡收成」，受光格是硬邊色塊不是整格平塗。 */

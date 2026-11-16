@@ -133,8 +133,8 @@ test('每日三項不重複首章收成與小麥交付，印章冊標示已領�
 });
 
 test('開場、對話與設定文案符合 R26', () => {
-  assert.match(world, /先去找鎮長葛瑞，再親手種下第一格。完成這兩步後，你可以自己決定先收成、修釣台，或去跟蘿拉打招呼。/);
-  assert.match(world, /id="worldSunBegin">去見鎮長葛瑞/);
+  assert.match(world, /先種下第一株小麥，跟著第一道光照料它，等麥穗成熟後親手收成。留好兩份小麥，再把第一份餐籃送給鎮長葛瑞。/);
+  assert.match(world, /id="worldSunBegin">開始種小麥/);
   /* R80C 同步：對話框按鈕改成跟下方對話框同一套說法（一次一句的主要鈕是「聽完了」、次要鈕「晚點再說」），只換字樣。 */
   assert.match(world, /class="dialogue-continue">聽完了<\/button>/);
   assert.match(world, /class="dialogue-close" aria-label="晚點再說"/);

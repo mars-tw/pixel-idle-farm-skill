@@ -269,7 +269,7 @@
     const lightChoice = farmNow && farmNow.plotIndex != null && window.lightHarvestChoice ? window.lightHarvestChoice(s, farmNow.plotIndex, Date.now()) : null;
     const lightChoiceOpen = !!(lightChoice && lightChoice.ok && lightChoice.hasTradeoff && !(queuedLight && queuedLight.plotIndex === farmNow.plotIndex));
     const farmActionShown = r80bFieldActionShown(farmNow);
-    const farmNowText = lightChoiceOpen ? "早市到了，請在田邊選一個。" : farmNow ? farmNow.text : "";
+    const farmNowText = r81bObjectiveStatus(farmNow, lightChoiceOpen, queuedLight);
     const farmTaskName = lightChoiceOpen ? "早市收成取捨" : farmNow && farmNow.actionLabel ? farmNow.actionLabel : "目前任務";
     const festivalCrop = festivalGoal && festivalGoal.id === "tomato" ? festivalCropStep(s, festivalGoal) : null;
     const festivalFocus = questStep && (questStep.action === "report" || (q && q.chapter >= 4)) ? null : festivalGoal ? {
@@ -283,7 +283,8 @@
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
-    const hint = objectiveHint(s, unfinished);
+    /* R81B：光的狀態已由「現在做」那一句承擔，不再加第二條提示。 */
+    const hint = lightStep ? null : objectiveHint(s, unfinished);
     const choiceRoutes = window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
     // 倒數秒數只更新文字，不重建按鈕，避免玩家按下時按鈕被換掉。
     const sig = JSON.stringify([q, summary.claimed, hint && hint.kind, hint && hint.hold, choiceRoutes, early, festival.active, festival.completed, festival.canComplete, festival.goals, festivalTime, farmNow && [farmNow.action, farmNowText, farmTaskName, farmNow.tileId], farmActionShown, lightChoiceOpen, queuedLight && [queuedLight.plotIndex, queuedLight.autoHarvest], festivalCrop && festivalCrop.label]);
@@ -427,9 +428,9 @@
     chip.hidden = false;
     const mirror = sun.refractionsLeft > 0 ? `・手鏡可折 ${sun.refractionsLeft} 次` : "";
     /* R78B：「光還有幾秒」只算一次（FarmSunplay.lightSecondsText），提示條、預告圈、田上標籤寫的是同一個數字；秒數那一段掛 data-r78b-light-secs，每一拍一起更新。 */
-    const lightSecs = lightSecondsLabel(s, now);
-    const chipText = plots.length ? `☀ 陽光照在 ${plots.length} 格田・剩 ${lightSecs}` : `☀ 光 ${lightSecs}後落下${mirror}`;
-    if (chip.textContent !== chipText || !!chip.querySelector("[data-r78b-light-secs]") !== !plots.length) { if (plots.length) chip.textContent = chipText; else chip.innerHTML = `☀ 光 <span data-r78b-light-secs>${esc(lightSecs)}</span>後落下${esc(mirror)}`; }
+    /* R81B：秒數只留在田邊動作列；頂部籤只報光的狀態與手鏡次數。 */
+    const chipText = plots.length ? `☀ 陽光正在 ${plots.length} 格田上` : `☀ 光快落下${mirror}`;
+    if (chip.textContent !== chipText) chip.textContent = chipText;
     chip.dataset.sunState = plots.length ? "active" : "preview";
     chip.setAttribute("aria-label", chipText + (plots.length ? "，點一下看受光的田" : "，點一下看光要落在哪"));
     const dock = el("questDock"); const r = dock && dock.getBoundingClientRect ? dock.getBoundingClientRect() : null;
@@ -449,6 +450,18 @@
     const button = action && bar.querySelector(`[data-action="${action}"]`);
     return !!(button && !button.hidden && button.getBoundingClientRect && button.getBoundingClientRect().width > 0);
   }
+  function r81bObjectiveStatus(step, choiceOpen, queuedLight) {
+    if (!step) return "";
+    if (choiceOpen) return "光快到了，請在田邊選一種收成方式。";
+    if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest
+      ? "已選等光，光到後會自動收成。"
+      : "已選等光，光到了再回田邊收成。";
+    if (step.action === "refract") return "光沒有照到作物，請把光折到這格。";
+    if (step.action === "catch_sun") return "光快到了，先留著這格作物。";
+    if (step.sunlit === true && step.action === "harvest") return "陽光正在田上，請在田邊收成。";
+    if (step.sunlit === true && step.action === "tend") return "陽光正在田上，請在田邊澆水。";
+    return step.text;
+  }
   function r80bNormalizeHeirloomObjective(box) {
     if (!box) return;
     const head = box.querySelector(".world-chapter"), task = box.querySelector(".world-objective-title"), detail = box.querySelector(".world-objective-detail"), button = box.querySelector(".world-objective-bottom button");
@@ -462,8 +475,8 @@
       const progress = head.lastElementChild; if (progress && progress !== title) progress.dataset.audit = "quest-progress";
     }
     if (task) task.classList.add("r80b-heirloom-task");
-    if (detail) detail.textContent = detail.textContent.replaceAll("等光落下再澆", "光到了再澆水").replaceAll("等光落下、小麥熟了", "光到了、小麥熟了");
     const step = A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null;
+    if (detail && step) detail.textContent = r81bObjectiveStatus(step, false, window.lightHarvestQueue ? window.lightHarvestQueue(current) : null);
     if (button) button.hidden = r80bFieldActionShown(step);
   }
   /* R78B：任務卡上的提示句。寫著「光幾秒後落下」時留下句型（data-r78b-light-tpl），秒數跟其他地方同一拍更新。 */
@@ -479,8 +492,8 @@
     /* R78B 第 2 項：任務卡叫玩家把熟了的那一格留著等光時，提示直接寫「等幾秒，光到再收」；秒數跟預告圈、田上標籤同一拍。 */
     if (next && next.action === "catch_sun" && next.holdPlotIndex != null) {
       const choice = window.lightHarvestChoice ? window.lightHarvestChoice(s, next.holdPlotIndex, now) : null;
-      if (choice && choice.ok) return r80bFieldActionShown(next) ? null : { kind: "sun", hold: true, text: choice.hasTradeoff ? "請在田邊選一個。" : choice.tutorialText };
-      return { kind: "sun", hold: true, text: `☀ 等 ${lightSecondsLabel(s, now)}，光到再收`, tpl: "☀ 等 {秒}，光到再收" };
+      if (choice && choice.ok) return r80bFieldActionShown(next) ? null : { kind: "sun", hold: true, text: choice.hasTradeoff ? "請在田邊選一種收成方式。" : "光快到了，先留著這格作物。" };
+      return { kind: "sun", hold: true, text: "光快到了，先留著這格作物。" };
     }
     const active = window.activePlotCount ? window.activePlotCount(s) : 6;
     const readyCount = (s.plots || []).slice(0, active).filter((p) => p && p.cropId && window.getCropProgress(s, p, now).ready).length;
@@ -1250,7 +1263,7 @@
   function welcome(s, offline) {
     current = s;
     if (!s.adventure.welcomeSeen) {
-      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先去找鎮長葛瑞，再親手種下第一格。完成這兩步後，你可以自己決定先收成、修釣台，或去跟蘿拉打招呼。</p><button class="btn buy" id="worldSunBegin">去見鎮長葛瑞</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
+      const box = modal("籃底有祖母留下的便箋", '<p class="project-desc">先種下第一株小麥，跟著第一道光照料它，等麥穗成熟後親手收成。留好兩份小麥，再把第一份餐籃送給鎮長葛瑞。</p><button class="btn buy" id="worldSunBegin">開始種小麥</button><button class="btn ghost" id="worldBegin">稍後再看便箋</button>');
       const finish = () => { s.adventure.welcomeSeen = true; farm().closeModal("worldModal"); farm().safeSaveNow(); };
       box.querySelector("#worldBegin").onclick = finish;
       box.querySelector("#worldSunBegin").onclick = () => { window.FarmHeirloom.start(s); finish(); farm().refresh(); };
