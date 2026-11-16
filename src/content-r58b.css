@@ -2309,3 +2309,42 @@ html body:has(.modal.show) #questDock#questDock * { visibility: hidden !importan
 /* 作物評比結果一定有一顆看得到、點得到的「繼續」。 */
 .r82a-result-close { display: block; min-width: 110px; min-height: 44px; margin: 10px 0 0 auto; padding: 8px 16px; border: 2px solid #83521c; border-radius: 8px; background: #ffd978; color: #4d3010; font: inherit; font-weight: 900; cursor: pointer; }
 /* ===== R82A 結束 ===== */
+
+/* ===== R83B：兩條舊麥種路線的階段成果 ===== */
+/* 麥田名牌與 data-r82b-stage 都由 r82PlantStatus 的同一份畫面資料產生。四個階段沿用 R82 正式圖，成熟時只加遊戲內效果：
+   麥穗後面一團金色光暈、沿著麥穗輪廓的發光外框、幾顆會閃的光點，再略放大；照過 1 次光只多一圈淡淡的白光，不畫外框。 */
+.r78c-scene-change[data-r82b-branch="plant"][data-r82b-stage="one-light"] img { filter: drop-shadow(0 0 2px rgba(255, 249, 222, .95)) drop-shadow(0 0 3px rgba(42, 91, 145, .78)) drop-shadow(0 2px 0 rgba(42, 31, 18, .42)); }
+.r78c-scene-change[data-r82b-branch="plant"][data-r82b-stage="ripe"] {
+  transform: translate(-50%, -100%) scale(1.18);
+  background: radial-gradient(ellipse 60% 56% at 50% 44%, rgba(255, 238, 146, .95) 0 38%, rgba(255, 210, 80, .5) 62%, rgba(255, 210, 80, 0) 100%);
+}
+.r78c-scene-change[data-r82b-branch="plant"][data-r82b-stage="ripe"] img { filter: brightness(1.12) saturate(1.22) drop-shadow(0 0 2px #fff7c2) drop-shadow(0 0 6px #ffcf33) drop-shadow(0 2px 0 rgba(84, 55, 14, .5)); }
+.r78c-scene-change[data-r82b-branch="plant"][data-r82b-stage="ripe"]::after {
+  content: ""; position: absolute; z-index: 2; inset: -12px -10px 6px; pointer-events: none;
+  background: radial-gradient(circle at 12% 22%, #fffbe0 0 2px, #ffd23f 3px, transparent 6px), radial-gradient(circle at 86% 14%, #fffbe0 0 2.5px, #ffd23f 3.5px, transparent 7px),
+    radial-gradient(circle at 92% 58%, #fffbe0 0 1.5px, #ffd23f 2.5px, transparent 5px), radial-gradient(circle at 8% 64%, #fffbe0 0 1.5px, #ffd23f 2.5px, transparent 5px),
+    radial-gradient(circle at 52% 4%, #fffbe0 0 2px, #ffd23f 3px, transparent 6px);
+  animation: r83b-ripe-glint 1.4s ease-in-out infinite alternate;
+}
+@keyframes r83b-ripe-glint { from { opacity: .55; transform: scale(.96); } to { opacity: 1; transform: scale(1.04); } }
+
+/* 鎮誌三樣舊物：64px 正式圖直接放在草地上（不加卡片底），金色發光外框讓它在草地上一眼看得出是可以撿的東西。 */
+.r78c-scene-change[data-r82b-branch="relic"] img { filter: drop-shadow(0 0 1px #fff6cc) drop-shadow(0 0 4px rgba(242, 193, 78, .95)) drop-shadow(0 2px 0 rgba(42, 31, 18, .45)); }
+.r78c-scene-change[data-r82b-branch="relic"]::after {
+  content: ""; position: absolute; z-index: 2; right: -4px; top: -6px; width: 14px; height: 14px; pointer-events: none;
+  background: radial-gradient(circle, #fffbe0 0 2px, #ffd23f 3px, transparent 7px);
+  animation: r83b-ripe-glint 1.6s ease-in-out infinite alternate;
+}
+.r78c-scene-label[data-r82b-branch="relic"] { min-width: 58px; background: rgba(74, 59, 32, .92); border-left-color: #f2c14e; font-size: 11px; }
+
+/* 回憶對話：鎮長葛瑞的頭像照舊在上方，那件舊物的正式圖擺在台詞左邊。 */
+.r76b-dialogue[data-r82b-branch="seal"] .r76b-dialogue-card { display: grid; grid-template-columns: 56px minmax(0, 1fr); column-gap: 10px; }
+.r76b-dialogue[data-r82b-branch="seal"] .r76b-dialogue-card > :not(.r83b-relic-icon):not(.r76b-dialogue-line) { grid-column: 1 / -1; }
+.r76b-dialogue[data-r82b-branch="seal"] .r76b-dialogue-line { grid-column: 2; align-self: center; }
+.r83b-relic-icon { grid-column: 1; width: 52px; height: 52px; align-self: center; object-fit: contain; image-rendering: pixelated; pointer-events: none; filter: drop-shadow(0 0 3px rgba(242, 193, 78, .9)); }
+@media (max-width: 430px), (max-height: 430px) {
+  .r76b-dialogue[data-r82b-branch="seal"] .r76b-dialogue-card { grid-template-columns: 42px minmax(0, 1fr); column-gap: 8px; }
+  .r83b-relic-icon { width: 40px; height: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { .r78c-scene-change[data-r82b-branch="plant"][data-r82b-stage="ripe"]::after, .r78c-scene-change[data-r82b-branch="relic"]::after { animation: none; } }
+/* ===== R83B 結束 ===== */

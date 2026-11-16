@@ -75,7 +75,7 @@ test("第 2 項：種植線從選擇走到藍布老麥收成，必須在兩個�
   assert.equal(R.r82PlantStatus(savedMidway, T0 + DAY + 10000).stage, "order");
   const order = R.r82BlueOrder(savedMidway);
   assert.equal(order.have, 1, "專屬收成留在這條支線，不會被一般市集誤賣");
-  assert.equal(order.name, "葛瑞的第一穗登記");
+  assert.equal(order.name, "班伯的第一穗留種單"); /* R83B 同步：專屬訂單改由做選擇的老農班伯具名 */
   assert.equal(order.enough, true, "收成後接的是專屬訂單");
   assert.equal(R.r82DeliverBlueOrder(savedMidway, T0 + DAY + 11000).ok, true);
   assert.equal(R.r82PlantStatus(savedMidway, T0 + DAY + 12000).stage, "done");
@@ -174,7 +174,8 @@ test("存檔相容：兩條新進度可讀回，R81 已選過但沒有 R82 欄�
 test("第 6 項：新測試已接到 unit 清單最後", () => {
   const guard = read("scripts/guard-validation-writes.js");
   /* R82 整合同步：同輪 C 線的 test-content-r82-play.js 也接在清單尾，B 線測試緊接在 r81-story 後面、後面只允許同輪 R82 測試。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*\s*\];/);
+  /* R83B 同步：R83 各線的新測試依規定接在清單尾，只允許 R83 測試排在 R82 這幾支後面。 */
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*\];/);
 });
 
 if (!process.exitCode) console.log("VERIFIED content R82B branches (" + passed + " tests)");

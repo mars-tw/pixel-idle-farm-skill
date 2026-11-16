@@ -1604,6 +1604,8 @@
   function anchorTile(state, spec) {
     const pair = String(spec || "").split(":"), kind = pair[0], id = pair[1];
     const tiles = state && state.map && Array.isArray(state.map.tiles) ? state.map.tiles : [];
+    /* R83B：鎮誌舊物直接指定一格空草地（tile:x,y），不必借站點旁邊的位置。 */
+    if (kind === "tile") { const xy = String(id || "").split(",").map(Number); return tiles.find((tile) => tile.x === xy[0] && tile.y === xy[1]) || null; }
     return kind === "structure" ? tiles.find((tile) => tile.structureId === id)
       : kind === "station" ? tiles.find((tile) => tile.station === id)
         : kind === "npc" ? tiles.find((tile) => tile.npc === id) : null;
@@ -1612,7 +1614,7 @@
     const world = document.getElementById("mapWorld");
     if (!world || !state || !state.map) return;
     /* R79C：招牌做完併進市集的「農場招牌（色名）」，不再另畫一塊名牌（圖 41、64 的兩個名牌）。 */
-    const states = sceneStates(state).filter((row) => !row.merged), signature = JSON.stringify(states.map((row) => [row.npcId, row.choiceId, row.done, row.decision, row.label, row.marker.art, row.badge || ""]));
+    const states = sceneStates(state).filter((row) => !row.merged), signature = JSON.stringify(states.map((row) => [row.npcId, row.choiceId, row.done, row.decision, row.label, row.marker.art, row.marker.displaySize || 0, row.r82bStage || "", row.badge || ""]));
     if (world.dataset.r78cScenes === signature && world.querySelectorAll(".r78c-scene-change").length === states.length) return;
     world.querySelectorAll(".r78c-scene-change, .r78c-scene-label").forEach((node) => node.remove());
     const size = Math.max(24, Math.round(world.offsetWidth / Math.max(1, state.map.width || 24)));
@@ -1628,10 +1630,15 @@
       node.type = "button"; node.className = "r78c-scene-change" + (row.done ? " is-done" : " is-early") + (row.decided ? " is-decided" : "");
       node.dataset.r78cRoute = row.npcId + ":" + row.choiceId; node.dataset.r78cDone = row.done ? "1" : "0";
       if (row.decided && row.decision) node.dataset.r79cDecision = row.decision;
-      node.setAttribute("aria-label", row.label); node.title = row.label;
-      const px = Math.max(32, Math.min(48, Math.round(size * .64)));
+      node.setAttribute("aria-label", row.hint || row.label); node.title = row.hint || row.label;
+      const basePx = Math.max(32, Math.min(48, Math.round(size * .64)));
+      const px = Math.max(basePx, Math.min(96, Math.round(Number(row.marker.displaySize) || 0)));
       let col, foot;
-      if (tile.structureId && key.indexOf("structure:") === 0) {
+      if (key.indexOf("tile:") === 0) {
+        /* R83B：指定格子的物件站在那一格正中央，腳底貼著格子下緣。 */
+        col = tile.x + .5 + n * .72;
+        foot = tile.y + .96;
+      } else if (tile.structureId && key.indexOf("structure:") === 0) {
         const body = state.map.tiles.filter((t) => t.structureId === tile.structureId);
         col = Math.min.apply(null, body.map((t) => t.x)) - .2 + n * .72;
         foot = Math.max.apply(null, body.map((t) => t.y)) + 1.06;
@@ -1648,13 +1655,18 @@
       const routeNpc = NPC_ORDER.includes(row.npcId);
       /* R81C：藍布舊麥種的物件點下去也是走過去打開那一段（爭執、具名訂單、收尾或之後的一句話）。 */
       if (row.r81c) node.dataset.r81cStory = row.choiceId;
-      if (row.r82b) { node.dataset.r82bBranch = row.r82bKind || row.choiceId; if (row.artFallback) node.dataset.r82bFallback = ""; }
+      if (row.r82b) {
+        node.dataset.r82bBranch = row.r82bKind || row.choiceId;
+        if (row.r82bStage) node.dataset.r82bStage = row.r82bStage;
+        if (row.artFallback) node.dataset.r82bFallback = "";
+      }
       node.onclick = (event) => { event.stopPropagation(); if (routeNpc) walkToMarker(state, row.npcId); else if (row.r81c && R && typeof R.r81Go === "function") R.r81Go(state); else if (row.r82b && R && typeof R.r82Go === "function") R.r82Go(state, row); else toast(row.label); };
       world.appendChild(node);
       /* 名牌另外放一層在最上面：市集攤前面那一排會被農舍屋頂蓋到，名牌不能跟著物件一起被遮。 */
       const tag = document.createElement("span"), shift = labelShift[key] || 0;
       tag.className = "r78c-scene-label" + (row.done ? " is-done" : "") + (row.decided ? " is-decided" : ""); tag.dataset.r78cRoute = node.dataset.r78cRoute; tag.textContent = row.label;
       if (node.dataset.r79cDecision) tag.dataset.r79cDecision = node.dataset.r79cDecision;
+      if (row.r82b) tag.dataset.r82bBranch = row.r82bKind || row.choiceId;
       tag.style.cssText = "left:" + Math.round(col * size) + "px;top:" + (Math.round(foot * size) + 4 + shift) + "px;";
       world.appendChild(tag);
       labelShift[key] = shift + (tag.offsetHeight || 17) + 2;

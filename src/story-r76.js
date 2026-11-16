@@ -167,7 +167,7 @@
     plant: {
       label: "照班伯說的，種回田裡", side: "elder", anchor: "station:well", spot: "水井旁", object: "藍布老麥田",
       reply: { by: "elder", text: "好。我去井邊翻一小塊地給它。你看葛瑞那張臉，我好多年沒見他這麼慌了。" },
-      labels: { order: "藍布老麥田・班伯在等", scene: "藍布老麥田・班伯有話要說", done: "藍布老麥田・葛瑞明天來翻土" },
+      labels: { order: "藍布老麥田・班伯在等", scene: "藍布老麥田・班伯有話要說", done: "藍布老麥田・等你播種" },
       order: { name: "班伯的老麥回禮單", want: { wheat: 2 }, rate: 1.2, extra: { seedPacks: { wheat: 2 } }, extraText: "小麥種子 2 包",
         line: { by: "elder", text: "老麥要配新麥一起曬，種才養得回來。拿你自己種的麥來，別人的我不要。" } },
       scene: [
@@ -188,7 +188,7 @@
       reply: { by: "mayor", text: "……謝謝。我不是要搶。只是有些東西封起來，比較不會痛。" },
       labels: { order: "鎮公所封存箱・等登記", scene: "鎮公所封存箱・葛瑞有話要說", done: "鎮公所封存箱・三粒留給你" },
       order: { name: "葛瑞的鎮誌登記單", want: { wheat: 2 }, rate: 1.5, extra: {}, extraText: "",
-        line: { by: "mayor", text: "登記要附兩份同一塊田的麥。我想讓它看起來……像還有人在種。" } },
+        line: { by: "mayor", text: "登記要附同一塊田收的麥。我想讓它看起來……像還有人在種。" } },
       scene: [
         { by: "", text: "（葛瑞翻開鎮誌，在「原主」那一欄停了筆。）" },
         { by: "mayor", text: "照規矩，原主那欄要寫名字。" },
@@ -215,7 +215,8 @@
      封存線接「分三個遊戲日找鎮誌舊物」的地圖支線。新圖先接正式路徑，缺圖時才走明列的既有後備。 */
   const R82_BLUE_LIGHT_PLOT = 0;
   const R82_BLUE_CROP = { id: "blue_cloth_wheat", name: "藍布老麥", icon: "cropIcon" };
-  const R82_BLUE_ORDER = { name: "葛瑞的第一穗登記", need: 1, coins: 60 };
+  /* R83B：種回田裡是老農班伯這一邊，專屬訂單以老農班伯具名；名稱跟 R81 的「班伯的老麥回禮單」分開，手札裡不會混成同一張。 */
+  const R82_BLUE_ORDER = { name: "班伯的第一穗留種單", side: "elder", need: 1, coins: 60 };
   const R82_ART = {
     cropIcon: "assets/generated/content-r82/blue-cloth-wheat-icon.png",
     cropSprout: "assets/generated/content-r82/blue-cloth-wheat-sprout.png",
@@ -241,20 +242,22 @@
   };
   function r82Art(key) { return R82_ART_READY.includes(key) && R82_ART[key] ? R82_ART[key] : R82_ART_FALLBACK[key]; }
   function r82ArtFallback(key) { return !R82_ART_READY.includes(key); }
+  /* R83B：三樣舊物各放在一格空草地上（tile:x,y），避開市集攤、玩家起點、鄰居站位與其他名牌；number 是名牌上的「鎮誌 N／3」。
+     舊種子籤在穀倉前、褪色照片在穀倉右邊的河岸草地、帳本一頁在水井右邊。 */
   const R82_RELICS = [
-    { id: "old_seed_tag", name: "舊種子籤", dayOffset: 0, anchor: "station:mailbox", artKey: "oldSeedTag", memory: [
-      { by: "", text: "（褪色的種子籤背面，還留著一道被雨暈開的鉛筆痕。）" },
-      { by: "mayor", text: "我小時候最討厭替我爹寫種子籤，總覺得那些名字永遠寫不完。" },
-      { by: "mayor", text: "現在再看到他的字，我反而希望那張長一點，讓我多看一會兒。" },
+    { id: "old_seed_tag", name: "舊種子籤", number: 1, dayOffset: 0, anchor: "tile:12,8", artKey: "oldSeedTag", memory: [
+      { by: "mayor", text: "這張籤是我爹留下的。小時候他老叫我幫忙寫，我總嫌田裡的名字怎麼也寫不完。" },
+      { by: "", text: "（他用拇指輕輕擦過背面那道被雨暈開的鉛筆痕。）" },
+      { by: "mayor", text: "現在再看到他的字，我反而希望這張籤再長一點，讓我多看一會兒。" },
     ] },
-    { id: "faded_photo", name: "褪色照片", dayOffset: 1, anchor: "structure:shop", artKey: "fadedPhoto", memory: [
-      { by: "", text: "（照片裡的少年把草帽壓得很低，旁邊的人笑得只剩一雙眼睛。）" },
-      { by: "mayor", text: "那頂帽子太大，我一路扶著，還是被風吹進田裡。" },
-      { by: "mayor", text: "我爹笑得站不直。我那時嫌他吵，現在卻怎麼也想不起那個笑聲了。" },
+    { id: "faded_photo", name: "褪色照片", number: 2, dayOffset: 1, anchor: "tile:14,7", artKey: "fadedPhoto", memory: [
+      { by: "mayor", text: "這是我第一次跟我爹去巡田。那頂草帽太大，我一路扶著，最後還是被風吹進田裡。" },
+      { by: "", text: "（葛瑞看著照片裡笑得只剩一雙眼睛的人，指尖停在褪色的邊角。）" },
+      { by: "mayor", text: "我那時嫌他笑得吵。現在想聽，卻怎麼也想不起那個聲音了。" },
     ] },
-    { id: "ledger_page", name: "帳本一頁", dayOffset: 2, anchor: "station:well", artKey: "ledgerPage", memory: [
-      { by: "", text: "（帳頁邊角沾著泥，最後一行只寫了「留給葛瑞」。）" },
-      { by: "mayor", text: "他什麼都愛記，連我鬧脾氣不吃飯也記。偏偏真正想說的，只留下這麼短一句。" },
+    { id: "ledger_page", name: "帳本一頁", number: 3, dayOffset: 2, anchor: "tile:4,10", artKey: "ledgerPage", memory: [
+      { by: "mayor", text: "這頁帳是我爹寫的。他什麼都記，連我鬧脾氣不吃飯也不肯漏掉。" },
+      { by: "", text: "（沾泥的頁角旁，最後一行只寫著「留給葛瑞」。）" },
       { by: "mayor", text: "我以前覺得他不懂我。也許，是我一直不敢把後面那句看完。" },
     ] },
   ];
@@ -302,11 +305,27 @@
     const stage = p.orderAt ? "done" : p.harvestedAt ? "order" : !p.plantedAt ? "empty" : p.lightDays.length >= 2 ? "ripe" : "growing";
     return { eligible: true, stage, lightDays: p.lightDays.length, lightNow, todayCaught: p.lightDays.includes(today), today, plantedAt: p.plantedAt, harvestedAt: p.harvestedAt, orderAt: p.orderAt };
   }
-  function r82PlantArt(state, now) {
+  /* R83B：名牌、正式圖與成熟特效共用同一份 r82PlantStatus；這裡只把已判定的階段翻成畫面資料，不另算進度。
+     還沒播種時畫的是那一包種子（R81 的種子包正式圖），不再借用長滿麥穗的田圖，免得跟「可以收成」看起來一樣。 */
+  const R83_PLANT_STAGES = {
+    empty: { stageKey: "empty", key: "", label: "藍布老麥田・等你播種" },
+    planted: { stageKey: "planted", key: "cropSprout", label: "藍布老麥田・剛種下" },
+    oneLight: { stageKey: "one-light", key: "cropOneLight", label: "藍布老麥田・照過 1 次光" },
+    ripe: { stageKey: "ripe", key: "cropRipe", label: "藍布老麥田・可以收成" },
+    harvested: { stageKey: "harvested", key: "cropHarvested", label: "藍布老麥田・已收成" },
+  };
+  function r82PlantPresentation(state, now) {
     const status = r82PlantStatus(state, now);
-    if (!status.eligible || status.stage === "story" || status.stage === "empty") return { key: "", art: r81Art("plant"), fallback: false };
-    const key = status.stage === "growing" ? (status.lightDays ? "cropOneLight" : "cropSprout") : status.stage === "ripe" ? "cropRipe" : "cropHarvested";
-    return { key, art: r82Art(key), fallback: r82ArtFallback(key) };
+    if (!status.eligible || status.stage === "story") return { status, stageKey: status.stage, key: "", art: r81Art("plant"), fallback: false, label: R81_OPTIONS.plant.labels.done };
+    const row = status.stage === "empty" ? R83_PLANT_STAGES.empty
+      : status.stage === "growing" ? (status.lightDays < 1 ? R83_PLANT_STAGES.planted : R83_PLANT_STAGES.oneLight)
+        : status.stage === "ripe" ? R83_PLANT_STAGES.ripe : R83_PLANT_STAGES.harvested;
+    const art = row.key ? r82Art(row.key) : r81Art("pending");
+    return { status, stageKey: row.stageKey, key: row.key, art, fallback: row.key ? r82ArtFallback(row.key) : false, label: row.label };
+  }
+  function r82PlantArt(state, now) {
+    const view = r82PlantPresentation(state, now);
+    return { key: view.key, art: view.art, fallback: view.fallback };
   }
   function r82Plant(state, now) {
     const status = r82PlantStatus(state, now), b = r82Ensure(state, now), t = Number.isFinite(now) ? now : Date.now();
@@ -331,7 +350,11 @@
     if (!b || b.route !== "plant") return { ok: false, reason: "wrong_route", message: "這裡沒有藍布老麥。" };
     if (status.stage !== "ripe") return { ok: false, reason: status.stage === "order" || status.stage === "done" ? "already_harvested" : "not_ready", message: status.stage === "order" || status.stage === "done" ? "藍布老麥已經收成了。" : "藍布老麥還沒成熟。" };
     b.plant.harvestedAt = t; b.plant.stock = 1;
-    return { ok: true, cropId: R82_BLUE_CROP.id, added: 1, order: R82_BLUE_ORDER.name, message: "收成藍布老麥 1 份，專屬訂單「" + R82_BLUE_ORDER.name + "」已經開放。" };
+    return {
+      ok: true, cropId: R82_BLUE_CROP.id, added: 1, order: R82_BLUE_ORDER.name,
+      speakerLine: { by: "elder", text: "好，這一穗總算回家了。別急著收進倉裡，先讓我再聞一下。" },
+      message: "收成藍布老麥 1 份，專屬訂單「" + R82_BLUE_ORDER.name + "」已經開放。",
+    };
   }
   function r82BlueOrder(state) {
     const b = r82Ensure(state), have = b && b.plant ? b.plant.stock : 0;
@@ -347,7 +370,9 @@
     if (!isObj81(state.stats)) state.stats = {};
     state.stats.totalCoinsEarned = Math.max(0, Number.isFinite(state.stats.totalCoinsEarned) ? state.stats.totalCoinsEarned : 0) + info.coins;
     b.plant.stock = 0; b.plant.orderAt = t;
-    return { ok: true, name: info.name, coins: info.coins, message: "完成專屬訂單「" + info.name + "」，拿到 " + info.coins + " 金。" };
+    return { ok: true, name: info.name, coins: info.coins,
+      speakerLine: { by: "elder", text: "這一穗我留著當種。明年井邊這一格，會長得比今年更密。" },
+      message: "完成專屬訂單「" + info.name + "」，拿到 " + info.coins + " 金。" };
   }
   function r82AvailableRelics(state, now) {
     const b = r82Ensure(state, now), t = Number.isFinite(now) ? now : Date.now();
@@ -357,7 +382,8 @@
   }
   function r82SealStatus(state, now) {
     const b = r82Ensure(state, now), available = r82AvailableRelics(state, now), foundCount = b && b.route === "seal" ? R82_RELICS.filter((relic) => b.seal.found[relic.id]).length : 0;
-    return { eligible: !!(b && b.route === "seal"), startDay: b && b.seal.startDay || "", foundCount, available, decorated: !!(b && b.seal.decoratedAt), next: available.find((relic) => !relic.found) || null };
+    const next = available.find((relic) => !relic.found) || null;
+    return { eligible: !!(b && b.route === "seal"), startDay: b && b.seal.startDay || "", foundCount, available, decorated: !!(b && b.seal.decoratedAt), next, nextNumber: next ? next.number : 0 };
   }
   function r82FindRelic(state, relicId, now) {
     let b = r82Ensure(state, now); const t = Number.isFinite(now) ? now : Date.now(), relic = R82_RELICS.find((row) => row.id === relicId);
@@ -373,13 +399,29 @@
     if (complete && !b.seal.decoratedAt) b.seal.decoratedAt = t;
     return { ok: true, relic: relic.id, name: relic.name, memory: relic.memory.slice(), complete, decoration: complete ? R82_DECORATION.name : "", message: complete ? "三樣鎮誌舊物都找齊了，封存箱旁多了「" + R82_DECORATION.name + "」。" : "找到「" + relic.name + "」，葛瑞想起了一段往事。" };
   }
+  /* R83B：名牌只寫「鎮誌 N／3」（N 是固定編號，同時出現兩件也不會撞號），舊物名字放在點下去的提示與手札。 */
+  function r83RelicLabel(relic) { return "鎮誌 " + relic.number + "／" + R82_RELICS.length; }
+  /* R83B：玩家可能在那一格蓋了東西；那一格被占用時，改放到最近的一格空草地（不踩路、不壓建築與站點），三件不放同一格。 */
+  function r83FreeTile(t) { return !!t && t.terrain === "grass" && !t.object && !t.buildingId && !t.adventureSite && !t.station && !t.npc && !t.structureId && !t.blocked && !t.event && !t.forage; }
+  function r83RelicAnchor(state, relic, taken) {
+    const m = /^tile:(\d+),(\d+)$/.exec(relic.anchor || ""), tiles = isObj81(state) && isObj81(state.map) && Array.isArray(state.map.tiles) ? state.map.tiles : [];
+    if (!m || !tiles.length) return relic.anchor;
+    const x0 = Number(m[1]), y0 = Number(m[2]), at = (x, y) => tiles.find((t) => t.x === x && t.y === y);
+    for (let r = 0; r <= 3; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+      const t = at(x0 + dx, y0 + dy), key = t ? "tile:" + t.x + "," + t.y : "";
+      if (t && r83FreeTile(t) && !taken.includes(key)) { taken.push(key); return key; }
+    }
+    return relic.anchor;
+  }
   function r82SceneRows(state, now) {
     const status = r82SealStatus(state, now);
     if (!status.eligible || r81Stage(state) !== "done") return [];
+    const taken = [];
     const rows = status.available.filter((relic) => !relic.found).map((relic) => ({
       npcId: "r82b_relic_" + relic.id, choiceId: relic.id, r82b: true, r82bKind: "relic", relicId: relic.id,
-      done: false, decided: true, decision: "seal", label: "鎮誌舊物・" + relic.name,
-      marker: { anchor: relic.anchor, art: relic.art }, artFallback: relic.artFallback,
+      done: false, decided: true, decision: "seal", label: r83RelicLabel(relic), hint: r83RelicLabel(relic) + "・" + relic.name,
+      marker: { anchor: r83RelicAnchor(state, relic, taken), art: relic.art, displaySize: 64 }, artFallback: relic.artFallback,
     }));
     if (status.decorated) rows.push({
       npcId: "r82b_decoration", choiceId: R82_DECORATION.id, r82b: true, r82bKind: "decoration", done: true, decided: true, decision: "seal",
@@ -400,7 +442,7 @@
     }
     const status = r82SealStatus(state, now);
     if (status.decorated) return null;
-    if (status.next) return { key: "r82b-seal", title: "鎮誌支線", line: "今天出現了「" + status.next.name + "」；走近看看葛瑞想起什麼。" };
+    if (status.next) return { key: "r82b-seal", title: "鎮誌支線", line: "地圖上的「" + r83RelicLabel(status.next) + "」是" + status.next.name + "；走近看看葛瑞想起什麼。" };
     return { key: "r82b-seal", title: "鎮誌支線", line: "鎮誌舊物 " + status.foundCount + "/3；另一件會在不同的遊戲日出現。" };
   }
   const isObj81 = (v) => !!v && typeof v === "object" && !Array.isArray(v);
@@ -489,8 +531,8 @@
     if (!stage) return [];
     if (stage === "conflict") return [{ npcId: "r81c_story", choiceId: "pending", r81c: true, done: false, decided: false, decision: "", label: R81_PENDING.label, marker: { anchor: R81_PENDING.anchor, art: r81Art("pending") } }];
     const b = r81Ensure(state), opt = R81_OPTIONS[b.choice];
-    const plantArt = b.choice === "plant" && stage === "done" ? r82PlantArt(state) : null;
-    return [{ npcId: "r81c_story", choiceId: b.choice, r81c: true, r82b: !!plantArt, r82bKind: plantArt ? "plant" : "", artFallback: !!(plantArt && plantArt.fallback), done: stage === "done", decided: true, decision: b.choice, label: opt.labels[stage] || opt.labels.order, marker: { anchor: opt.anchor, art: plantArt ? plantArt.art : r81Art(b.choice) } }];
+    const plantView = b.choice === "plant" && stage === "done" ? r82PlantPresentation(state) : null;
+    return [{ npcId: "r81c_story", choiceId: b.choice, r81c: true, r82b: !!plantView, r82bKind: plantView ? "plant" : "", r82bStage: plantView ? plantView.stageKey : "", artFallback: !!(plantView && plantView.fallback), done: stage === "done", decided: true, decision: b.choice, label: plantView ? plantView.label : (opt.labels[stage] || opt.labels.order), marker: { anchor: opt.anchor, art: plantView ? plantView.art : r81Art(b.choice), displaySize: plantView ? 64 : 0 } }];
   }
   /* 手札「今天可做」用的那一項（收尾了就不再佔位）。 */
   function r81Today(state, now) {
@@ -505,7 +547,7 @@
 
   const StoryR76 = { PORTRAITS, CHOICES, FOLLOWUPS, FESTIVAL_ROWS, portraitFor, choiceDef, questionOf, ensure, selectedChoiceId, followupDef, followupDue, noteOrder, noteTalk, markFollowupSeen, followupSummary, festivalBreakdown, festivalTip, isDuplicateQuestRow,
     SPEAKER_NAMES, R81_MYSTERY, R81_TITLE, R81_CONFLICT, R81_OPTIONS, R81_PENDING, R81_ART, R81_ART_READY, R81_ART_FALLBACK, r81Art, r81Ensure, r81Stage, r81Choose, r81Order, r81Deliver, r81Scene, r81SceneSeen, r81Summary, r81SceneRows, r81Today, r81GeneralMax, r81OrderPreview,
-    R82_BLUE_LIGHT_PLOT, R82_BLUE_CROP, R82_BLUE_ORDER, R82_ART, R82_ART_READY, R82_ART_FALLBACK, R82_RELICS, R82_DECORATION, r82Art, r82Ensure, r82PlantStatus, r82PlantArt, r82Plant, r82CatchLight, r82HarvestBlueWheat, r82BlueOrder, r82DeliverBlueOrder, r82AvailableRelics, r82SealStatus, r82FindRelic, r82SceneRows, r82Today };
+    R82_BLUE_LIGHT_PLOT, R82_BLUE_CROP, R82_BLUE_ORDER, R82_ART, R82_ART_READY, R82_ART_FALLBACK, R82_RELICS, R82_DECORATION, r82Art, r82Ensure, r82PlantStatus, r82PlantPresentation, r82PlantArt, r82Plant, r82CatchLight, r82HarvestBlueWheat, r82BlueOrder, r82DeliverBlueOrder, r82AvailableRelics, r82SealStatus, r82FindRelic, r82SceneRows, r82Today };
   root.StoryR76 = StoryR76;
   if (isNode) module.exports = StoryR76;
   if (typeof document === "undefined") return;
@@ -649,6 +691,16 @@
     if (r82ArtFallback("cropIcon")) img.dataset.r82bFallback = "";
     line.before(img);
   }
+  /* R83B：鎮長葛瑞講回憶時，旁邊一直擺著那件舊物的正式圖（點下去以後地圖上的舊物就收進鎮誌了）。 */
+  function addR83RelicIcon(overlay, artKey, name) {
+    const card = overlay && overlay.querySelector(".r76b-dialogue-card"), line = card && card.querySelector(".r76b-dialogue-line");
+    if (!card || !line || card.querySelector("[data-r83b-relic-icon]")) return;
+    const img = document.createElement("img"); img.className = "r83b-relic-icon"; img.dataset.r83bRelicIcon = artKey; img.src = r82Art(artKey); img.alt = name;
+    if (r82ArtFallback(artKey)) img.dataset.r82bFallback = "";
+    line.before(img);
+  }
+  /* R83B：動作結果的規則句（份數、金幣）用旁白呈現，不掛在鄰居頭像底下；鄰居自己要說的話另外放在 speakerLine。 */
+  function r83ResultLine(result) { return result && result.ok && result.speakerLine ? result.speakerLine : { by: "", text: (result && result.message) || "" }; }
   function openR82PlantMarker(state) {
     const s = liveState81(state), status = r82PlantStatus(s, Date.now()), order = r82BlueOrder(s);
     if (!status.eligible) return null;
@@ -664,11 +716,13 @@
       line = { by: "", text: "（兩次不同日子的光都留在穗上，藍布老麥沉甸甸地彎了腰。）" };
       choice = { id: "harvest", label: "收成藍布老麥", immediate: "成熟度 2/2", longTerm: "收成後開放專屬訂單「" + R82_BLUE_ORDER.name + "」" };
     } else if (status.stage === "order") {
-      line = { by: "", text: "（新收的藍布老麥用原本那塊藍布包好，鎮誌登記單壓在旁邊。）" };
+      line = { by: "", text: "（新收的藍布老麥用原本那塊藍布包著。班伯站在不遠處，一直往這邊看。）" };
       choice = { id: "order", label: "交專屬訂單「" + order.name + "」", immediate: "藍布老麥 " + Math.min(order.have, order.need) + "/" + order.need, longTerm: "完成拿 " + order.coins + " 金" };
     } else {
       return openDialogue(s, "mayor", [{ by: "mayor", text: "那一穗我看見了。原來有些留下來的東西，不一定只會讓人難過。" }], { speaker: speakerOf81("mayor"), dataset: { r82bBranch: "plant" }, onRender: addR82CropIcon });
     }
+    /* R83B：收成與交單由老農班伯本人回一句（帶頭像），規則句等對話框關掉再用提示訊息出來，不被對話框蓋住。 */
+    let note = "";
     return openDialogue(s, "elder", [line], { speaker: speakerOf81("elder"), startMode: "choices", dataset: { r82bBranch: "plant" }, choiceOptions: [choice], onRender: addR82CropIcon,
       onChoice: (id, showReply) => {
         const t = Date.now(); let result;
@@ -676,21 +730,26 @@
         else if (id === "light") result = r82CatchLight(s, t);
         else if (id === "harvest") result = r82HarvestBlueWheat(s, t);
         else result = r82DeliverBlueOrder(s, t);
-        if (result.ok) saveNow(); showReply(result.message);
-      } });
+        if (result.ok) saveNow();
+        if (result.ok && result.speakerLine) note = result.message;
+        showReply(r83ResultLine(result));
+      },
+      onClose: () => { if (note) toast81(note); } });
   }
   function openR82Relic(state, relicId) {
-    const s = liveState81(state), result = r82FindRelic(s, relicId, Date.now());
+    const s = liveState81(state), result = r82FindRelic(s, relicId, Date.now()), relic = R82_RELICS.find((row) => row.id === relicId);
     if (!result.ok) { toast81(result.message); return null; }
     saveNow();
     return openDialogue(s, "mayor", result.memory, { speaker: speakerOf81("mayor"), dataset: { r82bBranch: "seal", r82bRelic: relicId },
+      onRender: (overlay) => addR83RelicIcon(overlay, relic.artKey, relic.name),
       onLinesDone: () => { toast81(result.message); saveNow(); return null; } });
   }
   function openR82Decoration(state) {
     return openDialogue(liveState81(state), "mayor", [
       { by: "", text: "（三樣舊物壓在一束乾麥穗下，鎮誌牌安靜地立在封存箱旁。）" },
       { by: "mayor", text: "我原本只想把那段日子關起來。你把它們找回來以後，我才發現自己其實怕的是忘掉。" },
-    ], { speaker: speakerOf81("mayor"), dataset: { r82bBranch: "seal", r82bRelic: "decoration" } });
+    ], { speaker: speakerOf81("mayor"), dataset: { r82bBranch: "seal", r82bRelic: "decoration" },
+      onRender: (overlay) => addR83RelicIcon(overlay, R82_DECORATION.artKey, R82_DECORATION.name) });
   }
   function openR81Marker(state) {
     const stage = r81Stage(state);
@@ -703,11 +762,12 @@
     const info = r81Order(state, Date.now());
     return openDialogue(state, opt.side, [info.line], { speaker: speakerOf81(opt.side), startMode: "choices", dataset: { r81cStory: "order" },
       choiceOptions: [{ id: "deliver", label: "交具名訂單「" + info.name + "」", immediate: info.wantText + "（倉庫 " + Math.min(info.have, info.need) + "/" + info.need + "）", longTerm: "拿 " + info.rewardText + "・" + info.vsText }],
-      onChoice: (id, showReply) => { const r = r81Deliver(state, Date.now()); if (!r.ok) { showReply(r.message); return; } saveNow(); toast81(r.message); playR81Scene(state); } });
+      onChoice: (id, showReply) => { const r = r81Deliver(state, Date.now()); if (!r.ok) { showReply(r83ResultLine(r)); return; } saveNow(); toast81(r.message); playR81Scene(state); } });
   }
   function anchorTile81(state, spec) {
     const pair = String(spec || "").split(":"), kind = pair[0], id = pair[1];
     const tiles = state && state.map && Array.isArray(state.map.tiles) ? state.map.tiles : [];
+    if (kind === "tile") { const xy = String(id || "").split(",").map(Number); return tiles.find((t) => t.x === xy[0] && t.y === xy[1]) || null; }
     return kind === "structure" ? tiles.find((t) => t.structureId === id) : kind === "station" ? tiles.find((t) => t.station === id) : kind === "npc" ? tiles.find((t) => t.npc === id) : null;
   }
   /* 地圖物件與手札「帶我去」共用：走到物件旁（還沒決定時是鎮長葛瑞旁邊），到了就打開那一段。 */
