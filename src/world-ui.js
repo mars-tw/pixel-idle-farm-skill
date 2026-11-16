@@ -339,8 +339,6 @@
       return true;
     }
     const step = q ? guide.stepText : "村民留下了野餐合照。繼續經營你的農場。";
-    const nowText = questStep ? farmNowText : step;
-    const nowShort = questStep ? farmNowShort : (farmNow && farmNow.short) || step;
     const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
     const progressStep = activeGoal && activeGoal.name ? `${q && q.chapter >= 4 ? q.name + "・" : ""}${activeGoal.name}` : "";
@@ -358,9 +356,15 @@
     /* R76B：第 13 項——主線列與需求列說同一件事時只留需求列。 */
     const mainRowDuplicate = hasSharedFestivalCrop || (window.StoryR76 && window.StoryR76.isDuplicateQuestRow ? window.StoryR76.isDuplicateQuestRow(step, requirementRows.map((row) => ({ name: row.name, text: requirementText(row, festivalGoal) }))) : false);
     const routeChoiceOpen = choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes);
+    /* R83A 第 6 項：已有更具體的 nextGuidance 時，按鈕就做那一步；舊路線選擇只在沒有具體下一步時顯示（圖 41、54）。 */
+    const showRouteChoice = routeChoiceOpen && !questStep;
+    /* R83A 第 6 項：任務卡的字（含收合短句）跟按鈕讀同一個來源。有具體下一步時都讀它；沒有時都讀主線這一步，
+       短句用這一步的名稱，不再借農務短句（圖 127「用陽光催熟小麥」配「前往交談」）；按鈕是「選擇下一步」時，字也寫先選路線（圖 55）。 */
+    const nowText = questStep ? farmNowText : showRouteChoice ? "你想先做哪一件事？選好一條路線，任務卡就跟著那條走。" : step;
+    const nowShort = questStep ? farmNowShort : showRouteChoice ? "先選下一步" : q ? (activeGoal && activeGoal.name) || taskName || step : "繼續經營農場";
     const standardAction = farmActionShown && questStep
       ? `<span class="r68a-now-action r80b-now-copy" data-r80b-task-copy data-r78b-step="${esc(questStep.action)}">${esc(lightChoiceOpen ? "在田邊選一個" : questStep.actionLabel)}</span>`
-      : `<button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${routeChoiceOpen ? "data-choice-open" : "data-world-go"}>${routeChoiceOpen ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button>`;
+      : `<button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${showRouteChoice ? "data-choice-open" : "data-world-go"}>${showRouteChoice ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button>`;
     box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name r80b-objective-source">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name r80b-objective-task">任務：${esc(shownTaskName)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       ${festivalHtml}
       ${festivalFocus ? `<section class="r68a-now r69a-festival-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small title="${esc(festivalFocus.text)}">${guidanceCopyHtml(festivalFocus.text, festivalFocus.short)}</small></span><button type="button" class="r68a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : `<section class="r68a-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(fullTitle)}</span><small title="${esc(nowText)}">${guidanceCopyHtml(nowText, nowShort)}</small>${hint && hint.hold ? `<em class="world-objective-hint r67-now-hint" data-hint="sun">${esc(hint.text)}</em>` : ""}</span>${standardAction}</section>`}

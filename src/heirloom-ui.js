@@ -47,15 +47,19 @@
     box.querySelector("button").textContent = q.label;
     /* R82 整合：第一次收成後材料齊了，祖母手記卡也並排「去修河畔釣台」；兩件都通往主線，由玩家挑（R82C 第 2 項）。 */
     const g = A && A.nextGuidance ? A.nextGuidance(s, Date.now()) : null, alt = g && g.alternative, bottom = box.querySelector(".world-objective-bottom");
-    let pick = box.querySelector("[data-r82c-pick-alt]"), note = box.querySelector("[data-r82c-pick-note]");
+    let pick = box.querySelector("[data-r82c-pick-alt]"), note = box.querySelector("[data-r82c-pick-note]"), compactPick = box.querySelector("[data-r83a-heirloom-alt]");
     if (alt && bottom) {
       if (!pick) { pick = document.createElement("button"); pick.type = "button"; pick.className = "r82c-pick-alt r82-heirloom-pick"; pick.dataset.r82cPickAlt = alt.id; bottom.appendChild(pick); }
       if (!note) { note = document.createElement("small"); note.className = "r82c-pick-note"; note.dataset.r82cPickNote = ""; bottom.before(note); }
+      /* R83A 第 4 項：收合時「去修釣台」那顆並排鈕放不下，改留一顆「另一件」小鈕，按下去做同一件事。 */
+      if (!compactPick) { compactPick = document.createElement("button"); compactPick.type = "button"; compactPick.className = "r83a-heirloom-alt"; compactPick.dataset.r83aHeirloomAlt = alt.id; compactPick.textContent = "另一件"; bottom.appendChild(compactPick); }
       pick.textContent = alt.actionLabel; pick.title = alt.text; pick.setAttribute("aria-label", alt.actionLabel + "：" + alt.text);
       note.textContent = "也可以先" + alt.short + "，兩件都通往主線，先做哪件由你挑。";
-      pick.onclick = () => { if (alt.id === "fishing_dock" && window.FarmWorld && window.FarmWorld.visitSite) window.FarmWorld.visitSite("fishing_dock"); };
+      const visitAlt = () => { if (alt.id === "fishing_dock" && window.FarmWorld && window.FarmWorld.visitSite) window.FarmWorld.visitSite("fishing_dock"); };
+      pick.onclick = visitAlt;
+      compactPick.title = "還有另一件可挑：" + alt.text; compactPick.setAttribute("aria-label", compactPick.title); compactPick.onclick = visitAlt;
       box.dataset.r82HeirloomPick = alt.id;
-    } else { if (pick) pick.remove(); if (note) note.remove(); delete box.dataset.r82HeirloomPick; }
+    } else { if (pick) pick.remove(); if (note) note.remove(); if (compactPick) compactPick.remove(); delete box.dataset.r82HeirloomPick; }
     return true;
   }
   function renderPage(s, body) {
@@ -125,8 +129,11 @@
       const tile = s.map.tiles.find((t) => t.npc === "mayor");
       farm().closeModal("dailyModal");
       const moving = tile && farm().travelAndDo(tile.id,"use",() => {
-        const r = H.deliver(s,choice,Date.now());
+        const deliveredAt = Date.now(), r = H.deliver(s,choice,deliveredAt);
+        /* R83A 第 3 項：餐籃親手交給鎮長葛瑞，就是一次跟鎮長葛瑞的交談；第 1 章照一般規則結算，不直接改任務旗標。 */
+        const talk = r.ok && r.talkNpcId === "mayor" && window.StoryR76 && window.StoryR76.r83NoteMayorTalk ? window.StoryR76.r83NoteMayorTalk(s, deliveredAt) : null;
         farm().toast(r.ok ? "小麥餐籃送到了。祖母的便箋，夾在籃底。" : "先留兩份小麥，才能送出這籃。");
+        if (talk && talk.tutorial) farm().toast("跟鎮長葛瑞說上話了，「種下第一格」完成。再送你 2 包小麥種子。");
         farm().safeSaveNow(); farm().refresh(); window.DailyUI.openHeirloom();
       });
       if (!moving) { deliveryStarted=false;confirm.disabled=false;confirm.textContent='交付小麥 ×2 給葛瑞';farm().toast("先回到田邊，再走去找葛瑞。"); }

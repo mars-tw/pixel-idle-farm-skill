@@ -32,7 +32,9 @@
     s.storage.items.wheat -= 2;
     if (s.storage.items.wheat === 0) delete s.storage.items.wheat;
     Object.assign(s.heirloom, { started:true, delivered:true, choice, deliveredAt:Number.isFinite(now) ? Math.max(0,now) : 0 });
-    return { ok:true, note:notes[choice] };
+    /* R83A 第 3 項：餐籃是親手交到鎮長葛瑞手上的，結果標明對象；畫面端再交給 StoryR76.r83NoteMayorTalk
+       記一次一般交談（AdventureAPI.record），不在這裡碰任務旗標。 */
+    return { ok:true, note:notes[choice], talkNpcId:"mayor" };
   }
   const API = { normalize, ensure, start, recordHarvest, status, deliver, illustrations };
   if (typeof module !== "undefined" && module.exports) module.exports = API; else root.FarmHeirloom = API;

@@ -230,6 +230,7 @@ test("第 3 項：手札三層的程式接線（現在做的按鈕寫帶我去�
   const r83cTail = css.slice(css.lastIndexOf("/* ===== R82A 結束 ===== */") + "/* ===== R82A 結束 ===== */".length);
   assert.ok(css.includes("/* ===== R82A 結束 ===== */") && (!r83cTail.trim() || /^\s*\/\* ===== R83/.test(r83cTail)), "新 CSS 仍只追加在檔尾");
   assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */") || /R82A 結束 ===== \*\/\s*\/\* ===== R83[ABC]/.test(css), "新 CSS 仍只追加在檔尾"); /* R83B 同步：R83 各線依規定接在 R82A 後面 */
+  assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */") || /R82A 結束 ===== \*\/\s*\/\*[^\n]*R83[ABC]/.test(css), "新 CSS 仍只追加在檔尾（R83 起的新段落接在 R82A 後面）"); /* R83A 同步：R83 各線依規定也追加在檔尾 */
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
   assert.match(block, /\.r68a-card-now small \{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;/);
   assert.match(block, /\.r81c-later > \.r81c-later-body\[hidden\] \{ display: none !important; \}/);

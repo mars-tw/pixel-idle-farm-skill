@@ -95,6 +95,25 @@
     return { count: b.orders[npcId], due: followupDue(state, npcId, now, "order") };
   }
   function noteTalk(state, npcId, now) { return followupDue(state, npcId, now, "talk"); }
+  /* R83A 第 3 項：把餐籃交到鎮長葛瑞手上、或舊麥種故事裡鎮長葛瑞開口的那段聽完，都算跟鎮長葛瑞說過話。
+     走一般交談同一個計數（AdventureAPI.record），再照農務事件之後的同一條規則結算第 1 章（finishTutorial 條件齊了才領），
+     不直接改任務旗標。 */
+  function r83NoteMayorTalk(state, now) {
+    if (!A || typeof A.record !== "function") return { ok: false, tutorial: null };
+    const t = Number.isFinite(now) ? now : Date.now();
+    const rec = A.record(state, { type: "talk", npcId: "mayor" }, t);
+    const tutorial = rec && rec.ok && typeof A.finishTutorial === "function" ? A.finishTutorial(state, t) : null;
+    return { ok: !!(rec && rec.ok), tutorial: tutorial && tutorial.ok ? tutorial : null };
+  }
+  /* 這一段裡鎮長葛瑞有沒有自己開口：{ by: "mayor" } 的句子，或主說話者是鎮長葛瑞、沒寫 by 的句子；全形括號整句是旁白，不算。 */
+  function r83MayorSpeaks(npcId, lines) {
+    return (Array.isArray(lines) ? lines : []).some((line) => {
+      const by = line && typeof line === "object" && typeof line.by === "string" ? line.by : null;
+      const text = (line && typeof line === "object" ? String(line.text || "") : String(line == null ? "" : line)).trim();
+      if (!text || by === "" || /^（[\s\S]*）$/.test(text)) return false;
+      return by === "mayor" || (by === null && npcId === "mayor");
+    });
+  }
   function markFollowupSeen(state, npcId, now) {
     const b = ensure(state);
     const def = followupDef(state, npcId);
@@ -548,6 +567,7 @@
   const StoryR76 = { PORTRAITS, CHOICES, FOLLOWUPS, FESTIVAL_ROWS, portraitFor, choiceDef, questionOf, ensure, selectedChoiceId, followupDef, followupDue, noteOrder, noteTalk, markFollowupSeen, followupSummary, festivalBreakdown, festivalTip, isDuplicateQuestRow,
     SPEAKER_NAMES, R81_MYSTERY, R81_TITLE, R81_CONFLICT, R81_OPTIONS, R81_PENDING, R81_ART, R81_ART_READY, R81_ART_FALLBACK, r81Art, r81Ensure, r81Stage, r81Choose, r81Order, r81Deliver, r81Scene, r81SceneSeen, r81Summary, r81SceneRows, r81Today, r81GeneralMax, r81OrderPreview,
     R82_BLUE_LIGHT_PLOT, R82_BLUE_CROP, R82_BLUE_ORDER, R82_ART, R82_ART_READY, R82_ART_FALLBACK, R82_RELICS, R82_DECORATION, r82Art, r82Ensure, r82PlantStatus, r82PlantPresentation, r82PlantArt, r82Plant, r82CatchLight, r82HarvestBlueWheat, r82BlueOrder, r82DeliverBlueOrder, r82AvailableRelics, r82SealStatus, r82FindRelic, r82SceneRows, r82Today };
+  Object.assign(StoryR76, { r83NoteMayorTalk, r83MayorSpeaks }); /* R83A 第 3 項 */
   root.StoryR76 = StoryR76;
   if (isNode) module.exports = StoryR76;
   if (typeof document === "undefined") return;
@@ -580,6 +600,15 @@
     document.body.appendChild(overlay);
     let step = 0;
     let mode = options && options.startMode === "choices" ? "choices" : "lines"; /* R79C：地圖物件旁的選擇可以直接從選項開始 */
+    /* R83A 第 3 項：舊麥種故事（r81c／r82b 標記）裡鎮長葛瑞開口的那段，整段聽完才記一次跟鎮長葛瑞的交談；按「晚點再說」不算。 */
+    const r83MayorStory = !!(options && options.dataset && (options.dataset.r81cStory || options.dataset.r82bBranch) && r83MayorSpeaks(npcId, lines));
+    let r83MayorNoted = false;
+    function r83NoteMayorStory() {
+      if (!r83MayorStory || r83MayorNoted) return;
+      r83MayorNoted = true;
+      const r = r83NoteMayorTalk(state, Date.now()), f = farm();
+      if (r.tutorial && f && f.toast) f.toast("跟鎮長葛瑞說上話了，「種下第一格」完成。再送你 2 包小麥種子。");
+    }
     function headFor(line) {
       if (isNarration(line)) return '<div class="r76b-dialogue-head r80c-narration-head"><b>旁白</b></div>';
       const by = lineBy(line), who = by ? (SPEAKER_NAMES[by] || by) : speaker;
@@ -599,6 +628,7 @@
         overlay.innerHTML = '<div class="' + cardClass + '">' + head + lineHtml(lines[step], " data-r76b-line") + '<p class="r76b-dialogue-step">第 ' + (step + 1) + " 句，共 " + lines.length + ' 句</p><div class="r76b-dialogue-actions"><button type="button" data-r76b-next>' + (step >= lines.length - 1 ? "聽完了" : "下一句") + '</button><button type="button" data-r76b-later>晚點再說</button></div></div>';
         overlay.querySelector("[data-r76b-next]").onclick = () => {
           if (step < lines.length - 1) { step++; render(); return; }
+          r83NoteMayorStory();
           if (options && options.onLinesDone) { const nextMode = options.onLinesDone(); if (nextMode === "choices") { mode = "choices"; render(); return; } }
           close();
         };

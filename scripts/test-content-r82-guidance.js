@@ -140,6 +140,7 @@ test("7 CSS 在檔尾且不改任務卡高度；次要狀態不是黃色主按�
   const r83cTail = css.slice(css.lastIndexOf("/* ===== R82A 結束 ===== */") + "/* ===== R82A 結束 ===== */".length);
   assert.ok(block); assert.ok(!r83cTail.trim() || /^\s*\/\* ===== R83/.test(r83cTail));
   assert.ok(block); assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */") || /R82A 結束 ===== \*\/\s*\/\* ===== R83[ABC]/.test(css)); /* R83B 同步：R83 各線依規定接在 R82A 後面 */
+  assert.ok(block); assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */") || /R82A 結束 ===== \*\/\s*\/\*[^\n]*R83[ABC]/.test(css)); /* R83A 同步：R83 各線依規定接在 R82A 後面 */
   assert.match(block, /\.r82a-guidance-short \{ display: none; \}/);
   assert.match(block, /max-height: 52px !important/);
   assert.doesNotMatch(block, /150px|r82a-action-next-row/);

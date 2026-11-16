@@ -178,6 +178,7 @@ test("第 6 項：新測試已接到 unit 清單最後", () => {
   assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[23]-[a-z-]+\.js",)*\s*\];/);
   /* R83B 同步：R83 各線的新測試依規定接在清單尾，只允許 R83 測試排在 R82 這幾支後面。 */
   assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*\];/);
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[23]-[a-z-]+\.js",)*\s*\];/); /* R83A 同步：R83 的新測試依規定接在清單尾 */
 });
 
 if (!process.exitCode) console.log("VERIFIED content R82B branches (" + passed + " tests)");

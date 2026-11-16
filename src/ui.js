@@ -466,6 +466,16 @@
     else if (sun && sun.bottleFull) parts.push("蓄光瓶滿了，這點陽光沒接到");
     return parts.length ? `在光裡收成：${parts.join("・")}` : "在光裡收成";
   }
+  function r83aDropStaleGrowToasts() {
+    const zone = $("toast-zone");
+    if (zone) [...zone.querySelectorAll(".toast")].forEach((node) => { if (/還沒成熟|還在長/.test(node.textContent || "")) node.remove(); });
+  }
+  function r83aStaleHarvestBar(t) {
+    const bar = $("sceneActionBar");
+    if (!selectedTileId || !bar || bar.hidden || !bar.querySelector('[data-action="harvest"]')) return false;
+    const tile = G.getTileById(state, selectedTileId), plot = tile && tile.plotIndex != null ? state.plots[tile.plotIndex] : null;
+    return !!tile && tile.plotIndex != null && (!plot || !plot.cropId || !G.getCropProgress(state, plot, t).ready);
+  }
   function syncSunBeams(t) {
     if (!worldEl || !G.sunpatchStatus || !state.map) return;
     const st = G.sunpatchStatus(state, t);
@@ -486,7 +496,10 @@
       if (!badge) continue;
       badge.style.left = pxv((tile.x + .5) * TILE); badge.style.top = pxv((tile.y + 1.08) * TILE); badge.style.zIndex = String(Math.round((tile.y + 2) * TILE + 8));
     }
-    if (selectedJustRipened) renderSceneActionsForSelection();
+    /* R83A 第 6 項：選取中的田成熟了，先前點擊留下的「還沒成熟／還在長」提示已經過期，不跟「可收成」同屏（圖 132）。 */
+    if (selectedJustRipened) { r83aDropStaleGrowToasts(); renderSceneActionsForSelection(); }
+    /* R83A 第 6 項：選取中的田已經收掉或清空（例如等光自動收成、讀檔重整），田邊動作列不能還留著「收成」鈕（圖 83）。 */
+    else if (r83aStaleHarvestBar(t)) renderSceneActionsForSelection();
     const scene = $("mapScene");
     if (scene && scene.dataset.sun !== (st.active ? "on" : "off")) scene.dataset.sun = st.active ? "on" : "off";
     const playerTile=G.getTileById(state,state.player.tileId);
@@ -5748,24 +5761,31 @@
     const busy = !!quickHarvestTarget;
     const rack = rackThumbTarget(st.count);
     const selectedPlot = r79bSelectedPlotTile();
-    let targetLabel = "互動";
+    let targetLabel = "互動", labelTile = null;
     if (rack) targetLabel = rack.label;
     else if (selectedPlot) targetLabel = r79bSelectedPlotLabel(selectedPlot);
     else if (st.count && st.tileId) targetLabel = G.interactionLabelForTile ? G.interactionLabelForTile(state, G.getTileById(state, st.tileId), now()) : "收成・成熟作物";
     else {
       const facing = facingTile();
-      if (facing && G.interactionLabelForTile) targetLabel = interactLabelFor(facing);
+      if (facing && G.interactionLabelForTile) { targetLabel = interactLabelFor(facing); labelTile = facing; }
       /* R78B 第 7 項：面前（或剛點選、就在身邊）的田還在長，按鈕就寫它自己的狀態，不借旁邊那一格的「種植・空田」；看不到的田也不拿來當按鈕文字。 */
       const own = targetLabel === "互動" ? r78bOwnCropTile(facing) : null;
-      if (own && r78bPlotInSight(own)) targetLabel = r78bFacingCropLabel(own);
+      if (own && r78bPlotInSight(own)) { targetLabel = r78bFacingCropLabel(own); labelTile = own; }
       else if (targetLabel === "互動") {
         const pt = G.getTileById(state, state.player.tileId);
         const neighbor = pt && [[0,-1],[0,1],[-1,0],[1,0]].map(([dx,dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((tile) => tile && sceneActionsForTile(tile).length && r78bPlotInSight(tile));
-        if (neighbor && G.interactionLabelForTile) targetLabel = interactLabelFor(neighbor);
+        if (neighbor && G.interactionLabelForTile) { targetLabel = interactLabelFor(neighbor); labelTile = neighbor; }
       }
-      else if (!r78bPlotInSight(facing)) targetLabel = "互動";
+      else if (!r78bPlotInSight(facing)) { targetLabel = "互動"; labelTile = null; }
     }
-    try { if (!selectedPlot && nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
+    try { if (!selectedPlot && nearFestivalStall()) { targetLabel = "互動・祭典攤位"; labelTile = null; } } catch (e) {}
+    /* R83A 第 5 項：任務卡正帶玩家去某一格時，身旁不相干的東西（例如告示牌）不搶寫右下大鈕（圖 161「使用・告示牌」）。
+       大鈕改寫任務卡上那一步，按下去跟任務卡的主鈕一樣；任務卡此刻沒有可按的主鈕時才把大鈕收起。
+       不改任務的下一步；走到目標旁、點選田格、收成與曬架照舊。 */
+    const offTarget = !busy && targetLabel !== "互動" && r83aOffGuideTarget(labelTile);
+    const guideButton = offTarget ? r83aGuideButton() : null;
+    if (guideButton) targetLabel = guideButton.textContent.trim();
+    action.dataset.r83aOffTarget = offTarget ? (guideButton ? "guide" : "true") : "false";
     const sceneBar = $("sceneActionBar");
     const sceneButtons = sceneBar && !sceneBar.hidden ? [...sceneBar.querySelectorAll("button:not([disabled])")] : [];
     let facingSelected = false; try { const facing = facingTile(); facingSelected = !!(selectedPlot && facing && facing.id === selectedPlot.id); } catch (e) {}
@@ -5783,10 +5803,28 @@
     if (typeof action.setAttribute === "function") {
       action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count && !rack ? `${targetLabel}，共有 ${st.count} 格成熟` : targetLabel);
       action.setAttribute("aria-disabled", String(busy)); updateInteractVisibility();
+      if (offTarget && !guideButton) action.setAttribute("aria-hidden", "true");
     }
+  }
+  /* R83A 第 5 項：右下大鈕要寫的東西，是不是任務卡此刻帶玩家去的那一格（同一棟建物也算）。任務卡沒有指定目標時不攔。
+     鄰居本人照舊寫「交談・名字」（R68B：站在鄰居旁要寫出對象），田格照舊寫自己的狀態（R78B）；只攔告示牌、農舍這類身旁的物件。 */
+  function r83aOffGuideTarget(tile) {
+    if (!tile || tile.npc || tile.plotIndex != null) return false;
+    const dock = $("questDock"), targetId = dock && dock.dataset ? dock.dataset.targetId || "" : "";
+    if (!targetId || targetId === tile.id) return false;
+    const target = G.getTileById(state, targetId);
+    if (!target) return false;
+    const same = (key) => tile[key] != null && tile[key] === target[key];
+    return !(same("structureId") || same("buildingId") || same("npc"));
+  }
+  function r83aGuideButton() {
+    return [...document.querySelectorAll("#questDock :is([data-world-go],[data-early-goal],[data-r69a-festival-go],[data-choice-open])")].find((b) => b.tagName === "BUTTON" && !b.hidden && !b.disabled && b.textContent.trim()) || null;
   }
   function activateThumbAction() {
     if (hasOpenModal() || quickHarvestTarget) return;
+    /* R83A 第 5 項：大鈕寫的是任務卡那一步時，按下去就按任務卡的主鈕。 */
+    const actionButton = $("actionA");
+    if (actionButton && actionButton.dataset.r83aOffTarget === "guide") { const guide = r83aGuideButton(); if (guide) { guide.click(); updateQuickHarvest(); return; } }
     const st = G.quickHarvestStatus ? quickHarvestNow() : { count: 0 };
     /* 翻面只有短暫時窗，維持原本優先於舊選取田格。 */
     if (rackThumbTarget(st.count)) { window.FarmSunplay.runRackInteraction(); updateQuickHarvest(); return; }
