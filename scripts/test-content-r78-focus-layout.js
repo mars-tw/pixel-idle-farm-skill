@@ -117,7 +117,7 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
       }, null, { timeout: 4000 }).catch(() => { throw new Error(`${tag} 熟田等光：田邊動作列要寫秒數與收益`); });
       d = await snap(page);
       assert.match(d.label, /^等光再收・小麥/, `${tag} 熟田等光：標籤第一行`);
-      const choice = /^等 (\d+) 秒，光到了再收：(\d+) 份＋陽光 (\d+)（現在收只有 (\d+) 份）$/.exec(d.wait);
+      const choice = /^等光再收：等 (\d+) 秒，(\d+) 份＋陽光 (\d+)（現在收只有 (\d+) 份）$/.exec(d.wait); /* R83C 同步：統一用「等光再收」 */
       assert.ok(choice, `${tag} 熟田等光：標籤要寫出兩個結果（看到「${d.wait}」）`);
       assert.ok(Number(choice[2]) > Number(choice[4]), `${tag} 等光收的份數要比現在收多`);
       assert.ok(Number(choice[1]) >= 1 && Number(choice[1]) <= 7, `${tag} 等的秒數是算出來的`);

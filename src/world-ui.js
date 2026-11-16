@@ -459,7 +459,9 @@
       document.body.appendChild(chip);
     }
     chip.hidden = false;
-    const mirror = sun.refractionsLeft > 0 ? `・手鏡可折 ${sun.refractionsLeft} 次` : "";
+    /* R83C 第 1 項：教等光時不提手鏡；只有任務卡在教折光、或折光已交給玩家且沒有叫玩家等光時才寫（規則在 FarmSunplay.mirrorHint）。 */
+    const sp = window.FarmSunplay, mirrorText = sp && sp.mirrorHint ? sp.mirrorHint(s, nextGuidance(s, now), now) : "";
+    const mirror = sun.refractionsLeft > 0 && mirrorText ? `・${mirrorText}` : "";
     /* R78B：「光還有幾秒」只算一次（FarmSunplay.lightSecondsText），提示條、預告圈、田上標籤寫的是同一個數字；秒數那一段掛 data-r78b-light-secs，每一拍一起更新。 */
     /* R81B：秒數只留在田邊動作列；頂部籤只報光的狀態與手鏡次數。 */
     const chipText = plots.length ? `☀ 陽光正在 ${plots.length} 格田上` : `☀ 光快落下${mirror}`;
@@ -488,17 +490,17 @@
     if (choiceOpen) return "光快到了，請在田邊選一種收成方式。";
     if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest
       ? "已選等光，光到後會自動收成。"
-      : "已選等光，光到了再回田邊收成。";
+      : "已選等光再收，光落下後回田邊在光裡收成。";
     if (step.action === "refract") return "光沒有照到作物，請把光折到這格。";
     if (step.action === "catch_sun") return "光快到了，先留著這格作物。";
-    if (step.sunlit === true && step.action === "harvest") return "陽光正在田上，請在田邊收成。";
-    if (step.sunlit === true && step.action === "tend") return "陽光正在田上，請在田邊澆水。";
+    if (step.sunlit === true && step.action === "harvest") return "陽光正在田上，到田邊在光裡收成。";
+    if (step.sunlit === true && step.action === "tend") return "陽光正在田上，到田邊在光裡澆水。";
     return step.text;
   }
   function r82aObjectiveShort(step, choiceOpen, queuedLight) {
     if (!step) return "";
     if (choiceOpen) return "在田邊選收成方式";
-    if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest ? "等光自動收成" : "等光落下再收成";
+    if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest ? "等光自動收成" : "等光再收";
     return step.short;
   }
   function r80bNormalizeHeirloomObjective(box) {

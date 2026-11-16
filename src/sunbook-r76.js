@@ -128,7 +128,7 @@
   /* ---------- 還沒拿到的印章：一句話寫怎麼拿 ---------- */
   function hintFor(state, cropId, stampId) {
     const name = cropName(cropId);
-    if (stampId === "lit") return "等陽光照到田上，趁光還在的時候收成" + name + "。";
+    if (stampId === "lit") return "等陽光照到田上，在光裡收成" + name + "。"; /* R83C：統一說法 */
     if (stampId === "trait") {
       const kind = traitOf(cropId);
       if (kind === "sun") return "在光裡種下、照料或收成" + name + "，收成時會多收 1 份。";

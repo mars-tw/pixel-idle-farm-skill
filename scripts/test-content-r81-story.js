@@ -226,7 +226,9 @@ test("第 3 項：手札三層的程式接線（現在做的按鈕寫帶我去�
   assert.match(css, /R81C 結束[\s\S]*R82B（舊麥種兩條專屬玩法）開始/, "R82B 依規定接在既有 R81C 後方");
   assert.ok(css.trimEnd().endsWith("/* ===== R81C 結束 ===== */") || /R81C 結束 ===== \*\/\s*\/\*[^\n]*R82[ABC]/.test(css), "R81C 追加在檔尾（R82 起的新段落接在它後面）"); /* R82C 同步：R82 各線依規定也追加在檔尾 */
   assert.ok(css.indexOf("/* ===== R81C 結束 ===== */") < css.indexOf("/* ===== R82A"), "R81C 區段保持完整，R82A 只追加在其後");
-  assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */"), "新 CSS 仍只追加在檔尾");
+  /* R83C 同步：R83 各線的新樣式接在 R82A 後面；R82A 之後只能是 R83 的區塊。 */
+  const r83cTail = css.slice(css.lastIndexOf("/* ===== R82A 結束 ===== */") + "/* ===== R82A 結束 ===== */".length);
+  assert.ok(css.includes("/* ===== R82A 結束 ===== */") && (!r83cTail.trim() || /^\s*\/\* ===== R83/.test(r83cTail)), "新 CSS 仍只追加在檔尾");
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
   assert.match(block, /\.r68a-card-now small \{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;/);
   assert.match(block, /\.r81c-later > \.r81c-later-body\[hidden\] \{ display: none !important; \}/);

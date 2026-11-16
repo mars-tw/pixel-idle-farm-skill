@@ -52,7 +52,7 @@ test("5 任務卡的光狀態不重複秒數與收益", () => {
   const world = read("src/world-ui.js");
   assert.match(world, /function r81bObjectiveStatus/);
   assert.match(world, /光快到了，請在田邊選一種收成方式。/);
-  assert.match(world, /已選等光，光到了再回田邊收成。/);
+  assert.match(world, /已選等光再收，光落下後回田邊在光裡收成。/); /* R83C 同步：統一說法 */
   assert.match(world, /const chipText = plots\.length \? `☀ 陽光正在/);
   assert.doesNotMatch(world, /const chipText = plots\.length \? `☀ 陽光照在 \$\{plots\.length\} 格田・剩/);
 });

@@ -557,7 +557,7 @@
     if (r.spawned) {
       playSound("sunrise");
       if (r.first) {
-        const line = "看，陽光照到田上了！趁光還在，在光裡種下、澆水或收成，作物會長得更快，收成也多一份。";
+        const line = "看，陽光照到田上了！在光裡種下、澆水或收成，作物會長得更快，收成也多一份。";
         if (window.FarmWorld && window.FarmWorld.speak) window.FarmWorld.speak("鎮長葛瑞", line); else toast("☀ " + line);
       }
       scheduleSave();
@@ -1152,7 +1152,7 @@
         row.appendChild(half([choice.nowText]));
         row.appendChild(document.createTextNode("｜"));
         row.appendChild(half(["等 ", secs, choice.waitText.replace(/^等光再收：/, "再收：")]));
-      } else row.appendChild(half(["等 ", secs, `，光到了再收：${choice.waitQty} 份＋陽光 ${choice.waitSunlight}（現在收只有 ${choice.nowQty} 份）`]));
+      } else row.appendChild(half(["等光再收：等 ", secs, `，${choice.waitQty} 份＋陽光 ${choice.waitSunlight}（現在收只有 ${choice.nowQty} 份）`])); /* R83C：跟 tutorialText 同一種說法 */
       label.textContent = String(text).split("\n")[0];
       label.appendChild(row);
       return true;
@@ -4447,9 +4447,9 @@
     if (prog.ready) return (nextForPlot && nextStep.action === "refract" ? `折光・${name}` : heldForLight ? `等光再收・${name}` : `${name}・可收成`) + sunSuffix;
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
-    /* 光快落在這一格：任務卡教的是「等光到了再澆水」，標籤跟著講同一件事，不再寫「種滿再澆水」。 */
+    /* 光快落在這一格：任務卡教的是「在光裡澆水」（R83C 統一說法），標籤跟著講同一件事，不再寫「種滿再澆水」。 */
     if (nextForPlot && nextStep.action === "refract") return `折光・${name}` + sunSuffix;
-    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return `光到了再澆水・${name}` + "\n光快落在這格了";
+    if (G.sunpatchStatus && (G.sunpatchStatus(state, now()).previewPlots || []).includes(tile.plotIndex)) return `在光裡澆水・${name}` + "\n光快落在這格了";
     return name + "・" + (planted < 3 ? `已種 ${planted}／3 格・種滿再澆水` : "待澆水");
   }
   /* R77A 第 1 項：這一格的折光說明。「這格本來就會照到」只在標籤還沒講到光的時候才補，免得同一件事寫兩次。 */
@@ -5718,7 +5718,7 @@
     state.interaction.selectedTileId = tile.id;
     renderTileContext();
     renderSceneActionsForSelection();
-    if (heldReadyTile(tile)) { const choice = r78bChoiceFor(tile); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光到了再收成。"); return; }
+    if (heldReadyTile(tile)) { const choice = r78bChoiceFor(tile); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光再收。"); return; }
     const actions = sceneActionsForTile(tile);
     if (actions.length) runSceneAction(actions[0].action, tile.id);
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
@@ -5735,7 +5735,7 @@
       const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length && r78bPlotInSight(row)) : null;
       const nearLabel = near ? interactLabelFor(near) : "互動";
       const nearAction = near && nearLabel !== "互動" ? sceneActionsForTile(near).find((a) => a.action !== "build" && a.action !== "clear" && a.enabled !== false) : null;
-      if (near && nearLabel.startsWith("等光・")) { const choice = r78bChoiceFor(near); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光到了再收成。"); }
+      if (near && nearLabel.startsWith("等光・")) { const choice = r78bChoiceFor(near); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光再收。"); }
       else if (nearAction) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); runSceneAction(nearAction.action, near.id); }
       else toast(blockedReason(tile));
     }
