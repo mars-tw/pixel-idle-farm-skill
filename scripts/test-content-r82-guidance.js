@@ -148,4 +148,12 @@ test("7 CSS 在檔尾且不改任務卡高度；次要狀態不是黃色主按�
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
 });
 
+test("8 舊麥種故事裡要去田裡的指示，任務卡按鈕走一般田地流程，不會打開交單對話", () => {
+  /* R82 整合：選「種回田裡」後具名訂單缺小麥，指示是「去種小麥」（target field），按鈕卻一直打開班伯的交單對話，實玩卡住。 */
+  const world = read("src/world-ui.js");
+  const go = world.slice(world.indexOf("function goNextFarmStep()"), world.indexOf("function goNextFarmStep()") + 1200);
+  assert.match(go, /step\.guidanceScope === "r81_story" && step\.target !== "field" && window\.StoryR76/, "只有不是田地的故事指示才交給 r81Go");
+  assert.doesNotMatch(go, /step\.guidanceScope === "r81_story" && window\.StoryR76 && window\.StoryR76\.r81Go/, "不可再把所有故事指示都交給 r81Go");
+});
+
 console.log("VERIFIED content R82A guidance (" + passed + " tests)");

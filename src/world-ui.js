@@ -908,7 +908,9 @@
   }
   function goNextFarmStep() {
     const now = Date.now(); const step = nextGuidance(current, now); if (!step || !farm()) return;
-    if (step.guidanceScope === "r81_story" && window.StoryR76 && window.StoryR76.r81Go) { closePanels(); window.StoryR76.r81Go(current); return; }
+    /* R82 整合：舊麥種故事裡要去田裡的指示（缺小麥時的種、收、等）照一般田地流程走；只有做決定、交單、聽故事才交給故事處理，
+       不然「去種小麥」會一直打開交單對話，玩家卡在原地。 */
+    if (step.guidanceScope === "r81_story" && step.target !== "field" && window.StoryR76 && window.StoryR76.r81Go) { closePanels(); window.StoryR76.r81Go(current); return; }
     if (step.action === "deliver_heirloom" && window.DailyUI) { closePanels(); window.DailyUI.openHeirloom(); return; }
     /* 灶台在農舍裡：cook／eat 帶的格子是野餐桌那格，鏡頭別往那邊帶，讓它跟著人走回農舍。 */
     if (step.tileId && farm().focusTile && step.action !== "cook" && step.action !== "eat") farm().focusTile(step.tileId);
