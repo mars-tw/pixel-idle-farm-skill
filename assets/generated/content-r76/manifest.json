@@ -11,15 +11,10 @@
         160,
         160
       ],
-      "sha256": "83f2385695705124cae4dde621e494a306ed35d101c15fb38bebd97c590213ce",
-      "bytes": 46265,
-      "source": "assets/generated/content-r72/customer-elder.png",
-      "crop": [
-        0,
-        0,
-        282,
-        282
-      ]
+      "sha256": "6843e0ae29fe40b2cbc2e79496dc9676f5f2b55ba04b7e56c0105b956eef711d",
+      "bytes": 24954,
+      "source": "R81 整合：muse.image_generation 新生成（1024×1024 洋紅底胸像），去背、裁切、縮成 160×160",
+      "note": "R81 評審指出老農班伯頭像偏寫實、跟鎮長 Q 版頭像不同畫風，且穿紅格子襯衫與地圖小人不一致；改照鎮長頭像畫風重畫，服裝對齊 r83 圖集地圖小人（草帽綠帶、綠襯衫、棕色吊帶褲）。"
     },
     {
       "file": "portrait-merchant.png",
