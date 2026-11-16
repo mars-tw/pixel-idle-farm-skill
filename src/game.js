@@ -194,21 +194,28 @@
     const light = Sunplay ? Sunplay.harvestEffects(state, plot, function () { return 1; }, sunlit) : { yieldBonus: sunlit ? SUNPATCH.harvestBonus : 0 };
     const baseQty = crop.yield + (light.yieldBonus || 0) + mealFlatBonus(state, "harvest", t);
     const compostHave = Math.max(0, Math.floor(Number(state.materials && state.materials.compost) || 0));
+    const remainingByCare = {};
+    for (const id of Object.keys(FARM_CARE)) {
+      const growMs = plotGrowMs(state, Object.assign({}, plot, { careMode: id }), t);
+      remainingByCare[id] = Math.max(0, plot.plantedAt + growMs - t);
+    }
+    const waterSeconds = Math.ceil((remainingByCare.water || 0) / 1000);
     const rows = Object.keys(FARM_CARE).map((id) => {
       const care = FARM_CARE[id];
       const growMs = plotGrowMs(state, Object.assign({}, plot, { careMode: id }), t);
-      const remainingMs = Math.max(0, plot.plantedAt + growMs - t);
+      const remainingMs = remainingByCare[id];
+      const seconds = Math.ceil(remainingMs / 1000);
       const qty = baseQty + (care.yieldBonus || 0);
       const applied = plot.careMode === id;
       const compostCost = id === "compost" && !applied ? 1 : 0;
       const timeText = remainingMs > 0 ? `約 ${careDurationText(remainingMs)}` : "現在就能收";
-      let text = `${care.name}：${timeText}${id === "water" && remainingMs > 0 ? "成熟" : ""}・收 ${qty} 份`;
-      if (id === "compost") text += "，長得慢 25%";
-      if (id === "natural") text += "，長得慢 20%";
+      const slowerSeconds = Math.max(0, seconds - waterSeconds);
+      const compared = id === "water" ? (remainingMs > 0 ? "成熟" : "") : slowerSeconds > 0 ? `（比勤澆水慢 ${careDurationText(slowerSeconds * 1000)}）` : "（和勤澆水一樣快）";
+      let text = `${care.name}：${timeText}${compared}・收 ${qty} 份`;
       if (care.qualityChance) text += `，${careChanceText(care.qualityChance)}機率優質`;
       if (id === "compost") text += applied ? "（堆肥已經施了）" : compostHave >= compostCost ? `（用 ${compostCost} 份堆肥，現有 ${compostHave}）` : `（要 ${compostCost} 份堆肥，現在沒有）`;
       if (care.seedBack) text += `，帶回 ${care.seedBack} 包種子`;
-      return { id, name: care.name, growMs, remainingMs, seconds: Math.ceil(remainingMs / 1000), timeText, qty, qualityChance: care.qualityChance || 0,
+      return { id, name: care.name, growMs, remainingMs, seconds, slowerSeconds, timeText, qty, qualityChance: care.qualityChance || 0,
         seedBack: care.seedBack || 0, compostCost, compostHave, available: compostHave >= compostCost, selected: applied, text };
     });
     return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, selected: plot.careMode || "", rows };

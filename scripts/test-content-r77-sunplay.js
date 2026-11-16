@@ -166,11 +166,11 @@ function checkRows(s, index, now) {
 test("照顧方式：小麥三列寫出實際秒數與份數，換成那種方式真的就是那樣", () => {
   const s = fresh(1); s.materials.compost = 2; assert.equal(Game.plant(s, 0, "wheat", T).ok, true);
   const f = checkRows(s, 0, T);
-  /* R78B 第 3 項同步：三種照顧方式拉開差距——施堆肥的生長時間從 1 倍改成 1.25 倍（多收又有機會優質，但比較慢），放著長帶回的種子從 1 包改成 2 包。 */
+  /* R81A 同步：growMul 不動，畫面改用實際秒數和勤澆水相差幾秒。 */
   assert.deepEqual(f.rows.map((r) => r.text), [
     "勤澆水：約 12 秒成熟・收 2 份",
-    "施堆肥：約 19 秒・收 3 份，長得慢 25%，三成機率優質（用 1 份堆肥，現有 2）",
-    "放著長：約 18 秒・收 2 份，長得慢 20%，帶回 2 包種子",
+    "施堆肥：約 19 秒（比勤澆水慢 7 秒）・收 3 份，三成機率優質（用 1 份堆肥，現有 2）",
+    "放著長：約 18 秒（比勤澆水慢 6 秒）・收 2 份，帶回 2 包種子",
   ]);
   assert.equal(f.rows[1].qualityChance, Game.FARM_CARE.compost.qualityChance);
   /* 澆過水的濕土：沒選勤澆水的兩種也會變快，數字跟著變。 */

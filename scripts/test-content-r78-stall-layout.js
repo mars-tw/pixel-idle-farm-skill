@@ -67,7 +67,7 @@ function inside(box, width, height) { return !!box && box.left >= -1 && box.righ
       assert.ok(game.cards.some((card) => card.state === "stock"), tag + " 第 8 秒不能全部變成代幣卡 " + JSON.stringify(game.cards));
       assert.ok(game.tags >= 1 && game.tags <= 2, tag + " 每位客人最多兩個需求標籤");
       for (const card of game.cards) {
-        assert.match(card.text, /有貨・還剩 \d+ 份|用代幣・只拿一半分|賣完/, tag + " 卡片只用三種短狀態");
+        assert.match(card.text, /還剩 \d+ 份|缺貨・用代幣・只拿一半分|賣完/, tag + " 卡片只用三種短狀態");
         assert.ok(card.smallLeft >= card.left - 1 && card.smallRight <= card.right + 1, tag + " 卡片文字不超出右緣 " + JSON.stringify(card));
       }
 
