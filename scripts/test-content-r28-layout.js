@@ -133,8 +133,11 @@ const HELP = `
         for (const o of overlays) blocked += inter(scene, o);
         const toasts = [...document.querySelectorAll('#toast-zone .toast')].filter(vis);
         const titleEl = quest.querySelector('.world-objective-title');
+        const nextEl = quest.querySelector('.r82a-guidance-short');
         return {
           titleW: titleEl ? Math.round(titleEl.getBoundingClientRect().width) : 0,
+          nextText: nextEl ? nextEl.textContent.trim() : '',
+          nextCut: !!nextEl && (nextEl.scrollHeight > nextEl.clientHeight + 1 || nextEl.scrollWidth > nextEl.clientWidth + 1),
           questH: Math.round(quest.getBoundingClientRect().height), toastCount: toasts.length,
           gamePct: (scene.width * scene.height - blocked) / (innerWidth * innerHeight) * 100,
           dlgVsPlate: plate && vis(plate) ? Math.round(inter(ro(dlg), ro(plate))) : 0,
@@ -143,6 +146,7 @@ const HELP = `
       assert(duringDlg.toastCount === 0, `${w}×${h} 對話開啟時完成提示仍在`);
       assert(duringDlg.questH <= 56, `${w}×${h} 對話期間任務卡應暫時收合，實際 ${duringDlg.questH}px`);
       assert(duringDlg.titleW >= 40, `${w}×${h} 收合任務卡標題寬度 ${duringDlg.titleW}px，未顯示標題`);
+      assert(duringDlg.nextText && !duringDlg.nextCut, `${w}×${h} 對話期間 short 下一步應完整、不裁切：${JSON.stringify(duringDlg)}`);
       assert(duringDlg.gamePct >= 50, `${w}×${h} 對話中可見遊戲區 ${duringDlg.gamePct.toFixed(1)}% 低於 50%`);
       assert.equal(duringDlg.dlgVsPlate, 0, `${w}×${h} 對話框壓住 NPC 名牌（交集 ${duringDlg.dlgVsPlate}px）`);
       await page.screenshot({ path: path.join(SHOT_DIR, `dialogue-${w}x${h}.png`) });

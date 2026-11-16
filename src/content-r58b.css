@@ -2167,3 +2167,138 @@ html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #que
 .r76c-crop .r82c-crop-count { white-space: nowrap; }
 @media (max-width: 520px) { .r72b-item .r82c-item-name { font-size: 12px; } }
 /* ===== R82C 結束 ===== */
+
+/* ===== R82A（單一下一步、完整短句、單一黃色主按鈕）開始 ===== */
+/* 祖母手記顯示 nextGuidance 的完整句。 */
+.r82a-grandma-guidance { margin: 0 0 10px; padding: 8px 10px; border-left: 3px solid #3f6fa8; border-radius: 7px; background: #eef4e7; color: #3f2d18; }
+.r82a-grandma-guidance b, .r82a-grandma-guidance p { margin: 0; }
+.r82a-grandma-guidance p { margin-top: 3px; line-height: 1.5; overflow-wrap: anywhere; }
+
+/* 展開桌面讀完整句；收合、矮螢幕、手機、提示、對話與桌面面板改讀人工 short。 */
+.r82a-guidance-short { display: none; }
+.r82a-guidance-full { display: inline; }
+#questDock :is(.r67a-now,.r68a-now,.world-objective-detail) .r82a-guidance-full,
+#questDock :is(.r67a-now,.r68a-now,.world-objective-detail) .r82a-guidance-short { min-width: 0; }
+
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span,
+html body:has(#toast-zone > .toast) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span,
+html body:has(.r76b-dialogue) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span,
+html body:has(#worldDialogue:not([hidden])) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span,
+html body:has(.side-panel.world-panel-open) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span {
+  display: block !important; min-width: 0 !important;
+}
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span {
+  display: block !important; min-width: 0 !important;
+}
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small,
+html body:has(#toast-zone > .toast) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small,
+html body:has(.r76b-dialogue) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small,
+html body:has(#worldDialogue:not([hidden])) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small,
+html body:has(.side-panel.world-panel-open) #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small {
+  display: block !important; min-width: 0 !important; white-space: nowrap !important;
+  overflow: hidden !important; text-overflow: clip !important; -webkit-line-clamp: unset !important;
+}
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small {
+  display: block !important; min-width: 0 !important; white-space: nowrap !important;
+  overflow: hidden !important; text-overflow: clip !important; -webkit-line-clamp: unset !important;
+}
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :has(.r82a-guidance-short) .r82a-guidance-full,
+html body:has(#toast-zone > .toast) #questDock .r82a-guidance-full,
+html body:has(.r76b-dialogue) #questDock .r82a-guidance-full,
+html body:has(#worldDialogue:not([hidden])) #questDock .r82a-guidance-full,
+html body:has(.side-panel.world-panel-open) #questDock .r82a-guidance-full { display: none !important; }
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r82a-guidance-short,
+html body:has(#toast-zone > .toast) #questDock .r82a-guidance-short,
+html body:has(.r76b-dialogue) #questDock .r82a-guidance-short,
+html body:has(#worldDialogue:not([hidden])) #questDock .r82a-guidance-short,
+html body:has(.side-panel.world-panel-open) #questDock .r82a-guidance-short { display: inline !important; }
+
+/* 提示期間仍維持既有 56px 門檻，短句與動作同列。 */
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; grid-template-rows: 44px !important;
+  align-items: center !important; min-height: 52px !important; height: 52px !important; max-height: 52px !important;
+  padding: 4px 50px 4px 8px !important; overflow: hidden !important; box-sizing: border-box !important;
+}
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r68a-objective-head,.r67a-objective-head,.r68a-requirements,.r67a-task-list,.r68a-festival-summary) { display: none !important; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.r80b-decision-compact):has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) {
+  position: static !important; display: grid !important; grid-column: 1 / -1 !important; grid-template-columns: minmax(0,1fr) auto !important;
+  align-items: center !important; gap: 6px !important; width: 100% !important; margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important;
+}
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:has(.r82a-guidance-short) {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; grid-template-rows: 44px !important;
+  align-items: center !important; min-height: 52px !important; height: 52px !important; max-height: 52px !important;
+  padding: 4px 50px 4px 8px !important; overflow: hidden !important; box-sizing: border-box !important;
+}
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:has(.r82a-guidance-short) > :is(.r68a-objective-head,.r67a-objective-head,.r68a-requirements,.r67a-task-list,.r68a-festival-summary) { display: none !important; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) {
+  position: static !important; display: grid !important; grid-column: 1 / -1 !important; grid-template-columns: minmax(0,1fr) auto !important;
+  align-items: center !important; gap: 6px !important; width: 100% !important; margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important;
+}
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) > span,
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock:has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) small {
+  display: block !important; min-width: 0 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important;
+}
+
+/* 手機與 600px 以下螢幕即使展開也讀 short，任務列不因完整句增高。 */
+@media (max-width: 859px), (max-height: 600px) {
+  #questDock :is(.r67a-now,.r68a-now,.world-objective-detail) .r82a-guidance-full { display: none !important; }
+  #questDock :is(.r67a-now,.r68a-now,.world-objective-detail) .r82a-guidance-short { display: inline !important; }
+  #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > span { display: block !important; min-width: 0 !important; }
+  #questDock :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) small {
+    display: block !important; min-width: 0 !important; white-space: nowrap !important;
+    overflow: hidden !important; text-overflow: clip !important; -webkit-line-clamp: unset !important;
+  }
+}
+/* R67：手機開手札或其他面板時，任務卡仍整張隱藏。 */
+@media (max-width: 859px) {
+  html body:has(.side-panel.world-panel-open) #questDock#questDock { display: none !important; }
+  html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="early_free_choice"] { display: none !important; }
+}
+
+/* 桌面開面板時也只留 short 與動作，同列維持 52px；手機由上面的 R67 規則整卡隱藏。 */
+html body:has(.side-panel.world-panel-open) #questDock#questDock:has(.r82a-guidance-short) > :is(.r68a-objective-head,.r67a-objective-head,.r68a-requirements,.r67a-task-list,.r68a-festival-summary) { display: none !important; }
+html body:has(.side-panel.world-panel-open) #questDock#questDock:has(.r82a-guidance-short) > :is(.r67a-now,.r68a-now) {
+  position: static !important; display: grid !important; grid-template-columns: minmax(0,1fr) auto !important;
+  align-items: center !important; gap: 6px !important; width: 100% !important; margin: 0 !important; padding: 0 !important;
+  border: 0 !important; background: transparent !important;
+}
+
+/* 有 short 時，收合列不再顯示舊章節摘要；保留人工 short 與動作同一行。 */
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short) {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; grid-template-rows: 44px !important;
+  align-items: center !important; gap: 6px !important; min-height: 52px !important; height: 52px !important; max-height: 52px !important;
+  padding: 4px 50px 4px 8px !important; overflow: hidden !important; box-sizing: border-box !important;
+}
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed):has(.r82a-guidance-short) > :is(.r68a-objective-head,.r67a-objective-head,.r68a-requirements,.r67a-task-list,.r68a-festival-summary) { display: none !important; }
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) .r69a-collapsed-summary { display: none !important; }
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) {
+  display: grid !important; grid-column: 1 / -1 !important; grid-row: 1 !important; width: 100% !important;
+  grid-template-columns: minmax(0,1fr) auto !important; align-items: center !important; gap: 6px !important;
+}
+html body #questDock#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r67a-now,.r68a-now):not(.r69a-festival-now):has(.r82a-guidance-short) {
+  display: grid !important; grid-column: 1 / -1 !important; grid-row: 1 !important; width: 100% !important;
+  grid-template-columns: minmax(0,1fr) auto !important; align-items: center !important; gap: 6px !important;
+  margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important;
+}
+html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > :is(.r67a-now,.r68a-now):has(.r82a-guidance-short) > :is(.r67a-now-action,.r68a-now-action,.r63-primary,.r80b-now-copy) {
+  grid-column: 2 !important; width: auto !important; max-width: min(44vw,180px) !important; justify-self: end !important; white-space: nowrap !important;
+}
+
+/* 田邊動作列已出現時，任務卡只留狀態字，不把不可按的 span 畫成第二顆按鈕。 */
+.r80b-now-copy { min-height: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: #5b421f; font-weight: 800; }
+
+/* 收合鈕、右下作物狀態與手札按鈕使用次要色；黃色只留給目前畫面的主要動作。 */
+#questDock .quest-collapse-btn { background: #735034 !important; color: #fffaf0 !important; border-color: #4f3420 !important; box-shadow: none !important; }
+#actionA { background: rgba(49,92,64,.94) !important; color: #fffdf4 !important; border-color: #dbe9cf !important; box-shadow: 0 3px 10px rgba(28,48,30,.28) !important; }
+#adventurePanel :is(.r68a-card-now,.r81c-today-card) > button,
+#adventurePanel :is(.r58-card,.adventure-quest,.neighbor-entry) button:not(.r81c-later-toggle) { background: #f3ead4 !important; color: #4d3010 !important; border-color: #8a6a35 !important; box-shadow: none !important; }
+#adventurePanel :is(.r58-card,.adventure-quest,.neighbor-entry) button:disabled { background: #e6ded0 !important; color: #716652 !important; border-color: #b7aa91 !important; }
+body:has(.r76b-dialogue) #questDock :is(.r67a-now-action,.r68a-now-action,.r63-primary),
+body:has(#worldDialogue:not([hidden])) #questDock :is(.r67a-now-action,.r68a-now-action,.r63-primary),
+body:has(.modal.show) #questDock :is(.r67a-now-action,.r68a-now-action,.r63-primary) { background: #efe3c2 !important; color: #4d3010 !important; border-color: #8a6a35 !important; box-shadow: none !important; }
+html body:has(.modal.show) #questDock#questDock,
+html body:has(.modal.show) #questDock#questDock * { visibility: hidden !important; pointer-events: none !important; }
+
+/* 作物評比結果一定有一顆看得到、點得到的「繼續」。 */
+.r82a-result-close { display: block; min-width: 110px; min-height: 44px; margin: 10px 0 0 auto; padding: 8px 16px; border: 2px solid #83521c; border-radius: 8px; background: #ffd978; color: #4d3010; font: inherit; font-weight: 900; cursor: pointer; }
+/* ===== R82A 結束 ===== */

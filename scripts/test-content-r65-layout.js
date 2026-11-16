@@ -271,16 +271,16 @@ async function launchBrowser() {
         const fest = await page.evaluate((src) => {
           eval(src);
           const dock = document.querySelector('#questDock');
-          // R69 同步：手機收合摘要移到「現在做」的一行；舊橫幅保留給展開全文，不能用隱藏節點的 innerText 判斷收合內容。
-          const summary = dock.querySelector('.r69a-festival-now .r69a-collapsed-summary');
+          // R82A 同步：手機收合一律顯示人工 short；舊祭典進度摘要只留在展開內容。
+          const summary = dock.querySelector('.r69a-festival-now .r82a-guidance-short');
           return { ih: innerHeight, dock: ro(dock), banner: summary && vis(summary) ? ro(summary) : null, bannerText: summary && vis(summary) ? summary.innerText.trim() : '', bannerFull: dock.textContent.trim() };
         }, HELP);
         assert.ok(fest.banner, `${tag} 第 7 項：收穫祭進行中應有橫幅`);
-        assert.match(fest.bannerText, /祭典 2\/3｜剩 8 分/, `${tag} 第 7 項：收合時應一行顯示「祭典 2/3｜剩 8 分」（實際「${fest.bannerText}」）`);
+        assert.equal(fest.bannerText, '祭典：去找鄰居', `${tag} 第 7 項：收合時應完整顯示當下 short（實際「${fest.bannerText}」）`);
         assert.doesNotMatch(fest.bannerText, /收成 3 份番茄/, `${tag} 第 7 項：收合時三個小目標應先收起（實際「${fest.bannerText}」）`);
         assert.ok(fest.banner.height <= 34, `${tag} 第 7 項：收合時祭典資訊應只有一行（高 ${Math.round(fest.banner.height)}）`);
         assert.ok(fest.dock.height <= fest.ih * 0.18 + 1, `${tag} 第 7 項：收合任務卡高 ${Math.round(fest.dock.height)} 不應超過畫面 18%`);
-        console.log(`OK ${tag} 第 7 項：收合卡一行顯示「${fest.bannerText.split('\n')[0]}」`);
+        console.log(`OK ${tag} 第 7 項：收合卡一行顯示 short「${fest.bannerText.split('\n')[0]}」`);
         // 展開後才看得到三個小目標
         await page.locator("[data-audit='quest-collapse']").click();
         // R66 整合：整批連跑負載高時 500ms 不夠，改為等到展開內容出現（最多 3 秒），斷言不變

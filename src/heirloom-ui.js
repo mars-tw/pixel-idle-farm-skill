@@ -1,31 +1,17 @@
 (function () {
   "use strict";
-  const H = window.FarmHeirloom, el = (id) => document.getElementById(id), farm = () => window.__farm;
-  let signature = "", deliveredAcknowledged = false;
+  const H = window.FarmHeirloom, A = window.AdventureAPI, el = (id) => document.getElementById(id), farm = () => window.__farm;
+  let signature = "";
   function step(s) {
-    const h = H.status(s), now = Date.now(), sun = window.sunpatchStatus(s, now);
-    const plots = s.map.tiles.filter((t) => t.plotIndex != null && t.plotIndex < window.activePlotCount(s) && window.planMoveTo(s,t.id));
-    const wheat = plots.filter((t) => s.plots[t.plotIndex].cropId === "wheat");
-    const ripe = wheat.find((t) => window.getCropProgress(s,s.plots[t.plotIndex],now).ready);
-    if (h.ready) return { kind:"deliver", title:"第一份餐籃，送給誰？", detail:"替葛瑞留兩份小麥。送到門邊，或邀他一起坐下。", label:"裝好餐籃", target:null };
-    /* R75 整合：祖母手記的第一道光也教折光。光落在空田時，先用手鏡把光折到小麥上；
-       光快落在熟麥上時先別收，等光到了再收才算陽光小麥。 */
-    const next = h.sunWheat < 2 && window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(s, now) : null;
-    const mirror = next && next.action === "refract" ? wheat.find((t) => t.id === next.tileId) : null;
-    if (mirror) return { kind:"refract", title:"拿祖母的手鏡折光", detail:next.text, label:next.actionLabel, target:mirror };
-    const pending = sun.previewPlots || [];
-    if (ripe && h.sunWheat < 2 && pending.includes(ripe.plotIndex) && s.plots[ripe.plotIndex].sunGrown !== true) return { kind:"wait", title:"光快落在麥穗上了", detail:"先別收。等光落下再收成，這一株才算陽光小麥。", label:"看看這株小麥", target:ripe };
-    if (ripe) return { kind:"harvest", title:"把這束陽光收進餐籃", detail:"小麥成熟了。收成後，留下兩份給葛瑞。", label:"走近收成", target:ripe };
-    const lit = plots.find((t) => sun.plots.includes(t.plotIndex) && (!s.plots[t.plotIndex].cropId || (s.plots[t.plotIndex].cropId === "wheat" && !window.getCropProgress(s,s.plots[t.plotIndex],now).wet)));
-    if (lit && h.sunWheat < 2) return { kind:s.plots[lit.plotIndex].cropId ? "water" : "plant", title:"光落在這裡", detail:`光斑還有 ${Math.ceil(sun.remainingMs/1000)} 秒。在光裡${s.plots[lit.plotIndex].cropId ? "澆水" : "種小麥"}，這株的收穫會記進餐籃。`, label:s.plots[lit.plotIndex].cropId ? "去光裡澆水" : "在光裡播種", target:lit };
-    const growing = wheat[0];
-    if (growing) {
-      const p = s.plots[growing.plotIndex], progress = window.getCropProgress(s,p,now);
-      if (p.sunGrown !== true && pending.includes(growing.plotIndex)) return { kind:"wait", title:"光快落在這株小麥上了", detail:progress.wet ? "水已經澆了。等光落下、小麥熟了，趁光收成。" : "先別澆水。等光落下再澆，才接得住陽光。", label:"看看這株小麥", target:growing };
-      return { kind:"wait", title:p.sunGrown === true ? "陽光已經留在麥穗裡" : "等第一道光落下", detail:p.sunGrown === true ? `再等約 ${Math.ceil(progress.remainingMs/1000)} 秒成熟。光散了，這株仍記得你在光裡的照料。` : `光落下前，田上會先亮起預告圈。看見光落下，再去澆水；錯過會再來。`, label:"看看這株小麥", target:growing };
-    }
-    const empty = plots.find((t) => !s.plots[t.plotIndex].cropId);
-    return { kind:"plant", title:"先種一株，等光來", detail:h.sunWheat >= 2 ? "陽光收成已記下。倉庫還要留兩份小麥，才裝得成餐籃。" : "種一株小麥，留著水，等光落下再澆。餐籃不用等換日。", label:"種第一株小麥", target:empty };
+    return A && A.nextGuidance ? A.nextGuidance(s, Date.now()) : null;
+  }
+  function setGuidance(node, full, short) {
+    if (!node) return;
+    node.replaceChildren();
+    const longCopy = document.createElement("span"), shortCopy = document.createElement("span");
+    longCopy.className = "r82a-guidance-full"; longCopy.textContent = full;
+    shortCopy.className = "r82a-guidance-short"; shortCopy.textContent = short;
+    node.append(longCopy, shortCopy); node.title = full;
   }
   function guide(s) {
     H.start(s);
@@ -47,16 +33,8 @@
   function renderObjective(s, box) {
     const h = H.status(s);
     if (!h.started) { signature = ""; return false; }
-    if (h.delivered && !deliveredAcknowledged) {
-      if(signature==='delivered' && box.dataset.quest==='first_sun_basket_delivered')return true;
-      signature = "delivered";
-      box.dataset.quest = "first_sun_basket_delivered";
-      box.innerHTML = '<div class="world-chapter"><span>祖母手記・第一份陽光餐籃</span><span>3/3</span></div><div class="world-objective-title">餐籃送到了</div><div class="world-objective-detail">兩份小麥，換來一張留給你的椅子。</div><div class="world-objective-bottom"><span>回應已夾進手記</span><button type="button" data-world-go>繼續農場故事</button></div>';
-      box.querySelector('button').onclick = () => { deliveredAcknowledged=true;signature='';window.FarmWorld.renderObjective(s); };
-      return true;
-    }
     if(h.delivered){signature='';return false;}
-    const q = step(s), sig = JSON.stringify([q.kind,q.target && q.target.id,h.sunWheat,h.wheat]);
+    const q = step(s), sig = JSON.stringify([q.kind,q.target && q.target.id,q.text,q.short,h.sunWheat,h.wheat]);
     if (sig !== signature || box.dataset.quest !== "first_sun_basket") {
       signature = sig;
       box.dataset.quest = "first_sun_basket"; box.dataset.targetId = q.target ? q.target.id : "";
@@ -65,14 +43,16 @@
       box.querySelector("button").onclick = () => guide(s);
     }
     box.querySelector(".world-objective-title").textContent = q.title;
-    box.querySelector(".world-objective-detail").textContent = q.detail;
+    setGuidance(box.querySelector(".world-objective-detail"), q.detail, q.short);
     box.querySelector("button").textContent = q.label;
     return true;
   }
   function renderPage(s, body) {
     const h = H.status(s);
+    const guidance = A && A.nextGuidance ? A.nextGuidance(s, Date.now()) : null;
+    const guidanceHtml = guidance ? `<section class="r82a-grandma-guidance" data-r82a-grandma-guidance><b>現在做</b><p>${guidance.text}</p></section>` : "";
     if (h.delivered) {
-      body.innerHTML = `<article class="heirloom-paper"><span class="daily-kicker">第一份陽光餐籃・已送達</span><h3>${h.note.title}</h3><p>${h.note.text}</p><p class="heirloom-reply">葛瑞：「${h.note.reply}」</p><p class="heirloom-caption">這一頁留在日誌裡。今日農務的印章，還會帶來兩頁手記。</p></article>`;
+      body.innerHTML = guidanceHtml + `<article class="heirloom-paper"><span class="daily-kicker">第一份陽光餐籃・已送達</span><h3>${h.note.title}</h3><p>${h.note.text}</p><p class="heirloom-reply">葛瑞：「${h.note.reply}」</p><p class="heirloom-caption">這一頁留在日誌裡。今日農務的印章，還會帶來兩頁手記。</p></article>`;
       const source = `assets/generated/${h.choice==='table'?'r89':'r88'}/${h.choice}-result-512.webp`;
       const reply=body.querySelector('.heirloom-reply');
       const face=document.createElement('img');face.src='assets/generated/r89/grey-2.png'+(window.FARM_VERSION_QUERY || '');face.alt='葛瑞笑著留一張椅子';face.width=64;face.height=64;face.className='reply-portrait';reply.prepend(face);
@@ -90,7 +70,7 @@
       if (stage) { const m = document.createElement("p"); m.className = "r81c-mystery"; m.dataset.r81cMystery = stage; m.textContent = stage === "done" ? S.r81Summary(s) : stage === "conflict" ? "籃底那包藍布舊麥種滾了出來，葛瑞的臉色一下子變了。" : s.r81story.choice === "plant" ? "藍布舊麥種照班伯說的種回田裡了，故事還沒說完。" : "藍布舊麥種交給葛瑞封存了，故事還沒說完。"; reply.after(m); }
       return;
     }
-    body.innerHTML = `<article class="heirloom-paper"><span class="daily-kicker">祖母的第一張餐籃便箋</span><h3>先留一籃，再去賣</h3><p>在光裡種小麥或澆水，再收成這一株。從倉庫留兩份，走到葛瑞身邊，選一種送法。</p><p class="daily-progress">陽光照料後收成 ${h.sunWheat}/2 份・倉庫 ${Math.min(h.wheat,2)}/2 份</p><div class="heirloom-choices">${h.ready ? '<button id="heirloomDoorstep" type="button">留在門邊</button><button id="heirloomTable" type="button">一起坐下</button>' : '<button id="heirloomGuide" type="button">回田裡找陽光</button>'}</div><p class="heirloom-caption">交付取走兩份小麥。手記永久保留，不用連續登入。</p></article>`;
+    body.innerHTML = guidanceHtml + `<article class="heirloom-paper"><span class="daily-kicker">祖母的第一張餐籃便箋</span><h3>先留一籃，再去賣</h3><p>在光裡種小麥或澆水，再收成這一株。從倉庫留兩份，走到葛瑞身邊，選一種送法。</p><p class="daily-progress">陽光照料後收成 ${h.sunWheat}/2 份・倉庫 ${Math.min(h.wheat,2)}/2 份</p><div class="heirloom-choices">${h.ready ? '<button id="heirloomDoorstep" type="button">留在門邊</button><button id="heirloomTable" type="button">一起坐下</button>' : '<button id="heirloomGuide" type="button">回田裡找陽光</button>'}</div><p class="heirloom-caption">交付取走兩份小麥。手記永久保留，不用連續登入。</p></article>`;
     /* R81C 第 1 項：便箋留下的謎，跟開場那張便箋同一句；餐籃送到鎮長葛瑞手上時揭開。 */
     const mysteryText = window.StoryR76 && window.StoryR76.R81_MYSTERY;
     if (mysteryText) { const m = document.createElement("p"); m.className = "r81c-mystery"; m.dataset.r81cMystery = ""; m.textContent = mysteryText; const prog = body.querySelector(".daily-progress"); if (prog) prog.before(m); }

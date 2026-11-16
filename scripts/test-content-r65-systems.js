@@ -61,8 +61,9 @@ test("6 整合：成熟以遊戲判斷為準、第 4 章起手札不用前期下
   try { assert.equal(A.nextFarmStep(state, T0).action, "harvest"); }
   finally { if (saved) global.getCropProgress = saved; else delete global.getCropProgress; }
   const world = fs.readFileSync("src/world-ui.js", "utf8");
-  assert.match(world, /main && q\.chapter === 1 && A\.nextFarmStep/, "只有第 1 章主線卡可用前期下一步");
-  assert.match(world, /const nextFarm = A\.nextFarmStep \? A\.nextFarmStep\(s, Date\.now\(\)\)/, "三件事卡只用 nextFarmStep 顯示現在做，不另列收成提示");
+  assert.match(world, /const farmStep = main \? nextGuidance\(current, Date\.now\(\)\) : null/, "主線卡改讀單一 nextGuidance");
+  assert.match(world, /q\.chapter === 1 \|\| farmStep\.guidanceScope === "r81_story"/, "第 1 章與 R82 故事階段才覆蓋主線下一步");
+  assert.match(world, /const nextFarm = nextGuidance\(s, Date\.now\(\)\)/, "三件事卡只顯示同一份現在做，不另列收成提示");
 });
 
 console.log(`VERIFIED content R65A systems (${passed}/6)`);

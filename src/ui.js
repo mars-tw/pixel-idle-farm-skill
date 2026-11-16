@@ -197,8 +197,8 @@
     (result.feedback || []).forEach(showActionFeedback);
     /* R81B：第一收成的結果先在 game.js 建立，主線事件則在收成後才寫入；顯示前重讀一次，
        避免田裡已經種下下一株，結算卡還叫玩家「去種小麥」。 */
-    if (result.settlement && result.settlement.kind === "first_harvest" && window.AdventureAPI && window.AdventureAPI.nextFarmStep) {
-      const live = window.AdventureAPI.nextFarmStep(state, now());
+    if (result.settlement && result.settlement.kind === "first_harvest" && window.AdventureAPI && (window.AdventureAPI.nextGuidance || window.AdventureAPI.nextFarmStep)) {
+      const live = window.AdventureAPI.nextGuidance ? window.AdventureAPI.nextGuidance(state, now()) : window.AdventureAPI.nextFarmStep(state, now());
       if (live && live.text) result.settlement.next = live.text;
     }
     /* R78 整合：在光裡收成多幾份、入瓶幾點陽光，收成那一行提示與田上的大字已經各寫一次；結算卡只留金幣、經驗與下一步，不再把同一句重複第三次。 */
@@ -570,7 +570,7 @@
         spawnVfx(tile.id, "harvest_pop"); G.advanceStory(state, "harvest");
         const crop = window.CROPS[result.cropId]; cropHarvestFx(tile.id, crop, result.added); playSound("harvest"); if (result.sun) sunCatchFx(tile.id, result.sun);
         toast(`光到了，自動收下 ${result.added} 份${crop.name}。`);
-        enqueueResultFeedback(result); afterChange(true);
+        afterChange(true); enqueueResultFeedback(result);
       } else if (G.clearLightHarvestQueue) G.clearLightHarvestQueue(state);
     }
     syncSunBeams(t);
@@ -1196,8 +1196,21 @@
     const crop = plot && plot.cropId ? window.CROPS[plot.cropId] : null;
     if (!crop) return false;
     const left = G.getCropProgress(state, plot, now()).remainingMs;
+    renderTileStateLabel(tile);
     toast(`${crop.name}還在長，約 ${G.careDurationText ? G.careDurationText(left) : fmtTime(left)}後可以收。`);
     return true;
+  }
+  function r82aKeepTileLabelOffPlots() {
+    const label = $("tileStateLabel");
+    if (!label || label.hidden || window.innerHeight > 500 || window.innerWidth < 600) { if (label) label.style.translate = ""; return; }
+    label.style.translate = "";
+    const r = label.getBoundingClientRect(), plots = [...document.querySelectorAll(".gtile.farm-plot")].map((node) => node.getBoundingClientRect()).filter((box) => box.width > 0 && box.height > 0);
+    const hits = plots.filter((box) => r.left < box.right && r.right > box.left && r.top < box.bottom && r.bottom > box.top);
+    if (!hits.length) return;
+    const rightEdge = Math.max(...plots.map((box) => box.right)), rightShift = rightEdge + 6 - r.left;
+    if (r.right + rightShift <= window.innerWidth - 4) { label.style.translate = rightShift + "px 0"; return; }
+    const leftEdge = Math.min(...plots.map((box) => box.left)), leftShift = leftEdge - 6 - r.right;
+    if (r.left + leftShift >= 4) label.style.translate = leftShift + "px 0";
   }
   /* R78B 第 6 項：光裡收成的當下，在那一格上方跳出「多 1 份」「陽光 +N」兩行大字（像素風、整數像素位移），不蓋住最上面的資源列。 */
   function r78bSunPop(c, lines) {
@@ -1316,6 +1329,7 @@
       const labelTile = label && !label.hidden && label.dataset.tileId ? G.getTileById(state, label.dataset.tileId) : null;
       if (labelTile && r78bLabelKeyFor(labelTile, tileStateLabelText(labelTile)) !== r78bLabelKey) { renderTileStateLabel(labelTile); syncFloatingLabels(); }
       if (state) r80bKeepDecisionVisible(now());
+      r82aKeepTileLabelOffPlots();
       if (!r80bCarePopoverVisible()) showNextToast();
     } catch (e) {}
   }
@@ -4770,7 +4784,7 @@
     if (act.invalid && isTouch && sceneActionsForTile(tile).length) {
       clearTouchFarmPreview(false); spawnRing(tileId, true); renderSceneActionsForSelection(); updateMap(now()); return;
     }
-    if (act.invalid) { clearTouchFarmPreview(false); toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
+    if (act.invalid) { clearTouchFarmPreview(false); if (tile.plotIndex != null) renderTileStateLabel(tile); toast(act.invalid); state.interaction.lastInvalidReason = act.invalid; spawnRing(tileId, false); updateMap(now()); return; }
     if (act.action) {
       if (act.action === "build") { clearTouchFarmPreview(false); showBuildWheel(tile); updateMap(now()); return; }
       if (isTouch && tile.plotIndex != null) {
@@ -5159,7 +5173,7 @@
       const r = G.harvest(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("harvest", face); spawnVfx(tileId, "harvest_pop"); G.advanceStory(state, "harvest"); const crop = window.CROPS[r.cropId];
         cropHarvestFx(tileId, crop, r.added); playSound("harvest"); if (r.sun) sunCatchFx(tileId, r.sun);
-        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 " + r.seedBack + " 包種子" : "") + (r.marketBonus ? "・趕上收購，多得 " + r.marketBonus + " 金" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } enqueueResultFeedback(r); afterChange(true); }
+        toast("🧺 收成 " + r.added + " " + (r.quality ? "優質" : "") + crop.name + (r.seedBack ? "・帶回 " + r.seedBack + " 包種子" : "") + (r.marketBonus ? "・趕上收購，多得 " + r.marketBonus + " 金" : "") + (r.sun ? "・" + sunHarvestResultText(r.sun, crop.name) : "")); if (r.lost) toast("📦 倉滿損失 " + r.lost); if (r.leveled) { levelUpFx(tileElOf(tileId)); playSound("level"); } afterChange(true); enqueueResultFeedback(r); }
     } else if (action === "water") {
       const r = G.waterPlot(state, tile.plotIndex, t);
       if (r.ok) { if (!animationStarted) playAction("water", face); spawnVfx(tileId, "water_droplets"); waterSplashFx(tileId); playSound("water"); G.advanceStory(state, "water"); if (r.sun) sunCatchFx(tileId, r.sun); toast(r.sun ? "💧 在光裡澆水：" + sunGrowthResultText(r.sun) : "💧 澆水變濕土加速"); afterChange(false); }

@@ -188,7 +188,7 @@ const HELP = `
           ih: innerHeight, dock: ro(dock), banner: summary ? ro(summary) : null,
           bannerText: summary ? summary.innerText.trim() : '', expandedBanner: !!(banner && vis(banner)),
           bannerLines: summary ? [...summary.getClientRects()].filter((r) => r.height > 0).length : 0,
-          compactText: (() => { const e = dock.querySelector('.r69a-collapsed-summary'); return e && vis(e) ? { ...ro(e), lines: [...e.getClientRects()].filter((r) => r.width > 0 && r.height > 0).length } : null; })(),
+          compactText: (() => { const e = [...dock.querySelectorAll('.r82a-guidance-short,.r69a-collapsed-summary')].find(vis); return e ? { ...ro(e), lines: [...e.getClientRects()].filter((r) => r.width > 0 && r.height > 0).length } : null; })(),
           sun: pick('#sunChip'), seed: pick('#seedHud'), seedMore: pick('#seedHud .seed.more'),
           arrow: pick('#objectiveArrow'), collapse: pick("#questDock [data-audit='quest-collapse']"),
         };
@@ -199,8 +199,8 @@ const HELP = `
       if (view.mobile) {
         const limit = view.h > view.w ? 0.18 : 0.25;
         assert.ok(fest.dock.height <= fest.ih * limit + 1, `${tag} 第 5 項：有收穫祭時任務卡高 ${Math.round(fest.dock.height)} 超過 ${(limit * 100)}%`);
-        // R69 同步：整列含 44px 主要按鈕，不能再用舊橫幅 34px 高判斷；改驗摘要文字本身確實單行。
-        assert.ok(fest.compactText && fest.compactText.lines === 1 && fest.compactText.height <= 24, `${tag} 第 5 項：收穫祭摘要文字應只有一行（${fest.compactText ? fest.compactText.lines : 0} 行、高 ${fest.compactText ? Math.round(fest.compactText.height) : 0}）`);
+        // R82A 同步：手機與收合狀態改驗人工 short；整列 52px 與單行上限不變。
+        assert.ok(fest.compactText && fest.compactText.lines === 1 && fest.compactText.height <= 24, `${tag} 第 5 項：收穫祭 short 應只有一行（${fest.compactText ? fest.compactText.lines : 0} 行、高 ${fest.compactText ? Math.round(fest.compactText.height) : 0}）`);
       }
       if (fest.sun && fest.seedMore) assert.equal(inter(fest.sun, fest.seedMore), 0, `${tag} 第 6 項：陽光標籤不應蓋住「全部」鈕`);
       if (fest.sun && fest.seed) assert.equal(inter(fest.sun, fest.seed), 0, `${tag} 第 6 項：陽光標籤不應蓋住種子欄`);
