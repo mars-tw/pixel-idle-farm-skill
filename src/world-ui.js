@@ -641,9 +641,10 @@
   function r81cTodaySig() {
     if (!current) return "";
     const now = Date.now(), S = window.StoryR76;
-    let story = null;
+    let story = null, branch = null;
     try { story = S && typeof S.r81Today === "function" ? S.r81Today(current, now) : null; } catch (_) { story = null; }
-    return JSON.stringify([story, r81cRouteSteps(now)]);
+    try { branch = S && typeof S.r82Today === "function" ? S.r82Today(current, now) : null; } catch (_) { branch = null; }
+    return JSON.stringify([story, branch, r81cRouteSteps(now)]);
   }
   function r81cTodayCard(key, title, line, onGo) {
     const card = document.createElement("div"); card.className = "r58-card r81c-today-card"; card.dataset.r81cToday = key;
@@ -658,9 +659,11 @@
     const wrap = panel.querySelector(".r63a-main-story-wrap"), r58 = panel.querySelector(".r58-section");
     if (!r58 || panel.querySelector("[data-r81c-later]")) return;
     const now = Date.now(), S = window.StoryR76, Q = window.ChoicesR77, picks = [];
-    let story = null;
+    let story = null, branch = null;
     try { story = S && typeof S.r81Today === "function" ? S.r81Today(current, now) : null; } catch (_) { story = null; }
     if (story) picks.push(r81cTodayCard("story", story.title, story.line, () => { if (S.r81Go) S.r81Go(current); }));
+    try { branch = S && typeof S.r82Today === "function" ? S.r82Today(current, now) : null; } catch (_) { branch = null; }
+    if (branch) picks.push(r81cTodayCard(branch.key, branch.title, branch.line, () => { if (S.r82Go) S.r82Go(current); }));
     const eventCard = r58.querySelector(".r60-event-card");
     if (eventCard) picks.push(eventCard);
     const avail = Array.from(r58.querySelectorAll(":scope > .r60-available-card"));
