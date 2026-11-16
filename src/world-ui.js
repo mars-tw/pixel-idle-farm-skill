@@ -346,7 +346,7 @@
     const mainRowDuplicate = hasSharedFestivalCrop || (window.StoryR76 && window.StoryR76.isDuplicateQuestRow ? window.StoryR76.isDuplicateQuestRow(step, requirementRows.map((row) => ({ name: row.name, text: requirementText(row, festivalGoal) }))) : false);
     const routeChoiceOpen = choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes);
     const standardAction = farmActionShown && questStep
-      ? `<span class="r68a-now-action r80b-now-copy" data-r80b-task-copy data-r78b-step="${esc(questStep.action)}">${esc(questStep.actionLabel)}</span>`
+      ? `<span class="r68a-now-action r80b-now-copy" data-r80b-task-copy data-r78b-step="${esc(questStep.action)}">${esc(lightChoiceOpen ? "在田邊選一個" : questStep.actionLabel)}</span>`
       : `<button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${routeChoiceOpen ? "data-choice-open" : "data-world-go"}>${routeChoiceOpen ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button>`;
     box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name r80b-objective-source">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name r80b-objective-task">任務：${esc(shownTaskName)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
       ${festivalHtml}

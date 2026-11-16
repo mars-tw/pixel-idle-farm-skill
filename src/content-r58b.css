@@ -841,14 +841,15 @@ html body #questDock .r68a-objective-head > span:not(.qp-step), html body #quest
   html body #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) .r69a-collapsed-summary { display: none !important; }
 }
 /* 提示訊息出現時任務卡照舊暫時收成一行（R28）：「現在做」只留主要按鈕並移到標題列右側，不露出被裁半截的框。 */
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) { position: absolute !important; top: 4px; right: 56px; width: auto !important; display: flex !important; margin: 0; padding: 0; border: 0; background: none; }
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head, .r67a-objective-head) { padding-right: 150px; box-sizing: border-box; }
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(:has(.r69a-festival-now)) > .r68a-requirements { visibility: hidden; }
+/* R80 整合：縮小模式（r80b-decision-compact）有自己的單行排版，這組提示模式規則不套用在它身上，兩組疊在一起會把標題擠成一個字寬、把「現在做」藏掉。 */
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) { position: absolute !important; top: 4px; right: 56px; width: auto !important; display: flex !important; margin: 0; padding: 0; border: 0; background: none; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) :is(.r68a-now, .r67a-now):not(.r69a-festival-now) > span { display: none !important; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact):not(:has(.r69a-festival-now)) > :is(.r68a-objective-head, .r67a-objective-head) { padding-right: 150px; box-sizing: border-box; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact):not(:has(.r69a-festival-now)) > .r68a-requirements { visibility: hidden; }
 /* R75：同一個暫時收合狀態下，章名與任務名兩行都要完整（原本標題列被壓回 28px，第二行「任務：…」只露出上半截）。 */
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-title:has(.r71a-task-name) { flex: 0 0 auto !important; height: auto !important; max-height: none !important; margin-top: 4px; overflow: visible !important; align-items: center; }
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-title .qp-step:has(.r71a-task-name) { display: grid !important; grid-template-rows: auto auto; overflow: visible !important; }
-html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-title :is(.r71a-chapter-name, .r71a-task-name) { line-height: 1.15; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) > .world-objective-title:has(.r71a-task-name) { flex: 0 0 auto !important; height: auto !important; max-height: none !important; margin-top: 4px; overflow: visible !important; align-items: center; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) > .world-objective-title .qp-step:has(.r71a-task-name) { display: grid !important; grid-template-rows: auto auto; overflow: visible !important; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) > .world-objective-title :is(.r71a-chapter-name, .r71a-task-name) { line-height: 1.15; }
 
 /* R70A：收合、收穫祭收合與建造模式暫時收合統一為一行；左欄可省略，進度與主要按鈕固定保留。 */
 html body #questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed),
@@ -2026,4 +2027,11 @@ body:has(.r75a-sun-preview) #toast-zone:not(:has(.settlement-card)):not(:has(.mi
 /* 224px 扣掉收合鈕與內距只剩 131px，主要按鈕就佔 89px；桌機縮小模式改成 300px，高度上限照舊。 */
 @media (min-width: 860px) { #questDock.r80b-decision-compact { width: min(300px, calc(100vw - 40px)) !important; } }
 #questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > button { flex: 0 0 auto; white-space: nowrap; }
+/* 縮小模式只該用在展開的任務卡；收合成單行時維持原本的 420px，否則「收合」鈕會疊到主要按鈕上。 */
+@media (min-width: 860px) {
+  #questDock.r80b-decision-compact:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) { width: min(420px, calc(100vw - 40px)) !important; }
+}
+/* 縮小模式的標題那段固定單行排版（收合規則會把它改成格線、欄寬只剩 25px）；右邊的不可按狀態標籤不被壓縮。 */
+html body #questDock#questDock.r80b-decision-compact .r68a-objective-head .qp-step { display: block !important; flex: 1 1 auto !important; min-width: 0 !important; overflow: hidden; }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > .r68a-now-action { flex: 0 0 auto !important; white-space: nowrap !important; min-width: max-content; }
 /* ===== R80 整合結束 ===== */
