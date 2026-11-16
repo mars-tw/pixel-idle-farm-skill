@@ -1,0 +1,102 @@
+{
+ "model": "muse-wonder-1.0 via muse.image_generation",
+ "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、逐格裁切、縮放",
+ "generated": "2026-11-16",
+ "note": "R82B 舊麥種兩條路線的新圖：傳家作物藍布老麥（圖示與四種田間狀態，參考 content-r81/story-oldwheat-field.png）、鎮誌支線三樣舊物與壓穗鎮誌牌（參考 content-r81/story-seal-box.png）。兩張 1024×1024 洋紅底素材表皆為本輪新生成。",
+ "files": [
+  {
+   "file": "blue-cloth-wheat-icon.png",
+   "size": [
+    32,
+    32
+   ],
+   "bytes": 1765,
+   "sha256": "44b6f453d39dc53409072bb905e3bbbebaa3bbf23776360cc0df57a5e8620923",
+   "source": "sheet_wheat.png 上排左"
+  },
+  {
+   "file": "blue-cloth-wheat-sprout.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 8669,
+   "sha256": "df3f25f8fb95a8dc42ef5b1d31809fb570c2ae744720fd5f648bfc7960c1a2aa",
+   "source": "sheet_wheat.png 第 1 排第 2 格",
+   "note": "四種田間狀態同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-one-light.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 14776,
+   "sha256": "98a44f3a465829df4eae962b2efdf4626305b88293661c33e5b483fb4dec4871",
+   "source": "sheet_wheat.png 第 1 排第 3 格",
+   "note": "四種田間狀態同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-ripe.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 14411,
+   "sha256": "594942ee9c330c6434b2baa7c30bf6673afd2e1347918235494843ca79c611d9",
+   "source": "sheet_wheat.png 第 2 排第 1 格",
+   "note": "四種田間狀態同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-harvested.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 9424,
+   "sha256": "bec77cd3ba98e5f9d009f2e38c1b0be5e6322e3eb2db272a3c93743494f237c9",
+   "source": "sheet_wheat.png 第 2 排第 2 格",
+   "note": "四種田間狀態同一縮放比例"
+  },
+  {
+   "file": "old-seed-tag.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 11556,
+   "sha256": "173f8acf1e4d7ee7b11791c31be9060d6b302769d06e62822505023dbbfcda7b",
+   "source": "sheet_journal.png 第 1 排第 1 格"
+  },
+  {
+   "file": "faded-photo.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 15511,
+   "sha256": "b068c14f6b047a8ef26839bbcac3f9a5050d62c4b656f955ebc9243921a45aac",
+   "source": "sheet_journal.png 第 1 排第 2 格"
+  },
+  {
+   "file": "ledger-page.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 10682,
+   "sha256": "e1031e686a8f325fda196e192522756b332c31c890b15f1f99889ef5581616b9",
+   "source": "sheet_journal.png 第 2 排第 1 格"
+  },
+  {
+   "file": "town-journal-decoration.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 13704,
+   "sha256": "5f67f345914eb2a5687eebe82941846969e0459911bcea404613346946153b3b",
+   "source": "sheet_journal.png 第 2 排第 2 格"
+  }
+ ]
+}

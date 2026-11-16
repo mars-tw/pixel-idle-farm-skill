@@ -227,7 +227,7 @@
     ledgerPage: "assets/generated/content-r82/ledger-page.png",
     townJournalDecoration: "assets/generated/content-r82/town-journal-decoration.png",
   };
-  const R82_ART_READY = [];
+  const R82_ART_READY = ["cropIcon", "cropSprout", "cropOneLight", "cropRipe", "cropHarvested", "oldSeedTag", "fadedPhoto", "ledgerPage", "townJournalDecoration"];
   const R82_ART_FALLBACK = {
     cropIcon: "assets/generated/r66/native/crop_wheat-32.png",
     cropSprout: "assets/generated/r66/native/tool_plant-32.png",

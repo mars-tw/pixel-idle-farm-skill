@@ -82,13 +82,14 @@ test("第 2 項：種植線從選擇走到藍布老麥收成，必須在兩個�
 });
 
 test("第 2 項：藍布老麥有正式圖路徑、可用後備，以及三段不同的成長外觀", () => {
-  assert.deepEqual(R.R82_ART_READY, [], "本輪沒有假裝正式圖已存在");
+  /* R82 整合同步：MUSE 已補齊九張正式圖，改驗換圖清單跟檔案在不在一致（同 R81 故事物件的做法），不再寫死「缺圖」。 */
   for (const [key, file] of Object.entries(R.R82_ART)) {
-    assert.equal(fs.existsSync(path.join(ROOT, file)), false, key + " 正式圖目前列缺圖");
+    assert.equal(R.R82_ART_READY.includes(key), fs.existsSync(path.join(ROOT, file)), key + " 換圖清單要跟檔案在不在一致");
     assert.ok(fs.existsSync(path.join(ROOT, R.R82_ART_FALLBACK[key])), key + " 後備圖存在");
   }
   const growth = [R.r82Art("cropSprout"), R.r82Art("cropOneLight"), R.r82Art("cropRipe")];
-  assert.equal(new Set(growth).size, 3, "發芽、照過一天光、成熟的後備外觀不同");
+  assert.equal(new Set(growth).size, 3, "發芽、照過一天光、成熟的外觀不同");
+  assert.equal(new Set(["cropSprout", "cropOneLight", "cropRipe"].map((k) => R.R82_ART_FALLBACK[k])).size, 3, "後備外觀也彼此不同");
   const css = read("src/content-r58b.css");
   assert.match(css, /R82B（舊麥種兩條專屬玩法）開始/);
   assert.match(css, /\.r82b-crop-icon/);
