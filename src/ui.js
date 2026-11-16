@@ -4427,6 +4427,9 @@
     const nextStep = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null;
     const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex);
     const nextForPlot = nextStep && (nextStep.plotIndex === tile.plotIndex || nextStep.holdPlotIndex === tile.plotIndex);
+    /* R82C 第 3 項：早市二選一還沒選時，田上只寫「現在收或等光」，不先替玩家寫「等光再收」；選了等光才寫已選。 */
+    const r82cChoice = prog.ready && heldForLight ? r78bChoiceFor(tile) : null, r82cQueued = r82cChoice && r82cChoice.hasTradeoff && G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
+    if (prog.ready && r82cChoice && r82cChoice.ok && r82cChoice.hasTradeoff) return (r82cQueued && r82cQueued.plotIndex === tile.plotIndex ? `已選等光・${name}` : `${name}・現在收或等光`) + sunSuffix;
     if (prog.ready) return (nextForPlot && nextStep.action === "refract" ? `折光・${name}` : heldForLight ? `等光再收・${name}` : `${name}・可收成`) + sunSuffix;
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
@@ -4509,12 +4512,13 @@
       b.setAttribute("aria-label", meta[1]);
       const icon = {plant:'r89/sprout-32.png',water:'r89/water-32.png',harvest:'r89/wheat-32.png',collect:'r89/basket-32.png',deliver:'r89/basket-32.png',talk:'r84/face-32.png',use:'r89/note-32.png',sell:'r66/native/system_coin-32.png',clear:'r66/native/tool_clear-32.png',build:'r66/native/tool_build-32.png',refract:'content-r75/sun_mirror.png',ripen:'content-r75/sun_jar.png'}[entry.action];
       let actionLabel = meta[1], actionDetail = "";
-      if (lightChoice && lightChoice.ok && entry.action === "harvest") { actionLabel = "現在收"; actionDetail = `${lightChoice.nowQty} 份＋${lightChoice.nowCoins} 金；訂單每份 ${lightChoice.orderUnitCoins} 金`; }
+      /* R82C 第 3 項：兩顆鈕都寫最後拿到什麼（幾份作物、幾金、陽光、錯過早市），數字跟規則同一份。 */
+      if (lightChoice && lightChoice.ok && entry.action === "harvest") { actionLabel = "現在收"; actionDetail = lightChoice.nowShort; }
       if (lightChoice && lightChoice.ok && entry.action === "wait_light") {
         const selectedWait = queuedLight && queuedLight.plotIndex === tile.plotIndex;
         actionLabel = selectedWait ? (queuedLight.autoHarvest ? "等光中" : "已選等光") : "等光再收";
         actionDetail = lightChoice.hasTradeoff
-          ? `等 ${lightChoice.seconds} 秒・${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}`
+          ? `等 ${lightChoice.seconds} 秒・${lightChoice.waitShort}`
           : `等 ${lightChoice.seconds} 秒・${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}・光到自動收成`;
       }
       b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${actionLabel}${actionDetail ? `<small class="r79b-action-detail">${actionDetail}</small>` : ""}</span>`;

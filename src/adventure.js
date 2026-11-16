@@ -531,6 +531,13 @@
     if (ctx.ready.length) return ctx.field("harvest", ctx.ready[0], `${need}，田都種滿了，先收成空出一格來種${crop.name}。`, "去收成", Object.assign({ count: ctx.ready.length }, tag));
     return null;
   }
+  /* R82C：讀遊戲本身的「現在收／等光」規則（game.js 載入後才有），讀不到就當沒有取捨。 */
+  function r82cLightChoice(state, plotIndex, now) {
+    try {
+      const G = typeof module !== "undefined" && module.exports ? require("./game.js") : root;
+      return G && typeof G.lightHarvestChoice === "function" ? G.lightHarvestChoice(state, plotIndex, now) : null;
+    } catch (_) { return null; }
+  }
   // R75 整合：開場的下一步跟著光走——折光 → 光裡照料 → 等光時先把種子包種完 → 收成 → 催熟 → 交付。
   // 文字裡不放會跳動的秒數（任務卡靠文字判斷要不要重畫），倒數交給任務卡提示列與陽光標籤。
   function nextFarmStep(state, now) {
@@ -585,6 +592,9 @@
         if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水", held);
         const otherReady = ready.filter((tile) => !lit.includes(tile.plotIndex));
         if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", { count: otherReady.length, holdPlotIndex: hold.plotIndex });
+        /* R82C 第 3 項：早市（限時收購）是真的二選一，還沒選之前任務卡不先寫「等光再收」，兩邊結果交給田邊兩顆鈕。 */
+        const r82cChoice = holdRipe && !queued ? r82cLightChoice(state, hold.plotIndex, t) : null;
+        if (r82cChoice && r82cChoice.ok && r82cChoice.hasTradeoff) return field("catch_sun", hold, `${cropName(hold)}熟了，光也快到了：現在收趕得上${r82cChoice.kind === "market" ? "早市" : "限時收購"}，等光收得比較多。到田邊選一個。`, "到田邊選一個", Object.assign({ lightChoice: r82cChoice.kind }, held));
         return field("catch_sun", hold, queued && !queued.autoHarvest
           ? `已選等光再收。光到了要自己收成：${lightHarvestReward(hold)}。`
           : `光快落在${cropName(hold)}上了。${holdRipe ? `等光再收：${lightHarvestReward(hold)}。` : "光到了再澆水，才接得住陽光。"}`,
@@ -1623,6 +1633,32 @@
       stall: { id: "harvest_festival_stall", name: "祭典攤位", icon: "🎪", tileId: "t15_9", goals: copy(status.goals), judging: status.judging, rewardText: "三目標：收穫祭獎章 1 枚與河畔彩旗；作物評比：一至三星獎勵" },
     };
   }
+  /* R82C 第 2 項：第一次收成之後，給兩個一樣有效的目標讓玩家自己挑。
+     「下一步」照舊由上面的 nextFarmStep 決定，這裡不另外判斷要做什麼，只在「已收成過、鎮長的開工任務交了、
+     第一餐還沒吃、河畔釣台材料齊了還沒修」這一段，把「先修河畔釣台」掛成 step.alternative，任務卡並排兩個選項。
+     釣台正是第 2 章第一個任務要修的東西，先修也算數；主線那一邊不變，所以選哪個都不會卡。
+     光正在等人處理（折光、等光、催熟、在光裡照料）時不掛，光只停幾秒，不拿另一件事分心。 */
+  const R82C_PICK_HOLD_ACTIONS = ["refract", "catch_sun", "ripen"];
+  function r82cFirstPick(state, step, now) {
+    if (!step || typeof step !== "object" || !state || !state.adventure) return step;
+    const a = state.adventure;
+    /* 先修好釣台、吃完第一餐之後：主線不要再叫玩家「去河邊看看釣台」，直接請他把第 2 章的釣台任務交掉。 */
+    if (step.action === "explore" && step.target === "fishing_dock" && restored(a, "fishing_dock")) {
+      const q = quests(state, now).find((row) => row.id === "c2_fishing_dock");
+      if (q && q.canClaim) { const npc = (C.NPCS || {})[q.npcId] || { name: "鎮民" }; return { action: "report", target: q.npcId, questId: q.id, tileId: null, text: `河畔釣台已經修好了，去找${npc.name}回報，借他的魚竿。`, actionLabel: "去回報" }; }
+      return step;
+    }
+    const harvested = Object.values((state.stats && state.stats.harvested) || {}).some((n) => Number(n) > 0);
+    if (!harvested || !claimed(a, "c1_homecoming") || claimed(a, "c1_first_meal") || restored(a, "fishing_dock")) return step;
+    if (R82C_PICK_HOLD_ACTIONS.includes(step.action) || step.sunlit === true || step.holdPlotIndex != null) return step;
+    const dock = projects(state).find((p) => p.id === "fishing_dock");
+    if (!dock || !dock.canRestore) return step;
+    const cost = Object.entries(dock.cost || {}).map(([id, n]) => `${((C.MATERIALS || {})[id] || {}).name || id} ${n}`).join("、");
+    return Object.assign({}, step, { alternative: { id: "fishing_dock", action: "restore", target: "fishing_dock", tileId: dock.target && dock.target.tileId || null,
+      text: `修好河畔釣台（${cost} 已備齊），修好就能借魚竿釣魚，之後的釣台任務直接算完成。`, actionLabel: "去修釣台" } });
+  }
+  const r82cBaseFarmStep = nextFarmStep;
+  nextFarmStep = function (state, now) { return r82cFirstPick(state, r82cBaseFarmStep(state, now), now); };
   const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
     mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal, r77Upgraded };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;

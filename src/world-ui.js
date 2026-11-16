@@ -324,6 +324,7 @@
       const festivalField = box.querySelector("[data-festival-field]"); if (festivalField) festivalField.onclick = () => goFestivalField();
       const dailyClaim = box.querySelector("[data-r66a-claim]"); if (dailyClaim) dailyClaim.onclick = () => { const result = A.claimDailyGoals(s, Date.now()); notify(result.message); if (result.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
       const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
+      r82cApplyPick(box, nextFarm); /* R82C 第 2 項 */
       syncSeedHudTop();
       return true;
     }
@@ -370,8 +371,29 @@
     /* R78B：按鈕上的字來自 nextFarmStep 時，按下去也做同一件事。 */
     const goBtn = box.querySelector("[data-world-go]"); if (goBtn) goBtn.onclick = () => { const live = A.nextFarmStep ? A.nextFarmStep(current || s, Date.now()) : null; return questStep && live && (live.questAware || live.action === questStep.action) ? goNextFarmStep() : guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen(); };
     box.querySelectorAll("[data-r69a-festival-go]").forEach((button) => { button.onclick = () => goFestivalGoal(button.dataset.r69aFestivalGo); });
+    r82cApplyPick(box, farmNow); /* R82C 第 2 項 */
     paintHint(box.querySelector(".world-objective-hint"), hint);
     syncSeedHudTop();
+    return true;
+  }
+  /* R82C 第 2 項：nextFarmStep 掛了另一個同樣有效的目標（step.alternative）時，「現在做」底下並排兩個選項讓玩家自己挑。
+     兩邊一樣大、都不是黃色主鈕：主線那一邊沿用原本的按鈕（站在田邊時是狀態字），另一邊直接走去做那件事。
+     下一步怎麼判斷全在 nextFarmStep，這裡只負責擺出來。 */
+  function r82cApplyPick(box, step) {
+    const alt = step && step.alternative;
+    const now = box && box.querySelector('[data-audit="r67a-now"], [data-audit="r68a-now"]');
+    if (!alt || !now || now.classList.contains("r69a-festival-now")) return false;
+    const main = now.querySelector("[data-early-goal], [data-world-go], [data-r80b-task-copy]");
+    if (!main) return false;
+    now.dataset.r82cPick = alt.id;
+    const text = now.querySelector(":scope > span");
+    if (text) { const note = document.createElement("small"); note.className = "r82c-pick-note"; note.dataset.r82cPickNote = ""; note.textContent = "兩件都通往主線，先做哪件由你挑。另一件：" + alt.text; text.appendChild(note); }
+    const row = document.createElement("div"); row.className = "r82c-pick-row"; row.dataset.audit = "r82c-pick";
+    main.classList.remove("r63-primary"); main.classList.add("r82c-pick-main");
+    const button = document.createElement("button"); button.type = "button"; button.className = "r82c-pick-alt"; button.dataset.r82cPickAlt = alt.id;
+    button.textContent = alt.actionLabel; button.title = alt.text; button.setAttribute("aria-label", alt.actionLabel + "：" + alt.text);
+    button.onclick = () => { if (alt.id === "fishing_dock") visitSite("fishing_dock"); };
+    now.appendChild(row); row.appendChild(main); row.appendChild(button);
     return true;
   }
   // R44：作物不澆水也會長大；若玩家還沒澆完、作物就已成熟，成熟作物不能再澆，澆水步驟會卡住。

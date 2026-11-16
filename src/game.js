@@ -289,13 +289,22 @@
     const valueGapRatio = hasTradeoff ? roundCoins(Math.abs(nowValueCoins - waitValueCoins) / Math.max(1, nowValueCoins, waitValueCoins)) : 0;
     const unitText = Number.isInteger(orderUnitCoins) ? String(orderUnitCoins) : orderUnitCoins.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
     const sunlightUseText = waitSunlight >= 2 ? `可催熟 ${Math.floor(waitSunlight / 2)} 格` : waitSunlight > 0 ? "再 1 點可催熟 1 格" : "";
-    const nowText = `現在收：${nowQty} 份` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "") + (nowCoins > 0 ? `＋${kind === "market" ? "老農班伯早市" : "限時收購"} ${nowCoins} 金` : "") + (hasTradeoff ? `（訂單每份 ${unitText} 金）` : "");
-    const waitText = `等光再收：${waitQty} 份` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}（${sunlightUseText}）` : "") + (hasTradeoff ? "・收購結束，沒有獎金" : "");
+    /* R82C 第 3 項：早市（限時收購）兩邊都直接寫最後拿到什麼——現在收是幾份作物加幾金，等光是幾份作物加陽光、但錯過早市。
+       不再在旁邊寫「訂單每份幾金」，那一句會被讀成「這幾金就是賣掉那幾份的錢」。 */
+    const bonusName = kind === "market" ? "老農班伯早市" : "限時收購", missName = kind === "market" ? "早市" : "限時收購";
+    const nowShort = `${nowQty} 份${crop.name}` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "") + (nowCoins > 0 ? `＋${kind === "market" ? "早市" : "收購"} ${nowCoins} 金` : "");
+    const waitShort = `${waitQty} 份${crop.name}` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}` : "") + `・錯過${missName}`;
+    const nowText = hasTradeoff
+      ? `現在收：${nowQty} 份${crop.name}` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "") + (nowCoins > 0 ? `＋${bonusName} ${nowCoins} 金` : "")
+      : `現在收：${nowQty} 份` + (nowSunlight > 0 ? `＋陽光 ${nowSunlight}` : "");
+    const waitText = hasTradeoff
+      ? `等光再收：${waitQty} 份${crop.name}` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}（${sunlightUseText}）` : "") + `，但錯過${missName}`
+      : `等光再收：${waitQty} 份` + (waitSunlight > 0 ? `＋陽光 ${waitSunlight}（${sunlightUseText}）` : "");
     const tutorialText = `等 ${seconds} 秒，光到了再收：${waitQty} 份＋陽光 ${waitSunlight}（現在收只有 ${nowQty} 份）`;
     const helpText = kind === "tutorial" ? `按下後等 ${seconds} 秒，光到會自動收成` : "已選等光；光到了要自己收成";
     return { ok: true, plotIndex, cropId: crop.id, cropName: crop.name, kind, hasTradeoff, nowQty, waitQty, nowSunlight, waitSunlight,
-      nowCoins, waitCoins: 0, orderUnitCoins, sunlightUnitEquivalent, sunlightUseText, nowValueCoins, waitValueCoins, valueGapRatio,
-      waitMs, seconds, nowText, waitText, tutorialText, helpText, text: hasTradeoff ? nowText + "｜" + waitText : tutorialText };
+      nowCoins, waitCoins: 0, orderUnitCoins, orderUnitText: unitText, sunlightUnitEquivalent, sunlightUseText, nowValueCoins, waitValueCoins, valueGapRatio,
+      waitMs, seconds, nowText, waitText, nowShort, waitShort, tutorialText, helpText, text: hasTradeoff ? nowText + "｜" + waitText : tutorialText };
   }
   function queueLightHarvest(state, plotIndex, now) {
     const choice = lightHarvestChoice(state, plotIndex, now); if (!choice.ok) return { ok: false, reason: "unavailable" };
@@ -323,7 +332,8 @@
     const plot = tile && tile.plotIndex != null && state && Array.isArray(state.plots) ? state.plots[tile.plotIndex] : null; const crop = plot && plot.cropId ? CROPS[plot.cropId] : null;
     if (!crop) return "";
     const t = Number.isFinite(now) ? now : Date.now();
-    if (getCropProgress(state, plot, t).ready) return lightHarvestChoice(state, tile.plotIndex, t).ok ? "等光再收" : `收成・${crop.name}田`;
+    /* R82C 第 3 項：早市二選一時不先替玩家寫「等光再收」，跟 ui.js 選中田的大鈕同一種寫法。 */
+    if (getCropProgress(state, plot, t).ready) { const choice = lightHarvestChoice(state, tile.plotIndex, t); return choice.ok && !choice.hasTradeoff ? "等光再收" : `收成・${crop.name}田`; }
     return `生長中・${crop.name}田`;
   }
   // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）

@@ -943,8 +943,9 @@
         const showShortageHelp = cardState !== "stock" || isSubstitute;
         const chips = showShortageHelp && card.tasteLabels.length ? card.tasteLabels.map((label) => `<span class="r73b-taste">${esc(label)}</span>`).join("") : "";
         const help = showShortageHelp ? `<span class="r81a-shortage-help">${isSubstitute ? "可替代" : cardState === "token" ? "缺貨時可用代幣" : "缺貨"}<span class="r73b-tastes">${chips}</span></span>` : "";
+        /* R82C 第 4 項：圖示旁加上品名，番茄、草莓這種顏色相近的一眼分得出來。 */
         const aria = row.name + "，" + count + (hot ? "，熱門" : "") + (isSubstitute ? "，可替代" : "");
-        return `<button type="button" class="r72b-item r73b-item" aria-label="${esc(aria)}" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r78a-card-state="${cardState}" data-r79a-substitute="${isSubstitute ? "true" : "false"}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || cardState === "soldout" ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main r81a-item-summary"><small><span class="r79a-count">${count}</span></small>${hot ? '<span class="r81a-hot">熱門</span>' : ""}</span>${help}</button>`;
+        return `<button type="button" class="r72b-item r73b-item" aria-label="${esc(aria)}" data-r72b-item="${esc(row.id)}" data-r73b-mode="${card.mode}" data-r78a-card-state="${cardState}" data-r79a-substitute="${isSubstitute ? "true" : "false"}" data-r73b-tastes="${esc((row.tastes || []).join(","))}" ${arriving || cardState === "soldout" ? "disabled" : ""}><img class="r73b-item-icon" src="${esc(card.icon)}${versionQuery}" alt="" width="32" height="32"><span class="r73b-item-main r81a-item-summary"><b class="r82c-item-name" data-r82c-item-name>${esc(row.name)}</b><small><span class="r79a-count">${count}</span></small>${hot ? '<span class="r81a-hot">熱門</span>' : ""}</span>${help}</button>`;
       }).join("");
       // R74B（第 4 項）：回饋改放顧客卡上的短動畫與加分飄字；回饋列只留操作提示，
       // 新顧客出現時 session.feedback 已在 spawnNext 清除，不會留上一位的訊息。

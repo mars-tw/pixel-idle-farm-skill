@@ -173,7 +173,8 @@ test("存檔相容：兩條新進度可讀回，R81 已選過但沒有 R82 欄�
 
 test("第 6 項：新測試已接到 unit 清單最後", () => {
   const guard = read("scripts/guard-validation-writes.js");
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",\s*\];/);
+  /* R82 整合同步：同輪 C 線的 test-content-r82-play.js 也接在清單尾，B 線測試緊接在 r81-story 後面、後面只允許同輪 R82 測試。 */
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*\s*\];/);
 });
 
 if (!process.exitCode) console.log("VERIFIED content R82B branches (" + passed + " tests)");

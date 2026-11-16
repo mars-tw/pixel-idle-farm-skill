@@ -185,7 +185,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       assert.ok(await harvest("radish", true, 0) > 0);
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
       const c = await checkCard(page, tag, w, h, "第一枚章", true);
-      assert.match(c.card.text, new RegExp(`追光手冊：櫻桃蘿蔔・光裡收成（1／15）`), `${tag} 小卡文字`); /* R77C 同步：小卡分母統一 15 */
+      assert.match(c.card.text, new RegExp(`追光手冊：櫻桃蘿蔔・光裡收成（櫻桃蘿蔔 1／1 枚）`), `${tag} 小卡文字`); /* R82C 同步：小卡改按作物計（原為分母統一 15） */
       assert.match(c.card.text, /手札的圖鑑頁最上面多了一本追光手冊/, `${tag} 第一次拿章要提示手冊在哪`);
       assert.doesNotMatch(c.card.text, /\+0/);
       /* 「陽光照在幾格田」的標籤跟小卡同時出現時，小卡要讓開它。 */
@@ -208,7 +208,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
       assert.equal(await page.evaluate(() => { const n = document.querySelector("#toast-zone .settlement-card"); return n ? n.textContent.replace(/\s+/g, " ").trim() : ""; }), "", `${tag} 小卡出來時升級卡已經收掉`);
       const d = await checkCard(page, tag, w, h, "第二枚章", false);
-      assert.match(d.card.text, new RegExp(`^追光手冊：胡蘿蔔・光性達成（2／15）再 1 枚領：陽光 1 點、蓄光瓶永久多裝 1 點$`), `${tag} 之後的小卡寫印章與差幾枚領什麼`); /* R78C：3 枚改為非金幣獎勵 */
+      assert.match(d.card.text, new RegExp(`^追光手冊：胡蘿蔔・光性達成（胡蘿蔔 1／4 枚）全冊再 1 枚領：陽光 1 點、蓄光瓶永久多裝 1 點$`), `${tag} 之後的小卡寫印章與差幾枚領什麼`); /* R82C 同步：括號按作物計，差幾枚寫明全冊 */ /* R78C：3 枚改為非金幣獎勵 */
       await page.waitForFunction(cardHidden, null, { timeout: 8000 });
 
       /* 六、料理成果卡開著時，小卡先等著，不跟它搶位置；成果卡關掉才出來。 */
@@ -232,7 +232,7 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
       }
       await page.waitForFunction(cardShown, null, { timeout: 5000 });
       const e = await checkCard(page, tag, w, h, "集滿 3 枚", true);
-      assert.match(e.card.text, new RegExp(`追光手冊：小麥・煮成絕品（3／15）`)); assert.match(e.card.text, /集滿 3 枚了，到追光手冊領獎勵。/); /* R77C 同步：小卡分母統一 15 */
+      assert.match(e.card.text, new RegExp(`追光手冊：小麥・煮成絕品（小麥 1／4 枚）`)); /* R82C 同步：小卡改按作物計 */ assert.match(e.card.text, /集滿 3 枚了，到追光手冊領獎勵。/); /* R77C 同步：小卡分母統一 15 */
       await shot(page, tag, "4-milestone-card");
 
       /* 七、從小卡打開手冊，領第一份獎勵。 */

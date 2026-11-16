@@ -170,6 +170,7 @@ const unit=[
   "node scripts/test-content-r81-first-layout.js",
   "node scripts/test-content-r81-story.js",
   "node scripts/test-content-r82-branches.js",
+  "node scripts/test-content-r82-play.js",
 ];
 const commands=process.argv[2]==='r79'?['node scripts/test-r79-sunpatch.js','node scripts/test-r79-fun-e2e.js']:unit;
 for(const command of commands){console.log('EXECUTED '+command);const [exe,...args]=command.split(' '),r=cp.spawnSync(exe,args,{stdio:'inherit',windowsHide:true});assert.deepEqual(snapshot(),before,'Read-only provenance changed during '+command);if(r.status!==0)process.exit(r.status||1);}

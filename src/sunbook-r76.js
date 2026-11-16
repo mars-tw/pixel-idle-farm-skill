@@ -119,6 +119,11 @@
     return { got: got, total: total };
   }
   function counts(state) { normalize(state); flush(); return countsRaw(state); }
+  /* R82C 第 4 項：一種作物蓋了幾枚，寫成「小麥 1／4 枚」。 */
+  function cropCountText(state, cropId) {
+    const row = (state.sunbook && state.sunbook.stamps && state.sunbook.stamps[cropId]) || {}, ids = slotIds(state, cropId);
+    return cropName(cropId) + " " + ids.filter(function (id) { return !!row[id]; }).length + "／" + ids.length + " 枚";
+  }
 
   /* ---------- 還沒拿到的印章：一句話寫怎麼拿 ---------- */
   function hintFor(state, cropId, stampId) {
@@ -165,10 +170,13 @@
     for (const m of MILESTONES) if (!book.claimed[m.count] && before < m.count && now.got >= m.count) milestone = m.count;
     /* R77C 第 15 項：畫面上看到的分母統一用里程碑的 15 枚，不再跟已解鎖格數混用。 */
     const nextMile = MILESTONES.filter(function (m) { return !book.claimed[m.count] && m.count > now.got; })[0] || null;
+    /* R82C 第 4 項：小卡改按作物計（「小麥 1／4 枚」），跟手冊那一列同一種寫法；全冊枚數只留在里程碑。 */
+    const cropText = cropCountText(state, cropId);
     events.push({ state: state, cropId: cropId, stampId: stampId, cropName: cropName(cropId), stampName: STAMPS[stampId].name, got: now.got, total: now.total,
       displayGot: Math.min(now.got, LAST_COUNT), displayTotal: LAST_COUNT,
       nextCount: nextMile ? nextMile.count : 0, nextRemaining: nextMile ? nextMile.count - now.got : 0, nextRewardText: nextMile ? rewardParts(state, nextMile).join("、") : "",
-      text: "追光手冊：" + cropName(cropId) + "・" + STAMPS[stampId].name + "（" + Math.min(now.got, LAST_COUNT) + "／" + LAST_COUNT + "）", first: first, milestone: milestone });
+      cropCountText: cropText,
+      text: "追光手冊：" + cropName(cropId) + "・" + STAMPS[stampId].name + "（" + cropText + "）", first: first, milestone: milestone });
     if (events.length > 40) events.shift();
     return true;
   }
@@ -339,7 +347,7 @@
   function sync(state) { flush(); return normalize(state); }
 
   const API = { STAMPS: STAMPS, STAMP_ORDER: STAMP_ORDER, MILESTONES: MILESTONES, LAST_COUNT: LAST_COUNT, normalize: normalize, slotIds: slotIds, rows: rows, counts: counts, summary: summary,
-    claim: claim, sync: sync, takeEvents: takeEvents, noteDried: noteDried, notePerfect: notePerfect, hintFor: hintFor, install: install };
+    claim: claim, sync: sync, takeEvents: takeEvents, cropCountText: cropCountText, noteDried: noteDried, notePerfect: notePerfect, hintFor: hintFor, install: install };
   install();
   if (isNode) { module.exports = API; return; }
   root.FarmSunbook = API;
@@ -396,9 +404,9 @@
         return '<li data-r76c-hint="' + cell.id + '"><b>' + esc(cell.name) + "：</b>" + esc(cell.hint) + "</li>";
       }).join("");
       return '<li class="r76c-row' + (row.got === row.total ? " is-full" : "") + '" data-r76c-row="' + esc(row.cropId) + '">'
-        + '<div class="r76c-row-head"><span class="r76c-crop">' + esc((row.emoji ? row.emoji + " " : "") + row.name) + "</span>"
-        + (row.traitName ? '<span class="r76c-trait">' + esc(row.traitName) + "</span>" : "")
-        + '<span class="r76c-row-count">' + row.got + "／" + row.total + "</span></div>"
+        /* R82C 第 4 項：列首直接寫「小麥 1／4 枚」，一眼看出是這種作物蓋了幾枚。 */
+        + '<div class="r76c-row-head"><span class="r76c-crop">' + (row.emoji ? esc(row.emoji) + " " : "") + '<span class="r82c-crop-count" data-r82c-crop-count>' + esc(row.name + " " + row.got + "／" + row.total + " 枚") + "</span></span>"
+        + (row.traitName ? '<span class="r76c-trait">' + esc(row.traitName) + "</span>" : "") + "</div>"
         + '<ul class="r76c-cells">' + cells + "</ul>"
         + (hints ? '<details class="r78c-row-help"><summary>怎麼拿還缺的印章</summary><ul class="r76c-hints">' + hints + "</ul></details>" : '<p class="r76c-row-done">這一列蓋滿了。</p>')
         + "</li>";
@@ -572,7 +580,8 @@
     const latest = list[list.length - 1] || {};
     /* R77C 第 15 項：小卡也寫再幾枚領什麼。 */
     /* R77 整合：矮螢幕（手機橫式）一次只留一段說明；第一次拿章時「手冊在哪」比「再幾枚領什麼」要緊，差額改到手冊標題看。 */
-    const nextNote = !milestone && !(compact && note) && latest.nextRemaining > 0 && latest.nextRewardText ? "再 " + latest.nextRemaining + " 枚領：" + latest.nextRewardText : "";
+    /* R82C 第 4 項：括號裡改按作物計，這一句講的是整本手冊，寫明「全冊」免得跟作物的枚數混在一起。 */
+    const nextNote = !milestone && !(compact && note) && latest.nextRemaining > 0 && latest.nextRewardText ? "全冊再 " + latest.nextRemaining + " 枚領：" + latest.nextRewardText : "";
     node.innerHTML = '<button type="button" class="r76c-card-main" data-r76c-card-close title="點一下關閉">'
       + '<img src="' + art(iconFor(latest.cropId, latest.stampId) || COVER_ART) + '" alt="">'
       + '<span class="r76c-card-text">' + lines

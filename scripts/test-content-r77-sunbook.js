@@ -41,7 +41,7 @@ test("差幾枚與獎勵正確：蓋到第 1 枚後，還差 2 枚領第一份",
   const e = events[0];
   assert.equal(e.displayTotal, 15, "小卡分母要是 15");
   assert.equal(e.displayGot, 1);
-  assert.match(e.text, /（1／15）/, "小卡文字分母要是 15：" + e.text);
+  assert.match(e.text, /（小麥 1／4 枚）/, "小卡文字按作物計（R82C 同步，原為分母 15）：" + e.text);
   assert.equal(e.nextRemaining, 2, "還差 2 枚");
   assert.equal(e.nextCount, 3);
   assert.match(e.nextRewardText, /陽光 1 點.*蓄光瓶/, "要寫下一份領什麼：" + e.nextRewardText);

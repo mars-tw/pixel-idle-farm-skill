@@ -36,7 +36,7 @@ test("2 第一次只教等光，按下後光到自動收", () => {
 test("3 第二輪班伯早市兩邊各有一項較好", () => {
   const base = fresh(); base.stats.harvested.wheat = 3; base.sun.spawned = 1; ready(base, 0); preview(base, 0, 7);
   const choice = Game.lightHarvestChoice(base, 0, T); assert.equal(choice.kind, "market"); assert.equal(choice.hasTradeoff, true);
-  assert.match(choice.nowText, /趕得上|班伯早市/); assert.match(choice.waitText, /沒有獎金/);
+  assert.match(choice.nowText, /趕得上|班伯早市/); assert.match(choice.waitText, /錯過早市/); /* R82C 同步：等光那邊改寫最後結果「但錯過早市」 */
   const nowState = clone(base), waitState = clone(base), nowCoins = nowState.coins, waitCoins = waitState.coins;
   const nowOut = Game.harvest(nowState, 0, T + 1, () => 1);
   assert.equal(nowOut.added, choice.nowQty); assert.equal(nowOut.marketBonus, 14); assert.equal(nowState.coins - nowCoins, 14);
