@@ -3693,7 +3693,7 @@
       const el = addObjectPx(obDyn, "npcs", frame, cx, baselineY, TILE * 1.0, "shadowed", 0, "npc");
       if (el) {
         el.dataset.npc = tile.npc; el.dataset.tileId = tile.id;
-        if(tile.npc==='mayor'){el.style.width='64px';el.style.height='86px';el.style.left=pxv(cx-32);el.style.top=pxv(baselineY-86);el.style.backgroundImage='url(assets/generated/content-r10/mayor.png'+(window.FARM_VERSION_QUERY||'')+')';el.style.backgroundSize='64px 86px';el.style.backgroundPosition='0 0';}
+        if(tile.npc==='mayor'){el.style.width='64px';el.style.height='86px';el.style.left=pxv(cx-32);el.style.top=pxv(baselineY-86);el.style.backgroundImage='url(assets/generated/content-r81/mayor-map.png'+(window.FARM_VERSION_QUERY||'')+')';el.style.backgroundSize='64px 86px';el.style.backgroundPosition='0 0';}
         // Staging offset must not put the foreground child behind the orchard canopy.
         if(tile.npc==='child')el.style.zIndex=Math.round(baselineY);
       }
