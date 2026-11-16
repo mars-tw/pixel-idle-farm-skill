@@ -2039,3 +2039,42 @@ html body #questDock#questDock.r80b-decision-compact .r68a-objective-head .qp-st
   #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) { min-width: min(420px, calc(100vw - 40px)) !important; }
 }
 /* ===== R80 整合結束 ===== */
+/* ===== R81C（前十分鐘的小故事、鄰居對白、手札三層）開始 ===== */
+/* 第 1 項：祖母便箋留下的謎（開場便箋與餐籃便箋同一句），藍色細邊跟藍布包同一個顏色。 */
+.r81c-mystery { margin: 6px 0 10px; padding: 7px 10px; border-left: 3px solid #3f6fa8; border-radius: 4px; background: rgba(63, 111, 168, .09); color: #3b2a1a; font-size: 13px; line-height: 1.55; }
+/* 手機橫式（矮螢幕）：開場便箋多了這一段，兩顆按鈕改成並排一列，整張便箋仍放得進卡片裡。 */
+@media (max-height: 500px) {
+  #worldModal .r81c-mystery { margin: 2px 0 6px; padding: 4px 8px; font-size: 12px; line-height: 1.4; }
+  #worldModal .modal-body:has(> .r81c-mystery) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 8px; align-items: start; }
+  #worldModal .modal-body:has(> .r81c-mystery) > :not(button) { grid-column: 1 / -1; }
+  #worldModal .modal-body:has(> .r81c-mystery) > button { margin-top: 0 !important; margin-bottom: 0 !important; }
+}
+/* 兩位鄰居輪流說話時，頭像與名字跟著換人；名字顏色分得出是誰在說。 */
+.r76b-dialogue-head[data-r81c-speaker="elder"] b { color: #5b6e2a; }
+.r76b-dialogue-head[data-r81c-speaker="mayor"] b { color: #7a4a1e; }
+/* 地圖上的藍布包、藍布老麥田、鎮公所封存箱：後備小圖外圈一道藍布色，跟其他物件分得開。 */
+.r78c-scene-change[data-r81c-story] img { filter: drop-shadow(0 0 2px #3f6fa8) drop-shadow(0 1px 0 rgba(0, 0, 0, .35)); }
+.r78c-scene-label[data-r78c-route^="r81c_story"] { border-color: #3f6fa8; }
+/* 第 3 項：手札第一屏三層。現在做：目前主線卡把「現在做」一行排到最上面（字只留一行，放不下以「…」收尾，全文在提示裡），章節與進度縮成小字。 */
+#adventurePanel .r63a-main-story-wrap[data-r81c-tier="now"] > .story-subhead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+#adventurePanel [data-r81c-tier="now"] .r63a-main-story { gap: 4px; }
+#adventurePanel [data-r81c-tier="now"] .r63a-main-story .r68a-card-now { order: -1; }
+#adventurePanel [data-r81c-tier="now"] .r63a-main-story .r68a-card-now small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+#adventurePanel [data-r81c-tier="now"] .r63a-main-story .r68a-card-now button { white-space: nowrap; max-width: none; }
+#adventurePanel [data-r81c-tier="now"] .r63a-main-story .r68a-card-head { font-size: 11px; opacity: .9; grid-row: auto; grid-column: auto; }
+/* 今天可做：標題固定在這一段最上面（可交的卡排序是 -1，標題要再前面）。 */
+.r58-section[data-r81c-tier="today"] > .r81c-tier-head { order: -2; margin: 8px 0 4px; }
+.r58-section .r81c-today-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 8px; padding: 7px 10px; }
+.r58-section .r81c-today-card h4 { grid-column: 1; margin: 0; font-size: 13px; line-height: 1.35; }
+.r58-section .r81c-today-card .r81c-today-line { grid-column: 1; margin: 0; font-size: 12px; line-height: 1.4; color: #4f3a1f; overflow-wrap: anywhere; }
+.r58-section .r81c-today-card > button { grid-column: 2; grid-row: 1 / span 2; white-space: nowrap; min-height: 36px; }
+.r58-section .r81c-today-card[data-r81c-today="story"] { border-left: 3px solid #3f6fa8; }
+.r58-section .r81c-today-empty { margin: 0 0 4px; }
+/* 以後再說：預設收合，一行標題寫還有幾項。 */
+#adventurePanel .r81c-later { margin: 10px 0 4px; border-top: 1px dashed #d8b778; padding-top: 6px; }
+#adventurePanel .r81c-later > .r81c-later-toggle { display: flex; align-items: center; width: 100%; min-height: 40px; padding: 4px 8px; border: 0; border-radius: 6px; background: transparent; box-shadow: none; color: #75500e; font-size: 14px; font-weight: 700; text-align: left; cursor: pointer; }
+#adventurePanel .r81c-later > .r81c-later-toggle::before { content: "▸"; margin-right: 6px; }
+#adventurePanel .r81c-later.is-open > .r81c-later-toggle { margin-bottom: 6px; }
+#adventurePanel .r81c-later.is-open > .r81c-later-toggle::before { content: "▾"; }
+#adventurePanel .r81c-later > .r81c-later-body[hidden] { display: none !important; }
+/* ===== R81C 結束 ===== */

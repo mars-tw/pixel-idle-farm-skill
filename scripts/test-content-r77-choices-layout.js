@@ -144,7 +144,7 @@ function measure(page, selector) {
       await page.waitForFunction(() => {
         const n = document.querySelector('[data-r77b-bonus="merchant"]');
         if (n && n.getBoundingClientRect().width > 0) return true;
-        const more = document.querySelector('.side-pane.sel .r32-show-more, .side-pane.sel .r60-show-more');
+        const more = document.querySelector('.side-pane.sel .r32-show-more, .side-pane.sel .r60-show-more, .side-pane.sel .r81c-later-toggle[aria-expanded="false"]');
         if (more) more.click();
         return false;
       }, null, { timeout: 8000, polling: 300 });

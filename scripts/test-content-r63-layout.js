@@ -213,7 +213,7 @@ const HELP = `
         await page.evaluate(() => window.FarmWorld.openPanel('story'));
         await page.waitForTimeout(900);
         // 若有「再顯示」先展開全部，讓捲動提示接手顯示還剩幾項
-        const more = page.locator('.side-pane.sel .r32-show-more, .side-pane.sel .r60-show-more');
+        const more = page.locator('.side-pane.sel .r32-show-more, .side-pane.sel .r60-show-more, .side-pane.sel .r81c-later-toggle[aria-expanded="false"]');
         if (await more.count()) { await more.first().click().catch(() => {}); await page.waitForTimeout(700); }
         await page.evaluate(() => { const b = document.querySelector('.side-body'); if (b) b.scrollTop = 0; });
         await page.waitForTimeout(600);

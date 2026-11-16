@@ -85,9 +85,15 @@
       detailImage.alt=h.choice==='table'?'茶桌旁多留一張椅子':'留在葛瑞門邊的紅格餐籃';
       const caption=document.createElement('figcaption');caption.textContent=h.choice==='table'?'座位圖・一起坐下':'門邊的餐籃';
       detail.append(detailImage,caption);body.querySelector('article').append(detail);
+      /* R81C 第 1 項：送完餐籃，這一頁接著記下籃底那包藍布舊麥種後來怎麼了。 */
+      const S = window.StoryR76, stage = S && S.r81Stage ? S.r81Stage(s) : "";
+      if (stage) { const m = document.createElement("p"); m.className = "r81c-mystery"; m.dataset.r81cMystery = stage; m.textContent = stage === "done" ? S.r81Summary(s) : stage === "conflict" ? "籃底那包藍布舊麥種滾了出來，葛瑞的臉色一下子變了。" : s.r81story.choice === "plant" ? "藍布舊麥種照班伯說的種回田裡了，故事還沒說完。" : "藍布舊麥種交給葛瑞封存了，故事還沒說完。"; reply.after(m); }
       return;
     }
     body.innerHTML = `<article class="heirloom-paper"><span class="daily-kicker">祖母的第一張餐籃便箋</span><h3>先留一籃，再去賣</h3><p>在光裡種小麥或澆水，再收成這一株。從倉庫留兩份，走到葛瑞身邊，選一種送法。</p><p class="daily-progress">陽光照料後收成 ${h.sunWheat}/2 份・倉庫 ${Math.min(h.wheat,2)}/2 份</p><div class="heirloom-choices">${h.ready ? '<button id="heirloomDoorstep" type="button">留在門邊</button><button id="heirloomTable" type="button">一起坐下</button>' : '<button id="heirloomGuide" type="button">回田裡找陽光</button>'}</div><p class="heirloom-caption">交付取走兩份小麥。手記永久保留，不用連續登入。</p></article>`;
+    /* R81C 第 1 項：便箋留下的謎，跟開場那張便箋同一句；餐籃送到鎮長葛瑞手上時揭開。 */
+    const mysteryText = window.StoryR76 && window.StoryR76.R81_MYSTERY;
+    if (mysteryText) { const m = document.createElement("p"); m.className = "r81c-mystery"; m.dataset.r81cMystery = ""; m.textContent = mysteryText; const prog = body.querySelector(".daily-progress"); if (prog) prog.before(m); }
     if (el("heirloomGuide")) el("heirloomGuide").onclick = () => { H.start(s); farm().closeModal("dailyModal"); farm().safeSaveNow(); farm().refresh(); guide(s); };
     const illustration = document.createElement("img");
     illustration.className = "heirloom-illustration"; illustration.src = "assets/generated/r88/basket-512.webp" + (window.FARM_VERSION_QUERY || '');

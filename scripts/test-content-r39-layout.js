@@ -189,7 +189,7 @@ async function openPane(page, pane) {
         }
         // 展開後捲到底，最後一張卡完整可見
         await page.evaluate(() => {
-          const b = document.querySelector('.side-pane.sel .r32-show-more');
+          const b = document.querySelector('.side-pane.sel .r32-show-more, .side-pane.sel .r81c-later-toggle[aria-expanded="false"]');
           if (b) b.click();
         });
         await page.waitForTimeout(500);
