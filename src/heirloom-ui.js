@@ -45,6 +45,17 @@
     box.querySelector(".world-objective-title").textContent = q.title;
     setGuidance(box.querySelector(".world-objective-detail"), q.detail, q.short);
     box.querySelector("button").textContent = q.label;
+    /* R82 整合：第一次收成後材料齊了，祖母手記卡也並排「去修河畔釣台」；兩件都通往主線，由玩家挑（R82C 第 2 項）。 */
+    const g = A && A.nextGuidance ? A.nextGuidance(s, Date.now()) : null, alt = g && g.alternative, bottom = box.querySelector(".world-objective-bottom");
+    let pick = box.querySelector("[data-r82c-pick-alt]"), note = box.querySelector("[data-r82c-pick-note]");
+    if (alt && bottom) {
+      if (!pick) { pick = document.createElement("button"); pick.type = "button"; pick.className = "r82c-pick-alt r82-heirloom-pick"; pick.dataset.r82cPickAlt = alt.id; bottom.appendChild(pick); }
+      if (!note) { note = document.createElement("small"); note.className = "r82c-pick-note"; note.dataset.r82cPickNote = ""; bottom.before(note); }
+      pick.textContent = alt.actionLabel; pick.title = alt.text; pick.setAttribute("aria-label", alt.actionLabel + "：" + alt.text);
+      note.textContent = "也可以先" + alt.short + "，兩件都通往主線，先做哪件由你挑。";
+      pick.onclick = () => { if (alt.id === "fishing_dock" && window.FarmWorld && window.FarmWorld.visitSite) window.FarmWorld.visitSite("fishing_dock"); };
+      box.dataset.r82HeirloomPick = alt.id;
+    } else { if (pick) pick.remove(); if (note) note.remove(); delete box.dataset.r82HeirloomPick; }
     return true;
   }
   function renderPage(s, body) {
