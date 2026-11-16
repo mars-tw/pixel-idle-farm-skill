@@ -692,8 +692,12 @@
   }
   function nextGuidance(state, now) {
     const t = Number.isFinite(now) ? now : Date.now();
-    const next = storyGuidance(state, t) || heirloomGuidance(state, t) || nextFarmStep(state, t);
+    const lead = storyGuidance(state, t) || heirloomGuidance(state, t);
+    const farm = nextFarmStep(state, t), next = lead || farm;
     if (!next || typeof next.text !== "string" || typeof next.short !== "string") return next;
+    /* R82 整合：餐籃與舊麥種故事的指示排在前面時，也帶上 R82C「第一次收成後兩件挑一件」的另一個選項；
+       光正要處理（折光、等光、催熟、在光裡照料）時照 R82C 原規則不帶。不帶的話這個選項在第 1 章幾乎永遠被蓋掉。 */
+    if (lead && !lead.alternative && farm && farm.alternative && !["refract", "catch_sun", "ripen"].includes(lead.action) && lead.sunlit !== true) return Object.assign({}, lead, { alternative: farm.alternative });
     return next;
   }
 

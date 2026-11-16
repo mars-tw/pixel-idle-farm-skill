@@ -156,4 +156,17 @@ test("8 舊麥種故事裡要去田裡的指示，任務卡按鈕走一般田地
   assert.doesNotMatch(go, /step\.guidanceScope === "r81_story" && window\.StoryR76 && window\.StoryR76\.r81Go/, "不可再把所有故事指示都交給 r81Go");
 });
 
+test("9 餐籃或故事指示排在前面時，第一次收成後的另一個選項（去修河畔釣台）仍會帶上", () => {
+  /* R82 整合：重拍時發現 R82C 的二選一在第 1 章被餐籃與故事指示整個蓋掉。 */
+  const s = fresh(); s.coins = 50; A.record(s, { type: "talk", npcId: "mayor" }, T0); assert.equal(G.plant(s, 0, "wheat", T0).ok, true); A.record(s, { type: "plant", cropId: "wheat" }, T0);
+  assert.equal(A.claim(s, "c1_homecoming", T0).ok, true); s.plots[0].plantedAt = T0 - 3600000; s.plots[0].wateredAt = T0 - 3599999;
+  const r = G.harvest(s, 0, T0 + 1, () => 1); A.record(s, { type: "harvest", cropId: "wheat", count: r.added }, T0 + 1);
+  s.materials.wood = 4; s.materials.stone = 2; s.heirloom.started = true;
+  const farm = A.nextFarmStep(s, T0 + 2), g = A.nextGuidance(s, T0 + 2);
+  assert.ok(farm.alternative, "nextFarmStep 掛了另一個選項");
+  if (g !== farm && !["refract", "catch_sun", "ripen"].includes(g.action)) assert.deepEqual(g.alternative, farm.alternative, "排在前面的指示也帶上同一個選項");
+  else assert.ok(g.alternative || ["refract", "catch_sun", "ripen"].includes(g.action), "主線本身就帶選項或正在處理光");
+  assert.equal(typeof g.alternative.short, "string"); assert.ok([...g.alternative.short].length <= 12);
+});
+
 console.log("VERIFIED content R82A guidance (" + passed + " tests)");
