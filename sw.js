@@ -383,6 +383,7 @@ const CORE_ASSETS = [
   versioned("./src/story-r76.js"),
   versioned("./src/sunbook-r76.js"),
   versioned("./src/choices-r77.js"),
+  versioned("./src/waitplay-r82.js"),
   versioned("./assets/generated/content-r76/portrait-elder.png"),
   versioned("./assets/generated/content-r76/portrait-merchant.png"),
   versioned("./assets/generated/content-r76/portrait-child.png"),

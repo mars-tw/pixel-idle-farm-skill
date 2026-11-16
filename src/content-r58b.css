@@ -2119,3 +2119,31 @@ html body #questDock#questDock.r80b-decision-compact .r68a-objective-head .qp-st
 #adventurePanel .r81c-later.is-open > .r81c-later-toggle::before { content: "▾"; }
 #adventurePanel .r81c-later > .r81c-later-body[hidden] { display: none !important; }
 /* ===== R81C 結束 ===== */
+/* ===== R82C：前幾分鐘有得選、等待時有事做 開始 ===== */
+/* R82C 第 1 項：田邊小事。小小一塊名牌，不是黃色主鈕；放在田格旁邊的空地上，不蓋到要操作的那一格。 */
+.r82c-chore { position: absolute; transform: translate(-50%, -100%); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-width: 52px; min-height: 44px; padding: 3px 6px 4px; border: 2px solid #7a5530; border-radius: 10px; background: rgba(255, 248, 228, .94); color: #4f3519; box-shadow: 0 2px 0 rgba(70, 44, 18, .35); cursor: pointer; animation: r82c-chore-in .35s ease-out both; }
+.r82c-chore .r82c-chore-art { width: 28px; height: 28px; image-rendering: pixelated; pointer-events: none; }
+.r82c-chore b { font-size: 11px; font-weight: 900; line-height: 1.1; white-space: nowrap; }
+.r82c-chore.is-missing-art::before { content: ""; display: block; width: 18px; height: 18px; margin-bottom: 2px; border: 2px dashed #a07a46; border-radius: 50%; background: #f3e2b8; }
+.r82c-chore.is-claimed { opacity: .72; }
+.r82c-chore:focus-visible { outline: 3px solid #2f6db3; outline-offset: 2px; }
+@keyframes r82c-chore-in { from { opacity: 0; transform: translate(-50%, -80%); } to { opacity: 1; transform: translate(-50%, -100%); } }
+@media (prefers-reduced-motion: reduce) { .r82c-chore { animation: none; } }
+/* R82C 第 2 項：任務卡「現在做」兩件挑一件——說明在上、兩顆一樣大的選項在下，兩顆都不用黃色主鈕。 */
+#questDock [data-r82c-pick] { grid-template-columns: minmax(0, 1fr) !important; }
+#questDock [data-r82c-pick] .r82c-pick-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; width: 100%; min-width: 0; }
+#questDock [data-r82c-pick] .r82c-pick-row > :is(button, span) { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; min-width: 0 !important; max-width: none; min-height: 44px; margin: 0; padding: 4px 8px !important; border: 2px solid #8b5b22; border-radius: 8px; background: #fffaf0; color: #503314; font-size: 13px; font-weight: 900; text-align: center; white-space: nowrap !important; overflow: hidden; text-overflow: ellipsis; box-shadow: none; }
+#questDock [data-r82c-pick] .r82c-pick-row > span { border-style: dashed; }
+#questDock [data-r82c-pick] .r82c-pick-note { display: block; margin-top: 2px; color: #6a4a12; font-size: 12px; line-height: 1.35; }
+#questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) [data-r82c-pick] .r82c-pick-note { display: none !important; }
+/* 提示訊息出現時任務卡暫時收成一行（R28），那一行只放得下一顆鈕：先留主線那顆，提示消失、卡片展開後兩顆都回來。 */
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) [data-r82c-pick] .r82c-pick-alt { display: none !important; }
+html body:has(#toast-zone > .toast):not(:has(.side-panel.world-panel-open)) #questDock:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not(.r80b-decision-compact) [data-r82c-pick] .r82c-pick-row { display: flex; width: auto; }
+/* R82C 第 3 項：早市兩顆鈕寫最後拿到什麼，字比較長；窄螢幕在「・」處換行，不截掉「錯過早市」。 */
+#sceneActionBar [data-r79b-tradeoff] .sab-t { min-width: 0; white-space: normal !important; }
+#sceneActionBar [data-r79b-tradeoff] .r79b-action-detail { white-space: normal !important; word-break: keep-all; overflow-wrap: anywhere; }
+/* R82C 第 4 項：擺攤商品卡加品名；追光手冊列首寫「小麥 1／4 枚」。 */
+.r72b-item .r82c-item-name { display: block; max-width: 100%; overflow: hidden; color: #3f2a12; font-size: 13px; font-weight: 900; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.r76c-crop .r82c-crop-count { white-space: nowrap; }
+@media (max-width: 520px) { .r72b-item .r82c-item-name { font-size: 12px; } }
+/* ===== R82C 結束 ===== */

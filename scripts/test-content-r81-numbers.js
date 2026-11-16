@@ -76,7 +76,7 @@ test("擺攤第一場同時一位、第二場起兩位，三種客人耐心都�
   assert.deepEqual(F.STAR_THRESHOLDS, [{ stars: 1, score: 50 }, { stars: 2, score: 120 }, { stars: 3, score: 200 }]);
 });
 
-test("商品卡常態只顯示圖示、剩量、熱門，缺貨才補口味與替代說明；零星寫做法與 5 金保底", () => {
+test("商品卡常態只顯示圖示、品名、剩量、熱門（R82C 同步：加回品名），缺貨才補口味與替代說明；零星寫做法與 5 金保底", () => {
   const source = fs.readFileSync("src/festival-stall-r72.js", "utf8");
   const game = source.slice(source.indexOf("function renderGame"), source.indexOf("function renderResult"));
   assert.match(game, /const hot = !!marketItem/);

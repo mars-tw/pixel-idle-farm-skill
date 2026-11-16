@@ -25,7 +25,7 @@ test("2 早市按畫面訂單單價換算，兩邊差距不超過兩成", () => 
   const c = Game.lightHarvestChoice(s, 0, T);
   assert.equal(c.kind, "market"); assert.equal(c.orderUnitCoins, 7.25); assert.equal(c.nowCoins, 15);
   assert.equal(c.nowValueCoins, 29.5); assert.equal(c.waitValueCoins, 29); assert.ok(c.valueGapRatio <= 0.2, `價值差 ${c.valueGapRatio}`);
-  assert.match(c.nowText, /訂單每份 7\.25 金/); assert.match(c.waitText, /陽光 2（可催熟 1 格）/);
+  assert.match(c.nowText, /班伯早市 15 金/); assert.match(c.waitText, /陽光 2（可催熟 1 格）/); /* R82C 同步：現在收改寫最後拿到幾份加幾金，不再寫每份單價 */
   const mixed = fresh(); mixed.stats.harvested.wheat = 1; mixed.sun.spawned = 1; mixed.orders = [{ id: "shown_mixed", wants: { wheat: 2, carrot: 2 }, rewardCoins: 20 }]; ready(mixed, 0); preview(mixed, 0);
   const m = Game.lightHarvestChoice(mixed, 0, T);
   assert.equal(m.orderUnitCoins, 2.5); assert.equal(m.nowCoins, 5); assert.equal(m.nowValueCoins, 10); assert.equal(m.waitValueCoins, 10); assert.equal(m.valueGapRatio, 0);

@@ -57,7 +57,7 @@ test("光裡收成：光還照著時收成才蓋；喜光作物同時拿到光�
   assert.equal(stamps(s, "wheat"), "lit,trait");
   const events = Book.takeEvents(s);
   /* R77C 同步：小卡分母統一為里程碑 15 枚（原為已解鎖格數 4），counts() 的 total 不變。 */
-  assert.deepEqual(events.map((e) => e.text), ["追光手冊：小麥・光裡收成（1／15）", "追光手冊：小麥・光性達成（2／15）"]);
+  assert.deepEqual(events.map((e) => e.text), ["追光手冊：小麥・光裡收成（小麥 1／4 枚）", "追光手冊：小麥・光性達成（小麥 2／4 枚）"]); /* R82C 同步：小卡改按作物計 */
   assert.deepEqual(events.map((e) => e.first), [true, false]);
   assert.deepEqual(Book.takeEvents(s), [], "事件拿過就清掉");
 
@@ -203,17 +203,17 @@ test("每種已解鎖作物一列，沒有對應玩法的格子不出現", () =>
   assert.match(Book.hintFor(all, "strawberry", "trait"), /別讓草莓照到光.*整批都是優質/);
 });
 
-test("小卡文字的分母統一為 15 枚（R77C 同步，原為已解鎖格數）；還沒解鎖的作物先記著、不通知", () => {
+test("小卡文字按作物計「小麥 1／4 枚」（R82C 同步，原為統一 15 枚）；還沒解鎖的作物先記著、不通知", () => {
   const s = kitchen(fresh(1)); s.upgrades.plotCount = 0;
   perfect(s, "baked_carrot");
   const events = Book.takeEvents(s);
-  assert.deepEqual(events.map((e) => e.text), ["追光手冊：小麥・煮成絕品（1／15）"]);
+  assert.deepEqual(events.map((e) => e.text), ["追光手冊：小麥・煮成絕品（小麥 1／4 枚）"]);
   assert.deepEqual(Book.counts(s), { got: 1, total: 4 });
   setLevel(s, 2); s.upgrades.plotCount = 1;
   assert.deepEqual(Book.counts(s), { got: 2, total: 8 }, "胡蘿蔔那一列出現時章已經蓋好");
   assert.equal(Book.rows(s)[1].cells.filter((c) => c.got).map((c) => c.id).join(","), "perfect");
   grow(s, 0, "wheat", 0); light(s, [0]); Game.harvest(s, 0, T, () => 1);
-  assert.deepEqual(Book.takeEvents(s).map((e) => e.text), ["追光手冊：小麥・光裡收成（3／15）", "追光手冊：小麥・光性達成（4／15）"]);
+  assert.deepEqual(Book.takeEvents(s).map((e) => e.text), ["追光手冊：小麥・光裡收成（小麥 2／4 枚）", "追光手冊：小麥・光性達成（小麥 3／4 枚）"]);
 });
 
 test("第一次拿到印章只提示一次，存檔讀回來也不再提示", () => {
