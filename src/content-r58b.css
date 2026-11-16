@@ -2119,3 +2119,23 @@ html body #questDock#questDock.r80b-decision-compact .r68a-objective-head .qp-st
 #adventurePanel .r81c-later.is-open > .r81c-later-toggle::before { content: "▾"; }
 #adventurePanel .r81c-later > .r81c-later-body[hidden] { display: none !important; }
 /* ===== R81C 結束 ===== */
+/* ===== R82B（舊麥種兩條專屬玩法）開始 ===== */
+/* 傳家作物與鎮誌舊物共用藍布外圈；正式圖未到時，後備圖加米色底，玩家仍看得出這是可互動物件。 */
+.r78c-scene-change[data-r82b-branch] { border-radius: 9px; }
+.r78c-scene-change[data-r82b-branch] img { filter: drop-shadow(0 0 3px rgba(42, 91, 145, .92)) drop-shadow(0 2px 0 rgba(42, 31, 18, .42)); }
+.r78c-scene-change[data-r82b-fallback] { padding: 3px; background: rgba(255, 248, 226, .9); box-shadow: 0 0 0 2px #3f6fa8, 0 2px 0 rgba(61, 42, 22, .35); }
+.r78c-scene-change[data-r82b-branch="plant"] { transform: translate(-50%, -100%) scale(1.08); }
+.r78c-scene-change[data-r82b-branch="decoration"] { box-shadow: 0 0 0 2px #c79a39, 0 2px 0 rgba(61, 42, 22, .35); }
+/* 專用田互動框固定顯示作物圖示；圖示不接收點擊，不會擋到下方選項。 */
+.r76b-dialogue[data-r82b-branch="plant"] .r76b-dialogue-card { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 8px; }
+.r76b-dialogue[data-r82b-branch="plant"] .r76b-dialogue-head,
+.r76b-dialogue[data-r82b-branch="plant"] .r76b-choice-list,
+.r76b-dialogue[data-r82b-branch="plant"] .r76b-dialogue-actions { grid-column: 1 / -1; }
+.r82b-crop-icon { grid-column: 1; width: 36px; height: 36px; align-self: center; object-fit: contain; image-rendering: pixelated; pointer-events: none; border-radius: 7px; background: #fff8e8; box-shadow: 0 0 0 2px #3f6fa8; }
+.r76b-dialogue[data-r82b-branch="plant"] .r76b-dialogue-line { grid-column: 2; align-self: center; }
+.r58-section .r81c-today-card[data-r81c-today^="r82b-"] { border-left: 3px solid #3f6fa8; }
+@media (max-width: 480px) {
+  .r76b-dialogue[data-r82b-branch="plant"] .r76b-dialogue-card { grid-template-columns: 34px minmax(0, 1fr); }
+  .r82b-crop-icon { width: 30px; height: 30px; }
+}
+/* ===== R82B 結束 ===== */

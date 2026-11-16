@@ -1110,10 +1110,12 @@
       const route = routes[id], marker = c4Markers[id];
       return { npcId: id, choiceId: route, done: true, decision: route, label: marker[route], marker: { anchor: marker.anchor, art: marker.art } };
     });
-    /* R81C 第 1 項：藍布舊麥種的地圖物件（還沒決定時在鎮長葛瑞腳邊，決定後在水井旁或告示牌旁）跟其他物件一起畫。 */
+    /* R81C／R82B：藍布舊麥種的主物件，以及封存線分天出現的鎮誌舊物與永久擺飾，一起交給場景層畫。 */
     let storyRows = [];
     try { storyRows = R && typeof R.r81SceneRows === "function" ? R.r81SceneRows(state) : []; } catch (_) { storyRows = []; }
-    return choiceRows.concat(chapterRows, storyRows);
+    let branchRows = [];
+    try { branchRows = R && typeof R.r82SceneRows === "function" ? R.r82SceneRows(state, Date.now()) : []; } catch (_) { branchRows = []; }
+    return choiceRows.concat(chapterRows, storyRows, branchRows);
   }
 
   /* ---------- 接上既有函式（每個只包一次） ---------- */
@@ -1646,7 +1648,8 @@
       const routeNpc = NPC_ORDER.includes(row.npcId);
       /* R81C：藍布舊麥種的物件點下去也是走過去打開那一段（爭執、具名訂單、收尾或之後的一句話）。 */
       if (row.r81c) node.dataset.r81cStory = row.choiceId;
-      node.onclick = (event) => { event.stopPropagation(); if (routeNpc) walkToMarker(state, row.npcId); else if (row.r81c && R && typeof R.r81Go === "function") R.r81Go(state); else toast(row.label); };
+      if (row.r82b) { node.dataset.r82bBranch = row.r82bKind || row.choiceId; if (row.artFallback) node.dataset.r82bFallback = ""; }
+      node.onclick = (event) => { event.stopPropagation(); if (routeNpc) walkToMarker(state, row.npcId); else if (row.r81c && R && typeof R.r81Go === "function") R.r81Go(state); else if (row.r82b && R && typeof R.r82Go === "function") R.r82Go(state, row); else toast(row.label); };
       world.appendChild(node);
       /* 名牌另外放一層在最上面：市集攤前面那一排會被農舍屋頂蓋到，名牌不能跟著物件一起被遮。 */
       const tag = document.createElement("span"), shift = labelShift[key] || 0;
