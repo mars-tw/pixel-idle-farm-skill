@@ -2,7 +2,7 @@
  "model": "muse-wonder-1.0 via muse.image_generation",
  "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、裁切、縮放",
  "generated": "2026-11-16",
- "note": "鎮長地圖小人改戴禮帽，與 content-r77/portrait-mayor.png 頭像同一人；參考原本的 content-r10/mayor.png 姿勢與服裝。兩倍解析度（96×128），地圖上仍以 64×86 顯示。",
+ "note": "鎮長地圖小人改戴禮帽，與 content-r77/portrait-mayor.png 頭像同一人；參考原本的 content-r10/mayor.png 姿勢與服裝。兩倍解析度（96×128），地圖上仍以 64×86 顯示。 另有 R81C 故事地圖物件三張（藍布舊麥種包、藍布老麥田、鎮公所封存箱），96×96 透明背景，參考 ref_sign 風格與 r66 小麥。",
  "files": [
   {
    "file": "mayor-map.png",
@@ -13,6 +13,36 @@
    "bytes": 15229,
    "sha256": "7351c3a148f83db22efd2d5ef2b24ad45c4ecb339fcb9c57ac6af5817900965e",
    "source": "muse.image_generation 新生成（1024×1024 洋紅底原圖）"
+  },
+  {
+   "file": "story-pouch.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 12464,
+   "sha256": "1d204fc25b454935bcb064eadbf1fe44af3c01836a687388dea2e77f83139e73",
+   "source": "muse.image_generation 新生成（sheet_story.png，1024×1024 洋紅底三件一張）"
+  },
+  {
+   "file": "story-oldwheat-field.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 15124,
+   "sha256": "eac7b07af9653a471bfce0ab660996b0f59c9de2a69628de41d3af1ed0c28482",
+   "source": "muse.image_generation 新生成（sheet_story.png，1024×1024 洋紅底三件一張）"
+  },
+  {
+   "file": "story-seal-box.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 15769,
+   "sha256": "b2fcde4a536f55bfd7a1c733a1d40c87bdde6fff51ca838febf3551c6681e55e",
+   "source": "muse.image_generation 新生成（sheet_story.png，1024×1024 洋紅底三件一張）"
   }
  ]
 }

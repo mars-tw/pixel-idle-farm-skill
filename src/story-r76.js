@@ -205,7 +205,7 @@
   const R81_PENDING = { anchor: "npc:mayor", label: "藍布舊麥種・等你決定" };
   /* 地圖物件圖：檔名先接好，圖到了把那一項加進 R81_ART_READY；沒到之前用現成的小圖（種子包、種植、印章）當後備，三個樣子彼此不同。 */
   const R81_ART = { pending: "assets/generated/content-r81/story-pouch.png", plant: "assets/generated/content-r81/story-oldwheat-field.png", seal: "assets/generated/content-r81/story-seal-box.png" };
-  const R81_ART_READY = [];
+  const R81_ART_READY = ["pending", "plant", "seal"];
   const R81_ART_FALLBACK = { pending: "assets/generated/r83/seed-32.png", plant: "assets/generated/r66/native/tool_plant-32.png", seal: "assets/generated/r83/stamp-32.png" };
   function r81Art(key) { return R81_ART_READY.includes(key) && R81_ART[key] ? R81_ART[key] : R81_ART_FALLBACK[key]; }
   const isObj81 = (v) => !!v && typeof v === "object" && !Array.isArray(v);
