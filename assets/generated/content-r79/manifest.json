@@ -11,9 +11,10 @@
     128,
     128
    ],
-   "bytes": 24940,
-   "sha256": "e8c18ffdd8594faa7fbde3273e780cbe89e029f780c73edb8f8344d436358ba1",
-   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）"
+   "bytes": 16766,
+   "sha256": "ef4317d4cbbbf0a8833b436dc9482d6e04a6f4c04dfd682b8e4e152c9b6260eb",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）",
+   "note": "R81 重裁：每個物件各自裁切、三張同一縮放比例，不再夾到隔壁格"
   },
   {
    "file": "pot-good.png",
@@ -21,9 +22,10 @@
     128,
     128
    ],
-   "bytes": 27476,
-   "sha256": "cc7bd4f8f13eb029e1e17d25a5114210afeedb76bc8d9230d894c6ec5b9a1cce",
-   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）"
+   "bytes": 15630,
+   "sha256": "26334937d2467ac04ff148e8ca3c2e7412ff3cb998968be55f78423cdcd0d6dd",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）",
+   "note": "R81 重裁：每個物件各自裁切、三張同一縮放比例，不再夾到隔壁格"
   },
   {
    "file": "pot-low.png",
@@ -31,9 +33,10 @@
     128,
     128
    ],
-   "bytes": 17462,
-   "sha256": "64f891f8422ffde44630e53d3649ce8677182b5e3d8f2788de70c078c99b67df",
-   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）"
+   "bytes": 11665,
+   "sha256": "95863f9496ef6c66551057ea9807a961b7c3e5eb695a6b606840368382880929",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）",
+   "note": "R81 重裁：每個物件各自裁切、三張同一縮放比例，不再夾到隔壁格"
   },
   {
    "file": "stall-booth.png",
