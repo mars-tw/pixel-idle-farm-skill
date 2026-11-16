@@ -2012,3 +2012,18 @@ body:has(.r75a-sun-preview) #toast-zone:not(:has(.settlement-card)):not(:has(.mi
   #toast-zone:has(.settlement-card):not(:has(.milestone-card)) { left: 8px !important; right: auto !important; }
 }
 /* ===== R80B 結束 ===== */
+/* ===== R80 整合：任務卡縮小模式（r80b-decision-compact）的內部排版 ===== */
+/* 縮成 224px 時原本的排版沒跟著改：中文字被壓成一個字寬變直排、「現在做」那句往下延伸、主要按鈕被擠出卡片。
+   縮小模式下標題、任務名、「現在做」那句都只留一行，放不下以「…」收尾；按鈕固定在同一行右側。 */
+#questDock.r80b-decision-compact .r68a-objective-head { min-width: 0; }
+#questDock.r80b-decision-compact .r68a-objective-head .qp-step { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+#questDock.r80b-decision-compact .r68a-objective-head .qp-step > span { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) { display: flex; align-items: center; gap: 6px; min-width: 0; flex-wrap: nowrap; }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > span { flex: 1 1 auto; min-width: 0; display: block; overflow: hidden; }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > span > b { display: none; }
+#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now):not(.r69a-festival-now) small { display: block !important; max-width: 100%; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis; -webkit-line-clamp: unset !important; line-height: 1.3; }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > span { white-space: nowrap !important; max-height: 2.6em; }
+/* 224px 扣掉收合鈕與內距只剩 131px，主要按鈕就佔 89px；桌機縮小模式改成 300px，高度上限照舊。 */
+@media (min-width: 860px) { #questDock.r80b-decision-compact { width: min(300px, calc(100vw - 40px)) !important; } }
+#questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > button { flex: 0 0 auto; white-space: nowrap; }
+/* ===== R80 整合結束 ===== */
