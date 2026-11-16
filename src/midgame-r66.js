@@ -441,7 +441,7 @@
         const check = canChooseFacilityRoute(state, type, route.id, Date.now());
         const input = inputText(route.input);
         const output = route.passive ? "收雞蛋時多 1 顆雞蛋" : `${formatDuration(route.intervalMs)}產 ${route.amount || 1} 份${route.itemName}`;
-        return `<article class="r80a-route-card${active ? " is-active" : ""}" data-r80a-route-card="${esc(route.id)}"><img src="${esc(routeItemArt(route.itemId))}?v=content-r81-20261116-1" alt=""><div><h3>${esc(route.label)}</h3><p>操作：${esc(route.action)}</p><p>投入：${esc(input)}</p><p>產出：${esc(output)}</p><small>${esc(route.useText)}</small></div><button type="button" data-r80a-route="${esc(route.id)}" ${active || !check.ok ? "disabled" : ""}>${active ? "目前路線" : check.ok ? esc(route.action) : esc(check.message)}</button></article>`;
+        return `<article class="r80a-route-card${active ? " is-active" : ""}" data-r80a-route-card="${esc(route.id)}"><img src="${esc(routeItemArt(route.itemId))}?v=content-r82-20261117-1" alt=""><div><h3>${esc(route.label)}</h3><p>操作：${esc(route.action)}</p><p>投入：${esc(input)}</p><p>產出：${esc(output)}</p><small>${esc(route.useText)}</small></div><button type="button" data-r80a-route="${esc(route.id)}" ${active || !check.ok ? "disabled" : ""}>${active ? "目前路線" : check.ok ? esc(route.action) : esc(check.message)}</button></article>`;
       }).join("");
       const readyText = current.passive ? "這條路線不用等倒數，收雞蛋時直接生效。" : current.ready ? `已經有 ${current.pending} 份可以收。` : `${formatDuration(current.nextInMs)}後可以收${current.itemName}。`;
       overlay.innerHTML = `<div class="r80a-facility-card"><button type="button" class="r80a-facility-close" aria-label="關閉">×</button><h2>${esc(current.name)}怎麼運作</h2><p class="r80a-active-route">目前走「${esc(current.routeLabel)}」。${esc(readyText)}</p><div class="r80a-route-grid">${routeCards}</div><div class="r80a-facility-actions"><button type="button" data-r80a-collect ${current.passive || !current.ready ? "disabled" : ""}>${current.passive ? "收蛋時自動生效" : current.ready ? `收取${esc(current.itemName)}` : "還在準備"}</button><button type="button" data-r80a-close>回到農場</button></div></div>`;
@@ -475,7 +475,7 @@
       btn.setAttribute("aria-label", label);
       const size = Math.min(Math.round(tileSize * 1.08), Math.floor(tileSize * 1.5)); // R71B：設施圖寬度不超過一格半
       btn.style.cssText = `left:${Math.round((tile.x + 0.5) * tileSize)}px;top:${Math.round((tile.y + 1) * tileSize)}px;width:${size}px;height:${size}px;z-index:${Math.round((tile.y + 1) * tileSize) + 2};`;
-      btn.innerHTML = `<img src="${esc(art)}?v=content-r81-20261116-1" alt="" draggable="false">${dataset && dataset.r66bFacility ? `<span class="r74a-facility-name">${esc(label.split("，")[0])}</span><span class="r80a-facility-route">${esc(dataset.r80aRouteLabel || "尚未選路線")}</span>` : ""}`;
+      btn.innerHTML = `<img src="${esc(art)}?v=content-r82-20261117-1" alt="" draggable="false">${dataset && dataset.r66bFacility ? `<span class="r74a-facility-name">${esc(label.split("，")[0])}</span><span class="r80a-facility-route">${esc(dataset.r80aRouteLabel || "尚未選路線")}</span>` : ""}`;
       btn.onclick = (ev) => { ev.stopPropagation(); onClick(); };
       world.appendChild(btn);
       return btn;
@@ -524,7 +524,7 @@
       btn.dataset.r66bBuild = row.type;
       btn.disabled = row.built || !row.canBuild;
       btn.title = `${row.name}・${row.costCoins} 金・${row.produceText}`;
-      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r81-20261116-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small><span class="bw-costs">${row.costCoins} 金</span><span class="bw-status">${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</span></small></span>`;
+      btn.innerHTML = `<span class="bw-ic"><img class="r66b-build-art" src="${esc(FACILITIES[row.type].art)}?v=content-r82-20261117-1" alt=""></span><span class="bw-t">${esc(row.name)}<em class="bw-effect">${esc(row.produceText)}</em><small><span class="bw-costs">${row.costCoins} 金</span><span class="bw-status">${row.built ? "已建造" : row.canBuild ? "可以建造" : esc(row.gapText || "還差一點")}</span></small></span>`;
       btn.onclick = (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         state.interaction.buildType = row.type;

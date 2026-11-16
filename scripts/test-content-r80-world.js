@@ -355,7 +355,7 @@ test("原始碼：註解不放在程式後面、玩家看到的新字不夾英�
   const src = read("src/choices-r77.js");
   assert.doesNotMatch(src, /[;,)}\]]\s*\/\/.*[一-鿿]/, "中文註解不用 // 放在程式後面");
   for (const route of Object.keys(Q.DECISION_DAILY)) for (const key of Object.keys(Q.DECISION_DAILY[route])) assert.doesNotMatch(Q.DECISION_DAILY[route][key].text, NO_LATIN);
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r81-20261116-1"/);
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r82-20261117-1"/);
 });
 
 console.log("VERIFIED content R80C world (" + passed + " tests)");
