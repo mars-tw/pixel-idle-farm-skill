@@ -52,9 +52,9 @@ test('新存檔首輪六份小麥可完成班伯主線，且市集不重複扣�
 
 test('開場與主線統一把兩份小麥交給班伯，每日目標改成不同動作', () => {
   assert.match(adventure, /id: "c1_first_harvest"[\s\S]*?交給老農班伯 2 份小麥[\s\S]*?wants: \{ wheat: 2 \}/);
-  assert.match(world, /先收成、修釣台，或去跟蘿拉打招呼/);
-  assert.match(world, /先去找鎮長葛瑞，再親手種下第一格/);
-  assert.match(world, /id="worldSunBegin">去見鎮長葛瑞/);
+  assert.match(world, /留好兩份小麥，再把第一份餐籃送給鎮長葛瑞/);
+  assert.match(world, /先種下第一株小麥，跟著第一道光照料它/);
+  assert.match(world, /id="worldSunBegin">開始種小麥/);
   assert.doesNotMatch(world, /給葛瑞送一籃/);
   assert.deepEqual(D.status(S.defaultState(1800000000000), 1800000000000).tasks.map((row) => row.id), ['water', 'talk', 'sell']);
   const state = S.defaultState(1800000000000);

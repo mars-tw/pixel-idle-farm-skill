@@ -246,7 +246,7 @@ test("7 右下互動鈕：面前是長著作物的田時不寫「種植・空田
   assert.match(ui, /r78bFacingCropLabel/, "面前的田有作物時用它自己的狀態當按鈕文字");
   const s = fresh(); s.coins = 99; Game.plant(s, 0, "wheat", T); s.plots[0].wateredAt = T + 1;
   const tile = s.map.tiles.find((t) => t.plotIndex === 0);
-  assert.equal(Game.facingPlotLabel(s, tile, T + 2), "看看田裡");
+  assert.equal(Game.facingPlotLabel(s, tile, T + 2), "生長中・小麥田");
   const emptyTile = s.map.tiles.find((t) => t.plotIndex === 1);
   assert.equal(Game.facingPlotLabel(s, emptyTile, T + 2), "", "空田交給原本的種植字樣");
 });

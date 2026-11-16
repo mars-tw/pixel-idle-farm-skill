@@ -2053,3 +2053,30 @@ html body #questDock#questDock.r80b-decision-compact .r68a-objective-head .qp-st
   .r81a-item-summary small, .r81a-hot, .r81a-shortage-help { font-size: 10px; }
 }
 /* ===== R81A 結束 ===== */
+/* ===== R81B（第一分鐘一處說明、手機橫式不重複）開始 ===== */
+/* 田上只顯示一行名稱。舊節點保留給既有狀態同步，但移出可見與輔助閱讀範圍。 */
+#tileStateLabel :is(.r78b-wait-choice, .r77a-refract-note) {
+  position: absolute !important; width: 1px !important; height: 1px !important; margin: -1px !important;
+  padding: 0 !important; overflow: hidden !important; clip-path: inset(50%) !important; white-space: nowrap !important;
+}
+#tileStateLabel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 預告圈保留光點，不再重複顯示倒數。 */
+.r75a-sun-preview { font-size: 0 !important; }
+.r75a-sun-preview::before { margin: 0; font-size: 16px; }
+/* 受光中的田也只保留太陽圖示與進度條，倒數文字移到田邊動作列。 */
+.r40-sun-tile .r40-sun-secs { font-size: 0 !important; }
+.r40-sun-tile .r40-sun-secs::before { content: "☀"; font-size: 11px; }
+/* 單一等光動作不套兩欄取捨，按鈕與說明完整佔滿自己的操作列。 */
+#sceneActionBar:has([data-r81b-detail]):not(:has([data-r79b-tradeoff])) { width: max-content; }
+#sceneActionBar [data-r81b-detail] { width: 100%; min-width: 0; padding-inline: 12px; }
+#sceneActionBar [data-r81b-detail] .sab-t { max-width: none !important; white-space: normal !important; }
+#sceneActionBar [data-r81b-detail] .r79b-action-detail { white-space: nowrap; }
+#sceneActionBar [data-r79b-tradeoff] { box-sizing: border-box; }
+#sceneActionBar [data-r79b-tradeoff] .sab-t { white-space: normal !important; overflow: visible; text-overflow: clip; }
+@media (max-height: 500px) and (min-width: 600px) {
+  #sceneActionBar { max-width: calc(100vw - 24px); box-sizing: border-box; }
+  #sceneActionBar:has([data-r81b-detail]):not(:has([data-r79b-tradeoff])) { width: min(390px, calc(100vw - 300px)); }
+  #sceneActionBar [data-r81b-detail] { box-sizing: border-box; }
+  #sceneActionBar [data-r81b-detail] .r79b-action-detail { font-size: 10px; }
+}
+/* ===== R81B 結束 ===== */

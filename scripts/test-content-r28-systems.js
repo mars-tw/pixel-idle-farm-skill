@@ -83,7 +83,7 @@ test('A4 建造只列已解鎖與下一項，升級有三段排序與可達路�
 });
 
 test('A5 開場、手記、印章冊與農場幫手文字一致', () => {
-  assert.ok(world.includes('先去找鎮長葛瑞，再親手種下第一格。完成這兩步後，你可以自己決定先收成、修釣台，或去跟蘿拉打招呼。') && world.includes('id="worldSunBegin">去見鎮長葛瑞') && world.indexOf('id="worldSunBegin"') < world.indexOf('id="worldBegin"'), '開場便箋與主按鈕先引導兩步教學，並清楚交代自由階段三個選項');
+  assert.ok(world.includes('先種下第一株小麥，跟著第一道光照料它，等麥穗成熟後親手收成。留好兩份小麥，再把第一份餐籃送給鎮長葛瑞。') && world.includes('id="worldSunBegin">開始種小麥') && world.indexOf('id="worldSunBegin"') < world.indexOf('id="worldBegin"'), '開場便箋與主按鈕依序引導種植、追光、收成與送餐籃');
   assert.match(ui, /function currentQuestFirst\(ids, cur\)/);
   assert.match(dailyUi, /今天可做 \$\{st\.available\} 項・達成 \$\{st\.completed\}・已領 \$\{st\.claimed\}/);
   const state = S.defaultState(1_900_000_000_000);

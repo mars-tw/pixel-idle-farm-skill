@@ -154,7 +154,7 @@ const HELP = `
         assert.ok(row.sunBar.top >= row.secsRect.bottom - 1, `${tag} 第 6 項：${name}陽光進度條應在倒數標籤下方、不重疊`);
       }
       assert.ok(sun.empty.childClasses.length >= 1 && sun.empty.childClasses.every((c) => /r40-sun/.test(c)), `${tag} 第 6 項：空土格上只應有陽光標示（實際子元素 ${JSON.stringify(sun.empty.childClasses)}）`);
-      // 作物標示維持原樣：點選有作物的受光格，狀態標籤照常寫作物狀況與陽光說明，且不跟陽光倒數標籤重疊。
+      // R81B：田上只留一行作物名稱與狀態，不再重複陽光收益；位置仍不可跟陽光標示重疊。
       await page.evaluate((tid) => {
         window.MOVE_MS = 30;
         const s = window.__farm.state();
@@ -176,8 +176,7 @@ const HELP = `
           pill: secs ? ro(secs) : null,
         };
       }, { src: HELP, tid: tileIds.planted });
-      /* R76A 同步：受光格標籤不再寫籠統的「在光裡：生長加速」，改寫這株作物實際會得到的光性成果。 */
-      assert.match(labelCheck.text, /喜光・照過光了：收成多 1 份/, `${tag} 第 6 項：選取受光作物的標籤應說明這次照光的實際成果（實際「${labelCheck.text}」）`);
+      assert.match(labelCheck.text, /^小麥・已種 \d+／3 格$/, `${tag} 第 6 項：田上標籤只留一行名稱與狀態（實際「${labelCheck.text}」）`);
       assert.ok(labelCheck.label && labelCheck.pill, `${tag} 第 6 項：作物標籤與陽光倒數應同時存在`);
       assert.equal(((a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)))(labelCheck.label, labelCheck.pill), 0, `${tag} 第 6 項：作物標籤不應跟陽光倒數重疊`);
       console.log(`OK ${tag} 第 6 項：陽光標示為淡黃底「☀ ${sun.planted.secsText}」、跟作物標示不重疊、空土格只有陽光標示`);

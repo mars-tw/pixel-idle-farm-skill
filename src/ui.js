@@ -195,6 +195,12 @@
   function enqueueResultFeedback(result) {
     if (!result) return;
     (result.feedback || []).forEach(showActionFeedback);
+    /* R81B：第一收成的結果先在 game.js 建立，主線事件則在收成後才寫入；顯示前重讀一次，
+       避免田裡已經種下下一株，結算卡還叫玩家「去種小麥」。 */
+    if (result.settlement && result.settlement.kind === "first_harvest" && window.AdventureAPI && window.AdventureAPI.nextFarmStep) {
+      const live = window.AdventureAPI.nextFarmStep(state, now());
+      if (live && live.text) result.settlement.next = live.text;
+    }
     /* R78 整合：在光裡收成多幾份、入瓶幾點陽光，收成那一行提示與田上的大字已經各寫一次；結算卡只留金幣、經驗與下一步，不再把同一句重複第三次。 */
     if (result.settlement) enqueueSettlement(result.settlement);
     (result.milestones || []).forEach(enqueueSettlement);
@@ -1135,6 +1141,7 @@
       const row = document.createElement("span");
       row.className = "r78b-wait-choice";
       row.dataset.audit = "r78b-wait-choice";
+      row.setAttribute("aria-hidden", "true");
       const secs = document.createElement("b");
       secs.setAttribute("data-r78b-light-secs", "");
       secs.textContent = choice.seconds + " 秒";
@@ -1169,16 +1176,8 @@
       if (queued && queued.plotIndex === tile.plotIndex) return G.isSunlit && G.isSunlit(state, tile.plotIndex, now()) ? `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田` : queued.autoHarvest ? "等光中" : "已選等光";
       return choice && choice.ok && !choice.hasTradeoff ? "等光再收" : `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田`;
     }
-    return "看看田裡";
-  }
-  function r79bSyncActionNote(tile) {
-    const host = $("mobileControls"); if (!host) return;
-    let note = $("r79bActionNote");
-    const choice = tile ? r78bChoiceFor(tile) : null;
-    const text = choice && choice.ok && !choice.hasTradeoff ? choice.helpText : "";
-    if (!text) { if (note) note.hidden = true; return; }
-    if (!note) { note = document.createElement("div"); note.id = "r79bActionNote"; note.className = "r79b-action-note"; note.dataset.audit = "r79b-action-note"; host.appendChild(note); }
-    note.textContent = text; note.hidden = false;
+    const crop = window.CROPS[plot.cropId];
+    return `生長中・${crop ? crop.name : "作物"}田`;
   }
   function r78bOwnCropTile(facing) {
     try {
@@ -4456,13 +4455,14 @@
       const world = $("mapWorld"); if (!world) return;
       world.appendChild(label);
     }
-    label.textContent = text;
+    /* R81B：田上只留一行名稱；秒數與收成結果改由田邊動作列承擔。 */
+    label.textContent = String(text).split("\n")[0];
     /* R77A 第 1 項：折光之前先寫出折過來會怎樣；不能折也寫原因。句子全部來自 FarmSunplay.refractPreview（跟動作列的折光鈕同一份規則）。 */
     /* R78B 第 2 項：熟了又有光要來的那一格，改寫成有數字的二選一（現在收幾份｜等幾秒收幾份＋陽光），這時不再疊折光說明。 */
     r78bLabelKey = r78bLabelKeyFor(tile, text);
     const waitChoice = r78bWaitChoiceRow(label, tile, text);
     const refractNote = waitChoice ? "" : refractNoteForTile(tile, text);
-    if (refractNote) { label.textContent = String(text).split("\n")[0]; const note = document.createElement("span"); note.className = "r77a-refract-note"; note.dataset.audit = "r77a-refract-note"; note.textContent = "\n" + refractNote; label.appendChild(note); }
+    if (refractNote) { label.textContent = String(text).split("\n")[0]; const note = document.createElement("span"); note.className = "r77a-refract-note"; note.dataset.audit = "r77a-refract-note"; note.setAttribute("aria-hidden", "true"); note.textContent = "\n" + refractNote; label.appendChild(note); }
     label.dataset.tileId = tile.id;
     label.classList.remove("tile-state-label-below");
     delete label.dataset.labelBelow; delete label.dataset.labelTop; delete label.dataset.labelShift; delete label.dataset.labelLeft;
@@ -4511,10 +4511,16 @@
       if (lightChoice && lightChoice.ok && entry.action === "wait_light") {
         const selectedWait = queuedLight && queuedLight.plotIndex === tile.plotIndex;
         actionLabel = selectedWait ? (queuedLight.autoHarvest ? "等光中" : "已選等光") : "等光再收";
-        actionDetail = lightChoice.hasTradeoff ? `${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}，${lightChoice.sunlightUseText}` : lightChoice.helpText;
+        actionDetail = lightChoice.hasTradeoff
+          ? `等 ${lightChoice.seconds} 秒・${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}`
+          : `等 ${lightChoice.seconds} 秒・${lightChoice.waitQty} 份＋陽光 ${lightChoice.waitSunlight}・光到自動收成`;
       }
       b.innerHTML = `<span class="sab-ic">${icon?`<img src="assets/generated/${icon}${window.FARM_VERSION_QUERY||''}" width="28" height="28" alt="">`:meta[0]}</span><span class="sab-t">${actionLabel}${actionDetail ? `<small class="r79b-action-detail">${actionDetail}</small>` : ""}</span>`;
-      if (actionDetail) { b.dataset.r79bTradeoff = entry.action; b.title = `${actionLabel}・${actionDetail}`; b.setAttribute("aria-label", b.title); }
+      if (actionDetail) {
+        if (lightChoice && lightChoice.hasTradeoff) b.dataset.r79bTradeoff = entry.action;
+        else b.dataset.r81bDetail = entry.action;
+        b.title = `${actionLabel}・${actionDetail}`; b.setAttribute("aria-label", b.title);
+      }
       /* R77A 第 1 項：折光鈕多一行「手鏡還能折 N 次」，完整的結果寫進按鈕說明。 */
       if (entry.action === "refract" && window.FarmSunplay && window.FarmSunplay.refractPreview) {
         const preview = window.FarmSunplay.refractPreview(state, tile.plotIndex, now());
@@ -5740,7 +5746,6 @@
       else if (!r78bPlotInSight(facing)) targetLabel = "互動";
     }
     try { if (!selectedPlot && nearFestivalStall()) targetLabel = "互動・祭典攤位"; } catch (e) {}
-    r79bSyncActionNote(rack ? null : selectedPlot);
     const sceneBar = $("sceneActionBar");
     const sceneButtons = sceneBar && !sceneBar.hidden ? [...sceneBar.querySelectorAll("button:not([disabled])")] : [];
     let facingSelected = false; try { const facing = facingTile(); facingSelected = !!(selectedPlot && facing && facing.id === selectedPlot.id); } catch (e) {}

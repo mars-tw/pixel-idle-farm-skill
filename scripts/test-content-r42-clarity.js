@@ -8,7 +8,7 @@ function test(name, fn) { fn(); passed++; console.log("PASS " + name); }
 const ui = read("src/ui.js"), world = read("src/world-ui.js"), css = read("src/content-r42.css"), html = read("index.html"), sw = read("sw.js");
 test("陽光出現時有不被對話藏起的小標籤，點一下帶到受光的田", () => {
   assert.match(world, /function updateSunChip\(s\)/);
-  assert.match(world, /☀ 陽光照在 \$\{plots\.length\} 格田・剩/);
+  assert.match(world, /☀ 陽光正在 \$\{plots\.length\} 格田上/);
   assert.match(css, /\.sun-chip \{[^}]*position: fixed/);
 });
 test("二選一寫出各自後果，尚未選擇時隱藏前往鈕", () => {
