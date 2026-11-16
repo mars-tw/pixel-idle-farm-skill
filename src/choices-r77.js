@@ -104,7 +104,8 @@
   /* R78C：每條路線先有角色專屬的現場事件，再由玩家做一次會留下紀錄的決定。
      decision 的兩個結果給不同物品；完成後 marker.doneLabel 會留在地圖上。
      R79C：每一步都標 place——marker 是走到地圖上那個物件旁邊做，npc 是走到鄰居旁邊做；手札只顯示進度與「帶我去」。
-     special 是做完三步才解鎖、有名字的新訂單或新配方（依第二步的決定分兩種）；chatter 是物件旁每天輪替的鄰居對白。 */
+     special 是做完三步才解鎖、有名字的新訂單或新配方（依第二步的決定分兩種）；chatter 是物件旁每天輪替的鄰居對白。
+     R81C 第 2 項：brief、ask、thanks 是鄰居親口說的話，只講立場與心情；要交什麼、做完拿到什麼，留給手札、選項與提示。 */
   const QUESTS = {
     "mayor:farm": {
       id: "morning_field", name: "晨耕", npcId: "mayor", choiceId: "farm",
@@ -117,9 +118,9 @@
           { id: "sun", label: "晨光小瓶", result: "蓄光瓶裝進陽光 2 點", reward: { sunlight: 2 } },
         ] },
         { title: "帶 1 份日曬乾貨給鎮長", where: "倉庫備好日曬乾貨後，走到鎮長葛瑞旁邊交給他。", place: "npc", play: "rack", act: "give_dried", actLabel: "把乾貨交給鎮長", need: 1,
-          ask: "乾貨帶來了嗎？照規矩，我得先看過成色，才好記進鎮誌。", thanks: "曬得透。告示牌旁那只種子籃，從今天起就算你的了。" },
+          ask: "乾貨帶來了嗎？我想親眼看看，你曬出來的跟你祖母像不像。", thanks: "曬得透。……跟她曬的一個味道。告示牌旁那只種子籃，你就收下吧。" },
       ],
-      brief: ["田邊的種子籃已經擺好了。", "先看草圖、決定籃裡裝什麼，再帶一份乾貨給我。", "做完以後，種子籃每天都能親手翻一次。"],
+      brief: ["田邊的種子籃，我一早就擺好了。", "說來好笑，我年輕時也想過先種田。後來會開久了，就忘了土是什麼味道。", "你替我把那個早上種回來吧。"],
       upgradeText: "田邊留下晨耕種子籃；每天可翻一次，領 1 包當季種子與 1 點陽光。",
       afterText: "鎮長收下乾貨，田邊的種子籃也照我的決定留了下來。",
       daily: { id: "field_basket", label: "翻今天的晨耕種子籃", result: "拿到 1 包當季種子與 1 點陽光", reward: { seasonalSeed: 1, sunlight: 1 } },
@@ -149,9 +150,9 @@
           { id: "river_path", label: "送到河邊", result: "修路剩下的木料 2 份交給你", reward: { materials: { wood: 2 } } },
         ] },
         { title: "帶一道料理，和鎮長交換鎮上消息", where: "在灶台做好料理後，走到鎮長葛瑞旁邊，端料理去聽消息。", place: "npc", play: "cook", act: "meal", actNpc: "mayor", actLabel: "端料理去聽消息", need: 1,
-          ask: "公告貼出去了。帶一道菜來，我拿鎮上的消息跟你換，這樣才公道。", thanks: "橋頭要修，麵包店缺麥。往後不合手的委託，到公告旁邊找我換，一天一張。" },
+          ask: "公告貼出去了。邊吃邊聊吧，鎮上的消息，我一個人憋了好久。", thanks: "橋頭要修，麵包店缺麥……這些事我記了一整本。有人肯聽，我今晚睡得著了。" },
       ],
-      brief: ["公告草稿已經壓在信箱旁。", "讀完後選一個先貼的地方，再帶一道料理來交換消息。", "做完以後，不合手的鎮長委託每天能換一張。"],
+      brief: ["公告草稿我壓在信箱旁了，字寫得有點抖。", "好久沒替農場寫公告。上一張，是你祖母要我寫的。", "這次換你決定，貼在哪裡，大家就從哪裡認識你。"],
       upgradeText: "鎮長每日委託的金幣從多一成變成多兩成，每天還可以換一次委託。",
       afterText: "我帶料理去找鎮長，公告也照選的地方貼好；不合手的鎮長委託每天能換一張。",
       special: { kind: "新訂單", variants: {
@@ -181,7 +182,7 @@
         ] },
         { title: "把第一筆帳記進木箱上的帳簿", where: "走到老農班伯旁邊，讓他陪你把這筆帳記完。", place: "npc", act: "scene_close", actLabel: "和班伯記帳", need: 1, lines: ["（班伯在帳簿最上面寫下日期。）", "記住客人怎麼來，比只記今天賺多少更有用。"] },
       ],
-      brief: ["舊秤已經放到市集木箱旁。", "跟班伯試秤、決定第一袋貨怎麼賣，再把帳記好。", "以後每天都能問一次今日行情。"],
+      brief: ["舊秤我搬到市集木箱旁了。", "這秤跟了我四十年，沒騙過一個客人。", "你第一袋貨怎麼賣，我就站旁邊看，不出聲。"],
       upgradeText: "老農班伯的河畔委託金幣從多一成變成多兩成。",
       afterText: "班伯陪我把第一筆帳寫好，市集木箱旁一直留著那只舊秤。",
       daily: { id: "market_price", label: "問班伯今天的行情", result: "班伯替你談到今日行情 8 金", reward: { coins: 8 } },
@@ -211,9 +212,9 @@
           { id: "quick", label: "快長種", result: "拿到堆肥 2 份", reward: { materials: { compost: 2 } } },
         ] },
         { title: "帶 2 包種子和 1 道料理給班伯", where: "備齊種子包和料理後，走到老農班伯旁邊交給他。", place: "npc", play: "cook", act: "seed_meal", actLabel: "把種子和料理帶給班伯", need: 1,
-          ask: "種子兩包，菜一道。帶齊了再來。", thanks: "嗯。盤子留在井邊，每天來領一包。" },
+          ask: "來啦？留種的事要邊吃邊說，我爹以前也是這樣教我的。", thanks: "嗯。……這盤種子，我爹當年也是這樣挑的。盤子就留在井邊吧。" },
       ],
-      brief: ["兩只選種盤已經擺到田邊。", "先聽班伯比較，再替下一季選一盤；最後帶種子和料理來。", "做完以後，每天可以向班伯領一次選種包。"],
+      brief: ["兩只選種盤，我擺到田邊了。", "你祖母挑種比我快，眼睛一掃就知道哪盤會發。", "我想看看，你像不像她。"],
       upgradeText: "每天向老農班伯請教時，多拿的當季種子從 1 包變成 2 包。",
       afterText: "班伯一邊吃我帶去的菜，一邊教我看種子的顏色和飽不飽滿；現在每天向他請教，他都多塞兩包當季種子給我。",
       daily: { id: "seed_lesson", label: "向班伯領今天的選種包", result: "拿到當季種子 2 包", reward: { seasonalSeed: 2 } },
@@ -237,12 +238,12 @@
       intro: ["（蘿拉把三塊漆色樣板靠在還沒釘牢的農場牌下。）", "牌子不是裝飾。客人看見哪個顏色，就會記住哪種心情。"],
       marker: { anchor: "structure:shop", spot: "市集攤前", art: ROUTE_ART.sign, earlyLabel: "招牌色樣", doneLabel: "農場招牌（{color}）" },
       steps: [
-        { title: "和蘿拉比較三塊招牌色樣", where: "走到市集攤前的招牌色樣，和蘿拉比較三塊色樣。", place: "marker", act: "scene", actLabel: "看招牌色樣", need: 1, lines: ["（蘿拉把三塊色樣排到陽光下。）", "紅色讓人想到甜果，藍色像河風，綠色則像剛冒芽。選色也會決定我送你的開張小禮。"] },
+        { title: "和蘿拉比較三塊招牌色樣", where: "走到市集攤前的招牌色樣，和蘿拉比較三塊色樣。", place: "marker", act: "scene", actLabel: "看招牌色樣", need: 1, lines: ["（蘿拉把三塊色樣排到陽光下。）", "紅色讓人想到甜果，藍色像河風，綠色則像剛冒芽。我偏心紅色，不過這是你的牌子。"] },
         { title: "備齊 2 份木料把招牌釘牢", where: "市集建材行有木料；備齊後走到蘿拉旁邊交給她。", place: "npc", play: "market", act: "wood", actLabel: "把木料交給蘿拉", need: 2,
-          ask: "兩份木料，釘牢了才不怕風。建材行有賣，別買貴了。", thanks: "好了，牌子釘牢了。去攤前的色樣那邊挑個顏色，客人以後就認它。" },
+          ask: "這塊牌子要是被風吹倒，我會比你還難過。木料要釘牢一點。", thanks: "好了，牌子釘牢了！顏色你來挑，我只負責誇它好看。" },
         { title: "替招牌選一個顏色", where: "走到市集攤前的招牌色樣，三種顏色選一種。", place: "marker", play: "", act: "color", need: 1 },
       ],
-      brief: ["三塊色樣已經靠在市集旁。", "先比較顏色，再用兩份木料釘牢；最後選色。", "三種顏色各有不同的開張小禮。"],
+      brief: ["三塊色樣我都靠在市集旁了。", "我擺攤這麼多年，第一次替別人的牌子緊張。", "選你自己喜歡的就好，客人看得出來。"],
       upgradeText: "蘿拉的河畔委託金幣從多一成變成多兩成，地圖上的招牌換成你選的顏色。",
       afterText: "蘿拉把招牌釘牢，照我選的{color}重新漆過；她說遠遠就認得出是我家的貨，委託的酬勞從多一成變成多兩成。",
       daily: { id: "sign_care", label: "擦亮今天的農場招牌", result: "從招牌下找到木料 1 份", reward: { materials: { wood: 1 } } },
@@ -274,9 +275,9 @@
           { id: "fresh", label: "先回清爽口味", tag: "清爽口味", result: "蘿拉給胡蘿蔔種子 3 包試種", reward: { seedPacks: { carrot: 3 } } },
         ] },
         { title: "帶 1 份今天特價的作物給蘿拉", where: "備好今天特價的作物後，走到蘿拉旁邊交給她。", place: "npc", play: "market", act: "special_crop", actLabel: "把特價作物交給蘿拉", need: 1,
-          ask: "帶一份今天特價的作物來，我拿去回客人的話。貨要新鮮，別拿隔夜的。", thanks: "客人的話我都記在口味牌上。以後每天多替你留一樣特價。" },
+          ask: "客人還在等回音呢。我答應過他們，要拿最新鮮的去。", thanks: "客人的話我都記在口味牌上了。說真的，被人記住口味，比被記住價錢開心。" },
       ],
-      brief: ["兩張留言卡已經放到攤前。", "先讀留言、決定回哪一桌，再帶一份今天特價的作物來。", "做完以後，今日特價會多留第三樣。"],
+      brief: ["兩張留言卡我放到攤前了。", "以前沒人留話給我，客人買完就走。", "現在有人肯寫字給農場，我捨不得讓他們等太久。"],
       upgradeText: "蘿拉的今日特價從兩樣變成三樣。",
       afterText: "蘿拉把客人的話一句一句轉給我聽：有人誇上次的作物新鮮，也有人問下次能不能多留幾份；她說以後每天替我多留一樣特價。",
       special: { kind: "新配方", variants: {
@@ -1109,7 +1110,10 @@
       const route = routes[id], marker = c4Markers[id];
       return { npcId: id, choiceId: route, done: true, decision: route, label: marker[route], marker: { anchor: marker.anchor, art: marker.art } };
     });
-    return choiceRows.concat(chapterRows);
+    /* R81C 第 1 項：藍布舊麥種的地圖物件（還沒決定時在鎮長葛瑞腳邊，決定後在水井旁或告示牌旁）跟其他物件一起畫。 */
+    let storyRows = [];
+    try { storyRows = R && typeof R.r81SceneRows === "function" ? R.r81SceneRows(state) : []; } catch (_) { storyRows = []; }
+    return choiceRows.concat(chapterRows, storyRows);
   }
 
   /* ---------- 接上既有函式（每個只包一次） ---------- */
@@ -1640,7 +1644,9 @@
       if (row.badge) node.dataset.r80cBadge = row.decision;
       /* R79C：點地圖上的物件就走過去打開它（第四章的記號照舊只顯示名字）。 */
       const routeNpc = NPC_ORDER.includes(row.npcId);
-      node.onclick = (event) => { event.stopPropagation(); if (routeNpc) walkToMarker(state, row.npcId); else toast(row.label); };
+      /* R81C：藍布舊麥種的物件點下去也是走過去打開那一段（爭執、具名訂單、收尾或之後的一句話）。 */
+      if (row.r81c) node.dataset.r81cStory = row.choiceId;
+      node.onclick = (event) => { event.stopPropagation(); if (routeNpc) walkToMarker(state, row.npcId); else if (row.r81c && R && typeof R.r81Go === "function") R.r81Go(state); else toast(row.label); };
       world.appendChild(node);
       /* 名牌另外放一層在最上面：市集攤前面那一排會被農舍屋頂蓋到，名牌不能跟著物件一起被遮。 */
       const tag = document.createElement("span"), shift = labelShift[key] || 0;

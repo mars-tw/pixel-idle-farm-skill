@@ -617,8 +617,78 @@
     const taskName = card.querySelector(".r71a-task-name"), firstOpen = rows.find((row) => !row.complete);
     if (taskName) taskName.textContent = `任務：${firstOpen ? firstOpen.name : q.name}`;
     const button = card.querySelector("[data-quest-go]");
-    if (button) { button.textContent = action; button.toggleAttribute("data-main-next", !!mainStep); button.onclick = () => mainStep ? goNextFarmStep() : goQuest(q); }
+    /* R81C 第 3 項：手札「現在做」那一行的按鈕一律寫「帶我去」，要做的動作放在提示與報讀文字裡。 */
+    if (button) { button.textContent = "帶我去"; button.title = action; button.setAttribute("aria-label", "帶我去：" + action); button.toggleAttribute("data-main-next", !!mainStep); button.onclick = () => mainStep ? goNextFarmStep() : goQuest(q); }
     card.querySelectorAll(".r68a-card-requirements span").forEach((node, i) => { const row = rows[i]; if (row) { node.textContent = `${row.complete ? "✓" : "○"} ${row.name} ${Math.min(row.current, row.required)}/${row.required}`; node.title = `${row.name} ${Math.min(row.current, row.required)}/${row.required}`; } });
+  }
+  /* R81C 第 3 項：手札第一屏分三層——
+     現在做：目前主線那張卡，「現在做」一行字＋「帶我去」排最上面，章節與進度縮成小字在下面；
+     今天可做：最多兩項，依序挑藍布舊麥種的故事、正在發生的農場小事、東西備齊能交的鄰居委託、後續委託目前那一步、其他現在可做的鄰居委託；
+     以後再說：其餘的卡片（含之後的委託、章節紀錄、鄰居餐籃、河畔委託）全部收進一個預設收合的區塊，用一顆「以後再說（N 項）」按鈕展開。 */
+  const R81C_TODAY_MAX = 2;
+  let r81cLaterOpen = false;
+  const R81C_ROUTE_NPCS = ["mayor", "elder", "merchant"];
+  function r81cRouteSteps(now) {
+    const Q = window.ChoicesR77;
+    if (!Q || typeof Q.questView !== "function") return [];
+    return R81C_ROUTE_NPCS.map((npcId) => {
+      let v = null;
+      try { v = Q.questView(current, npcId, now); } catch (_) { v = null; }
+      const step = v && v.status === "active" ? v.steps.find((s) => s.status === "current") : null;
+      return step ? { npcId, name: v.name, index: step.index, title: step.title, progress: step.progress } : null;
+    }).filter(Boolean);
+  }
+  function r81cTodaySig() {
+    if (!current) return "";
+    const now = Date.now(), S = window.StoryR76;
+    let story = null;
+    try { story = S && typeof S.r81Today === "function" ? S.r81Today(current, now) : null; } catch (_) { story = null; }
+    return JSON.stringify([story, r81cRouteSteps(now)]);
+  }
+  function r81cTodayCard(key, title, line, onGo) {
+    const card = document.createElement("div"); card.className = "r58-card r81c-today-card"; card.dataset.r81cToday = key;
+    const h = document.createElement("h4"); h.textContent = title;
+    const p = document.createElement("p"); p.className = "r81c-today-line"; p.textContent = line; p.title = line;
+    const b = document.createElement("button"); b.type = "button"; b.textContent = "帶我去"; b.dataset.r81cGo = key; b.setAttribute("aria-label", "帶我去：" + title);
+    b.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); onGo(); };
+    card.append(h, p, b);
+    return card;
+  }
+  function r81cTierJournal(panel) {
+    const wrap = panel.querySelector(".r63a-main-story-wrap"), r58 = panel.querySelector(".r58-section");
+    if (!r58 || panel.querySelector("[data-r81c-later]")) return;
+    const now = Date.now(), S = window.StoryR76, Q = window.ChoicesR77, picks = [];
+    let story = null;
+    try { story = S && typeof S.r81Today === "function" ? S.r81Today(current, now) : null; } catch (_) { story = null; }
+    if (story) picks.push(r81cTodayCard("story", story.title, story.line, () => { if (S.r81Go) S.r81Go(current); }));
+    const eventCard = r58.querySelector(".r60-event-card");
+    if (eventCard) picks.push(eventCard);
+    const avail = Array.from(r58.querySelectorAll(":scope > .r60-available-card"));
+    const ready = avail.filter((c) => { const b = c.querySelector("[data-r58-personal]"); return !!b && !b.disabled; });
+    picks.push(...ready);
+    r81cRouteSteps(now).forEach((row) => picks.push(r81cTodayCard("route-" + row.npcId, "後續委託「" + row.name + "」", "第 " + row.index + " 步：" + row.title + "（" + row.progress + "）", () => { if (Q && Q.goTo) Q.goTo(current, row.npcId); })));
+    picks.push(...avail.filter((c) => !ready.includes(c)));
+    const today = picks.slice(0, R81C_TODAY_MAX);
+    const later = document.createElement("section"); later.className = "r81c-later"; later.dataset.r81cLater = "";
+    const body = document.createElement("div"); body.className = "r81c-later-body"; body.id = "r81cLaterBody";
+    Array.from(r58.children).forEach((node) => { if (!today.includes(node)) body.appendChild(node); });
+    for (let node = r58.nextSibling; node; ) { const next = node.nextSibling; body.appendChild(node); node = next; }
+    const head = document.createElement("h3"); head.className = "story-subhead r81c-tier-head"; head.textContent = "今天可做";
+    r58.appendChild(head);
+    today.forEach((node) => r58.appendChild(node));
+    if (!today.length) { const p = document.createElement("p"); p.className = "project-desc r81c-today-empty"; p.textContent = "今天沒有別的急事，照「現在做」那一行走就好。"; r58.appendChild(p); }
+    r58.dataset.r81cTier = "today";
+    const count = body.querySelectorAll(".adventure-quest, .r58-card, .neighbor-entry").length;
+    const toggle = document.createElement("button"); toggle.type = "button"; toggle.className = "r81c-later-toggle"; toggle.textContent = "以後再說（" + count + " 項）"; toggle.setAttribute("aria-controls", body.id);
+    /* 玩家打開過「以後再說」，手札重畫時保持打開，不會一直被收回去。 */
+    const setOpen = (open) => { r81cLaterOpen = open; body.hidden = !open; later.classList.toggle("is-open", open); toggle.setAttribute("aria-expanded", String(open)); };
+    setOpen(r81cLaterOpen);
+    toggle.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); setOpen(!r81cLaterOpen); if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-panel-rendered")); };
+    later.dataset.r81cTier = "later";
+    later.append(toggle, body);
+    r58.after(later);
+    if (wrap) wrap.dataset.r81cTier = "now";
+    panel.dataset.r81cTiers = "1";
   }
   function renderPanels() {
     if (!current) return;
@@ -632,7 +702,7 @@
     const buffs = A.activeBuffs ? A.activeBuffs(current, Date.now()) : null;
     const mainId = (A.summary(current, Date.now()).currentQuest || {}).id;
       const panelList = list.map((row) => row.id === mainId ? { id: row.id, chapter: row.chapter, chapterName: row.chapterName, name: row.name, status: row.status } : row);
-    const sig = JSON.stringify([panelList, projects, commissions, current.adventure.neighbors, current.adventure.gathering, personal, permanent, r58evt, buffs && Math.floor(buffs.growthRemainingMs / 30000), buffs && Math.floor(buffs.orderRemainingMs / 30000)]);
+    const sig = JSON.stringify([panelList, projects, commissions, current.adventure.neighbors, current.adventure.gathering, personal, permanent, r58evt, buffs && Math.floor(buffs.growthRemainingMs / 30000), buffs && Math.floor(buffs.orderRemainingMs / 30000), r81cTodaySig()]);
     if (sig !== lastPanels) {
       lastPanels = sig;
       lastMainStory = "";
@@ -640,7 +710,7 @@
       const currentMain = A.summary(current, Date.now()).currentQuest;
       const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main && q.chapter === 1 && A.nextFarmStep ? A.nextFarmStep(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" ? farmStep : main ? journalQuestStep(current, q) : null; const mainGuide = main && !mainStep ? journalGuide(current, q) : null; const rows = rowsOf(q); const cardTaskName = main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : mainGuide ? mainGuide.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
         <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(cardTaskName)}</span></b><span>${progress}</span></div>
-        <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}">${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}>${esc(action)}</button>` : ""}</div>
+        <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}">${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}${main ? ` title="${esc(action)}" aria-label="帶我去：${esc(action)}"` : ""}>${main ? "帶我去" : esc(action)}</button>` : ""}</div>
         <div class="adventure-meta r68a-card-requirements">${displayRows.map((r) => r.routeLabel ? `<span class="r77c-route-label" data-r77c-route-label>${esc(r.name)}</span>` : `<span title="${esc(`${r.route === "alt" ? "或：" : ""}${r.name} ${Math.min(r.current, r.required)}/${r.required}`)}">${r.complete ? "✓" : "○"} ${r.route === "alt" ? "或：" : ""}${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}${q.status !== "claimed" && q.status !== "locked" ? `<span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span>` : ""}</div></article>`; };
       panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
         ${availability.showNeighborBasket ? `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div>` : ""}
@@ -658,7 +728,7 @@
         ${laterPersonal.length ? `<details class="r60-later-quests"><summary class="r60-later-summary">之後的委託（${laterPersonal.length}）</summary>${laterPersonal.map(personalCard).join("")}</details>` : ""}
         ${permanent.filter((result) => result.unlocked).map((result) => `<div class="r58-card r59-permanent" data-r59-permanent="${esc(result.npcId)}"><h4>${esc(result.icon)} ${esc(result.name)}</h4><p>${esc(result.text)}</p><p class="r58-meta">${esc(result.revisit)}</p></div>`).join("")}`;
       const mainStoryHost = panel.querySelector(".r63a-main-story-wrap");
-      if (mainStoryHost) mainStoryHost.after(r58host); else if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host); if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-panel-rendered")); /* R59：手札重繪會換掉卡片、清掉首屏收合，通知 ui.js 重新收合 */
+      if (mainStoryHost) mainStoryHost.after(r58host); else if (panel.firstChild) panel.insertBefore(r58host, panel.firstChild); else panel.appendChild(r58host); r81cTierJournal(panel); if (typeof window.dispatchEvent === "function" && typeof Event === "function") window.dispatchEvent(new Event("farm-panel-rendered")); /* R59：手札重繪會換掉卡片、清掉首屏收合，通知 ui.js 重新收合 */
       panel.querySelectorAll("[data-r58-resolve]").forEach((b) => { b.onclick = () => { const r = A.resolveRandomEvent(current, b.dataset.r58Resolve, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastPanels = ""; refresh(current); }; });
       panel.querySelectorAll("[data-r58-personal]").forEach((b) => { b.onclick = () => {
         closePanels();
@@ -930,6 +1000,9 @@
       const titlebar=document.createElement('div');titlebar.className='sun-titlebar';
       const heading=box.querySelector('h2'),close=box.querySelector('.world-modal-close');
       heading.before(titlebar);titlebar.append(heading,close);
+      /* R81C 第 1 項：便箋留一個具體的謎——籃底那包藍布舊麥種是誰的（餐籃送到鎮長葛瑞手上時揭開）。 */
+      const mystery = window.StoryR76 && window.StoryR76.R81_MYSTERY, modalBody = box.querySelector(".modal-body");
+      if (mystery && modalBody) { const p = document.createElement("p"); p.className = "r81c-mystery"; p.dataset.r81cMystery = ""; p.textContent = mystery; const first = modalBody.querySelector("button"); if (first) modalBody.insertBefore(p, first); else modalBody.appendChild(p); }
     }
     box.querySelector(".world-modal-close").onclick = () => { stopFishing(); disposeResidentPoseScenes(box); farm().closeModal("worldModal"); };
     farm().openModal("worldModal", ".world-modal-close");
@@ -1314,8 +1387,9 @@
     }
     const r64bClue = (window.NeighborsR61 && window.NeighborsR61.CLUES && window.NeighborsR61.CLUES[npcId]) || ""; // R64B（第 5 項）：日常對話帶喜好線索
     if (npcId === "child") return (current.adventure.claimed.c3_harvest_picnic ? "我把野餐合照收好了。下次再帶你新種的東西來！" : "河邊要是有桌子，我想帶小花和點心來。你也會來嗎？") + (r64bClue ? " " + r64bClue : "");
-    if (npcId === "merchant") return "新鮮作物可以交訂單。留一點給自己的餐籃，河邊很快會需要它們。" + (r64bClue ? " " + r64bClue : "");
-    if (npcId === "elder") return "下田時別忘了雞舍。添水、梳毛、餵食，牠們都記得你。" + (r64bClue ? " " + r64bClue : "");
+    /* R81C 第 2 項：平常打招呼只講立場與心情，交訂單、照顧雞舍的做法留給任務卡與按鈕。 */
+    if (npcId === "merchant") return "今天河邊風大，攤子差點被吹走。你的菜要是撐得到傍晚，我就放心了。" + (r64bClue ? " " + r64bClue : "");
+    if (npcId === "elder") return "雞舍那幾隻跟你祖母最親。她走了以後，牠們早上都晚叫半刻。" + (r64bClue ? " " + r64bClue : "");
     return npcId === "mayor" && r64bClue && fallback ? fallback + " " + r64bClue : fallback;
   }
   window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal, prepareResidentPoses, requestResidentPose, residentPresentationState, disposeResidentPoseScenes };
