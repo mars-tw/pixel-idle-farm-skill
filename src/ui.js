@@ -1010,10 +1010,10 @@
   function r78bCareSummary(mode, withStock) {
     if (!mode) return "";
     const parts = [];
-    const mul = Number(mode.growMul) || 1;
-    if (mul !== 1) parts.push(`生長時間${mul < 1 ? "縮短" : "增加"} ${Math.round(Math.abs(1 - mul) * 100)}%`);
+    if (mode.id === "water") parts.push("成熟最快");
+    else parts.push("種下後會顯示比勤澆水慢幾秒");
     if (mode.yieldBonus) parts.push(`產量 +${mode.yieldBonus}`);
-    if (mode.qualityChance) parts.push(`${Math.round(mode.qualityChance * 100)}% 優質`);
+    if (mode.qualityChance) parts.push(`${["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"][Math.max(0, Math.min(10, Math.round(mode.qualityChance * 10)))]}成機率優質`);
     if (withStock && mode.id === "compost") parts.push(`用掉 1 份堆肥（剩 ${Math.max(0, Number(state.materials && state.materials.compost) || 0)}）`);
     if (mode.seedBack) parts.push(`收成帶回 ${mode.seedBack} 包種子`);
     return mode.name + "：" + parts.join("，");

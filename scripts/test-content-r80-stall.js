@@ -21,7 +21,7 @@ function festivalState(items) {
   const festival = state.adventure.r61.festival;
   Object.assign(festival, { unlocked: true, startsAt: T0, endsAt: T0 + 10 * 60 * 1000, nextAt: 0, baseline: { wheat: 0, carrot: 0, tomato: 0, cook: 0, talks: { mayor: 0, elder: 0, merchant: 0, child: 0 } }, supportProvisioned: true, harvestCrop: "wheat", harvestRequired: 3 });
   state.storage.items = Object.assign({}, items || { wheat: 20, carrot: 20, tomato: 20, strawberry: 20 });
-  F.ensure(state, T0); M.ensure(state, T0); return state;
+  F.ensure(state, T0); state.adventure.r72b.totalPlays = 1; M.ensure(state, T0); return state;
 }
 function demandKey(demand) { return demand.kind === "item" ? "item:" + demand.itemId : demand.kind === "pair" ? "pair:" + demand.tastes.slice().sort().join("+") : "taste:" + demand.taste; }
 function rowFor(state, session, customer) {
@@ -40,8 +40,8 @@ function perfect(seed) {
 }
 function freeTile(state) { return state.map.tiles.find((tile) => G.canBuildOn(state, tile)); }
 
-test("客人類型固定為 6、10、14 秒，每天熱門最多兩樣", () => {
-  assert.deepEqual(F.CUSTOMER_TYPES.map((row) => [row.label, row.timeoutMs]), [["趕時間", 6000], ["一般", 10000], ["只說口味", 14000]]);
+test("客人類型固定為 15、18、21 秒，每天熱門最多兩樣", () => {
+  assert.deepEqual(F.CUSTOMER_TYPES.map((row) => [row.label, row.timeoutMs]), [["趕時間", 15000], ["一般", 18000], ["只說口味", 21000]]);
   const state = festivalState(), pool = F.unlockedItems(state).filter((row) => ["wheat", "carrot", "tomato", "strawberry"].includes(row.id));
   for (let seed = 1; seed <= 200; seed++) assert.ok(F.marketPreview(state, pool, seeded(seed)).hotItems.length <= 2, "seed " + seed + " 熱門超過兩樣");
 });
@@ -93,11 +93,11 @@ test("蜂箱、香草小圃、雞舍餵食槽各有兩條可切換且真的產�
   assert.match(adventureSource, /mint_tea[^\n]*river_mint/);
 });
 
-test("照顧彈窗寫慢多少，料理成果卡把 3 分鐘說成效果持續時間", () => {
+test("照顧彈窗寫比勤澆水慢幾秒，料理成果卡把 3 分鐘說成效果持續時間", () => {
   const state = festivalState(); state.materials.compost = 2; state.plots[0].cropId = "wheat"; state.plots[0].plantedAt = T0;
   const forecast = G.careForecast(state, 0, T0);
-  assert.match(forecast.rows.find((row) => row.id === "compost").text, /長得慢 25%/);
-  assert.match(forecast.rows.find((row) => row.id === "natural").text, /長得慢 20%/);
+  assert.match(forecast.rows.find((row) => row.id === "compost").text, /比勤澆水慢 \d+ 秒/);
+  assert.match(forecast.rows.find((row) => row.id === "natural").text, /比勤澆水慢 \d+ 秒/);
   const recipe = A.recipes(state).find((row) => row.effect && row.effect.durationMs === 3 * 60 * 1000);
   assert.ok(recipe, "要有 3 分鐘效果料理");
   assert.match(Cooking.gradeEffectText(recipe, "perfect"), /效果持續 3 分鐘 → 4 分 30 秒/);

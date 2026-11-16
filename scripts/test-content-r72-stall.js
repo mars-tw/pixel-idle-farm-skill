@@ -35,9 +35,9 @@ function correctItem(session) {
   return row.id;
 }
 
-test("常數：60 秒一場、一般顧客 10 秒", () => {
+test("常數：60 秒一場、一般顧客 18 秒", () => {
   assert.equal(F.DURATION_MS, 60000);
-  assert.equal(F.CUSTOMER_TIMEOUT_MS, 10000);
+  assert.equal(F.CUSTOMER_TIMEOUT_MS, 18000);
   assert.equal(F.MAX_ATTEMPTS_PER_ROUND, 2);
 });
 

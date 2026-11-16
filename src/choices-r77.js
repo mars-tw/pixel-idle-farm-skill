@@ -690,8 +690,8 @@
   }
 
   /* ---------- R79C：每個選擇解鎖、有名字的新訂單或新配方 ----------
-     R80C 第 1 項：報酬改用「一般訂單」當基準——同樣的東西、同樣的份數，市集看板的一般訂單平均能拿多少（照 game.js makeOrder：
-     每份單價＝作物售價 × 稀有度倍率後四捨五入，再依四種稀有度出現的機率加權），具名單一律不低於這個平均，再多給一項一般訂單沒有的東西。
+     R81A 第 1 項：報酬先對照玩家當下看得到、內容完全相同的一般訂單；看板還沒開時則對照市集預告。
+     沒有完全相同的卡才退回 R80 的一般訂單平均。具名單依 coinsRate 從同一個基準算，卡片與實際入帳共用這筆數字。
      第 3 項：做了決定就能接「第一張」（只要同一種作物 2 份，新存檔幾分鐘內就交得出來）；三步做完以後每天一張，照單上的要求。 */
   const RATE_TEXT = { 1: "跟一般訂單一樣", 1.1: "比一般訂單多一成", 1.2: "比一般訂單多兩成", 1.3: "比一般訂單多三成", 1.4: "比一般訂單多四成", 1.5: "比一般訂單多五成" };
   const TRIAL_WANT = { type: "most", qty: 2 };
@@ -706,6 +706,18 @@
     if (!sell || !rarities.length || !(qty > 0)) return 0;
     const weight = rarities.reduce((sum, r) => sum + (r.weight || 0), 0) || 1;
     return rarities.reduce((sum, r) => sum + (r.weight || 0) * Math.max(1, Math.round(sell * r.payMult)) * qty, 0) / weight;
+  }
+  function shownGeneralOrder(state, itemId, qty, now) {
+    if (!state || !itemId || !(qty > 0)) return 0;
+    let rows = Array.isArray(state.orders) && state.orders.length ? state.orders : [];
+    if (!rows.length && G && typeof G.previewMarketOrders === "function") {
+      try { rows = G.previewMarketOrders(state, nowOf(now)) || []; } catch (_) { rows = []; }
+    }
+    return rows.reduce((best, order) => {
+      const wants = order && order.wants || {}, ids = Object.keys(wants);
+      if (ids.length !== 1 || ids[0] !== itemId || Number(wants[itemId]) !== Number(qty)) return best;
+      return Math.max(best, Math.max(0, Number(order.rewardCoins) || 0));
+    }, 0);
   }
   /* 熟客單收的那一道料理：照 shareMeal 會交出去的那一道，材料用一般訂單平均算。 */
   function mealPick(state) {
@@ -751,21 +763,21 @@
     return { kind: "crop", itemId: pick, have, need: want.qty, text };
   }
   /* 這一張要交的東西，在一般訂單平均能拿多少金（料理照材料算）；沒有東西可比時回 0。 */
-  function specialBase(state, want, itemId) {
+  function specialBase(state, want, itemId, now) {
     if (want.type === "meal") return state ? mealAverage(state, mealPick(state)) : 0;
-    return itemId ? generalOrderAverage(itemId, want.qty) : 0;
+    return itemId ? Math.max(generalOrderAverage(itemId, want.qty), shownGeneralOrder(state, itemId, want.qty, now)) : 0;
   }
-  function specialCoins(v, itemId, state, want) {
-    const w = want || v.want, base = specialBase(state, w, itemId);
+  function specialCoins(v, itemId, state, want, now) {
+    const w = want || v.want, base = specialBase(state, w, itemId, now);
     return (v.coinsRate && base ? Math.ceil(base * v.coinsRate) : 0) + ((v.reward && v.reward.coins) || 0);
   }
-  function specialRewardText(state, v, itemId, want) {
+  function specialRewardText(state, v, itemId, want, now) {
     const w = want || v.want;
     const other = Object.assign({}, v.reward || {}); delete other.coins;
     const parts = [];
-    const base = specialBase(state, w, itemId);
+    const base = specialBase(state, w, itemId, now);
     if (v.coinsRate && !base) parts.push("金幣" + RATE_TEXT[v.coinsRate] + (v.reward && v.reward.coins ? "，再加 " + v.reward.coins + " 金" : ""));
-    else { const coins = specialCoins(v, itemId, state, w); if (coins) parts.push(coins + " 金" + (v.coinsRate ? "（" + RATE_TEXT[v.coinsRate] + (v.reward && v.reward.coins ? "，另加 " + v.reward.coins + " 金" : "") + "）" : "")); }
+    else { const coins = specialCoins(v, itemId, state, w, now); if (coins) parts.push(coins + " 金" + (v.coinsRate ? "（" + RATE_TEXT[v.coinsRate] + (v.reward && v.reward.coins ? "，另加 " + v.reward.coins + " 金" : "") + "）" : "")); }
     const rest = rewardText(other, state);
     if (rest) parts.push(rest);
     return parts.join("、");
@@ -781,8 +793,8 @@
     const key = (trial ? "trial:" : "special:") + def.id, today = dayKeyOf(t), used = !trial && r.daily[key] === today;
     const plan = wantPlan(state, want, t), enough = plan.have >= plan.need;
     return { eligible: true, trial, kind: def.special.kind, name: v.name, used, enough, can: !used && enough, key, today, wantText: plan.text, diff: v.diff || "",
-      have: plan.have, need: plan.need, itemId: plan.itemId, rewardText: specialRewardText(state, v, plan.itemId, want), line: v.line,
-      general: Math.round(specialBase(state, want, plan.itemId)), coins: specialCoins(v, plan.itemId, state, want),
+      have: plan.have, need: plan.need, itemId: plan.itemId, rewardText: specialRewardText(state, v, plan.itemId, want, t), line: v.line,
+      general: Math.round(specialBase(state, want, plan.itemId, t)), coins: specialCoins(v, plan.itemId, state, want, t),
       missingText: enough ? "" : "還差 " + (plan.need - plan.have) + (plan.kind === "meal" ? " 道料理" : " 份"), unlockText: unlockText(def, q) };
   }
   function takeSpecial(state, npcId, now) {
@@ -793,7 +805,7 @@
     const q = r.quests[npcId], def = questDef(npcId, q.choiceId), v = specialVariant(def, q);
     const want = info.trial ? TRIAL_WANT : v.want;
     const meal = want.type === "meal";
-    const coins = specialCoins(v, meal ? "" : info.itemId, state, want);
+    const coins = specialCoins(v, meal ? "" : info.itemId, state, want, t);
     if (meal) { const shared = shareMeal(state, npcId, t); if (!shared.ok) return shared; }
     else takeItem(storageItems(state), info.itemId, want.qty);
     const reward = Object.assign({}, v.reward || {});
@@ -1265,7 +1277,7 @@
     sceneStates, takeNotes, pendingNotes, setListener, install, hookDried,
     CHOICE_ART, CHOICE_ART_READY, choiceArt, colorGift, specialInfo, takeSpecial, unlockText, dailyLine, stepPlace,
     DECISION_KEYS, DECISION_ART, DECISION_ART_READY, DECISION_BADGE, DECISION_DAILY, decisionArt, perkInfo, perkRows, firePerks, harvestPerks,
-    generalOrderAverage, nextSeedCropId, TRIAL_WANT };
+    generalOrderAverage, shownGeneralOrder, nextSeedCropId, TRIAL_WANT };
   root.ChoicesR77 = ChoicesR77;
   if (isNode) module.exports = ChoicesR77;
   if (typeof document === "undefined") return;

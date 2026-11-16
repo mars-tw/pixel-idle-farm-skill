@@ -38,6 +38,7 @@ function overlaps(a, b) { return a && b && a.left < b.right && a.right > b.left 
         festival.unlocked = true; festival.startsAt = now - 1000; festival.endsAt = now + 600000; festival.nextAt = 0;
         festival.baseline = { wheat: 0, carrot: 0, tomato: 0, cook: 0, talks: { mayor: 0, elder: 0, merchant: 0, child: 0 } };
         festival.supportProvisioned = true; festival.harvestCrop = "wheat"; festival.harvestRequired = 3;
+        FestivalStallR72.ensure(state, now); state.adventure.r72b.totalPlays = 1;
         state.storage.items = { wheat: 11, carrot: 12, tomato: 12, strawberry: 12 };
         __farm.refresh(); FarmWorld.refresh(state);
         FestivalStallR72.open(state, { notify: () => {}, save: () => {} });

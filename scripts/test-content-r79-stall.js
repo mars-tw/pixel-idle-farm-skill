@@ -31,6 +31,7 @@ function festivalState(items) {
   festival.supportProvisioned = true; festival.harvestCrop = "wheat"; festival.harvestRequired = 3;
   state.storage.items = Object.assign({}, items);
   F.ensure(state, T0);
+  state.adventure.r72b.totalPlays = 1;
   return state;
 }
 function rowFor(state, session, customer) {
