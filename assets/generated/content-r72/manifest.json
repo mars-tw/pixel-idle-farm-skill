@@ -19,8 +19,9 @@
         282,
         292
       ],
-      "sha256": "f748abd4081cf1a872c6349db74c9853771cbda148b5a2bed0de47ab62fc5a3c",
-      "bytes": 117823
+      "sha256": "2dd6965e48afb775e9b870bf5949982ed5803085404b42de13f1be43301f0b9c",
+      "bytes": 58860,
+      "r82Note": "R82 主控：改用 MUSE 新畫的 Q 版班伯胸像（與 content-r76/portrait-elder.png 同一張原圖），跟鎮長、蘿拉、圖圖同一種畫風。"
     },
     {
       "file": "customer-merchant.png",
