@@ -216,7 +216,7 @@ test("第 5 項：R83B 樣式接在 R82A 後面；測試接在 unit 清單；沿
   assert.ok(fs.existsSync(path.join(ROOT, R.r81Art("pending"))), "還沒播種時的種子包正式圖存在");
   const guard = read("scripts/guard-validation-writes.js");
   assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*\];/);
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r82-20261117-1"/, "版本字串沒動");
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r83-20261117-1"/, "版本字串沒動");
 });
 
 /* ---------- 版面：實際開瀏覽器量 ---------- */

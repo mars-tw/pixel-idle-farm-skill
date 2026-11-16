@@ -444,10 +444,10 @@ test("第 8 項：兩套回訪不重複——六種回答只剩 R76 回訪那一
 
 test("載入清單與原始碼：新檔加進 index.html 與 sw.js、版本字串沒動、註解寫法", () => {
   const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  assert.match(html, /<script src="src\/sunbook-r76\.js\?v=content-r82-20261117-1"><\/script>\s*<script src="src\/choices-r77\.js\?v=content-r82-20261117-1"><\/script>/);
+  assert.match(html, /<script src="src\/sunbook-r76\.js\?v=content-r83-20261117-1"><\/script>\s*<script src="src\/choices-r77\.js\?v=content-r83-20261117-1"><\/script>/);
   const sw = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
   assert.match(sw, /versioned\("\.\/src\/choices-r77\.js"\)/);
-  assert.match(sw, /CACHE_VERSION = "content-r82-20261117-1"/);
+  assert.match(sw, /CACHE_VERSION = "content-r83-20261117-1"/);
   const src = fs.readFileSync(path.join(ROOT, "src/choices-r77.js"), "utf8");
   assert.doesNotMatch(src, /[;,)}\]]\s*\/\/.*[一-鿿]/, "中文註解不用 // 放在程式後面");
   const css = fs.readFileSync(path.join(ROOT, "src/content-r58b.css"), "utf8");

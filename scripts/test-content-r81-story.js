@@ -244,7 +244,7 @@ test("原始碼：中文註解不放在程式後面、提到兩位鄰居用全�
   }
   const story = read("src/story-r76.js"), comments = (story.match(/\/\*[\s\S]*?\*\//g) || []).filter((c) => /R81C|藍布/.test(c)).join("");
   assert.doesNotMatch(comments.replace(/鎮長葛瑞|老農班伯/g, ""), /葛瑞|班伯|老農|鎮長/, "註解提到兩位鄰居一律用「鎮長葛瑞」「老農班伯」");
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r82-20261117-1"/);
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r83-20261117-1"/);
   assert.match(read("scripts/guard-validation-writes.js"), /"node scripts\/test-content-r81-story\.js"/, "加進 unit 清單");
 });
 
