@@ -131,7 +131,8 @@ function measure(page, selector) {
       assert.match(done.upgrade, /多兩成/, `${tag} 手札寫出加成升級`);
       assert.match(done.effect, /委託金幣加成照常.*每天還可擦亮一次/, `${tag} 「現在的影響」寫清原加成與新互動`);
       assert.equal(done.pressed, "true", `${tag} 選中的顏色有標示`);
-      await page.waitForFunction(() => { const n = document.querySelector('.r75b-map-node[data-r75b-sign][data-r77b-sign-color="red"]'); return n && /hue-rotate/.test(getComputedStyle(n.querySelector("img")).filter); }, null, { timeout: 8000 });
+      /* R80 整合同步：三色招牌的手繪圖到了（DECISION_ART_READY）就直接換成紅色招牌圖；圖沒到才用濾鏡染色。 */
+      await page.waitForFunction(() => { const n = document.querySelector('.r75b-map-node[data-r75b-sign][data-r77b-sign-color="red"]'); const img = n && n.querySelector("img"); return !!img && (/decision-merchant-sign-red/.test(img.getAttribute("src") || "") || /hue-rotate/.test(getComputedStyle(img).filter)); }, null, { timeout: 8000 });
       const sign = await page.evaluate(() => { const n = document.querySelector('.r75b-map-node[data-r75b-sign]'); return { count: document.querySelectorAll('[data-r75b-sign="farm_sign"]').length, label: n.getAttribute("aria-label") }; });
       assert.equal(sign.count, 1, `${tag} 地圖上仍然只有一塊招牌`);
       assert.match(sign.label, /莓果紅/, `${tag} 地圖招牌換成選的顏色`);
