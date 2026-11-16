@@ -2034,4 +2034,8 @@ body:has(.r75a-sun-preview) #toast-zone:not(:has(.settlement-card)):not(:has(.mi
 /* 縮小模式的標題那段固定單行排版（收合規則會把它改成格線、欄寬只剩 25px）；右邊的不可按狀態標籤不被壓縮。 */
 html body #questDock#questDock.r80b-decision-compact .r68a-objective-head .qp-step { display: block !important; flex: 1 1 auto !important; min-width: 0 !important; overflow: hidden; }
 #questDock.r80b-decision-compact :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > .r68a-now-action { flex: 0 0 auto !important; white-space: nowrap !important; min-width: max-content; }
+/* 桌機上收合成單行的任務卡（含祖母手記那種）最少 420px，跟 R79 一樣；被壓到 224px 時「收合」鈕會疊在「看看這格」上。 */
+@media (min-width: 860px) {
+  #questDock:is(.quest-collapsed, .quest-auto-collapsed, .quest-target-collapsed) { min-width: min(420px, calc(100vw - 40px)) !important; }
+}
 /* ===== R80 整合結束 ===== */
