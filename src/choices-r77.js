@@ -61,7 +61,8 @@
   Object.keys(DECISION_KEYS).forEach((route) => DECISION_KEYS[route].forEach((key) => {
     DECISION_ART[route + ":" + key] = "assets/generated/content-r80/decision-" + route.replace(":", "-") + "-" + key.replace(/_/g, "-") + ".png";
   }));
-  const DECISION_ART_READY = [];
+  /* R80 整合：13 張決定物件圖由 MUSE 補齊（content-r80/decision-*.png），全部登記為已到。 */
+  const DECISION_ART_READY = Object.keys(DECISION_ART);
   const DECISION_BADGE = {
     seed: "assets/generated/r83/seed-32.png", sun: "assets/generated/content-r75/sun_jar.png",
     town_gate: "assets/generated/r66/native/system_coin-32.png", river_path: "assets/generated/content-r73/item-fallen_branch.png",

@@ -54,10 +54,11 @@ async function clearDialogs(page) { for (let i = 0; i < 6; i++) { await page.eva
         await press(page, mobile, '.r76b-dialogue [data-r76b-choice="' + pick + '"]');
         await untilLine(page, /第一張新訂單「(留種|晨光)合作單」/, tag + " 決定後的回覆提到第一張具名訂單");
         await closeDialogue(page, mobile);
-        await page.waitForFunction(() => document.querySelector('.r78c-scene-change[data-r78c-route="mayor:farm"] img.r80c-decision-badge'), null, { timeout: 8000 });
-        await page.waitForFunction(() => { const i = document.querySelector('.r78c-scene-change[data-r78c-route="mayor:farm"] img.r80c-decision-badge'); return i && i.complete && i.naturalWidth > 0; }, null, { timeout: 8000 });
+        /* R80 整合：決定物件圖到了（DECISION_ART_READY 有登記）就整張換成新圖、不再疊小圖示；圖沒到才檢查疊上去的小圖示。 */
+        const artMode = await page.evaluate(() => !!(window.ChoicesR77 && (window.ChoicesR77.DECISION_ART_READY || []).length)); const sel = '.r78c-scene-change[data-r78c-route="mayor:farm"] ' + (artMode ? 'img:not(.r80c-decision-badge)' : 'img.r80c-decision-badge');
+        await page.waitForFunction((s) => { const i = document.querySelector(s); return i && i.complete && i.naturalWidth > 0 && (!s.includes(':not') || /content-r80\/decision-/.test(i.getAttribute('src') || '')); }, sel, { timeout: 8000 });
         await page.evaluate(() => { const s = __farm.state(), t = s.map.tiles.find((x) => x.station === "sign"); if (__farm.focusTile) __farm.focusTile(t.id); }); await page.waitForTimeout(600);
-        looks[pick] = await page.evaluate(() => { const n = document.querySelector('.r78c-scene-change[data-r78c-route="mayor:farm"]'), b = n.querySelector("img.r80c-decision-badge"), r = b.getBoundingClientRect(); return { badge: b.getAttribute("src"), ring: getComputedStyle(b).boxShadow, size: r.width, label: document.querySelector('.r78c-scene-label[data-r78c-route="mayor:farm"]').textContent }; });
+        looks[pick] = await page.evaluate((s) => { const b = document.querySelector(s), r = b.getBoundingClientRect(); return { badge: b.getAttribute("src"), ring: b.classList.contains("r80c-decision-badge") ? getComputedStyle(b).boxShadow : "art", size: r.width, label: document.querySelector('.r78c-scene-label[data-r78c-route="mayor:farm"]').textContent }; }, sel);
         assert.ok(looks[pick].size >= 16, tag + " 小圖示看得到 " + JSON.stringify(looks[pick]));
         await shot(page, tag, "3-place-" + pick);
 
@@ -109,7 +110,7 @@ async function clearDialogs(page) { for (let i = 0; i < 6; i++) { await page.eva
         await S.ctx.close();
       }
       assert.notEqual(looks.seed.badge, looks.sun.badge, tag + " 兩個決定疊的小圖示不同");
-      assert.notEqual(looks.seed.ring, looks.sun.ring, tag + " 兩個決定的圈線顏色不同");
+      if (looks.seed.ring !== "art") assert.notEqual(looks.seed.ring, looks.sun.ring, tag + " 兩個決定的圈線顏色不同");
       assert.notEqual(looks.seed.label, looks.sun.label);
 
       /* 五、好感故事：手札「鄰居好感」→ 聽故事，用下方那一種對話框，按鈕「下一句／晚點再說」，最後一句「聽完了」。 */

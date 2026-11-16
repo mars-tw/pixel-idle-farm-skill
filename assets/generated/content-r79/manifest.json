@@ -1,0 +1,69 @@
+{
+ "model": "muse-wonder-1.0 via muse.image_generation",
+ "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、依格子切開、縮放",
+ "generated": "2026-11-16",
+ "background": "純洋紅 #FF00FF 產生後去背；決定物件 96×96、攤位 256×192、鍋子 128×128、圖示 64×64，物件底部對齊",
+ "note": "R79 欠的攤位場景、看火候鍋子三態（三張用同一個裁切範圍，鍋子大小一致）、升級卡天氣與四季圖示。畫風參考 content-r75 的蓄光瓶、農場招牌、料理鍋。OpenAI gpt-image-2 額度用盡，改用 MUSE。",
+ "files": [
+  {
+   "file": "pot-burn.png",
+   "size": [
+    128,
+    128
+   ],
+   "bytes": 24940,
+   "sha256": "e8c18ffdd8594faa7fbde3273e780cbe89e029f780c73edb8f8344d436358ba1",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）"
+  },
+  {
+   "file": "pot-good.png",
+   "size": [
+    128,
+    128
+   ],
+   "bytes": 27476,
+   "sha256": "cc7bd4f8f13eb029e1e17d25a5114210afeedb76bc8d9230d894c6ec5b9a1cce",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）"
+  },
+  {
+   "file": "pot-low.png",
+   "size": [
+    128,
+    128
+   ],
+   "bytes": 17462,
+   "sha256": "64f891f8422ffde44630e53d3649ce8677182b5e3d8f2788de70c078c99b67df",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_pots.png）"
+  },
+  {
+   "file": "stall-booth.png",
+   "size": [
+    256,
+    192
+   ],
+   "bytes": 69027,
+   "sha256": "ad072fbed7e3796cf3fc738a323cf96e01a088b6200f790dcee998b0c7798ab2",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 stall_booth.png）"
+  },
+  {
+   "file": "unlock-seasons.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 9166,
+   "sha256": "fdc265f1a10b45add6599ed5db83b2a6892c6734495a9b58c06258012dd67e0d",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_icons.png）"
+  },
+  {
+   "file": "unlock-weather.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 9069,
+   "sha256": "2b913b12369bb2e8ebaeb94bcdec2cb83d70de2b1127a3561fe58940ffb33fdb",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_icons.png）"
+  }
+ ]
+}

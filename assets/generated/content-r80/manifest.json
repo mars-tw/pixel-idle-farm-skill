@@ -1,0 +1,139 @@
+{
+ "model": "muse-wonder-1.0 via muse.image_generation",
+ "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、依格子切開、縮放",
+ "generated": "2026-11-16",
+ "background": "純洋紅 #FF00FF 產生後去背；決定物件 96×96、攤位 256×192、鍋子 128×128、圖示 64×64，物件底部對齊",
+ "note": "後續委託兩個決定（招牌三色）的地圖物件圖，共 13 張。畫風參考 content-r75 的蓄光瓶、農場招牌、料理鍋。OpenAI gpt-image-2 額度用盡，改用 MUSE。",
+ "files": [
+  {
+   "file": "decision-elder-seed-quick.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 17447,
+   "sha256": "a4ed716e77b07baf7387209b8d52d72563ca5a6d3d4b6522c9cec3efd804a1db",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_elder.png）"
+  },
+  {
+   "file": "decision-elder-seed-sturdy.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 16866,
+   "sha256": "5ceec5c6e3c4d6b94fd0c5a3733b5ccf5e4c12683b52b2ab22511ef9e1e8b562",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_elder.png）"
+  },
+  {
+   "file": "decision-elder-sell-cash.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 15436,
+   "sha256": "4e022ab7d4372bc26e234073c2786261a678f433b4f25787d5d43614c901bf32",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_elder.png）"
+  },
+  {
+   "file": "decision-elder-sell-sample.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 15413,
+   "sha256": "356489397adab3f8470eaf3121d2afdb39415acb92631b374f72e50eb012e364",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_elder.png）"
+  },
+  {
+   "file": "decision-mayor-farm-seed.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 17757,
+   "sha256": "b88ba8c0330bb5c6ecfb2dc82210f965b1754e12fcb06c9ee81db0f0e05ff811",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_mayor.png）"
+  },
+  {
+   "file": "decision-mayor-farm-sun.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 18351,
+   "sha256": "e5c935aba43da87574ecea988836303e4eaabc5abcf21b73f4a22f3417c6f9f7",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_mayor.png）"
+  },
+  {
+   "file": "decision-mayor-town-river-path.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 13836,
+   "sha256": "e595045601213e659e5df15c44488abff543e6ca097fa515524e06aa81a0be51",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_mayor.png）"
+  },
+  {
+   "file": "decision-mayor-town-town-gate.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 11891,
+   "sha256": "dd452e58d2d17cfd9e094e94e944e82c73d116c57de8d7f4abd5c40a8e2ba177",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_mayor.png）"
+  },
+  {
+   "file": "decision-merchant-listen-fresh.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 13455,
+   "sha256": "c8cb5c68abca20a384b97049588b71a0ded31c7a8adbabb4b3f82ef1178fc7e5",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_merchant.png）"
+  },
+  {
+   "file": "decision-merchant-listen-sweet.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 12575,
+   "sha256": "b420805aae31c4f4c30d9bc12016b3e7ee31d55b08f106d852d3bab7b8a473c1",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_merchant.png）"
+  },
+  {
+   "file": "decision-merchant-sign-blue.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 9778,
+   "sha256": "52562033ee0ab105ad487bc08cf1b372a9c2ba1ea3da857ce58c88f534f2da73",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_merchant.png）"
+  },
+  {
+   "file": "decision-merchant-sign-green.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 9450,
+   "sha256": "387d2488a7411594c58b5a835607b9c63ccb18536d49c50ca36fe9608e03f304",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_merchant.png）"
+  },
+  {
+   "file": "decision-merchant-sign-red.png",
+   "size": [
+    96,
+    96
+   ],
+   "bytes": 9426,
+   "sha256": "66c502465a732f02d0557f4d1d66a6be28ee632a0a97373926e82feadec5c52a",
+   "source": "muse.image_generation 新生成（1024×1024 洋紅底素材表 sheet_merchant.png）"
+  }
+ ]
+}

@@ -334,7 +334,9 @@ test("第 6 項：升級卡不再重複「獲得：農場等級提升」、天�
     for (const row of card.unlocks) assert.ok(row.icon || row.mark, "Lv " + level + " 的「" + row.name + "」要有圖示");
   }
   const weather = G.milestoneCard("level_up", { level: 5 }).unlocks.find((row) => row.id === "weather");
-  assert.equal(weather.mark, C.WEATHER.rain.icon, "天氣變化先用資源列同一個天氣符號");
+  // R80 整合：專屬圖示到了就用圖（content-r79/unlock-weather.png），沒有圖才用資源列同一個天氣符號頂替。
+  if (fs.existsSync(path.join(ROOT, "assets/generated/content-r79/unlock-weather.png"))) assert.equal(weather.icon, "assets/generated/content-r79/unlock-weather.png", "天氣變化用專屬圖示");
+  else assert.equal(weather.mark, C.WEATHER.rain.icon, "天氣變化先用資源列同一個天氣符號");
   assert.doesNotMatch(ui, /r55-future-upgrades|之後的目標（/, "升級面板不再另折一層「之後的目標」");
   assert.match(ui, /laterCards\.forEach\(\(el\) => box\.appendChild\(el\)\);/);
   const block = (css.match(/R80C（選擇的後果玩得到[\s\S]*R80C 結束/) || [""])[0];
