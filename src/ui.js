@@ -4457,6 +4457,8 @@
     }
     /* R81B：田上只留一行名稱；秒數與收成結果改由田邊動作列承擔。 */
     label.textContent = String(text).split("\n")[0];
+    /* R81 整合：第二行（光性成果、光快落下）不再畫在田上，但留在提示文字裡，滑鼠停留或讀屏時仍讀得到。 */
+    label.title = String(text).replace(/\n/g, "・");
     /* R77A 第 1 項：折光之前先寫出折過來會怎樣；不能折也寫原因。句子全部來自 FarmSunplay.refractPreview（跟動作列的折光鈕同一份規則）。 */
     /* R78B 第 2 項：熟了又有光要來的那一格，改寫成有數字的二選一（現在收幾份｜等幾秒收幾份＋陽光），這時不再疊折光說明。 */
     r78bLabelKey = r78bLabelKeyFor(tile, text);

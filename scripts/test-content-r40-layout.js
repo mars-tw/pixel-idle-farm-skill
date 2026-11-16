@@ -214,10 +214,12 @@ async function measureDialogue(page) {
         const tileEl = document.querySelector('.gtile[data-tile-id="' + tid + '"]');
         const tiles = [...document.querySelectorAll('.gtile')].filter(vis);
         const widths = tiles.slice(0, 8).map((e) => ro(e).width);
-        return { text: label ? label.textContent.trim() : '', sel: selEl ? ro(selEl) : null, tile: tileEl ? ro(tileEl) : null, widths };
+        return { text: label ? label.textContent.trim() : '', title: label ? label.title : '', sel: selEl ? ro(selEl) : null, tile: tileEl ? ro(tileEl) : null, widths };
       }, { src: HELP, tid: tileId });
       /* R76A：選取田格改顯示這株目前的光性收成結果，不再只寫通用加速。 */
-      assert(sel.text.includes('喜光・照過光了：收成多 1 份'), `${tag} 選取受光格提示應說明實際收成結果（實際「${sel.text}」）`);
+      /* R81 整合同步：R81B 田上標籤只畫一行名稱，光性成果改留在提示文字（title），斷言內容不變。 */
+      assert(/^小麥・已種 \d+／3 格$/.test(sel.text), `${tag} 田上標籤只畫一行（實際「${sel.text}」）`);
+      assert(sel.title.includes('喜光・照過光了：收成多 1 份'), `${tag} 選取受光格提示應說明實際收成結果（實際「${sel.title}」）`);
       assert(sel.sel && sel.tile, `${tag} 應有選取格`);
       assert(Math.abs(sel.sel.width - sel.tile.width) <= 2, `${tag} 選取框寬 ${Math.round(sel.sel.width)} 應等於一格寬 ${Math.round(sel.tile.width)}（±2px）`);
       console.log(`OK 第 7＋10 項 ${tag}：受光格邊框／太陽／${sun.secs} 秒進度條齊全、近白 ${white.toFixed(2)}% < 3%、提示實際光性成果、選取框寬 ${Math.round(sel.sel.width)} ≈ 一格 ${Math.round(sel.tile.width)}`);

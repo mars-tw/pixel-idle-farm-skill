@@ -247,8 +247,9 @@ const INTERSECT_JS = `
         window.__farm.setTool('water'); window.__farm.clickTile(tile.id);
       });
       await page.waitForTimeout(250);
-      const sunLabel = await page.evaluate(() => { const label = document.querySelector('[data-audit="tile-state-label"]'); return label && !label.hidden ? label.textContent.trim() : null; });
-      assert.match(String(sunLabel), /^光到了再澆水・小麥\s+光快落在這格了$/, `${w}×${h} 光快落在這格時標籤應提示光到了再澆水，實際「${sunLabel}」`);
+      /* R81 整合同步：R81B 田上標籤只畫一行，第二行「光快落在這格了」改留在提示文字（title）。 */
+      const sunLabel = await page.evaluate(() => { const label = document.querySelector('[data-audit="tile-state-label"]'); return label && !label.hidden ? label.textContent.trim() + '\n' + (label.title || '') : null; });
+      assert.match(String(sunLabel), /^光到了再澆水・小麥\n光到了再澆水・小麥・光快落在這格了$/, `${w}×${h} 光快落在這格時標籤應提示光到了再澆水，實際「${sunLabel}」`);
       console.log(`OK 單格 ${w}×${h} 光快落下時標籤改寫「光到了再澆水」`);
       await page.evaluate(() => { const s = window.__farm.state(); Object.assign(s.sun, { previewPlots: [], previewAt: 0, nextAt: Date.now() + 600000 }); });
       await page.evaluate(() => { const s = window.__farm.state(); s.plots[0].cropId = null; window.__farm.cancelJourney(); window.__farm.setTool('hand'); window.__farm.refresh(); });
