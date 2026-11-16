@@ -40,13 +40,13 @@
   /* 小收穫都只有一份。陽光、木料、堆肥另有冷卻，十分鐘裡最多幾份，不會變成另一條賺錢的路。
      label 是地圖上小名牌寫的名稱；name 是要做的事（讀屏與提示用）。 */
   const CHORES = [
-    { id: "glean", label: "落穗", name: "撿落穗", art: "assets/generated/r83/wheat-32.png", motion: "sway", reward: { seeds: "wheat" }, rewardText: "小麥種子 1 包", cooldownMs: 0,
+    { id: "glean", label: "落穗", name: "撿落穗", art: "assets/generated/content-r83/chore-glean.png", motion: "sway", reward: { seeds: "wheat" }, rewardText: "小麥種子 1 包", cooldownMs: 0,
       doneText: "你把田埂上的落穗撿起來，收進種子袋。" },
     { id: "sparrow", label: "麻雀", name: "趕麻雀", art: "assets/generated/content-r82/chore-sparrow.png", motion: "hop", reward: { sunlight: 1 }, rewardText: "陽光 1", cooldownMs: 120000,
       doneText: "麻雀拍拍翅膀飛走了，麥穗多接到一點光。" },
     { id: "weed", label: "雜草", name: "拔雜草", art: "assets/generated/content-r82/chore-weed.png", motion: "sway", reward: { compost: 1 }, rewardText: "堆肥 1", cooldownMs: 180000,
       doneText: "你把田邊那株雜草連根拔起，丟進堆肥。" },
-    { id: "twig", label: "枯枝", name: "撿枯枝", art: "assets/generated/content-r73/item-fallen_branch.png", motion: "still", reward: { wood: 1 }, rewardText: "木料 1", cooldownMs: 120000,
+    { id: "twig", label: "枯枝", name: "撿枯枝", art: "assets/generated/content-r83/chore-twig.png", motion: "still", reward: { wood: 1 }, rewardText: "木料 1", cooldownMs: 120000,
       doneText: "你把吹到田邊的枯枝撿回來，捆成一小把木料。" },
   ];
   /* R83C 第 3 項：麻雀的兩個做法。數字只寫在選項小字與手札，不寫進旁白。 */

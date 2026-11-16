@@ -1,0 +1,28 @@
+{
+ "model": "muse-wonder-1.0 via muse.image_generation",
+ "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、裁切、縮放",
+ "generated": "2026-11-17",
+ "note": "R83 田邊小事：地上散落的麥穗（撿落穗）、地上一小捆枯枝（撿枯枝），取代原本借用的背包物品圖示；參考 content-r82/chore-sparrow.png、chore-weed.png 畫風。",
+ "files": [
+  {
+   "file": "chore-glean.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 6099,
+   "sha256": "beceaced151dd73fba6bac1c6ca0ac908114b331178790e774879e542d8675a1",
+   "source": "sheet_ground.png（1024×1024 洋紅底兩件一張，本輪新生成）"
+  },
+  {
+   "file": "chore-twig.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 4476,
+   "sha256": "941d92073cc5572dc964c6690afea86e0cf3a78a117703740f1f4cdf9b442b77",
+   "source": "sheet_ground.png（1024×1024 洋紅底兩件一張，本輪新生成）"
+  }
+ ]
+}
