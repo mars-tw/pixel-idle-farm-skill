@@ -7,6 +7,7 @@
   "use strict";
   const C = typeof module !== "undefined" && module.exports ? require("./config.js") : (root.CONFIG || root);
   const Sunplay = typeof module !== "undefined" && module.exports ? require("./sunplay-r75.js") : root.FarmSunplay;
+  const Heirloom = typeof module !== "undefined" && module.exports ? require("./heirloom.js") : root.FarmHeirloom;
   const VERSION = 2;
   const COUNT_CAP = 1000000;
   const EVENT_CAP = 100;
@@ -505,36 +506,36 @@
     const q = QUESTS[index]; const route = questRouteStatus(state, q, a);
     if (!route.primary.length && !route.alt.length) return null;
     const npc = (C.NPCS || {})[q.npcId] || { name: "鎮民" }; const tag = { questAware: true, questId: q.id };
-    if (route.canClaim) return Object.assign({ action: "report", target: q.npcId, tileId: null, text: `「${q.name}」要的東西都齊了，去找${npc.name}回報。`, actionLabel: "去回報" }, tag);
+    if (route.canClaim) return Object.assign({ action: "report", target: q.npcId, tileId: null, text: `「${q.name}」要的東西都齊了，去找${npc.name}回報。`, short: `去找${npc.name}回報`, actionLabel: "去回報" }, tag);
     if (!route.goalsDone) return null;
     const row = route.primary.find((r) => !r.complete); if (!row) return null;
     const lack = Math.max(1, row.required - row.current);
     if (row.source === "materials") {
       const spot = (state.map && state.map.tiles || []).find((tile) => tile.object && (C.OBSTACLES || {})[tile.object] && ((C.OBSTACLES[tile.object].grants || {})[row.id] || 0) > 0);
       if (!spot) return null;
-      return Object.assign({ action: "gather", target: "obstacle", tileId: spot.id, materialId: row.id, text: `還差 ${lack} 份${row.name}，清掉農場上的${C.OBSTACLES[spot.object].name}就有。`, actionLabel: `去找${row.name}` }, tag);
+      return Object.assign({ action: "gather", target: "obstacle", tileId: spot.id, materialId: row.id, text: `還差 ${lack} 份${row.name}，清掉農場上的${C.OBSTACLES[spot.object].name}就有。`, short: `去農場找${row.name}`, actionLabel: `去找${row.name}` }, tag);
     }
     if (row.source !== "inventory" || !C.CROPS[row.id]) return null;
     const crop = C.CROPS[row.id]; const need = `還差 ${lack} 份${crop.name}`; const mine = (tile) => ctx.plotOf(tile).cropId === crop.id;
     const extra = Object.assign({ cropId: crop.id }, tag);
     const ripe = ctx.ready.filter(mine);
-    if (ripe.length) return ctx.field("harvest", ripe[0], `${need}，田裡的${crop.name}熟了，點一下收成。`, `去收${crop.name}`, Object.assign({ count: ripe.length }, extra));
+    if (ripe.length) return ctx.field("harvest", ripe[0], `${need}，田裡的${crop.name}熟了，點一下收成。`, `去收${crop.name}`, `去田邊收${crop.name}`, Object.assign({ count: ripe.length }, extra));
     const thirsty = ctx.dry.find(mine);
-    if (thirsty) return ctx.field("tend", thirsty, `${need}，田裡的${crop.name}正在長，先澆水，長得更快。`, `去照顧${crop.name}`, extra);
+    if (thirsty) return ctx.field("tend", thirsty, `${need}，田裡的${crop.name}正在長，先澆水，長得更快。`, `去照顧${crop.name}`, `去田邊澆${crop.name}`, extra);
     const young = ctx.growing.find(mine);
-    if (young) return ctx.field("wait", young, `${need}，等田裡的${crop.name}成熟就能收。`, `等${crop.name}成熟`, extra);
+    if (young) return ctx.field("wait", young, `${need}，等田裡的${crop.name}成熟就能收。`, `等${crop.name}成熟`, `等${crop.name}成熟`, extra);
     const packs = qty((((a.r58 || {}).r59 || {}).seedPacks || {})[crop.id]);
     const unlocked = crop.unlockLevel <= (state.level || 1) && (crop.id !== "carrot" || ((state.upgrades || {}).plotCount || 0) >= 1);
     if (!unlocked && packs <= 0) return null;
-    if (ctx.empty.length) return ctx.field("plant", ctx.empty[0], `${need}，先種下${crop.name}。`, `去種${crop.name}`, extra);
+    if (ctx.empty.length) return ctx.field("plant", ctx.empty[0], `${need}，先種下${crop.name}。`, `去種${crop.name}`, `去田邊種${crop.name}`, extra);
     /* 田都種滿了：先收掉熟的空出一格；沒有熟的就交回原本的走法。 */
-    if (ctx.ready.length) return ctx.field("harvest", ctx.ready[0], `${need}，田都種滿了，先收成空出一格來種${crop.name}。`, "去收成", Object.assign({ count: ctx.ready.length }, tag));
+    if (ctx.ready.length) return ctx.field("harvest", ctx.ready[0], `${need}，田都種滿了，先收成空出一格來種${crop.name}。`, "去收成", "先收一格空出田地", Object.assign({ count: ctx.ready.length }, tag));
     return null;
   }
   // R75 整合：開場的下一步跟著光走——折光 → 光裡照料 → 等光時先把種子包種完 → 收成 → 催熟 → 交付。
   // 文字裡不放會跳動的秒數（任務卡靠文字判斷要不要重畫），倒數交給任務卡提示列與陽光標籤。
   function nextFarmStep(state, now) {
-    if (!ensure(state, now).ok) return { action: "wait", target: null, tileId: null, text: "先回到農場看看。", actionLabel: "回到農場" };
+    if (!ensure(state, now).ok) return { action: "wait", target: null, tileId: null, text: "先回到農場看看。", short: "回農場看看", actionLabel: "回到農場" };
     const a = state.adventure; const t = at(state, now); const ready = readyHarvestPlots(state, now); const wheat = ((state.storage || {}).items || {}).wheat || 0; const bread = (a.meals || {}).rustic_bread || 0;
     const active = activePlotTotal(state); const plotOf = (tile) => (state.plots || [])[tile.plotIndex];
     const tiles = (state.map && state.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < active && plotOf(tile));
@@ -549,7 +550,7 @@
       const out = Sunplay.harvestOutcome(state, plotOf(tile), { exposedNow: true, caughtSunlight: 1 });
       return `多收 ${Math.max(0, out.yieldBonus || 0)} 份＋陽光 ${Math.max(0, out.sunlightTotal || 0)}`;
     };
-    const field = (action, tile, text, actionLabel, extra) => Object.assign({ action, target: "field", tileId: tile ? tile.id : null, plotIndex: tile ? tile.plotIndex : null, text, actionLabel }, extra || {});
+    const field = (action, tile, text, actionLabel, short, extra) => Object.assign({ action, target: "field", tileId: tile ? tile.id : null, plotIndex: tile ? tile.plotIndex : null, text, short, actionLabel }, extra || {});
     const mealDone = claimed(a, "c1_first_meal"); const sunplay = Sunplay && !mealDone ? Sunplay.normalize(state).r75Sunplay : null; let litGrowing = null, lightOn = false;
     if (sunplay) {
       const sun = state.sun || {}; const used = sun.used || [];
@@ -560,13 +561,13 @@
         const target = dry[0] || growing[0] || cropped[0];
         /* 作物已經熟了還叫玩家折光，要講清楚為什麼：在光裡收成才接得到陽光，所以先別收。 */
         const ripe = ready.includes(target);
-        if (Sunplay.canRefract(state, target.plotIndex, t)) return field("refract", target, ripe ? `${cropName(target)}熟了，先別收。拿祖母的手鏡把光折過來，在光裡收成會${lightHarvestReward(target)}。` : activeLight.length ? `光落在空田上。拿祖母的手鏡，把光折到你的${cropName(target)}上。` : `光快落在空田上了。拿祖母的手鏡，先把光折到你的${cropName(target)}上。`, "把光折過來");
+        if (Sunplay.canRefract(state, target.plotIndex, t)) return field("refract", target, ripe ? `${cropName(target)}熟了，先別收。拿祖母的手鏡把光折過來，在光裡收成會${lightHarvestReward(target)}。` : activeLight.length ? `光落在空田上。拿祖母的手鏡，把光折到你的${cropName(target)}上。` : `光快落在空田上了。拿祖母的手鏡，先把光折到你的${cropName(target)}上。`, "把光折過來", `把光折到${cropName(target)}上`);
       }
       if (activeLight.length && litCrops.length) {
         const ripe = litCrops.find((tile) => ready.includes(tile));
-        if (ripe) return field("harvest", ripe, `光正照著，點一下收成：${lightHarvestReward(ripe)}。`, "在光裡收成", { count: ready.length, sunlit: true });
+        if (ripe) return field("harvest", ripe, `光正照著，點一下收成：${lightHarvestReward(ripe)}。`, "在光裡收成", `趁光收成${cropName(ripe)}`, { count: ready.length, sunlit: true });
         const thirsty = litCrops.find((tile) => dry.includes(tile));
-        if (thirsty) return field("tend", thirsty, `光到了！趁光還在替${cropName(thirsty)}澆水，接住${sunplay.firstCaught ? "" : "第一點"}陽光。`, "在光裡澆水", { sunlit: true });
+        if (thirsty) return field("tend", thirsty, `光到了！趁光還在替${cropName(thirsty)}澆水，接住${sunplay.firstCaught ? "" : "第一點"}陽光。`, "在光裡澆水", `趁光澆${cropName(thirsty)}`, { sunlit: true });
       }
       /* 光快落在有作物的格子上：那一格留到光到了再收成或澆水，這幾秒先做別格的事。
          已經熟的也先留著——不然玩家會在光到之前把它收掉，光就落在空田上。 */
@@ -580,38 +581,110 @@
         /* R80B：教學後玩家選了「等光再收」就不再自動收。等待的幾秒把一件別格農事交給任務卡，
            但 holdPlotIndex 仍保留，快速收成不會誤收這一格。 */
         const canDoOther = !holdRipe || (queued && !queued.autoHarvest);
-        if (canDoOther && empty.length && packs > 0) return field("plant", empty[0], `已選等光再收。光還沒到，先把剩下的 ${packs} 包小麥種子種下。`, "去種小麥", held);
+        if (canDoOther && empty.length && packs > 0) return field("plant", empty[0], `已選等光再收。光還沒到，先把剩下的 ${packs} 包小麥種子種下。`, "去種小麥", "先去田邊種小麥", held);
         const other = canDoOther ? dry.find((tile) => !lit.includes(tile.plotIndex)) : null;
-        if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水", held);
+        if (other) return field("tend", other, `光還沒到，先替另一格${cropName(other)}澆水。`, "去澆水", `先澆另一格${cropName(other)}`, held);
         const otherReady = ready.filter((tile) => !lit.includes(tile.plotIndex));
-        if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", { count: otherReady.length, holdPlotIndex: hold.plotIndex });
+        if (otherReady.length) return field("harvest", otherReady[0], `光還沒到，先收別格：田裡有 ${otherReady.length} 格可以收成。`, "去收成", "先收另一格作物", { count: otherReady.length, holdPlotIndex: hold.plotIndex });
         return field("catch_sun", hold, queued && !queued.autoHarvest
           ? `已選等光再收。光到了要自己收成：${lightHarvestReward(hold)}。`
           : `光快落在${cropName(hold)}上了。${holdRipe ? `等光再收：${lightHarvestReward(hold)}。` : "光到了再澆水，才接得住陽光。"}`,
-        holdRipe ? (queued && !queued.autoHarvest ? "看看田裡" : "等光再收") : "看光落在哪", holdRipe ? held : null);
+        holdRipe ? (queued && !queued.autoHarvest ? "看看田裡" : "等光再收") : "看光落在哪", holdRipe ? `等光再收${cropName(hold)}` : `等光落下再澆${cropName(hold)}`, holdRipe ? held : null);
       }
       litGrowing = growing.find((tile) => lit.includes(tile.plotIndex)) || null; lightOn = activeLight.length > 0;
     }
     if (mealDone) { const questStep = questFarmStep(state, a, { ready, growing, dry, empty, plotOf, field }); if (questStep) return questStep; }
-    if (ready.length) return field("harvest", ready[0], `田裡有 ${ready.length} 格可以收成，點一下收成。`, "去收成", { count: ready.length });
+    if (ready.length) return field("harvest", ready[0], `田裡有 ${ready.length} 格可以收成，點一下收成。`, "去收成", `去田邊收${cropName(ready[0])}`, { count: ready.length });
     if (sunplay && sunplay.sunlight >= 2 && !sunplay.firstRipened && growing.length) {
       const target = growing.slice().sort((x, y) => plotOf(y).plantedAt - plotOf(x).plantedAt)[0];
-      return field("ripen", target, `蓄光瓶有 ${sunplay.sunlight} 點陽光。用掉 2 點，讓還在長的${cropName(target)}立刻成熟。`, "用陽光催熟");
+      return field("ripen", target, `蓄光瓶有 ${sunplay.sunlight} 點陽光。用掉 2 點，讓還在長的${cropName(target)}立刻成熟。`, "用陽光催熟", `用陽光催熟${cropName(target)}`);
     }
     const harvestDone = claimed(a, "c1_first_harvest");
     /* R79 整合：第一個任務「找鎮長葛瑞交談」還沒做完時，老農班伯的開市任務還沒開，先帶玩家去找鎮長。
        原本小麥一湊滿 2 份就叫玩家交給老農班伯，任務卡與驚嘆號卻都指向鎮長，三處講不同的人。 */
-    if (!harvestDone && wheat >= 2 && !claimed(a, "c1_homecoming")) return { action: "report", target: "mayor", questId: "c1_homecoming", tileId: null, text: "小麥收好了。先去找鎮長葛瑞打聲招呼，他會告訴你這 2 份要交給誰。", actionLabel: "前往交談" };
-    if (!harvestDone && wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", actionLabel: "帶去交付" };
-    if (harvestDone && !mealDone && bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", actionLabel: "吃麥餅" };
-    if (harvestDone && !mealDone && wheat >= 2) return { action: "cook", target: "kitchen", tileId: "t10_10", text: "食材已齊，前往農舍灶台做農家麥餅。", actionLabel: "前往灶台" };
-    if (mealDone) return { action: "explore", target: "fishing_dock", tileId: null, text: "第一餐吃完了，去河邊看看釣台。", actionLabel: "去河邊看看" };
-    if (dry.length) return field("tend", dry[0], `${cropName(dry[0])}正在長，先澆水，長得更快。`, "去澆水");
+    if (!harvestDone && wheat >= 2 && !claimed(a, "c1_homecoming")) return { action: "report", target: "mayor", questId: "c1_homecoming", tileId: null, text: "小麥收好了。先去找鎮長葛瑞打聲招呼，他會告訴你這 2 份要交給誰。", short: "去找鎮長葛瑞", actionLabel: "前往交談" };
+    if (!harvestDone && wheat >= 2) return { action: "deliver", target: "elder", tileId: null, text: "2 份小麥已備齊，帶去交給老農班伯。", short: "把小麥交給老農班伯", actionLabel: "帶去交付" };
+    if (harvestDone && !mealDone && bread > 0) return { action: "eat", target: "kitchen", tileId: "t10_10", text: "農家麥餅做好了，趁熱吃下第一餐。", short: "回農舍吃農家麥餅", actionLabel: "吃麥餅" };
+    if (harvestDone && !mealDone && wheat >= 2) return { action: "cook", target: "kitchen", tileId: "t10_10", text: "食材已齊，前往農舍灶台做農家麥餅。", short: "回農舍做農家麥餅", actionLabel: "前往灶台" };
+    if (mealDone) return { action: "explore", target: "fishing_dock", tileId: null, text: "第一餐吃完了，去河邊看看釣台。", short: "去河邊看看釣台", actionLabel: "去河邊看看" };
+    if (dry.length) return field("tend", dry[0], `${cropName(dry[0])}正在長，先澆水，長得更快。`, "去澆水", `去田邊澆${cropName(dry[0])}`);
     const mealNeed = `回家的第一餐還差 ${Math.max(0, 2 - wheat)} 份小麥`;
-    if (empty.length && packs > 0 && cropped.length) return field("plant", empty[0], `把剩下的 ${packs} 包小麥種子也種下，幾格一起照顧。`, "去種小麥");
-    if (!growing.length) return field("plant", empty[0] || null, harvestDone ? `${mealNeed}，先種下小麥。` : "先種下第一格小麥，接著跟著光走。", "去種小麥");
-    if (litGrowing) return field("wait", litGrowing, `${lightOn ? "光正照著" : "光快落在"}${cropName(litGrowing)}${lightOn ? "" : "上了"}，熟了就趁光收成：${lightHarvestReward(litGrowing)}。`, "看看田裡");
-    return field("wait", growing[0], harvestDone ? `${mealNeed}，等田裡的${cropName(growing[0])}成熟。` : `${cropName(growing[0])}正在長，成熟了就來收。`, "看看田裡");
+    /* R82A：受光中的作物還在長時，先照顧眼前這株，不要一邊顯示「還沒成熟」一邊又叫玩家去種別格。 */
+    if (litGrowing && lightOn) return field("wait", litGrowing, `光正照著${cropName(litGrowing)}，等這株成熟再收。`, "看看田裡", `等${cropName(litGrowing)}成熟再收`);
+    if (empty.length && packs > 0 && cropped.length) return field("plant", empty[0], `把剩下的 ${packs} 包小麥種子也種下，幾格一起照顧。`, "去種小麥", "去田邊種小麥");
+    if (!growing.length) return field("plant", empty[0] || null, harvestDone ? `${mealNeed}，先種下小麥。` : "先種下第一格小麥，接著跟著光走。", "去種小麥", "去田邊種小麥");
+    if (litGrowing) return field("wait", litGrowing, `${lightOn ? "光正照著" : "光快落在"}${cropName(litGrowing)}${lightOn ? "" : "上了"}，熟了就趁光收成：${lightHarvestReward(litGrowing)}。`, "看看田裡", `等${cropName(litGrowing)}成熟再收`);
+    return field("wait", growing[0], harvestDone ? `${mealNeed}，等田裡的${cropName(growing[0])}成熟。` : `${cropName(growing[0])}正在長，成熟了就來收。`, "看看田裡", `等${cropName(growing[0])}成熟再收`);
+  }
+
+  /* R82A：所有玩家看得到的「下一步」都從這裡取。nextFarmStep 保留純農務排序；
+     nextGuidance 再把陽光餐籃與藍布舊麥種的故事階段放到同一條時間線上。 */
+  function guidanceGame() {
+    if (root && root.getCropProgress && root.activePlotCount) return root;
+    if (typeof module !== "undefined" && module.exports) return require("./game.js");
+    return null;
+  }
+  function guidanceFieldStep(state, now, cropId, need, sourceText) {
+    const G = guidanceGame(); if (!G) return null;
+    const active = G.activePlotCount(state), crop = C.CROPS[cropId] || { name: "作物" };
+    const tiles = (state.map && state.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < active && state.plots[tile.plotIndex]);
+    const mine = tiles.filter((tile) => state.plots[tile.plotIndex].cropId === cropId);
+    const ready = mine.find((tile) => G.getCropProgress(state, state.plots[tile.plotIndex], now).ready);
+    const dry = mine.find((tile) => { const p = G.getCropProgress(state, state.plots[tile.plotIndex], now); return !p.ready && !p.wet; });
+    const growing = mine.find((tile) => !G.getCropProgress(state, state.plots[tile.plotIndex], now).ready);
+    const empty = tiles.find((tile) => !state.plots[tile.plotIndex].cropId);
+    const prefix = sourceText + "還差 " + Math.max(1, need) + " 份" + crop.name + "，";
+    const field = (action, tile, text, short, actionLabel) => ({ guidanceScope: "r81_story", action, kind: action, target: "field", tileId: tile ? tile.id : null, plotIndex: tile ? tile.plotIndex : null, cropId, text, short, actionLabel });
+    if (ready) return field("harvest", ready, prefix + "田裡的" + crop.name + "熟了，先去收成。", "去田邊收" + crop.name, "去收" + crop.name);
+    if (dry) return field("tend", dry, prefix + "田裡的" + crop.name + "正在長，先澆水。", "去田邊澆" + crop.name, "去照顧" + crop.name);
+    if (growing) return field("wait", growing, prefix + "田裡已經有" + crop.name + "，等成熟再收。", "等" + crop.name + "成熟再收", "看看田裡");
+    if (empty) return field("plant", empty, prefix + "先種一株" + crop.name + "。", "去田邊種" + crop.name, "去種" + crop.name);
+    return { guidanceScope: "r81_story", action: "wait", kind: "wait", target: "field", tileId: null, text: prefix + "先收成或清出一格田。", short: "先清出一格田地", actionLabel: "看看田裡" };
+  }
+  function heirloomGuidance(state, now) {
+    if (!Heirloom || !state) return null;
+    const h = Heirloom.status(state); if (!h.started || h.delivered) return null;
+    const G = guidanceGame(); if (!G) return null;
+    const sun = G.sunpatchStatus(state, now), active = G.activePlotCount(state);
+    const plots = (state.map && state.map.tiles || []).filter((tile) => tile.plotIndex != null && tile.plotIndex < active && state.plots[tile.plotIndex]);
+    const wheat = plots.filter((tile) => state.plots[tile.plotIndex].cropId === "wheat");
+    const ripe = wheat.find((tile) => G.getCropProgress(state, state.plots[tile.plotIndex], now).ready);
+    const step = (kind, title, detail, short, label, target, extra) => Object.assign({ guidanceScope: "heirloom", action: kind === "deliver" ? "deliver_heirloom" : kind, kind, title, text: detail, short, detail, actionLabel: label, label, target: target || null, tileId: target ? target.id : null, plotIndex: target ? target.plotIndex : null }, extra || {});
+    if (h.ready) return step("deliver", "第一份餐籃，送給誰？", "替鎮長葛瑞留兩份小麥。送到門邊，或邀他一起坐下。", "把餐籃送給鎮長葛瑞", "裝好餐籃", null);
+    const base = nextFarmStep(state, now), mirror = base && base.action === "refract" ? wheat.find((tile) => tile.id === base.tileId) : null;
+    if (mirror) return step("refract", "拿祖母的手鏡折光", base.text, base.short, base.actionLabel, mirror);
+    const pending = sun.previewPlots || [];
+    if (ripe && h.sunWheat < 2 && pending.includes(ripe.plotIndex) && state.plots[ripe.plotIndex].sunGrown !== true) return step("wait", "光快落在麥穗上了", "先別收。等光落下再收成，這一株才算陽光小麥。", "等光落下再收小麥", "看看這株小麥", ripe);
+    if (ripe) return step("harvest", "把這束陽光收進餐籃", "小麥成熟了。收成後，留下兩份給鎮長葛瑞。", "去田邊收小麥", "走近收成", ripe);
+    const lit = plots.find((tile) => sun.plots.includes(tile.plotIndex) && (!state.plots[tile.plotIndex].cropId || (state.plots[tile.plotIndex].cropId === "wheat" && !G.getCropProgress(state, state.plots[tile.plotIndex], now).wet)));
+    if (lit && h.sunWheat < 2) return step(state.plots[lit.plotIndex].cropId ? "water" : "plant", "光落在這裡", `光斑還有 ${Math.ceil(sun.remainingMs / 1000)} 秒。在光裡${state.plots[lit.plotIndex].cropId ? "澆水" : "種小麥"}，這株的收穫會記進餐籃。`, state.plots[lit.plotIndex].cropId ? "趁光去田邊澆小麥" : "趁光去田邊種小麥", state.plots[lit.plotIndex].cropId ? "去光裡澆水" : "在光裡播種", lit);
+    const growing = wheat[0];
+    if (growing) {
+      const p = state.plots[growing.plotIndex], progress = G.getCropProgress(state, p, now);
+      if (p.sunGrown !== true && pending.includes(growing.plotIndex)) return step("wait", "光快落在這株小麥上了", progress.wet ? "水已經澆了。等光落下、小麥熟了，趁光收成。" : "先別澆水。等光落下再澆，才接得住陽光。", progress.wet ? "等光落下再收小麥" : "等光落下再澆小麥", "看看這株小麥", growing);
+      return step("wait", p.sunGrown === true ? "陽光已經留在麥穗裡" : "等第一道光落下", p.sunGrown === true ? `再等約 ${Math.ceil(progress.remainingMs / 1000)} 秒成熟。光散了，這株仍記得你在光裡的照料。` : "光落下前，田上會先亮起預告圈。看見光落下，再去澆水；錯過會再來。", p.sunGrown === true ? "等小麥成熟再收" : "等光落下再澆小麥", "看看這株小麥", growing);
+    }
+    const empty = plots.find((tile) => !state.plots[tile.plotIndex].cropId);
+    return step("plant", "先種一株，等光來", h.sunWheat >= 2 ? "陽光收成已記下。倉庫還要留兩份小麥，才裝得成餐籃。" : "種一株小麥，先別澆水；看見光落下，再去澆水。餐籃不用等換日。", "去田邊種小麥", "種第一株小麥", empty);
+  }
+  function storyGuidance(state, now) {
+    const S = root && root.StoryR76;
+    if (!S || typeof S.r81Stage !== "function") return null;
+    const stage = S.r81Stage(state); if (!stage || stage === "done") return null;
+    if (stage === "conflict") return { guidanceScope: "r81_story", action: "story_choice", kind: "story_choice", target: "r81c_story", tileId: null, text: "鎮長葛瑞想封存舊麥種，老農班伯想種回田裡。聽完兩人的話，再決定交給誰。", short: "到藍布老麥田看看", actionLabel: "去做決定" };
+    const info = S.r81Order(state, now);
+    if (stage === "order" && info) {
+      if (info.enough) return { guidanceScope: "r81_story", action: "story_order", kind: "story_order", target: info.side, tileId: null, text: `具名訂單「${info.name}」的 ${info.need} 份${(C.CROPS[info.itemId] || {}).name || "作物"}已備齊，帶去交付。`, short: info.side === "elder" ? "把訂單交給老農班伯" : "把訂單交給鎮長葛瑞", actionLabel: "交付具名訂單" };
+      return guidanceFieldStep(state, now, info.itemId, info.need - info.have, `具名訂單「${info.name}」`);
+    }
+    if (stage === "scene") return { guidanceScope: "r81_story", action: "story_scene", kind: "story_scene", target: "r81c_story", tileId: null, text: "具名訂單已交付。回到舊麥種旁，聽完這段故事。", short: "回藍布老麥田聽故事", actionLabel: "繼續舊麥種故事" };
+    return null;
+  }
+  function nextGuidance(state, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const next = storyGuidance(state, t) || heirloomGuidance(state, t) || nextFarmStep(state, t);
+    if (!next || typeof next.text !== "string" || typeof next.short !== "string") return next;
+    return next;
   }
 
   function earlyGoals(state, now) {
@@ -1623,7 +1696,7 @@
       stall: { id: "harvest_festival_stall", name: "祭典攤位", icon: "🎪", tileId: "t15_9", goals: copy(status.goals), judging: status.judging, rewardText: "三目標：收穫祭獎章 1 枚與河畔彩旗；作物評比：一至三星獎勵" },
     };
   }
-  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
+  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, nextGuidance, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
     mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal, r77Upgraded };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

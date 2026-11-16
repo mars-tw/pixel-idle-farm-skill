@@ -34,6 +34,7 @@ const VIEWS = [
   { w: 844, h: 390, mobile: true },
 ];
 const YELLOW = 'rgb(255, 207, 100)'; // R59B 主色 #ffcf64
+const SECONDARY = 'rgb(243, 234, 212)'; // R82A 手札按鈕改為次要色，同畫面只留一顆黃色主按鈕
 const GREY = 'rgb(230, 222, 208)'; // R59B 停用 #e6ded0
 
 async function setup(page, base) {
@@ -52,13 +53,13 @@ async function setup(page, base) {
 
 function titleMeasure() {
   const box = document.querySelector('#questDock');
-  const folded = box && /quest-(?:auto-)?collapsed|quest-target-collapsed/.test(box.className);
-  // R69 同步：手機收合規格是「標題或摘要＋進度＋主要按鈕」，摘要取代隱藏的舊標題節點。
-  const sum = box && folded ? box.querySelector('.r69a-collapsed-summary') : null; const step = (sum && getComputedStyle(sum).display !== 'none' && sum.getBoundingClientRect().width > 0 ? sum : null) || (box && box.querySelector('.world-objective-title .qp-step')); // R69 整合：桌面收合時一般摘要與標題列重複，只留標題列；摘要或標題列任一可見即可
+  const folded = box && (/quest-(?:auto-)?collapsed|quest-target-collapsed/.test(box.className) || !!document.querySelector('.side-panel.world-panel-open'));
+  // R82A：收合與桌面面板改驗人工 short；手機面板仍整張隱藏。
+  const sum = box && folded ? box.querySelector('.r82a-guidance-short') : null; const step = (sum && getComputedStyle(sum).display !== 'none' && sum.getBoundingClientRect().width > 0 ? sum : null) || (box && box.querySelector('.world-objective-title .qp-step'));
   if (!step) return { ok: false, reason: 'no-step', dock: box ? box.textContent.trim().slice(0, 80) : '' };
   const r = step.getBoundingClientRect(), cs = getComputedStyle(step);
   return {
-    ok: /今日三件事|三件事/.test(step.textContent) && cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 0 && r.height > 0,
+    ok: !!step.textContent.trim() && cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 0 && r.height > 0,
     text: step.textContent.trim(), display: cs.display, w: Math.round(r.width), h: Math.round(r.height),
     dock: box.textContent.trim().slice(0, 80),
   };
@@ -103,10 +104,10 @@ function titleMeasure() {
         let zone = document.querySelector('#toast-zone');
         if (!zone) { zone = document.createElement('div'); zone.id = 'toast-zone'; document.body.appendChild(zone); }
         const toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = '量測用提示'; zone.appendChild(toast);
-        const m = (function () { const box = document.querySelector('#questDock'); const step = box.querySelector('.world-objective-title .qp-step'); const r = step.getBoundingClientRect(), cs = getComputedStyle(step); return { ok: /今日三件事|三件事/.test(step.textContent) && cs.display !== 'none' && r.height > 0, text: step.textContent.trim(), display: cs.display }; })();
+        const m = (function () { const box = document.querySelector('#questDock'); const step = box.querySelector('.r82a-guidance-short'); const line = step && step.closest('small'); const r = step && step.getBoundingClientRect(), cs = step && getComputedStyle(step); return { ok: !!(step && step.textContent.trim() && cs.display !== 'none' && r.height > 0 && line.scrollWidth <= line.clientWidth + 1 && line.scrollHeight <= line.clientHeight + 1), text: step && step.textContent.trim(), display: cs && cs.display, rect: r && { width:r.width,height:r.height }, line: line && { cw:line.clientWidth,sw:line.scrollWidth,ch:line.clientHeight,sh:line.scrollHeight,display:getComputedStyle(line).display } }; })();
         toast.remove(); return m;
       });
-      assert.ok(t.ok, `${tag} 提示出現時標題應可見：${JSON.stringify(t)}`);
+      assert.ok(t.ok, `${tag} 提示出現時 short 下一步應完整可見：${JSON.stringify(t)}`);
       // 面板開啟時（同時做第 6、9 項量測）
       await page.evaluate(() => window.FarmWorld.openPanel('story'));
       await page.waitForTimeout(900);
@@ -169,8 +170,8 @@ function titleMeasure() {
         const enabledRow = order.rows[order.firstEnabled];
         const minTop = Math.min(...order.rows.map((r) => r.top));
         assert.ok(Math.abs(enabledRow.top - minTop) <= 1, `${tag} 可交付委託應排在最前面（視覺頂端）：${JSON.stringify(order.rows)}`);
-        assert.equal(enabledRow.bg, YELLOW, `${tag} 可交付按鈕應為主色黃色，實際 ${enabledRow.bg}`);
-        console.log(`OK ${tag} 第 6／9 項：可交付委託在最前且按鈕為主色`);
+        assert.equal(enabledRow.bg, SECONDARY, `${tag} 手札可交付按鈕應為次要色，實際 ${enabledRow.bg}`);
+        console.log(`OK ${tag} 第 6／9 項：可交付委託在最前且手札按鈕不搶主色`);
       } else {
         console.log(`SKIP ${tag} 第 6 項排序：此階段無已解鎖的個人委託可備齊`);
       }
@@ -181,7 +182,7 @@ function titleMeasure() {
         return { dis: dis ? getComputedStyle(dis).backgroundColor : null, ena: ena ? getComputedStyle(ena).backgroundColor : null };
       });
       if (btnColors.dis) assert.equal(btnColors.dis, GREY, `${tag} 停用按鈕應為灰色，實際 ${btnColors.dis}`);
-      if (btnColors.ena) assert.equal(btnColors.ena, YELLOW, `${tag} 啟用按鈕應為主色黃色，實際 ${btnColors.ena}`);
+      if (btnColors.ena) assert.equal(btnColors.ena, SECONDARY, `${tag} 手札啟用按鈕應為次要色，實際 ${btnColors.ena}`);
 
       /* ---- 第 6 項：灶台可捲動、捲到底不切半張 ---- */
       await page.evaluate(() => window.FarmWorld.openKitchen()); await page.waitForTimeout(600);

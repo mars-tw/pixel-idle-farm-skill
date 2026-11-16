@@ -223,7 +223,8 @@ test("第 3 項：手札三層的程式接線（現在做的按鈕寫帶我去�
   assert.match(ui, /pane\.querySelector\("\.r32-show-more, \.r60-show-more, \.r81c-later-toggle\[aria-expanded=false\]"\)/, "以後再說收著時不再另外跳「往下還有」");
   const block = (css.match(/R81C（前十分鐘的小故事[\s\S]*R81C 結束/) || [""])[0];
   assert.ok(block, "R81C 區段在 content-r58b.css 檔尾");
-  assert.ok(css.trimEnd().endsWith("/* ===== R81C 結束 ===== */"), "R81C 追加在檔尾");
+  assert.ok(css.indexOf("/* ===== R81C 結束 ===== */") < css.indexOf("/* ===== R82A"), "R81C 區段保持完整，R82A 只追加在其後");
+  assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */"), "新 CSS 仍只追加在檔尾");
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
   assert.match(block, /\.r68a-card-now small \{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;/);
   assert.match(block, /\.r81c-later > \.r81c-later-body\[hidden\] \{ display: none !important; \}/);

@@ -203,9 +203,11 @@ const HELP = `
         // R69 同步：短桌面會自動收合，祭典摘要已併入「現在做」；不可再量已隱藏的舊橫幅。
         const summary = visibleBanner || (now && vis(now) ? now : null);
         const title = dock.querySelector('.world-objective-title');
+        const short = dock.querySelector('.r82a-guidance-short');
         return {
           dock: ro(dock), banner: summary ? ro(summary) : null, bannerText: summary ? summary.innerText.trim() : '', expandedBanner: !!visibleBanner,
           title: title ? ro(title) : null, titleText: title ? title.textContent.trim() : '',
+          short: short && vis(short) ? ro(short) : null, shortText: short && vis(short) ? short.textContent.trim() : '', shortCut: !!short && (short.scrollWidth > short.clientWidth + 1 || short.scrollHeight > short.clientHeight + 1),
         };
       }, HELP);
       assert.ok(fest.banner, `${tag} 第 8 項：收穫祭進行中應有橫幅`);
@@ -216,7 +218,8 @@ const HELP = `
       else assert.ok(fest.banner.width > 0, `${tag} 第 8 項：收合祭典摘要應有可見寬度`);
       if (!view.mobile && fest.expandedBanner) assert.ok(fest.title && fest.banner.top >= fest.title.bottom - 2, `${tag} R68：展開時祭典摘要應在標題列下方且留在同一卡內（標題底 ${Math.round(fest.title.bottom)}／摘要頂 ${Math.round(fest.banner.top)}）`);
       // R63B 同步（第 5、7 項）：手機任務卡預設一行、標題單行省略，寬度比例只驗桌機；手機改由 R63 測試驗單行與不重疊
-      if (!view.mobile) assert.ok(fest.title.width >= Math.min(fest.banner.width * 0.8, 200), `${tag} R68：三層卡標題列右側有收合鈕，標題至少 200px 或橫幅 8 成（取小者），不得擠成窄欄（標題 ${Math.round(fest.title.width)}／摘要 ${Math.round(fest.banner.width)}）`);
+      if (!view.mobile && fest.expandedBanner) assert.ok(fest.title.width >= Math.min(fest.banner.width * 0.8, 200), `${tag} R68：展開三層卡標題列右側有收合鈕，標題至少 200px 或橫幅 8 成（取小者），不得擠成窄欄（標題 ${Math.round(fest.title.width)}／摘要 ${Math.round(fest.banner.width)}）`);
+      if (!fest.expandedBanner) assert.ok(fest.short && fest.shortText && !fest.shortCut, `${tag} R82A：收合時應完整顯示人工 short（${JSON.stringify(fest)}）`);
       assert.ok(fest.titleText.length >= 2, `${tag} 第 8 項：任務標題應可讀（實際「${fest.titleText}」）`);
       console.log(`OK ${tag} 第 8 項：橫幅全寬一列在任務卡上方（${Math.round(fest.banner.width)}／${Math.round(fest.dock.width)}）、任務標題寬 ${Math.round(fest.title.width)} 不被擠`);
 

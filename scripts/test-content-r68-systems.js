@@ -41,9 +41,9 @@ test("任務卡、田邊泡泡、結算與手札主線都讀同一個下一步",
   const world = fs.readFileSync("src/world-ui.js", "utf8");
   const ui = fs.readFileSync("src/ui.js", "utf8");
   const game = fs.readFileSync("src/game.js", "utf8");
-  assert.match(adventure, /function nextFarmStep/);
-  assert.match(world, /const nextFarm = A\.nextFarmStep/);
-  assert.match(world, /const farmStep = main && q\.chapter === 1 && A\.nextFarmStep/);
+  assert.match(adventure, /function nextGuidance/);
+  assert.match(world, /const nextFarm = nextGuidance/);
+  assert.match(world, /const farmStep = main \? nextGuidance/);
   assert.match(ui, /可收成，點一下收成/);
   assert.match(game, /next: farmNextStepText\(state, now/);
   assert.match(game, /guideApi\.nextFarmStep\(data\.state, data\.now\)/);

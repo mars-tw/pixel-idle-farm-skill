@@ -327,6 +327,8 @@
   function narrationText(line) { return lineText(line).trim().replace(/^（/, "").replace(/）$/, ""); }
   function openDialogue(state, npcId, lines, options) {
     document.querySelectorAll(".r76b-dialogue").forEach((n) => n.remove());
+    /* R82A：新版逐句對話接手時，直接移除舊 NPC 泡泡；舊泡泡裡的兩張選項卡正是圖 114／120 的空白卡片來源。 */
+    document.querySelectorAll(".npc-bubble").forEach((n) => n.remove());
     const def = CHOICES[npcId];
     const speaker = options && options.speaker || (def ? def.speaker : npcId);
     const overlay = document.createElement("div");

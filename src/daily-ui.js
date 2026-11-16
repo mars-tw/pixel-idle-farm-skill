@@ -9,7 +9,8 @@
     el("dailyOpen").dataset.ready = String(st.tasks.some((t) => t.ready));
     el("dailyOpen").setAttribute("aria-label", `晨光日誌，今日 ${st.done}/${st.available} 項可做農務${st.tasks.some((t) => t.ready) ? "，可以領取獎勵" : ""}`);
     if (!el("dailyModal").classList.contains("show")) return;
-    const sig = JSON.stringify([st, tab, page, window.FarmHeirloom.status(s)]);
+    const guidance = window.AdventureAPI && window.AdventureAPI.nextGuidance ? window.AdventureAPI.nextGuidance(s, Date.now()) : null;
+    const sig = JSON.stringify([st, tab, page, window.FarmHeirloom.status(s), guidance && [guidance.guidanceScope, guidance.action, guidance.text, guidance.actionLabel]]);
     if (sig === signature) return;
     signature = sig;
     const body = el("dailyBody"), list = tab === "today" ? st.tasks : st.keepsakes;
