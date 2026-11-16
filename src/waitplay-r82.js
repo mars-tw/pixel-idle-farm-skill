@@ -36,7 +36,8 @@
     { id: "twig", name: "撿枯枝", art: "assets/generated/content-r73/item-fallen_branch.png", reward: { wood: 1 }, rewardText: "木料 1", cooldownMs: 120000,
       doneText: "你把吹到田邊的枯枝撿回來，捆成一小把木料。" },
   ];
-  const MISSING_ART = ["assets/generated/content-r82/chore-sparrow.png", "assets/generated/content-r82/chore-weed.png"];
+  /* R82 整合：麻雀與雜草的正式圖已由 MUSE 補上。 */
+  const MISSING_ART = [];
   const byId = (id) => CHORES.find((row) => row.id === id) || null;
   const whole = (v) => (Number.isFinite(v) && v > 0 ? Math.floor(v) : 0);
   const plain = (v) => !!v && typeof v === "object" && !Array.isArray(v);

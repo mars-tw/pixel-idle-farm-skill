@@ -2,7 +2,7 @@
  "model": "muse-wonder-1.0 via muse.image_generation",
  "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、逐格裁切、縮放",
  "generated": "2026-11-16",
- "note": "R82B 舊麥種兩條路線的新圖：傳家作物藍布老麥（圖示與四種田間狀態，參考 content-r81/story-oldwheat-field.png）、鎮誌支線三樣舊物與壓穗鎮誌牌（參考 content-r81/story-seal-box.png）。兩張 1024×1024 洋紅底素材表皆為本輪新生成。",
+ "note": "R82B 舊麥種兩條路線的新圖：傳家作物藍布老麥（圖示與四種田間狀態，參考 content-r81/story-oldwheat-field.png）、鎮誌支線三樣舊物與壓穗鎮誌牌（參考 content-r81/story-seal-box.png）。兩張 1024×1024 洋紅底素材表皆為本輪新生成。 另有 R82C 田邊小事圖示兩張（趕麻雀、拔雜草），64×64，畫面上約顯示 28 像素。",
  "files": [
   {
    "file": "blue-cloth-wheat-icon.png",
@@ -97,6 +97,26 @@
    "bytes": 13704,
    "sha256": "5f67f345914eb2a5687eebe82941846969e0459911bcea404613346946153b3b",
    "source": "sheet_journal.png 第 2 排第 2 格"
+  },
+  {
+   "file": "chore-sparrow.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 4688,
+   "sha256": "bda1f9d5c1cd587e33696de416456e26c8e2f072fe0c0a92bb47e1ba44636a6c",
+   "source": "sheet_chores.png（R82C 田邊小事，1024×1024 洋紅底兩件一張，本輪新生成）"
+  },
+  {
+   "file": "chore-weed.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 6370,
+   "sha256": "2602055262b41fbaadcbb00204cf0b1436b22f0c53a33cb99cfd3a42b614b2ab",
+   "source": "sheet_chores.png（R82C 田邊小事，1024×1024 洋紅底兩件一張，本輪新生成）"
   }
  ]
 }
