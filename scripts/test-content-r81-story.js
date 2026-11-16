@@ -229,6 +229,7 @@ test("第 3 項：手札三層的程式接線（現在做的按鈕寫帶我去�
   /* R83C 同步：R83 各線的新樣式接在 R82A 後面；R82A 之後只能是 R83 的區塊。 */
   const r83cTail = css.slice(css.lastIndexOf("/* ===== R82A 結束 ===== */") + "/* ===== R82A 結束 ===== */".length);
   assert.ok(css.includes("/* ===== R82A 結束 ===== */") && (!r83cTail.trim() || /^\s*\/\* ===== R83/.test(r83cTail)), "新 CSS 仍只追加在檔尾");
+  assert.ok(css.trimEnd().endsWith("/* ===== R82A 結束 ===== */") || /R82A 結束 ===== \*\/\s*\/\* ===== R83[ABC]/.test(css), "新 CSS 仍只追加在檔尾"); /* R83B 同步：R83 各線依規定接在 R82A 後面 */
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
   assert.match(block, /\.r68a-card-now small \{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;/);
   assert.match(block, /\.r81c-later > \.r81c-later-body\[hidden\] \{ display: none !important; \}/);
