@@ -1,0 +1,48 @@
+{
+ "model": "muse-wonder-1.0 via muse.image_generation",
+ "tool": "muse.image_generation（原圖）＋ Pillow 去洋紅背景、逐格裁切、縮放",
+ "generated": "2026-11-17",
+ "note": "R84C 藍布老麥田 2×2 四個階段（剛種下、照過一次光仍青綠、成熟金黃、收成後），參考 content-r81/story-oldwheat-field.png 與 content-r82 的藍布老麥圖。",
+ "files": [
+  {
+   "file": "blue-cloth-wheat-field-sprout.png",
+   "size": [
+    192,
+    192
+   ],
+   "bytes": 25031,
+   "sha256": "2bf0e6c03610b003a8ceba0d2edc45c3f806cc44b87a09660aea82699cdb4678",
+   "source": "sheet_field.png（1024×1024 洋紅底四格，本輪新生成），四階段同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-field-one-light.png",
+   "size": [
+    192,
+    192
+   ],
+   "bytes": 41071,
+   "sha256": "258814e250f9bd56e9732916894ba91bdda1bc8c76010fae2faff7d39bf7b670",
+   "source": "sheet_field.png（1024×1024 洋紅底四格，本輪新生成），四階段同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-field-ripe.png",
+   "size": [
+    192,
+    192
+   ],
+   "bytes": 43090,
+   "sha256": "2b78f5f6b04c60c36dacfa6b5ab35e8d6e0e503f400865f35e9548f0679c2507",
+   "source": "sheet_field.png（1024×1024 洋紅底四格，本輪新生成），四階段同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-field-harvested.png",
+   "size": [
+    192,
+    192
+   ],
+   "bytes": 25723,
+   "sha256": "9ec6c188dae04c3a3e65da7524d665300de2f8a0876e8d4efee1d056324714fb",
+   "source": "sheet_field.png（1024×1024 洋紅底四格，本輪新生成），四階段同一縮放比例"
+  }
+ ]
+}

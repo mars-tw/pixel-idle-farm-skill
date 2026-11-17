@@ -435,7 +435,10 @@ async function artInfo(page, src) {
     for (let i = 0; i < d.length; i += 4) if (d[i + 3] > 128) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; n++; }
     /* 「植株」的顏色：只算明顯有色的像素（排掉泥土的暗褐色），看是綠還是金黃。 */
     let cr = 0, cg = 0, cn = 0; for (let i = 0; i < d.length; i += 4) { if (d[i + 3] <= 128) continue; const mx = Math.max(d[i], d[i + 1], d[i + 2]), mn = Math.min(d[i], d[i + 1], d[i + 2]); if (mx < 90 || mx - mn < 50) continue; cr += d[i]; cg += d[i + 1]; cn++; }
-    return { px, mean: [r / n, gg / n, b / n], plant: cn ? [cr / cn, cg / cn] : [0, 0], plantPx: cn };
+    /* R84 整合：青綠植株與金黃麥穗各占不透明像素的比例（四個階段畫在同一塊土上，用顏色比例分辨階段）。 */
+    let op = 0, gr = 0, go = 0; for (let i = 0; i < d.length; i += 4) { if (d[i + 3] <= 128) continue; op++; const R = d[i], G = d[i + 1], B = d[i + 2];
+      if (G > R + 15 && G > B + 20 && G >= 90) gr++; if (R >= 170 && G >= 110 && R > G && G > B && R - B >= 80) go++; }
+    return { px, mean: [r / n, gg / n, b / n], plant: cn ? [cr / cn, cg / cn] : [0, 0], plantPx: cn, greenPct: op ? 100 * gr / op : 0, goldPct: op ? 100 * go / op : 0 };
   }, src);
 }
 const meanDiff = (a, b) => { let d = 0, n = 0; for (let i = 0; i < a.length; i += 4) { const wa = a[i + 3] / 255, wb = b[i + 3] / 255; d += Math.abs(a[i] * wa - b[i] * wb) + Math.abs(a[i + 1] * wa - b[i + 1] * wb) + Math.abs(a[i + 2] * wa - b[i + 2] * wb); n += 3; } return d / n; };
@@ -466,13 +469,16 @@ async function fieldChecks(page, tag) {
   const green = arts["one-light"].plant, gold = arts.ripe.plant;
   assert.ok(arts["one-light"].plantPx > 20 && green[1] > green[0], tag + " 照過 1 次光是青綠色、還沒熟 " + JSON.stringify(green));
   assert.ok(gold[0] > gold[1], tag + " 成熟是金黃色 " + JSON.stringify(gold));
-  /* 照過 1 次光、成熟這兩個階段跟其他階段的 16×16 縮圖要差得夠多（R83 圖 149、150 的問題）。
-     剛種下與已收成目前都是 R82 那兩張土堆圖（一個長芽、一個留麥稈和一束麥），只驗不是同一張；2×2 新圖到了再拉開。 */
-  const keys = ["planted", "one-light", "ripe", "harvested"];
-  for (let i = 0; i < keys.length; i++) for (let j = i + 1; j < keys.length; j++) {
-    const d = meanDiff(arts[keys[i]].px, arts[keys[j]].px), key = keys[i] + "/" + keys[j];
-    assert.ok(d >= (key === "planted/harvested" ? 5 : 15), `${tag} ${keys[i]} 與 ${keys[j]} 外形差 ${d.toFixed(1)}`);
-  }
+  /* R84 整合同步：MUSE 補上 2×2 正式圖後，四個階段畫在同一塊土堆上，原本用後備圖訂的「16×16 縮圖平均色差 ≥ 15」被共用的土堆拉低
+     （實測剛種下 vs 照過一次光 12.3）。改用顏色比例分辨階段，對 R83 圖 149、150「照過一次光就已金黃」更嚴：舊 R82 照過一次光圖金黃占 17.5%，這裡會擋下。 */
+  const pct = (k) => [arts[k].greenPct, arts[k].goldPct], fmt = (k) => k + JSON.stringify(pct(k).map((v) => +v.toFixed(1)));
+  assert.ok(arts.planted.greenPct >= 1 && arts.planted.greenPct <= 15 && arts.planted.goldPct <= 3, tag + " 剛種下是一點小綠芽 " + fmt("planted"));
+  assert.ok(arts["one-light"].greenPct >= 20 && arts["one-light"].goldPct <= 3, tag + " 照過 1 次光整片青綠、沒有金黃 " + fmt("one-light"));
+  assert.ok(arts.ripe.goldPct >= 15 && arts.ripe.greenPct <= 3, tag + " 成熟整片金黃 " + fmt("ripe"));
+  assert.ok(arts.harvested.goldPct >= 1 && arts.harvested.goldPct <= 12 && arts.harvested.greenPct <= 3, tag + " 收成後只剩一束金麥 " + fmt("harvested"));
+  assert.ok(arts["one-light"].greenPct >= 4 * arts.planted.greenPct, tag + " 照過 1 次光的綠遠多於剛種下 " + fmt("one-light") + fmt("planted"));
+  assert.ok(arts.ripe.goldPct >= 3 * arts.harvested.goldPct, tag + " 成熟的金黃遠多於收成後 " + fmt("ripe") + fmt("harvested"));
+  assert.ok(new Set(["planted", "one-light", "ripe", "harvested"].map((k) => arts[k].px.join())).size === 4, tag + " 四個階段是四張不同的圖");
 }
 async function relicChecks(page, tag) {
   /* 舊物剛出現：鏡頭帶過去、物件在畫面內沒被介面蓋住、沒有遮罩接管點擊；小地圖有記號。 */

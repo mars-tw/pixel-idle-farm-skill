@@ -268,7 +268,7 @@
     cropRipe: "assets/generated/content-r84/blue-cloth-wheat-field-ripe.png",
     cropHarvested: "assets/generated/content-r84/blue-cloth-wheat-field-harvested.png",
   };
-  const R84_ART_READY = [];
+  const R84_ART_READY = ["cropSprout", "cropOneLight", "cropRipe", "cropHarvested"];
   const R84_ART_FALLBACK = { cropOneLight: "assets/generated/r89/wheat-grow-48.png" };
   const R84_FIELD = { dx: 1, dy: 0, w: 2, h: 2 };
   function r82Art(key) {
