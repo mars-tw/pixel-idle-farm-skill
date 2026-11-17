@@ -209,6 +209,7 @@ test("第 5 項：R83B 樣式接在 R82A 後面；測試接在 unit 清單；沿
   assert.ok(css.indexOf("/* ===== R82A 結束 ===== */") < css.indexOf("/* ===== R83B：兩條舊麥種路線的階段成果 ===== */"), "R83B 追加在 R82A 之後");
   assert.match(css, /\/\* ===== R83B：兩條舊麥種路線的階段成果 ===== \*\/[\s\S]*\/\* ===== R83B 結束 ===== \*\//);
   assert.match(css.trimEnd(), /\/\* ===== R8[34][ABC] 結束 ===== \*\/$/, "檔尾是 R83 的段落"); /* R84A 同步：R84 各線的新樣式依規定接在 R83 後面，檔尾可以是 R84 的段落 */
+  assert.match(css.trimEnd(), /\/\* ===== R8[34][ABC] 結束 ===== \*\/$/, "檔尾是 R83 的段落"); /* R84 同步：R84 的樣式照規定追加在檔尾 */
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
   for (const key of ["cropSprout", "cropOneLight", "cropRipe", "cropHarvested", "oldSeedTag", "fadedPhoto", "ledgerPage", "townJournalDecoration"]) {
     assert.ok(R.R82_ART_READY.includes(key) && fs.existsSync(path.join(ROOT, R.R82_ART[key])), key + " 沿用的 R82 正式圖存在");
@@ -216,6 +217,7 @@ test("第 5 項：R83B 樣式接在 R82A 後面；測試接在 unit 清單；沿
   assert.ok(fs.existsSync(path.join(ROOT, R.r81Art("pending"))), "還沒播種時的種子包正式圖存在");
   const guard = read("scripts/guard-validation-writes.js");
   assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 的新測試依規定接在清單尾 */
+  assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r8[34]-[a-z-]+\.js",)*\s*\];/); /* R84 同步：R84 的測試照規定排在清單最後 */
   assert.match(read("sw.js"), /CACHE_VERSION = "content-r83-20261117-1"/, "版本字串沒動");
 });
 

@@ -1187,7 +1187,8 @@
     const choice = r78bChoiceFor(tile), queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
     if (G.getCropProgress(state, plot, now()).ready) {
       if (queued && queued.plotIndex === tile.plotIndex) return G.isSunlit && G.isSunlit(state, tile.plotIndex, now()) ? `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田` : queued.autoHarvest ? "等光中" : "已選等光";
-      return choice && choice.ok && !choice.hasTradeoff ? "等光再收" : `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田`;
+      /* R84C 第 1 項：「等光再收」只寫在田邊動作列；右下大鈕跟面向田的寫法一樣寫「等光・某某田」。 */
+      return choice && choice.ok && !choice.hasTradeoff ? `等光・${(window.CROPS[plot.cropId] || {}).name || "作物"}田` : `收成・${(window.CROPS[plot.cropId] || {}).name || "作物"}田`;
     }
     const crop = window.CROPS[plot.cropId];
     return `生長中・${crop ? crop.name : "作物"}田`;
@@ -4457,7 +4458,8 @@
     /* R82C 第 3 項：早市二選一還沒選時，田上只寫「現在收或等光」，不先替玩家寫「等光再收」；選了等光才寫已選。 */
     const r82cChoice = prog.ready && heldForLight ? r78bChoiceFor(tile) : null, r82cQueued = r82cChoice && r82cChoice.hasTradeoff && G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
     if (prog.ready && r82cChoice && r82cChoice.ok && r82cChoice.hasTradeoff) return (r82cQueued && r82cQueued.plotIndex === tile.plotIndex ? `已選等光・${name}` : `${name}・現在收或等光`) + sunSuffix;
-    if (prog.ready) return (nextForPlot && nextStep.action === "refract" ? `折光・${name}` : heldForLight ? `等光再收・${name}` : `${name}・可收成`) + sunSuffix;
+    /* R84C 第 1 項：田上只寫狀態「留著等光」；「等光再收」與秒數、收益只在田邊動作列。 */
+    if (prog.ready) return (nextForPlot && nextStep.action === "refract" ? `折光・${name}` : heldForLight ? `${name}・留著等光` : `${name}・可收成`) + sunSuffix;
     if (prog.wet) return name + "・已澆水" + sunSuffix;
     if (sunlit) return name + "・" + `已種 ${planted}／3 格` + sunSuffix;
     /* 光快落在這一格：任務卡教的是「在光裡澆水」（R83C 統一說法），標籤跟著講同一件事，不再寫「種滿再澆水」。 */
@@ -5731,7 +5733,8 @@
     state.interaction.selectedTileId = tile.id;
     renderTileContext();
     renderSceneActionsForSelection();
-    if (heldReadyTile(tile)) { const choice = r78bChoiceFor(tile); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光再收。"); return; }
+    /* R84C 第 1 項：田邊動作列已經寫了秒數與收益，提示只講狀態。 */
+    if (heldReadyTile(tile)) { const choice = r78bChoiceFor(tile); toast(choice && choice.ok && choice.hasTradeoff ? "光快落在這格了，請在田邊選一種收成方式。" : "光快落在這格了，先留著這株。"); return; }
     const actions = sceneActionsForTile(tile);
     if (actions.length) runSceneAction(actions[0].action, tile.id);
     else if (tile.station || tile.structureId || tile.bridge || tile.event || tile.forage || tile.npc) handleMapClick(tile.id, "direct");
@@ -5748,7 +5751,7 @@
       const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length && r78bPlotInSight(row)) : null;
       const nearLabel = near ? interactLabelFor(near) : "互動";
       const nearAction = near && nearLabel !== "互動" ? sceneActionsForTile(near).find((a) => a.action !== "build" && a.action !== "clear" && a.enabled !== false) : null;
-      if (near && nearLabel.startsWith("等光・")) { const choice = r78bChoiceFor(near); toast(choice && choice.ok ? choice.tutorialText : "光快落在這格了，等光再收。"); }
+      if (near && nearLabel.startsWith("等光・")) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); toast("光快落在這格了，先留著這株。"); }
       else if (nearAction) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); runSceneAction(nearAction.action, near.id); }
       else toast(blockedReason(tile));
     }
@@ -5791,7 +5794,9 @@
     let facingSelected = false; try { const facing = facingTile(); facingSelected = !!(selectedPlot && facing && facing.id === selectedPlot.id); } catch (e) {}
     const selectedChoice = selectedPlot ? r78bChoiceFor(selectedPlot) : null;
     const thumbOwnsWait = !!(facingSelected && selectedChoice && selectedChoice.ok && !selectedChoice.hasTradeoff && sceneButtons.length === 1 && sceneButtons[0].dataset.action === "wait_light");
-    if (sceneBar) sceneBar.dataset.r80bYieldToThumb = thumbOwnsWait ? "true" : "false";
+    /* R84C 第 1 項：秒數與收益只寫在田邊動作列，動作列不再讓給右下大鈕（讓了就看不到等幾秒、多收幾份）；
+       大鈕照樣寫「等光・某某田」，按下去做同一件事。 */
+    if (sceneBar) sceneBar.dataset.r80bYieldToThumb = "false";
     const plotActionShown = !!(selectedPlot && sceneButtons.length && !thumbOwnsWait);
     action.dataset.r80bDuplicate = plotActionShown ? "true" : "false";
     action.textContent = busy ? "收成中" : targetLabel;
@@ -6242,6 +6247,8 @@
       clickTile: (id) => handleMapClick(id),
       touchFarmPreview: () => pendingTouchFarmAction ? { ...pendingTouchFarmAction } : null,
       focusTile: (id) => focusCameraOnTile(id),
+      /* R84C 第 1 項：選取一格田、打開田邊動作列並把鏡頭帶過去，不走路、不代按（任務卡「看看這株」用）。 */
+      selectTile: (id) => { const tile = G.getTileById(state, id); if (!tile || hasOpenModal()) return false; selectedTileId = tile.id; state.interaction.selectedTileId = tile.id; renderTileContext(); renderSceneActionsForSelection(); updateQuickHarvest(); focusCameraOnTile(tile.id); return true; },
       assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],
       renderSettings: () => renderSettingsPanel(),
       lastOfflineSummary: () => state.lastOfflineSummary,

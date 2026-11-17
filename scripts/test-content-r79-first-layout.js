@@ -30,10 +30,10 @@ const overlap=(a,b)=>{if(!a||!b)return 0;const w=Math.min(a.right,b.right)-Math.
       });
       assert.deepEqual(first.actions,["wait_light"],`${tag} 第一次只有「等光再收」一個田格動作`);
       assert.equal(first.refract,0,`${tag} 第一次收成前沒有第二個折光入口`);
-      assert.match(first.label,/^等光再收・小麥/,`${tag} 標籤第一行跟下一步一致（看到「${first.label}」）`);
+      assert.match(first.label,/^小麥・留著等光/,`${tag} 標籤第一行跟下一步一致（看到「${first.label}」）`); /* R84C 同步：田上寫狀態 */
       assert.ok(first.label.split("\n").length<=2,`${tag} 田邊標籤最多兩行`);
       assert.equal(first.plots.some(p=>overlap(first.labelBox,p)>1),false,`${tag} 田邊標籤不蓋田（標籤 ${JSON.stringify(first.labelBox)}；田 ${JSON.stringify(first.plots)}）`);
-      assert.equal(first.actionText,"等光再收",`${tag} 右下大按鈕跟選中的熟田一致`);
+      assert.equal(first.actionText,"等光・小麥田",`${tag} 右下大按鈕跟選中的熟田一致`); /* R84C 同步：大鈕跟面向田同一種寫法 */
       if(isMobile) assert.match(first.note,/^$/,`${tag} 底部不再重複「按下後等幾秒」說明`);
 
       await page.evaluate(()=>__farm.enqueueSettlement({kind:"first_harvest",coins:0,xp:3,next:"把 2 份小麥交給老農班伯。"})); await page.waitForTimeout(100);

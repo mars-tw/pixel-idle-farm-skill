@@ -7,7 +7,7 @@ assert.match(ui,/r74a-care-popover/,"照顧方式須改為田旁彈出層");
 assert.match(ui,/空田維持一鍵播種/,"點空田須直接播種");
 assert.match(ui,/showCarePopover\(tileId, tile\.plotIndex\)/,"播種後須在田旁顯示照顧方式");
 /* R76A：需要等光的成熟格顯示先別收，其他成熟格仍顯示可收成。 */
-assert.match(ui,/heldForLight \? `等光再收・\$\{name\}` : `\$\{name\}・可收成`/,"成熟田格依 nextFarmStep 顯示等光再收或可收成");
+assert.match(ui,/heldForLight \? `\$\{name\}・留著等光` : `\$\{name\}・可收成`/,"成熟田格依 nextFarmStep 顯示等光再收或可收成"); /* R84C 同步：田上改寫狀態「留著等光」，「等光再收」只留在田邊動作列 */
 assert.match(ui,/state\.map\.tiles\.filter\(\(row\) => row\.plotIndex != null && row\.plotIndex < active/,"已種格數須以畫面上的有效田格計算");
 assert.doesNotMatch([config,adventure,ui].join("\n"),/["'`][^"'`\n]*木材/,"玩家文字須統一使用木料");
 assert.match(adventure,/earned: `農場等級提升到 \$\{data\.level\} 級`, unlocked: "新的作物與農場能力"/,"升級提示的獲得與新解鎖不得重複");

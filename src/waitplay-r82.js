@@ -10,6 +10,8 @@
  *   名稱只在角色靠近、滑鼠停留或點選時才冒出小名牌。放的格子會讓開角色站的位置與任務那一格旁邊（角色在田上工作時站在左邊那格）。
  * R83C 第 3 項：麻雀二選一——「趕走」拿陽光 1；「留一把穗給牠」當下不拿東西，之後偶爾叼回一顆小麥種子（有間隔、一天有上限）。
  *   結果寫進手札一行（state.adventure.r58.r59.journal，eventId 以 r83c_ 開頭）。
+ * R84C 第 3 項：一般視角下圖至少畫 40px；小名牌（撿落穗、麻雀、拔雜草、撿枯枝）常駐顯示，不再等角色靠近。
+ *   位置沿用 R83C 的避讓規則（讓開角色、任務那一格旁邊、田格與固定介面）。
  */
 (function (root) {
   "use strict";
@@ -29,6 +31,8 @@
   const CLAIM_HOLD_MS = 8000;               // 點了正在走過去，這段時間不收起來
   const PLAY_STEP_CAP_MS = 2000;            // 遊玩時間每次最多記這麼多（切到背景不算）
   const HISTORY_CAP = 20;
+  const R84C_ART_MIN = 40;                  // R84C 第 3 項：一般視角下小事的圖至少畫這麼大
+  const R84C_ART_TILE = 48;                 // 格子至少這麼大才算一般視角（縮放看整張地圖時不放大）
   /* R83C 第 3 項：留穗給麻雀之後，牠多久叼回種子、兩次之間至少隔多久、一天（往回算 24 小時）最多幾次。 */
   const SPARROW_GIFT_DELAY_MS = 40000;
   const SPARROW_GIFT_GAP_MS = 5 * 60 * 1000;
@@ -40,13 +44,13 @@
   /* 小收穫都只有一份。陽光、木料、堆肥另有冷卻，十分鐘裡最多幾份，不會變成另一條賺錢的路。
      label 是地圖上小名牌寫的名稱；name 是要做的事（讀屏與提示用）。 */
   const CHORES = [
-    { id: "glean", label: "落穗", name: "撿落穗", art: "assets/generated/content-r83/chore-glean.png", motion: "sway", reward: { seeds: "wheat" }, rewardText: "小麥種子 1 包", cooldownMs: 0,
+    { id: "glean", label: "撿落穗", name: "撿落穗", art: "assets/generated/content-r83/chore-glean.png", motion: "sway", reward: { seeds: "wheat" }, rewardText: "小麥種子 1 包", cooldownMs: 0,
       doneText: "你把田埂上的落穗撿起來，收進種子袋。" },
     { id: "sparrow", label: "麻雀", name: "趕麻雀", art: "assets/generated/content-r82/chore-sparrow.png", motion: "hop", reward: { sunlight: 1 }, rewardText: "陽光 1", cooldownMs: 120000,
       doneText: "麻雀拍拍翅膀飛走了，麥穗多接到一點光。" },
-    { id: "weed", label: "雜草", name: "拔雜草", art: "assets/generated/content-r82/chore-weed.png", motion: "sway", reward: { compost: 1 }, rewardText: "堆肥 1", cooldownMs: 180000,
+    { id: "weed", label: "拔雜草", name: "拔雜草", art: "assets/generated/content-r82/chore-weed.png", motion: "sway", reward: { compost: 1 }, rewardText: "堆肥 1", cooldownMs: 180000,
       doneText: "你把田邊那株雜草連根拔起，丟進堆肥。" },
-    { id: "twig", label: "枯枝", name: "撿枯枝", art: "assets/generated/content-r83/chore-twig.png", motion: "still", reward: { wood: 1 }, rewardText: "木料 1", cooldownMs: 120000,
+    { id: "twig", label: "撿枯枝", name: "撿枯枝", art: "assets/generated/content-r83/chore-twig.png", motion: "still", reward: { wood: 1 }, rewardText: "木料 1", cooldownMs: 120000,
       doneText: "你把吹到田邊的枯枝撿回來，捆成一小把木料。" },
   ];
   /* R83C 第 3 項：麻雀的兩個做法。數字只寫在選項小字與手札，不寫進旁白。 */
@@ -316,7 +320,7 @@
     return { ok: true, id: chore.id, name: chore.name, choice: choice || null, reward, giftScheduled, journalText, message };
   }
 
-  const API = { CHORES, SPARROW_CHOICES, MISSING_ART, ONBOARD_MS, ONBOARD_AFTER_MS, ONBOARD_COOLDOWN_MS, LATER_AFTER_MS, LATER_GAP_MS, MIN_LEFT_MS, LIFE_MS, GRACE_MS, CLAIM_HOLD_MS,
+  const API = { CHORES, SPARROW_CHOICES, MISSING_ART, R84C_ART_MIN, R84C_ART_TILE, ONBOARD_MS, ONBOARD_AFTER_MS, ONBOARD_COOLDOWN_MS, LATER_AFTER_MS, LATER_GAP_MS, MIN_LEFT_MS, LIFE_MS, GRACE_MS, CLAIM_HOLD_MS,
     SPARROW_GIFT_DELAY_MS, SPARROW_GIFT_GAP_MS, SPARROW_GIFT_DAY_MS, SPARROW_GIFT_DAY_CAP, SPARROW_GIFT_SEED,
     normalize, onboarding, waitStatus, fieldEdgeTiles, avoidTiles, pickTile, setTilePreference, update, view, claim, unclaim, resolve, sparrowCanGift, sparrowChoices, journalLines };
   if (isNode) { module.exports = API; return; }
@@ -387,7 +391,12 @@
     const player = state.player || {}, ptile = player.tileId && typeof Game.getTileById === "function" ? Game.getTileById(state, player.tileId) : null;
     node.classList.toggle("is-near", !!(ptile && Math.max(Math.abs(ptile.x - box.x), Math.abs(ptile.y - box.y)) <= 1));
     /* 圖跟著格子大小；點擊範圍至少 44×44，底部貼著這一格的地面。疊放順序比同一列的角色低，角色走過去時畫在小事前面。 */
-    const T = box.size, hit = Math.max(44, Math.round(T * 0.7)), art = Math.max(Math.min(16, Math.floor(T * 0.9)), Math.round(T * (current.id === "sparrow" || current.id === "weed" ? 0.62 : 0.5)));
+    /* R84C 第 3 項：一般視角（格子至少 48px）圖至少畫 40px，64px 縮圖也認得出是什麼；最大不超過格子的九成，不壓到隔壁的田。
+       縮放看整張地圖時格子很小，照原本比例縮小，不蓋到旁邊的田。 */
+    const T = box.size, hit = Math.max(44, Math.round(T * 0.7)), artBase = Math.round(T * (current.id === "sparrow" || current.id === "weed" ? 0.62 : 0.5));
+    const art = T >= R84C_ART_TILE ? Math.min(Math.floor(T * 0.9), Math.max(R84C_ART_MIN, Math.round(T * 0.62))) : Math.max(Math.min(16, Math.floor(T * 0.9)), artBase);
+    /* 縮放看整張地圖（格子小於一般視角）時名牌比格子還寬，常駐會蓋到旁邊的田；這時照 R83C 只在靠近、停留或點選時出現。 */
+    node.classList.toggle("r84c-small-tile", T < R84C_ART_TILE);
     const shift = hit > T ? hitShift(state, box.tile) : { x: 0, y: 0 }, over = Math.max(0, (hit - T) / 2);
     const left = Math.round((box.x + 0.5) * T - hit / 2 + shift.x * over);
     const top = Math.round(hit <= T ? (box.y + 1) * T - hit - T * 0.04 : (box.y + 0.5) * T - hit / 2 + shift.y * over);

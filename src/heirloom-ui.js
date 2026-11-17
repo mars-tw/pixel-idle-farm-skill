@@ -27,7 +27,8 @@
     if (!q.target) { farm().toast("先收成田裡的作物，騰一格來種小麥。"); return; }
     farm().setTool(q.kind === "water" ? "water" : "hand");
     if (q.kind === "plant") farm().selectSeed("wheat");
-    if (q.kind === "wait") { farm().focusTile(q.target.id); farm().toast(q.detail); return; }
+    /* R84C 第 1 項：熟了留著等光時，「看看這株」選取那一格、打開田邊動作列（秒數與收益只寫在那裡）。 */
+    if (q.kind === "wait") { const choice = window.lightHarvestChoice ? window.lightHarvestChoice(s, q.target.plotIndex, Date.now()) : null; if (choice && choice.ok && farm().selectTile && farm().selectTile(q.target.id)) return; farm().focusTile(q.target.id); farm().toast(q.detail); return; }
     farm().clickTile(q.target.id);
   }
   function renderObjective(s, box) {
