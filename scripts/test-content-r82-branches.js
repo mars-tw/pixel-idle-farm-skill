@@ -175,10 +175,10 @@ test("第 6 項：新測試已接到 unit 清單最後", () => {
   const guard = read("scripts/guard-validation-writes.js");
   /* R82 整合同步：同輪 C 線的 test-content-r82-play.js 也接在清單尾，B 線測試緊接在 r81-story 後面、後面只允許同輪 R82 測試。 */
   /* R83C 同步：R83 各線的新測試也接在清單尾，r82-branches 後面只允許 R82、R83 的測試。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[23]-[a-z-]+\.js",)*\s*\];/);
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[234]-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 的新測試也依規定接在清單尾 */
   /* R83B 同步：R83 各線的新測試依規定接在清單尾，只允許 R83 測試排在 R82 這幾支後面。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*\];/);
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[23]-[a-z-]+\.js",)*\s*\];/); /* R83A 同步：R83 的新測試依規定接在清單尾 */
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 測試排在 R83 後面 */
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[234]-[a-z-]+\.js",)*\s*\];/); /* R83A 同步：R83 的新測試依規定接在清單尾 */ /* R84A 同步：R84 亦同 */
 });
 
 if (!process.exitCode) console.log("VERIFIED content R82B branches (" + passed + " tests)");

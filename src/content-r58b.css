@@ -2511,3 +2511,98 @@ html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),
 /* 第 5 項：任務卡帶玩家去某一格時，右下大鈕不寫身旁不相干的東西（由 ui.js 標記 data-r83a-off-target）。 */
 #actionA[data-r83a-off-target="true"] { visibility: hidden !important; pointer-events: none !important; }
 /* ===== R83A 結束 ===== */
+/* ===== R84A（任務卡全狀態掃描：四尺寸 × 展開／收合 × 全部下一步）開始 ===== */
+/* 由 scripts/test-content-r84-card-sweep.js 掃出來的破版，一種一條修；不改任務卡高度上限（收合、目標避讓、手札開著的一列卡仍是 52px）。 */
+
+/* 1. 標題列上下兩行（「第 1 章・回家與第一餐」「任務：等光再收」、祖母手記的「祖母手記」「第一份陽光餐籃」）：
+      行高 1.1／1.15 比字形本身還矮，兩行的字框上下疊 2～3px。行高拉到字形高度（1.4），兩行不再疊。 */
+html body #questDock#questDock :is(.r80b-objective-source, .r80b-objective-task) { line-height: 1.4 !important; }
+
+/* 2. 桌面開著手札、任務卡是今日三件事：卡片排成一列，右上角的「收合／展開」鈕蓋在主按鈕上（圖 12、17、18、20、152）。
+      跟主線一列卡一樣，右邊讓出收合鈕的位置。 */
+@media (min-width: 860px) {
+  html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="early_free_choice"] { padding-right: 52px !important; box-sizing: border-box !important; }
+}
+
+/* 3. 光的決定時的精簡卡（r80b-decision-compact）：說明句被壓成一行裁掉，田邊的狀態字「等光再收」疊在被裁掉的字上、還凸出「現在做」框（圖 76、104、129）。
+      說明句改小一號、可以換行（不再裁字），狀態字跟按鈕一樣在右邊垂直置中，不再凸出框外；卡片仍守 R80B 的 104px 上限。 */
+html body #questDock#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now):not(.r69a-festival-now) { align-items: center !important; }
+html body #questDock#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now):not(.r69a-festival-now) > span { white-space: normal !important; max-height: none !important; }
+html body #questDock#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now):not(.r69a-festival-now) small {
+  white-space: normal !important; overflow: visible !important; font-size: 11px !important; line-height: 1.4 !important;
+}
+html body #questDock#questDock.r80b-decision-compact .r80b-now-copy { min-height: 0 !important; height: auto !important; align-self: center !important; }
+/* 精簡卡高度上限 104px 裡，上下內距 12px 讓「現在做」那一格只剩 36px，44px 高的主鈕凸出框外、第三行字掉到框下面。
+   內距收成 6px，「現在做」那一格固定 52px（剛好放進 44px 的主鈕），總高仍是 104px。 */
+@media (min-width: 860px) {
+  html body #questDock#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed):not([data-quest="first_sun_basket"]) { padding-top: 6px !important; padding-bottom: 6px !important; }
+  html body #questDock#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) :is(.r67a-now, .r68a-now):not(.r69a-festival-now) { flex: 0 0 auto !important; min-height: 52px !important; padding-top: 4px !important; padding-bottom: 4px !important; box-sizing: border-box !important; }
+}
+/* 對話開著時精簡卡的格子被壓扁 1px，標題列第二行「任務：…」被切掉下半：標題列不縮、置中對齊。 */
+html body #questDock#questDock.r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .r68a-objective-head { flex: 0 0 auto !important; align-items: center !important; }
+
+/* 3-2. 祖母手記卡的精簡卡：標題列、短標題、兩行說明與主鈕疊起來超過 104px，主鈕整顆被裁掉、說明句只剩半行。
+        精簡卡跟一般任務卡一樣只留「標題列＋這一步一句＋按鈕」：這一步的短標題（可換兩行）與主鈕同一列，說明句留給展開時與田邊動作列。
+        手札、提示或對話開著時照舊用 R83A／R84A 的一列卡。 */
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; grid-template-rows: auto auto !important; align-items: center !important; column-gap: 6px !important; row-gap: 4px !important;
+}
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-chapter { grid-column: 1 / -1 !important; grid-row: 1 !important; margin: 0 !important; }
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-title {
+  grid-column: 1 !important; grid-row: 2 !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; white-space: normal !important; overflow: visible !important; text-overflow: clip !important; line-height: 1.35 !important; text-align: left !important;
+}
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > :is(.world-objective-detail, .r82c-pick-note) { display: none !important; }
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-bottom {
+  grid-column: 2 !important; grid-row: 2 !important; display: flex !important; gap: 6px !important; margin: 0 !important; padding: 0 !important; width: auto !important;
+}
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-bottom > :is(span, .r82-heirloom-pick) { display: none !important; }
+html body:not(:has(.side-panel.world-panel-open)):not(:has(#toast-zone > .toast)):not(:has(.r76b-dialogue)):not(:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"].r80b-decision-compact:not(.quest-collapsed):not(.quest-auto-collapsed):not(.quest-target-collapsed) > .world-objective-bottom > .r83a-heirloom-alt { display: inline-flex !important; align-items: center !important; min-height: 44px !important; padding: 0 8px !important; white-space: nowrap !important; }
+
+/* 4. 祖母手記卡在手札開著時（桌面任何樣子、手機看得到卡片時）：沿用 R83A 的一列排法——左邊這一步的短標題、中間主鈕、右邊 1/3。
+      原本手札一開，收合時主鈕被藏掉、手機只剩一顆按鈕左邊空白（圖 72）、標題被擠成兩行疊在一起。 */
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto auto !important; grid-template-rows: 44px !important;
+  align-items: center !important; column-gap: 6px !important; row-gap: 0 !important;
+  min-height: 52px !important; height: 52px !important; max-height: 52px !important;
+  padding: 4px 50px 4px 8px !important; overflow: hidden !important; box-sizing: border-box !important;
+}
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-title {
+  display: block !important; grid-column: 1 !important; grid-row: 1 !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important;
+  white-space: normal !important; overflow: hidden !important; text-overflow: clip !important; -webkit-line-clamp: unset !important;
+  color: #4a3212 !important; font-size: 13px !important; font-weight: 800 !important; line-height: 1.3 !important; text-align: left !important;
+}
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-bottom {
+  display: flex !important; grid-column: 2 !important; grid-row: 1 !important; flex-wrap: nowrap !important; align-items: center !important;
+  justify-content: flex-end !important; gap: 6px !important; width: auto !important; min-width: 0 !important; height: auto !important; margin: 0 !important; padding: 0 !important;
+}
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-bottom > :is(span,.r82-heirloom-pick) { display: none !important; }
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-bottom > :is(button[data-world-go]:not([hidden]),.r83a-heirloom-alt) {
+  display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;
+  min-width: 44px !important; min-height: 44px !important; height: 44px !important; margin: 0 !important; padding: 0 8px !important;
+  white-space: nowrap !important; font-size: 12px !important; box-sizing: border-box !important;
+}
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter {
+  display: flex !important; grid-column: 3 !important; grid-row: 1 !important; align-items: center !important; width: auto !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important;
+}
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter > :not([data-audit="quest-progress"]),
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > :is(.world-objective-detail,.r82c-pick-note) { display: none !important; }
+html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-chapter > [data-audit="quest-progress"] {
+  display: inline-flex !important; align-items: center !important; justify-content: center !important; min-width: 0 !important; height: 26px !important;
+  padding: 0 6px !important; border: 1px solid #b89455 !important; border-radius: 13px !important; background: #fff3d1 !important; color: #5b421f !important;
+  font-size: 12px !important; font-weight: 900 !important; line-height: 1 !important; white-space: nowrap !important; box-sizing: border-box !important;
+}
+
+/* 4-2. R83A 的祖母手記一列卡（收合、提示、對話開著）：短標題不換行、放不下就直接切掉，被切掉的後半段跑到主鈕底下（精簡卡寬度只有 300px 時最明顯）。
+        短標題改成可以換兩行（一列 44px 放得下兩行），整句看得到；手札開著的一列卡（上面第 4 段）同樣寫法。 */
+html body:not(:has(.side-panel.world-panel-open)) #questDock#questDock#questDock[data-quest="first_sun_basket"]:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) > .world-objective-title,
+html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),:has(.r76b-dialogue),:has(#worldDialogue:not([hidden]))) #questDock#questDock#questDock[data-quest="first_sun_basket"] > .world-objective-title { white-space: normal !important; }
+
+/* 5. 橫式手機（矮於 500px）開著手札：手札固定在右邊、寬 320px，收成一列的任務卡卻一路伸到手札底下，
+      右邊的「展開」鈕與主鈕被手札的標題列蓋住、點不到。任務卡停在手札左邊。 */
+@media (max-height: 500px) and (min-width: 600px) {
+  html body:has(.side-panel.world-panel-open) #questDock#questDock#questDock { max-width: calc(100vw - 352px) !important; }
+}
+
+/* 6. R44 只想在「去找人說話」那一步、對話已經開著時藏「前往交談」；任務卡按鈕換成光或田裡的動作（把光折過來、去種小麥）時照樣看得到，不留一塊空白。 */
+body:has(#worldDialogue:not([hidden])) #questDock#questDock:is([data-step-type="talk"], [data-step-type="claim"]) [data-world-go][data-r78b-step]:not([data-r78b-step="report"]) { visibility: visible !important; }
+/* ===== R84A 結束 ===== */
