@@ -1614,7 +1614,7 @@
     const world = document.getElementById("mapWorld");
     if (!world || !state || !state.map) return;
     /* R79C：招牌做完併進市集的「農場招牌（色名）」，不再另畫一塊名牌（圖 41、64 的兩個名牌）。 */
-    const states = sceneStates(state).filter((row) => !row.merged), signature = JSON.stringify(states.map((row) => [row.npcId, row.choiceId, row.done, row.decision, row.label, row.marker.art, row.marker.displaySize || 0, row.r82bStage || "", row.badge || ""]));
+    const states = sceneStates(state).filter((row) => !row.merged), signature = JSON.stringify(states.map((row) => [row.npcId, row.choiceId, row.done, row.decision, row.label, row.marker.art, row.marker.displaySize || 0, row.r82bStage || "", row.badge || "", row.marker.displayTiles || 0, row.marker.footprint || null]));
     if (world.dataset.r78cScenes === signature && world.querySelectorAll(".r78c-scene-change").length === states.length) return;
     world.querySelectorAll(".r78c-scene-change, .r78c-scene-label").forEach((node) => node.remove());
     const size = Math.max(24, Math.round(world.offsetWidth / Math.max(1, state.map.width || 24)));
@@ -1622,6 +1622,8 @@
        站點放左邊，水井左邊是釣魚棧橋所以放右邊；市集攤是兩格高的建築，從攤子左邊沿著攤前往右排（左邊那格是訂單看板）。
        同一個錨點有好幾樣時一樣一樣往外排，名牌往下錯開不互疊。 */
     const RIGHT_SIDE = { "station:well": true }, seen = {}, labelShift = {};
+    /* R84C 第 4 項：有物件指定蓋住錨點旁邊的幾格（footprint，例如藍布老麥田 2×2）時，同一個錨點的其他物件改放到錨點正下方，不疊在那塊田上。 */
+    const reserved = {}, displaced = {}; states.forEach((row) => { if (row.marker && row.marker.footprint) reserved[row.marker.anchor] = row.marker.footprint; });
     states.forEach((row) => {
       const tile = anchorTile(state, row.marker.anchor);
       if (!tile) return;
@@ -1632,9 +1634,18 @@
       if (row.decided && row.decision) node.dataset.r79cDecision = row.decision;
       node.setAttribute("aria-label", row.hint || row.label); node.title = row.hint || row.label;
       const basePx = Math.max(32, Math.min(48, Math.round(size * .64)));
-      const px = Math.max(basePx, Math.min(96, Math.round(Number(row.marker.displaySize) || 0)));
+      /* R84C 第 4、5 項：displayTiles／footprint 照格子大小畫（藍布老麥田 2×2、壓穗鎮誌牌至少跟告示牌一樣大）。 */
+      const fp = row.marker.footprint || null, tilesWide = fp ? Number(fp.w) || 0 : Number(row.marker.displayTiles) || 0;
+      const px = Math.max(basePx, Math.min(96, Math.round(Number(row.marker.displaySize) || 0)), tilesWide > 0 ? Math.round(size * tilesWide) : 0);
       let col, foot;
-      if (key.indexOf("tile:") === 0) {
+      if (fp) {
+        col = tile.x + (Number(fp.dx) || 0) + tilesWide / 2;
+        foot = tile.y + (Number(fp.dy) || 0) + (Number(fp.h) || tilesWide);
+      } else if (reserved[key] && key.indexOf("tile:") !== 0) {
+        const k = displaced[key] || 0; displaced[key] = k + 1;
+        col = tile.x + .5 + k * .72;
+        foot = tile.y + 2;
+      } else if (key.indexOf("tile:") === 0) {
         /* R83B：指定格子的物件站在那一格正中央，腳底貼著格子下緣。 */
         col = tile.x + .5 + n * .72;
         foot = tile.y + .96;
@@ -1643,7 +1654,9 @@
         col = Math.min.apply(null, body.map((t) => t.x)) - .2 + n * .72;
         foot = Math.max.apply(null, body.map((t) => t.y)) + 1.06;
       } else {
-        col = RIGHT_SIDE[key] ? tile.x + 1.2 + n * .72 : tile.x - .2 - n * .72;
+        /* R84C 第 5 項：比一格大的物件（壓穗鎮誌牌）多讓一點，不疊到同一個錨點前一樣東西。 */
+        const extra = n > 0 ? Math.max(0, px / size / 2 - .36) : 0;
+        col = RIGHT_SIDE[key] ? tile.x + 1.2 + n * .72 + extra : tile.x - .2 - n * .72 - extra;
         foot = tile.y + 1;
       }
       node.style.cssText = "left:" + Math.round(col * size) + "px;top:" + Math.round(foot * size) + "px;width:" + px + "px;height:" + px + "px;z-index:" + (Math.round(foot * size) + 3) + ";";
@@ -1655,6 +1668,7 @@
       const routeNpc = NPC_ORDER.includes(row.npcId);
       /* R81C：藍布舊麥種的物件點下去也是走過去打開那一段（爭執、具名訂單、收尾或之後的一句話）。 */
       if (row.r81c) node.dataset.r81cStory = row.choiceId;
+      if (fp) node.dataset.r84cField = (Number(fp.w) || 0) + "x" + (Number(fp.h) || 0);
       if (row.r82b) {
         node.dataset.r82bBranch = row.r82bKind || row.choiceId;
         if (row.r82bStage) node.dataset.r82bStage = row.r82bStage;
@@ -1669,7 +1683,9 @@
       if (row.r82b) tag.dataset.r82bBranch = row.r82bKind || row.choiceId;
       tag.style.cssText = "left:" + Math.round(col * size) + "px;top:" + (Math.round(foot * size) + 4 + shift) + "px;";
       world.appendChild(tag);
-      labelShift[key] = shift + (tag.offsetHeight || 17) + 2;
+      /* R84C 第 4 項：2×2 的田名牌放在田的上緣外面（地圖最下面兩排，下方沒有地方放）。 */
+      if (fp) { tag.dataset.r84cField = node.dataset.r84cField; tag.style.top = (Math.round((foot - (Number(fp.h) || tilesWide)) * size) - (tag.offsetHeight || 17) - 2) + "px"; }
+      else labelShift[key] = shift + (tag.offsetHeight || 17) + 2;
     });
     world.dataset.r78cScenes = signature;
   }

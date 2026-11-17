@@ -344,9 +344,9 @@ test("3c 還沒選之前，田上標籤、右下大鈕、任務卡都不先寫�
   assert.equal(Game.facingPlotLabel(s, tileOf(s, 0), T), "收成・小麥田");
   const ui = read("src/ui.js"); assert.match(ui, /`\$\{name\}・現在收或等光`/); assert.match(ui, /`已選等光・\$\{name\}`/);
   /* 選了等光以後才講等光；第一次的教學只有等光一條路，照舊直接寫。 */
-  Game.queueLightHarvest(s, 0, T); assert.match(A.nextFarmStep(s, T + 1).text, /已選等光再收/);
+  Game.queueLightHarvest(s, 0, T); assert.match(A.nextFarmStep(s, T + 1).text, /^已選等光[，。]/); /* R84C 同步：「等光再收」只留在田邊動作列，任務卡寫「已選等光」 */
   const tutorial = marketState(); tutorial.stats.harvested = {}; assert.equal(Game.lightHarvestChoice(tutorial, 0, T).kind, "tutorial");
-  assert.equal(Game.facingPlotLabel(tutorial, tileOf(tutorial, 0), T), "等光再收");
+  assert.equal(Game.facingPlotLabel(tutorial, tileOf(tutorial, 0), T), "等光・小麥田"); /* R84C 同步：大鈕跟面向田同一種寫法 */
 });
 
 /* ---------- 第 4 項：擺攤品名、追光手冊按作物計 ---------- */

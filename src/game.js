@@ -333,7 +333,8 @@
     if (!crop) return "";
     const t = Number.isFinite(now) ? now : Date.now();
     /* R82C 第 3 項：早市二選一時不先替玩家寫「等光再收」，跟 ui.js 選中田的大鈕同一種寫法。 */
-    if (getCropProgress(state, plot, t).ready) { const choice = lightHarvestChoice(state, tile.plotIndex, t); return choice.ok && !choice.hasTradeoff ? "等光再收" : `收成・${crop.name}田`; }
+    /* R84C 第 1 項：「等光再收」只寫在田邊動作列那一顆鈕；大鈕寫「等光・某某田」（跟面向田時同一種寫法）。 */
+    if (getCropProgress(state, plot, t).ready) { const choice = lightHarvestChoice(state, tile.plotIndex, t); return choice.ok && !choice.hasTradeoff ? `等光・${crop.name}田` : `收成・${crop.name}田`; }
     return `生長中・${crop.name}田`;
   }
   // 澆水：對已種植、未成熟、本輪尚未澆過的格子澆水（一輪一次）
@@ -363,7 +364,16 @@
     harvestBonus: 1,         // 收成多 1 份
     xpBonus: 2,
     blockedWeather: { rain: true, storm: true, snow: true, fog: true },
+    /* R84C 第 2 項：新存檔的前十分鐘（遊戲時鐘，從存檔建立算起；天氣還沒解鎖），兩道光之間最多等 20 秒，
+       加上光前 8 秒預告也不超過 30 秒（R83 圖 37 曾寫等 86 秒）。十分鐘以後、或天氣解鎖以後照原本的 28／40 秒。 */
+    earlyWindowMs: 10 * 60 * 1000,
+    earlyGapMs: 20000,
   };
+  function earlyLightWindow(state, now) {
+    const born = Number(state && state.createdAt) || 0;
+    return born > 0 && now >= born && now - born < SUNPATCH.earlyWindowMs && (Number(state.level) || 1) < WEATHER_UNLOCK_LEVEL;
+  }
+  function sunGapMs(state, now, interval) { return earlyLightWindow(state, now) ? Math.min(interval, SUNPATCH.earlyGapMs) : interval; }
   function ensureSunState(state) {
     const s = state.sun;
     if (!s || typeof s !== "object" || Array.isArray(s)) state.sun = { plots: [], startsAt: 0, endsAt: 0, nextAt: 0, used: [], introduced: false };
@@ -455,10 +465,10 @@
     }
     if (now < sun.nextAt) return out;
     const plots = sun.previewPlots.slice();
-    if (!plots.length) { sun.nextAt = now + interval; return out; }
+    if (!plots.length) { sun.nextAt = now + sunGapMs(state, now, interval); return out; }
     const dur = sun.spawned ? SUNPATCH.durationMs : SUNPATCH.firstDurationMs; sun.spawned = (sun.spawned || 0) + 1;
     sun.plots = plots; sun.previewPlots = []; sun.previewAt = 0; sun.used = []; sun.startsAt = now; sun.endsAt = now + dur; sun.durationMs = dur;
-    sun.nextAt = now + dur + ((sun.spawned || 0) === 1 ? Math.min(interval, 15000) : interval);
+    sun.nextAt = now + dur + ((sun.spawned || 0) === 1 ? Math.min(interval, 15000) : sunGapMs(state, now + dur, interval));
     out.spawned = true;
     const queued = lightHarvestQueue(state);
     if (queued && queued.previewAt === sun.startsAt && !queued.autoHarvest && !queued.recorded) {
@@ -3248,7 +3258,7 @@
     animalAffinity, qualityTierFor, qualityProductId, animalStatus, waterAnimal, groomAnimal,
     isQualityItem, hasCollectedQuality,
     // R79：陽光光斑
-    SUNPATCH, ensureSunState, sunpatchActive, isSunlit, sunpatchStatus, updateSunpatch,
+    SUNPATCH, ensureSunState, sunpatchActive, isSunlit, sunpatchStatus, updateSunpatch, earlyLightWindow,
   };
   if (typeof window !== "undefined") Object.assign(window, GameAPI, { Game: GameAPI });
   if (typeof module !== "undefined" && module.exports) module.exports = GameAPI;

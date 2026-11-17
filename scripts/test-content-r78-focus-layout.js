@@ -116,12 +116,12 @@ const inView = (b, w, h) => !!b && b.left >= -1 && b.top >= -1 && b.right <= w +
         return /等 \d+ 秒・\d+ 份＋陽光 \d+/.test(d.actionDetail);
       }, null, { timeout: 4000 }).catch(() => { throw new Error(`${tag} 熟田等光：田邊動作列要寫秒數與收益`); });
       d = await snap(page);
-      assert.match(d.label, /^等光再收・小麥/, `${tag} 熟田等光：標籤第一行`);
+      assert.match(d.label, /^小麥・留著等光/, `${tag} 熟田等光：標籤第一行`); /* R84C 同步：田上寫狀態，「等光再收」只留在田邊動作列 */
       const choice = /^等光再收：等 (\d+) 秒，(\d+) 份＋陽光 (\d+)（現在收只有 (\d+) 份）$/.exec(d.wait); /* R83C 同步：統一用「等光再收」 */
       assert.ok(choice, `${tag} 熟田等光：標籤要寫出兩個結果（看到「${d.wait}」）`);
       assert.ok(Number(choice[2]) > Number(choice[4]), `${tag} 等光收的份數要比現在收多`);
       assert.ok(Number(choice[1]) >= 1 && Number(choice[1]) <= 7, `${tag} 等的秒數是算出來的`);
-      sameStep(d, tag, "熟田等光", "等光再收");
+      sameStep(d, tag, "熟田等光", "看看這株小麥"); /* R84C 同步：任務卡的鈕帶玩家到田邊看，不再寫「等光再收」 */
       if (d.hint) assert.match(d.hint, /光快到了，先留著這格作物/, `${tag} 任務卡只留一句狀態`);
       assert.ok(d.plots[0], `${tag} 被點的那格田在畫面裡`);
 

@@ -56,7 +56,7 @@ test("下一步包含折光、等光與催熟，舊存檔補安全預設", () =>
 
 test("光快落在已經熟的作物上：先留著等光，光到了才叫玩家收", () => {
   const s = fresh(); ready(s, 0, "wheat", 1000); s.sun.previewPlots = [0]; s.sun.previewAt = 9000; s.sun.nextAt = 9000;
-  const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /等光再收/);
+  const hold = Adventure.nextFarmStep(s, 2000); assert.equal(hold.action, "catch_sun"); assert.equal(hold.plotIndex, 0); assert.match(hold.text, /先留著這株/); /* R84C 同步：任務卡只寫狀態，「等光再收」只在田邊動作列 */
   /* R76 整合：手上還有種子包時，這幾秒先叫玩家去種別格；等光的那一格要一起帶出去，田上才會寫「先別收」、收成鈕先收起來（原本手機上任務卡說去種小麥、田上卻寫可收成）。 */
   s.adventure.r58.r59.seedPacks.wheat = 2;
   /* R78B 規則改了：等光的那一格已經熟了，就只講「等光再收」，不再叫玩家去種小麥（任務卡寫去種小麥、田上寫先別收對不起來）；等光的那一格照樣帶出去。 */

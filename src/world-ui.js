@@ -494,7 +494,7 @@
     if (choiceOpen) return "光快到了，請在田邊選一種收成方式。";
     if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest
       ? "已選等光，光到後會自動收成。"
-      : "已選等光再收，光落下後回田邊在光裡收成。";
+      : "已選等光，光落下後回田邊在光裡收成。"; /* R84C 第 1 項：「等光再收」只留在田邊動作列 */
     if (step.action === "refract") return "光沒有照到作物，請把光折到這格。";
     if (step.action === "catch_sun") return "光快到了，先留著這格作物。";
     if (step.sunlit === true && step.action === "harvest") return "陽光正在田上，到田邊在光裡收成。";
@@ -504,7 +504,7 @@
   function r82aObjectiveShort(step, choiceOpen, queuedLight) {
     if (!step) return "";
     if (choiceOpen) return "在田邊選收成方式";
-    if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest ? "等光自動收成" : "等光再收";
+    if (queuedLight && step.holdPlotIndex === queuedLight.plotIndex) return queuedLight.autoHarvest ? "等光自動收成" : "已選等光";
     return step.short;
   }
   function r80bNormalizeHeirloomObjective(box) {
@@ -941,7 +941,11 @@
       notify(result.ok ? "用掉 2 點陽光，這一格立刻成熟了，走過去收吧。" : step.text); if (result.ok) afterSunAction(); return;
     }
     if (step.action === "catch_sun") {
-      closePanels(); const result = window.queueLightHarvest ? window.queueLightHarvest(current, step.plotIndex, now) : { ok: false };
+      closePanels();
+      /* R84C 第 1 項：熟了留著等光時，任務卡的「看看這株」不替玩家按等光：鏡頭帶到那一格、選取它，田邊動作列寫秒數與收益，玩家在那裡按「等光再收」。 */
+      const queuedNow = window.lightHarvestQueue ? window.lightHarvestQueue(current) : null, choiceNow = window.lightHarvestChoice ? window.lightHarvestChoice(current, step.plotIndex, now) : null;
+      if (choiceNow && choiceNow.ok && !(queuedNow && queuedNow.plotIndex === step.plotIndex) && farm().selectTile && farm().selectTile(step.tileId)) return;
+      const result = window.queueLightHarvest ? window.queueLightHarvest(current, step.plotIndex, now) : { ok: false };
       notify(result.ok ? result.choice.helpText : step.text); if (result.ok) afterSunAction(); return;
     }
     if (step.action === "wait") { closePanels(); notify(step.text); return; }
@@ -1293,6 +1297,10 @@
     const scene = el("mapScene");
     ctx.strokeStyle = "rgba(255,255,235,.55)"; ctx.lineWidth = 1;
     ctx.strokeRect(-s.camera.x / size * 10, -s.camera.y / size * 10, scene.clientWidth / size * 10, scene.clientHeight / size * 10);
+    /* R84C 第 5 項：還沒撿的鎮誌舊物在小地圖上畫一顆金色菱形（深色外框），一眼找得到在哪。 */
+    let marks = []; try { marks = window.StoryR76 && window.StoryR76.r84MinimapMarks ? window.StoryR76.r84MinimapMarks(s, Date.now()) : []; } catch (e) { marks = []; }
+    marks.forEach((m) => { const cx = m.x * 10 + 5, cy = m.y * 10 + 5; ctx.beginPath(); ctx.moveTo(cx, cy - 7); ctx.lineTo(cx + 6, cy); ctx.lineTo(cx, cy + 7); ctx.lineTo(cx - 6, cy); ctx.closePath(); ctx.fillStyle = "#f2c14e"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#3b2a12"; ctx.stroke(); });
+    button.dataset.r84cMarks = marks.map((m) => m.x + "," + m.y).join(";");
     ctx.fillStyle = "#2b2118"; ctx.fillRect(s.player.x * 10, s.player.y * 10, 10, 10); ctx.fillStyle = "#ff5a3c"; ctx.fillRect(s.player.x * 10 + 1, s.player.y * 10 + 1, 8, 8); ctx.fillStyle = "#fff6e3"; ctx.fillRect(s.player.x * 10 + 3, s.player.y * 10 + 3, 4, 4); button.dataset.playerDot = s.player.x + "," + s.player.y;
     button.onclick = (e) => { const r = canvas.getBoundingClientRect(); const x = Math.floor((e.clientX - r.left) / r.width * s.map.width), y = Math.floor((e.clientY - r.top) / r.height * s.map.height); const tile = window.getTileXY(s, x, y); if (tile) { farm().setTool("hand"); farm().clickTile(tile.id); } };
   }
@@ -1390,7 +1398,9 @@
       const focusId = targetCovered ? tid : (coveredPlot && targetIsPlot ? coveredPlot.dataset.tileId : null);
       const talking = !!document.querySelector("#worldDialogue:not([hidden])"); // R37 整合：對話中鏡頭留給說話者，不為了被蓋的田格移走
       // 新的被蓋目標立即聚焦；同一目標才沿用 3 秒節流，避免鏡頭反覆跳。
-      if (focusId && !(talking && !targetCovered) && (focusId !== lastTargetAvoidId || nowMs - lastTargetAvoidAt > 3000 || !(current.camera && current.camera.focusTileId === focusId))) { lastTargetAvoidAt = nowMs; lastTargetAvoidId = focusId; const f = farm(); if (f && f.focusTile) f.focusTile(focusId); }
+      /* R84C 第 5 項：鎮誌舊物剛出現、鏡頭正帶過去的那幾秒，不為了被蓋住的任務目標把鏡頭搶回來。 */
+      const relicHold = !!(window.StoryR76 && window.StoryR76.r84FocusHoldUntil > nowMs);
+      if (focusId && !relicHold && !(talking && !targetCovered) && (focusId !== lastTargetAvoidId || nowMs - lastTargetAvoidAt > 3000 || !(current.camera && current.camera.focusTileId === focusId))) { lastTargetAvoidAt = nowMs; lastTargetAvoidId = focusId; const f = farm(); if (f && f.focusTile) f.focusTile(focusId); }
     }
     syncSeedHudTop();
   }

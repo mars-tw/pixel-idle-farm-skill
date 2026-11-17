@@ -100,6 +100,8 @@ function branchStates() {
   /* 任務卡：光快落在乾的那株（等光，在光裡澆水）、教學等光再收、早市選了等光、光落在空田要折光。 */
   const dry = fresh(); dry.coins = 30; Game.plant(dry, 0, "wheat", T); dry.r75Sunplay.firstRefracted = true; preview(dry, [0], T + 6000); grab(dry, T, "任務卡・光快落在乾的那株");
   const tut = fresh(); tut.coins = 30; Game.plant(tut, 0, "wheat", T, "water"); tut.plots[0].plantedAt = T - 3600000; preview(tut, [0], T + 7000); grab(tut, T, "任務卡・教學等光再收");
+  /* R84C 同步：「等光再收」改成只寫在田邊動作列那一顆鈕（任務卡只寫狀態），教到這個說法的地方改收田邊動作列的字。 */
+  bag.push({ where: "田邊動作列", key: "tutorialText", text: Game.lightHarvestChoice(tut, 0, T).tutorialText });
   Game.queueLightHarvest(tut, 0, T); grab(tut, T + 1, "任務卡・教學已按等光");
   const market = fresh(); market.coins = 30; market.stats.harvested.wheat = 3; market.sun.spawned = 1; market.flags.r79FirstLightHarvest = true; Game.plant(market, 0, "wheat", T, "water"); market.plots[0].plantedAt = T - 3600000; preview(market, [0], T + 7000);
   grab(market, T, "任務卡・早市二選一"); Game.queueLightHarvest(market, 0, T); grab(market, T + 1, "任務卡・早市已選等光");
@@ -145,9 +147,9 @@ test("1b 原始碼：任務卡、田上標籤、祖母手記、提示訊息的�
   assert.deepEqual(hits, [], "字串裡還有舊說法");
   const ui = read("src/ui.js"), world = read("src/world-ui.js");
   assert.match(ui, /`在光裡澆水・\$\{name\}` \+ "\\n光快落在這格了"/, "光快落在乾的那格：田上標籤寫在光裡澆水");
-  assert.match(ui, /"光快落在這格了，等光再收。"/);
-  assert.match(world, /"已選等光再收，光落下後回田邊在光裡收成。"/);
-  assert.match(world, /queuedLight\.autoHarvest \? "等光自動收成" : "等光再收"/);
+  assert.match(ui, /"光快落在這格了，先留著這株。"/); /* R84C 同步：提示只寫狀態，「等光再收」只留在田邊動作列 */
+  assert.match(world, /"已選等光，光落下後回田邊在光裡收成。"/); /* R84C 同步 */
+  assert.match(world, /queuedLight\.autoHarvest \? "等光自動收成" : "已選等光"/); /* R84C 同步 */
   assert.match(world, /"陽光正在田上，到田邊在光裡收成。"/); assert.match(world, /"陽光正在田上，到田邊在光裡澆水。"/);
 });
 
@@ -361,7 +363,7 @@ async function browserChecks() {
           assert.deepEqual(m.coveredButtons, [], t2 + " 不壓任何按鈕");
           const cx = m.sprite.l + m.sprite.w / 2, cy = m.sprite.t + m.sprite.h / 2;
           assert.ok(cx > m.tileRect.l && cx < m.tileRect.r && cy > m.tileRect.t && cy < m.tileRect.b, t2 + " 圖站在自己那一格上");
-          assert.equal(m.tagShown, m.near, t2 + " 名牌只在角色靠近時出現（靠近：" + m.near + "）");
+          assert.equal(m.tagShown, true, t2 + " 名牌常駐顯示（靠近：" + m.near + "）"); /* R84C 同步：第 3 項改成常駐短名牌 */
           const expectAnim = reduced ? "none" : { sparrow: "r83c-chore-hop", weed: "r83c-chore-sway", glean: "r83c-chore-sway", twig: "none" }[choreId];
           assert.equal(m.anim, expectAnim, t2 + " 動作");
           checks++;
@@ -369,7 +371,7 @@ async function browserChecks() {
         if (!reduced) {
           /* 角色走遠：名牌收起；滑鼠停留或點選才出現。 */
           const far = await page.evaluate(async () => { const s = __farm.state(), far = s.map.tiles.find((t) => t.id === "t7_5") || s.map.tiles.find((t) => t.plotIndex == null && t.x > 6); s.player.tileId = far.id; s.player.x = far.x; s.player.y = far.y; await new Promise((r) => setTimeout(r, 450)); const tag = document.querySelector(".r83c-chore .r83c-chore-tag"); return getComputedStyle(tag).visibility; });
-          assert.equal(far, "hidden", tag + " 角色走遠，名牌收起");
+          assert.equal(far, "visible", tag + " 角色走遠，名牌仍在"); /* R84C 同步：第 3 項改成常駐短名牌 */
           /* 跟地圖一起縮放：切到整張地圖，小事仍站在自己那一格。 */
           const zoom = await page.evaluate(async () => { const before = document.querySelector(".gtile").style.width; document.getElementById("mapFitToggle").click(); await new Promise((r) => setTimeout(r, 700)); const node = document.querySelector("#mapWorld .r83c-chore"), sp = node.querySelector(".r83c-chore-sprite").getBoundingClientRect(), tile = document.querySelector('.gtile[data-tile-id="' + node.dataset.tileId + '"]').getBoundingClientRect(); const cx = sp.left + sp.width / 2, cy = sp.top + sp.height / 2, n = node.getBoundingClientRect(); const out = { before, after: document.querySelector(".gtile").style.width, inside: cx > tile.left && cx < tile.right && cy > tile.top && cy < tile.bottom, w: n.width, h: n.height }; document.getElementById("mapFitToggle").click(); await new Promise((r) => setTimeout(r, 500)); return out; });
           assert.notEqual(zoom.before, zoom.after, tag + " 切換了地圖大小"); assert.equal(zoom.inside, true, tag + " 縮放後小事仍在自己那一格：" + JSON.stringify(zoom)); assert.ok(zoom.w >= 44 && zoom.h >= 44, tag + " 縮小後點擊範圍仍至少 44");

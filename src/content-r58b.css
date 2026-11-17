@@ -2511,3 +2511,15 @@ html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),
 /* 第 5 項：任務卡帶玩家去某一格時，右下大鈕不寫身旁不相干的東西（由 ui.js 標記 data-r83a-off-target）。 */
 #actionA[data-r83a-off-target="true"] { visibility: hidden !important; pointer-events: none !important; }
 /* ===== R83A 結束 ===== */
+/* ===== R84C：前幾分鐘的節奏與舊麥種成果 開始 ===== */
+/* R84C 第 3 項：田邊小事的小名牌常駐顯示（撿落穗、麻雀、拔雜草、撿枯枝），不再等角色靠近；位置照 R83C 的避讓規則。 */
+#mapWorld .r83c-chore .r83c-chore-tag { opacity: 1; visibility: visible; }
+/* 縮放看整張地圖時格子很小，名牌比格子寬，常駐會蓋到旁邊的田：這時照 R83C 只在靠近、停留或點選時出現。 */
+#mapWorld .r83c-chore.r84c-small-tile:not(.is-near):not(.is-claimed):not(:hover):not(:focus-visible):not(.is-missing-art) .r83c-chore-tag { opacity: 0; visibility: hidden; }
+/* R84C 第 4 項：藍布老麥田是一塊 2×2 格的田（footprint 由 story-r76 指定）；R83B 給單株用的放大不再套用，成熟只留輕微放大與光點。 */
+.r78c-scene-change[data-r84c-field] { transform: translate(-50%, -100%); }
+.r78c-scene-change[data-r84c-field][data-r82b-stage="ripe"] { transform: translate(-50%, -100%) scale(1.03); }
+.r78c-scene-change[data-r84c-field]::before { width: 86%; height: 12px; bottom: -2px; }
+/* 還沒播種時畫的是那一包種子：種子包是道具，不撐滿整塊田，站在田的下緣中央。 */
+.r78c-scene-change[data-r84c-field][data-r82b-stage="empty"] img { width: 56%; height: 56%; }
+/* ===== R84C 結束 ===== */

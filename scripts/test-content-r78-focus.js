@@ -37,7 +37,7 @@ test("4a 小麥已經熟、光快到了：主要按鈕不寫「去種小麥」�
   const step = A.nextFarmStep(s, T + 1000);
   assert.notEqual(step.actionLabel, "去種小麥", "田上寫先別收的時候，任務卡不能叫玩家去種小麥");
   assert.equal(step.action, "catch_sun"); assert.equal(step.plotIndex, 0); assert.equal(step.holdPlotIndex, 0, "等光的那一格要帶出去，田上才會寫先別收");
-  assert.equal(step.actionLabel, "等光再收"); assert.match(step.text, /等光再收/);
+  assert.equal(step.actionLabel, "看看這株小麥"); assert.match(step.text, /先留著這株，在光裡收成/); /* R84C 同步：「等光再收」只留在田邊動作列，任務卡改寫狀態 */
   assert.doesNotMatch(step.text, /\d+ 秒/, "任務卡文字不放會跳動的秒數");
   /* 沒有光的預告時，熟了就是去收。 */
   const plain = fresh(); grow(plain, 0, "wheat", T); plain.adventure.r58.r59.seedPacks.wheat = 2;
@@ -209,7 +209,7 @@ test("2 等光還是現在收：兩個數字都從規則算出來", () => {
   assert.equal(Game.lightHarvestChoice(young, 0, at).ok, false);
   const ui = read("src/ui.js");
   assert.match(ui, /G\.lightHarvestChoice\(/, "田上標籤用算出來的數字"); assert.match(ui, /r78b-wait-choice/);
-  assert.match(ui, /heldForLight \? `等光再收・\$\{name\}` : `\$\{name\}・可收成`/, "成熟田的第一行跟下一步同步");
+  assert.match(ui, /heldForLight \? `\$\{name\}・留著等光` : `\$\{name\}・可收成`/, "成熟田的第一行跟下一步同步");
 });
 
 test("2b 光已經落下後，不再留「光會落在這一格」「等光到了再…」", () => {
