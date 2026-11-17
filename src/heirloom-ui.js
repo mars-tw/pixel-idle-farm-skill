@@ -52,7 +52,9 @@
       if (!pick) { pick = document.createElement("button"); pick.type = "button"; pick.className = "r82c-pick-alt r82-heirloom-pick"; pick.dataset.r82cPickAlt = alt.id; bottom.appendChild(pick); }
       if (!note) { note = document.createElement("small"); note.className = "r82c-pick-note"; note.dataset.r82cPickNote = ""; bottom.before(note); }
       /* R83A 第 4 項：收合時「去修釣台」那顆並排鈕放不下，改留一顆「另一件」小鈕，按下去做同一件事。 */
-      if (!compactPick) { compactPick = document.createElement("button"); compactPick.type = "button"; compactPick.className = "r83a-heirloom-alt"; compactPick.dataset.r83aHeirloomAlt = alt.id; compactPick.textContent = "另一件"; bottom.appendChild(compactPick); }
+      if (!compactPick) { compactPick = document.createElement("button"); compactPick.type = "button"; compactPick.className = "r83a-heirloom-alt"; compactPick.dataset.r83aHeirloomAlt = alt.id; bottom.appendChild(compactPick); }
+      /* R84B 第 3 項：收合時那顆小鈕直接寫要做什麼（修釣台），不再只寫「另一件」（圖 160）；字數跟原本一樣，不撐開收合列。 */
+      compactPick.textContent = alt.pickLabel || alt.actionLabel;
       pick.textContent = alt.actionLabel; pick.title = alt.text; pick.setAttribute("aria-label", alt.actionLabel + "：" + alt.text);
       note.textContent = "也可以先" + alt.short + "，兩件都通往主線，先做哪件由你挑。";
       const visitAlt = () => { if (alt.id === "fishing_dock" && window.FarmWorld && window.FarmWorld.visitSite) window.FarmWorld.visitSite("fishing_dock"); };

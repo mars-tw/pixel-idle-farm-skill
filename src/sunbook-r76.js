@@ -482,10 +482,16 @@
    * 自己一張卡，不擠進一般提示列。位置每次都重算：排在頂欄、任務卡、種子籤的下面，
    * 碰到下方工具列或手機操作鍵就縮短，幾秒後自己收掉，也可以點掉。 */
   let cardTimer = 0, cardWatch = 0, cardWait = 0, cardFrame = 0, cardQueue = [], cardShown = [];
+  /* R84B 第 2 項：同一枚印章只跳一次（圖 19、23）。小卡在畫面上停過 1.2 秒就算看過：之後被對話、手札或結算卡蓋過去就直接收掉、不再排隊重跳，
+     印章本身已經蓋在追光手冊裡，玩家隨時翻得到；剛冒出來不到 1.2 秒就被蓋掉的才排回去，等畫面空出來再出一次（排隊的不丟）。 */
+  const CARD_SEEN_MS = 1200, cardSeen = new Set();
+  let cardShownAt = 0;
+  const cardKey = (e) => (e && (e.cropId || "") + ":" + (e.stampId || "")) || "";
   /* 升級卡、結算卡跟小卡都排在右上角，同時出來會疊在一起（小卡整張蓋住升級卡）；它們 2.5 秒就收，小卡排在後面等。 */
   /* R78B 第 5 項：最後兩個是互動層級的掛點——照顧方式彈窗還在、或 <html data-r78-focus> 標著有主要面板開著時，集章小卡先收起來排隊。 */
   const BLOCKERS = ".r75b-cook-overlay, .r75a-rack-overlay, .r76b-dialogue, .modal.show, #toast-zone .settlement-card, .r74a-care-popover, html[data-r78-focus]:not([data-r78-focus=\"\"]) body";
-  function blocked() { return !!document.querySelector(BLOCKERS); }
+  /* R84B 第 2 項：手札、鄰居順口一句也算（R78B 的焦點記號每 250 毫秒才更新一次，這裡直接看）。 */
+  function blocked() { return !!document.querySelector(BLOCKERS + ", .side-panel.world-panel-open, #worldDialogue:not([hidden])") || !!(root.FarmLayers && typeof root.FarmLayers.mustWait === "function" && root.FarmLayers.mustWait("stamp")); }
   function cardNode() {
     let node = document.getElementById("r76cStampCard");
     if (!node) {
@@ -546,8 +552,14 @@
     placeCard();
     if (typeof root.requestAnimationFrame === "function") cardFrame = root.requestAnimationFrame(followCard);
   }
-  function hideCard() {
+  function hideCard(interrupted) {
     const node = document.getElementById("r76cStampCard");
+    /* 被蓋過去時：看過的記成看過；剛冒出來的排回去。其他收法（點掉、時間到、打開手冊）都算看過。 */
+    const early = interrupted === true && cardShownAt && Date.now() - cardShownAt < CARD_SEEN_MS;
+    const shownNow = cardShown.slice();
+    if (early) cardQueue = shownNow.concat(cardQueue.filter((q) => !shownNow.some((e) => cardKey(e) === cardKey(q)))).slice(-12);
+    else shownNow.forEach((e) => { const key = cardKey(e); if (key) cardSeen.add(key); });
+    cardShownAt = 0;
     if (cardTimer) { clearTimeout(cardTimer); cardTimer = 0; }
     if (cardWatch) { clearInterval(cardWatch); cardWatch = 0; }
     if (cardFrame && typeof root.cancelAnimationFrame === "function") { root.cancelAnimationFrame(cardFrame); cardFrame = 0; }
@@ -556,7 +568,7 @@
   }
   /* 料理成果卡、曬架這類整面蓋住畫面的視窗開著時，小卡先排隊，等它關掉才出來，不跟它搶位置。 */
   function showCard(list) {
-    if (list && list.length) cardQueue = cardQueue.concat(list).slice(-12);
+    if (list && list.length) cardQueue = cardQueue.concat(list.filter((e) => !cardSeen.has(cardKey(e)) && !cardQueue.some((q) => cardKey(q) === cardKey(e)))).slice(-12);
     if (!cardQueue.length) return;
     if (blocked()) {
       if (!cardWait) cardWait = setInterval(function () { if (!blocked()) { clearInterval(cardWait); cardWait = 0; showCard(); } }, 300);
@@ -566,12 +578,12 @@
     paintCard(batch);
   }
   function watchCard() {
-    if (blocked() && cardShown.length) { const again = cardShown; hideCard(); showCard(again); return; }
+    if (blocked() && cardShown.length) { const again = cardShownAt && Date.now() - cardShownAt < CARD_SEEN_MS; hideCard(true); if (again) showCard(); return; } /* R84B：看過的被蓋過去就收掉，不重跳 */
     placeCard();
   }
   function paintCard(list) {
     const node = cardNode(), compact = (root.innerHeight || 0) < 480, limit = compact ? 1 : 3;
-    cardShown = list;
+    cardShown = list; cardShownAt = Date.now();
     const lines = list.slice(-limit).map(function (e) { return '<span class="r76c-card-line">' + esc(e.text) + "</span>"; }).join("");
     const extra = list.length - Math.min(limit, list.length);
     let milestone = 0, first = false;

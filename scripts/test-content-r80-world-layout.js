@@ -62,16 +62,16 @@ async function clearDialogs(page) { for (let i = 0; i < 6; i++) { await page.eva
         assert.ok(looks[pick].size >= 16, tag + " 小圖示看得到 " + JSON.stringify(looks[pick]));
         await shot(page, tag, "3-place-" + pick);
 
-        /* 二、第一張具名訂單：種兩格小麥、收成，走回種子籃旁交出去（新存檔幾分鐘內就做得到）。 */
+        /* 二、第一張具名訂單：種三格小麥（R84B 同步：原為兩格）、收成，走回種子籃旁交出去（新存檔幾分鐘內就做得到）。 */
         if (pick === "seed") {
           await clearToasts(page);
-          await page.evaluate(() => { const s = __farm.state(), now = Date.now(); s.plots[0].cropId = null; s.plots[1].cropId = null; Game.plant(s, 0, "wheat", now - 60000); Game.plant(s, 1, "wheat", now - 60000); Game.harvest(s, 0, now); Game.harvest(s, 1, now); __farm.refresh(); });
+          await page.evaluate(() => { const s = __farm.state(), now = Date.now(); s.plots[0].cropId = null; s.plots[1].cropId = null; s.plots[2].cropId = null; Game.plant(s, 0, "wheat", now - 60000); Game.plant(s, 1, "wheat", now - 60000); Game.plant(s, 2, "wheat", now - 60000); Game.harvest(s, 0, now); Game.harvest(s, 1, now); Game.harvest(s, 2, now); __farm.refresh(); }); /* R84B 同步：第一張跟每天那張同一個份數（留種合作單 3 份），多種一格（原為兩格） */
           await clearToasts(page);
           const coins0 = await page.evaluate(() => __farm.state().coins);
           await page.evaluate(() => document.querySelector('.r78c-scene-change[data-r78c-route="mayor:farm"]').click());
           await page.waitForFunction(() => document.querySelector('.r76b-dialogue [data-r76b-choice="special"]'), null, { timeout: 8000 });
           const trial = await page.evaluate(() => { const b = document.querySelector('.r76b-dialogue [data-r76b-choice="special"]'), r = b.getBoundingClientRect(), top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return { text: b.textContent.replace(/\s+/g, " "), box: { left: r.left, top: r.top, right: r.right, bottom: r.bottom }, hit: !!top && (top === b || b.contains(top)), head: document.querySelector(".r76b-dialogue-head")?.textContent.trim() }; });
-          assert.match(trial.text, /交第一張「留種合作單」.*同一種作物 2 份.*金/, tag + " 物件旁就能交第一張 " + trial.text);
+          assert.match(trial.text, /交第一張「留種合作單」.*同一種作物 3 份.*金/, tag + " 物件旁就能交第一張 " + trial.text); /* R84B 同步：原為 2 份 */
           assert.ok(trial.hit && inside(trial.box, w, h), tag + " 交付鈕在畫面內點得到");
           await shot(page, tag, "4-trial-order");
           await press(page, mobile, '.r76b-dialogue [data-r76b-choice="special"]');

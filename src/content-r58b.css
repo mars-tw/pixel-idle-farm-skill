@@ -2511,3 +2511,12 @@ html body:not(:has(.side-panel.world-panel-open)):is(:has(#toast-zone > .toast),
 /* 第 5 項：任務卡帶玩家去某一格時，右下大鈕不寫身旁不相干的東西（由 ui.js 標記 data-r83a-off-target）。 */
 #actionA[data-r83a-off-target="true"] { visibility: hidden !important; pointer-events: none !important; }
 /* ===== R83A 結束 ===== */
+
+/* ===== R84B（下一步不矛盾、一次只有一層）開始 ===== */
+/* 第 2 項：看火候（或料理成果卡）開著時，底下的灶台清單整個退場，畫面上只剩看火候自己的一個關閉鈕（MUSE：圖 39、58、71）。
+   關掉看火候，灶台清單原封不動回來；料理成果卡按完會自己重開灶台。 */
+html body:has(.r75b-cook-overlay) .modal.show { visibility: hidden !important; pointer-events: none !important; }
+html body:has(.r75b-cook-overlay) .modal.show * { visibility: hidden !important; }
+/* 第 1 項：任務卡標題一律寫主線那一列與它自己的數字（不再換成光的按鈕字）；第一分鐘那張窄卡（R80B）放不下「任務：」三個字，只在窄卡裡省掉字首，名字不被截斷。 */
+#questDock.r80b-decision-compact .r84b-task-prefix { display: none; }
+/* ===== R84B 結束 ===== */

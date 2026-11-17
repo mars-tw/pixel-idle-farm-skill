@@ -30,21 +30,21 @@ function festivalState() {
   return state;
 }
 
-test("具名第一單以畫面上的 2 份小麥 14 金為底，卡片與入帳同為多兩成", () => {
+test("具名第一單以畫面上的 3 份小麥 21 金為底，卡片與入帳同為多兩成（R84B 同步：第一張跟每天那張同為 3 份，原為 2 份 14 金）", () => {
   const state = S.defaultState(T0); A.ensure(state, T0);
   assert.equal(A.resolveMainStoryChoice(state, "mayor", "farm", T0).ok, true);
   assert.equal(Q.act(state, "mayor", T0 + 1).ok, true);
   assert.equal(Q.act(state, "mayor", T0 + 2, "seed").ok, true);
-  state.storage.items.wheat = 2;
+  state.storage.items.wheat = 3;
   const info = Q.specialInfo(state, "mayor", T0 + 3);
-  assert.equal(Q.shownGeneralOrder(state, "wheat", 2, T0 + 3), 14);
-  assert.equal(info.general, 14);
-  assert.equal(info.coins, 17, "14 金多兩成，向上取整後是 17 金");
-  assert.match(info.rewardText, /^17 金（比一般訂單多兩成）/);
-  assert.match(Q.cardHtml(state, "mayor", T0 + 3), /17 金（比一般訂單多兩成）/);
+  assert.equal(Q.shownGeneralOrder(state, "wheat", 3, T0 + 3), 21);
+  assert.equal(info.general, 21);
+  assert.equal(info.coins, 26, "21 金多兩成，向上取整後是 26 金");
+  assert.match(info.rewardText, /^26 金（比一般訂單多兩成）/);
+  assert.match(Q.cardHtml(state, "mayor", T0 + 3), /26 金（比一般訂單多兩成）/);
   const before = state.coins;
   assert.equal(Q.takeSpecial(state, "mayor", T0 + 4).ok, true);
-  assert.equal(state.coins - before, 17);
+  assert.equal(state.coins - before, 26);
 });
 
 test("三種照顧方式共用絕對時間，慢幾秒以勤澆水為基準且不顯示百分比", () => {

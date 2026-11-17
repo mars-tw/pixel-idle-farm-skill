@@ -160,6 +160,24 @@
     const card = primary ? null : known[0] || null;
     return { primary, card, queued: known.filter((id) => id !== card), questDock: primary ? "folded" : "shown", hints: primary ? "hidden" : "shown" };
   }
+  /* R84B 第 2 項：一次只留一個主要互動層。上面的 focusRule 只排「誰當焦點」，兩層仍可能同時開著（圖 29 兩個對話框、圖 147 手札加旁白）；
+     這一支決定新的一層能不能現在出來：
+       - 主要層五種：對話（dialogue，下方對話框）、手札（journal）、結算卡（settlement）、集章小卡（stamp）、看火候（cook）。
+         鄰居順口一句（#worldDialogue）是提示那一級：下方對話框一開就收起，不跟它同時出現。
+       - 玩家自己按出來的（點鄰居、點地圖物件、打開手札、開始看火候）：馬上出來，原本開著的其他主要層收掉（對話等於按「晚點再說」，故事可以從地圖或手札再接）。
+       - 自己跳出來的（自動演的故事、鄰居順口一句、結算卡、集章小卡）：有別的主要層開著就排隊，等畫面空出來再出；排隊不丟，最後一定會出現。
+       - 集章小卡已經在畫面上停過一下（1.2 秒）才被蓋過去就不重跳，印章已經記在追光手冊裡（同一枚只跳一次）；剛冒出來就被蓋掉的才排回去，之後出一次。
+     任何時候 layersOk 都要成立：主要層最多一個。 */
+  const LAYER_KINDS = ["dialogue", "journal", "settlement", "stamp", "cook"];
+  function layerRule(input) {
+    const incoming = input && input.incoming, byPlayer = !!(input && input.byPlayer);
+    const open = ((input && input.open) || []).filter((id) => LAYER_KINDS.includes(id) && id !== incoming);
+    if (!LAYER_KINDS.includes(incoming)) return { show: true, close: [], queue: false };
+    if (!open.length) return { show: true, close: [], queue: false };
+    if (byPlayer) return { show: true, close: open, queue: false };
+    return { show: false, close: [], queue: true };
+  }
+  function layersOk(open) { return ((open || []).filter((id) => LAYER_KINDS.includes(id))).length <= 1; }
   /* R78B 第 2 項：折光後的那一句提示。預告期間說「光會落在這一格」，光已經在照就說趁光還在；光落下後，預告期間的句子就過期了。 */
   function refractToastText(result) {
     if (!result || !result.ok) return "現在沒有光可以折，等下一道光的預告。";
@@ -569,6 +587,7 @@
   }
 
   const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, mirrorHint, harvestPopText };
+  Object.assign(API, { LAYER_KINDS, layerRule, layersOk }); /* R84B 第 2 項 */
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };
