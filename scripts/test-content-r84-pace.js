@@ -276,7 +276,7 @@ test("6a 接線：測試排在 unit 清單最後；R84C 樣式追加在 content-
   assert.ok(css.indexOf("/* ===== R84C：前幾分鐘的節奏與舊麥種成果 開始 ===== */") > css.lastIndexOf("/* ===== R83A 結束 ===== */"), "R84C 追加在 R83 後面");
   assert.match(css.trimEnd(), /\/\* ===== R84[ABC] 結束 ===== \*\/$/, "檔尾是 R84 的段落");
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r83-20261117-1"/, "版本字串沒動");
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r84-20261117-1"/, "版本字串沒動");
 });
 
 /* ---------- 瀏覽器：四種尺寸實拍量測 ---------- */

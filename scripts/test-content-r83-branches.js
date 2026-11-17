@@ -220,7 +220,7 @@ test("第 5 項：R83B 樣式接在 R82A 後面；測試接在 unit 清單；沿
   assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 的新測試依規定接在清單尾 */
   assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r8[34]-[a-z-]+\.js",)*\s*\];/); /* R84 同步：R84 的測試照規定排在清單最後 */
   assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r8[34]-[a-z-]+\.js",)*\s*\];/); /* R84B 同步：R84 的新測試依規定接在清單尾（原為只容許 r83） */
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r83-20261117-1"/, "版本字串沒動");
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r84-20261117-1"/, "版本字串沒動");
 });
 
 /* ---------- 版面：實際開瀏覽器量 ---------- */
