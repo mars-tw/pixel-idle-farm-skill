@@ -74,6 +74,9 @@ async function checkCard(page, tag, w, h, label, wantOpenButton) {
   for (let attempt = 0; attempt < 3; attempt++) {
     await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
     m = await measure(page, Object.assign({ card: "#r76cStampCard", main: "[data-r76c-card-close]", open: "[data-r76c-card-open]" }, AROUND));
+    /* R84 整合同步：R84B「一次只有一層」讓別的主要層（例如祖母寄來的信）剛好跳出時，小卡先讓位、稍後再出來；量到看不到時等它回來再量，
+       規則本身（小卡要看得到、重疊 0）不變。 */
+    if (!m.card && attempt < 2) { await page.waitForFunction(() => { const c = document.querySelector("#r76cStampCard"); return !!c && !c.hidden && c.getBoundingClientRect().width > 0; }, null, { timeout: 4000 }).catch(() => {}); continue; }
     if (!m.card || NEAR.every((key) => overlap(m.card, m[key]) === 0)) break;
   }
   assert.ok(m.card, `${tag} ${label}：小卡看得到`);
