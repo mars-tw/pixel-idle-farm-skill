@@ -125,8 +125,8 @@
       afterText: "鎮長收下乾貨，田邊的種子籃也照我的決定留了下來。",
       daily: { id: "field_basket", label: "翻今天的晨耕種子籃", result: "拿到 1 包當季種子與 1 點陽光", reward: { seasonalSeed: 1, sunlight: 1 } },
       special: { kind: "新訂單", variants: {
-        seed: { name: "留種合作單", want: { type: "seasonal", qty: 3 }, coinsRate: 1.2, reward: { nextSeed: 1, seasonalSeed: 1 }, diff: "會送一包還沒解鎖的作物種子，現在就能先種",
-          line: "籃邊夾著鎮長的字條：「交三份當季收成，鎮上照一般訂單多兩成付錢，再回你一包下一級才種得到的種子。照規矩，一天一張。」" },
+        seed: { name: "留種合作單", want: { type: "seasonal", qty: 3 }, coinsRate: 1.2, reward: { nextSeed: 1, seasonalSeed: 1 }, diff: "會送一包還買不到的作物種子，拿到就能種",
+          line: "籃邊夾著鎮長的字條：「交三份當季收成，鎮上照一般訂單多兩成付錢，再回你一包鋪子裡還買不到的種子。照規矩，一天一張。」" },
         sun: { name: "晨光合作單", want: { type: "seasonal", qty: 3 }, coinsRate: 1.2, reward: { sunlight: 2, materials: { compost: 1 } }, diff: "一般訂單不給陽光，這張會把蓄光瓶裝進 2 點",
           line: "籃邊夾著鎮長的字條：「交三份當季收成，照一般訂單多兩成付錢，我再替你把晨光小瓶裝滿兩格。照規矩，一天一張。」" },
       } },
@@ -540,10 +540,12 @@
     const locked = Object.values(C.CROPS || {}).filter((c) => (c.unlockLevel || 1) > level).sort((x, y) => (x.unlockLevel || 1) - (y.unlockLevel || 1) || (x.seedCost || 0) - (y.seedCost || 0));
     return locked.length ? locked[0].id : "";
   }
+  /* R84B 第 1 項：送的那包是商店還買不到的種子，拿到就能種；不再寫「Lv 3 才解鎖，現在就能種」這種前後打架的句子（圖 87、111）。 */
+  const NEXT_SEED_NOTE = "還買不到，拿到就能種";
   function rewardText(reward, state) {
     const parts = [];
     if (reward && reward.coins) parts.push(reward.coins + " 金");
-    if (reward && reward.nextSeed) { const id = nextSeedCropId(state); parts.push(id ? cropName(id) + "種子 " + reward.nextSeed + " 包（Lv " + C.CROPS[id].unlockLevel + " 才解鎖，現在就能種）" : cropName(seasonalCropId(state)) + "種子 " + reward.nextSeed + " 包"); }
+    if (reward && reward.nextSeed) { const id = nextSeedCropId(state); parts.push(id ? cropName(id) + "種子 " + reward.nextSeed + " 包（" + NEXT_SEED_NOTE + "）" : cropName(seasonalCropId(state)) + "種子 " + reward.nextSeed + " 包"); }
     for (const id of Object.keys((reward && reward.materials) || {})) parts.push(cropName(id) === id && C.MATERIALS && C.MATERIALS[id] ? C.MATERIALS[id].name + " " + reward.materials[id] + " 份" : id + " " + reward.materials[id] + " 份");
     for (const id of Object.keys((reward && reward.seedPacks) || {})) parts.push(cropName(id) + "種子 " + reward.seedPacks[id] + " 包");
     for (const id of Object.keys((reward && reward.items) || {})) parts.push(cropName(id) + " " + reward.items[id] + " 份");
@@ -696,6 +698,14 @@
      第 3 項：做了決定就能接「第一張」（只要同一種作物 2 份，新存檔幾分鐘內就交得出來）；三步做完以後每天一張，照單上的要求。 */
   const RATE_TEXT = { 1: "跟一般訂單一樣", 1.1: "比一般訂單多一成", 1.2: "比一般訂單多兩成", 1.3: "比一般訂單多三成", 1.4: "比一般訂單多四成", 1.5: "比一般訂單多五成" };
   const TRIAL_WANT = { type: "most", qty: 2 };
+  /* R84B 第 1 項：同一張具名訂單只有一個份數（圖 87 寫 3 份、圖 89 寫 2 份）。第一張跟之後每天那一張要的份數一樣，
+     只是不限當季或今天特價（交倉庫裡最多的那一種），新存檔做了決定就交得出來；收料理的那幾張第一張也收料理。
+     TRIAL_WANT 只在找不到那張單時當後備。 */
+  function trialWant(v) {
+    const want = v && v.want;
+    if (!want || !(want.qty > 0)) return TRIAL_WANT;
+    return { type: want.type === "meal" ? "meal" : "most", qty: want.qty };
+  }
   function itemSellValue(id) {
     if (C.CROPS && C.CROPS[id]) return C.CROPS[id].sellValue || 0;
     const def = typeof C.getItemDef === "function" ? C.getItemDef(id) : null;
@@ -790,7 +800,7 @@
     if (!v) return { eligible: false, can: false, kind: def.special.kind, unlockText: unlockText(def, q) };
     const trial = q.step < 3;
     if (trial && q.trialAt) return { eligible: false, can: false, trial: true, trialUsed: true, kind: def.special.kind, name: v.name, unlockText: unlockText(def, q) };
-    const want = trial ? TRIAL_WANT : v.want;
+    const want = trial ? trialWant(v) : v.want;
     const key = (trial ? "trial:" : "special:") + def.id, today = dayKeyOf(t), used = !trial && r.daily[key] === today;
     const plan = wantPlan(state, want, t), enough = plan.have >= plan.need;
     return { eligible: true, trial, kind: def.special.kind, name: v.name, used, enough, can: !used && enough, key, today, wantText: plan.text, diff: v.diff || "",
@@ -804,7 +814,7 @@
     if (info.used) return fail("daily_limit", "「" + info.name + "」今天做過了，明天再來。");
     if (!info.enough) return fail("missing_special", "「" + info.name + "」要" + info.wantText + "，" + info.missingText + "。");
     const q = r.quests[npcId], def = questDef(npcId, q.choiceId), v = specialVariant(def, q);
-    const want = info.trial ? TRIAL_WANT : v.want;
+    const want = info.trial ? trialWant(v) : v.want;
     const meal = want.type === "meal";
     const coins = specialCoins(v, meal ? "" : info.itemId, state, want, t);
     if (meal) { const shared = shareMeal(state, npcId, t); if (!shared.ok) return shared; }
@@ -1039,7 +1049,7 @@
     }
     if (v.decisionText) html += '<p class="r78c-decision-record" data-r78c-decision-record>我選了：<b>' + esc(v.decisionText) + '</b>・拿到：' + esc(v.decisionReward) + "</p>";
     /* R80C 第 1、3 項：兩個決定每天的差別並排列出；做了決定就能接第一張具名訂單，三步做完以後每天一張。 */
-    if (!v.upgraded && v.unlockText) html += '<p class="r79c-unlock" data-r79c-unlock>' + (v.decided ? "已解鎖：" + esc(v.unlockText) + (v.special && v.special.trialUsed ? "——三步做完以後每天一張" : "——第一張現在就能接，三步做完以後每天一張") : "做了決定就解鎖：" + esc(v.unlockText) + "；第一張只要同一種作物 2 份，三步做完以後每天一張") + "</p>";
+    if (!v.upgraded && v.unlockText) html += '<p class="r79c-unlock" data-r79c-unlock>' + (v.decided ? "已解鎖：" + esc(v.unlockText) + (v.special && v.special.trialUsed ? "——三步做完以後每天一張" : "——第一張現在就能接，三步做完以後每天一張") : "做了決定就解鎖：" + esc(v.unlockText) + "；第一張現在就能接，份數跟之後每天那張一樣，三步做完以後每天一張") + "</p>";
     html += perkDiffHtml(state, npcId, v);
     if (!v.upgraded && v.special && (v.special.eligible || v.special.trialUsed)) {
       const sp = v.special;
@@ -1283,7 +1293,7 @@
     sceneStates, takeNotes, pendingNotes, setListener, install, hookDried,
     CHOICE_ART, CHOICE_ART_READY, choiceArt, colorGift, specialInfo, takeSpecial, unlockText, dailyLine, stepPlace,
     DECISION_KEYS, DECISION_ART, DECISION_ART_READY, DECISION_BADGE, DECISION_DAILY, decisionArt, perkInfo, perkRows, firePerks, harvestPerks,
-    generalOrderAverage, shownGeneralOrder, nextSeedCropId, TRIAL_WANT };
+    generalOrderAverage, shownGeneralOrder, nextSeedCropId, TRIAL_WANT, trialWant };
   root.ChoicesR77 = ChoicesR77;
   if (isNode) module.exports = ChoicesR77;
   if (typeof document === "undefined") return;

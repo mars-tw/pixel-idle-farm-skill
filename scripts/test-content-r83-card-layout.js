@@ -76,6 +76,9 @@ function install() {
     return out;
   }
   function dock() {
+    /* R84 整合同步：遊戲每次重畫會依情況重新決定卡片樣子（光的決定精簡卡、目標被蓋住時自動收成一列），
+       C 線把前十分鐘的光改密後重畫更頻繁；setFold 指定的樣子若在等待中被改回，量之前在同一步重新套用，量的內容與門檻不變。 */
+    const fold = window.__r83Fold; if (fold) { const d0 = document.querySelector("#questDock"); d0.classList.remove("quest-collapsed", "quest-auto-collapsed", "quest-target-collapsed", "r80b-decision-compact"); if (fold === "collapsed") d0.classList.add("quest-collapsed"); window.__r83Fold = ""; }
     const d = document.querySelector("#questDock"), list = runs(d), collapsed = /quest-(auto-|target-)?collapsed/.test(d.className);
     /* 按鈕、狀態字、進度，以及收合時排在右側的標題列（只留進度，今日三件事另留這四個字）都算右側狀態，不算左邊的字。 */
     const headSel = ".r68a-objective-head, .r67a-objective-head, .world-chapter";
@@ -109,7 +112,7 @@ async function clearOverlays(page) { await page.evaluate(() => { document.queryS
 async function setFold(page, mode) {
   /* 一般提示（例如祖母寄來的信）開著時任務卡會改成一列模式；量「展開」前先等提示走完。 */
   if (mode === "expanded") await page.waitForFunction(() => !document.querySelector("#toast-zone > *"), null, { timeout: 9000 }).catch(() => page.evaluate(() => { document.querySelector("#toast-zone").innerHTML = ""; }));
-  await page.evaluate((mode) => { const d = document.querySelector("#questDock"); d.classList.remove("quest-collapsed", "quest-auto-collapsed", "quest-target-collapsed", "r80b-decision-compact"); if (mode === "collapsed") d.classList.add("quest-collapsed"); }, mode);
+  await page.evaluate((mode) => { const d = document.querySelector("#questDock"); d.classList.remove("quest-collapsed", "quest-auto-collapsed", "quest-target-collapsed", "r80b-decision-compact"); if (mode === "collapsed") d.classList.add("quest-collapsed"); window.__r83Fold = mode; }, mode);
   await page.waitForTimeout(80);
 }
 async function rerender(page) { await page.evaluate(() => { const s = __farm.state(); __farm.refresh(); FarmWorld.refresh(s); }); await page.waitForTimeout(150); }

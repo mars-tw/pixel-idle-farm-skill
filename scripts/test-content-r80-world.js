@@ -202,17 +202,17 @@ test("第 1 項：十三項具名解鎖的金幣不低於同樣東西交一般�
   for (const row of table) console.log("  " + row.join("｜"));
 });
 
-test("第 1、3 項：做了決定就能接第一張（同一種作物 2 份）；交過以後要做完第三步才每天一張；文案改成以一般訂單為基準", () => {
+test("第 1、3 項：做了決定就能接第一張（R84B 同步：份數跟之後每天那張一樣，留種合作單 3 份）；交過以後要做完第三步才每天一張；文案改成以一般訂單為基準", () => {
   const s = fresh(1); choose(s, "mayor", "farm", T0);
   assert.equal(Q.specialInfo(s, "mayor", T0 + 1).eligible, false, "還沒決定不能接");
   decide(s, "mayor", "farm", "seed", T0 + 2);
   const info = Q.specialInfo(s, "mayor", T0 + 5);
-  assert.equal(info.eligible, true); assert.equal(info.trial, true); assert.deepEqual(Q.TRIAL_WANT, { type: "most", qty: 2 });
+  assert.equal(info.eligible, true); assert.equal(info.trial, true); assert.deepEqual(Q.TRIAL_WANT, { type: "most", qty: 2 }); assert.equal(info.need, 3, "R84B 同步：第一張跟每天那張同一個份數（原為 TRIAL_WANT 的 2 份）");
   assert.equal(info.enough, false);
-  s.storage.items.wheat = 2;
+  s.storage.items.wheat = 3; /* R84B 同步：第一張要 3 份（原為 2） */
   const r = Q.takeSpecial(s, "mayor", T0 + 6);
   assert.equal(r.ok, true, JSON.stringify(r)); assert.equal(r.trial, true); assert.match(r.message, /第一張「留種合作單」/);
-  assert.match(r.rewardText, /胡蘿蔔種子 1 包（Lv 2 才解鎖，現在就能種）/, "留種合作單送一包還沒解鎖的作物種子");
+  assert.match(r.rewardText, /胡蘿蔔種子 1 包（還買不到，拿到就能種）/, "留種合作單送一包還沒解鎖的作物種子"); /* R84B 同步：原為「Lv 2 才解鎖，現在就能種」（前後矛盾，圖 87、111） */
   assert.equal(s.adventure.r58.r59.seedPacks.carrot, 1);
   assert.equal(G.plant(s, 2, "carrot", T0 + 7).ok, true, "一級就能用那包種子種胡蘿蔔");
   const after = Q.specialInfo(s, "mayor", T0 + 8);

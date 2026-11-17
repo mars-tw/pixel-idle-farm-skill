@@ -691,13 +691,18 @@
     const S = root && root.StoryR76;
     if (!S || typeof S.r81Stage !== "function") return null;
     const stage = S.r81Stage(state); if (!stage || stage === "done") return null;
-    if (stage === "conflict") return { guidanceScope: "r81_story", action: "story_choice", kind: "story_choice", target: "r81c_story", tileId: null, text: "鎮長葛瑞想封存舊麥種，老農班伯想種回田裡。聽完兩人的話，再決定交給誰。", short: "到藍布老麥田看看", actionLabel: "去做決定" };
+    /* R84B 第 1 項：還沒選之前地圖上只有鎮長葛瑞腳邊那包「藍布舊麥種」，水井旁的田與告示牌旁的封存箱都還不存在，短句只指那一包。 */
+    if (stage === "conflict") return { guidanceScope: "r81_story", action: "story_choice", kind: "story_choice", target: "r81c_story", tileId: null, text: "鎮長葛瑞想封存舊麥種，老農班伯想種回田裡。聽完兩人的話，再決定交給誰。", short: "去決定藍布舊麥種", actionLabel: "去做決定" };
     const info = S.r81Order(state, now);
     if (stage === "order" && info) {
       if (info.enough) return { guidanceScope: "r81_story", action: "story_order", kind: "story_order", target: info.side, tileId: null, text: `具名訂單「${info.name}」的 ${info.need} 份${(C.CROPS[info.itemId] || {}).name || "作物"}已備齊，帶去交付。`, short: info.side === "elder" ? "把訂單交給老農班伯" : "把訂單交給鎮長葛瑞", actionLabel: "交付具名訂單" };
       return guidanceFieldStep(state, now, info.itemId, info.need - info.have, `具名訂單「${info.name}」`);
     }
-    if (stage === "scene") return { guidanceScope: "r81_story", action: "story_scene", kind: "story_scene", target: "r81c_story", tileId: null, text: "具名訂單已交付。回到舊麥種旁，聽完這段故事。", short: "回藍布老麥田聽故事", actionLabel: "繼續舊麥種故事" };
+    /* R84B 第 1 項：收尾地點照玩家選的那一邊——種回田裡是「藍布老麥田」，封存是「鎮公所封存箱」；封存路線全程不提藍布老麥田。 */
+    if (stage === "scene") {
+      const pick = S.r81Ensure ? S.r81Ensure(state).choice : "", place = pick === "seal" ? { text: "鎮公所封存箱", short: "封存箱" } : { text: "藍布老麥田", short: "藍布老麥田" };
+      return { guidanceScope: "r81_story", action: "story_scene", kind: "story_scene", target: "r81c_story", tileId: null, text: "具名訂單已交付。回到" + place.text + "旁，聽完這段故事。", short: "回" + place.short + "聽故事", actionLabel: "繼續舊麥種故事" };
+    }
     return null;
   }
   function nextGuidance(state, now) {
@@ -709,6 +714,37 @@
        光正要處理（折光、等光、催熟、在光裡照料）時照 R82C 原規則不帶。不帶的話這個選項在第 1 章幾乎永遠被蓋掉。 */
     if (lead && !lead.alternative && farm && farm.alternative && !["refract", "catch_sun", "ripen"].includes(lead.action) && lead.sunlit !== true) return Object.assign({}, lead, { alternative: farm.alternative });
     return next;
+  }
+  /* R84B 第 1 項：任務卡、手札「現在做」、章節清單共用的兩個答案，各處只讀這兩支，不在畫面端各自補判斷。
+     nowStep：此刻「現在做」講哪一步。祖母手記與舊麥種故事排在前面時就是那一步；今日三件事還在時跟著農務走；
+     其餘只有這一步屬於目前主線、或光正要處理（折光、等光、在光裡照料、已選等光再收）時才用 nextGuidance，
+     否則回 null，畫面改寫主線這一步（guide.stepText）。規則跟任務卡 renderObjective 的 questStep 同一套。
+     questFocus：「任務：X n/m」那一組名字與數字，永遠出自目前主線第一個還沒完成的同一列，名字跟數字不會一個講光、一個講鎮長。 */
+  function nowStep(state, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const g = nextGuidance(state, t);
+    if (!g || typeof g !== "object") return null;
+    if (g.guidanceScope === "heirloom" || g.guidanceScope === "r81_story") return g;
+    const early = earlyGoals(state, t);
+    if (early.available && !early.complete) return g;
+    const view = summary(state, t), q = view && view.ok ? view.currentQuest : null;
+    if (!q) return null;
+    if (g.questAware && g.questId === q.id) return g;
+    const queued = state.flags && state.flags.r79WaitHarvest;
+    const waiting = g.holdPlotIndex != null && !!queued && queued.plotIndex === g.holdPlotIndex && !queued.autoHarvest;
+    if (!g.questAware && (g.action === "refract" || g.action === "catch_sun" || g.sunlit === true || waiting)) return g;
+    return null;
+  }
+  function questFocus(state, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const view = summary(state, t), q = view && view.ok ? view.currentQuest : null;
+    if (!q) return null;
+    const g = guide(state, t);
+    const row = g && g.route ? g.step : (q.objectives || []).concat(q.requirements || []).find((r) => !r.complete) || null;
+    const npc = (C.NPCS || {})[q.npcId] || { name: "鎮民" };
+    const current = row ? Math.min(qty(row.current, Number.MAX_SAFE_INTEGER), row.required) : null;
+    return { questId: q.id, chapter: q.chapter, chapterName: q.chapterName, name: row && row.name ? row.name : q.canClaim ? `找${npc.name}回報` : q.name,
+      current, required: row ? row.required : null, progress: row ? `${current}/${row.required}` : q.canClaim ? `✓ 回報${npc.name}` : "1/1" };
   }
 
   function earlyGoals(state, now) {
@@ -1742,11 +1778,11 @@
     if (!dock || !dock.canRestore) return step;
     const cost = Object.entries(dock.cost || {}).map(([id, n]) => `${((C.MATERIALS || {})[id] || {}).name || id} ${n}`).join("、");
     return Object.assign({}, step, { alternative: { id: "fishing_dock", action: "restore", target: "fishing_dock", tileId: dock.target && dock.target.tileId || null,
-      text: `修好河畔釣台（${cost} 已備齊），修好就能借魚竿釣魚，之後的釣台任務直接算完成。`, short: "去修河畔釣台", actionLabel: "去修釣台" } });
+      text: `修好河畔釣台（${cost} 已備齊），修好就能借魚竿釣魚，之後的釣台任務直接算完成。`, short: "去修河畔釣台", actionLabel: "去修釣台", pickLabel: "修釣台" } }); /* R84B 第 3 項：收合列小鈕用的三個字 */
   }
   const r82cBaseFarmStep = nextFarmStep;
   nextFarmStep = function (state, now) { return r82cFirstPick(state, r82cBaseFarmStep(state, now), now); };
-  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, nextGuidance, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
+  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, nextGuidance, nowStep, questFocus, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
     mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal, r77Upgraded };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

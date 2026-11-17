@@ -627,6 +627,11 @@
   function isNarration(line) { return /^（[\s\S]*）$/.test(lineText(line).trim()) || lineBy(line) === ""; }
   function narrationText(line) { return lineText(line).trim().replace(/^（/, "").replace(/）$/, ""); }
   function openDialogue(state, npcId, lines, options) {
+    /* R84B 第 2 項：下方對話框是玩家點出來的一層。開之前照 FarmLayers 的規則把手札、結算卡、集章小卡收掉，
+       鄰居順口那一句（#worldDialogue）也先收起來（排隊中的那一句不丟，等這個對話框關掉再出），畫面上只留這一個對話框（圖 29、147）。
+       自動演的故事先由 busy81 等畫面空出來才會叫到這裡；呼叫端帶 passive 時不收別層。 */
+    if (root.FarmLayers && typeof root.FarmLayers.request === "function") { try { root.FarmLayers.request("dialogue", !(options && options.passive)); } catch (_) { /* 規則讀不到就照舊開 */ } }
+    if (!(options && options.passive)) { const said = document.getElementById("worldDialogue"); if (said && !said.hidden) said.hidden = true; }
     document.querySelectorAll(".r76b-dialogue").forEach((n) => n.remove());
     /* R82A：新版逐句對話接手時，直接移除舊 NPC 泡泡；舊泡泡裡的兩張選項卡正是圖 114／120 的空白卡片來源。 */
     document.querySelectorAll(".npc-bubble").forEach((n) => n.remove());
@@ -730,7 +735,9 @@
   const R81_AUTO_MS = 30 * 60000;
   function liveState81(fallback) { const f = farm(); try { return (f && typeof f.state === "function" && f.state()) || fallback; } catch (_) { return fallback; } }
   function toast81(message) { const f = farm(); if (message && f && f.toast) f.toast(message); }
-  function busy81() { return !!(document.querySelector(".r76b-dialogue") || document.querySelector(".modal.show") || document.querySelector("#startupLoading")); }
+  /* R84B 第 2 項：自動演的那段是自己跳出來的一層——手札（或任何側邊面板）、鄰居順口一句、結算卡、集章小卡、看火候開著時都先等，畫面空出來再演（圖 147）；
+     等的期間地圖上的藍布包與手札「帶我去」照樣打得開，不會卡住。 */
+  function busy81() { return !!(document.querySelector(".r76b-dialogue") || document.querySelector(".modal.show") || document.querySelector("#startupLoading") || document.querySelector(".side-panel.world-panel-open") || document.querySelector("#worldDialogue:not([hidden])") || (root.FarmLayers && typeof root.FarmLayers.mustWait === "function" && root.FarmLayers.mustWait("dialogue"))); }
   function speakerOf81(side) { return SPEAKER_NAMES[side] || side; }
   function focusR82Choice(state, choice) {
     const f = farm(), opt = R81_OPTIONS[choice], tile = opt && anchorTile81(state, opt.anchor);

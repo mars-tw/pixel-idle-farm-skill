@@ -80,7 +80,7 @@ test("4 祖母手記收合：短標題、主鈕、「另一件」小鈕與 1/3 �
   const css = read("src/content-r58b.css"), heir = read("src/heirloom-ui.js");
   assert.match(css, /#questDock \.r83a-heirloom-alt \{ display: none !important; \}/, "平常不顯示");
   assert.match(css, /\[data-quest="first_sun_basket"\]:is\(\.quest-collapsed,\.quest-auto-collapsed,\.quest-target-collapsed\) > \.world-objective-title,/, "收合時顯示這一步的短標題（R75 一列模式要看得到標題）");
-  assert.match(heir, /compactPick\.textContent = "另一件"/);
+  assert.match(heir, /compactPick\.textContent = alt\.pickLabel \|\| alt\.actionLabel;/); /* R84B 同步：小鈕改寫要做的事（修釣台），原為「另一件」（圖 160） */
   assert.match(heir, /compactPick\.title = "還有另一件可挑：" \+ alt\.text/);
   assert.match(heir, /pick\.onclick = visitAlt;[\s\S]*compactPick\.onclick = visitAlt/, "兩顆鈕做同一件事");
   assert.match(heir, /else \{ if \(pick\) pick\.remove\(\); if \(note\) note\.remove\(\); if \(compactPick\) compactPick\.remove\(\);/, "沒有第二件時移除");

@@ -158,8 +158,14 @@
     const zone = $("toast-zone");
     if (!zone) { settlementVisible = false; return; }
     if (zone.children && zone.children.length) return;
+    /* R84B 第 2 項：結算卡是自己跳出來的一層——對話、手札、集章小卡、看火候開著時先排隊（不丟），畫面空出來才出（焦點檢查每 250 毫秒再試一次）。 */
+    if (window.FarmLayers && window.FarmLayers.mustWait("settlement")) return;
     const data = feedbackQueue ? feedbackQueue.next() : settlementQueue.shift();
     if (!data) return;
+    /* R84B 第 1 項：結算卡的「下一步」在真的出現那一刻才讀，讀的是任務卡「現在做」同一個來源；排隊排久了也不會跟任務卡打架（圖 106）。 */
+    if (data.kind === "first_harvest" || (data.kind === "order" && state && state.adventure && state.adventure.claimed && !state.adventure.claimed.c1_first_meal)) {
+      try { const live = r84bNowText(); if (live) data.next = live; } catch (e) {}
+    }
     settlementVisible = true;
     const card = document.createElement("button");
     card.type = "button";
@@ -169,6 +175,7 @@
       ? `<strong>${escapeHtml(data.title)}</strong>${data.type === "level_up" || /^農場等級提升/.test(String(data.earned || "")) ? "" /* R80C 第 6 項：升級卡標題已寫「升到 Lv N」，不再重複一行「獲得：農場等級提升到 Lv N」 */ : `<span>獲得：${escapeHtml(data.earned)}</span>`}${Array.isArray(data.unlocks) && data.unlocks.length ? `<span class="r79c-unlocks" data-r79c-unlocks>新解鎖：${data.unlocks.map((row) => `<i class="r79c-unlock" data-kind="${escapeHtml(row.kind)}">${row.icon ? `<img src="${escapeHtml(row.icon)}${window.FARM_VERSION_QUERY || ""}" alt="" width="20" height="20">` : row.mark ? `<b aria-hidden="true">${escapeHtml(row.mark)}</b>` : ""}${escapeHtml(row.name)}</i>`).join("")}</span>` : `<span>新解鎖：${escapeHtml(data.unlocked)}</span>`}<span>下一步：${escapeHtml(data.next)}</span>`
       : `${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).length ? `獲得 ${[data.coins > 0 ? `${data.coins} 金` : "", data.xp > 0 ? `${data.xp} 經驗` : ""].filter(Boolean).join("・")}・` : ""}下一步：${escapeHtml(data.next)}`;
     zone.appendChild(card);
+    r84bKeepToastOffDock();
     let timer = setTimeout(close, 2500);
     function close() {
       if (!settlementVisible) return;
@@ -231,6 +238,7 @@
     const t = document.createElement("div");
     t.className = "toast"; t.textContent = msg;
     zone.appendChild(t);
+    r84bKeepToastOffDock();
     setTimeout(() => { t.remove(); normalToastVisible = false; showNextSettlement(); showNextToast(); }, 2100);
   }
   function floatText(x, y, text, color) {
@@ -1328,6 +1336,101 @@
     } catch (e) { /* 量不到就沿用原本的位置 */ }
     return rule;
   }
+  /* ===== R84B 第 2 項：一次只留一個主要互動層（對話、手札、結算卡、集章小卡、看火候） =====
+     規則在 FarmSunplay.layerRule（玩家按出來的馬上出、其他層收掉；自己跳出來的排隊）。這裡只量畫面現況、照規則收掉或叫它等。
+     手札＝側邊面板開著而且是「手札」或「圖鑑」那一頁；訂單、升級頁不算，交訂單的結算卡照舊看得到。
+     對話＝下方對話框；鄰居順口一句（#worldDialogue）是提示那一級：下方對話框一開就收起（圖 29），它自己也會等手札、下方對話框關掉才出（R37），
+     但不擋結算卡（R78B：對話時收成結算卡仍看得到，兩張不疊）。 */
+  const R84B_LAYERS = {
+    dialogue: ".r76b-dialogue",
+    journal: ".side-panel.world-panel-open .side-pane.sel:is([data-pane=\"story\"],[data-pane=\"journal\"])",
+    settlement: "#toast-zone .settlement-card",
+    stamp: "#r76cStampCard:not([hidden])",
+    cook: ".r75b-cook-overlay",
+  };
+  let r84bHold = { kind: "", until: 0 };
+  function r84bShown(node) {
+    if (!node || node.hidden || !node.getClientRects || !node.getClientRects().length) return false;
+    const style = getComputedStyle(node); return style.display !== "none" && style.visibility !== "hidden";
+  }
+  function r84bLayersOpen() {
+    return Object.keys(R84B_LAYERS).filter((key) => { try { return [...document.querySelectorAll(R84B_LAYERS[key])].some(r84bShown); } catch (e) { return false; } });
+  }
+  function r84bCloseLayer(id) {
+    if (id === "dialogue") {
+      const box = $("worldDialogue"); if (box && !box.hidden) box.hidden = true;
+      /* 下方對話框等於按「晚點再說」：故事狀態不變，之後從地圖物件或手札再接。 */
+      document.querySelectorAll(".r76b-dialogue").forEach((overlay) => {
+        /* 只對按鈕本身發一次不往外冒的點擊：頁面上「點面板外面就關面板」的規則不會把剛打開的手札又關掉。 */
+        const later = overlay.querySelector("[data-r76b-later]"), done = overlay.querySelector("[data-r76b-next]"), press = (b) => b.dispatchEvent(new MouseEvent("click", { bubbles: false, cancelable: true }));
+        if (later) press(later); else if (done && /知道了/.test(done.textContent || "")) press(done); else overlay.remove();
+      });
+    } else if (id === "journal") { const panel = document.querySelector(".side-panel"); if (panel) panel.classList.remove("world-panel-open"); }
+    else if (id === "settlement") { if (closeActiveSettlement) closeActiveSettlement(); }
+    else if (id === "stamp") { const book = window.FarmSunbook; if (book && book.hideCard) { book.hideCard(true); if (book.showCard) book.showCard(); } } /* 看過的收掉；剛冒出來的排回去，等畫面空出來再出 */
+    else if (id === "cook") { const x = document.querySelector(".r75b-cook-overlay [data-r75b-close]"); if (x) x.dispatchEvent(new MouseEvent("click", { bubbles: false, cancelable: true })); }
+  }
+  /* 玩家按出來的一層：照規則收掉其他層，並把這一層占住半秒，收掉別層時排隊的東西不會趁空檔冒出來。 */
+  function r84bRequest(kind, byPlayer) {
+    const sp = window.FarmSunplay, open = r84bLayersOpen();
+    const rule = sp && sp.layerRule ? sp.layerRule({ open, incoming: kind, byPlayer }) : { show: true, close: [] };
+    if (rule.show) { r84bHold = { kind, until: Date.now() + 600 }; (rule.close || []).forEach(r84bCloseLayer); }
+    return !!rule.show;
+  }
+  /* 自己跳出來的一層要不要先等：別的主要層開著、剛有一層被玩家按出來、或有整面視窗（.modal.show）開著。 */
+  function r84bMustWait(kind) {
+    if (r84bHold.until > Date.now() && r84bHold.kind !== kind) return true;
+    if (r84bLayersOpen().some((id) => id !== kind)) return true;
+    return kind !== "settlement" && hasOpenModal();
+  }
+  window.FarmLayers = { kinds: Object.keys(R84B_LAYERS), open: r84bLayersOpen, request: r84bRequest, mustWait: r84bMustWait, close: r84bCloseLayer,
+    ok: () => (window.FarmSunplay && window.FarmSunplay.layersOk ? window.FarmSunplay.layersOk(r84bLayersOpen()) : r84bLayersOpen().length <= 1) };
+  /* 玩家打開手札：開著的對話、結算卡、集章小卡收掉（側邊面板的開關散在很多地方，統一從 class 變化接）。 */
+  (function r84bWatchJournal() {
+    const panel = typeof document.querySelector === "function" ? document.querySelector(".side-panel") : null;
+    if (!panel || typeof MutationObserver !== "function") return;
+    let wasOpen = panel.classList.contains("world-panel-open");
+    new MutationObserver(() => {
+      const isOpen = panel.classList.contains("world-panel-open");
+      if (isOpen && !wasOpen) { try { if (r84bLayersOpen().includes("journal")) r84bRequest("journal", true); } catch (e) {} }
+      wasOpen = isOpen;
+    }).observe(panel, { attributes: true, attributeFilter: ["class"] });
+  })();
+  /* 提示與結算卡不壓任務卡（圖 106、134）：放好以後量一次，疊到任務卡就挪到任務卡下方；下方被種子欄占住就挪到任務卡右邊（讓開陽光標籤）。 */
+  function r84bKeepToastOffDock() {
+    const zone = $("toast-zone"), dock = $("questDock");
+    if (!zone || !dock || !zone.children || !zone.children.length || !zone.getBoundingClientRect) return;
+    const box = (n) => { if (!r84bShown(n)) return null; const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
+    const hit = (a, b) => !!a && !!b && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    const clear = () => { ["top", "left", "right", "bottom", "transform"].forEach((key) => zone.style.removeProperty(key)); delete zone.dataset.r84bMoved; };
+    if (zone.dataset.r84bMoved) clear();
+    const d = box(dock), z = box(zone);
+    if (!d || !z || !hit(z, d)) return;
+    const vw = window.innerWidth || 0, vh = window.innerHeight || 0, w = z.width, h = z.height;
+    /* 頂欄本身是一整條透明的框（左邊標誌、右邊資源），只讓開裡面真的看得到的那幾塊。 */
+    const others = ["#seedHud", "#sunChip", "#farmDock", "#sceneActionBar", "#mobileControls .dpad", "#actionA", "#r76cStampCard", ".r74a-care-popover", "#worldDialogue"].map((sel) => box(document.querySelector(sel))).concat([...document.querySelectorAll("header > *")].map(box)).filter(Boolean);
+    const chip = box($("sunChip"));
+    const spots = [
+      { left: Math.max(8, d.left), top: d.bottom + 6 },
+      { left: Math.max(d.right, chip && chip.top < d.bottom ? chip.right : 0) + 8, top: d.top },
+    ];
+    for (const spot of spots) {
+      const r = { left: spot.left, top: spot.top, right: spot.left + w, bottom: spot.top + h };
+      if (r.right > vw - 4 || r.bottom > vh - 4 || hit(r, d) || others.some((o) => hit(r, o))) continue;
+      const set = (key, value) => zone.style.setProperty(key, value, "important");
+      set("left", Math.round(spot.left) + "px"); set("top", Math.round(spot.top) + "px"); set("right", "auto"); set("bottom", "auto"); set("transform", "none");
+      zone.dataset.r84bMoved = "1";
+      return;
+    }
+  }
+  /* R84B 第 1 項：任務卡「現在做」那一句（A.nowStep；沒有就寫主線這一步），結算卡的「下一步」讀它。 */
+  function r84bNowText() {
+    const A = window.AdventureAPI; if (!A || !state) return "";
+    const t = now(), step = A.nowStep ? A.nowStep(state, t) : A.nextGuidance ? A.nextGuidance(state, t) : null;
+    if (step && step.text) return step.text;
+    const g = A.guide ? A.guide(state, t) : null; return g && g.stepText ? g.stepText : "";
+  }
+  /* ===== R84B 第 2 項結束 ===== */
   var r78bCareHeld = false;
   function r78bFocusTick() {
     try {
@@ -1345,6 +1448,7 @@
       if (state) r80bKeepDecisionVisible(now());
       r82aKeepTileLabelOffPlots();
       if (!r80bCarePopoverVisible()) showNextToast();
+      showNextSettlement(); r84bKeepToastOffDock(); /* R84B 第 2 項：排隊的結算卡等畫面空出來就出；任務卡變高變矮時提示跟著讓開 */
     } catch (e) {}
   }
   function plantingCareMode() {
@@ -5709,10 +5813,20 @@
   function festivalStallTileId() { try { const sc = window.AdventureAPI && window.AdventureAPI.festivalScene ? window.AdventureAPI.festivalScene(state, now()) : null; return sc && sc.active && sc.stall ? sc.stall.tileId : ""; } catch (e) { return ""; } }
   function nearFestivalStall() { const stallId = festivalStallTileId(); if (!stallId || !state || !state.player) return false; const pt = G.getTileById(state, state.player.tileId); const tiles = []; try { tiles.push(facingTile()); } catch (e) {} if (pt) for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) tiles.push(G.getTileXY(state, pt.x + dx, pt.y + dy)); return tiles.some((t) => t && t.id === stallId); }
   // R76 整合：任務卡叫玩家把某一格留著等光時（田上寫「先別收」），右下互動鈕也跟著跳過那一格：先收別格；面前只剩那一格就寫「等光」，按下去只提醒、不收。直接點那一格仍然收得到。
-  function lightHoldPlotIndex() { try { const step = window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, now()) : null; if (!step) return null; if (step.holdPlotIndex != null) return step.holdPlotIndex; return (step.action === "catch_sun" || step.action === "refract") && step.plotIndex != null ? step.plotIndex : null; } catch (e) { return null; } }
+  /* R84B 第 3 項：右下大鈕認得「任務卡叫玩家留著的那一格」時，也讀任務卡那一步（nextGuidance：祖母手記、舊麥種故事也算），
+     不只看農務排序；只讀不改，nextGuidance 的優先順序不變。 */
+  /* 大鈕每一拍都會問好幾次，同一拍（150 毫秒內、同一份存檔）只算一次。 */
+  let r84bGuideMemo = { at: -1, st: null, value: null }, r84bHoldMemo = { at: -1, st: null, value: null };
+  const r84bFresh = (memo, t) => memo.st === state && t >= memo.at && t - memo.at < 150;
+  function r84bGuide() { const t = now(); if (r84bFresh(r84bGuideMemo, t)) return r84bGuideMemo.value; let value = null; try { const A = window.AdventureAPI; value = A && A.nextGuidance ? A.nextGuidance(state, t) : null; } catch (e) { value = null; } r84bGuideMemo = { at: t, st: state, value }; return value; }
+  function r84bHoldOf(step) { if (!step) return null; if (step.holdPlotIndex != null) return step.holdPlotIndex; if ((step.action === "catch_sun" || step.action === "refract") && step.plotIndex != null) return step.plotIndex; return step.guidanceScope === "heirloom" && step.action === "wait" && step.plotIndex != null ? step.plotIndex : null; }
+  function lightHoldPlotIndex() { const t = now(); if (r84bFresh(r84bHoldMemo, t)) return r84bHoldMemo.value; let value = null; try { const lead = r84bGuide(), guided = r84bHoldOf(lead); if (guided != null) value = guided; else { const step = lead && !lead.guidanceScope ? lead : window.AdventureAPI && window.AdventureAPI.nextFarmStep ? window.AdventureAPI.nextFarmStep(state, t) : null; if (step && step.holdPlotIndex != null) value = step.holdPlotIndex; else value = step && (step.action === "catch_sun" || step.action === "refract") && step.plotIndex != null ? step.plotIndex : null; } } catch (e) { value = null; } r84bHoldMemo = { at: t, st: state, value }; return value; }
+  /* R84B 第 3 項（圖 128）：熟了但任務卡叫玩家先折光的那一格，大鈕不寫「收成」，改寫任務卡的按鈕字（把光折過來），按下去也是折光。 */
+  function r84bHeldLabel(tile) { if (!tile || tile.plotIndex == null || !tileReadyCrop(tile)) return ""; const g = r84bGuide(); return g && g.action === "refract" && g.plotIndex === tile.plotIndex ? (g.actionLabel || "把光折過來") : ""; }
+  function r84bRunGuide() { if (window.FarmWorld && window.FarmWorld.goNextFarmStep) { window.FarmWorld.goNextFarmStep(); return true; } const b = r83aGuideButton(); if (b) { b.click(); return true; } return false; }
   function quickHarvestNow() { return G.quickHarvestStatus(state, now(), lightHoldPlotIndex()); }
   function heldReadyTile(tile) { return !!(tile && tile.plotIndex != null && tileReadyCrop(tile) && tile.plotIndex === lightHoldPlotIndex()); }
-  function interactLabelFor(tile) { const label = G.interactionLabelForTile(state, tile, now()); return heldReadyTile(tile) ? label.replace(/^收成・/, "等光・") : label; }
+  function interactLabelFor(tile) { const label = G.interactionLabelForTile(state, tile, now()), guided = r84bHeldLabel(tile); return guided ? guided : heldReadyTile(tile) ? label.replace(/^收成・/, "等光・") : label; }
   /* R77A 第 5 項：站在曬架旁、現在可以翻面或乾貨曬好了，右下互動鈕寫「翻面・曬架」「收乾貨・曬架」，按下去就做那件事。
      翻面只有 10 秒，所以排在收成前面；收乾貨不急，有成熟的田要收時先讓給收成。祭典攤位仍照原本的規則優先。 */
   function rackThumbTarget(harvestCount) {
@@ -5733,6 +5847,7 @@
     state.interaction.selectedTileId = tile.id;
     renderTileContext();
     renderSceneActionsForSelection();
+    if (r84bHeldLabel(tile) && r84bRunGuide()) { updateQuickHarvest(); return; } /* R84B 第 3 項 */
     /* R84C 第 1 項：田邊動作列已經寫了秒數與收益，提示只講狀態。 */
     if (heldReadyTile(tile)) { const choice = r78bChoiceFor(tile); toast(choice && choice.ok && choice.hasTradeoff ? "光快落在這格了，請在田邊選一種收成方式。" : "光快落在這格了，先留著這株。"); return; }
     const actions = sceneActionsForTile(tile);
@@ -5751,7 +5866,8 @@
       const near = pt ? [[0, -1], [0, 1], [-1, 0], [1, 0]].map(([dx, dy]) => G.getTileXY(state, pt.x + dx, pt.y + dy)).find((row) => row && sceneActionsForTile(row).length && r78bPlotInSight(row)) : null;
       const nearLabel = near ? interactLabelFor(near) : "互動";
       const nearAction = near && nearLabel !== "互動" ? sceneActionsForTile(near).find((a) => a.action !== "build" && a.action !== "clear" && a.enabled !== false) : null;
-      if (near && nearLabel.startsWith("等光・")) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); toast("光快落在這格了，先留著這株。"); }
+      if (near && r84bHeldLabel(near) && nearLabel === r84bHeldLabel(near)) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; r84bRunGuide(); }
+      else if (near && nearLabel.startsWith("等光・")) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); toast("光快落在這格了，先留著這株。"); }
       else if (nearAction) { selectedTileId = near.id; state.interaction.selectedTileId = near.id; renderTileContext(); renderSceneActionsForSelection(); runSceneAction(nearAction.action, near.id); }
       else toast(blockedReason(tile));
     }
@@ -5766,7 +5882,7 @@
     const selectedPlot = r79bSelectedPlotTile();
     let targetLabel = "互動", labelTile = null;
     if (rack) targetLabel = rack.label;
-    else if (selectedPlot) targetLabel = r79bSelectedPlotLabel(selectedPlot);
+    else if (selectedPlot) { targetLabel = r79bSelectedPlotLabel(selectedPlot); labelTile = selectedPlot; }
     else if (st.count && st.tileId) targetLabel = G.interactionLabelForTile ? G.interactionLabelForTile(state, G.getTileById(state, st.tileId), now()) : "收成・成熟作物";
     else {
       const facing = facingTile();
@@ -5785,6 +5901,10 @@
     /* R83A 第 5 項：任務卡正帶玩家去某一格時，身旁不相干的東西（例如告示牌）不搶寫右下大鈕（圖 161「使用・告示牌」）。
        大鈕改寫任務卡上那一步，按下去跟任務卡的主鈕一樣；任務卡此刻沒有可按的主鈕時才把大鈕收起。
        不改任務的下一步；走到目標旁、點選田格、收成與曬架照舊。 */
+    /* R84B 第 3 項（圖 128）：要寫「收成」的那一格正被任務卡留著（先折光、等光、祖母手記的等光），就不寫收成：先折光的寫任務卡那顆鈕的字，
+       等光的跟面向那一格時同一種寫法「等光・小麥田」（「等光再收」只留在田邊動作列）。作物沒熟本來就不會寫收成。 */
+    if (!busy && labelTile && /^收成・/.test(targetLabel) && labelTile.plotIndex != null && labelTile.plotIndex === lightHoldPlotIndex()) targetLabel = r84bHeldLabel(labelTile) || targetLabel.replace(/^收成・/, "等光・");
+    action.dataset.r84bHeld = !busy && labelTile && labelTile.plotIndex != null && labelTile.plotIndex === lightHoldPlotIndex() && tileReadyCrop(labelTile) ? (r84bHeldLabel(labelTile) ? "guide" : "wait") : "";
     const offTarget = !busy && targetLabel !== "互動" && r83aOffGuideTarget(labelTile);
     const guideButton = offTarget ? r83aGuideButton() : null;
     if (guideButton) targetLabel = guideButton.textContent.trim();
@@ -5839,6 +5959,8 @@
       const choice = ready ? r78bChoiceFor(selectedPlot) : null, queued = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
       if (queued && queued.plotIndex === selectedPlot.plotIndex) { toast(queued.choice.helpText); return; }
       if (ready && choice && choice.ok && !choice.hasTradeoff) { runSceneAction("wait_light", selectedPlot.id); return; }
+      /* R84B 第 3 項：任務卡留著的這一格按大鈕不收成——先折光的就折光，其他就提醒等光。 */
+      if (ready && selectedPlot.plotIndex === lightHoldPlotIndex()) { if (r84bHeldLabel(selectedPlot) && r84bRunGuide()) { updateQuickHarvest(); return; } toast(choice && choice.ok && choice.hasTradeoff ? "光快落在這格了，請在田邊選一種收成方式。" : "光快落在這格了，先留著這株。"); return; }
       if (ready) { quickHarvestTarget = selectedPlot.id; moveAndAct(selectedPlot.id, "harvest"); updateQuickHarvest(); return; }
       if (plot && plot.cropId) { r78bGrowingToast(selectedPlot); return; }
       const plant = sceneActionsForTile(selectedPlot).find((entry) => entry.action === "plant");

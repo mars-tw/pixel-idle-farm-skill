@@ -179,6 +179,12 @@
       s.adventure.byTarget.forage[id] = Math.max(s.adventure.byTarget.forage[id] || 0, (stats.collected || {})[id] || 0);
     }
     counts.forage = Math.max(counts.forage, total(s.adventure.byTarget.forage));
+    /* R84B 第 1 項：一鍵收成、光到自動收成走的是遊戲內部的收成，不經過上面的掛勾；各作物的收成數也照實際收成補齊，
+       不會倉庫已有「小麥 2/2」、任務卻停在「收成老農班伯的開市小麥 0/2」（圖 152），玩家帶去交也交不出去。 */
+    for (const id of Object.keys(window.CROPS || {})) {
+      if (!s.adventure.byTarget.harvest) break;
+      const got = (stats.harvested || {})[id]; s.adventure.byTarget.harvest[id] = Math.max(s.adventure.byTarget.harvest[id] || 0, Number.isFinite(got) && got > 0 ? Math.floor(got) : 0);
+    }
   }
   function rowsOf(q) { return (q.objectives || []).concat(q.requirements || []); }
   function chapterTaskLabel(q) {
@@ -307,7 +313,10 @@
     if (early.available && !early.complete) {
       box.dataset.quest = "early_free_choice";
       box.dataset.stepType = "choice";
-      box.dataset.targetId = "";
+      /* R84B 第 3 項：今日三件事的卡也標出「現在做」要去的那一格（田、鄰居或農舍），右下大鈕與目標箭頭才知道任務正帶玩家去哪（圖 153 帶去交給老農班伯，大鈕卻寫「使用・告示牌」）。 */
+      const earlyStep = farmNow, earlyNpc = earlyStep && earlyStep.target && (window.NPCS || {})[earlyStep.target] ? npcTile(earlyStep.target) : null;
+      const earlyTarget = !earlyStep ? null : earlyStep.action === "cook" || earlyStep.action === "eat" ? homeTile() : earlyStep.tileId ? window.getTileById(s, earlyStep.tileId) : earlyNpc;
+      box.dataset.targetId = earlyTarget ? earlyTarget.id : "";
       if (document.body) document.body.dataset.questStep = "choice";
       const nextFarm = nextGuidance(s, Date.now());
       const nextGoal = !early.goals.find((goal) => goal.id === "harvest" && !goal.complete) && early.nextStep ? "meal" : "harvest";
@@ -342,7 +351,10 @@
     const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
     const progressStep = activeGoal && activeGoal.name ? `${q && q.chapter >= 4 ? q.name + "・" : ""}${activeGoal.name}` : "";
-    const progressText = activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q && q.canClaim ? `✓ 回報${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}` : (q ? "1/1" : ""));
+    /* R84B 第 1 項：「任務：X n/m」的數字一定是 X 自己的數字。標題一律寫主線那一列與它的數字，讀 A.questFocus（手札目前主線同一支）；
+       祭典那一列換成祭典自己的數字。光正要處理時「現在做」寫光的那一步，標題不再換成光的按鈕字配主線那一列的 0/1（圖 77「在光裡收成 0/1」）。 */
+    const focus = q && A.questFocus ? A.questFocus(s, Date.now()) : null;
+    const progressText = festivalFocus && festivalGoal ? `${Math.min(festivalGoal.current, festivalGoal.required)}/${festivalGoal.required}` : focus ? focus.progress : activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q && q.canClaim ? `✓ 回報${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}` : (q ? "1/1" : ""));
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
@@ -350,8 +362,8 @@
     box.dataset.targetId = questStep && questStep.tileId ? questStep.tileId : target ? target.id : "";
     const requirementRows = q ? questRowsAll(q) : [];
     const taskName = q ? (activeGoal && activeGoal.name ? activeGoal.name : q.canClaim ? `找${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}回報` : q.name) : "";
-    const shownTaskName = festivalFocus && festivalGoal ? festivalGoal.name : lightStep ? farmTaskName : taskName;
-    const fullTitle = q ? `第 ${q.chapter} 章・${q.chapterName}｜任務：${shownTaskName} ${progressText}` : "繼續經營農場";
+    const shownTaskName = festivalFocus && festivalGoal ? festivalGoal.name : taskName;
+    const fullTitle = q ? `第 ${q.chapter} 章・${q.chapterName}｜任務：${shownTaskName}${progressText ? " " + progressText : ""}` : "繼續經營農場";
     const hasSharedFestivalCrop = requirementRows.some((row) => sharedFestivalCrop(row, festivalGoal));
     /* R76B：第 13 項——主線列與需求列說同一件事時只留需求列。 */
     const mainRowDuplicate = hasSharedFestivalCrop || (window.StoryR76 && window.StoryR76.isDuplicateQuestRow ? window.StoryR76.isDuplicateQuestRow(step, requirementRows.map((row) => ({ name: row.name, text: requirementText(row, festivalGoal) }))) : false);
@@ -367,7 +379,7 @@
     const standardAction = farmActionShown && questStep
       ? `<span class="r68a-now-action r80b-now-copy" data-r80b-task-copy data-r78b-step="${esc(questStep.action)}">${esc(lightChoiceOpen ? "在田邊選一個" : questStep.actionLabel)}</span>`
       : `<button type="button" class="r68a-now-action r63-primary"${questStep ? ` data-r78b-step="${esc(questStep.action)}"` : ""} ${showRouteChoice ? "data-choice-open" : "data-world-go"}>${showRouteChoice ? "選擇下一步" : questStep ? esc(questStep.actionLabel) : q ? esc(guide.actionLabel) : "繼續經營"}</button>`;
-    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name r80b-objective-source">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name r80b-objective-task">任務：${esc(shownTaskName)}</span></span> <span data-audit="quest-progress">${esc(progressText)}</span>` : "繼續經營農場"}</div>
+    box.innerHTML = `<div class="world-objective-title r68a-objective-head" title="${esc(fullTitle)}">${q ? `<span class="qp-step"><span class="r71a-chapter-name r80b-objective-source">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name r80b-objective-task"><span class="r84b-task-prefix">任務：</span>${esc(shownTaskName)}</span></span>${progressText ? ` <span data-audit="quest-progress">${esc(progressText)}</span>` : ""}` : "繼續經營農場"}</div>
       ${festivalHtml}
       ${festivalFocus ? `<section class="r68a-now r69a-festival-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(festivalCompactText)}</span><small title="${esc(festivalFocus.text)}">${guidanceCopyHtml(festivalFocus.text, festivalFocus.short)}</small></span><button type="button" class="r68a-now-action r63-primary" data-r69a-festival-go="${festivalFocus.id}">${esc(festivalFocus.action)}</button></section>` : `<section class="r68a-now" data-audit="r68a-now"><span><b>現在做</b><span class="r69a-collapsed-summary">${esc(fullTitle)}</span><small title="${esc(nowText)}">${guidanceCopyHtml(nowText, shownShort)}</small>${hint && hint.hold ? `<em class="world-objective-hint r67-now-hint" data-hint="sun">${esc(hint.text)}</em>` : ""}</span>${standardAction}</section>`}
       <div class="r68a-requirements" data-audit="r68a-requirements">${festivalFocus && !mainRowDuplicate ? `<span class="r69a-main-row">主線：${esc(nowText)}</span>` : ""}${requirementRows.length ? requirementRows.map((row) => { if (row.routeLabel) return `<span class="r77c-route-label" data-r77c-route-label>${esc(row.name)}</span>`; const text = requirementText(row, festivalGoal); return `<span${sharedFestivalCrop(row, festivalGoal) ? ' data-r71a-shared-crop="true"' : ""} title="${esc(text)}">${row.complete ? "✓" : "○"} ${esc(text)}</span>`; }).join("") : "<span>✓ 可以自由經營農場</span>"}</div>`;
@@ -639,6 +651,9 @@
   /* R79C 第 5 項：第 2 章以後，手札「目前主線」的「現在做」與任務卡按鈕從同一個來源拿——跟 renderObjective 一樣：
      nextFarmStep 認得這個任務（或光正照著）就用它；沒有就用 guide 的步驟與按鈕字。第 1 章照舊跟著前期農務走。 */
   function journalQuestStep(s, q) {
+    /* R84B 第 1 項：第 2 章以後手札「現在做」跟任務卡讀同一支 A.nowStep——祖母手記、舊麥種故事、主線認得的農務步驟、光的步驟
+       （圖 96：任務卡寫祖母手記那一步、手札卻寫番茄）。下面是 A.nowStep 不在時的舊規則。 */
+    if (A.nowStep) return A.nowStep(s, Date.now());
     const step = nextGuidance(s, Date.now());
     if (step && step.guidanceScope === "r81_story") return step;
     if (q.chapter === 1 || !step) return null;
@@ -657,17 +672,22 @@
     const q = A.summary(current, Date.now()).currentQuest;
     if (!q || card.dataset.quest !== q.id) { lastPanels = ""; return; }
     const farmStep = nextGuidance(current, Date.now());
-    const mainStep = farmStep && farmStep.action !== "explore" && (q.chapter === 1 || farmStep.guidanceScope === "r81_story") ? farmStep : journalQuestStep(current, q);
+    /* R84B 第 1 項：祖母手記排在前面時，手札「現在做」也寫祖母手記那一步（圖 96）；第 2 章以後其餘跟任務卡同一支 A.nowStep。 */
+    const mainStep = farmStep && farmStep.action !== "explore" && (q.chapter === 1 || farmStep.guidanceScope === "r81_story" || farmStep.guidanceScope === "heirloom") ? farmStep : journalQuestStep(current, q);
     const guideNow = mainStep ? null : journalGuide(current, q);
     const rows = rowsOf(q), text = mainStep ? mainStep.text : guideNow ? guideNow.text : q.description;
     const action = mainStep ? mainStep.actionLabel : guideNow ? guideNow.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]);
-    const signature = JSON.stringify([q.id, q.status, text, action, rows]);
+    const focus = A.questFocus ? A.questFocus(current, Date.now()) : null;
+    const signature = JSON.stringify([q.id, q.status, text, action, rows, focus]);
     if (signature === lastMainStory) return;
     lastMainStory = signature;
     const small = card.querySelector(".r68a-card-now small");
     if (small) { small.textContent = text; small.title = text; }
     const taskName = card.querySelector(".r71a-task-name"), firstOpen = rows.find((row) => !row.complete);
-    if (taskName) taskName.textContent = `任務：${firstOpen ? firstOpen.name : q.name}`;
+    if (taskName) taskName.textContent = `任務：${focus ? focus.name : firstOpen ? firstOpen.name : q.name}`;
+    /* R84B 第 1 項：標題的數字跟任務卡同一支 questFocus（同一列的名字配同一列的數字）。 */
+    const headProgress = card.querySelector(".r68a-card-head > span:last-child");
+    if (headProgress && focus && headProgress.textContent !== focus.progress) headProgress.textContent = focus.progress;
     const button = card.querySelector("[data-quest-go]");
     /* R81C 第 3 項：手札「現在做」那一行的按鈕一律寫「帶我去」，要做的動作放在提示與報讀文字裡。 */
     if (button) { button.textContent = "帶我去"; button.title = action; button.setAttribute("aria-label", "帶我去：" + action); button.toggleAttribute("data-main-next", !!mainStep); button.onclick = () => mainStep ? goNextFarmStep() : goQuest(q); }
@@ -767,7 +787,7 @@
       lastMainStory = "";
       const availability = A.storyPanelAvailability(current);
       const currentMain = A.summary(current, Date.now()).currentQuest;
-      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main ? nextGuidance(current, Date.now()) : null; const mainStep = farmStep && farmStep.action !== "explore" && (q.chapter === 1 || farmStep.guidanceScope === "r81_story") ? farmStep : main ? journalQuestStep(current, q) : null; const mainGuide = main && !mainStep ? journalGuide(current, q) : null; const rows = rowsOf(q); const cardTaskName = main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : mainGuide ? mainGuide.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const progress = rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
+      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main ? nextGuidance(current, Date.now()) : null; /* R84B 第 1 項：祖母手記排在前面時手札也寫那一步（圖 96）；第 2 章以後其餘跟任務卡同一支 A.nowStep */ const mainStep = farmStep && farmStep.action !== "explore" && (q.chapter === 1 || farmStep.guidanceScope === "r81_story" || farmStep.guidanceScope === "heirloom") ? farmStep : main ? journalQuestStep(current, q) : null; const mainGuide = main && !mainStep ? journalGuide(current, q) : null; const rows = rowsOf(q); const focus = main && A.questFocus ? A.questFocus(current, Date.now()) : null; const cardTaskName = focus ? focus.name : main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : mainGuide ? mainGuide.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); /* R84B 第 1 項：目前主線的數字跟任務卡同一支 questFocus（名字與數字出自同一列）；其他章節照舊寫完成幾項。 */ const progress = focus ? focus.progress : rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
         <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(cardTaskName)}</span></b><span>${progress}</span></div>
         <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}">${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}${main ? ` title="${esc(action)}" aria-label="帶我去：${esc(action)}"` : ""}>${main ? "帶我去" : esc(action)}</button>` : ""}</div>
         <div class="adventure-meta r68a-card-requirements">${displayRows.map((r) => r.routeLabel ? `<span class="r77c-route-label" data-r77c-route-label>${esc(r.name)}</span>` : `<span title="${esc(`${r.route === "alt" ? "或：" : ""}${r.name} ${Math.min(r.current, r.required)}/${r.required}`)}">${r.complete ? "✓" : "○"} ${r.route === "alt" ? "或：" : ""}${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}${q.status !== "claimed" && q.status !== "locked" ? `<span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span>` : ""}</div></article>`; };
@@ -920,6 +940,8 @@
        不然「去種小麥」會一直打開交單對話，玩家卡在原地。 */
     if (step.guidanceScope === "r81_story" && step.target !== "field" && window.StoryR76 && window.StoryR76.r81Go) { closePanels(); window.StoryR76.r81Go(current); return; }
     if (step.action === "deliver_heirloom" && window.DailyUI) { closePanels(); window.DailyUI.openHeirloom(); return; }
+    /* R84B 第 1 項：手札「現在做」寫的是祖母手記那一步時，「帶我去」做的事跟祖母手記卡的主鈕一樣（在光裡澆水要拿水壺）。 */
+    if (step.guidanceScope === "heirloom" && window.HeirloomUI && window.HeirloomUI.guide) { closePanels(); window.HeirloomUI.guide(current); return; }
     /* 灶台在農舍裡：cook／eat 帶的格子是野餐桌那格，鏡頭別往那邊帶，讓它跟著人走回農舍。 */
     if (step.tileId && farm().focusTile && step.action !== "cook" && step.action !== "eat") farm().focusTile(step.tileId);
     if (step.action === "harvest" && step.tileId) { closePanels(); farm().setTool("hand"); farm().clickTile(step.tileId); return; }
@@ -1467,4 +1489,6 @@
   }
   window.FarmWorld = { prepare, refresh, tick, renderObjective, renderPanels, paintWorld, welcome, openKitchen, openMarket, openSeedBag, openProjects, visitSite, speak, openPanel, markerTile, dialogue, syncWorldHitTargets, contentModal: modal, prepareResidentPoses, requestResidentPose, residentPresentationState, disposeResidentPoseScenes };
   window.FarmWorld.hushSpeak = hushSpeak; // R79C：開下方對話框前收掉這一種
+  /* R84B 第 3 項：右下大鈕寫任務卡那一步時，按下去做同一件事。 */
+  window.FarmWorld.goNextFarmStep = goNextFarmStep;
 })();
