@@ -540,6 +540,14 @@
       const r = button.getBoundingClientRect();
       if (r.width > 0 && r.height > 0) lower.push(r);
     });
+    /* R85A 第 4 項：一般提示（例如「祖母寄來一封信」）也要讓開。手機橫式第一次在光裡收成時，來信提示跟第一枚印章小卡同時出現在右上，
+       小卡原本只讓開任務卡，會壓在提示上（r76-sunbook-layout 偶發失敗的原因）。上半部的提示當成上面的東西、下半部的當成下面的東西。 */
+    document.querySelectorAll("#toast-zone > *").forEach(function (toast) {
+      if (toast.classList && toast.classList.contains("settlement-card")) return;
+      const style = getComputedStyle(toast); if (style.display === "none" || style.visibility === "hidden") return;
+      const r = toast.getBoundingClientRect(); if (!(r.width > 0 && r.height > 0) || !overlapsX(r)) return;
+      if ((r.top + r.bottom) / 2 < vh / 2) top = Math.max(top, r.bottom + 8); else lower.push(r);
+    });
     lower.forEach(function (r) { if (r && overlapsX(r) && r.top > top + 60) bottom = Math.min(bottom, r.top - 8); });
     const next = { left: Math.round(left) + "px", top: Math.round(top) + "px", width: Math.round(width) + "px", maxHeight: Math.max(60, Math.round(bottom - top)) + "px" };
     Object.keys(next).forEach(function (key) { if (node.style[key] !== next[key]) node.style[key] = next[key]; });

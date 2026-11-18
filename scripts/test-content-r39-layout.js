@@ -246,7 +246,9 @@ async function openPane(page, pane) {
           vsPlayer: actionA && player ? inter(actionA, player) : null,
           vsNpcs: actionA ? Math.max(0, ...npcs.map((r) => inter(actionA, r))) : null,
           toolTops: tools.map((r) => Math.round(r.top)), central: (bottomTop - topBottom) / innerHeight,
-          step: document.body.dataset.questStep || '' };
+          step: document.body.dataset.questStep || '',
+          /* R85A 同步：右下大鈕身旁沒有該做的事（只有不相干的告示牌）或會跟任務卡主鈕寫同一句時讓位，同一個動作只留任務卡那一顆主鈕。 */
+          thumbYield: (() => { const a = document.querySelector('#actionA'), main = [...document.querySelectorAll('#questDock [data-world-go], #questDock [data-early-goal]')].find(vis); return !!a && (a.dataset.r83aOffTarget === 'true' || !!a.dataset.r85Dup) && !!main; })() };
       }, HELP);
       assert(m.header && m.quest && m.dock, '844x390 資源列、任務列與工具列都應在');
       assert(m.header.height <= 52, `資源列應只有一列（高 ${Math.round(m.header.height)}）`);
@@ -254,9 +256,9 @@ async function openPane(page, pane) {
       if (m.seed) assert(Math.abs(m.seed.top - m.quest.top) <= 8, `種子欄應收進任務列同一列（種子 top ${Math.round(m.seed.top)}／任務 top ${Math.round(m.quest.top)}，步驟 ${m.step}）`);
       assert(new Set(m.toolTops).size <= 1, `工具列應只有一列（tops ${JSON.stringify(m.toolTops)}）`);
       assert(m.central >= 0.5, `中央可操作區 ${(m.central * 100).toFixed(1)}% 應 ≥ 50%`);
-      assert(m.actionA, '844x390 互動鈕應可見');
-      assert.equal(m.vsPlayer, 0, '互動鈕不應蓋住角色');
-      assert.equal(m.vsNpcs, 0, '互動鈕不應蓋住 NPC');
+      /* R85A 同步（R85 計畫 A 線第 2 項：任務卡與右下大鈕不寫同一句、同一動作只留一顆主按鈕）：大鈕看得到；或它讓位時任務卡主鈕看得到。看得到時照舊不蓋角色與 NPC。 */
+      assert(m.actionA || m.thumbYield, '844x390 互動鈕應可見（或讓位給任務卡主鈕）');
+      if (m.actionA) { assert.equal(m.vsPlayer, 0, '互動鈕不應蓋住角色'); assert.equal(m.vsNpcs, 0, '互動鈕不應蓋住 NPC'); }
       console.log(`OK 第 8 項 844x390：資源／任務／工具各一列、種子欄同列（步驟 ${m.step}）、中央可操作區 ${(m.central * 100).toFixed(1)}% ≥ 50%、互動鈕不蓋角色`);
       await ctx.close();
     }

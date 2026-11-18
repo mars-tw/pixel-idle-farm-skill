@@ -152,6 +152,73 @@
   function guidanceCopyHtml(text, short) {
     return `<span class="r82a-guidance-full">${esc(text || "")}</span><span class="r82a-guidance-short">${esc(short || text || "")}</span>`;
   }
+  /* R85A 第 1、2 項：這一刻「現在做」是哪一步——任務卡（一般卡、今日三件事、祖母手記卡）、手札「現在做」、右下大鈕都讀這一支。
+     步驟本身出自 A.oneStep；這裡只補畫面上的說法：早市取捨、已選等光、先選路線、祭典。按下去統一走 goStep。 */
+  function festivalFocusOf(s, t, step, q) {
+    const festival = A.festivalStatus ? A.festivalStatus(s, t) : { unlocked: false, active: false, goals: [] };
+    const goal = festival.active && festival.goals ? festival.goals.find((g) => !g.complete) : null;
+    if (step && (step.action === "report" || (q && q.chapter >= 4))) return null;
+    if (goal) {
+      const crop = goal.id === "tomato" ? festivalCropStep(s, goal) : null, cropName = ((window.CROPS || {})[goal.cropId || "tomato"] || { name: "作物" }).name;
+      /* R85A 第 2 項：祭典那一句跟按鈕講同一件事（圖 32、65、101：字寫「去收作物」、按鈕卻是「去種小麥」）。 */
+      const action = crop ? crop.label : goal.id === "tomato" ? "去種" + cropName : goal.id === "cook" ? "去做料理" : "去找鄰居";
+      const how = !crop ? "" : crop.action === "harvest" ? `田裡的${cropName}熟了，去收。` : crop.action === "plant" ? `田裡的${cropName}還不夠，先去種。` : crop.action === "tend" ? `田裡的${cropName}還沒澆水，先去澆。` : `田裡的${cropName}正在長，熟了再收。`;
+      return { id: goal.id, goal, festival, name: goal.name, progress: `${Math.min(goal.current, goal.required)}/${goal.required}`, text: `祭典：${goal.name}（${goal.current}/${goal.required}）${how ? "。" + how : ""}`, short: "祭典：" + action, action, crop };
+    }
+    if (festival.active && festival.canComplete) return { id: "claim", goal: null, festival, name: "領取祭典獎勵", progress: `${festival.goals.length}/${festival.goals.length}`, text: "祭典：三個目標都完成了，領取獎勵。", short: "領取祭典獎勵", action: "領取祭典獎勵", crop: null };
+    return null;
+  }
+  function presentStep(s, now) {
+    const t = now || Date.now();
+    if (!s || !A.oneStep) return null;
+    const one = A.oneStep(s, t), step = one.step, q = A.summary(s, t).currentQuest, guide = A.guide(s, t);
+    const h = window.FarmHeirloom && window.FarmHeirloom.status ? window.FarmHeirloom.status(s) : null;
+    if (h && h.started && !h.delivered && step && step.guidanceScope === "heirloom") {
+      const queued = window.lightHarvestQueue ? window.lightHarvestQueue(s) : null;
+      return { kind: "heirloom", one, step, title: step.title || one.title, progress: "", text: r81bObjectiveStatus(step, false, queued), short: r82aObjectiveShort(step, false, queued), label: step.actionLabel || step.label || "", targetId: step.tileId || "" };
+    }
+    const early = A.earlyGoals ? A.earlyGoals(s, t) : { available: false };
+    const earlyMode = !!(early.available && !early.complete);
+    const queuedLight = window.lightHarvestQueue ? window.lightHarvestQueue(s) : null;
+    const lightChoice = step && step.plotIndex != null && window.lightHarvestChoice ? window.lightHarvestChoice(s, step.plotIndex, t) : null;
+    const lightChoiceOpen = !!(lightChoice && lightChoice.ok && lightChoice.hasTradeoff && !(queuedLight && queuedLight.plotIndex === step.plotIndex));
+    const fest = festivalFocusOf(s, t, step, q);
+    if (fest) return { kind: "festival", one, step, title: fest.name, progress: fest.progress, text: fest.text, short: fest.short, label: fest.action, festivalId: fest.id, targetId: fest.crop && fest.crop.tileId ? fest.crop.tileId : "", lightChoiceOpen, queuedLight };
+    const choiceRoutes = !earlyMode && !step && window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "";
+    if (choiceRoutes && !/route[^"]*tracked/.test(choiceRoutes) && /你想先做哪一件事/.test(choiceRoutes)) return { kind: "choice", one, step: null, title: "選第一條路線", progress: "", text: "你想先做哪一件事？選好一條路線，任務卡就跟著那條走。", short: "先選下一步", label: "選擇下一步", targetId: "", lightChoiceOpen, queuedLight };
+    if (step) {
+      return { kind: "guide", one, step, title: lightChoiceOpen ? "早市收成取捨" : one.title, progress: lightChoiceOpen ? "" : one.progress, text: r81bObjectiveStatus(step, lightChoiceOpen, queuedLight), short: r82aObjectiveShort(step, lightChoiceOpen, queuedLight), label: step.actionLabel || "", targetId: step.tileId || "", lightChoiceOpen, queuedLight, early: earlyMode };
+    }
+    if (!q) return { kind: "free", one, step: null, title: one.title, progress: "", text: one.text, short: one.short, label: "繼續經營", targetId: "", lightChoiceOpen, queuedLight };
+    const activeGoal = guide.route ? guide.step : rowsOf(q).find((row) => !row.complete);
+    const short = activeGoal && activeGoal.name ? activeGoal.name : one.title;
+    /* R84A 第 2 項：收合短句至少 4 個字（需求列只寫物品名時補「備齊」）。 */
+    const shownShort = activeGoal && /^(inventory|materials|coins)$/.test(activeGoal.source || "") && short === activeGoal.name && [...String(short)].length < 4 ? "備齊" + short : short;
+    return { kind: "quest", one, step: null, title: one.title, progress: one.progress, text: guide.stepText || one.text, short: shownShort, label: guide.actionLabel || one.actionLabel, targetId: "", lightChoiceOpen, queuedLight };
+  }
+  function chooseFirstRoute(s, button) {
+    const status = A.firstChoiceStatus(s);
+    const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
+    if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; farm().closeModal("worldModal"); renderObjective(s); if (!status.selected) { const g2 = A.guide(s, Date.now()); const q2 = A.summary(s, Date.now()).currentQuest; if (g2 && g2.route === "order") openPanel("orders"); else if (q2) goQuest(q2); } }
+    else notify(result.message);
+  }
+  function openRouteChoice(s) {
+    const choiceModal = modal("選擇下一步", window.FarmEarlyChoiceRoutesHtml ? window.FarmEarlyChoiceRoutesHtml(s) : "");
+    choiceModal.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => chooseFirstRoute(s, button); });
+    const first = choiceModal.querySelector("[data-first-choice]"); if (first && first.focus) first.focus();
+  }
+  /* R85A 第 1 項：任務卡主鈕、手札「帶我去」按下去做同一件事。 */
+  function goStep() {
+    const s = current; if (!s) return;
+    const p = presentStep(s, Date.now()); if (!p) return;
+    if (p.kind === "heirloom" && window.HeirloomUI && window.HeirloomUI.guide) { closePanels(); window.HeirloomUI.guide(s); return; }
+    if (p.kind === "festival") { closePanels(); goFestivalGoal(p.festivalId); return; }
+    if (p.kind === "choice") { closePanels(); openRouteChoice(s); return; }
+    if (p.kind === "guide") { goNextFarmStep(); return; }
+    const q = A.summary(s, Date.now()).currentQuest, guide = A.guide(s, Date.now());
+    closePanels();
+    if (guide && guide.route === "order") openPanel("orders"); else if (q) goQuest(q); else openKitchen();
+  }
 
   function prepare(s) {
     current = s;
@@ -275,27 +342,25 @@
     /* R78B 第 4 項：主要按鈕跟著 nextFarmStep 走。它認得任務還缺哪種作物、田裡現在是什麼狀態、是不是可以回報，
        所以番茄還沒種時寫「去種番茄」、全部齊了寫「去回報」，不會寫成去找人，也不會回頭叫玩家去種已經有的東西。 */
     const farmNow = nextGuidance(s, Date.now());
-    /* R78B 第 1 項：光只來幾秒。光的這一步（折光、等光再收、在光裡收成或澆水）先佔住「現在做」，任務卡按鈕、田上標籤、提示條講同一件事；光過了才換回原本的任務步驟。 */
     const waitingSideStep = !!(farmNow && farmNow.holdPlotIndex != null && s.flags && s.flags.r79WaitHarvest && s.flags.r79WaitHarvest.plotIndex === farmNow.holdPlotIndex && !s.flags.r79WaitHarvest.autoHarvest);
     const lightStep = farmNow && !farmNow.questAware && (farmNow.action === "refract" || farmNow.action === "catch_sun" || farmNow.sunlit === true || waitingSideStep) ? farmNow : null;
-    const questStep = q && farmNow && ((farmNow.questAware && farmNow.questId === q.id) || lightStep || farmNow.guidanceScope === "r81_story") ? farmNow : null;
+    /* R85A 第 1 項：任務卡的「現在做」、標題、按鈕都讀 presentStep（A.oneStep 加上早市取捨、已選等光、祭典的說法）；手札「現在做」讀同一支。
+       光的這一步（折光、等光、在光裡收成或澆水）照 R78B 先佔住「現在做」，標題也寫這一步，不再配主線那一列的數字。 */
+    const present = presentStep(s, Date.now()) || { kind: "free", one: null, step: null, title: "", progress: "", text: "", short: "", label: "" };
+    const earlyMode = !!(early.available && !early.complete);
+    const questStep = q && !earlyMode && present.one && present.one.step ? present.one.step : null;
     const queuedLight = window.lightHarvestQueue ? window.lightHarvestQueue(s) : null;
-    const lightChoice = farmNow && farmNow.plotIndex != null && window.lightHarvestChoice ? window.lightHarvestChoice(s, farmNow.plotIndex, Date.now()) : null;
-    const lightChoiceOpen = !!(lightChoice && lightChoice.ok && lightChoice.hasTradeoff && !(queuedLight && queuedLight.plotIndex === farmNow.plotIndex));
+    const lightChoiceOpen = !!present.lightChoiceOpen;
     const farmActionShown = r80bFieldActionShown(farmNow);
     const farmNowText = r81bObjectiveStatus(farmNow, lightChoiceOpen, queuedLight);
     const farmNowShort = r82aObjectiveShort(farmNow, lightChoiceOpen, queuedLight);
-    const farmTaskName = lightChoiceOpen ? "早市收成取捨" : farmNow && farmNow.actionLabel ? farmNow.actionLabel : "目前任務";
+    /* 今日三件事的標題列擠著「今日三件事」「0/3」「從五件中挑三件」，只放得下按鈕那幾個字：寫現在做那一步的按鈕字（同一步、同一件事）。 */
+    const farmTaskName = lightChoiceOpen ? "早市收成取捨" : present.kind === "festival" ? present.title : present.label || (farmNow && farmNow.actionLabel) || "目前任務";
     const festivalCrop = festivalGoal && festivalGoal.id === "tomato" ? festivalCropStep(s, festivalGoal) : null;
-    const festivalFocus = questStep && (questStep.action === "report" || (q && q.chapter >= 4)) ? null : festivalGoal ? {
-      text: `祭典：${festivalGoal.name}（${festivalGoal.current}/${festivalGoal.required}）`,
-      short: festivalGoal.id === "tomato" ? "祭典：去收作物" : festivalGoal.id === "cook" ? "祭典：去做料理" : "祭典：去找鄰居",
-      action: festivalCrop ? festivalCrop.label : festivalGoal.id === "tomato" ? "去種番茄" : festivalGoal.id === "cook" ? "去做料理" : "去找鄰居",
-      id: festivalGoal.id,
-    } : festival.active && festival.canComplete ? { text: "祭典：三個目標都完成了，領取獎勵。", short: "領取祭典獎勵", action: "領取祭典獎勵", id: "claim" } : null;
+    const festivalFocus = present.kind === "festival" ? { text: present.text, short: present.short, action: present.label, id: present.festivalId } : null;
     const festivalCompactText = festival.active ? `祭典 ${festivalDone}/${festival.goals.length}｜${Math.floor(festivalTime / 60) >= 1 ? `剩 ${Math.floor(festivalTime / 60)} 分` : "剩不到 1 分"}` : ""; // R71B：收合列只留這一段摘要，兩段以「｜」分隔
     const festivalCompact = festival.active ? `<span class="r65b-festival-compact" aria-hidden="true">${festivalCompactText}</span>` : "";
-    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner r68a-festival-summary" data-active="${festival.active}" data-audit="r68a-festival-summary"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b>${festivalCompact}<small title="${esc(festival.active ? festival.goals.map((g) => `${g.complete ? "✓" : "○"}${g.name} ${g.current}/${g.required}`).join("・") : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`)}">${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.supportMessage ? `<button type="button" data-festival-field>${esc(festival.supportMessage)}</button>` : ""}${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
+    const festivalHtml = !festival.unlocked ? "" : `<section class="r61a-festival-banner r68a-festival-summary" data-active="${festival.active}" data-audit="r68a-festival-summary"><b>${festival.active ? "河畔收穫祭進行中" : "下一場河畔收穫祭"}</b>${festivalCompact}<small title="${esc(festival.active ? festival.goals.map((g) => `${g.complete ? "✓" : "○"}${g.name} ${g.current}/${g.required}`).join("・") : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`)}">${festival.active ? `${festival.goals.map((g) => `${g.complete ? "✓" : "○"}${esc(g.name)} ${g.current}/${g.required}`).join("・")}・剩 ${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒` : `${Math.floor(festivalTime / 60)} 分 ${festivalTime % 60} 秒後開場`}</small>${festival.supportMessage ? (festivalFocus ? (festivalGoal && festivalGoal.id === "tomato" && (festivalGoal.cropId || "tomato") !== "tomato" ? "" : `<small class="r85a-festival-note" data-r85a-festival-note>${esc(festival.supportMessage)}</small>`) /* R85A 第 2 項：「現在做」已經有祭典那顆鈕，送種子的說明只留字，不再多一顆做同一件事的按鈕；這一場要收的不是番茄時不寫「先去種番茄」，免得跟「現在做」講兩件事 */ : `<button type="button" data-festival-field>${esc(festival.supportMessage)}</button>`) : ""}${festival.canComplete ? '<button type="button" data-complete-festival>領取獎章與裝飾</button>' : ""}</section>`;
     const badge = el("storyBadge");
     if (badge) { badge.textContent = q && q.canClaim ? "!" : ""; badge.hidden = !(q && q.canClaim); }
     const unfinished = q && rowsOf(q).find((r) => !r.complete);
@@ -351,18 +416,16 @@
     const activeGoal = guide.route ? guide.step : (q && rowsOf(q).find((row) => !row.complete));
     // R31：數字前寫出目前步驟，分母換步驟時玩家看得懂（「種下作物 2/3」而不是只有「2/3」）。
     const progressStep = activeGoal && activeGoal.name ? `${q && q.chapter >= 4 ? q.name + "・" : ""}${activeGoal.name}` : "";
-    /* R84B 第 1 項：「任務：X n/m」的數字一定是 X 自己的數字。標題一律寫主線那一列與它的數字，讀 A.questFocus（手札目前主線同一支）；
-       祭典那一列換成祭典自己的數字。光正要處理時「現在做」寫光的那一步，標題不再換成光的按鈕字配主線那一列的 0/1（圖 77「在光裡收成 0/1」）。 */
-    const focus = q && A.questFocus ? A.questFocus(s, Date.now()) : null;
-    const progressText = festivalFocus && festivalGoal ? `${Math.min(festivalGoal.current, festivalGoal.required)}/${festivalGoal.required}` : focus ? focus.progress : activeGoal ? `${activeGoal.current}/${activeGoal.required}` : (q && q.canClaim ? `✓ 回報${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}` : (q ? "1/1" : ""));
+    /* R85A 第 1 項：標題就是「現在做」那一步（presentStep.title），數字只在這一步正好是主線某一列時才寫那一列自己的數字；祭典讀祭典的。 */
+    const progressText = present.kind === "free" ? "" : present.progress;
     const target = targetFor(q);
     box.dataset.quest = q ? q.id : "picnic_complete";
     box.dataset.stepType = guide.step ? (guide.step.type || "goal") : (q ? "claim" : "free");
     if (document.body) document.body.dataset.questStep = box.dataset.stepType;
-    box.dataset.targetId = questStep && questStep.tileId ? questStep.tileId : target ? target.id : "";
+    box.dataset.targetId = festivalFocus && present.targetId ? present.targetId : questStep && questStep.tileId ? questStep.tileId : target ? target.id : "";
     const requirementRows = q ? questRowsAll(q) : [];
     const taskName = q ? (activeGoal && activeGoal.name ? activeGoal.name : q.canClaim ? `找${((window.NPCS || {})[q.npcId] || { name: "鎮民" }).name}回報` : q.name) : "";
-    const shownTaskName = festivalFocus && festivalGoal ? festivalGoal.name : taskName;
+    const shownTaskName = present.kind === "free" ? taskName : present.title || taskName;
     const fullTitle = q ? `第 ${q.chapter} 章・${q.chapterName}｜任務：${shownTaskName}${progressText ? " " + progressText : ""}` : "繼續經營農場";
     const hasSharedFestivalCrop = requirementRows.some((row) => sharedFestivalCrop(row, festivalGoal));
     /* R76B：第 13 項——主線列與需求列說同一件事時只留需求列。 */
@@ -385,20 +448,10 @@
       <div class="r68a-requirements" data-audit="r68a-requirements">${festivalFocus && !mainRowDuplicate ? `<span class="r69a-main-row">主線：${esc(nowText)}</span>` : ""}${requirementRows.length ? requirementRows.map((row) => { if (row.routeLabel) return `<span class="r77c-route-label" data-r77c-route-label>${esc(row.name)}</span>`; const text = requirementText(row, festivalGoal); return `<span${sharedFestivalCrop(row, festivalGoal) ? ' data-r71a-shared-crop="true"' : ""} title="${esc(text)}">${row.complete ? "✓" : "○"} ${esc(text)}</span>`; }).join("") : "<span>✓ 可以自由經營農場</span>"}</div>`;
     box.querySelector(".r68a-objective-head")?.classList.add("r80b-objective-head"); /* data-world-go 由 standardAction 依目前步驟放入。 */
     const festivalButton = box.querySelector("[data-complete-festival]"); if (festivalButton) festivalButton.onclick = () => { const r = A.completeFestival(s, Date.now()); notify(r.message); if (r.ok && farm() && farm().safeSaveNow) farm().safeSaveNow(); lastObjective = ""; renderObjective(s); };
-    const chooseFirstRoute = (button) => {
-      const status = A.firstChoiceStatus(s);
-      const result = status.selected ? A.trackFirstPath(s, button.dataset.firstChoice) : A.chooseFirstPath(s, button.dataset.firstChoice);
-      if (result.ok) { if (farm()) farm().safeSaveNow(); lastObjective = ""; farm().closeModal("worldModal"); renderObjective(s); if (!status.selected) { const g2 = A.guide(s, Date.now()); const q2 = A.summary(s, Date.now()).currentQuest; if (g2 && g2.route === "order") openPanel("orders"); else if (q2) goQuest(q2); } }
-      else notify(result.message);
-    };
-    box.querySelectorAll("#questDock > .world-objective-routes [data-first-choice], .world-objective-routes [data-first-choice]").forEach((button) => { if (box.contains(button)) button.onclick = () => chooseFirstRoute(button); }); // R57：展開的任務卡直接列出兩個選項
-    const choiceOpen = box.querySelector("[data-choice-open]"); if (choiceOpen) choiceOpen.onclick = () => {
-      const choiceModal = modal("選擇下一步", choiceRoutes);
-      choiceModal.querySelectorAll("[data-first-choice]").forEach((button) => { button.onclick = () => chooseFirstRoute(button); });
-      const first = choiceModal.querySelector("[data-first-choice]"); if (first && first.focus) first.focus();
-    };
-    /* R78B：按鈕上的字來自 nextFarmStep 時，按下去也做同一件事。 */
-    const goBtn = box.querySelector("[data-world-go]"); if (goBtn) goBtn.onclick = () => { const live = nextGuidance(current || s, Date.now()); return questStep && live && (live.guidanceScope === "r81_story" || live.questAware || live.action === questStep.action) ? goNextFarmStep() : guide.route === "order" ? openPanel("orders") : q ? goQuest(q) : openKitchen(); };
+    box.querySelectorAll("#questDock > .world-objective-routes [data-first-choice], .world-objective-routes [data-first-choice]").forEach((button) => { if (box.contains(button)) button.onclick = () => chooseFirstRoute(s, button); }); // R57：展開的任務卡直接列出兩個選項
+    const choiceOpen = box.querySelector("[data-choice-open]"); if (choiceOpen) choiceOpen.onclick = () => openRouteChoice(s);
+    /* R78B：按鈕上的字來自 nextFarmStep 時，按下去也做同一件事。R85A 第 1 項：任務卡主鈕與手札「帶我去」都走 goStep。 */
+    const goBtn = box.querySelector("[data-world-go]"); if (goBtn) goBtn.onclick = () => goStep();
     box.querySelectorAll("[data-r69a-festival-go]").forEach((button) => { button.onclick = () => goFestivalGoal(button.dataset.r69aFestivalGo); });
     r82cApplyPick(box, farmNow); /* R82C 第 2 項 */
     paintHint(box.querySelector(".world-objective-hint"), hint);
@@ -650,49 +703,34 @@
   }
   /* R79C 第 5 項：第 2 章以後，手札「目前主線」的「現在做」與任務卡按鈕從同一個來源拿——跟 renderObjective 一樣：
      nextFarmStep 認得這個任務（或光正照著）就用它；沒有就用 guide 的步驟與按鈕字。第 1 章照舊跟著前期農務走。 */
-  function journalQuestStep(s, q) {
-    /* R84B 第 1 項：第 2 章以後手札「現在做」跟任務卡讀同一支 A.nowStep——祖母手記、舊麥種故事、主線認得的農務步驟、光的步驟
-       （圖 96：任務卡寫祖母手記那一步、手札卻寫番茄）。下面是 A.nowStep 不在時的舊規則。 */
-    if (A.nowStep) return A.nowStep(s, Date.now());
-    const step = nextGuidance(s, Date.now());
-    if (step && step.guidanceScope === "r81_story") return step;
-    if (q.chapter === 1 || !step) return null;
-    const light = !!step && !step.questAware && (step.action === "refract" || step.action === "catch_sun" || step.sunlit === true);
-    return step && ((step.questAware && step.questId === q.id) || light) ? step : null;
-  }
-  function journalGuide(s, q) {
-    if (q.chapter === 1) return null;
-    const guide = A.guide(s, Date.now());
-    return guide && guide.stepText ? { text: guide.stepText, action: guide.actionLabel || "前往交談" } : null;
-  }
   // R69A：手札開著時只同步「目前主線」卡的下一步；不重建整個面板，也不改變捲動位置。
   function syncMainStoryCard() {
     const card = document.querySelector("#adventurePanel [data-r63a-main-story]");
     if (!card || !current) return;
     const q = A.summary(current, Date.now()).currentQuest;
     if (!q || card.dataset.quest !== q.id) { lastPanels = ""; return; }
-    const farmStep = nextGuidance(current, Date.now());
-    /* R84B 第 1 項：祖母手記排在前面時，手札「現在做」也寫祖母手記那一步（圖 96）；第 2 章以後其餘跟任務卡同一支 A.nowStep。 */
-    const mainStep = farmStep && farmStep.action !== "explore" && (q.chapter === 1 || farmStep.guidanceScope === "r81_story" || farmStep.guidanceScope === "heirloom") ? farmStep : journalQuestStep(current, q);
-    const guideNow = mainStep ? null : journalGuide(current, q);
-    const rows = rowsOf(q), text = mainStep ? mainStep.text : guideNow ? guideNow.text : q.description;
-    const action = mainStep ? mainStep.actionLabel : guideNow ? guideNow.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]);
-    const focus = A.questFocus ? A.questFocus(current, Date.now()) : null;
-    const signature = JSON.stringify([q.id, q.status, text, action, rows, focus]);
+    /* R85A 第 1 項：手札「現在做」與「帶我去」讀任務卡同一支 presentStep（不再第 1 章讀農務、其他章讀主線各算一次）。
+       標題寫這張卡的任務名、數字寫這張卡列出的子項完成幾項，跟底下列的子項數一致（R84 圖 136、147：0/1 卻列兩個子項）。 */
+    const p = presentStep(current, Date.now());
+    const rows = rowsOf(q), text = p ? p.text : q.description, action = p ? p.label : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]);
+    const progress = journalProgress(q);
+    const signature = JSON.stringify([q.id, q.status, text, action, rows, progress, p && p.kind]);
     if (signature === lastMainStory) return;
     lastMainStory = signature;
     const small = card.querySelector(".r68a-card-now small");
     if (small) { small.textContent = text; small.title = text; }
-    const taskName = card.querySelector(".r71a-task-name"), firstOpen = rows.find((row) => !row.complete);
-    if (taskName) taskName.textContent = `任務：${focus ? focus.name : firstOpen ? firstOpen.name : q.name}`;
-    /* R84B 第 1 項：標題的數字跟任務卡同一支 questFocus（同一列的名字配同一列的數字）。 */
+    const taskName = card.querySelector(".r71a-task-name");
+    if (taskName) taskName.textContent = `任務：${journalTaskName(q)}`;
     const headProgress = card.querySelector(".r68a-card-head > span:last-child");
-    if (headProgress && focus && headProgress.textContent !== focus.progress) headProgress.textContent = focus.progress;
+    if (headProgress && headProgress.textContent !== progress) headProgress.textContent = progress;
     const button = card.querySelector("[data-quest-go]");
     /* R81C 第 3 項：手札「現在做」那一行的按鈕一律寫「帶我去」，要做的動作放在提示與報讀文字裡。 */
-    if (button) { button.textContent = "帶我去"; button.title = action; button.setAttribute("aria-label", "帶我去：" + action); button.toggleAttribute("data-main-next", !!mainStep); button.onclick = () => mainStep ? goNextFarmStep() : goQuest(q); }
+    if (button) { button.textContent = "帶我去"; button.title = action; button.setAttribute("aria-label", "帶我去：" + action); button.setAttribute("data-main-next", ""); button.dataset.r85Step = p ? p.kind : ""; button.onclick = () => goStep(); }
     card.querySelectorAll(".r68a-card-requirements span").forEach((node, i) => { const row = rows[i]; if (row) { node.textContent = `${row.complete ? "✓" : "○"} ${row.name} ${Math.min(row.current, row.required)}/${row.required}`; node.title = `${row.name} ${Math.min(row.current, row.required)}/${row.required}`; } });
   }
+  /* R85A 第 1 項：手札卡的任務名與數字——任務本身的名字，數字是底下子項完成幾項（跟列出來的子項數一致）。 */
+  function journalTaskName(q) { const g = A.guide(current, Date.now()); return g && g.route && g.displayTitle ? g.displayTitle : q.name; }
+  function journalProgress(q) { const rows = rowsOf(q); return rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : q.status === "claimed" ? "已完成" : "1/1"; }
   /* R81C 第 3 項：手札第一屏分三層——
      現在做：目前主線那張卡，「現在做」一行字＋「帶我去」排最上面，章節與進度縮成小字在下面；
      今天可做：最多兩項，依序挑藍布舊麥種的故事、正在發生的農場小事、東西備齊能交的鄰居委託、後續委託目前那一步、其他現在可做的鄰居委託；
@@ -787,9 +825,9 @@
       lastMainStory = "";
       const availability = A.storyPanelAvailability(current);
       const currentMain = A.summary(current, Date.now()).currentQuest;
-      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; const farmStep = main ? nextGuidance(current, Date.now()) : null; /* R84B 第 1 項：祖母手記排在前面時手札也寫那一步（圖 96）；第 2 章以後其餘跟任務卡同一支 A.nowStep */ const mainStep = farmStep && farmStep.action !== "explore" && (q.chapter === 1 || farmStep.guidanceScope === "r81_story" || farmStep.guidanceScope === "heirloom") ? farmStep : main ? journalQuestStep(current, q) : null; const mainGuide = main && !mainStep ? journalGuide(current, q) : null; const rows = rowsOf(q); const focus = main && A.questFocus ? A.questFocus(current, Date.now()) : null; const cardTaskName = focus ? focus.name : main && rows.find((row) => !row.complete) ? rows.find((row) => !row.complete).name : q.name; const displayRows = questRowsAll(q); const action = mainStep ? mainStep.actionLabel : mainGuide ? mainGuide.action : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); /* R84B 第 1 項：目前主線的數字跟任務卡同一支 questFocus（名字與數字出自同一列）；其他章節照舊寫完成幾項。 */ const progress = focus ? focus.progress : rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
+      const questCard = (q, main) => { const chapter = A.summary(current, Date.now()).chapters.find((row) => row.number === q.chapter); const chapterLabel = chapter && chapter.claimed === chapter.total ? "已完成" : { locked: "尚未開始", active: "進行中", ready: q.canClaim ? "可以交付" : "補齊物品", claimed: "已完成" }[q.status]; /* R85A 第 1 項：目前主線卡的「現在做」與「帶我去」讀任務卡同一支 presentStep；標題寫任務名、數字寫子項完成幾項（跟列出的子項數一致）。 */ const present = main ? presentStep(current, Date.now()) : null; const rows = rowsOf(q); const cardTaskName = main ? journalTaskName(q) : q.name; const displayRows = questRowsAll(q); const action = present ? present.label : q.canClaim ? "前往交談" : A.taskActionLabel(q, rows.find((row) => !row.complete), (window.NPCS || {})[q.npcId]); const nowLine = present ? present.text : q.description; const progress = main ? journalProgress(q) : rows.length ? `${rows.filter((row) => row.complete).length}/${rows.length}` : (q.status === "claimed" ? "已完成" : chapterLabel); return `<article class="adventure-quest r68a-quest-card ${q.status}${main ? " r63a-main-story" : ""}" data-quest="${q.id}"${main ? ' data-r63a-main-story=""' : ""}>
         <div class="world-chapter r68a-card-head" title="${esc(chapterTaskLabel(q))} ${progress}"><b><span class="r71a-chapter-name">第 ${q.chapter} 章・${esc(q.chapterName)}</span><span class="r71a-task-name">任務：${esc(cardTaskName)}</span></b><span>${progress}</span></div>
-        <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}">${esc(mainStep ? mainStep.text : mainGuide ? mainGuide.text : q.description)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${mainStep ? ' data-main-next="1"' : ""}${main ? ` title="${esc(action)}" aria-label="帶我去：${esc(action)}"` : ""}>${main ? "帶我去" : esc(action)}</button>` : ""}</div>
+        <div class="r68a-card-now"><span><b>現在做</b><small title="${esc(nowLine)}">${esc(nowLine)}</small></span>${q.status !== "claimed" && q.status !== "locked" ? `<button data-quest-go="${q.id}"${main ? ' data-main-next="1"' : ""}${main ? ` title="${esc(action)}" aria-label="帶我去：${esc(action)}"` : ""}>${main ? "帶我去" : esc(action)}</button>` : ""}</div>
         <div class="adventure-meta r68a-card-requirements">${displayRows.map((r) => r.routeLabel ? `<span class="r77c-route-label" data-r77c-route-label>${esc(r.name)}</span>` : `<span title="${esc(`${r.route === "alt" ? "或：" : ""}${r.name} ${Math.min(r.current, r.required)}/${r.required}`)}">${r.complete ? "✓" : "○"} ${r.route === "alt" ? "或：" : ""}${esc(r.name)} ${Math.min(r.current, r.required)}/${r.required}</span>`).join("")}${q.status !== "claimed" && q.status !== "locked" ? `<span>報酬 ${q.reward.coins} 金・${q.reward.xp} 經驗</span>` : ""}</div></article>`; };
       panel.innerHTML = `${currentMain ? `<section class="r63a-main-story-wrap"><h3 class="story-subhead">目前主線</h3>${questCard(currentMain, true)}</section>` : ""}<div class="adventure-quests r63a-story-history">${list.filter((q) => !currentMain || q.id !== currentMain.id).map((q) => questCard(q, false)).join("")}</div>
         ${availability.showNeighborBasket ? `<div class="neighbor-entry"><h3>餐籃送到以後</h3><p class="project-desc">帶一份麥餅，坐下聽鄰居說說話。記住那一口味道，下次再帶來。</p><button id="worldNeighborButton">裝一份鄰居餐籃</button></div>` : ""}
@@ -835,7 +873,7 @@
       const neighborButton = panel.querySelector("#worldNeighborButton");
       if (neighborButton) neighborButton.onclick = () => window.ContentR1.openNeighbors(current);
       if(window.ContentR6 && availability.showNeighborBasket && A.gathering(current,Date.now()).unlocked){const b=document.createElement('button');b.id='worldGatheringButton';b.textContent=current.adventure.gathering.completed?'翻共同聚餐手記':'三個位子，一起吃';b.onclick=()=>window.ContentR6.openGathering(current);panel.querySelector('.neighbor-entry').appendChild(b);}
-      panel.querySelectorAll("[data-quest-go]").forEach((b) => { b.onclick = () => b.dataset.mainNext ? goNextFarmStep() : goQuest(list.find((q) => q.id === b.dataset.questGo)); });
+      panel.querySelectorAll("[data-quest-go]").forEach((b) => { b.onclick = () => b.dataset.mainNext ? goStep() : goQuest(list.find((q) => q.id === b.dataset.questGo)); });
       panel.querySelectorAll("[data-commission]").forEach((b) => { b.onclick = () => {
         closePanels();
         const c = commissions.find((entry) => entry.id === b.dataset.commission), tile = npcTile(c.npcId);
@@ -1390,7 +1428,8 @@
     if (!current) return;
     const dock = el("questDock"), seed = el("seedHud");
     let tid = null;
-    try { tid = markerTile(current); } catch (e) { tid = null; }
+    /* R85A 第 3 項：要讓出來的是任務卡「現在做」那一格（同一個下一步），不是主線清單上的第一列（祖母手記帶去看的那株小麥、祭典要收的番茄……）。 */
+    try { tid = (dock && dock.dataset.targetId) || markerTile(current); } catch (e) { tid = null; }
     if (!tid) { if (dock) dock.classList.remove("quest-target-collapsed"); if (seed) seed.classList.remove("seed-hud-shifted", "seed-hud-bottom"); return; }
     const nodes = [document.querySelector('.gtile[data-tile-id="' + tid + '"]'), document.querySelector('[data-kind="npc"][data-tile-id="' + tid + '"]'), document.querySelector('[data-kind="crop"][data-tile-id="' + tid + '"]')].filter(Boolean);
     const rects = nodes.map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0);
@@ -1402,7 +1441,8 @@
     const lightDecision = !!(farmStep && farmStep.tileId === tid && (farmStep.action === "refract" || farmStep.action === "catch_sun" || farmStep.sunlit === true));
     /* R80B：光的田格決定先把任務卡收成一列，實際鏡頭只做最小位移；不要沿用一般任務的
        focusTile 置中，否則農舍旁的曬架與整片農場會被推出畫面。 */
-    if (lightDecision) { if (dock) dock.classList.add("quest-target-collapsed"); syncSeedHudTop(); return; }
+    /* R85A 第 3 項：光的那一格任務卡收成一列以後，那一格若仍被蓋住或貼在畫面邊緣，鏡頭再做最小位移讓出來（不改成置中）。 */
+    if (lightDecision) { if (dock) dock.classList.add("quest-target-collapsed"); syncSeedHudTop(); const f0 = farm(); if (f0 && f0.clearGuideTarget) setTimeout(() => f0.clearGuideTarget(), 40); return; }
     const coveredBy = (box) => { if (!box) return 0; const r = box.getBoundingClientRect(); if (!r.width || !r.height) return 0; return Math.max.apply(null, rects.concat(plotRects).map((t) => rectOverlap(t, r)).concat([0])); };
     /* R37：plotRects 已併入 coveredBy，任務列與種子欄對任何田格重疊都會觸發避讓。 */
     // R58：「今日三件事」是玩家要自己挑的清單，不因目標被蓋到而收掉（否則手機上三個目標全看不到）。
@@ -1426,6 +1466,8 @@
       const relicHold = !!(window.StoryR76 && window.StoryR76.r84FocusHoldUntil > nowMs);
       if (focusId && !relicHold && !(talking && !targetCovered) && (focusId !== lastTargetAvoidId || nowMs - lastTargetAvoidAt > 3000 || !(current.camera && current.camera.focusTileId === focusId))) { lastTargetAvoidAt = nowMs; lastTargetAvoidId = focusId; const f = farm(); if (f && f.focusTile) f.focusTile(focusId); }
     }
+    /* R85A 第 3 項：對話、鎮誌舊物鏡頭以外的時候，「現在做」那一格在畫面上卻還被蓋住（展開的祖母手記卡、橫式手機的任務卡），鏡頭再讓一點。 */
+    if (!document.querySelector("#worldDialogue:not([hidden])") && !(window.StoryR76 && window.StoryR76.r84FocusHoldUntil > Date.now())) { const f1 = farm(); if (f1 && f1.clearGuideTarget) f1.clearGuideTarget(); }
     syncSeedHudTop();
   }
   function welcome(s, offline) {
@@ -1491,4 +1533,7 @@
   window.FarmWorld.hushSpeak = hushSpeak; // R79C：開下方對話框前收掉這一種
   /* R84B 第 3 項：右下大鈕寫任務卡那一步時，按下去做同一件事。 */
   window.FarmWorld.goNextFarmStep = goNextFarmStep;
+  /* R85A 第 1 項：任務卡、手札、右下大鈕共用的「現在做」那一步（測試與評審截圖工具讀這一支，不必各自重算）。 */
+  window.FarmWorld.currentStep = () => { const p = current ? presentStep(current, Date.now()) : null; return p ? { kind: p.kind, title: p.title, progress: p.progress, text: p.text, short: p.short, label: p.label, targetId: p.targetId || "", action: p.step ? p.step.action || "" : "", source: p.one ? p.one.source : "" } : null; };
+  window.FarmWorld.goStep = goStep;
 })();

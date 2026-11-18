@@ -2627,3 +2627,13 @@ html body:has(.r75b-cook-overlay) .modal.show * { visibility: hidden !important;
 /* 第 1 項：任務卡標題一律寫主線那一列與它自己的數字（不再換成光的按鈕字）；第一分鐘那張窄卡（R80B）放不下「任務：」三個字，只在窄卡裡省掉字首，名字不被截斷。 */
 #questDock.r80b-decision-compact .r84b-task-prefix { display: none; }
 /* ===== R84B 結束 ===== */
+/* ===== R85A（一個下一步、一顆主按鈕、目標在畫面內）開始 ===== */
+/* 第 2 項：右下大鈕不再抄任務卡主鈕那一句；跟主鈕同一句、做的是主鈕帶去的同一格、任務卡正擺著兩件挑一件、或要做的那一格不在畫面上時讓位（由 ui.js 標記 data-r85-dup）。 */
+#actionA:is([data-r85-dup="same"],[data-r85-dup="pick"],[data-r85-dup="target"],[data-r85-dup="offscreen"]) { visibility: hidden !important; pointer-events: none !important; }
+/* 第 2 項：任務卡上能按的東西看得出是按鈕。「從五件中挑三件／換一件」原本是底線文字，改成有框、有底色的小按鈕。 */
+#questDock[data-quest="early_free_choice"] .r66a-daily-pick { flex: 0 0 auto; padding: 2px 6px; border: 1px solid #b0854a; border-radius: 6px; background: #fff3d6; color: #6b4a1f; text-decoration: none; box-shadow: 0 1px 0 rgba(107,74,31,.35); }
+#questDock[data-quest="early_free_choice"] .r66a-daily-pick:disabled { background: #efe6d2; color: #8a7556; border-color: #c9b48f; box-shadow: none; }
+/* 第 2 項：祭典送種子的說明在「現在做」已經有祭典那顆鈕時只留字；收合時跟原本那顆鈕一樣收起。 */
+#questDock .r61a-festival-banner .r85a-festival-note { color: #6b4a1f; font-size: 12px; margin-top: 2px; }
+#questDock:is(.quest-collapsed,.quest-auto-collapsed,.quest-target-collapsed) .r61a-festival-banner .r85a-festival-note { display: none !important; }
+/* ===== R85A 結束 ===== */

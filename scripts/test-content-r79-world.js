@@ -244,11 +244,13 @@ test("第 4 項：鎮長一律叫「鎮長葛瑞」、頭像跟下方對話框�
 
 test("第 5 項：手札「現在做」與任務卡同一個來源；鎮長評比台詞與下次提示講同一個數字", () => {
   const world = read("src/world-ui.js");
-  assert.match(world, /function journalQuestStep\(s, q\)[\s\S]*?step\.questAware && step\.questId === q\.id\) \|\| light/, "第 2 章以後跟任務卡同一套規則（任務認得的農務步驟或光的步驟）");
-  assert.match(world, /function journalGuide\(s, q\)[\s\S]*?A\.guide\(s, Date\.now\(\)\)/, "沒有農務步驟時跟任務卡一樣用 guide");
-  assert.equal((world.match(/journalQuestStep\(current, q\)/g) || []).length, 2, "目前主線卡與同步函式都用同一支");
-  assert.equal((world.match(/journalGuide\(current, q\)/g) || []).length, 2);
-  assert.match(world, /farmNow\.questAware && farmNow\.questId === q\.id/, "任務卡本身的規則沒變");
+  /* R85A 同步（R85 計畫 A 線第 1 項：下一步只有一個來源）：手札與任務卡不再各寫一套規則，兩邊都讀 world-ui 的 presentStep（A.oneStep → nowStep）；
+     「任務認得的農務步驟或光的步驟」這套規則現在只寫在 adventure.js 的 nowStep 一處，沒有農務步驟時一樣用 guide。 */
+  const adv = read("src/adventure.js");
+  assert.match(adv, /function nowStep\(state, now\) \{[\s\S]*?if \(g\.questAware && g\.questId === q\.id\) return g;[\s\S]*?if \(!g\.questAware && \(g\.action === "refract" \|\| g\.action === "catch_sun" \|\| g\.sunlit === true \|\| waiting\)\) return g;/, "第 2 章以後跟任務卡同一套規則（任務認得的農務步驟或光的步驟）");
+  assert.match(adv, /function oneStep\(state, now\) \{[\s\S]*?const step = nowStep\(state, t\), g = q \? guide\(state, t\) : null;/, "沒有農務步驟時跟任務卡一樣用 guide");
+  assert.equal((world.match(/presentStep\(current, Date\.now\(\)\)/g) || []).length, 3, "目前主線卡、同步函式與 FarmWorld.currentStep 都用同一支");
+  assert.match(world, /const present = presentStep\(s, Date\.now\(\)\)/, "任務卡也讀同一支");
   let checked = 0;
   for (const pick of [["wheat", "carrot", "rustic_bread"], ["wheat", "wheat", "carrot"]]) {
     const s = fresh(5), f = s.adventure.r61.festival;

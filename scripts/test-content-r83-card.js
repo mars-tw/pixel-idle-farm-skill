@@ -102,8 +102,9 @@ test("5 右下大鈕：只比對任務卡此刻的目標（data-target-id），�
   assert.doesNotMatch(fn, /nextGuidance|nextFarmStep/);
   assert.match(fn, /if \(!tile \|\| tile\.npc \|\| tile\.plotIndex != null\) return false;/, "鄰居本人與田格照舊寫自己（R68B、R78B），只攔身旁的物件");
   assert.match(ui, /const offTarget = !busy && targetLabel !== "互動" && r83aOffGuideTarget\(labelTile\);/);
-  assert.match(ui, /if \(guideButton\) targetLabel = guideButton\.textContent\.trim\(\);/, "大鈕改寫任務卡主鈕那一句");
-  assert.match(ui, /dataset\.r83aOffTarget === "guide"\) \{ const guide = r83aGuideButton\(\); if \(guide\) \{ guide\.click\(\);/, "按大鈕就按任務卡主鈕");
+  /* R85A 同步：R85 計畫 A 線第 2 項「任務卡與右下大鈕不寫同一句」（R84 圖 95、128、160），大鈕不再抄任務卡主鈕那一句，身旁不相干的東西照舊收起。 */
+  assert.doesNotMatch(ui, /if \(guideButton\) targetLabel = guideButton\.textContent\.trim\(\);/, "大鈕不再抄任務卡主鈕那一句");
+  assert.match(ui, /action\.dataset\.r83aOffTarget = offTarget \? "true" : "false";/, "身旁不相干的東西照舊收起");
   assert.match(css, /#actionA\[data-r83a-off-target="true"\] \{ visibility: hidden !important; pointer-events: none !important; \}/);
   assert.doesNotMatch(adv, /R83A/, "A 線沒有動 nextGuidance 的判斷");
 });
