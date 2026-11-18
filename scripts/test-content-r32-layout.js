@@ -156,10 +156,20 @@ async function setPlayerNearMayor(page, dx, dy) {
         assert(cov.pct >= 70, `${tag} 世界可視面積 ${cov.pct.toFixed(1)}% 未達 70%（HUD 覆蓋 ${cov.coveredPct.toFixed(1)}%）`);
         console.log(`OK 手機減量 ${tag} 任務卡一行 ${q.h}px、方向鍵與互動鍵無目標時隱藏、世界可視 ${cov.pct.toFixed(1)}%`);
         await page.screenshot({ path: path.join(SHOT_DIR, `gameplay-${tag}.png`) });
-        // 有目標時互動鍵出現（站到鎮長旁）
+        // 鎮長是任務卡的目標時，R85 讓卡片負責交談，右下不再重複同一個動作。
         await setPlayerNearMayor(page, 1, 0);
-        const nearAct = await page.evaluate((src) => { eval(src); return vis(document.querySelector('#actionA')); }, HELP);
-        assert.equal(nearAct, true, `${tag} 鎮長旁有可互動目標時「互動」鍵應出現`);
+        const mayorAction = await page.evaluate((src) => {
+          eval(src);
+          const dock = document.querySelector('#questDock');
+          const button = dock.querySelector('[data-world-go]');
+          const rect = button.getBoundingClientRect();
+          const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          return { target: dock.dataset.targetId, mayor: __farm.state().map.tiles.find((t) => t.npc === 'mayor').id,
+            label: button.textContent.trim(), reachable: vis(button) && !button.disabled && button.contains(hit), thumb: vis(document.querySelector('#actionA')) };
+        }, HELP);
+        assert.equal(mayorAction.target, mayorAction.mayor, tag + ' 交談按鈕指向鎮長');
+        assert.equal(mayorAction.label, '前往交談');
+        assert.ok(mayorAction.reachable && !mayorAction.thumb, tag + ' 鎮長旁要有一顆可點的交談按鈕 ' + JSON.stringify(mayorAction));
         // 設定開關：開啟「顯示方向鍵」後方向鍵出現
         await page.evaluate(() => document.querySelector('#settingsBtn').click());
         await page.waitForTimeout(400);
