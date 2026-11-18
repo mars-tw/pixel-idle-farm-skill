@@ -57,12 +57,17 @@ test("1-1 「任務：X n/m」的數字一定是 X 自己的：標題一律寫�
   assert.deepEqual(now, g, "「現在做」是光的那一步");
   assert.deepEqual([f.name, f.progress], ["找鎮長葛瑞交談", "0/1"], "手札目前主線（questFocus）仍是主線那一列與它的數字");
   const world = read("src/world-ui.js");
-  assert.match(world, /const shownTaskName = festivalFocus && festivalGoal \? festivalGoal\.name : taskName;/, "任務卡標題不再換成光的按鈕字");
-  assert.match(world, /const progressText = festivalFocus && festivalGoal \? [^;]*: focus \? focus\.progress/, "數字只配自己那一列：祭典讀祭典的，其餘讀 questFocus");
+  /* R85A 同步（R85 計畫 A 線第 1 項，R84 圖 75、34、52、129：標題寫「找鎮長葛瑞交談 0/1」按鈕卻是折光）：
+     任務卡標題改寫「現在做」那一步（A.oneStep），光的那一步只寫步驟名、不配數字；「數字一定是那個名字自己的」這條規則不變，
+     由 test-content-r85-one-step.js 逐狀態檢查。手札卡的標題寫任務名、數字寫底下子項完成幾項（R84 圖 136、147）。 */
+  const one = A.oneStep(s, t);
+  assert.deepEqual([one.title, one.progress], ["在光裡收成小麥", ""], "任務卡標題寫光的那一步，不配主線那一列的 0/1");
+  assert.match(world, /const shownTaskName = present\.kind === "free" \? taskName : present\.title \|\| taskName;/, "任務卡標題讀 presentStep");
+  assert.match(world, /const progressText = present\.kind === "free" \? "" : present\.progress;/, "數字只配自己那一列（祭典讀祭典的）");
   assert.match(read("src/content-r58b.css"), /#questDock\.r80b-decision-compact \.r84b-task-prefix \{ display: none; \}/, "第一分鐘的窄卡只省字首，名字不被截斷");
-  assert.match(world, /const progress = focus \? focus\.progress :/, "手札目前主線的數字讀 questFocus");
-  assert.match(world, /const cardTaskName = focus \? focus\.name :/, "手札目前主線的名字讀 questFocus");
-  assert.match(world, /if \(headProgress && focus && headProgress\.textContent !== focus\.progress\) headProgress\.textContent = focus\.progress;/, "手札開著時同步的數字也讀 questFocus");
+  assert.match(world, /const progress = main \? journalProgress\(q\) :/, "手札目前主線的數字是子項完成幾項");
+  assert.match(world, /const cardTaskName = main \? journalTaskName\(q\) : q\.name;/, "手札目前主線的名字是任務名");
+  assert.match(world, /if \(headProgress && headProgress\.textContent !== progress\) headProgress\.textContent = progress;/, "手札開著時同步的數字也一樣");
 });
 
 test("1-2 手札「現在做」跟任務卡同一支 nowStep：祖母手記排在前面時兩邊都寫祖母手記那一步；第 4 章的數字是同一列（圖 96）", () => {
@@ -75,7 +80,9 @@ test("1-2 手札「現在做」跟任務卡同一支 nowStep：祖母手記排�
   assert.deepEqual(now, A.nextGuidance(s, t));
   assert.deepEqual([f.name, f.progress], ["番茄", "1/3"], "第 4 章標題寫「番茄 1/3」，不是「完成 0/3 項」");
   const world = read("src/world-ui.js");
-  assert.match(world, /function journalQuestStep\(s, q\) \{[\s\S]{0,400}if \(A\.nowStep\) return A\.nowStep\(s, Date\.now\(\)\);/, "手札讀 nowStep");
+  /* R85A 同步：手札「現在做」改讀 presentStep（A.oneStep 以 nowStep 為準），跟任務卡同一支。 */
+  assert.match(world, /function syncMainStoryCard\(\) \{[\s\S]*?const p = presentStep\(current, Date\.now\(\)\);/, "手札讀 presentStep（nowStep）");
+  assert.deepEqual(A.oneStep(s, t).step, now, "presentStep 讀的就是 nowStep");
   assert.match(world, /if \(step\.guidanceScope === "heirloom" && window\.HeirloomUI && window\.HeirloomUI\.guide\)/, "手札「帶我去」做的事跟祖母手記卡主鈕一樣");
   /* 沒有祖母手記、也沒有光的時候：第 1 章找鎮長那一步，兩邊都寫主線這一步。 */
   const s2 = fresh(); s2.heirloom.started = false;
@@ -251,7 +258,9 @@ test("3-2 新字是台灣繁中、沒有英文縮寫單位；測試列在 unit �
   assert.ok(block.length > 100); assert.doesNotMatch(block, LATIN_UNIT);
   const guard = read("scripts/guard-validation-writes.js"), list = guard.slice(guard.indexOf("const unit=["), guard.indexOf("];", guard.indexOf("const unit=[")));
   const rows = list.split("\n").map((line) => line.trim()).filter((line) => line.startsWith('"node scripts/'));
-  assert.equal(rows[rows.length - 1], '"node scripts/test-content-r84-consistency.js",', "新測試在 unit 清單最後");
+  /* R85A 同步：R85 的新測試依規定接在 R84 後面，這一支之後只能是 R85 的測試。 */
+  const at = rows.indexOf('"node scripts/test-content-r84-consistency.js",');
+  assert.ok(at >= 0 && rows.slice(at + 1).every((row) => /^"node scripts\/test-content-r85-[a-z-]+\.js",$/.test(row)), "新測試在 unit 清單最後（後面只接 R85）");
 });
 
 /* ---------------- 瀏覽器 ---------------- */
@@ -409,17 +418,22 @@ async function sameNumbers(page, tag) {
   await page.evaluate(() => { const s = __farm.state(), t = Date.now(); __r84.claim({}); s.adventure.byTarget.talk.mayor = 0; s.heirloom.started = false; s.heirloom.delivered = false; AdventureAPI.record(s, { type: "plant", cropId: "wheat" }, t); for (const p of s.plots) { p.cropId = null; p.plantedAt = 0; delete p.wateredAt; } s.plots[0].cropId = "wheat"; s.plots[0].plantedAt = t - 3600000; s.plots[0].wateredAt = t - 3600000; Object.assign(s.sun, { plots: [0], used: [], startsAt: t - 1000, endsAt: t + 60000, previewPlots: [], previewAt: 0, nextAt: t + 600000, introduced: true }); __farm.refresh(); FarmWorld.refresh(s); });
   await clear(page);
   let r = await readBoth();
+  /* R85A 同步（R85 計畫 A 線第 1 項）：任務卡標題寫「現在做」那一步、光的那一步不配數字，所以不會再出現「在光裡收成 0/1」（圖 77），
+     也不會「標題寫找鎮長、按鈕卻是光」（R84 圖 75、34、52、129）。手札卡的標題寫任務名、數字寫底下子項完成幾項（R84 圖 136、147），
+     手札「現在做」跟任務卡同一句。 */
+  const subRows = (rows) => rows.filter((row) => /^[✓○]/.test(row));
+  const sameJournal = (r, what) => { const rows = subRows(r.journal.rows); assert.equal(r.journal.progress, rows.filter((row) => row.startsWith("✓")).length + "/" + rows.length, tag + " " + what + "：手札的數字跟列出的子項數一致 " + JSON.stringify(r)); assert.equal(r.journal.now, r.dock.now, tag + " " + what + "：手札「現在做」跟任務卡同一句 " + JSON.stringify(r)); };
   assert.equal(await page.evaluate(() => AdventureAPI.nextGuidance(__farm.state(), Date.now()).sunlit), true, tag + " 圖 77 情境：光正照著熟麥");
-  assert.deepEqual([r.dock.task, r.dock.progress], ["任務：找鎮長葛瑞交談", "0/1"], tag + " 任務卡標題是主線那一列，不是「在光裡收成 0/1」 " + JSON.stringify(r));
-  assert.deepEqual([r.journal.task, r.journal.progress], [r.dock.task, r.dock.progress], tag + " 手札跟任務卡同字同數 " + JSON.stringify(r));
+  assert.deepEqual([r.dock.task, r.dock.progress], ["任務：在光裡收成小麥", ""], tag + " 任務卡標題就是光的那一步、不配主線那一列的 0/1 " + JSON.stringify(r));
   assert.match(r.dock.now, /光/, tag + " 光的那一步佔著「現在做」 " + JSON.stringify(r));
-  assert.ok(r.journal.rows.some((row) => row === "○ 找鎮長葛瑞交談 0/1"), tag + " 條件列也是 0/1 " + JSON.stringify(r.journal.rows));
+  sameJournal(r, "圖 77");
+  assert.ok(r.journal.rows.some((row) => row === "○ 找鎮長葛瑞交談 0/1"), tag + " 條件列還是 0/1 " + JSON.stringify(r.journal.rows));
   /* 光走了以後：任務卡與手札同字同數。 */
   await page.evaluate(() => { const s = __farm.state(), t = Date.now(); Object.assign(s.sun, { plots: [], used: [], startsAt: 0, endsAt: 0, previewPlots: [], previewAt: 0, nextAt: t + 600000 }); s.plots[0].plantedAt = t; s.plots[0].wateredAt = t; __farm.refresh(); FarmWorld.refresh(s); });
   await clear(page);
   r = await readBoth();
   assert.deepEqual([r.dock.task, r.dock.progress], ["任務：找鎮長葛瑞交談", "0/1"], tag + " 沒有光時任務卡是主線那一列 " + JSON.stringify(r));
-  assert.deepEqual([r.journal.task, r.journal.progress], [r.dock.task, r.dock.progress], tag + " 手札跟任務卡同字同數 " + JSON.stringify(r));
+  sameJournal(r, "光走了以後");
   /* 圖 96：祖母手記帶路、主線在第 4 章番茄 1/3。 */
   await page.evaluate(() => { const s = __farm.state(), t = Date.now(); for (const q of AdventureAPI.quests(s, t)) if (q.chapter <= 3) s.adventure.claimed[q.id] = true; AdventureAPI.ensure(s, t); s.storage.items.tomato = 1; s.heirloom.started = true; s.heirloom.delivered = false; s.heirloom.sunWheat = 0; Object.assign(s.sun, { plots: [], used: [], startsAt: 0, endsAt: 0, previewPlots: [], previewAt: 0, nextAt: t + 600000 }); s.plots[0].cropId = "wheat"; s.plots[0].plantedAt = t; delete s.plots[0].wateredAt; __farm.refresh(); FarmWorld.refresh(s); });
   await clear(page);
@@ -428,7 +442,10 @@ async function sameNumbers(page, tag) {
   assert.equal(lead.scope, "heirloom", tag + " 圖 96 情境：祖母手記帶路");
   assert.equal(r.dock.quest, "first_sun_basket", tag + " 任務卡是祖母手記");
   assert.equal(r.journal.now, lead.text, tag + " 手札「現在做」跟任務卡同一步（祖母手記），不是「番茄 1/3」 " + JSON.stringify(r));
-  assert.deepEqual([r.journal.task, r.journal.progress], ["任務：番茄", "1/3"], tag + " 第 4 章標題的數字是番茄那一列 " + JSON.stringify(r));
+  /* R85A 同步：第 4 章的子項是 R78C 的兩條路格子，數字跟這一章主線要交的子項（任務本身的條件列）完成幾項一致。 */
+  const ch4 = await page.evaluate(() => { const q = AdventureAPI.summary(__farm.state(), Date.now()).currentQuest, rows = (q.objectives || []).concat(q.requirements || []); return { progress: rows.filter((row) => row.complete).length + "/" + rows.length, tomato: rows.find((row) => row.id === "tomato") }; });
+  assert.equal(r.journal.progress, ch4.progress, tag + " 第 4 章手札的數字跟子項完成幾項一致 " + JSON.stringify([r, ch4]));
+  assert.deepEqual([ch4.tomato.current, ch4.tomato.required], [1, 3], tag + " 番茄那一列還是 1/3");
   /* 圖 152：一鍵收成收了 2 份小麥（沒經過收成掛勾）。倉庫 2/2 時任務的收成數也是 2/2，交得出去。 */
   await page.evaluate(() => { const s = __farm.state(), t = Date.now(); __r84.claim({ c1_homecoming: true }); s.heirloom.started = false; s.adventure.byTarget.harvest.wheat = 0; s.stats.harvested = { wheat: 2 }; s.storage.items.wheat = 2; __farm.refresh(); FarmWorld.refresh(s); });
   await page.waitForTimeout(300);
@@ -464,10 +481,10 @@ async function thumb(page, tag) {
   await page.waitForTimeout(800);
   let r = await page.evaluate(() => { const a = document.querySelector("#actionA"), g = AdventureAPI.nextGuidance(__farm.state(), Date.now()); const why = []; for (let n = a; n && n !== document.body; n = n.parentElement) { const c = getComputedStyle(n); if (c.display === "none" || c.visibility === "hidden" || n.hidden) why.push((n.id || n.className) + ":" + c.display + "/" + c.visibility); } return { why, say: (document.querySelector("#worldDialogue:not([hidden])") || {}).textContent || "", story: document.querySelectorAll(".r76b-dialogue").length, menu: !!document.querySelector("#farmMenu:not([hidden])"), focus: document.documentElement.dataset.r78Focus || "", text: a.textContent.trim(), shown: __r84.shown(a), held: a.dataset.r84bHeld, step: g.action, plot: g.plotIndex, label: g.actionLabel, ready: Game.getCropProgress(__farm.state(), __farm.state().plots[0], Date.now()).ready }; });
   assert.deepEqual([r.step, r.plot, r.ready], ["refract", 0, true], tag + " 圖 128 情境：熟麥那一格要先折光 " + JSON.stringify(r));
-  assert.doesNotMatch(r.text, /^收成/, tag + " 大鈕不寫收成 " + JSON.stringify(r));
-  assert.equal(r.text, r.label, tag + " 大鈕寫任務卡那一步 " + JSON.stringify(r));
-  assert.ok(r.shown, tag + " 大鈕看得到 " + JSON.stringify(r));
-  await page.locator("#actionA").tap({ timeout: 8000 });
+  assert.ok(!(r.shown && /^收成/.test(r.text)), tag + " 大鈕不寫收成 " + JSON.stringify(r));
+  /* R85A 同步（R85 計畫 A 線第 2 項，R84 圖 95、128、160：任務卡與右下大鈕寫同一句）：同一個動作只留任務卡那一顆主鈕，大鈕讓位，按任務卡主鈕就是折光。 */
+  assert.ok(!(r.shown && r.text === r.label), tag + " 大鈕不跟任務卡主鈕寫同一句 " + JSON.stringify(r));
+  await page.locator("#questDock [data-world-go]").first().tap({ timeout: 8000 });
   await page.waitForTimeout(400);
   const after = await page.evaluate(() => { const s = __farm.state(); return { crop: s.plots[0].cropId, refractions: s.sun.refractions, preview: s.sun.previewPlots }; });
   assert.equal(after.crop, "wheat", tag + " 按下去沒有把麥收掉 " + JSON.stringify(after));
@@ -484,7 +501,7 @@ async function thumb(page, tag) {
   assert.deepEqual([r.quest, r.step], ["early_free_choice", "deliver"], tag + " 圖 153 情境：今日三件事帶去交給班伯 " + JSON.stringify(r));
   assert.equal(r.target, r.elder, tag + " 任務卡標出要去的是班伯 " + JSON.stringify(r));
   assert.ok(!(r.shown && /告示牌/.test(r.text)), tag + " 大鈕不寫告示牌 " + JSON.stringify(r));
-  if (r.main) assert.equal(r.text, r.main, tag + " 大鈕寫任務卡那一步 " + JSON.stringify(r));
+  if (r.main) assert.ok(!(r.shown && r.text === r.main), tag + " 大鈕不抄任務卡主鈕那一句（R85A 同步） " + JSON.stringify(r));
 
   /* 圖 160：祖母手記卡收合時那顆小鈕寫要做的事。 */
   await clear(page);

@@ -746,6 +746,48 @@
     return { questId: q.id, chapter: q.chapter, chapterName: q.chapterName, name: row && row.name ? row.name : q.canClaim ? `找${npc.name}回報` : q.name,
       current, required: row ? row.required : null, progress: row ? `${current}/${row.required}` : q.canClaim ? `✓ 回報${npc.name}` : "1/1" };
   }
+  /* R85A 第 1 項：「一個下一步」唯一來源。任務卡標題、任務卡按鈕、手札「現在做」、右下大鈕都讀這一支，畫面端不再各自判斷。
+     step 是 nowStep（祖母手記、舊麥種故事、今日三件事、主線認得的農務、光的那一步）；沒有就是主線這一步（guide）。
+     標題寫「現在要做的那一件」：這一步正好是主線某一列（種下第一格、收成開市小麥、找鎮長、交番茄……）就寫那一列的名字與它自己的數字；
+     折光、等光這類一次性的步驟只寫步驟名、不配數字，不再出現「標題寫找鎮長 0/1、按鈕卻是折光」（R84 圖 75、34、52、129）。 */
+  function stepRow(state, q, rows, step) {
+    const open = rows.filter((r) => r && !r.complete);
+    if (!q || !step || step.guidanceScope) return null;
+    if ((step.action === "report" || step.action === "deliver") && q.canClaim && (!step.questId || step.questId === q.id)) return "claim";
+    if (step.questAware) {
+      if (step.questId !== q.id) return null;
+      if (step.action === "gather") return open.find((r) => r.source === "materials" && r.id === step.materialId) || null;
+      return open.find((r) => r.source === "inventory" && (!step.cropId || r.id === step.cropId)) || null;
+    }
+    const plot = step.plotIndex != null ? (state.plots || [])[step.plotIndex] : null, crop = step.cropId || (plot && plot.cropId) || null;
+    if (step.action === "report") return open.find((r) => r.type === "talk" && (!step.target || r.id === step.target)) || null;
+    if (step.action === "plant") return open.find((r) => r.type === "plant") || null;
+    if (step.action === "harvest") return open.find((r) => r.type === "harvest" && (!crop || r.id === crop)) || null;
+    if (step.action === "tend") return open.find((r) => r.type === "water") || null;
+    if (step.action === "cook" || step.action === "eat") return open.find((r) => r.type === "cook") || null;
+    return null;
+  }
+  function oneStep(state, now) {
+    const t = Number.isFinite(now) ? now : Date.now();
+    const view = summary(state, t), q = view && view.ok ? view.currentQuest : null;
+    const step = nowStep(state, t), g = q ? guide(state, t) : null;
+    const npc = q ? ((C.NPCS || {})[q.npcId] || { name: "鎮民" }) : null;
+    const rows = q ? (g && g.route ? [g.step] : (q.objectives || []).concat(q.requirements || [])) : [];
+    const count = (row) => `${Math.min(qty(row.current, Number.MAX_SAFE_INTEGER), row.required)}/${row.required}`;
+    const base = { questId: q ? q.id : null, chapter: q ? q.chapter : null, chapterName: q ? q.chapterName : "" };
+    if (step) {
+      const row = stepRow(state, q, rows, step);
+      const title = row === "claim" ? `找${npc.name}回報` : row ? row.name : (step.title || step.short || step.actionLabel || "");
+      const progress = row === "claim" ? `✓ 回報${npc.name}` : row ? count(row) : "";
+      return Object.assign(base, { source: step.guidanceScope || (row ? "quest" : "farm"), step, title, progress, rowName: row && row !== "claim" ? row.name : "",
+        text: step.text || "", short: step.short || title, actionLabel: step.actionLabel || "", action: step.action || "", tileId: step.tileId || null, plotIndex: step.plotIndex != null ? step.plotIndex : null, target: step.target || null });
+    }
+    if (!q) return Object.assign(base, { source: "free", step: null, title: "繼續經營農場", progress: "", rowName: "", text: "村民留下了野餐合照。繼續經營你的農場。", short: "繼續經營農場", actionLabel: "繼續經營", action: "free", tileId: null, plotIndex: null, target: null });
+    const row = g && g.route ? g.step : rows.find((r) => r && !r.complete) || null;
+    const title = row && row.name ? row.name : q.canClaim ? `找${npc.name}回報` : q.name;
+    return Object.assign(base, { source: "quest", step: null, title, progress: row ? count(row) : q.canClaim ? `✓ 回報${npc.name}` : "1/1", rowName: row ? row.name : "",
+      text: g && g.stepText ? g.stepText : q.name, short: title, actionLabel: g ? g.actionLabel : "前往交談", action: "quest", tileId: null, plotIndex: null, target: q.npcId || null, route: g && g.route ? g.route : "" });
+  }
 
   function earlyGoals(state, now) {
     if (!ensure(state, now).ok) return { available: false, goals: [] };
@@ -1782,7 +1824,7 @@
   }
   const r82cBaseFarmStep = nextFarmStep;
   nextFarmStep = function (state, now) { return r82cFirstPick(state, r82cBaseFarmStep(state, now), now); };
-  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, nextGuidance, nowStep, questFocus, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
+  const AdventureAPI = { ensure, record, finishTutorial, nextFarmStep, nextGuidance, nowStep, questFocus, oneStep, quests, questRequirements, altQuestRequirements, sunbookStampCount, gradedMealCount, claim, earlyGoals, chooseDailyGoals, swapDailyGoal, claimDailyGoals, projects, restore, recipes, cook, fish, summary, guide, firstChoiceStatus, chooseFirstPath, trackFirstPath, taskActionLabel, storyPanelAvailability, buyMaterial, commissions, deliverCommission, eatMeal, activeBuffs, firstMealTask, randomEvents, maybeTriggerRandomEvent, resolveRandomEvent, randomEventRecall, worldEventObject, settleExpiredWorldEvent, personalQuests, completePersonalQuest, permanentResults,
     mainStoryChoice, resolveMainStoryChoice, mainStoryRecall, r61MarketChoice, chooseR61MarketFlag, r61MarketRecall, festivalStatus, completeFestival, festivalEntries, judgeFestivalEntry, takeFestivalSettlement, festivalScene, neighbors, basketFlavors, deliverNeighbor, startFishing, fishingObservation, observeFishingCast, reelFishing, fishNotes, gathering, packGathering, completeGathering, servingReply, serveGathering, serveGatheringCourse, serveGatheringTaste, gatheringPortions, refillGathering, serveGatheringPortion, sharedMealChoices, shareMeal, r77Upgraded };
   if (typeof window !== "undefined") window.AdventureAPI = AdventureAPI;
   if (typeof module !== "undefined" && module.exports) module.exports = AdventureAPI;

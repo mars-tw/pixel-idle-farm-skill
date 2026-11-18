@@ -287,12 +287,13 @@ async function thumbButton(page, tag) {
   assert.equal(r.quest, "first_sun_basket", tag + " 祖母手記正在帶路 " + JSON.stringify(r));
   assert.ok(r.target && r.target !== setup.sign, tag + " 任務卡的目標是那株小麥 " + JSON.stringify(r));
   assert.ok(!(r.shown && /告示牌/.test(r.text)), tag + " 右下大鈕不寫身旁的告示牌 " + JSON.stringify(r));
-  /* 大鈕改寫任務卡那一步（跟任務卡主鈕同一句），按下去就是按任務卡的主鈕。 */
-  assert.equal(r.off, "guide", tag + " 大鈕改帶任務那一步 " + JSON.stringify(r));
-  assert.equal(r.text, r.main, tag + " 大鈕跟任務卡主鈕同一句 " + JSON.stringify(r));
+  /* R85A 同步（R85 計畫 A 線第 2 項，R84 圖 95、128、160：任務卡與右下大鈕寫同一句）：同一個動作只留任務卡那一顆主鈕，
+     大鈕不再抄那一句（原本 R83A 讓大鈕改寫任務卡那一步）；身旁不相干的告示牌照舊不寫。玩家按任務卡主鈕。 */
+  assert.equal(r.off, "true", tag + " 身旁不相干的東西讓大鈕收起 " + JSON.stringify(r));
+  assert.ok(!(r.shown && r.text === r.main), tag + " 大鈕不跟任務卡主鈕寫同一句 " + JSON.stringify(r));
   await page.evaluate(() => { window.__r83Pressed = 0; document.querySelector("#questDock [data-world-go]").addEventListener("click", () => { window.__r83Pressed++; }); });
-  await page.locator("#actionA").tap({ timeout: 8000 });
-  assert.equal(await page.evaluate(() => window.__r83Pressed), 1, tag + " 按大鈕等於按任務卡主鈕");
+  await page.locator("#questDock [data-world-go]").first().tap({ timeout: 8000 });
+  assert.equal(await page.evaluate(() => window.__r83Pressed), 1, tag + " 任務卡主鈕按得到");
   /* 走到目標田旁、面向它：大鈕寫那一格。 */
   await page.evaluate(() => {
     const s = __farm.state(), target = s.map.tiles.find((x) => x.id === document.querySelector("#questDock").dataset.targetId);
@@ -301,8 +302,9 @@ async function thumbButton(page, tag) {
     __farm.refresh(); FarmWorld.refresh(s);
   });
   await page.waitForTimeout(700);
-  r = await page.evaluate(() => { const a = document.querySelector("#actionA"); return { text: a.textContent.trim(), off: a.dataset.r83aOffTarget }; });
-  assert.notEqual(r.off, "true", tag + " 站在目標田旁時大鈕不被收起 " + JSON.stringify(r));
+  r = await page.evaluate(() => { const a = document.querySelector("#actionA"), main = document.querySelector("#questDock [data-world-go]"); return { text: a.textContent.trim(), off: a.dataset.r83aOffTarget, shown: __r83.shown(a) && a.getBoundingClientRect().width > 0, main: main ? main.textContent.trim() : "" }; });
+  assert.notEqual(r.off, "true", tag + " 站在目標田旁時大鈕不算身旁不相干的東西 " + JSON.stringify(r));
+  assert.ok(!(r.shown && r.text === r.main), tag + " 也不跟任務卡主鈕寫同一句（R85A 同步） " + JSON.stringify(r));
   return 2;
 }
 

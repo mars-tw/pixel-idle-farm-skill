@@ -33,7 +33,9 @@ test("1 四個可見入口只讀 AdventureAPI.nextGuidance，任務卡同時掛 
   const world = read("src/world-ui.js"), heir = read("src/heirloom-ui.js"), daily = read("src/daily-ui.js");
   assert.match(world, /function nextGuidance\(s, now\)[\s\S]*A\.nextGuidance/);
   assert.match(world, /const farmNow = nextGuidance\(s, Date\.now\(\)\)/, "任務卡");
-  assert.match(world, /const farmStep = nextGuidance\(current, Date\.now\(\)\)/, "手札現在做");
+  /* R85A 同步：手札「現在做」改讀 presentStep（A.oneStep → nowStep → nextGuidance，跟任務卡同一支），不再在手札裡另外呼叫一次 nextGuidance。 */
+  assert.match(world, /const present = main \? presentStep\(current, Date\.now\(\)\) : null;/, "手札現在做");
+  assert.match(world, /function presentStep\(s, now\) \{[\s\S]*?const one = A\.oneStep\(s, t\)/, "presentStep 讀 A.oneStep");
   assert.match(world, /guidance && guidance\.guidanceScope === "r81_story" \? guidance\.text : story\.line/, "任務清單");
   assert.match(world, /r82a-guidance-full/); assert.match(world, /r82a-guidance-short/);
   assert.match(heir, /A && A\.nextGuidance \? A\.nextGuidance\(s, Date\.now\(\)\)/, "祖母手記");

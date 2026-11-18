@@ -268,6 +268,9 @@ async function sweepView(browser, origin, [width, height, mobile], only) {
       await page.evaluate(() => __r84h.done(__farm.state()));
       /* 等遊戲自己的定時同步（光的決定、目標避讓、收合）跑過幾輪。 */
       await page.waitForTimeout(650);
+      /* R85A 同步：舊麥種二選一的爭執由 story-r76 每 900 毫秒一拍的計時器自動演出；上面只等 650 毫秒，計時器相位不巧時它會在量測途中才跳出來蓋住任務卡（偶發失敗）。
+         這裡等它真的演過（shownAt 有值）再一起收掉，量的內容與門檻不變。 */
+      await page.waitForFunction(() => { const s = __farm.state(); return !(window.StoryR76 && StoryR76.r81Stage(s) === "conflict" && !StoryR76.r81Ensure(s).shownAt); }, null, { timeout: 3000 }).catch(() => {});
       /* 擺好狀態時自己跳出來的提示、泡泡與整頁的故事對話（舊麥種二選一會自動開）先收掉，量玩家關掉之後看到的任務卡。 */
       await page.evaluate(() => { const z = document.querySelector("#toast-zone"); if (z) z.innerHTML = ""; document.querySelectorAll(".npc-bubble,.r76b-dialogue").forEach((n) => n.remove()); });
       const g = await page.evaluate(() => __r84h.guide());

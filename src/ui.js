@@ -1504,7 +1504,7 @@
       if (!btn) {
         btn = document.createElement("button");
         btn.type = "button"; btn.className = "quest-collapse-btn"; btn.dataset.audit = "quest-collapse";
-        btn.onclick = (ev) => { ev.stopPropagation(); const shown = !questDockCollapsed && !box.classList.contains("quest-auto-collapsed"); questDockUserToggled = true; questDockCollapsed = shown; box.classList.remove("quest-auto-collapsed"); if (!shown) box.classList.remove("r80b-decision-compact"); ensure(); }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed", "r80b-decision-compact"); ensure(); };
+        btn.onclick = (ev) => { ev.stopPropagation(); const shown = !questDockCollapsed && !box.classList.contains("quest-auto-collapsed"); questDockUserToggled = true; questDockCollapsed = shown; box.classList.remove("quest-auto-collapsed"); if (!shown) box.classList.remove("r80b-decision-compact"); ensure(); setTimeout(r85ClearGuideTarget, 60); /* R85A 第 3 項 */ }; box.onclick = (ev) => { if (ev.target.closest && ev.target.closest("button")) return; if (!questDockCollapsed && !box.classList.contains("quest-auto-collapsed")) return; questDockUserToggled = true; questDockCollapsed = false; box.classList.remove("quest-auto-collapsed", "r80b-decision-compact"); ensure(); setTimeout(r85ClearGuideTarget, 60); /* R85A 第 3 項 */ };
         box.appendChild(btn);
       }
       // R58：自動收合時按鈕也寫「展開」，一按就展開（原本寫「收合」且要按兩次）。
@@ -2197,6 +2197,17 @@
     badge.textContent = n > 0 ? String(n) : "";
     badge.hidden = n <= 0;
   }
+  function r85KeepFieldInView(mailboxId) {
+    try {
+      if (r78bTileOnScreen(mailboxId, false)) return false;
+      const act = state.player && state.player.action;
+      if (act && act !== "idle" && act !== "walk") return true;
+      if (document.querySelector(".r78b-sun-pop")) return true;
+      const sel = state.interaction && state.interaction.selectedTileId ? G.getTileById(state, state.interaction.selectedTileId) : null;
+      const here = state.player ? G.getTileById(state, state.player.tileId) : null;
+      return !!(sel && sel.plotIndex != null && here && Math.abs(sel.x - here.x) + Math.abs(sel.y - here.y) <= 2 && r78bTileOnScreen(sel.id, false));
+    } catch (e) { return false; }
+  }
   function checkNewLetters(t, notify) {
     if (!G.evaluateLetters || !state) return [];
     const ids = G.evaluateLetters(state, t);
@@ -2205,7 +2216,9 @@
       toast("📬 " + (first && first.from ? first.from : "信箱") + "寄來一封信…");
       mailArriveFx(); playSound("mail");
       const mailbox = stationTileOf("mailbox");
-      if (mailbox) focusCameraOnTile(mailbox);
+      /* R85A 第 3 項：剛在田裡收成、澆水或種下（圖 93：手機在光裡收成後鏡頭被拉去信箱，田離開畫面），來信只跳提示、鏡頭留在田上；
+         信箱本來就在畫面上、或玩家沒在田裡忙時照舊帶過去。 */
+      if (mailbox && !r85KeepFieldInView(mailbox)) focusCameraOnTile(mailbox);
     }
     if (ids.length) { renderStory(); renderJournal(); scheduleSave(); }
     updateMailBadges();
@@ -3988,7 +4001,11 @@
       ys.push(hud.bottom + 32 - targetBox.top, hud.top - 32 - targetBox.bottom);
     });
     let best = null;
-    for (const x of xs) for (const y of ys) {
+    /* R85A 第 3 項：先把每個候選位移限制在鏡頭到得了的範圍內再評分。原本選完才夾回邊界，靠地圖邊的田（祖母手記那株小麥）會選到一個到不了的位移，夾回去後又被任務卡蓋住。 */
+    const scene0 = $("mapScene"), scale0 = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1, bound0 = scene0 ? r85CamBounds(scene0.clientWidth, scene0.clientHeight) : null;
+    const cam0 = state.camera || {}, room0 = bound0 ? { minX: (bound0.minX - (cam0.x || 0)) * scale0, maxX: (bound0.maxX - (cam0.x || 0)) * scale0, minY: (bound0.minY - (cam0.y || 0)) * scale0, maxY: (bound0.maxY - (cam0.y || 0)) * scale0 } : null;
+    for (let x of xs) for (let y of ys) {
+      if (room0) { x = Math.min(room0.maxX, Math.max(room0.minX, x)); y = Math.min(room0.maxY, Math.max(room0.minY, y)); }
       const box = { left: targetBox.left + x, right: targetBox.right + x, top: targetBox.top + y, bottom: targetBox.bottom + y };
       const outside = view ? Math.max(0, view.left + 4 - box.left) + Math.max(0, box.right - view.right + 4) + Math.max(0, view.top + 4 - box.top) + Math.max(0, box.bottom - view.bottom + 4) : 0;
       const overlap = hudBoxes.reduce((sum, hud) => sum + Math.max(0, Math.min(box.right, hud.right) - Math.max(box.left, hud.left)) * Math.max(0, Math.min(box.bottom, hud.bottom) - Math.max(box.top, hud.top)), 0);
@@ -4000,10 +4017,10 @@
     if (!dx && !dy) return false;
     const scale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1;
     let x = (state.camera && state.camera.x || 0) + dx / (scale || 1), y = (state.camera && state.camera.y || 0) + dy / (scale || 1);
-    const scene = $("mapScene"), fringe = TILE * 4;
-    if (scene && mapViewMode() === "natural") {
-      x = Math.min(fringe, Math.max(scene.clientWidth - state.map.width * TILE - fringe, x));
-      y = Math.min(fringe, Math.max(scene.clientHeight - state.map.height * TILE - fringe, y));
+    const scene = $("mapScene"), bound = scene ? r85CamBounds(scene.clientWidth, scene.clientHeight) : null; /* R85A：跟評分時同一個範圍 */
+    if (bound) {
+      x = Math.min(bound.maxX, Math.max(bound.minX, x));
+      y = Math.min(bound.maxY, Math.max(bound.minY, y));
     }
     if (!state.camera) state.camera = {};
     state.camera.x = x; state.camera.y = y;
@@ -4011,6 +4028,47 @@
     worldEl.style.transform = `translate(${Math.round(x)}px,${Math.round(y)}px)`;
     void worldEl.offsetWidth; worldEl.style.transition = ""; syncFloatingLabels();
     return true;
+  }
+  /* R85A 第 3 項：要做決定的那一格連同它頭上的名牌一起留在畫面內（圖 103：早市取捨那一格貼著左緣，名牌被切掉一半）。
+     只把名牌的寬度算進去（名牌以田格為中心），高度照田格算，鏡頭不會因為名牌上下換位而來回跳。 */
+  function r85WithLabelWidth(box, tileId) {
+    if (!box) return box;
+    try {
+      const lab = $("tileStateLabel");
+      if (!lab || lab.hidden || lab.dataset.tileId !== tileId) return box;
+      const scale = worldEl && worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1;
+      const half = Math.max(box.width, (lab.offsetWidth || 0) * (scale || 1)) / 2, cx = (box.left + box.right) / 2;
+      return Object.assign({}, box, { left: Math.min(box.left, cx - half), right: Math.max(box.right, cx + half), width: Math.max(box.width, half * 2) });
+    } catch (e) { return box; }
+  }
+  /* R85A 第 3 項：任務卡「現在做」那一格已在畫面上卻被任務卡、祖母手記卡、種子欄或其他固定介面蓋住、或貼在畫面邊緣被切掉時，
+     鏡頭只做最小位移把它讓出來（玩家展開任務卡、光正照著那一格時都適用）；走路中鏡頭照常跟人，不在這裡搶。 */
+  function r85ClearGuideTarget() {
+    try {
+      if (moveTimer || !worldEl) return false;
+      const id = r85GuideTileId();
+      if (!id || !G.getTileById(state, id)) return false;
+      const focusing = state.camera && state.camera.focusTileId && now() < (state.camera.focusUntil || 0);
+      if (focusing && state.camera.focusTileId !== id) return false; /* 鏡頭正帶去看別的東西（信箱、鎮誌舊物）時不搶 */
+      const box = r85WithLabelWidth(r78bBox(tileElOf(id)), id), view = r78bSceneBox();
+      if (!box || !view) return false;
+      const cx = (box.left + box.right) / 2, cy = (box.top + box.bottom) / 2;
+      if (cx < view.left || cx > view.right || cy < view.top || cy > view.bottom) return false; /* 不在畫面上的交給任務卡按鈕帶過去 */
+      const hudBoxes = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip"]
+        .flatMap((sel) => [...document.querySelectorAll(sel)]).filter((node) => !node.hidden && getComputedStyle(node).display !== "none" && getComputedStyle(node).visibility !== "hidden").map(r78bBox).filter(Boolean);
+      const scene = $("mapScene"), scale = worldEl.offsetWidth ? worldEl.getBoundingClientRect().width / worldEl.offsetWidth : 1;
+      const camX = state.camera && state.camera.x || 0, camY = state.camera && state.camera.y || 0;
+      const b0 = scene ? r85CamBounds(scene.clientWidth, scene.clientHeight) : null;
+      const room = b0 ? { minX: (b0.minX - camX) * scale, maxX: (b0.maxX - camX) * scale, minY: (b0.minY - camY) * scale, maxY: (b0.maxY - camY) * scale } : null;
+      const best = r85BestShift(box, hudBoxes, view, r78bBox($("player")), room);
+      if (!best) return false;
+      if (!state.camera) state.camera = {};
+      state.camera.x = camX + best.x / (scale || 1); state.camera.y = camY + best.y / (scale || 1);
+      worldEl.style.transition = "none";
+      worldEl.style.transform = `translate(${Math.round(state.camera.x)}px,${Math.round(state.camera.y)}px)`;
+      void worldEl.offsetWidth; worldEl.style.transition = ""; syncFloatingLabels();
+      return true;
+    } catch (e) { return false; }
   }
   function r80bKeepDecisionVisible(t) {
     const target = r80bDecisionTarget(t), dock = $("questDock");
@@ -4046,7 +4104,7 @@
       renderTileContext();
       renderSceneActionsForSelection();
     }
-    const targetBox = r78bBox(tileElOf(target.tile.id));
+    const targetBox = r85WithLabelWidth(r78bBox(tileElOf(target.tile.id)), target.tile.id);
     if (!targetBox) return;
     const hudBoxes = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip"]
       .flatMap((sel) => [...document.querySelectorAll(sel)]).filter((node) => !node.hidden && getComputedStyle(node).display !== "none" && getComputedStyle(node).visibility !== "hidden").map(r78bBox).filter(Boolean);
@@ -4113,6 +4171,55 @@
     if (!animate) { void pl.offsetWidth; pl.style.transition = ""; }
     updateCamera(animate);
   }
+  /* 鏡頭可以移動的範圍。平常跟人時世界外留四格邊；為了讓出任務目標最多可到六格（地圖外圍的草地本來就畫了六格，不會露出底色）。 */
+  function r85CamBounds(vw, vh) {
+    if (mapViewMode() !== "natural") return null;
+    const f = TILE * 6;
+    return { minX: vw - state.map.width * TILE - f, maxX: f, minY: vh - state.map.height * TILE - f, maxY: f };
+  }
+  /* 在鏡頭能到的範圍內找最小位移，讓 box 不碰任何 hud、留在 view 內；keep 也要留在 view 內、不被蓋住。找不到更好的就回 null。 */
+  function r85BestShift(box, huds, view, keep, room) {
+    const hitArea = (r) => huds.reduce((sum, h) => sum + Math.max(0, Math.min(r.right, h.right + 4) - Math.max(r.left, h.left - 4)) * Math.max(0, Math.min(r.bottom, h.bottom + 4) - Math.max(r.top, h.top - 4)), 0);
+    const out = (r) => Math.max(0, view.left + 4 - r.left) + Math.max(0, r.right - view.right + 4) + Math.max(0, view.top + 4 - r.top) + Math.max(0, r.bottom - view.bottom + 4);
+    const move = (r, x, y) => ({ left: r.left + x, right: r.right + x, top: r.top + y, bottom: r.bottom + y });
+    const xs = [0, view.left + 6 - box.left, view.right - 6 - box.right], ys = [0, view.top + 6 - box.top, view.bottom - 6 - box.bottom];
+    huds.forEach((h) => { xs.push(h.right + 10 - box.left, h.left - 10 - box.right); ys.push(h.bottom + 10 - box.top, h.top - 10 - box.bottom); });
+    const score = (x, y) => { const r = move(box, x, y), k = keep ? move(keep, x, y) : null; return out(r) * 1e9 + hitArea(r) * 1e5 + (k ? out(k) * 20 : 0) + Math.abs(x) + Math.abs(y); };
+    if (!out(box) && !hitArea(box)) return null; /* 目標本身沒被蓋、沒被切就不動 */
+    const base = score(0, 0); let best = null;
+    for (let x of xs) for (let y of ys) {
+      if (room) { x = Math.min(room.maxX, Math.max(room.minX, x)); y = Math.min(room.maxY, Math.max(room.minY, y)); }
+      const s = score(x, y); if (!best || s < best.s) best = { x, y, s };
+    }
+    return best && best.s + 0.5 < base && (best.x || best.y) ? best : null;
+  }
+  /* 要讓出來的那一格：玩家正在身旁照顧的那一格田（剛收成、澆水、種下，圖 93）優先，其次是任務卡「現在做」帶去的那一格。 */
+  function r85GuideTileId() {
+    try {
+      const sel = state.interaction && state.interaction.selectedTileId ? G.getTileById(state, state.interaction.selectedTileId) : null;
+      const here = state.player ? G.getTileById(state, state.player.tileId) : null;
+      if (sel && sel.plotIndex != null && here && Math.abs(sel.x - here.x) + Math.abs(sel.y - here.y) <= 1) return sel.id;
+      const dock = $("questDock"); return dock && dock.dataset ? dock.dataset.targetId || "" : "";
+    } catch (e) { return ""; }
+  }
+  /* R85A 第 3 項：鏡頭跟著人走時，正在照顧的那一格田或任務卡現在帶玩家去的那一格（田或鄰居）已經在畫面上卻被任務卡、祖母手記卡或其他固定介面蓋住，
+     就再挪一點把它讓出來（圖 158、159、162：展開的祖母手記卡蓋住要看的田）；人盡量留在畫面內，挪不開就維持原樣。 */
+  function r85AvoidGuideTarget(camX, camY, ownRect, hudRects, vw, vh) {
+    const keep = { x: camX, y: camY };
+    try {
+      const id = r85GuideTileId();
+      const t = id ? G.getTileById(state, id) : null;
+      if (!t || !ownRect) return keep;
+      const gx = (t.x + 0.5) * TILE, gy = (t.y + 0.5) * TILE;
+      const r = { left: gx - TILE / 2 + camX, right: gx + TILE / 2 + camX, top: gy - TILE / 2 + camY, bottom: gy + TILE / 2 + camY };
+      const view = { left: 0, top: 0, right: vw, bottom: vh };
+      const visible = (r.left + r.right) / 2 >= 0 && (r.left + r.right) / 2 <= vw && (r.top + r.bottom) / 2 >= 0 && (r.top + r.bottom) / 2 <= vh;
+      if (!visible) return keep;
+      const b0 = r85CamBounds(vw, vh), room = b0 ? { minX: b0.minX - camX, maxX: b0.maxX - camX, minY: b0.minY - camY, maxY: b0.maxY - camY } : null;
+      const best = r85BestShift(r, hudRects, view, ownRect, room);
+      return best ? { x: camX + best.x, y: camY + best.y } : keep;
+    } catch (e) { return keep; }
+  }
   // camera：跟隨玩家置中，clamp 到世界邊界（世界比視口大才平移）
   // 鏡頭動畫（180ms）結束後只重算浮動標籤位置，不再呼叫 updateCamera、不移動鏡頭。
   let cameraLabelTimer = 0;
@@ -4170,7 +4277,7 @@
       camX = worldW <= vw ? (vw - worldW) / 2 : Math.min(0, Math.max(vw - worldW, camX));
       camY = worldH <= vh ? (vh - worldH) / 2 : Math.min(0, Math.max(vh - worldH, camY));
     }
-    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip", "#worldDialogue:not([hidden])"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 6; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } } state.camera.x = camX; state.camera.y = camY;
+    if (window.FarmWorld) { const hudSels = ["#questDock", ".seed-hud", "#worldMinimap", "header", ".tool-bar", ".side-tabs", "#farmDock", "#mobileControls", "#sceneActionBar", ".sun-chip", "#worldDialogue:not([hidden])"]; const hudRects = hudSels.flatMap((sel) => [...document.querySelectorAll(sel)]).filter((n) => !n.hidden && getComputedStyle(n).display !== "none" && getComputedStyle(n).visibility !== "hidden").map((n) => n.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0); const tileRectAt = (cx, cy) => ({ left: px0 - TILE / 2 + cx, right: px0 + TILE / 2 + cx, top: py0 - TILE / 2 + cy, bottom: py0 + TILE / 2 + cy }); const hitHud = (rect) => hudRects.find((h) => rect.left < h.right + 4 && rect.right > h.left - 4 && rect.top < h.bottom + 4 && rect.bottom > h.top - 4); for (let i = 0; i < 6; i++) { const rect = tileRectAt(camX, camY); const h = hitHud(rect); if (!h) break; const dxR = h.right + 8 - rect.left, dxL = h.left - 8 - rect.right, dyD = h.bottom + 8 - rect.top, dyU = h.top - 8 - rect.bottom; const opts = [{ d: Math.abs(dxR), x: dxR, y: 0 }, { d: Math.abs(dxL), x: dxL, y: 0 }, { d: Math.abs(dyD), x: 0, y: dyD }, { d: Math.abs(dyU), x: 0, y: dyU }].sort((a, b) => a.d - b.d); camX += opts[0].x; camY += opts[0].y; } const fringe2 = TILE * 4; if (mapViewMode() === "natural") { camX = Math.min(fringe2, Math.max(vw - worldW - fringe2, camX)); camY = Math.min(fringe2, Math.max(vh - worldH - fringe2, camY)); } ({ x: camX, y: camY } = r85AvoidGuideTarget(camX, camY, tileRectAt(camX, camY), hudRects, vw, vh)); } state.camera.x = camX; state.camera.y = camY;
     if (!animate) worldEl.style.transition = "none";
     worldEl.style.transform = "translate(" + Math.round(camX) + "px," + Math.round(camY) + "px)";
     if (!animate) { void worldEl.offsetWidth; worldEl.style.transition = ""; }
@@ -5906,9 +6013,10 @@
     if (!busy && labelTile && /^收成・/.test(targetLabel) && labelTile.plotIndex != null && labelTile.plotIndex === lightHoldPlotIndex()) targetLabel = r84bHeldLabel(labelTile) || targetLabel.replace(/^收成・/, "等光・");
     action.dataset.r84bHeld = !busy && labelTile && labelTile.plotIndex != null && labelTile.plotIndex === lightHoldPlotIndex() && tileReadyCrop(labelTile) ? (r84bHeldLabel(labelTile) ? "guide" : "wait") : "";
     const offTarget = !busy && targetLabel !== "互動" && r83aOffGuideTarget(labelTile);
-    const guideButton = offTarget ? r83aGuideButton() : null;
-    if (guideButton) targetLabel = guideButton.textContent.trim();
-    action.dataset.r83aOffTarget = offTarget ? (guideButton ? "guide" : "true") : "false";
+    /* R85A 第 2 項：大鈕不再抄任務卡主鈕那一句（R84 圖 95、128、160：一個動作兩顆主按鈕）。身旁不相干的東西照 R83A 收起，
+       跟任務卡主鈕同一句、任務卡正擺著兩件挑一件、或要做的那一格不在畫面上（圖 133、161）時也收起。 */
+    action.dataset.r83aOffTarget = offTarget ? "true" : "false";
+    action.dataset.r85Dup = offTarget ? "" : r85ThumbDup(targetLabel, labelTile, st, busy, rack);
     const sceneBar = $("sceneActionBar");
     const sceneButtons = sceneBar && !sceneBar.hidden ? [...sceneBar.querySelectorAll("button:not([disabled])")] : [];
     let facingSelected = false; try { const facing = facingTile(); facingSelected = !!(selectedPlot && facing && facing.id === selectedPlot.id); } catch (e) {}
@@ -5928,7 +6036,7 @@
     if (typeof action.setAttribute === "function") {
       action.setAttribute("aria-label", busy ? "正在走近田地收成" : st.count && !rack ? `${targetLabel}，共有 ${st.count} 格成熟` : targetLabel);
       action.setAttribute("aria-disabled", String(busy)); updateInteractVisibility();
-      if (offTarget && !guideButton) action.setAttribute("aria-hidden", "true");
+      if (offTarget || action.dataset.r85Dup) action.setAttribute("aria-hidden", "true");
     }
   }
   /* R83A 第 5 項：右下大鈕要寫的東西，是不是任務卡此刻帶玩家去的那一格（同一棟建物也算）。任務卡沒有指定目標時不攔。
@@ -5942,14 +6050,27 @@
     const same = (key) => tile[key] != null && tile[key] === target[key];
     return !(same("structureId") || same("buildingId") || same("npc"));
   }
+  /* R85A 第 2、3 項：右下大鈕什麼時候要讓位。回傳原因（空字串＝照常顯示）。 */
+  function r85Shown(n) { if (!n || n.hidden) return false; const r = n.getBoundingClientRect(); if (!(r.width > 0 && r.height > 0)) return false; for (let x = n; x && x !== document.documentElement; x = x.parentElement) { const c = getComputedStyle(x); if (c.display === "none" || c.visibility === "hidden") return false; } return true; }
+  function r85ThumbDup(label, labelTile, st, busy, rack) {
+    if (busy) return "";
+    try {
+      const main = r83aGuideButton(), mainText = main && r85Shown(main) ? main.textContent.trim() : "";
+      if (mainText && mainText === String(label || "").trim()) return "same";
+      if (mainText && !rack && [...document.querySelectorAll("#questDock [data-r82c-pick-alt], #questDock [data-r83a-heirloom-alt]")].some(r85Shown)) return "pick";
+      /* 任務卡主鈕正要帶玩家去做的就是面前這一格（同一格田、同一位鄰居）：主鈕已經是那個動作，大鈕不再多寫一顆。 */
+      const dockTarget = $("questDock") && $("questDock").dataset.targetId;
+      if (mainText && !rack && labelTile && dockTarget && labelTile.id === dockTarget) return "target";
+      const tileId = rack ? "" : labelTile ? labelTile.id : st && st.count && st.tileId ? st.tileId : "";
+      if (tileId && !r78bTileOnScreen(tileId, false)) return "offscreen";
+    } catch (e) { return ""; }
+    return "";
+  }
   function r83aGuideButton() {
     return [...document.querySelectorAll("#questDock :is([data-world-go],[data-early-goal],[data-r69a-festival-go],[data-choice-open])")].find((b) => b.tagName === "BUTTON" && !b.hidden && !b.disabled && b.textContent.trim()) || null;
   }
   function activateThumbAction() {
     if (hasOpenModal() || quickHarvestTarget) return;
-    /* R83A 第 5 項：大鈕寫的是任務卡那一步時，按下去就按任務卡的主鈕。 */
-    const actionButton = $("actionA");
-    if (actionButton && actionButton.dataset.r83aOffTarget === "guide") { const guide = r83aGuideButton(); if (guide) { guide.click(); updateQuickHarvest(); return; } }
     const st = G.quickHarvestStatus ? quickHarvestNow() : { count: 0 };
     /* 翻面只有短暫時窗，維持原本優先於舊選取田格。 */
     if (rackThumbTarget(st.count)) { window.FarmSunplay.runRackInteraction(); updateQuickHarvest(); return; }
@@ -6369,6 +6490,7 @@
       clickTile: (id) => handleMapClick(id),
       touchFarmPreview: () => pendingTouchFarmAction ? { ...pendingTouchFarmAction } : null,
       focusTile: (id) => focusCameraOnTile(id),
+      clearGuideTarget: () => r85ClearGuideTarget(),
       /* R84C 第 1 項：選取一格田、打開田邊動作列並把鏡頭帶過去，不走路、不代按（任務卡「看看這株」用）。 */
       selectTile: (id) => { const tile = G.getTileById(state, id); if (!tile || hasOpenModal()) return false; selectedTileId = tile.id; state.interaction.selectedTileId = tile.id; renderTileContext(); renderSceneActionsForSelection(); updateQuickHarvest(); focusCameraOnTile(tile.id); return true; },
       assistantSuggestions: () => G.farmActionSuggestions ? G.farmActionSuggestions(state, now(), { limit: 3 }) : [],
