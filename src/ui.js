@@ -4046,7 +4046,7 @@
      鏡頭只做最小位移把它讓出來（玩家展開任務卡、光正照著那一格時都適用）；走路中鏡頭照常跟人，不在這裡搶。 */
   function r85ClearGuideTarget() {
     try {
-      if (moveTimer || !worldEl) return false;
+      if (moveTimer || !worldEl || document.querySelector("#worldDialogue:not([hidden])")) return false;
       const id = r85GuideTileId();
       if (!id || !G.getTileById(state, id)) return false;
       const focusing = state.camera && state.camera.focusTileId && now() < (state.camera.focusUntil || 0);
@@ -4207,6 +4207,7 @@
      就再挪一點把它讓出來（圖 158、159、162：展開的祖母手記卡蓋住要看的田）；人盡量留在畫面內，挪不開就維持原樣。 */
   function r85AvoidGuideTarget(camX, camY, ownRect, hudRects, vw, vh) {
     const keep = { x: camX, y: camY };
+    if (document.querySelector("#worldDialogue:not([hidden])")) return keep;
     try {
       const id = r85GuideTileId();
       const t = id ? G.getTileById(state, id) : null;

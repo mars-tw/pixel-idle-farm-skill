@@ -1442,7 +1442,7 @@
     /* R80B：光的田格決定先把任務卡收成一列，實際鏡頭只做最小位移；不要沿用一般任務的
        focusTile 置中，否則農舍旁的曬架與整片農場會被推出畫面。 */
     /* R85A 第 3 項：光的那一格任務卡收成一列以後，那一格若仍被蓋住或貼在畫面邊緣，鏡頭再做最小位移讓出來（不改成置中）。 */
-    if (lightDecision) { if (dock) dock.classList.add("quest-target-collapsed"); syncSeedHudTop(); const f0 = farm(); if (f0 && f0.clearGuideTarget) setTimeout(() => f0.clearGuideTarget(), 40); return; }
+    if (lightDecision) { if (dock) dock.classList.toggle("quest-target-collapsed", dock.dataset.quest !== "early_free_choice"); syncSeedHudTop(); const f0 = farm(); if (f0 && f0.clearGuideTarget) setTimeout(() => f0.clearGuideTarget(), 40); return; }
     const coveredBy = (box) => { if (!box) return 0; const r = box.getBoundingClientRect(); if (!r.width || !r.height) return 0; return Math.max.apply(null, rects.concat(plotRects).map((t) => rectOverlap(t, r)).concat([0])); };
     /* R37：plotRects 已併入 coveredBy，任務列與種子欄對任何田格重疊都會觸發避讓。 */
     // R58：「今日三件事」是玩家要自己挑的清單，不因目標被蓋到而收掉（否則手機上三個目標全看不到）。
