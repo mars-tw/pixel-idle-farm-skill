@@ -157,15 +157,31 @@
     if (step && step.tileId) standLeft(tiles.find((t) => t.id === step.tileId));
     if (step && step.holdPlotIndex != null) standLeft(tiles.find((t) => t.plotIndex === step.holdPlotIndex));
     try { const A = adventure(), ev = A && A.worldEventObject ? A.worldEventObject(state, now) : null; if (ev && ev.tileId) busy.add(ev.tileId); } catch (_) { /* 沒有農場小事 */ }
+    /* R85B 第 4 項：壞天氣時田邊立著雨水桶，小事讓開那一格。 */
+    const rain = state.r85Rain && state.r85Rain.spell; if (rain && rain.tileId) busy.add(rain.tileId);
     return busy;
   }
   /* 瀏覽器可以掛一個偏好（例如畫面上看得到、沒被任務卡蓋住的格子）；沒掛或全不合時照原本的輪替。 */
   let tilePreference = null;
   function setTilePreference(fn) { tilePreference = typeof fn === "function" ? fn : null; }
+  /* R85B 第 3 項：瀏覽器另外掛一個「一定要讓開」的檢查（被花叢這類擺飾蓋住的格子）。手機橫放（844×390）時田邊三格常有兩格在畫面外，
+     原本偏好全部落空就照輪替放，麻雀會被放到花叢後面：圖被蓋住、點到花叢那半邊也不會跳出二選一（R84 圖 163）。
+     先拿掉被蓋住的格子，再照原本的偏好挑；全部都被蓋住才照舊。 */
+  let tileAvoid = null;
+  function setTileAvoid(fn) { tileAvoid = typeof fn === "function" ? fn : null; }
   function pickTile(state, step, count, now) {
     const busy = avoidTiles(state, step, now);
     let free = fieldEdgeTiles(state, 1).filter((t) => !busy.has(t.id));
     if (!free.length) free = fieldEdgeTiles(state, 2).filter((t) => !busy.has(t.id));
+    if (tileAvoid && free.length) {
+      /* 緊貼的一圈與外一圈都先拿掉被擺飾蓋住的格子；再照偏好（畫面上看得到、沒被固定介面蓋住）先找緊貼的一圈、再找外一圈。 */
+      const keep = (list) => { try { return list.filter((t) => !tileAvoid(t)); } catch (_) { return list; } };
+      const like = (list) => { if (!tilePreference) return []; try { return list.filter((t) => tilePreference(t)); } catch (_) { return []; } };
+      const ring1 = keep(free), ring2 = keep(fieldEdgeTiles(state, 2).filter((t) => !busy.has(t.id)));
+      const liked = like(ring1).length ? like(ring1) : like(ring2);
+      if (liked.length) return liked[count % liked.length];
+      if (ring1.length) free = ring1; else if (ring2.length) free = ring2;
+    }
     if (tilePreference && free.length > 1) { let liked = []; try { liked = free.filter((t) => tilePreference(t)); } catch (_) { liked = []; } if (liked.length) free = liked; }
     return free.length ? free[count % free.length] : null;
   }
@@ -322,7 +338,7 @@
 
   const API = { CHORES, SPARROW_CHOICES, MISSING_ART, R84C_ART_MIN, R84C_ART_TILE, ONBOARD_MS, ONBOARD_AFTER_MS, ONBOARD_COOLDOWN_MS, LATER_AFTER_MS, LATER_GAP_MS, MIN_LEFT_MS, LIFE_MS, GRACE_MS, CLAIM_HOLD_MS,
     SPARROW_GIFT_DELAY_MS, SPARROW_GIFT_GAP_MS, SPARROW_GIFT_DAY_MS, SPARROW_GIFT_DAY_CAP, SPARROW_GIFT_SEED,
-    normalize, onboarding, waitStatus, fieldEdgeTiles, avoidTiles, pickTile, setTilePreference, update, view, claim, unclaim, resolve, sparrowCanGift, sparrowChoices, journalLines };
+    normalize, onboarding, waitStatus, fieldEdgeTiles, avoidTiles, pickTile, setTilePreference, setTileAvoid, update, view, claim, unclaim, resolve, sparrowCanGift, sparrowChoices, journalLines };
   if (isNode) { module.exports = API; return; }
   root.FarmWaitplay = API;
   if (typeof document === "undefined") return;
@@ -364,6 +380,13 @@
     } catch (_) { return true; }
   }
   setTilePreference(tileOnScreen);
+  /* R85B 第 3 項：被花叢、水桶這類擺飾蓋住超過一成五的格子，小事一定讓開（不只是偏好）。 */
+  function tileUnderProp(tile) {
+    const node = document.querySelector('.gtile[data-tile-id="' + tile.id + '"]'); if (!node) return false;
+    const r = node.getBoundingClientRect(), area = r.width * r.height; if (!area) return false;
+    return [...document.querySelectorAll("#mapWorld .garden-prop")].some((el) => { const b = el.getBoundingClientRect(); return Math.max(0, Math.min(b.right, r.right) - Math.max(b.left, r.left)) * Math.max(0, Math.min(b.bottom, r.bottom) - Math.max(b.top, r.top)) > area * 0.15; });
+  }
+  setTileAvoid(tileUnderProp);
 
   function closeChoice(unclaimToo) {
     const pop = document.querySelector(".r83c-chore-choice"); if (pop) pop.remove();
@@ -405,7 +428,10 @@
     const sig = [left, top, hit, art, cx, by, Math.round((box.y + 1) * T - T * 0.3)].join("|");
     if (node.dataset.r83cBox !== sig) {
       node.dataset.r83cBox = sig;
-      node.style.cssText = "left:" + left + "px;top:" + top + "px;width:" + hit + "px;height:" + hit + "px;z-index:" + Math.round((box.y + 1) * T - T * 0.3) + ";--r83c-art:" + art + "px;--r83c-cx:" + cx + "px;--r83c-by:" + by + "px;";
+      /* R85B 第 3 項：跟擺飾疊到時畫在擺飾上面，整個點擊範圍都點得到（R84 圖 163 點到花叢那半邊不會跳出二選一）。 */
+      const r = { left, top, right: left + hit, bottom: top + hit }; let z = Math.round((box.y + 1) * T - T * 0.3);
+      document.querySelectorAll("#mapWorld .garden-prop").forEach((el) => { const l = parseFloat(el.style.left) || 0, t = parseFloat(el.style.top) || 0, w = parseFloat(el.style.width) || 0, h = parseFloat(el.style.height) || 0; if (l < r.right && l + w > r.left && t < r.bottom && t + h > r.top) z = Math.max(z, (parseInt(getComputedStyle(el).zIndex, 10) || 0) + 1); });
+      node.style.cssText = "left:" + left + "px;top:" + top + "px;width:" + hit + "px;height:" + hit + "px;z-index:" + z + ";--r83c-art:" + art + "px;--r83c-cx:" + cx + "px;--r83c-by:" + by + "px;";
     }
     const pop = document.querySelector(".r83c-chore-choice");
     if (pop) { if (pop.dataset.r83cChoreKey !== current.key) closeChoice(false); else placeChoice(pop, node); }

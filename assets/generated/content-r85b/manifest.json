@@ -1,0 +1,52 @@
+{
+ "model": "MUSE CLI（muse.cmd exec）；圖片模型未回報（MUSE 回報：生圖工具沒有揭露內部模型名稱）",
+ "tool": "MUSE CLI 圖片生成（原圖 1920×1280 JPG，MUSE 置中合成為 1024×1024 洋紅底素材表）＋ Pillow 去洋紅背景、取連通區塊、依格子分組、等比縮放置中、透明度只留全有或全無",
+ "generated": "2026-11-18",
+ "note": "R85B 第 4 項「壞天氣也有事做」：田邊雨水桶三種水量（空、一半、滿，三張同一縮放比例、桶底貼齊畫布底部）與雨後虹光的彩虹。參考 content-r82/chore-sparrow.png、content-r83/chore-twig.png 畫風。一般視角雨水桶約畫 40～60 像素，彩虹約畫 2.4～4 格寬。",
+ "files": [
+  {
+   "file": "rain-barrel-empty.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 5891,
+   "sha256": "d6d9c48e39f0e2297e47f34747b7fca45ce5f956123a6a0dd0396f9b124bfe48",
+   "source": "sheet_rain.png 第 1 排第 1 格",
+   "use": "雨水桶剛立起來、還沒接到一半"
+  },
+  {
+   "file": "rain-barrel-half.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 6400,
+   "sha256": "14ed94f608063ea3a4f438062b9bea4d16e5c43747a6b45a24bc84a62d698704",
+   "source": "sheet_rain.png 第 1 排第 2 格",
+   "use": "接到一半以上"
+  },
+  {
+   "file": "rain-barrel-full.png",
+   "size": [
+    64,
+    64
+   ],
+   "bytes": 6531,
+   "sha256": "2bb55faa422190e4b3273d724c96e327b71e63836ce99de9e4a05792f0e2d4e5",
+   "source": "sheet_rain.png 第 2 排第 1 格",
+   "use": "接滿、可以倒進田裡（也用在這段壞天氣接滿 3 桶之後）"
+  },
+  {
+   "file": "rainbow-light.png",
+   "size": [
+    192,
+    96
+   ],
+   "bytes": 11132,
+   "sha256": "fa89b628a3baf50c995c161bdafb2a4e3b2dd53ec2cf98f76c8a0f3abd6712b9",
+   "source": "sheet_rain.png 第 2 排第 2 格",
+   "use": "雨後虹光照著的田上方"
+  }
+ ]
+}

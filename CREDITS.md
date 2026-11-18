@@ -161,3 +161,4 @@ OpenAI `gpt-image-2` 額度用盡後，R70 起的新圖改用 MUSE（`muse.image
 - `assets/generated/content-r76/`：追光手冊封面與六枚印章是 MUSE 新生成的圖；班伯、蘿拉、圖圖的對話頭像由 content-r72 顧客圖裁切縮放。
 - `assets/generated/content-r77/portrait-mayor.png`：鎮長的對話頭像，由 content-r72 顧客圖裁切縮放，不是新生成的圖。米莉的新頭像缺件（MUSE 與 OpenAI 額度都用盡，沒有產出），沿用 `assets/generated/r84/miri-0.png`。
 - R77 的招牌換色用現有 `content-r75/farm_sign.png` 加 CSS 濾色，沒有新圖。
+- `assets/generated/content-r85b/`（4 張，2026-11-18）：田邊雨水桶三種水量（空、一半、滿）與雨後虹光的彩虹。MUSE CLI（`muse.cmd exec`）生成，MUSE 回報生圖工具沒有揭露模型名稱，manifest 記為「模型未回報」；去洋紅背景、取連通區塊、等比縮放。

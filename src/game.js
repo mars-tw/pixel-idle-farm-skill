@@ -359,6 +359,7 @@
     durationMs: 16000,       // 每道光停留時間
     firstDurationMs: 40000,  // R51：第一道光配合教學對話停久一點，玩家讀完對話仍看得到光
     maxPlots: 2,
+    rainbowMaxPlots: 4,      // R85B：雨後虹光
     growthBoost: 0.3,        // 種／澆：立刻推進成長時間 30%
     growthBoostCapMs: 180000,
     harvestBonus: 1,         // 收成多 1 份
@@ -368,10 +369,35 @@
        加上光前 8 秒預告也不超過 30 秒（R83 圖 37 曾寫等 86 秒）。十分鐘以後、或天氣解鎖以後照原本的 28／40 秒。 */
     earlyWindowMs: 10 * 60 * 1000,
     earlyGapMs: 20000,
+    /* R85B 第 2 項：前十分鐘原本只看「存檔建立後過了多久」（牆上時間）。新存檔建立後停在開場、手機切到背景、玩幾分鐘就離開再回來，
+       牆上時間一過十分鐘，玩家實際才玩幾分鐘就回到 40 秒一道光。連續玩的話四種尺寸都在 20 秒內；遊戲時鐘裡找得到的「新存檔等超過 20 秒」
+       只有這一條，R84 圖 106（1366×600）的 29 秒等光最可能就是這樣（例如截圖換尺寸時沿用同一份存檔）。
+       現在新存檔另外記「開著遊戲的時間」（每次更新最多記 2 秒，離線、切到背景不算），兩者任一還在十分鐘內都算前十分鐘。
+       只有第一次更新時存檔建立不到一分鐘才記（新存檔）；舊存檔、測試擺好的存檔照舊只看牆上時間。 */
+    earlyPlayStepCapMs: 2000,
+    earlyNewSaveMs: 60000,
   };
   function earlyLightWindow(state, now) {
-    const born = Number(state && state.createdAt) || 0;
-    return born > 0 && now >= born && now - born < SUNPATCH.earlyWindowMs && (Number(state.level) || 1) < WEATHER_UNLOCK_LEVEL;
+    if (!state || (Number(state.level) || 1) >= WEATHER_UNLOCK_LEVEL) return false;
+    const born = Number(state.createdAt) || 0;
+    if (born > 0 && now >= born && now - born < SUNPATCH.earlyWindowMs) return true;
+    const sun = state.sun, played = sun && Number.isFinite(sun.earlyPlayMs) && sun.earlyPlayMs >= 0 ? sun.earlyPlayMs : -1;
+    if (played < 0) return false;
+    /* 往後推算（例如「這道光散掉那一刻」）：一分鐘內的推算照實加上去；更久的時間差當成離線，不算。 */
+    const ahead = Math.max(0, now - (Number(sun.earlyLastAt) || now));
+    return played + (ahead <= 60000 ? ahead : 0) < SUNPATCH.earlyWindowMs;
+  }
+  /* 每次 updateSunpatch 先記一次開著遊戲的時間。 */
+  function trackEarlyPlay(state, sun, now) {
+    if (!Number.isFinite(sun.earlyPlayMs)) {
+      const born = Number(state.createdAt) || 0;
+      sun.earlyPlayMs = born > 0 && now >= born && now - born < SUNPATCH.earlyNewSaveMs ? 0 : -1;
+      sun.earlyLastAt = now;
+      return;
+    }
+    if (sun.earlyPlayMs < 0 || sun.earlyPlayMs >= SUNPATCH.earlyWindowMs) { sun.earlyLastAt = now; return; }
+    const step = Math.max(0, Math.min(SUNPATCH.earlyPlayStepCapMs, now - (Number(sun.earlyLastAt) || now)));
+    sun.earlyPlayMs = Math.min(SUNPATCH.earlyWindowMs, sun.earlyPlayMs + step); sun.earlyLastAt = now;
   }
   function sunGapMs(state, now, interval) { return earlyLightWindow(state, now) ? Math.min(interval, SUNPATCH.earlyGapMs) : interval; }
   function ensureSunState(state) {
@@ -381,7 +407,8 @@
     const num = (v) => (Number.isFinite(v) && v > 0 ? v : 0);
     sun.startsAt = num(sun.startsAt); sun.endsAt = num(sun.endsAt); sun.nextAt = num(sun.nextAt);
     const okIndex = (i) => Number.isInteger(i) && i >= 0 && i < (state.plots || []).length;
-    sun.plots = Array.isArray(sun.plots) ? sun.plots.filter(okIndex).slice(0, SUNPATCH.maxPlots) : [];
+    /* R85B 第 4 項：雨後虹光一次照 4 格（rainplay-r85.js），其餘的光照舊最多 2 格。 */
+    sun.plots = Array.isArray(sun.plots) ? sun.plots.filter(okIndex).slice(0, sun.rainbow ? SUNPATCH.rainbowMaxPlots : SUNPATCH.maxPlots) : [];
     sun.used = Array.isArray(sun.used) ? sun.used.filter(okIndex) : [];
     sun.introduced = !!sun.introduced;
     if (!state.stats) state.stats = {};
@@ -434,13 +461,14 @@
     const sun = ensureSunState(state);
     const random = typeof rng === "function" ? rng : Math.random;
     const out = { spawned: false, expired: false, first: false };
+    trackEarlyPlay(state, sun, now);
     if (sun.plots.length && sun.plots.every((i) => (sun.used || []).includes(i))) {
-      sun.plots = []; sun.used = []; sun.endsAt = now; sun.nextAt = now + 15000; out.expired = true;
+      sun.plots = []; sun.used = []; sun.endsAt = now; sun.nextAt = now + 15000; sun.rainbow = false; out.expired = true;
       const queued = lightHarvestQueue(state); if (queued && queued.previewAt === sun.startsAt) clearLightHarvestQueue(state);
     }
     if (sun.plots.length && sun.endsAt && now >= sun.endsAt) {
       if (Sunplay) Sunplay.settleBeam(state, sun.plots.filter((i) => !(sun.used || []).includes(i)));
-      sun.plots = []; sun.used = []; out.expired = true;
+      sun.plots = []; sun.used = []; sun.rainbow = false; out.expired = true;
       const queued = lightHarvestQueue(state); if (queued && queued.previewAt === sun.startsAt) clearLightHarvestQueue(state);
     }
     if (sunpatchActive(state, now)) return out;
@@ -467,7 +495,7 @@
     const plots = sun.previewPlots.slice();
     if (!plots.length) { sun.nextAt = now + sunGapMs(state, now, interval); return out; }
     const dur = sun.spawned ? SUNPATCH.durationMs : SUNPATCH.firstDurationMs; sun.spawned = (sun.spawned || 0) + 1;
-    sun.plots = plots; sun.previewPlots = []; sun.previewAt = 0; sun.used = []; sun.startsAt = now; sun.endsAt = now + dur; sun.durationMs = dur;
+    sun.plots = plots; sun.previewPlots = []; sun.previewAt = 0; sun.used = []; sun.startsAt = now; sun.endsAt = now + dur; sun.durationMs = dur; sun.rainbow = false;
     sun.nextAt = now + dur + ((sun.spawned || 0) === 1 ? Math.min(interval, 15000) : sunGapMs(state, now + dur, interval));
     out.spawned = true;
     const queued = lightHarvestQueue(state);
@@ -1537,6 +1565,9 @@
 
   // ---------- 天氣 ----------
   function currentWeather(state, now) {
+    /* R85B 第 4 項：新存檔的過雲雨（rainplay-r85.js 排程）下著的時候算雨天，天氣還沒解鎖也一樣；光斑照 blockedWeather 停下來。 */
+    const shower = state && state.r85Rain;
+    if (shower && shower.showerUntil > now && now >= (shower.showerStartedAt || 0)) return "rain";
     if (state.level < WEATHER_UNLOCK_LEVEL) return "clear";
     if (!state.weather || now >= (state.weather.untilMs || 0)) return "clear";
     return state.weather.id;
