@@ -1,0 +1,1064 @@
+{
+  "suiteCommit": "43d623e",
+  "complete": false,
+  "entries": 178,
+  "results": [
+    {
+      "index": 1,
+      "name": "test-version-chain",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 2,
+      "name": "test-guards",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 3,
+      "name": "test-economy",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 4,
+      "name": "test-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 5,
+      "name": "test-adventure",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 6,
+      "name": "test-world-migration",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 7,
+      "name": "test-r74-building-upgrades",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 8,
+      "name": "test-r79-sunpatch",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 9,
+      "name": "test-r80-daily",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 10,
+      "name": "test-r81-heirloom",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 11,
+      "name": "test-ui-smoke",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 12,
+      "name": "validate-v3-atlas",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 13,
+      "name": "validate-v4-atlas",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 14,
+      "name": "generate-r66-ui",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 15,
+      "name": "test-r66-ui-art",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 16,
+      "name": "process-r68-visuals",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 17,
+      "name": "test-r68-visuals",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 18,
+      "name": "test-content-r1",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 19,
+      "name": "test-content-r2",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 20,
+      "name": "test-content-r3",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 21,
+      "name": "test-content-r4",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 22,
+      "name": "test-content-r5",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 23,
+      "name": "test-content-r6",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 24,
+      "name": "test-content-r7",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 25,
+      "name": "test-content-r8",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 26,
+      "name": "test-content-r9",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 27,
+      "name": "test-content-r10",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 28,
+      "name": "test-content-r11",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 29,
+      "name": "test-content-r12",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 30,
+      "name": "test-content-r13",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 31,
+      "name": "test-content-r14",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 32,
+      "name": "test-content-r15",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 33,
+      "name": "check-content-r15-art",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 34,
+      "name": "test-content-r16",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 35,
+      "name": "test-content-r17",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 36,
+      "name": "test-content-r18",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 37,
+      "name": "test-content-r19",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 38,
+      "name": "test-content-r20",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 39,
+      "name": "test-content-r21",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 40,
+      "name": "test-content-r22",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 41,
+      "name": "test-content-r23",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 42,
+      "name": "test-content-r25-economy",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 43,
+      "name": "test-content-r25-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 44,
+      "name": "test-content-r26-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 45,
+      "name": "test-content-r26-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 46,
+      "name": "test-content-r27-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 47,
+      "name": "test-content-r27-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 48,
+      "name": "test-content-r28-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 49,
+      "name": "test-content-r28-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 50,
+      "name": "test-content-r29-systems",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 51,
+      "name": "test-content-r29-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 52,
+      "name": "test-content-r30-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 53,
+      "name": "test-content-r30-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 54,
+      "name": "test-content-r32-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 55,
+      "name": "test-content-r32-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 56,
+      "name": "test-content-r34-systems",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 57,
+      "name": "test-content-r34-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 58,
+      "name": "test-content-r36-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 59,
+      "name": "test-content-r36-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 60,
+      "name": "test-content-r37-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 61,
+      "name": "test-content-r37-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 62,
+      "name": "test-content-r38-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 63,
+      "name": "test-content-r38-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 64,
+      "name": "test-content-r39-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 65,
+      "name": "test-content-r39-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 66,
+      "name": "test-content-r40-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 67,
+      "name": "test-content-r40-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 68,
+      "name": "test-content-r41-polish",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 69,
+      "name": "test-content-r42-clarity",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 70,
+      "name": "test-content-r43-flow",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 71,
+      "name": "test-content-r44-wording",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 72,
+      "name": "test-content-r46-guard",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 73,
+      "name": "test-content-r47-choice",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 74,
+      "name": "test-content-r49-art",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 75,
+      "name": "test-content-r51-flow",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 76,
+      "name": "test-content-r55-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 77,
+      "name": "test-content-r55-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 78,
+      "name": "test-content-r58-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 79,
+      "name": "test-content-r58-content",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 80,
+      "name": "test-content-r58-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 81,
+      "name": "test-content-r59-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 82,
+      "name": "test-content-r59-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 83,
+      "name": "test-content-r60-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 84,
+      "name": "test-content-r60-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 85,
+      "name": "test-content-r61-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 86,
+      "name": "test-content-r61-neighbors",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 87,
+      "name": "test-content-r62-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 88,
+      "name": "test-content-r62-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 89,
+      "name": "test-content-r63-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 90,
+      "name": "test-content-r63-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 91,
+      "name": "test-content-r64-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 92,
+      "name": "test-content-r64-neighbors",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 93,
+      "name": "test-content-r64-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 94,
+      "name": "test-content-r65-systems",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 95,
+      "name": "test-content-r65-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 96,
+      "name": "test-content-r66-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 97,
+      "name": "test-content-r66-midgame",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 98,
+      "name": "test-content-r67-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 99,
+      "name": "test-content-r67-economy",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 100,
+      "name": "test-content-r68-systems",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 101,
+      "name": "test-content-r68-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 102,
+      "name": "test-content-r68-orders",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 103,
+      "name": "test-content-r68b-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 104,
+      "name": "test-content-r69-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 105,
+      "name": "test-content-r69-systems",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 106,
+      "name": "test-content-r69-wording",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 107,
+      "name": "test-content-r69-integration",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 108,
+      "name": "test-content-r70-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 109,
+      "name": "test-content-r70-art",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 110,
+      "name": "test-content-r71-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 111,
+      "name": "test-content-r71-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 112,
+      "name": "test-content-r71b-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 113,
+      "name": "test-content-r72-farming",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 114,
+      "name": "test-content-r72-stall",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 115,
+      "name": "test-content-r73-care",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 116,
+      "name": "test-content-r73-stall",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 117,
+      "name": "test-content-r74-systems",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 118,
+      "name": "test-content-r74-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 119,
+      "name": "test-content-r74-stall",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 120,
+      "name": "test-content-r75-sunplay",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 121,
+      "name": "test-content-r75-sunplay-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 122,
+      "name": "test-content-r75-cooking",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 123,
+      "name": "test-content-r75-choices",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 124,
+      "name": "test-content-r75b-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 125,
+      "name": "test-content-r75-opening",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 126,
+      "name": "test-content-r75-shipping",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 127,
+      "name": "test-content-r76-story",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 128,
+      "name": "test-content-r76-festival",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 129,
+      "name": "test-content-r76b-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 130,
+      "name": "test-content-r76-feedback",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 131,
+      "name": "test-content-r76-feedback-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 132,
+      "name": "test-content-r76-sunbook",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 133,
+      "name": "test-content-r76-sunbook-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 134,
+      "name": "test-content-r77-festival",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 135,
+      "name": "test-content-r77-chapter4",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 136,
+      "name": "test-content-r77-sunbook",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 137,
+      "name": "test-content-r77c-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 138,
+      "name": "test-content-r77-sunplay",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 139,
+      "name": "test-content-r77-sunplay-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 140,
+      "name": "test-content-r77-choices",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 141,
+      "name": "test-content-r77-choices-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 142,
+      "name": "test-content-r78-stall",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 143,
+      "name": "test-content-r78-stall-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 144,
+      "name": "test-content-r78-choices",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 145,
+      "name": "test-content-r78-choices-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 146,
+      "name": "test-content-r78-focus",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 147,
+      "name": "test-content-r78-focus-layout",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 148,
+      "name": "test-content-r79-stall",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 149,
+      "name": "test-content-r79-stall-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 150,
+      "name": "test-content-r79-first",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 151,
+      "name": "test-content-r79-first-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 152,
+      "name": "test-content-r79-world",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 153,
+      "name": "test-content-r79-world-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 154,
+      "name": "test-content-r80-stall",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 155,
+      "name": "test-content-r80-stall-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 156,
+      "name": "test-content-r80-world",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 157,
+      "name": "test-content-r80-world-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 158,
+      "name": "test-content-r80-first",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 159,
+      "name": "test-content-r80-first-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 160,
+      "name": "test-content-r81-numbers",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 161,
+      "name": "test-content-r81-first",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 162,
+      "name": "test-content-r81-first-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 163,
+      "name": "test-content-r85-art",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 164,
+      "name": "test-content-r81-story",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 165,
+      "name": "test-content-r82-branches",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 166,
+      "name": "test-content-r82-play",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 167,
+      "name": "test-content-r82-guidance",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 168,
+      "name": "test-content-r82-guidance-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 169,
+      "name": "test-content-r83-play",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 170,
+      "name": "test-content-r83-branches",
+      "rc": 1,
+      "provenance": true
+    },
+    {
+      "index": 171,
+      "name": "test-content-r83-card",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 172,
+      "name": "test-content-r83-card-layout",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 173,
+      "name": "test-content-r84-card-sweep",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 174,
+      "name": "test-content-r84-pace",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 176,
+      "name": "test-content-r85-weather",
+      "rc": 0,
+      "provenance": true
+    },
+    {
+      "index": 177,
+      "name": "test-content-r84-consistency",
+      "rc": 0,
+      "provenance": true
+    }
+  ],
+  "notes": "Grouped original suite entries; overlapping corrections tested separately as recorded in the report."
+}

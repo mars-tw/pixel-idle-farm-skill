@@ -1,17 +1,20 @@
 "use strict";
-/* R71A：桌面聚焦田格避開任務卡，任務卡／手札章名任務名一致，共用作物只留一條主線列。 */
+/* R71A：桌面聚焦田格避開任務卡，任務卡與手札保留同一章名、共用目前步驟，共用作物只留一條主線列。 */
 const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path"),http=require("node:http"),{chromium}=require("playwright");
 const ROOT=path.resolve(__dirname,".."),PORT=5171,ORIGIN=`http://127.0.0.1:${PORT}`;
 const MIME={".html":"text/html",".js":"application/javascript",".css":"text/css",".json":"application/json",".png":"image/png",".webp":"image/webp",".svg":"image/svg+xml",".webmanifest":"application/manifest+json",".ogg":"audio/ogg",".m4a":"audio/mp4"};
 const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
 async function serve(){const s=http.createServer((req,res)=>{const u=new URL(req.url,ORIGIN),f=path.resolve(ROOT,"."+(u.pathname==="/"?"/index.html":decodeURIComponent(u.pathname))),rel=path.relative(ROOT,f);if(rel.startsWith("..")||path.isAbsolute(rel)||!fs.existsSync(f)||fs.statSync(f).isDirectory()){res.writeHead(404);return res.end()}res.writeHead(200,{"Content-Type":MIME[path.extname(f)]||"application/octet-stream","Cache-Control":"no-store"});fs.createReadStream(f).pipe(res)});await new Promise((ok,bad)=>{s.once("error",bad);s.listen(PORT,"127.0.0.1",ok)});return s}
-async function launch(){try{return await chromium.launch({headless:true,args:["--no-sandbox"]})}catch(_){}return chromium.launch({headless:true,args:["--no-sandbox"],executablePath:"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"})}
+async function launch(){try{return await chromium.launch({headless:true,args:["--no-sandbox","--disable-gpu","--use-angle=swiftshader","--enable-unsafe-swiftshader"]})}catch(_){}return chromium.launch({headless:true,args:["--no-sandbox","--disable-gpu","--use-angle=swiftshader","--enable-unsafe-swiftshader"],executablePath:"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"})}
 (async()=>{const server=await serve(),browser=await launch();try{const page=await browser.newPage({viewport:{width:1366,height:768}}),errors=[];page.on("pageerror",e=>errors.push(String(e)));await page.goto(ORIGIN);await page.waitForFunction(()=>window.__farm&&!document.querySelector("#startupLoading"),null,{timeout:30000});await page.evaluate(()=>document.querySelector("#worldBegin")?.click());
   const title=await page.evaluate(()=>({dock:[...document.querySelectorAll("#questDock .r71a-chapter-name,#questDock .r71a-task-name")].map(e=>e.textContent.trim()),quest:document.querySelector("#questDock")?.dataset.quest}));
   assert.deepEqual(title.dock,["第 1 章・回家與第一餐","任務：找鎮長葛瑞交談"]);
   await page.evaluate(()=>window.FarmWorld.openPanel("story"));await page.waitForTimeout(100);
   const journal=await page.evaluate(()=>[...document.querySelectorAll("[data-r63a-main-story] .r71a-chapter-name,[data-r63a-main-story] .r71a-task-name")].map(e=>e.textContent.trim()));
-  assert.deepEqual(journal,title.dock,"任務卡與手札同時顯示相同章名及任務名");
+  assert.deepEqual(journal,[title.dock[0],"任務：種下第一格"],"手札保留同一章名與整個任務名稱，任務卡顯示這一步");
+  const current=await page.evaluate(()=>({text:document.querySelector("[data-r63a-main-story] .r68a-card-now small").textContent, step:FarmWorld.currentStep()}));
+  assert.equal(current.text,current.step.text,"手札現在做仍與任務卡一致");
+  assert.equal("任務："+current.step.title,title.dock[1],"任務卡標題是目前步驟");
   await page.evaluate(()=>{document.querySelector(".side-panel.world-panel-open .world-close")?.click();const s=__farm.state(),n=Date.now();AdventureAPI.record(s,{type:"talk",npcId:"mayor"},n);__farm.refresh();FarmWorld.refresh(s)});await page.waitForTimeout(120);
   const camera=await page.evaluate(async()=>{const tileId=document.querySelector("#questDock").dataset.targetId,tile=__farm.state().map.tiles.find(t=>t.id===tileId);if(!tile||tile.plotIndex==null)throw Error("目前主線目標不是田格："+tileId);__farm.focusTile(tile.id);await new Promise(r=>setTimeout(r,500));const q=document.querySelector("#questDock").getBoundingClientRect(),t=document.querySelector(`.gtile[data-tile-id="${tile.id}"]`).getBoundingClientRect();return{q:{left:q.left,right:q.right,top:q.top,bottom:q.bottom},t:{left:t.left,right:t.right,top:t.top,bottom:t.bottom}}});
   assert.equal(overlap(camera.q,camera.t),0,`桌面聚焦田格不可被左上任務卡遮住：${JSON.stringify(camera)}`);

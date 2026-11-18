@@ -61,7 +61,9 @@ test("A3 子目標完成待回報時不再顯示 3/3", () => {
   assert.equal(quest.canClaim, true);
   assert.equal(quest.npcId, "mayor");
   const world = read("src/world-ui.js");
-  assert.match(world, /q && q\.canClaim \? `✓ 回報\$\{/);
+  const step = A.oneStep(state, T);
+  assert.deepEqual([step.questId, step.target, step.title, step.progress],
+    [quest.id, "mayor", "找鎮長葛瑞回報", "✓ 回報鎮長葛瑞"]);
   assert.doesNotMatch(world, /rowsOf\(q\)\[rowsOf\(q\)\.length - 1\]/);
 });
 

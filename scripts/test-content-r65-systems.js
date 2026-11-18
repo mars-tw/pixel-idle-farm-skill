@@ -19,7 +19,11 @@ test("1 可收成時任務卡、田邊提示與手札共用同一個下一步，
   const s = afterHarvest(); s.plots[0] = { id: "p01", cropId: "wheat", plantedAt: T0 - C.CROPS.wheat.growMs - 1 };
   const next = A.nextFarmStep(s, T0); const early = A.earlyGoals(s, T0); const world = fs.readFileSync("src/world-ui.js", "utf8");
   assert.equal(next.action, "harvest"); assert.equal(next.tileId, s.map.tiles.find((tile) => tile.plotIndex === 0).id); assert.equal(early.nextStep.detail, next.text); assert.equal(early.nextStep.actionLabel, next.actionLabel);
-  assert.match(world, /A\.nextFarmStep/); assert.match(world, /data-next-tile/); assert.match(world, /mainStep \? mainStep\.text/); assert.match(world, /goNextFarmStep/);
+  const shared = A.oneStep(s, T0);
+  assert.deepEqual([shared.action, shared.tileId, shared.text, shared.actionLabel],
+    [next.action, next.tileId, next.text, next.actionLabel]);
+  assert.match(world, /const present = main \? presentStep\(current, Date\.now\(\)\) : null/);
+  assert.match(world, /data-next-tile/); assert.match(world, /goNextFarmStep/);
 });
 
 test("2 做出麥餅不完成，吃下麥餅才完成第一餐", () => {
@@ -50,7 +54,7 @@ test("5 作物評比列三樣明細、加分來源、補星提示與拉開獎勵
 });
 
 test("6 整合：成熟以遊戲判斷為準、第 4 章起手札不用前期下一步、三件事不重複收成提示", () => {
-  const state = fresh(); ok(A.finishTutorial ? { ok: true } : { ok: true });
+  const state = fresh();
   state.adventure.claimed.c1_homecoming = true;
   state.plots[0] = Object.assign({}, state.plots[0], { cropId: "wheat", plantedAt: T0 - 999999, wateredAt: 0 });
   const saved = global.getCropProgress;
@@ -61,8 +65,12 @@ test("6 整合：成熟以遊戲判斷為準、第 4 章起手札不用前期下
   try { assert.equal(A.nextFarmStep(state, T0).action, "harvest"); }
   finally { if (saved) global.getCropProgress = saved; else delete global.getCropProgress; }
   const world = fs.readFileSync("src/world-ui.js", "utf8");
-  assert.match(world, /const farmStep = main \? nextGuidance\(current, Date\.now\(\)\) : null/, "主線卡改讀單一 nextGuidance");
-  assert.match(world, /q\.chapter === 1 \|\| farmStep\.guidanceScope === "r81_story"/, "第 1 章與 R82 故事階段才覆蓋主線下一步");
+  // A chapter-four card must still point to its tomatoes with a ripe wheat plot.
+  for (const quest of A.quests(state, T0)) if (quest.chapter <= 3) state.adventure.claimed[quest.id] = true;
+  A.ensure(state, T0); state.level = 8; state.storage.items.tomato = 1;
+  const chapterFour = A.oneStep(state, T0);
+  assert.deepEqual([chapterFour.questId, chapterFour.title, chapterFour.progress],
+    ["c4_market_expansion", "番茄", "1/3"]);
   assert.match(world, /const nextFarm = nextGuidance\(s, Date\.now\(\)\)/, "三件事卡只顯示同一份現在做，不另列收成提示");
 });
 

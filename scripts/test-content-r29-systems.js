@@ -76,7 +76,14 @@ test("A5 Bamber has named quest data, a marker, routing, and grandma note portra
   const ui = source("src/ui.js"), world = source("src/world-ui.js");
   assert.match(ui, /quest-npc-nameplate/);
   assert.match(world, /if \(q\.canClaim\) return npcTile\(q\.npcId\)/);
-  assert.match(world, /guide\.route === "order" \? openPanel\("orders"\) : q \? goQuest\(q\)/);
+  const state = S.defaultState(T);
+  A.ensure(state, T); state.adventure.claimed.c1_homecoming = true;
+  state.storage.items.wheat = 2; state.stats.harvested = { wheat: 2 };
+  state.adventure.byTarget.harvest.wheat = 2; state.materials.wood = 6; state.materials.stone = 2;
+  const delivery = A.oneStep(state, T);
+  assert.deepEqual([delivery.action, delivery.title], ["deliver", "找老農班伯回報"]);
+  const dispatch = world.slice(world.indexOf("function goStep()"), world.indexOf("function prepare("));
+  assert.match(dispatch, /guide\.route === "order"\) openPanel\("orders"\); else if \(q\) goQuest\(q\)/);
   assert.match(world, /r84\/grandma-0\.png/);
   assert.doesNotMatch(world.match(/hero\.innerHTML =[^;]+;/)[0], /miri-0\.png/);
 });

@@ -43,7 +43,14 @@ test("任務卡、田邊泡泡、結算與手札主線都讀同一個下一步",
   const game = fs.readFileSync("src/game.js", "utf8");
   assert.match(adventure, /function nextGuidance/);
   assert.match(world, /const nextFarm = nextGuidance/);
-  assert.match(world, /const farmStep = main \? nextGuidance/);
+  const s = fresh();
+  s.adventure.claimed.c1_homecoming = true;
+  s.plots[0] = { cropId: "wheat", plantedAt: T0 - 999999, wateredAt: T0 - 999999 };
+  const next = A.nextFarmStep(s, T0), one = A.oneStep(s, T0);
+  assert.equal(one.action, "harvest");
+  assert.deepEqual([one.tileId, one.text, one.actionLabel], [next.tileId, next.text, next.actionLabel]);
+  assert.match(world, /const present = main \? presentStep\(current, Date\.now\(\)\) : null/);
+  assert.match(world, /const nowLine = present \? present\.text : q\.description/);
   assert.match(ui, /可收成，點一下收成/);
   assert.match(game, /next: farmNextStepText\(state, now/);
   assert.match(game, /guideApi\.nextFarmStep\(data\.state, data\.now\)/);

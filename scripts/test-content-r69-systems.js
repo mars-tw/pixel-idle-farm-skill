@@ -1,6 +1,81 @@
 "use strict";
-/* R69A：收穫祭焦點與手札目前主線原地同步。 */
-const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path"),http=require("node:http"),{chromium}=require("playwright");
-const ROOT=path.resolve(__dirname,".."),PORT=5170,ORIGIN=`http://127.0.0.1:${PORT}`,MIME={".html":"text/html",".js":"application/javascript",".css":"text/css",".json":"application/json",".png":"image/png",".webp":"image/webp",".svg":"image/svg+xml",".webmanifest":"application/manifest+json"};
-async function server(){const s=http.createServer((req,res)=>{const u=new URL(req.url,ORIGIN),f=path.resolve(ROOT,"."+(u.pathname==="/"?"/index.html":decodeURIComponent(u.pathname)));if(!f.startsWith(ROOT)||!fs.existsSync(f)||fs.statSync(f).isDirectory()){res.writeHead(404);return res.end()}res.writeHead(200,{"Content-Type":MIME[path.extname(f)]||"application/octet-stream"});fs.createReadStream(f).pipe(res)});await new Promise((ok,bad)=>{s.once("error",bad);s.listen(PORT,"127.0.0.1",ok)});return s}
-(async()=>{const srv=await server();let br;try{br=await chromium.launch({headless:true,args:["--no-sandbox"]})}catch(_){br=await chromium.launch({headless:true,executablePath:"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",args:["--no-sandbox"]})}try{const p=await br.newPage({viewport:{width:1366,height:768}});await p.goto(ORIGIN);await p.waitForFunction(()=>window.__farm&&!document.querySelector("#startupLoading"),null,{timeout:30000});await p.evaluate(()=>document.querySelector("#worldBegin")?.click());await p.evaluate(()=>{const s=__farm.state(),A=AdventureAPI,n=Date.now();A.ensure(s,n);const f=s.adventure.r61.festival;f.unlocked=true;f.startsAt=n-1000;f.endsAt=n+480000;f.nextAt=0;f.baseline={tomato:0,cook:0,talks:{mayor:0,elder:0,merchant:0,child:0}};f.harvestCrop="tomato";f.harvestRequired=3;__farm.refresh();FarmWorld.refresh(s)});await p.waitForTimeout(100);const focus=await p.evaluate(()=>({now:document.querySelector("#questDock .r69a-festival-now .r82a-guidance-full")?.textContent||"",main:document.querySelector("#questDock .r69a-main-row")?.textContent||"",reqs:[...document.querySelectorAll("#questDock .r68a-requirements span")].map(x=>x.textContent),button:document.querySelector("#questDock [data-r69a-festival-go]")?.textContent||""}));assert.match(focus.now,/^祭典：收成 3 份番茄（0\/3）$/);/* R76B 同步：主線步驟跟需求列是同一句時只留需求列，不再多一行「主線：」。 */assert.equal(focus.main,"");assert.ok(focus.reqs.includes("○ 找鎮長葛瑞交談 0/1"),JSON.stringify(focus.reqs));assert.equal(focus.button,"去種番茄");await p.evaluate(()=>FarmWorld.openPanel("story"));await p.waitForTimeout(100);const before=await p.evaluate(()=>{const body=document.querySelector(".side-body"),card=document.querySelector("[data-r63a-main-story]"),small=card.querySelector(".r68a-card-now small");document.querySelectorAll(".r81c-later-toggle[aria-expanded=false]").forEach((b)=>{b.click()});body.scrollTop=37;return{card,smallText:small.textContent}});await p.evaluate(()=>{const s=__farm.state(),n=Date.now();s.plots[0]={cropId:"wheat",plantedAt:n,wateredAt:0};AdventureAPI.record(s,{type:"plant",cropId:"wheat"},n);FarmWorld.refresh(s)});await p.waitForTimeout(100);const after=await p.evaluate(()=>({same:document.querySelector("[data-r63a-main-story]")===window.__r69Card,text:document.querySelector("[data-r63a-main-story] .r68a-card-now small")?.textContent||"",scroll:document.querySelector(".side-body").scrollTop}));/* identity is checked below with a retained browser property */await p.evaluate(()=>{window.__r69Card=document.querySelector("[data-r63a-main-story]")});const oldText=await p.evaluate(()=>document.querySelector("[data-r63a-main-story] .r68a-card-now small")?.textContent||"");await p.evaluate(()=>{const s=__farm.state(),n=Date.now();s.plots[0].plantedAt=n-120000;s.plots[0].wateredAt=n-120000;FarmWorld.refresh(s)});await p.waitForTimeout(100);const sync=await p.evaluate(()=>({same:window.__r69Card===document.querySelector("[data-r63a-main-story]"),text:document.querySelector("[data-r63a-main-story] .r68a-card-now small")?.textContent||"",scroll:document.querySelector(".side-body").scrollTop}));assert.equal(sync.same,true,"手札同步不可重建目前主線卡");assert.notEqual(sync.text,oldText,"農務下一步改變時手札文字須同步");assert.equal(sync.scroll,37,"手札同步不可跳捲動位置");assert.ok(after.text);console.log("VERIFIED content R69A festival focus and journal sync")}finally{await br.close();srv.close()}})().catch(e=>{console.error(e);process.exit(1)});
+const assert = require("node:assert/strict");
+const { chromium } = require("playwright");
+const { serve } = require("./r85-browser-helper");
+
+(async () => {
+  const { server, origin } = await serve();
+  let browser;
+  try {
+    const args = ["--no-sandbox", "--disable-gpu", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
+    try { browser = await chromium.launch({ headless: true, args }); }
+    catch (_) { browser = await chromium.launch({ headless: true, channel: "chrome", args }); }
+    const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    await page.goto(origin);
+    await page.waitForFunction(() => window.__farm && !document.querySelector("#startupLoading"), null, {timeout: 30000});
+    await page.evaluate(() => document.querySelector("#worldBegin")?.click());
+    await page.evaluate(() => {
+      const s = __farm.state(), now = Date.now();
+      AdventureAPI.ensure(s, now);
+      Object.assign(s.adventure.r61.festival, {
+        unlocked: true, startsAt: now-1000, endsAt: now+480000, nextAt: 0,
+        baseline: {tomato:0, cook:0, talks:{mayor:0, elder:0, merchant:0, child:0}},
+        harvestCrop: "tomato", harvestRequired: 3
+      });
+      __farm.refresh(); FarmWorld.refresh(s);
+    });
+    const focus = await page.evaluate(() => {
+      const dock = document.querySelector("#questDock");
+      return {
+        now: dock.querySelector(".r69a-festival-now .r82a-guidance-full")?.textContent,
+        main: dock.querySelector(".r69a-main-row")?.textContent || "",
+        requirements: Array.from(dock.querySelectorAll(".r68a-requirements span"), e => e.textContent),
+        button: dock.querySelector("[data-r69a-festival-go]")?.textContent
+      };
+    });
+    assert.equal(focus.now, "祭典：收成 3 份番茄（0/3）。田裡的番茄還不夠，先去種。");
+    assert.equal(focus.button, "去種番茄");
+    assert.equal(focus.main, "");
+    assert.ok(focus.requirements.includes("○ 找鎮長葛瑞交談 0/1"), JSON.stringify(focus));
+    await page.evaluate(() => FarmWorld.openPanel("story"));
+    const story = page.locator("[data-r63a-main-story]");
+    assert.equal(await story.locator(".r68a-card-now small").textContent(), focus.now,
+      "祭典開著時手札與任務卡都說明先種番茄");
+    // With the festival closed, the ordinary farming step becomes the priority.
+    await page.evaluate(() => {
+      const s = __farm.state(), now = Date.now();
+      s.adventure.r61.festival.unlocked = false;
+      s.sun = {...s.sun, plots:[], previewPlots:[], used:[], startsAt:0, endsAt:0, previewAt:0, nextAt:now+600000, introduced:true};
+      s.adventure.claimed.c1_homecoming = true;
+      s.plots[0] = {...s.plots[0], cropId:"wheat", plantedAt:now, wateredAt:0};
+      AdventureAPI.record(s, {type:"plant", cropId:"wheat"}, now);
+      __farm.refresh(); FarmWorld.refresh(s);
+    });
+    await page.waitForFunction(() => document.querySelector("[data-r63a-main-story]")?.dataset.quest === "c1_first_harvest");
+    const before = await page.evaluate(() => {
+      document.querySelectorAll(".r81c-later-toggle[aria-expanded=false]").forEach(b => b.click());
+      const body = document.querySelector(".side-body");
+      body.scrollTop = 37;
+      const card = document.querySelector("[data-r63a-main-story]");
+      window.__r69Card = card;
+      return { text:card.querySelector(".r68a-card-now small").textContent, scroll:body.scrollTop };
+    });
+    assert.equal(before.scroll, 37);
+    await page.evaluate(() => {
+      const s = __farm.state(), now = Date.now();
+      s.plots[0].plantedAt = now-120000; s.plots[0].wateredAt = now-120000;
+      FarmWorld.refresh(s);
+    });
+    const after = await page.evaluate(() => {
+      const card = document.querySelector("[data-r63a-main-story]");
+      return { same:card === window.__r69Card, text:card.querySelector(".r68a-card-now small").textContent,
+        step:FarmWorld.currentStep(), scroll:document.querySelector(".side-body").scrollTop };
+    });
+    assert.equal(after.same, true, "手札更新時保留同一張卡");
+    assert.notEqual(after.text, before.text, "小麥成熟後更新手札文字");
+    assert.equal(after.step.action, "harvest");
+    assert.equal(after.text, after.step.text);
+    assert.equal(after.scroll, before.scroll, "手札更新時保留捲動位置");
+    console.log("VERIFIED content R69A festival focus and journal sync");
+  } finally { if (browser) await browser.close(); server.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

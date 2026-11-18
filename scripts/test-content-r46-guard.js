@@ -16,7 +16,10 @@ test("手記已交付任務標「已完成」，章節進度留在故事手記",
 });
 test("待選路線時只有「選擇下一步」入口，按下才開啟路線選擇", () => {
   assert.match(world, /\? "data-choice-open" : "data-world-go"/);
-  assert.match(world, /choiceOpen\.onclick = \(\) => \{\s*const choiceModal = modal\("選擇下一步", choiceRoutes\)/);
+  assert.match(world, /choiceOpen\.onclick = \(\) => openRouteChoice\(s\)/);
+  const open = world.slice(world.indexOf("function openRouteChoice("), world.indexOf("function goStep()"));
+  assert.match(open, /modal\("選擇下一步", window\.FarmEarlyChoiceRoutesHtml/);
+  assert.match(open, /button\.onclick = \(\) => chooseFirstRoute\(s, button\)/);
 });
 test("手機訂單面板底部預留空間", () => {
   assert.match(css, /\.side-pane\[data-pane="orders"\] \{ padding-bottom: 64px !important; \}/);
