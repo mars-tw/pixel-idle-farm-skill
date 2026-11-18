@@ -1,0 +1,42 @@
+/* R85B：看得懂的光、不空等、雨天也有事做（docs/OPTIM_PLAN_CONTENT_R85.md B 線）。 */
+
+/* ---------- 第 4 項：田邊的雨水桶與雨後虹光（src/rainplay-r85.js） ---------- */
+#mapWorld .r85b-barrel { position: absolute; display: block; margin: 0; padding: 0; min-width: 44px; min-height: 44px; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: inherit; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+#mapWorld .r85b-barrel::before { content: ""; position: absolute; left: 50%; bottom: 0; width: calc(var(--r85b-art, 40px) * .82); height: calc(var(--r85b-art, 40px) * .2); transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse at center, rgba(30, 40, 52, .38) 0%, rgba(30, 40, 52, 0) 72%); pointer-events: none; }
+#mapWorld .r85b-barrel .r85b-barrel-art { position: absolute; left: 50%; bottom: 2px; width: var(--r85b-art, 40px); height: var(--r85b-art, 40px); transform: translateX(-50%); pointer-events: none; }
+#mapWorld .r85b-barrel .r85b-barrel-art img { display: block; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+#mapWorld .r85b-barrel .r85b-barrel-tag { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); padding: 1px 6px; border-radius: 6px; background: rgba(28, 44, 66, .9); color: #f2f8ff; font-size: 11px; font-weight: 800; line-height: 1.4; white-space: nowrap; pointer-events: none; }
+#mapWorld .r85b-barrel .r85b-barrel-meter { position: absolute; left: 50%; bottom: calc(100% + 1px); width: 70%; height: 4px; transform: translateX(-50%); border-radius: 2px; background: rgba(28, 44, 66, .55); overflow: hidden; pointer-events: none; }
+#mapWorld .r85b-barrel .r85b-barrel-meter > i { display: block; height: 100%; width: 0; background: #7cc4ff; }
+#mapWorld .r85b-barrel[data-stage="full"] .r85b-barrel-tag { background: #1f6fb8; color: #fff; box-shadow: 0 0 0 2px #cfe9ff; }
+#mapWorld .r85b-barrel[data-stage="full"] .r85b-barrel-art { animation: r85b-barrel-bob 1.2s ease-in-out infinite; }
+#mapWorld .r85b-barrel[data-stage="capped"] .r85b-barrel-meter { display: none; }
+#mapWorld .r85b-barrel:focus-visible { outline: 2px solid #2f6db3; outline-offset: 1px; border-radius: 8px; }
+#mapWorld .r85b-barrel.is-new { animation: r85b-in .4s ease-out both; }
+@keyframes r85b-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes r85b-barrel-bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-2px); } }
+#mapWorld .r85b-rainbow { position: absolute; z-index: 9300; pointer-events: none; opacity: .92; animation: r85b-in .8s ease-out both; }
+#mapWorld .r85b-rainbow img { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+#mapWorld .r85b-rainbow.is-lowered { opacity: .7; }
+@media (prefers-reduced-motion: reduce) { #mapWorld .r85b-barrel, #mapWorld .r85b-barrel .r85b-barrel-art, #mapWorld .r85b-rainbow { animation: none !important; } }
+html[data-performance-tier="low"] #mapWorld .r85b-barrel .r85b-barrel-art, html.perf-low #mapWorld .r85b-barrel .r85b-barrel-art { animation: none; }
+
+/* ---------- 第 1 項：看得懂的光 ---------- */
+/* 折光落點：光斑底下那一行寫這格的光性與照到後的收益（src/sunplay-r75.js aimPreview），取代原本跟折光鈕重複的「把光折到這裡」。 */
+.r77a-refract-ghost::after { content: none !important; display: none !important; }
+.r77a-refract-ghost .r85b-aim-tag { position: absolute; left: 50%; bottom: 3px; transform: translateX(-50%); padding: 0 5px; border: 1px solid #7a4a00; background: #fff3b0; color: #4a3200; font-size: 11px; font-weight: 900; line-height: 16px; white-space: nowrap; pointer-events: none; font-family: inherit; }
+.r77a-refract-ghost[data-r85b-trait="partial"] .r85b-aim-tag { background: #ffe7c2; }
+.r77a-refract-ghost[data-r85b-trait="shade"] .r85b-aim-tag { background: #e3eefc; border-color: #34507a; color: #22385a; }
+/* 光要落在兩格時，只有一格畫預告圈；另一格鋪一層淡淡的光暈，不畫圈、不寫秒數。 */
+.r85b-sun-also { position: absolute; z-index: 9490; box-sizing: border-box; pointer-events: none; background: radial-gradient(ellipse at 50% 55%, rgba(255, 246, 176, .55), rgba(255, 228, 120, .22) 62%, rgba(255, 228, 120, 0) 84%); }
+
+/* ---------- 第 3 項：手機的說明字數 ---------- */
+/* 追光手冊小卡在手機只留印章那一行與「打開手冊」，其餘收進「說明」（src/sunplay-r75.js foldStampCard）。 */
+#r76cStampCard.r85b-fold { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+#r76cStampCard.r85b-fold .r76c-card-main { flex: 1 1 100%; }
+#r76cStampCard.r85b-fold.is-compact .r76c-card-main { flex: 1 1 auto; }
+#r76cStampCard.r85b-fold:not(.r85b-open) .r76c-card-note { display: none; }
+#r76cStampCard.r85b-fold .r76c-card-open { flex: 1 1 auto; }
+#r76cStampCard .r85b-fold-toggle { flex: 0 0 auto; min-width: 64px; min-height: 44px; padding: 4px 10px; border: 2px solid #8a541c; border-radius: 9px; background: #fff3d2; color: #4d3010; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+#r76cStampCard .r85b-fold-toggle::before { content: "說明 ▾"; }
+#r76cStampCard.r85b-open .r85b-fold-toggle::before { content: "收起 ▴"; }

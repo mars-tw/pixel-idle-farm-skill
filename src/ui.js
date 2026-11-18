@@ -578,7 +578,8 @@
     if (r.spawned) {
       playSound("sunrise");
       if (r.first) {
-        const line = "看，陽光照到田上了！在光裡種下、澆水或收成，作物會長得更快，收成也多一份。";
+        /* R85B 第 3 項：手機一次讀不完 35 個字，改短，數字照實際規則（在光裡種、澆：生長時間少三成；在光裡收：多一份）。 */
+        const line = "看，陽光照到田上了！在光裡種、澆、收：長快三成，多收一份。";
         if (window.FarmWorld && window.FarmWorld.speak) window.FarmWorld.speak("鎮長葛瑞", line); else toast("☀ " + line);
       }
       scheduleSave();

@@ -219,7 +219,8 @@
     const activeCount = typeof root.activePlotCount === "function" ? root.activePlotCount(state) : ((state.upgrades || {}).plotCount > 0 && C.UPGRADES ? C.UPGRADES.plotCount.levels[state.upgrades.plotCount - 1].value : C.GAME.startPlots);
     const limit = mirrorLimit(state), remaining = Math.max(0, limit - sun.refractions);
     const inField = Number.isInteger(targetIndex) && targetIndex >= 0 && targetIndex < activeCount;
-    const reason = !(active || preview) ? "none" : !inField ? "plot" : plots.includes(targetIndex) ? "lit" : remaining <= 0 ? "used" : "";
+    /* R85B 第 4 項：雨後虹光一次照好幾格，不能折（折了會把 4 格縮成 1 格）。 */
+    const reason = !(active || preview) ? "none" : !inField ? "plot" : plots.includes(targetIndex) ? "lit" : active && sun.rainbow ? "rainbow" : remaining <= 0 ? "used" : "";
     return { ok: !reason, reason, active, preview, remaining, limit, from: plots.slice(), spent: reason === "lit" && active && (sun.used || []).includes(targetIndex) };
   }
   function canRefract(state, targetIndex, now) { return refractCheck(state, targetIndex, now).ok; }
@@ -232,6 +233,7 @@
     if (check.reason === "none" || check.reason === "plot") return out;
     if (check.reason === "lit") { out.spent = check.spent; out.text = check.spent ? "這道光在這格已經用過了" : "這格本來就會照到光，不用折"; return out; }
     if (check.reason === "used") { out.text = "這道光已經折過了，等下一道光"; return out; }
+    if (check.reason === "rainbow") { out.text = "虹光一次照好幾格，不用折"; return out; }
     out.buttonText = `手鏡還能折 ${check.remaining} 次`;
     const plot = (state.plots || [])[targetIndex];
     if (!plot || !plot.cropId) { out.text = "折過來：這格會照到光，在光裡種下去長得快"; return out; }
@@ -248,6 +250,47 @@
     else if (out.yieldGain > 0) effectText = `收成多 ${out.yieldGain} 份`;
     if (out.sunlightTotal > 0) effectText += `・光裡收成得陽光 ${out.sunlightTotal}`;
     out.text = `折過來：${who}會照到光，${effectText}`;
+    return out;
+  }
+  /* R85B 第 1 項：瞄準時看得到「折過來會怎樣」。落點那一格的光斑底下一行短字（tag），折光鈕上一行（line），完整一句（text）給讀屏與滑鼠停留。
+   * 數字全部照實際規則算：在光裡種下或澆水，生長時間立刻少三成（game.js SUNPATCH.growthBoost，上限 3 分鐘）；
+   * 收成多幾份、陽光幾點、優質會不會沒了，跟 refractPreview／harvestOutcome 同一套。 */
+  function sunRule() { const P = root.SUNPATCH || null; return { boost: P && P.growthBoost || 0.3, cap: P && P.growthBoostCapMs || 180000 }; }
+  function growthBoostMs(state, cropId, now, wetAfter) {
+    const crop = C.CROPS[cropId]; if (!crop) return 0; const rule = sunRule();
+    let grow = typeof root.effectiveGrowMs === "function" ? root.effectiveGrowMs(state, cropId, now) : crop.growMs;
+    if (wetAfter) grow = Math.max(1000, Math.floor(grow * (C.MOISTURE_MUL || 0.75)));
+    return Math.min(rule.cap, Math.round(grow * rule.boost));
+  }
+  function aimPreview(state, targetIndex, now) {
+    const check = refractCheck(state, targetIndex, now);
+    const out = { ok: check.ok, plotIndex: targetIndex, trait: null, tag: "", line: "", text: "" };
+    if (!check.ok) return out;
+    const plot = (state.plots || [])[targetIndex], pct = ["", "一", "兩", "三", "四", "五", "六", "七", "八", "九"][Math.round(sunRule().boost * 10)] || "三";
+    if (!plot || !plot.cropId) {
+      out.tag = `種下長快${pct}成`; out.line = `空地：在光裡種下長快${pct}成`; out.text = `折過來：這格是空地，在光裡種下，生長時間立刻少${pct}成`;
+      return out;
+    }
+    const info = traitInfo(plot.cropId), name = cropName(plot.cropId); out.trait = info.id;
+    const progress = typeof root.getCropProgress === "function" ? root.getCropProgress(state, plot, now) : null;
+    const wet = (plot.wateredAt || 0) >= (plot.plantedAt || 0);
+    const pre = refractPreview(state, targetIndex, now);
+    const traitName = info.id === "neutral" ? name : `${info.name}${name}`, head = info.id === "neutral" ? "" : `${info.icon}${info.name}・`;
+    if (progress && progress.ready) {
+      const lit = harvestOutcome(state, plot, { rng: function () { return 1; }, exposedNow: true, caughtSunlight: 1 });
+      const gain = [lit.yieldBonus > 0 ? `多 ${lit.yieldBonus} 份` : "", lit.sunlightTotal > 0 ? `陽光 ${lit.sunlightTotal}` : "", lit.effect.guaranteedQuality ? "保證優質" : ""].filter(Boolean);
+      out.tag = `${head}${gain.length ? gain.join("＋") : "照到沒加成"}`;
+      out.line = `${traitName}：在光裡收成${gain.length ? gain.join("＋") : "跟現在一樣"}`;
+    } else if (!wet) {
+      const secs = Math.max(1, Math.round(growthBoostMs(state, plot.cropId, now, true) / 1000));
+      out.tag = `${head}長快${pct}成`;
+      out.line = `${traitName}：在光裡澆水，馬上長快 ${secs} 秒（${pct}成）` + (pre.yieldGain > 0 ? `，收成多 ${pre.yieldGain} 份` : pre.qualityChange === "gain" ? "，保證 1 份優質" : pre.qualityChange === "lose" ? "，但優質加成會沒了" : "");
+    } else {
+      const gain = pre.yieldGain > 0 ? `收成多 ${pre.yieldGain} 份` : pre.qualityChange === "gain" ? "保證 1 份優質" : pre.qualityChange === "lose" ? (info.id === "shade" ? "陰涼優質會沒了" : "曬過頭，優質沒了") : "照到沒加成";
+      out.tag = `${head}${gain}`;
+      out.line = `${traitName}：照到後${gain}`;
+    }
+    out.text = pre.text || out.line;
     return out;
   }
   function refract(state, targetIndex, now) {
@@ -394,7 +437,16 @@
   function refractGhostPlot(state, now) {
     const id = state && state.interaction && state.interaction.selectedTileId; const tile = id && state.map ? state.map.tiles.find((t) => t.id === id) : null;
     const firstLessonDone = !!(state && ((state.flags && state.flags.r79FirstLightHarvest === true) || (state.adventure && state.adventure.claimed && state.adventure.claimed.c1_first_harvest)));
-    return firstLessonDone && tile && tile.plotIndex != null && refractCheck(state, tile.plotIndex, now).ok ? tile.plotIndex : null;
+    if (firstLessonDone && tile && tile.plotIndex != null && refractCheck(state, tile.plotIndex, now).ok) return tile.plotIndex;
+    /* R85B 第 1 項：任務卡在教折光（按任務卡的鈕就直接折）時，按之前也先在要折過去的那一格畫落點與收益，不是按了才知道。
+       選了別格田就照選的那格（上面那一條），選的正是要折過去的那一格、或沒選田時，畫在任務卡要折過去的那一格。 */
+    const step = lessonStep(state, now);
+    if (!step || !Number.isInteger(step.plotIndex) || !refractCheck(state, step.plotIndex, now).ok) return null;
+    return !tile || tile.plotIndex == null || tile.plotIndex === step.plotIndex ? step.plotIndex : null;
+  }
+  function lessonStep(state, now) {
+    const A = root.AdventureAPI; if (!A || typeof A.nextFarmStep !== "function") return null;
+    try { const step = A.nextFarmStep(state, now); return step && step.action === "refract" ? step : null; } catch (_) { return null; }
   }
   function syncRefractGhost(state, now) {
     if (typeof document === "undefined") return; const world = document.getElementById("mapWorld"); if (!world) return;
@@ -403,6 +455,11 @@
     if (!node) { node = document.createElement("div"); node.className = "r77a-refract-ghost"; node.dataset.audit = "r77a-refract-ghost"; node.setAttribute("aria-hidden", "true"); world.appendChild(node); }
     const box = want + "|" + point.left + "|" + point.top + "|" + point.size;
     if (node.dataset.box !== box) { node.dataset.box = box; node.dataset.plotIndex = String(want); node.style.left = point.left + "px"; node.style.top = point.top + "px"; node.style.width = point.size + "px"; node.style.height = point.size + "px"; }
+    /* R85B 第 1 項：光斑底下那一行改寫這格的光性與照到後的收益（原本寫「把光折到這裡」，跟折光鈕重複）。 */
+    const aim = aimPreview(state, want, now); let tag = node.querySelector(".r85b-aim-tag");
+    if (!tag) { tag = document.createElement("b"); tag.className = "r85b-aim-tag"; tag.dataset.audit = "r85b-aim-tag"; node.appendChild(tag); }
+    if (tag.textContent !== aim.tag) tag.textContent = aim.tag;
+    node.dataset.r85bTrait = aim.trait || "empty"; node.title = aim.text;
   }
 
   function tilePoint(state, plotIndex) {
@@ -423,18 +480,38 @@
     world.appendChild(beam); setTimeout(function () { beam.remove(); }, 700);
   }
   /* 預告圈：光落下前先在田上亮起，寫著還有幾秒。 */
+  /* R85B 第 1 項：同一時間只有一個預告圈（R84 圖 11、16 一次兩個圈）。光要落在兩格時，圈只畫在最值得照顧的那一格
+     （熟了 > 還沒澆 > 已澆 > 空地，同分取前面那格），另一格只鋪一層淡淡的光暈，不畫圈、不寫秒數。 */
+  function previewPrimary(state, plots, now) {
+    let best = null, bestScore = -1;
+    (plots || []).forEach((i) => {
+      const p = (state.plots || [])[i]; let score = 1;
+      if (p && p.cropId) { const prog = typeof root.getCropProgress === "function" ? root.getCropProgress(state, p, now) : null; score = prog && prog.ready ? 4 : prog && prog.wet ? 2 : 3; }
+      if (score > bestScore) { best = i; bestScore = score; }
+    });
+    return best;
+  }
   function renderPreview(state, now) {
     const world = document.getElementById("mapWorld"); if (!world) return; const sun = state.sun || {};
     const active = now >= (sun.startsAt || 0) && now < (sun.endsAt || 0);
-    const preview = !active && now < (sun.previewAt || 0) ? sun.previewPlots || [] : []; const wanted = new Set(preview);
-    world.querySelectorAll(".r75a-sun-preview").forEach((n) => { if (!wanted.has(Number(n.dataset.plotIndex))) n.remove(); });
+    const preview = !active && now < (sun.previewAt || 0) ? sun.previewPlots || [] : [];
+    const primary = previewPrimary(state, preview, now), also = new Set(preview.filter((i) => i !== primary));
+    world.querySelectorAll(".r75a-sun-preview").forEach((n) => { if (Number(n.dataset.plotIndex) !== primary) n.remove(); });
+    world.querySelectorAll(".r85b-sun-also").forEach((n) => { if (!also.has(Number(n.dataset.plotIndex))) n.remove(); });
     const text = lightSecondsText(sun, now);
-    preview.forEach((i) => {
-      const p = tilePoint(state, i); if (!p) return; let n = world.querySelector(`.r75a-sun-preview[data-plot-index="${i}"]`);
-      if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(i); n.setAttribute("data-r78b-light-secs", ""); n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
-      const box = p.left + "|" + p.top + "|" + p.size;
-      if (n.dataset.box !== box) { n.dataset.box = box; n.style.left = p.left + "px"; n.style.top = p.top + "px"; n.style.width = p.size + "px"; n.style.height = p.size + "px"; }
-      if (n.textContent !== text) n.textContent = text;
+    const place = (n, p) => { const box = p.left + "|" + p.top + "|" + p.size; if (n.dataset.box !== box) { n.dataset.box = box; n.style.left = p.left + "px"; n.style.top = p.top + "px"; n.style.width = p.size + "px"; n.style.height = p.size + "px"; } };
+    if (primary != null) {
+      const p = tilePoint(state, primary);
+      if (p) {
+        let n = world.querySelector(`.r75a-sun-preview[data-plot-index="${primary}"]`);
+        if (!n) { n = document.createElement("div"); n.className = "r75a-sun-preview"; n.dataset.plotIndex = String(primary); n.setAttribute("data-r78b-light-secs", ""); n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
+        place(n, p); if (n.textContent !== text) n.textContent = text;
+      }
+    }
+    also.forEach((i) => {
+      const p = tilePoint(state, i); if (!p) return; let n = world.querySelector(`.r85b-sun-also[data-plot-index="${i}"]`);
+      if (!n) { n = document.createElement("div"); n.className = "r85b-sun-also"; n.dataset.plotIndex = String(i); n.dataset.audit = "r85b-sun-also"; n.setAttribute("aria-hidden", "true"); world.appendChild(n); }
+      place(n, p);
     });
   }
 
@@ -561,10 +638,49 @@
     if (flip) flip.onclick = function () { flipNow(state); };
   }
 
+  /* R85B 第 1 項：同一格田不疊多個教學元素（R84 圖 31、69、99）。一格田上同時有預告圈、折光落點、任務標記、「下一格」時，
+     只留最要緊的一個：預告圈（光幾秒後落下）> 折光落點 > 任務標記 > 下一格；其餘先藏起來（不移除，狀態一變就回來）。
+     任務標記與「下一格」由別的程式每次重畫，所以用一段樣式表依格子藏，重畫也不會閃一下。 */
+  function teachingOwners(state) {
+    const world = typeof document !== "undefined" && document.getElementById("mapWorld"); const owners = new Map(); if (!world || !state || !state.map) return owners;
+    const tileOf = (i) => state.map.tiles.find((t) => t.plotIndex === i);
+    const own = (node, rank) => { const t = tileOf(Number(node.dataset.plotIndex)); if (t && (!owners.has(t.id) || owners.get(t.id) > rank)) owners.set(t.id, rank); };
+    world.querySelectorAll(".r75a-sun-preview").forEach((n) => own(n, 1));
+    world.querySelectorAll(".r77a-refract-ghost").forEach((n) => own(n, 2));
+    return owners;
+  }
+  let teachingSig = "";
+  function syncTeaching(state) {
+    const owners = teachingOwners(state), ids = [...owners.keys()].sort(), sig = ids.join(",");
+    if (sig === teachingSig && document.getElementById("r85bTeachingYield")) return; teachingSig = sig;
+    let style = document.getElementById("r85bTeachingYield");
+    if (!style) { style = document.createElement("style"); style.id = "r85bTeachingYield"; document.head.appendChild(style); }
+    style.textContent = ids.map((id) => `.qmarker[data-tile-id="${id}"], .gtile[data-tile-id="${id}"].next-plot::after { visibility: hidden !important; } .gtile[data-tile-id="${id}"].next-plot { outline-color: transparent !important; animation: none !important; }`).join("\n");
+    document.body.dataset.r85bTeaching = sig;
+  }
+  /* R85B 第 3 項：手機（窄於 560px 或矮於 480px）同一畫面的說明字數減少。第一次拿章、集滿領獎時，追光手冊小卡原本一次寫三段
+     （印章、全冊再幾枚領什麼、手冊在哪）；手機只留印章那一行與「打開手冊」，其餘收進「說明」，點了才展開（文字還在，讀屏照樣讀得到）。
+     「說明」兩個字用樣式畫，不寫進小卡的文字裡。 */
+  function foldStampCard() {
+    const card = document.getElementById("r76cStampCard"); if (!card || card.hidden) return;
+    const narrow = (root.innerWidth || 0) <= 560 || (root.innerHeight || 0) < 480;
+    const notes = card.querySelectorAll(".r76c-card-note"), open = card.querySelector("[data-r76c-card-open]");
+    let toggle = card.querySelector(".r85b-fold-toggle");
+    if (!(narrow && notes.length && open)) { card.classList.remove("r85b-fold", "r85b-open"); if (toggle) toggle.remove(); return; }
+    const sig = (card.querySelector(".r76c-card-text") || card).textContent;
+    if (card.dataset.r85bFoldSig !== sig) { card.dataset.r85bFoldSig = sig; card.classList.remove("r85b-open"); }
+    if (!toggle) {
+      toggle = document.createElement("button"); toggle.type = "button"; toggle.className = "r85b-fold-toggle"; toggle.dataset.audit = "r85b-fold-toggle";
+      toggle.setAttribute("aria-expanded", "false"); toggle.setAttribute("aria-label", "展開說明");
+      toggle.addEventListener("click", function (event) { event.stopPropagation(); const on = card.classList.toggle("r85b-open"); toggle.setAttribute("aria-expanded", String(on)); toggle.setAttribute("aria-label", on ? "收起說明" : "展開說明"); });
+      card.insertBefore(toggle, open);
+    }
+    card.classList.add("r85b-fold");
+  }
   function tick() {
     const state = liveState(); if (!state || typeof document === "undefined") return;
     normalize(state); const now = Date.now();
-    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now); syncRefractGhost(state, now); syncLightSecs(state, now);
+    syncJarChip(state); renderPreview(state, now); paintRack(state, now); renderRackPanel(state, now); syncPlotActions(state, now); syncRefractGhost(state, now); syncLightSecs(state, now); syncTeaching(state); foldStampCard();
   }
   /* R78B：畫面上所有寫「光還有幾秒」的地方（預告圈、提示條、田上標籤）都掛 data-r78b-light-secs，在這裡同一拍寫進同一個數字。
      光一落下，預告期間留下的句子（光會落在這一格、等光到了再…）就從提示區收掉，不讓舊字留在畫面上。 */
@@ -586,7 +702,7 @@
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeRack(); });
   }
 
-  const API = { PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, mirrorHint, harvestPopText };
+  const API = { aimPreview, growthBoostMs, previewPrimary, teachingOwners, PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, mirrorHint, harvestPopText };
   Object.assign(API, { LAYER_KINDS, layerRule, layersOk }); /* R84B 第 2 項 */
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;

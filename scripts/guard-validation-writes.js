@@ -179,6 +179,8 @@ const unit=[
   "node scripts/test-content-r83-card-layout.js",
   "node scripts/test-content-r84-card-sweep.js",
   "node scripts/test-content-r84-pace.js",
+  "node scripts/test-content-r85-light.js",
+  "node scripts/test-content-r85-weather.js",
   "node scripts/test-content-r84-consistency.js",
 ];
 const commands=process.argv[2]==='r79'?['node scripts/test-r79-sunpatch.js','node scripts/test-r79-fun-e2e.js']:unit;
