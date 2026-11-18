@@ -271,6 +271,15 @@
   const R84_ART_READY = ["cropSprout", "cropOneLight", "cropRipe", "cropHarvested"];
   const R84_ART_FALLBACK = { cropOneLight: "assets/generated/r89/wheat-grow-48.png" };
   const R84_FIELD = { dx: 1, dy: 0, w: 2, h: 2 };
+  /* R85C：藍布老麥田在故事階段（老農班伯在等、老農班伯有話要說）原本畫 R81 那一小株金麥，等你播種畫一包種子，跟分支階段的 2×2 田圖是兩套畫法（R84 圖 140、145 對 148～150）。
+     MUSE 照 content-r84 四張田圖補兩格：剛翻好的土（故事階段）、翻好的土上放著藍布種子包（等你播種），同一塊土堆、同一根綁藍布的木樁。缺圖時才回到原本的圖。 */
+  const R85_FIELD_ART = {
+    tilled: "assets/generated/content-r85/blue-cloth-wheat-field-tilled.png",
+    seedbag: "assets/generated/content-r85/blue-cloth-wheat-field-seedbag.png",
+  };
+  const R85_FIELD_ART_READY = ["tilled", "seedbag"];
+  const R85_FIELD_FALLBACK = { tilled: "assets/generated/content-r81/story-oldwheat-field.png", seedbag: "assets/generated/content-r81/story-pouch.png" };
+  function r85FieldArt(key) { return R85_FIELD_ART_READY.includes(key) && R85_FIELD_ART[key] ? R85_FIELD_ART[key] : R85_FIELD_FALLBACK[key]; }
   function r82Art(key) {
     if (R84_ART_READY.includes(key) && R84_ART[key]) return R84_ART[key];
     if (R84_ART_FALLBACK[key]) return R84_ART_FALLBACK[key];
@@ -352,11 +361,11 @@
   };
   function r82PlantPresentation(state, now) {
     const status = r82PlantStatus(state, now);
-    if (!status.eligible || status.stage === "story") return { status, stageKey: status.stage, key: "", art: r81Art("plant"), fallback: false, label: R81_OPTIONS.plant.labels.done };
+    if (!status.eligible || status.stage === "story") return { status, stageKey: status.stage, key: "", art: r85FieldArt("tilled"), fallback: false, label: R81_OPTIONS.plant.labels.done };
     const row = status.stage === "empty" ? R83_PLANT_STAGES.empty
       : status.stage === "growing" ? (status.lightDays < 1 ? R83_PLANT_STAGES.planted : R83_PLANT_STAGES.oneLight)
         : status.stage === "ripe" ? R83_PLANT_STAGES.ripe : R83_PLANT_STAGES.harvested;
-    const art = row.key ? r82Art(row.key) : r81Art("pending");
+    const art = row.key ? r82Art(row.key) : r85FieldArt("seedbag");
     return { status, stageKey: row.stageKey, key: row.key, art, fallback: row.key ? r82ArtFallback(row.key) : false, label: row.label };
   }
   function r82PlantArt(state, now) {
@@ -593,7 +602,7 @@
     const b = r81Ensure(state), opt = R81_OPTIONS[b.choice];
     const plantView = b.choice === "plant" && stage === "done" ? r82PlantPresentation(state) : null;
     /* R84C 第 4 項：種回田裡那一邊，從班伯在等開始就是水井右邊一塊 2×2 的田（footprint），不再是一小株。 */
-    return [{ npcId: "r81c_story", choiceId: b.choice, r81c: true, r82b: !!plantView, r82bKind: plantView ? "plant" : "", r82bStage: plantView ? plantView.stageKey : "", artFallback: !!(plantView && plantView.fallback), done: stage === "done", decided: true, decision: b.choice, label: plantView ? plantView.label : (opt.labels[stage] || opt.labels.order), marker: Object.assign({ anchor: opt.anchor, art: plantView ? plantView.art : r81Art(b.choice), displaySize: plantView ? 64 : 0 }, b.choice === "plant" ? { footprint: Object.assign({}, R84_FIELD) } : {}) }];
+    return [{ npcId: "r81c_story", choiceId: b.choice, r81c: true, r82b: !!plantView, r82bKind: plantView ? "plant" : "", r82bStage: plantView ? plantView.stageKey : "", artFallback: !!(plantView && plantView.fallback), done: stage === "done", decided: true, decision: b.choice, label: plantView ? plantView.label : (opt.labels[stage] || opt.labels.order), marker: Object.assign({ anchor: opt.anchor, art: plantView ? plantView.art : b.choice === "plant" ? r85FieldArt("tilled") : r81Art(b.choice), displaySize: plantView ? 64 : 0 }, b.choice === "plant" ? { footprint: Object.assign({}, R84_FIELD) } : {}) }];
   }
   /* 手札「今天可做」用的那一項（收尾了就不再佔位）。 */
   function r81Today(state, now) {
@@ -608,7 +617,7 @@
 
   const StoryR76 = { PORTRAITS, CHOICES, FOLLOWUPS, FESTIVAL_ROWS, portraitFor, choiceDef, questionOf, ensure, selectedChoiceId, followupDef, followupDue, noteOrder, noteTalk, markFollowupSeen, followupSummary, festivalBreakdown, festivalTip, isDuplicateQuestRow,
     SPEAKER_NAMES, R81_MYSTERY, R81_TITLE, R81_CONFLICT, R81_OPTIONS, R81_PENDING, R81_ART, R81_ART_READY, R81_ART_FALLBACK, r81Art, r81Ensure, r81Stage, r81Choose, r81Order, r81Deliver, r81Scene, r81SceneSeen, r81Summary, r81SceneRows, r81Today, r81GeneralMax, r81OrderPreview,
-    R82_BLUE_LIGHT_PLOT, R82_BLUE_CROP, R82_BLUE_ORDER, R82_ART, R82_ART_READY, R82_ART_FALLBACK, R82_RELICS, R82_DECORATION, R84_ART, R84_ART_READY, R84_ART_FALLBACK, R84_FIELD, R84_DECORATION_TILES, r84RelicsToAnnounce, r84MarkRelicsSeen, r84MinimapMarks, r82Art, r82Ensure, r82PlantStatus, r82PlantPresentation, r82PlantArt, r82Plant, r82CatchLight, r82HarvestBlueWheat, r82BlueOrder, r82DeliverBlueOrder, r82AvailableRelics, r82SealStatus, r82FindRelic, r82SceneRows, r82Today };
+    R82_BLUE_LIGHT_PLOT, R82_BLUE_CROP, R82_BLUE_ORDER, R82_ART, R82_ART_READY, R82_ART_FALLBACK, R82_RELICS, R82_DECORATION, R84_ART, R84_ART_READY, R84_ART_FALLBACK, R84_FIELD, R85_FIELD_ART, R85_FIELD_ART_READY, R85_FIELD_FALLBACK, r85FieldArt, R84_DECORATION_TILES, r84RelicsToAnnounce, r84MarkRelicsSeen, r84MinimapMarks, r82Art, r82Ensure, r82PlantStatus, r82PlantPresentation, r82PlantArt, r82Plant, r82CatchLight, r82HarvestBlueWheat, r82BlueOrder, r82DeliverBlueOrder, r82AvailableRelics, r82SealStatus, r82FindRelic, r82SceneRows, r82Today };
   Object.assign(StoryR76, { r83NoteMayorTalk, r83MayorSpeaks }); /* R83A 第 3 項 */
   root.StoryR76 = StoryR76;
   if (isNode) module.exports = StoryR76;

@@ -162,3 +162,4 @@ OpenAI `gpt-image-2` 額度用盡後，R70 起的新圖改用 MUSE（`muse.image
 - `assets/generated/content-r77/portrait-mayor.png`：鎮長的對話頭像，由 content-r72 顧客圖裁切縮放，不是新生成的圖。米莉的新頭像缺件（MUSE 與 OpenAI 額度都用盡，沒有產出），沿用 `assets/generated/r84/miri-0.png`。
 - R77 的招牌換色用現有 `content-r75/farm_sign.png` 加 CSS 濾色，沒有新圖。
 - `assets/generated/content-r85b/`（4 張，2026-11-18）：田邊雨水桶三種水量（空、一半、滿）與雨後虹光的彩虹。MUSE CLI（`muse.cmd exec`）生成，MUSE 回報生圖工具沒有揭露模型名稱，manifest 記為「模型未回報」；去洋紅背景、取連通區塊、等比縮放。
+- `assets/generated/content-r85/`（14 張，2026-11-18）：MUSE CLI 1.4.23（`muse exec`，內建 `muse.image_generation`）新生成，模型未回報（工具只回傳檔案路徑）。兩種晨耕種子籃（留種小包、晨光小瓶）、藍布老麥田兩個 2×2 階段（剛翻好的土、放著種子包）、十道料理的成品圖示。洋紅底去背、取連通區塊、等比縮放，細節見該資料夾的 `manifest.json`。

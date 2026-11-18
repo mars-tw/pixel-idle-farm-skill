@@ -230,7 +230,9 @@ test("第 2 項：十三張決定物件圖的檔名照計畫接好；圖沒到�
     const badges = new Set(), arts = new Set();
     for (const key of keys) {
       const file = Q.DECISION_ART[route + ":" + key];
-      assert.equal(file, "assets/generated/content-r80/decision-" + npc + "-" + choice + "-" + key.replace(/_/g, "-") + ".png");
+      /* R85C 同步：晨耕種子籃兩個決定（mayor:farm:seed／sun）MUSE 重畫、改接 content-r85（R84 圖 109、116 縮圖分不出來）；其餘仍是 content-r80 的計畫檔名。 */
+      assert.equal(file, (Q.R85_DECISION_ART || {})[route + ":" + key] || "assets/generated/content-r80/decision-" + npc + "-" + choice + "-" + key.replace(/_/g, "-") + ".png");
+      if ((Q.R85_DECISION_ART || {})[route + ":" + key]) assert.match(file, /^assets\/generated\/content-r85\/decision-mayor-farm-(seed|sun)\.png$/);
       assert.equal(Q.DECISION_ART_READY.includes(route + ":" + key), fs.existsSync(path.join(ROOT, file)), route + ":" + key + " 清單要跟檔案在不在一致");
       n++;
       if (Q.questDef(npc, choice).colorStep) continue;

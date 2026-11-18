@@ -1,0 +1,177 @@
+{
+ "tool": "MUSE CLI 1.4.23（muse exec，內建 muse.image_generation 出圖）＋ Pillow 去洋紅背景、取連通區塊、依格子分組、等比縮放置中／貼底、真透明",
+ "model": "模型未回報（muse.image_generation 只回傳檔案路徑，沒有模型名稱；種子籃那一次 MUSE 回覆裡自稱 muse-image-1.0，但同一段又說工具沒有回報模型，無法查證）",
+ "generated": "2026-11-18",
+ "background": "純洋紅 #FF00FF 生成後去背；光芒、蒸氣混到洋紅的粉紅色一併去掉；被物件包住、沒有純洋紅的小洞補回不透明",
+ "note": "R85C 美術：兩種晨耕種子籃在 64px 分得出來（剪影寬矮對高瘦、主色綠對金）；藍布老麥田故事階段與等你播種改用跟 content-r84 同一套 2×2 田圖；十道料理各有自己的成品圖示，不再共用爐子。",
+ "files": [
+  {
+   "file": "decision-mayor-farm-seed.png",
+   "size": [
+    96,
+    96
+   ],
+   "mode": "RGBA",
+   "bytes": 15500,
+   "sha256": "a6ca221e87d77737d9ac3afe1d11fa96e9701a466a6b5b1c5a71827c99ab7fef",
+   "source": "sheet_basket.png（1920×1920 洋紅底，左右兩格，本輪新生成）",
+   "note": "晨耕種子籃・留種小包：寬矮的淺籃、滿滿的種子小包與綠芽、綠色蝴蝶結（取代 content-r80 同名圖；地圖物件 96×96，貼底）"
+  },
+  {
+   "file": "decision-mayor-farm-sun.png",
+   "size": [
+    96,
+    96
+   ],
+   "mode": "RGBA",
+   "bytes": 10486,
+   "sha256": "c274c64ce3e379904a36f724582c0b4fa33e8082614d89a5ed70fe52b4edd0b8",
+   "source": "sheet_basket.png（1920×1920 洋紅底，左右兩格，本輪新生成）",
+   "note": "晨耕種子籃・晨光小瓶：窄深的提籃插著一個高出籃口的發光金色玻璃瓶（取代 content-r80 同名圖；瓶身四周的放射光芒去掉，只留小星點）"
+  },
+  {
+   "file": "blue-cloth-wheat-field-tilled.png",
+   "size": [
+    192,
+    192
+   ],
+   "mode": "RGBA",
+   "bytes": 25707,
+   "sha256": "bc1d6f7cf5acd1f95610b3685d4535f56f19ae2da0aac73f6a7232e6b02facab",
+   "source": "MUSE 生成原圖（1920×1280 洋紅底，左右兩格，本輪新生成；附 content-r84 四張田圖與 content-r81/story-pouch.png 當參考）",
+   "note": "藍布老麥田・剛翻好的土（故事階段：班伯在等、班伯有話要說），與 content-r84 四個階段同一塊土堆、同一根綁藍布的木樁、同一縮放比例"
+  },
+  {
+   "file": "blue-cloth-wheat-field-seedbag.png",
+   "size": [
+    192,
+    192
+   ],
+   "mode": "RGBA",
+   "bytes": 29574,
+   "sha256": "d16db8056cc4f139ff54eb74bb066e03744326d4c7a1e5b4bb457499649de6c4",
+   "source": "MUSE 生成原圖（1920×1280 洋紅底，左右兩格，本輪新生成；附 content-r84 四張田圖與 content-r81/story-pouch.png 當參考）",
+   "note": "藍布老麥田・等你播種：同一塊翻好的土上放著藍布舊麥種包（取代原本單獨一包種子的畫法）"
+  },
+  {
+   "file": "dish-rustic_bread.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 5851,
+   "sha256": "a883e9a7d7bf2b4e764245d45586f4bf2255578e51238b4e57987babe7417e71",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "農家麥餅：砧板上的圓麥餅（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-baked_carrot.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 7080,
+   "sha256": "e35e2a1320f8215604c546dccf0e94084bd6c4fb8451b4a31f370054c0fb602c",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "胡蘿蔔烤餅：格子餐巾上的兩塊烤餅（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-mint_tea.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 7590,
+   "sha256": "bdcc16408e5c8faae4abe77e4b6787475a7d5d60b364d3524345b1cd79c14027",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "溪畔薄荷茶：淺綠茶杯配一片麥餅乾（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-wheat_carrot_pancake.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 7420,
+   "sha256": "9ff0bc038d53037bf3f246107da4b8d6bfa723696f22a5bf2e9340ef6a81a3be",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "小麥胡蘿蔔煎餅：白盤上三片煎餅（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-carrot_wheat_stew.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 6039,
+   "sha256": "9a5992d51cf3afd63e0a2fbde994ad68eeb73c9f3f40759984fd37f0d323c01f",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "胡蘿蔔麥粒燉鍋：雙耳陶鍋、鍋蓋放旁邊（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-bamber_rain_soup.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 6216,
+   "sha256": "4114a1e230f02baf3fc8be89a72f4b0cc794d52c13a09d7de42f2ba8e7e994d5",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "老農班伯的雨水清湯：白瓷碗清湯與雨滴（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-tomato_harvest_stew.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 6458,
+   "sha256": "63ccd45e88bee7b5c04f719aa6ed9d737dc7cb8214eb345a6ab7949848d33954",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "番茄豐收燉鍋：紅色琺瑯淺鍋（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-strawberry_market_tart.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 7728,
+   "sha256": "a554f818eeab1d2aaf51e2f436e8db19ec0763aff9e03215b7eec7fe06fa3d37",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "草莓市集塔：蕾絲紙上的草莓塔（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-carrot_trail_soup.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 6849,
+   "sha256": "d276a22b103fa872650b778eb43caead38ccbff3d3a2b9f7418246fbe295bbd8",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "胡蘿蔔田埂濃湯：木碗與木湯匙（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  },
+  {
+   "file": "dish-riverside_harvest_platter.png",
+   "size": [
+    64,
+    64
+   ],
+   "mode": "RGBA",
+   "bytes": 7171,
+   "sha256": "f8d93ccecf8885309f2614968a6b0715a9fbe3eccf92db559daf921adab2684c",
+   "source": "sheet_dish.png（1920×1280 洋紅底，5 欄 × 2 列，本輪新生成）",
+   "note": "河畔豐收拼盤：橢圓木盤上的番茄、胡蘿蔔、麵包與菜葉（灶台清單與料理成果卡用，取代每道菜共用的鐵鍋爐子圖）"
+  }
+ ]
+}

@@ -62,6 +62,12 @@
     DECISION_ART[route + ":" + key] = "assets/generated/content-r80/decision-" + route.replace(":", "-") + "-" + key.replace(/_/g, "-") + ".png";
   }));
   /* R80 整合：13 張決定物件圖由 MUSE 補齊（content-r80/decision-*.png），全部登記為已到。 */
+  /* R85C：晨耕種子籃的兩個決定縮到 64px 分不出來（R84 圖 109、116），MUSE 重畫成剪影與主色都不同的兩只籃子（寬矮綠色留種籃、高瘦金色晨光瓶籃），改接 content-r85。 */
+  const R85_DECISION_ART = {
+    "mayor:farm:seed": "assets/generated/content-r85/decision-mayor-farm-seed.png",
+    "mayor:farm:sun": "assets/generated/content-r85/decision-mayor-farm-sun.png",
+  };
+  Object.assign(DECISION_ART, R85_DECISION_ART);
   const DECISION_ART_READY = Object.keys(DECISION_ART);
   const DECISION_BADGE = {
     seed: "assets/generated/r83/seed-32.png", sun: "assets/generated/content-r75/sun_jar.png",
@@ -1292,7 +1298,7 @@
     questView, cardHtml, bind: function () {}, signColor, signLabel, signDataset, seedBagLabel,
     sceneStates, takeNotes, pendingNotes, setListener, install, hookDried,
     CHOICE_ART, CHOICE_ART_READY, choiceArt, colorGift, specialInfo, takeSpecial, unlockText, dailyLine, stepPlace,
-    DECISION_KEYS, DECISION_ART, DECISION_ART_READY, DECISION_BADGE, DECISION_DAILY, decisionArt, perkInfo, perkRows, firePerks, harvestPerks,
+    DECISION_KEYS, DECISION_ART, DECISION_ART_READY, R85_DECISION_ART, DECISION_BADGE, DECISION_DAILY, decisionArt, perkInfo, perkRows, firePerks, harvestPerks,
     generalOrderAverage, shownGeneralOrder, nextSeedCropId, TRIAL_WANT, trialWant };
   root.ChoicesR77 = ChoicesR77;
   if (isNode) module.exports = ChoicesR77;

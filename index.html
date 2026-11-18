@@ -880,7 +880,11 @@
       radial-gradient(50px 50px at 45% 80%, rgba(255,244,200,.22), transparent 70%);
     mix-blend-mode: screen; animation: sunDrift 14s ease-in-out infinite alternate; }
   @keyframes sunDrift { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 12px -10px, -14px 8px, 8px 10px; } }
-  #weatherLayer.windy::before { background-image: repeating-linear-gradient(12deg,
+  /* R85C：風吹白線只畫在田野地面上（#groundLayer，作物、角色、名牌都疊在它上面），不再整片蓋在視口上、
+     從任務卡、按鈕、提示條底下透出來（R84 圖 32、82、83）。天氣層保留 windy class 與淡淡的色調。
+     art-r89.css 把地面層的偽元素整個藏起來（雨、雪的地面色調），這裡只把微風這一條打開。 */
+  #weatherLayer.windy::before { background-image: none; animation: none; }
+  #mapScene[data-weather="windy"] #groundLayer::after { display: block; opacity: 1; background-image: repeating-linear-gradient(12deg,
       transparent 0 28px, rgba(238,255,224,.34) 28px 31px, transparent 31px 74px);
     animation: windSlide 1.8s linear infinite; }
   #weatherLayer.windy::after { background: linear-gradient(90deg, rgba(220,255,210,.10), transparent 45%, rgba(255,255,255,.10)); }
@@ -904,7 +908,7 @@
       rgba(214,232,255,.38) 0 1px, transparent 1px 58px); opacity: .24; animation: none; }
   html.perf-low #weatherLayer.sunny::after { background-image:
       radial-gradient(72px 72px at 25% 32%, rgba(255,244,200,.22), transparent 72%); animation: none; }
-  html.perf-low #weatherLayer.windy::before { background-image: repeating-linear-gradient(12deg,
+  html.perf-low #mapScene[data-weather="windy"] #groundLayer::after { background-image: repeating-linear-gradient(12deg,
       transparent 0 54px, rgba(238,255,224,.20) 54px 56px, transparent 56px 112px); animation: none; }
   html.perf-low #weatherLayer.fog::before { background:
       linear-gradient(180deg, rgba(238,242,230,.14), rgba(238,242,230,.24)); animation: none; }
@@ -928,6 +932,7 @@
   @media (prefers-reduced-motion: reduce) {
     #weatherLayer::before, #weatherLayer::after { animation: none !important; }
     #groundLayer::before, #groundLayer::after { transition: none !important; }
+    #mapScene[data-weather="windy"] #groundLayer::after { animation: none !important; }
   }
   .touch-action-preview { position: absolute; z-index: 9850; left: 8px; right: 8px; top: 8px;
     padding: 8px 10px; border: 2px solid #fff2a8; border-radius: 9px; color: #fffdf2;
