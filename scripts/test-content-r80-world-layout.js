@@ -56,7 +56,7 @@ async function clearDialogs(page) { for (let i = 0; i < 6; i++) { await page.eva
         await closeDialogue(page, mobile);
         /* R80 整合：決定物件圖到了（DECISION_ART_READY 有登記）就整張換成新圖、不再疊小圖示；圖沒到才檢查疊上去的小圖示。 */
         const artMode = await page.evaluate(() => !!(window.ChoicesR77 && (window.ChoicesR77.DECISION_ART_READY || []).length)); const sel = '.r78c-scene-change[data-r78c-route="mayor:farm"] ' + (artMode ? 'img:not(.r80c-decision-badge)' : 'img.r80c-decision-badge');
-        await page.waitForFunction((s) => { const i = document.querySelector(s); return i && i.complete && i.naturalWidth > 0 && (!s.includes(':not') || /content-r80\/decision-/.test(i.getAttribute('src') || '')); }, sel, { timeout: 8000 });
+        await page.waitForFunction((s) => { const i = document.querySelector(s); return i && i.complete && i.naturalWidth > 0 && (!s.includes(':not') || /content-r8[05]\/decision-/.test(i.getAttribute('src') || '')); }, sel, { timeout: 8000 }); /* R85C 同步：晨耕種子籃兩個決定的圖改放 content-r85 */
         await page.evaluate(() => { const s = __farm.state(), t = s.map.tiles.find((x) => x.station === "sign"); if (__farm.focusTile) __farm.focusTile(t.id); }); await page.waitForTimeout(600);
         looks[pick] = await page.evaluate((s) => { const b = document.querySelector(s), r = b.getBoundingClientRect(); return { badge: b.getAttribute("src"), ring: b.classList.contains("r80c-decision-badge") ? getComputedStyle(b).boxShadow : "art", size: r.width, label: document.querySelector('.r78c-scene-label[data-r78c-route="mayor:farm"]').textContent }; }, sel);
         assert.ok(looks[pick].size >= 16, tag + " 小圖示看得到 " + JSON.stringify(looks[pick]));

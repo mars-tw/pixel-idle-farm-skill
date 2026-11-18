@@ -2615,8 +2615,9 @@ body:has(#worldDialogue:not([hidden])) #questDock#questDock:is([data-step-type="
 .r78c-scene-change[data-r84c-field] { transform: translate(-50%, -100%); }
 .r78c-scene-change[data-r84c-field][data-r82b-stage="ripe"] { transform: translate(-50%, -100%) scale(1.03); }
 .r78c-scene-change[data-r84c-field]::before { width: 86%; height: 12px; bottom: -2px; }
-/* 還沒播種時畫的是那一包種子：種子包是道具，不撐滿整塊田，站在田的下緣中央。 */
-.r78c-scene-change[data-r84c-field][data-r82b-stage="empty"] img { width: 56%; height: 56%; }
+/* 還沒播種時畫的是那一包種子：種子包是道具，不撐滿整塊田，站在田的下緣中央。
+   R85C：等你播種改畫「翻好的土上放著種子包」的 2×2 田圖（content-r85），撐滿整塊田；只有缺圖退回單獨一包種子時才縮小。 */
+.r78c-scene-change[data-r84c-field][data-r82b-stage="empty"] img[src*="story-pouch"] { width: 56%; height: 56%; }
 /* ===== R84C 結束 ===== */
 
 /* ===== R84B（下一步不矛盾、一次只有一層）開始 ===== */

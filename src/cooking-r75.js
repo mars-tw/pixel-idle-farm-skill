@@ -105,6 +105,13 @@
     if (!snap) return POT_ART.good;
     return snap.heat < snap.goldMin ? POT_ART.low : snap.heat > snap.goldMax ? POT_ART.burn : POT_ART.good;
   }
+  /* R85C：灶台清單每道料理原本都放同一張鐵鍋爐子圖（R84 圖 21、57），MUSE 替十道料理各畫一張成品圖（64×64，content-r85/dish-<料理>.png）。
+     清單縮圖與料理成果卡都用這一張；不在清單上的料理才退回鐵鍋圖。看火候小遊戲仍畫鍋子三態（那是煮的過程，不是成品）。 */
+  const DISH_IDS = ["rustic_bread", "baked_carrot", "mint_tea", "wheat_carrot_pancake", "carrot_wheat_stew", "bamber_rain_soup", "tomato_harvest_stew", "strawberry_market_tart", "carrot_trail_soup", "riverside_harvest_platter"];
+  const DISH_ART = {};
+  DISH_IDS.forEach((id) => { DISH_ART[id] = "assets/generated/content-r85/dish-" + id + ".png"; });
+  const DISH_ART_FALLBACK = "assets/generated/content-r75/cooking_pot.png";
+  function dishArt(recipeId) { return DISH_ART[recipeId] || DISH_ART_FALLBACK; }
 
   /* 火候小遊戲的一局：指針就是火力，火會慢慢變小，添柴加一段、掀蓋降一段。 */
   function createFireSession(options) {
@@ -452,7 +459,7 @@
 
   const CookingR75 = { DURATION_MS, GOLD_MIN, GOLD_MAX, START_HEAT, GRADES, GRADE_ORDER, CHOICE_DEFS,
     FIRE_KINDS, RECIPE_FIRE, fireKindOf, fireHintText, fireLabelText,
-    POT_ART, potStateFor,
+    POT_ART, potStateFor, DISH_ART, DISH_ART_FALLBACK, dishArt,
     ensure, createFireSession, gradeForRatio, scaledDurationMs, durationText, gradeEffectText,
     mealGrades, bestStockGrade, cookWithGrade, cookDirect, finishFireSession, eatMeal, shareBestMeal, noteSharedMeal,
     selectedChoice, choiceEffects, hasEffect, orderCoinBonusRate, mayorQuestBonusRate, boostedCoins,
@@ -493,6 +500,8 @@
   function augmentKitchen() {
     const state = browserState();
     if (!state) return;
+    /* R85C：清單縮圖改成成品圖以後，鐵鍋圖不再跟著清單載入；照 R79A 的做法，打開灶台時先把看火候要用的鐵鍋圖載好，開始煮時不閃破圖。 */
+    if (root.Image && !augmentKitchen.pot) { augmentKitchen.pot = new root.Image(); augmentKitchen.pot.src = DISH_ART_FALLBACK + versionQuery(); }
     document.querySelectorAll(".recipe-row[data-recipe]").forEach((row) => {
       if (row.querySelector("[data-r75b-start]")) return;
       const cookBtn = row.querySelector("[data-cook]");
@@ -522,9 +531,11 @@
       cookBtn.before(start);
       const pot = document.createElement("img");
       pot.className = "r75b-pot-thumb r76a-recipe-thumb";
-      /* R79A：灶台清單先載入鍋子後備圖；小遊戲缺新三態圖時沿用同一張已載入圖片，不會閃破圖。 */
-      pot.src = "assets/generated/content-r75/cooking_pot.png" + versionQuery();
-      pot.alt = recipe ? "煮" + recipe.name + "的鍋子" : "料理鍋";
+      /* R79A：灶台清單先載入鍋子後備圖；小遊戲缺新三態圖時沿用同一張已載入圖片，不會閃破圖。
+         R85C：清單縮圖改成這道料理自己的成品圖，每道菜長得不一樣。 */
+      pot.src = dishArt(recipeId) + versionQuery();
+      pot.dataset.r85cDish = recipeId;
+      pot.alt = recipe ? recipe.name : "料理";
       row.prepend(pot);
       const eat = row.querySelector("[data-eat]");
       if (eat && recipe && recipe.effect) { const grade = info.bestInStock || "home"; eat.textContent = `享用${GRADES[grade].label}・${durationText(scaledDurationMs(recipe.effect.durationMs, grade))}`; }
@@ -652,7 +663,7 @@
     const grade = result.grade || "home"; const ratio = Math.max(0, Math.min(1, Number(snap && snap.ratio) || 0));
     const overlay = document.createElement("div"); overlay.className = "r75b-cook-overlay r76a-result-overlay"; overlay.setAttribute("role", "dialog"); overlay.setAttribute("aria-modal", "true"); overlay.setAttribute("aria-label", recipe.name + "料理成果");
     overlay.innerHTML = '<article class="r75b-cook-card r76a-result-card" data-r76a-cook-result>'
-      + '<img class="r76a-result-image" src="assets/generated/content-r73/item-' + esc(recipeId) + '.png' + esc(versionQuery()) + '" alt="' + esc(recipe.name) + '">'
+      + '<img class="r76a-result-image" data-r85c-dish="' + esc(recipeId) + '" src="' + esc(DISH_ART[recipeId] || "assets/generated/content-r73/item-" + recipeId + ".png") + esc(versionQuery()) + '" alt="' + esc(recipe.name) + '">'
       + '<p class="r76a-grade-badge" data-grade="' + esc(grade) + '">' + esc(GRADES[grade].label) + '</p>'
       + '<h3>' + esc(recipe.name) + '做好了</h3>'
       + '<p>火候剛好 ' + Math.round(ratio * 100) + '%</p>'

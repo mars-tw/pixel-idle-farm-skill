@@ -58,7 +58,7 @@ test("第 1 項：名牌、正式圖與成熟效果都由 r82PlantStatus 的同�
     assert.equal(row.label, view.label, "名牌直接用畫面資料的那一句，不另寫一套");
     seen.push([stage, label, art]);
   };
-  check(T0 + 4000, "empty", "藍布老麥田・等你播種", R.r81Art("pending"));
+  check(T0 + 4000, "empty", "藍布老麥田・等你播種", R.r85FieldArt("seedbag")); /* R85C 同步：等你播種改畫「翻好的土上放著藍布種子包」的 2×2 田圖（content-r85），跟其他階段同一套畫法；原為 R.r81Art("pending") 單獨一包種子 */
   assert.equal(R.r82Plant(s, T0 + 5000).ok, true);
   check(T0 + 5001, "planted", "藍布老麥田・剛種下", R.r82Art("cropSprout"));
   shine(s, T0 + 6000); assert.equal(R.r82CatchLight(s, T0 + 6000).ok, true);
