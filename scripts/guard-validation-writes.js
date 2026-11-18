@@ -168,8 +168,6 @@ const unit=[
   "node scripts/test-content-r81-numbers.js",
   "node scripts/test-content-r81-first.js",
   "node scripts/test-content-r81-first-layout.js",
-  /* R85C：美術資產與評審截圖工具。插在 r81-story 前面，不動 R82～R84 測試對清單尾順序的檢查。 */
-  "node scripts/test-content-r85-art.js",
   "node scripts/test-content-r81-story.js",
   "node scripts/test-content-r82-branches.js",
   "node scripts/test-content-r82-play.js",
@@ -181,9 +179,10 @@ const unit=[
   "node scripts/test-content-r83-card-layout.js",
   "node scripts/test-content-r84-card-sweep.js",
   "node scripts/test-content-r84-pace.js",
+  "node scripts/test-content-r84-consistency.js",
+  "node scripts/test-content-r85-art.js",
   "node scripts/test-content-r85-light.js",
   "node scripts/test-content-r85-weather.js",
-  "node scripts/test-content-r84-consistency.js",
   "node scripts/test-content-r85-one-step.js",
 ];
 const commands=process.argv[2]==='r79'?['node scripts/test-r79-sunpatch.js','node scripts/test-r79-fun-e2e.js']:unit;
