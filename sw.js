@@ -1,4 +1,4 @@
-const CACHE_VERSION = "content-r84-20261117-1";
+const CACHE_VERSION = "content-r85-20261118-1";
 const CACHE_PREFIX = "pixel-farm-rpg-";
 const HTML_CACHE = CACHE_PREFIX + CACHE_VERSION + "-html";
 const STATIC_CACHE = CACHE_PREFIX + CACHE_VERSION + "-static";
@@ -508,6 +508,24 @@ const CORE_ASSETS = [
   versioned("./assets/generated/v4/crops4-48.png"),
   versioned("./assets/generated/v4/duck-egg-quality-32.json"),
   versioned("./assets/generated/v4/duck-egg-quality-32.png"),
+  versioned("./assets/generated/content-r85/blue-cloth-wheat-field-seedbag.png"),
+  versioned("./assets/generated/content-r85/blue-cloth-wheat-field-tilled.png"),
+  versioned("./assets/generated/content-r85/decision-mayor-farm-seed.png"),
+  versioned("./assets/generated/content-r85/decision-mayor-farm-sun.png"),
+  versioned("./assets/generated/content-r85/dish-baked_carrot.png"),
+  versioned("./assets/generated/content-r85/dish-bamber_rain_soup.png"),
+  versioned("./assets/generated/content-r85/dish-carrot_trail_soup.png"),
+  versioned("./assets/generated/content-r85/dish-carrot_wheat_stew.png"),
+  versioned("./assets/generated/content-r85/dish-mint_tea.png"),
+  versioned("./assets/generated/content-r85/dish-riverside_harvest_platter.png"),
+  versioned("./assets/generated/content-r85/dish-rustic_bread.png"),
+  versioned("./assets/generated/content-r85/dish-strawberry_market_tart.png"),
+  versioned("./assets/generated/content-r85/dish-tomato_harvest_stew.png"),
+  versioned("./assets/generated/content-r85/dish-wheat_carrot_pancake.png"),
+  versioned("./assets/generated/content-r85b/rain-barrel-empty.png"),
+  versioned("./assets/generated/content-r85b/rain-barrel-full.png"),
+  versioned("./assets/generated/content-r85b/rain-barrel-half.png"),
+  versioned("./assets/generated/content-r85b/rainbow-light.png"),
   versioned("./assets/generated/v4/max-actions-48x64.json"),
   versioned("./assets/generated/v4/max-actions-48x64.png"),
   versioned("./assets/generated/v4/max-walk-48x64.json"),

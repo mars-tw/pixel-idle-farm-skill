@@ -190,7 +190,7 @@ test("6a 接線：測試排進 unit 清單；樣式在 content-r85b.css、括號
   assert.match(css, /\.r77a-refract-ghost \.r85b-aim-tag/); assert.match(css, /\.r85b-sun-also/);
   const html = read("index.html"); assert.match(html, /src\/content-r85b\.css\?v=/); assert.ok(html.indexOf("content-r85b.css") > html.indexOf("content-r58b.css"), "排在 content-r58b.css 後面");
   assert.match(read("sw.js"), /"\.\/src\/content-r85b\.css"/);
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r84-20261117-1"/, "版本字串沒動");
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r85-20261118-1"/, "版本字串沒動");
 });
 
 /* ---------- 瀏覽器：四種尺寸實際開瀏覽器量 ---------- */

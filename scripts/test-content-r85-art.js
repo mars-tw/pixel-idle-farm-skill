@@ -214,7 +214,7 @@ test("7 接線：加進 unit 清單；樣式改在原有規則，不追加到 co
   const guard = read("scripts/guard-validation-writes.js"), list = guard.slice(guard.indexOf("const unit=["), guard.indexOf("];", guard.indexOf("const unit=[")));
   assert.match(list, /"node scripts\/test-content-r85-art\.js",/);
   assert.doesNotMatch(read("src/content-r58b.css"), /\/\* ===== R85C/, "沒有新增 R85C 段落（改的是 R84C 原有那一條）");
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r84-20261117-1"/, "版本字串由主控統一改");
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r85-20261118-1"/, "版本字串由主控統一改");
 });
 
 /* ---------- 瀏覽器：四尺寸實拍 ---------- */

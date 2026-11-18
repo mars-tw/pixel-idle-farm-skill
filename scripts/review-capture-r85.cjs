@@ -25,8 +25,7 @@
  *   - 有頁面錯誤或不是預期畫面時，結束碼是 1（截圖照樣留著，index.md 會標出來）。
  *
  * 擴充點：
- *   - 壞天氣：WEATHER_SHOTS 目前拍雨、暴風雨、霧、雪（B 線的壞天氣小玩法合併後，在 badWeatherPlay() 裡補上進入那個玩法的擺法即可，
- *     例如雨天接雨水的桶子出現、雨停後的虹光；沒有那個玩法時自動略過那幾張，不算失敗）。
+ *   - 壞天氣畫面用遊戲的接水規則準備滿桶，再確認畫面上有可操作的水桶。
  *   - 其他新畫面：在 SCENES 加一項，或用 --extra 從外部檔案追加。 */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -187,13 +186,19 @@ const WEATHER_SHOTS = [
   { id: "fog", title: "壞天氣：霧天", look: "霧氣不讓田與名牌糊成一片；介面仍清楚。" },
   { id: "snow", title: "壞天氣：雪天", look: "雪點只在場景裡；田、作物與名牌看得出來。" },
 ];
-/* B 線合併後在這裡補上「進入壞天氣小玩法」的擺法（例如接雨水的桶子出現、雨停後的虹光）。
-   回傳 true 代表擺好了；回傳 false 代表這個版本還沒有那個玩法，該張就略過、不算失敗。 */
 async function badWeatherPlay(page, weatherId) {
-  return page.evaluate((id) => {
-    /* 例：if (window.FarmRainplay && FarmRainplay.debugStart) { FarmRainplay.debugStart(__farm.state(), id, Date.now()); __farm.refresh(); return true; } */
-    void id; return false;
-  }, weatherId);
+  await setup(page, (id) => {
+    const h = __rc85, state = __farm.state(), now = Date.now();
+    h.level(state, 6);
+    h.weather(state, id, now);
+    h.noSun(state, now);
+    h.stand(h.tile(0));
+    for (const i of [0, 1, 2]) h.crop(state, i, "wheat", now);
+    const rain = window.FarmRainplay;
+    for (let t = now - rain.FILL_MS; t <= now; t += rain.STEP_CAP_MS) rain.update(state, t);
+  }, weatherId, { keepWeather: true });
+  await page.locator('.r85b-barrel[data-stage="full"]').waitFor({ state: "visible" });
+  await cleanAfter(page);
 }
 
 /* ---------- 要拍的畫面 ----------
@@ -346,9 +351,14 @@ const SCENES = [
     ...WEATHER_SHOTS.map((w) => ({ id: "weather-" + w.id, title: w.title, look: w.look,
       run: async (page) => { await setup(page, (id) => { const h = __rc85, s = __farm.state(), t = Date.now(); h.level(s, 6); h.weather(s, id, t); for (const i of [0, 1, 2]) h.crop(s, i, "wheat", t, { wet: true, ago: 3000 }); h.noSun(s, t); }, w.id, { keepWeather: true }); await focus(page, () => __rc85.focus(__rc85.tile(1))); await cleanAfter(page); },
       check: async (page) => (await page.evaluate((id) => document.getElementById("weatherLayer")?.className === id, w.id)) ? "" : "天氣層不是 " + w.id })),
-    ...WEATHER_SHOTS.map((w) => ({ id: "weather-" + w.id + "-play", title: w.title + "・壞天氣小玩法", look: "B 線壞天氣玩法：要能在畫面上看到可以做的事與獎勵，不打斷主線。", optional: true,
-      run: async (page) => { await setup(page, (id) => { const h = __rc85, s = __farm.state(), t = Date.now(); h.level(s, 6); h.weather(s, id, t); h.noSun(s, t); }, w.id, { keepWeather: true }); const ok = await badWeatherPlay(page, w.id); if (!ok) return "skip"; await page.waitForTimeout(600); await cleanAfter(page); },
-      check: async () => "" })),
+    ...WEATHER_SHOTS.map((w) => ({ id: "weather-" + w.id + "-play", title: w.title + "・倒滿桶的水", look: "確認水桶已滿、提示可讀，玩家點得到。",
+      run: (page) => badWeatherPlay(page, w.id),
+      check: async (page) => page.evaluate((id) => {
+        const bucket = document.querySelector('.r85b-barrel[data-stage="full"]');
+        if (!bucket || __farm.state().r85Rain.spell?.weather !== id) return "天氣或桶內水量不符";
+        const box = bucket.getBoundingClientRect(), hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+        return bucket.contains(hit) ? "" : "水桶按鈕被遮住";
+      }, w.id) })),
     { id: "weather-windy", title: "天氣：微風", look: "風吹白線只在田野地面上，不畫在任務卡、按鈕、提示條與面板上（R84 未解 8：圖 32、82、83）。",
       run: async (page) => { await setup(page, () => { const h = __rc85, s = __farm.state(), t = Date.now(); h.level(s, 6); h.weather(s, "windy", t); for (const i of [0, 1, 2]) h.crop(s, i, "wheat", t, { wet: true, ago: 3000 }); h.noSun(s, t); }, null, { keepWeather: true }); await focus(page, () => __rc85.focus(__rc85.tile(1))); await cleanAfter(page); },
       check: async (page) => (await page.evaluate(() => document.getElementById("weatherLayer")?.className === "windy")) ? "" : "天氣層不是 windy" },

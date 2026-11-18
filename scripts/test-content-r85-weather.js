@@ -256,7 +256,7 @@ test("6a MUSE 新圖：雨水桶三種水量 64×64、虹光 192×96，都有透
 });
 test("6b 接線：rainplay 接在 waitplay 後面、sw.js 有快取；game.js 的過雲雨與虹光掛鉤；不改版本號", () => {
   const html = read("index.html"); assert.match(html, /<script src="src\/rainplay-r85\.js\?v=/); assert.ok(html.indexOf("rainplay-r85.js") > html.indexOf("waitplay-r82.js"));
-  const sw = read("sw.js"); assert.match(sw, /"\.\/src\/rainplay-r85\.js"/); assert.match(sw, /CACHE_VERSION = "content-r84-20261117-1"/);
+  const sw = read("sw.js"); assert.match(sw, /"\.\/src\/rainplay-r85\.js"/); assert.match(sw, /CACHE_VERSION = "content-r85-20261118-1"/);
   const game = read("src/game.js"); assert.match(game, /shower\.showerUntil > now/); assert.match(game, /rainbowMaxPlots: 4/);
   assert.match(read("src/waitplay-r82.js"), /state\.r85Rain && state\.r85Rain\.spell/, "田邊小事讓開雨水桶那一格");
   /* 任務卡、右下大鈕不另開一條：adventure.js、world-ui.js 沒有雨水桶的字。 */
