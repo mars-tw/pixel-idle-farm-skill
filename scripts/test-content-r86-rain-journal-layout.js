@@ -22,7 +22,8 @@ function outDir() {
 }
 
 async function activate(locator, mobile) {
-  await locator.scrollIntoViewIfNeeded();
+  // Playwright scrolls as part of click/tap and re-resolves a detached button.
+  // The scene action bar rebuilds its buttons on normal farm updates.
   if (mobile) await locator.tap();
   else await locator.click();
 }
