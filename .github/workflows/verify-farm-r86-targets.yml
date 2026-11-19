@@ -1,0 +1,60 @@
+name: Farm R86 targeted verification
+on:
+  push:
+    branches: [codex/verify-farm-r86-20261119]
+    paths:
+      - '.github/qa-r86/targets.json'
+      - '.github/workflows/verify-farm-r86-targets.yml'
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      checks: ${{ steps.matrix.outputs.checks }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - id: matrix
+        run: echo "checks=$(jq -c .checks .github/qa-r86/targets.json)" >> "$GITHUB_OUTPUT"
+  target:
+    needs: plan
+    name: ${{ matrix.label }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        include: ${{ fromJson(needs.plan.outputs.checks) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install verified tooling
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install --disable-pip-version-check 'Pillow==12.2.0' numpy
+          npx playwright install --with-deps chromium
+          if ! fc-list ':lang=zh-tw' | grep -q .; then sudo apt-get install -y fonts-noto-cjk; fi
+      - name: Execute selected registry command
+        env:
+          CI: 'true'
+          R86_COMMAND: ${{ matrix.command }}
+        run: python .github/qa-r86/run.py ${{ matrix.suite }} 1 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r86-target-${{ matrix.label }}
+          path: ${{ runner.temp }}/farm-r86-results
+          if-no-files-found: error
+          retention-days: 12

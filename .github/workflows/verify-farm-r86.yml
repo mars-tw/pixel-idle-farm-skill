@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   test:
-    if: ${{ !contains(github.event.head_commit.message, '[journal-only]') }}
+    if: ${{ !contains(github.event.head_commit.message, '[journal-only]') && !contains(github.event.head_commit.message, '[target-only]') }}
     name: ${{ matrix.suite }} ${{ matrix.shard }}
     runs-on: ubuntu-24.04
     timeout-minutes: 125
@@ -54,7 +54,7 @@ jobs:
       - name: Install game test dependencies
         run: |
           npm ci --no-audit --no-fund
-          python -m pip install --disable-pip-version-check Pillow numpy
+          python -m pip install --disable-pip-version-check 'Pillow==12.2.0' numpy
           npx playwright install --with-deps chromium
           if ! fc-list ':lang=zh-tw' | grep -q .; then sudo apt-get install -y fonts-noto-cjk; fi
       - name: Run all assigned gates and record individual results

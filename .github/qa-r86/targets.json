@@ -1,0 +1,50 @@
+{
+  "revision": 1,
+  "checks": [
+    {
+      "suite": "unit",
+      "label": "r68-render",
+      "command": "python tools/process-r68-visuals.py --check"
+    },
+    {
+      "suite": "unit",
+      "label": "r18",
+      "command": "node scripts/test-content-r18.js"
+    },
+    {
+      "suite": "unit",
+      "label": "r36-layout",
+      "command": "node scripts/test-content-r36-layout.js"
+    },
+    {
+      "suite": "optional",
+      "label": "controls",
+      "command": "node scripts/test-controls-reachability.js"
+    },
+    {
+      "suite": "optional",
+      "label": "npc",
+      "command": "node scripts/test-npc-indicators.js"
+    },
+    {
+      "suite": "optional",
+      "label": "r79",
+      "command": "node scripts/test-r79-fun-e2e.js"
+    },
+    {
+      "suite": "optional",
+      "label": "r81",
+      "command": "node scripts/test-r81-review.js"
+    },
+    {
+      "suite": "unit",
+      "label": "r73-care",
+      "command": "node scripts/test-content-r73-care.js"
+    },
+    {
+      "suite": "unit",
+      "label": "r74-care",
+      "command": "node scripts/test-content-r74-care.js"
+    }
+  ]
+}

@@ -50,15 +50,20 @@ async function main() {
       await page.evaluate(() => { __farm.state().settings.mapViewMode = "natural"; dispatchEvent(new Event("resize")); window.MOVE_MS = 10; });
       await page.waitForTimeout(150);
       await page.locator("#questDock [data-world-go]").click();
-      await page.waitForFunction(() => __farm.state().story.dialogueSeen.mayor && document.querySelector('.npc-bubble[data-npc="mayor"]'));
+      const dialogue = page.locator('[data-r76b-dialogue="mayor"] .r76b-dialogue-card');
+      await dialogue.waitFor();
       await page.waitForTimeout(220);
       const speechGap = await page.evaluate(() => {
         const n = document.querySelector('.ob[data-kind="npc"][data-npc="mayor"]').getBoundingClientRect();
-        const b = document.querySelector('.npc-bubble[data-npc="mayor"]').getBoundingClientRect();
-        return n.top - b.bottom;
+        const b = document.querySelector('[data-r76b-dialogue="mayor"] .r76b-dialogue-card').getBoundingClientRect();
+        return Math.max(n.top-b.bottom,b.top-n.bottom,n.left-b.right,b.left-n.right);
       });
       assert(speechGap >= 10, name + ": speech bubble/tail covers the NPC");
       await checkMarkers(page, name + " talking");
+      for (let i=0;i<8 && await dialogue.isVisible();i++) {
+        await dialogue.locator("button:visible").first().click();
+      }
+      assert(!await dialogue.isVisible(), name + ": can complete the mayor's dialogue");
       await page.evaluate(() => {
         const s = __farm.state(); s.storage.items.wheat = 1;
         s.npcRequests.merchant = { id: "marker_ready_fixture", npcId: "merchant", wants: { wheat: 1 }, createdAt: Date.now(), rewardCoins: 1, rewardXp: 1 };

@@ -54,7 +54,9 @@ async function sunpatchPlay(browser, base) {
     await page.evaluate(() => { window.MOVE_MS = 20; });
     // 真實引導：前往鈕走完「和葛瑞交談」與第一次播種
     for (let i = 0; i < 6 && !(await page.evaluate(() => window.__farm.state().stats.plantCount > 0)); i++) {
-      await page.locator("#questDock [data-world-go]").click();
+      const dialogue = page.locator('[data-r76b-dialogue] button:visible').first();
+      if (await dialogue.isVisible()) await dialogue.click();
+      else await page.locator("#questDock [data-world-go]").click();
       await page.waitForTimeout(1600);
     }
     check(await page.evaluate(() => window.__farm.state().stats.plantCount > 0), "sun: player planted through the real quest button");

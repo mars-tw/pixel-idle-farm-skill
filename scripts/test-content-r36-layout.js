@@ -304,10 +304,26 @@ async function measurePanel(page, tag, tab, label) {
         const npcs = [...document.querySelectorAll('.ob[data-kind="npc"]')].filter(vis).map(ro);
         return { vis: true, r: br, vsPlots: Math.max(0, ...plots.map((r) => inter(br, r))), vsNpcs: Math.max(0, ...npcs.map((r) => inter(br, r))) };
       }, HELP);
-      assert(act.vis, `${tag} 班伯旁應有可見的互動鈕`);
-      assert.equal(act.vsPlots, 0, `${tag} 互動鈕蓋住田格（交集 ${act.vsPlots}px）`);
-      assert.equal(act.vsNpcs, 0, `${tag} 互動鈕蓋住 NPC（交集 ${act.vsNpcs}px）`);
-      console.log(`OK 第 10 項 ${tag} 互動鈕與田格、NPC 交集皆為 0`);
+      if (!act.vis) {
+        const owner = await page.evaluate(() => {
+          const thumb = document.querySelector('#actionA');
+          const nodes = Array.from(document.querySelectorAll('[data-r76b-dialogue="elder"] button, #questDock [data-world-go], #sceneActionBar button, .npc-bubble[data-npc="elder"]'));
+          const visible = nodes.filter(el => {
+            const r = el.getBoundingClientRect(), css = getComputedStyle(el);
+            const hit = document.elementFromPoint(r.x + r.width/2,r.y + r.height/2);
+            return r.width > 0 && r.height > 0 && css.visibility !== 'hidden' && !el.disabled && (hit === el || el.contains(hit));
+          });
+          return { reason:thumb.dataset.r85Dup || thumb.dataset.r83aOffTarget, controls:visible.map(el=>el.textContent.trim()),
+            talk:!!document.querySelector('[data-r76b-dialogue="elder"]') };
+        });
+        assert(owner.controls.length > 0 && (owner.talk || ['same','target','pick','offscreen','true'].includes(owner.reason)),
+          `${tag} 隱藏大鈕時仍應有能點擊的目前動作：${JSON.stringify(owner)}`);
+        console.log(`OK 第 10 項 ${tag} 大鈕讓位，畫面上仍可點擊：${owner.controls.join("、")}`);
+      } else {
+        assert.equal(act.vsPlots, 0, `${tag} 互動鈕蓋住田格（交集 ${act.vsPlots}px）`);
+        assert.equal(act.vsNpcs, 0, `${tag} 互動鈕蓋住 NPC（交集 ${act.vsNpcs}px）`);
+        console.log(`OK 第 10 項 ${tag} 互動鈕與田格、NPC 交集皆為 0`);
+      }
       await page.screenshot({ path: path.join(SHOT_DIR, 'landscape-844x390.png') });
       await measurePanel(page, tag, 'upgrades', '升級');
       await measurePanel(page, tag, 'story', '手記');

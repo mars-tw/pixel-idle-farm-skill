@@ -104,12 +104,19 @@ async function readable(locator) {
     const rect = el.getBoundingClientRect(), body = el.closest(".side-body").getBoundingClientRect();
     const top = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2);
     const style = getComputedStyle(el);
+    const visualOverlaps = [...document.querySelectorAll(".r78b-sun-pop-line")].filter(node => {
+      const b = node.getBoundingClientRect(), paint = getComputedStyle(node);
+      return paint.visibility === "visible" && b.width > 0 && b.height > 0 &&
+        Math.min(rect.right, b.right) > Math.max(rect.left, b.left) &&
+        Math.min(rect.bottom, b.bottom) > Math.max(rect.top, b.top);
+    }).map(node => node.textContent);
     return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height,
       fontPx: parseFloat(style.fontSize), fitsPane: rect.left >= Math.max(body.left, 0) - 1 && rect.right <= Math.min(body.right, innerWidth) + 1,
       fitsScreen: rect.top >= -1 && rect.bottom <= innerHeight + 1, hit: top === el || el.contains(top),
-      cover: top && [top.tagName, top.id, top.className].map(String).join(" ") };
+      visualOverlaps, cover: top && [top.tagName, top.id, top.className].map(String).join(" ") };
   });
   assert.ok(info.fitsPane && info.fitsScreen && info.hit && info.fontPx >= 12, "Unreachable or clipped text: " + JSON.stringify(info));
+  assert.deepEqual(info.visualOverlaps, [], "Harvest feedback painted over the journal");
   return info;
 }
 
@@ -135,6 +142,7 @@ async function verifyPage(page, run, name, expected, out, screenshot) {
   assert.ok(control.height >= 44 && control.width >= 44, "Rain journal target below 44px: " + JSON.stringify(control));
   const item = { name, text: texts, summary: await summary.textContent(), state, geometry: { control, rows } };
   if (screenshot) {
+    if (expected === 3) await readable(disclosure.locator(":scope > p"));
     item.image = run.id + "-" + name + ".png";
     await page.screenshot({ path: path.join(out, item.image), animations: "disabled" });
   }

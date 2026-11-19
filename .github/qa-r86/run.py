@@ -57,12 +57,17 @@ def run(command, log):
 def main():
     suite, shard, total = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
     commands = registry(suite)
+    targeted = os.environ.get("R86_COMMAND")
+    if targeted and targeted not in commands:
+        raise ValueError(f"Unregistered {suite} command: {targeted}")
     out = Path(os.environ["RUNNER_TEMP"]) / "farm-r86-results"
     out.mkdir(exist_ok=True)
     baseline = provenance() if suite == "unit" else {}
     rows = []
     for index, command in enumerate(commands):
-        if index % total != shard - 1:
+        if targeted and command != targeted:
+            continue
+        if not targeted and index % total != shard - 1:
             continue
         log = out / f"{index + 1:03}-{Path(shlex.split(command)[1]).stem}.log"
         print(f"START {index+1}/{len(commands)} {command}", flush=True)

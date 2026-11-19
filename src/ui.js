@@ -977,7 +977,9 @@
         plot.careMode = nextCare;
       }
       selectedCare = nextCare; state.selectedCare = nextCare;
-      renderSeeds(); scheduleSave();
+      if (plot && plot.cropId) showCarePopover(carePopoverTileId, carePopoverPlotIndex);
+      else renderSeeds();
+      scheduleSave();
     });
     const more = document.createElement("div");
     more.className = "seed more" + (seedDrawerOpen ? " sel" : "");
@@ -4358,10 +4360,12 @@
     const el = $("objectBubble"); if (!el) return;
     el.hidden = true; el.innerHTML = "";
   }
-  function hideSceneActions() {
+  function hideSceneActions(keepCare = false) {
     const el = $("sceneActionBar"); if (!el) return;
     el.hidden = true; el.innerHTML = "";
-    const care = typeof document.querySelector === "function" ? document.querySelector(".r74a-care-popover") : null; if (care) care.remove();
+    if (!keepCare) {
+      const care = typeof document.querySelector === "function" ? document.querySelector(".r74a-care-popover") : null; if (care) care.remove();
+    }
   }
   let buildPreviewEl = null;
   function clearBuildPreview() { if (buildPreviewEl) { buildPreviewEl.hidden = true; delete buildPreviewEl.dataset.tileId; delete buildPreviewEl.dataset.state; } }
@@ -4720,11 +4724,13 @@
   function renderSceneActionsForSelection() {
     const bar = $("sceneActionBar"); if (!bar) return;
     const tile = selectedTileId ? G.getTileById(state, selectedTileId) : null; renderTileStateLabel(tile); renderSeeds();
+    // A growing crop can still offer care choices when it has no hand-tool action.
+    const keepCare = !!tile && tile.id === carePopoverTileId && currentTool() === "hand";
     const toolActions = { hand: ["plant", "harvest"], water: ["water"], build: ["build"], clear: ["clear"], inspect: [] }[currentTool()] || [];
     const actions = sceneActionsForTile(tile);
     // R75 整合：光可以折到這一格、或蓄光瓶夠催熟時，把「把光折到這裡」「催熟」接在動作列後面（原本是每 250ms 重建的浮動泡泡，會被田格標籤蓋住）。
     const sunActions = tile && tile.plotIndex != null && tile.plotIndex < G.activePlotCount(state) && window.FarmSunplay && window.FarmSunplay.plotActions ? window.FarmSunplay.plotActions(state, tile.plotIndex, now()) : [];
-    if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(); return; }
+    if (!tile || (!actions.length && !sunActions.length)) { hideSceneActions(keepCare); return; }
     const lightChoice = tile && tile.plotIndex != null ? r78bChoiceFor(tile) : null;
     const queuedLight = G.lightHarvestQueue ? G.lightHarvestQueue(state) : null;
     if (tile && tile.plotIndex != null) {
@@ -4732,7 +4738,7 @@
       /* R80B：第一次折光只由任務卡教學鈕執行；田邊先不混入澆水等另一顆動作，
          也不建立「把光折到這裡」預覽。第一次光裡收成後才交回一般田格動作列。 */
       const firstRefractLesson = nextStep && nextStep.action === "refract" && nextStep.plotIndex === tile.plotIndex && !sunActions.some((row) => row.action === "refract");
-      if (firstRefractLesson) { hideSceneActions(); return; }
+      if (firstRefractLesson) { hideSceneActions(keepCare); return; }
       const heldForLight = nextStep && ((nextStep.plotIndex === tile.plotIndex && (nextStep.action === "catch_sun" || nextStep.action === "refract")) || nextStep.holdPlotIndex === tile.plotIndex);
       let filtered = actions.filter((a) => toolActions.includes(a.action));
       if (lightChoice && lightChoice.ok) {
@@ -4740,7 +4746,7 @@
         filtered = filtered.slice(0, 1);
         filtered.push({ action: "wait_light", enabled: !(queuedLight && queuedLight.plotIndex === tile.plotIndex) });
       } else filtered = filtered.filter((a) => !(heldForLight && a.action === "harvest")).slice(0, 1);
-      actions.splice(0, actions.length, ...filtered, ...sunActions); if (!actions.length) { hideSceneActions(); return; }
+      actions.splice(0, actions.length, ...filtered, ...sunActions); if (!actions.length) { hideSceneActions(keepCare); return; }
     }
     bar.innerHTML = "";
     actions.forEach((entry) => {

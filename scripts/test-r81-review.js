@@ -13,7 +13,12 @@ async function shot(page, name, store = false) {
   fs.mkdirSync(dir, { recursive: true });
   // A cold launch can finish boot before a newly inserted narrative image decodes.
   // Store captures must contain the real loaded artwork, not its reserved layout box.
-  await page.locator("img").evaluateAll(nodes => Promise.all(nodes.map(img => img.decode())));
+  await page.locator("img").evaluateAll(nodes => Promise.all(nodes.map(async img => {
+    const url = img.currentSrc || img.getAttribute("src");
+    if (!url && !img.getClientRects().length) return;
+    if (!url) throw Error("Visible image has no source: " + img.outerHTML);
+    try { await img.decode(); } catch (err) { throw Error("Image did not decode: " + url + " " + err.message); }
+  })));
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await page.screenshot({ path: path.join(dir, name + ".png") });
 }

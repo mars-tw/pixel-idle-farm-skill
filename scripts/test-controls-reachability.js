@@ -212,6 +212,13 @@ async function assertBuildingUpgradeControls(page, tag) {
 
 async function assertDailyControls(page, tag) {
   await page.locator("#dailyOpen").click();
+  assert(await page.locator('.daily-locked-row[data-task="sell"]').isVisible(), tag + " 新存檔保留市集鎖定說明");
+  // Measure all three actionable cards on the unlocked-market fixture.
+  await page.evaluate(() => {
+    const s = __farm.state(); AdventureAPI.ensure(s, Date.now());
+    s.adventure.claimed.c1_first_harvest = true; __farm.refresh();
+  });
+  await page.locator("#dailyToday").click();
   assertReachable(`${tag} 日誌三張農務牌`, await controlMetrics(page, "#dailyToday, #dailyCollection, .daily-task-thumb, #dailyClose"));
   for (let i=0;i<3;i++) {
     await page.locator('.daily-task-thumb').nth(i).click();
