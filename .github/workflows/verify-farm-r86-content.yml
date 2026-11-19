@@ -1,0 +1,41 @@
+name: Farm R86 content browser verification
+on:
+  push:
+    branches: [verify/farm-r86-content-20261119]
+permissions:
+  contents: read
+jobs:
+  content:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    strategy:
+      fail-fast: false
+      matrix:
+        round: [1, 2, 3, 4, 5, 6, 7, 8, 9, 23]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci && npx playwright install --with-deps chromium
+      - name: Run actual browser scenarios
+        shell: bash
+        env:
+          ROUND: ${{ matrix.round }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/result"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/.github/r86-ui-diagnostics.cjs"
+          file="scripts/test-content-r$ROUND-e2e.js"
+          if [ "$ROUND" = 23 ]; then file=scripts/test-content-r23-matrix.js; fi
+          node "$file" 2>&1 | tee "$RUNNER_TEMP/result/run.log"
+          echo PASS > "$RUNNER_TEMP/result/outcome.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: content-${{ matrix.round }}
+          path: ${{ runner.temp }}/result/
+          retention-days: 4
+

@@ -9,4 +9,21 @@ async function revealFarmControl(page, locator) {
   if(inMenu && await page.locator('#farmMenu').isHidden())await page.locator('#farmMore').click();
   return locator;
 }
-module.exports={revealFarmControl};
+async function openNeighborBaskets(page) {
+  const pane = page.locator('.side-panel.world-panel-open [data-pane="story"].sel');
+  if (!await pane.isVisible()) {
+    const tab = page.locator('[data-tab="story"]');
+    await revealFarmControl(page, tab);
+    await tab.click();
+  }
+  const basket = page.locator('#worldNeighborButton');
+  await basket.waitFor({state: 'attached'});
+  const later = page.locator('[data-r81c-later]').filter({has: basket});
+  if (await later.count()) {
+    const toggle = later.locator('button[aria-controls="r81cLaterBody"]');
+    if (await toggle.getAttribute('aria-expanded') === 'false') await toggle.click();
+  }
+  await basket.click();
+  await page.locator('#sendNeighbor').waitFor({state: 'visible'});
+}
+module.exports = {revealFarmControl, openNeighborBaskets};

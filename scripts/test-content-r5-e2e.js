@@ -4,7 +4,7 @@ const {captureNative}=require('./native-evidence-capture');
 const {verifyWaterPixels}=require('./content-r8-water-test-helper');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright'),{ROOT,serve}=require('./r85-browser-helper');
-const {revealFarmControl}=require('./farm-control-test-helper');
+const {revealFarmControl,openNeighborBaskets}=require('./farm-control-test-helper');
 const S=require('../src/state'),A=require('../src/adventure');
 const OUT=path.join(ROOT,'docs/content/r5');fs.mkdirSync(OUT,{recursive:true});
 const report={status:'EXECUTED',fixture:'Chapter1/dock unlocked; wheat20, carrot4, berries4 supplied. Ten breads cooked and nine gifts delivered via UI. Only fish RNG is fixed. Real clock, actual hit windows, full30s cooldown. Layout/offline/store sessions reuse this run earned saves.',checks:[],screenshots:[],frames:[],errors:[]};
@@ -25,7 +25,7 @@ async function snap(page,name,store=false){
  await captureNative(page,path.join(ROOT,rel));report.screenshots.push(rel);
  report.frames.push({path:rel,at:Date.now(),state:await page.evaluate(()=>({resident:document.querySelector('#worldModal')?.dataset.resident,view:document.querySelector('#worldModal')?.dataset.contentView,phase:document.querySelector('.pond-stage')?.dataset.phase,pose:document.querySelector('.pond-stage')?.dataset.pose,cast:__farm.state().adventure.fishingCast,player:__farm.state().player,action:__farm.playerAction(),sprite:__farm.player().frame,bread:__farm.state().adventure.meals.rustic_bread,neighbors:__farm.state().adventure.neighbors,catch:__farm.state().adventure.catch}))});
 }
-async function baskets(page){const t=page.locator('[data-tab="story"]');await revealFarmControl(page,t);await t.click();await page.locator('#worldNeighborButton').click();await page.locator('#sendNeighbor').waitFor();}
+
 async function send(page,id,taste){
  await page.locator(`[data-neighbor="${id}"]`).click();await page.locator(`[data-taste="${taste}"]`).click();
  const before=await page.evaluate(id=>({bread:__farm.state().adventure.meals.rustic_bread,count:__farm.state().adventure.neighbors[id].deliveries}),id);
@@ -33,7 +33,7 @@ async function send(page,id,taste){
  check(await page.evaluate(({id,b})=>__farm.state().adventure.meals.rustic_bread===b.bread-1&&__farm.state().adventure.neighbors[id].deliveries===b.count+1,{id,b:before}),id+' '+taste+' reaches resident and spends exactly one bread');
 }
 async function neighbors(){const{ctx,page}=await session();try{
- await baskets(page);
+ await openNeighborBaskets(page);
  for(let i=0;i<10;i++){await page.locator('#basketKitchen').click();const n=await page.evaluate(()=>__farm.state().adventure.meals.rustic_bread);await page.locator('[data-cook="rustic_bread"]').click();await page.waitForFunction(n=>__farm.state().adventure.meals.rustic_bread===n+1,n);await page.locator('#kitchenNeighbors').click();}
  for(const id of ids){
   if(id==='merchant'){
@@ -63,7 +63,7 @@ async function neighbors(){const{ctx,page}=await session();try{
   const resident=page.locator(`.ob[data-kind="npc"][data-npc="${id}"]`);await resident.tap();
   const talk=page.locator('[data-action="talk"]:visible').first();if(await talk.count())await talk.click();else await page.locator('#talkNpcBtn').click();
   await page.waitForFunction(({id,line})=>document.querySelector(`.npc-bubble[data-npc="${id}"] .nb-line`)?.textContent===line,{id,line:reaction});
-  await snap(page,`phone-memory-${id}-farm-response.png`);await baskets(page);
+  await snap(page,`phone-memory-${id}-farm-response.png`);await openNeighborBaskets(page);
  }
  await page.locator('.world-modal-close').click();await page.reload();await ready(page);
  check(await page.evaluate(()=>Object.values(__farm.state().adventure.neighbors).every(n=>n.deliveries===3&&n.lastMatched)),'all nine real gifts and matched memories survive reload');
@@ -76,7 +76,7 @@ async function footerChecks(page,tag){
 }
 async function layouts(){for(const v of [{w:320,h:568},{w:430,h:932}])for(const id of ids){
  const{ctx,page}=await session(v,earned);try{
-  await baskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator('[data-taste="plain"]').click();
+  await openNeighborBaskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator('[data-taste="plain"]').click();
   await footerChecks(page,`${v.w} ${id}`);await snap(page,`phone-basket-${id}-${v.w}-top.png`);
   const text=await page.locator('#basketDescription').textContent();check(text.endsWith('但不會觸發口味配對。'),'plain description retains complete rule text '+id);
   await page.locator('#worldModal .modal-body').evaluate(e=>e.scrollTop=e.scrollHeight);
@@ -89,7 +89,7 @@ async function layouts(){for(const v of [{w:320,h:568},{w:430,h:932}])for(const 
  }finally{await ctx.close();}
 }
 for(const v of [{w:844,h:390},{w:768,h:1024},{w:1366,h:600}]){
- const{ctx,page}=await session(v,earned);try{await baskets(page);await footerChecks(page,`${v.w}x${v.h}`);check(!/WASD|鍵盤|方向鍵/.test(await page.locator('#worldModal').innerText()),'no keyboard instructions '+v.w);await snap(page,`layout-basket-${v.w}x${v.h}.png`);await page.locator('#sendNeighbor').click();await page.locator('#anotherBasket').waitFor();}finally{await ctx.close();}
+ const{ctx,page}=await session(v,earned);try{await openNeighborBaskets(page);await footerChecks(page,`${v.w}x${v.h}`);check(!/WASD|鍵盤|方向鍵/.test(await page.locator('#worldModal').innerText()),'no keyboard instructions '+v.w);await snap(page,`layout-basket-${v.w}x${v.h}.png`);await page.locator('#sendNeighbor').click();await page.locator('#anotherBasket').waitFor();}finally{await ctx.close();}
 }}
 async function fixedFish(page,roll){await page.evaluate(r=>{const start=AdventureAPI.startFishing;AdventureAPI.startFishing=(s,t)=>start(s,t,()=>r);},roll);}
 async function phase(page,index){await page.waitForFunction(i=>document.querySelector('.pond-stage')?.dataset.phase===String(i),index,{polling:'raf'});}
@@ -131,24 +131,24 @@ async function offline(){const{ctx,page}=await session(undefined,earned,'allow')
  const precache=await page.evaluate(async()=>{const c=await caches.open('pixel-farm-rpg-'+FARM_CACHE_VERSION+'-static');const urls=(await c.keys()).map(x=>new URL(x.url).pathname);return['content-r4/basket.webp','content-r4/child.webp','content-r3/merchant.webp','content-r3/elder.webp','content-r3/child.webp','content-r5/merchant.webp','content-r5/elder.webp'].every(x=>urls.some(u=>u.endsWith(x)));});
  check(precache,'all packing/first/matched illustrations precached before first open');
  await ctx.setOffline(true);await page.reload();await ready(page);
- for(const id of ids){await baskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator(`[data-taste="${tastes[id]}"]`).click();
+ for(const id of ids){await openNeighborBaskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator(`[data-taste="${tastes[id]}"]`).click();
   check(await page.evaluate(()=>ContentR1.verifyArtwork()),id+' offline FIRST basket opening decodes real art');await snap(page,`phone-basket-${id}-offline.png`);
   await page.locator('#readNeighbor').click();check(await page.evaluate(()=>ContentR1.verifyArtwork()),id+' offline matched art decodes');await snap(page,`phone-memory-${id}-offline.png`);await page.locator('#backToFarm').click();
  }
 }finally{await ctx.close();}
 // Failure injection belongs outside the selected review set; selection and ingredients remain intact.
 for(const id of ids){const{ctx,page}=await session(undefined,earned);try{
- await page.route('**/content-r4/basket.webp*',r=>r.abort());await baskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator('[data-taste="sour"]').click();await page.locator('.retry-art').waitFor();
+ await page.route('**/content-r4/basket.webp*',r=>r.abort());await openNeighborBaskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator('[data-taste="sour"]').click();await page.locator('.retry-art').waitFor();
  const before=await page.evaluate(()=>JSON.stringify({bread:__farm.state().adventure.meals,items:__farm.state().storage.items,resident:document.querySelector('#worldModal').dataset.resident,taste:document.querySelector('[data-taste][aria-pressed="true"]').dataset.taste,description:document.querySelector('#basketDescription').textContent}));
  await page.unroute('**/content-r4/basket.webp*');await page.locator('.retry-art').click();await page.waitForFunction(()=>document.querySelector('.content-illustration').dataset.artState==='loaded');
  check(await page.evaluate(()=>JSON.stringify({bread:__farm.state().adventure.meals,items:__farm.state().storage.items,resident:document.querySelector('#worldModal').dataset.resident,taste:document.querySelector('[data-taste][aria-pressed="true"]').dataset.taste,description:document.querySelector('#basketDescription').textContent}))===before,id+' same-page retry preserves resident, flavor, all text and ingredients');await snap(page,`phone-basket-${id}-retry-restored.png`);
 }finally{await ctx.close();}}
 // First-delivery story images have not been opened before this offline reload.
 for(const id of ids){const{ctx,page}=await session(undefined,firstSaves[id],'allow');try{
- await page.waitForFunction(()=>!!navigator.serviceWorker.controller&&!!sessionStorage.getItem('pixelFarmPwaAutoReloaded'),null,{timeout:45000});await ctx.setOffline(true);await page.reload();await ready(page);await baskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator('#readNeighbor').click();check(await page.evaluate(()=>ContentR1.verifyArtwork()),id+' offline FIRST story opening decodes');await snap(page,`phone-story-${id}-offline-first.png`);
+ await page.waitForFunction(()=>!!navigator.serviceWorker.controller&&!!sessionStorage.getItem('pixelFarmPwaAutoReloaded'),null,{timeout:45000});await ctx.setOffline(true);await page.reload();await ready(page);await openNeighborBaskets(page);await page.locator(`[data-neighbor="${id}"]`).click();await page.locator('#readNeighbor').click();check(await page.evaluate(()=>ContentR1.verifyArtwork()),id+' offline FIRST story opening decodes');await snap(page,`phone-story-${id}-offline-first.png`);
 }finally{await ctx.close();}}
 }
-async function store(){for(const v of [{w:430,h:932,dpr:3,name:'iphone'},{w:1032,h:1376,dpr:2,name:'ipad'}]){const{ctx,page}=await session(v,earned);try{await baskets(page);await page.locator('[data-neighbor="elder"]').click();await page.locator('#readNeighbor').click();await snap(page,`${v.name}-11-stove-return.png`,true);}finally{await ctx.close();}}}
+async function store(){for(const v of [{w:430,h:932,dpr:3,name:'iphone'},{w:1032,h:1376,dpr:2,name:'ipad'}]){const{ctx,page}=await session(v,earned);try{await openNeighborBaskets(page);await page.locator('[data-neighbor="elder"]').click();await page.locator('#readNeighbor').click();await snap(page,`${v.name}-11-stove-return.png`,true);}finally{await ctx.close();}}}
 function selectReview(){const selection=[
  ['basket','phone-basket-walking-1.png'],['basket','phone-basket-walking-2.png'],['basket','phone-story-child-first.png'],['basket','phone-basket-child-430-top.png'],['basket','phone-basket-merchant-320-bottom.png'],
  ['pond','phone-pond-river_carp-sinking-original.png'],['pond','phone-pond-silver_dace-pre-sink-original.png'],['pond','phone-pond-silver_dace-sinking-original.png'],['pond','phone-pond-river_perch-pre-sink-original.png'],['pond','phone-pond-river_perch-sinking-original.png'],

@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs"), path = require("node:path");
 const {chromium} = require("playwright");
 const {serve,ROOT} = require("./r85-browser-helper");
-const {revealFarmControl} = require("./farm-control-test-helper");
+const {revealFarmControl,openNeighborBaskets} = require("./farm-control-test-helper");
 const S = require("../src/state"), A = require("../src/adventure");
 const OUT = path.join(ROOT,"docs/content/r1");
 const STORE = path.join(ROOT,"docs/store/screenshots");
@@ -37,12 +37,7 @@ async function snap(page,name,store=false) {
   const file=path.join(store?STORE:OUT,name);await page.screenshot({path:file,fullPage:false});
   report.screenshots.push(path.relative(ROOT,file).replaceAll("\\","/"));
 }
-async function openBaskets(page) {
-  // Same visible farm menu and story tab as normal play, never a hidden feature hook.
-  const tab=page.locator('[data-tab="story"]');await revealFarmControl(page,tab);await tab.click();
-  await page.locator("#worldNeighborButton").click();
-  await page.locator("#sendNeighbor").waitFor({state:"visible"});
-}
+
 async function cookBread(page) {
   // Kitchen entry is exposed on the basket page; recipe uses actual wheat and farm action frame.
   await page.locator("#basketKitchen").click();
@@ -66,14 +61,14 @@ async function playNeighbors(origin) {
   const {context,page}=await session(origin,{w:390,h:844,mobile:true});
   try {
     await snap(page,"before-new-content-390x844.png");
-    await openBaskets(page);
+    await openNeighborBaskets(page);
     check(await page.locator("#sendNeighbor").isDisabled(),"empty meal basket visibly directs player to the existing kitchen");
     for(let i=0;i<10;i++)await cookBread(page);
     check(await page.evaluate(()=>(__farm.state().storage.items.wheat||0)===0),"ten real kitchen actions consume twenty wheat");
     await page.locator("#sendNeighbor").click();await page.locator(".basket-carrying button").click();
     await page.waitForTimeout(650);
     check(await page.evaluate(()=>__farm.state().adventure.meals.rustic_bread===10&&__farm.state().adventure.neighbors.merchant.deliveries===0),"cancel during carrying spends nothing and never completes the story later");
-    await openBaskets(page);
+    await openNeighborBaskets(page);
     for(const [id,taste] of [["merchant","sour"],["elder","hot"],["child","sweet"]]) {
       const first=await send(page,id);
       check(!!first.n.story&&!first.n.matched&&!!first.n.reaction,`${id}: first story and taste clue are earned`);
@@ -90,7 +85,7 @@ async function playNeighbors(origin) {
     }
     await page.locator(".world-modal-close").click();await page.reload();await ready(page);
     check(await page.evaluate(()=>Object.values(__farm.state().adventure.neighbors).every(n=>n.deliveries===3&&n.matched&&n.lastMatched)),"all three stories, delivery counts and matched replies persist through actual reload");
-    await openBaskets(page);await page.locator('[data-neighbor="child"]').click();await page.locator("#readNeighbor").click();
+    await openNeighborBaskets(page);await page.locator('[data-neighbor="child"]').click();await page.locator("#readNeighbor").click();
     check(/胡蘿蔔/.test(await page.locator(".neighbor-reaction").textContent()),"earned taste conversation can be reread after reload");
     return await page.evaluate(()=>JSON.parse(JSON.stringify(__farm.state())));
   } finally {await context.close();}
@@ -126,7 +121,7 @@ async function layout(origin,earned) {
   for(const view of [{w:320,h:568,mobile:true},{w:844,h:390,mobile:true},{w:768,h:1024,mobile:true},{w:1366,h:600},{w:430,h:932,mobile:true,dpr:3,platform:"iphone"},{w:1032,h:1376,mobile:true,dpr:2,platform:"ipad"}]) {
     const {context,page}=await session(origin,view,earned);
     try {
-      await openBaskets(page);
+      await openNeighborBaskets(page);
       for(const selector of [".world-modal-close","#sendNeighbor","#basketKitchen","#readNeighbor","[data-neighbor]","[data-taste]"]) {
         const bounds=await page.locator(selector).evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;return {w:r.width,h:r.height,visible:r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight,hit:e.contains(document.elementFromPoint(x,y))};}));
         check(bounds.every(b=>b.w>=44&&b.h>=44&&b.visible&&b.hit),`${view.w}x${view.h} ${selector}: >=44px, onscreen and center hittable`);
@@ -160,7 +155,7 @@ async function offline(origin,earned) {
     const cached=await page.evaluate(async()=>{const urls=(await Promise.all((await caches.keys()).map(async k=>(await (await caches.open(k)).keys()).map(r=>r.url)))).flat();return ["src/content-r1.js","src/content-r1.css","merchant.webp","elder.webp","child.webp","water.webp","bobber.png"].every(p=>urls.some(u=>u.includes(p)));});
     check(cached,"content code and illustrations are actually precached");
     await context.setOffline(true);await page.reload();await ready(page);
-    await openBaskets(page);await page.locator("#readNeighbor").click();
+    await openNeighborBaskets(page);await page.locator("#readNeighbor").click();
     check(await page.locator(".content-illustration").evaluate(e=>e.complete&&e.naturalWidth===64&&e.naturalHeight===64&&e.src.includes("content-r8/token-")),"offline reload opens earned story with local art and save intact");
     await snap(page,"offline-story-390x844.png");
     await page.locator("#backToFarm").click();await page.evaluate(()=>FarmWorld.visitSite("fishing_dock"));
