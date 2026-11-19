@@ -217,10 +217,8 @@ test("第 5 項：R83B 樣式接在 R82A 後面；測試接在 unit 清單；沿
   }
   assert.ok(fs.existsSync(path.join(ROOT, R.r81Art("pending"))), "還沒播種時的種子包正式圖存在");
   const guard = read("scripts/guard-validation-writes.js");
-  assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r85-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 的新測試依規定接在清單尾；R85A 同步：R85 的新測試接在 R84 後面 */
-  assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r8[345]-[a-z-]+\.js",)*\s*\];/); /* R84 同步：R84 的測試照規定排在清單最後（R85A 同步：R85 亦同） */
-  assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r8[345]-[a-z-]+\.js",)*\s*\];/); /* R84B 同步：R84 的新測試依規定接在清單尾（原為只容許 r83）；R85A 同步：容許 R85 */
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r85-20261118-1"/, "版本字串沒動");
+  assert.match(guard, /"node scripts\/test-content-r82-guidance-layout\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*\s*"node scripts\/test-content-r83-branches\.js",(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r85-[a-z-]+\.js",)*\s*"node scripts\/test-content-r86-rain-journal\.js",\s*\];/);
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r86-20261119-1"/, "版本字串沒動");
 });
 
 /* ---------- 版面：實際開瀏覽器量 ---------- */

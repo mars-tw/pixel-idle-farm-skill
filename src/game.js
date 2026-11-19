@@ -913,6 +913,7 @@
       const stored = quality ? addQualityToStorage(state, crop.id, qty) : addToStorage(state, crop.id, qty); added = stored.added; lost = stored.lost;
     }
     state.stats.harvested[crop.id] = (state.stats.harvested[crop.id] || 0) + added;
+    if (added > 0 && sunlit && state.sun.rainbow === true && Sunplay) Sunplay.noteRainEvent(state, "harvest", crop.id);
     if (Daily && added > 0) Daily.record(state, "harvest", added, now);
     if (Heirloom) Heirloom.recordHarvest(state, crop.id, added, sunlit || plot.sunGrown === true);
     if (added > 0) recordDiscovery(state, crop.id, now);

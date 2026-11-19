@@ -54,6 +54,8 @@ jobs:
         run: node scripts/test-content-r8.js
       - name: 新內容第九輪：固定角色、動作像素與完整存檔
         run: node scripts/test-content-r9.js
+      - name: R86 雨後手記資料與存檔
+        run: node scripts/test-content-r86-rain-journal.js
       - name: 檢查執行時與快取版本一致
         run: node scripts/test-version-chain.js
       - name: UI 煙霧測試（mock DOM）

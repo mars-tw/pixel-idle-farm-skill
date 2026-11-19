@@ -26,6 +26,41 @@
   };
 
   function integer(value, fallback) { return Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback; }
+  function rainNotes(state) {
+    const saved = state.r86RainNotes || {};
+    const rain = state.r85Rain || {};
+    const crop = typeof saved.crop === "string" && Object.prototype.hasOwnProperty.call(C.CROPS, saved.crop) ? saved.crop : "";
+    // R85 recorded actual rainbow landings, but not which pours watered crops
+    // or which successful harvests took place under a rainbow.
+    const lit = saved.lit === true || !!crop || (Number.isSafeInteger(rain.rainbows) && rain.rainbows > 0);
+    return { watered: saved.watered === true, lit, crop };
+  }
+
+  function noteRainEvent(state, event, cropId) {
+    const notes = rainNotes(state);
+    if (event === "watered" && !notes.watered) notes.watered = true;
+    else if (event === "lit" && !notes.lit) notes.lit = true;
+    else if (event === "harvest" && !notes.crop && typeof cropId === "string" && Object.prototype.hasOwnProperty.call(C.CROPS, cropId)) {
+      notes.crop = cropId;
+      notes.lit = true;
+    } else return false;
+    state.r86RainNotes = notes;
+    if (typeof API.onRainNote === "function") {
+      try { API.onRainNote(state); } catch (_) { /* The journal display cannot cancel an actual harvest or pour. */ }
+    }
+    return true;
+  }
+
+  function rainNotesPage(state) {
+    const notes = rainNotes(state);
+    const rows = [
+      { done: notes.watered, text: notes.watered ? "用桶裡的雨水澆過作物了。" : "雨水桶接滿後，倒進還沒澆過、正在生長的田。" },
+      { done: notes.lit, text: notes.lit ? "看見雨後的虹光落在田裡了。" : "雨天倒過一桶水，等放晴時看看田裡的虹光。" },
+      { done: !!notes.crop, text: notes.crop ? "第一次趁虹光收下了" + C.CROPS[notes.crop].name + "。" : "趁虹光還照著，收下一格成熟的作物，記得先留點倉位。" },
+    ];
+    const count = rows.filter((row) => row.done).length;
+    return { rows, count, memory: count === rows.length ? "祖母在頁角寫著：「那份" + C.CROPS[notes.crop].name + "收得正是時候。下回雨停，記得也抬頭看看。」" : "" };
+  }
   /* R76C 追光手冊：集章里程碑給的永久加成（蓄光瓶容量、手鏡折光次數），存在 state.sunbook.bonus。 */
   function sunbookBonus(state, key, max) { const bonus = state && state.sunbook && state.sunbook.bonus; const n = bonus ? Math.floor(bonus[key]) : 0; return n > 0 ? Math.min(max, n) : 0; }
   function normalize(state) {
@@ -704,6 +739,7 @@
 
   const API = { aimPreview, growthBoostMs, previewPrimary, teachingOwners, PREVIEW_MS, DRYING_MS, FLIP_WINDOW_MS, TRAITS, TRAIT_INFO, DRIED, normalize, bottleCapacity, mirrorLimit, sunlight, addSunlight, spendSunlight, trait, traitInfo, traitText, resetPlot, recordExposure, settleBeam, harvestEffects, harvestOutcome, harvestPreview, catchSun, canRefract, refractCheck, refractPreview, refract, ripen, buyMirror, buyBottle, driedDef, driedItemIds, startDrying, updateRack, flipWindow, flipState, flipRack, collectDrying, rackStatus, rackLabel, rackTimeText, rackSpot, rackNear, rackInteraction, runRackInteraction, festivalBonus, jarChipHtml, upgradeCards, plotActions, runPlotAction, playBeam, refractGhostPlot, syncRefractGhost, openRack, closeRack, secondsLeft, refreshLightCountdown, lightCountdown, lightSecondsLeft, lightSecondsText, FOCUS_PRIMARY, FOCUS_CARDS, focusRule, refractToastText, staleLightText, mirrorHint, harvestPopText };
   Object.assign(API, { LAYER_KINDS, layerRule, layersOk }); /* R84B 第 2 項 */
+  Object.assign(API, { noteRainEvent, rainNotesPage });
   if (typeof module !== "undefined" && module.exports) module.exports = API; else {
     const baseGetItemDef = root.getItemDef;
     if (typeof baseGetItemDef === "function") root.getItemDef = function (id) { return baseGetItemDef(id) || driedDef(id); };

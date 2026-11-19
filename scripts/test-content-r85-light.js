@@ -190,7 +190,7 @@ test("6a 接線：測試排進 unit 清單；樣式在 content-r85b.css、括號
   assert.match(css, /\.r77a-refract-ghost \.r85b-aim-tag/); assert.match(css, /\.r85b-sun-also/);
   const html = read("index.html"); assert.match(html, /src\/content-r85b\.css\?v=/); assert.ok(html.indexOf("content-r85b.css") > html.indexOf("content-r58b.css"), "排在 content-r58b.css 後面");
   assert.match(read("sw.js"), /"\.\/src\/content-r85b\.css"/);
-  assert.match(read("sw.js"), /CACHE_VERSION = "content-r85-20261118-1"/, "版本字串沒動");
+  assert.match(read("sw.js"), /CACHE_VERSION = "content-r86-20261119-1"/, "版本字串沒動");
 });
 
 /* ---------- 瀏覽器：四種尺寸實際開瀏覽器量 ---------- */
@@ -412,6 +412,10 @@ async function browserChecks() {
 
 (async () => {
   for (const [name, fn] of pending) { try { await fn(); passed++; console.log("PASS " + name); } catch (error) { console.error("FAIL " + name + "\n" + error.stack); process.exitCode = 1; } }
+  if (process.argv.includes("--rules-only")) {
+    if (!process.exitCode) console.log(`R85 light rules: ${passed} passed (no browser)`);
+    return;
+  }
   try { const checks = await browserChecks(); passed++; console.log(`PASS 6 實拍 ${VIEWS.map((v) => v[0] + "×" + v[1]).join("、")}：一個預告圈、瞄準預覽寫光性與收益、教學元素不疊、手機小卡說明收進「說明」、麻雀二選一點得出來、隔了一段時間回來仍 20 秒一道光（${checks} 組）`); }
   catch (error) { console.error("FAIL 6 實拍\n" + error.stack); process.exitCode = 1; }
   if (!process.exitCode) console.log(`R85B light: ${passed} passed`);

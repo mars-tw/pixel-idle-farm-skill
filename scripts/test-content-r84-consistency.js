@@ -258,9 +258,12 @@ test("3-2 新字是台灣繁中、沒有英文縮寫單位；測試列在 unit �
   assert.ok(block.length > 100); assert.doesNotMatch(block, LATIN_UNIT);
   const guard = read("scripts/guard-validation-writes.js"), list = guard.slice(guard.indexOf("const unit=["), guard.indexOf("];", guard.indexOf("const unit=[")));
   const rows = list.split("\n").map((line) => line.trim()).filter((line) => line.startsWith('"node scripts/'));
-  /* R85A 同步：R85 的新測試依規定接在 R84 後面，這一支之後只能是 R85 的測試。 */
   const at = rows.indexOf('"node scripts/test-content-r84-consistency.js",');
-  assert.ok(at >= 0 && rows.slice(at + 1).every((row) => /^"node scripts\/test-content-r85-[a-z-]+\.js",$/.test(row)), "新測試在 unit 清單最後（後面只接 R85）");
+  assert.ok(at >= 0, "R84 主線一致性測試必須列入清單");
+  const tail = ["r85-art", "r85-light", "r85-weather", "r85-one-step", "r86-rain-journal"]
+    .map((name) => '"node scripts/test-content-' + name + '.js",');
+  assert.deepEqual(rows.slice(at + 1), tail, "R85 的四支回歸依原順序接在 R84 後，再跑 R86 雨後手記");
+  assert.ok(tail.every((command) => rows.indexOf(command) === rows.lastIndexOf(command)), "每支回歸在清單內只出現一次");
 });
 
 /* ---------------- 瀏覽器 ---------------- */

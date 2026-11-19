@@ -173,20 +173,8 @@ test("存檔相容：兩條新進度可讀回，R81 已選過但沒有 R82 欄�
 
 test("第 6 項：新測試已接到 unit 清單最後", () => {
   const guard = read("scripts/guard-validation-writes.js");
-  /* R82 整合同步：同輪 C 線的 test-content-r82-play.js 也接在清單尾，B 線測試緊接在 r81-story 後面、後面只允許同輪 R82 測試。 */
-  /* R83C 同步：R83 各線的新測試也接在清單尾，r82-branches 後面只允許 R82、R83 的測試。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[2345]-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 的新測試也依規定接在清單尾；R85A 同步：R85 亦同 */
-  /* R83B 同步：R83 各線的新測試依規定接在清單尾，只允許 R83 測試排在 R82 這幾支後面。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r85-[a-z-]+\.js",)*\s*\];/); /* R84A 同步：R84 測試排在 R83 後面；R85A 同步：R85 測試排在 R84 後面 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[2345]-[a-z-]+\.js",)*\s*\];/); /* R83A 同步：R83 的新測試依規定接在清單尾 */ /* R84A 同步：R84 亦同 */ /* R85A 同步：R85 亦同 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[2345]-[a-z-]+\.js",)*\s*\];/); /* R84C 同步：R84 的新測試依規定接在清單尾 */ /* R85A 同步：R85 亦同 */
-  /* R83B 同步：R83 各線的新測試依規定接在清單尾，只允許 R83 測試排在 R82 這幾支後面。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r85-[a-z-]+\.js",)*\s*\];/); /* R84C 同步：R84 測試排在 R83 後面 */ /* R85A 同步：R85 的新測試接在 R84 後面 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[2345]-[a-z-]+\.js",)*\s*\];/); /* R83A 同步：R83 的新測試依規定接在清單尾；R84C 同步：R84 亦同 */ /* R85A 同步：R85 的新測試接在 R84 後面 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[2345]-[a-z-]+\.js",)*\s*\];/); /* R84B 同步：R84 的新測試接在清單尾（原為 r8[23]） */ /* R85A 同步：R85 的新測試接在 R84 後面 */
-  /* R83B 同步：R83 各線的新測試依規定接在清單尾，只允許 R83 測試排在 R82 這幾支後面。 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r85-[a-z-]+\.js",)*\s*\];/); /* R85A 同步：R85 的新測試接在 R84 後面 */
-  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r8[2345]-[a-z-]+\.js",)*\s*\];/); /* R83A 同步：R83 的新測試依規定接在清單尾；R84B 同步：r8[23] 改 r8[234] */ /* R85A 同步：R85 的新測試接在 R84 後面 */
+  // 各輪依序接在 R81 後，最後一項是 R86 雨後手記。
+  assert.match(guard, /"node scripts\/test-content-r81-story\.js",\s*"node scripts\/test-content-r82-branches\.js",(\s*"node scripts\/test-content-r82-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r83-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r84-[a-z-]+\.js",)*(\s*"node scripts\/test-content-r85-[a-z-]+\.js",)*\s*"node scripts\/test-content-r86-rain-journal\.js",\s*\];/);
 });
 
 if (!process.exitCode) console.log("VERIFIED content R82B branches (" + passed + " tests)");

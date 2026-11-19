@@ -365,6 +365,21 @@
   function save() { const f = farm(); if (f && f.safeSaveNow) { try { f.safeSaveNow(); } catch (_) { /* 存檔失敗由主程式提示 */ } } }
   function art(path) { return esc(path + versionQuery()); }
 
+  function rainNotesHtml(state) {
+    const page = Sunplay.rainNotesPage(state);
+    const lines = page.rows.map(row => "<li>" + (row.done ? "已記下・" : "待記・") + esc(row.text) + "</li>").join("");
+    return "<summary>雨後手記・" + page.count + "／3</summary><ol>" + lines + "</ol>"
+      + (page.memory ? "<p>" + esc(page.memory) + "</p>" : "");
+  }
+
+  if (Sunplay) Sunplay.onRainNote = function (state) {
+    // Keep the reader's current page and disclosure open when a shower ends.
+    setTimeout(function () {
+      const page = document.querySelector("[data-r86-rain-notes]");
+      if (page && liveState() === state) page.innerHTML = rainNotesHtml(state);
+    }, 0);
+  };
+
   function sealHtml(cell) {
     /* 還沒蓋的格子放一枚淡淡的灰章，看得出這一格要集的是哪一枚。 */
     if (!cell.got) return '<span class="r76c-seal is-empty" aria-hidden="true">' + (cell.icon ? '<img src="' + art(cell.icon) + '" alt="">' : "") + "</span>";
@@ -422,9 +437,13 @@
       + '<div class="r76c-ticks" aria-hidden="true">' + ticks + "</div>"
       + '<p class="r76c-next" data-r76c-next>' + esc(nextText) + "</p></div>"
       + '<details class="r78c-mile-fold"' + (sum.claimable.length || sum.milestones.some(function (m) { return m.claimed; }) ? " open" : "") + '><summary>里程碑獎勵</summary><ul class="r76c-miles">' + miles + "</ul></details>"
+      + (Sunplay && Sunplay.rainNotesPage ? '<details class="r78c-mile-fold" data-r86-rain-notes>' + rainNotesHtml(state) + '</details>' : '')
       + (sum.lockedCrops > 0 ? '<p class="r76c-more">還有 ' + sum.lockedCrops + " 種作物沒解鎖，解鎖以後各多一列。</p>" : "")
       + "</div></details></section>";
   }
+  // A stamp or panel refresh can detach the old disclosure before the next
+  // render. Read its last open state even if its toggle event is still queued.
+  const rainDisclosureByState = new WeakMap();
   /* 手札每次重畫都會清空圖鑑頁，這裡把手冊補回最上面；沒帶 state 而且區塊還在就不重畫。 */
   function inject(stateArg) {
     const panel = document.getElementById("journalPanel");
@@ -436,6 +455,12 @@
     let section = null;
     try { const host = document.createElement("div"); host.innerHTML = bookHtml(state); section = host.firstElementChild; } catch (_) { section = null; }
     if (!section) return;
+    const rainPage = section.querySelector("[data-r86-rain-notes]");
+    if (rainPage) {
+      const previous = rainDisclosureByState.get(state);
+      if (previous) rainPage.open = previous.open;
+      rainDisclosureByState.set(state, rainPage);
+    }
     panel.querySelectorAll("[data-r76c-sunbook]").forEach(function (node) { node.remove(); });
     panel.insertBefore(section, panel.firstChild);
     const fold = section.querySelector("details");

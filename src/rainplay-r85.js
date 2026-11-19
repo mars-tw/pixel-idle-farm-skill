@@ -100,6 +100,7 @@
     const sun = typeof Game.ensureSunState === "function" ? Game.ensureSunState(state) : state.sun;
     const interval = Game.SUNPATCH ? Game.SUNPATCH.intervalMs : 40000;
     Object.assign(sun, { plots, used: [], startsAt: t, endsAt: t + RAINBOW_MS, durationMs: RAINBOW_MS, previewPlots: [], previewAt: 0, nextAt: t + RAINBOW_MS + interval, refractions: 0, rainbow: true });
+    if (Sunplay) Sunplay.noteRainEvent(state, "lit");
     try { if (typeof Game.clearLightHarvestQueue === "function") Game.clearLightHarvestQueue(state); } catch (_) { /* 沒有等光排程 */ }
     return plots;
   }
@@ -158,6 +159,7 @@
     }
     const gained = Sunplay && typeof Sunplay.addSunlight === "function" ? Sunplay.addSunlight(state, POUR_SUNLIGHT) : 0;
     sp.buckets += 1; sp.filledMs = 0; r.pours += 1;
+    if (watered.length && Sunplay) Sunplay.noteRainEvent(state, "watered");
     const left = SPELL_CAP - sp.buckets;
     /* 手機一次讀得完：先寫拿到什麼，再寫還能接幾桶。 */
     const head = watered.length ? `倒進田裡：澆好 ${watered.length} 格田` : "田都澆過了";

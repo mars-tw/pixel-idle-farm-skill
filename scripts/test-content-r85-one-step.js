@@ -391,9 +391,13 @@ async function browserChecks() {
   return checks;
 }
 
-browserChecks().then((checks) => {
-  passed++;
-  console.log("PASS 瀏覽器檢查 " + checks + " 項");
-  console.log(passed + " passed");
-  if (!process.exitCode) console.log("VERIFIED content R85A one step, one button, target in view");
-}).catch((error) => { console.error("FAIL 瀏覽器檢查\n" + (error && error.stack || error)); process.exitCode = 1; });
+if (process.argv.includes("--rules-only")) {
+  if (!process.exitCode) console.log(`R85 one-step rules: ${passed} passed (no browser)`);
+} else {
+  browserChecks().then((checks) => {
+    passed++;
+    console.log("PASS 瀏覽器檢查 " + checks + " 項");
+    console.log(passed + " passed");
+    if (!process.exitCode) console.log("VERIFIED content R85A one step, one button, target in view");
+  }).catch((error) => { console.error("FAIL 瀏覽器檢查\n" + (error && error.stack || error)); process.exitCode = 1; });
+}
