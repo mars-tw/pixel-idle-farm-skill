@@ -1,0 +1,71 @@
+name: Farm R86 verification
+on:
+  push:
+    branches: [codex/verify-farm-r86-20261119]
+    paths-ignore:
+      - '.github/workflows/verify-farm-r86-layout.yml'
+      - 'scripts/test-content-r86-rain-journal-layout.js'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: farm-r86-gates-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: ${{ matrix.suite }} ${{ matrix.shard }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 125
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        include:
+          - {suite: unit, shard: 1, total: 12}
+          - {suite: unit, shard: 2, total: 12}
+          - {suite: unit, shard: 3, total: 12}
+          - {suite: unit, shard: 4, total: 12}
+          - {suite: unit, shard: 5, total: 12}
+          - {suite: unit, shard: 6, total: 12}
+          - {suite: unit, shard: 7, total: 12}
+          - {suite: unit, shard: 8, total: 12}
+          - {suite: unit, shard: 9, total: 12}
+          - {suite: unit, shard: 10, total: 12}
+          - {suite: unit, shard: 11, total: 12}
+          - {suite: unit, shard: 12, total: 12}
+          - {suite: optional, shard: 1, total: 4}
+          - {suite: optional, shard: 2, total: 4}
+          - {suite: optional, shard: 3, total: 4}
+          - {suite: optional, shard: 4, total: 4}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install game test dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install --disable-pip-version-check Pillow numpy
+          npx playwright install --with-deps chromium
+          if ! fc-list ':lang=zh-tw' | grep -q .; then sudo apt-get install -y fonts-noto-cjk; fi
+      - name: Run all assigned gates and record individual results
+        env:
+          CI: 'true'
+          PYTHONIOENCODING: utf-8
+        run: python .github/qa-r86/run.py ${{ matrix.suite }} ${{ matrix.shard }} ${{ matrix.total }}
+      - name: Retain result ledger and failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r86-${{ matrix.suite }}-${{ matrix.shard }}
+          path: ${{ runner.temp }}/farm-r86-results
+          if-no-files-found: warn
+          retention-days: 12
