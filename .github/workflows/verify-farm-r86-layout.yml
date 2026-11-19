@@ -1,0 +1,40 @@
+name: Farm R86 journal browser verification
+on:
+  push:
+    branches: [codex/verify-farm-r86-20261119]
+    paths:
+      - '.github/workflows/verify-farm-r86-layout.yml'
+      - 'scripts/test-content-r86-rain-journal-layout.js'
+      - 'src/**'
+      - 'index.html'
+
+permissions:
+  contents: read
+
+jobs:
+  journal:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install Chromium and locale fonts
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          if ! fc-list ':lang=zh-tw' | grep -q .; then sudo apt-get install -y fonts-noto-cjk; fi
+      - name: Verify player actions and note persistence in four viewports
+        run: node scripts/test-content-r86-rain-journal-layout.js --out "${RUNNER_TEMP}/farm-r86-journal"
+      - name: Keep measured screenshots and test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: farm-r86-journal-layout
+          path: ${{ runner.temp }}/farm-r86-journal
+          if-no-files-found: error
+          retention-days: 12

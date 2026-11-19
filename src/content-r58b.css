@@ -1703,6 +1703,9 @@ html[data-performance-tier="low"] .r77a-refract-ghost, html.perf-low .r77a-refra
 .r78c-row-help > summary, .r78c-mile-fold > summary { min-height: 32px; display: flex; align-items: center; color: #6a4a12; font-size: 12px; font-weight: 800; cursor: pointer; }
 .r78c-mile-fold { margin-top: 8px; }
 .r78c-mile-fold > .r76c-miles { margin-top: 6px; }
+.r76c-book [data-r86-rain-notes] > summary { min-height: 44px; font-size: 14px; line-height: 1.4; }
+.r76c-book [data-r86-rain-notes] > ol { padding-inline-start: 1.6em; }
+.r76c-book [data-r86-rain-notes] li, .r76c-book [data-r86-rain-notes] p { line-height: 1.5; overflow-wrap: anywhere; }
 #worldModal:has(.r76b-judge-total) .modal-body { padding-bottom: 32px; scroll-padding-bottom: 32px; }
 #worldModal:has(.r76b-judge-total) .modal-body > p:last-child { margin-bottom: 10px; }
 @media (max-width: 430px) {
